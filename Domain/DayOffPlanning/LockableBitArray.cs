@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -157,5 +158,20 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             ret._rnd = new Random();
             return ret;
         }
-    }
+
+		public bool HasSameDayOffs(ILockableBitArray otherLockableBitArray)
+		{
+			if (_dayOffBits.Count != otherLockableBitArray.Count)
+				return false;
+
+			for (var i = 0; i < _dayOffBits.Count; i++)
+			{
+				if (this[i] && !otherLockableBitArray[i])
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+	}
 }

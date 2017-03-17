@@ -61,5 +61,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <returns></returns>
         BitArray ToLongBitArray();
+
+	    bool HasSameDayOffs(ILockableBitArray otherLockableBitArray);
     }
 }

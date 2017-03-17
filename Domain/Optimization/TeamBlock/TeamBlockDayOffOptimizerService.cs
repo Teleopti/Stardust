@@ -599,21 +599,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private movedDaysOff affectedDaysOff(IScheduleMatrixPro matrix, IDaysOffPreferences daysOffPreferences, ILockableBitArray originalArray, ILockableBitArray resultingArray)
 		{
-			bool considerWeekBefore = daysOffPreferences.ConsiderWeekBefore;
-
-			var equals = true;
-			for (var i = 0; i < resultingArray.Count; i++)
-			{
-				if (resultingArray[i] && !originalArray[i])
-				{
-					equals = false;
-					break;
-				}
-			}
-
-			if (equals)
+			if (originalArray.HasSameDayOffs(resultingArray))
 				return null;
 
+			bool considerWeekBefore = daysOffPreferences.ConsiderWeekBefore;
 			// find out what have changed, Does the predictor beleve in this? depends on how many members
 			IList<DateOnly> addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix,
 			                                                                            considerWeekBefore);

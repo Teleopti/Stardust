@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -197,5 +198,33 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             longBitArray = _target.ToLongBitArray();
             Assert.AreEqual(21, longBitArray.Count);
         }
-    }
+
+		[Test]
+		public void ShouldNotHasSameDayOffsDifferentElements()
+		{
+			var target1 = new LockableBitArray(1, false, false, null);
+			var target2 = new LockableBitArray(1, false, false, null);
+			target1.SetAll(true);
+			target2.SetAll(false);
+			target1.HasSameDayOffs(target2).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldHasSameDayOffsSameElements()
+		{
+			var target1 = new LockableBitArray(1, false, false, null);
+			var target2 = new LockableBitArray(1, false, false, null);
+			target1.SetAll(true);
+			target2.SetAll(true);
+			target1.HasSameDayOffs(target2).Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotHasSameDayOffsIfDifferentLengths()
+		{
+			var target1 = new LockableBitArray(2, false, false, null);
+			var target2 = new LockableBitArray(1, false, false, null);
+			target1.HasSameDayOffs(target2).Should().Be.False();
+		}
+	}
 }
