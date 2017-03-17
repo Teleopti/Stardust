@@ -74,29 +74,40 @@ Teleopti.MyTimeWeb.Schedule.Helper = (function ($) {
 		var intervalEndMinutes = getIntervalEndMinutes(startOfToday, startMoment, endMoment);
 		var intervalStartMinutes = getIntervalStartMinutes(startOfToday, startMoment);
 
-		var visible = false;
+		var shouldGenerate = false;
 		if (probabilityType === constants.absenceProbabilityType) {
 			for (var i = 0; i < continousPeriods.length; i++) {
 				var continousPeriod = continousPeriods[i];
-				if (continousPeriod.startTimeInMin <= intervalStartMinutes && intervalEndMinutes <= continousPeriod.endTimeInMin) {
-					visible = true;
+				var startInPeriod = continousPeriod.startTimeInMin <= intervalStartMinutes && intervalStartMinutes <= continousPeriod.endTimeInMin;
+				var endInPeriod = continousPeriod.startTimeInMin <= intervalEndMinutes && intervalEndMinutes <= continousPeriod.endTimeInMin;
+				if (startInPeriod || endInPeriod) {
+					if (!startInPeriod && endInPeriod) {
+						startMoment = startMoment.add(continousPeriod.startTimeInMin - intervalStartMinutes, "minute");
+						intervalStartMinutes = continousPeriod.startTimeInMin;
+					}
+					if (startInPeriod && !endInPeriod) {
+						endMoment = endMoment.add(continousPeriod.endTimeInMin - intervalEndMinutes, "minute");
+						intervalEndMinutes = continousPeriod.endTimeInMin;
+					}
+					shouldGenerate = true;
 					break;
 				}
 			}
 		} else if (probabilityType === constants.overtimeProbabilityType) {
-			visible = boundaries.probabilityStartMinutes <= intervalStartMinutes &&
+			shouldGenerate = boundaries.probabilityStartMinutes <= intervalStartMinutes &&
 				intervalEndMinutes <= boundaries.probabilityEndMinutes;
 		}
 
-		var shouldGenerate = boundaries.probabilityStartMinutes <= intervalStartMinutes &&
-			intervalEndMinutes <= boundaries.probabilityEndMinutes;
+		var inDisplayRange = boundaries.probabilityStartMinutes <= intervalStartMinutes && intervalEndMinutes <= boundaries.probabilityEndMinutes;
+		var longerThanZero = intervalEndMinutes > intervalStartMinutes;
+
 		return {
 			startTime: startMoment,
 			endTime: endMoment,
 			startTimeInMinutes: intervalStartMinutes,
 			endTimeInMinutes: intervalEndMinutes,
 			possibility: rawProbability.Possibility,
-			shouldGenerateViewModel: shouldGenerate && visible
+			shouldGenerateViewModel: shouldGenerate && inDisplayRange && longerThanZero
 		};
 	}
 

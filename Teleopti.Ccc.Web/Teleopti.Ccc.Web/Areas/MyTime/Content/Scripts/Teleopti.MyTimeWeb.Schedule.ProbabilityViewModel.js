@@ -6,31 +6,8 @@
 	var highProbabilityClass = "probability-high";
 	var expiredProbabilityClass = "probability-expired";
 
-	var startOfToday = moment(rawProbability.startTime).startOf("day");
-	var intervalStartMinutes = rawProbability.startTimeInMinutes;
-	var intervalEndMinutes = rawProbability.endTimeInMinutes;
-	var startDiffInMin = 0, endDiffInMin = 0;
-
-	function trimIntervalAccordingSchedulePeriod() {
-		if (probabilityType === constants.absenceProbabilityType) {
-			for (var i = 0; i < continousPeriods.length; i++) {
-				var continousPeriod = continousPeriods[i];
-				if ((intervalStartMinutes <= continousPeriod.startTimeInMin && intervalEndMinutes >= continousPeriod.startTimeInMin)) {
-					startDiffInMin = continousPeriod.startTimeInMin - intervalStartMinutes;
-					intervalStartMinutes = continousPeriod.startTimeInMin;
-				}
-
-				if ((intervalStartMinutes <= continousPeriod.endTimeInMin && intervalEndMinutes >= continousPeriod.endTimeInMin)) {
-					endDiffInMin = intervalEndMinutes - continousPeriod.endTimeInMin;
-					intervalEndMinutes = continousPeriod.endTimeInMin;
-				}
-			}
-		}
-	}
 
 	function generateCssClass() {
-		trimIntervalAccordingSchedulePeriod();
-
 		var cssClass = "";
 		if (rawProbability.possibility === constants.probabilityLow)
 			cssClass = lowProbabilityClass;
@@ -39,7 +16,7 @@
 
 		if (parent.userNowInMinute() < 0) {
 			return invisibleProbabilityClass;
-		} else if (parent.userNowInMinute() < intervalEndMinutes) {
+		} else if (parent.userNowInMinute() < rawProbability.endTimeInMinutes) {
 			return cssClass;
 		} else {
 			return cssClass + " " + expiredProbabilityClass;
@@ -47,14 +24,12 @@
 	}
 
 	function generateStyleJson() {
-		trimIntervalAccordingSchedulePeriod();
-
 		var styleJson = {};
 		var startPositionProperty = layoutDirection === constants.horizontalDirectionLayout ? "left" : "top";
 		var lengthProperty = layoutDirection === constants.horizontalDirectionLayout ? "width" : "height";
 
-		styleJson[startPositionProperty] = boundaries.lengthPercentagePerMinute * (intervalStartMinutes - boundaries.timelineStartMinutes) * 100 + "%";
-		styleJson[lengthProperty] = boundaries.lengthPercentagePerMinute * (intervalEndMinutes - intervalStartMinutes) * 100 + "%";
+		styleJson[startPositionProperty] = boundaries.lengthPercentagePerMinute * (rawProbability.startTimeInMinutes - boundaries.timelineStartMinutes) * 100 + "%";
+		styleJson[lengthProperty] = boundaries.lengthPercentagePerMinute * (rawProbability.endTimeInMinutes - rawProbability.startTimeInMinutes) * 100 + "%";
 
 		return styleJson;
 	}
@@ -70,9 +45,7 @@
 	}
 
 	function generateTooltips() {
-		trimIntervalAccordingSchedulePeriod();
-
-		if (!(parent.userNowInMinute() >= 0 && parent.userNowInMinute() < intervalEndMinutes))
+		if (!(parent.userNowInMinute() >= 0 && parent.userNowInMinute() < rawProbability.endTimeInMinutes))
 			return "";
 
 		var label = "",
@@ -92,9 +65,12 @@
 	}
 
 	function generateIntervalTimeSpanText(startMoment, endMoment) {
-		var timeFormat = Teleopti.MyTimeWeb.Common.TimeFormat;
+		var startOfToday = moment(rawProbability.startTime).startOf("day");
 		var dayDiff = endMoment.diff(startOfToday, "days");
-		return startMoment.minutes(intervalStartMinutes % 60).format(timeFormat) + " - " + endMoment.minutes(intervalEndMinutes % 60).format(timeFormat) + (dayDiff > 0 ? " +" + dayDiff : "");
+		var timeFormat = Teleopti.MyTimeWeb.Common.TimeFormat;
+		return startMoment.minutes(rawProbability.startTimeInMinutes % 60).format(timeFormat) + " - "
+			+ endMoment.minutes(rawProbability.endTimeInMinutes % 60).format(timeFormat)
+			+ (dayDiff > 0 ? " +" + dayDiff : "");
 	}
 
 	return {
