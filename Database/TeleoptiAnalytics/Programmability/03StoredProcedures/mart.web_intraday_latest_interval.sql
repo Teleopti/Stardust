@@ -64,8 +64,7 @@ BEGIN
 		INNER JOIN mart.fact_queue fq ON q.queue_id = fq.queue_id
 	WHERE
 		date_id between @current_date_id - 1 and @current_date_id + 1
-		AND offered_calls > 0
-		OR overflow_in_calls > 0
+		AND (offered_calls > 0 OR overflow_in_calls > 0)
 
 	SELECT
 		@return_value = MAX(i.interval_id)

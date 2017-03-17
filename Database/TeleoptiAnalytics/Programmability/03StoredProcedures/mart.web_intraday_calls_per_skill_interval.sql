@@ -102,11 +102,11 @@ BEGIN
 	WHERE
 		date_id between @current_date_id - 1 and @current_date_id + 1
 		AND 
-			(offered_calls IS NOT NULL
-			AND offered_calls > 0)
-		OR
-			(overflow_in_calls IS NOT NULL
-			AND overflow_in_calls > 0)
+			(
+				(offered_calls IS NOT NULL AND offered_calls > 0)
+				OR
+				(overflow_in_calls IS NOT NULL AND overflow_in_calls > 0)
+			)
 	SELECT
 		qs.skill_code AS SkillId,
 		DATEADD(mi, DATEDIFF(MINUTE, DATEADD(DAY, DATEDIFF(DAY, 0, i.interval_start), 0), i.interval_start), d.date_date) AS StartTime,
