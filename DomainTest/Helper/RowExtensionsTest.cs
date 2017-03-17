@@ -1,7 +1,9 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Linq;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.DomainTest.Helper
@@ -70,6 +72,20 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
 			Assert.IsFalse(row.IsBlank());
 		}
+
+		[Test]
+		public void ShouldGetAllCellsIncludeBlankCellOrNull()
+		{
+			var row = _sheet.CreateRow(0);
+			row.CreateCell(0);
+			row.CreateCell(1, CellType.String).SetCellValue("xx");
+			createDateCell(row, 2, DateTime.Now);
+			row.CreateCell(3);
+
+			row.Cells.Count.Should().Be(4);
+			row.GetCellsIncludeBlankOrNull().Count().Should().Be(4);
+		}
+
 
 		private void createDateCell(IRow row, int cellIndex, DateTime? value = null)
 		{

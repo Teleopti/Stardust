@@ -82,8 +82,24 @@ namespace Teleopti.Ccc.Domain.Helper
 			return row.Cells.Sum(c => c.IsBlank() ? 1 : 0) == row.Cells.Count;
 		}
 
+		public static IEnumerable<ICell> GetCellsIncludeBlankOrNull(this IRow row)
+		{
+			if (row == null)
+			{
+				yield break;
+			}
+			for (int i = 0; i < row.LastCellNum; i++)
+			{
+				yield return row.GetCell(i, MissingCellPolicy.RETURN_NULL_AND_BLANK);
+			}
+		}
+
 		private static bool IsBlank(this ICell cell)
 		{
+			if (cell == null)
+			{
+				return true;
+			}
 			if (cell.CellType == CellType.Blank)
 			{
 				return true;

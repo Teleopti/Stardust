@@ -121,8 +121,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				return new List<string>();
 			var sheet = workbook.GetSheetAt(0);
 			var headerRow = sheet.GetRow(0);
-			return headerRow.Cells.Select(x =>
+			return headerRow.GetCellsIncludeBlankOrNull().Select(x =>
 			{
+				if (x == null || x.CellType == CellType.Blank)
+				{
+					return string.Empty;
+				}
 				try
 				{
 					return x.StringCellValue;
@@ -130,10 +134,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				catch (Exception)
 				{
 
-					return null;
+					return string.Empty;
 				}
 
-			}).Where(n => n != null).ToList();
+			}).ToList();
 		}
 
 		private static object getVale(ICell cell, PropertyInfo pro)
