@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = 
 				new SmartDayOffBackToLegalStateService(
-				100,
+				100,// <--
 				_dayOffDecisionMaker);
 
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder =
@@ -219,6 +219,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var totalLiveTeamInfos = remainingInfoList.Count;
 			var currentTeamInfoCounter = 0;
 			var cancelMe = false;
+
 			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
 				currentTeamInfoCounter++;
@@ -599,7 +600,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private movedDaysOff affectedDaysOff(IScheduleMatrixPro matrix, IDaysOffPreferences daysOffPreferences, ILockableBitArray originalArray, ILockableBitArray resultingArray)
 		{
 			bool considerWeekBefore = daysOffPreferences.ConsiderWeekBefore;
-			if (resultingArray.Equals(originalArray))
+
+			var equals = true;
+			for (var i = 0; i < resultingArray.Count; i++)
+			{
+				if (resultingArray[i] && !originalArray[i])
+				{
+					equals = false;
+					break;
+				}
+			}
+
+			if (equals)
 				return null;
 
 			// find out what have changed, Does the predictor beleve in this? depends on how many members
