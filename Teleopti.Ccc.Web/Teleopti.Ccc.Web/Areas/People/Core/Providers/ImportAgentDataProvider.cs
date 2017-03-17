@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		{
 			return new ImportAgentsFieldOptionsModel
 			{
-				Roles = _applicationRoleRepository.LoadAll().Select(r => new FieldOptionViewModel
+				Roles = _applicationRoleRepository.LoadAllApplicationRolesSortedByName().Select(r => new FieldOptionViewModel
 				{
 					Id = r.Id.GetValueOrDefault(),
 					Name = r.DescriptionText
@@ -135,8 +135,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 		public IApplicationRole FindRole(string roleName)
 		{
-			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.DescriptionText == roleName);
+			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.DescriptionText.Trim() == roleName.Trim());
 		}
+
 
 		public IContract FindContract(Guid id)
 		{
