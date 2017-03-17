@@ -184,7 +184,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 		return self.formattedFixedDate() === self.formatedCurrentUserDate();
 	});
 
-	if(self.staffingProbabilityEnabled()){
+	if (self.staffingProbabilityEnabled()) {
 		self.probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
 		{
 			probabilityType: parent.probabilityType(),
@@ -194,7 +194,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 			mergeIntervals: self.mergeIdenticalProbabilityIntervals,
 			userTexts: parent.userTexts
 		});
-	}else{
+	} else {
 		self.probabilities = [];
 	}
 

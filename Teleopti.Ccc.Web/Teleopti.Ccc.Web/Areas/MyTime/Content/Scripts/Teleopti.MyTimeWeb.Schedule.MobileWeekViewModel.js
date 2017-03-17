@@ -161,7 +161,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		self.showingAbsenceProbability(self.selectedProbabilityOptionValue() === constants.absenceProbabilityType);
 		self.showingOvertimeProbability(self.selectedProbabilityOptionValue() === constants.overtimeProbabilityType);
 
-		if(self.showingAbsenceProbability() || self.showingOvertimeProbability())
+		if (self.showingAbsenceProbability() || self.showingOvertimeProbability())
 			reloadSchedule();
 
 		self.requestViewModel(undefined);
@@ -255,7 +255,6 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 		return moment(self.fixedDate()).format("l");
 	});
 	self.userNowInMinute = ko.observable(0);
-	self.mergeIdenticalProbabilityIntervals = true;
 
 	self.weekDayHeaderTitle = ko.observable(scheduleDay.Header ? scheduleDay.Header.Title : null);
 	self.summaryStyleClassName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.StyleClassName : null);
@@ -316,17 +315,17 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 		return new MobileWeekLayerViewModel(item, parent.userTexts);
 	});
 
-	if(self.staffingProbabilityEnabled()){
+	if (self.staffingProbabilityEnabled()) {
 		self.probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
 		{
 			probabilityType: parent.selectedProbabilityOptionValue(),
 			layoutDirection: constants.horizontalDirectionLayout,
 			timelines: parent.timeLines(),
 			intradayOpenPeriod: parent.intradayOpenPeriod,
-			mergeIntervals: self.mergeIdenticalProbabilityIntervals,
+			mergeSameIntervals: true,
 			userTexts: parent.userTexts
 		});
-	}else{
+	} else {
 		self.probabilities = [];
 	}
 };

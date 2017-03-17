@@ -9,7 +9,7 @@ $(document).ready(function () {
 	var baseDate = "2017-03-10";
 	var tomorrow = "2017-03-11";
 
-	function createTimeline (timelineStartHour, timelineEndHour) {
+	function createTimeline(timelineStartHour, timelineEndHour) {
 		var timelinePoints = [];
 		var startHour = timelineStartHour;
 		var endHour = timelineEndHour;
@@ -38,7 +38,7 @@ $(document).ready(function () {
 		return timelinePoints;
 	}
 
-	function createRawProbabilities () {
+	function createRawProbabilities() {
 		var result = [];
 		for (var i = 0; i < 24 * 60 / 15; i++) {
 			result.push({
@@ -224,7 +224,7 @@ $(document).ready(function () {
 		var options = {
 			probabilityType: constants.absenceProbabilityType,
 			layoutDirection: constants.verticalDirectionLayout,
-			mergeIntervals: false,
+			mergeSameIntervals: false,
 			timelines: createTimeline(1, 8),
 			userTexts: {
 				"high": "High",
@@ -265,7 +265,7 @@ $(document).ready(function () {
 		var options = {
 			probabilityType: constants.absenceProbabilityType,
 			layoutDirection: constants.horizontalDirectionLayout,
-			mergeIntervals: false,
+			mergeSameIntervals: false,
 			timelines: createTimeline(1, 8),
 			userTexts: {
 				"high": "High",
@@ -283,68 +283,148 @@ $(document).ready(function () {
 		}
 	});
 
-//test("")
+	test("Should merge same probability intervals when options.mergeSameIntervals is set to true", function () {
+		var timelineStart = 1, timelineEnd = 9;
+		var scheduleDay = {
+			FixedDate: baseDate,
+			IsFullDayAbsence: false,
+			IsDayOff: false,
+			Periods: [
+	 			{
+	 				"StartTime": baseDate + "T06:00:00",
+	 				"EndTime": baseDate + "T09:00:00"
+	 			}
+			]
+		};
+		var rawProbabilities = createRawProbabilities();
 
+		rawProbabilities.forEach(function (p, index) {
+			//Test case: probability level is low from 6:00 to 7:00, and high between 7:00 to 9:00
+			//Schedule Period: 6:00 ~ 9:00, Timeline: 0:45 ~ 9:15
+			p.Possibility = index < (7 * 4) ? constants.probabilityLow : constants.probabilityHigh;
+		});
 
-	// test("Should merge probability cells with identical intervals when options.mergeIntervals is set to true", function () {
-	// 	var scheduleDay = {
-	// 		FixedDate: baseDate,
-	// 		IsFullDayAbsence: false,
-	// 		IsDayOff: false,
-	// 		Periods: [
-	// 			{
-	// 				"StartTime": baseDate + "T06:00:00",
-	// 				"EndTime": baseDate + "T09:00:00"
-	// 			},
-	// 		]
-	// 	};
-	// 	var rawProbabilities = createRawProbabilities();
+		var expectedRawProbabilities = rawProbabilities.filter(function (p) {
+			return moment(p.EndTime) <= moment(baseDate).add(9, "hours");
+		});
 
-	// 	rawProbabilities.forEach(function(p, index){
-	// 		//Test case: probability level is low from 6:00 to 7:00, and high between 7:00 to 9:00
-	// 		//Schedule Period: 6:00 ~ 9:00, Timeline: 0:45 ~ 9:15
-	// 		if(index < (7 * 4)){
-	// 			p.Possibility = 0;
-	// 		}else{
-	// 			p.Possibility = 1;
-	// 		}
-	// 	});
-	// 	var expectedRawProbabilities = rawProbabilities.filter(function(p){
-	// 		return moment(p.EndTime) <= moment(baseDate).add(9,'hours');
-	// 	});
+		var options = {
+			probabilityType: constants.absenceProbabilityType,
+			layoutDirection: constants.horizontalDirectionLayout,
+			mergeSameIntervals: true,
+			timelines: createTimeline(timelineStart, timelineEnd),
+			userTexts: {
+				"high": "High",
+				"low": "Low",
+				"probabilityForAbsence": "Probability to get absence:",
+				"probabilityForOvertime": "Probability to get overtime:"
+			}
+		};
 
-	// 	var options = {
-	// 		probabilityType: constants.absenceProbabilityType,
-	// 		layoutDirection: constants.horizontalDirectionLayout,
-	// 		mergeIntervals: true,
-	// 		timelines: createTimeline(1, 9),
-	// 		userTexts: {
-	// 			"high": "High",
-	// 			"low": "Low",
-	// 			"probabilityForAbsence": "Probability to get absence:",
-	// 			"probabilityForOvertime": "Probability to get overtime:"
-	// 		}
-	// 	};
+		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay,
+			expectedRawProbabilities,
+			{
+				userNowInMinute: function () { return 0; }
+			}, options);
 
-	// 	var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, expectedRawProbabilities, {userNowInMinute: function(){return 0;}}, options);
+		var expectedLengthPercentagePerMinute = 1 / ((timelineEnd - timelineStart) * 60 + 2 * constants.timelineMarginInMinutes);
 
-	// 	var expectedLengthPercentagePerMinute = 1/((9 * 60 + 15) - (1 * 60 - 15));
+		equal(probabilities.length, 2);
+		for (var i = 0; i < probabilities.length; i++) {
+			equal(probabilities[i].styleJson.width != undefined, true);
+			equal(probabilities[i].styleJson.height == undefined, true);
+		}
 
-	// 	equal(probabilities.length, 3);
-	// 	for (var i = 0; i < probabilities.length; i++) {
-	// 		equal(probabilities[i].styleJson.width != undefined, true);
-	// 		equal(probabilities[i].styleJson.height == undefined, true);
-	// 	}
+		// Should calculate the margin on top for this invisible probability view model
+		var probability = probabilities[0];
+		//equal(probability.styleJson.left,
+		//	((((7 - timelineStart) * 60 - constants.timelineMarginInMinutes) * expectedLengthPercentagePerMinute * 100) + "%"));
+		//equal(probability.styleJson.width,
+		//	((((7 - 6) * 60) * expectedLengthPercentagePerMinute * 100) + "%"));
+		equal(probability.tooltips().indexOf("6:00") > -1, true);
+		equal(probability.tooltips().indexOf("7:00") > -1, true);
+		equal(probability.cssClass(), "probability-low");
 
-	// 	//equal(probabilities[0].styleJson.width, (((6 - 1) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
-	// 	equal(probabilities[0].tooltips().length == 0, true);
+		probability = probabilities[1];
+		//equal(probability.styleJson.width, (((9 - 7) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
+		equal(probability.tooltips().indexOf("7:00") > -1, true);
+		equal(probability.tooltips().indexOf("9:00") > -1, true);
+		equal(probability.cssClass(), "probability-high");
+	});
 
-	// 	//equal(probabilities[1].styleJson.width, (((7 - 6) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
-	// 	equal(probabilities[1].tooltips().indexOf('6:00') > -1, true);
-	// 	equal(probabilities[1].tooltips().indexOf('7:00') > -1, true);
+	test("Should merge same probability intervals correctly when there are cross day schedule", function () {
+		var timelineStart = 0, timelineEnd = 9;
+		var scheduleDay = {
+			FixedDate: baseDate,
+			IsFullDayAbsence: false,
+			IsDayOff: false,
+			Periods: [
+	 			{
+	 				"StartTime": baseDate + "T00:00:00",
+	 				"EndTime": baseDate + "T04:00:00"
+	 			},
+	 			{
+	 				"StartTime": baseDate + "T06:00:00",
+	 				"EndTime": baseDate + "T09:00:00"
+	 			}
+			]
+		};
+		var rawProbabilities = createRawProbabilities();
 
-	// 	//equal(probabilities[2].styleJson.width, (((9 - 7) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
-	// 	equal(probabilities[2].tooltips().indexOf('7:00') > -1, true);
-	// 	equal(probabilities[2].tooltips().indexOf('9:00') > -1, true);
-	// });
+		rawProbabilities.forEach(function (p, index) {
+			//Test case: probability level is low from 6:00 to 7:00, and high between 7:00 to 9:00
+			//Schedule Period: 6:00 ~ 9:00, Timeline: 0:45 ~ 9:15
+			p.Possibility = index < (7 * 4) ? constants.probabilityLow : constants.probabilityHigh;
+		});
+
+		var expectedRawProbabilities = rawProbabilities.filter(function (p) {
+			return moment(p.EndTime) <= moment(baseDate).add(9, "hours");
+		});
+
+		var options = {
+			probabilityType: constants.absenceProbabilityType,
+			layoutDirection: constants.horizontalDirectionLayout,
+			mergeSameIntervals: true,
+			timelines: createTimeline(timelineStart, timelineEnd),
+			userTexts: {
+				"high": "High",
+				"low": "Low",
+				"probabilityForAbsence": "Probability to get absence:",
+				"probabilityForOvertime": "Probability to get overtime:"
+			}
+		};
+
+		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay,
+			expectedRawProbabilities,
+			{
+				userNowInMinute: function () { return 0; }
+			}, options);
+
+		// Only 1 margin at end of timeline since timeline is start from 00:00
+		var expectedLengthPercentagePerMinute = 1 / ((timelineEnd - timelineStart) * 60 + constants.timelineMarginInMinutes);
+
+		equal(probabilities.length, 3);
+		for (var i = 0; i < probabilities.length; i++) {
+			equal(probabilities[i].styleJson.width != undefined, true);
+			equal(probabilities[i].styleJson.height == undefined, true);
+		}
+
+		var probability = probabilities[0];
+		//equal(probability.styleJson.width, (((4 - 0) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
+		equal(probability.tooltips().indexOf("00:00") > -1, true);
+		equal(probability.tooltips().indexOf("04:00") > -1, true);
+		equal(probability.cssClass(), "probability-low");
+
+		probability = probabilities[1];
+		//equal(probability.styleJson.width, (((7 - 6) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
+		equal(probability.tooltips().indexOf("06:00") > -1, true);
+		equal(probability.tooltips().indexOf("07:00") > -1, true);
+		equal(probability.cssClass(), "probability-low");
+
+		probability = probabilities[2];
+		//equal(probability.styleJson.width, (((9 - 7) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
+		equal(probability.tooltips().indexOf("07:00") > -1, true);
+		equal(probability.tooltips().indexOf("09:00") > -1, true);
+		equal(probability.cssClass(), "probability-high");
+	});
 });

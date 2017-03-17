@@ -338,8 +338,7 @@ $(document).ready(function () {
 		equal(vm.probabilities.length, 36);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
-			if (i === 0) {
-			} else {
+			if (i > 0) {
 				equal(probability.tooltips().length > 0, true);
 			}
 		}
@@ -373,7 +372,7 @@ $(document).ready(function () {
 			var probability = vm.probabilities[i];
 			// Schedule started from 09:30, current time is 12:30
 			// Then the first (12:30 - 09:30) * 4 = 12 probabilities should be masked
-			if(i < 12)
+			if (i < 12)
 				equal(probability.tooltips().length > 0, false);
 			else
 				equal(probability.tooltips().length > 0, true);
@@ -393,7 +392,7 @@ $(document).ready(function () {
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			if (i === 0) {
-		
+
 				equal(probability.tooltips().length, 0);
 			} else {
 				// Open hour period started from 02:00, current time is 12:30
@@ -527,10 +526,10 @@ $(document).ready(function () {
 	// 	for (var i = 0; i < vm.probabilities.length; i++) {
 	// 		var probability = vm.probabilities[i];
 	// 		if ((7 <= i && i <= 38)) {
-		
+
 	// 			equal(probability.tooltips().length, 0);
 	// 		} else {
-		
+
 	// 			equal(probability.tooltips().length > 0, true);
 	// 		}
 	// 	}
