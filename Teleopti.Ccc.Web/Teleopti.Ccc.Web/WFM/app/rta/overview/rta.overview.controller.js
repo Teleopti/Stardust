@@ -67,16 +67,16 @@
 		vm.urlForSelectSkill = urlForSelectSkill;
 		vm.getStateForTeams = getStateForTeams;
 		vm.getStateForAgents = getStateForAgents;
-		vm.goToDashboard = goToDashboard;
-		vm.goToSelectSkill = goToSelectSkill;
+		vm.goToDashboard = function () { rtaRouteService.goToSites(); };
+		vm.goToSelectSkill = function () { rtaRouteService.goToSelectSkill(); };
 		vm.toggleSelection = toggleSelection;
 		vm.openSelectedItems = openSelectedItems;
-		
+
 		(function initialize() {
-			rtaService.getSkillAreas().then(function(skillAreas){
+			rtaService.getSkillAreas().then(function (skillAreas) {
 				vm.skillAreas = skillAreas.SkillAreas;
 				getSitesOrTeams();
-			});			
+			});
 		})();
 
 		function urlForSelectSkill() { return rtaRouteService.urlForSelectSkill(); };
@@ -93,9 +93,6 @@
 			return newValue !== oldValue && angular.isDefined(oldValue) && oldValue != null && newValue == null;
 		}
 
-		function goToDashboard() { rtaRouteService.goToSites(); }
-		function goToSelectSkill() { rtaRouteService.goToSelectSkill(); };
-		
 		function toggleSelection(itemId) {
 			var index = vm.selectedItemIds.indexOf(itemId);
 			if (index > -1) vm.selectedItemIds.splice(index, 1);
@@ -112,10 +109,13 @@
 				if (vm.skillAreaId !== null)
 					vm.skillId = skillIdsFromSkillArea(vm.skillAreaId);
 				if (vm.siteIds !== null && angular.isDefined(vm.teams)) {
-					getAdherenceForTeamsBySkills(vm.siteIds, vm.skillId)
+					rtaService.getAdherenceForTeamsBySkills({
+						skillIds: vm.skillId,
+						siteIds: vm.siteIds
+					})
 						.then(function (teamAdherences) { rtaAdherenceService.updateAdherence(vm.teams, teamAdherences); });
 				} else if (angular.isDefined(vm.sites)) {
-					getAdherenceForSitesBySkills(vm.skillId)
+					rtaService.getAdherenceForSitesBySkills(vm.skillId)
 						.then(function (siteAdherences) { rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); });
 				};
 			}
@@ -127,9 +127,6 @@
 					.then(function (siteAdherences) { rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); });
 			}
 		}, pollingInterval);
-
-		rtaOrganizationService.getSiteName(vm.siteIds)
-			.then(function (name) { vm.siteName = name; });
 
 		function getSitesOrTeams() {
 			if (vm.skillId !== null || vm.skillAreaId !== null) { return vm.siteIds !== null ? getTeamsBySkillsInfo() : getSitesBySkillsInfo(); }
@@ -150,22 +147,25 @@
 		};
 
 		function getTeamsBySkillsInfo() {
-			return getTeamsForSkillOrSkillArea()
-				.then(function (teams) {
-					vm.teams = teams;
-					var teamIds = teams.map(function (team) {
-						return team.Id;
-					});
-					return getAdherenceForTeamsBySkills(vm.siteIds, vm.skillIds)
-						.then(function (teamAdherences) { rtaAdherenceService.updateAdherence(vm.teams, teamAdherences); });
-				})
+			vm.skillIds = getSkillIds();
+			return rtaService.getTeamsForSiteAndSkills({
+				skillIds: vm.skillIds,
+				siteIds: vm.siteIds
+			}).then(function (teams) {
+				vm.teams = teams;
+				return rtaService.getAdherenceForTeamsBySkills({
+					skillIds: vm.skillIds,
+					siteIds: vm.siteIds
+				}).then(function (teamAdherences) { rtaAdherenceService.updateAdherence(vm.teams, teamAdherences); });
+			})
 		}
 
 		function getSitesBySkillsInfo() {
-			return getSitesForSkillsOrSkillArea()
+			vm.skillIds = getSkillIds();
+			return rtaService.getSitesForSkills(vm.skillIds)
 				.then(function (sites) {
 					vm.sites = sites;
-					return getAdherenceForSitesBySkills(vm.skillIds);
+					return rtaService.getAdherenceForSitesBySkills(vm.skillIds);
 				}).then(function (siteAdherences) { rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); });
 		}
 
@@ -191,16 +191,6 @@
 				});
 		}
 
-		function getSitesForSkillsOrSkillArea() {
-			vm.skillIds = getSkillIds();
-			return getSitesForSkills(vm.skillIds);
-		}
-
-		function getTeamsForSkillOrSkillArea() {
-			vm.skillIds = getSkillIds();
-			return getTeamsForSiteAndSkills(vm.skillIds, vm.siteIds);
-		}
-
 		function skillIdsFromSkillArea(skillAreaId) {
 			return vm.skillAreas.find(function (skillArea) {
 				return skillArea.Id === skillAreaId;
@@ -213,29 +203,7 @@
 		function getSkillIds() {
 			return vm.skillAreaId !== null ? skillIdsFromSkillArea(vm.skillAreaId) : [vm.skillId];
 		}
-
-		function getSitesForSkills(skillIds) {
-			return rtaService.getSitesForSkills(skillIds);
-		}
-
-		function getTeamsForSiteAndSkills(skillIds, siteIds) {
-			return rtaService.getTeamsForSiteAndSkills({
-				skillIds: skillIds,
-				siteIds: siteIds
-			});
-		};
-
-		function getAdherenceForSitesBySkills(skillIds) {
-			return rtaService.getAdherenceForSitesBySkills(skillIds);
-		}
-
-		function getAdherenceForTeamsBySkills(siteIds, skillIds) {
-			return rtaService.getAdherenceForTeamsBySkills({
-				skillIds: skillIds,
-				siteIds: siteIds
-			})
-		};
-
+		
 		$scope.$watch(
 			function () { return $sessionStorage.buid; },
 			function (newValue, oldValue) {
