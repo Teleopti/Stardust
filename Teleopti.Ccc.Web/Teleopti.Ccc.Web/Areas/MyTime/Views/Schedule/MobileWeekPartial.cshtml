@@ -68,7 +68,7 @@
         <div class="day panel panel-default mobile-view-day" data-bind="attr: { 'data-mytime-date': fixedDate }">
             <div class="header panel-heading">
                 <span class="weekday" data-bind="text: weekDayHeaderTitle"></span>
-                <!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913') && showProbabilityOptions()-->
+                <!-- ko if: $parent.staffingProbabilityEnabled() && showProbabilityOptions()-->
                 <span class="weekday">(@Resources.Today)</span>
                 <!-- /ko -->
                 <span class="date" data-bind="text: fixedDate"></span>
@@ -122,7 +122,7 @@
                     <!-- /ko -->
                 </div>
             </div>
-            <!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913') && ($parent.showingAbsenceProbability() || $parent.showingOvertimeProbability()) && showProbabilityOptions() -->
+            <!-- ko if: $parent.staffingProbabilityEnabled() && ($parent.showingAbsenceProbability() || $parent.showingOvertimeProbability()) && showProbabilityOptions() -->
             <div class="probability-horizontal-bar">
                 <!--ko foreach: probabilities-->
                 <div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
@@ -132,7 +132,7 @@
 
             <div class="mobile-bottom-bar">
                 <ul class="nav nav-pills navbar-weekview">
-                    <!-- ko if: !Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')-->
+                    <!-- ko if: !$parent.staffingProbabilityEnabled()-->
                     <!-- ko if: overtimeAvailabilityPermission() -->
                     <li data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
                         <a href="#" class="overtime-availability-add" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
@@ -144,7 +144,7 @@
                     </li>
                     <!-- /ko -->
                     <!-- /ko -->
-                    <!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')-->
+                    <!-- ko if: $parent.staffingProbabilityEnabled()-->
                     <!-- ko if: overtimeAvailabilityPermission() -->
                     <li class="display-none" data-bind="css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
                         <a class="overtime-availability-add">@Resources.OvertimeAvailability</a>

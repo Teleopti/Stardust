@@ -35,9 +35,11 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 
 	self.baseUtcOffsetInMinutes = ko.observable();
 	self.intradayOpenPeriod = null;
-	self.selectedProbabilityOptionValue = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().probability);
-	self.showingAbsenceProbability = ko.observable(false);
-	self.showingOvertimeProbability = ko.observable(false);
+
+	var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
+	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
+	self.showingAbsenceProbability = ko.observable(initializeProbabilityType === constants.absenceProbabilityType);
+	self.showingOvertimeProbability = ko.observable(initializeProbabilityType === constants.overtimeProbabilityType);
 
 	self.selectedDateSubscription = null;
 	self.initialRequestDay = ko.observable();
@@ -315,19 +317,20 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 		return new MobileWeekLayerViewModel(item, parent.userTexts);
 	});
 
-	if (self.staffingProbabilityEnabled()) {
-		self.probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
-		{
-			probabilityType: parent.selectedProbabilityOptionValue(),
-			layoutDirection: constants.horizontalDirectionLayout,
-			timelines: parent.timeLines(),
-			intradayOpenPeriod: parent.intradayOpenPeriod,
-			mergeSameIntervals: true,
-			userTexts: parent.userTexts
-		});
-	} else {
-		self.probabilities = [];
-	}
+	var probabilities = self.staffingProbabilityEnabled()
+		? Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay,
+			rawProbabilities,
+			self,
+			{
+				probabilityType: parent.selectedProbabilityOptionValue(),
+				layoutDirection: constants.horizontalDirectionLayout,
+				timelines: parent.timeLines(),
+				intradayOpenPeriod: parent.intradayOpenPeriod,
+				mergeSameIntervals: true,
+				userTexts: parent.userTexts
+			})
+		: [];
+	self.probabilities = ko.observableArray(probabilities);
 };
 
 var MobileWeekLayerViewModel = function (layer, userTexts) {
