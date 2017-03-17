@@ -17,7 +17,7 @@
 	WfmImportAgentsCtrl.prototype.fetchingFieldOptions = true;
 	WfmImportAgentsCtrl.prototype.started = false;
 	WfmImportAgentsCtrl.prototype.done = false;
-
+	WfmImportAgentsCtrl.prototype.setFallbacks = false;
 
 
 	WfmImportAgentsCtrl.prototype.reset = function () {
@@ -50,7 +50,8 @@
 
 	WfmImportAgentsCtrl.prototype.clickImport = function () {
 		this.started = true;
-		this._peopleSvc.uploadAgentFromFile(this.file, this.fallbacks)
+		var fields = this.setFallbacks ? this.fallbacks : undefined;
+		this._peopleSvc.uploadAgentFromFile(this.file, fields)
 			.then(this.handleImportResult.bind(this), this.handleImportError.bind(this));
 	};
 
