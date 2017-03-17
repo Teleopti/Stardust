@@ -7,3 +7,7 @@ CREATE TABLE ReadModel.ExternalLogon
 	Deleted bit NULL default 0,
 	Added bit NULL default 0
 )
+GO
+
+UPDATE ReadModel.KeyValueStore SET Value = 'True' WHERE [Key] = 'PersonAssociationChangedPublishTrigger'
+GO
