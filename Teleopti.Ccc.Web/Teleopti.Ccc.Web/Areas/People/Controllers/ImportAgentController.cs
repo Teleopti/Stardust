@@ -63,11 +63,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			if (errors.Any())
 			{
 				var errorMsg = string.Format(Resources.MissingColumnX, string.Join(",", errors));
+
 				var invalidFileResponse = Request.CreateResponse((HttpStatusCode)422);
 				invalidFileResponse.Headers.Clear();
+				invalidFileResponse.Headers.Add("Message", $"format errors: {errorMsg}");
+
 				invalidFileResponse.Content = new StringContent(errorMsg);
 				invalidFileResponse.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
 				return invalidFileResponse;
 			}
 			var total = _fileProcessor.GetNumberOfRecordsInSheet(workbook.GetSheetAt(0));

@@ -146,18 +146,22 @@
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		</div>
 		<div class="con-flex" ng-if="$ctrl.done">
-			<div ng-show="$ctrl.result.success > 0" class="alert-success notice-spacer">
+			<div ng-show="$ctrl.result && $ctrl.result.success > 0" class="alert-success notice-spacer">
 				<i class='mdi mdi-thumb-up'></i>{{ $ctrl.getMessage('success', $ctrl.result.success) }}.
 			</div>
-			<div ng-show="$ctrl.result.warning > 0" class="alert-warning notice-spacer">
+			<div ng-show="$ctrl.result && $ctrl.result.warning > 0" class="alert-warning notice-spacer">
 				<i class='mdi mdi-information'></i>{{ $ctrl.getMessage('warning', $ctrl.result.warning) }}.
 			</div>
-			<div ng-show="$ctrl.result.failure > 0" class="alert-danger notice-spacer">
+			<div ng-show="$ctrl.result && $ctrl.result.failure > 0" class="alert-danger notice-spacer">
 				<i class='mdi mdi-information'></i>{{ $ctrl.getMessage('failure', $ctrl.result.failure) }}.
 			</div>
 
-			<div ng-show="$ctrl.result.warning + $ctrl.result.failure > 0" class="alert-warning notice-spacer">
+			<div ng-show="$ctrl.result && ($ctrl.result.warning + $ctrl.result.failure > 0)" class="alert-warning notice-spacer">
 				<i class='mdi mdi-information'></i>{{'PleaseFindTheDownloadedExcelSheetToCheckTheError'|translate}}
+			</div>
+			
+			<div ng-show="$ctrl.fileError" class="alert-warning notice-spacer">
+				<i class='mdi mdi-information'></i>{{ $ctrl.fileError }}.
 			</div>
 
 			<div>

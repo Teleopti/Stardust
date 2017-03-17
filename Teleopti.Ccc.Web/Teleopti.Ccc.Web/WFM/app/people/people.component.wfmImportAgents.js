@@ -25,6 +25,7 @@
 		this.started = false;
 		this.fallbacks = angular.copy(defaultFallbacks);
 		this.result = null;
+		this.fileError = null;
 		this.file = null;
 		this.setFallbacks = false;
 	};
@@ -50,7 +51,7 @@
 	WfmImportAgentsCtrl.prototype.clickImport = function () {
 		this.started = true;
 		this._peopleSvc.uploadAgentFromFile(this.file, this.fallbacks)
-			.then(this.handleImportResult.bind(this));
+			.then(this.handleImportResult.bind(this), this.handleImportError.bind(this));
 	};
 
 	WfmImportAgentsCtrl.prototype.getTemplate = function () {
@@ -60,23 +61,34 @@
 			}.bind(this));
 	};
 
+	WfmImportAgentsCtrl.prototype.handleImportError = function(response) {
+		this.done = true;
+		var fileError = response.headers()['message'].match(/^format errors: (.+)$/);
+
+		if (fileError) {
+			this.fileError = fileError[1];
+		}
+	}
+
 	WfmImportAgentsCtrl.prototype.handleImportResult = function (response) {
 		this.done = true;
-
+		
 		var isXlsx = response.headers()['content-type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 		var processResult = response.headers()['message'].match(/success count:(\d+), failed count:(\d+), warning count:(\d+)/);
 
-		this.result = {
-			success: processResult[1],
-			failure: processResult[2],
-			warning: processResult[3]
-		};
+		if (processResult) {
+			this.result = {
+				success: processResult[1],
+				failure: processResult[2],
+				warning: processResult[3]
+			};
 
-		if (processResult[2] > 0 || processResult[3] > 0) {
-			var ext = isXlsx ? '.xlsx' : '.xls';
-			this.saveFile(response, 'invalid_agents' + ext);
-		}
+			if (processResult[2] > 0 || processResult[3] > 0) {
+				var ext = isXlsx ? '.xlsx' : '.xls';
+				this.saveFile(response, 'invalid_agents' + ext);
+			}
+		}		
 	};
 
 	WfmImportAgentsCtrl.prototype.getMessage = function (type, count) {
