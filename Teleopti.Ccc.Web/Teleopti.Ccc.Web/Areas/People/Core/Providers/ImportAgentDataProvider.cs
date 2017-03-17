@@ -135,7 +135,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 		public IApplicationRole FindRole(string roleName)
 		{
-			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.DescriptionText.Trim() == roleName.Trim());
+			if (roleName.IsNullOrEmpty())
+			{
+				return null;
+			}
+			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.DescriptionText?.Trim() == roleName.Trim());
 		}
 
 
