@@ -123,9 +123,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var skillsDataExtractor = _optimizerHelper.CreateTeamBlockAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, schedulerStateHolder.SchedulingResultState, allPersonMatrixList);
 			var periodValueCalculatorForAllSkills = _optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, skillsDataExtractor);
 
+			var maxIterations = optimizationPreferences.Extra.IsClassic() ? 25 : 100;
+
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = 
 				new SmartDayOffBackToLegalStateService(
-				100,// <--
+				maxIterations,
 				_dayOffDecisionMaker);
 
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder =
