@@ -188,6 +188,7 @@ And I am viewing requests
 When I click on the existing request in the list
 Then I should not see the remaining and used time
 
+@suppressHangfireQueue
 Scenario: Add absence request
 	Given I am an agent
 	And I have a requestable absence called Vacation

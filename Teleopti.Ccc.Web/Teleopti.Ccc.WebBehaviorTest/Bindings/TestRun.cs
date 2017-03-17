@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using log4net;
 using log4net.Config;
 using NUnit.Framework;
@@ -7,6 +8,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Toggle;
 
@@ -15,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	public class TestRun
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(TestRun));
+		private const string suppressHangfireQueueTag = "suppressHangfireQueue";
 
 		public void Setup()
 		{
@@ -63,7 +66,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			if (Browser.IsStarted)
 				Browser.Interactions.GoTo("about:blank");
 			DataMaker.AfterScenario();
-			LocalSystem.Hangfire.WaitForQueue();
+			// some scenarios should not trigger handfire queue jobs which may throw an exception caused by no data available.
+			if (!suppressHangfireQueue())
+			{
+				LocalSystem.Hangfire.WaitForQueue();
+			}
 
 			if (ScenarioContext.Current.TestError != null)
 				Console.WriteLine($"\r\nTest Scenario \"{ScenarioContext.Current.ScenarioInfo.Title}\" failed, please check the error message.");
@@ -88,6 +95,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			log.Debug("Finished test run");
 		}
-		
+
+		private static bool suppressHangfireQueue()
+		{
+			return ScenarioContext.Current.IsTaggedWith(suppressHangfireQueueTag);
+		}
 	}
 }
