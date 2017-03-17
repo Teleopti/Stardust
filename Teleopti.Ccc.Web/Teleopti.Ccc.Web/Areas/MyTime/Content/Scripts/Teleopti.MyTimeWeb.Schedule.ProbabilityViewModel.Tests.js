@@ -31,8 +31,6 @@ $(document).ready(function () {
 		"lengthPercentagePerMinute": 0.01,
 		"probabilityStartMinutes": 240, // 04:00
 		"probabilityEndMinutes": 1380, // 23:00
-		"probabilityStartPosition": 0.14,
-		"probabilityEndPosition": 0.86
 	};
 
 	var baseDate = "2017-02-24";

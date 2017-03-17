@@ -7,8 +7,6 @@
 
 	var probabilityStartMinutes;
 	var probabilityEndMinutes;
-	var probabilityStartPosition;
-	var probabilityEndPosition;
 
 	var timelineStartMinutes = timelines[0].minutes;
 	var timelineEndMinutes = timelines[timelines.length - 1].minutes;
@@ -99,14 +97,11 @@
 	probabilityStartMinutes = Math.max.apply(null, startTimeCandidates);
 	probabilityEndMinutes = Math.min.apply(null, endTimeCandidates);
 
-	probabilityStartPosition = (probabilityStartMinutes - timelineStartMinutes) * lengthPercentagePerMinute;
-	probabilityEndPosition = (probabilityEndMinutes - timelineStartMinutes) * lengthPercentagePerMinute;
-
 	return {
+		timelineStartMinutes: timelineStartMinutes,
+		timelineEndMinutes: timelineEndMinutes,
 		lengthPercentagePerMinute: lengthPercentagePerMinute,
 		probabilityStartMinutes: probabilityStartMinutes,
 		probabilityEndMinutes: probabilityEndMinutes,
-		probabilityStartPosition: probabilityStartPosition,
-		probabilityEndPosition: probabilityEndPosition
 	};
 };

@@ -88,8 +88,6 @@ $(document).ready(function () {
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
-		equal(vm.probabilityStartPosition, 0);
-		equal(vm.probabilityEndPosition, 1);
 	});
 
 	test("Calculate absence probability boundaries for full day absence", function () {
@@ -101,8 +99,6 @@ $(document).ready(function () {
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
-		equal(vm.probabilityStartPosition, 0);
-		equal(vm.probabilityEndPosition, 1);
 	});
 
 	test("Calculate overtime probability boundaries for dayoff", function () {
@@ -114,8 +110,6 @@ $(document).ready(function () {
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
-		equal(vm.probabilityStartPosition, 0);
-		equal(vm.probabilityEndPosition, 1);
 	});
 
 	test("Calculate overtime probability boundaries for full day absence", function () {
@@ -127,8 +121,6 @@ $(document).ready(function () {
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, constants.totalMinutesOfOneDay);
-		equal(vm.probabilityStartPosition, 0);
-		equal(vm.probabilityEndPosition, 1);
 	});
 
 	test("Calculate absence probability boundaries for normal day", function () {
@@ -140,8 +132,6 @@ $(document).ready(function () {
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 570);
 		equal(vm.probabilityEndMinutes, 1110);
-		equal(Math.round(vm.probabilityStartPosition * 1000), Math.round(570 * 1000 / constants.totalMinutesOfOneDay));
-		equal(Math.round(vm.probabilityEndPosition * 1000), Math.round(1110 * 1000 / constants.totalMinutesOfOneDay));
 	});
 
 	// Should show overtime probability in intersection of timeline, open hour period and probility start / end
@@ -166,10 +156,8 @@ $(document).ready(function () {
 		equal(vm.lengthPercentagePerMinute, 1 / timelineLengthInMinutes);
 		equal(vm.probabilityStartMinutes, 420); // 07:00
 		equal(vm.probabilityEndMinutes, 960); // 16:00
-		equal(Math.round(vm.probabilityStartPosition * 1000),
-			Math.round(((420 - timelineStartInMinutes) * vm.lengthPercentagePerMinute) * 1000));
-		equal(Math.round(vm.probabilityEndPosition * 1000),
-			Math.round(((960 - timelineStartInMinutes) * vm.lengthPercentagePerMinute) * 1000));
+		Math.round(((420 - timelineStartInMinutes) * vm.lengthPercentagePerMinute) * 1000);
+		Math.round(((960 - timelineStartInMinutes) * vm.lengthPercentagePerMinute) * 1000);
 	});
 
 	test("Calculate absence probability boundaries for cross day schedule end today", function () {
@@ -181,8 +169,6 @@ $(document).ready(function () {
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, 60);
-		equal(vm.probabilityStartPosition, 0);
-		equal(Math.round(vm.probabilityEndPosition * 1000), Math.round(60 * 1000 / constants.totalMinutesOfOneDay));
 	});
 
 	test("Calculate absence probability boundaries for cross day schedule will end tomorrow", function () {
@@ -194,8 +180,6 @@ $(document).ready(function () {
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 1020);
 		equal(vm.probabilityEndMinutes, 1440);
-		equal(Math.round(vm.probabilityStartPosition * 1000), Math.round(1020 * 1000 / constants.totalMinutesOfOneDay));
-		equal(vm.probabilityEndPosition, 1);
 	});
 
 	test("Calculate overtime probability boundaries for cross day schedule end today", function () {
@@ -207,8 +191,6 @@ $(document).ready(function () {
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, 1440);
-		equal(vm.probabilityStartPosition, 0);
-		equal(vm.probabilityEndPosition, 1);
 	});
 
 	test("Calculate overtime probability boundaries for cross day schedule will end tomorrow", function () {
@@ -220,7 +202,5 @@ $(document).ready(function () {
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
 		equal(vm.probabilityEndMinutes, 1440);
-		equal(vm.probabilityStartPosition, 0);
-		equal(vm.probabilityEndPosition, 1);
 	});
 });

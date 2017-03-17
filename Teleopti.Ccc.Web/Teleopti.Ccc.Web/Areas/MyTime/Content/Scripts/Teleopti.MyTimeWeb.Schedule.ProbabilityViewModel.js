@@ -29,9 +29,6 @@
 					intervalEndMinutes = continousPeriods[i].endTimeInMin;
 				}
 			}
-		} else if (probabilityType === constants.overtimeProbabilityType) {
-			visible = boundaries.probabilityStartMinutes <= intervalStartMinutes &&
-				intervalEndMinutes <= boundaries.probabilityEndMinutes;
 		}
 	}
 
@@ -56,7 +53,8 @@
 		trimIntervalAccordingSchedulePeriod();
 
 		var styleJson = {};
-		var intervalStartPositionPercentage = boundaries.lengthPercentagePerMinute * intervalStartMinutes * 100;
+		var intervalStartPositionPercentage = boundaries.lengthPercentagePerMinute * (intervalStartMinutes - boundaries.timelineStartMinutes) * 100;
+
 		var positionProperty = layoutDirection === constants.horizontalDirectionLayout ? "left" : "top";
 		styleJson[positionProperty] = intervalStartPositionPercentage + "%";
 
