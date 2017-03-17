@@ -27,11 +27,6 @@
 
 	var momentDate = moment(scheduleDay.FixedDate);
 
-	function convertTimePointToMinutes(time) {
-		var baseDate = "2017-01-01 ";
-		return (moment(baseDate + time).diff(moment(baseDate)) / (60 * 1000));
-	}
-
 	if (scheduleDay.Periods.length > 0) {
 		var firstPeriod = scheduleDay.Periods[0];
 		var lastPeriod = scheduleDay.Periods[scheduleDay.Periods.length - 1];
@@ -75,8 +70,8 @@
 	var openPeriodEndMinutes = constants.totalMinutesOfOneDay + 1;
 	if (probabilityType === constants.overtimeProbabilityType &&
 		intradayOpenPeriod != undefined && intradayOpenPeriod != null) {
-		openPeriodStartMinutes = convertTimePointToMinutes(intradayOpenPeriod.startTime);
-		openPeriodEndMinutes = convertTimePointToMinutes(intradayOpenPeriod.endTime);
+		openPeriodStartMinutes = moment.duration(intradayOpenPeriod.startTime).asMinutes();
+		openPeriodEndMinutes = moment.duration(intradayOpenPeriod.endTime).asMinutes();
 	}
 
 	var startTimeCandidates = [
@@ -102,6 +97,6 @@
 		timelineEndMinutes: timelineEndMinutes,
 		lengthPercentagePerMinute: lengthPercentagePerMinute,
 		probabilityStartMinutes: probabilityStartMinutes,
-		probabilityEndMinutes: probabilityEndMinutes,
+		probabilityEndMinutes: probabilityEndMinutes
 	};
 };
