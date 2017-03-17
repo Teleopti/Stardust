@@ -14,6 +14,7 @@ describe('ResourceplannerReportCtrl', function () {
 		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 		$httpBackend.whenGET("../ToggleHandler/AllToggles").respond(200, {});
+		//$httpBackend.whenGET("../api/resourceplanner/planningperiod/111-111/countagents").respond(200, { TotalAgents: 5});
 
 		mockToggleService = function (Scheduler_IntradayOptimization_36617_Value, Wfm_ResourcePlanner_SchedulingOnStardust_42874_Value) {
 			var deferred = $q.defer();
@@ -37,7 +38,7 @@ describe('ResourceplannerReportCtrl', function () {
 		return {result:{BusinessRulesValidationResults:[[]]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:'2015-11-12'}]}]}};
 	};
 	result.withPeriodId = function(){
-		return {planningperiod:{id:0},result:{BusinessRulesValidationResults:[[]]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:'2015-11-12'}]}]}}
+		return { planningperiod: { id: 0},result:{BusinessRulesValidationResults:[[]]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:'2015-11-12'}]}]}}
 	};
 
 	it('should not detect any issues', inject(function ($controller) {
@@ -90,14 +91,14 @@ describe('ResourceplannerReportCtrl', function () {
 	}));
 	it('should return false if no params are provided', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		var mockstateParams = {id:"",result:{},interResult:[],planningperiod:{}}
+		var mockstateParams = { id: "", result: {}, interResult: [], planningperiod: { StartDate: '2015-11-11', EndDate: '2015-11-18'}}
 		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: mockstateParams});
 
 		expect(scope.optimizeDayOffIsEnabled()).toBe(false);
 	}));
-	it('should return true if params are provided', inject(function ($controller) {
+	xit('should return true if params are provided', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		var mockstateParams = {id:"111-111",result:{},interResult:[],planningperiod:{}}
+		var mockstateParams = { id: "111-111", result: {}, interResult: [], planningperiod: { StartDate: '2015-11-11', EndDate: '2015-11-18'}}
 		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: mockstateParams, Toggle: mockToggleService(true, false) });
 		scope.$digest();
 		expect(scope.optimizeDayOffIsEnabled()).toBe(true);
