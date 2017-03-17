@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Ajax.Utilities;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.UserTexts;
@@ -319,9 +321,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 			if (!agentInfo.ExternalLogons.Any())
 			{
-				if (_defaultValues.ExternalLogon != null)
+				if (_defaultValues != null)
 				{
-					agentInfo.ExternalLogons.Add(_defaultValues.ExternalLogon);
+					if (_defaultValues.ExternalLogon != null)
+						agentInfo.ExternalLogons.Add(_defaultValues.ExternalLogon);
 					feedback.WarningMessages.Add(warningMessage("ExternalLogon"));
 					return feedback;
 				}

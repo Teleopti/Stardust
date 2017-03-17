@@ -507,6 +507,27 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void WithEmptyDefaultsProvidedShouldBeAbleToFixInvalidExternalLogon()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.ExternalLogon = "Invalid external logon";
+
+			var externalLogon = ExternalLogOnFactory.CreateExternalLogOn().WithId();
+			ExternalLogOnRepository.Add(externalLogon);
+
+			var defaultExternalLogon = Guid.Empty.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { ExternalLogonId = defaultExternalLogon });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon"));
+			result.Single().Agent.ExternalLogons.Count.Should().Be(0);
+		}
+
+		[Test]
 		public void WithDefaultsProvidedShouldBeAbleToFixInvalidRuleSetBag()
 		{
 			var rawAgent = setupProviderData();
