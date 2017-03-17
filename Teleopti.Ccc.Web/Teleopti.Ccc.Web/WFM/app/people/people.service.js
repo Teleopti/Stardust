@@ -90,9 +90,9 @@
 			function normalizeFormData(fields) {
 				return {
 					StartDate: fields.startDate,
-					RoleIds: (fields.roles||[]).join(","),
+					RoleIds: angular.isArray(fields.roles) && fields.roles.length > 0 ? fields.roles.join(',') : undefined,
 					TeamId: fields.team,
-					SkillIds:(fields.skills||[]).join(","),
+					SkillIds: angular.isArray(fields.skills) && fields.skills.length > 0 ? fields.skills.join(',') : undefined,
 					ExternalLogonId: fields.externalLogon,
 					ContractId: fields.contract,
 					ContractScheduleId: fields.contractSchedule,
