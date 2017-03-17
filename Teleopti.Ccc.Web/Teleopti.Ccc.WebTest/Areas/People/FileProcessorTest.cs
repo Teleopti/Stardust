@@ -338,6 +338,18 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "Firstname", string.Format(Resources.RequireXCellFormat, "text"))).Should().Be.False();
 		}
 
+		[Test]
+		public void ShouldSkipEmptyRows()
+		{
+			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var sheet = workbook.GetSheetAt(0);
+			sheet.CreateRow(1);
+			sheet.CreateRow(2);			
+
+			var result = Target.GetNumberOfRecordsInSheet(sheet);
+			result.Should().Be.EqualTo(0);
+		}
+
 
 		[Test]
 		public void ShouldWriteErrorMsgForInvalidInput()

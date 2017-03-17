@@ -24,6 +24,21 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			_workbookHandler = workbookHandler;
 		}
 
+		public int GetNumberOfRecordsInSheet(ISheet sheet)
+		{
+			var count = 0;
+
+			for (var i = 1; i <= sheet.LastRowNum; i++)
+			{
+				var row = sheet.GetRow(i);
+				if (!row.IsBlank())
+				{
+					count++;
+				}
+			}
+			return count;			
+		}
+
 		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentFormData defaultValues = null)
 		{
 			if (defaultValues != null)
@@ -85,6 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 	public interface IFileProcessor
 	{
 		IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentFormData defaultValues = null);
+		int GetNumberOfRecordsInSheet(ISheet sheet);
 		IList<string> ValidateWorkbook(IWorkbook workbook);
 		IWorkbook ParseFile(FileData fileData);
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);
