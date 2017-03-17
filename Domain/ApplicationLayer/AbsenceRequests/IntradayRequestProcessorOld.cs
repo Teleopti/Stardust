@@ -124,6 +124,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				foreach (var day in scheduleDays)
 				{
 					var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
+					var layers = projection.ToResourceLayers(skillInterval).ToList();
+
+					if (!layers.Any())
+					{
+						continue;
+					}
+
 					if (projection.OriginalProjectionPeriod.Value.StartDateTime < earliestProjectionStartDateTime)
 					{
 						earliestProjectionStartDateTime = projection.OriginalProjectionPeriod.Value.StartDateTime;
@@ -131,15 +138,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					if (projection.OriginalProjectionPeriod.Value.EndDateTime > latestProjectionEndDateTime)
 					{
 						latestProjectionEndDateTime = projection.OriginalProjectionPeriod.Value.EndDateTime;
-					}
-					var layers = projection.ToResourceLayers(skillInterval);
-
-					if (!layers.Any())
-					{
-						if (!autoGrant) return;
-						logger.Info($"Absence request {personRequest.Id.GetValueOrDefault()}  is approved as the agent is not scheduled.");
-						sendApproveCommand(personRequest.Id.GetValueOrDefault());
-						return;
 					}
 
 					foreach (var layer in layers)
