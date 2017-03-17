@@ -662,7 +662,6 @@
     <Compile Include="Scheduler\SetTagCommandTest.cs" />
     <Compile Include="Scheduler\SkillMonthGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\SkillWeekGridControlPresenterTest.cs" />
-    <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
     <Compile Include="Scheduler\SplitLongDayAbsencesTest.cs" />
     <Compile Include="Scheduler\TryModifyTests.cs" />
     <Compile Include="Scheduler\ValidationAlertsModelTest.cs" />
