@@ -114,6 +114,10 @@
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AI.Wcf, Version=0.27.0.5588, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.Wcf.0.27.0-build05588\lib\net45\Microsoft.AI.Wcf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Web, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
       <Private>True</Private>
@@ -293,6 +297,6 @@
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\..\BuildArtifacts\SDKWeb.config" "$(ProjectDir)web.config"
-if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\..\BuildArtifacts\ApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"</PreBuildEvent>
+if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\..\BuildArtifacts\SDKApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"</PreBuildEvent>
   </PropertyGroup>
 </Project>

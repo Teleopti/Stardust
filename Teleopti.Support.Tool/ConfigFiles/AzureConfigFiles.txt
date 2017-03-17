@@ -1,7 +1,7 @@
 ﻿..\..\..\sitesroot\0\Web.config,BuildArtifacts\Web.StartPage.Web.config
 ..\..\..\sitesroot\1\LegalNotice.txt,BuildArtifacts\LegalNotice.txt
 ..\..\..\sitesroot\1\web.config,BuildArtifacts\SDKWeb.config
-..\..\..\sitesroot\1\ApplicationInsights.config,BuildArtifacts\ApplicationInsights.config
+..\..\..\sitesroot\1\ApplicationInsights.config,BuildArtifacts\SDKApplicationInsights.config
 ..\..\..\sitesroot\2\web.config,BuildArtifacts\AnalyticsWeb.config
 ..\..\..\sitesroot\3\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
 ..\..\..\sitesroot\3\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
