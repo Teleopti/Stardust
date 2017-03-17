@@ -75,7 +75,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 			var deleteTag = personRequest as IDeleteTag;
 			if (deleteTag != null && deleteTag.IsDeleted)
 			{
-				// DELETE
+				// Request has been deleted, remove from analytics
+				_analyticsRequestRepository.Delete(@event.PersonRequestId);
+				return;
+			}
+			if (personRequest.Person.IsTerminated() && personRequest.RequestedDate > personRequest.Person.TerminalDate.Value.Date)
+			{
+				// Person has been terminated and request is after termination date, remove from analytics if it already exists
 				_analyticsRequestRepository.Delete(@event.PersonRequestId);
 				return;
 			}
