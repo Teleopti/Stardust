@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool removeIllegalDayOffs(ILockableBitArray workingBitArray, IDaysOffPreferences daysOffPreferences)
         {
             //get back to legal state, if needed
-            return _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray, daysOffPreferences), 100);
+            return _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray, daysOffPreferences, 25), 100, new List<string>());
         }
 
         private dayOffOptimizerMoveDaysResult executeDayOffMovesInMatrix(

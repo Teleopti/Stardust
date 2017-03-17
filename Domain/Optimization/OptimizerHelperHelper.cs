@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				ILockableBitArray bitArray = scheduleMatrixLockableBitArrayConverterEx.Convert(matrixOriginalStateContainer.ScheduleMatrix, dayOffOptimizationPreference.ConsiderWeekBefore, dayOffOptimizationPreference.ConsiderWeekAfter);
 				IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
-				ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(20, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
+				ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
 				ISmartDayOffBackToLegalStateSolverContainer solverContainer = new SmartDayOffBackToLegalStateSolverContainer(matrixOriginalStateContainer, bitArray, solverService);
 				solverContainers.Add(solverContainer);
 			}

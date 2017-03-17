@@ -29,14 +29,14 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             _daysOffPreferences.UseWeekEndDaysOff = true;
             _daysOffPreferences.UseFullWeekendsOff = true;
         	_decisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
-            _target = new SmartDayOffBackToLegalStateService(_maxIterations, _decisionMaker);
+            _target = new SmartDayOffBackToLegalStateService(_decisionMaker);
         }
 
         [Test]
         public void VerifyCanGetListOfSolversIncorrectRunOrder()
         {
             LockableBitArray array = createBitArray();
-            IList<IDayOffBackToLegalStateSolver> solvers = _target.BuildSolverList(array, _daysOffPreferences);
+            IList<IDayOffBackToLegalStateSolver> solvers = _target.BuildSolverList(array, _daysOffPreferences, _maxIterations);
             Assert.AreEqual(6, solvers.Count);
             Assert.AreEqual(typeof(FreeWeekendSolver), solvers[0].GetType());
             Assert.AreEqual(typeof(FreeWeekendDaySolver), solvers[1].GetType());
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             Assert.AreEqual(typeof(ConsecutiveWorkdaysSolver), solvers[4].GetType());
             Assert.AreEqual(typeof(TuiCaseSolver), solvers[5].GetType());
         	_daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 5);
-			solvers = _target.BuildSolverList(array, _daysOffPreferences);
+			solvers = _target.BuildSolverList(array, _daysOffPreferences, _maxIterations);
 			Assert.AreEqual(7, solvers.Count);
 			Assert.AreEqual(typeof(FiveConsecutiveWorkdaysSolver), solvers[6].GetType());
         }
@@ -70,16 +70,16 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             }
 
             bool result;
-
-            using (_mocks.Playback())
+			var failedDescKeys = new List<string>();
+			using (_mocks.Playback())
             {
-                result = _target.Execute(solvers, _maxIterations);
+                result = _target.Execute(solvers, _maxIterations, failedDescKeys);
             }
 
             Assert.IsFalse(result);
-            Assert.IsTrue(_target.FailedSolverDescriptionKeys.Contains("hej"));
-            Assert.IsTrue(_target.FailedSolverDescriptionKeys.Contains("hupp"));
-            Assert.AreEqual(2, _target.FailedSolverDescriptionKeys.Count);
+            Assert.IsTrue(failedDescKeys.Contains("hej"));
+            Assert.IsTrue(failedDescKeys.Contains("hupp"));
+            Assert.AreEqual(2, failedDescKeys.Count);
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(solvers, _maxIterations);
+                result = _target.Execute(solvers, _maxIterations, new List<string>());
             }
 
             Assert.IsTrue(result);
@@ -138,15 +138,15 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             }
 
             bool result;
-
+	        var failedDescKeys = new List<string>();
             using (_mocks.Playback())
             {
-                result = _target.Execute(solvers, 1);
+                result = _target.Execute(solvers, 1, failedDescKeys);
             }
 
             Assert.IsFalse(result);
-			Assert.IsTrue(_target.FailedSolverDescriptionKeys.Contains("hej"));
-			Assert.IsTrue(_target.FailedSolverDescriptionKeys.Contains("hupp"));
+			Assert.IsTrue(failedDescKeys.Contains("hej"));
+			Assert.IsTrue(failedDescKeys.Contains("hupp"));
         }
 
 

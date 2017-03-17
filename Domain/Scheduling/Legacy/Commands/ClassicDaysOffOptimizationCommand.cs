@@ -162,9 +162,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var scheduleResultDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix, optimizerPreferences.Advanced, scheduleResultStateHolder());
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService =
-				new SmartDayOffBackToLegalStateService(
-					25,
-					_dayOffDecisionMaker);
+				new SmartDayOffBackToLegalStateService(_dayOffDecisionMaker);
 
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, scheduleResultStateHolder(), _userTimeZone);
 

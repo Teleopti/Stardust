@@ -36,12 +36,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public void Execute(IDaysOffPreferences daysOffPreferences)
         {
-            _result = _dayOffBackToLegalStateService.Execute(_dayOffBackToLegalStateService.BuildSolverList(BitArray, daysOffPreferences), 20);
+			var failedSolverDescriptionKeys = new List<string>();
+            _result = _dayOffBackToLegalStateService.Execute(_dayOffBackToLegalStateService.BuildSolverList(BitArray, daysOffPreferences, 20), 20, failedSolverDescriptionKeys);
+	        FailedSolverDescriptionKeys = failedSolverDescriptionKeys;
         }
 
-        public IList<string> FailedSolverDescriptionKeys
-        {
-            get { return _dayOffBackToLegalStateService.FailedSolverDescriptionKeys; }
-        }
+        public IList<string> FailedSolverDescriptionKeys { get; set; }
     }
 }

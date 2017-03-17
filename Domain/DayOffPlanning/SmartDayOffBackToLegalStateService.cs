@@ -8,33 +8,30 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
     public class SmartDayOffBackToLegalStateService : ISmartDayOffBackToLegalStateService
     {
-        private readonly int _maxIterations;
     	private readonly IDayOffDecisionMaker _cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker;
-    	private readonly IList<string> _failedSolverDescriptionKeys = new List<string>();
 
-		public SmartDayOffBackToLegalStateService(int maxIterations, IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker)
+		public SmartDayOffBackToLegalStateService(IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker)
         {
-            _maxIterations = maxIterations;
 			_cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker;
         }
 
-        public IList<IDayOffBackToLegalStateSolver> BuildSolverList(ILockableBitArray bitArray, IDaysOffPreferences daysOffPreferences)
+        public IList<IDayOffBackToLegalStateSolver> BuildSolverList(ILockableBitArray bitArray, IDaysOffPreferences daysOffPreferences, int maxIterations)
         {
 			var functions = new DayOffBackToLegalStateFunctions(bitArray);
             IList<IDayOffBackToLegalStateSolver> solvers = new List<IDayOffBackToLegalStateSolver>();
             if (daysOffPreferences.UseFullWeekendsOff)
-                solvers.Add(new FreeWeekendSolver(bitArray, functions, daysOffPreferences, _maxIterations));
+                solvers.Add(new FreeWeekendSolver(bitArray, functions, daysOffPreferences, maxIterations));
             if (daysOffPreferences.UseWeekEndDaysOff)
-                solvers.Add(new FreeWeekendDaySolver(bitArray, functions, daysOffPreferences, _maxIterations));
+                solvers.Add(new FreeWeekendDaySolver(bitArray, functions, daysOffPreferences, maxIterations));
             if (daysOffPreferences.UseDaysOffPerWeek)
-                solvers.Add(new DaysOffPerWeekSolver(bitArray, functions, daysOffPreferences, _maxIterations));
+                solvers.Add(new DaysOffPerWeekSolver(bitArray, functions, daysOffPreferences, maxIterations));
             if (daysOffPreferences.UseConsecutiveDaysOff)
-                solvers.Add(new ConsecutiveDaysOffSolver(bitArray, functions, daysOffPreferences, _maxIterations));
+                solvers.Add(new ConsecutiveDaysOffSolver(bitArray, functions, daysOffPreferences, maxIterations));
             if (daysOffPreferences.UseConsecutiveWorkdays)
             {
-                solvers.Add(new ConsecutiveWorkdaysSolver(bitArray, functions, daysOffPreferences, _maxIterations));
+                solvers.Add(new ConsecutiveWorkdaysSolver(bitArray, functions, daysOffPreferences, maxIterations));
                 if (daysOffPreferences.UseWeekEndDaysOff)
-					solvers.Add(new TuiCaseSolver(bitArray, functions, daysOffPreferences, _maxIterations, (int)DateTime.Now.TimeOfDay.TotalSeconds));
+					solvers.Add(new TuiCaseSolver(bitArray, functions, daysOffPreferences, maxIterations, (int)DateTime.Now.TimeOfDay.TotalSeconds));
 				if(daysOffPreferences.ConsecutiveWorkdaysValue.Maximum == 5)
 				{
 					solvers.Add(new FiveConsecutiveWorkdaysSolver(bitArray, functions, daysOffPreferences));
@@ -49,12 +46,10 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return solvers;
         }
 
-        public bool Execute(IList<IDayOffBackToLegalStateSolver> solvers, int maxIterations)
+        public bool Execute(IList<IDayOffBackToLegalStateSolver> solvers, int maxIterations, ICollection<string> failedSolverDescriptionKeys)
         {
             bool inLegalState = false;
             int iterationCounter = 0;
-            _failedSolverDescriptionKeys.Clear();
-
             while (!inLegalState && iterationCounter <= maxIterations)
             {
                 inLegalState = true;
@@ -64,7 +59,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 	                inLegalState = inLegalState && isSolverInLegalState;
 
 					if (!isSolverInLegalState && iterationCounter == maxIterations)
-						_failedSolverDescriptionKeys.Add(solver.ResolverDescriptionKey);
+						failedSolverDescriptionKeys.Add(solver.ResolverDescriptionKey);
                 }
                 iterationCounter++;
             }
@@ -78,10 +73,5 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 		    bool isSolverInLegalState = isTooFewInLegalState && isTooManyInLegalState;
 		    return isSolverInLegalState;
 	    }
-
-	    public IList<string> FailedSolverDescriptionKeys
-        {
-            get { return _failedSolverDescriptionKeys; }
-        }
     }
 }

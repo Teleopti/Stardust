@@ -40,11 +40,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             solverList.Add(solver);
             using (_mocks.Record())
             {
-                Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_bitArray, _daysOffPreferences)).Return(solverList).Repeat.Once();
-                Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 20)).Return(true).Repeat.Once();
+                Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_bitArray, _daysOffPreferences, 10)).Return(solverList).Repeat.Once();
+                Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 20, new List<string>())).IgnoreArguments().Return(true).Repeat.Once();
                 Expect.Call(_scheduleMatrixOriginalStateContainer.ScheduleMatrix).Return(_matrix).Repeat.Any();
-                Expect.Call(_smartDayOffBackToLegalStateService.FailedSolverDescriptionKeys).Return(new List<string>()).
-                    Repeat.Any();
             }
             _target.Execute(_daysOffPreferences);
             Assert.AreSame(_matrix, _target.MatrixOriginalStateContainer.ScheduleMatrix);

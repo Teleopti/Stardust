@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly DayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
+		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 
 		public TeamBlockDayOffOptimizerService(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -72,7 +73,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
-			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor)
+			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
@@ -98,6 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_dayOffOptimizerPreMoveResultPredictor = dayOffOptimizerPreMoveResultPredictor;
+			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
 		}
 
 		public void OptimizeDaysOff(
@@ -122,18 +125,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			
 			var skillsDataExtractor = _optimizerHelper.CreateTeamBlockAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, schedulerStateHolder.SchedulingResultState, allPersonMatrixList);
 			var periodValueCalculatorForAllSkills = _optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, skillsDataExtractor);
-
-			var maxIterations = optimizationPreferences.Extra.IsClassic() ? 25 : 100;
-
-			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = 
-				new SmartDayOffBackToLegalStateService(
-				maxIterations,
-				_dayOffDecisionMaker);
-
-			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder =
-				new TeamBlockDaysOffMoveFinder(_scheduleResultDataExtractorProvider,
-				dayOffBackToLegalStateService,
-				_dayOffOptimizationDecisionMakerFactory);
 
 			// create a list of all teamInfos
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
@@ -168,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				IEnumerable<ITeamInfo> teamInfosToRemove;
 				if(optimizationPreferences.Extra.UseTeamSameDaysOff)
 				{
-					teamInfosToRemove = runOneOptimizationRound(periodValueCalculatorForAllSkills, teamBlockDaysOffMoveFinder, optimizationPreferences, rollbackService,
+					teamInfosToRemove = runOneOptimizationRound(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
 					                                            remainingInfoList, schedulingOptions,
 					                                            resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, ()=>
 					                                            {
@@ -178,7 +169,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 				else
 				{
-					teamInfosToRemove = runOneOptimizationRoundWithFreeDaysOff(periodValueCalculatorForAllSkills, teamBlockDaysOffMoveFinder, optimizationPreferences, rollbackService,
+					teamInfosToRemove = runOneOptimizationRoundWithFreeDaysOff(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
 					                                                           remainingInfoList, schedulingOptions,
 					                                                           selectedPersons,
 																			   resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, () =>
@@ -209,7 +200,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return false;
 		}
 
-		private IEnumerable<ITeamInfo> runOneOptimizationRoundWithFreeDaysOff(IPeriodValueCalculator periodValueCalculatorForAllSkills, ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, 
+		private IEnumerable<ITeamInfo> runOneOptimizationRoundWithFreeDaysOff(IPeriodValueCalculator periodValueCalculatorForAllSkills, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, 
 																			List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, 
 																			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, 
 																			Action cancelAction,
@@ -240,7 +231,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
 
 						var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(dayOffOptimizationPreference.ConsiderWeekBefore, dayOffOptimizationPreference.ConsiderWeekAfter, matrix);
-						var resultingArray = teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, dayOffOptimizationPreference, _schedulerStateHolder().SchedulingResultState);
+						var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, dayOffOptimizationPreference, _schedulerStateHolder().SchedulingResultState);
 
 						var movedDaysOff = affectedDaysOff(matrix, dayOffOptimizationPreference, originalArray, resultingArray);
 						if (movedDaysOff != null)
@@ -326,7 +317,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return teamInfosToRemove;
 		}
 			
-		private IEnumerable<ITeamInfo> runOneOptimizationRound(IPeriodValueCalculator periodValueCalculatorForAllSkills, ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, 
+		private IEnumerable<ITeamInfo> runOneOptimizationRound(IPeriodValueCalculator periodValueCalculatorForAllSkills, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, 
 																List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, 
 																ISchedulingResultStateHolder schedulingResultStateHolder, Action cancelAction, 
 																IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress schedulingProgress)
@@ -351,7 +342,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
 
 						bool checkPeriodValue;
-						var success = runOneTeam(teamBlockDaysOffMoveFinder, optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
+						var success = runOneTeam(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
 						                         resourceCalculateDelayer,
 						                         schedulingResultStateHolder,
 												 dayOffOptimizationPreference,
@@ -516,8 +507,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		[RemoveMeWithToggle("maxseat check can be removed with toggle", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		private bool runOneTeam(ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, 
-														IOptimizationPreferences optimizationPreferences,
+		private bool runOneTeam(IOptimizationPreferences optimizationPreferences,
 		                        ISchedulePartModifyAndRollbackService rollbackService,
 		                        ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix,
 		                        ITeamInfo teamInfo,
@@ -528,7 +518,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 								out bool checkPeriodValue)
 		{
 			var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter, matrix);
-			var resultingArray = teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, daysOffPreferences, _schedulerStateHolder().SchedulingResultState);
+			var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, daysOffPreferences, _schedulerStateHolder().SchedulingResultState);
 
 			var movedDaysOff = affectedDaysOff(matrix, daysOffPreferences, originalArray, resultingArray);
 			if (movedDaysOff == null)
