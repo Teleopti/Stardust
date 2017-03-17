@@ -36,25 +36,19 @@ $(document).ready(function () {
 
 	var baseDate = "2017-02-24";
 
-	test("Create normal absence possibility view model within continous periods", function () {
+	test("should create normal absence possibility view model", function () {
 		var rawProbability = {
-			startTime: moment(baseDate + "T06:00:00"),
-			endTime: moment(baseDate + "T06:15:00"),
+			startTimeMoment: moment(baseDate + "T06:00:00"),
+			endTimeMoment: moment(baseDate + "T06:15:00"),
 			startTimeInMinutes: 360,
 			endTimeInMinutes: 375,
 			possibility: Math.round(Math.random())
 		};
-		var continousPeriods = [
-			{
-				"startTime": 60, // 01:00
-				"endTime": 1380 // 23:00
-			}
-		];
 		var dayViewModel = createDayViewModel();
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
-			boundaries, continousPeriods, userTexts, dayViewModel);
+			boundaries, userTexts, dayViewModel);
 
-		var expectedIntervalLength = rawProbability.endTime.diff(rawProbability.startTime, "minute");
+		var expectedIntervalLength = rawProbability.endTimeMoment.diff(rawProbability.startTimeMoment, "minute");
 		var expectedStartPositionInPercentage = (rawProbability.startTimeInMinutes - boundaries.timelineStartMinutes) * boundaries.lengthPercentagePerMinute * 100;
 		var expectedLengthInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.possibility];
@@ -70,170 +64,6 @@ $(document).ready(function () {
 		// Masked after current time
 		dayViewModel.setUserNowInMinutes(420);
 		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
-		equal(vm.tooltips(), "");
-	});
-
-	test("Create normal absence possibility view model not start or end at quarter", function () {
-		var rawProbability = {
-			startTime: moment(baseDate + "T06:00:00"),
-			endTime: moment(baseDate + "T06:28:00"),
-			startTimeInMinutes: 360,
-			endTimeInMinutes: 388,
-			possibility: Math.round(Math.random())
-		};
-		var continousPeriods = [
-			{
-				"startTime": 60, // 01:00
-				"endTime": 1380 // 23:00
-			}
-		];
-		var dayViewModel = createDayViewModel();
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
-			boundaries, continousPeriods, userTexts, dayViewModel);
-
-		var expectedIntervalLength = rawProbability.endTime.diff(rawProbability.startTime, "minute");
-		var expectedStartPositionInPercentage = (rawProbability.startTimeInMinutes - boundaries.timelineStartMinutes) * boundaries.lengthPercentagePerMinute * 100;
-		var expectedLengthInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
-		var expectedActualClass = "probability-" + probabilityNames[rawProbability.possibility];
-
-		equal(vm.styleJson.top, expectedStartPositionInPercentage + "%");
-		equal(vm.styleJson.height, expectedLengthInPercentage + "%");
-
-		// Will not show by default (Current user time is not set)
-		equal(vm.tooltips(), "");
-
-		// Show before current time
-		dayViewModel.setUserNowInMinutes(0);
-		equal(vm.cssClass(), expectedActualClass);
-		equal(vm.tooltips().indexOf(probabilityLabels[rawProbability.possibility]) > -1, true);
-
-		// Masked after current time
-		dayViewModel.setUserNowInMinutes(420);
-		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
-		equal(vm.tooltips(), "");
-	});
-
-	test("Create normal absence possibility view model to show horizontal within continous periods", function () {
-		var rawProbability = {
-			startTime: moment(baseDate + "T06:00:00"),
-			endTime: moment(baseDate + "T06:15:00"),
-			startTimeInMinutes: 360,
-			endTimeInMinutes: 375,
-			possibility: Math.round(Math.random())
-		};
-		var continousPeriods = [
-			{
-				"startTime": 60, // 01:00
-				"endTime": 1380 // 23:00
-			}
-		];
-		var dayViewModel = createDayViewModel();
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
-			boundaries, continousPeriods, userTexts, dayViewModel, constants.horizontalDirectionLayout);
-
-		var expectedIntervalLength = rawProbability.endTime.diff(rawProbability.startTime, "minute");
-		var expectedStartPositionInPercentage = (rawProbability.startTimeInMinutes - boundaries.timelineStartMinutes) * boundaries.lengthPercentagePerMinute * 100;
-		var expectedWidthPerIntervalInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
-		var expectedActualClass = "probability-" + probabilityNames[rawProbability.possibility];
-
-		equal(vm.styleJson.left, expectedStartPositionInPercentage + "%");
-		equal(vm.styleJson.width, expectedWidthPerIntervalInPercentage + "%");
-
-		// Will not show by default (Current user time is not set)
-		equal(vm.tooltips(), "");
-
-		// Show before current time
-		dayViewModel.setUserNowInMinutes(0);
-		equal(vm.cssClass(), expectedActualClass);
-		equal(vm.tooltips().indexOf(probabilityLabels[rawProbability.possibility]) > -1, true);
-
-		// Masked after current time
-		dayViewModel.setUserNowInMinutes(420);
-		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
-		equal(vm.tooltips(), "");
-	});
-
-	test("Create normal overtime possibility view model within continous periods", function () {
-		var rawProbability = {
-			startTime: moment(baseDate + "T06:00:00"),
-			endTime: moment(baseDate + "T06:15:00"),
-			startTimeInMinutes: 360,
-			endTimeInMinutes: 375,
-			possibility: Math.round(Math.random())
-		};
-		var continousPeriods = [
-			{
-				"startTime": 60, // 01:00
-				"endTime": 1380 // 23:00
-			}
-		];
-		var dayViewModel = createDayViewModel();
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
-			boundaries, continousPeriods, userTexts, dayViewModel);
-
-		var expectedIntervalLength = rawProbability.endTime.diff(rawProbability.startTime, "minute");
-		var expectedStartPositionInPercentage = (rawProbability.startTimeInMinutes - boundaries.timelineStartMinutes) * boundaries.lengthPercentagePerMinute * 100;
-		var expectedLengthInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
-		var expectedActualClass = "probability-" + probabilityNames[rawProbability.possibility];
-
-		equal(vm.styleJson.top, expectedStartPositionInPercentage + "%");
-		equal(vm.styleJson.height, expectedLengthInPercentage + "%");
-
-		// Will not show by default (Current user time is not set)
-		equal(vm.tooltips(), "");
-
-		// Show before current time
-		dayViewModel.setUserNowInMinutes(0);
-		equal(vm.cssClass(), expectedActualClass);
-		equal(vm.tooltips().indexOf(probabilityLabels[rawProbability.possibility]) > -1, true);
-
-		// Masked after current time
-		dayViewModel.setUserNowInMinutes(420);
-		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
-		equal(vm.tooltips(), "");
-	});
-
-	test("Will create a normal overtime possibility view model between continous periods", function () {
-		var rawProbability = {
-			startTime: moment(baseDate + "T06:00:00"),
-			endTime: moment(baseDate + "T06:15:00"),
-			startTimeInMinutes: 360,
-			endTimeInMinutes: 375,
-			possibility: Math.round(Math.random())
-		};
-		var continousPeriods = [
-			{
-				"startTime": 60,
-				"endTime": 300
-			},
-			{
-				"startTime": 600,
-				"endTime": 1200
-			}
-		];
-		var dayViewModel = createDayViewModel();
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.overtimeProbabilityType,
-			boundaries, continousPeriods, userTexts, dayViewModel);
-
-		var expectedIntervalLength = rawProbability.endTime.diff(rawProbability.startTime, "minute");
-		var expectedStartPositionInPercentage = (rawProbability.startTimeInMinutes - boundaries.timelineStartMinutes) * boundaries.lengthPercentagePerMinute * 100;
-		var expectedLengthInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
-		var expectedActualClass = "probability-" + probabilityNames[rawProbability.possibility];
-
-		equal(vm.styleJson.top, expectedStartPositionInPercentage + "%");
-		equal(vm.styleJson.height, expectedLengthInPercentage + "%");
-
-		// Will not show by default (Current user time is not set)
-		equal(vm.tooltips(), "");
-
-		// Show before current time
-		dayViewModel.setUserNowInMinutes(0);
-		equal(vm.cssClass(), expectedActualClass);
-		equal(vm.tooltips().indexOf(probabilityLabels[rawProbability.possibility]) > -1, true);
-
-		// Masked after current time
-		dayViewModel.setUserNowInMinutes(420);
-		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
-		equal(vm.tooltips(), "");
+		equal(vm.tooltips().indexOf("06:00") > -1, true);
 	});
 });

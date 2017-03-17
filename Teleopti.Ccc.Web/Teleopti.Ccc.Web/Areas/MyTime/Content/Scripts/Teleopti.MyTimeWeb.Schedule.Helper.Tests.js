@@ -385,6 +385,7 @@ $(document).ready(function () {
 			probabilityType: constants.absenceProbabilityType,
 			layoutDirection: constants.horizontalDirectionLayout,
 			mergeSameIntervals: true,
+			hideProbabilityEarlierThanNow: false,
 			timelines: createTimeline(timelineStart, timelineEnd),
 			userTexts: {
 				"high": "High",
@@ -426,5 +427,58 @@ $(document).ready(function () {
 		equal(probability.tooltips().indexOf("07:00") > -1, true);
 		equal(probability.tooltips().indexOf("09:00") > -1, true);
 		equal(probability.cssClass(), "probability-high");
+	});
+
+	test("Should trim probability cell data periods according continousPeriods", function(){
+		var timelineStart = 0, timelineEnd = 9;
+		var scheduleDay = {
+			FixedDate: baseDate,
+			IsFullDayAbsence: false,
+			IsDayOff: false,
+			Periods: [
+	 			{
+	 				"StartTime": baseDate + "T00:00:00",
+	 				"EndTime": baseDate + "T04:10:00"
+	 			},
+	 			{
+	 				"StartTime": baseDate + "T08:50:00",
+	 				"EndTime": baseDate + "T09:00:00"
+	 			}
+			]
+		};
+		//probability period is 24 hours
+		var rawProbabilities = createRawProbabilities();
+		var expectedRawProbabilities = rawProbabilities.filter(function (p) {
+			return moment(p.EndTime) <= moment(baseDate).add(9, "hours");
+		});
+
+		expectedRawProbabilities.forEach(function(p){
+			p.Possibility = 1;
+		});
+
+		var options = {
+			probabilityType: constants.absenceProbabilityType,
+			layoutDirection: constants.horizontalDirectionLayout,
+			mergeSameIntervals: true,
+			hideProbabilityEarlierThanNow: false,
+			timelines: createTimeline(timelineStart, timelineEnd),
+			userTexts: {
+				"high": "High",
+				"low": "Low",
+				"probabilityForAbsence": "Probability to get absence:",
+				"probabilityForOvertime": "Probability to get overtime:"
+			}
+		};
+
+		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay,
+			expectedRawProbabilities,
+			{
+				userNowInMinute: function () { return 0; }
+			}, options);
+
+		equal(probabilities[probabilities.length - 2].tooltips().indexOf("00:00") > -1, true);
+		equal(probabilities[probabilities.length - 2].tooltips().indexOf("04:10") > -1, true);
+		equal(probabilities[probabilities.length - 1].tooltips().indexOf("08:50") > -1, true);
+		equal(probabilities[probabilities.length - 1].tooltips().indexOf("09:00") > -1, true);
 	});
 });

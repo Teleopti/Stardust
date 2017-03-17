@@ -69,6 +69,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 	self.probabilityClass = ko.observable(scheduleDay.ProbabilityClass);
 	self.probabilityText = ko.observable(scheduleDay.ProbabilityText);
 	self.mergeIdenticalProbabilityIntervals = false;
+	self.hideProbabilityEarlierThanNow = true;
 
 	self.holidayChanceText = ko.computed(function () {
 		var probabilityText = self.probabilityText();
@@ -192,6 +193,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 			timelines: parent.timeLines(),
 			intradayOpenPeriod: parent.intradayOpenPeriod,
 			mergeIntervals: self.mergeIdenticalProbabilityIntervals,
+			hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
 			userTexts: parent.userTexts
 		});
 	} else {
