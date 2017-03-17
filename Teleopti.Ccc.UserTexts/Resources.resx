@@ -15523,8 +15523,8 @@ These options are activated:
     <comment>use in MyTime Web, permission for view Probability of absence or overtime approved on intraday</comment>
   </data>
   <data name="HideStaffingProbability" xml:space="preserve">
-    <value>Hide staffing probability</value>
-    <comment>Dropdown list item in MyTime Web</comment>
+    <value>Staffing info</value>
+    <comment>The default item for staffing probability dropdown list in MyTime Web</comment>
   </data>
   <data name="ShowAbsenceProbability" xml:space="preserve">
     <value>Show absence probability</value>
