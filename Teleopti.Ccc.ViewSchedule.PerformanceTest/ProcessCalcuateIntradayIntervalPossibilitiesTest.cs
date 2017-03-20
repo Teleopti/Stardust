@@ -99,6 +99,8 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			foreach (var personId in personIds)
 			{
 				var person = PersonRepository.Get(new Guid(personId));
+				if (person == null)
+					continue;
 				var currentUser = new FakeLoggedOnUser(person);
 				var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator, IntervalLengthFetcher);
 				_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
