@@ -54,6 +54,7 @@
 		};
 
 		vm.successCount = 0;
+		vm.warningCount = 0;
 		vm.failedCount = 0;
 		vm.upload = function (files) {
 			if (files && files.length) {
@@ -75,6 +76,7 @@
 							var processResult = response.headers()['message'].match(/[0-9]+/g);;
 							vm.successCount = processResult[0];
 							vm.failedCount = processResult[1];
+							
 							if (vm.failedCount > 0) {
 								vm.hasInvalidData = true;
 								var extension = isXlsx ? '.xlsx' : '.xls';
@@ -104,7 +106,10 @@
 							var processResult = response.headers()['message'].match(/[0-9]+/g);;
 							vm.successCount = processResult[0];
 							vm.failedCount = processResult[1];
-							if (vm.failedCount > 0) {
+							if (processResult[2] !== undefined) {
+								vm.warningCount = processResult[2];
+							}
+							if (vm.failedCount + vm.warningCount > 0 ) {
 								vm.hasInvalidData = true;
 								var extension = isXlsx ? '.xlsx' : '.xls';
 								saveAs(blob, 'invalidAgents' + extension);
@@ -133,6 +138,10 @@
 
 		vm.getFailureMessage = function (failureCount) {
 			return $translate.instant('FailedToImportAgents').replace('{0}', failureCount);
+		}
+
+		vm.getWarningMessage = function(warningCount) {
+			return $translate.instant('WarnImportedAgents').replace('{0}', warningCount);
 		}
 
 		function arrayBuffer2String(buf, callback) {
