@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var errors = _fileProcessor.ValidateWorkbook(workbook);
 			if (errors.Any())
 			{
-				var errorMsg = string.Format(Resources.MissingColumnX, string.Join(",", errors));
+				var errorMsg = string.Format(Resources.MissingColumnX, string.Join(", ", errors));
 
 				var invalidFileResponse = Request.CreateResponse((HttpStatusCode)422);
 				invalidFileResponse.Headers.Clear();
