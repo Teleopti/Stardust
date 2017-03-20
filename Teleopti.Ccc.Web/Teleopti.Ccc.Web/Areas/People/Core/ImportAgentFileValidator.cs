@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 			feedback.Merge(parseFirstnameAndLastname(raw.Firstname, raw.Lastname, agentInfo));
 			feedback.Merge(parseWindowsUserAndApplicationLogonId(raw.WindowsUser, raw.ApplicationUserId, agentInfo));
-			feedback.Merge(parsePassword(raw.Password, agentInfo));
+			feedback.Merge(parseApplicationUserIdAndPassword(raw.ApplicationUserId, raw.Password, agentInfo));
 			feedback.Merge(parseRole(raw.Role, agentInfo));
 			feedback.Merge(parseStartDate(raw.StartDate, agentInfo));
 
@@ -280,17 +280,25 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			return feedback;
 		}
 
-		private Feedback parsePassword(string rawPassword, AgentDataModel agentInfo)
+		private Feedback parseApplicationUserIdAndPassword(string applicationUserId, string password, AgentDataModel agent)
 		{
-			var feedback = new Feedback();
+			var f = new Feedback();
 
-			if (rawPassword.IsNullOrWhiteSpace())
+			if (!applicationUserId.IsNullOrWhiteSpace() && password.IsNullOrWhiteSpace())
 			{
-				feedback.ErrorMessages.Add(Resources.EmptyPasswordErrorMsgSemicolon);
-				return feedback;
+				f.ErrorMessages.Add(Resources.EmptyPasswordErrorMsgSemicolon);
+				return f;
 			}
-			agentInfo.Password = rawPassword;
-			return feedback;
+
+			if (!password.IsNullOrWhiteSpace() && applicationUserId.IsNullOrWhiteSpace())
+			{
+				f.ErrorMessages.Add(Resources.NoApplicationLogonAccountErrorMsgSemicolon);
+				return f;
+			}
+			
+			agent.Password = password;
+
+			return f;
 		}
 
 		private Feedback parseSchedulePeriodLength(int periodLength, AgentDataModel agentInfo)
