@@ -146,7 +146,7 @@
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		</div>
 		<div class="con-flex" ng-if="$ctrl.done">
-			<div ng-show="$ctrl.result && $ctrl.result.success > 0" class="alert-success notice-spacer">
+			<div ng-show="$ctrl.result && ($ctrl.result.success > 0 || $ctrl.result.isAllSuccess)" class="alert-success notice-spacer">
 				<i class='mdi mdi-thumb-up'></i>{{ $ctrl.getMessage('success', $ctrl.result.success) }}.
 			</div>
 			<div ng-show="$ctrl.result && $ctrl.result.warning > 0" class="alert-warning notice-spacer">

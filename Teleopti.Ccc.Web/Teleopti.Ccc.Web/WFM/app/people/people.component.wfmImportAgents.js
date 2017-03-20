@@ -79,13 +79,15 @@
 		var processResult = response.headers()['message'].match(/success count:(\d+), failed count:(\d+), warning count:(\d+)/);
 
 		if (processResult) {
+			var isAllSuccess = !(processResult[2] > 0 || processResult[3] > 0);
 			this.result = {
 				success: processResult[1],
 				failure: processResult[2],
-				warning: processResult[3]
+				warning: processResult[3],
+				isAllSuccess: isAllSuccess
 			};
 
-			if (processResult[2] > 0 || processResult[3] > 0) {
+			if (!isAllSuccess) {
 				var ext = isXlsx ? '.xlsx' : '.xls';
 				this.saveFile(response, 'invalid_agents' + ext);
 			}
