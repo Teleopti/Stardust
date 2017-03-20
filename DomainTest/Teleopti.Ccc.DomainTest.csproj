@@ -1671,10 +1671,6 @@
       <Name>Teleopti.Ccc.UserTexts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Web\Teleopti.Ccc.WebTest\Teleopti.Ccc.WebTest.csproj">
-      <Project>{040557ee-947f-460b-8860-cfc92139725e}</Project>
-      <Name>Teleopti.Ccc.WebTest</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Web\Teleopti.Ccc.WebTest\Teleopti.Ccc.WebTest.csproj">
       <Project>{040557EE-947F-460B-8860-CFC92139725E}</Project>
       <Name>Teleopti.Ccc.WebTest</Name>
     </ProjectReference>
