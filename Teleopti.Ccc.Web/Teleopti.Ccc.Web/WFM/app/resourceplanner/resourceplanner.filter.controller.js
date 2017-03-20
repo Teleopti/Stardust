@@ -89,11 +89,16 @@
 
 				};
 				$scope.isValidDayOffsPerWeek = function () {
-					return $scope.dayOffsPerWeek.MinDayOffsPerWeek <= $scope.dayOffsPerWeek.MaxDayOffsPerWeek;
+					return isInteger($scope.dayOffsPerWeek.MinDayOffsPerWeek) && 
+						isInteger($scope.dayOffsPerWeek.MaxDayOffsPerWeek) &&
+						$scope.dayOffsPerWeek.MaxDayOffsPerWeek <= 7 &&
+					$scope.dayOffsPerWeek.MinDayOffsPerWeek <= $scope.dayOffsPerWeek.MaxDayOffsPerWeek;
 				};
 
 				$scope.isValidConsecDaysOff = function () {
-					return $scope.consecDaysOff.MinConsecDaysOff <= $scope.consecDaysOff.MaxConsecDaysOff;
+					return isInteger($scope.consecDaysOff.MinConsecDaysOff) &&
+						isInteger($scope.consecDaysOff.MaxConsecDaysOff) &&
+						$scope.consecDaysOff.MinConsecDaysOff <= $scope.consecDaysOff.MaxConsecDaysOff;
 				};
 				$scope.clearInput = function () {
 					$scope.searchString = '';
@@ -101,7 +106,9 @@
 				};
 
 				$scope.isValidConsecWorkDays = function () {
-					return $scope.consecWorkDays.MinConsecWorkDays <= $scope.consecWorkDays.MaxConsecWorkDays;
+					return isInteger($scope.consecWorkDays.MinConsecWorkDays) &&
+						isInteger($scope.consecWorkDays.MaxConsecWorkDays) &&
+						$scope.consecWorkDays.MinConsecWorkDays <= $scope.consecWorkDays.MaxConsecWorkDays;
 				};
 
 				$scope.isValidFilters = function () {
@@ -109,6 +116,12 @@
 				};
 				$scope.isValidName = function () {
 					return $scope.name.length > 0;
+				};
+
+				function isInteger(value) {
+					return typeof value === "number" &&
+						isFinite(value) &&
+						Math.floor(value) === value;
 				};
 
 				var isVaildUnit = function (item) {
