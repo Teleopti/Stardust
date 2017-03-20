@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -83,32 +82,30 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			});
 		}
 
-		private static string[] loadPersonIds()
+		private static Guid[] loadPersonIds()
 		{
-			var personIds = new List<string>();
 			var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "PersonIds.txt";
 			var content = File.ReadAllText(path);
-			personIds.AddRange(content.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries));
-			return personIds.ToArray();
+			return content.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToArray();
 		}
 
-		private long calcuatePossibilities(string[] personIds)
+		private long calcuatePossibilities(Guid[] personIds)
 		{
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
-			foreach (var personId in personIds)
+
+			var people = PersonRepository.FindPeople(personIds);
+			foreach (var person in people)
 			{
-				var person = PersonRepository.Get(new Guid(personId));
-				if (person == null)
-					continue;
 				var currentUser = new FakeLoggedOnUser(person);
-				var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator, IntervalLengthFetcher);
+				var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator,
+					IntervalLengthFetcher);
 				_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
 					cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario);
 				var possibilities = _scheduleStaffingPossibilityCalculator.CalcuateIntradayAbsenceIntervalPossibilities();
 				if (!possibilities.Any())
 				{
-					Console.WriteLine($"{personId} no data");
+					Console.WriteLine($"{person.Id.GetValueOrDefault()} no data");
 				}
 			}
 			stopwatch.Stop();
