@@ -6,10 +6,12 @@
 ..\..\..\sitesroot\3\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
 ..\..\..\sitesroot\3\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
 ..\..\..\sitesroot\3\Web.config,BuildArtifacts\Web.Root.Web.config
+..\..\..\sitesroot\3\ApplicationInsights.config,BuildArtifacts\WebApplicationInsights.config
 ..\..\..\sitesroot\4\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy,BuildArtifacts\AppRaptor.config
 ..\..\..\sitesroot\5\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
 ..\..\..\sitesroot\5\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
 ..\..\..\sitesroot\5\Web.config,BuildArtifacts\Web.Root.Web.config
+..\..\..\sitesroot\5\ApplicationInsights.config,BuildArtifacts\WebApplicationInsights.config
 ..\..\..\sitesroot\6\web.config,BuildArtifacts\Web.AuthenticationBridge.Web.config
 ..\..\..\sitesroot\7\web.config,BuildArtifacts\Web.WindowsIdentityProvider.Web.config
 ..\..\..\sitesroot\8\web.config,BuildArtifacts\Web.Administration.Web.config
