@@ -170,7 +170,6 @@ ResourcePlanner_MaxSeatsNew_40939 = true
 ResourcePlanner_LessPersonAssignmentUpdates_42159 = true
 ResourcePlanner_IntradayNoDailyValueCheck_42767 = true
 ResourcePlanner_LoadingLessSchedules_42639 = true
-ResourcePlanner_NotShovelCorrectly_41763 = true
 
 Wfm_DisplayOnlineHelp_39402 = RC
 

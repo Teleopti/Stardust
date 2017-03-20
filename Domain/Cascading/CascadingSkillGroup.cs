@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
@@ -20,17 +19,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public IEnumerable<ISkill> PrimarySkills { get; }
 		public IEnumerable<SubSkillsWithSameIndex> SubSkillsWithSameIndex { get; }
 		public double RemainingResources { get; set; }
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_NotShovelCorrectly_41763)]
-		public string SkillGroupIndexHash()
-		{
-			var primaryHash = new StringBuilder();
-			foreach (var primarySkill in PrimarySkills)
-			{
-				primaryHash.Append(primarySkill.CascadingIndex + "|");
-			}
-			return primaryHash.Append(subskillHash()).ToString();
-		}
 
 		public bool HasSameSkillGroupIndexAs(CascadingSkillGroup otherSkillGroup)
 		{

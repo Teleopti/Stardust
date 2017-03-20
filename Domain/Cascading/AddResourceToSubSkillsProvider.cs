@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class AddResourceToSubSkillsProvider : IAddResourceToSubSkillsProvider
+	public class AddResourceToSubSkillsProvider
 	{
 		public IAddResourcesToSubSkills Fetch(bool primarySkillIsClosed)
 		{

@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_NotShovelCorrectly_41763)]
 	public class CascadingResourceCalculationClosedSkillsTest
 	{
 		public CascadingResourceCalculation Target;

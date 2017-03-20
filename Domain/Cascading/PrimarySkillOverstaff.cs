@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class PrimarySkillOverstaff
 	{
-		private readonly IAddResourceToSubSkillsProvider _addResourceToSubSkillsProvider;
+		private readonly AddResourceToSubSkillsProvider _addResourceToSubSkillsProvider;
 
-		public PrimarySkillOverstaff(IAddResourceToSubSkillsProvider addResourceToSubSkillsProvider)
+		public PrimarySkillOverstaff(AddResourceToSubSkillsProvider addResourceToSubSkillsProvider)
 		{
 			_addResourceToSubSkillsProvider = addResourceToSubSkillsProvider;
 		}
