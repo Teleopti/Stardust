@@ -22,57 +22,61 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 
 		public IEnumerable<FindFilterResult> Search(string searchString, int maxHits)
 		{
+			var results = new List<FindFilterResult>();
 			if (searchString.IsEmpty())
-				return Enumerable.Empty<FindFilterResult>();
-
-			var itemsLeftToLoad = maxHits;
-			var contractHits = searchContract(searchString, itemsLeftToLoad);
-			itemsLeftToLoad = itemsLeftToLoad - contractHits.Count();
-			var teamHits = searchTeam(searchString, itemsLeftToLoad);
-			itemsLeftToLoad = itemsLeftToLoad - teamHits.Count();
-			var siteHits = searchSite(searchString, itemsLeftToLoad);
-
-			return contractHits.Union(teamHits).Union(siteHits);
+				return results;
+			results = results.Union(searchContract(searchString, maxHits - results.Count)).ToList();
+			results = results.Union(searchSite(searchString, maxHits - results.Count)).ToList();
+			results = results.Union(searchTeam(searchString, maxHits - results.Count)).ToList();
+			return results;
 		}
 
 		private IEnumerable<FindFilterResult> searchContract(string searchString, int itemsLeftToLoad)
 		{
 			return _contractRepository.FindContractsContain(searchString, itemsLeftToLoad)
-				.Select(contract => new FindFilterResult {FilterType = FilterModel.ContractFilterType, Id = contract.Id.Value, Name = contract.Description.Name});
+				.Select(contract => new FindFilterResult(contract));
 		}
 
 		private IEnumerable<FindFilterResult> searchTeam(string searchString, int itemsLeftToLoad)
 		{
 			return _teamRepository.FindTeamsContain(searchString, itemsLeftToLoad)
-				.Select(team => new FindFilterResult {FilterType = FilterModel.TeamFilterType, Id = team.Id.Value, Name = team.Description.Name});
+				.Select(team => new FindFilterResult(team));
 		}
 
 		private IEnumerable<FindFilterResult> searchSite(string searchString, int itemsLeftToLoad)
 		{
-			return _siteRepository.FindSitesContain(searchString, itemsLeftToLoad)
-				.Select(site => new FindFilterResult { FilterType = FilterModel.SiteFilterType, Id = site.Id.Value, Name = site.Description.Name });
+			var sites = _siteRepository.FindSitesContain(searchString, itemsLeftToLoad).ToList();
+			var siteFilters= sites.Select(site => new FindFilterResult(site))
+				.ToList();
+
+			var left = itemsLeftToLoad - siteFilters.Count;
+			var teamFilters = new List<FindFilterResult>();
+			foreach (var team in sites.SelectMany(site => site.TeamCollection))
+			{
+				if (left < 1)
+					break;
+				teamFilters.Add(new FindFilterResult(team));
+				left--;
+			}
+			return siteFilters.Union(teamFilters);
 		}
 
 		private IEnumerable<FindFilterResult> searchSkill(string searchString, int itemsLeftToLoad)
 		{
 			return _skillRepository.FindSkillsContain(searchString, itemsLeftToLoad)
-				.Select(skill => new FindFilterResult { FilterType = FilterModel.SkillFilterType, Id = skill.Id.Value, Name = skill.Name });
+				.Select(skill => new FindFilterResult(skill));
 		}
 
 		public IEnumerable<FindFilterResult> SearchForAgentGroup(string searchString, int maxHits)
 		{
+			var results = new List<FindFilterResult>();
 			if (searchString.IsEmpty())
-				return Enumerable.Empty<FindFilterResult>();
-
-			var itemsLeftToLoad = maxHits;
-			var siteHits = searchSite(searchString, itemsLeftToLoad);
-			itemsLeftToLoad = itemsLeftToLoad - siteHits.Count();
-			var teamHits = searchTeam(searchString, itemsLeftToLoad);
-			itemsLeftToLoad = itemsLeftToLoad - teamHits.Count();
-			var skillHits = searchSkill(searchString, itemsLeftToLoad);
-			itemsLeftToLoad = itemsLeftToLoad - skillHits.Count();
-			var contractHits = searchContract(searchString, itemsLeftToLoad);
-			return siteHits.Union(teamHits).Union(skillHits).Union(contractHits);
+				return results;
+			results = results.Union(searchSite(searchString, maxHits - results.Count)).ToList();
+			results = results.Union(searchTeam(searchString, maxHits - results.Count)).ToList();
+			results = results.Union(searchContract(searchString, maxHits - results.Count)).ToList();
+			results = results.Union(searchSkill(searchString, maxHits - results.Count)).ToList();
+			return results;
 		}
 	}
 }

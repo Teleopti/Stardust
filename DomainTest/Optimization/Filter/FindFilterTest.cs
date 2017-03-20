@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var expectedGuid = Guid.NewGuid();
 			const string expectedType = "team";
 			var team = new Team().WithId(expectedGuid).WithDescription(new Description(RandomName.Make() + searchString + RandomName.Make()));
+			team.Site = new Site(RandomName.Make());
 			TeamRepository.Add(team);
 
 			var result = Target.Search(searchString, 10).Single();
@@ -136,6 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var expectedGuid = Guid.NewGuid();
 			const string expectedType = "team";
 			var team = new Team().WithId(expectedGuid).WithDescription(new Description(RandomName.Make() + searchString + RandomName.Make()));
+			team.Site = new Site(RandomName.Make());
 			TeamRepository.Add(team);
 
 			var result = Target.SearchForAgentGroup(searchString, 10).Single();
@@ -192,10 +194,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 		{
 			const int maxHits = 3;
 			var name = RandomName.Make();
-			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
-			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
-			TeamRepository.Add(new Team().WithId().WithDescription(new Description(name + RandomName.Make())));
-			TeamRepository.Add(new Team().WithId().WithDescription(new Description(name + RandomName.Make())));
+			var site1 = new Site(name + RandomName.Make()).WithId();
+			var site2 = new Site(name + RandomName.Make()).WithId();
+			var team1 = new Team().WithId().WithDescription(new Description(name + RandomName.Make()));
+			var team2 = new Team().WithId().WithDescription(new Description(name + RandomName.Make()));
+			team1.Site = site1;
+			team2.Site = site2;
+			
+			SiteRepository.Add(site1);
+			SiteRepository.Add(site2);
+			TeamRepository.Add(team1);
+			TeamRepository.Add(team2);
 			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
 			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
 
