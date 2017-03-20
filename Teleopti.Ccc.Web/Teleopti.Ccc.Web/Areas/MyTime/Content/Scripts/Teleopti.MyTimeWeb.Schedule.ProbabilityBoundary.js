@@ -68,8 +68,7 @@
 
 	var openPeriodStartMinutes = -1;
 	var openPeriodEndMinutes = constants.totalMinutesOfOneDay + 1;
-	if (probabilityType === constants.overtimeProbabilityType &&
-		intradayOpenPeriod != undefined && intradayOpenPeriod != null) {
+	if (probabilityType === constants.overtimeProbabilityType && intradayOpenPeriod != undefined) {
 		openPeriodStartMinutes = moment.duration(intradayOpenPeriod.startTime).asMinutes();
 		openPeriodEndMinutes = moment.duration(intradayOpenPeriod.endTime).asMinutes();
 	}

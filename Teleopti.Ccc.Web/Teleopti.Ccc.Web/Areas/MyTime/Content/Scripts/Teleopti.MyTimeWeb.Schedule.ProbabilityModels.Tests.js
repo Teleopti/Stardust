@@ -2,7 +2,7 @@
 /// <reference path="~/Content/Scripts/qunit.js" />
 
 $(document).ready(function () {
-	module("Teleopti.MyTimeWeb.Schedule.Helper");
+	module("Teleopti.MyTimeWeb.Schedule.ProbabilityModels");
 
 	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
 	var yesterday = "2017-03-09";
@@ -170,7 +170,7 @@ $(document).ready(function () {
 			probabilityType: constants.noneProbabilityType
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
 		equal(probabilities.length, 0);
 	});
 
@@ -184,7 +184,7 @@ $(document).ready(function () {
 			probabilityType: constants.absenceProbabilityType
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
 		equal(probabilities.length, 0);
 	});
 
@@ -198,7 +198,7 @@ $(document).ready(function () {
 			probabilityType: constants.absenceProbabilityType
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
 		equal(probabilities.length, 0);
 	});
 
@@ -234,7 +234,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
 
 		equal(probabilities.length, 13);
 		for (var i = 0; i < probabilities.length; i++) {
@@ -275,7 +275,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
 		equal(probabilities.length, 13);
 		for (var i = 0; i < probabilities.length; i++) {
 			equal(probabilities[i].styleJson.width != undefined, true);
@@ -321,7 +321,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay,
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay,
 			expectedRawProbabilities,
 			{
 				userNowInMinute: function () { return 0; }
@@ -395,7 +395,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay,
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay,
 			expectedRawProbabilities,
 			{
 				userNowInMinute: function () { return 0; }
@@ -470,7 +470,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay,
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay,
 			expectedRawProbabilities,
 			{
 				userNowInMinute: function () { return 0; }

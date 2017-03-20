@@ -436,45 +436,44 @@ $(document).ready(function () {
 		}
 	});
 
-	//TODO: not accomplished test cases:
-	// test("should show overtime possibility based on intraday open hour", function () {
-	// 	var day = createRawDaySchedule(false, false, creatPeriods());
-	// 	var intradayOpenHour = {
-	// 		"startTime": "10:00:00",
-	// 		"endTime": "15:00:00"
-	// 	};
-	// 	var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20, intradayOpenHour);
-	// 	var probabilities = createRawProbabilities();
-	// 	var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
-	// 	vm.userNowInMinute(0);
+	test("should show overtime possibility based on intraday open hour", function () {
+		var day = createRawDaySchedule(false, false, creatPeriods());
+		var intradayOpenHour = {
+			"startTime": "10:00:00",
+			"endTime": "15:00:00"
+		};
+		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20, intradayOpenHour);
+		var probabilities = createRawProbabilities();
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(0);
 
-	// 	// Only probability within open hour period will be generated, so there will be (15 - 10) * 4 probabilities
-	// 	equal(vm.probabilities.length, 20);
-	// 	for (var i = 0; i < vm.probabilities.length; i++) {
-	// 		var probability = vm.probabilities[i];
-	// 		equal(probability.tooltips().length > 0, true);
-	// 	}
-	// });
+		// Only probability within open hour period will be generated, so there will be (15 - 10) * 4 probabilities
+		equal(vm.probabilities.length, 20);
+		for (var i = 0; i < vm.probabilities.length; i++) {
+			var probability = vm.probabilities[i];
+			equal(probability.tooltips().length > 0, true);
+		}
+	});
 
-	// test("should show overtime possibility for dayoff based on intraday open hour", function () {
-	// 	var day = createRawDaySchedule(true, false, creatPeriods());
-	// 	var intradayOpenHour = {
-	// 		"startTime": "10:00:00",
-	// 		"endTime": "15:00:00"
-	// 	};
-	// 	var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20, intradayOpenHour);
-	// 	var probabilities = createRawProbabilities();
-	// 	var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
-	// 	vm.userNowInMinute(0);
+	test("should show overtime possibility for dayoff based on intraday open hour", function () {
+		var day = createRawDaySchedule(true, false, creatPeriods());
+		var intradayOpenHour = {
+			"startTime": "10:00:00",
+			"endTime": "15:00:00"
+		};
+		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20, intradayOpenHour);
+		var probabilities = createRawProbabilities();
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(0);
 
-	// 	// In this scenario will show prabability based on length of initraday open houru
-	// 	// So should be (15 - 10) * 4 
-	// 	equal(vm.probabilities.length, 20);
-	// 	for (var i = 0; i < vm.probabilities.length; i++) {
-	// 		var probability = vm.probabilities[i];
-	// 		equal(probability.tooltips().length > 0, true);
-	// 	}
-	// });
+		// In this scenario will show prabability based on length of initraday open houru
+		// So should be (15 - 10) * 4 
+		equal(vm.probabilities.length, 20);
+		for (var i = 0; i < vm.probabilities.length; i++) {
+			var probability = vm.probabilities[i];
+			equal(probability.tooltips().length > 0, true);
+		}
+	});
 
 	test("should show overtime possibility for fullday absence", function () {
 		var day = createRawDaySchedule(false, true, creatPeriods());

@@ -5,7 +5,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.Helper.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityModels.js" />
 
 if (typeof (Teleopti) === "undefined") {
 	Teleopti = {};
@@ -326,7 +326,7 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 
 	if (self.staffingProbabilityEnabled()){
 	var probabilities = self.staffingProbabilityEnabled()
-		? Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay,
+		? Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay,
 			rawProbabilities,
 			self,
 			{

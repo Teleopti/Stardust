@@ -3,7 +3,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.Helper.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityModels.js" />
 
 Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabilities, parent) {
 	var self = this;
@@ -186,7 +186,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 	});
 
 	if (self.staffingProbabilityEnabled()) {
-		self.probabilities = Teleopti.MyTimeWeb.Schedule.Helper.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
+		console.log(Teleopti.MyTimeWeb.Schedule);
+		self.probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
 		{
 			probabilityType: parent.probabilityType(),
 			layoutDirection: constants.verticalDirectionLayout,

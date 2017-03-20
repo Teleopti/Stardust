@@ -1406,10 +1406,11 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AbsenceRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Helper.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Helper.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityModels.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileDayViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityModels.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ViewModels.js" />
