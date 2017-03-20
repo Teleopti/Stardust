@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
@@ -114,6 +115,7 @@ namespace Stardust.Manager
 				foreach (var uri in allAliveWorkerNodesUri)
 				{
 					AssignJobToWorkerNodeWorker(uri);
+					Thread.Sleep(500);
 				}
 			}
 			catch (Exception exp)
