@@ -184,6 +184,38 @@
       <HintPath>..\..\packages\MbCache.2.10\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.2.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.2.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.WindowsServer.2.2.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights.Log4NetAppender, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.Log4NetAppender.2.2.0\lib\net45\Microsoft.ApplicationInsights.Log4NetAppender.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Client.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
       <Private>True</Private>
@@ -1478,6 +1510,9 @@
     <Content Include="WFM\app\resourceplanner\resourceplanner.debounce.service.js" />
     <Content Include="Areas\MyTime\Views\Schedule\ProbabilityOptionsPartial.cshtml" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel.js" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
     <Content Include="WFM\app\permissions\refact\functionsrefact\permissions-function-tree.html" />
@@ -2796,12 +2831,12 @@
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-      if not exist "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config" copy "$(ProjectDir)..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Teleopti.Ccc.Sdk.ServiceBus.Client.config" "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config"
-      if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Root.Web.config" "$(ProjectDir)web.config"
-      if not exist "$(ProjectDir)Areas\MyTime\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.MyTime.Web.config" "$(ProjectDir)Areas\MyTime\Views\web.config"
-      if not exist "$(ProjectDir)Areas\Start\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Start.Web.config" "$(ProjectDir)Areas\Start\Views\web.config"
-      if not exist "$(ProjectDir)Areas\SSO\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.SSO.Web.config" "$(ProjectDir)Areas\SSO\Views\web.config"
+    <PreBuildEvent>if not exist "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config" copy "$(ProjectDir)..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Teleopti.Ccc.Sdk.ServiceBus.Client.config" "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config"
+if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\..\BuildArtifacts\WebApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"
+if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Root.Web.config" "$(ProjectDir)web.config"
+if not exist "$(ProjectDir)Areas\MyTime\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.MyTime.Web.config" "$(ProjectDir)Areas\MyTime\Views\web.config"
+if not exist "$(ProjectDir)Areas\Start\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Start.Web.config" "$(ProjectDir)Areas\Start\Views\web.config"
+if not exist "$(ProjectDir)Areas\SSO\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.SSO.Web.config" "$(ProjectDir)Areas\SSO\Views\web.config"
 if not exist "$(TargetDir)FeatureFlags" mkdir "$(TargetDir)FeatureFlags"
 copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFlags\toggles.txt"
 </PreBuildEvent>
