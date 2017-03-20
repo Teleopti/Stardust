@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 
 		private static Guid[] loadPersonIds()
 		{
-			var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "PersonIds.txt";
+			var path = AppDomain.CurrentDomain.BaseDirectory + "/../../PersonIds.txt";
 			var content = File.ReadAllText(path);
 			return content.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToArray();
 		}
