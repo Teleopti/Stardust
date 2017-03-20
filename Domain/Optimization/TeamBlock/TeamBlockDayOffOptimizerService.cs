@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 									//TODO: hack -> always do this
 									resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 								}
-								var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
+								var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Person, schedulingOptions, teamInfo,
 									resourceCalculateDelayer,
 									schedulingResultStateHolder,
 									dayOffOptimizationPreferenceProvider,
@@ -398,7 +398,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		[RemoveMeWithToggle("maxseat check can be removed with toggle", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
-										ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,
+										ISchedulePartModifyAndRollbackService rollbackService, IPerson agent,
 										ISchedulingOptions schedulingOptions, ITeamInfo teamInfo, 
 										IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -406,17 +406,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 										out bool checkPeriodValue,
 										movedDaysOff movedDaysOff)
 		{
-			IPerson person = matrix.Person;
-			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, person);
-			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, person, !optimizationPreferences.Extra.IsClassic());
+			checkPeriodValue = false;
+			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, agent);
+			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, agent, !optimizationPreferences.Extra.IsClassic());
 
-			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo,
-			                                         movedDaysOff.RemovedDaysOff,
-			                                         rollbackService, resourceCalculateDelayer,
-			                                         schedulingResultStateHolder);
-			if (!success)
+			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo,
+																							 movedDaysOff.RemovedDaysOff,
+																							 rollbackService, resourceCalculateDelayer,
+																							 schedulingResultStateHolder))
 			{
-				checkPeriodValue = false;
 				return false;
 			}
 
@@ -436,7 +434,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 					lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
 					lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
-					checkPeriodValue = false;
 					return false;
 				}
 			}
@@ -458,10 +455,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-				checkPeriodValue = false;
 				return true;
 			}
-
 
 			foreach (var dateOnly in movedDaysOff.RemovedDaysOff)
 			{
