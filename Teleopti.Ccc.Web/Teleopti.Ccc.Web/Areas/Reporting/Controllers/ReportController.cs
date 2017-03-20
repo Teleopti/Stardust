@@ -16,7 +16,6 @@ using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Reporting.Models;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 {
@@ -30,6 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 		private readonly IToggleManager _toggleManager;
 		private readonly IAnalyticsPermissionsUpdater _analyticsPermissionsUpdater;
 		private readonly ICommonReportsFactory _commonReportsFactory;
+
+		private static readonly Guid[] adherenceReportIds = { new Guid("D1ADE4AC-284C-4925-AEDD-A193676DBD2F"), new Guid("6A3EB69B-690E-4605-B80E-46D5710B28AF") };
 
 		public ReportController(IReportsNavigationProvider reportsNavigationProvider,
 			IPersonNameProvider personNameProvider,
@@ -52,11 +53,11 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 		[AnalyticsUnitOfWork]
 		public virtual ActionResult Index(Guid? id)
 		{
-			if (id == null)
+			if (!id.HasValue)
 				return View("Empty");
 			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
 
-			var guids = reportsItems.Select(item => item.Id).ToList();
+			var guids = reportsItems.Select(item => item.Id).ToArray();
 			if(!id.Value.Equals(Guid.Empty) && !guids.Contains(id.Value))
 				return View("NoPermission");
 			var agentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name);
@@ -73,8 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 					name = commonReports.Name;
 				var helpUrl = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", ConfigurationManager.AppSettings["HelpUrlOnline"], commonReports.HelpKey);
 
-				if (id.Equals(new Guid("D1ADE4AC-284C-4925-AEDD-A193676DBD2F")) ||
-				    id.Equals(new Guid("6A3EB69B-690E-4605-B80E-46D5710B28AF")))
+				if (adherenceReportIds.Contains(id.Value))
 					return View("Adherence",
 						new ReportModel
 						{

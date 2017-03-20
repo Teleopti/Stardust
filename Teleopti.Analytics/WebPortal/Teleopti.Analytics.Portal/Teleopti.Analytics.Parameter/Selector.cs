@@ -26,7 +26,8 @@ namespace Teleopti.Analytics.Parameters
 		private bool _isReportPermissionGranted;
 		private Guid _groupPageCode;
 		private readonly UserReportParams userReportParams = new UserReportParams();
-		
+		private static readonly Guid businessHierarchyCode = new Guid("D5AE2A10-2E17-4B3C-816C-1A0E81CD767C");
+
 		internal static Unit _LabelWidth = new Unit("200");
 		internal static Unit _List1Width = new Unit("200");
 		internal static Unit _List2Width = new Unit("200");
@@ -36,13 +37,7 @@ namespace Teleopti.Analytics.Parameters
 			userReportParams.ConnectionString = ConfigurationManager.ConnectionStrings["LocalSqlServer"].ConnectionString;
 		}
 
-		public static Guid BusinessHierarchyCode
-		{
-			get
-			{
-				return new Guid("D5AE2A10-2E17-4B3C-816C-1A0E81CD767C");
-			}
-		}
+		public static Guid BusinessHierarchyCode => businessHierarchyCode;
 
 		public string ConnectionString
 		{

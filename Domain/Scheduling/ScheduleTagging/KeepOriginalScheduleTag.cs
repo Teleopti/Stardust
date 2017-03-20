@@ -5,7 +5,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 {
     public sealed class KeepOriginalScheduleTag : IScheduleTag
     {
-        private class Nested
+	    private static readonly Guid keepOriginalId = new Guid("00000000-0000-0000-0000-111111111111");
+
+	    private class Nested
         {
             private Nested(){}
             //// Explicit static constructor to tell C# compiler
@@ -27,13 +29,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
         {
         }
 
-        public static KeepOriginalScheduleTag Instance
-        {
-            get { return KeepOriginalScheduleTag.Nested.instance; }
-        }
-
-
-        public bool Equals(IEntity other)
+        public static KeepOriginalScheduleTag Instance => Nested.instance;
+		
+	    public bool Equals(IEntity other)
         {
             if (other is KeepOriginalScheduleTag)
                 return true;
@@ -41,49 +39,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
             return false;
         }
 
-        public Guid? Id
-        {
-			get { return new Guid("00000000-0000-0000-0000-111111111111"); }
-        }
+        public Guid? Id => keepOriginalId;
 
-        public void SetId(Guid? newId)
+	    public void SetId(Guid? newId)
         {
-
         }
 
         public void ClearId()
         {
-
         }
 
-        public IPerson CreatedBy
-        {
-            get { return null; }
-        }
+        public IPerson CreatedBy => null;
 
-        public DateTime? CreatedOn
-        {
-            get { return null; }
-        }
+	    public DateTime? CreatedOn => null;
 
-        public IPerson UpdatedBy
-        {
-            get { return null; }
-        }
+	    public IPerson UpdatedBy => null;
 
-        public DateTime? UpdatedOn
-        {
-            get { return null; }
-        }
+	    public DateTime? UpdatedOn => null;
 
-         public bool IsDeleted
-        {
-            get { return false; }
-        }
+	    public bool IsDeleted => false;
 
-        public void SetDeleted()
+	    public void SetDeleted()
         {
-            return;
         }
     }
 }

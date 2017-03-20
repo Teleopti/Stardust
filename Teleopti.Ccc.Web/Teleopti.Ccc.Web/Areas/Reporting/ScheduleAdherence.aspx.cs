@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		private decimal? _teamDeviationTotal = -2;
 		private IList<SqlParameter> _sqlParameterList;
 		private IList<string> _parameterTextList;
-		private readonly Guid reportAdherencePerAgentGuid = new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af");
+		private static readonly Guid reportAdherencePerAgentGuid = new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af");
 
 		private readonly IDictionary<int, IList<IntervalToolTip>> _intervalToolTipDictionary =
 			new Dictionary<int, IList<IntervalToolTip>>();
