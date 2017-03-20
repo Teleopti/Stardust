@@ -23,7 +23,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
 	public class ShiftCategoryLimitationTest
 	{
 		public DesktopScheduling Target;

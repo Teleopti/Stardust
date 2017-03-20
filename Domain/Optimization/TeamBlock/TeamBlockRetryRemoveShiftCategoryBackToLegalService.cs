@@ -1,21 +1,17 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public class TeamBlockRetryRemoveShiftCategoryBackToLegalService : ITeamBlockRemoveShiftCategoryBackToLegalService
+	public class TeamBlockRetryRemoveShiftCategoryBackToLegalService
 	{
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ITeamInfoFactory _teamInfoFactory;
@@ -54,14 +50,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		[RemoveMeWithToggle("Remove scheduleMatrixListPros param and posible move first line in method one step up", Toggles.ResourcePlanner_ShiftCategoryLimitations_42680)]
-		public void Execute(ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
+		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, 
 			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> scheduleMatrixListPros,
 			IOptimizationPreferences optimizationPreferences,
 			IEnumerable<IScheduleMatrixPro> allScheduleMatrixListPros)
 		{
-			backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot)); //If this is enough, we can move this line one step up
 			var shiftNudgeDirective = new ShiftNudgeDirective();
 			var isSingleAgentTeam = _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions);
 			var scheduleMatrixes = isSingleAgentTeam ? scheduleMatrixListPros : allScheduleMatrixListPros;

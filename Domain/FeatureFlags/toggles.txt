@@ -168,7 +168,6 @@ ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI u
 ResourcePlanner_NegativeOrderIndex_39062 = true
 ResourcePlanner_MaxSeatsNew_40939 = true
 ResourcePlanner_LessPersonAssignmentUpdates_42159 = true
-ResourcePlanner_ShiftCategoryLimitations_42680 = true
 ResourcePlanner_IntradayNoDailyValueCheck_42767 = true
 ResourcePlanner_LoadingLessSchedules_42639 = true
 ResourcePlanner_NotShovelCorrectly_41763 = true

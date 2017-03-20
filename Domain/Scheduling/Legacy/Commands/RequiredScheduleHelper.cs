@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly ITeamBlockRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
+		private readonly TeamBlockRetryRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
 		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
 		private readonly IUserTimeZone _userTimeZone;
 
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, 
 				IScheduleDayChangeCallback scheduleDayChangeCallback, 
 				IScheduleDayEquator scheduleDayEquator, 
-				IMatrixListFactory matrixListFactory, 
-				ITeamBlockRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService,
+				IMatrixListFactory matrixListFactory,
+				TeamBlockRetryRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService,
 				INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory,
 				IUserTimeZone userTimeZone)
 		{
@@ -99,13 +99,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (backgroundWorker.CancellationPending)
 					return;
 
-		
 				if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 				{
 					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _resultStateHolder(), _userTimeZone);
 					foreach (var matrix in matrixList)
 					{
-						_teamBlockRemoveShiftCategoryBackToLegalService.Execute(backgroundWorker, schedulingOptions, matrix, _resultStateHolder(), resourceCalculateDelayer, matrixList, optimizationPreferences, allMatrixes);
+						backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot));
+						_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, matrix, _resultStateHolder(), resourceCalculateDelayer, matrixList, optimizationPreferences, allMatrixes);
 					}
 				}
 				else

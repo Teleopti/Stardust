@@ -158,7 +158,6 @@
 		ResourcePlanner_MaxSeatsNew_40939,
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_LessPersonAssignmentUpdates_42159,
-		ResourcePlanner_ShiftCategoryLimitations_42680,
 		ResourcePlanner_IntradayNoDailyValueCheck_42767,
 		ResourcePlanner_LoadingLessSchedules_42639,
 		ResourcePlanner_NotShovelCorrectly_41763,

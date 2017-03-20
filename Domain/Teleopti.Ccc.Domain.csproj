@@ -2306,7 +2306,6 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeBetweenDaysService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockOptimizationLimits.cs" />
-    <Compile Include="Optimization\TeamBlock\TeamBlockRemoveShiftCategoryBackToLegalService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRemoveShiftCategoryOnBestDateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockScheduleCloner.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\BrokenWeekCounterForAPerson.cs" />
