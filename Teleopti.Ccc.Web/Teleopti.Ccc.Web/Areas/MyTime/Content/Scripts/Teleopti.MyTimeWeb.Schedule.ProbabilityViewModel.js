@@ -43,22 +43,22 @@
 	}
 
 	function generateTooltips() {
-		if (!hideProbabilityEarlierThanNow || parent.userNowInMinute() <= 0 ||(parent.userNowInMinute() > 0 && parent.userNowInMinute() < rawProbabilityCellData.endTimeInMinutes)){
-		var label = "",
-			tooltipTitle = getTooltipsTitle(),
-			intervalTimeSpanText = generateIntervalTimeSpanText(rawProbabilityCellData.startTimeMoment, rawProbabilityCellData.endTimeMoment);
+		if (!hideProbabilityEarlierThanNow || parent.userNowInMinute() <= 0 || (parent.userNowInMinute() > 0 && parent.userNowInMinute() < rawProbabilityCellData.endTimeInMinutes)) {
+			var label = "",
+				tooltipTitle = getTooltipsTitle(),
+				intervalTimeSpanText = generateIntervalTimeSpanText(rawProbabilityCellData.startTimeMoment, rawProbabilityCellData.endTimeMoment);
 
-		if (rawProbabilityCellData.possibility === constants.probabilityLow)
-			label = userTexts.low;
-		else if (rawProbabilityCellData.possibility === constants.probabilityHigh)
-			label = userTexts.high;
+			if (rawProbabilityCellData.possibility === constants.probabilityLow)
+				label = userTexts.low;
+			else if (rawProbabilityCellData.possibility === constants.probabilityHigh)
+				label = userTexts.high;
 
-		return "<div>" +
-			"  <div>" + tooltipTitle + "</div>" +
-			"  <div class='tooltip-wordwrap'>" + label + "</div>" +
-			"  <div class='tooltip-wordwrap'>" + intervalTimeSpanText + "</div>" +
-			"</div>";
-		}else {
+			return "<div>" +
+				"  <div>" + tooltipTitle + "</div>" +
+				"  <div class='tooltip-wordwrap'>" + label + "</div>" +
+				"  <div class='tooltip-wordwrap'>" + intervalTimeSpanText + "</div>" +
+				"</div>";
+		} else {
 			return "";
 		}
 	}

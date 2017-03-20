@@ -37,6 +37,8 @@ $(document).ready(function () {
 	var baseDate = "2017-02-24";
 
 	test("should create normal absence possibility view model", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var rawProbability = {
 			startTimeMoment: moment(baseDate + "T06:00:00"),
 			endTimeMoment: moment(baseDate + "T06:15:00"),
@@ -64,6 +66,6 @@ $(document).ready(function () {
 		// Masked after current time
 		dayViewModel.setUserNowInMinutes(420);
 		equal(vm.cssClass(), expectedActualClass + " " + expiredProbabilityCssClass);
-		equal(vm.tooltips().indexOf("06:00") > -1, true);
+		equal(vm.tooltips().indexOf("06:00 - 06:15") > -1, true);
 	});
 });

@@ -284,6 +284,8 @@ $(document).ready(function () {
 	});
 
 	test("Should merge same probability intervals when options.mergeSameIntervals is set to true", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var timelineStart = 1, timelineEnd = 9;
 		var scheduleDay = {
 			FixedDate: baseDate,
@@ -341,18 +343,18 @@ $(document).ready(function () {
 		//	((((7 - timelineStart) * 60 - constants.timelineMarginInMinutes) * expectedLengthPercentagePerMinute * 100) + "%"));
 		//equal(probability.styleJson.width,
 		//	((((7 - 6) * 60) * expectedLengthPercentagePerMinute * 100) + "%"));
-		equal(probability.tooltips().indexOf("6:00") > -1, true);
-		equal(probability.tooltips().indexOf("7:00") > -1, true);
+		equal(probability.tooltips().indexOf("6:00 - 7:00") > -1, true);
 		equal(probability.cssClass(), "probability-low");
 
 		probability = probabilities[1];
 		//equal(probability.styleJson.width, (((9 - 7) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
-		equal(probability.tooltips().indexOf("7:00") > -1, true);
-		equal(probability.tooltips().indexOf("9:00") > -1, true);
+		equal(probability.tooltips().indexOf("7:00 - 9:00") > -1, true);
 		equal(probability.cssClass(), "probability-high");
 	});
 
 	test("Should merge same probability intervals correctly when there are cross day schedule", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var timelineStart = 0, timelineEnd = 9;
 		var scheduleDay = {
 			FixedDate: baseDate,
@@ -412,24 +414,23 @@ $(document).ready(function () {
 
 		var probability = probabilities[0];
 		//equal(probability.styleJson.width, (((4 - 0) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
-		equal(probability.tooltips().indexOf("00:00") > -1, true);
-		equal(probability.tooltips().indexOf("04:00") > -1, true);
+		equal(probability.tooltips().indexOf("00:00 - 04:00") > -1, true);
 		equal(probability.cssClass(), "probability-low");
 
 		probability = probabilities[1];
 		//equal(probability.styleJson.width, (((7 - 6) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
-		equal(probability.tooltips().indexOf("06:00") > -1, true);
-		equal(probability.tooltips().indexOf("07:00") > -1, true);
+		equal(probability.tooltips().indexOf("06:00 - 07:00") > -1, true);
 		equal(probability.cssClass(), "probability-low");
 
 		probability = probabilities[2];
 		//equal(probability.styleJson.width, (((9 - 7) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
-		equal(probability.tooltips().indexOf("07:00") > -1, true);
-		equal(probability.tooltips().indexOf("09:00") > -1, true);
+		equal(probability.tooltips().indexOf("07:00 - 09:00") > -1, true);
 		equal(probability.cssClass(), "probability-high");
 	});
 
-	test("Should trim probability cell data periods according continousPeriods", function(){
+	test("Should trim probability cell data periods according continousPeriods", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var timelineStart = 0, timelineEnd = 9;
 		var scheduleDay = {
 			FixedDate: baseDate,
@@ -452,7 +453,7 @@ $(document).ready(function () {
 			return moment(p.EndTime) <= moment(baseDate).add(9, "hours");
 		});
 
-		expectedRawProbabilities.forEach(function(p){
+		expectedRawProbabilities.forEach(function (p) {
 			p.Possibility = 1;
 		});
 
@@ -476,9 +477,7 @@ $(document).ready(function () {
 				userNowInMinute: function () { return 0; }
 			}, options);
 
-		equal(probabilities[probabilities.length - 2].tooltips().indexOf("00:00") > -1, true);
-		equal(probabilities[probabilities.length - 2].tooltips().indexOf("04:10") > -1, true);
-		equal(probabilities[probabilities.length - 1].tooltips().indexOf("08:50") > -1, true);
-		equal(probabilities[probabilities.length - 1].tooltips().indexOf("09:00") > -1, true);
+		equal(probabilities[probabilities.length - 2].tooltips().indexOf("00:00 - 04:10") > -1, true);
+		equal(probabilities[probabilities.length - 1].tooltips().indexOf("08:50 - 09:00") > -1, true);
 	});
 });
