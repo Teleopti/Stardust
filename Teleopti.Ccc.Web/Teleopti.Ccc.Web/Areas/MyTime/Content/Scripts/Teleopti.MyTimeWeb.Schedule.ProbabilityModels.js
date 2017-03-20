@@ -70,7 +70,7 @@
 			endTimeMoment: moment(rawProbability.EndTime),
 			startTimeInMinutes: intervalStartMinutes,
 			endTimeInMinutes: intervalEndMinutes,
-			possibility: rawProbability.Possibility,
+			possibility: rawProbability.Possibility
 		};
 	}
 
@@ -96,48 +96,47 @@
 		var boundaries = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, options.timelines,
 			options.probabilityType, rawProbabilities, options.intradayOpenPeriod);
 
-		var probabilityModels = [], filteredRawProbabilities = [], filteredRawProbabilityCellDataList = [];
+		var probabilityModels = [], filteredRawProbabilities = [], cellDataList = [];
 
-		if (options.probabilityType == constants.absenceProbabilityType) {
+		if (options.probabilityType === constants.absenceProbabilityType) {
 			filteredRawProbabilities = filterRawProbabilities(rawProbabilities, continousPeriods);
 			filteredRawProbabilities.forEach(function (filteredRawPro) {
 				var cellData = createProbabilityCellData(filteredRawPro);
 				var trimedCellData = trimIntervalAccordingContinuousSchedulePeriod(cellData, continousPeriods);
 
 				if (trimedCellData.startTimeInMinutes < trimedCellData.endTimeInMinutes)
-					filteredRawProbabilityCellDataList.push(trimedCellData);
+					cellDataList.push(trimedCellData);
 			});
-		} else if (options.probabilityType == constants.overtimeProbabilityType) {
+		} else if (options.probabilityType === constants.overtimeProbabilityType) {
 			filteredRawProbabilities = rawProbabilities;
 			filteredRawProbabilities.forEach(function (filteredRawPro) {
 				var cellData = createProbabilityCellData(filteredRawPro);
 				var trimedCellData = trimIntervalAccordingTimeLinePeriodAndBoundaries(cellData, boundaries);
 
 				if (trimedCellData.startTimeInMinutes < trimedCellData.endTimeInMinutes)
-					filteredRawProbabilityCellDataList.push(trimedCellData);
+					cellDataList.push(trimedCellData);
 			});
 		}
 
-		var i, j, probabilityModel, listLength = filteredRawProbabilityCellDataList.length;
+		var i, j, probabilityModel, listLength = cellDataList.length;
 
 		for (i = 0; i < listLength; i = j) {
 			j = i + 1;
 			if (options.mergeSameIntervals) {
 				for (; j < listLength; j++) {
-					var hasSamePossibilityValue = filteredRawProbabilityCellDataList[j].possibility == filteredRawProbabilityCellDataList[i].possibility;
-
-					var isConnectedPossibility = filteredRawProbabilityCellDataList[i].endTimeInMinutes == filteredRawProbabilityCellDataList[j].startTimeInMinutes;
-
+					var hasSamePossibilityValue = cellDataList[j].possibility === cellDataList[i].possibility;
+					var isConnectedPossibility = cellDataList[i].endTimeInMinutes === cellDataList[j].startTimeInMinutes;
 					if (!hasSamePossibilityValue || !isConnectedPossibility) {
 						break;
 					}
 
-					filteredRawProbabilityCellDataList[i].endTimeMoment = filteredRawProbabilityCellDataList[j].endTimeMoment;
-					filteredRawProbabilityCellDataList[i].endTimeInMinutes = filteredRawProbabilityCellDataList[j].endTimeInMinutes;
+					cellDataList[i].endTimeMoment = cellDataList[j].endTimeMoment;
+					cellDataList[i].endTimeInMinutes = cellDataList[j].endTimeInMinutes;
 				}
 			}
 
-			probabilityModel = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(filteredRawProbabilityCellDataList[i], options.probabilityType, boundaries, options.userTexts, dayViewModel, options.layoutDirection, options.hideProbabilityEarlierThanNow);
+			probabilityModel = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(cellDataList[i], options.probabilityType,
+				boundaries, options.userTexts, dayViewModel, options.layoutDirection, options.hideProbabilityEarlierThanNow);
 
 			if (!$.isEmptyObject(probabilityModel)) {
 				probabilityModels.push(probabilityModel);
@@ -150,14 +149,20 @@
 	function trimIntervalAccordingContinuousSchedulePeriod(probabilityCellData, continousPeriods) {
 		for (var i = 0; i < continousPeriods.length; i++) {
 			var continousPeriod = continousPeriods[i];
-			if ((probabilityCellData.startTimeInMinutes <= continousPeriod.startTimeInMin && probabilityCellData.endTimeInMinutes >= continousPeriod.startTimeInMin)) {
+			if ((probabilityCellData.startTimeInMinutes <= continousPeriod.startTimeInMin &&
+				probabilityCellData.endTimeInMinutes >= continousPeriod.startTimeInMin)) {
 				probabilityCellData.startTimeInMinutes = continousPeriod.startTimeInMin;
-				probabilityCellData.startTimeMoment.hours(Math.floor(continousPeriod.startTimeInMin / 60)).minutes(continousPeriod.startTimeInMin % 60);
+				probabilityCellData.startTimeMoment
+					.hours(Math.floor(continousPeriod.startTimeInMin / 60))
+					.minutes(continousPeriod.startTimeInMin % 60);
 			}
 
-			if ((probabilityCellData.startTimeInMinutes <= continousPeriod.endTimeInMin && probabilityCellData.endTimeInMinutes >= continousPeriod.endTimeInMin)) {
+			if ((probabilityCellData.startTimeInMinutes <= continousPeriod.endTimeInMin &&
+				probabilityCellData.endTimeInMinutes >= continousPeriod.endTimeInMin)) {
 				probabilityCellData.endTimeInMinutes = continousPeriod.endTimeInMin;
-				probabilityCellData.endTimeMoment.hours(Math.floor(continousPeriod.endTimeInMin / 60)).minutes(continousPeriod.endTimeInMin % 60);
+				probabilityCellData.endTimeMoment
+					.hours(Math.floor(continousPeriod.endTimeInMin / 60))
+					.minutes(continousPeriod.endTimeInMin % 60);
 			}
 		}
 
@@ -168,11 +173,15 @@
 		if (boundaries) {
 			if (probabilityCellData.startTimeInMinutes <= boundaries.probabilityStartMinutes) {
 				probabilityCellData.startTimeInMinutes = boundaries.probabilityStartMinutes;
-				probabilityCellData.startTimeMoment.hours(Math.floor(boundaries.probabilityStartMinutes / 60)).minutes(boundaries.probabilityStartMinutes % 60);
+				probabilityCellData.startTimeMoment
+					.hours(Math.floor(boundaries.probabilityStartMinutes / 60))
+					.minutes(boundaries.probabilityStartMinutes % 60);
 			}
 			if (probabilityCellData.endTimeInMinutes >= boundaries.probabilityEndMinutes) {
 				probabilityCellData.endTimeInMinutes = boundaries.probabilityEndMinutes;
-				probabilityCellData.endTimeMoment.hours(Math.floor(boundaries.probabilityEndMinutes / 60)).minutes(boundaries.probabilityEndMinutes % 60);
+				probabilityCellData.endTimeMoment
+					.hours(Math.floor(boundaries.probabilityEndMinutes / 60))
+					.minutes(boundaries.probabilityEndMinutes % 60);
 			}
 		}
 

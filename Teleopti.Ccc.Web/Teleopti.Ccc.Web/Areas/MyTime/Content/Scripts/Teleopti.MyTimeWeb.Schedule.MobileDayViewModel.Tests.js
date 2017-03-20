@@ -5,8 +5,9 @@
 $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.MobileDayViewModel");
 
+	Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
-	var expiredProbabilityCssClass = "probability-expired";
 
 	var createTimeline = function (timelineStartHour, timelineEndHour) {
 		var timelinePoints = [];
@@ -35,28 +36,32 @@ $(document).ready(function () {
 		}
 
 		return timelinePoints;
-	}
+	};
 
-	var createRawProbabilities = function () {
+	var createRawProbabilities = function (generateProbability) {
 		var result = [];
+		var intervalLengthInMinute = 15;
 		var dateStart = "2017-02-16";
-		for (var i = 0; i < 24 * 60 / 15; i++) {
+
+		for (var i = 0; i < 24 * 60 / intervalLengthInMinute; i++) {
 			result.push({
-				"StartTime": moment(dateStart).add(15 * i, "minutes").toDate(),
-				"EndTime": moment(dateStart).add(15 * (i + 1), "minutes").toDate(),
-				"Possibility": Math.round(Math.random())
+				"StartTime": moment(dateStart).add(intervalLengthInMinute * i, "minutes").toDate(),
+				"EndTime": moment(dateStart).add(intervalLengthInMinute * (i + 1), "minutes").toDate(),
+				"Possibility": generateProbability == undefined
+					? Math.round(Math.random())
+					: generateProbability(intervalLengthInMinute * i)
 			});
 		}
 
 		return result;
-	}
+	};
 
 	var createWeekViewmodel = function (probabilityType, timelineStartHour, timelineEndHour, intradayOpenPeriod) {
 		var self = this;
 		self.userTexts = {
 			"xRequests": "{0} Request(s)",
-			"fair": "Fair",
-			"good": "Good",
+			"low": "Low",
+			"high": "High",
 			"probabilityForAbsence": "Probability to get absence:",
 			"probabilityForOvertime": "Probability to get overtime:"
 		};
@@ -77,7 +82,7 @@ $(document).ready(function () {
 		self.selectedProbabilityOptionValue = ko.observable(probabilityType ? probabilityType : constants.noneProbabilityType);
 		self.OnProbabilityOptionSelectCallback = function (selectedOptionValue) {
 			self.selectedProbabilityOptionValue(selectedOptionValue);
-			if (selectedOptionValue == '0') {
+			if (selectedOptionValue === 0) {
 				self.requestViewModel(undefined);
 			}
 		};
@@ -140,7 +145,7 @@ $(document).ready(function () {
 				"IsOvertime": false
 			}
 		];
-	}
+	};
 
 	var createCrossDayPeriods = function () {
 		return [
@@ -197,95 +202,97 @@ $(document).ready(function () {
 				"IsOvertime": false
 			}
 		];
-	}
+	};
 
 	var createNightShiftPeriods = function () {
-		return [{
-			"Title": "Phone",
-			"TimeSpan": "10:00 - 12:00",
-			"StartTime": "2017-02-16T10:00:00",
-			"EndTime": "2017-02-16T12:00:00",
-			"Summary": "2:00",
-			"StyleClassName": "color_80FF80",
-			"Meeting": null,
-			"StartPositionPercentage": 0.4166714892533478396740703017,
-			"EndPositionPercentage": 0.5000057871040174076088843621,
-			"Color": "128,255,128",
-			"IsOvertime": false
-		}, {
-			"Title": "Short break",
-			"TimeSpan": "12:00 - 12:15",
-			"StartTime": "2017-02-16T12:00:00",
-			"EndTime": "2017-02-16T12:15:00",
-			"Summary": "0:15",
-			"StyleClassName": "color_FF0000",
-			"Meeting": null,
-			"StartPositionPercentage": 0.5000057871040174076088843621,
-			"EndPositionPercentage": 0.5104225743353511036007361196,
-			"Color": "255,0,0",
-			"IsOvertime": false
-		}, {
-			"Title": "Phone",
-			"TimeSpan": "12:15 - 14:15",
-			"StartTime": "2017-02-16T12:15:00",
-			"EndTime": "2017-02-16T14:15:00",
-			"Summary": "2:00",
-			"StyleClassName": "color_80FF80",
-			"Meeting": null,
-			"StartPositionPercentage": 0.5104225743353511036007361196,
-			"EndPositionPercentage": 0.59375687218602067153555018,
-			"Color": "128,255,128",
-			"IsOvertime": false
-		}, {
-			"Title": "Lunch",
-			"TimeSpan": "14:15 - 15:15",
-			"StartTime": "2017-02-16T14:15:00",
-			"EndTime": "2017-02-16T15:15:00",
-			"Summary": "1:00",
-			"StyleClassName": "color_FFFF00",
-			"Meeting": null,
-			"StartPositionPercentage": 0.59375687218602067153555018,
-			"EndPositionPercentage": 0.6354240211113554555029572102,
-			"Color": "255,255,0",
-			"IsOvertime": false
-		}, {
-			"Title": "Social Media",
-			"TimeSpan": "15:15 - 17:00",
-			"StartTime": "2017-02-16T15:15:00",
-			"EndTime": "2017-02-16T17:00:00",
-			"Summary": "1:45",
-			"StyleClassName": "color_1E90FF",
-			"Meeting": null,
-			"StartPositionPercentage": 0.6354240211113554555029572102,
-			"EndPositionPercentage": 0.708341531730691327445919513,
-			"Color": "30,144,255",
-			"IsOvertime": false
-		}, {
-			"Title": "Short break",
-			"TimeSpan": "17:00 - 17:15",
-			"StartTime": "2017-02-16T17:00:00",
-			"EndTime": "2017-02-16T17:15:00",
-			"Summary": "0:15",
-			"StyleClassName": "color_FF0000",
-			"Meeting": null,
-			"StartPositionPercentage": 0.708341531730691327445919513,
-			"EndPositionPercentage": 0.7187583189620250234377712705,
-			"Color": "255,0,0",
-			"IsOvertime": false
-		}, {
-			"Title": "Phone",
-			"TimeSpan": "17:15 - 01:30 +1",
-			"StartTime": "2017-02-16T17:15:00",
-			"EndTime": "2017-02-17T01:30:00",
-			"Summary": "8:15",
-			"StyleClassName": "color_80FF80",
-			"Meeting": null,
-			"StartPositionPercentage": 0.7187583189620250234377712705,
-			"EndPositionPercentage": 1.0,
-			"Color": "128,255,128",
-			"IsOvertime": false
-		}];
-	}
+		return [
+			{
+				"Title": "Phone",
+				"TimeSpan": "10:00 - 12:00",
+				"StartTime": "2017-02-16T10:00:00",
+				"EndTime": "2017-02-16T12:00:00",
+				"Summary": "2:00",
+				"StyleClassName": "color_80FF80",
+				"Meeting": null,
+				"StartPositionPercentage": 0.4166714892533478396740703017,
+				"EndPositionPercentage": 0.5000057871040174076088843621,
+				"Color": "128,255,128",
+				"IsOvertime": false
+			}, {
+				"Title": "Short break",
+				"TimeSpan": "12:00 - 12:15",
+				"StartTime": "2017-02-16T12:00:00",
+				"EndTime": "2017-02-16T12:15:00",
+				"Summary": "0:15",
+				"StyleClassName": "color_FF0000",
+				"Meeting": null,
+				"StartPositionPercentage": 0.5000057871040174076088843621,
+				"EndPositionPercentage": 0.5104225743353511036007361196,
+				"Color": "255,0,0",
+				"IsOvertime": false
+			}, {
+				"Title": "Phone",
+				"TimeSpan": "12:15 - 14:15",
+				"StartTime": "2017-02-16T12:15:00",
+				"EndTime": "2017-02-16T14:15:00",
+				"Summary": "2:00",
+				"StyleClassName": "color_80FF80",
+				"Meeting": null,
+				"StartPositionPercentage": 0.5104225743353511036007361196,
+				"EndPositionPercentage": 0.59375687218602067153555018,
+				"Color": "128,255,128",
+				"IsOvertime": false
+			}, {
+				"Title": "Lunch",
+				"TimeSpan": "14:15 - 15:15",
+				"StartTime": "2017-02-16T14:15:00",
+				"EndTime": "2017-02-16T15:15:00",
+				"Summary": "1:00",
+				"StyleClassName": "color_FFFF00",
+				"Meeting": null,
+				"StartPositionPercentage": 0.59375687218602067153555018,
+				"EndPositionPercentage": 0.6354240211113554555029572102,
+				"Color": "255,255,0",
+				"IsOvertime": false
+			}, {
+				"Title": "Social Media",
+				"TimeSpan": "15:15 - 17:00",
+				"StartTime": "2017-02-16T15:15:00",
+				"EndTime": "2017-02-16T17:00:00",
+				"Summary": "1:45",
+				"StyleClassName": "color_1E90FF",
+				"Meeting": null,
+				"StartPositionPercentage": 0.6354240211113554555029572102,
+				"EndPositionPercentage": 0.708341531730691327445919513,
+				"Color": "30,144,255",
+				"IsOvertime": false
+			}, {
+				"Title": "Short break",
+				"TimeSpan": "17:00 - 17:15",
+				"StartTime": "2017-02-16T17:00:00",
+				"EndTime": "2017-02-16T17:15:00",
+				"Summary": "0:15",
+				"StyleClassName": "color_FF0000",
+				"Meeting": null,
+				"StartPositionPercentage": 0.708341531730691327445919513,
+				"EndPositionPercentage": 0.7187583189620250234377712705,
+				"Color": "255,0,0",
+				"IsOvertime": false
+			}, {
+				"Title": "Phone",
+				"TimeSpan": "17:15 - 01:30 +1",
+				"StartTime": "2017-02-16T17:15:00",
+				"EndTime": "2017-02-17T01:30:00",
+				"Summary": "8:15",
+				"StyleClassName": "color_80FF80",
+				"Meeting": null,
+				"StartPositionPercentage": 0.7187583189620250234377712705,
+				"EndPositionPercentage": 1.0,
+				"Color": "128,255,128",
+				"IsOvertime": false
+			}
+		];
+	};
 
 	var createRawDaySchedule = function (isDayoff, isFullDayAbsence, periods) {
 		return {
@@ -473,229 +480,242 @@ $(document).ready(function () {
 		equal(vm.probabilities.length, 0);
 	});
 
-	// TODO-xinfli: Temporary ignored, should fixed for interval merging.
-	/*
 	test("should show absence possibility within schedule time range", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(false, false, creatPeriods());
 		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
-		var probabilities = createRawProbabilities();
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
-		vm.userNowInMinute(0);
+		var rawProbabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
+			return intervalStartMinute < 12 * 60 ? 0 : 1;
+		});
 
-		// Total 9 hours * 4 = 36 periods
-		equal(vm.probabilities.length, 36);
-		for (var i = 0; i < vm.probabilities.length; i++) {
-			var probability = vm.probabilities[i];
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, rawProbabilities, true, true, week);
+
+		equal(vm.probabilities().length, 2);
+		for (var i = 0; i < vm.probabilities().length; i++) {
+			var probability = vm.probabilities()[i];
 			equal(probability.tooltips().length > 0, true);
 		}
+
+		equal(vm.probabilities()[0].tooltips().indexOf("09:30 - 12:00") > -1, true);
+		equal(vm.probabilities()[1].tooltips().indexOf("12:00 - 18:30") > -1, true);
 	});
 
 	test("should show overtime possibility within timeline range", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(false, false, creatPeriods());
 		var week = createWeekViewmodel(constants.overtimeProbabilityType, 8, 19);
-		var probabilities = createRawProbabilities();
+		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
+			return intervalStartMinute < 12 * 60 ? 0 : 1;
+		});
+
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
 		vm.userNowInMinute(0);
 
 		// Will generate all overtime possibility within timeline range (from 08:00 to 19:00)
-		equal(vm.probabilities.length, 44);
-		for (var i = 0; i < vm.probabilities.length; i++) {
-			var probability = vm.probabilities[i];
-
+		equal(vm.probabilities().length, 2);
+		for (var i = 0; i < vm.probabilities().length; i++) {
+			var probability = vm.probabilities()[i];
 			equal(probability.tooltips().length > 0, true);
 		}
-	});
 
-	test("should hide absence possibility earlier than now", function () {
-		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
-		var probabilities = createRawProbabilities();
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
-		vm.userNowInMinute(750); // 12:30
-
-		// Total 9 hours * 4 = 36 periods
-		equal(vm.probabilities.length, 36);
-
-		for (var i = 0; i < vm.probabilities.length; i++) {
-			var probability = vm.probabilities[i];
-			// Schedule started from 09:30, current time is 12:30
-			// Then the first (12:30 - 09:30) * 4 probabilities should be masked
-			if (i < 12) {
-				equal(probability.cssClass().indexOf(expiredProbabilityCssClass) > -1, true);
-				equal(probability.tooltips().length, 0);
-			} else {
-
-				equal(probability.tooltips().length > 0, true);
-			}
-		}
-	});
-
-	test("should hide overtime possibility earlier than now", function () {
-		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20);
-		var probabilities = createRawProbabilities();
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
-		vm.userNowInMinute(750); // 12:30
-
-		// Will generate all overtime possibility within timeline range (from 02:00 to 20:00)
-		equal(vm.probabilities.length, 72);
-
-		for (var i = 0; i < vm.probabilities.length; i++) {
-			var probability = vm.probabilities[i];
-			// Open hour period started from 02:00, current time is 12:30
-			// Then the first (12:30 - 02:00) * 4 probabilities should be invisible
-			if (i < 42) {
-				equal(probability.cssClass().indexOf(expiredProbabilityCssClass) > -1, true);
-				equal(probability.tooltips().length, 0);
-			} else {
-
-				equal(probability.tooltips().length > 0, true);
-			}
-		}
+		equal(vm.probabilities()[0].tooltips().indexOf("08:00 - 12:00") > -1, true);
+		equal(vm.probabilities()[1].tooltips().indexOf("12:00 - 19:00") > -1, true);
 	});
 
 	test("should show no absence possibility for dayoff", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(true, false, creatPeriods());
 		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
 		var probabilities = createRawProbabilities();
+
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
-		equal(vm.probabilities.length, 0);
+
+		equal(vm.probabilities().length, 0);
 	});
 
 	test("should show no absence possibility for fullday absence", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(false, true, creatPeriods());
 		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
 		var probabilities = createRawProbabilities();
+
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
-		equal(vm.probabilities.length, 0);
+		equal(vm.probabilities().length, 0);
 	});
 
 	test("should show overtime possibility for dayoff", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(true, false, creatPeriods());
 		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20);
-		var probabilities = createRawProbabilities();
+		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
+			return intervalStartMinute < 12 * 60 ? 0 : 1;
+		});
+
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
 		vm.userNowInMinute(0);
 
-		// In this scenario will show prabability based on length of timeline
-		// So should be (20 - 2) * 4
-		equal(vm.probabilities.length, 72);
-		for (var i = 0; i < vm.probabilities.length; i++) {
-			var probability = vm.probabilities[i];
-
+		equal(vm.probabilities().length, 2);
+		for (var i = 0; i < vm.probabilities().length; i++) {
+			var probability = vm.probabilities()[i];
 			equal(probability.tooltips().length > 0, true);
 		}
+		equal(vm.probabilities()[0].tooltips().indexOf("02:00 - 12:00") > -1, true);
+		equal(vm.probabilities()[1].tooltips().indexOf("12:00 - 20:00") > -1, true);
 	});
 
 	test("should show overtime possibility based on intraday open hour", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(false, false, creatPeriods());
 		var intradayOpenHour = {
 			"startTime": "10:00:00",
 			"endTime": "15:00:00"
 		};
 		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20, intradayOpenHour);
-		var probabilities = createRawProbabilities();
+		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
+			return intervalStartMinute < 12 * 60 ? 0 : 1;
+		});
+
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
 		vm.userNowInMinute(0);
 
-		// Only probability within open hour period will be generated, so there will be (15 - 10) * 4 probabilities
-		equal(vm.probabilities.length, 20);
-		for (var i = 0; i < vm.probabilities.length; i++) {
-			var probability = vm.probabilities[i];
-
-			equal(probability.tooltips().length > 0, true);
+		equal(vm.probabilities().length, 2);
+		for (var i = 0; i < vm.probabilities().length; i++) {
+			var tooltips = vm.probabilities()[i].tooltips();
+			equal(tooltips.length > 0, true);
 		}
+		equal(vm.probabilities()[0].tooltips().indexOf("10:00 - 12:00") > -1, true);
+		equal(vm.probabilities()[1].tooltips().indexOf("12:00 - 15:00") > -1, true);
 	});
 
 	test("should show overtime possibility for dayoff based on intraday open hour", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(true, false, creatPeriods());
 		var intradayOpenHour = {
 			"startTime": "10:00:00",
 			"endTime": "15:00:00"
 		};
 		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20, intradayOpenHour);
-		var probabilities = createRawProbabilities();
+		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
+			return intervalStartMinute < 12 * 60 + 30 || intervalStartMinute >= 14 * 60 ? 0 : 1;
+		});
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
 		vm.userNowInMinute(0);
 
 		// In this scenario will show prabability based on length of initraday open houru
 		// So should be (15 - 10) * 4
-		equal(vm.probabilities.length, 20);
-		for (var i = 0; i < vm.probabilities.length; i++) {
-			var probability = vm.probabilities[i];
-
+		equal(vm.probabilities().length, 3);
+		for (var i = 0; i < vm.probabilities().length; i++) {
+			var probability = vm.probabilities()[i];
 			equal(probability.tooltips().length > 0, true);
 		}
+		equal(vm.probabilities()[0].tooltips().indexOf("10:00 - 12:30") > -1, true);
+		equal(vm.probabilities()[1].tooltips().indexOf("12:30 - 14:00") > -1, true);
+		equal(vm.probabilities()[2].tooltips().indexOf("14:00 - 15:00") > -1, true);
 	});
 
 	test("should show overtime possibility for fullday absence", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(false, true, creatPeriods());
 		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20);
-		var probabilities = createRawProbabilities();
+		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
+			return intervalStartMinute < 12 * 60 + 30 || intervalStartMinute >= 14 * 60 ? 0 : 1;
+		});
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
 		vm.userNowInMinute(0);
 
-		// In this scenario will show prabability based on length of timeline
-		// So should be (20 - 2) * 4
-		equal(vm.probabilities.length, 72);
-		for (var i = 0; i < vm.probabilities.length; i++) {
-			var probability = vm.probabilities[i];
+		equal(vm.probabilities().length, 3);
+		for (var i = 0; i < vm.probabilities().length; i++) {
+			var probability = vm.probabilities()[i];
 
 			equal(probability.tooltips().length > 0, true);
 		}
+		equal(vm.probabilities()[0].tooltips().indexOf("02:00 - 12:30") > -1, true);
+		equal(vm.probabilities()[1].tooltips().indexOf("12:30 - 14:00") > -1, true);
+		equal(vm.probabilities()[2].tooltips().indexOf("14:00 - 20:00") > -1, true);
 	});
 
 	test("should show correct overtime possibility for cross day schedule", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(false, false, createCrossDayPeriods());
 		var week = createWeekViewmodel(constants.overtimeProbabilityType, 0, 19);
-		var probabilities = createRawProbabilities();
+		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
+			return intervalStartMinute < 12 * 60 + 30 || intervalStartMinute >= 14 * 60 ? 0 : 1;
+		});
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
 		vm.userNowInMinute(0);
 
-		// In this scenario timeline will start from 00:00, then all probabilities will be generated for whole timeline
-		// So should be (19 - 0) * 4
-		equal(vm.probabilities.length, 76);
-		for (var i = 0; i < vm.probabilities.length; i++) {
-			var probability = vm.probabilities[i];
-
+		equal(vm.probabilities().length, 3);
+		for (var i = 0; i < vm.probabilities().length; i++) {
+			var probability = vm.probabilities()[i];
 			equal(probability.tooltips().length > 0, true);
 		}
+		equal(vm.probabilities()[0].tooltips().indexOf("00:00 - 12:30") > -1, true);
+		equal(vm.probabilities()[1].tooltips().indexOf("12:30 - 14:00") > -1, true);
+		equal(vm.probabilities()[2].tooltips().indexOf("14:00 - 19:00") > -1, true);
 	});
 
 	test("should show correct absence possibility for cross day schedule", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(false, false, createCrossDayPeriods());
 		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 19);
-		var probabilities = createRawProbabilities();
+		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
+			return intervalStartMinute < 12 * 60 + 30 || intervalStartMinute >= 14 * 60 ? 0 : 1;
+		});
 
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
 		vm.userNowInMinute(0);
 
-		// In this scenario timeline will start from 00:00
-		// So should be (18.5 - 0) * 4
-		equal(vm.probabilities.length, 42);
+		equal(vm.probabilities().length, 4);
 
 		// Probability from 01:30 to 09:30 should be invisible since there is no schedule for this time range
 		// will not create invisible probability view models
-		for (var i = 0; i < vm.probabilities.length; i++) {
-			var probability = vm.probabilities[i];
+		for (var i = 0; i < vm.probabilities().length; i++) {
+			var probability = vm.probabilities()[i];
 			equal(probability.tooltips().length > 0, true);
 		}
+
+		equal(vm.probabilities()[0].tooltips().indexOf("00:00 - 01:30") > -1, true);
+		equal(vm.probabilities()[1].tooltips().indexOf("09:30 - 12:30") > -1, true);
+		equal(vm.probabilities()[2].tooltips().indexOf("12:30 - 14:00") > -1, true);
+		equal(vm.probabilities()[3].tooltips().indexOf("14:00 - 18:30") > -1, true);
 	});
 
 	test("should show absence possibility for night shift schedule", function () {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
 		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
 
-		var probabilities = createRawProbabilities();
+		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
+			return intervalStartMinute < 12 * 60 + 30 || intervalStartMinute >= 14 * 60 ? 0 : 1;
+		});
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
 
 		// Will generate probabilities from schedule start (10:00) to schedule end (00:00+)
-		equal(vm.probabilities.length, 56);
+		equal(vm.probabilities().length, 3);
+		for (var i = 0; i < vm.probabilities().length; i++) {
+			var probability = vm.probabilities()[i];
+			equal(probability.tooltips().length > 0, true);
+		}
+
+		equal(vm.probabilities()[0].tooltips().indexOf("10:00 - 12:30") > -1, true);
+		equal(vm.probabilities()[1].tooltips().indexOf("12:30 - 14:00") > -1, true);
+		equal(vm.probabilities()[2].tooltips().indexOf("14:00 - 00:00 +1") > -1, true);
 	});
 
 	test("should set default probability option to hidden ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
+		var week = createWeekViewmodel(undefined, 0, 24);
 
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
@@ -705,11 +725,10 @@ $(document).ready(function () {
 
 	test("should change probability option value to 1 after selecting Show absence probability ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
+		var week = createWeekViewmodel(constants.noneProbabilityType, 0, 24);
 
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
-
 
 		week.toggleProbabilityOptionsPanel(vm);
 		equal(week.requestViewModel().model.checkedProbability(), 0);
@@ -721,7 +740,7 @@ $(document).ready(function () {
 
 	test("should change staffing probability option value to 2 after selecting Show overtime  probability ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
+		var week = createWeekViewmodel(constants.noneProbabilityType, 0, 24);
 
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
@@ -736,7 +755,7 @@ $(document).ready(function () {
 
 	test("should toggle off staffing probability after selecting Hide staffing probability ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
+		var week = createWeekViewmodel(constants.noneProbabilityType, 0, 24);
 
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
@@ -749,5 +768,4 @@ $(document).ready(function () {
 		week.requestViewModel().model.onOptionSelected(0);
 		equal(week.requestViewModel(), undefined);
 	});
-	//*/
 });
