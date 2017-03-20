@@ -178,14 +178,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var port = _configReader.ReadValue("port", 14100);
 				var totalNodes = _configReader.ReadValue("NumberOfNodes", Environment.ProcessorCount);
-				for (int portIndex = 1; portIndex <= totalNodes; portIndex++)
+				for (var portIndex = 1; portIndex <= totalNodes; portIndex++)
 				{
 					var nodeName = "Node" + portIndex;
 					var localPort = port;
 					var nodeThread = new Thread(() => startNode(localPort, nodeName));
 					nodeThread.Start();
 					// a little delay
-					Thread.Sleep(1000);
+					Thread.Sleep(3000);
 					port++;
 				}
 			
