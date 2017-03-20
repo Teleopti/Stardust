@@ -115,7 +115,7 @@
 					return $scope.selectedResults.length > 0 || $scope.default;
 				};
 				$scope.isValidName = function () {
-					return $scope.name.length > 0;
+					return $scope.name.length > 0 && scope.name.length <= 100;
 				};
 
 				function isInteger(value) {
