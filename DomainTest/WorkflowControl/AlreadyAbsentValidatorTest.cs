@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         	scenario = ScenarioFactory.CreateScenarioAggregate();
 			person = PersonFactory.CreatePerson();
 			stateHolder = mocks.DynamicMock<ISchedulingResultStateHolder>();
-			target = new AlreadyAbsentSpecification(new AlreadyAbsentValidator());
+			target = new AlreadyAbsentSpecification(new AlreadyAbsentValidator(new FakeGlobalSettingDataRepository()));
         }
 
         [Test]

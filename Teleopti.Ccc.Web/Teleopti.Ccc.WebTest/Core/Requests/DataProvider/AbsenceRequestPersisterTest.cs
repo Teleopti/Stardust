@@ -3,13 +3,17 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
@@ -18,6 +22,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -32,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
 	[TestFixture,
 	RequestsTest,
-		Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747), 
+		Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747),
 		Toggle(Toggles.Wfm_Requests_Check_Expired_Requests_40274)]
 	public class AbsenceRequestPersisterTest : ISetup
 	{
@@ -76,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble<AbsenceRequestFormMapper>().For<AbsenceRequestFormMapper>();
 			system.UseTestDouble<RequestsViewModelMapper>().For<RequestsViewModelMapper>();
 			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
-
+			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
 		}
 
 		[Test]
@@ -86,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
 
-			setWorkflowControlSet(usePersonAccountValidator:true);
+			setWorkflowControlSet(usePersonAccountValidator: true);
 
 			var personRequest = setupSimpleAbsenceRequest();
 
@@ -99,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldHandleRequestDirectlyWhenRequestShorterThan24HoursAndEndsWithin24HourWindow()
 		{
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
-			
+
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
@@ -130,12 +135,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			_person.WorkflowControlSet = null;
 
 			var personRequest = setupSimpleAbsenceRequest();
-			
+
 			personRequest.Should().Not.Be(null);
 			personRequest.IsDenied.Should().Be(true);
 			personRequest.DenyReason.Should().Be(Resources.RequestDenyReasonNoWorkflow);
 		}
-		
+
 		[Test]
 		public void ShouldNotDenyWhenPersonHasZeroBalanceButWorkflowControlSetHasNoPersonAccountValidation()
 		{
@@ -166,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			request.IsDenied.Should().Be(false);
 			request.DenyReason.Should().Be.Empty();
 		}
-		
+
 		[Test]
 		public void ShouldDenyExpiredRequest([Values]bool autoGrant)
 		{
@@ -193,7 +198,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			setWorkflowControlSet(autoDeny: true);
 
 			var personRequest = setupSimpleAbsenceRequest();
-			
+
 			personRequest.Should().Not.Be(null);
 			personRequest.IsDenied.Should().Be(true);
 			personRequest.DenyReason.Should().Be("RequestDenyReasonAutodeny");
@@ -328,8 +333,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			_absence = createAbsence();
 
 			var isWaitlisted = autoGrant;
-			
-			setWorkflowControlSet(usePersonAccountValidator:true, autoGrant:autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
+
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
 
 			var accountDay = new AccountDay(_today)
 			{
@@ -491,6 +496,41 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			Assert.Throws<InvalidOperationException>(tryPersist);
 		}
 
+		[Test]
+		public void ShouldApproveFullDayRequestWhenPreviousDayIsAbsentWithCrossDayShift()
+		{
+			var startDateTime = new DateTime(2017, 3, 21, 0, 0, 0, DateTimeKind.Utc);
+
+			_absence = createAbsence();
+
+			// create the first day night shift
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), new DateTimePeriod(startDateTime.AddHours(23), startDateTime.AddDays(1).AddHours(7))));
+
+			// create cross day night shift
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), new DateTimePeriod(startDateTime.AddDays(1).AddHours(23), startDateTime.AddDays(2).AddHours(7))));
+
+			setWorkflowControlSet(autoGrant: true);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = new DateOnly(startDateTime.AddDays(1)),
+				EndDate = new DateOnly(startDateTime.AddDays(1)),
+				StartTime = new TimeOfDay(TimeSpan.Zero),
+				EndTime = new TimeOfDay(TimeSpan.FromDays(1).Subtract(TimeSpan.FromMinutes(1)))
+			});
+
+			// create cross day absence
+			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, CurrentScenario.Current()
+				, new DateTimePeriod(startDateTime.AddHours(23), startDateTime.AddDays(1).AddHours(7)), _absence).WithId());
+
+			var personRequest1 = Persister.Persist(form);
+
+			personRequest1.IsDenied.Should().Be(false);
+			personRequest1.IsPending.Should().Be(true);
+		}
+
 		private void tryPersist()
 		{
 			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
@@ -523,7 +563,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			_workflowControlSet.AbsenceRequestWaitlistEnabled = absenceRequestWaitlistEnabled;
 			_workflowControlSet.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold;
 			var absenceRequestProcess = autoGrant
-				? (IProcessAbsenceRequest) new GrantAbsenceRequest()
+				? (IProcessAbsenceRequest)new GrantAbsenceRequest()
 				: new PendingAbsenceRequest();
 			if (autoDeny)
 				absenceRequestProcess = new DenyAbsenceRequest();
@@ -533,10 +573,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				AbsenceRequestProcess = absenceRequestProcess,
 				OpenForRequestsPeriod = new DateOnlyPeriod(_today, DateOnly.Today.AddDays(30)),
 				Period = new DateOnlyPeriod(_today, DateOnly.Today.AddDays(30)),
-				PersonAccountValidator = usePersonAccountValidator? (IAbsenceRequestValidator)new PersonAccountBalanceValidator() : new AbsenceRequestNoneValidator()
+				PersonAccountValidator = usePersonAccountValidator ? (IAbsenceRequestValidator)new PersonAccountBalanceValidator() : new AbsenceRequestNoneValidator()
 			});
 		}
-		
+
 		private IPersonRequest setupSimpleAbsenceRequest()
 		{
 			var accountDay = new AccountDay(_today)
@@ -571,10 +611,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 				personAbsenceAccount.Add(account);
 			}
-			
+
 			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 		}
-		
+
 		private AbsenceRequestForm createAbsenceRequestForm(DateTimePeriodForm period)
 		{
 			var form = new AbsenceRequestForm
