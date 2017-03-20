@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			                                         schedulingResultStateHolder);
 			if (!success)
 			{
-				checkPeriodValue = true;
+				checkPeriodValue = false;
 				return false;
 			}
 
@@ -436,7 +436,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 					lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
 					lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
-					checkPeriodValue = true;
+					checkPeriodValue = false;
 					return false;
 				}
 			}
