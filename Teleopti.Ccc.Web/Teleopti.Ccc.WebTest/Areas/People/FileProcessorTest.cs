@@ -24,6 +24,7 @@ using Teleopti.Ccc.Web.Areas.People.Core;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.WebTest.Areas.People.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.People
 {
@@ -287,23 +288,22 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			row.CreateCell(3).SetCellValue("aa");
 			row.CreateCell(4).SetCellValue("aa");
 			row.CreateCell(5).SetCellValue("agent");
-			row.CreateCell(6).SetCellValue("2017-09-23");
+			row.CreateCell(6).SetCellValue(DateTime.Today);
 			row.CreateCell(7).SetCellValue("london");
 			row.CreateCell(8).SetCellValue("test");
-			row.CreateCell(9).SetCellValue(1009);
+			row.CreateCell(9).SetCellValue("1002");
 
 			row.CreateCell(10).SetCellValue("fix");
 			row.CreateCell(11).SetCellValue("fix");
-			row.CreateCell(12).SetCellValue(1);
+			row.CreateCell(12).SetCellValue("100%");
 			row.CreateCell(13).SetCellValue("early");
 			row.CreateCell(14).SetCellValue("week");
 			row.CreateCell(15);
-			row.Cells[12].SetCellType(CellType.Numeric);
 
 			var result = Target.ProcessSheet(sheet);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "SchedulePeriodLength", string.Format(Resources.RequireXCellFormat, "number"))).Should().Be.True();
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "SchedulePeriodLength", "")).Should().Be.True();
 		}
 
 		[Test]
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Agent.Should().Be.Null();
-			result.First().Feedback.ErrorMessages.Count.Should().Be(11);
+			result.First().Feedback.ErrorMessages.Count.Should().Be(12);
 		}
 
 
@@ -468,6 +468,26 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixEmptySchedulePeriodType()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.SchedulePeriodType = null;
+
+			var defaultSchedulePeriodType = "Week";
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			var sheet = workbook.GetSheetAt(0);
+			sheet.GetRow(1).RemoveCell(sheet.GetRow(1).GetCell(14));
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { SchedulePeriodType = defaultSchedulePeriodType });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodType"));
+			result.Single().Agent.SchedulePeriodType.Should().Be.EqualTo(SchedulePeriodType.Week);
+		}
+
+		[Test]
 		public void WithDefaultsProvidedShouldBeAbleToFixInvalidSchedulePeriodType()
 		{
 			var rawAgent = setupProviderData();
@@ -549,6 +569,50 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixEmptyRuleSetBag()
+		{
+			var rawAgent = setupProviderData();
+
+			var ruleSetBag = new RuleSetBag().WithId();
+			RuleSetBagRepository.Add(ruleSetBag);
+
+			var defaultValue = ruleSetBag.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			var row = workbook.GetSheetAt(0).GetRow(1);
+			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(13));
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { ShiftBagId = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ShiftBag"));
+			result.Single().Agent.RuleSetBag.Should().Be.EqualTo(ruleSetBag);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixEmptyPartTimePercentage()
+		{
+			var rawAgent = setupProviderData();
+			var defaultEntity = PartTimePercentageFactory.CreatePartTimePercentage("default");
+			PartTimePercentageRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			var row = workbook.GetSheetAt(0).GetRow(1);
+			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(12));
+			row.CreateCell(12);
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { PartTimePercentageId = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage"));
+			result.Single().Agent.PartTimePercentage.Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
 		public void WithDefaultsProvidedShouldBeAbleToFixInvalidPartTimePercentage()
 		{
 			var rawAgent = setupProviderData();
@@ -567,6 +631,29 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage"));
 			result.Single().Agent.PartTimePercentage.Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixEmptyContractSchedule()
+		{
+			var rawAgent = setupProviderData();
+
+			var defaultEntity = ContractScheduleFactory.CreateContractSchedule("default").WithId();
+			ContractScheduleRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			var row = workbook.GetSheetAt(0).GetRow(1);
+			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(11));
+			row.CreateCell(11);
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { ContractScheduleId = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ContractSchedule"));
+			result.Single().Agent.ContractSchedule.Should().Be.EqualTo(defaultEntity);
 		}
 
 		[Test]
@@ -591,6 +678,28 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixEmptyContract()
+		{
+			var rawAgent = setupProviderData();
+			rawAgent.Contract = "Invalid contract";
+
+			var defaultEntity = ContractFactory.CreateContract("default").WithId();
+			ContractRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			var row = workbook.GetSheetAt(0).GetRow(1);
+			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(10));
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { ContractId = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Contract"));
+			result.Single().Agent.Contract.Should().Be.EqualTo(defaultEntity);
+		}
+		[Test]
 		public void WithDefaultsProvidedShouldBeAbleToFixInvalidContract()
 		{
 			var rawAgent = setupProviderData();
@@ -609,6 +718,28 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Contract"));
 			result.Single().Agent.Contract.Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixEmptyRole()
+		{
+			var rawAgent = setupProviderData();
+
+			var defaultEntity = ApplicationRoleFactory.CreateRole("default", "default role").WithId();
+			RoleRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			var row = workbook.GetSheetAt(0).GetRow(1);
+			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(5));
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { RoleIds = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Roles"));
+			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
 		[Test]
@@ -633,6 +764,28 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixEmptyTeam()
+		{
+			var rawAgent = setupProviderData();
+
+			var defaultEntity = TeamFactory.CreateSimpleTeam("default").WithId();
+			TeamRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			var row = workbook.GetSheetAt(0).GetRow(1);
+			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(7));
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { TeamId = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Team"));
+			result.Single().Agent.Team.Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
 		public void WithDefaultsProvidedShouldBeAbleToFixInvalidTeam()
 		{
 			var rawAgent = setupProviderData();
@@ -654,6 +807,28 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixEmptySkill()
+		{
+			var rawAgent = setupProviderData();
+
+			var defaultEntity = SkillFactory.CreateSkill("default").WithId();
+			SkillRepository.Add(defaultEntity);
+
+			var defaultValue = defaultEntity.Id.Value.ToString();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			var row = workbook.GetSheetAt(0).GetRow(1);
+			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(8));
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { SkillIds = defaultValue });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Skills"));
+			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
+		}
+
+		[Test]
 		public void WithDefaultsProvidedShouldBeAbleToFixInvalidSkill()
 		{
 			var rawAgent = setupProviderData();
@@ -672,6 +847,45 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Skills"));
 			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
+		}
+
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixEmptyStartDate()
+		{
+			var rawAgent = setupProviderData();
+
+			var defaultValue = DateOnly.Today;
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			var row = workbook.GetSheetAt(0).GetRow(1);
+			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(6));
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { StartDate = defaultValue.ToShortDateString() });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("StartDate"));
+			result.Single().Agent.StartDate.Should().Be.EqualTo(defaultValue);
+		}
+
+		[Test]
+		public void WithDefaultsProvidedShouldBeAbleToFixEmptySchedulePeriodLength()
+		{
+			var rawAgent = setupProviderData();
+
+			var defaultValue = 4;
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			var row = workbook.GetSheetAt(0).GetRow(1);
+			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(15));
+
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { SchedulePeriodLength = "4" });
+
+			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodLength"));
+			result.Single().Agent.SchedulePeriodLength.Should().Be.EqualTo(defaultValue);
 		}
 
 		[Test]

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Ajax.Utilities;
-using Teleopti.Ccc.Domain.AgentInfo;
+using NPOI.HPSF;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Util;
@@ -10,7 +10,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
 {
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		private const int maxWindowUserLength = 100;
 		private const int maxApplicationUserIdLength = 50;
 
-		private defaultAgentDataModel _defaultValues = new defaultAgentDataModel();
+		private defaultAgentDataModel _defaultValues;
 
 		private readonly IImportAgentDataProvider _importAgentDataProvider;
 
@@ -31,6 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 		public void SetDefaultValues(ImportAgentFormData defaultValues)
 		{
+			if(defaultValues == null) return;
+
 			_defaultValues = new defaultAgentDataModel();
 			if (!defaultValues.RoleIds.IsNullOrWhiteSpace())
 			{
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			feedback.Merge(parseWindowsUserAndApplicationLogonId(raw.WindowsUser, raw.ApplicationUserId, agentInfo));
 			feedback.Merge(parsePassword(raw.Password, agentInfo));
 			feedback.Merge(parseRole(raw.Role, agentInfo));
-			agentInfo.StartDate = new DateOnly(raw.StartDate);
+			feedback.Merge(parseStartDate(raw.StartDate, agentInfo));
 
 			feedback.Merge(parseOrganization(raw.Organization, agentInfo));
 			feedback.Merge(parseSkill(raw.Skill, agentInfo));
@@ -192,9 +193,29 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			feedback.Merge(parsePartTimePercentage(raw.PartTimePercentage, agentInfo));
 			feedback.Merge(parseRuleSetBag(raw.ShiftBag, agentInfo));
 			feedback.Merge(parseSchedulePeriodType(raw.SchedulePeriodType, agentInfo));
-			agentInfo.SchedulePeriodLength = (int)raw.SchedulePeriodLength;
+			feedback.Merge(parseSchedulePeriodLength((int)raw.SchedulePeriodLength, agentInfo));
 
 			return agentInfo;
+		}
+
+		private Feedback parseStartDate(DateTime startDate, AgentDataModel agentInfo)
+		{
+			var feedback = new Feedback();
+			if (startDate == DateTime.MinValue || startDate == DateTime.MaxValue)
+			{
+				if (_defaultValues != null && _defaultValues.StartDate.HasValue)
+				{
+					agentInfo.StartDate = _defaultValues.StartDate.Value;
+					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.StartDate)));
+					return feedback;
+				}
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.StartDate), ""));
+			}
+			else
+			{
+				agentInfo.StartDate = new DateOnly(startDate);
+			}
+			return feedback;
 		}
 
 		private Feedback parseFirstnameAndLastname(string rawFirstname, string rawLastname,
@@ -272,6 +293,27 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			return feedback;
 		}
 
+		private Feedback parseSchedulePeriodLength(int periodLength, AgentDataModel agentInfo)
+		{
+			var feedback = new Feedback();
+			if (periodLength == 0)
+			{
+				if (_defaultValues?.SchedulePeriodLength != null)
+				{
+					agentInfo.SchedulePeriodLength = _defaultValues.SchedulePeriodLength.Value;
+					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.SchedulePeriodLength)));
+					return feedback;
+				}
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.SchedulePeriodLength), ""));
+			}
+			else
+			{
+				agentInfo.SchedulePeriodLength = periodLength;
+			}
+
+			return feedback;
+		}
+
 		private Feedback parseSchedulePeriodType(string rawSchedulePeriodType, AgentDataModel agentInfo)
 		{
 			var feedback = new Feedback();
@@ -283,7 +325,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				return feedback;
 			}
 
-			if (_defaultValues.SchedulePeriodType.HasValue)
+			if (_defaultValues?.SchedulePeriodType != null)
 			{
 				agentInfo.SchedulePeriodType = _defaultValues.SchedulePeriodType.Value;
 				feedback.WarningMessages.Add(warningMessage("SchedulePeriodType"));
@@ -346,7 +388,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var ruleSetBag = _importAgentDataProvider.FindRuleSetBag(rawShiftBag);
 			if (ruleSetBag == null)
 			{
-				if (_defaultValues.RuleSetBag != null)
+				if (_defaultValues?.RuleSetBag != null)
 				{
 					agentInfo.RuleSetBag = _defaultValues.RuleSetBag;
 					feedback.WarningMessages.Add(warningMessage("ShiftBag"));
@@ -368,7 +410,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var partTimePercentage = _importAgentDataProvider.FindPartTimePercentage(rawPartTimePercentage);
 			if (partTimePercentage == null)
 			{
-				if (_defaultValues.PartTimePercentage != null)
+				if (_defaultValues?.PartTimePercentage != null)
 				{
 					agentInfo.PartTimePercentage = _defaultValues.PartTimePercentage;
 					feedback.WarningMessages.Add(warningMessage("PartTimePercentage"));
@@ -390,7 +432,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var contractSchedule = _importAgentDataProvider.FindContractSchedule(rawContractSchedule);
 			if (contractSchedule == null)
 			{
-				if (_defaultValues.ContractSchedule != null)
+				if (_defaultValues?.ContractSchedule != null)
 				{
 					agentInfo.ContractSchedule = _defaultValues.ContractSchedule;
 					feedback.WarningMessages.Add(warningMessage("ContractSchedule"));
@@ -411,7 +453,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var contract = _importAgentDataProvider.FindContract(rawContract);
 			if (contract == null)
 			{
-				if (_defaultValues.Contract != null)
+				if (_defaultValues?.Contract != null)
 				{
 					agentInfo.Contract = _defaultValues.Contract;
 					feedback.WarningMessages.Add(warningMessage("Contract"));
@@ -429,7 +471,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		private Feedback parseRole(string rawRoleString, AgentDataModel agent)
 		{
 			var feedback = new Feedback();
-			var roleNames = StringHelper.SplitStringList(rawRoleString).ToList();
+			var roleNames = rawRoleString != null ?StringHelper.SplitStringList(rawRoleString).ToList() : new List<string>();
 			agent.Roles = new List<IApplicationRole>();
 			var invalidRoles = new List<string>();
 			foreach (var roleName in roleNames)
@@ -447,7 +489,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 			if (!agent.Roles.Any())
 			{
-				if (_defaultValues.Roles.Any())
+				if (_defaultValues != null && _defaultValues.Roles.Any())
 				{
 					agent.Roles = _defaultValues.Roles;
 					feedback.WarningMessages.Add(warningMessage("Roles"));
@@ -469,7 +511,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		private Feedback parseOrganization(string rawOrganizationString, AgentDataModel agent)
 		{
 			var feedback = new Feedback();
-			var organizationParts = rawOrganizationString.Split('/');
+			var organizationParts = rawOrganizationString?.Split('/') ?? new string[] {};
 
 			ITeam team = null;
 
@@ -484,7 +526,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 			if (team == null)
 			{
-				if (_defaultValues.Team != null)
+				if (_defaultValues?.Team != null)
 				{
 					agent.Team = _defaultValues.Team;
 					feedback.WarningMessages.Add(warningMessage("Team"));
@@ -523,7 +565,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 			if (!agent.Skills.Any())
 			{
-				if (_defaultValues.Skills.Any())
+				if (_defaultValues != null && _defaultValues.Skills.Any())
 				{
 					agent.Skills = _defaultValues.Skills;
 					feedback.WarningMessages.Add(warningMessage("Skills"));

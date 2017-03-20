@@ -144,16 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		{
 			if (cell == null || cell.CellType == CellType.Blank)
 			{
-				switch (pro.Name)
-				{
-					case nameof(RawAgent.Firstname):
-					case nameof(RawAgent.Lastname):
-					case nameof(RawAgent.WindowsUser):
-					case nameof(RawAgent.ApplicationUserId):
-					case nameof(RawAgent.Password):
-					case nameof(RawAgent.ExternalLogon):
-						return null;
-				}
+				return null;
 			}
 
 			switch (pro.Name)

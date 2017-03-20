@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		{
 			var formModel = new T();
 			var props = typeof(T).GetProperties();
+			var hasFallBacks = false;
 
 			foreach (var content in contents)
 			{
@@ -20,9 +21,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if (prop == null) continue;
 
 				prop.SetValue(formModel, content.ReadAsStringAsync().Result);
+				hasFallBacks = true;
 			}
+			
 
-			return formModel;			
+			return hasFallBacks ?  formModel : default(T);			
 		}
 
 		public IEnumerable<FileData> ExtractFileData(IEnumerable<HttpContent> contents)
