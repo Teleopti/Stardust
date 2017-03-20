@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	[TestWithStaticDependenciesAvoidUse]
 	public class TeamBlockRoleModelSelectorTest
 	{
-		private ITeamBlockRoleModelSelector _target;
+		private TeamBlockRoleModelSelector _target;
 		private MockRepository _mocks;
 		private ITeamBlockRestrictionAggregator _restrictionAggregator;
 		private IWorkShiftFilterService _workShiftFilterService;
