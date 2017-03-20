@@ -47,33 +47,21 @@ namespace Teleopti.Ccc.Domain.Staffing
 			        _requestStrategySettingsReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
 
 		        var currentBusinessUnit = ((ICurrentBusinessUnit) _businessUnitScope).Current();
-		        var lastExecutedPerBu = _jobStartTimeRepository.LoadAll();
 				var businessUnits = _businessUnitRepository.LoadAll();
 		        var person = _personRepository.Get(SystemUser.Id);
 		        _updatedByScope.OnThisThreadUse(person);
 
 		        businessUnits.ForEach(businessUnit =>
 		        {
-			        if (lastExecutedPerBu.ContainsKey(businessUnit.Id.GetValueOrDefault()))
+					_businessUnitScope.OnThisThreadUse(businessUnit);
+					if (!_jobStartTimeRepository.CheckAndUpdate(updateResourceReadModelIntervalMinutes)) return;
+					
+			        _publisher.Publish(new UpdateStaffingLevelReadModelEvent
 			        {
-				        var lastExecuted = lastExecutedPerBu[businessUnit.Id.GetValueOrDefault()];
-				        if (lastExecuted.AddMinutes(updateResourceReadModelIntervalMinutes) >= _now.UtcDateTime()) return;
-				        _businessUnitScope.OnThisThreadUse(businessUnit);
-				        _publisher.Publish(new UpdateStaffingLevelReadModelEvent
-				        {
-					        Days = 1
-				        });
-			        }
-			        else
-			        {
-						_businessUnitScope.OnThisThreadUse(businessUnit);
-						_publisher.Publish(new UpdateStaffingLevelReadModelEvent
-						{
-							Days = 1
-						});
-					}
+				        Days = 1
+			        });
 
-		        });
+				});
 		        _businessUnitScope.OnThisThreadUse(currentBusinessUnit);
 
 	        }

@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Wfm.Administration.Core;
@@ -18,13 +19,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly StardustRepository _stardustRepository;
 		private readonly IEventPublisher _eventPublisher;
 		private readonly ILoadAllTenants _loadAllTenants;
+		private readonly IJobStartTimeRepository _jobStartTimeRepository;
 
 		public StardustController(StardustRepository stardustRepository, IEventPublisher eventPublisher, 
-			ILoadAllTenants loadAllTenants)
+			ILoadAllTenants loadAllTenants, IJobStartTimeRepository jobStartTimeRepository)
 		{
 			_stardustRepository = stardustRepository;
 			_eventPublisher = eventPublisher;
 			_loadAllTenants = loadAllTenants;
+			_jobStartTimeRepository = jobStartTimeRepository;
 		}
 
 		[HttpGet, Route("Stardust/Jobs/{from}/{to}")]
@@ -112,12 +115,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			
 			foreach (var bu in bus)
 			{
+				_jobStartTimeRepository.Update(bu);
 				if (logOnModel.Days == 1)
 					_eventPublisher.Publish(
 						new UpdateStaffingLevelReadModelEvent
 						{
 							Days = logOnModel.Days,
-							RequestedFromWeb = true,
 							LogOnDatasource = logOnModel.Tenant,
 							LogOnBusinessUnitId = bu
 						});

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
@@ -22,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
     [TestFixture]
     [DomainTest]
-    public class IntradayResourceCalculationForAbsenceHandlerTest : ISetup
+    public class SendUpdateStaffingReadModelHandlerTest : ISetup
     {
         public SendUpdateStaffingReadModelHandler Target;
         public FakeBusinessUnitRepository BusinessUnitRepository;
@@ -30,32 +25,35 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
         public FakePersonRepository PersonRepository;
         public FakeEventPublisher Publisher;
         public MutableNow Now;
-	    public FakeCurrentBusinessUnit BuesinessUnitScope;
+	    private FakeCurrentBusinessUnit _fakeCurrentBusniessUnit;
 	    public FakeJobStartTimeRepository JobStartTimeRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
         {
-            system.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
-            system.UseTestDouble<SendUpdateStaffingReadModelHandler>().For<IHandleEvent<TenantMinuteTickEvent>>();
-            system.UseTestDouble<FakeConfigReader>().For<IConfigReader>();
-			system.UseTestDouble<FakeCurrentBusinessUnit>().For<IBusinessUnitScope>();
-			system.UseTestDouble<FakeJobStartTimeRepository>().For<IJobStartTimeRepository>();
+			_fakeCurrentBusniessUnit = new FakeCurrentBusinessUnit();
+			system.UseTestDouble(_fakeCurrentBusniessUnit).For<IBusinessUnitScope>();
+			system.UseTestDouble(_fakeCurrentBusniessUnit).For<ICurrentBusinessUnit>();
         }
 
-        [Test]
-        public void ShouldNotRunResourceCalculationIfItsRecentlyExecuted()
-        {
+		[Test]
+		public void ShouldNotRunResourceCalculationIfItsRecentlyExecuted()
+		{
+			Now.Is("2016-03-01 09:50");
+			var bu = BusinessUnitFactory.CreateWithId("bu");
+			BusinessUnitRepository.Add(bu);
+			addPerson();
+			JobStartTimeRepository.Update(bu.Id.GetValueOrDefault());
 			Now.Is("2016-03-01 10:00");
-            Target.Handle(new TenantMinuteTickEvent());
-            Publisher.PublishedEvents.Count().Should().Be.EqualTo(0);
-        }
+			Target.Handle(new TenantMinuteTickEvent());
+			Publisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+		}
 
-        [Test]
+		[Test]
         public void ShouldRunResourceCalculation()
         {
 			Now.Is("2016-03-01 10:00");
-	        var businessUnit = BusinessUnitFactory.CreateWithId("bu");
-			BusinessUnitRepository.Add(businessUnit);
+	        var bu = BusinessUnitFactory.CreateWithId("bu");
+			BusinessUnitRepository.Add(bu);
 			addPerson();
 			Target.Handle(new TenantMinuteTickEvent());
             Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
@@ -65,27 +63,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldResetTheExistingValueOfBusinessUnit()
 		{
 			Now.Is("2016-03-01 10:00");
-			BuesinessUnitScope.OnThisThreadUse(null);
-			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-01 08:10");
+			_fakeCurrentBusniessUnit.OnThisThreadUse(null);
 			var bu = BusinessUnitFactory.CreateWithId("bu");
 			BusinessUnitRepository.Add(bu);
-
 			addPerson();
 			Target.Handle(new TenantMinuteTickEvent());
-			BuesinessUnitScope.Current().Should().Be.Null();
+			_fakeCurrentBusniessUnit.Current().Should().Be.Null();
 		}
 
 		[Test]
 		public void ShouldExecuteJobOnlyFor1Bu()
 		{
-			Now.Is("2016-03-01 08:10");
-			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-01 08:10");
+			Now.Is("2016-03-01 06:10");
 			var bu1 = BusinessUnitFactory.CreateWithId("B1");
 			var bu2 = BusinessUnitFactory.CreateWithId("B2");
 			BusinessUnitRepository.Add(bu1);
 			BusinessUnitRepository.Add(bu2);
-			JobStartTimeRepository.Persist(bu1.Id.GetValueOrDefault(), new DateTime(2016, 03, 01, 6, 30, 0, DateTimeKind.Utc));
-			JobStartTimeRepository.Persist(bu2.Id.GetValueOrDefault(), new DateTime(2016, 03, 01, 8, 9, 0, DateTimeKind.Utc));
+			JobStartTimeRepository.Update(bu1.Id.GetValueOrDefault());
+			Now.Is("2016-03-01 08:10");
+			JobStartTimeRepository.Update(bu2.Id.GetValueOrDefault());
 
 			addPerson();
 			Target.Handle(new TenantMinuteTickEvent());
@@ -105,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 	    private void addPerson()
 	    {
-		    IPerson person = PersonFactory.CreatePerson();
+		    var person = PersonFactory.CreatePerson();
 		    person.SetId(SystemUser.Id);
 		    PersonRepository.Add(person);
 	    }
