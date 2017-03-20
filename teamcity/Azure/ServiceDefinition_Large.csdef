@@ -48,11 +48,11 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 	  <Task commandLine="HardenSSL.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="PatchDatabases.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="PrepareConfigAndSignClickOnce.cmd" executionContext="elevated" taskType="simple" />
-      <Task commandLine="InstallService.cmd" executionContext="elevated" taskType="simple" />
+      <Task commandLine="InstallServiceV2.ps1" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="InitializeCopyPayroll.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="IIS7ConfigMoveToNET4.cmd" executionContext="elevated" taskType="background" />
 	  <Task commandLine="Add-TeleoptiFoldersAndShortcuts.cmd" executionContext="elevated" taskType="background" />	  
-	  <Task commandLine="RestartTeleopti.cmd" executionContext="elevated" taskType="background" />
+	  <Task commandLine="RestartTeleopti.cmd" executionContext="elevated" taskType="simple" />
 	</Startup>
 	<ConfigurationSettings>
 		<Setting name="TeleoptiDriveMap.BlobPath" />
