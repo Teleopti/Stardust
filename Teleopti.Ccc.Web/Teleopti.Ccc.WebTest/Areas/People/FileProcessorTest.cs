@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Agent.Should().Be.Null();
-			result.First().Feedback.ErrorMessages.Count.Should().Be(12);
+			result.First().Feedback.ErrorMessages.Count.Should().Be(11);
 		}
 
 
