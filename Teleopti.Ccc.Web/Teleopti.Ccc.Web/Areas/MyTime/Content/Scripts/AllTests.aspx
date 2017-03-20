@@ -47,6 +47,7 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.WeekViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ProbabilityViewmodel.js?bust=<%=version%>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ProbabilityModels.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Viewmodels.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.js?bust=<%=version%>"></script>
@@ -66,7 +67,6 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.WeekViewModel.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Viewmodels.Tests.js?bust=<%=version%>"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Helper.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ProbabilityViewmodel.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.Tests.js?bust=<%=version%>"></script>

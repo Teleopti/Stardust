@@ -186,7 +186,6 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 	});
 
 	if (self.staffingProbabilityEnabled()) {
-		console.log(Teleopti.MyTimeWeb.Schedule);
 		self.probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
 		{
 			probabilityType: parent.probabilityType(),

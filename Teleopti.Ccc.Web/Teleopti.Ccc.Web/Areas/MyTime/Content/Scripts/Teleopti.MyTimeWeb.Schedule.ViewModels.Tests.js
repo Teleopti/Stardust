@@ -352,7 +352,8 @@ $(document).ready(function () {
 		vm.userNowInMinute(0);
 
 		// Will generate all overtime possibility within timeline range (from 08:00 to 19:00)
-		equal(vm.probabilities.length, 46);
+		// (19 - 8 ) * 4 = 44
+		equal(vm.probabilities.length, 44);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			equal(vm.probabilities[i].tooltips().length > 0, true);
 		}
@@ -388,11 +389,12 @@ $(document).ready(function () {
 		vm.userNowInMinute(750); // 12:30
 
 		// Will generate all overtime possibility within timeline range (from 02:00 to 20:00)
-		equal(vm.probabilities.length, 74);
+		// (20 - 2) * 4 = 72
+		equal(vm.probabilities.length, 72);
 
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
-			if (i <= 42){
+			if (i <  42){
 				equal(probability.tooltips().length, 0);
 				equal(probability.cssClass().indexOf(expiredProbabilityCssClass) > -1, true);
 			} else {
@@ -428,8 +430,8 @@ $(document).ready(function () {
 		vm.userNowInMinute(0);
 
 		// In this scenario will show prabability based on length of timeline
-		// So should be (20 - 2) * 4
-		equal(vm.probabilities.length, 74);
+		// So should be (20 - 2) * 4 = 72
+		equal(vm.probabilities.length, 72);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			equal(probability.tooltips().length > 0, true);
@@ -483,8 +485,8 @@ $(document).ready(function () {
 		vm.userNowInMinute(0);
 
 		// In this scenario will show prabability based on length of timeline
-		// So should be (20 - 2) * 4
-		equal(vm.probabilities.length, 74);
+		// So should be (20 - 2) * 4 = 72
+		equal(vm.probabilities.length, 72);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			equal(probability.tooltips().length > 0, true);
@@ -499,37 +501,30 @@ $(document).ready(function () {
 		vm.userNowInMinute(0);
 
 		// In this scenario timeline will start from 00:00, then all probabilities will be generated for whole timeline
-		// So should be (19 - 0) * 4
-		equal(vm.probabilities.length, 77);
+		// So should be (19 - 0) * 4 = 76
+		equal(vm.probabilities.length, 76);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
 			equal(probability.tooltips().length > 0, true);
 		}
 	});
 
-	// test("should show correct absence possibility for cross day schedule", function () {
-	// 	var day = createRawDaySchedule(false, false, createCrossDayPeriods());
-	// 	var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 19);
-	// 	var probabilities = createRawProbabilities();
-	// 	var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
-	// 	vm.userNowInMinute(0);
+	test("should show correct absence possibility for cross day schedule", function () {
+		var day = createRawDaySchedule(false, false, createCrossDayPeriods());
+		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 19);
+		var probabilities = createRawProbabilities();
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
+		vm.userNowInMinute(0);
 
-	// 	// In this scenario timeline will start from 00:00
-	// 	// So should be (18:30 - 0) * 4
-	// 	equal(vm.probabilities.length, 74);
+		// In this scenario timeline will start from 00:00
+		// So should be( (1:30 - 0:00) + (18:30 - 9:30) )* 4 = (1.5 + 9) * 4 = 10.5 * 4 = 42
+		equal(vm.probabilities.length, 42);
 
-	// 	// Probability from 01:30 to 09:30 should be invisible since there is no schedule for this time range
-	// 	for (var i = 0; i < vm.probabilities.length; i++) {
-	// 		var probability = vm.probabilities[i];
-	// 		if ((7 <= i && i <= 38)) {
-
-	// 			equal(probability.tooltips().length, 0);
-	// 		} else {
-
-	// 			equal(probability.tooltips().length > 0, true);
-	// 		}
-	// 	}
-	// });
+		for (var i = 0; i < vm.probabilities.length; i++) {
+			var probability = vm.probabilities[i];
+			equal(probability.tooltips().length > 0, true);
+		}
+	});
 
 	test("should show absence possibility for night shift schedule", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
