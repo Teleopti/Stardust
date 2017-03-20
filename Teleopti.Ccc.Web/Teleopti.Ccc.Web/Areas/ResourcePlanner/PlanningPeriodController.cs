@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				HasNextPlanningPeriod = hasNextPlanningPeriod(range.EndDate.AddDays(1)),
 				State = state.ToString(),
 				ValidationResult = validationResult,
-				AgentGroupId = agentGroup?.Id ?? Guid.Empty
+				AgentGroupId = agentGroup?.Id
 			};
 		}
 

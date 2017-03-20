@@ -22,6 +22,22 @@
 					return !($scope.schedulingPerformed && $scope.lastJobSuccessful && runAsynchronously);
 				};
 
+				function getDayOffRules() {
+					var agentGroupId = $scope.planningPeriod.AgentGroupId;
+					if (agentGroupId != undefined) {
+						dayOffRuleService.getDayOffRulesForAgentGroup({ agentGroupId: agentGroupId }).$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
+					} else {
+						dayOffRuleService.getDayOffRules().$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
+					}
+
+					function handleGetDayOffRulesSuccess(result) {
+						$scope.dayOffRules = result;
+					}
+					function handleGetDayOffRulesFail() {
+						handleScheduleOrOptimizeError($translate.instant('FailedToLoadDayoffRules'));
+					}
+				}
+
 				function handleScheduleOrOptimizeError(message) {
 					if (!message)
 						message = "An error occurred. Please try again.";
@@ -30,12 +46,7 @@
 					$scope.status = '';
 					$scope.scheduleClicked = false;
 				}
-
-				dayOffRuleService.getDayOffRules().$promise.then(function (result) {
-					$scope.dayOffRules = result;
-				}, function() {
-					handleScheduleOrOptimizeError($translate.instant('FailedToLoadDayoffRules'));
-				});
+				
 
 				var tenMinutes = 1000 * 60 * 10;
 				var keepAliveRef = $interval(function () {
@@ -153,6 +164,7 @@
 				planningPeriodService.getPlanningPeriod({ id: $stateParams.id })
 					.$promise.then(function (result) {
 						$scope.planningPeriod = result;
+						getDayOffRules();
 						$scope.initialized = true;
 						if (runAsynchronously) {
 							checkProgress($stateParams.id);
@@ -197,21 +209,19 @@
 					$state.go('resourceplanner.filter', {
 						filterId: filter.Id,
 						periodId: $stateParams.id,
-						isDefault: filter.Default
+						isDefault: filter.Default,
+						groupId: $scope.planningPeriod.AgentGroupId
 					});
 				};
 				$scope.createRuleset = function () {
 					$state.go('resourceplanner.filter', {
-						periodId: $stateParams.id
+						periodId: $stateParams.id,
+						groupId: $scope.planningPeriod.AgentGroupId
 					});
 				};
 				$scope.destoryRuleset = function (node) {
 					dayOffRuleService.removeDayOffRule({ id: node.Id })
-						.$promise.then(function () {
-							dayOffRuleService.getDayOffRules().$promise.then(function (result) {
-								$scope.dayOffRules = result;
-							});
-						});
+						.$promise.then(getDayOffRules);
 				};
 
 				$scope.$on('$destroy', function () {

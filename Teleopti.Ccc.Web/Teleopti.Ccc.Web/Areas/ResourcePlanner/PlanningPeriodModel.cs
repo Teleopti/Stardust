@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public bool HasNextPlanningPeriod { get; set; }
 		public string State { get; set; }
 		public ValidationResult ValidationResult { get; set; }
-		public Guid AgentGroupId { get; set; }
+		public Guid? AgentGroupId { get; set; }
 	}
 	
 }
