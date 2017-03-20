@@ -112,34 +112,13 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		public virtual void PersistSkillCombinationResource(DateTime dataLoaded, IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
-			var updateReadModelInterval = _requestStrategySettingsReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			lock (skillCombinationLock)
 			{
-
-
 				var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
 				using (var connection = new SqlConnection(connectionString))
 				{
 					connection.OpenWithRetry(_retryPolicy);
-
-					var purgeTime = dataLoaded.AddMinutes(-updateReadModelInterval * 2);
-					//Purge old intervals that is out of the scope
-					using (var deleteCommand = new SqlCommand(@"
-						DELETE FROM [ReadModel].[SkillCombinationResource] 
-						WHERE StartDateTime < @purgeTime", connection))
-					{
-						deleteCommand.Parameters.AddWithValue("@purgeTime", purgeTime);
-						deleteCommand.ExecuteNonQuery();
-					}
-
-					using (var deleteCommand = new SqlCommand($@"
-						DELETE FROM [ReadModel].[SkillCombinationResourceDelta] 
-						WHERE StartDateTime < @purgeTime", connection))
-					{
-						deleteCommand.Parameters.AddWithValue("@purgeTime", purgeTime);
-						deleteCommand.ExecuteNonQuery();
-					}
 
 					var dt = new DataTable();
 					dt.Columns.Add("SkillCombinationId", typeof(Guid));
@@ -175,20 +154,19 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 						}
 
 
-						using (var deleteCommand = new SqlCommand($@"
+						using (var deleteCommand = new SqlCommand(@"
 						DELETE FROM ReadModel.SkillCombinationResourceDelta
 						WHERE InsertedOn < @dataLoaded and 
 						SkillCombinationId in 
 								(select skillcombinationId from  [ReadModel].[SkillCombinationResource] 
-								where businessunit = @buid)"
-																  , connection, transaction))
+								where businessunit = @buid)" , connection, transaction))
 						{
 							deleteCommand.Parameters.AddWithValue("@buid", bu);
 							deleteCommand.Parameters.AddWithValue("@dataLoaded", dataLoaded);
 							deleteCommand.ExecuteNonQuery();
 						}
 
-						using (var deleteCommand = new SqlCommand($@"
+						using (var deleteCommand = new SqlCommand(@"
 						DELETE FROM [ReadModel].[SkillCombinationResource] 
 						WHERE businessunit = @buid", connection, transaction))
 						{
