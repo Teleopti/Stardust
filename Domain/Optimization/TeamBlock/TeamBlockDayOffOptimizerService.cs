@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -39,11 +38,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
 		private readonly TeamBlockDaysOffSameDaysOffLockSyncronizer _teamBlockDaysOffSameDaysOffLockSyncronizer;
-		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
-		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
-		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
@@ -65,11 +61,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
 			TeamBlockDaysOffSameDaysOffLockSyncronizer teamBlockDaysOffSameDaysOffLockSyncronizer,
-			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IOptimizerHelperHelper optimizerHelper,
-			IDayOffDecisionMaker dayOffDecisionMaker,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
@@ -91,11 +84,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
 			_teamBlockDaysOffSameDaysOffLockSyncronizer = teamBlockDaysOffSameDaysOffLockSyncronizer;
-			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
-			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
 			_schedulerStateHolder = schedulerStateHolder;
 			_optimizerHelper = optimizerHelper;
-			_dayOffDecisionMaker = dayOffDecisionMaker;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
@@ -676,6 +666,5 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				return AddedDaysOff.Union(RemovedDaysOff);
 			}
 		}
-
 	}
 }
