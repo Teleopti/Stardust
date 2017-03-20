@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly INow _now;
 		private readonly IUpdatedByScope _updatedByScope;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IFilterRequestsWithDifferentVersion _filterRequestsWithDifferentVersion;
 
 		public AbsenceRequestQueueStrategyHandler(IAbsenceRequestStrategyProcessor absenceRequestStrategyProcessor,
@@ -42,7 +41,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_personRepository = personRepository;
 			_updatedByScope = updatedByScope;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
-			_personRequestRepository = personRequestRepository;
 			_filterRequestsWithDifferentVersion = filterRequestsWithDifferentVersion;
 			_publisher = publisher;
 			_now = now;

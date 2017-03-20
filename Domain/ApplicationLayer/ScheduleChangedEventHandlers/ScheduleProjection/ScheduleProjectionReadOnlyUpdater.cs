@@ -12,13 +12,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		IRunOnHangfire
 	{
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
-		private readonly IEventPublisher _eventPublisher;
 		private readonly ILog logger = LogManager.GetLogger(typeof(ScheduleProjectionReadOnlyUpdater));
 
-		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IEventPublisher eventPublisher)
+		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
 		{
 			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
-			_eventPublisher = eventPublisher;
 		}
 
 		[UnitOfWork]

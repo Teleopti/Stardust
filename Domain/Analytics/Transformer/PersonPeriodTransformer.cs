@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
 		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
-		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 		private readonly IAnalyticsIntervalRepository _analyticsIntervalRepository;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
 			IAnalyticsTeamRepository analyticsTeamRepository,
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
-			IAnalyticsDateRepository analyticsDateRepository,
 			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
 			IAnalyticsIntervalRepository analyticsIntervalRepository,
 			IGlobalSettingDataRepository globalSettingDataRepository, 
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsTeamRepository = analyticsTeamRepository;
 			_analyticsPersonPeriodMapNotDefined = analyticsPersonPeriodMapNotDefined;
-			_analyticsDateRepository = analyticsDateRepository;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
 			_analyticsIntervalRepository = analyticsIntervalRepository;
 			_globalSettingDataRepository = globalSettingDataRepository;

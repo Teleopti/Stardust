@@ -94,7 +94,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				_analyticsBusinessUnitRepository, 
 				_analyticsTeamRepository, 
 				new ReturnNotDefined(),
-				_analyticsDateRepository,
 				_analyticsTimeZoneRepository,
 				_analyticsIntervalRepository,
 				_globalSettingDataRepository, new AnalyticsPersonPeriodDateFixer(_analyticsDateRepository, _analyticsIntervalRepository));

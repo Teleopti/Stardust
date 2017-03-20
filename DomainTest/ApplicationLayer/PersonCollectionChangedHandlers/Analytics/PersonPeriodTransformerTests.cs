@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				fakeAnalyticsBusinessUnitRepository,
 				fakeAnalyticsTeamRepository,
 				throwExceptionOnSkillMapError,
-				fakeAnalyticsDateRepository,
 				fakeAnalyticsTimeZoneRepository,
 				_analyticsIntervalRepository,
 				_globalSettingDataRepository, new AnalyticsPersonPeriodDateFixer(fakeAnalyticsDateRepository, _analyticsIntervalRepository));

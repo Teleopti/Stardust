@@ -103,7 +103,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				fakeAnalyticsBusinessUnitRepository, 
 				fakeAnalyticsTeamRepository, 
 				new ReturnNotDefined(), 
-				_analyticsDateRepository, 
 				_analyticsTimeZoneRepository, 
 				_analyticsIntervalRepository,
 				_globalSettingDataRepository,

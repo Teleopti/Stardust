@@ -1,13 +1,8 @@
-﻿using System;
-using System.Globalization;
-using log4net;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
+﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -27,15 +22,11 @@ namespace Teleopti.Ccc.Domain.Staffing
         private readonly IBusinessUnitScope _businessUnitScope;
         private readonly INow _now;
         private readonly IEventPublisher _publisher;
-        private readonly IConfigReader _configReader;
 	    private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
-
-        private static readonly ILog logger = LogManager.GetLogger(typeof(SendUpdateStaffingReadModelHandler));
-
 
         public SendUpdateStaffingReadModelHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitRepository businessUnitRepository,
 			IPersonRepository personRepository, IUpdatedByScope updatedByScope, IBusinessUnitScope businessUnitScope, INow now, IEventPublisher publisher, 
-			IConfigReader configReader, IRequestStrategySettingsReader requestStrategySettingsReader, IJobStartTimeRepository jobStartTimeRepository)
+			IRequestStrategySettingsReader requestStrategySettingsReader, IJobStartTimeRepository jobStartTimeRepository)
         {
             _currentUnitOfWorkFactory = currentUnitOfWorkFactory;
             _businessUnitRepository = businessUnitRepository;
@@ -44,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Staffing
             _businessUnitScope = businessUnitScope;
             _now = now;
             _publisher = publisher;
-            _configReader = configReader;
 	        _requestStrategySettingsReader = requestStrategySettingsReader;
 	        _jobStartTimeRepository = jobStartTimeRepository;
         }
