@@ -163,7 +163,7 @@ Scheduler_IntradayOptimization_36617 = true
 Scheduler_ShowSkillPrioLevels_41980 = true
 WfmGlobalLayout_personalOptions_37114 = true
 
-ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....
+ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = RC
 ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI until we have a proper UI
 ResourcePlanner_NegativeOrderIndex_39062 = true
 ResourcePlanner_MaxSeatsNew_40939 = true
