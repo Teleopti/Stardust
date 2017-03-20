@@ -1,4 +1,4 @@
-﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
+/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/moment/moment.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
@@ -40,6 +40,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
 	self.showingAbsenceProbability = ko.observable(initializeProbabilityType === constants.absenceProbabilityType);
 	self.showingOvertimeProbability = ko.observable(initializeProbabilityType === constants.overtimeProbabilityType);
+
+	self.absenceProbabilityEnabled = ko.observable(false);
 
 	self.selectedDateSubscription = null;
 	self.initialRequestDay = ko.observable();
@@ -137,7 +139,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 
 	self.probabilityOptionModel = {
 		model: new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self),
-		type: function () { return 'probabilityOptions' },
+		type: function () { return "probabilityOptions" },
 		OnProbabilityOptionSelectCallback: function (selectedOptionValue) { self.OnProbabilityOptionSelectCallback(selectedOptionValue); }
 	};
 
@@ -206,6 +208,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		self.viewProbabilityPermission(data.ViewPossibilityPermission);
 		self.staffingProbabilityEnabled(self.viewProbabilityPermission()
 			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913"));
+
+		self.absenceProbabilityEnabled = ko.observable(self.staffingProbabilityEnabled() && data.CheckStaffingByIntraday);
 
 		var timelines = ko.utils.arrayMap(data.TimeLine, function (rawTimeline) {
 			var hourMinuteSecond = rawTimeline.Time.split(":");
