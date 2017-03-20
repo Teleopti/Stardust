@@ -15522,9 +15522,9 @@ These options are activated:
     <value>View Staffing Probability</value>
     <comment>use in MyTime Web, permission for view Probability of absence or overtime approved on intraday</comment>
   </data>
-  <data name="HideStaffingProbability" xml:space="preserve">
+  <data name="StaffingProbabilityInfo" xml:space="preserve">
     <value>Staffing info</value>
-    <comment>The default item for staffing probability dropdown list in MyTime Web</comment>
+    <comment>The default item for staffing probability dropdown list in MyTime Web week view</comment>
   </data>
   <data name="ShowAbsenceProbability" xml:space="preserve">
     <value>Show absence probability</value>
@@ -15703,5 +15703,9 @@ Do you want to participate?</value>
   <data name="WarnImportedAgents" xml:space="preserve">
     <value>Imported {0} agent(s) containing warnings</value>
     <comment>Warning message for agent import, used to indicate that the action is successful but containing warnings that user needs to know. E.g. Imported 5 agents containing warnings.</comment>
+  </data>
+  <data name="HideStaffingProbability" xml:space="preserve">
+    <value>Hide staffing probability</value>
+    <comment>HideStaffingProbability radio option of probability option panel in MyTime web mobile view</comment>
   </data>
 </root>

@@ -30155,6 +30155,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staffing info.
+        /// </summary>
+        public static string StaffingProbabilityInfo {
+            get {
+                return ResourceManager.GetString("StaffingProbabilityInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Standard.
         /// </summary>
         public static string Standard {

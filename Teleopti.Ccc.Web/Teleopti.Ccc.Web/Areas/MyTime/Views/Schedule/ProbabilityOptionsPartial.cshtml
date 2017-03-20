@@ -6,11 +6,13 @@
 		<input type="radio"  name="probabilityRadios" aria-label="@Resources.HideStaffingProbability" data-bind="value: noneOption, checked: checkedProbability, click:function(d,e){onOptionSelected(d.checkedProbability()); return true;}" />
 		<span>@Resources.HideStaffingProbability</span>
 	</label>
+	<!-- ko if: $parents[2].absenceProbabilityEnabled() -->
 	<label class="radio pointer">
 		<input type="radio" name="probabilityRadios" aria-label="@Resources.ShowAbsenceProbability" data-bind="value: absenceOption, checked: checkedProbability, click:function(d,e){onOptionSelected(d.checkedProbability()); return true;}" />
 		<span>@Resources.ShowAbsenceProbability</span>
 		<span class="absence-probability-label"></span>
 	</label>
+	<!-- /ko -->
 	<label class="radio pointer">
 		<input type="radio" name="probabilityRadios" aria-label="@Resources.ShowOvertimeProbability"  data-bind="value: overtimeOption, checked: checkedProbability, click:function(d,e){onOptionSelected(d.checkedProbability()); return true;}" />
 		<span>@Resources.ShowOvertimeProbability</span>
