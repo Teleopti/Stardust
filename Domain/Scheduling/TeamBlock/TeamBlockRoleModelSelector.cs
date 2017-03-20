@@ -10,12 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface ITeamBlockRoleModelSelector
-	{
-		IShiftProjectionCache Select(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly dateTime, IPerson person, ISchedulingOptions schedulingOptions, IEffectiveRestriction additionalEffectiveRestriction, IGroupPersonSkillAggregator groupPersonSkillAggregator);
-	}
-
-	public class TeamBlockRoleModelSelector : ITeamBlockRoleModelSelector
+	public class TeamBlockRoleModelSelector
 	{
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private readonly IWorkShiftFilterService _workShiftFilterService;

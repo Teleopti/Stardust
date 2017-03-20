@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class ShiftProjectionCachesForIntraInterval
 	{
-		private readonly ITeamBlockRoleModelSelector _roleModelSelector;
+		private readonly TeamBlockRoleModelSelector _roleModelSelector;
 		private readonly ITeamBlockSingleDayScheduler _singleDayScheduler;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
-		public ShiftProjectionCachesForIntraInterval(ITeamBlockRoleModelSelector roleModelSelector, 
+		public ShiftProjectionCachesForIntraInterval(TeamBlockRoleModelSelector roleModelSelector, 
 																								ITeamBlockSingleDayScheduler singleDayScheduler,
 																								IWorkShiftSelector workShiftSelector,
 																								IGroupPersonSkillAggregator groupPersonSkillAggregator)

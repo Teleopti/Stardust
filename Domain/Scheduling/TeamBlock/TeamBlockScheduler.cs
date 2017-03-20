@@ -32,13 +32,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class TeamBlockScheduler : ITeamBlockScheduler
 	{
 		private readonly ITeamBlockSingleDayScheduler _singleDayScheduler;
-		private readonly ITeamBlockRoleModelSelector _roleModelSelector;
+		private readonly TeamBlockRoleModelSelector _roleModelSelector;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public TeamBlockScheduler(ITeamBlockSingleDayScheduler singleDayScheduler,
-		                          ITeamBlockRoleModelSelector roleModelSelector,
+															TeamBlockRoleModelSelector roleModelSelector,
 									ITeamBlockClearer teamBlockClearer, 
 									ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 									IGroupPersonSkillAggregator groupPersonSkillAggregator)

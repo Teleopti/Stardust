@@ -564,7 +564,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SameShiftBlockSpecification>().As<ISameShiftBlockSpecification>().SingleInstance();
 			builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>().SingleInstance();
 			builder.RegisterType<TeamBlockSchedulingOptions>().As<ITeamBlockSchedulingOptions>().SingleInstance();
-			builder.RegisterType<TeamBlockRoleModelSelector>().As<ITeamBlockRoleModelSelector>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSchedulingCompletionChecker>().As<ITeamBlockSchedulingCompletionChecker>().SingleInstance();
 			builder.RegisterType<ProposedRestrictionAggregator>().As<IProposedRestrictionAggregator>().SingleInstance();
 			builder.RegisterType<TeamBlockRestrictionAggregator>().As<ITeamBlockRestrictionAggregator>().SingleInstance();
