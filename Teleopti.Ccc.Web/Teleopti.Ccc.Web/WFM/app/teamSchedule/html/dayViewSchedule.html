@@ -27,7 +27,7 @@
 								 preselected-team-ids="vm.selectedTeamIds"></organization-picker>
 
 			<span class="people-search-container inline-block" ng-if="vm.searchEnabled">
-				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged" focus-input="vm.searchOptions.focusingSearch" ></wfm-multiple-search-input>
+				<wfm-multiple-search-input search-options="vm.searchOptions" title="'Search'" search-callback="vm.onKeyWordInSearchInputChanged" focus-input="vm.searchOptions.focusingSearch" ></wfm-multiple-search-input>
 			</span>
 
 			<span class="datepicker-container" ng-click="$event.stopPropagation()">

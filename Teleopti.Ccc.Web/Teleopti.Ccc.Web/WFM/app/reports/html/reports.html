@@ -1,4 +1,4 @@
-﻿<div id="reports" class="wfm-reports">
+﻿<!--<div id="reports" class="wfm-reports">
 	<div class="view-header">
 		<div class="view-title">
 			<h1><i class="mdi mdi-chart-bar"></i> <span translate>Reports</span></h1>
@@ -20,4 +20,53 @@
 			</div>
 		</a>
 	</div>
+</div>-->
+<div id="reports" class="wfm-reports">
+<div class="view-header">
+	<div class="view-title">
+		<h1><i class="mdi mdi-chart-bar"></i> <span translate>Reports</span></h1>
+	</div>
+</div>
+
+<div class="con-row">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="con-row full-padding">
+				<div class="con-flex">
+
+					<label for="filter" class="input-icon">
+					<i class="mdi mdi-filter-outline">
+					<input type="text" id="filter" ng-model="reportFilter.Name" placeholder="{{'FilterReports'|translate}}...">
+					<md-tooltip>{{'FilterReports'|translate}}</md-tooltip>
+					</i>
+					</label>
+				</div>
+				<div class="con-flex x3"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="con-row">
+	<div class="con-flex">
+		<div class="wfm-grid report-list">
+
+			<a class="grid-card" ng-repeat="report in reports.reports | filter: reportFilter" ng-if="!report.IsWebReport" ng-href="{{report.Url}}">
+				<div class="list-content">
+					<h2>{{report.Name}}</h2>
+				</div>
+			</a>
+
+
+			<a class="grid-card" ng-repeat="report in reports.reports | filter: reportFilter" ng-if="report.IsWebReport" ui-sref="{{report.Url}}">
+				<div class="list-content">
+					<h2>{{report.Name}}</h2>
+				</div>
+			</a>
+
+		</div>
+	</div>
+</div>	
 </div>
