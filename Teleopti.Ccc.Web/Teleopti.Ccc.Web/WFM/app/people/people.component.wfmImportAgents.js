@@ -1,19 +1,14 @@
 (function (angular) {
 	'use strict';
 
-	var blankId = '00000000-0000-0000-0000-000000000000';
-	var defaultFallbacks = {
-		externalLogon: blankId
-	};
 	function WfmImportAgentsCtrl($translate, svc, peopleSvc) {
 		this._svc = svc;
 		this._peopleSvc = peopleSvc;
 		this._translate = $translate;
-		this.fallbacks = angular.copy(defaultFallbacks);
+		this.fallbacks = {};
 		this.now = new Date();
 	}
 
-	WfmImportAgentsCtrl.prototype.blankId = blankId;
 	WfmImportAgentsCtrl.prototype.fetchingFieldOptions = true;
 	WfmImportAgentsCtrl.prototype.started = false;
 	WfmImportAgentsCtrl.prototype.done = false;
@@ -23,7 +18,7 @@
 	WfmImportAgentsCtrl.prototype.reset = function () {
 		this.done = false;
 		this.started = false;
-		this.fallbacks = angular.copy(defaultFallbacks);
+		this.fallbacks = {};
 		this.result = null;
 		this.fileError = null;
 		this.file = null;
