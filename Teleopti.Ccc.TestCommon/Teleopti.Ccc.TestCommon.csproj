@@ -218,6 +218,7 @@
     <Compile Include="FakeRepositories\FakeMultisiteDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeNonceInfoRepository.cs" />
     <Compile Include="FakeRepositories\FakeNoteRepository.cs" />
+    <Compile Include="FakeRepositories\FakeOptionalColumnRepository.cs" />
     <Compile Include="FakeRepositories\FakePayrollExportRepository.cs" />
     <Compile Include="FakeRepositories\FakePayrollFormatRepository.cs" />
     <Compile Include="FakeRepositories\FakePayrollResultRepository.cs" />

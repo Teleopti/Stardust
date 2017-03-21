@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -56,6 +57,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true).List<IColumnUniqueValues>();
 			}
 		}
+
+	    public List<IOptionalColumnValue> OptionalColumnValues(Guid optionalColumnId)
+	    {
+		    throw new NotImplementedException();
+	    }
     }
 	public class ColumnUniqueValues : IColumnUniqueValues
 	{

@@ -282,6 +282,7 @@
     <Compile Include="ApplicationLayer\Intraday\SplitSkillStaffInterval.cs" />
     <Compile Include="Staffing\UpdateStaffingLevelReadModel2WeeksHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsHourlyAvailabilityMatchingPerson.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsOptionalColumnGroupPageHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPreferenceMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsRequestMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsScheduleMatchingPerson.cs" />

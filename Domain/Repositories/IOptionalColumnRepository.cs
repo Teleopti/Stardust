@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         IList<IOptionalColumn> GetOptionalColumns<T>();
 
 		IList<IColumnUniqueValues> UniqueValuesOnColumn(Guid column);
+		List<IOptionalColumnValue> OptionalColumnValues(Guid optionalColumnId);
     }
 
 	public interface IColumnUniqueValues

@@ -192,6 +192,7 @@
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\OptionalColumnCollectionChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\MoveShiftCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsHourlyAvailabilityMatchingPersonTest.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsOptionalColumnGroupPageHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPreferenceMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsRequestMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\SiteNameChangedTest.cs" />
