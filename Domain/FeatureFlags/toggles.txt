@@ -47,6 +47,7 @@ RTA_MonitorAgentsInPermittedOrganizationOnly_40660 = false
 RTA_SolidProofWhenManagingAgentAdherence_39351 = false
 
 WfmPermission_ReplaceOldPermission_34671 = true
+WfmPermission_RelaseRefactor_43587 = RC
 
 WfmTeamSchedule_SetAgentsPerPage_36230 = true
 WfmTeamSchedule_SeeScheduleChangesByOthers_36303 = true
