@@ -931,6 +931,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("partTime");
 			PartTimePercentageRepository.Add(partTimePercentage);
 			var shiftBag = new RuleSetBag(WorkShiftRuleSetFactory.Create());
+			shiftBag.Description = new Description("test");
 			RuleSetBagRepository.Add(shiftBag);
 
 			return new RawAgent
