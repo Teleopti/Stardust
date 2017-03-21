@@ -371,15 +371,11 @@ namespace Stardust.Manager
 						return;
 					}
 					
-					this.Log().Info(Environment.StackTrace);
-					this.Log().Info(string.Format("Aquired job id {0} for node {1}",jobQueueItem.JobId,availableNode.ToString()));
 					var builderHelper = new NodeUriBuilderHelper(availableNode);
 					var urijob = builderHelper.GetJobTemplateUri();
 					var response = _httpSender.PostAsync(urijob, jobQueueItem).Result;
-					this.Log().Info(string.Format("Sent job id {0} to node {1}", jobQueueItem.JobId, availableNode.ToString()));
 					if (response != null && (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest)))
 					{
-						this.Log().Info(string.Format("Node {0} have started processing job {1}",  availableNode.ToString(), jobQueueItem.JobId));
 						var sentToWorkerNodeUri = availableNode.ToString();
 						using (var sqlTransaction = sqlConnection.BeginTransaction())
 						{
@@ -394,11 +390,9 @@ namespace Stardust.Manager
 						urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
 						//what should happen if this response is not 200? 
 						_httpSender.PutAsync(urijob, null);
-						this.Log().Info(string.Format("Job {0} is deleted from job queue for node {1}", jobQueueItem.JobId, availableNode));
 					}
 					else
 					{
-						this.Log().Info(string.Format("Job {0} failed to be delived to node {1}", jobQueueItem.JobId, availableNode));
 						using (var sqlTransaction = sqlConnection.BeginTransaction())
 						{
 							if (response == null)
@@ -408,7 +402,6 @@ namespace Stardust.Manager
 							_jobRepositoryCommandExecuter.TagQueueItem(jobQueueItem.JobId, sqlConnection, sqlTransaction);
 							sqlTransaction.Commit();
 						}
-						this.Log().Info(string.Format("Job {0} was untagged for node {1}", jobQueueItem.JobId, availableNode));
 					}
 				}
 			}
