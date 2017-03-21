@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 									//TODO: hack -> always do this
 									resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 								}
-								var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Person, schedulingOptions, teamInfo,
+								var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
 									resourceCalculateDelayer,
 									schedulingResultStateHolder,
 									dayOffOptimizationPreferenceProvider,
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		[RemoveMeWithToggle("maxseat check can be removed with toggle", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
-										ISchedulePartModifyAndRollbackService rollbackService, IPerson agent,
+										ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,
 										ISchedulingOptions schedulingOptions, ITeamInfo teamInfo, 
 										IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -404,12 +404,22 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 										movedDaysOff movedDaysOff)
 		{
 			checkPeriodValue = false;
-			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, agent);
-			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, agent);
+			var predictorValueBefore = _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix);
+			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, matrix.Person);
+			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, matrix.Person);
 
 			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff,rollbackService, resourceCalculateDelayer,schedulingResultStateHolder))
 			{
 				return false;
+			}
+
+			if (optimizationPreferences.Extra.IsClassic())
+			{
+				//TODO - not only if classic probably... Does "predictor" work with team/block as well? Problaby not...
+				if (_dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix) >= predictorValueBefore)
+				{
+					return false;
+				}
 			}
 
 			if (!optimizationPreferences.General.OptimizationStepDaysOff && optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
