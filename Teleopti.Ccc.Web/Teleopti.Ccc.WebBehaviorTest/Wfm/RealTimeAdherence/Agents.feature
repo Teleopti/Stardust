@@ -57,22 +57,22 @@ Scenario: See current states
 	When I view real time adherence for all agents on team 'Red'
 	And the time is '2014-01-21 12:45:00'
 	Then I should see agent status
-		| Field                 | Value        |
-		| Name                  | Pierre Baldi |
-		| State                 | Pause        |
-		| Activity              | Phone        |
-		| Next activity         | Lunch        |
-		| Rule                  | Not adhering |
-		| Out of adherence time | 0:15:00      |
-		| Alarm Color           | Red          |
+		| Field                    | Value        |
+		| Name                     | Pierre Baldi |
+		| State                    | Pause        |
+		| Activity                 | Phone        |
+		| Next activity            | Lunch        |
+		| Alarm                    | Not adhering |
+		| Out of adherence time    | 0:15:00      |
+		| Alarm Color              | Red          |
 	And I should see agent status
-		| Field         | Value         |
-		| Name          | Ashley Andeen |
-		| State         | Ready         |
-		| Activity      | Phone         |
-		| Next activity | Lunch         |
-		| Rule          | Adhering      |
-		| Alarm Color   | Green         |
+		| Field                    | Value         |
+		| Name                     | Ashley Andeen |
+		| State                    | Ready         |
+		| Activity                 | Phone         |
+		| Next activity            | Lunch         |
+		| Alarm                    | Adhering      |
+		| Alarm Color              | Green         |
 
 Scenario: See state updates
 	Given the time is '2014-01-21 12:30:00'
@@ -81,22 +81,22 @@ Scenario: See state updates
 	And 'Ashley Andeen' sets his phone state to 'Ready'
 	And the time is '2014-01-21 12:45:00'
 	Then I should see agent status
-		| Field                 | Value        |
-		| Name                  | Pierre Baldi |
-		| State                 | Pause        |
-		| Activity              | Phone        |
-		| Next activity         | Lunch        |
-		| Rule                  | Not adhering |
-		| Out of adherence time | 0:15:00      |
-		| Alarm Color           | Red          |
+		| Field                    | Value        |
+		| Name                     | Pierre Baldi |
+		| State                    | Pause        |
+		| Activity                 | Phone        |
+		| Next activity            | Lunch        |
+		| Alarm                    | Not adhering |
+		| Out of adherence time    | 0:15:00      |
+		| Alarm Color              | Red          |
 	And I should see agent status
-		| Field         | Value         |
-		| Name          | Ashley Andeen |
-		| State         | Ready         |
-		| Activity      | Phone         |
-		| Next activity | Lunch         |
-		| Rule          | Adhering      |
-		| Alarm Color   | Green         |
+		| Field                    | Value         |
+		| Name                     | Ashley Andeen |
+		| State                    | Ready         |
+		| Activity                 | Phone         |
+		| Next activity            | Lunch         |
+		| Alarm                    | Adhering      |
+		| Alarm Color              | Green         |
 
 Scenario: See all agents of the team even without state updates
 	Given the time is '2014-01-21 12:30:00'
@@ -122,7 +122,7 @@ Scenario: See state updates when call center is in Istanbul
 		| Field                 | Value        |
 		| Name                  | Pierre Baldi |
 		| State                 | Pause        |
-		| Rule                  | Not adhering |
+		| Alarm                 | Not adhering |
 		| Out of adherence time | 0:15:00      |
 		| Alarm Color           | Red          |
 
@@ -157,7 +157,7 @@ Scenario: See agent status when call center is in Istanbul
 		| Field                 | Value        |
 		| Name                  | Pierre Baldi |
 		| State                 | Pause        |
-		| Rule                  | Not adhering |
+		| Alarm                 | Not adhering |
 		| Out of adherence time | 1:00:00      |
 		| Alarm Color           | Red          |
 
