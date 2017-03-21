@@ -413,7 +413,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				return false;
 			}
 
-			if (optimizationPreferences.Extra.IsClassic())
+			if (optimizationPreferences.Extra.IsClassic() && !optimizationPreferences.Advanced.UseTweakedValues)
 			{
 				//TODO - not only if classic probably... Does "predictor" work with team/block as well? Problaby not...
 				if (_dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix) >= predictorValueBefore)
