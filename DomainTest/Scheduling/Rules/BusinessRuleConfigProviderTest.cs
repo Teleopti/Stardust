@@ -133,8 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Assert.IsNull(nonConfigurableShiftTradeSpecificationRuleConfig);
 		}
 
-		// Refer to bug #43527: Strange order of shift trade request settings in Options
-		[Test]
+		[Test(Description = "Verify solution for bug #43527: Strange order of shift trade request settings in Options")]
 		public void ShouldReturnDefaultBusinessRulesConfigInSpecifyOrder()
 		{
 			var stateHolder = new FakeSchedulingResultStateHolder { UseMinWeekWorkTime = true };
@@ -160,15 +159,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				ruleOrder.Add(result[i].BusinessRuleType, i);
 			}
 
-			Assert.IsTrue(ruleOrder[typeof(NewShiftCategoryLimitationRule).FullName] < ruleOrder[typeof(WeekShiftCategoryLimitationRule).FullName]);
-			Assert.IsTrue(ruleOrder[typeof(WeekShiftCategoryLimitationRule).FullName] < ruleOrder[typeof(NewNightlyRestRule).FullName]);
-			Assert.IsTrue(ruleOrder[typeof(NewNightlyRestRule).FullName] < ruleOrder[typeof(MinWeeklyRestRule).FullName]);
-			Assert.IsTrue(ruleOrder[typeof(MinWeeklyRestRule).FullName] < ruleOrder[typeof(NewMaxWeekWorkTimeRule).FullName]);
-			Assert.IsTrue(ruleOrder[typeof(NewMaxWeekWorkTimeRule).FullName] < ruleOrder[typeof(MinWeekWorkTimeRule).FullName]);
-			Assert.IsTrue(ruleOrder[typeof(MinWeekWorkTimeRule).FullName] < ruleOrder[typeof(ShiftTradeTargetTimeSpecification).FullName]);
-			Assert.IsTrue(ruleOrder[typeof(ShiftTradeTargetTimeSpecification).FullName] < ruleOrder[typeof(NewDayOffRule).FullName]);
-			Assert.IsTrue(ruleOrder[typeof(NewDayOffRule).FullName] < ruleOrder[typeof(NotOverwriteLayerRule).FullName]);
-			Assert.IsTrue(ruleOrder[typeof(NotOverwriteLayerRule).FullName] < ruleOrder[typeof(NonMainShiftActivityRule).FullName]);
+			var businessRuleTypes = new[]
+			{
+				typeof(NewShiftCategoryLimitationRule).FullName,
+				typeof(WeekShiftCategoryLimitationRule).FullName,
+				typeof(NewNightlyRestRule).FullName,
+				typeof(MinWeeklyRestRule).FullName,
+				typeof(NewMaxWeekWorkTimeRule).FullName,
+				typeof(MinWeekWorkTimeRule).FullName,
+				typeof(ShiftTradeTargetTimeSpecification).FullName,
+				typeof(NewDayOffRule).FullName,
+				typeof(NotOverwriteLayerRule).FullName,
+				typeof(NonMainShiftActivityRule).FullName
+			};
+
+			for (var i = 0; i < businessRuleTypes.Length - 1; i++)
+			{
+				Assert.IsTrue(ruleOrder[businessRuleTypes[i]] < ruleOrder[businessRuleTypes[i + 1]]);
+			}
 		}
 	}
 }
