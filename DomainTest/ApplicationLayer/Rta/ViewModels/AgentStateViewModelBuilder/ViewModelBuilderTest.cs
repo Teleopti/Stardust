@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			agentState.Activity.Should().Be("phone");
 			agentState.NextActivity.Should().Be("lunch");
 			agentState.NextActivityStartTime.Should().Be("09:00");
-			agentState.Alarm.Should().Be("in adherence");
+			agentState.Rule.Should().Be("in adherence");
 			agentState.Color.Should().Be("#000000");
 			agentState.TimeInState.Should().Be(30 * 60);
 		}
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			agentState.Activity.Should().Be("phone");
 			agentState.NextActivity.Should().Be("lunch");
 			agentState.NextActivityStartTime.Should().Be("09:00");
-			agentState.Alarm.Should().Be("in adherence");
+			agentState.Rule.Should().Be("in adherence");
 			agentState.Color.Should().Be("#000000");
 			agentState.TimeInState.Should().Be(30 * 60);
 		}

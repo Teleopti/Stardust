@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string Activity { get; set; }
 		public string NextActivity { get; set; }
 		public string NextActivityStartTime { get; set; }
-		public string Alarm { get; set; }
+		public string Rule { get; set; }
 		public string Color { get; set; }
 		public int TimeInState { get; set; }
 		public int? TimeInRule { get; set; }
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					   Activity = state.Activity,
 					   NextActivity = state.NextActivity,
 					   NextActivityStartTime = formatTime(state.NextActivityStartTime),
-					   Alarm = state.RuleName,
+					   Rule = state.RuleName,
 					   Color = _appliedAlarm.ColorTransition(state, timeInAlarm),
 					   TimeInState = state.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - state.StateStartTime.Value).TotalSeconds : 0,
 					   TimeInAlarm = timeInAlarm,

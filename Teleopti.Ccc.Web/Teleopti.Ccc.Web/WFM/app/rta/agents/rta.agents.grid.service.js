@@ -75,9 +75,9 @@
 				cellTemplate: coloredCellTemplate,
 			};
 
-			var alarm = {
-				displayName: $translate.instant('Alarm'),
-				field: 'Alarm',
+			var rule = {
+				displayName: $translate.instant('Rule'),
+				field: 'Rule',
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: alarmCellTemplate,
 			};
@@ -116,12 +116,10 @@
 			columnDefs.push(name);
 			columnDefs.push(siteAndTeam);
 			columnDefs.push(shift);
-			columnDefs.push(alarm);
+			columnDefs.push(rule);
 			columnDefs.push(timeOutOfAdherence);
 			columnDefs.push(timeInAlarm);
 			columnDefs.push(state);
-
-
 			return {
 				rowTemplate: rowTemplate,
 				columnDefs: columnDefs,

@@ -58,7 +58,7 @@
 		var skillIds = $stateParams.skillIds || [];
 		var skillAreaId = $stateParams.skillAreaId || undefined;
 		var excludedStatesFromUrl = function () { return $stateParams.es || [] };
-		var propertiesForFiltering = ["Name", "State", "Activity", "Alarm", "SiteAndTeamName"];
+		var propertiesForFiltering = ["Name", "State", "Activity", "Rule", "SiteAndTeamName"];
 		var allGrid = rtaGridService.makeAllGrid();
 		var inAlarmGrid = rtaGridService.makeInAlarmGrid();
 		// because angular cant handle an array of null in stateparams

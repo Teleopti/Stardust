@@ -49,7 +49,7 @@ describe('RtaAgentsController', function () {
 			Activity: "Phone",
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
-			Alarm: "In Adherence",
+			Rule: "In Adherence",
 			Color: "#00FF00",
 			TimeInState: 15473
 		});
@@ -65,7 +65,7 @@ describe('RtaAgentsController', function () {
 		expect(vm.agents[0].Activity).toEqual("Phone");
 		expect(vm.agents[0].NextActivity).toEqual("Short break");
 		expect(vm.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
-		expect(vm.agents[0].Alarm).toEqual("In Adherence");
+		expect(vm.agents[0].Rule).toEqual("In Adherence");
 		expect(vm.agents[0].Color).toEqual("#00FF00");
 		expect(vm.agents[0].TimeInState).toEqual(15473);
 	});
@@ -106,7 +106,7 @@ describe('RtaAgentsController', function () {
 			Activity: "Phone",
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
-			Alarm: "In Adherence",
+			Rule: "In Adherence",
 			Color: "#00FF00",
 			TimeInState: 15473
 		});
@@ -119,7 +119,7 @@ describe('RtaAgentsController', function () {
 		expect(vm.agents[0].Activity).toEqual("Phone");
 		expect(vm.agents[0].NextActivity).toEqual("Short break");
 		expect(vm.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
-		expect(vm.agents[0].Alarm).toEqual("In Adherence");
+		expect(vm.agents[0].Rule).toEqual("In Adherence");
 		expect(vm.agents[0].Color).toEqual("#00FF00");
 		expect(vm.agents[0].TimeInState).toEqual(15473);
 	});

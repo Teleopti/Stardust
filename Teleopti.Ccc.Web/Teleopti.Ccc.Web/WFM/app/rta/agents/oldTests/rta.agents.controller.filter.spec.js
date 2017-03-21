@@ -191,7 +191,7 @@ describe('RtaAgentsController', function() {
 			})
 			.withState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				Alarm: "Positive"
+				Rule: "Positive"
 			})
 			.withAgent({
 				Name: "Charley Caper",
@@ -201,7 +201,7 @@ describe('RtaAgentsController', function() {
 			})
 			.withState({
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				Alarm: "Adhering"
+				Rule: "Adhering"
 			});
 
 		var c = $controllerBuilder.createController();
@@ -209,7 +209,7 @@ describe('RtaAgentsController', function() {
 		c.apply(vm.agentsInAlarm = false)
 			.apply(vm.filterText = "Adhering");
 
-		expect(vm.filteredData[0].Alarm).toEqual("Adhering");
+		expect(vm.filteredData[0].Rule).toEqual("Adhering");
 		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
 	});
 

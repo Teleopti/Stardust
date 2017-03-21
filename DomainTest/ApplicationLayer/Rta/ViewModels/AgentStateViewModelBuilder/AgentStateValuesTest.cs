@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			states.Single().Activity.Should().Be("phone");
 			states.Single().NextActivity.Should().Be("lunch");
 			states.Single().NextActivityStartTime.Should().Be("09:00");
-			states.Single().Alarm.Should().Be("in adherence");
+			states.Single().Rule.Should().Be("in adherence");
 			states.Single().Color.Should().Be("#000000");
 			states.Single().TimeInState.Should().Be(30 * 60);
 		}

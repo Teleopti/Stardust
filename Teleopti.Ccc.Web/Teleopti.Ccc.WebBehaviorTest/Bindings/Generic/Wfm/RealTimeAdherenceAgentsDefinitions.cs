@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.NextActivity);
 			if (status.NextActivityStartTimeFormatted() != null)
 				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.NextActivityStartTimeFormatted());
-			if (status.Alarm != null)
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.Alarm);
+			if (status.Rule != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.Rule);
 			if (status.AlarmTimeFormatted() != null)
 				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.AlarmTimeFormatted());
 			if (status.AlarmColor != null)
@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				Browser.Interactions.AssertAnyContains(selector, state.Name);
 			if (state.State != null)
 				Browser.Interactions.AssertAnyContains(selector, state.State);
-			if (state.Alarm != null)
-				Browser.Interactions.AssertAnyContains(selector, state.Alarm);
+			if (state.Rule != null)
+				Browser.Interactions.AssertAnyContains(selector, state.Rule);
 
 			if (state.PreviousActivity != null)
 			{
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public string Activity { get; set; }
 		public string NextActivity { get; set; }
 		public string NextActivityStartTime { get; set; }
-		public string Alarm { get; set; }
+		public string Rule { get; set; }
 		public string AlarmColor { get; set; }
 		public string Color { get; set; }
 		public string AlarmTime { get; set; }

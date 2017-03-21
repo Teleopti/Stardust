@@ -35,7 +35,7 @@
 				Activity: state.Activity,
 				NextActivity: state.NextActivity,
 				NextActivityStartTime: state.NextActivityStartTime,
-				Alarm: state.Alarm,
+				Rule: state.Rule,
 				Color: state.Color,
 				TimeInState: state.TimeInState,
 				TimeInAlarm: getTimeInAlarm(state),
