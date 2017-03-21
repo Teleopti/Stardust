@@ -210,6 +210,11 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913"));
 
 		self.absenceProbabilityEnabled = ko.observable(self.staffingProbabilityEnabled() && data.CheckStaffingByIntraday);
+		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityOptionValue() === constants.absenceProbabilityType) {
+			self.selectedProbabilityOptionValue(constants.noneProbabilityType);
+			self.showingAbsenceProbability(false);
+			self.showingOvertimeProbability(false);
+		}
 
 		var timelines = ko.utils.arrayMap(data.TimeLine, function (rawTimeline) {
 			var hourMinuteSecond = rawTimeline.Time.split(":");
