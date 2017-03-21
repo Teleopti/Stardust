@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var ruleToRemove1 = typeof(MinWeeklyRestRule);
 			var ruleToRemove2 = typeof(MinWeekWorkTimeRule);
 
-			var rulesToRemove = new List<Type> {ruleToRemove1, ruleToRemove2};
+			var rulesToRemove = new List<Type> { ruleToRemove1, ruleToRemove2 };
 
 			var stateHolder = new FakeSchedulingResultStateHolder();
 			var businessRules = NewBusinessRuleCollection.All(new SchedulingResultStateHolder());
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var configurableRules = businessRules.Where(x => x.Configurable && (x.IsMandatory || x.HaltModify)
 															 && !rulesToRemove.Contains(x.GetType())).ToArray();
 
-			var target = new BusinessRuleConfigProvider(businessRuleProvider, stateHolder, new IShiftTradeSpecification[] {});
+			var target = new BusinessRuleConfigProvider(businessRuleProvider, stateHolder, new IShiftTradeSpecification[] { });
 			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
 
 			Assert.AreEqual(configurableRules.Length, result.Count);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldReturnMinWeekWorkTimeRuleConfig()
 		{
-			var stateHolder = new FakeSchedulingResultStateHolder {UseMinWeekWorkTime = true};
+			var stateHolder = new FakeSchedulingResultStateHolder { UseMinWeekWorkTime = true };
 			var businessRules = NewBusinessRuleCollection.All(stateHolder);
 
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
@@ -101,7 +101,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Assert.IsTrue(shiftTradeTargetTimeSpecificationRuleConfig.HandleOptionOnFailed == RequestHandleOption.AutoDeny);
 		}
 
-
 		[Test]
 		public void ShouldOnlyReturnConfigurableShiftTradeSpecificationRuleConfig()
 		{
@@ -127,10 +126,49 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var target = new BusinessRuleConfigProvider(businessRuleProvider, stateHolder, shiftTradeSpecifications);
 			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
-			var configurableShiftTradeSpecificationRuleConfig = result.FirstOrDefault(r=>r.FriendlyName == "specification2");
+
+			var configurableShiftTradeSpecificationRuleConfig = result.FirstOrDefault(r => r.FriendlyName == "specification2");
 			Assert.IsNotNull(configurableShiftTradeSpecificationRuleConfig);
 			var nonConfigurableShiftTradeSpecificationRuleConfig = result.FirstOrDefault(r => r.FriendlyName == "specification1");
 			Assert.IsNull(nonConfigurableShiftTradeSpecificationRuleConfig);
+		}
+
+		// Refer to bug #43527: Strange order of shift trade request settings in Options
+		[Test]
+		public void ShouldReturnDefaultBusinessRulesConfigInSpecifyOrder()
+		{
+			var stateHolder = new FakeSchedulingResultStateHolder { UseMinWeekWorkTime = true };
+			var businessRules = NewBusinessRuleCollection.All(stateHolder);
+			businessRules.Add(new NonMainShiftActivityRule());
+
+			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
+			businessRuleProvider.Stub(x => x.GetBusinessRulesForShiftTradeRequest(stateHolder, true))
+				.IgnoreArguments().Return(businessRules);
+
+			var shiftTradeSpecifications = new IShiftTradeSpecification[]
+			{
+				new ShiftTradeTargetTimeSpecification(() => new SchedulerStateHolder(stateHolder, null,
+					new FakeTimeZoneGuard()), null, null)
+			};
+
+			var target = new BusinessRuleConfigProvider(businessRuleProvider, stateHolder, shiftTradeSpecifications);
+			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
+
+			var ruleOrder = new Dictionary<string, int>();
+			for (var i = 0; i < result.Count; i++)
+			{
+				ruleOrder.Add(result[i].BusinessRuleType, i);
+			}
+
+			Assert.IsTrue(ruleOrder[typeof(NewShiftCategoryLimitationRule).FullName] < ruleOrder[typeof(WeekShiftCategoryLimitationRule).FullName]);
+			Assert.IsTrue(ruleOrder[typeof(WeekShiftCategoryLimitationRule).FullName] < ruleOrder[typeof(NewNightlyRestRule).FullName]);
+			Assert.IsTrue(ruleOrder[typeof(NewNightlyRestRule).FullName] < ruleOrder[typeof(MinWeeklyRestRule).FullName]);
+			Assert.IsTrue(ruleOrder[typeof(MinWeeklyRestRule).FullName] < ruleOrder[typeof(NewMaxWeekWorkTimeRule).FullName]);
+			Assert.IsTrue(ruleOrder[typeof(NewMaxWeekWorkTimeRule).FullName] < ruleOrder[typeof(MinWeekWorkTimeRule).FullName]);
+			Assert.IsTrue(ruleOrder[typeof(MinWeekWorkTimeRule).FullName] < ruleOrder[typeof(ShiftTradeTargetTimeSpecification).FullName]);
+			Assert.IsTrue(ruleOrder[typeof(ShiftTradeTargetTimeSpecification).FullName] < ruleOrder[typeof(NewDayOffRule).FullName]);
+			Assert.IsTrue(ruleOrder[typeof(NewDayOffRule).FullName] < ruleOrder[typeof(NotOverwriteLayerRule).FullName]);
+			Assert.IsTrue(ruleOrder[typeof(NotOverwriteLayerRule).FullName] < ruleOrder[typeof(NonMainShiftActivityRule).FullName]);
 		}
 	}
 }

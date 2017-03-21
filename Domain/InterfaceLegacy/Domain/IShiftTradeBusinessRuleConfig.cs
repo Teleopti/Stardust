@@ -9,5 +9,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool Enabled { get; set; }
 
 		RequestHandleOption? HandleOptionOnFailed { get; set; }
+
+		int Order { get; set; }
 	}
 }
