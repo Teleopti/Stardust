@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly DayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
-		private readonly IResourceCalculation _resourceCalculation;
 
 		public TeamBlockDayOffOptimizerService(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -68,8 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
-			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder,
-			IResourceCalculation resourceCalculation)
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
@@ -93,7 +91,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_dayOffOptimizerPreMoveResultPredictor = dayOffOptimizerPreMoveResultPredictor;
 			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
-			_resourceCalculation = resourceCalculation;
 		}
 
 		public void OptimizeDaysOff(
@@ -408,22 +405,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			checkPeriodValue = false;
 			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, agent);
-			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, agent, !optimizationPreferences.Extra.IsClassic());
+			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, agent);
 
-			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo,
-																							 movedDaysOff.RemovedDaysOff,
-																							 rollbackService, resourceCalculateDelayer,
-																							 schedulingResultStateHolder))
+			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff,rollbackService, resourceCalculateDelayer,schedulingResultStateHolder))
 			{
 				return false;
-			}
-
-			if (optimizationPreferences.Extra.IsClassic())
-			{
-				foreach (var dateOnly in movedDaysOff.AddedDaysOff)
-				{
-					_resourceCalculation.ResourceCalculate(dateOnly, schedulingResultStateHolder.ToResourceOptimizationData(true, false));
-				}
 			}
 
 			if (!optimizationPreferences.General.OptimizationStepDaysOff && optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
@@ -483,11 +469,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		private void addAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService,
-		                                           ISchedulingOptions schedulingOptions, IList<DateOnly> addedDaysOff, IPerson person, bool resourceCalculate)
+		                                           ISchedulingOptions schedulingOptions, IList<DateOnly> addedDaysOff, IPerson person)
 		{
 			foreach (DateOnly dateOnly in addedDaysOff)
 			{
-				_teamDayOffModifier.AddDayOffForMember(rollbackService, person, dateOnly, schedulingOptions.DayOffTemplate, resourceCalculate);
+				_teamDayOffModifier.AddDayOffForMember(rollbackService, person, dateOnly, schedulingOptions.DayOffTemplate, true);
 			}
 		}
 
