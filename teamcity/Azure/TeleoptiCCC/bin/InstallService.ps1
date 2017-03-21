@@ -37,14 +37,20 @@ function ReinstallService
 ##===========
 Try
 {
- 	#start log4net
-	$log4netPath = $PSScriptRoot + "\log4net"
+    [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
+	
+	#Get local path
+    [string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+    [string]$global:ScriptFileName = $MyInvocation.MyCommand.Name
+    Set-Location $scriptPath
+ 
+	#start log4net
+	$log4netPath = $scriptPath + "\log4net"
     Unblock-File -Path "$log4netPath\log4net.ps1"
     . "$log4netPath\log4net.ps1";
     $configFile = new-object System.IO.FileInfo($log4netPath + "\log4net.config");
     configure-logging -configFile "$configFile"
 	
-	$ScriptFileName = $MyInvocation.MyCommand.Name
 	log-info "running: $ScriptFileName"
 	
 	ReinstallService "TeleoptiEtlService" "E:\approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe"
