@@ -13,7 +13,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		
-		<link rel="stylesheet" href="Content/jqueryui/smoothness/jquery-ui-1.10.1.custom.css" />
+		<link rel="stylesheet" href="Content/jqueryui/smoothness/jquery-ui-1.10.2.custom.css" />
 		<link rel="stylesheet" href="Content/bootstrap/Content/bootstrap.css" />
 		<link rel="stylesheet" href="Content/bootstrap/Content/bootstrap-theme.css" />
 		<link rel="stylesheet" href="Content/moment-datepicker/datepicker.css" />

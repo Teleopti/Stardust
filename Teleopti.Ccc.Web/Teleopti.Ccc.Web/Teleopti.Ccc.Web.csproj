@@ -2427,7 +2427,6 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.css" />
-    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.min.css" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />
