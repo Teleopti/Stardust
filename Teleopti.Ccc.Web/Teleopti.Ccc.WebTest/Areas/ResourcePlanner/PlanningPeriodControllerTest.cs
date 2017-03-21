@@ -176,7 +176,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
-		[Ignore("this failed in build server")]
 		public void ShouldReturnAvailablePlanningPeriods()
 		{
 			PlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31))));
