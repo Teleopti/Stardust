@@ -260,10 +260,10 @@
     <Compile Include="Hangfire\AttemptsFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
-    <Compile Include="Intraday\JobStartTimeRepository.cs" />
+    <Compile Include="Repositories\JobStartTimeRepository.cs" />
     <Compile Include="Intraday\PersonProviderForOvertime.cs" />
-    <Compile Include="Intraday\ScheduleForecastSkillReadModelRepository.cs" />
-    <Compile Include="Intraday\SkillCombinationResourceRepository.cs" />
+    <Compile Include="Repositories\ScheduleForecastSkillReadModelRepository.cs" />
+    <Compile Include="Repositories\SkillCombinationResourceRepository.cs" />
     <Compile Include="Licensing\ISetLicenseActivator.cs" />
     <Compile Include="Licensing\SetLicenseActivator.cs" />
     <Compile Include="Licensing\SetNoLicenseActivator.cs" />

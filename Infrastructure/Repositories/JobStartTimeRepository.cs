@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 
-namespace Teleopti.Ccc.Infrastructure.Intraday
+namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class JobStartTimeRepository : IJobStartTimeRepository
 	{
@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 							startTime = (DateTime) scalar;
 					}
 
+					//if less than one hour and lock is not null and in the past 
 					if (startTime.AddMinutes(thresholdMinutes) > _now.UtcDateTime()) return false;
 
 					using (var deleteCommand = new SqlCommand(@"delete from [JobStartTime] where BusinessUnit = @bu", connection, transaction))
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 					{
 						insertCommand.Parameters.AddWithValue("@bu", bu);
 						insertCommand.Parameters.AddWithValue("@startTime", _now.UtcDateTime());
+						//set lock time to null
 						insertCommand.ExecuteNonQuery();
 					}
 					transaction.Commit();

@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		[UnitOfWork]
 		public virtual void Handle(UpdateStaffingLevelReadModelEvent @event)
 		{
+			//start thread with time and set time to now + 1 min (or 2?)
 			var period = new DateTimePeriod(_now.UtcDateTime().AddDays(-1).AddHours(-1), _now.UtcDateTime().AddDays(@event.Days).AddHours(1));
 
 			_updateStaffingLevelReadModel.Update(period);

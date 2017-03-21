@@ -15,9 +15,8 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.Intraday
+namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
 	[UnitOfWorkTest]
