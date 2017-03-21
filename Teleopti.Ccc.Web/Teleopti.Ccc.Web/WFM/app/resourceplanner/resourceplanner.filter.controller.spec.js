@@ -292,7 +292,7 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isValidFilters()).toBe(true);
 	}));
 
-	it('should be able to save the dayoffrule', inject(function ($controller, $state,$stateParams) {
+	xit('should be able to save the dayoffrule', inject(function ($controller, $state,$stateParams) {
 		var scope = $rootScope.$new();
 		var sentData;
 		spyOn($state, 'go');
