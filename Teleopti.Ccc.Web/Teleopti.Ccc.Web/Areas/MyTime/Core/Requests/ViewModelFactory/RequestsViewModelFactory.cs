@@ -112,11 +112,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		public AbsenceAccountViewModel GetAbsenceAccountViewModel(Guid absenceId, DateOnly date)
 		{
 			var absence = _absenceTypesProvider.GetRequestableAbsences().FirstOrDefault(x => x.Id == absenceId);
-			if (absence==null) return null;
+			if (absence == null) return null;
 
 			var absenceAccount = _personAccountProvider.GetPersonAccount(absence, date);
-			if (absenceAccount == null) return null;
-
 			return _personAccountViewModelMapper.Map(absenceAccount);
 		}
 
@@ -124,21 +122,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		{
 			var ret = _shiftTradeRequestsPeriodViewModelMapper.Map(_shiftTradeRequestprovider.RetrieveUserWorkflowControlSet(), _now);
 
-			if (id != null)
+			if (id == null) return ret;
+
+			var personRequest = _personRequestRepository.Find(id.Value);
+			var shiftTrade = personRequest.Request as IShiftTradeRequest;
+
+			if (shiftTrade == null || shiftTrade.Offer != null) return ret;
+
+			ret.MiscSetting = new ShiftTradeRequestMiscSetting
 			{
-				var personRequest = _personRequestRepository.Find(id.Value);
-				var shiftTrade = personRequest.Request as IShiftTradeRequest;
-				if (shiftTrade != null)
-				{
-					if (shiftTrade.Offer == null)
-					{
-						ret.MiscSetting = new ShiftTradeRequestMiscSetting
-						{
-							AnonymousTrading = false
-						};
-					}
-				}
-			}
+				AnonymousTrading = false
+			};
 			return ret;
 		}
 
@@ -189,8 +183,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 					startTimeForSchedTwo = shiftTradeSwapDetails.To.StartTimeUtc;
 				}
 
-				shiftTradeSwapDetails.From.MinutesSinceTimeLineStart = (int) startTimeForSchedOne.Subtract(startTimeForTimeline).TotalMinutes;
-				shiftTradeSwapDetails.To.MinutesSinceTimeLineStart = (int) startTimeForSchedTwo.Subtract(startTimeForTimeline).TotalMinutes;
+				shiftTradeSwapDetails.From.MinutesSinceTimeLineStart = (int)startTimeForSchedOne.Subtract(startTimeForTimeline).TotalMinutes;
+				shiftTradeSwapDetails.To.MinutesSinceTimeLineStart = (int)startTimeForSchedTwo.Subtract(startTimeForTimeline).TotalMinutes;
 				shiftTradeSwapDetails.To.IsMySchedule = _loggedOnUser.CurrentUser().Equals(req.PersonTo);
 
 				shiftTradeSwapDetailsList.Add(shiftTradeSwapDetails);
