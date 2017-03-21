@@ -56,17 +56,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterAssemblyTypes(typeof(IHandleEvent<>).Assembly)
                 .Where(t =>
-                {
-					var handleInterfaces = (
-						from i in t.GetInterfaces()
-						let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)
-						where isHandler
-						let isHandlerEnabled = t.TypeEnabledByToggle(_config)
-						where isHandlerEnabled select i)
-						.ToArray();
-
-                    var hasHandleInterfaces = handleInterfaces.Any();
-
+				{
+					var hasHandleInterfaces =
+						t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)) &&
+						t.TypeEnabledByToggle(_config);
                     if (hasHandleInterfaces)
                     {
                         var runOnHangfire = typeof(IRunOnHangfire).IsAssignableFrom(t);
