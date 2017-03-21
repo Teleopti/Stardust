@@ -22,7 +22,7 @@
 				low: '@Resources.Low',
 				probabilityForAbsence: '@Resources.ProbabilityToGetAbsenceColon',
 				probabilityForOvertime: '@Resources.ProbabilityToGetOvertimeColon',
-				staffingProbabilityInfo: '@Resources.StaffingProbabilityInfo',
+				hideStaffingInfo: '@Resources.HideStaffingInfo',
 				showAbsenceProbability: '@Resources.ShowAbsenceProbability',
 				showOvertimeProbability: '@Resources.ShowOvertimeProbability'
 			},
@@ -80,7 +80,7 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="#" data-bind="click: function (data, event) { switchProbabilityType(0); }">
-                                    @Resources.StaffingProbabilityInfo
+                                    @Resources.HideStaffingInfo
                                 </a>
                             </li>
                             <li data-bind="visible: absenceProbabilityEnabled()">

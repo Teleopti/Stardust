@@ -3,8 +3,8 @@
 <!-- ko if: $parents[1].showProbabilityOptions() -->
 <div class="probability-radios-group"> 
 	<label class="radio pointer">
-		<input type="radio"  name="probabilityRadios" aria-label="@Resources.HideStaffingProbability" data-bind="value: noneOption, checked: checkedProbability, click:function(d,e){onOptionSelected(d.checkedProbability()); return true;}" />
-		<span>@Resources.HideStaffingProbability</span>
+		<input type="radio"  name="probabilityRadios" aria-label="@Resources.HideStaffingInfo" data-bind="value: noneOption, checked: checkedProbability, click:function(d,e){onOptionSelected(d.checkedProbability()); return true;}" />
+		<span>@Resources.HideStaffingInfo</span>
 	</label>
 	<!-- ko if: $parents[2].absenceProbabilityEnabled() -->
 	<label class="radio pointer">

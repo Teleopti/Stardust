@@ -12918,11 +12918,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide staffing probability.
+        ///   Looks up a localized string similar to Hide staffing info.
         /// </summary>
-        public static string HideStaffingProbability {
+        public static string HideStaffingInfo {
             get {
-                return ResourceManager.GetString("HideStaffingProbability", resourceCulture);
+                return ResourceManager.GetString("HideStaffingInfo", resourceCulture);
             }
         }
         
@@ -30151,15 +30151,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string StaffingLevels {
             get {
                 return ResourceManager.GetString("StaffingLevels", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Staffing info.
-        /// </summary>
-        public static string StaffingProbabilityInfo {
-            get {
-                return ResourceManager.GetString("StaffingProbabilityInfo", resourceCulture);
             }
         }
         

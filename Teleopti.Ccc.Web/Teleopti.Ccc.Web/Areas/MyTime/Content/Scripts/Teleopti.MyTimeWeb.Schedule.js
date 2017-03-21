@@ -225,7 +225,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		var validProbabilitiesTypes = [
-			userTexts.staffingProbabilityInfo,
+			userTexts.hideStaffingInfo,
 			userTexts.showAbsenceProbability,
 			userTexts.showOvertimeProbability
 		];
