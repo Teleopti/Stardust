@@ -98,8 +98,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 						string value = ConfigurationManager.AppSettings[key];
 
 						Uri uri;
-						if (Uri.TryCreate(value, UriKind.Absolute, out uri))
+						if (Uri.TryCreate(value, UriKind.Absolute, out uri) && !uri.IsFile && !uri.IsUnc)
 						{
+							if (key == "ManagerLocation")
+							{
+								result.Add(new Tuple<string, bool, string>(value, false, "Skip"));
+							}
 							var pingResult = pingAddress(uri);
 							result.Add(new Tuple<string, bool, string>(value, pingResult.Item1, pingResult.Item2));
 						}
