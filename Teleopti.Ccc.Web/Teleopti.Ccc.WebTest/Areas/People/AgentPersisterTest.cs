@@ -100,18 +100,15 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 		private AgentDataModel getAgentDataModel()
 		{
-			return new AgentDataModel
+			var agent = new AgentDataModel
 			{
 				Firstname = "a",
 				Lastname = "b",
 				WindowsUser = "abc",
 				ApplicationUserId = "abc",
 				Password = "password",
-				Roles = new List<IApplicationRole> { ApplicationRoleFactory.CreateRole("role","a role") },
 				StartDate = new DateOnly(2017,1,1),
 				Team = TeamFactory.CreateSimpleTeam(),
-				Skills = new List<ISkill> { SkillFactory.CreateSkill("skill") },
-				ExternalLogons = new List<IExternalLogOn> { ExternalLogOnFactory.CreateExternalLogOn()},
 				Contract = ContractFactory.CreateContract("contract"),
 				ContractSchedule = ContractScheduleFactory.CreateContractSchedule("contractSchedule"),
 				PartTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("parttime percentage"),
@@ -119,6 +116,11 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				SchedulePeriodType = SchedulePeriodType.Week,
 				SchedulePeriodLength = 4
 			};
+
+			agent.Roles.Add(ApplicationRoleFactory.CreateRole("role", "a role"));
+			agent.Skills.Add(SkillFactory.CreateSkill("skill"));
+			agent.ExternalLogons.Add(ExternalLogOnFactory.CreateExternalLogOn());
+			return agent;
 		}
 
 	}

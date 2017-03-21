@@ -11,16 +11,23 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 		public string WindowsUser { get; set; }
 		public string ApplicationUserId { get; set; }
 		public string Password { get; set; }
-		public List<IApplicationRole> Roles { get; set; }
+		public List<IApplicationRole> Roles { get; private set; }
 		public DateOnly StartDate { get; set; }
 		public ITeam Team { get; set; }
-		public List<ISkill> Skills { get; set; }
-		public IList<IExternalLogOn> ExternalLogons { get; set; }
+		public List<ISkill> Skills { get; private set; }
+		public List<IExternalLogOn> ExternalLogons { get; private set; }
 		public IContract Contract { get; set; }
 		public IContractSchedule ContractSchedule { get; set; }
 		public IPartTimePercentage PartTimePercentage { get; set; }
 		public IRuleSetBag RuleSetBag { get; set; }
 		public SchedulePeriodType SchedulePeriodType { get; set; }
 		public int SchedulePeriodLength { get; set; }
+
+		public AgentDataModel()
+		{
+			Roles = new List<IApplicationRole>();
+			Skills = new List<ISkill>();
+			ExternalLogons = new List<IExternalLogOn>();
+		}
 	}
 }

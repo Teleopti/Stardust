@@ -349,8 +349,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 		private Feedback parseExternalLogon(string rawExternalLogons, AgentDataModel agentInfo)
 		{
-			var feedback = new Feedback();
-			agentInfo.ExternalLogons = new List<IExternalLogOn>();
+			var feedback = new Feedback();		
 			if (rawExternalLogons == null)
 				return feedback;
 
@@ -481,7 +480,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		{
 			var feedback = new Feedback();
 			var roleNames = rawRoleString != null ?StringHelper.SplitStringList(rawRoleString).ToList() : new List<string>();
-			agent.Roles = new List<IApplicationRole>();
+			
 			var invalidRoles = new List<string>();
 			foreach (var roleName in roleNames)
 			{
@@ -500,7 +499,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			{
 				if (_defaultValues != null && _defaultValues.Roles.Any())
 				{
-					agent.Roles = _defaultValues.Roles;
+					agent.Roles.AddRange(_defaultValues.Roles);
 					feedback.WarningMessages.Add(warningMessage("Roles"));
 					return feedback;
 				}
@@ -555,9 +554,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var feedback = new Feedback();
 			var skillNames = !rawSkillString.IsNullOrWhiteSpace()
 				? StringHelper.SplitStringList(rawSkillString)
-				: new List<string>();
-			agent.Skills = new List<ISkill>();
-
+				: new List<string>();			
 			var invalidSkills = new List<string>();
 			foreach (var skillName in skillNames)
 			{
@@ -576,7 +573,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			{
 				if (_defaultValues != null && _defaultValues.Skills.Any())
 				{
-					agent.Skills = _defaultValues.Skills;
+					agent.Skills.AddRange(_defaultValues.Skills);
 					feedback.WarningMessages.Add(warningMessage("Skills"));
 					return feedback;
 				}
