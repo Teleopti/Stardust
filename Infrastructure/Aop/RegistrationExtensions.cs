@@ -42,9 +42,8 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 
 			var invalidMethods =
 				from m in methods
-				let hasAspect = m.GetCustomAttributes<AspectAttribute>().Any()
 				let isVirtual = m.IsVirtual
-				where hasAspect && !isVirtual
+				where !isVirtual && m.IsDefined(typeof(AspectAttribute))
 				select m;
 
 			var invalidSample = invalidMethods.FirstOrDefault();
