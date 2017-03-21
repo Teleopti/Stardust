@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Helper
@@ -93,24 +92,6 @@ namespace Teleopti.Ccc.Domain.Helper
 				yield return row.GetCell(i, MissingCellPolicy.RETURN_NULL_AND_BLANK);
 			}
 		}
-
-		private static bool IsBlank(this ICell cell)
-		{
-			if (cell == null)
-			{
-				return true;
-			}
-			if (cell.CellType == CellType.Blank)
-			{
-				return true;
-			}
-			if (cell.CellType == CellType.String && cell.StringCellValue.IsNullOrEmpty())
-			{
-				return true;
-			}
-			return false;
-		}
-
 
 		private static bool validateCopyRowParameters(IRow sourceRow, IRow targetRow, int startIndex, int endIndex)
 		{

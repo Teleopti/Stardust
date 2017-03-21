@@ -211,6 +211,7 @@
     <Compile Include="Common\PersonLeavingTest.cs" />
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />
     <Compile Include="Common\PublishPersonNameChangedEventTest.cs" />
+    <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
     <Compile Include="Common\PublishPersoEmploymentNumberChangedEventTest.cs" />

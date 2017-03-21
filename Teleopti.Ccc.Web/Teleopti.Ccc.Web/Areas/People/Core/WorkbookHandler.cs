@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 		private static object getVale(ICell cell, PropertyInfo pro)
 		{
-			if (cell == null || cell.CellType == CellType.Blank)
+			if (cell.IsBlank())
 			{
 				return null;
 			}
@@ -165,6 +165,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			}
 			throw new Exception();
 		}
+
 	}
 
 	public interface IWorkbookHandler

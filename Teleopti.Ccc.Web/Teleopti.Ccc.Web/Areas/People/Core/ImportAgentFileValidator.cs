@@ -350,10 +350,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		private Feedback parseExternalLogon(string rawExternalLogons, AgentDataModel agentInfo)
 		{
 			var feedback = new Feedback();
+			agentInfo.ExternalLogons = new List<IExternalLogOn>();
 			if (rawExternalLogons == null)
 				return feedback;
+
 			var externalLogons = StringHelper.SplitStringList(rawExternalLogons);
-			agentInfo.ExternalLogons = new List<IExternalLogOn>();
 			var invalidLogons = new List<string>(); 
 			foreach (var logon in externalLogons)
 			{
