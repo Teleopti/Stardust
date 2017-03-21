@@ -20,10 +20,10 @@ namespace Stardust.Node
 		}
 		
 		public Uri BaseAddress { get; private set; }
-		public Uri ManagerLocation { get; private set; }
+		public Uri ManagerLocation { get; }
 		public string NodeName { get; private set; }
-		public Assembly HandlerAssembly { get; private set; }
-		public double PingToManagerSeconds { get; private set; }
+		public Assembly HandlerAssembly { get; }
+		public double PingToManagerSeconds { get; }
 		public double SendDetailsToManagerMilliSeconds { get; private set; }
 
 		private void ValidateParameters()
@@ -31,15 +31,15 @@ namespace Stardust.Node
 
 			if (ManagerLocation == null)
 			{
-				throw new ArgumentNullException("managerLocation");
+				throw new ArgumentNullException(nameof(ManagerLocation));
 			}
 			if (HandlerAssembly == null)
 			{
-				throw new ArgumentNullException("handlerAssembly");
+				throw new ArgumentNullException(nameof(HandlerAssembly));
 			}
 			if (PingToManagerSeconds <= 0)
 			{
-				throw new ArgumentNullException("pingToManagerSeconds");
+				throw new ArgumentNullException(nameof(PingToManagerSeconds));
 			}
 		}
 
@@ -56,16 +56,14 @@ namespace Stardust.Node
 			}
 			return localIp;
 		}
-
-
+		
 		private Uri CreateNodeAddress(int port)
 		{
 			if (port <= 0)
 			{
-				throw new ArgumentNullException("port");
+				throw new ArgumentNullException(nameof(port));
 			}
 			return new Uri("http://" + GetIpAddress() + ":" + port + "/");
 		}
-
 	}
 }

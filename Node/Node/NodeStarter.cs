@@ -29,11 +29,11 @@ namespace Stardust.Node
 		{
 			if (nodeConfiguration == null)
 			{
-				throw new ArgumentNullException("nodeConfiguration");
+				throw new ArgumentNullException(nameof(nodeConfiguration));
 			}
 			if (container == null)
 			{
-				throw new ArgumentNullException("container");
+				throw new ArgumentNullException(nameof(container));
 			}
 			
 			var nodeAddress = "http://+:" + nodeConfiguration.BaseAddress.Port + "/";
