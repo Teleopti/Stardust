@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Analytics;
@@ -56,11 +57,11 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 
 		private void update(Guid personId, AnalyticBusinessUnit businessUnit)
 		{
-			var currentPermissions = _permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId).ToList();
-			var currentAnalyticsPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId);
-
-			var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Any(x => x.Equals(p)));
-			var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Any(x => x.Equals(p)));
+			var currentPermissions = new HashSet<AnalyticsPermission>(_permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId));
+			var currentAnalyticsPermissions = new HashSet<AnalyticsPermission>(_analyticsPermissionRepository.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId));
+			
+			var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Contains(p)).ToList();
+			var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Contains(p)).ToList();
 			_analyticsPermissionRepository.InsertPermissions(toBeAdded);
 			_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
 
