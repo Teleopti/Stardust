@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods();
 			result.Content.Count.Should().Be.EqualTo(3);
-			result.Content.ForEach(x=>x.AgentGroupId.Should().Be.EqualTo(Guid.Empty));
+			result.Content.ForEach(x=>x.AgentGroupId.Should().Be.EqualTo(null));
 		}
 
 		[Test]
