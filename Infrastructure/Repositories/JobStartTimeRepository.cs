@@ -83,6 +83,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
+		public void UpdateLockTimestamp()
+		{
+		}
+
+		public void ResetLockTimestamp()
+		{
+		}
+
 		//public IDictionary<Guid, DateTime> LoadAll()
 		//{
 		//	//var result =

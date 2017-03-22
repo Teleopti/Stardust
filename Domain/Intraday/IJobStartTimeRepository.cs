@@ -6,5 +6,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		bool CheckAndUpdate(int thresholdMinutes);
 		void Update(Guid buId);
+		void UpdateLockTimestamp();
+		void ResetLockTimestamp();
 	}
 }

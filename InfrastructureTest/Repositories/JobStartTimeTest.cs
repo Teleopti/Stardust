@@ -83,7 +83,53 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.First().Should().Be.EqualTo(Now.UtcDateTime());
 		}
 
+		[Test]
+		public void ShouldCheckAndUpdateAndSetTimeLockToNull()
+		{
+			Now.Is("2016-03-01 07:50");
+			Target.Update(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+			Now.Is("2016-03-01 09:50");
+			Target.CheckAndUpdate(60);
+			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select LockTimestamp from JobStartTime where BusinessUnit = :bu")
+				.SetGuid("bu", CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.List<DateTime?>();
+			result.First().Should().Be.Null();
+		}
 
+		[Test]
+		public void ShouldUpdateAndSetTimeLockToNull()
+		{
+			Now.Is("2016-03-01 07:50");
+			Target.Update(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+			Now.Is("2016-03-01 09:50");
+			Target.Update(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select LockTimestamp from JobStartTime where BusinessUnit = :bu")
+				.SetGuid("bu", CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.List<DateTime?>();
+			result.First().Should().Be.Null();
+		}
+
+		[Test,Ignore("WIP")]
+		public void ShouldUpdateIfLockTimestampIsNotValid()
+		{
+			Now.Is("2016-03-01 09:40");
+			Target.Update(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+			Target.UpdateLockTimestamp();
+			Now.Is("2016-03-01 09:50");
+			var isUpdated = Target.CheckAndUpdate(60);
+			isUpdated.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotUpdateIfLockTimestampIsValid()
+		{
+			Now.Is("2016-03-01 09:40");
+			Target.Update(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+			Now.Is("2016-03-01 09:50");
+			Target.UpdateLockTimestamp();
+			var isUpdated = Target.CheckAndUpdate(60);
+			isUpdated.Should().Be.False();
+		}
 
 		//[Test]
 		//public void ShouldPersist()

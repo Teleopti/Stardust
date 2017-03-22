@@ -35,5 +35,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				Records.Remove(bu);
 			Records.Add(bu, _now.UtcDateTime());
 		}
+
+		public void UpdateLockTimestamp()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ResetLockTimestamp()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
