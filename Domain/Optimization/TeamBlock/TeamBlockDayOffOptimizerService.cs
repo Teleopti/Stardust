@@ -279,7 +279,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 									if (!optimizationPreferences.Advanced.UseTweakedValues)
 									{
-										allFailed = false;
+										if (!optimizationPreferences.Extra.IsClassic())
+										{
+											allFailed = false;
+										}
 										lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
 										lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
 									}
@@ -305,6 +308,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 
 			return teamInfosToRemove;
+		}
+
+
+		private bool Poo(bool theBool, IOptimizationPreferences prefs)
+		{
+			return theBool && !prefs.Extra.IsClassic();
 		}
 			
 		private IEnumerable<ITeamInfo> runOneOptimizationRound(IPeriodValueCalculator periodValueCalculatorForAllSkills, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, 
