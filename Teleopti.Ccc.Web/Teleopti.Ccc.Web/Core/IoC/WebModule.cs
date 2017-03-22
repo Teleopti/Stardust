@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ReportsProvider>().As<IReportsProvider>();
 			builder.RegisterType<ReportsNavigationProvider>().As<IReportsNavigationProvider>();
 			builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
-			builder.RegisterType<AnalyticsPermissionsUpdater>().As<IAnalyticsPermissionsUpdater>().InstancePerRequest();
+			builder.RegisterType<AnalyticsPermissionsUpdater>().As<IAnalyticsPermissionsUpdater>().InstancePerRequest().ApplyAspects();
 			builder.RegisterType<PermissionsConverter>().As<IPermissionsConverter>().InstancePerRequest();
 			builder.RegisterType<ApplicationFunctionResolver>().As<IApplicationFunctionResolver>().InstancePerRequest();
 			builder.RegisterType<CommonReportsFactory>().As<ICommonReportsFactory>().SingleInstance();

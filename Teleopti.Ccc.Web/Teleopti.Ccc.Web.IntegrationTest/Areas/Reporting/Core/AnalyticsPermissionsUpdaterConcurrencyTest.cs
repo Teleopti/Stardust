@@ -2,9 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -14,10 +12,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
-using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 
 namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 {
@@ -25,21 +19,16 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 	[InfrastructureTest]
 	public class AnalyticsPermissionsUpdaterConcurrencyTest : ISetup
 	{
-		public IAnalyticsPermissionRepository AnalyticsPermissionRepository;
-		public IAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
-		public IAnalyticsPermissionExecutionRepository AnalyticsPermissionExecutionRepository;
-		public IPermissionsConverter PermissionsConverter;
-		public IDistributedLockAcquirer DistributedLockAcquirer;
-		public ICurrentAnalyticsUnitOfWork CurrentAnalyticsUnitOfWork;
-		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public WithUnitOfWork WithUnitOfWork;
 		public ConcurrencyRunner Run;
 		public Database Database;
 		public IPersonRepository PersonRepository;
+		public IAnalyticsPermissionsUpdater Target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<PermissionsConverter>().For<IPermissionsConverter>();
+			system.AddService<PermissionsConverter>();
+			system.AddService<AnalyticsPermissionsUpdater>();
 		}
 
 		[Test]
@@ -73,18 +62,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 			{
 				10.Times(i =>
 				{
-					WithAnalyticsUnitOfWork.Do(() =>
-					{
-						WithUnitOfWork.Do(() =>
-						{
-							var target = new AnalyticsPermissionsUpdater(AnalyticsPermissionRepository,
-								AnalyticsBusinessUnitRepository,
-								AnalyticsPermissionExecutionRepository,
-								PermissionsConverter);
-
-							target.Handle(personId, businessUnitId);
-						});
-					});
+					Target.Handle(personId, businessUnitId);
 				});
 
 			}).Times(10);

@@ -49,23 +49,18 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			_commonReportsFactory = commonReportsFactory;
 		}
 
-		[UnitOfWork]
-		[AnalyticsUnitOfWork]
-		public virtual ActionResult Index(Guid? id)
+		public ActionResult Index(Guid? id)
 		{
 			if (!id.HasValue)
 				return View("Empty");
 			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
 
 			var guids = reportsItems.Select(item => item.Id).ToArray();
-			if(!id.Value.Equals(Guid.Empty) && !guids.Contains(id.Value))
+			if (!id.Value.Equals(Guid.Empty) && !guids.Contains(id.Value))
 				return View("NoPermission");
-			var currentUser = _loggedOnUser.CurrentUser();
-			var currentBusinessUnit = _currentBusinessUnit.Current();
+			var reportContext = GetReportContext();
 
-			_analyticsPermissionsUpdater.Handle(currentUser.Id.GetValueOrDefault(), currentBusinessUnit.Id.GetValueOrDefault());
-
-			var agentName = _personNameProvider.BuildNameFromSetting(currentUser.Name);
+			_analyticsPermissionsUpdater.Handle(reportContext.PersonId, reportContext.BusinessUnitId);
 
 			using (var commonReports = _commonReportsFactory.CreateAndLoad(((TeleoptiIdentity)Thread.CurrentPrincipal.Identity).DataSource.Analytics.ConnectionString, id.Value))
 			{
@@ -84,8 +79,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 							Name = name,
 							ReportNavigationItems = reportsItems,
 							HelpUrl = helpUrl,
-							CurrentLogonAgentName = agentName,
-							CurrentBuName = currentBusinessUnit.Name
+							CurrentLogonAgentName = reportContext.PersonName,
+							CurrentBuName = reportContext.BusinessUnitName
 						});
 
 				return
@@ -95,11 +90,33 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 						Name = name,
 						ReportNavigationItems = reportsItems,
 						HelpUrl = helpUrl,
-						CurrentLogonAgentName = agentName,
-						CurrentBuName = currentBusinessUnit.Name,
+						CurrentLogonAgentName = reportContext.PersonName,
+						CurrentBuName = reportContext.BusinessUnitName,
 						UseOpenXml = _toggleManager.IsEnabled(Toggles.Report_UseOpenXmlFormat_35797)
 					});
 			}
+		}
+
+		[UnitOfWork]
+		protected virtual ReportContext GetReportContext()
+		{
+			var currentUser = _loggedOnUser.CurrentUser();
+			var currentBusinessUnit = _currentBusinessUnit.Current();
+			return new ReportContext
+			{
+				BusinessUnitId = currentBusinessUnit.Id.GetValueOrDefault(),
+				PersonId = currentUser.Id.GetValueOrDefault(),
+				BusinessUnitName = currentBusinessUnit.Name,
+				PersonName = _personNameProvider.BuildNameFromSetting(currentUser.Name)
+			};
+		}
+
+		protected class ReportContext
+		{
+			public Guid BusinessUnitId { get; set; }
+			public Guid PersonId { get; set; }
+			public string BusinessUnitName { get; set; }
+			public string PersonName { get; set; }
 		}
 	}
 }
