@@ -178,14 +178,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
-		private static bool onReportProgress(ResourceOptimizerProgressEventArgs args, ISchedulingProgress schedulingProgress)
+		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, double periodValue)
 		{
 			if (schedulingProgress.CancellationPending)
 			{
-				args.Cancel = true;
 				return true;
 			}
-			schedulingProgress.ReportProgress(1, args);
+			var eventArgs = new ResourceOptimizerProgressEventArgs(0, 0,
+				Resources.OptimizingDaysOff + Resources.Colon + "(" + totalNumberOfTeamInfos.ToString("####") + ")(" +
+				teamInfoCounter.ToString("####") + ") " + currentTeamInfo.Name.DisplayString(20) + " (" + periodValue + ")");
+			schedulingProgress.ReportProgress(1, eventArgs);
 			return false;
 		}
 
@@ -277,9 +279,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 									}
 								}
 
-								if (onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
-									 currentTeamInfoCounter.ToString("####") + ") " +
-									 teamInfo.Name.DisplayString(20) + " (" + previousPeriodValue + ")"), schedulingProgress))
+								if (onReportProgress(schedulingProgress, totalLiveTeamInfos, currentTeamInfoCounter, teamInfo, previousPeriodValue))
 								{
 									cancelAction();
 									return null;
@@ -369,11 +369,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 			}
-
-			var shouldCancel = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
-							 currentTeamInfoCounter.ToString("####") + ") " +
-							 teamInfo.Name.DisplayString(20) + " (" + currentPeriodValue + ")"), schedulingProgress);
-			if (shouldCancel)
+			if (onReportProgress(schedulingProgress, totalLiveTeamInfos, currentTeamInfoCounter, teamInfo, currentPeriodValue))
 			{
 				cancelAction();
 			}
