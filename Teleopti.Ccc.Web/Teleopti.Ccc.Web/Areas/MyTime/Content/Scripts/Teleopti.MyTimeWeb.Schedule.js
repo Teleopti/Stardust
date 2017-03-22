@@ -209,14 +209,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		};
 
-		self.setCurrentDate = function (date) {
+		self.setCurrentDate = function (selectedDate) {
 			if (self.selectedDateSubscription)
 				self.selectedDateSubscription.dispose();
-			self.selectedDate(date);
-			self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
-				var probabilityPart = getProbabilityPart();
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD"))
-					+ probabilityPart);
+			self.selectedDate(selectedDate);
+			self.selectedDateSubscription = self.selectedDate.subscribe(function (date) {
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(date) + getUrlPartForProbability());
 			});
 		};
 
@@ -243,39 +241,36 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.today = function () {
-			var probabilityPart = getProbabilityPart();
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + probabilityPart);
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForProbability());
 		};
 
 		self.week = function (date) {
-			var probabilityPart = getProbabilityPart();
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD"))
-				+ probabilityPart);
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(date) + getUrlPartForProbability());
 		};
 
 		self.month = function () {
-			var probabilityPart = getProbabilityPart();
-			var d = self.selectedDate();
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD"))
-				+ probabilityPart);
-		};
-
-		self.isWithinSelected = function (startDate, endDate) {
-			return (startDate <= self.maxDate() && endDate >= self.minDate());
+			var date = self.selectedDate();
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + getUrlPartForDate(date) + getUrlPartForProbability());
 		};
 
 		self.mobile = function () {
 			var date = self.selectedDate();
-			var probabilityUrlPart = self.probabilityType() !== constants.noneProbabilityType
-			? "/Probability/" + self.probabilityType()
-			: "";
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek"
-				+ Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD")) + probabilityUrlPart);
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + getUrlPartForDate(date) + getUrlPartForProbability());
+		};
+
+		function getUrlPartForDate(date) {
+			return Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD"));
 		}
 
-		function getProbabilityPart() {
-			return self.staffingProbabilityEnabled() ? "/Probability/" + self.probabilityType() : "";
+		function getUrlPartForProbability() {
+			return (self.staffingProbabilityEnabled() && self.probabilityType() !== constants.noneProbabilityType)
+				? "/Probability/" + self.probabilityType()
+				: "";
 		}
+
+		self.isWithinSelected = function (startDate, endDate) {
+			return (startDate <= self.maxDate() && endDate >= self.minDate());
+		};
 
 		function _fillFormData(data) {
 			var requestViewModel = self.requestViewModel().model;
