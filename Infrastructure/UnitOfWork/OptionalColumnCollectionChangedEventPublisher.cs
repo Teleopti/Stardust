@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			foreach (var optionalColumnList in affectedInterfaces.Batch(25))
 			{
 				var idsAsString = optionalColumnList.Where(p => p.Id.HasValue).Select(p => p.Id.GetValueOrDefault()).ToArray();
-				var message = new OptionalColumnCollectionChangedEvent();
+				var message = new OptionalColumnCollectionChangedEvent {LogOnBusinessUnitId = bu.Id.Value};
 				message.SetOptionalColumnIdCollection(idsAsString);
 				_eventsPublisher.Publish(message);
 			}

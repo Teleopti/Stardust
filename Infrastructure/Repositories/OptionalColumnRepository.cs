@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
 			{
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-					"select distinct Description FROM OptionalColumnValue WHERE Parent =:columnId AND ltrim(Description) <> '' ORDER BY Description")
+					"select distinct Description FROM OptionalColumnValue WHERE Parent =:columnId AND ltrim(description) <> '' ORDER BY description")
 					.SetGuid("columnId", column)
 					.SetResultTransformer(Transformers.AliasToBean<ColumnUniqueValues>())
 					.SetReadOnly(true).List<IColumnUniqueValues>();
@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 			ICollection<IOptionalColumnValue> retList = Session.CreateCriteria(typeof(OptionalColumnValue))
 				.Add(Restrictions.Eq("Parent", optionalColumn))
+				.Add(Restrictions.Not(Restrictions.Eq("Description", string.Empty)))
 				.AddOrder(Order.Asc("Description"))
 				.List<IOptionalColumnValue>();
 

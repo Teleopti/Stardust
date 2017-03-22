@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -15,46 +15,46 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private readonly IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
-		private readonly Guid _businessUnitId;
 
 		public AnalyticsOptionalColumnGroupPageHandler(
 			IOptionalColumnRepository optionalColumnRepository, 
 			IAnalyticsGroupPageRepository analyticsGroupPageRepository,
-			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository,
-			Guid businessUnitId)
+			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository
+			)
 		{
 			_optionalColumnRepository = optionalColumnRepository;
 			_analyticsGroupPageRepository = analyticsGroupPageRepository;
 			_analyticsBridgeGroupPagePersonRepository = analyticsBridgeGroupPagePersonRepository;
-			_businessUnitId = businessUnitId;
 		}
 
-		public void Handle(OptionalColumnCollectionChangedEvent @event)
+		[UnitOfWork, AnalyticsUnitOfWork]
+		[Attempts(10)]
+		public virtual void Handle(OptionalColumnCollectionChangedEvent @event)
 		{
 			foreach (var optionalColumnId in  @event.OptionalColumnIdCollection)
 			{
 				var optionalColumn = _optionalColumnRepository.Get(optionalColumnId);
 				if (optionalColumn == null || !optionalColumn.AvailableAsGroupPage)
 				{
-					DeleteGroupPage(optionalColumnId);
+					DeleteGroupPage(optionalColumnId, @event.LogOnBusinessUnitId);
 					continue;
 				}
 				var personValues = _optionalColumnRepository.OptionalColumnValues(optionalColumn);
-				var newDimGroupPages = createNewDimGroupPages(optionalColumn, personValues);
+				var newDimGroupPages = createNewDimGroupPages(optionalColumn, personValues, @event.LogOnBusinessUnitId);
 				var newBridgeGroupPagePersons = createNewBridgeGroupPagePerson(personValues, newDimGroupPages);
-				_analyticsBridgeGroupPagePersonRepository.DeleteAllBridgeGroupPagePerson(new List<Guid>() {optionalColumnId}, _businessUnitId);
-				_analyticsGroupPageRepository.DeleteGroupPages(new List<Guid>() { optionalColumnId }, _businessUnitId);
+				_analyticsBridgeGroupPagePersonRepository.DeleteAllBridgeGroupPagePerson(new List<Guid>() {optionalColumnId}, @event.LogOnBusinessUnitId);
+				_analyticsGroupPageRepository.DeleteGroupPages(new List<Guid>() { optionalColumnId }, @event.LogOnBusinessUnitId);
 				saveNewDimGroupPages(newDimGroupPages);
-				saveNewBridgeGroupPagePersons(newBridgeGroupPagePersons);
+				saveNewBridgeGroupPagePersons(newBridgeGroupPagePersons, @event.LogOnBusinessUnitId);
 			}
 			
 		}
 
-		private void saveNewBridgeGroupPagePersons(IDictionary<Guid, IList<Guid>> newBridgeGroupPagePersons)
+		private void saveNewBridgeGroupPagePersons(IDictionary<Guid, IList<Guid>> newBridgeGroupPagePersons, Guid businessUnitId)
 		{
 			foreach (var bridgeGroupPagePerson in newBridgeGroupPagePersons)
 			{
-				_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(bridgeGroupPagePerson.Value, bridgeGroupPagePerson.Key, _businessUnitId);
+				_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(bridgeGroupPagePerson.Value, bridgeGroupPagePerson.Key, businessUnitId);
 			}
 		}
 
@@ -93,7 +93,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			return bridgePersonPeriod;
 		}
 
-		private IList<AnalyticsGroupPerson> createNewDimGroupPages(IOptionalColumn optionalColumn, IEnumerable<IOptionalColumnValue> personValues)
+		private IList<AnalyticsGroupPerson> createNewDimGroupPages(
+			IOptionalColumn optionalColumn, 
+			IEnumerable<IOptionalColumnValue> personValues, 
+			Guid businessUnitId)
 		{
 			var dimGroupPages = personValues
 				.GroupBy(g => g.Description)
@@ -104,17 +107,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					GroupCode = Guid.NewGuid(),
 					GroupName = s.Key,
 					GroupIsCustom = false,
-					BusinessUnitCode = _businessUnitId
+					BusinessUnitCode = businessUnitId
 				})
 				.ToList();
 
 			return dimGroupPages;
 		}
 
-		private void DeleteGroupPage(Guid groupPageId)
+		private void DeleteGroupPage(Guid groupPageId, Guid businessUnitId)
 		{
-			_analyticsBridgeGroupPagePersonRepository.DeleteAllBridgeGroupPagePerson(new[] {groupPageId }, _businessUnitId);
-			_analyticsGroupPageRepository.DeleteGroupPages(new[] {groupPageId}, _businessUnitId);
+			_analyticsBridgeGroupPagePersonRepository.DeleteAllBridgeGroupPagePerson(new[] {groupPageId }, businessUnitId);
+			_analyticsGroupPageRepository.DeleteGroupPages(new[] {groupPageId}, businessUnitId);
 		}
 	}
 

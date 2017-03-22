@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_target = new AnalyticsOptionalColumnGroupPageHandler(
 				_optionalColumnRepository, 
 				_analyticsGroupPageRepository, 
-				_analyticsBridgeGroupPagePersonRepository, 
-				_businessUnitId);
+				_analyticsBridgeGroupPagePersonRepository
+				);
 			_entityId = Guid.NewGuid();
 			_analyticsGroupPage = new AnalyticsGroup
 			{
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				.Has(_bridgePersonGroupPage)
 				.WithPersonMapping(_bridgePersonGroupPage.PersonCode, _bridgePersonGroupPage.PersonId);
 
-			var message = new OptionalColumnCollectionChangedEvent();
+			var message = new OptionalColumnCollectionChangedEvent {LogOnBusinessUnitId = _businessUnitId};
 			message.SetOptionalColumnIdCollection(new List<Guid>() { _entityId });
 
 			_target.Handle(message);
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				.Has(_bridgePersonGroupPage)
 				.WithPersonMapping(_bridgePersonGroupPage.PersonCode, _bridgePersonGroupPage.PersonId);
 
-			var message = new OptionalColumnCollectionChangedEvent();
+			var message = new OptionalColumnCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			message.SetOptionalColumnIdCollection(new List<Guid>() { _entityId });
 
 			_target.Handle(message);
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			new FakePersonRepositoryLegacy(new IPerson[] {person1, person2, person3});
 
-			var message = new OptionalColumnCollectionChangedEvent();
+			var message = new OptionalColumnCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			message.SetOptionalColumnIdCollection(new List<Guid>() { _entityId });
 
 			_target.Handle(message);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_optionalColumnRepository.Add(optionalColumn);
 
-			var message = new OptionalColumnCollectionChangedEvent();
+			var message = new OptionalColumnCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			message.SetOptionalColumnIdCollection(new List<Guid>() { _entityId });
 
 			_target.Handle(message);

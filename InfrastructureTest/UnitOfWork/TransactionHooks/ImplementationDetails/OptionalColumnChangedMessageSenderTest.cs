@@ -17,13 +17,17 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		private ITransactionHook _target;
 		private MockRepository _mocks;
 		private IEventPopulatingPublisher _serviceBusSender;
+		private IBusinessUnit _businessUnit;
 
 		[SetUp]
 		public void Setup()
 		{
+			var currentBusinessUnit = new SpecificBusinessUnit(BusinessUnitFactory.CreateWithId("fakeBu"));
+			_businessUnit = currentBusinessUnit.Current();
 			_mocks = new MockRepository();
 			_serviceBusSender = _mocks.DynamicMock<IEventPopulatingPublisher>();
-			_target = new OptionalColumnCollectionChangedEventPublisher(_serviceBusSender, new SpecificBusinessUnit(BusinessUnitFactory.CreateWithId("fakeBu")));
+			_target = new OptionalColumnCollectionChangedEventPublisher(_serviceBusSender, currentBusinessUnit);
+
 		}
 
 		[Test]
@@ -31,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		{
 			var optionalColumn = new OptionalColumn("opt");
 			var ids = new Guid[0];
-			var message = new OptionalColumnCollectionChangedEvent();
+			var message = new OptionalColumnCollectionChangedEvent(){ LogOnBusinessUnitId = _businessUnit.Id.Value };
 			message.SetOptionalColumnIdCollection(ids);
 
 			var roots = new IRootChangeInfo[1];
@@ -52,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		{
 			var contract = new Contract("contract");
 			var ids = new Guid[0];
-			var message = new OptionalColumnCollectionChangedEvent();
+			var message = new OptionalColumnCollectionChangedEvent() { LogOnBusinessUnitId = _businessUnit.Id.Value };
 			message.SetOptionalColumnIdCollection(ids);
 
 			var roots = new IRootChangeInfo[1];

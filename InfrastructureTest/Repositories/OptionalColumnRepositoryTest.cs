@@ -1,15 +1,11 @@
 using System.Collections.Generic;
-using NHibernate.Util;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -26,9 +22,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override IOptionalColumn CreateAggregateWithCorrectBusinessUnit()
 		{
-			OptionalColumn opc = new OptionalColumn("OptionalColumn");
-			opc.TableName = "Person";
-			opc.AvailableAsGroupPage = true;
+			var opc = new OptionalColumn("OptionalColumn")
+			{
+				TableName = "Person",
+				AvailableAsGroupPage = true
+			};
 			return opc;
 		}
 
@@ -81,19 +79,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyGetOptionalColumns()
 		{
-			const string columnName = "Column A";
-			var columnA = new OptionalColumn(columnName)
-			{
-				TableName = "Person",
-				AvailableAsGroupPage = true
-			};
+			var column = CreateAggregateWithCorrectBusinessUnit();
 
-			PersistAndRemoveFromUnitOfWork(columnA);
+			PersistAndRemoveFromUnitOfWork(column);
 
 			IList<IOptionalColumn> returnList = repository.GetOptionalColumns<Person>();
 
 			Assert.AreEqual(1, returnList.Count);
-			Assert.AreEqual(columnName, returnList[0].Name);
+			Assert.AreEqual(column.Name, returnList[0].Name);
 			Assert.AreEqual(true, returnList[0].AvailableAsGroupPage);
 		}
 
@@ -120,7 +113,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(ret.Count, Is.EqualTo(2));
 			Assert.IsTrue(ret.Contains(person1.OptionalColumnValueCollection[0]));
 			Assert.IsTrue(ret.Contains(person2.OptionalColumnValueCollection[0]));
+		}
 
+		[Test]
+		public void ShouldNotReturnEmptyValuesForGivenOptionalColumn()
+		{
+			var optionalColumn1 = CreateAggregateWithCorrectBusinessUnit();
+			IPerson person1 = PersonFactory.CreatePerson("1");
+			person1.AddOptionalColumnValue(new OptionalColumnValue(string.Empty), optionalColumn1);
+
+			PersistAndRemoveFromUnitOfWork(optionalColumn1);
+			PersistAndRemoveFromUnitOfWork(person1);
+
+
+			var ret = repository.OptionalColumnValues(optionalColumn1);
+			Assert.IsEmpty(ret);
 		}
 	}
 }
