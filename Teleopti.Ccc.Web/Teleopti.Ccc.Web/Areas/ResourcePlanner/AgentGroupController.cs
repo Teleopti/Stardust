@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
-	public class AgentGroupController : ApiController
+	public class AgentGroupController : ApiController 
 	{
 		private readonly IAgentGroupModelPersister _agentGroupModelPersister;
 		private readonly IFetchAgentGroupModel _fetchAgentGroupModel;
