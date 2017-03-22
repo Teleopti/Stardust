@@ -132,6 +132,9 @@
     <Compile Include="AgentInfo\FixedStaffLoader.cs" />
     <Compile Include="AgentInfo\IAgentGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
+    <Compile Include="AgentInfo\ImportAgent\FileData.cs" />
+    <Compile Include="AgentInfo\ImportAgent\ImportAgentDefaults.cs" />
+    <Compile Include="AgentInfo\ImportAgent\ImportAgentService.cs" />
     <Compile Include="AgentInfo\ImportAgent\ImportAgentsSettingDataModel.cs" />
     <Compile Include="AgentInfo\PeopleSelection.cs" />
     <Compile Include="AgentInfo\PersonsThatChangedPersonSkillsDuringPeriodFinder.cs" />
@@ -206,6 +209,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorOld.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidator.cs" />
+    <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />

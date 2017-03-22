@@ -569,7 +569,6 @@
     <Compile Include="Areas\People\Core\IMultipartHttpContentExtractor.cs" />
     <Compile Include="Areas\People\Core\Models\AgentDataModel.cs" />
     <Compile Include="Areas\People\Core\Models\AgentFileTemplate.cs" />
-    <Compile Include="Areas\People\Core\Models\ImportAgentFormData.cs" />
     <Compile Include="Areas\People\Core\Models\InputModel.cs" />
     <Compile Include="Areas\People\Core\Models\PeopleShiftBagCommandInput.cs" />
     <Compile Include="Areas\People\Controllers\PeopleSmartWorkflowControlSetController.cs" />

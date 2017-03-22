@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		[UnitOfWork]
 		protected virtual HttpResponseMessage ProcessInternal(IEnumerable<HttpContent> contents)
 		{
-			var formData = _multipartHttpContentExtractor.ExtractFormModel<ImportAgentFormData>(contents);
+			var formData = _multipartHttpContentExtractor.ExtractFormModel<ImportAgentDefaults>(contents);
 			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents);
 			var workbook = _fileProcessor.ParseFile(fileData.SingleOrDefault());
 			var isXlsx = workbook is XSSFWorkbook;

@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		}
 	}
 
+
 	public abstract class ManageScheduleBaseEvent : EventWithLogOnContext
 	{
 		public DateOnly StartDate { get; set; }

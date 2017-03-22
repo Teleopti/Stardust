@@ -1,6 +1,6 @@
-﻿namespace Teleopti.Ccc.Web.Areas.People.Core.Models
+namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
-	public class ImportAgentFormData
+	public class ImportAgentDefaults
 	{
 		public string RoleIds { get; set; }
 		public string StartDate { get; set; }

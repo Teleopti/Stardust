@@ -1,5 +1,6 @@
 ﻿using NPOI.SS.UserModel;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
@@ -39,6 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 	public interface IImportAgentFileValidator
 	{
 		AgentDataModel MapRawData(RawAgent raw, out Feedback feedback);
-		void SetDefaultValues(ImportAgentFormData defaultValues);
+		void SetDefaultValues(ImportAgentDefaults defaultValues);
 	}
 }

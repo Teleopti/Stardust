@@ -5,6 +5,7 @@ using System.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 using Teleopti.Ccc.Domain.Helper;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			return count;
 		}
 
-		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentFormData defaultValues = null)
+		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentDefaults defaultValues = null)
 		{
 
 			_fileValidator.SetDefaultValues(defaultValues);
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 	public interface IFileProcessor
 	{
-		IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentFormData defaultValues = null);
+		IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentDefaults defaultValues = null);
 		int GetNumberOfRecordsInSheet(ISheet sheet);
 		IList<string> ValidateWorkbook(IWorkbook workbook);
 		IWorkbook ParseFile(FileData fileData);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Ajax.Utilities;
 using NPOI.HPSF;
+using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Util;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			_importAgentDataProvider = importAgentDataProvider;
 		}
 
-		public void SetDefaultValues(ImportAgentFormData defaultValues)
+		public void SetDefaultValues(ImportAgentDefaults defaultValues)
 		{
 			_defaultValues = null;
 			if (defaultValues == null) return;
