@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
@@ -19,11 +17,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			if (originalArray.HasSameDayOffs(resultingArray))
 				return null;
 
-			bool considerWeekBefore = daysOffPreferences.ConsiderWeekBefore;
+			var considerWeekBefore = daysOffPreferences.ConsiderWeekBefore;
 			// find out what have changed, Does the predictor beleve in this? depends on how many members
-			IList<DateOnly> addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix,
+			var addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix,
 				considerWeekBefore);
-			IList<DateOnly> removedDaysOff = _lockableBitArrayChangesTracker.DaysOffRemoved(resultingArray, originalArray, matrix,
+			var removedDaysOff = _lockableBitArrayChangesTracker.DaysOffRemoved(resultingArray, originalArray, matrix,
 				considerWeekBefore);
 
 			return new MovedDaysOff

@@ -196,12 +196,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 																			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress schedulingProgress)
 		{
 			var teamInfosToRemove = new HashSet<ITeamInfo>();
-			double previousPeriodValue =
-					periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+			var previousPeriodValue = periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			var totalLiveTeamInfos = remainingInfoList.Count;
 			var currentTeamInfoCounter = 0;
 
-			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
+			foreach (var teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
 				currentTeamInfoCounter++;
 
@@ -460,7 +459,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		private void addAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService,
-		                                           ISchedulingOptions schedulingOptions, IList<DateOnly> addedDaysOff, IPerson person)
+		                                           ISchedulingOptions schedulingOptions, IEnumerable<DateOnly> addedDaysOff, IPerson person)
 		{
 			foreach (DateOnly dateOnly in addedDaysOff)
 			{
@@ -469,7 +468,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		private void removeAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService,
-		                                              IList<DateOnly> removedDaysOff, IPerson person)
+		                                              IEnumerable<DateOnly> removedDaysOff, IPerson person)
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
@@ -561,7 +560,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 
-		private static void lockDaysInMatrixes(IList<DateOnly> datesToLock , ITeamInfo teamInfo)
+		private static void lockDaysInMatrixes(IEnumerable<DateOnly> datesToLock , ITeamInfo teamInfo)
 		{
 			foreach (var dateOnly in datesToLock)
 			{
