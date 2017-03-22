@@ -108,8 +108,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var time = now.UtcDateTime();
 			var from = new DateOnly(time.AddDays(-1));
 			var to = new DateOnly(time.AddDays(1));
-			var loadPeriod = new DateOnlyPeriod(@from.AddDays(-1), to.AddDays(1));
-			var persistPeriod = new DateOnlyPeriod(@from, to);
+			var loadPeriod = new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1));
+			var persistPeriod = new DateOnlyPeriod(from, to);
 
 			persons.FindPeople(personIds)
 				.Select(x => new

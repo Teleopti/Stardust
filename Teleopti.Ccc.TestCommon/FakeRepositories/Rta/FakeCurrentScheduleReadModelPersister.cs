@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
@@ -12,16 +13,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			public Guid PersonId;
 			public IEnumerable<ScheduledActivity> Schedules;
+			public DateTime UpdatedAt;
 			public bool Valid;
-
 		}
 
+		private readonly INow _now;
 		private IEnumerable<data> _data = Enumerable.Empty<data>();
 
-		public IEnumerable<ScheduledActivity> Read()
+		public FakeCurrentScheduleReadModelPersister(INow now)
+		{
+			_now = now;
+		}
+
+		public IEnumerable<CurrentSchedule> Read(DateTime? updatedAfter)
 		{
 			return _data
-				.SelectMany(x => x.Schedules ?? Enumerable.Empty<ScheduledActivity>())
+				.Where(x => !updatedAfter.HasValue || x.UpdatedAt >= updatedAfter.Value)
+				.Select(x => new CurrentSchedule
+				{
+					PersonId = x.PersonId,
+					Schedule = x.Schedules ?? Enumerable.Empty<ScheduledActivity>()
+				})
 				.ToArray();
 		}
 		
@@ -29,8 +41,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			var data = _data.SingleOrDefault(x => x.PersonId == personId);
 			if (data == null)
-				_data = _data.Append(new data {PersonId = personId});
-			_data.Single(x => x.PersonId == personId).Valid = false;
+				_data = _data.Append(new data {PersonId = personId, Valid = false}).ToArray();
+			else
+				data.Valid = false;
 		}
 
 		public IEnumerable<Guid> GetInvalid()
@@ -45,18 +58,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			_data = _data
 				.Where(x => x.PersonId != personId)
+				.Append(new data
+				{
+					PersonId = personId,
+					Schedules = schedule.ToArray(),
+					UpdatedAt = _now.UtcDateTime(),
+					Valid = true
+				})
 				.ToArray();
-			if (schedule.Any())
-			{
-				_data = _data
-					.Append(new data
-					{
-						PersonId = personId,
-						Schedules = schedule.ToArray(),
-						Valid = true
-					})
-					.ToArray();
-			}
 		}
 
 	}
