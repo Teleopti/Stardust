@@ -248,18 +248,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 									out bool checkPeriodValue,
 									movedDaysOff);
 
-								var periodValue = new Lazy<double>(
-										() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
+								var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 
-								var currentPeriodValue = previousPeriodValue;
 								if (success && checkPeriodValue)
 								{
-									currentPeriodValue = periodValue.Value;
-									success = currentPeriodValue < previousPeriodValue;
+									success = currentPeriodValue.Value < previousPeriodValue;
 								}
 								if (success)
 								{
-									previousPeriodValue = periodValue.Value;
+									previousPeriodValue = currentPeriodValue.Value;
 									allFailed = false;
 								}
 								else
@@ -288,7 +285,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 								if (onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
 									 currentTeamInfoCounter.ToString("####") + ") " +
-									 teamInfo.Name.DisplayString(20) + " (" + currentPeriodValue + ")"), schedulingProgress))
+									 teamInfo.Name.DisplayString(20) + " (" + previousPeriodValue + ")"), schedulingProgress))
 								{
 									cancelAction();
 									return null;
