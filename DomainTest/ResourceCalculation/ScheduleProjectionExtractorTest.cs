@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -11,57 +10,35 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class ScheduleProjectionExtractorTest
     {
-        ScheduleProjectionExtractor _target;
-	    private MockRepository _mocks;
-	    private IPersonSkillProvider _personSkillProvider;
+	    [Test]
+	    public void VerifyEverythingWorks()
+	    {
+		    IPerson p1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2000, 1, 1));
+		    IPerson p2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2000, 1, 1));
 
-	    [SetUp]
-        public void Setup()
-        {
-	        _mocks = new MockRepository();
-		    _personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
-            _target = new ScheduleProjectionExtractor(_personSkillProvider, 15, false);
-        }
+		    IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
+		    DateTimePeriod dtp = new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
 
-        [Test]
-        public void VerifyEverythingWorks()
-        {
-            IPerson p1 = PersonFactory.CreatePerson();
-            IPerson p2 = PersonFactory.CreatePerson();
+		    ScheduleDictionary dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dtp),
+			    new PersistableScheduleDataPermissionChecker());
+		    var period = new DateTimePeriod(2000, 6, 1, 2000, 7, 1);
+		    IPersonAssignment pAss =
+			    PersonAssignmentFactory.CreateAssignmentWithMainShift(p1, scenario, period);
 
-            IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
-            DateTimePeriod dtp =  new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
+		    IPersonAbsence pAbs =
+			    PersonAbsenceFactory.CreatePersonAbsence(p2, scenario,
+				    new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+		    ((ScheduleRange) dic[pAss.Person]).Add(pAss);
+		    ((ScheduleRange) dic[pAbs.Person]).Add(pAbs);
 
-            ScheduleDictionary dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dtp), new PersistableScheduleDataPermissionChecker());
-            var period = new DateTimePeriod(2000, 6, 1, 2000, 7, 1);
-            IPersonAssignment pAss =
-                PersonAssignmentFactory.CreateAssignmentWithMainShift(p1,scenario, period);
-  
-            
-            IPersonAbsence pAbs =
-                PersonAbsenceFactory.CreatePersonAbsence(p2, scenario,
-                                                         new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            ((ScheduleRange)dic[pAss.Person]).Add(pAss);
-            ((ScheduleRange)dic[pAbs.Person]).Add(pAbs);
+			var target = new ScheduleProjectionExtractor(new PersonSkillProvider(), 15, false);
+			var retList = target.CreateRelevantProjectionList(dic);
+		    Assert.IsTrue(retList.HasItems());
 
-	        using (_mocks.Record())
-	        {
-		        Expect.Call(_personSkillProvider.SkillsOnPersonDate(p1, new DateOnly()))
-		              .IgnoreArguments()
-		              .Return(new SkillCombination(new ISkill[0], new DateOnlyPeriod(),
-		                                           new SkillEffiencyResource[0],new ISkill[0]));
-	        }
-	        using (_mocks.Playback())
-	        {
-		        var retList = _target.CreateRelevantProjectionList(dic);
-		        Assert.IsTrue(retList.HasItems());
-
-		        retList = _target.CreateRelevantProjectionList(dic, period);
-		        Assert.IsTrue(retList.HasItems());
-	        }
-        }
+		    retList = target.CreateRelevantProjectionList(dic, period);
+		    Assert.IsTrue(retList.HasItems());
+	    }
     }
 }

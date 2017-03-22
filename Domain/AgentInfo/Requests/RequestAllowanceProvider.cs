@@ -27,19 +27,20 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public IList<IBudgetAbsenceAllowanceDetail> GetBudgetAbsenceAllowanceDetails(DateOnlyPeriod period, IBudgetGroup selectedBudgetGroup, IEnumerable<IAbsence> absencesInBudgetGroup)
 		{
 			var budgetAbsenceAllowanceDetails = new List<IBudgetAbsenceAllowanceDetail>();
-			var usedAbsences = loadUsedAbsences(selectedBudgetGroup, period);
+			var usedAbsences = loadUsedAbsences(selectedBudgetGroup, period).ToDictionary(k => new Tuple<Guid,DateTime>(k.PayloadId,k.BelongsToDate));
 			var budgetDays = loadBudgetDays(selectedBudgetGroup, period);
-			var fteCollection = budgetDays.Select(b => b.FulltimeEquivalentHours).ToList();
-			var shrinkedAllowanceCollection = budgetDays.Select(b => b.ShrinkedAllowance).ToList();
-			var fullAllowanceCollection = budgetDays.Select(b => b.FullAllowance).ToList();
+			var fteCollection = budgetDays.Select(b => b.FulltimeEquivalentHours).ToArray();
+			var shrinkedAllowanceCollection = budgetDays.Select(b => b.ShrinkedAllowance).ToArray();
+			var fullAllowanceCollection = budgetDays.Select(b => b.FullAllowance).ToArray();
 			for (var i = 0; i < period.DayCount(); i++)
 			{
 				var currentDate = period.StartDate.AddDays(i);
 				var absenceDict = new Dictionary<IAbsence, double>();
 				foreach (var absence in absencesInBudgetGroup)
 				{
-					var payloadWorkTime = usedAbsences.FirstOrDefault(ua => ua.PayloadId.Equals(absence.Id.GetValueOrDefault()) && ua.BelongsToDate.Equals(currentDate.Date));
-					if (payloadWorkTime != null)
+					PayloadWorkTime payloadWorkTime;
+					if (usedAbsences.TryGetValue(new Tuple<Guid, DateTime>(absence.Id.GetValueOrDefault(), currentDate.Date),
+						out payloadWorkTime))
 					{
 						var usedFTEs = fteCollection[i] != 0
 							? TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes * 1d / TimeDefinition.MinutesPerHour /
@@ -77,12 +78,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private List<PayloadWorkTime> loadUsedAbsences(IBudgetGroup selectedBudgetGroup, DateOnlyPeriod period)
 		{
-			var usedAbsences = new List<PayloadWorkTime>();
-			if (isBudgetGroupNullOrEmpty(selectedBudgetGroup)) return usedAbsences;
-			usedAbsences =
+			if (isBudgetGroupNullOrEmpty(selectedBudgetGroup)) return new List<PayloadWorkTime>();
+			return 
 				_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(period, selectedBudgetGroup,
 					_scenarioRepository.Current()).ToList();
-			return usedAbsences;
 		}
 
 		private List<IBudgetDay> loadBudgetDays(IBudgetGroup selectedBudgetGroup, DateOnlyPeriod period)

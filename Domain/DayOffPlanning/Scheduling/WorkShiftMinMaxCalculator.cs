@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 
         public bool IsPeriodInLegalState(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
-            return (PeriodLegalStateStatus(matrix, schedulingOptions) == 0);
+            return PeriodLegalStateStatus(matrix, schedulingOptions) == 0;
         }
 
         public int PeriodLegalStateStatus(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
@@ -135,8 +136,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
         private TimeSpan calculateSumCorrection(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, int numberOfWeeks, ISchedulingOptions schedulingOptions)
         {
             TimeSpan sumCorrection = TimeSpan.Zero;
-
-            
             if(numberOfWeeks > 1)
             {
                 for (int i = 0; i < numberOfWeeks; i++)
@@ -170,17 +169,10 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 
         public IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
-            if (_possibleMinMaxWorkShiftLengthState == null)
-            {
-                _possibleMinMaxWorkShiftLengthState = new Dictionary<DateOnly, MinMax<TimeSpan>>();
-                foreach (var scheduleDayPro in matrix.FullWeeksPeriodDays)
-                {
-                    _possibleMinMaxWorkShiftLengthState.Add(scheduleDayPro.Day,
-                        _possibleMinMaxWorkShiftLengthExtractor.PossibleLengthsForDate(scheduleDayPro.Day, matrix, schedulingOptions));
-                }
-            }
-
-            return _possibleMinMaxWorkShiftLengthState;
+	        return _possibleMinMaxWorkShiftLengthState ??
+				   (_possibleMinMaxWorkShiftLengthState =
+					   matrix.FullWeeksPeriodDays.ToDictionary(k => k.Day,
+						   v => _possibleMinMaxWorkShiftLengthExtractor.PossibleLengthsForDate(v.Day, matrix, schedulingOptions)));
         }
 
         private MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
