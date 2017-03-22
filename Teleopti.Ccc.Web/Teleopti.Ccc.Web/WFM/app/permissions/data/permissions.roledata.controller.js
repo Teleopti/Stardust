@@ -55,7 +55,7 @@
 					count(node);
 
 					function count(node) {
-						if (node.childNodes().length > 0) {
+						if (node.childNodes() && node.childNodes().length > 0) {
 							node.childNodes().forEach(function (child) {
 								nodeCount++;
 								if (child.$modelValue.selected) {
@@ -76,7 +76,7 @@
 
 				uiTree.sameSelectionToChildren = function(node, result) {
 					var children = node.childNodes();
-					if (children.length > 0) {
+					if (children && children.length > 0) {
 						children.forEach(function(child) {
 							var childData = child.$modelValue;
 							childData.selected = node.$modelValue.selected;

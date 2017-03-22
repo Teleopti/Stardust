@@ -51,31 +51,27 @@
 <div class="flex-relative-element permissions-tree-container">
 	<div class="tree permissions-tree flex-absolute-child">
 		<div ui-tree data-drag-enabled="false">
-			<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root">
-				<li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
+			<ol ui-tree-nodes ng-model="organization.BusinessUnit" id="tree-root">
+				<li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ui-tree-node ng-include="'nodes_bu_renderer.html'">
+				</li>
 			</ol>
 		</div>
 	</div>
 </div>
 
-
-
-		<!-- Nested node template for data -->
+<!-- Nested node template for data -->
 <script type="text/ng-template" id="nodes_bu_renderer.html">
-  <ul class="wfm-list">
-    <li ng-click="launchDeselectConfirmModal(this)" ng-class="{dataHeader: node.ChildNodes.length > 0}">
-      <span class="list-item-container">
-        {{node.Name}}
-      </span>
-      <span ng-cloak ng-show="node.selected" class="grow-out list-check"><b class="mdi mdi-check"></b></span>
-		<span ng-cloak ng-show="node.semiSelected" class="grow-out list-check"><b class="mdi mdi-semicheck"></b>wee</span>
-    </li>
-  </ul>
-
-			<div ui-tree-nodes="" ng-model="node.ChildNodes" class="padding-reset permissions-teams">
-				<div ng-repeat="node in node.ChildNodes | nameFilter: searchData | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle | orderBy:'Name'"
-					 ui-tree-node ng-include="'nodes_bu_renderer.html'">
-
-				</div>
-			</div>
-		</script>
+	<ul class="wfm-list">
+		<li ui-tree-handle ng-click="launchDeselectConfirmModal(this)" ng-class="{dataHeader: node.childNodes().length > 0}">
+			<span class="list-item-container">
+				{{node.Name}}
+			</span>
+			<span ng-cloak ng-show="node.selected" class="grow-out list-check"><b class="mdi mdi-check"></b></span>
+			<span ng-cloak ng-show="node.semiSelected" class="grow-out list-check"><b class="mdi mdi-semicheck"></b>wee</span>
+		</li>
+	</ul>
+	<div ui-tree-nodes ng-model="node.ChildNodes" class="padding-reset permissions-teams">
+		<div ng-repeat="node in node.ChildNodes | nameFilter: searchData | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ui-tree-node ng-include="'nodes_bu_renderer.html'">
+		</div>
+	</div>
+</script>
