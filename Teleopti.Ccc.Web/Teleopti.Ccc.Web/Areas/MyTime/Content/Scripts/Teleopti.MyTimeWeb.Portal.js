@@ -1,10 +1,16 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Crossroads/crossroads.js" />
 /// <reference path="~/Content/hasher/hasher.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/knockout.bindings.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MyReport.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MyAdherence.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MyQueueMetrics.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Test.js" />
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -67,11 +73,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		;
 
 		if (location.hash.length <= 1) {
-			if (_isMobile()) {
-				location.replace('#Schedule/MobileWeek');
-			}
-			else location.replace('#' + _settings.defaultNavigation);
+			location.replace("#" + (_isMobile() ? "Schedule/MobileWeek" : _settings.defaultNavigation));
 		}
+
 		var asmWindow;
 		$('#asm-link').click(function (ev) {
 			$(".dropdown#user-settings").removeClass("open");
@@ -257,7 +261,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _parseHash(hash) {
-		var isWeekSchedule = hash.indexOf("#Schedule") >= 0 && !_isMobile();
+		var isWeekSchedule = hash.indexOf("#Schedule") >= 0;
 
 		if (_endsWith(hash, "Tab")) {
 			var suffix = (hash.indexOf("#Schedule") === 0) ? (_isMobile() ? "/MobileWeek" : "/Week") : "/Index";
