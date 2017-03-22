@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 
 			Target.Handle(new TenantMinuteTickEvent());
 
-			var activity = Persister.Read(Now.UtcDateTime()).Single().Schedule.Single();
+			var activity = Persister.Read().Single();
 			activity.PersonId.Should().Be(user);
 			activity.PayloadId.Should().Be(phone);
 			activity.BelongsToDate.Should().Be("2017-01-25".Date());
@@ -69,9 +69,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 
 			Target.Handle(new TenantMinuteTickEvent());
 
-			var result = Persister.Read(Now.UtcDateTime());
-			result.Single(x => x.PersonId == user1).Schedule.Single().PayloadId.Should().Be(phone1);
-			result.Single(x => x.PersonId == user2).Schedule.Single().PayloadId.Should().Be(phone2);
+			Persister.Read().Single(x => x.PersonId == user1).PayloadId.Should().Be(phone1);
+			Persister.Read().Single(x => x.PersonId == user2).PayloadId.Should().Be(phone2);
 		}
 
 		[Test]
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Persister.Read(Now.UtcDateTime()).Single().Schedule.Select(x => x.PayloadId)
+			Persister.Read().Select(x => x.PayloadId)
 				.Should()
 				.Have.SameValuesAs(phone, email);
 		}
@@ -118,13 +117,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Persister.Read(Now.UtcDateTime()).Single().Schedule.Select(x => x.BelongsToDate)
+			Persister.Read().Select(x => x.BelongsToDate)
 				.Should()
 				.Have.SameValuesAs("2017-01-24".Date(), "2017-01-25".Date(), "2017-01-26".Date());
 		}
 
 		[Test]
-		public void ShouldPersistEmptySchedule()
+		public void ShouldRemoveDeletedSchedule()
 		{
 			var user = Guid.NewGuid();
 			var phone = Guid.NewGuid();
@@ -140,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 			Target.Handle(new ScheduleChangedEvent { PersonId = user });
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Persister.Read(Now.UtcDateTime()).Single().Schedule.Should().Be.Empty();
+			Persister.Read().Should().Be.Empty();
 		}
 
 		[Test]
@@ -165,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 			Target.Handle(new ScheduleChangedEvent {PersonId = user});
 			Target.Handle(new TenantMinuteTickEvent());
 
-			var activity = Persister.Read(Now.UtcDateTime()).Single().Schedule.Single();
+			var activity = Persister.Read().Single();
 			activity.PayloadId.Should().Be(email);
 		}
 
@@ -190,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 				.WithAssignedActivity("2017-01-25 08:00", "2017-01-25 17:00");
 			Target.Handle(new TenantMinuteTickEvent());
 
-			var activity = Persister.Read(Now.UtcDateTime()).Single().Schedule.Single();
+			var activity = Persister.Read().Single();
 			activity.PayloadId.Should().Be(phone);
 		}
 
@@ -214,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 			Target.Handle(new TenantDayTickEvent());
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Persister.Read(Now.UtcDateTime()).Single().Schedule.Select(x => x.BelongsToDate)
+			Persister.Read().Select(x => x.BelongsToDate)
 				.Should().Contain("2017-01-27".Date());
 		}
 
@@ -235,7 +234,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 			Target.Handle(new ScheduleChangedEvent { PersonId = user });
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Persister.Read(Now.UtcDateTime()).Single().Schedule.Select(x => x.BelongsToDate)
+			Persister.Read().Select(x => x.BelongsToDate)
 				.Should().Contain("2017-01-25".Date());
 		}
 	}

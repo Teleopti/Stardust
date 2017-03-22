@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Handle(new TenantMinuteTickEvent());
 
-			WithUnitOfWork.Get(() => Reader.Read(null))
-				.Single().Schedule.Single().Name.Should().Be("phone");
+			WithUnitOfWork.Get(() => Reader.Read())
+				.Single().Name.Should().Be("phone");
 		}
 		
 	}

@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 
@@ -15,51 +14,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 	public class CurrentScheduleReadModelPersisterTest
 	{
 		public Database Database;
-		public MutableNow Now;
 		public ICurrentScheduleReadModelPersister Target;
 		public IScheduleReader Reader;
 
 		[Test]
 		public void ShouldPersistOne()
 		{
-			Now.Is("2017-03-23 08:00");
 			Target.Persist(Guid.NewGuid(), new[] {new ScheduledActivity()});
 
-			Reader.Read(Now.UtcDateTime()).Should().Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldFetchWithProperties()
-		{
-			Now.Is("2017-03-23 08:00");
-			var person = Guid.NewGuid();
-			var phone = Guid.NewGuid();
-			var schedule = new[]
-			{
-				new ScheduledActivity
-				{
-					PersonId = person,
-					PayloadId = phone,
-					BelongsToDate = "2017-03-23".Date(),
-					StartDateTime = "2017-03-23 08:00".Utc(),
-					EndDateTime = "2017-03-23 11:00".Utc(),
-					Name = "phone",
-					ShortName = "ph",
-					DisplayColor = Color.DarkGoldenrod.ToArgb()
-				}
-			};
-			Target.Persist(person, schedule);
-
-			var result = Reader.Read(Now.UtcDateTime()).Single();
-			result.PersonId.Should().Be(person);
-			result.Schedule.Single().PersonId.Should().Be(person);
-			result.Schedule.Single().PayloadId.Should().Be(phone);
-			result.Schedule.Single().BelongsToDate.Should().Be("2017-03-23".Date());
-			result.Schedule.Single().StartDateTime.Should().Be("2017-03-23 08:00".Utc());
-			result.Schedule.Single().EndDateTime.Should().Be("2017-03-23 11:00".Utc());
-			result.Schedule.Single().Name.Should().Be("phone");
-			result.Schedule.Single().ShortName.Should().Be("ph");
-			result.Schedule.Single().DisplayColor.Should().Be(Color.DarkGoldenrod.ToArgb());
+			Reader.Read().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -79,16 +42,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldReplaceOnPersist()
 		{
-			Now.Is("2017-03-23 08:00");
 			var person = Guid.NewGuid();
 			Target.Persist(person, new[] { new ScheduledActivity(), new ScheduledActivity() });
 			Target.Persist(person, new[] { new ScheduledActivity() });
 
-			Reader.Read(Now.UtcDateTime()).Should().Have.Count.EqualTo(1);
+			Reader.Read().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldPersistEmptySchedule()
+		public void ShouldDeleteOnPersistEmpty()
 		{
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
@@ -96,15 +58,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Persist(person2, new[] { new ScheduledActivity() });
 			Target.Persist(person2, Enumerable.Empty<ScheduledActivity>());
 
-			var result = Reader.Read(Now.UtcDateTime());
-			result.Single(x => x.PersonId == person1).Schedule.Should().Have.Count.EqualTo(1);
-			result.Single(x => x.PersonId == person2).Schedule.Should().Be.Empty();
+			Reader.Read().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldPersistSchedule()
 		{
-			Now.Is("2017-03-23 08:00");
 			var person = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Target.Persist(person, new[]
@@ -122,15 +81,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			var result = Reader.Read(Now.UtcDateTime()).Single().Schedule.Single();
-			result.PersonId.Should().Be(person);
-			result.BelongsToDate.Should().Be("2017-01-27".Date());
-			result.PayloadId.Should().Be(phone);
-			result.Name.Should().Be("Phone");
-			result.ShortName.Should().Be("P");
-			result.DisplayColor.Should().Be(Color.Green.ToArgb());
-			result.StartDateTime.Should().Be("2017-01-27 08:00".Utc());
-			result.EndDateTime.Should().Be("2017-01-27 17:00".Utc());
+			Reader.Read().Single().PersonId.Should().Be(person);
+			Reader.Read().Single().BelongsToDate.Should().Be("2017-01-27".Date());
+			Reader.Read().Single().PayloadId.Should().Be(phone);
+			Reader.Read().Single().Name.Should().Be("Phone");
+			Reader.Read().Single().ShortName.Should().Be("P");
+			Reader.Read().Single().DisplayColor.Should().Be(Color.Green.ToArgb());
+			Reader.Read().Single().StartDateTime.Should().Be("2017-01-27 08:00".Utc());
+			Reader.Read().Single().EndDateTime.Should().Be("2017-01-27 17:00".Utc());
 		}
 
 		[Test]
@@ -150,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Invalidate(person);
 
-			Reader.Read(Now.UtcDateTime()).Should().Be.Empty();
+			Reader.Read().Should().Be.Empty();
 		}
 
 		[Test]
