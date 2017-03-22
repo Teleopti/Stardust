@@ -201,7 +201,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			var totalLiveTeamInfos = remainingInfoList.Count;
 			var currentTeamInfoCounter = 0;
-			var cancelMe = false;
 
 			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
@@ -291,18 +290,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 									 currentTeamInfoCounter.ToString("####") + ") " +
 									 teamInfo.Name.DisplayString(20) + " (" + currentPeriodValue + ")"), schedulingProgress))
 								{
-									cancelMe = true;
 									cancelAction();
+									return null;
 								}
 							}
 						}
 					}
-					
 					if(allFailed)
 						teamInfosToRemove.Add(teamInfo);
-
-					if (cancelMe)
-						break;
 				}
 			}
 
