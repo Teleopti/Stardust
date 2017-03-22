@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewBadge, "xxViewBadge", DefinedRaptorApplicationFunctionForeignIds.ViewBadge);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, "xxViewBadgeLeaderboard", DefinedRaptorApplicationFunctionForeignIds.ViewBadgeLeaderboard);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AbsenceReport, "xxAbsenceReport", DefinedRaptorApplicationFunctionForeignIds.AbsenceReport);	
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewPossibility, "xxViewPossibility", DefinedRaptorApplicationFunctionForeignIds.ViewPossibility);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewStaffingInfo, "xxViewStaffingInfo", DefinedRaptorApplicationFunctionForeignIds.ViewStaffingInfo);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration, "xxViewQRCodeForConfiguration", DefinedRaptorApplicationFunctionForeignIds.ViewQRCodeForConfiguration);	
 
 			// Web

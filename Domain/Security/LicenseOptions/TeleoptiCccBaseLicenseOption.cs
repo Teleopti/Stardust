@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.ArchiveSchedule,
 				DefinedRaptorApplicationFunctionPaths.ImportSchedule,
 				DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports,
-				DefinedRaptorApplicationFunctionPaths.ViewPossibility,
+				DefinedRaptorApplicationFunctionPaths.ViewStaffingInfo,
 				DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration,
 
 				DefinedRaptorApplicationFunctionPaths.WebPermissions,

@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var shiftTradeBulletinBoardPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
 			var shiftExchangePermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
 			var personalAccountPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
-			var viewPossibilityPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewPossibility);
+			var viewPossibilityPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewStaffingInfo);
 
 			var isCurrentWeek = week.Contains(_now.LocalDateOnly());
 

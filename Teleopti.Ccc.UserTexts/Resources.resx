@@ -15518,8 +15518,8 @@ These options are activated:
     <value>Optimizing max seats</value>
     <comment>Status text scheduler when optimizing max seats</comment>
   </data>
-  <data name="ViewPossibility" xml:space="preserve">
-    <value>View Staffing Probability</value>
+  <data name="ViewStaffingInfo" xml:space="preserve">
+    <value>View Staffing Info</value>
     <comment>use in MyTime Web, permission for view Probability of absence or overtime approved on intraday</comment>
   </data>
   <data name="ShowAbsenceProbability" xml:space="preserve">

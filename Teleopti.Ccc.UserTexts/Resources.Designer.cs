@@ -34135,15 +34135,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View Staffing Probability.
-        /// </summary>
-        public static string ViewPossibility {
-            get {
-                return ResourceManager.GetString("ViewPossibility", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to View QR Code for Configuration.
         /// </summary>
         public static string ViewQRCodeForConfiguration {
@@ -34221,6 +34212,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ViewSeatBookings {
             get {
                 return ResourceManager.GetString("ViewSeatBookings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Staffing Info.
+        /// </summary>
+        public static string ViewStaffingInfo {
+            get {
+                return ResourceManager.GetString("ViewStaffingInfo", resourceCulture);
             }
         }
         

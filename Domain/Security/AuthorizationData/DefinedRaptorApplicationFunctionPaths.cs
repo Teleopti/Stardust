@@ -117,7 +117,7 @@
 		public const string ViewBadge = "Raptor/MyTimeWeb/ViewBadge";
 		public const string ViewBadgeLeaderboard = "Raptor/MyTimeWeb/ViewBadgeLeaderboard";
 		public const string AbsenceReport = "Raptor/MyTimeWeb/AbsenceReport";
-		public const string ViewPossibility = "Raptor/MyTimeWeb/ViewPossibility";
+		public const string ViewStaffingInfo = "Raptor/MyTimeWeb/ViewStaffingInfo";
 		public const string ViewQRCodeForConfiguration = "Raptor/MyTimeWeb/ViewQRCodeForConfiguration";
 
 		// Web
