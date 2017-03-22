@@ -65,31 +65,30 @@ namespace Teleopti.Ccc.Domain.Forecasting
             foreach (var keyValuePair in workloadDayTemplate.SortedTaskPeriodList)
             {
                 var localTemplatePeriod = keyValuePair.Period.TimePeriod(timeZone);
-                var taskPeriods =
-                    TaskPeriodList.Where(t => localTemplatePeriod.Contains(t.Period.TimePeriod(timeZone))).ToList();
-                int taskPeriodCount = taskPeriods.Count;
+	            var taskPeriods = TaskPeriodList.Select(t => new {t, localTime = t.Period.TimePeriod(timeZone) }).Where(t => localTemplatePeriod.Contains(t.localTime)).ToArray();
+                int taskPeriodCount = taskPeriods.Length;
                 if (taskPeriodCount == 2 &&
-                    taskPeriods[0].Period.TimePeriod(timeZone) == taskPeriods[1].Period.TimePeriod(timeZone))
+                    taskPeriods[0].localTime == taskPeriods[1].localTime)
                 {
                     //Do nothing as we wan't to set the same values to both periods in this case (ambigious periods due to change from DST)
                 }
                 else if (taskPeriodCount > 1)
                 {
-                    innerMergeTemplateTaskPeriods(taskPeriods, lockAction, releaseAction);
+                    innerMergeTemplateTaskPeriods(taskPeriods.Select(t => t.t).ToArray(), lockAction, releaseAction);
                     taskPeriods =
-                        TaskPeriodList.Where(t => localTemplatePeriod.StartTime == t.Period.TimePeriod(timeZone).StartTime)
-                            .ToList();
-                    taskPeriodCount = taskPeriods.Count;
+                        TaskPeriodList.Select(t => new { t, localTime = t.Period.TimePeriod(timeZone) }).Where(t => localTemplatePeriod.StartTime == t.localTime.StartTime)
+                            .ToArray();
+                    taskPeriodCount = taskPeriods.Length;
                 }
                 if (taskPeriodCount == 0) continue;
 
-                foreach (ITemplateTaskPeriod newTaskPeriod in taskPeriods)
+                foreach (var newTaskPeriod in taskPeriods)
                 {
-                    newTaskPeriod.Tasks = keyValuePair.Task.Tasks;
-                    newTaskPeriod.AverageTaskTime = keyValuePair.AverageTaskTime;
-                    newTaskPeriod.AverageAfterTaskTime = keyValuePair.AverageAfterTaskTime;
-                    newTaskPeriod.AverageTaskTime = TimeSpan.FromSeconds(newTaskPeriod.AverageTaskTime.TotalSeconds * taskTimeFactor);
-                    newTaskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(newTaskPeriod.AverageAfterTaskTime.TotalSeconds * taskAfterTaskTimeFactor);
+                    newTaskPeriod.t.Tasks = keyValuePair.Task.Tasks;
+                    newTaskPeriod.t.AverageTaskTime = keyValuePair.AverageTaskTime;
+                    newTaskPeriod.t.AverageAfterTaskTime = keyValuePair.AverageAfterTaskTime;
+                    newTaskPeriod.t.AverageTaskTime = TimeSpan.FromSeconds(newTaskPeriod.t.AverageTaskTime.TotalSeconds * taskTimeFactor);
+                    newTaskPeriod.t.AverageAfterTaskTime = TimeSpan.FromSeconds(newTaskPeriod.t.AverageAfterTaskTime.TotalSeconds * taskAfterTaskTimeFactor);
                 }
             }
 

@@ -1514,7 +1514,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             if (templateTaskPeriodList.Count == 0) return;
             if (!templateTaskPeriodList.All(i => Equals(i.Parent)))
             {
-                throw new ArgumentException("All items in supplied list must have this entity as parent.", "templateTaskPeriodList");
+                throw new ArgumentException("All items in supplied list must have this entity as parent.", nameof(templateTaskPeriodList));
             }
 
             //Create a list of valid date time periods
@@ -1529,9 +1529,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 var currentTaskPeriodList = (from t in templateTaskPeriodList
                                              where period.Contains(t.Period.StartDateTime)
                                              orderby t.Period.StartDateTime ascending
-                                             select t).ToList();
+                                             select t).ToArray();
 
-                if (currentTaskPeriodList.Count == 0) continue;
+                if (currentTaskPeriodList.Length == 0) continue;
 
                 TaskOwnerPeriod taskOwnerPeriod = new TaskOwnerPeriod(
                     _currentDate,
@@ -1558,8 +1558,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     newCampaign,
 						  newOverride, 
                     new DateTimePeriod(
-	                    currentTaskPeriodList.First().Period.StartDateTime,
-		                    currentTaskPeriodList.Last().Period.EndDateTime));
+	                    currentTaskPeriodList[0].Period.StartDateTime,
+		                    currentTaskPeriodList[currentTaskPeriodList.Length-1].Period.EndDateTime));
 
                 lockAction(this);
                 newTaskPeriod.SetParent(this);
