@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 
 		public AnalyticsPermissionsUpdater(IAnalyticsPermissionRepository analyticsPermissionRepository,
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
-			IAnalyticsPermissionExecutionRepository analyticsPermissionExecutionRepository, IPermissionsConverter permissionsConverter)
+			IAnalyticsPermissionExecutionRepository analyticsPermissionExecutionRepository, 
+			IPermissionsConverter permissionsConverter)
 		{
 			_analyticsPermissionRepository = analyticsPermissionRepository;
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
@@ -36,12 +37,27 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			if (!shouldUpdate)
 				return;
 
+			runWithRetries(() =>
+			{
+				var currentPermissions = new HashSet<AnalyticsPermission>(_permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId));
+				var currentAnalyticsPermissions = new HashSet<AnalyticsPermission>(_analyticsPermissionRepository.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId));
+				var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Contains(p)).ToList();
+				var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Contains(p)).ToList();
+				_analyticsPermissionRepository.InsertPermissions(toBeAdded);
+				_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
+
+				_analyticsPermissionExecutionRepository.Set(personId, businessUnit.BusinessUnitId);
+			});
+		}
+
+		private static void runWithRetries(Action action)
+		{
 			var retries = 3;
 			while (true)
 			{
 				try
 				{
-					update(personId, businessUnit);
+					action();
 					break;
 				}
 				catch (ConstraintViolationException)
@@ -52,20 +68,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 					Thread.Sleep(new Random().Next(0, 1000));
 				}
 			}
-			
-		}
-
-		private void update(Guid personId, AnalyticBusinessUnit businessUnit)
-		{
-			var currentPermissions = new HashSet<AnalyticsPermission>(_permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId));
-			var currentAnalyticsPermissions = new HashSet<AnalyticsPermission>(_analyticsPermissionRepository.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId));
-			
-			var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Contains(p)).ToList();
-			var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Contains(p)).ToList();
-			_analyticsPermissionRepository.InsertPermissions(toBeAdded);
-			_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
-
-			_analyticsPermissionExecutionRepository.Set(personId, businessUnit.BusinessUnitId);
 		}
 	}
 }

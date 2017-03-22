@@ -9,10 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 {
@@ -22,7 +19,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		private IAuthorization _authorization;
 		private IReportsNavigationProvider _target;
 		private IReportsProvider _reportsProvider;
-		private IToggleManager _toggleManagger;
 		private IReportUrl _reportUrl;
 
 		[SetUp]
@@ -30,9 +26,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		{
 			_authorization = MockRepository.GenerateMock<IAuthorization>();
 			_reportsProvider = MockRepository.GenerateMock<IReportsProvider>();
-			_toggleManagger = MockRepository.GenerateMock<IToggleManager>();
 			_reportUrl = MockRepository.GenerateMock<IReportUrl>();
-			_target = new ReportsNavigationProvider(_authorization, _reportsProvider, _reportUrl, _toggleManagger);
+			_target = new ReportsNavigationProvider(_authorization, _reportsProvider, _reportUrl);
 		}
 
 		[Test]

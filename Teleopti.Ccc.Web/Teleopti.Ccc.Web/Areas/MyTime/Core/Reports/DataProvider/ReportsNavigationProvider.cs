@@ -4,10 +4,8 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 {
@@ -16,13 +14,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 		private readonly IAuthorization _authorization;
 		private readonly IReportsProvider _reportsProvider;
 		private readonly IReportUrl _reportUrl;
-		private readonly IToggleManager _toggleManager;
 
-		public ReportsNavigationProvider(IAuthorization authorization, IReportsProvider reportsProvider, IReportUrl reportUrl, IToggleManager toggleManager)
+		public ReportsNavigationProvider(IAuthorization authorization, IReportsProvider reportsProvider, IReportUrl reportUrl)
 		{
 			_authorization = authorization;
 			_reportsProvider = reportsProvider;
-			_toggleManager = toggleManager;
 			_reportUrl = reportUrl;
 		}
 

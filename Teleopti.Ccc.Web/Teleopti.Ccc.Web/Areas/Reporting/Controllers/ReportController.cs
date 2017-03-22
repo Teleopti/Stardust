@@ -60,10 +60,12 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			var guids = reportsItems.Select(item => item.Id).ToArray();
 			if(!id.Value.Equals(Guid.Empty) && !guids.Contains(id.Value))
 				return View("NoPermission");
-			var agentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name);
-			var buName = _currentBusinessUnit.Current().Name;
+			var currentUser = _loggedOnUser.CurrentUser();
+			var currentBusinessUnit = _currentBusinessUnit.Current();
 
-			_analyticsPermissionsUpdater.Handle(_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), _currentBusinessUnit.Current().Id.GetValueOrDefault());
+			_analyticsPermissionsUpdater.Handle(currentUser.Id.GetValueOrDefault(), currentBusinessUnit.Id.GetValueOrDefault());
+
+			var agentName = _personNameProvider.BuildNameFromSetting(currentUser.Name);
 
 			using (var commonReports = _commonReportsFactory.CreateAndLoad(((TeleoptiIdentity)Thread.CurrentPrincipal.Identity).DataSource.Analytics.ConnectionString, id.Value))
 			{
@@ -83,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 							ReportNavigationItems = reportsItems,
 							HelpUrl = helpUrl,
 							CurrentLogonAgentName = agentName,
-							CurrentBuName = buName
+							CurrentBuName = currentBusinessUnit.Name
 						});
 
 				return
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 						ReportNavigationItems = reportsItems,
 						HelpUrl = helpUrl,
 						CurrentLogonAgentName = agentName,
-						CurrentBuName = buName,
+						CurrentBuName = currentBusinessUnit.Name,
 						UseOpenXml = _toggleManager.IsEnabled(Toggles.Report_UseOpenXmlFormat_35797)
 					});
 			}
