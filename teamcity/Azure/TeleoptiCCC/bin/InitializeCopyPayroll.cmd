@@ -71,3 +71,6 @@ schtasks /create /sc minute /mo 20 /tn "%taskName%" /f /ru "%admin%" /rp "%pwd%"
 
 ::Run for the first time
 schtasks /RUN /TN "%taskName%" >> "%FILE%.log"
+
+ECHO %ERRORLEVEL%
+exit /b 0
