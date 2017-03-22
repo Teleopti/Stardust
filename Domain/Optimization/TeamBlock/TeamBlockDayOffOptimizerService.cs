@@ -236,7 +236,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							}
 							else
 							{
-								bool checkPeriodValue;
 								var resCalcState = new UndoRedoContainer();
 								if (optimizationPreferences.Extra.IsClassic())
 								{
@@ -247,7 +246,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 									resourceCalculateDelayer,
 									schedulingResultStateHolder,
 									dayOffOptimizationPreferenceProvider,
-									out checkPeriodValue,
+									out bool checkPeriodValue,
 									movedDaysOff);
 
 								var periodValue = new Lazy<double>(
@@ -308,12 +307,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 
 			return teamInfosToRemove;
-		}
-
-
-		private bool Poo(bool theBool, IOptimizationPreferences prefs)
-		{
-			return theBool && !prefs.Extra.IsClassic();
 		}
 			
 		private IEnumerable<ITeamInfo> runOneOptimizationRound(IPeriodValueCalculator periodValueCalculatorForAllSkills, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, 
