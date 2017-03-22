@@ -404,22 +404,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 										movedDaysOff movedDaysOff)
 		{
 			checkPeriodValue = false;
-			var predictorValueBefore = _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix);
 			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, matrix.Person);
 			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, matrix.Person);
 
 			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff,rollbackService, resourceCalculateDelayer,schedulingResultStateHolder))
 			{
 				return false;
-			}
-
-			if (optimizationPreferences.Extra.IsClassic() && !optimizationPreferences.Advanced.UseTweakedValues)
-			{
-				//TODO - not only if classic probably... Does "predictor" work with team/block as well? Problaby not...
-				if (_dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix) >= predictorValueBefore)
-				{
-					return false;
-				}
 			}
 
 			if (!optimizationPreferences.General.OptimizationStepDaysOff && optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
