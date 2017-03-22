@@ -15,8 +15,8 @@
 	  <many-to-one name="ReferenceObject" column="ReferenceId"
                  class="Teleopti.Ccc.Domain.Common.Person"
                  not-null="true"/>
-    <many-to-one class="OptionalColumn"
-                     name="Parent"
-                     not-null="true" foreign-key="FK_OptionalColumnValue_OptionalColumn"/>
+    <many-to-one name="Parent"
+								 class="OptionalColumn"
+                 not-null="true" foreign-key="FK_OptionalColumnValue_OptionalColumn"/>
   </class>
 </hibernate-mapping>

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					DeleteGroupPage(optionalColumnId);
 					continue;
 				}
-				var personValues = _optionalColumnRepository.OptionalColumnValues(optionalColumnId);
+				var personValues = _optionalColumnRepository.OptionalColumnValues(optionalColumn);
 				var newDimGroupPages = createNewDimGroupPages(optionalColumn, personValues);
 				var newBridgeGroupPagePersons = createNewBridgeGroupPagePerson(personValues, newDimGroupPages);
 				_analyticsBridgeGroupPagePersonRepository.DeleteAllBridgeGroupPagePerson(new List<Guid>() {optionalColumnId}, _businessUnitId);
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 
 		private IDictionary<Guid, IList<Guid>> createNewBridgeGroupPagePerson(
-			List<IOptionalColumnValue> personValues, 
+			IEnumerable<IOptionalColumnValue> personValues, 
 			IList<AnalyticsGroupPerson> newDimGroupPages)
 		{
 			var bridgePersonPeriod = new Dictionary<Guid, IList<Guid>>();

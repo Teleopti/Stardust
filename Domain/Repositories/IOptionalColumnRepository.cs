@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         IList<IOptionalColumn> GetOptionalColumns<T>();
 
 		IList<IColumnUniqueValues> UniqueValuesOnColumn(Guid column);
-		List<IOptionalColumnValue> OptionalColumnValues(Guid optionalColumnId);
+		IList<IOptionalColumnValue> OptionalColumnValues(IOptionalColumn optionalColumn);
     }
 
 	public interface IColumnUniqueValues

@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personValueList.Add(personValue);
 		}
 
-		public List<IOptionalColumnValue> OptionalColumnValues(Guid optionalColumnId)
+		public IList<IOptionalColumnValue> OptionalColumnValues(IOptionalColumn optionalColumn)
 		{
-			return _personValueList.Where(x => x.Parent.Id.Value == optionalColumnId).ToList();
+			return _personValueList.Where(x => x.Parent.Id.Value == optionalColumn.Id.Value).ToList();
 		}
 	}
 }
