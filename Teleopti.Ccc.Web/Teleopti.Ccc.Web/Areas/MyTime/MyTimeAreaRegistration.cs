@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 
 			context.MapRoute(
 				"MyTime-widget-alias",
-				"MyTime/CiscoWidget/{action}",
+				"MyTime/ASMWidget/{action}",
 				new { controller = "Widget", action = "Index" }
 				);
 
