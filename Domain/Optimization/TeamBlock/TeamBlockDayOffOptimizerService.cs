@@ -241,19 +241,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 									//TODO: hack -> always do this
 									resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 								}
+								var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 								var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
 									resourceCalculateDelayer,
 									schedulingResultStateHolder,
 									dayOffOptimizationPreferenceProvider,
-									out bool checkPeriodValue,
+									currentPeriodValue,
+									previousPeriodValue,
 									movedDaysOff);
 
-								var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
-
-								if (success && checkPeriodValue)
-								{
-									success = currentPeriodValue.Value < previousPeriodValue;
-								}
 								if (success)
 								{
 									previousPeriodValue = currentPeriodValue.Value;
@@ -394,10 +390,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 										IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder,
 										IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-										out bool checkPeriodValue,
+										Lazy<double> currentPeriodValue, double previousPeriodValue,
 										movedDaysOff movedDaysOff)
 		{
-			checkPeriodValue = false;
 			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, matrix.Person);
 			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, matrix.Person);
 
@@ -427,8 +422,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
 				lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
-				checkPeriodValue = true;
-				return true;
+				return checkPeriodValue(currentPeriodValue, previousPeriodValue);
 			}
 
 			if (!_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamInfo))
@@ -457,9 +451,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				// * lock also added DO days?
 				lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
 			}
-			
-			checkPeriodValue = true;
-			return true;
+
+			return checkPeriodValue(currentPeriodValue, previousPeriodValue);
+		}
+
+		private static bool checkPeriodValue(Lazy<double> currentValue, double prevValue)
+		{
+			return currentValue.Value < prevValue;
 		}
 
 		private void addAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService,
