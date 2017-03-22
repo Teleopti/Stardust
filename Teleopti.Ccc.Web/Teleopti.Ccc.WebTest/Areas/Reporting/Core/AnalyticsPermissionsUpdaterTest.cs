@@ -1,124 +1,162 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 {
 	[TestFixture]
-	public class AnalyticsPermissionsUpdaterTest
+	[DomainTest]
+	public class AnalyticsPermissionsUpdaterTest : ISetup
 	{
-		private IAnalyticsPermissionsUpdater target;
-		private IAnalyticsPermissionRepository _analyticsPermissionRepository;
-		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
-		private IAnalyticsPermissionExecutionRepository _analyticsPermissionExecutionRepository;
-		private IPermissionsConverter _permissionsConverter;
-		private MutableNow _now;
-		private Guid businessUnitId;
-		private Guid personId;
+		public IAnalyticsPermissionsUpdater Target;
+		public IAnalyticsPermissionRepository AnalyticsPermissionRepository;
+		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
+		public FakeAnalyticsPermissionExecutionRepository AnalyticsPermissionExecutionRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeAnalyticsTeamRepository AnalyticsTeamRepository;
+		public IPermissionsConverter PermissionsConverter;
+		public MutableNow Now;
+		private readonly Guid businessUnitId = Guid.NewGuid();
+		private readonly Guid personId = Guid.NewGuid();
+		private readonly Guid teamId = Guid.NewGuid();
+		private readonly Guid reportId = Guid.NewGuid();
+		private const int analyticsBusinessUnitId = 1;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_now = new MutableNow();
-			_analyticsPermissionRepository = new FakeAnalyticsPermissionRepository();
-			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository {UseList = true};
-			_analyticsPermissionExecutionRepository = new FakeAnalyticsPermissionExecutionRepository(_now);
-			_permissionsConverter = MockRepository.GenerateMock<IPermissionsConverter>();
-
-			businessUnitId = Guid.NewGuid();
-			personId = Guid.NewGuid();
-
-			target = new AnalyticsPermissionsUpdater(_analyticsPermissionRepository, 
-				_analyticsBusinessUnitRepository, 
-				_analyticsPermissionExecutionRepository, 
-				_permissionsConverter);
+			system.AddService<FakeAnalyticsPermissionRepository>();
+			system.AddService<FakeAnalyticsPermissionExecutionRepository>();
+			system.AddService(new FakeAnalyticsBusinessUnitRepository{UseList = true});
+			system.AddService<AnalyticsPermissionsUpdater>();
+			system.AddService<PermissionsConverter>();
+			system.AddService<FakeAnalyticsTeamRepository>();
 		}
 
 		[Test]
 		public void ShouldNotUpdatePermissionsIfRecentlyUpdated()
 		{
-			const int analyticsBusinessUnitId = 1;
-			_analyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId,BusinessUnitCode = businessUnitId});
-			_now.Is(DateTime.UtcNow);
-			_analyticsPermissionExecutionRepository.Set(personId, analyticsBusinessUnitId);
+			PersonRepository.Has(PersonFactory.CreatePerson("_").WithId(personId));
+			AnalyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId,BusinessUnitCode = businessUnitId});
+			Now.Is(DateTime.UtcNow);
+			AnalyticsPermissionExecutionRepository.Has(Now);
+			AnalyticsPermissionExecutionRepository.Set(personId, analyticsBusinessUnitId);
 
-			target.Handle(personId, businessUnitId);
+			Target.Handle(personId, businessUnitId);
 
-			_analyticsPermissionRepository.GetPermissionsForPerson(personId, analyticsBusinessUnitId).Should().Be.Empty();
+			AnalyticsPermissionRepository.GetPermissionsForPerson(personId, analyticsBusinessUnitId).Should().Be.Empty();
 		}
 
 		[Test]
 		public void ShouldUpdateWithEmptySetWhenNoPermissions()
 		{
-			const int analyticsBusinessUnitId = 1;
-			_now.Is(DateTime.UtcNow - TimeSpan.FromMinutes(16));
-			_analyticsPermissionExecutionRepository.Set(personId, analyticsBusinessUnitId);
-			_analyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId, BusinessUnitCode = businessUnitId });
-			_permissionsConverter.Stub(r => r.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId))
-				.Return(new AnalyticsPermission[] {});
+			PersonRepository.Has(PersonFactory.CreatePerson("_").WithId(personId));
+			Now.Is(DateTime.UtcNow - TimeSpan.FromMinutes(16));
+			AnalyticsPermissionExecutionRepository.Has(Now);
+			AnalyticsPermissionExecutionRepository.Set(personId, analyticsBusinessUnitId);
+			AnalyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId, BusinessUnitCode = businessUnitId });
 
-			target.Handle(personId, businessUnitId);
+			Target.Handle(personId, businessUnitId);
 
-			_analyticsPermissionRepository.GetPermissionsForPerson(personId, analyticsBusinessUnitId).Should().Be.Empty();
+			AnalyticsPermissionRepository.GetPermissionsForPerson(personId, analyticsBusinessUnitId).Should().Be.Empty();
 		}
 
 		[Test]
 		public void ShouldRemovePermissionsThatAreNotInApplicationDatabase()
 		{
-			const int analyticsBusinessUnitId = 1;
-			_now.Is(DateTime.UtcNow - TimeSpan.FromMinutes(16));
-			_analyticsPermissionExecutionRepository.Set(personId, analyticsBusinessUnitId);
-			_analyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId, BusinessUnitCode = businessUnitId });
-			_permissionsConverter.Stub(r => r.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId))
-				.Return(new AnalyticsPermission[] { });
-			var toBeRemoved = new AnalyticsPermission {BusinessUnitId = analyticsBusinessUnitId, DatasourceId = 1, DatasourceUpdateDate = DateTime.UtcNow, MyOwn = false, PersonCode = personId, ReportId = Guid.NewGuid(), TeamId = 123};
-			_analyticsPermissionRepository.InsertPermissions(new[] { toBeRemoved });
+			PersonRepository.Has(PersonFactory.CreatePerson("_").WithId(personId));
+			Now.Is(DateTime.UtcNow - TimeSpan.FromMinutes(16));
+			AnalyticsPermissionExecutionRepository.Has(Now);
+			AnalyticsPermissionExecutionRepository.Set(personId, analyticsBusinessUnitId);
+			AnalyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId, BusinessUnitCode = businessUnitId });
 
-			target.Handle(personId, businessUnitId);
+			var toBeRemoved = new AnalyticsPermission {BusinessUnitId = analyticsBusinessUnitId, DatasourceId = 1, DatasourceUpdateDate = DateTime.UtcNow, MyOwn = false, PersonCode = personId, ReportId = reportId, TeamId = 123};
+			AnalyticsPermissionRepository.InsertPermissions(new[] { toBeRemoved });
 
-			_analyticsPermissionRepository.GetPermissionsForPerson(personId, analyticsBusinessUnitId).Should().Be.Empty();
+			Target.Handle(personId, businessUnitId);
+
+			AnalyticsPermissionRepository.GetPermissionsForPerson(personId, analyticsBusinessUnitId).Should().Be.Empty();
 		}
 
 		[Test]
 		public void ShouldAddPermissionsThatAreInApplicationDatabase()
 		{
-			const int analyticsBusinessUnitId = 1;
-			_now.Is(DateTime.UtcNow - TimeSpan.FromMinutes(16));
-			_analyticsPermissionExecutionRepository.Set(personId, analyticsBusinessUnitId);
-			_analyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId, BusinessUnitCode = businessUnitId });
-			var toBeAdded = new AnalyticsPermission { BusinessUnitId = analyticsBusinessUnitId, DatasourceId = 1, DatasourceUpdateDate = DateTime.UtcNow, MyOwn = false, PersonCode = personId, ReportId = Guid.NewGuid(), TeamId = 123 };
+			var person = PersonFactory.CreatePerson("_").WithId(personId);
+			var applicationRole = new ApplicationRole();
+			var analyticTeam = new AnalyticTeam { TeamCode = teamId, TeamId = 123 };
+			var team = new Team().WithId(teamId);
 
-			_permissionsConverter.Stub(r => r.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId))
-				.Return(new [] { toBeAdded });
+			applicationRole.AddApplicationFunction(new ApplicationFunction { ForeignId = reportId.ToString(), ForeignSource = DefinedForeignSourceNames.SourceMatrix });
+			applicationRole.AvailableData = new AvailableData
+			{
+				AvailableDataRange = AvailableDataRangeOption.None
+			};
+			applicationRole.AvailableData.AddAvailableTeam(team);
+			person.PermissionInformation.AddApplicationRole(applicationRole);
+			AnalyticsTeamRepository.Has(analyticTeam);
+
+			PersonRepository.Has(person);
+			Now.Is(DateTime.UtcNow - TimeSpan.FromMinutes(16));
+			AnalyticsPermissionExecutionRepository.Has(Now);
+			AnalyticsPermissionExecutionRepository.Set(personId, analyticsBusinessUnitId);
+			AnalyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId, BusinessUnitCode = businessUnitId });
 			
-			target.Handle(personId, businessUnitId);
+			Target.Handle(personId, businessUnitId);
 
-			_analyticsPermissionRepository.GetPermissionsForPerson(personId, analyticsBusinessUnitId).First().Should().Be.SameInstanceAs(toBeAdded);
+			AnalyticsPermissionRepository.GetPermissionsForPerson(personId, analyticsBusinessUnitId)
+				.First()
+				.Should()
+				.Be.EqualTo(new AnalyticsPermission
+				{
+					BusinessUnitId = analyticsBusinessUnitId,
+					MyOwn = false,
+					PersonCode = personId,
+					ReportId = reportId,
+					TeamId = analyticTeam.TeamId
+				});
 		}
 
 		[Test]
 		public void ShouldUpdateWithEmptySetWhenExistsInBoth()
 		{
-			const int analyticsBusinessUnitId = 1;
-			_now.Is(DateTime.UtcNow - TimeSpan.FromMinutes(16));
-			_analyticsPermissionExecutionRepository.Set(personId, analyticsBusinessUnitId);
-			_analyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId, BusinessUnitCode = businessUnitId });
-			var existsInBoth = new AnalyticsPermission { BusinessUnitId = analyticsBusinessUnitId, DatasourceId = 1, DatasourceUpdateDate = DateTime.UtcNow, MyOwn = false, PersonCode = personId, ReportId = Guid.NewGuid(), TeamId = 123 };
+			var person = PersonFactory.CreatePerson("_").WithId(personId);
+			var applicationRole = new ApplicationRole();
+			var analyticTeam = new AnalyticTeam { TeamCode = teamId, TeamId = 123 };
+			var team = new Team().WithId(teamId);
 
-			_permissionsConverter.Stub(r => r.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId))
-				.Return(new[] { existsInBoth });
-			_analyticsPermissionRepository.InsertPermissions(new[] { existsInBoth });
+			applicationRole.AddApplicationFunction(new ApplicationFunction { ForeignId = reportId.ToString(), ForeignSource = DefinedForeignSourceNames.SourceMatrix });
+			applicationRole.AvailableData = new AvailableData
+			{
+				AvailableDataRange = AvailableDataRangeOption.None
+			};
+			applicationRole.AvailableData.AddAvailableTeam(team);
+			person.PermissionInformation.AddApplicationRole(applicationRole);
+			AnalyticsTeamRepository.Has(analyticTeam);
+			PersonRepository.Has(person);
+			Now.Is(DateTime.UtcNow - TimeSpan.FromMinutes(16));
+			AnalyticsPermissionExecutionRepository.Has(Now);
+			AnalyticsPermissionExecutionRepository.Set(personId, analyticsBusinessUnitId);
+			AnalyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId, BusinessUnitCode = businessUnitId });
+			var existsInBoth = new AnalyticsPermission { BusinessUnitId = analyticsBusinessUnitId, DatasourceId = 1, DatasourceUpdateDate = DateTime.UtcNow, MyOwn = false, PersonCode = personId, ReportId = reportId, TeamId = analyticTeam.TeamId };
 
-			target.Handle(personId, businessUnitId);
+			AnalyticsPermissionRepository.InsertPermissions(new[] { existsInBoth });
 
-			_analyticsPermissionRepository.GetPermissionsForPerson(personId, analyticsBusinessUnitId).First().Should().Be.SameInstanceAs(existsInBoth);
+			Target.Handle(personId, businessUnitId);
+
+			AnalyticsPermissionRepository.GetPermissionsForPerson(personId, analyticsBusinessUnitId).First().Should().Be.EqualTo(existsInBoth);
 		}
 	}
 }

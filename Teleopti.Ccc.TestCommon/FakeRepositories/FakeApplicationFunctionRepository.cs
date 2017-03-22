@@ -4,8 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -51,7 +50,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IApplicationFunction> ExternalApplicationFunctions()
 		{
-			yield break;
+			return
+				_applicationFunctions
+					.Where(a => a.ForeignSource != DefinedForeignSourceNames.SourceRaptor)
+					.OrderBy(a => a.FunctionCode);
 		}
 
 		public IList<IApplicationFunction> GetChildFunctions(Guid id)

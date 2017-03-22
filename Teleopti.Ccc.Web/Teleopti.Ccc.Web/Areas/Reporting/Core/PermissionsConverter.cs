@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			var person = _personRepository.Get(personId);
 			var sites = _siteRepository.LoadAll();
 			var teamResolver = new TeamResolver(person, sites);
-			var result = new List<AnalyticsPermission>();
+			var result = new HashSet<AnalyticsPermission>();
 
 			foreach (var role in person.PermissionInformation.ApplicationRoleCollection)
 			{
@@ -47,12 +47,13 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 				var functions = role.Id.GetValueOrDefault() == SystemUser.SuperRoleId ? _applicationFunctionRepository.ExternalApplicationFunctions() : role.ApplicationFunctionCollection;
 				foreach (var function in functions.FilterBySpecification(_matrixFunctionSpecification))
 				{
-					result.AddRange(teams
+					teams
 						.Select(team => convertToAnalyticsPermission(new MatrixPermissionHolder(person, team.Team, team.IsMy, function), analyticTeams, analyticsBusinessUnitId, now))
-						.Where(analyticsPermission => analyticsPermission != null));
+						.Where(analyticsPermission => analyticsPermission != null)
+						.ForEach(permission => result.Add(permission));
 				}
 			}
-			return result.Distinct();
+			return result;
 		}
 
 		private static AnalyticsPermission convertToAnalyticsPermission(MatrixPermissionHolder arg, IEnumerable<AnalyticTeam> analyticTeams, int analyticsBusinessUnitId, DateTime updateDate)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -17,9 +16,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		private readonly List<permissionExecutionEntry> entries = new List<permissionExecutionEntry>();
-		private readonly INow _now;
+		private INow _now;
 
 		public FakeAnalyticsPermissionExecutionRepository(INow now)
+		{
+			_now = now;
+		}
+
+		public void Has(INow now)
 		{
 			_now = now;
 		}

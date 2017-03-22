@@ -1,71 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 {
 	[TestFixture]
-	public class PermissionsConverterTest
+	[DomainTest]
+	public class PermissionsConverterTest : ISetup
 	{
-		private IPermissionsConverter target;
-		private INow _now;
-		private IAnalyticsTeamRepository _analyticsTeamRepository;
-		private IPersonRepository _personRepository;
-		private ISiteRepository _siteRepository;
-		private IApplicationFunctionRepository _applicationFunctionRepository;
-		private Guid personId;
-		private int analyticsBusinessUnitId;
-		private ICurrentBusinessUnit _temp;
+		public IPermissionsConverter Target;
+		public MutableNow Now;
+		public FakeAnalyticsTeamRepository AnalyticsTeamRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeSiteRepository SiteRepository;
+		public FakeApplicationFunctionRepository ApplicationFunctionRepository;
+		private readonly Guid personId = Guid.NewGuid();
+		private readonly Guid reportId = Guid.NewGuid();
+		private readonly Guid teamId = Guid.NewGuid();
+		private const int analyticsBusinessUnitId = 1;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_temp = ServiceLocatorForEntity.CurrentBusinessUnit; // Store previous value
-
-			_now = MockRepository.GenerateMock<INow>();
-			_analyticsTeamRepository = MockRepository.GenerateMock<IAnalyticsTeamRepository>();
-			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			_siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			_applicationFunctionRepository = MockRepository.GenerateMock<IApplicationFunctionRepository>();
-			personId = Guid.NewGuid();
-			
-			analyticsBusinessUnitId = 1;
-			target = new PermissionsConverter(_analyticsTeamRepository, _now, _personRepository, _siteRepository, _applicationFunctionRepository);
-		}
-
-		[TearDown]
-		public void AfterTest()
-		{
-			ServiceLocatorForEntity.CurrentBusinessUnit = _temp; // Restore to previous state
+			system.AddService<PermissionsConverter>();
+			system.AddService<FakeAnalyticsTeamRepository>();
 		}
 
 		[Test]
 		public void EmptyPermissionsReturnsEmptyAnalyticsPermissions()
 		{
 			var now = DateTime.UtcNow;
-			var person = PersonFactory.CreatePerson("Test");
-			person.SetId(personId);
-			_personRepository.Stub(r => r.Get(personId)).Return(person);
+			var person = PersonFactory.CreatePerson("Test").WithId(personId);
+			PersonRepository.Has(person);
 
-			_analyticsTeamRepository.Stub(r => r.GetTeams()).Return(new AnalyticTeam[] {});
-			_now.Stub(r => r.UtcDateTime()).Return(now);
+			Now.Is(now);
 
-			var result = target.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId);
+			var result = Target.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId);
 
 			result.Should().Be.Empty();
 		}
@@ -73,20 +56,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		[Test]
 		public void PermissionsShouldBeMappedAnalyticsPermissions()
 		{
-
-			var fakeCurrentBusinessUnit = new FakeCurrentBusinessUnit();
-			var businessUnit = new BusinessUnit("Test");
-			businessUnit.SetId(Guid.NewGuid());
-			fakeCurrentBusinessUnit.FakeBusinessUnit(businessUnit);
-			ServiceLocatorForEntity.CurrentBusinessUnit = fakeCurrentBusinessUnit;
-
 			var now = DateTime.UtcNow;
-			var reportId = Guid.NewGuid();
-			var analyticTeam = new AnalyticTeam { TeamCode = Guid.NewGuid(), TeamId = 123 };
-			var team = new Team();
-			team.SetId(analyticTeam.TeamCode);
+			
+			var analyticTeam = new AnalyticTeam { TeamCode = teamId, TeamId = 123 };
+			var team = new Team().WithId(teamId);
 
-			var person = PersonFactory.CreatePerson("Test");
+			var person = PersonFactory.CreatePerson("Test").WithId(personId);
 			var applicationRole = new ApplicationRole();
 			applicationRole.AddApplicationFunction(new ApplicationFunction {ForeignId = reportId.ToString(), ForeignSource = DefinedForeignSourceNames.SourceMatrix });
 			applicationRole.AvailableData = new AvailableData
@@ -95,14 +70,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 			};
 			applicationRole.AvailableData.AddAvailableTeam(team);
 			person.PermissionInformation.AddApplicationRole(applicationRole);
-			person.SetId(personId);
-			_personRepository.Stub(r => r.Get(personId)).Return(person);
+			PersonRepository.Has(person);
 
-			_siteRepository.Stub(r => r.LoadAll()).Return(new List<ISite>());
-			_analyticsTeamRepository.Stub(r => r.GetTeams()).Return(new[] { analyticTeam  });
-			_now.Stub(r => r.UtcDateTime()).Return(now);
+			AnalyticsTeamRepository.Has(analyticTeam);
+			Now.Is(now);
 
-			var result = target.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId).ToList();
+			var result = Target.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId).ToList();
 
 			result.Should().Not.Be.Empty();
 			var analyticsPermission = result.First();
@@ -118,18 +91,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		[Test]
 		public void SuperRoleShouldHaveAccessToAllReports()
 		{
-			var reportId = Guid.NewGuid();
-			var fakeCurrentBusinessUnit = new FakeCurrentBusinessUnit();
-			var businessUnit = new BusinessUnit("Test");
-			businessUnit.SetId(Guid.NewGuid());
-			fakeCurrentBusinessUnit.FakeBusinessUnit(businessUnit);
-			ServiceLocatorForEntity.CurrentBusinessUnit = fakeCurrentBusinessUnit;
 			var now = DateTime.UtcNow;
-			var analyticTeam = new AnalyticTeam { TeamCode = Guid.NewGuid(), TeamId = 123 };
-			var team = new Team();
-			team.SetId(analyticTeam.TeamCode);
+			var analyticTeam = new AnalyticTeam { TeamCode = teamId, TeamId = 123 };
+			var team = new Team().WithId(teamId);
 
-			var person = PersonFactory.CreatePerson("Test");
+			var person = PersonFactory.CreatePerson("Test").WithId(personId);
 			var applicationRole = new ApplicationRole
 			{
 				BuiltIn = true,
@@ -137,24 +103,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 				{
 					AvailableDataRange = AvailableDataRangeOption.Everyone
 				}
-			};
-			applicationRole.SetId(SystemUser.SuperRoleId);
+			}.WithId(SystemUser.SuperRoleId);
 			applicationRole.AddApplicationFunction(new ApplicationFunction { ForeignId = "0000", ForeignSource = DefinedForeignSourceNames.SourceRaptor });
 			person.PermissionInformation.AddApplicationRole(applicationRole);
-			person.SetId(personId);
-			_personRepository.Stub(r => r.Get(personId)).Return(person);
+			PersonRepository.Has(person);
 
-			var site = new Site("Test");
-			site.AddTeam(team);
-			_siteRepository.Stub(r => r.LoadAll()).Return(new List<ISite> {site});
-			_analyticsTeamRepository.Stub(r => r.GetTeams()).Return(new[] { analyticTeam });
-			_now.Stub(r => r.UtcDateTime()).Return(now);
-			_applicationFunctionRepository.Stub(x => x.ExternalApplicationFunctions()).Return(new List<IApplicationFunction>
-			{
-				new ApplicationFunction {ForeignId = reportId.ToString(), ForeignSource = DefinedForeignSourceNames.SourceMatrix}
-			});
+			SiteRepository.Has(SiteFactory.CreateSiteWithTeam(Guid.NewGuid(), "_", team));
+			AnalyticsTeamRepository.Has(analyticTeam);
+			Now.Is(now);
+			ApplicationFunctionRepository.Add(new ApplicationFunction { ForeignId = reportId.ToString(), ForeignSource = DefinedForeignSourceNames.SourceMatrix });
 
-			var result = target.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId).ToList();
+			var result = Target.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId).ToList();
 
 			result.Should().Not.Be.Empty();
 
