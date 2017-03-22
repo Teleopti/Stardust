@@ -13,14 +13,14 @@ function ReinstallService
 			$exePath
 		)
 		
-	$etlService = Get-Service | Where-Object {$_.name -eq $nombreDeServicio}
-	if ($etlService -ne $null)
+	$Servicio = Get-Service | Where-Object {$_.name -eq $nombreDeServicio}
+	if ($Servicio -ne $null)
 	{
 		log-info "Service $nombreDeServicio already exists, uninstalling..."
 		StopWindowsService $nombreDeServicio
 		SC.EXE DELETE $nombreDeServicio
-		$etlService = Get-Service | Where-Object {$_.name -eq $nombreDeServicio}
-		if ($etlService -ne $null)
+		$Servicio = Get-Service | Where-Object {$_.name -eq $nombreDeServicio}
+		if ($Servicio -ne $null)
 		{
 			log-error "Could not delete TeleoptiEtlService"
 			# Felhantering
@@ -55,6 +55,9 @@ Try
 	
 	ReinstallService "TeleoptiEtlService" "E:\approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe"
 	ReinstallService "TeleoptiServiceBus" "E:\approot\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe"
+	
+	$ServiceBus = "TeleoptiServiceBus"
+	& sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000
 
 	#log-info "Installing Report Viewer"
 	#CALL "ReportViewer2010.exe" /norestart /log "%ROOTDIR%\ReportViewer2010-installlog.htm" /install /q
