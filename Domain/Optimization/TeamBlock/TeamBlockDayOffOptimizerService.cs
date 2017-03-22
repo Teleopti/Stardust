@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public class TeamBlockDayOffOptimizerService
 	{
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
-		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
@@ -45,10 +43,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly DayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
+		private readonly AffectedDayOffs _affectedDayOffs;
 
 		public TeamBlockDayOffOptimizerService(
 			ILockableBitArrayFactory lockableBitArrayFactory,
-			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
 			ITeamBlockScheduler teamBlockScheduler,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
@@ -67,10 +65,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
-			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder)
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder,
+			AffectedDayOffs affectedDayOffs)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
-			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
@@ -91,6 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_dayOffOptimizerPreMoveResultPredictor = dayOffOptimizerPreMoveResultPredictor;
 			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
+			_affectedDayOffs = affectedDayOffs;
 		}
 
 		public void OptimizeDaysOff(
@@ -222,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(dayOffOptimizationPreference.ConsiderWeekBefore, dayOffOptimizationPreference.ConsiderWeekAfter, matrix);
 						var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, dayOffOptimizationPreference, _schedulerStateHolder().SchedulingResultState);
 
-						var movedDaysOff = affectedDaysOff(matrix, dayOffOptimizationPreference, originalArray, resultingArray);
+						var movedDaysOff = _affectedDayOffs.Execute(matrix, dayOffOptimizationPreference, originalArray, resultingArray);
 						if (movedDaysOff != null)
 						{
 							if (!optimizationPreferences.Advanced.UseTweakedValues &&
@@ -391,7 +390,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 										ISchedulingResultStateHolder schedulingResultStateHolder,
 										IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 										Lazy<double> currentPeriodValue, double previousPeriodValue,
-										movedDaysOff movedDaysOff)
+										MovedDaysOff movedDaysOff)
 		{
 			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, matrix.Person);
 			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, matrix.Person);
@@ -492,7 +491,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter, matrix);
 			var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, daysOffPreferences, _schedulerStateHolder().SchedulingResultState);
 
-			var movedDaysOff = affectedDaysOff(matrix, daysOffPreferences, originalArray, resultingArray);
+			var movedDaysOff = _affectedDayOffs.Execute(matrix, daysOffPreferences, originalArray, resultingArray);
 			if (movedDaysOff == null)
 			{
 				checkPeriodValue = true;
@@ -561,24 +560,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return true;
 		}
 
-		private movedDaysOff affectedDaysOff(IScheduleMatrixPro matrix, IDaysOffPreferences daysOffPreferences, ILockableBitArray originalArray, ILockableBitArray resultingArray)
-		{
-			if (originalArray.HasSameDayOffs(resultingArray))
-				return null;
-
-			bool considerWeekBefore = daysOffPreferences.ConsiderWeekBefore;
-			// find out what have changed, Does the predictor beleve in this? depends on how many members
-			IList<DateOnly> addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix,
-			                                                                            considerWeekBefore);
-			IList<DateOnly> removedDaysOff = _lockableBitArrayChangesTracker.DaysOffRemoved(resultingArray, originalArray, matrix,
-			                                                                                considerWeekBefore);
-
-			return new movedDaysOff
-				{
-					AddedDaysOff = addedDaysOff,
-					RemovedDaysOff = removedDaysOff
-				};
-		}
 
 		private static void lockDaysInMatrixes(IList<DateOnly> datesToLock , ITeamInfo teamInfo)
 		{
@@ -636,17 +617,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				_teamDayOffModifier.RemoveDayOffForTeam(rollbackService, teamInfo, dateOnly);
 			}
-		}
-
-		private class movedDaysOff
-		{
-			public IList<DateOnly> AddedDaysOff { get; set; }
-			public IList<DateOnly> RemovedDaysOff { get; set; }
-
-			public IEnumerable<DateOnly> ModifiedDays()
-			{
-				return AddedDaysOff.Union(RemovedDaysOff);
-			}
-		}
+	}
 	}
 }
