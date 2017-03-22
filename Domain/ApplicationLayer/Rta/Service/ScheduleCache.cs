@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public IEnumerable<ScheduledActivity> Read(Guid personId)
 		{
-			_dictionary.Value.TryGetValue(personId, out IEnumerable<ScheduledActivity> result);
+			IEnumerable<ScheduledActivity> result;
+			_dictionary.Value.TryGetValue(personId, out result);
 			return result ?? Enumerable.Empty<ScheduledActivity>();
 		}
 
