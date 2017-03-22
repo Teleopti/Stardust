@@ -24,7 +24,8 @@
 				probabilityForOvertime: '@Resources.ProbabilityToGetOvertimeColon',
 				hideStaffingInfo: '@Resources.HideStaffingInfo',
 				showAbsenceProbability: '@Resources.ShowAbsenceProbability',
-				showOvertimeProbability: '@Resources.ShowOvertimeProbability'
+				showOvertimeProbability: '@Resources.ShowOvertimeProbability',
+				staffingInfo: '@Resources.StaffingInfo'
 			},
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues,
 			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
@@ -77,23 +78,23 @@
                             <span data-bind="text: probabilityLabel()"></span>
                             <span class="caret"></span>
                         </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(0); }">
-                                    @Resources.HideStaffingInfo
-                                </a>
-                            </li>
-                            <li data-bind="visible: absenceProbabilityEnabled()">
-                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(1); }">
-                                    @Resources.ShowAbsenceProbability
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(2); }">
-                                    @Resources.ShowOvertimeProbability
-                                </a>
-                            </li>
-                        </ul>
+	                    <ul class="dropdown-menu">
+		                    <li>
+			                    <a href="#" data-bind="click: function (data, event) { switchProbabilityType(0); }">
+				                    @Resources.HideStaffingInfo
+			                    </a>
+		                    </li>
+		                    <li data-bind="visible: absenceProbabilityEnabled()">
+			                    <a href="#" data-bind="click: function (data, event) { switchProbabilityType(1); }">
+				                    @Resources.ShowAbsenceProbability
+			                    </a>
+		                    </li>
+		                    <li>
+			                    <a href="#" data-bind="click: function (data, event) { switchProbabilityType(2); }">
+				                    @Resources.ShowOvertimeProbability
+			                    </a>
+		                    </li>
+	                    </ul>
                     </div>
                 </div>
             </li>

@@ -229,7 +229,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		];
 
 		self.probabilityType = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().probability);
-		self.probabilityLabel = function () { return validProbabilitiesTypes[self.probabilityType()] };
+		self.probabilityLabel = function () {
+			var selectedProbabilityType = validProbabilitiesTypes[self.probabilityType()];
+			if (!selectedProbabilityType) {
+				return userTexts.staffingInfo;
+			}
+			return selectedProbabilityType;
+		};
 
 		self.switchProbabilityType = function (probabilityType) {
 			self.probabilityType(probabilityType);
@@ -263,7 +269,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		function getUrlPartForProbability() {
-			return (self.staffingProbabilityEnabled() && self.probabilityType() !== constants.noneProbabilityType)
+			return (self.staffingProbabilityEnabled() && self.probabilityType() !== constants.noneProbabilityType && self.probabilityType())
 				? "/Probability/" + self.probabilityType()
 				: "";
 		}

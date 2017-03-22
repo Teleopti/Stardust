@@ -15704,4 +15704,8 @@ Do you want to participate?</value>
     <value>Hide staffing info</value>
     <comment>HideStaffingInfo radio option of probability option panel in MyTime web mobile view</comment>
   </data>
+  <data name="StaffingInfo" xml:space="preserve">
+    <value>Staffing info</value>
+    <comment>Toop tip item of probability option panel in MyTime web schedule view</comment>
+  </data>
 </root>

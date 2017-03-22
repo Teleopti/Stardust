@@ -63,7 +63,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		if (self.selectedDateSubscription)
 			self.selectedDateSubscription.dispose();
 		self.selectedDate(date);
-		var probabilityUrlPart = self.selectedProbabilityOptionValue() !== constants.noneProbabilityType
+		var probabilityUrlPart = self.selectedProbabilityOptionValue() !== constants.noneProbabilityType && self.selectedProbabilityOptionValue()
 			? "/Probability/" + self.selectedProbabilityOptionValue()
 			: "";
 		self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
