@@ -36,15 +36,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 					count++;
 				}
 			}
-			return count;			
+			return count;
 		}
 
 		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentFormData defaultValues = null)
 		{
-			if (defaultValues != null)
-			{
-				_fileValidator.SetDefaultValues(defaultValues);
-			}
+
+			_fileValidator.SetDefaultValues(defaultValues);
+
 			var extractedResult = _workbookHandler.ProcessSheet(sheet);
 			_agentPersister.Persist(extractedResult);
 			return extractedResult.Where(r => r.Feedback.ErrorMessages.Any() || r.Feedback.WarningMessages.Any()).ToList();

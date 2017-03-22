@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
 			var sheet = workbook.GetSheetAt(0);
 			sheet.CreateRow(1);
-			sheet.CreateRow(2);			
+			sheet.CreateRow(2);
 
 			var result = Target.GetNumberOfRecordsInSheet(sheet);
 			result.Should().Be.EqualTo(0);
@@ -433,7 +433,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			row.CreateCell(3).SetCellValue("aa");
 			row.CreateCell(4).SetCellValue("aa");
 			row.CreateCell(5).SetCellValue("agent");
-			row.CreateCell(6).SetCellValue(new DateTime(2017,1,1));
+			row.CreateCell(6).SetCellValue(new DateTime(2017, 1, 1));
 			row.CreateCell(7).SetCellValue("london");
 			row.CreateCell(8).SetCellValue("test");
 			row.CreateCell(9).SetCellValue("0019,0018");
@@ -446,12 +446,12 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			row.CreateCell(15).SetCellValue(4);
 
 			var result = Target.ProcessSheet(sheet);
-
+			var externalLogonProName = nameof(RawAgent.ExternalLogon);
 			result.Count.Should().Be.EqualTo(1);
 			var errForExtLogon =
-				result.First().Feedback.ErrorMessages.Where(r => r.Contains("ExternalLogon")).Single();
+				result.First().Feedback.ErrorMessages.Where(r => r.Contains(externalLogonProName)).Single();
 			errForExtLogon.Should()
-				.Be.EqualTo(string.Format(Resources.InvalidColumn, nameof(RawAgent.ExternalLogon), "0019,0018"));
+				.Be.EqualTo(string.Format(Resources.InvalidColumn, externalLogonProName, "0019,0018"));
 		}
 
 		[Test]
@@ -540,7 +540,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0),new ImportAgentFormData { ExternalLogonId = defaultExternalLogon });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentFormData { ExternalLogonId = defaultExternalLogon });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
 			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon"));

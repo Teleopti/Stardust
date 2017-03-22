@@ -30,9 +30,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 		public void SetDefaultValues(ImportAgentFormData defaultValues)
 		{
-			if(defaultValues == null) return;
-
+			_defaultValues = null;
+			if (defaultValues == null) return;
 			_defaultValues = new defaultAgentDataModel();
+
 			if (!defaultValues.RoleIds.IsNullOrWhiteSpace())
 			{
 				var roleIds = StringHelper.SplitStringList(defaultValues.RoleIds);
