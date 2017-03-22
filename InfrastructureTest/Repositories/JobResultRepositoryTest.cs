@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Text;
+using NHibernate.Proxy;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -7,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -72,6 +75,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.Count.Should().Be.EqualTo(1);
 			pagingDetail.TotalNumberOfResults.Should().Be.EqualTo(1);
 		}
+
+	    [Test]
+	    public void ShouldBeAbleToPersistArtifact()
+	    {
+			var item = CreateAggregateWithCorrectBusinessUnit();
+			var artifact = new JobResultArtifact(JobResultArtifactCategory.Input, "test.xls", Encoding.ASCII.GetBytes("test"));
+			item.AddArtifact(artifact);
+			PersistAndRemoveFromUnitOfWork(item);
+			PersistAndRemoveFromUnitOfWork(artifact);
+
+			var repository = new JobResultRepository(CurrUnitOfWork);
+		    var result = repository.LoadAll().First();
+
+			LazyLoadingManager.IsInitialized(result.Artifacts).Should().Be.False();
+		    var savedArtifact = result.Artifacts.Single();
+			LazyLoadingManager.IsInitialized(result.Artifacts).Should().Be.True();
+		    savedArtifact.Name.Should().Be.EqualTo("test.xls");
+		    savedArtifact.Content.Should().Have.SameSequenceAs(Encoding.ASCII.GetBytes("test"));
+		    savedArtifact.Category.Should().Be(JobResultArtifactCategory.Input);
+	    }
+
 
         protected override Repository<IJobResult> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {

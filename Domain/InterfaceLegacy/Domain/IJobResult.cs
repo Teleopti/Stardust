@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -56,5 +57,12 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///</summary>
         ///<returns></returns>
         bool IsWorking();
+
+	    IList<JobResultArtifact> Artifacts { get; }
+
+		void AddArtifact(JobResultArtifact artifact);
+
     }
+
+	
 }

@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Common
         private DateOnlyPeriod _period;
         private readonly IList<IJobResultDetail> _details = new List<IJobResultDetail>();
         private bool _finishedOk;
+		private IList<JobResultArtifact> _artifacts = new List<JobResultArtifact>();
 
         protected JobResult(){}
 
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get { return _jobCategory; }
         }
+
 
         public virtual DateOnlyPeriod Period
         {
@@ -74,6 +76,17 @@ namespace Teleopti.Ccc.Domain.Common
             set { _finishedOk = value; }
         }
 
+	    public virtual IList<JobResultArtifact> Artifacts
+	    {
+		    get { return _artifacts;}			
+	    }
+
+	    public virtual void AddArtifact(JobResultArtifact artifact)
+	    {
+		    artifact.SetParent(this);
+		    _artifacts.Add(artifact);
+	    }
+
         private bool ResultTimeOut()
         {
             return !_finishedOk && _timestamp < DateTime.UtcNow.AddHours(-12);
@@ -94,5 +107,6 @@ namespace Teleopti.Ccc.Domain.Common
         public const string ImportSchedule = "ImportSchedule";
         public const string WebSchedule = "WebSchedule";
         public const string WebIntradayOptimiztion = "WebIntradayOptimiztion";
+	    public const string WebImportAgent = "WebImportAgent";
     }
 }
