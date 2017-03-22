@@ -356,6 +356,13 @@
 			vm.resetSchedulePage();
 		};
 
+		vm.hideSearchIfNoSelectedTeam = function () {
+			if (angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0) {
+				return 'visible';
+			}
+			return 'hidden';
+		};
+
 		vm.boostrap = bootstrapCommon.ready();
 		vm.onSelectedTeamsInitDefer = $q.defer();
 		vm.onFavoriteSearchInitDefer = $q.defer();
