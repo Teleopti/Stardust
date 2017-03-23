@@ -4,6 +4,10 @@
 $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.ProbabilityModels");
 
+	var probabilityLevel = {
+		low: 0,
+		high: 1
+	};
 	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
 	var yesterday = "2017-03-09";
 	var baseDate = "2017-03-10";
@@ -167,7 +171,7 @@ $(document).ready(function () {
 		var scheduleDay = {};
 		var rawProbability = createRawProbabilities();
 		var options = {
-			probabilityType: constants.noneProbabilityType
+			probabilityType: constants.probabilityType.none
 		};
 
 		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
@@ -181,7 +185,7 @@ $(document).ready(function () {
 		};
 		var rawProbability = createRawProbabilities();
 		var options = {
-			probabilityType: constants.absenceProbabilityType
+			probabilityType: constants.probabilityType.absence
 		};
 
 		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
@@ -195,7 +199,7 @@ $(document).ready(function () {
 		};
 		var rawProbability = createRawProbabilities();
 		var options = {
-			probabilityType: constants.absenceProbabilityType
+			probabilityType: constants.probabilityType.absence
 		};
 
 		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
@@ -222,8 +226,8 @@ $(document).ready(function () {
 		};
 		var rawProbability = createRawProbabilities();
 		var options = {
-			probabilityType: constants.absenceProbabilityType,
-			layoutDirection: constants.verticalDirectionLayout,
+			probabilityType: constants.probabilityType.absence,
+			layoutDirection: constants.layoutDirection.vertical,
 			mergeSameIntervals: false,
 			timelines: createTimeline(1, 8),
 			userTexts: {
@@ -263,8 +267,8 @@ $(document).ready(function () {
 		};
 		var rawProbability = createRawProbabilities();
 		var options = {
-			probabilityType: constants.absenceProbabilityType,
-			layoutDirection: constants.horizontalDirectionLayout,
+			probabilityType: constants.probabilityType.absence,
+			layoutDirection: constants.layoutDirection.horizontal,
 			mergeSameIntervals: false,
 			timelines: createTimeline(1, 8),
 			userTexts: {
@@ -303,7 +307,7 @@ $(document).ready(function () {
 		rawProbabilities.forEach(function (p, index) {
 			//Test case: probability level is low from 6:00 to 7:00, and high between 7:00 to 9:00
 			//Schedule Period: 6:00 ~ 9:00, Timeline: 0:45 ~ 9:15
-			p.Possibility = index < (7 * 4) ? constants.probabilityLow : constants.probabilityHigh;
+			p.Possibility = index < (7 * 4) ? probabilityLevel.low : probabilityLevel.high;
 		});
 
 		var expectedRawProbabilities = rawProbabilities.filter(function (p) {
@@ -311,8 +315,8 @@ $(document).ready(function () {
 		});
 
 		var options = {
-			probabilityType: constants.absenceProbabilityType,
-			layoutDirection: constants.horizontalDirectionLayout,
+			probabilityType: constants.probabilityType.absence,
+			layoutDirection: constants.layoutDirection.horizontal,
 			mergeSameIntervals: true,
 			timelines: createTimeline(timelineStart, timelineEnd),
 			userTexts: {
@@ -376,7 +380,7 @@ $(document).ready(function () {
 		rawProbabilities.forEach(function (p, index) {
 			//Test case: probability level is low from 6:00 to 7:00, and high between 7:00 to 9:00
 			//Schedule Period: 6:00 ~ 9:00, Timeline: 0:45 ~ 9:15
-			p.Possibility = index < (7 * 4) ? constants.probabilityLow : constants.probabilityHigh;
+			p.Possibility = index < (7 * 4) ? probabilityLevel.low : probabilityLevel.high;
 		});
 
 		var expectedRawProbabilities = rawProbabilities.filter(function (p) {
@@ -384,8 +388,8 @@ $(document).ready(function () {
 		});
 
 		var options = {
-			probabilityType: constants.absenceProbabilityType,
-			layoutDirection: constants.horizontalDirectionLayout,
+			probabilityType: constants.probabilityType.absence,
+			layoutDirection: constants.layoutDirection.horizontal,
 			mergeSameIntervals: true,
 			hideProbabilityEarlierThanNow: false,
 			timelines: createTimeline(timelineStart, timelineEnd),
@@ -458,8 +462,8 @@ $(document).ready(function () {
 		});
 
 		var options = {
-			probabilityType: constants.absenceProbabilityType,
-			layoutDirection: constants.horizontalDirectionLayout,
+			probabilityType: constants.probabilityType.absence,
+			layoutDirection: constants.layoutDirection.horizontal,
 			mergeSameIntervals: true,
 			hideProbabilityEarlierThanNow: false,
 			timelines: createTimeline(timelineStart, timelineEnd),

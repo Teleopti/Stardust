@@ -1,8 +1,10 @@
 ﻿Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel = function (selectedOptionValue, weekViewModelParent) {
+	var probabilityType = Teleopti.MyTimeWeb.Schedule.Constants.probabilityType;
+
 	this.Template = "probability-options-template";
-	this.noneOption = ko.observable(Teleopti.MyTimeWeb.Schedule.Constants.noneProbabilityType);
-	this.absenceOption = ko.observable(Teleopti.MyTimeWeb.Schedule.Constants.absenceProbabilityType);
-	this.overtimeOption = ko.observable(Teleopti.MyTimeWeb.Schedule.Constants.overtimeProbabilityType);
+	this.noneOption = ko.observable(probabilityType.none);
+	this.absenceOption = ko.observable(probabilityType.absence);
+	this.overtimeOption = ko.observable(probabilityType.overtime);
 
 	this.checkedProbability = ko.observable(selectedOptionValue);
 

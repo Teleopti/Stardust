@@ -301,7 +301,7 @@ $(document).ready(function () {
 
 	test("should show no absence possibility if set to hide probability", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.noneProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.none, 2, 20);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		equal(vm.probabilities.length, 0);
@@ -309,7 +309,7 @@ $(document).ready(function () {
 
 	test("should show no absence possibility if the feature is disabled", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 2, 20);
 		week.staffingProbabilityEnabled = function () { return false; }
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
@@ -319,7 +319,7 @@ $(document).ready(function () {
 
 	test("should show no overtime possibility if the feature is disabled", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20);
 		week.staffingProbabilityEnabled = function () { return false; }
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
@@ -329,7 +329,7 @@ $(document).ready(function () {
 
 	test("should show absence possibility within schedule time range", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 2, 20);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
@@ -346,7 +346,7 @@ $(document).ready(function () {
 
 	test("should show overtime possibility within timeline range", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 8, 19);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 8, 19);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
@@ -362,7 +362,7 @@ $(document).ready(function () {
 	test("should hide absence possibility earlier than now", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
 
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 2, 20);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(750); // 12:30
@@ -383,7 +383,7 @@ $(document).ready(function () {
 
 	test("should hide overtime possibility earlier than now", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(750); // 12:30
@@ -394,7 +394,7 @@ $(document).ready(function () {
 
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
-			if (i <  42){
+			if (i < 42) {
 				equal(probability.tooltips().length, 0);
 				equal(probability.cssClass().indexOf(expiredProbabilityCssClass) > -1, true);
 			} else {
@@ -408,7 +408,7 @@ $(document).ready(function () {
 
 	test("should show no absence possibility for dayoff", function () {
 		var day = createRawDaySchedule(true, false, creatPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 2, 20);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		equal(vm.probabilities.length, 0);
@@ -416,7 +416,7 @@ $(document).ready(function () {
 
 	test("should show no absence possibility for fullday absence", function () {
 		var day = createRawDaySchedule(false, true, creatPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 2, 20);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		equal(vm.probabilities.length, 0);
@@ -424,7 +424,7 @@ $(document).ready(function () {
 
 	test("should show overtime possibility for dayoff", function () {
 		var day = createRawDaySchedule(true, false, creatPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
@@ -444,7 +444,7 @@ $(document).ready(function () {
 			"startTime": "10:00:00",
 			"endTime": "15:00:00"
 		};
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20, intradayOpenHour);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20, intradayOpenHour);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
@@ -463,13 +463,13 @@ $(document).ready(function () {
 			"startTime": "10:00:00",
 			"endTime": "15:00:00"
 		};
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20, intradayOpenHour);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20, intradayOpenHour);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
 
 		// In this scenario will show prabability based on length of initraday open houru
-		// So should be (15 - 10) * 4 
+		// So should be (15 - 10) * 4
 		equal(vm.probabilities.length, 20);
 		for (var i = 0; i < vm.probabilities.length; i++) {
 			var probability = vm.probabilities[i];
@@ -479,7 +479,7 @@ $(document).ready(function () {
 
 	test("should show overtime possibility for fullday absence", function () {
 		var day = createRawDaySchedule(false, true, creatPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
@@ -495,7 +495,7 @@ $(document).ready(function () {
 
 	test("should show correct overtime possibility for cross day schedule", function () {
 		var day = createRawDaySchedule(false, false, createCrossDayPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 0, 19);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 0, 19);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
@@ -511,7 +511,7 @@ $(document).ready(function () {
 
 	test("should show correct absence possibility for cross day schedule", function () {
 		var day = createRawDaySchedule(false, false, createCrossDayPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 19);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 0, 19);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 		vm.userNowInMinute(0);
@@ -528,7 +528,7 @@ $(document).ready(function () {
 
 	test("should show absence possibility for night shift schedule", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 0, 24);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(day, probabilities, week);
 

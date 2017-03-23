@@ -79,7 +79,7 @@ $(document).ready(function () {
 
 		self.showingAbsenceProbability = ko.observable(false);
 		self.showingOvertimeProbability = ko.observable(false);
-		self.selectedProbabilityOptionValue = ko.observable(probabilityType ? probabilityType : constants.noneProbabilityType);
+		self.selectedProbabilityOptionValue = ko.observable(probabilityType ? probabilityType : constants.probabilityType.none);
 		self.OnProbabilityOptionSelectCallback = function (selectedOptionValue) {
 			self.selectedProbabilityOptionValue(selectedOptionValue);
 			if (selectedOptionValue === 0) {
@@ -351,7 +351,7 @@ $(document).ready(function () {
 			FixedDate: "2014-04-14"
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], false, true, createWeekViewmodel(constants.noneProbabilityType, 2, 20));
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], false, true, createWeekViewmodel(constants.probabilityType.none, 2, 20));
 
 		equal(vm.fixedDate(), "2014-04-14");
 		equal(vm.absenceReportPermission(), false);
@@ -359,7 +359,7 @@ $(document).ready(function () {
 	});
 
 	test("should read permission", function () {
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel({}, [], false, true, createWeekViewmodel(constants.noneProbabilityType, 2, 20));
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel({}, [], false, true, createWeekViewmodel(constants.probabilityType.none, 2, 20));
 
 		equal(vm.absenceReportPermission(), false);
 		equal(vm.overtimeAvailabilityPermission(), true);
@@ -375,7 +375,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, createWeekViewmodel(constants.noneProbabilityType, 2, 20));
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, createWeekViewmodel(constants.probabilityType.none, 2, 20));
 		equal(vm.summaryName(), scheduleDay.Summary.Title);
 		equal(vm.summaryTimeSpan(), scheduleDay.Summary.TimeSpan);
 		equal(vm.summaryColor(), scheduleDay.Summary.Color);
@@ -390,7 +390,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, createWeekViewmodel(constants.noneProbabilityType, 2, 20));
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, createWeekViewmodel(constants.probabilityType.none, 2, 20));
 		equal(vm.isDayoff(), true);
 	});
 
@@ -401,7 +401,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, createWeekViewmodel(constants.noneProbabilityType, 2, 20));
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, createWeekViewmodel(constants.probabilityType.none, 2, 20));
 		equal(vm.hasShift, true);
 	});
 
@@ -412,7 +412,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, createWeekViewmodel(constants.noneProbabilityType, 2, 20));
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, createWeekViewmodel(constants.probabilityType.none, 2, 20));
 		equal(vm.weekDayHeaderTitle(), "Monday");
 	});
 
@@ -447,14 +447,14 @@ $(document).ready(function () {
 			HasOvertime: true
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, createWeekViewmodel(constants.noneProbabilityType, 2, 20));
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, [], true, true, createWeekViewmodel(constants.probabilityType.none, 2, 20));
 		equal(vm.summaryTimeSpan(), "9:00 AM -  2:00 PM");
 		equal(vm.layers.length, 4);
 	});
 
 	test("should show no absence possibility if set to hide probability", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.noneProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.none, 2, 20);
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
 		equal(vm.probabilities.length, 0);
@@ -462,7 +462,7 @@ $(document).ready(function () {
 
 	test("should show no absence possibility if the feature is disabled", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 2, 20);
 		week.staffingProbabilityEnabled = function () { return false; }
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
@@ -472,7 +472,7 @@ $(document).ready(function () {
 
 	test("should show no overtime possibility if the feature is disabled", function () {
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20);
 		week.staffingProbabilityEnabled = function () { return false; }
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
@@ -484,7 +484,7 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 2, 20);
 		var rawProbabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
 			return intervalStartMinute < 12 * 60 ? 0 : 1;
 		});
@@ -505,7 +505,7 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var day = createRawDaySchedule(false, false, creatPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 8, 19);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 8, 19);
 		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
 			return intervalStartMinute < 12 * 60 ? 0 : 1;
 		});
@@ -528,7 +528,7 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var day = createRawDaySchedule(true, false, creatPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 2, 20);
 		var probabilities = createRawProbabilities();
 
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
@@ -540,7 +540,7 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var day = createRawDaySchedule(false, true, creatPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 2, 20);
 		var probabilities = createRawProbabilities();
 
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
@@ -551,7 +551,7 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var day = createRawDaySchedule(true, false, creatPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20);
 		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
 			return intervalStartMinute < 12 * 60 ? 0 : 1;
 		});
@@ -576,7 +576,7 @@ $(document).ready(function () {
 			"startTime": "10:00:00",
 			"endTime": "15:00:00"
 		};
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20, intradayOpenHour);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20, intradayOpenHour);
 		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
 			return intervalStartMinute < 12 * 60 ? 0 : 1;
 		});
@@ -601,7 +601,7 @@ $(document).ready(function () {
 			"startTime": "10:00:00",
 			"endTime": "15:00:00"
 		};
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20, intradayOpenHour);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20, intradayOpenHour);
 		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
 			return intervalStartMinute < 12 * 60 + 30 || intervalStartMinute >= 14 * 60 ? 0 : 1;
 		});
@@ -624,7 +624,7 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var day = createRawDaySchedule(false, true, creatPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 2, 20);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 2, 20);
 		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
 			return intervalStartMinute < 12 * 60 + 30 || intervalStartMinute >= 14 * 60 ? 0 : 1;
 		});
@@ -646,7 +646,7 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var day = createRawDaySchedule(false, false, createCrossDayPeriods());
-		var week = createWeekViewmodel(constants.overtimeProbabilityType, 0, 19);
+		var week = createWeekViewmodel(constants.probabilityType.overtime, 0, 19);
 		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
 			return intervalStartMinute < 12 * 60 + 30 || intervalStartMinute >= 14 * 60 ? 0 : 1;
 		});
@@ -667,7 +667,7 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var day = createRawDaySchedule(false, false, createCrossDayPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 19);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 0, 19);
 		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
 			return intervalStartMinute < 12 * 60 + 30 || intervalStartMinute >= 14 * 60 ? 0 : 1;
 		});
@@ -694,7 +694,7 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
-		var week = createWeekViewmodel(constants.absenceProbabilityType, 0, 24);
+		var week = createWeekViewmodel(constants.probabilityType.absence, 0, 24);
 
 		var probabilities = createRawProbabilities(function generateProbability(intervalStartMinute) {
 			return intervalStartMinute < 12 * 60 + 30 || intervalStartMinute >= 14 * 60 ? 0 : 1;
@@ -725,7 +725,7 @@ $(document).ready(function () {
 
 	test("should change probability option value to 1 after selecting Show absence probability ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
-		var week = createWeekViewmodel(constants.noneProbabilityType, 0, 24);
+		var week = createWeekViewmodel(constants.probabilityType.none, 0, 24);
 
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
@@ -740,7 +740,7 @@ $(document).ready(function () {
 
 	test("should change staffing probability option value to 2 after selecting Show overtime  probability ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
-		var week = createWeekViewmodel(constants.noneProbabilityType, 0, 24);
+		var week = createWeekViewmodel(constants.probabilityType.none, 0, 24);
 
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);
@@ -755,7 +755,7 @@ $(document).ready(function () {
 
 	test("should toggle off staffing probability after selecting Hide staffing probability ", function () {
 		var day = createRawDaySchedule(false, false, createNightShiftPeriods());
-		var week = createWeekViewmodel(constants.noneProbabilityType, 0, 24);
+		var week = createWeekViewmodel(constants.probabilityType.none, 0, 24);
 
 		var probabilities = createRawProbabilities();
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(day, probabilities, true, true, week);

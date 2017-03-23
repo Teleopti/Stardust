@@ -47,7 +47,7 @@ $(document).ready(function () {
 			possibility: Math.round(Math.random())
 		};
 		var dayViewModel = createDayViewModel();
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.absenceProbabilityType,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(rawProbability, constants.probabilityType.absence,
 			boundaries, userTexts, dayViewModel);
 
 		var expectedIntervalLength = rawProbability.endTimeMoment.diff(rawProbability.startTimeMoment, "minute");

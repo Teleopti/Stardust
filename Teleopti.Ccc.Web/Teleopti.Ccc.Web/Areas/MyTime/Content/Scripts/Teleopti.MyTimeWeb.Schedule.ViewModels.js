@@ -180,7 +180,6 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 		}
 	};
 
-
 	self.showProbabilityBar = ko.computed(function () {
 		return self.formattedFixedDate() === self.formatedCurrentUserDate();
 	});
@@ -189,7 +188,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 		self.probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
 		{
 			probabilityType: parent.probabilityType(),
-			layoutDirection: constants.verticalDirectionLayout,
+			layoutDirection: constants.layoutDirection.vertical,
 			timelines: parent.timeLines(),
 			intradayOpenPeriod: parent.intradayOpenPeriod,
 			mergeIntervals: self.mergeIdenticalProbabilityIntervals,

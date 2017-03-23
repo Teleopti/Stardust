@@ -80,8 +80,8 @@
 		}
 
 		// If today is full day absence or dayoff, Then hide absence probabilities
-		if (options.probabilityType === constants.noneProbabilityType
-			|| (options.probabilityType === constants.absenceProbabilityType
+		if (options.probabilityType === constants.probabilityType.none
+			|| (options.probabilityType === constants.probabilityType.absence
 			&& (scheduleDay.IsFullDayAbsence || scheduleDay.IsDayOff))) {
 			return [];
 		}
@@ -89,7 +89,7 @@
 		var continousPeriods = [];
 		var date = moment(scheduleDay.FixedDate);
 
-		if (options.probabilityType === constants.absenceProbabilityType) {
+		if (options.probabilityType === constants.probabilityType.absence) {
 			continousPeriods = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(date, scheduleDay.Periods);
 		}
 
@@ -98,7 +98,7 @@
 
 		var probabilityModels = [], filteredRawProbabilities = [], cellDataList = [];
 
-		if (options.probabilityType === constants.absenceProbabilityType) {
+		if (options.probabilityType === constants.probabilityType.absence) {
 			filteredRawProbabilities = filterRawProbabilities(rawProbabilities, continousPeriods);
 			filteredRawProbabilities.forEach(function (filteredRawPro) {
 				var cellData = createProbabilityCellData(filteredRawPro);
@@ -107,7 +107,7 @@
 				if (trimedCellData.startTimeInMinutes < trimedCellData.endTimeInMinutes)
 					cellDataList.push(trimedCellData);
 			});
-		} else if (options.probabilityType === constants.overtimeProbabilityType) {
+		} else if (options.probabilityType === constants.probabilityType.overtime) {
 			filteredRawProbabilities = rawProbabilities;
 			filteredRawProbabilities.forEach(function (filteredRawPro) {
 				var cellData = createProbabilityCellData(filteredRawPro);

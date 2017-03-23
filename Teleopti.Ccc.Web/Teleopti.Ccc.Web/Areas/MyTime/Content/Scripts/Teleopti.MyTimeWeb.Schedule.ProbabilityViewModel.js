@@ -1,6 +1,11 @@
 ﻿Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel = function (rawProbabilityCellData, probabilityType, boundaries, userTexts, parent, layoutDirection, hideProbabilityEarlierThanNow) {
-
 	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+
+	var probabilityLevel = {
+		low: 0,
+		high: 1
+	};
+
 	var lowProbabilityClass = "probability-low";
 	var highProbabilityClass = "probability-high";
 	var expiredProbabilityClass = "probability-expired";
@@ -9,9 +14,9 @@
 
 	function generateCssClass() {
 		var cssClass = "";
-		if (rawProbabilityCellData.possibility === constants.probabilityLow)
+		if (rawProbabilityCellData.possibility === probabilityLevel.low)
 			cssClass = lowProbabilityClass;
-		else if (rawProbabilityCellData.possibility === constants.probabilityHigh)
+		else if (rawProbabilityCellData.possibility === probabilityLevel.high)
 			cssClass = highProbabilityClass;
 
 		if (parent.userNowInMinute() < rawProbabilityCellData.endTimeInMinutes) {
@@ -23,8 +28,8 @@
 
 	function generateStyleJson() {
 		var styleJson = {};
-		var startPositionProperty = layoutDirection === constants.horizontalDirectionLayout ? "left" : "top";
-		var lengthProperty = layoutDirection === constants.horizontalDirectionLayout ? "width" : "height";
+		var startPositionProperty = layoutDirection === constants.layoutDirection.horizontal ? "left" : "top";
+		var lengthProperty = layoutDirection === constants.layoutDirection.horizontal ? "width" : "height";
 
 		styleJson[startPositionProperty] = boundaries.lengthPercentagePerMinute * (rawProbabilityCellData.startTimeInMinutes - boundaries.timelineStartMinutes) * 100 + "%";
 		styleJson[lengthProperty] = boundaries.lengthPercentagePerMinute * (rawProbabilityCellData.endTimeInMinutes - rawProbabilityCellData.startTimeInMinutes) * 100 + "%";
@@ -34,9 +39,9 @@
 
 	function getTooltipsTitle() {
 		var result = "";
-		if (probabilityType === constants.absenceProbabilityType) {
+		if (probabilityType === constants.probabilityType.absence) {
 			result = userTexts.probabilityForAbsence;
-		} else if (probabilityType === constants.overtimeProbabilityType) {
+		} else if (probabilityType === constants.probabilityType.overtime) {
 			result = userTexts.probabilityForOvertime;
 		}
 		return result;
@@ -48,9 +53,9 @@
 				tooltipTitle = getTooltipsTitle(),
 				intervalTimeSpanText = generateIntervalTimeSpanText(rawProbabilityCellData.startTimeMoment, rawProbabilityCellData.endTimeMoment);
 
-			if (rawProbabilityCellData.possibility === constants.probabilityLow)
+			if (rawProbabilityCellData.possibility === probabilityLevel.low)
 				label = userTexts.low;
-			else if (rawProbabilityCellData.possibility === constants.probabilityHigh)
+			else if (rawProbabilityCellData.possibility === probabilityLevel.high)
 				label = userTexts.high;
 
 			return "<div>" +

@@ -83,7 +83,7 @@ $(document).ready(function () {
 		var scheduleDay = createScheduleDay(false, true, []);
 		var timelines = createTimelines(0, 24);
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
-			constants.absenceProbabilityType, [], undefined);
+			constants.probabilityType.absence, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
@@ -94,7 +94,7 @@ $(document).ready(function () {
 		var scheduleDay = createScheduleDay(true, false, []);
 		var timelines = createTimelines(0, 24);
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
-			constants.absenceProbabilityType, [], undefined);
+			constants.probabilityType.absence, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
@@ -105,7 +105,7 @@ $(document).ready(function () {
 		var scheduleDay = createScheduleDay(false, true, []);
 		var timelines = createTimelines(0, 24);
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
-			constants.overtimeProbabilityType, [], undefined);
+			constants.probabilityType.overtime, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
@@ -116,7 +116,7 @@ $(document).ready(function () {
 		var scheduleDay = createScheduleDay(true, false, []);
 		var timelines = createTimelines(0, 24);
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
-			constants.overtimeProbabilityType, [], undefined);
+			constants.probabilityType.overtime, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
@@ -127,7 +127,7 @@ $(document).ready(function () {
 		var scheduleDay = createScheduleDay(false, false, createPeriods());
 		var timelines = createTimelines(0, 24);
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
-			constants.absenceProbabilityType, [], undefined);
+			constants.probabilityType.absence, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 570);
@@ -151,7 +151,7 @@ $(document).ready(function () {
 			endTime: "16:00:00"
 		};
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
-			constants.overtimeProbabilityType, [], openHourPeriod);
+			constants.probabilityType.overtime, [], openHourPeriod);
 
 		equal(vm.lengthPercentagePerMinute, 1 / timelineLengthInMinutes);
 		equal(vm.probabilityStartMinutes, 420); // 07:00
@@ -164,7 +164,7 @@ $(document).ready(function () {
 		var scheduleDay = createScheduleDay(false, false, createCrossDayPeriodsEndAtToday());
 		var timelines = createTimelines(0, 24);
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
-			constants.absenceProbabilityType, [], undefined);
+			constants.probabilityType.absence, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
@@ -175,7 +175,7 @@ $(document).ready(function () {
 		var scheduleDay = createScheduleDay(false, false, createCrossDayPeriodsEndAtTomorrow());
 		var timelines = createTimelines(0, 24);
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
-			constants.absenceProbabilityType, [], undefined);
+			constants.probabilityType.absence, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 1020);
@@ -186,7 +186,7 @@ $(document).ready(function () {
 		var scheduleDay = createScheduleDay(false, false, createCrossDayPeriodsEndAtToday());
 		var timelines = createTimelines(0, 24);
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
-			constants.overtimeProbabilityType, [], undefined);
+			constants.probabilityType.overtime, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);
@@ -197,7 +197,7 @@ $(document).ready(function () {
 		var scheduleDay = createScheduleDay(false, false, createCrossDayPeriodsEndAtTomorrow());
 		var timelines = createTimelines(0, 24);
 		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
-			constants.overtimeProbabilityType, [], undefined);
+			constants.probabilityType.overtime, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
 		equal(vm.probabilityStartMinutes, 0);

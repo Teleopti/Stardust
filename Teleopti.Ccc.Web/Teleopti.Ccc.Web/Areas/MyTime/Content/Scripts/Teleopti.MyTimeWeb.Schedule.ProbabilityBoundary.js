@@ -68,7 +68,7 @@
 
 	var openPeriodStartMinutes = -1;
 	var openPeriodEndMinutes = constants.totalMinutesOfOneDay + 1;
-	if (probabilityType === constants.overtimeProbabilityType && intradayOpenPeriod != undefined) {
+	if (probabilityType === constants.probabilityType.overtime && intradayOpenPeriod != undefined) {
 		openPeriodStartMinutes = moment.duration(intradayOpenPeriod.startTime).asMinutes();
 		openPeriodEndMinutes = moment.duration(intradayOpenPeriod.endTime).asMinutes();
 	}
@@ -80,10 +80,10 @@
 		rawProbabilityEndMinutes, timelineEndMinutesForBoundary
 	];
 
-	if (probabilityType === constants.absenceProbabilityType) {
+	if (probabilityType === constants.probabilityType.absence) {
 		startTimeCandidates.push(shiftStartMinutes);
 		endTimeCandidates.push(shiftEndMinutes);
-	} else if (probabilityType === constants.overtimeProbabilityType) {
+	} else if (probabilityType === constants.probabilityType.overtime) {
 		startTimeCandidates.push(openPeriodStartMinutes);
 		endTimeCandidates.push(openPeriodEndMinutes);
 	}

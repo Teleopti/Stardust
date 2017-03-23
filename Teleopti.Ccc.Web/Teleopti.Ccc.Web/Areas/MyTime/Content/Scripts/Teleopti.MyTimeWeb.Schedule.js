@@ -26,17 +26,19 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		pixelToDisplayAll: 38,
 		pixelToDisplayTitle: 16,
 
-		probabilityLow: 0,
-		probabilityHigh: 1,
-		noneProbabilityType: 0,
-		absenceProbabilityType: 1,
-		overtimeProbabilityType: 2,
-
-		verticalDirectionLayout: 0,
-		horizontalDirectionLayout: 1,
-
 		timelineMarginInMinutes: 15, // Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.WeekScheduleDomainDataProvider.getMinMaxTime()
-		totalMinutesOfOneDay: 1440 //: 24 * 60, Total minutes of a day
+		totalMinutesOfOneDay: 1440, //: 24 * 60, Total minutes of a day
+
+		probabilityType: {
+			none: 0,
+			absence: 1,
+			overtime: 2
+		},
+
+		layoutDirection: {
+			vertical: 0,
+			horizontal: 1
+		}
 	};
 
 	var timeIndicatorDateTime;
@@ -269,7 +271,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		function getUrlPartForProbability() {
-			return (self.staffingProbabilityEnabled() && self.probabilityType() !== constants.noneProbabilityType && self.probabilityType())
+			return (self.staffingProbabilityEnabled() && self.probabilityType() !== constants.probabilityType.none && self.probabilityType())
 				? "/Probability/" + self.probabilityType()
 				: "";
 		}
@@ -452,8 +454,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled());
 
-			if (!self.absenceProbabilityEnabled() && self.probabilityType() === constants.absenceProbabilityType) {
-				self.probabilityType(constants.noneProbabilityType);
+			if (!self.absenceProbabilityEnabled() && self.probabilityType() === constants.probabilityType.absence) {
+				self.probabilityType(constants.probabilityType.none);
 			}
 
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
