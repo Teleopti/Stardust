@@ -338,14 +338,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			if (_defaultValues?.SchedulePeriodType != null)
 			{
 				agentInfo.SchedulePeriodType = _defaultValues.SchedulePeriodType.Value;
-				feedback.WarningMessages.Add(warningMessage("SchedulePeriodType"));
+				feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.SchedulePeriodType)));
 				return feedback;
 			}
 
 			var avaliableSchedulePeriodTypeValues = String.Join(", ", EnumExtensions
 															.GetValues(SchedulePeriodType.ChineseMonth)
 															.Select(t => t.ToString()));
-			feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "SchedulePeriodType", string.Format(Resources.OnlySupport, avaliableSchedulePeriodTypeValues)));
+			feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.SchedulePeriodType), string.Format(Resources.OnlySupport, avaliableSchedulePeriodTypeValues)));
 			return feedback;
 		}
 
@@ -377,11 +377,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				{
 					if (_defaultValues.ExternalLogon != null)
 						agentInfo.ExternalLogons.Add(_defaultValues.ExternalLogon);
-					feedback.WarningMessages.Add(warningMessage("ExternalLogon"));
+					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.ExternalLogon)));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "ExternalLogon", rawExternalLogons));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.ExternalLogon), rawExternalLogons));
 				return feedback;
 			}
 
@@ -401,11 +401,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if (_defaultValues?.RuleSetBag != null)
 				{
 					agentInfo.RuleSetBag = _defaultValues.RuleSetBag;
-					feedback.WarningMessages.Add(warningMessage("ShiftBag"));
+					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.ShiftBag)));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "ShiftBags", rawShiftBag));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.ShiftBag), rawShiftBag));
 				return feedback;
 				;
 			}
@@ -423,11 +423,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if (_defaultValues?.PartTimePercentage != null)
 				{
 					agentInfo.PartTimePercentage = _defaultValues.PartTimePercentage;
-					feedback.WarningMessages.Add(warningMessage("PartTimePercentage"));
+					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.PartTimePercentage)));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "PartTimePercentage", rawPartTimePercentage));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.PartTimePercentage), rawPartTimePercentage));
 				return feedback;
 				;
 			}
@@ -445,11 +445,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if (_defaultValues?.ContractSchedule != null)
 				{
 					agentInfo.ContractSchedule = _defaultValues.ContractSchedule;
-					feedback.WarningMessages.Add(warningMessage("ContractSchedule"));
+					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.ContractSchedule)));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "ContractSchedule", rawContractSchedule));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.ContractSchedule), rawContractSchedule));
 				return feedback;
 			}
 
@@ -466,11 +466,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if (_defaultValues?.Contract != null)
 				{
 					agentInfo.Contract = _defaultValues.Contract;
-					feedback.WarningMessages.Add(warningMessage("Contract"));
+					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.Contract)));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "Contract", rawContract));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Contract), rawContract));
 				return feedback;
 			}
 
@@ -502,17 +502,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if (_defaultValues != null && _defaultValues.Roles.Any())
 				{
 					agent.Roles.AddRange(_defaultValues.Roles);
-					feedback.WarningMessages.Add(warningMessage("Roles"));
+					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.Role)));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "Role", string.Join(",", invalidRoles)));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Role), string.Join(",", invalidRoles)));
 				return feedback;
 			}
 
 			if (invalidRoles.Any())
 			{
-				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn, "Role", string.Join(",", invalidRoles)));
+				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Role), string.Join(",", invalidRoles)));
 			}
 
 			return feedback;
@@ -533,17 +533,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 					team = _importAgentDataProvider.FindTeam(site, organizationParts[1]);
 				}
 			}
-
+			
 			if (team == null)
 			{
 				if (_defaultValues?.Team != null)
 				{
 					agent.Team = _defaultValues.Team;
-					feedback.WarningMessages.Add(warningMessage("Team"));
+					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.Organization)));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "Organization", rawOrganizationString));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Organization), rawOrganizationString));
 				return feedback;
 			}
 
@@ -576,17 +576,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				if (_defaultValues != null && _defaultValues.Skills.Any())
 				{
 					agent.Skills.AddRange(_defaultValues.Skills);
-					feedback.WarningMessages.Add(warningMessage("Skills"));
+					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.Skill)));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, "Skill", string.Join(",", invalidSkills)));
+				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Skill), string.Join(",", invalidSkills)));
 				return feedback;
 			}
 
 			if (invalidSkills.Any())
 			{
-				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn, "Skill", string.Join(",", invalidSkills)));
+				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Skill), string.Join(",", invalidSkills)));
 			}
 
 			return feedback;
