@@ -25,9 +25,10 @@
 								 on-pick="vm.onSelectedTeamsChanged(teams)"
 								 preselected-team-ids="vm.selectedTeamIds"></organization-picker>
 
-			<span class="people-search-container inline-block">
+			<div class="people-search-container inline-block"
+			     ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged" focus-input="vm.searchOptions.focusingSearch"></wfm-multiple-search-input>
-			</span>
+			</div>
 
 			<span class="datepicker-container" ng-click="$event.stopPropagation()">
 				<team-schedule-datepicker selected-date="vm.startOfWeek" status="vm.showDatePicker" on-date-change="vm.onStartOfWeekChanged()" step="7"></team-schedule-datepicker>

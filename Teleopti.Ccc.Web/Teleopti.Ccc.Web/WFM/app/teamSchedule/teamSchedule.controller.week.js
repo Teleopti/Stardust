@@ -96,6 +96,13 @@
 			vm.resetSchedulePage();
 		};
 
+		vm.hideSearchIfNoSelectedTeam = function () {
+			if (angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0) {
+				return 'visible';
+			}
+			return 'hidden';
+		};
+
 		vm.getSearch = function () {
 			return {
 				TeamIds: vm.selectedTeamIds,
