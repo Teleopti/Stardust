@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-
-    public class DayOffOptimizerContainer : IDayOffOptimizerContainer
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
+	public class DayOffOptimizerContainer : IDayOffOptimizerContainer
     {
         private readonly IScheduleMatrixLockableBitArrayConverterEx _converter;
         private readonly IList<IDayOffDecisionMaker> _decisionMakers;

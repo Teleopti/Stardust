@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public class DayOffOptimizationService : IDayOffOptimizationService
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
+	public class DayOffOptimizationService : IDayOffOptimizationService
     {
         private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
     	

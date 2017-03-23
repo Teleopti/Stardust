@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-    /// <summary>
-    /// DayOff Optimization Service
-    /// </summary>
-    public interface IDayOffOptimizationService
+	/// <summary>
+	/// DayOff Optimization Service
+	/// </summary>
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
+	public interface IDayOffOptimizationService
     {
         /// <summary>
         /// Occurs when [report progress].

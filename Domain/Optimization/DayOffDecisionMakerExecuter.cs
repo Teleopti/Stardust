@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -12,7 +13,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public class DayOffDecisionMakerExecuter : IDayOffDecisionMakerExecuter
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
+	public class DayOffDecisionMakerExecuter : IDayOffDecisionMakerExecuter
     {
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;

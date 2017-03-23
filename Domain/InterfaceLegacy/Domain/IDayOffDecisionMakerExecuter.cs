@@ -1,9 +1,12 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿using Teleopti.Ccc.Domain.FeatureFlags;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-    /// <summary>
-    /// Removes, get the period back to legal state and then reschedules the days that the decision maker found.
-    /// </summary>
-    public interface IDayOffDecisionMakerExecuter
+	/// <summary>
+	/// Removes, get the period back to legal state and then reschedules the days that the decision maker found.
+	/// </summary>
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
+	public interface IDayOffDecisionMakerExecuter
     {
 		/// <summary>
 		/// Executes the service.

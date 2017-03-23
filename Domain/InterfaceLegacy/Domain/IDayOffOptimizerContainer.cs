@@ -1,9 +1,12 @@
+using Teleopti.Ccc.Domain.FeatureFlags;
+
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-    /// <summary>
-    /// Performs a complete set of day off moves.
-    /// </summary>
-    public interface IDayOffOptimizerContainer
+	/// <summary>
+	/// Performs a complete set of day off moves.
+	/// </summary>
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
+	public interface IDayOffOptimizerContainer
     {
         /// <summary>
         /// Executes a day off move. Moves a set of days, mostly only one, and reschedule it.
