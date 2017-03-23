@@ -462,19 +462,19 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 				persons.Add(personRequest.Person);
 			}
-			var totalPeriodIncludingMidnight = new DateTimePeriod(totalPeriod.StartDateTime, totalPeriod.EndDateTime);
+			var totalPeriodIncludingMidnightAllTimeZones = new DateTimePeriod(totalPeriod.StartDateTime.AddDays(-1), totalPeriod.EndDateTime);
 
 			if (shouldLoadDataForResourceCalculation)
 			{
-				_feedback.SendProgress($"Started loading data for requests in period {totalPeriodIncludingMidnight}");
+				_feedback.SendProgress($"Started loading data for requests in period {totalPeriodIncludingMidnightAllTimeZones}");
 				_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
-																		 totalPeriodIncludingMidnight,
+																		 totalPeriodIncludingMidnightAllTimeZones,
 																		 persons, _schedulingResultStateHolder);
 			}
 			else
 			{
 				_loadSchedulesForRequestWithoutResourceCalculation.Execute(_scenarioRepository.Current(),
-																		   totalPeriod,
+																		   totalPeriodIncludingMidnightAllTimeZones,
 																		   persons, _schedulingResultStateHolder);
 			}
 		}
