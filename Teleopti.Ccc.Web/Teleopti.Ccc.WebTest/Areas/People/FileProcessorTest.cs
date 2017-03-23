@@ -739,7 +739,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Roles"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Role)));
 			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -760,7 +760,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Roles"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Role)));
 			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -782,7 +782,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { TeamId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Team"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Organization)));
 			result.Single().Agent.Team.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -803,7 +803,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { TeamId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Team"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Organization)));
 			result.Single().Agent.Team.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -825,7 +825,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { SkillIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Skills"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Skill)));
 			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -846,7 +846,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { SkillIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Skills"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Skill)));
 			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -866,7 +866,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { StartDate = defaultValue.ToShortDateString() });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("StartDate"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.StartDate)));
 			result.Single().Agent.StartDate.Should().Be.EqualTo(defaultValue);
 		}
 
@@ -885,7 +885,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { SchedulePeriodLength = "4" });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodLength"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.SchedulePeriodLength)));
 			result.Single().Agent.SchedulePeriodLength.Should().Be.EqualTo(defaultValue);
 		}
 
