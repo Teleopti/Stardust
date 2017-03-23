@@ -1,7 +1,17 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1><i class="mdi mdi-account-multiple"></i> Agent Group Detail</h1>
-		<p translate>Manage Your Agent Group With Schedule Periods and Dayoff Rules </p>
+		<h1><i class="mdi mdi-account-multiple"></i>Schedule Agent Group "{{vm.agentGroup.Name}}"</h1>
+		<p translate>Select planning period to schedule Agent Group</p>
+	</div>
+</div>
+<div class="con-row">
+	<div class="con-flex">
+		<div class="wfm-chip-wrap" ng-repeat="each in vm.agentGroup.Filters | orderBy: '+FilterType' ">
+			<span class="wfm-chip">
+			<span class="chip-handle">{{each.FilterType}}</span>
+			<span class="chip-text">{{each.Name}}</span>
+			</span>
+		</div>
 	</div>
 </div>
 <div class="panel material-depth-1">
@@ -22,26 +32,7 @@
 						</div>
 					</md-content>
 				</md-tab>
-				<md-tab label="Info">
-					<md-content class="md-padding">
-						<div class="con-flex">
-							<button type="button" name="button" ng-click="vm.removeAgentGroup(vm.agentGroup)" class="wfm-btn wfm-btn-default" translate>
-								Delete Agent Group
-							</button>
-						</div>
-						<div class="con-flex">
-							<h2> Agent Group: {{vm.agentGroup.Name}} </h2>
-							<div class="wfm-chip-wrap" ng-repeat="each in vm.agentGroup.Filters">
-								<span class="wfm-chip">
-									<span class="chip-handle">{{each.FilterType}}</span>
-									<span class="chip-text" style="margin-right: 20px;">{{each.Name}}</span>
-								</span>
-							</div>
-						</div>
-					</md-content>
-				</md-tab>
 			</md-tabs>
 		</md-content>
 	</div>
 </div>
-<!-- {{vm.agentGroup}} -->

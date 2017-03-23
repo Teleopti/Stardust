@@ -3,7 +3,8 @@
 
 	angular
         .module('wfm.resourceplanner')
-        .controller('dayoffRuleOverviewController', Controller);
+        .controller('dayoffRuleOverviewController', Controller)
+		.directive('dayoffRules', dayoffRulesDirective);
 
 	Controller.$inject = ['$state', '$stateParams', 'dayOffRuleService'];
 
@@ -49,5 +50,16 @@
 				periodId: undefined
 			});
 		}
+	}
+
+	function dayoffRulesDirective() {
+		var directive = {
+			restrict: 'EA',
+      scope: {}, 
+			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
+			controller: 'dayoffRuleOverviewController as vm',
+			bindToController: true
+		};
+		return directive;
 	}
 })();

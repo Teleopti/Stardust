@@ -1,6 +1,11 @@
-<div class="view-header">
+<div class="view-header" ng-hide="vm.editAgentGroup.Id">
 	<div class="view-title">
 		<h1><i class="mdi mdi-account-multiple"></i> Create Agent Group</h1>
+	</div>
+</div>
+<div class="view-header" ng-if="vm.editAgentGroup.Id">
+	<div class="view-title">
+		<h1><i class="mdi mdi-account-multiple"></i> Edit Agent Group: {{vm.editAgentGroup.Name}}</h1>
 	</div>
 </div>
 <div class="con-row">
@@ -11,7 +16,8 @@
 					<form name="form" class="wfm-form" novalidate>
 						<div class="form-input-wrap">
 							<label for="agentGroupName" translate>NameColon</label>
-							<input type="text" name="agentGroupName" id="agentGroupName" autofocus autocomplete="off" ng-model="vm.name" ng-model-options="{ debounce: 500 }" />
+							<input type="text" name="agentGroupName" id="agentGroupName" autofocus autocomplete="off" ng-model="vm.name" ng-model-options="{ debounce: 500 }"
+							/>
 							<p class="text-danger" ng-show="!vm.isValidName()" translate>
 								NameRequired
 							</p>
@@ -21,12 +27,16 @@
 				<div class="con-flex split-1-2">
 					<div class="wfm-option form-input-wrap">
 						<form name="autocomplete-form" class="autosearch-input">
-							<md-autocomplete  md-no-cache="true" md-selected-item="selectedItem" md-search-text="vm.searchString" placeholder="{{'Find'|translate}}: {{'Skill'|translate}} / {{'Contract'|translate}} / {{'Team'|translate}}"
-											md-items="item in vm.inputFilterData()" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">
+							<md-autocomplete md-no-cache="true" md-selected-item="selectedItem" md-search-text="vm.searchString" placeholder="{{'Find'|translate}}: {{'Skill'|translate}} / {{'Contract'|translate}} / {{'Team'|translate}}"
+							 md-items="item in vm.inputFilterData()" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">
 								<md-item-template>
-									<div>
-										<span md-highlight-text class="item-type filter-handle">{{item.FilterType}}</span>
-										<span md-highlight-text class="item-name filter-chip">{{item.Name}}</span>
+									<div class="wfm-filter-selected">
+										<div class="wfm-chip-wrap">
+											<span class="wfm-chip">
+												<span class="chip-handle">{{item.FilterType}}</span>
+												<span class="chip-text">{{item.Name}}</span>
+											</span>
+										</div>
 									</div>
 								</md-item-template>
 								<md-not-found>
@@ -41,23 +51,40 @@
 					<div ng-show="vm.selectedResults.length > 0">
 						<p translate>SelectedFiltersColon</p>
 						<div class="wfm-filter-selected">
-							<div class="unrelated-filters" ng-repeat="selected in vm.selectedResults">
-								<span class="filter-handle">{{selected.FilterType}}</span>
-								<span class="filter-chip">{{selected.Name}}
-								<i class="mdi mdi-close" ng-click="vm.removeNode(selected)"></i>
-							</span>
+							<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults | orderBy: ['+FilterType','+Name']">
+								<span class="wfm-chip">
+									<span class="chip-handle">{{selected.FilterType}}</span>
+								<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeNode(selected)"></i></span>
+								</span>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="con-row">
-				<div class="con-footer">
-					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelCreate()">{{'Cancel'|translate}}</button>
-					<button class="wfm-btn" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}" ng-click="vm.persist()" translate>Save</button>
+			<div class="con-footer">
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
+				<button ng-show="vm.editAgentGroup.Id" class="wfm-btn wfm-btn-invis-default" ng-click='confirmModal1=true'>{{'Delete'|translate}}</button>
+				<button class="wfm-btn" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
+				 ng-click="vm.persist()" translate>Save</button>
+				<div ng-cloak class="modal-box">
+					<div ng-cloak ng-show="confirmModal1">
+						<div class="modalbg">
+							<div class="dialog-mini material-depth-1">
+								<div class="modal-inner-content">
+									<h3>Delete</h3>
+									Are you sure you want to delete agent group {{vm.editAgentGroup.Name}} ?
+								</div>
+								<div class="modal-actions">
+									<aside>
+										<button ng-click="confirmModal1=false" class="wfm-btn wfm-btn-invis-default">Cancel</button>
+										<button ng-click="confirmModal1=false; vm.removeAgentGroup(vm.editAgentGroup.Id)" class="wfm-btn wfm-btn-invis-primary">Delete</button>
+									</aside>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- {{vm.name}} {{vm.selectedResults}} -->

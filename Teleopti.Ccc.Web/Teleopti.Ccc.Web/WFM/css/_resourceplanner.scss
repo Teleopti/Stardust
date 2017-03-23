@@ -301,3 +301,17 @@ background-color: #cacaca;
 .agent-group-chip > span {
 	margin: 10px;
 }
+
+.agent-edit-active
+{
+	border-left: 10px solid $blue-500;
+}
+
+.wfm-tip {
+		text-align: center;
+		border-radius: 6px;
+	}
+
+	.wfm-tip-header {
+		padding-top: 27px;
+	}

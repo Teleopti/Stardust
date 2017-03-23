@@ -3,7 +3,8 @@
 
     angular
         .module('wfm.resourceplanner')
-        .controller('planningPeriodOverviewController', Controller);
+        .controller('planningPeriodOverviewController', Controller)
+        .directive('planingPeriods', planingPeriodsDirective);
 
     Controller.$inject = ['$stateParams','$state','planningPeriodService'];
 
@@ -48,5 +49,17 @@
         		$state.go('resourceplanner.planningperiod', { id: planningPeriodId });
 	        }
         }
+
     }
+
+    function planingPeriodsDirective() {
+		var directive = {
+			restrict: 'EA',
+      scope: {},
+			templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
+			controller: 'planningPeriodOverviewController as vm',
+			bindToController: true
+		};
+		return directive;
+	}
 })();

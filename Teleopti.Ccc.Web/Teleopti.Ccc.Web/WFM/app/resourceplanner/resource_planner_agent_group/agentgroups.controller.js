@@ -1,38 +1,57 @@
-(function() {
-    'use strict';
+(function () {
+  'use strict';
 
-    angular
-        .module('wfm.resourceplanner')
-        .controller('agentGroupsController', Controller);
+  angular
+    .module('wfm.resourceplanner')
+    .controller('agentGroupsController', Controller)
+    .directive('agentGroups', agentGroupsDirective);
 
-    Controller.$inject = ['$state','agentGroupService'];
+  Controller.$inject = ['$state', 'agentGroupService'];
 
-    /* @ngInject */
-    function Controller($state, agentGroupService) {
-        var vm = this;
+  /* @ngInject */
+  function Controller($state, agentGroupService) {
+    var vm = this;
 
-        vm.goForm = goForm;
-        vm.goAgentGroup = goAgentGroup;
-        vm.agentGroups = [];
+    vm.goForm = goForm;
+    vm.goAgentGroup = goAgentGroup;
+    vm.goEditAgentGroup = goEditAgentGroup;
+    vm.agentGroups = [];
 
-        getAgentGroups();
+    getAgentGroups();
 
-        function getAgentGroups(){
-          var query = agentGroupService.getAgentGroups();
-          return query.$promise.then(function (data) {
-    				vm.agentGroups = data;
-    				return vm.agentGroups;
-    			});
-        }
-
-        function goForm(){
-          $state.go('resourceplanner.createagentgroup');
-        }
-
-        function goAgentGroup(groupId){
-          if (groupId) {
-            $state.go('resourceplanner.oneagentroup', { groupId: groupId });
-          }
-        }
+    function getAgentGroups() {
+      var query = agentGroupService.getAgentGroups();
+      return query.$promise.then(function (data) {
+        vm.agentGroups = data;
+        return vm.agentGroups;
+      });
     }
+
+    function goForm() {
+      $state.go('resourceplanner.createagentgroup');
+    }
+
+    function goEditAgentGroup(groupId) {
+      if (groupId) {
+        $state.go('resourceplanner.editagentgroup', { groupId: groupId });
+      }
+    }
+
+    function goAgentGroup(groupId) {
+      if (groupId) {
+        $state.go('resourceplanner.oneagentroup', { groupId: groupId });
+      }
+    }
+  }
+
+  function agentGroupsDirective() {
+    var directive = {
+      restrict: 'EA',
+      scope: {},
+      templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroups.html',
+      controller: 'agentGroupsController as vm',
+      bindToController: true
+    };
+    return directive;
+  }
 })();

@@ -52,16 +52,22 @@
 			params: {
 				isImportSchedule: true
 			}
-		}).state('resourceplanner.agentgroups', {   //from here is new
-			url: '/agentgroup',
-			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroups.html',
-			controller: 'agentGroupsController as vm'
+		}).state('resourceplanner.newoverview', {   //from here is new
+			url: '/resourceplanner/v2',
+			templateUrl: 'app/resourceplanner/resource_planner_v2/resourceplanning.overview.html',
+			controller: 'resourceplanningOverviewController as vm'
 		}).state('resourceplanner.createagentgroup', {
 			url: '/createagentgroup',
 			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroup.createform.html',
 			controller: 'agentGroupFormController as vm'
-		})
-		.state('resourceplanner.oneagentroup', {
+		}).state('resourceplanner.editagentgroup', {
+			url: '/agentgroup/:groupId/edit',
+			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroup.createform.html',
+			controller: 'agentGroupFormController as vm',
+			params: {
+				groupId: ''
+			}
+		}).state('resourceplanner.oneagentroup', {
 			url: '/agentgroup/:groupId/detail',
 			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroup.detail.html',
 			controller: 'agentGroupsDetailController as vm',

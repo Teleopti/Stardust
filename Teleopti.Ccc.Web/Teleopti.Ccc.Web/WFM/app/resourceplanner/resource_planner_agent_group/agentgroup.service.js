@@ -19,6 +19,7 @@
 			getFilterData: filterResult.query,
 			removeAgentGroup: agentGroup.remove
 		};
+		
 		return service;
 	}
 })();

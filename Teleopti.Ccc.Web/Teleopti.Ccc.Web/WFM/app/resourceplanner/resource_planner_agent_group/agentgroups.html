@@ -1,28 +1,38 @@
-<div ui-view>
-	<div class="view-header with-fab with-desc">
-		<div class="view-title">
-			<h1><i class="mdi mdi-account-multiple"></i>Agent Groups</h1>
-			<p>Create And Manage Your Agent Groups</p>
-		</div>
-		<div class="fab-wrapper">
-			<button ng-click="vm.goForm()" class="wfm-fab material-depth-1 grow-out">
-				<i class="mdi mdi-plus"></i>
-				<md-tooltip>
-					Create new agent group
-				</md-tooltip>
-			</button>
+<div class="con-row">
+	<div class="con-flex">
+		<button class="wfm-btn btn-sm wfm-btn-default " ng-click="vm.goForm()">New Agent Group</button>
+		<button class="wfm-btn btn-sm" ng-class="{'agent-edit-active': activeEdit, 'wfm-btn-primary-disabled': vm.agentGroups.length == 0, 'wfm-btn-default': vm.agentGroups.length !== 0}"
+		 ng-click="activeEdit = !activeEdit">Edit Agent Group</button>
+	</div>
+</div>
+<div class="con-row" ng-if="vm.agentGroups.length == 0">
+	<div class="con-flex">
+		<div class="panel wfm-tip">
+			<div class="sub-header wfm-tip-header">
+				<h2><i class="mdi mdi-information-outline"></i> You need an agent group to schdule your agents. Do you want to create agent group?</h2>
+			</div>
+			<div class="con-footer">
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goForm(); start = 1">Create Agent Group</button>
+			</div>
 		</div>
 	</div>
-	<div class="con-row">
-		<div class="con-flex">
-			<div class="wfm-grid">
-				<div class="grid-card-mini planingperiod-container" ng-repeat="agentGroup in vm.agentGroups">
-					<div class="list-content agent-group-chip" ng-click="vm.goAgentGroup(agentGroup.Id)">
-						<span>{{agentGroup.Name}}</span>
+</div>
+<div class="con-row">
+	<div class="con-flex">
+		<div class="wfm-grid">
+			<div class="grid-card planingperiod-container" ng-repeat="agentGroup in vm.agentGroups | orderBy: '+Name'">
+				<div class="list-content" ng-class="{'agent-edit-active': activeEdit}">
+					<div ng-if="!activeEdit" class="sub-header panel" ng-click="vm.goAgentGroup(agentGroup.Id)">
+						{{agentGroup.Name}}
+					</div>
+					<div ng-if="activeEdit" class="sub-header panel" ng-click="vm.goEditAgentGroup(agentGroup.Id)">
+						{{agentGroup.Name}}
+						<div class="head-actions panel-menu" ng-if="activeEdit">
+							<button class="wfm-btn btn-sm wfm-btn-invis-primary">Edit</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- {{vm.agentGroups}} -->

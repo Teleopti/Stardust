@@ -1,16 +1,21 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
 		.module('wfm.resourceplanner')
 		.controller('agentGroupFormController', Controller);
 
-	Controller.$inject = ['$state', '$timeout','agentGroupService', 'NoticeService', '$translate', 'debounceService'];
+	Controller.$inject = ['$state', '$timeout', '$stateParams', 'agentGroupService', 'NoticeService', '$translate', 'debounceService'];
 
 	/* @ngInject */
-	function Controller($state, $timeout, agentGroupService, NoticeService, $translate, debounceService) {
+	function Controller($state, $timeout, $stateParams, agentGroupService, NoticeService, $translate, debounceService) {
 		var vm = this;
 
+		vm.searchString = '';
+		vm.selectedResults = [];
+		vm.name = '';
+		vm.cancel = cancel;
+		vm.editAgentGroup = {};
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
 		vm.isValidFilters = isValidFilters;
@@ -18,13 +23,28 @@
 		vm.isValid = isValid;
 		vm.removeNode = removeNode;
 		vm.persist = persist;
-		vm.searchString = undefined;
-		vm.selectedResults = [];
-		vm.name = '';
-		vm.cancelCreate = cancelCreate;
+		vm.removeAgentGroup = removeAgentGroup;
+		var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
 
-		function cancelCreate() {
-			$state.go('resourceplanner.agentgroups');
+		//load agentgroup to edit
+		getAgentGroupbyId(agentGroupId);
+
+		function getAgentGroupbyId(id) {
+			if (id !== null) {
+				var getAgentGroup = agentGroupService.getAgentGroupbyId({ id: id });
+				return getAgentGroup.$promise.then(function (data) {
+					vm.editAgentGroup = data;
+					vm.name = data.Name;
+					vm.selectedResults = data.Filters;
+					return vm.editAgentGroup;
+				});
+			}
+		}
+
+		//load empty form
+		function cancel() {
+			$state.go('resourceplanner.newoverview');
+			vm.editAgentGroup = {};
 		}
 
 		function inputFilterData() {
@@ -47,55 +67,65 @@
 				clearInput();
 				NoticeService.warning("Unit already exists", 5000, true);
 			}
-		};
-
-		function removeNode(node) {
-			var p = vm.selectedResults.indexOf(node);
-			vm.selectedResults.splice(p, 1);
-		};
-
-		function clearInput() {
-			vm.searchString = '';
-			vm.results = [];
-		};
+		}
 
 		function isVaildUnit(item) {
 			var check = true;
-			vm.selectedResults.forEach(function(node) {
+			vm.selectedResults.forEach(function (node) {
 				if (node.Id === item.Id) {
 					check = false;
 				};
 			});
 			return check;
-		};
+		}
 
-		function isValidFilters() {
-			return vm.selectedResults.length > 0;
-		};
+		function clearInput() {
+			vm.searchString = '';
+			vm.results = [];
+		}
 
-		function isValidName() {
-			return vm.name.length > 0 && vm.name.length <= 100;
-		};
+		function removeNode(node) {
+			var p = vm.selectedResults.indexOf(node);
+			vm.selectedResults.splice(p, 1);
+		}
 
 		function isValid() {
 			if (isValidFilters() && isValidName()) {
 				return true;
 			}
-		};
+		}
+
+		function isValidFilters() {
+			return vm.selectedResults.length > 0;
+		}
+
+		function isValidName() {
+			return vm.name.length > 0 && vm.name.length <= 100;
+		}
 
 		function persist() {
 			if (isValid()) {
 				agentGroupService.saveAgentGroup({
+					Id: vm.editAgentGroup ? vm.editAgentGroup.Id : null,
 					Name: vm.name,
 					Filters: vm.selectedResults
-				}).$promise.then(function() {
-					$state.go('resourceplanner.agentgroups');
+				}).$promise.then(function () {
+					vm.editAgentGroup = {};
+					$state.go('resourceplanner.newoverview');
 				});
 			}
 			if (!isValid()) {
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 				return;
 			}
+		}
+
+		//delete agent group
+		function removeAgentGroup(id) {
+			agentGroupService.removeAgentGroup({ id: id }).$promise.then(function () {
+				vm.editAgentGroup = {};
+				$state.go('resourceplanner.newoverview');
+			});
 		}
 	}
 })();
