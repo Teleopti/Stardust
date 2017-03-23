@@ -423,10 +423,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
 				lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
 
-				if (optimizationPreferences.Extra.IsClassic() && _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix) >= oldPredictedValue)
-					return false;
-
-				return checkPeriodValue(currentPeriodValue, previousPeriodValue);
+				return checkPeriodValue(optimizationPreferences, matrix, oldPredictedValue, currentPeriodValue, previousPeriodValue);
 			}
 
 			if (!_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamInfo))
@@ -454,16 +451,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				// * run also when normal team/block?
 				// * lock also added DO days?
 				lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
-				if(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix) >= oldPredictedValue)
-					return false;
 			}
 
-			return checkPeriodValue(currentPeriodValue, previousPeriodValue);
+			return checkPeriodValue(optimizationPreferences, matrix, oldPredictedValue, currentPeriodValue, previousPeriodValue);
 		}
 
-		private static bool checkPeriodValue(Lazy<double> currentValue, double prevValue)
+		private bool checkPeriodValue(IOptimizationPreferences optimizationPreferences, 
+							IScheduleMatrixPro matrix,
+							double oldPredictedValue, 
+							Lazy<double> currentPeriodValue, 
+							double previousPeriodValue)
 		{
-			return currentValue.Value < prevValue;
+			if (optimizationPreferences.Extra.IsClassic() && _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix) >= oldPredictedValue)
+				return false;
+			return currentPeriodValue.Value < previousPeriodValue;
 		}
 
 		private void addAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService,
