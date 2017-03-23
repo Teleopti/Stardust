@@ -335,17 +335,25 @@ ECHO.
 )
 
 ::PostRestore
+REM If you need create any private data for debug, just create .sql files named PostDbRestore*.sql,
+REM And put these files in %ROOTDIR%\..\.hgprivate folder.
+REM This folder will be kept by default when purge code repository
 SET postDbRestoreSqlFile=%ROOTDIR%\..\.hgprivate\PostDbRestore*.sql
 IF EXIST "%postDbRestoreSqlFile%" (
+   SET postDbRestoreLogFile=%ROOTDIR%\PostDbRestore.log
+   IF EXIST "%postDbRestoreLogFile%" DEL %postDbRestoreLogFile%
+
    ECHO ------
    ECHO Apply your own patches...
    FOR %%f IN ("%postDbRestoreSqlFile%") DO (
       ECHO    Applying "%%~nf%%~xf"...
-      SQLCMD -S%INSTANCE% -E -dmaster -i"%%f" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" > "%ROOTDIR%\PostDbRestore.log"
+      SQLCMD -S%INSTANCE% -E -dmaster -i"%%f" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%">>"%postDbRestoreLogFile%"
    )
    ECHO Done!
    ECHO ------
 )
+
+PAUSE
 
 ECHO ------
 ECHO Update data ...
