@@ -13,8 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<PeopleSearchProvider>().As<IPeopleSearchProvider>().SingleInstance();
-			builder.RegisterType<PeoplePersister>().As<IPeoplePersister>().SingleInstance().ApplyAspects();
-			builder.RegisterType<UserValidator>().As<IUserValidator>().SingleInstance();
 			builder.RegisterType<PersonDataProvider>().As<IPersonDataProvider>().SingleInstance();
 			builder.RegisterType<PersonInfoUpdater>().As<IPersonInfoUpdater>().SingleInstance();
 			builder.RegisterType<ImportAgentFileValidator>().As<IImportAgentFileValidator>().SingleInstance();

@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		public void Setup(ISystem system,IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<PersonInfoMapperFake>().For<IPersonInfoMapper>();
 			system.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
 			system.UseTestDouble<TenantUserPersister>().For<ITenantUserPersister>();
 			system.AddService<AgentPersister>();

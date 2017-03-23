@@ -574,7 +574,6 @@
     <Compile Include="Areas\People\Controllers\PeopleSmartWorkflowControlSetController.cs" />
     <Compile Include="Areas\People\Core\Models\PersonDataModel.cs" />
     <Compile Include="Areas\People\Core\Models\RawAgent.cs" />
-    <Compile Include="Areas\People\Core\Models\RawUser.cs" />
     <Compile Include="Areas\People\Core\Models\ShiftBagDataModel.cs" />
     <Compile Include="Areas\People\Core\Models\ShiftBagUpdateCommandInputModel.cs" />
     <Compile Include="Areas\People\Core\Models\SkillDataModel.cs" />
@@ -583,7 +582,6 @@
     <Compile Include="Areas\People\Controllers\SmartAssignWorkflowControlSetModel.cs" />
     <Compile Include="Areas\People\Controllers\WorkflowControlSetModel.cs" />
     <Compile Include="Areas\People\Core\ImportAgentFileValidator.cs" />
-    <Compile Include="Areas\People\Core\Models\UserFileTemplate.cs" />
     <Compile Include="Areas\People\Core\MultipartHttpContentExtractor.cs" />
     <Compile Include="Areas\People\Core\Persisters\AgentPersister.cs" />
     <Compile Include="Areas\People\Core\Persisters\TenantUserPersister.cs" />
@@ -673,15 +671,10 @@
     <Compile Include="Areas\People\Controllers\PersonCommandInputModel.cs" />
     <Compile Include="Areas\People\Controllers\ResultModel.cs" />
     <Compile Include="Areas\People\Core\IoC\PeopleAreaModule.cs" />
-    <Compile Include="Areas\People\Core\Persisters\IPeoplePersister.cs" />
-    <Compile Include="Areas\People\Core\Persisters\IUserValidator.cs" />
-    <Compile Include="Areas\People\Core\Persisters\PeoplePersister.cs" />
-    <Compile Include="Areas\People\Core\Persisters\UserValidator.cs" />
     <Compile Include="Areas\People\Core\Providers\IPersonInfoUpdater.cs" />
     <Compile Include="Areas\People\Core\Providers\IPersonDataProvider.cs" />
     <Compile Include="Areas\People\Core\Providers\PeopleSearchProvider.cs" />
     <Compile Include="Areas\People\Core\Models\PeopleSummaryModel.cs" />
-    <Compile Include="Areas\People\Controllers\ImportPeopleController.cs" />
     <Compile Include="Areas\People\Core\Providers\PersonInfoUpdater.cs" />
     <Compile Include="Areas\People\Core\Providers\PersonDataProvider.cs" />
     <Compile Include="Areas\Permissions\Controllers\ApplicationFunctionsController.cs" />

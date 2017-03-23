@@ -340,9 +340,7 @@
     <Compile Include="Areas\People\PeopleDataControllerTest.cs" />
     <Compile Include="Areas\People\PeopleCommandControllerTest.cs" />
     <Compile Include="Areas\People\PeopleCommandTestAttribute.cs" />
-    <Compile Include="Areas\People\PeoplePersisterTest.cs" />
     <Compile Include="Areas\People\Providers\PeopleSearchProviderTest.cs" />
-    <Compile Include="Areas\People\UserValidatorTest.cs" />
     <Compile Include="Areas\Permissions\ApplicationFunctionsControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProviderTest.cs" />
     <Compile Include="Areas\Permissions\OrganizationSelectionControllerTest.cs" />

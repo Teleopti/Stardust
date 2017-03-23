@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		{
 			var raw = new RawAgent();
 			errors = new List<string>();
-			for (var i = 0; i < propertyInfos.Length - 1; i++)
+			for (var i = 0; i < propertyInfos.Length; i++)
 			{
 				var pro = propertyInfos[i];
 				var cell = row.GetCell(i);

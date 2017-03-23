@@ -1,3 +1,6 @@
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,9 +9,15 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 {
-	public class AgentFileTemplate : UserFileTemplate
+	public class AgentFileTemplate
 	{
 		private readonly string[] _columnHeaders = {
+			"Firstname",
+			"Lastname",
+			"WindowsUser",
+			"ApplicationUserId",
+			"Password",
+			"Role",
 			"StartDate",
 			"Organization",
 			"Skill",
@@ -21,21 +30,21 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			"SchedulePeriodLength"
 		};
 
-		private readonly IDictionary<string, int> _columnHeaderMap;
+
+
+		private readonly IDictionary<string, int> _columnHeaderMap = new Dictionary<string, int>();
 
 		public AgentFileTemplate()
 		{
-			_columnHeaderMap = base.ColumnHeaderMap;
-			var offset = base.ColumnHeaderMap.Count;
 			for (var i = 0; i < _columnHeaders.Length; i++)
 			{
-				_columnHeaderMap.Add(_columnHeaders[i], offset + i);
+				_columnHeaderMap.Add(_columnHeaders[i], i);
 			}
 		}
 
-		public override string[] ColumnHeaderNames => base.ColumnHeaderNames.Concat(_columnHeaders).ToArray();
+		public  string[] ColumnHeaderNames => _columnHeaders;
 
-		public override IDictionary<string, int> ColumnHeaderMap => _columnHeaderMap;
+		public  IDictionary<string, int> ColumnHeaderMap => _columnHeaderMap;
 
 		public RawAgent GetDefaultAgent()
 		{
@@ -47,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 				ApplicationUserId = "john.smith@teleopti.com",
 				Password = "password",
 				Role = "agent, \"London, Team Leader\"",
-				StartDate = new DateTime(2017,3,1),
+				StartDate = new DateTime(2017, 3, 1),
 				Organization = "Team Preference",
 				Skill = "Outbound, Direct sales",
 				ExternalLogon = "001001",
@@ -122,6 +131,20 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Models
 			returnedFile.Write(ms);
 
 			return ms;
+		}
+
+		public IWorkbook GetTemplateWorkbook(string invalidUserSheetName, bool isXlsx = false)
+		{
+			var returnedFile = isXlsx ? (IWorkbook)new XSSFWorkbook() : new HSSFWorkbook();
+			var newsheet = returnedFile.CreateSheet(invalidUserSheetName);
+
+			var row = newsheet.CreateRow(0);
+			for (var i = 0; i < ColumnHeaderNames.Length; i++)
+			{
+				row.CreateCell(i).SetCellValue(ColumnHeaderNames[i]);
+			}
+
+			return returnedFile;
 		}
 
 	}

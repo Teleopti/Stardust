@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var result = Target.ValidateWorkbook(hssfwb);
 
-			result.Count.Should().Be.EqualTo(16);
+			result.Count.Should().Be.EqualTo(15);
 		}
 
 		[Test]
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var result = Target.ValidateWorkbook(hssfwb);
 
-			result.Count.Should().Be.EqualTo(16);
+			result.Count.Should().Be.EqualTo(15);
 		}
 
 		[Test]
