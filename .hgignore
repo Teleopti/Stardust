@@ -4,6 +4,7 @@
 # use glob syntax
 syntax: glob
 
+.hg*
 *.obj
 *.exe
 *.dll

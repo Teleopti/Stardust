@@ -334,6 +334,16 @@ ECHO ------
 ECHO.
 )
 
+::PostRestore
+SET postDbRestoreSqlFile=%ROOTDIR%\..\.hgprivate\PostDbRestore.sql
+IF EXIST %postDbRestoreSqlFile% (
+   ECHO ------
+   ECHO Apply your own patch in "%postDbRestoreSqlFile%"...
+   SQLCMD -S%INSTANCE% -E -dmaster -i"%postDbRestoreSqlFile%" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" > "%ROOTDIR%\PostDbRestore.log"
+   ECHO Done!
+   ECHO ------
+)
+
 ECHO ------
 ECHO Update data ...
 ECHO Teleopti.Support.Security.exe. Done!
