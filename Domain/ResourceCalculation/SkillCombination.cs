@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class SkillCombination
+	public class SkillCombination : IEquatable<SkillCombination>
 	{
 		private readonly DateOnlyPeriod _period;
 		private readonly IList<Guid> _skillKeys;
@@ -63,5 +63,32 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public ISkill[] Skills { get; }
 		public ISkill[] OriginalSkills { get; }
 		public SkillEffiencyResource[] SkillEfficiencies { get; }
+
+		public bool Equals(SkillCombination other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return _period.Equals(other._period) && string.Equals(OriginalKey, other.OriginalKey) && string.Equals(Key, other.Key) && Equals(SkillEfficiencies, other.SkillEfficiencies);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((SkillCombination) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = _period.GetHashCode();
+				hashCode = (hashCode * 397) ^ (OriginalKey?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Key?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (SkillEfficiencies?.GetHashCode() ?? 0);
+				return hashCode;
+			}
+		}
 	}
 }
