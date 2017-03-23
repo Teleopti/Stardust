@@ -88,6 +88,13 @@ table td {
 	font-weight: bold;
 }
 
+.SuccessLabel
+{
+	color: Green;
+	font-size: large;
+	font-weight: bold;
+}
+
 .wait {
 	cursor: wait !important;
 }

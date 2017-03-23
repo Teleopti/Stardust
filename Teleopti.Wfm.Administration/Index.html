@@ -85,7 +85,8 @@
 			</div>
 			<button type="submit" ng-click="loginVm.login()" class="btn btn-default signInBtn">Log In</button>
 			<div>
-				<label class="ErrorLabel">{{loginVm.Message}}</label>
+				<label class="ErrorLabel">{{loginVm.ErrorMessage}}</label>
+				<label class="SuccessLabel">{{loginVm.Message}}</label>
 			</div>
 		</form>
 	</div>

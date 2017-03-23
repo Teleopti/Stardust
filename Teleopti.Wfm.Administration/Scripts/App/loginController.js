@@ -45,6 +45,7 @@
 		vm.loginEmail = sessionStorage.getItem(emailKey);
 		vm.loginPassword = "";
 		vm.Message = '';
+		vm.ErrorMessage = '';
 		vm.Id = cookie ? cookie.idKey : null;
 		vm.user = cookie ? cookie.userKey : null;
 
@@ -87,7 +88,7 @@
 		});
 
 		function showError(jqXHR) {
-			vm.Message = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
+			vm.ErrorMessage = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
 		}
 
 		function createCookies(data) {
@@ -123,6 +124,7 @@
 
 		vm.login = function () {
 			vm.Id = 0;
+			vm.ErrorMessage = '';
 			$("#modal-login").toggleClass("wait");
 			var loginData = {
 				granttype: 'password',
@@ -137,7 +139,7 @@
 				//destory previous cookies
 				if (data.Success === false) {
 					//alert(data.Message);
-					vm.Message = data.Message;
+					vm.ErrorMessage = data.Message;
 					return;
 				} else {
 					createCookies(data);
