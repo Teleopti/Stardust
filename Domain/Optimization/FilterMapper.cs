@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					FilterType = FilterModel.TeamFilterType,
 					Id = teamFilter.Team.Id.Value,
-					Name = teamFilter.Team.Description.Name
+					Name = teamFilter.Team.SiteAndTeam
 				};
 			}
 

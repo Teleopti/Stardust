@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldIncludeTeamFilterWhenFetching()
 		{
-			var filterName = RandomName.Make();
-			var team = new Team().WithId().WithDescription(new Description(filterName));
+			var team = new Team().WithId().WithDescription(new Description(RandomName.Make()));
+			team.Site = new Site(RandomName.Make());
 			var agentGroup = new AgentGroup()
 				.WithId()
 				.AddFilter(new TeamFilter(team));
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.TeamFilterType);
 			filter.Id.Should().Be.EqualTo(team.Id.Value);
-			filter.Name.Should().Be.EqualTo(filterName);
+			filter.Name.Should().Be.EqualTo(team.SiteAndTeam);
 		}
 
 		[Test]
