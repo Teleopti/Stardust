@@ -18,6 +18,7 @@ function ReinstallService
 	{
 		log-info "Service $nombreDeServicio already exists, uninstalling..."
 		StopWindowsService $nombreDeServicio
+		taskkill /F /IM "mmc.exe"
 		SC.EXE DELETE $nombreDeServicio
 		$Servicio = Get-Service | Where-Object {$_.name -eq $nombreDeServicio}
 		if ($Servicio -ne $null)
