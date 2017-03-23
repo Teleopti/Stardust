@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Ajax.Utilities;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -37,7 +39,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 				if (agentResult.Feedback.ErrorMessages.Any() || agentData == null) continue;
 
 				var person = persistPerson(agentData);
-				var errorMessages =	_tenantUserPersister.Persist(agentData, person.Id.GetValueOrDefault());
+				var errorMessages = _tenantUserPersister.Persist(new PersonInfoModel
+				{
+					ApplicationLogonName = agentData.ApplicationUserId.IsNullOrWhiteSpace() ? null : agentData.ApplicationUserId,
+					Identity = agentData.WindowsUser.IsNullOrWhiteSpace() ? null : agentData.WindowsUser,
+					Password = agentData.Password.IsNullOrWhiteSpace() ? null : agentData.Password,
+					PersonId = person.Id.GetValueOrDefault()
+				});
 
 				if (errorMessages.Any())
 				{

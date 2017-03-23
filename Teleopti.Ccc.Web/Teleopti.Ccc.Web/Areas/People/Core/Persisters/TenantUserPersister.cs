@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 	public interface ITenantUserPersister
 	{
 		List<string> Persist(PersonInfoModel tenantUserData);
-		List<string> Persist(AgentDataModel agentData, Guid personId);
 	}
 
 	public class TenantUserPersister : ITenantUserPersister
@@ -27,21 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			_persistPersonInfo = persistPersonInfo;
 			_personInfoMapper = personInfoMapper;
 		}
-
-		public virtual List<string> Persist(AgentDataModel agentData, Guid personId)
-		{
-			var tenantUserData = new PersonInfoModel
-			{
-				ApplicationLogonName = agentData.ApplicationUserId.IsNullOrWhiteSpace() ? null : agentData.ApplicationUserId,
-				Identity = agentData.WindowsUser.IsNullOrWhiteSpace() ? null : agentData.WindowsUser,
-				Password = agentData.Password.IsNullOrWhiteSpace()? null : agentData.Password,
-				PersonId = personId
-			};
-
-			return Persist(tenantUserData);
-		}
-
-		public virtual List<string> Persist(PersonInfoModel tenantUserData)
+		public List<string> Persist(PersonInfoModel tenantUserData)
 		{
 			var errorMessages = new List<string>();
 
