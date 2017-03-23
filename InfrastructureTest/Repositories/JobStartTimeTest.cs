@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.First().Should().Be.EqualTo(Now.UtcDateTime());
 		}
 
-		[Test]
+		[Test, Ignore("WIP")]
 		public void ShouldCheckAndUpdateAndSetTimeLockToNull()
 		{
 			Now.Is("2016-03-01 07:50");
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.First().Should().Be.Null();
 		}
 
-		[Test]
+		[Test, Ignore("WIP")]
 		public void ShouldUpdateAndSetTimeLockToNull()
 		{
 			Now.Is("2016-03-01 07:50");
