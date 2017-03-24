@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new WebAppModule(configuration));
 			_containerBuilder.RegisterModule(new PeopleAreaModule());
+			_containerBuilder.RegisterModule(new Web.Areas.People.Core.IoC.PeopleAreaModule());
 		}
 
 

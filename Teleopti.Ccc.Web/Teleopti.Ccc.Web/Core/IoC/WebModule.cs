@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new TenantServerModule(_configuration));
 			builder.RegisterModule<SeatPlannerAreaModule>();
 			builder.RegisterModule<OutboundAreaModule>();
-			builder.RegisterModule<PeopleAreaModule>();
+			builder.RegisterModule<Web.Areas.People.Core.IoC.PeopleAreaModule>();
 			builder.RegisterModule<TeamScheduleAreaModule>();
 			builder.RegisterModule<RequestsAreaModule>();
 			builder.RegisterModule<ReportsAreaModule>();
