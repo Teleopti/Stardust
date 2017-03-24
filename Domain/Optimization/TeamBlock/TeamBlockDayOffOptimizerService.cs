@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly DayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 		private readonly AffectedDayOffs _affectedDayOffs;
+		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 
 		public TeamBlockDayOffOptimizerService(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -66,7 +67,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder,
-			AffectedDayOffs affectedDayOffs)
+			AffectedDayOffs affectedDayOffs,
+			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -90,6 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_dayOffOptimizerPreMoveResultPredictor = dayOffOptimizerPreMoveResultPredictor;
 			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
 			_affectedDayOffs = affectedDayOffs;
+			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 		}
 
 		public void OptimizeDaysOff(
@@ -158,6 +161,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 				else
 				{
+					if (optimizationPreferences.Extra.IsClassic())
+					{
+						periodValueCalculatorForAllSkills = new noExpansivePeriodValueCalculation();
+					}
 					teamInfosToRemove = runOneOptimizationRoundWithFreeDaysOff(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
 					                                                           remainingInfoList, schedulingOptions,
 					                                                           selectedPersons,
@@ -175,6 +182,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					remainingInfoList.Remove(teamInfo);
 				}
+			}
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
+		private class noExpansivePeriodValueCalculation : IPeriodValueCalculator
+		{
+			public double PeriodValue(IterationOperationOption iterationOperationOption)
+			{
+				return 0;
 			}
 		}
 
@@ -236,12 +252,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							else
 							{
 								var resCalcState = new UndoRedoContainer();
+								var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 								if (optimizationPreferences.Extra.IsClassic())
 								{
 									//TODO: hack -> always do this
 									resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
+
+									//vad tror du claes? här? eller längre upp?
+									var personalSkillsDataExtractor = _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced, schedulingResultStateHolder);
+									var localPeriodValueCalculator = _optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
+									//
+									currentPeriodValue = new Lazy<double>(() => localPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization));
+									previousPeriodValue = localPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
 								}
-								var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 								var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
 									resourceCalculateDelayer,
 									schedulingResultStateHolder,
