@@ -1,8 +1,8 @@
 ﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Security;
-using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
 	public class PersonInfoMapper : IPersonInfoMapper
 	{
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			_currentHashFunction = currentHashFunction;
 		}
 
-		public PersonInfo Map(PersonInfoModel personInfoModel)
+		public PersonInfo Map(IPersonInfoModel personInfoModel)
 		{
 			var id = personInfoModel.PersonId;
 			var personInfo = new PersonInfo(_currentTenant.Current(), id);

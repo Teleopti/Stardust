@@ -101,6 +101,7 @@
     <Compile Include="Domain\InParameter.cs" />
     <Compile Include="Domain\IntervalDefinition.cs" />
     <Compile Include="Domain\IPasswordStrengthRule.cs" />
+    <Compile Include="Domain\IPersonInfoModel.cs" />
     <Compile Include="Domain\IStateReader.cs" />
     <Compile Include="Domain\IUserCulture.cs" />
     <Compile Include="Domain\MinMax.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Domain\TimeZoneHelper.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
+    <Compile Include="Infrastructure\IPersonInfoCreator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Teleopti.Ccc.snk">

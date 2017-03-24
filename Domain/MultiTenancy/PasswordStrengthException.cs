@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
+namespace Teleopti.Ccc.Domain.MultiTenancy
 {
 	public class PasswordStrengthException : Exception
 	{

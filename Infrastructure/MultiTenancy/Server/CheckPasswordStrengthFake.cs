@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
+﻿using Teleopti.Ccc.Domain.MultiTenancy;
+
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class CheckPasswordStrengthFake : ICheckPasswordStrength
 	{

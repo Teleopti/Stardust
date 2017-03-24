@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
@@ -11,6 +12,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		{
 			_currentTenantSession = currentTenantSession;
 		}
+
+		
 
 		public void Persist(PersonInfo personInfo)
 		{

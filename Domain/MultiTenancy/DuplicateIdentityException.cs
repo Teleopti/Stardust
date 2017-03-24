@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
+namespace Teleopti.Ccc.Domain.MultiTenancy
 {
 	public class DuplicateIdentityException : Exception
 	{
@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			ExistingPerson = existingPerson;
 		}
 
-	public Guid ExistingPerson { get; }
-}
+		public Guid ExistingPerson { get; }
+	}
 }

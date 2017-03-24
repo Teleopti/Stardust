@@ -26,6 +26,7 @@ using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.WebTest.Areas.People.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.People
 {

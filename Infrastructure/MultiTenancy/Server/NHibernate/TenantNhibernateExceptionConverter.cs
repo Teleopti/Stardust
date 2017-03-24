@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using NHibernate.Exceptions;
+using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {

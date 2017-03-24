@@ -260,6 +260,10 @@
     <Compile Include="Hangfire\AttemptsFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
+    <Compile Include="MultiTenancy\IPersonInfoMapper.cs" />
+    <Compile Include="MultiTenancy\PersonInfoMapper.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\IPersistPersonInfo.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\PersonInfoCreator.cs" />
     <Compile Include="Repositories\JobStartTimeRepository.cs" />
     <Compile Include="Intraday\PersonProviderForOvertime.cs" />
     <Compile Include="Repositories\ScheduleForecastSkillReadModelRepository.cs" />
@@ -326,8 +330,6 @@
     <Compile Include="MultiTenancy\Server\CurrentTenantFake.cs" />
     <Compile Include="MultiTenancy\Server\Queries\CountTenants.cs" />
     <Compile Include="MultiTenancy\Server\Queries\DeletePersonInfoFake.cs" />
-    <Compile Include="MultiTenancy\Server\DuplicateApplicationLogonNameException.cs" />
-    <Compile Include="MultiTenancy\Server\DuplicateIdentityException.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindLogonInfo.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindLogonInfoFake.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoByCredentials.cs" />
@@ -348,7 +350,6 @@
     <Compile Include="MultiTenancy\Server\IVerifyPasswordPolicy.cs" />
     <Compile Include="MultiTenancy\Server\LogonInfo.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantNhibernateExceptionConverter.cs" />
-    <Compile Include="MultiTenancy\Server\PasswordStrengthException.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IFindTenantByName.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IIdUserQuery.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoFake.cs" />
@@ -366,7 +367,6 @@
     <Compile Include="MultiTenancy\Server\Queries\ApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\Client\IPostHttpRequest.cs" />
-    <Compile Include="MultiTenancy\Server\Queries\IPersistPersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistLogonAttempt.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfo.cs" />

@@ -5,6 +5,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WithTenantUnitOfWork>().SingleInstance();
 			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
+			builder.RegisterType<PersonInfoCreator>().As<IPersonInfoCreator>().SingleInstance();
 			builder.RegisterType<DeletePersonInfo>().As<IDeletePersonInfo>().SingleInstance();
 			builder.RegisterType<VerifyPasswordPolicy>().As<IVerifyPasswordPolicy>().SingleInstance();
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();

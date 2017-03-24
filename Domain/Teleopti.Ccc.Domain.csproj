@@ -212,6 +212,11 @@
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
+    <Compile Include="MultiTenancy\DuplicateApplicationLogonNameException.cs" />
+    <Compile Include="MultiTenancy\DuplicateIdentityException.cs" />
+    <Compile Include="MultiTenancy\PasswordStrengthException.cs" />
+    <Compile Include="MultiTenancy\PersonInfoModel.cs" />
+    <Compile Include="MultiTenancy\TenantUserPersister.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
     <Compile Include="Staffing\SendUpdateStaffingReadModelHandler.cs" />

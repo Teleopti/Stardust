@@ -3,7 +3,9 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.IocCommon;
@@ -17,6 +19,7 @@ using Teleopti.Ccc.Web.Areas.People.Core;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.People
 {

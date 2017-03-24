@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy
