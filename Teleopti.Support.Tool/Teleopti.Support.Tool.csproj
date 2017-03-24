@@ -59,6 +59,7 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="SevenZipSharp">
       <HintPath>..\packages\SevenZipSharp.0.64\lib\SevenZipSharp.dll</HintPath>
     </Reference>
@@ -230,6 +231,8 @@
     <Compile Include="Tool\ConfigServerCommand.cs" />
     <Compile Include="Tool\CustomSection.cs" />
     <Compile Include="Tool\CustomSectionContainer.cs" />
+    <Compile Include="Tool\FrameAncestorsUpdator.cs" />
+    <Compile Include="Tool\IFrameAncestorsUpdator.cs" />
     <Compile Include="Tool\ISupportCommand.cs" />
     <Compile Include="Tool\ModeFile.cs" />
     <Compile Include="Tool\MoveCustomReportsCommand.cs" />
@@ -394,10 +397,6 @@
     <ProjectReference Include="..\Teleopti.Support.Library\Teleopti.Support.Library.csproj">
       <Project>{96baa3e0-a623-412e-bfe7-d3be03a2288a}</Project>
       <Name>Teleopti.Support.Library</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Support.Shared\Teleopti.Support.Shared.csproj">
-      <Project>{e6539638-fef8-41db-bb0e-3ae22f408eb6}</Project>
-      <Name>Teleopti.Support.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,3 @@
-using Teleopti.Support.Shared;
 using Teleopti.Support.Tool.DataLayer;
 
 namespace Teleopti.Support.Tool.Tool

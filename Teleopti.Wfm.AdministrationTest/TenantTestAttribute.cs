@@ -9,7 +9,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Support.Shared;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 
@@ -29,7 +28,6 @@ namespace Teleopti.Wfm.AdministrationTest
 			system.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
 			system.UseTestDouble<FakeHangfireCookie>().For<IHangfireCookie>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();			
-			system.UseTestDouble<FrameAncestorsUpdatorFake>().For<IFrameAncestorsUpdator>();			
 
 			_tenantUnitOfWorkManager = TenantUnitOfWorkForTest();
 			system.AddService(_tenantUnitOfWorkManager);

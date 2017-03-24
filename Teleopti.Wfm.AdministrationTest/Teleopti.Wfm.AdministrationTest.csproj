@@ -126,7 +126,6 @@
     <Compile Include="Core\CreateBusinessUnitTest.cs" />
     <Compile Include="Core\FakeRunWithUnitOfWork.cs" />
     <Compile Include="FakeHangfireCookie.cs" />
-    <Compile Include="FrameAncestorsUpdatorFake.cs" />
     <Compile Include="GetImportUsersFake.cs" />
     <Compile Include="DatabaseHelperWrapperFake.cs" />
     <Compile Include="ControllerActions\GenerateRtaKeyForTenant.cs" />
@@ -174,10 +173,6 @@
     <ProjectReference Include="..\Teleopti.Support.Security\Teleopti.Support.Security.csproj">
       <Project>{6030cf98-1346-43dd-a9b6-01cdbeb5a832}</Project>
       <Name>Teleopti.Support.Security</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Support.Shared\Teleopti.Support.Shared.csproj">
-      <Project>{e6539638-fef8-41db-bb0e-3ae22f408eb6}</Project>
-      <Name>Teleopti.Support.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Wfm.Administration\Teleopti.Wfm.Administration.csproj">
       <Project>{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}</Project>

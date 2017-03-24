@@ -5,7 +5,6 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Support.Shared;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
 
@@ -15,12 +14,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class ConfigurationController : ApiController
 	{
 		private readonly IServerConfigurationRepository _serverConfigurationRepository;
-		private readonly IFrameAncestorsUpdator _ancestorsUpdator;
 
-		public ConfigurationController(IServerConfigurationRepository serverConfigurationRepository, IFrameAncestorsUpdator ancestorsUpdator)
+		public ConfigurationController(IServerConfigurationRepository serverConfigurationRepository)
 		{
 			_serverConfigurationRepository = serverConfigurationRepository;
-			_ancestorsUpdator = ancestorsUpdator;
 		}
 
 		[HttpGet]
@@ -57,7 +54,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			try
 			{
-				_ancestorsUpdator.Update(model.Value);
 				_serverConfigurationRepository.Update(model.Key, model.Value);
 			}
 			catch (Exception exception)
