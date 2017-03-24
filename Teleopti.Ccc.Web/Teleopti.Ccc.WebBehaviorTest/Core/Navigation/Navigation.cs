@@ -572,7 +572,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoPageCiscoFinesse()
 		{
-			GoToPage("MyTime/CiscoWidget");
+			GoToPage("MyTime/ASMWidget");
 		}
 
 		public static void GoToWfmRequests()
