@@ -31,17 +31,14 @@
 		function ahAhAhAhStayingAlive() {
 			var request = new XMLHttpRequest();
 			request.open('GET', '../api/Global/User/CurrentUser', true);
-			request.onload = function() {
-			  if (request.status >= 200 && request.status < 400) {
-					return true;
-			  } else {
-			  	function(xhr, ajaxOptions, thrownError)
-			  	{
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-					errorStayingAlive();
-				}
-			  }
-			};
+			request.setRequestHeader("Accept", "application/json");
+		    request.onload = function() {
+		        if (request.status >= 200 && request.status < 400) {
+		            return true;
+		        } else {
+		            errorStayingAlive();
+		        }
+		    };
 			request.send();
 		}
 

@@ -53,8 +53,6 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 using Timer = System.Windows.Forms.Timer;
 
@@ -111,6 +109,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void yesResponse(object sender, JSExtInvokeArgs jsExtInvokeArgs)
 		{
+			logInfo(" Yes was clicked on DataProtection EO:URL= " + webViewDataProtection.Url);
 			showDataProtectionWebPage = false;
 			webControlDataProtection.Visible = false;
 			webControl1.Visible = true;
@@ -119,6 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void noResponse(object sender, JSExtInvokeArgs jsExtInvokeArgs)
 		{
+			logInfo(" No was clicked on DataProtection EO:URL= " + webViewDataProtection.Url);
 			showDataProtectionWebPage = false;
 			webControlDataProtection.Visible = false;
 			webControl1.Visible = true;
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 										Environment.NewLine + 
 										"You may require to relogon to use permissions.";
 			showBalloon();
-			logInfo("Session dropped in StayingAlive");
+			logInfo("Session dropped in StayingAlive EO:URL " + wfmWebView.Url);
 			wfmWebView.LoadUrl(webServer + "start/Url/RedirectToWebLogin");
 		}		
 
@@ -152,6 +152,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
 			request.Method = "post";
 			wfmWebView.LoadCompleted += wfmWebViewOnLoadCompletedSetBusinessUnit;
+			logInfo("setBusinessUnitInWfmWebView: Setting the business unit");
 			wfmWebView.LoadRequest(request);
 		}
 
@@ -160,7 +161,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedSetBusinessUnit;
 			if (_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
 			{
-				setWfmWebUrl(_permissionModule);
+				logInfo(" Setting the permissions url current URL is " + wfmWebView.Url );
+				setWfmWebUrl();
 			}
 		}
 
@@ -171,11 +173,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
 			request.Method = "post";
 			webViewDataProtection.LoadCompleted += dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
+			logInfo("setBusinessUnitInDataProtectionWebView: Setting the business unit");
 			webViewDataProtection.LoadRequest(request);
 		}
 
 		private void dataProtectionWebViewOnLoadCompletedSetBusinessUnit(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
 		{
+			logInfo(" Bu loaded for data protection EO:URL= " + webViewDataProtection.Url);
 			webViewDataProtection.LoadCompleted -= dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
 			webControlDataProtection.WebView.Url = string.Format("{0}WFM/index_desktop_client.html#/fdpa", webServer);
 		}
@@ -199,11 +203,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				try
 				{
-					logInfo("EvalScript(ahAhAhAhStayingAlive)");
+					logInfo("EvalScript(ahAhAhAhStayingAlive) EO:URL =" + wfmWebView.Url);
 					var ahAhAhAhStayingAlive = (JSFunction)wfmWebView.EvalScript("ahAhAhAhStayingAlive");
 					if (ahAhAhAhStayingAlive != null)
 					{
-						logInfo("Invoke StayingAlive");
+						logInfo("Invoke StayingAlive EO:URL =" + wfmWebView.Url);
 						ahAhAhAhStayingAlive.Invoke(window, new object[] { });
 					}
 				}
@@ -420,16 +424,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_container.Resolve<HangfireClientStarter>().Start();
 		}
 
-		public void setWfmWebUrl(string module)
+		public void setWfmWebUrl()
 		{
+			logInfo(" URL before setting the permissions EO:URL " + wfmWebView.Url);
 			if (!wfmWebView.IsCreated)
 			{
-				logInfo("setWfmWebUrl: wfmWebViewwfmWebView is not created ");
+				logInfo(" wfmWebView is not created EO:URL " + wfmWebView.Url);
 				wfmWebView = new WebView();
 				wfmWebView.UrlChanged += wfmWebView_UrlChanged;
 				wfmWebControl.WebView = wfmWebView;
 			}
 			wfmWebView.LoadUrl(string.Format("{0}WFM/index_desktop_client.html#{1}", webServer, _permissionModule));
+			logInfo(" Loaded permissions via load method EO:URL " + wfmWebView.Url);
 		}
 
 		private string webServer
@@ -503,6 +509,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				}
 				else
 				{
+					logInfo("toolStripButtonPermissons_Click: Showing permissions EO:URL " + wfmWebView.Url);
 					backStageViewMain.HideBackStage();
 					toggleWebControls(false);
 				}
@@ -1062,6 +1069,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void toggleWebControls(bool hidePermissions)
 		{
 			wfmWebControl.Visible = !hidePermissions;
+			logInfo("Toggling the wfm view EO:URL" + wfmWebView.Url);
 			if (!hidePermissions)
 			{
 				webControl1.Visible = false;
@@ -1092,6 +1100,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedSetBusinessUnit;
 			wfmWebView.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
+			_customLogger.Error("The following url is missing a certificate. " + e.Url + "  EO:URL " + wfmWebView.Url);
 			_logger.Error("The following url is missing a certificate. " + e.Url);
 		}
 
@@ -1104,6 +1113,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void handlingCertificateErrorswebViewDataProtection(object sender, CertificateErrorEventArgs e)
 		{
 			webViewDataProtection.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
+			_customLogger.Error("The following url is missing a certificate. " + e.Url + "  EO:URL " + wfmWebView.Url);
 			_logger.Error("The following url is missing a certificate. " + e.Url);
 		}
 
@@ -1129,7 +1139,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (!((wfmWebView.Url == "" || wfmWebView.Url == webServer) ||
 				validUrls.Any(x => wfmWebView.Url.Contains(x))))
 			{
-				setWfmWebUrl(_permissionModule);
+				setWfmWebUrl();
 			}
 		}
 	}
