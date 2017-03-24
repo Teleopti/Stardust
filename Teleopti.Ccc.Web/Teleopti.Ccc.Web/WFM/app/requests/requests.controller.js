@@ -102,6 +102,13 @@
 			vm.paging.totalRequestsCount = count;
 		};
 
+		vm.hideSearchIfNoSelectedTeam = function () {
+			if (angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0) {
+				return 'visible';
+			}
+			return 'hidden';
+		};
+
 		function init() {
 			vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
 			vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
