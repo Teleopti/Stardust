@@ -600,7 +600,7 @@ item: Execute Program
 end
 item: Execute Program
   Pathname=.\Teleopti.Support.Tool.exe
-  Command Line=-CS %SQL_AUTH_STRING_TMP%;Database=%DB_CCC7_TMP%;
+  Command Line=-CS "%SQL_AUTH_STRING_TMP%;Database=%DB_CCC7_TMP%;"
   Default Directory=%SUPPORTTOOLS_TMP%
   Flags=00000110
 end
