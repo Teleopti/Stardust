@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Teleopti.Ccc.Infrastructure.Util
+namespace Teleopti.Ccc.Domain.Util
 {
 	public class StringHelper
 	{

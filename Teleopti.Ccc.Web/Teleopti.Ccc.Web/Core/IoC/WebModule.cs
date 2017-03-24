@@ -33,7 +33,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Options.IoC;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
-using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Reports.IoC;

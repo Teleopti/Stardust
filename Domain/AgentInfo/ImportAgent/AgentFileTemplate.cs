@@ -1,13 +1,12 @@
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core.Models
+namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public class AgentFileTemplate
 	{

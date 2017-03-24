@@ -6,9 +6,8 @@ using System.Reflection;
 using NPOI.SS.UserModel;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.People.Core.Models;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core
+namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public class WorkbookHandler : IWorkbookHandler
 	{

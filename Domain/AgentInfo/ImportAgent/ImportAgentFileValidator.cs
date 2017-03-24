@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Ajax.Utilities;
-using NPOI.HPSF;
-using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Util;
+using Teleopti.Ccc.Domain.Util;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.People.Core.Models;
-using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core
+namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public class ImportAgentFileValidator : IImportAgentFileValidator
 	{
@@ -35,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			if (defaultValues == null) return;
 			_defaultValues = new defaultAgentDataModel();
 
-			if (!defaultValues.RoleIds.IsNullOrWhiteSpace())
+			if (!defaultValues.RoleIds.IsNullOrEmpty())
 			{
 				var roleIds = StringHelper.SplitStringList(defaultValues.RoleIds);
 				foreach (var roleIdString in roleIds)
@@ -50,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if (!defaultValues.StartDate.IsNullOrWhiteSpace())
+			if (!defaultValues.StartDate.IsNullOrEmpty())
 			{
 				DateTime startDate;
 				if (DateTime.TryParse(defaultValues.StartDate, out startDate))
@@ -59,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if (!defaultValues.TeamId.IsNullOrWhiteSpace())
+			if (!defaultValues.TeamId.IsNullOrEmpty())
 			{
 				Guid teamId;
 				if (Guid.TryParse(defaultValues.TeamId, out teamId))
@@ -69,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if (!defaultValues.SkillIds.IsNullOrWhiteSpace())
+			if (!defaultValues.SkillIds.IsNullOrEmpty())
 			{
 				var skillIds = StringHelper.SplitStringList(defaultValues.SkillIds);
 
@@ -87,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if (!defaultValues.ExternalLogonId.IsNullOrWhiteSpace())
+			if (!defaultValues.ExternalLogonId.IsNullOrEmpty())
 			{
 				Guid externalLogonId;
 				if (Guid.TryParse(defaultValues.ExternalLogonId, out externalLogonId))
@@ -100,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if (!defaultValues.PartTimePercentageId.IsNullOrWhiteSpace())
+			if (!defaultValues.PartTimePercentageId.IsNullOrEmpty())
 			{
 				Guid partTimePercentageId;
 				if (Guid.TryParse(defaultValues.PartTimePercentageId, out partTimePercentageId))
@@ -113,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if (!defaultValues.ContractId.IsNullOrWhiteSpace())
+			if (!defaultValues.ContractId.IsNullOrEmpty())
 			{
 				Guid contractId;
 				if (Guid.TryParse(defaultValues.ContractId, out contractId))
@@ -126,7 +121,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if (!defaultValues.ContractScheduleId.IsNullOrWhiteSpace())
+			if (!defaultValues.ContractScheduleId.IsNullOrEmpty())
 			{
 				Guid contractScheduleId;
 				if (Guid.TryParse(defaultValues.ContractScheduleId, out contractScheduleId))
@@ -139,7 +134,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if (!defaultValues.ShiftBagId.IsNullOrWhiteSpace())
+			if (!defaultValues.ShiftBagId.IsNullOrEmpty())
 			{
 				Guid shiftBagId;
 				if (Guid.TryParse(defaultValues.ShiftBagId, out shiftBagId))
@@ -152,7 +147,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if (!defaultValues.SchedulePeriodType.IsNullOrWhiteSpace())
+			if (!defaultValues.SchedulePeriodType.IsNullOrEmpty())
 			{
 				SchedulePeriodType schedulePeriodType;
 				if (Enum.TryParse(defaultValues.SchedulePeriodType, out schedulePeriodType))
@@ -161,7 +156,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				}
 			}
 
-			if (!defaultValues.SchedulePeriodLength.IsNullOrWhiteSpace())
+			if (!defaultValues.SchedulePeriodLength.IsNullOrEmpty())
 			{
 				int schedulePeriodLength;
 				if (int.TryParse(defaultValues.SchedulePeriodLength, out schedulePeriodLength))
@@ -226,7 +221,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var feedback = new Feedback();
 			var errorMessages = feedback.ErrorMessages;
 
-			if (rawFirstname.IsNullOrWhiteSpace() && rawLastname.IsNullOrWhiteSpace())
+			if (rawFirstname.IsNullOrEmpty() && rawLastname.IsNullOrEmpty())
 			{
 				errorMessages.Add(Resources.BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon);
 			}
@@ -257,17 +252,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var feedback = new Feedback();
 			var errorMessages = feedback.ErrorMessages;
 
-			if (rawWindowsUser.IsNullOrWhiteSpace() && rawApplicationUserId.IsNullOrWhiteSpace())
+			if (rawWindowsUser.IsNullOrEmpty() && rawApplicationUserId.IsNullOrEmpty())
 			{
 				errorMessages.Add(Resources.NoLogonAccountErrorMsgSemicolon);
 			}
 
-			if (!rawWindowsUser.IsNullOrWhiteSpace() && rawWindowsUser.Length > maxWindowUserLength)
+			if (!rawWindowsUser.IsNullOrEmpty() && rawWindowsUser.Length > maxWindowUserLength)
 			{
 				errorMessages.Add(Resources.TooLongWindowsUserErrorMsgSemicolon);
 			}
 
-			if (!rawApplicationUserId.IsNullOrWhiteSpace() && rawApplicationUserId.Length > maxApplicationUserIdLength)
+			if (!rawApplicationUserId.IsNullOrEmpty() && rawApplicationUserId.Length > maxApplicationUserIdLength)
 			{
 				errorMessages.Add(Resources.TooLongApplicationUserIdErrorMsgSemicolon);
 			}
@@ -286,13 +281,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		{
 			var f = new Feedback();
 
-			if (!applicationUserId.IsNullOrWhiteSpace() && password.IsNullOrWhiteSpace())
+			if (!applicationUserId.IsNullOrEmpty() && password.IsNullOrEmpty())
 			{
 				f.ErrorMessages.Add(Resources.EmptyPasswordErrorMsgSemicolon);
 				return f;
 			}
 
-			if (!password.IsNullOrWhiteSpace() && applicationUserId.IsNullOrWhiteSpace())
+			if (!password.IsNullOrEmpty() && applicationUserId.IsNullOrEmpty())
 			{
 				f.ErrorMessages.Add(Resources.NoApplicationLogonAccountErrorMsgSemicolon);
 				return f;
@@ -554,7 +549,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		private Feedback parseSkill(string rawSkillString, AgentDataModel agent)
 		{
 			var feedback = new Feedback();
-			var skillNames = !rawSkillString.IsNullOrWhiteSpace()
+			var skillNames = !rawSkillString.IsNullOrEmpty()
 				? StringHelper.SplitStringList(rawSkillString)
 				: new List<string>();			
 			var invalidSkills = new List<string>();

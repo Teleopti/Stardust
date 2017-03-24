@@ -2,9 +2,9 @@
 using NPOI.HSSF.UserModel;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.People.Core.Models;
+using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 
-namespace Teleopti.Ccc.WebTest.Areas.People
+namespace Teleopti.Ccc.DomainTest.AgentInfo.ImportAgent
 {
 	[TestFixture]
 	public class AgentFileTemplateTest

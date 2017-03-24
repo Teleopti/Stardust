@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using NHibernate.Impl;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
@@ -12,10 +9,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.Util;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {

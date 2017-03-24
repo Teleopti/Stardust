@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
+namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public class ImportAgentDataProvider : IImportAgentDataProvider
 	{

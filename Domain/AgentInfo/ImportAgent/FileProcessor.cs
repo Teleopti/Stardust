@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
-using Teleopti.Ccc.Web.Areas.People.Core.Models;
-using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 using Teleopti.Ccc.Domain.Helper;
+using System.Linq;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core
+namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public class FileProcessor : IFileProcessor
 	{

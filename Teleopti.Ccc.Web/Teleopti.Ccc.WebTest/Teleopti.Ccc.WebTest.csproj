@@ -284,9 +284,6 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\SiteProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\SiteViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
-    <Compile Include="Areas\People\AgentPersisterTest.cs" />
-    <Compile Include="Areas\People\FileProcessorTest.cs" />
-    <Compile Include="Areas\People\AgentFileTemplateTest.cs" />
     <Compile Include="Areas\People\IoC\WebPeopleTestAttribute.cs" />
     <Compile Include="Areas\People\MultipartHttpContentExtractorTest.cs" />
     <Compile Include="Areas\People\PeopleAreaModuleTest.cs" />

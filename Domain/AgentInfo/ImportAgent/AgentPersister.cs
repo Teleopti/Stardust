@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Ajax.Utilities;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
-using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
+namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public interface IAgentPersister
 	{
@@ -42,9 +39,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 				var person = persistPerson(agentData);
 				var errorMessages = _tenantUserPersister.Persist(new PersonInfoModel
 				{
-					ApplicationLogonName = agentData.ApplicationUserId.IsNullOrWhiteSpace() ? null : agentData.ApplicationUserId,
-					Identity = agentData.WindowsUser.IsNullOrWhiteSpace() ? null : agentData.WindowsUser,
-					Password = agentData.Password.IsNullOrWhiteSpace() ? null : agentData.Password,
+					ApplicationLogonName = agentData.ApplicationUserId.IsNullOrEmpty() ? null : agentData.ApplicationUserId,
+					Identity = agentData.WindowsUser.IsNullOrEmpty() ? null : agentData.WindowsUser,
+					Password = agentData.Password.IsNullOrEmpty() ? null : agentData.Password,
 					PersonId = person.Id.GetValueOrDefault()
 				});
 

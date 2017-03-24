@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Domain.Util;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Interfaces.Domain;

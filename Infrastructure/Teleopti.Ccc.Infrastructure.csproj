@@ -745,7 +745,6 @@
     <Compile Include="UnitOfWork\CurrentUnitOfWorkFactory.cs" />
     <Compile Include="Util\MemoryCounter.cs" />
     <Compile Include="Util\SqlTransientErrorChecker.cs" />
-    <Compile Include="Util\StringHelper.cs" />
     <Compile Include="WebReports\DailyMetricsForDayQuery.cs" />
     <Compile Include="WebReports\QueueMetricsForDayResult.cs" />
     <Compile Include="WebReports\DailyMetricsForDayResult.cs" />

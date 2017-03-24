@@ -1,10 +1,10 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Infrastructure;
 

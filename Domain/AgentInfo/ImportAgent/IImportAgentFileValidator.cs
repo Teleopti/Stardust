@@ -1,9 +1,7 @@
-﻿using NPOI.SS.UserModel;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
-using Teleopti.Ccc.Web.Areas.People.Core.Models;
+﻿using System.Collections.Generic;
+using NPOI.SS.UserModel;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core
+namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 	public class Feedback
 	{

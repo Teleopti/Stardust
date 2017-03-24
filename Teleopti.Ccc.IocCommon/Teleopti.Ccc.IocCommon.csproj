@@ -161,6 +161,7 @@
     <Compile Include="Configuration\MessageBrokerServerModule.cs" />
     <Compile Include="Configuration\MessageBrokerUnitOfWorkModule.cs" />
     <Compile Include="Configuration\OutboundScheduledResourcesProviderModule.cs" />
+    <Compile Include="Configuration\PeopleAreaModule.cs" />
     <Compile Include="Configuration\ReadModelUnitOfWorkModule.cs" />
     <Compile Include="Configuration\EventPublisherModule.cs" />
     <Compile Include="Configuration\RequestModule.cs" />

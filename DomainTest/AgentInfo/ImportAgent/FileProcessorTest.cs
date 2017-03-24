@@ -20,17 +20,11 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
-using Teleopti.Ccc.Web.Areas.People.Core;
-using Teleopti.Ccc.Web.Areas.People.Core.Models;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
-using Teleopti.Ccc.WebTest.Areas.People.IoC;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebTest.Areas.People
+namespace Teleopti.Ccc.DomainTest.AgentInfo.ImportAgent
 {
-	[TestFixture, WebPeopleTest]
+	[TestFixture, DomainTest]
 	public class FileProcessorTest : ISetup
 	{
 		public FileProcessor Target;
@@ -77,7 +71,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			system.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
 			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.UseTestDouble<LogLogonAttemptFake>().For<ILogLogonAttempt>();
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 		}
 

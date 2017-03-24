@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.Util;
+using Teleopti.Ccc.Domain.Util;
 
 namespace Teleopti.Ccc.InfrastructureTest.Util
 {
-    [TestFixture]
+	[TestFixture]
     class StringHelperTest
     {
         [Test]

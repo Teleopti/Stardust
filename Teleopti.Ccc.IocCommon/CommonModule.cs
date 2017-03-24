@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<BadgeCalculationModule>();
 			builder.RegisterModule<CommandDispatcherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
+			builder.RegisterModule<PeopleAreaModule>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)

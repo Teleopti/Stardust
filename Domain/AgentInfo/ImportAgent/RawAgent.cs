@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core.Models
+namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
 {
 
 	public class OrderAttribute : Attribute
