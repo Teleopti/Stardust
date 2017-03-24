@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly DayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 		private readonly AffectedDayOffs _affectedDayOffs;
+		private readonly IScheduleService _classicSchedulingService;
 
 		public TeamBlockDayOffOptimizerService(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -66,7 +67,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder,
-			AffectedDayOffs affectedDayOffs)
+			AffectedDayOffs affectedDayOffs,
+			IScheduleService classicSchedulingService)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -90,6 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_dayOffOptimizerPreMoveResultPredictor = dayOffOptimizerPreMoveResultPredictor;
 			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
 			_affectedDayOffs = affectedDayOffs;
+			_classicSchedulingService = classicSchedulingService;
 		}
 
 		public void OptimizeDaysOff(
@@ -390,7 +393,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, matrix.Person);
 			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, matrix.Person);
 			
-			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder))
+			if (!reScheduleAllMovedDaysOff(matrix, schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, optimizationPreferences.Extra.IsClassic()))
 			{
 				return false;
 			}
@@ -450,8 +453,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return checkPeriodValue(currentPeriodValue, previousPeriodValue);
 		}
 
-		private static bool checkPeriodValue(Lazy<double> currentPeriodValue, 
-							double previousPeriodValue)
+		private static bool checkPeriodValue(Lazy<double> currentPeriodValue, double previousPeriodValue)
 		{
 			return currentPeriodValue.Value < previousPeriodValue;
 		}
@@ -498,10 +500,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			removeAllDecidedDaysOffForTeam(rollbackService, teamInfo, movedDaysOff.RemovedDaysOff);
 			addAllDecidedDaysOffForTeam(rollbackService, schedulingOptions, teamInfo, movedDaysOff.AddedDaysOff);
 
-			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo,
+			bool success = reScheduleAllMovedDaysOff(matrix, schedulingOptions, teamInfo,
 			                                         movedDaysOff.RemovedDaysOff,
 			                                         rollbackService, resourceCalculateDelayer,
-			                                         schedulingResultStateHolder);
+			                                         schedulingResultStateHolder, false);
 			if (!success)
 			{
 				checkPeriodValue = true;
@@ -569,11 +571,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
-		private bool reScheduleAllMovedDaysOff(ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
+		private bool reScheduleAllMovedDaysOff(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 		                                       IEnumerable<DateOnly> removedDaysOff,
 		                                       ISchedulePartModifyAndRollbackService rollbackService,
 		                                       IResourceCalculateDelayer resourceCalculateDelayer,
-												ISchedulingResultStateHolder schedulingResultStateHolder)
+												ISchedulingResultStateHolder schedulingResultStateHolder,
+												bool useOldClassicScheduling)
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
@@ -586,8 +589,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
-				if(!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
-					return false;
+				if (useOldClassicScheduling)
+				{
+					if (!_classicSchedulingService.SchedulePersonOnDay(matrix.ActiveScheduleRange.ScheduledDay(dateOnly), schedulingOptions, resourceCalculateDelayer, rollbackService))
+						return false;
+				}
+				else
+				{
+					if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
+						return false;
+				}
 			}
 
 			return true;
