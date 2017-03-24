@@ -19,7 +19,8 @@ CREATE PROCEDURE [ReadModel].[LoadOrganizationForSelector]
 @enddate datetime,
 @bu uniqueidentifier,
 @users bit,
-@culture int
+@culture int,
+@optionalColumnId uniqueidentifier
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -203,6 +204,20 @@ BEGIN
 		INNER JOIN PersonSkill ps ON PeriodId = ps.Parent
 		INNER JOIN Skill s ON ps.Skill = s.Id AND s.IsDeleted = 0
 	 
+	END
+
+	IF @type = 'OptionalColumn'
+	BEGIN	
+		INSERT #otherResult
+		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit, ocv.Description,  
+		pp.FirstName, pp.LastName, pp.EmploymentNumber  
+		FROM  #TempPersonPeriodWithEndDate pp
+		INNER JOIN Person p with (nolock) on pp.Parent = p.Id
+		INNER JOIN Team ON Team.Id = pp.Team
+		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
+		INNER JOIN OptionalColumnValue ocv ON p.Id = ocv.ReferenceId 
+			AND ocv.Parent = @optionalColumnId
+			AND ocv.Description <> ''
 	END
 
 	SELECT @dynamicSQL =	'SELECT * FROM #otherResult ORDER BY Node collate ' + @collation +

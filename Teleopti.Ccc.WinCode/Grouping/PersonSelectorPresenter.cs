@@ -4,9 +4,12 @@ using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Grouping.Commands;
@@ -49,13 +52,14 @@ namespace Teleopti.Ccc.WinCode.Grouping
 		private IRenameGroupPageCommand _renameGroupPageCommand;
 		private IOpenModuleCommand _openModuleCommand;
 		private IEventAggregator _globalEventAggregator;
+		private readonly IToggleManager _toggleManager;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "10"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public PersonSelectorPresenter(IPersonSelectorView personSelectorView, ICommandProvider commandProvider,
 			 IUnitOfWorkFactory unitOfWorkFactory, IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository, IEventAggregator eventAggregator,
 			 IAddGroupPageCommand addGroupPageCommand, IDeleteGroupPageCommand deleteGroupPageCommand,
 			 IModifyGroupPageCommand modifyGroupPageCommand, IRenameGroupPageCommand renameGroupPageCommand, IOpenModuleCommand openModuleCommand,
-			 IEventAggregatorLocator eventAggregatorLocator)
+			 IEventAggregatorLocator eventAggregatorLocator, IToggleManager toggleManager)
 		{
 			_personSelectorView = personSelectorView;
 			_commandProvider = commandProvider;
@@ -68,6 +72,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
 			_modifyGroupPageCommand = modifyGroupPageCommand;
 			_renameGroupPageCommand = renameGroupPageCommand;
 			_openModuleCommand = openModuleCommand;
+			_toggleManager = toggleManager;
 			_eventAggregator.GetEvent<AddGroupPageClicked>().Subscribe(addGroupPageClicked);
 			_eventAggregator.GetEvent<DeleteGroupPageClicked>().Subscribe(deleteGroupPageClicked);
 			_eventAggregator.GetEvent<ModifyGroupPageClicked>().Subscribe(modifyGroupPageClicked);
@@ -180,59 +185,90 @@ namespace Teleopti.Ccc.WinCode.Grouping
 											  {
 													Tag =
 														 _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Contract,
-																												  _personSelectorView,
-																												  Resources.Contract,ApplicationFunction),
+																													_personSelectorView,
+																													Resources.Contract,
+																													ApplicationFunction,
+																													Guid.Empty),
 											  },
 										 new TabPageAdv(Resources.ContractSchedule)
 											  {
 													Tag =
-														 _commandProvider.GetLoadBuiltInTabsCommand(
-															  PersonSelectorField.ContractSchedule, _personSelectorView,
-															  Resources.ContractSchedule,ApplicationFunction)
+														 _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.ContractSchedule, 
+																													_personSelectorView,
+																													Resources.ContractSchedule,
+																													ApplicationFunction,
+																													Guid.Empty)
 											  },
 										 new TabPageAdv(Resources.PartTimePercentageHeader)
 											  {
 													Tag =
-														 _commandProvider.GetLoadBuiltInTabsCommand(
-															  PersonSelectorField.PartTimePercentage, _personSelectorView,
-															  Resources.PartTimePercentageHeader,ApplicationFunction)
+														 _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.PartTimePercentage, 
+																													_personSelectorView,
+																													Resources.PartTimePercentageHeader,
+																													ApplicationFunction,
+																													Guid.Empty)
 											  },
 										 new TabPageAdv(Resources.Note)
 											  {
 													Tag =
 														 _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Note,
-																												  _personSelectorView,
-																												  Resources.Note,ApplicationFunction)
+																													_personSelectorView,
+																													Resources.Note,
+																													ApplicationFunction,
+																													Guid.Empty)
 											  },
 										 new TabPageAdv(Resources.RuleSetBag)
 											  {
 													Tag =
 														 _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.ShiftBag,
-																												  _personSelectorView,
-																												  Resources.RuleSetBag,ApplicationFunction)
+																													_personSelectorView,
+																													Resources.RuleSetBag,
+																													ApplicationFunction,
+																													Guid.Empty)
 											  },
 										 new TabPageAdv(Resources.Skill)
 											  {
 													Tag =
 														 _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Skill,
-																												  _personSelectorView,
-																												  Resources.Skill,ApplicationFunction)
+																													_personSelectorView,
+																													Resources.Skill,
+																													ApplicationFunction,
+																													Guid.Empty)
 											  }
 									};
 
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var userTabs = _personSelectorReadOnlyRepository.GetUserDefinedTabs();
-				foreach (var userDefinedTabLight in userTabs.OrderBy(u => u.Name))
-				{
-					tabs.Add(new TabPageAdv(userDefinedTabLight.Name)
-					{
-						Tag = _commandProvider.GetLoadUserDefinedTabsCommand(_personSelectorView, userDefinedTabLight.Id, ApplicationFunction)
-					});
-				}
+				if(_toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
+					createOptionalColumnTabs(tabs);
+				createUserDefinedTabs(tabs);
 			}
 
 			_personSelectorView.ResetTabs(tabs.ToArray(), _commandProvider.GetLoadOrganizationCommand(ApplicationFunction, ShowPersons, ShowUsers));
+		}
+
+		private void createOptionalColumnTabs(List<TabPageAdv> tabs)
+		{
+			var optionalColumns = _personSelectorReadOnlyRepository.GetOptionalColumnTabs();
+			foreach (var optionColumn in optionalColumns.OrderBy(o => o.Name))
+			{
+				tabs.Add(new TabPageAdv(optionColumn.Name)
+				{
+					Tag = _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.OptionalColumn, _personSelectorView, optionColumn.Name, ApplicationFunction, optionColumn.Id)
+				});
+			}
+		}
+
+		private void createUserDefinedTabs(List<TabPageAdv> tabs)
+		{
+			var userTabs = _personSelectorReadOnlyRepository.GetUserDefinedTabs();
+			foreach (var userDefinedTabLight in userTabs.OrderBy(u => u.Name))
+			{
+				tabs.Add(new TabPageAdv(userDefinedTabLight.Name)
+				{
+					Tag = _commandProvider.GetLoadUserDefinedTabsCommand(_personSelectorView, userDefinedTabLight.Id, ApplicationFunction)
+				});
+			}
 		}
 
 		public HashSet<Guid> SelectedPersonGuids

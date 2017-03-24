@@ -25,10 +25,17 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
         private readonly string _rootNodeName;
         private readonly ICommonNameDescriptionSetting _commonAgentNameSettings;
         private readonly IApplicationFunction _applicationFunction;
+	    private readonly Guid _optionalColumnId;
 
-        public LoadBuiltInTabsCommand(PersonSelectorField loadType, IUnitOfWorkFactory unitOfWorkFactory, 
-            IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository, IPersonSelectorView personSelectorView, string rootNodeName,
-            ICommonNameDescriptionSetting commonAgentNameSettings, IApplicationFunction applicationFunction)
+	    public LoadBuiltInTabsCommand(
+			  PersonSelectorField loadType, 
+			  IUnitOfWorkFactory unitOfWorkFactory, 
+			  IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository, 
+			  IPersonSelectorView personSelectorView, 
+			  string rootNodeName, 
+			  ICommonNameDescriptionSetting commonAgentNameSettings, 
+			  IApplicationFunction applicationFunction, 
+			  Guid optionalColumnId)
         {
             _loadType = loadType;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -37,6 +44,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             _rootNodeName = rootNodeName;
             _commonAgentNameSettings = commonAgentNameSettings;
             _applicationFunction = applicationFunction;
+	        _optionalColumnId = optionalColumnId;
         }
 
         public void Execute()
@@ -45,7 +53,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             IList<IPersonSelectorBuiltIn> toNodes;
             using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-	            toNodes = _personSelectorReadOnlyRepository.GetBuiltIn(selectedPeriod, _loadType);    
+	            toNodes = _personSelectorReadOnlyRepository.GetBuiltIn(selectedPeriod, _loadType, _optionalColumnId);    
             }
             
             // rättigheter

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
         [Test]
         public void ShouldDeliverLoadBuiltInCommand()
         {
-            Assert.That(_target.GetLoadBuiltInTabsCommand(PersonSelectorField.Contract,_view, "Contract" ,_myApplicationFunction), Is.Not.Null);
+            Assert.That(_target.GetLoadBuiltInTabsCommand(PersonSelectorField.Contract,_view, "Contract" ,_myApplicationFunction, Guid.Empty), Is.Not.Null);
         }
 
         [Test]

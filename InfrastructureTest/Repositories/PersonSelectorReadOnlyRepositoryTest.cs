@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
 				var date = new DateOnly(2012, 1, 27);
-				_target.GetBuiltIn(new DateOnlyPeriod(date,date), PersonSelectorField.Contract);
+				_target.GetBuiltIn(new DateOnlyPeriod(date,date), PersonSelectorField.Contract, Guid.Empty);
 			}
 		}
 
@@ -53,6 +53,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
 				_target.GetUserDefinedTab(new DateOnly(2012, 1, 27), Guid.NewGuid());
+			}
+		}
+
+		[Test]
+		public void ShouldLoadOptionalColumnTabs()
+		{
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
+				_target.GetOptionalColumnTabs();
 			}
 		}
 	}

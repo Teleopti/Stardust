@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 	public interface ICommandProvider:  IDisposable
 	{
         ILoadOrganizationCommand GetLoadOrganizationCommand(IApplicationFunction applicationFunction, bool showPersons, bool loadUsers);
-        ILoadBuiltInTabsCommand GetLoadBuiltInTabsCommand(PersonSelectorField loadType, IPersonSelectorView personSelectorView, string rootNodeName, IApplicationFunction applicationFunction);
+        ILoadBuiltInTabsCommand GetLoadBuiltInTabsCommand(PersonSelectorField loadType, IPersonSelectorView personSelectorView, string rootNodeName, IApplicationFunction applicationFunction, Guid optionalColumnId);
         ILoadUserDefinedTabsCommand GetLoadUserDefinedTabsCommand(IPersonSelectorView personSelectorView, Guid value, IApplicationFunction applicationFunction);
     }
 
@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             return new LoadOrganizationCommand(_unitOfWorkFactory, _personSelectorReadOnlyRepository, _view, _commonAgentNameSettings.Value, applicationFunction, showPersons, loadUsers);
         }
 
-        public ILoadBuiltInTabsCommand GetLoadBuiltInTabsCommand(PersonSelectorField loadType, IPersonSelectorView personSelectorView, string rootNodeName, IApplicationFunction applicationFunction)
+        public ILoadBuiltInTabsCommand GetLoadBuiltInTabsCommand(PersonSelectorField loadType, IPersonSelectorView personSelectorView, string rootNodeName, IApplicationFunction applicationFunction, Guid optionalColumnId)
         {
-            return new LoadBuiltInTabsCommand(loadType, _unitOfWorkFactory, _personSelectorReadOnlyRepository, personSelectorView, rootNodeName, _commonAgentNameSettings.Value, applicationFunction);
+            return new LoadBuiltInTabsCommand(loadType, _unitOfWorkFactory, _personSelectorReadOnlyRepository, personSelectorView, rootNodeName, _commonAgentNameSettings.Value, applicationFunction, optionalColumnId);
         }
 
         public ILoadUserDefinedTabsCommand GetLoadUserDefinedTabsCommand(IPersonSelectorView personSelectorView, Guid value, IApplicationFunction applicationFunction)
