@@ -141,7 +141,6 @@
     <Compile Include="ApplicationLayer\ImportAgent\IImportAgentFileValidator.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentDataProvider.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentDefaults.cs" />
-    <Compile Include="ApplicationLayer\ImportAgent\ImportAgentEventHandler.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentFileValidator.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentService.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentsSettingDataModel.cs" />
