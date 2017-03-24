@@ -188,7 +188,7 @@ BEGIN
 END
 
 DECLARE @txt varchar(8000)
-SELECT @txt = @logdb_name+'.'+@schema+'.'+@proc_name+'
+SELECT @txt = '['+@logdb_name+'].['+@schema+'].['+@proc_name+']
 '+convert(varchar(5),@log_object_id)+',
 '+''''+convert(varchar(10),@last_logg_date,120)+''''+',
 '+convert(varchar(5),@last_logg_interval)+',
