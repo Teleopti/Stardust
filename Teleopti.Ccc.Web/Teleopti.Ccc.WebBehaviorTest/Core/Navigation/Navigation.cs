@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("MyTime");
 		}
 
-		public static void GotoCiscoWidget()
+		public static void GotoASMWidget()
 		{
 			GoToPage("MyTime/ASMWidget");
 		}

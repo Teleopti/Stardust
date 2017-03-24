@@ -651,7 +651,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I navigate to CiscoWidget")]
 		public void WhenINavigateToCiscoWidget()
 		{
-			Navigation.GotoCiscoWidget();
+			Navigation.GotoASMWidget();
 		}
 
 		[Given(@"I navigate to Anywhere")]
