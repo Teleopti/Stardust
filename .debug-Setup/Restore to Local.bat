@@ -351,9 +351,8 @@ IF EXIST "%postDbRestoreSqlFile%" (
    )
    ECHO Done!
    ECHO ------
+   ECHO.
 )
-
-PAUSE
 
 ECHO ------
 ECHO Update data ...
