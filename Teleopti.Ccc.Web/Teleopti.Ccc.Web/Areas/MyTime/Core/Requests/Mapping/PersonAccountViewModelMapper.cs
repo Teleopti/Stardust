@@ -24,17 +24,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var absence = absenceAccount?.Owner?.Absence;
 			if (absence == null) return null;
 
-			var tracker = absence.Tracker;
-			var trackerType = getTrackerType(tracker);
+			var timezone = _userTimeZone.TimeZone();
+			var trackerType = getTrackerType(absence.Tracker);
 			return new AbsenceAccountViewModel
 			{
 				AbsenceName = absence.Name,
 				TrackerType = trackerType,
-				PeriodStart = TimeZoneInfo.ConvertTimeFromUtc(absenceAccount.StartDate.Date, _userTimeZone.TimeZone()),
-				PeriodEnd = TimeZoneInfo.ConvertTimeFromUtc(absenceAccount.Period().EndDate.Date, _userTimeZone.TimeZone()),
-				Accrued = tracker == null ? string.Empty : convertTimeSpanToString(absenceAccount.Accrued, trackerType),
-				Used = tracker == null ? string.Empty : convertTimeSpanToString(absenceAccount.LatestCalculatedBalance, trackerType),
-				Remaining = tracker == null ? string.Empty : convertTimeSpanToString(absenceAccount.Remaining, trackerType)
+				PeriodStart = TimeZoneInfo.ConvertTimeFromUtc(absenceAccount.StartDate.Date, timezone),
+				PeriodEnd = TimeZoneInfo.ConvertTimeFromUtc(absenceAccount.Period().EndDate.Date, timezone),
+				Accrued = convertTimeSpanToString(absenceAccount.Accrued, trackerType),
+				Used = convertTimeSpanToString(absenceAccount.LatestCalculatedBalance, trackerType),
+				Remaining = convertTimeSpanToString(absenceAccount.Remaining, trackerType)
 			};
 		}
 
