@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentTenant>().As<ICurrentTenant>().SingleInstance();
 			builder.RegisterType<FindLogonInfo>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
+			builder.RegisterType<ServerConfigurationRepository>().As<IServerConfigurationRepository>().SingleInstance();
 			builder.RegisterType<TenantExists>().As<ITenantExists>().SingleInstance();
 			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();
 			builder.RegisterType<PersistTenant>().SingleInstance();

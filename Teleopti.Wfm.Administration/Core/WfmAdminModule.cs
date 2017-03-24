@@ -19,6 +19,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Support.Security;
+using Teleopti.Support.Shared;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 using Teleopti.Wfm.Administration.Core.Stardust;
@@ -54,6 +55,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<DatabaseUpgrader>().SingleInstance();
 			builder.RegisterType<DatabasePatcher>().SingleInstance();
 			builder.RegisterType<TenantUpgrader>().SingleInstance();
+			builder.RegisterType<FrameAncestorsUpdator>().As<IFrameAncestorsUpdator>().SingleInstance();
 			builder.RegisterType<NullLog>().As<IUpgradeLog>();
 			builder.RegisterType<UpgradeRunner>().SingleInstance();
 			builder.RegisterType<UpgradeLogRetriever>().As<IUpgradeLogRetriever>().SingleInstance();

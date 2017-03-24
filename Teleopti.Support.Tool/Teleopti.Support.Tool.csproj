@@ -227,6 +227,7 @@
     <Compile Include="SettingsInRegistry.cs" />
     <Compile Include="Tool\CommandLineArgument.cs" />
     <Compile Include="Tool\CompositeCommand.cs" />
+    <Compile Include="Tool\ConfigServerCommand.cs" />
     <Compile Include="Tool\CustomSection.cs" />
     <Compile Include="Tool\CustomSectionContainer.cs" />
     <Compile Include="Tool\ISupportCommand.cs" />
@@ -393,6 +394,10 @@
     <ProjectReference Include="..\Teleopti.Support.Library\Teleopti.Support.Library.csproj">
       <Project>{96baa3e0-a623-412e-bfe7-d3be03a2288a}</Project>
       <Name>Teleopti.Support.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Support.Shared\Teleopti.Support.Shared.csproj">
+      <Project>{e6539638-fef8-41db-bb0e-3ae22f408eb6}</Project>
+      <Name>Teleopti.Support.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

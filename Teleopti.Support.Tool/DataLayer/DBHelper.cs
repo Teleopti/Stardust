@@ -75,7 +75,26 @@ namespace  Teleopti.Support.Tool.DataLayer
             }
         }
 
-        public int GetDatabaseBuildNumber()
+	    public Dictionary<string, string> GetServerConfigurations()
+	    {
+			var result = new Dictionary<string, string>();
+			var builder = new SqlConnectionStringBuilder(ConnectionString);
+			using (var ds = Execute("select [Key], [Value] from Tenant.ServerConfiguration", builder.InitialCatalog))
+			{
+				foreach (DataTable table in ds.Tables)
+				{
+					foreach (DataRow row in table.Rows)
+					{
+						var key = Convert.ToString(row.ItemArray[0], System.Globalization.CultureInfo.InvariantCulture);
+						var value = Convert.ToString(row.ItemArray[1], System.Globalization.CultureInfo.InvariantCulture);
+						result.Add(key, value);
+					}
+				}
+			}
+			return result;
+		}
+
+		public int GetDatabaseBuildNumber()
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString);
             return GetDatabaseBuildNumber(builder.InitialCatalog);

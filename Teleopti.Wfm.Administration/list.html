@@ -18,7 +18,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 ">
+		<div class="col-md-4">
 			<div class="panel panel-default">
 				<div class="panel-heading">Create new Tenant</div>
 				<div class="panel-body text-container">
@@ -60,29 +60,47 @@
 		<div>
 			<table>
 				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Application database</th>
-						<th>Analytics database</th>
-						<th>Aggregation database</th>
-						<th>Version</th>
-						<th>Active</th>
-					</tr>
+				<tr>
+					<th>Name</th>
+					<th>Application database</th>
+					<th>Analytics database</th>
+					<th>Aggregation database</th>
+					<th>Version</th>
+					<th>Active</th>
+				</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="tenant in Tenants">
-						<td>
-							<a href="#details\{{tenant.Name}}">
-								<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_group_black_24px.svg"></md-icon>{{tenant.Name}}</a>
-						</td>
-						<td><a href="#details\{{tenant.Name}}">{{tenant.AppDatabase}}</a> </td>
-						<td><a href="#details\{{tenant.Name}}">{{tenant.AnalyticsDatabase}}</a> </td>
-						<td><a href="#details\{{tenant.Name}}">&nbsp;{{tenant.AggregationDatabase}}</a> </td>
-						<td><a href="#details\{{tenant.Name}}">{{tenant.Version.ImportAppVersion}}</a> </td>
-						<td>{{tenant.Active}}</td>
-					</tr>
+				<tr ng-repeat="tenant in Tenants">
+					<td>
+						<a href="#details\{{tenant.Name}}">
+							<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_group_black_24px.svg"></md-icon>{{tenant.Name}}</a>
+					</td>
+					<td><a href="#details\{{tenant.Name}}">{{tenant.AppDatabase}}</a> </td>
+					<td><a href="#details\{{tenant.Name}}">{{tenant.AnalyticsDatabase}}</a> </td>
+					<td><a href="#details\{{tenant.Name}}">&nbsp;{{tenant.AggregationDatabase}}</a> </td>
+					<td><a href="#details\{{tenant.Name}}">{{tenant.Version.ImportAppVersion}}</a> </td>
+					<td>{{tenant.Active}}</td>
+				</tr>
 				</tbody>
 			</table>
 		</div>
+	</div>
+	
+	<h2>Configuration for this installation</h2>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th>Key</th>
+					<th>Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="configuration in Configurations">
+					<td><a href="#configurationdetails\{{configuration.Key}}">{{configuration.Key}}</a></td>
+					<td><a href="#configurationdetails\{{configuration.Key}}">{{configuration.Value}}</a></td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>

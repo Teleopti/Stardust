@@ -46,6 +46,9 @@
 					templateUrl: 'changePassword.html',
 					//controller: 'changePasswordController'
 				})
+				.when('/configurationdetails/:key', {
+					templateUrl: 'configurationDetails.html'
+				})
 				.when('/other', {
 					templateUrl: 'other.html',
 					//controller: 'otherController'

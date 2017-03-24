@@ -13,6 +13,12 @@
 		}).error(function(xhr, ajaxOptions, thrownError) {
 			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 		});
+
+		$http.get("./GetAllConfigurations", tokenHeaderService.getHeaders()).success(function (data) {
+			$scope.Configurations = data;
+		}).error(function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+		});
 	}
 
 })();

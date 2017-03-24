@@ -4,13 +4,12 @@ using NUnit.Framework;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Support.Shared;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 
@@ -30,6 +29,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			system.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
 			system.UseTestDouble<FakeHangfireCookie>().For<IHangfireCookie>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();			
+			system.UseTestDouble<FrameAncestorsUpdatorFake>().For<IFrameAncestorsUpdator>();			
 
 			_tenantUnitOfWorkManager = TenantUnitOfWorkForTest();
 			system.AddService(_tenantUnitOfWorkManager);

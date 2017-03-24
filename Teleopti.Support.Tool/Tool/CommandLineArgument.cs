@@ -101,9 +101,16 @@ namespace Teleopti.Support.Tool.Tool
 
 				if (argument.Equals("-SET"))
 					Command = new SetSettingCommand(_args.ElementAt(1), _args.ElementAt(2));
+
+				if (argument.StartsWith("-CS"))
+				{
+					Command = new ConfigServerCommand(_args.ElementAt(1));
+				}
 			});
 
 		}
 
 	}
+
+
 }

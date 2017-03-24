@@ -211,7 +211,11 @@
     <Content Include="Content\angular-material.css" />
     <Content Include="Content\angular-material.layouts.css" />
     <Content Include="Content\angular-material.layouts.min.css" />
+    <Content Include="Content\images\ic_account_circle_black_24px.svg" />
+    <Content Include="Content\images\ic_add_black_24px.svg" />
+    <Content Include="Content\images\ic_create_black_24px.svg" />
     <Content Include="Content\images\ic_delete_black_24px.svg" />
+    <Content Include="Content\images\ic_forward_black_24px.svg" />
     <Content Include="Content\images\ic_group_add_black_24px.svg" />
     <Content Include="Content\images\ic_group_black_24px.svg" />
     <Content Include="HangfireMonitoring.html" />
@@ -260,6 +264,7 @@
     <Content Include="Scripts\App\addSuperUserController.js" />
     <Content Include="Scripts\App\httpInterceptor.js" />
     <Content Include="Scripts\App\tokenHeaderService.js" />
+    <Content Include="Scripts\App\configurationDetailsController.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\Hangfire\hangfireController.js" />
@@ -290,6 +295,7 @@
     <Content Include="StardustDashboard\menu.html" />
     <Content Include="StardustDashboard\queue.html" />
     <Content Include="StardustDashboard\style.css" />
+    <Content Include="configurationDetails.html" />
     <Content Include="userdetails.html" />
     <Content Include="details.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -339,7 +345,11 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Models\ConfigurationModel.cs" />
     <Compile Include="Controllers\HangfireController.cs" />
+    <Compile Include="Models\UpdateConfigurationModel.cs" />
+    <Compile Include="Models\UpdateConfigurationResultModel.cs" />
     <Compile Include="Core\CreateBusinessUnit.cs" />
     <Compile Include="Core\Hangfire\HangfireCookie.cs" />
     <Compile Include="Core\Hangfire\HangfireStatisticsViewModelBuilder.cs" />
@@ -428,6 +438,10 @@
     <ProjectReference Include="..\Teleopti.Support.Security\Teleopti.Support.Security.csproj">
       <Project>{6030cf98-1346-43dd-a9b6-01cdbeb5a832}</Project>
       <Name>Teleopti.Support.Security</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Support.Shared\Teleopti.Support.Shared.csproj">
+      <Project>{e6539638-fef8-41db-bb0e-3ae22f408eb6}</Project>
+      <Name>Teleopti.Support.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
