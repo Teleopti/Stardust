@@ -12918,7 +12918,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide staffing info.
+        ///   Looks up a localized string similar to Hide staffing probability.
         /// </summary>
         public static string HideStaffingInfo {
             get {

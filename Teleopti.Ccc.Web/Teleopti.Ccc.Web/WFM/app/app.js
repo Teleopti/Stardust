@@ -50,7 +50,8 @@ var wfm = angular.module('wfm', [
 	'wfm.rtaTool',
 	'wfm.staffing',
 	'wfm.dataProtection',
-	'wfm.templates'
+	'wfm.templates',
+	'wfm.workPicker'
 ]);
 
 wfm.config([
