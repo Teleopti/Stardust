@@ -14,7 +14,7 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selectedDate) {
+Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selectedDate, parent) {
 
 	var self = this;
 	var currentDate = moment(scheduleDate.FixedDate, 'YYYY-MM-DD');
@@ -185,9 +185,9 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
 			}
 			var newDay;
 			if (useJalaaliCalendar) {
-				newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[base - count], self.selectedDate());
+				newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[base - count], self.selectedDate(), self);
 			} else {
-				newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], self.selectedDate());
+				newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], self.selectedDate(), self);
 			}
 
 			count++;
@@ -195,7 +195,4 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
 		}
 		self.weekViewModels.push(newWeek);
 	};
-
-
-
 };
