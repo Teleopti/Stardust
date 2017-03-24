@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				_innerValue = _innerValue + change;
 			}
 
-			public double Current => _innerValue;
+			public double Current { get { return _innerValue; } }
 		}
 
 		private SkillEffiencyResource[] subtractEffiencyResources(SkillEffiencyResource[] baseCollection,

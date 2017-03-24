@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ActivitySkillsCombination : IEquatable<ActivitySkillsCombination>
+	public class ActivitySkillsCombination
 	{
 		private readonly Guid _activity;
 		private readonly SkillCombination _skills;
@@ -31,25 +31,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != GetType()) return false;
-			return Equals((ActivitySkillsCombination) obj);
+			var that = obj as ActivitySkillsCombination;
+			if (that == null)
+				return false;
+			return _activity == that._activity &&
+				_skills.MergedKey() == that._skills.MergedKey();
 		}
 
 		public override int GetHashCode()
 		{
-			unchecked
-			{
-				return (_activity.GetHashCode() * 397) ^ (_skills?.GetHashCode() ?? 0);
-			}
-		}
-
-		public bool Equals(ActivitySkillsCombination other)
-		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return _activity.Equals(other._activity) && Equals(_skills, other._skills);
+			return _activity.GetHashCode() ^ _skills.MergedKey().GetHashCode();
 		}
 	}
 }
