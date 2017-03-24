@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public interface IImportAgentDataProvider
 	{

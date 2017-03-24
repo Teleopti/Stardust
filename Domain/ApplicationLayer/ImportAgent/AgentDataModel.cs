@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public class AgentDataModel
 	{

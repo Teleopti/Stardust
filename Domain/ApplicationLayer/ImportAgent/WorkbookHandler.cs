@@ -7,7 +7,7 @@ using NPOI.SS.UserModel;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public class WorkbookHandler : IWorkbookHandler
 	{

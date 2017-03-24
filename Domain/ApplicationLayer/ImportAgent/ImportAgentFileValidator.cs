@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Util;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public class ImportAgentFileValidator : IImportAgentFileValidator
 	{

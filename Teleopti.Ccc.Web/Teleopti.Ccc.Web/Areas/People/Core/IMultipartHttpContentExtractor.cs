@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
-using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
+using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
 {

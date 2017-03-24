@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.AgentInfo.ImportAgent
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public class ImportAgentsFieldOptionsModel
 	{

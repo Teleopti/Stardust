@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Domain.AgentInfo.ImportAgent;
+using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
