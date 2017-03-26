@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Support.Library.Config;
 
@@ -13,11 +14,13 @@ namespace Teleopti.Support.Tool.Tool
 
 	public class CommandLineArgument : ICommandLineArgument
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(CommandLineArgument));
 		private readonly IEnumerable<string> _args;
 
 		public CommandLineArgument(IEnumerable<string> args)
 		{
 			_args = args;
+			logger.InfoFormat("support tool is called with args: {0}", string.Join(" ", args));
 			readArguments();
 		}
 
