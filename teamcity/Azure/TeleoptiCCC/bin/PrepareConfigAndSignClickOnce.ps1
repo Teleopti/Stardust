@@ -267,6 +267,25 @@ function SetDefaultSettings{
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(CSP_PARENT_URL)" -content "`$(CSP_PARENT_URL)|"
 }
 
+function GetConnectoinString {
+	$DBManagerFolder = Get-ScriptDirectory + "\..\Tools\Database"
+    $settingsFile = "settings.txt"
+    $fullPathsettingsFile =  $DBManagerFolder + "\" + $settingsFile
+	
+	#Get SQL Server info
+	$FirstRow = (Get-Content $fullPathsettingsFile)[0 .. 0] | out-string
+	$ThirdRow = (Get-Content $fullPathsettingsFile)[2 .. 2] | out-string
+
+	$ConnectionStringBase = ($FirstRow -split "|")[1]
+
+	$CCC7DB = $ThirdRow.Substring($ThirdRow.LastIndexOf("|") + 1)
+	$CCC7DB = $CCC7DB.Replace("`r","")
+	$CCC7DB = $CCC7DB.Replace("`n","")
+	
+	$ConnectionString = $ConnectionStringBase + ";Database=" + $CCC7DB + ";"
+	return "`"" +$ConnectionString + "`""
+}
+
 ##===========
 ## Main
 ##===========
@@ -362,7 +381,17 @@ Try
 	$p = Start-Process $SupportTool -ArgumentList "-MOAzure" -wait -NoNewWindow -PassThru
     $p.HasExited
     $LastExitCode = $p.ExitCode
-
+    
+    if ($LastExitCode -ne 0) {
+		log-error "SupportTool generated an error!"
+        throw "SupportTool generated an error!"
+    }
+	
+	log-info "Restore server configurations, Running Teleopti.Support.Tool.exe -CS ..."
+	$conn = GetConnectoinString
+	$p = Start-Process $SupportTool -ArgumentList "-CS" $conn -wait -NoNewWindow -PassThru
+    $p.HasExited
+    $LastExitCode = $p.ExitCode
     
     if ($LastExitCode -ne 0) {
 		log-error "SupportTool generated an error!"
