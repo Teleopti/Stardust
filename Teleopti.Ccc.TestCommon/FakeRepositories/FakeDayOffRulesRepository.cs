@@ -59,13 +59,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_workRuleSettings.Add(defaultSettings);
 		}
 
-		public void HasDefault(Action<DayOffRules> actionOnDefaultInstance, IAgentGroup agentGroup)
-		{
-			var defaultSettings = DayOffRules.CreateDefault(agentGroup);
-			actionOnDefaultInstance(defaultSettings);
-			_workRuleSettings.Add(defaultSettings);
-		}
-
 		public IList<DayOffRules> LoadAllByAgentGroup(IAgentGroup agentGroup)
 		{
 			return _workRuleSettings.Where(x => x.AgentGroup == agentGroup).ToList();
