@@ -67,6 +67,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			{
 				return errorMsg;
 			}
+
+			if (GetNumberOfRecordsInSheet(sheet) == 0)
+			{
+				return Resources.NoDataAvailable;
+			}
+
 			return string.Empty;
 
 		}

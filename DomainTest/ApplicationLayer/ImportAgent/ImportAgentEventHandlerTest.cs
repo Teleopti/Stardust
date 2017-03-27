@@ -8,7 +8,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -28,6 +30,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 	{
 		public ImportAgentEventHandler Target;
 		public FakeJobResultRepository JobResultRepo;
+		public FakeApplicationRoleRepository RoleRepository;
+		public FakeContractRepository ContractRepository;
+		public FakeContractScheduleRepository ContractScheduleRepository;
+		public FakePartTimePercentageRepository PartTimePercentageRepository;
+		public FakeRuleSetBagRepository RuleSetBagRepository;
+		public FakeSkillRepository SkillRepository;
+		public FakeSiteRepository SiteRepository;
+		public FakeTeamRepository TeamRepository;
+		public FakeExternalLogOnRepository ExternalLogOnRepository;
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<ImportAgentEventHandler>();
@@ -38,6 +50,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+
+			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+			system.UseTestDouble<FakeContractRepository>().For<IContractRepository>();
+			system.UseTestDouble<FakeContractScheduleRepository>().For<IContractScheduleRepository>();
+			system.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
+			system.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
+			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			system.UseTestDouble<FakeExternalLogOnRepository>().For<IExternalLogOnRepository>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+
 		}
 
 		[Test]
@@ -136,6 +162,41 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			message.Should().Be.EqualTo(string.Format(Resources.MissingColumnX, string.Join(", ",headers.Except(new[]{"Firstname"}))));
 		}
 
+		[Test]
+		public void ShouldHandleEventWhenInputArtifactHasNoAgents()
+		{
+			var jobResult = fakeJobResult();
+			var workbook = new AgentFileTemplate().GetTemplateWorkbook("agent");
+			using (var stream = new MemoryStream())
+			{
+				workbook.Write(stream);
+				jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test.xls", stream.ToArray()));
+			}
+			
+			Target.Handle(new ImportAgentEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+			var message = jobResult.Details.Single().Message;
+			message.Should().Be.EqualTo(Resources.NoDataAvailable);
+		}
+
+		[Test]
+		public void ShouldHandleWithValidInputArtifact()
+		{
+			var jobResult = fakeJobResult();
+			var rawAgent = setupProviderData();
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test.xls", ms.ToArray()));
+
+			Target.Handle(new ImportAgentEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+			var message = jobResult.Details.Single().Message;
+			message.Should().Be.EqualTo("success count:1, failed count:0, warning count:0");
+		}
+
 		private IJobResult fakeJobResult()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
@@ -144,5 +205,51 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var updated = JobResultRepo.Get(jobResult.Id.Value);
 			return updated;
 		}
+
+		private RawAgent setupProviderData()
+		{
+			var role = ApplicationRoleFactory.CreateRole("agent", "role description");
+
+			RoleRepository.Add(role);
+			var team = TeamFactory.CreateSimpleTeam("preference");
+			var site = SiteFactory.CreateSimpleSite("London");
+			SiteRepository.Add(site);
+			team.Site = site;
+			TeamRepository.Add(team);
+			var skill = SkillFactory.CreateSkill("test skill");
+			SkillRepository.Add(skill);
+			var externalLogon = ExternalLogOnFactory.CreateExternalLogOn();
+			ExternalLogOnRepository.Add(externalLogon);
+			var contract = ContractFactory.CreateContract("full");
+			ContractRepository.Add(contract);
+			var contractSchedule = ContractScheduleFactory.CreateContractSchedule("test schedule");
+			ContractScheduleRepository.Add(contractSchedule);
+			var partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("partTime");
+			PartTimePercentageRepository.Add(partTimePercentage);
+			var shiftBag = new RuleSetBag(WorkShiftRuleSetFactory.Create());
+			shiftBag.Description = new Description("test");
+			RuleSetBagRepository.Add(shiftBag);
+
+			return new RawAgent
+			{
+				Firstname = "John",
+				Lastname = "Smith",
+				WindowsUser = "john.smith@teleopti.com",
+				ApplicationUserId = "john.smith@teleopti.com",
+				Password = "password",
+				Role = role.DescriptionText,
+				StartDate = new DateTime(2017, 3, 1),
+				Organization = team.SiteAndTeam,
+				Skill = skill.Name,
+				ExternalLogon = externalLogon.AcdLogOnName,
+				Contract = contract.Description.Name,
+				ContractSchedule = contractSchedule.Description.Name,
+				PartTimePercentage = partTimePercentage.Description.Name,
+				ShiftBag = shiftBag.Description.Name,
+				SchedulePeriodType = "Week",
+				SchedulePeriodLength = 4
+			};
+		}
+
 	}
 }

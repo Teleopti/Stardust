@@ -56,6 +56,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 						jobResult.AddDetail((new JobResultDetail(DetailLevel.Error, error, DateTime.UtcNow, null)));
 					}
 
+					_fileProcessor.ProcessSheet(workbook.GetSheetAt(0), @event.Defaults);
+
 				}
 			}
 			jobResult.FinishedOk = true;
