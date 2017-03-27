@@ -27,7 +27,7 @@ describe("Timezone filter tests", function () {
 
 		var input = '08:00';
 		var result = target(input, 'Europe/Stockholm');
-		var isDST = moment().isDST();
+		var isDST = moment().tz('Europe/Stockholm').isDST();
 		if (isDST) {
 			expect(result).toEqual('02:00');
 		} else {
@@ -39,7 +39,7 @@ describe("Timezone filter tests", function () {
 
 		var input = '05:00';
 		var result = target(input, 'Europe/Stockholm');
-		var isDST = moment().isDST();
+		var isDST = moment().tz('Europe/Stockholm').isDST();
 		if (isDST) {
 			expect(result).toEqual('23:00');
 		} else {
