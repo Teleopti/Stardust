@@ -21,7 +21,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		private readonly PreferenceDomainDataMapper _preferenceDomainMapper;
 		private readonly ExtendedPreferenceTemplateMapper _templateMapper;
 
-		public PreferenceViewModelFactory(IPreferenceProvider preferenceProvider, IScheduleProvider scheduleProvider, IPreferenceTemplateProvider preferenceTemplateProvider, IPreferenceWeeklyWorkTimeSettingProvider preferenceWeeklyWorkTimeSettingProvider, PreferenceAndScheduleDayViewModelMapper preferenceAndScheduleMapper, PreferenceDayViewModelMapper preferenceDayMapper, PreferenceDayFeedbackViewModelMapper feedbackMapper, PreferenceViewModelMapper preferenceViewMapper, PreferenceDomainDataMapper preferenceDomainMapper, ExtendedPreferenceTemplateMapper templateMapper)
+		public PreferenceViewModelFactory(IPreferenceProvider preferenceProvider, IScheduleProvider scheduleProvider,
+			IPreferenceTemplateProvider preferenceTemplateProvider,
+			IPreferenceWeeklyWorkTimeSettingProvider preferenceWeeklyWorkTimeSettingProvider,
+			PreferenceAndScheduleDayViewModelMapper preferenceAndScheduleMapper, PreferenceDayViewModelMapper preferenceDayMapper,
+			PreferenceDayFeedbackViewModelMapper feedbackMapper, PreferenceViewModelMapper preferenceViewMapper,
+			PreferenceDomainDataMapper preferenceDomainMapper, ExtendedPreferenceTemplateMapper templateMapper)
 		{
 			_preferenceProvider = preferenceProvider;
 			_scheduleProvider = scheduleProvider;
@@ -69,12 +74,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 
 		public PreferenceWeeklyWorkTimeViewModel CreatePreferenceWeeklyWorkTimeViewModel(DateOnly date)
 		{
-			 var setting = _preferenceWeeklyWorkTimeSettingProvider.RetrieveSetting(date);
-			 return new PreferenceWeeklyWorkTimeViewModel
-			 {
-				  MaxWorkTimePerWeekMinutes = setting.MaxWorkTimePerWeekMinutes,
-				  MinWorkTimePerWeekMinutes = setting.MinWorkTimePerWeekMinutes,
-			 };
+			var setting = _preferenceWeeklyWorkTimeSettingProvider.RetrieveSetting(date);
+			return new PreferenceWeeklyWorkTimeViewModel
+			{
+				MaxWorkTimePerWeekMinutes = setting.MaxWorkTimePerWeekMinutes,
+				MinWorkTimePerWeekMinutes = setting.MinWorkTimePerWeekMinutes,
+			};
 		}
 	}
 }

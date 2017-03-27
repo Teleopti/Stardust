@@ -14,7 +14,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		private readonly IPreferenceNightRestChecker _perferenceNightChecker;
 		private readonly IPersonRuleSetBagProvider _ruleSetBagProvider;
 
-		public PreferenceFeedbackProvider(IWorkTimeMinMaxCalculator workTimeMinMaxCalculator, ILoggedOnUser loggedOnUser, IScheduleProvider scheduleProvider, IPreferenceNightRestChecker perferenceNightChecker, IPersonRuleSetBagProvider ruleSetBagProvider)
+		public PreferenceFeedbackProvider(IWorkTimeMinMaxCalculator workTimeMinMaxCalculator, ILoggedOnUser loggedOnUser,
+			IScheduleProvider scheduleProvider, IPreferenceNightRestChecker perferenceNightChecker,
+			IPersonRuleSetBagProvider ruleSetBagProvider)
 		{
 			_workTimeMinMaxCalculator = workTimeMinMaxCalculator;
 			_loggedOnUser = loggedOnUser;
@@ -25,15 +27,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date, IScheduleDay scheduleDay)
 		{
-			var bag = _ruleSetBagProvider.ForDate(_loggedOnUser.CurrentUser(),date);
-			if (bag == null) return null;
-
-			return _workTimeMinMaxCalculator.WorkTimeMinMax(date, bag, scheduleDay);
+			var bag = _ruleSetBagProvider.ForDate(_loggedOnUser.CurrentUser(), date);
+			return bag != null ? _workTimeMinMaxCalculator.WorkTimeMinMax(date, bag, scheduleDay) : null;
 		}
 
 		public WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date)
 		{
-			var scheduleDay = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date)) ?? new IScheduleDay[] {};
+			var scheduleDay = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date)) ?? new IScheduleDay[] { };
 			return WorkTimeMinMaxForDate(date, scheduleDay.SingleOrDefault());
 		}
 

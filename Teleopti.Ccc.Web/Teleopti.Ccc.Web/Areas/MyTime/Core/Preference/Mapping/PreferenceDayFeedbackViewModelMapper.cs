@@ -1,3 +1,4 @@
+using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
@@ -15,45 +16,41 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			_preferenceFeedbackProvider = preferenceFeedbackProvider;
 		}
 
-		public PreferenceDayFeedbackViewModel Map(DateOnly s)
+		public PreferenceDayFeedbackViewModel Map(DateOnly date)
 		{
+			var nightRestResult = _preferenceFeedbackProvider.CheckNightRestViolation(date);
+
 			var mappedResult = new PreferenceDayFeedbackViewModel
 			{
-				Date = s.ToFixedClientDateOnlyFormat(),
-				DateInternal = s.Date,
+				Date = date.ToFixedClientDateOnlyFormat(),
+				DateInternal = date.Date,
+				RestTimeToNextDay = nightRestResult.RestTimeToNextDay,
+				RestTimeToPreviousDay = nightRestResult.RestTimeToPreviousDay,
+				HasNightRestViolationToPreviousDay = nightRestResult.HasViolationToPreviousDay,
+				HasNightRestViolationToNextDay = nightRestResult.HasViolationToNextDay,
+				ExpectedNightRest = nightRestResult.ExpectedNightRest
 			};
 
-			var nightRestResult = _preferenceFeedbackProvider.CheckNightRestViolation(s);
-			mappedResult.RestTimeToNextDay = nightRestResult.RestTimeToNextDay;
-			mappedResult.RestTimeToPreviousDay = nightRestResult.RestTimeToPreviousDay;
-			mappedResult.HasNightRestViolationToPreviousDay = nightRestResult.HasViolationToPreviousDay;
-			mappedResult.HasNightRestViolationToNextDay = nightRestResult.HasViolationToNextDay;
-			mappedResult.ExpectedNightRest = nightRestResult.ExpectedNightRest;
+			var workTimeResult = _preferenceFeedbackProvider.WorkTimeMinMaxForDate(date) ?? new WorkTimeMinMaxCalculationResult();
 
-			var workTimeResult = _preferenceFeedbackProvider.WorkTimeMinMaxForDate(s) ??
-								 new WorkTimeMinMaxCalculationResult();
+			var workTimeMinMax = workTimeResult.WorkTimeMinMax;
+			if (workTimeMinMax != null)
+			{
+				mappedResult.PossibleStartTimes = workTimeMinMax.StartTimeLimitation.ToString();
+				mappedResult.PossibleEndTimes = workTimeMinMax.EndTimeLimitation.ToString();
 
-			if (workTimeResult.WorkTimeMinMax == null)
+				var workTimeLimitation = workTimeMinMax.WorkTimeLimitation;
+				mappedResult.PossibleContractTimeMinutesLower =
+					workTimeLimitation.StartTime?.TotalMinutes.ToString(CultureInfo.CurrentCulture);
+
+				mappedResult.PossibleContractTimeMinutesUpper =
+					workTimeLimitation.EndTime?.TotalMinutes.ToString(CultureInfo.CurrentCulture);
+			}
+			else
 			{
 				mappedResult.FeedbackError = workTimeResult.RestrictionNeverHadThePossibilityToMatchWithShifts
 					? ""
 					: Resources.NoAvailableShifts;
-			}
-			else
-			{
-				mappedResult.PossibleStartTimes =
-					workTimeResult.WorkTimeMinMax.StartTimeLimitation.StartTimeString.ToLower() + "-" +
-					workTimeResult.WorkTimeMinMax.StartTimeLimitation.EndTimeString.ToLower();
-
-				mappedResult.PossibleEndTimes =
-					workTimeResult.WorkTimeMinMax.EndTimeLimitation.StartTimeString.ToLower() + "-" +
-					workTimeResult.WorkTimeMinMax.EndTimeLimitation.EndTimeString.ToLower();
-
-				mappedResult.PossibleContractTimeMinutesLower =
-					workTimeResult.WorkTimeMinMax.WorkTimeLimitation.StartTime?.TotalMinutes.ToString();
-
-				mappedResult.PossibleContractTimeMinutesUpper =
-					workTimeResult.WorkTimeMinMax.WorkTimeLimitation.EndTime?.TotalMinutes.ToString();
 			}
 
 			return mappedResult;

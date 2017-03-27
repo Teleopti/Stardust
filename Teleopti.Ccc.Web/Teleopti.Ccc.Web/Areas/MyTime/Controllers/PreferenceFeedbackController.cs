@@ -14,12 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IPreferenceViewModelFactory _viewModelFactory;
 		private readonly IPreferencePeriodFeedbackViewModelFactory _preferencePeriodFeedbackViewModelFactory;
 
-		public PreferenceFeedbackController(IPreferenceViewModelFactory viewModelFactory, IPreferencePeriodFeedbackViewModelFactory preferencePeriodFeedbackViewModelFactory)
+		public PreferenceFeedbackController(IPreferenceViewModelFactory viewModelFactory,
+			IPreferencePeriodFeedbackViewModelFactory preferencePeriodFeedbackViewModelFactory)
 		{
 			_viewModelFactory = viewModelFactory;
 			_preferencePeriodFeedbackViewModelFactory = preferencePeriodFeedbackViewModelFactory;
 		}
-
 
 		[HttpGet]
 		[AsyncTask]
@@ -37,9 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
-
-
-
 		[HttpGet]
 		[AsyncTask]
 		public void PeriodFeedbackAsync(DateOnly date) { }
@@ -55,8 +52,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			task.Wait();
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
-
-
 	}
-
 }

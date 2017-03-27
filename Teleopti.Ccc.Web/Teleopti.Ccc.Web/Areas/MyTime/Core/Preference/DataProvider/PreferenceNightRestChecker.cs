@@ -7,23 +7,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	public class PreferenceNightRestChecker : IPreferenceNightRestChecker
 	{
 		private readonly IPersonPreferenceDayOccupationFactory _personPreferenceDayOccupationFactory;
-	
+
 		public PreferenceNightRestChecker(IPersonPreferenceDayOccupationFactory personPreferenceDayOccupationFactory)
 		{
 			_personPreferenceDayOccupationFactory = personPreferenceDayOccupationFactory;
 		}
 
 		public PreferenceNightRestCheckResult CheckNightRestViolation(IPerson person, DateOnly date)
-		{		
+		{
 			var period = person.Period(date);
 
 			var result = new PreferenceNightRestCheckResult
 			{
-				ExpectedNightRest = period != null ? period.PersonContract.Contract.WorkTimeDirective.NightlyRest : TimeSpan.Zero
+				ExpectedNightRest = period?.PersonContract.Contract.WorkTimeDirective.NightlyRest ?? TimeSpan.Zero
 			};
 
-			var previousDay = date.Add(new TimeSpan(-24, 0, 0));
-			var nextDay = date.Add(new TimeSpan(24, 0, 0));
+			var previousDay = date.AddDays(-1);
+			var nextDay = date.AddDays(1);
 
 			var previousDayOccupation = _personPreferenceDayOccupationFactory.GetPreferenceDayOccupation(person, previousDay);
 			var nextDayOccupation = _personPreferenceDayOccupationFactory.GetPreferenceDayOccupation(person, nextDay);
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 			if (!thisDayOccupation.HasPreference) return result;
 
-			if ((previousDayOccupation.HasPreference || previousDayOccupation.HasShift) && 
+			if ((previousDayOccupation.HasPreference || previousDayOccupation.HasShift) &&
 				!(previousDayOccupation.HasDayOff || previousDayOccupation.HasFullDayAbsence) &&
 				previousDayOccupation.EndTimeLimitation.StartTime.HasValue && thisDayOccupation.StartTimeLimitation.EndTime.HasValue)
 			{
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 				result.RestTimeToPreviousDay = compareDate2 - compareDate1;
 				if (result.RestTimeToPreviousDay < result.ExpectedNightRest)
-				{					
+				{
 					result.HasViolationToPreviousDay = true;
 				}
 			}
@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				result.RestTimeToNextDay = compareDate1 - compareDate2;
 				if (result.RestTimeToNextDay < result.ExpectedNightRest)
 				{
-					
 					result.HasViolationToNextDay = true;
 				}
 			}
