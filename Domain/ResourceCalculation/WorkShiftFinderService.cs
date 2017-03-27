@@ -81,14 +81,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			if (result == null && (schedulingOptions.UsePreferences || schedulingOptions.UseAvailability || schedulingOptions.UseRotations || schedulingOptions.UseStudentAvailability))
 			{
-				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(schedulePart.DateOnlyAsPeriod, bag, true, true);
+				if (!effectiveRestriction.IsRestriction)
+					return new WorkShiftFinderServiceResult(result, finderResult);
+
+				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(schedulePart.DateOnlyAsPeriod, bag, true,
+					true);
 				if (shiftList.Count > 0)
 				{
 					shiftList.ForEach(s =>
 					{
 						var x = s.TheMainShift;
 					});
-					result = findBestShift(effectiveRestriction, currentSchedulePeriod, scheduleDateOnly, person, matrix, schedulingOptions, finderResult,shiftList);
+					result = findBestShift(effectiveRestriction, currentSchedulePeriod, scheduleDateOnly, person, matrix,
+						schedulingOptions, finderResult, shiftList);
 				}
 			}
 

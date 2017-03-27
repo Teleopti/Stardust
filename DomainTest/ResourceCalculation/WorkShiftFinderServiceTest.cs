@@ -216,6 +216,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(new DateOnly(), null, null, null, null, null)).
 					IgnoreArguments().Return(caches);
 				Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, _matrix, _schedulingOptions)).Return(null);
+
+	            Expect.Call(effectiveRestriction.IsRestriction).Return(true);
             }
             _schedulingOptions.ShiftCategory = _category;
             using (_mocks.Playback())
@@ -245,8 +247,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_shiftProjectionCacheFilter.CheckRestrictions(null, null, null)).IgnoreArguments().Return(true);
                 Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, bag, false, true)).Return(new List<IShiftProjectionCache>());
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, bag, true, true)).Return(new List<IShiftProjectionCache>()); 
-			}
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, bag, true, true)).Return(new List<IShiftProjectionCache>());
+	            Expect.Call(effectiveRestriction.IsRestriction).Return(true);
+            }
             
             using (_mocks.Playback())
             {
@@ -310,6 +313,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				commonMocksForBlackListTests(bag, dateOnly);
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, bag, true, true)).Return(new List<IShiftProjectionCache>());
+				Expect.Call(effectiveRestriction.IsRestriction).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -336,6 +340,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				commonMocksForBlackListTests(bag, dateOnly);
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, bag, true, true)).Return(new List<IShiftProjectionCache>());
+				Expect.Call(effectiveRestriction.IsRestriction).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -362,6 +367,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				commonMocksForBlackListTests(bag, dateOnly);
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, bag, true, true)).Return(new List<IShiftProjectionCache>());
+				Expect.Call(effectiveRestriction.IsRestriction).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -388,6 +394,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				commonMocksForBlackListTests(bag, dateOnly);
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, bag, true, true)).Return(new List<IShiftProjectionCache>());
+				Expect.Call(effectiveRestriction.IsRestriction).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -413,7 +420,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
 			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, (IRuleSetBag) null, false, true)).Return(new List<IShiftProjectionCache>()).IgnoreArguments();
 			Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(_scheduleDateOnlyPeriod, (IRuleSetBag) null, false, true)).Return(new List<IShiftProjectionCache>()).IgnoreArguments();
-                    
+			Expect.Call(effectiveRestriction.IsRestriction).Return(true);
+
 			_mocks.ReplayAll();
             _schedulingOptions.ShiftCategory = _category;
 
@@ -563,6 +571,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(caches).Repeat.AtLeastOnce();
+				Expect.Call(effectiveRestriction.IsRestriction).Return(true);
 			}
 
 	        using (_mocks.Playback())
@@ -628,6 +637,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(caches).Repeat.AtLeastOnce();
+
+				Expect.Call(effectiveRestriction.IsRestriction).Return(true);
 			}
 
 			using (_mocks.Playback())
