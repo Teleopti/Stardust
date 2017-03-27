@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Linq;
 using ManagerTest.Attributes;
 using ManagerTest.Fakes;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Manager;
+using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
@@ -24,8 +26,10 @@ namespace ManagerTest
 		public IHttpSender HttpSender;
 		public IJobRepository JobRepository;
 		public IWorkerNodeRepository WorkerNodeRepository;
-		
-		private WorkerNode _workerNode;
+	    public JobRepositoryCommandExecuter JobRepositoryCommandExecuter;
+	    public ManagerConfiguration ManagerConfiguration;
+
+        private WorkerNode _workerNode;
 
 
 		private FakeHttpSender FakeHttpSender
@@ -210,5 +214,36 @@ namespace ManagerTest
 			JobRepository.GetAllJobs().Count.Should().Be(0);
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
 		}
-	}
+
+        [Test]
+        public void ShouldReturnTheNodesSortedByAvailability()
+        {
+            NodeManager.AddWorkerNode(new Uri("http://localhost:9051/"));
+            NodeManager.AddWorkerNode(new Uri("http://localhost:9052/"));
+            var jobQueueItem = new JobQueueItem
+            {
+                JobId = Guid.NewGuid(),
+                Name = "Name Test",
+                CreatedBy = "Created By Test",
+                Serialized = "Serialized Test",
+                Type = "Type Test"
+            };
+
+            JobManager.AddItemToJobQueue(jobQueueItem);
+            JobManager.AssignJobToWorkerNodes();
+
+            jobQueueItem.JobId = Guid.NewGuid();
+            JobManager.AddItemToJobQueue(jobQueueItem);
+            JobManager.AssignJobToWorkerNodes();
+
+            NodeManager.AddWorkerNode(new Uri("http://localhost:9053/"));
+
+            using (var sqlConnection = new SqlConnection(ManagerConfiguration.ConnectionString))
+            {
+                var nodes = JobRepositoryCommandExecuter.SelectAllAliveWorkerNodes(sqlConnection);
+                nodes.First().Should().Be.EqualTo("http://localhost:9053/");
+            }
+           
+        }
+    }
 }

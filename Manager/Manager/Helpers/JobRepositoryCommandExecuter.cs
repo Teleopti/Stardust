@@ -148,13 +148,9 @@ namespace Stardust.Manager.Helpers
 		public List<Uri> SelectAllAliveWorkerNodes(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
 		{
 			var allAliveWorkerNodesUri = new List<Uri>();
-			const string selectAllAliveWorkerNodesCommandText = @"SELECT   
-												   [Id]
-												  ,[Url]
-												  ,[Heartbeat]
-												  ,[Alive]
-											  FROM [Stardust].[WorkerNode] WITH (NOLOCK) 
-											  WHERE Alive = 1";
+			const string selectAllAliveWorkerNodesCommandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
+								(SELECT SentToWorkerNodeUri FROM Stardust.Job WITH(NOLOCK) WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
+									FROM [Stardust].WorkerNode WITH(NOLOCK)) w order by running";
 			using (var selectAllAliveWorkerNodesCommand = new SqlCommand(selectAllAliveWorkerNodesCommandText, sqlConnection, sqlTransaction))
 			{
 				using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReaderWithRetry(_retryPolicy))
