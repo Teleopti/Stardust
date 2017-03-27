@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			if (!string.IsNullOrWhiteSpace(requestOrigin))
 			{
 				var originUri = new Uri(requestOrigin,UriKind.RelativeOrAbsolute);
-				if (originIsNotProxyIpAddress(originUri) && originUri.Host != request.Url.Host)
+				if (isNotProxyIpAddress(originUri) && isNotProxyIpAddress(request.Url) && originUri.Host != request.Url.Host)
 				{
 					if (Logger.IsDebugEnabled)
 					{
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			return base.OnBeforeAuthorizeConnect(hubDescriptor, request);
 		}
 
-		private static bool originIsNotProxyIpAddress(Uri requestOrigin)
+		private static bool isNotProxyIpAddress(Uri requestOrigin)
 		{
 			return requestOrigin.HostNameType != UriHostNameType.IPv4;
 		}

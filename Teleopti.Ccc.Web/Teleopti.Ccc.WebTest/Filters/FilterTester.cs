@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		private IPrincipal _user = Thread.CurrentPrincipal;
 		private readonly IDictionary<string, string> _routeDataTokens = new Dictionary<string, string>();
 		private string _method = "GET";
+		private Uri _uri = new Uri("http://tempuri.org/foo");
 
 		public ActionResult InvokeFilter(IAuthorizationFilter authorizationFilter) { return InvokeFilter(new FilterTestActionInvoker(authorizationFilter)); }
 		public ActionResult InvokeFilter(AuthorizeAttribute authorizationFilter) { return InvokeFilter(new FilterTestActionInvoker(authorizationFilter)); }
@@ -32,8 +33,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		public ActionResult InvokeFilter(IResultFilter resultFilter) { return InvokeFilter(new FilterTestActionInvoker(resultFilter)); }
 		public ActionResult InvokeFilter(IActionFilter actionFilter) { return InvokeFilter(new FilterTestActionInvoker(actionFilter)); }
 		public ActionResult InvokeFilter(ActionFilterAttribute actionFilter) { return InvokeFilter(new FilterTestActionInvoker(actionFilter)); }
-
-		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		
 		public FilterTester()
 		{
 			HttpContext.Current = new HttpContext(new HttpRequest("foo", "http://tempuri.org/foo", ""), new HttpResponse(new StringWriter()));
@@ -75,6 +75,12 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 		public void IsUser(IPrincipal principal) { _user = principal; }
 
+		public void UseUri(Uri location)
+		{
+			HttpContext.Current = new HttpContext(new HttpRequest("foo", location.ToString(), ""), new HttpResponse(new StringWriter()));
+			_uri = location;
+		}
+
 		public void UseController(ITestController controller) { _controller = controller; }
 
 		public void AddRouteDataToken(string key, string value) { _routeDataTokens.Add(key, value); }
@@ -99,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.HttpMethod).Return(_method);
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.RequestContext)
 				.Return(new RequestContext(controller.ControllerContext.HttpContext, controller.ControllerContext.RouteData));
-			controller.ControllerContext.HttpContext.Request.Stub(x => x.Url).Return(new Uri("http://tempuri.org/foo"));
+			controller.ControllerContext.HttpContext.Request.Stub(x => x.Url).Return(_uri);
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.Path).Return("foo");
 
 			var cache = MockRepository.GenerateMock<HttpCachePolicyBase>();
@@ -108,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			return controller;
 		}
 
-		public ControllerContext ControllerContext { get { return _controller.ControllerContext; } }
+		public ControllerContext ControllerContext => _controller.ControllerContext;
 
 		#region Nested type: FilterTestActionInvoker
 

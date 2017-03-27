@@ -56,6 +56,21 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			request.Headers = headers;
 			function(new HubDescriptor(), request).Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldAcceptRequestsWithIpAddressHostFromProxy()
+		{
+			var target = new OriginHandlerPipelineModule();
+			var function = target.BuildAuthorizeConnect((d, r) => true);
+
+			var request = new FakeHubRequest { Url = new Uri("http://10.0.0.1/TeleoptiWFM/Web/signalr?connect") };
+			var headers = new SimpleSignalrNameValueCollection(new NameValueCollection
+			{
+				{"Origin", "http://burk/TeleoptiWFM/Web/signalr?connect"}
+			});
+			request.Headers = headers;
+			function(new HubDescriptor(), request).Should().Be.True();
+		}
 	}
 
 	public class SimpleSignalrNameValueCollection : INameValueCollection

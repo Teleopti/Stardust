@@ -37,6 +37,18 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldNotBlockOtherOriginWhenHostIPv4()
+		{
+			var context = CreateExecutedContext();
+			context.Request.RequestUri = new Uri("http://192.168.0.1/teleoptiwfm");
+			context.Request.Headers.Add("Origin", "http://wfmserver1/test/2");
+			var filter = new CsrfFilterHttp();
+			filter.OnActionExecuting(context);
+
+			context.Response.IsSuccessStatusCode.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldBlockOtherReferrer()
 		{
 			var context = CreateExecutedContext();
@@ -54,6 +66,18 @@ namespace Teleopti.Ccc.WebTest.Core
 			var context = CreateExecutedContext();
 			context.Request.RequestUri = new Uri("http://wfmserver1/teleoptiwfm");
 			context.Request.Headers.Referrer = new Uri("http://192.168.0.1/test/2");
+			var filter = new CsrfFilterHttp();
+			filter.OnActionExecuting(context);
+
+			context.Response.IsSuccessStatusCode.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotBlockOtherReferrerWhenHostIPv4()
+		{
+			var context = CreateExecutedContext();
+			context.Request.RequestUri = new Uri("http://192.168.0.1/teleoptiwfm");
+			context.Request.Headers.Referrer = new Uri("http://wfmserver1/test/2");
 			var filter = new CsrfFilterHttp();
 			filter.OnActionExecuting(context);
 
@@ -168,11 +192,24 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
-		public void ShouldNotBlockOtherOriginWhenIPv4Host()
+		public void ShouldNotBlockOtherOriginWhenIPv4OriginHost()
 		{
 			var filter = new CsrfFilter();
 			var filterTester = new FilterTester();
 			filterTester.AddHeader("Origin", "http://192.168.0.1/test/2");
+			filterTester.UsePost();
+			filterTester.InvokeFilter(filter);
+
+			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Not.Be.EqualTo(HttpStatusCode.Forbidden);
+		}
+
+		[Test]
+		public void ShouldNotBlockOtherOriginWhenIPv4RequestHost()
+		{
+			var filter = new CsrfFilter();
+			var filterTester = new FilterTester();
+			filterTester.UseUri(new Uri("http://192.168.0.1/test/2"));
+			filterTester.AddHeader("Origin", "http://tempuri.org/test/2");
 			filterTester.UsePost();
 			filterTester.InvokeFilter(filter);
 
