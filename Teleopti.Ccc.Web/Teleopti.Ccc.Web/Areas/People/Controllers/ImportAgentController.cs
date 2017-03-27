@@ -5,13 +5,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Castle.Core.Internal;
 using NPOI.XSSF.UserModel;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Core;
-using Teleopti.Ccc.Web.Areas.People.Core.Models;
-using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
@@ -59,11 +57,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var workbook = _fileProcessor.ParseFile(fileData.SingleOrDefault());
 			var isXlsx = workbook is XSSFWorkbook;
 
-			var errors = _fileProcessor.ValidateWorkbook(workbook);
-			if (errors.Any())
+			var errorMsg = _fileProcessor.ValidateSheetColumnHeader(workbook);
+			if (!errorMsg.IsNullOrEmpty())
 			{
-				var errorMsg = string.Format(Resources.MissingColumnX, string.Join(", ", errors));
-
 				var invalidFileResponse = Request.CreateResponse((HttpStatusCode)422);
 				invalidFileResponse.Headers.Clear();
 				invalidFileResponse.Headers.Add("Message", $"format errors: {errorMsg}");

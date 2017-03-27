@@ -15708,4 +15708,12 @@ Do you want to participate?</value>
     <value>Staffing info</value>
     <comment>Toop tip item of probability option panel in MyTime web schedule view</comment>
   </data>
+  <data name="EmptyFile" xml:space="preserve">
+    <value>Empty file</value>
+    <comment>Error message for importing agent when the given file is empty</comment>
+  </data>
+  <data name="NoInput" xml:space="preserve">
+    <value>No input</value>
+    <comment>No input in an import agent job</comment>
+  </data>
 </root>

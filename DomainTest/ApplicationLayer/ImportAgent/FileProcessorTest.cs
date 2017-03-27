@@ -121,9 +121,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var workbook = fileTemplate.GetTemplateWorkbook("test");
 
 
-			var result = Target.ValidateWorkbook(workbook);
+			var result = Target.ValidateSheetColumnHeader(workbook);
 
-			result.Count.Should().Be.EqualTo(0);
+			result.Should().Be.Empty();
 		}
 
 		[Test]
@@ -133,9 +133,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var workbook = fileTemplate.GetTemplateWorkbook("test");
 			workbook.GetSheetAt(0).GetRow(0).CreateCell(fileTemplate.ColumnHeaderNames.Length).SetCellValue("redundant");
 
-			var result = Target.ValidateWorkbook(workbook);
+			var result = Target.ValidateSheetColumnHeader(workbook);
 
-			result.Count.Should().Be.EqualTo(0);
+			result.Should().Be.Empty();
 		}
 
 		[Test]
@@ -143,9 +143,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		{
 			HSSFWorkbook hssfwb = new HSSFWorkbook();
 
-			var result = Target.ValidateWorkbook(hssfwb);
+			var result = Target.ValidateSheetColumnHeader(hssfwb);
 
-			result.Count.Should().Be.EqualTo(15);
+			result.Should().Be.EqualTo(getMissingColumnsErrorMsg());
 		}
 
 		[Test]
@@ -157,9 +157,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			row.CreateCell(0).SetCellValue(1234);
 
 
-			var result = Target.ValidateWorkbook(hssfwb);
+			var result = Target.ValidateSheetColumnHeader(hssfwb);
 
-			result.Count.Should().Be.EqualTo(15);
+			result.Should().Be.EqualTo(getMissingColumnsErrorMsg());
 		}
 
 		[Test]
@@ -948,6 +948,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 				SchedulePeriodType = "Week",
 				SchedulePeriodLength = 4
 			};
+		}
+
+		private string getMissingColumnsErrorMsg(params string[] excepts)
+		{
+
+			var colsMsg= string.Join(", ", new AgentFileTemplate().ColumnHeaderNames.Except(excepts));
+			return string.Format(Resources.MissingColumnX, colsMsg);
+
 		}
 	}
 }

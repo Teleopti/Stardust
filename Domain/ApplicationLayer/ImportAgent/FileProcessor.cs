@@ -4,7 +4,9 @@ using System.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 			return count;
 		}
-
+		
 		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentDefaults defaultValues = null)
 		{
 
@@ -46,9 +48,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			return extractedResult.Where(r => r.Feedback.ErrorMessages.Any() || r.Feedback.WarningMessages.Any()).ToList();
 		}
 
-		public IList<string> ValidateWorkbook(IWorkbook workbook)
+		public string ValidateWorkbook(IWorkbook workbook)
 		{
-			return _workbookHandler.ValidateSheetColumnHeader(workbook);
+			if (workbook.NumberOfSheets == 0)
+			{
+				return Resources.InvalidInput;
+			}
+
+			var sheet = workbook.GetSheetAt(0);
+
+			if (sheet.LastRowNum == 0 && sheet.GetRow(0) == null)
+			{
+				return Resources.EmptyFile;
+			}
+
+			var errorMsg = "";
+			if (!(errorMsg = this.ValidateSheetColumnHeader(workbook)).IsNullOrEmpty())
+			{
+				return errorMsg;
+			}
+			return string.Empty;
+
+		}
+
+		public string ValidateSheetColumnHeader(IWorkbook workbook)
+		{
+
+			var missingCols = _workbookHandler.ValidateSheetColumnHeader(workbook);
+			if (missingCols.IsNullOrEmpty())
+			{
+				return string.Empty;
+			}
+			return string.Format(Resources.MissingColumnX, string.Join(", ", missingCols));
 		}
 
 		public IWorkbook ParseFile(FileData fileData)
@@ -97,8 +128,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	{
 		IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentDefaults defaultValues = null);
 		int GetNumberOfRecordsInSheet(ISheet sheet);
-		IList<string> ValidateWorkbook(IWorkbook workbook);
+		string ValidateSheetColumnHeader(IWorkbook workbook);
 		IWorkbook ParseFile(FileData fileData);
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);
+		string ValidateWorkbook(IWorkbook workbook);
 	}
 }

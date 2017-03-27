@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		{
 			var columnNames = extractSheetColumnNames(workbook).ToArray();
 			var errorMessages = new List<string>();
-			for (var i = 0; i < propertyInfos.Length - 1; i++)
+			for (var i = 0; i < propertyInfos.Length; i++)
 			{
 				var expectedColumnName = propertyInfos[i].Name;
 				if (i >= columnNames.Length)

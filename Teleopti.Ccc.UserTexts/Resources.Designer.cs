@@ -9875,6 +9875,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty file.
+        /// </summary>
+        public static string EmptyFile {
+            get {
+                return ResourceManager.GetString("EmptyFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to empty password;.
         /// </summary>
         public static string EmptyPasswordErrorMsgSemicolon {
@@ -18940,6 +18949,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoHierarchiesExist {
             get {
                 return ResourceManager.GetString("NoHierarchiesExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No input.
+        /// </summary>
+        public static string NoInput {
+            get {
+                return ResourceManager.GetString("NoInput", resourceCulture);
             }
         }
         
