@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
 
 #pragma warning disable 618
-			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, false))
+			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true))
 #pragma warning restore 618
 			{
 				_resourceOptimizationHelperExtended.ResourceCalculateAllDays(new NoSchedulingProgress(), false);

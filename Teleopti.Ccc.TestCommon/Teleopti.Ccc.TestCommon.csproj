@@ -386,6 +386,7 @@
     <Compile Include="PersonExtensions.cs" />
     <Compile Include="RequestInfo.cs" />
     <Compile Include="ScheduleDayExtensions.cs" />
+    <Compile Include="SchedulePeriodExtensions.cs" />
     <Compile Include="Services\FakeNotifier.cs" />
     <Compile Include="Services\ShiftTradeRequestStatusCheckerForTestAlwaysRefer.cs" />
     <Compile Include="SkillDayExtensions.cs" />

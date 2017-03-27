@@ -189,11 +189,11 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\UpdateStaffingLevelReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddOvertimeActivityCommandHandlerTest.cs" />
-	<Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\OptionalColumnCollectionChangedEventTest.cs" />
+    <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\OptionalColumnCollectionChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\MoveShiftCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsHourlyAvailabilityMatchingPersonTest.cs" />
-	<Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsOptionalColumnGroupPageHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsOptionalColumnGroupPageHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPreferenceMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsRequestMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\SiteNameChangedTest.cs" />
@@ -351,6 +351,7 @@
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingReadModelForecastTest.cs" />
     <Compile Include="SchedulingScenarios\ContractWithMaximumTolerance.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationSameBitArrayTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationAgentGroupTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandHandlerIncreaseIslandsAsyncTest.cs" />

@@ -118,11 +118,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
 
-			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
-			var backgroundWorker = new NoSchedulingProgress();
-			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
-			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, false, period.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true, period.Inflate(1)))
 			{
+				_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
 				_teamBlockDayOffOptimizerService.OptimizeDaysOff(
 					matrixListForDayOffOptimization, period,
 					schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(),
@@ -130,8 +128,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 					schedulingOptions,
 					resourceCalcDelayer, 
 					dayOffOptimizationPreferenceProvider,
-					teamInfoFactory,
-					backgroundWorker);
+					new TeamInfoFactory(_groupPersonBuilderWrapper),
+					new NoSchedulingProgress());
 
 				_weeklyRestSolverExecuter.Resolve(
 					optimizationPreferences, 
