@@ -8,7 +8,7 @@
 		<div class="wfm-grid">
 			<div class="grid-card" ng-repeat="p in vm.planningPeriods | orderBy: '-EndDate'">
 				<div class="list-content">
-					<div class="inner-card" ng-click="vm.launchSchedule(planningPeriod)">
+					<div class="inner-card" ng-click="vm.showPlanningPeriod(p.Id)">
 						<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="card-context card-dot mdi mdi-calendar-check"></i>
 						<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="card-context card-dot-undone mdi mdi-calendar-remove"></i>
 						<span>{{p.StartDate | amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}</span>
