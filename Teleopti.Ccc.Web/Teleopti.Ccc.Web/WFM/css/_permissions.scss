@@ -217,6 +217,10 @@
 	display: inline-block;
 }
 
+.scroll-free-tree{
+	max-height: none;
+}
+
 //helpers to the styleguide
 .non-pointer{
 	pointer-events: none;
