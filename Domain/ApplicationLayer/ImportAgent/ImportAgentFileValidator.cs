@@ -402,7 +402,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.ShiftBag), rawShiftBag));
 				return feedback;
-				;
 			}
 
 			agentInfo.RuleSetBag = ruleSetBag;
@@ -424,7 +423,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.PartTimePercentage), rawPartTimePercentage));
 				return feedback;
-				;
 			}
 
 			agentInfo.PartTimePercentage = partTimePercentage;
