@@ -6,8 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
@@ -17,25 +15,30 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Activity { get; set; }
 		public string TimeZone { get; set; }
 		public ISkill Skill { get; set; }
+		public int Resolution { get; set; }
+		public int? CascadingIndex { get; set; }
+
+		public SkillConfigurable()
+		{
+			Resolution = 15;
+			TimeZone = TimeZoneInfo.Utc.Id;
+			CascadingIndex = null;
+		}
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skillType = new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony);
 			var skillTypeRepository = new SkillTypeRepository(currentUnitOfWork);
-			skillTypeRepository.Add(skillType);
+			var skillType = skillTypeRepository.LoadAll().FirstOrDefault(x => x.Description.Name == "SkillTypeInboundTelephony");
+			if (skillType == null)
+			{
+				skillType = new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony);
+				skillTypeRepository.Add(skillType);
+			}
 			
-			if (string.IsNullOrEmpty(TimeZone))
-			{
-				Skill = SkillFactory.CreateSkill(Name);
-			}
-			else
-			{
-				var timeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZone);
-				Skill = SkillFactory.CreateSkill(Name, timeZone);
-			}
-
-
-			Skill.SkillType = skillType;
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZone);
+			Skill = SkillFactory.CreateSkill(Name, skillType, Resolution, timeZone, TimeSpan.Zero);
+			if(CascadingIndex.HasValue)
+				Skill.SetCascadingIndex(CascadingIndex.Value);
 
 			var activityRepository = new ActivityRepository(currentUnitOfWork);
 			Skill.Activity = activityRepository.LoadAll().Single(b => b.Description.Name == Activity);

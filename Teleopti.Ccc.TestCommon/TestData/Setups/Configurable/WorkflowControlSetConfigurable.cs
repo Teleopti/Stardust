@@ -132,6 +132,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
 						break;
 
+					case "intraday with shrinkage":
+						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new StaffingThresholdWithShrinkageValidator();
+						break;
+
 					case "mix":
 						var mixedList = new List<IAbsenceRequestValidator>{
 							new BudgetGroupAllowanceValidator(),

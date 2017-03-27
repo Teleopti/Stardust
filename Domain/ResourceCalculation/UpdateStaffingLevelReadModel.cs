@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
 		
-		public virtual void Update(DateTimePeriod period)
+		public void Update(DateTimePeriod period)
 		{
 			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
 			_feedback.SendProgress($"Starting ForecastSkill Read Model update for period {period}");

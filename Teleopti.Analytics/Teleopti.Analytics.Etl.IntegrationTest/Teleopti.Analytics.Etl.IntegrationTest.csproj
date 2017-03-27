@@ -90,7 +90,6 @@
     <Compile Include="TestData\EtlReadModelSetup.cs" />
     <Compile Include="TestData\RemovePersonSchedule.cs" />
     <Compile Include="TestData\ScheduleDayReadModelSetup.cs" />
-    <Compile Include="TestData\ShiftForDate.cs" />
     <Compile Include="TestData\StepRunner.cs" />
     <Compile Include="TestState.cs" />
     <Compile Include="SanityTest.cs" />

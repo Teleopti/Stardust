@@ -6,9 +6,8 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
+namespace Teleopti.Ccc.TestCommon.TestData
 {
 	public class ShiftForDate : IUserDataSetup
 	{

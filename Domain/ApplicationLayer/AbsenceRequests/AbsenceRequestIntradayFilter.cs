@@ -40,20 +40,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			personRequest.Pending();
 			var startDateTime = _now.UtcDateTime();
-
-			var fakeIntradayStartUtcDateTime = _configReader.AppConfig("FakeIntradayUtcStartDateTime");
-			if (fakeIntradayStartUtcDateTime != null)
-			{
-				try
-				{
-					startDateTime = DateTime.ParseExact(fakeIntradayStartUtcDateTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture).Utc();
-				}
-				catch
-				{
-					logger.Warn("The app setting 'FakeIntradayStartDateTime' is not specified correctly. Format your datetime as 'yyyy-MM-dd HH:mm' ");
-				}
-			}
-
 			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(24));
 
 			var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);

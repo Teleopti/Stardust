@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Domain.Repositories;
@@ -74,6 +75,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// message broker
 			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
+
+			// stardust
+			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 
 			system.AddService<Database>();
 			system.AddService<DatabaseLegacy>();
