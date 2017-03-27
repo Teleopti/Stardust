@@ -3551,9 +3551,9 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to Available As Group Page:*.
         /// </summary>
-        public static string AvailableAsGroupPage {
+        public static string AvailableAsGroupPageColon {
             get {
-                return ResourceManager.GetString("AvailableAsGroupPage", resourceCulture);
+                return ResourceManager.GetString("AvailableAsGroupPageColon", resourceCulture);
             }
         }
         

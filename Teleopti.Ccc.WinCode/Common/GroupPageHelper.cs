@@ -87,6 +87,11 @@ namespace Teleopti.Ccc.WinCode.Common
 			}
 		}
 
+		public IList<IOptionalColumn> OptionalColumnCollectionAvailableAsGroupPage
+		{
+			get { return new List<IOptionalColumn>(); }
+		}
+
 		public void SetSelectedPeriod(DateOnlyPeriod dateOnlyPeriod)
 		{
 			SelectedPeriod = dateOnlyPeriod;
