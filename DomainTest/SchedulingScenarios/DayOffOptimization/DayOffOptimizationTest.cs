@@ -412,5 +412,44 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				skillStaffPeriod.HasIntraIntervalIssue.Should().Be.False();
 			}
 		}
+
+		[Test]
+		[Ignore("43659 - not yet red. just a start....")]
+		public void ShouldNotMoveDOsForOneAgentOnlyButChangeAfterEachPeriod()
+		{
+			var activity = ActivityRepository.Has("phone");
+			var skill = SkillRepository.Has("skill", activity);
+			var dateOnly = new DateOnly(2015, 10, 12);
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 2);
+			var scenario = ScenarioRepository.Has("some name");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), shiftCategory));
+			var agent1 = PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1).NumberOfDaysOf(1), ruleSet, skill);
+			var agent2 = PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1).NumberOfDaysOf(1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, dateOnly, 
+				1, 2, 2, 2, 2, 2, 2, 
+				1, 2, 2, 2, 2, 2, 2));
+
+			for (var i = 0; i < 14; i++)
+			{
+				if (i == 6 || i == 13)
+				{
+					PersonAssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), dateOnly.AddDays(i));
+					PersonAssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), dateOnly.AddDays(i));
+				}
+				else
+				{
+					PersonAssignmentRepository.Has(agent1, scenario, activity, shiftCategory, dateOnly.AddDays(i), new TimePeriod(8, 17));
+					PersonAssignmentRepository.Has(agent2, scenario, activity, shiftCategory, dateOnly.AddDays(i), new TimePeriod(8, 17));
+				}
+			}
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			var allDOs = PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null);
+			var movedD01 = allDOs.Single(x => x.Date == dateOnly);
+			var movedD02 = allDOs.Single(x => x.Date == dateOnly.AddWeeks(1));
+			movedD01.Person.Should().Not.Be.EqualTo(movedD02.Person);
+		}
 	}
 }
