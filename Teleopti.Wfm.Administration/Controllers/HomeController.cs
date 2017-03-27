@@ -111,7 +111,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var tenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(name));
 			_deleteTenant.Delete(tenant);
 
-			return Json(new TenantResultModel { Success = true, Message = string.Format("Deleted Tenant {0}. The databases are not deleted.", name )});
+			return Json(new TenantResultModel { Success = true, Message =
+				$"Deleted Tenant {name}. The databases are not deleted."
+			});
 		}
 
 		private TenantResultModel tenantCanBeDeletedInternal(string tenantName)
