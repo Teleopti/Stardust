@@ -362,18 +362,10 @@
 			var endTime = test.scope.requests[0].FormatedPeriodEndTime();
 			var createdTime = test.scope.requests[0].FormatedCreatedTime();
 			var updatededTime = test.scope.requests[0].FormatedUpdatedTime();
-			var isDST = moment().tz('Europe/Berlin').isDST();
-			if (isDST) {
-				expect(startTime).toEqual(toDateString('2016-01-04T23:00:00', 'Europe/Berlin'));
-				expect(endTime).toEqual(toDateString('2016-01-07T22:59:00', 'Europe/Berlin'));
-				expect(createdTime).toEqual(toDateString('2016-01-05T02:29:37', 'Europe/Berlin'));
-				expect(updatededTime).toEqual(toDateString('2016-01-05T02:29:37', 'Europe/Berlin'));
-			} else {
-				expect(startTime).toEqual(toDateString('2016-01-05T00:00:00', 'Europe/Berlin'));
-				expect(endTime).toEqual(toDateString('2016-01-07T23:59:00', 'Europe/Berlin'));
-				expect(createdTime).toEqual(toDateString('2016-01-05T03:29:37', 'Europe/Berlin'));
-				expect(updatededTime).toEqual(toDateString('2016-01-05T03:29:37', 'Europe/Berlin'));
-			}
+			expect(startTime).toEqual(toDateString('2016-01-05T00:00:00'));
+			expect(endTime).toEqual(toDateString('2016-01-07T23:59:00'));
+			expect(createdTime).toEqual(toDateString('2016-01-05T03:29:37'));
+			expect(updatededTime).toEqual(toDateString('2016-01-05T03:29:37'));
 		});
 
 		it("should be able to switch between user timezone and request submitter timezone", function () {
@@ -386,12 +378,7 @@
 			isolatedScope.requestsTableContainer.userTimeZone = 'Europe/Berlin';
 			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = false;
 			test.scope.$digest();
-			var isDST = moment().tz('Europe/Berlin').isDST();
-			if (isDST) {
-				expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T04:00:00', 'Europe/Berlin'));
-			} else {
-				expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T05:00:00', 'Europe/Berlin'));
-			}
+			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T05:00:00'));
 			
 
 			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
@@ -547,14 +534,8 @@
 			test.scope.$digest();
 
 			var request = test.scope.requests[0];
-			var isDST = moment().tz(timeZone).isDST();
-			if (isDST) {
-				expect(request.FormatedPeriodStartTime()).toEqual(toDateString('2016-10-27T16:00:00', timeZone));
-				expect(request.FormatedPeriodEndTime()).toEqual(toDateString('2016-10-27T17:00:00', timeZone));
-			} else {
-				expect(request.FormatedPeriodStartTime()).toEqual(toDateString('2016-10-27T17:00:00', timeZone));
-				expect(request.FormatedPeriodEndTime()).toEqual(toDateString('2016-10-27T18:00:00', timeZone));
-			}
+			expect(request.FormatedPeriodStartTime()).toEqual(toDateString('2016-10-27T17:00:00'));
+			expect(request.FormatedPeriodEndTime()).toEqual(toDateString('2016-10-27T18:00:00'));
 		});
 
 		it('should display time in shift trade day view according to logon user timezone', function () {
