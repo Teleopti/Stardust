@@ -268,22 +268,21 @@ function SetDefaultSettings{
 }
 
 function GetConnectoinString {
-	$DBManagerFolder = Get-ScriptDirectory + "\..\Tools\Database"
+	$directory = Get-ScriptDirectory
+	$DBManagerFolder = $directory + "\..\Tools\Database"
     $settingsFile = "settings.txt"
     $fullPathsettingsFile =  $DBManagerFolder + "\" + $settingsFile
-	
-	#Get SQL Server info
+
 	$FirstRow = (Get-Content $fullPathsettingsFile)[0 .. 0] | out-string
 	$ThirdRow = (Get-Content $fullPathsettingsFile)[2 .. 2] | out-string
 
-	$ConnectionStringBase = ($FirstRow -split "|")[1]
-
 	$CCC7DB = $ThirdRow.Substring($ThirdRow.LastIndexOf("|") + 1)
-	$CCC7DB = $CCC7DB.Replace("`r","")
-	$CCC7DB = $CCC7DB.Replace("`n","")
-	
+	$CCC7DB = $CCC7DB.Replace("`r","").Replace("`n","")
+	$ConnectionStringBase = ($FirstRow -split "\|")[1]
+	$ConnectionStringBase = $ConnectionStringBase.Replace("`r","").Replace("`n","")
+
 	$ConnectionString = $ConnectionStringBase + ";Database=" + $CCC7DB + ";"
-	return "`"" +$ConnectionString + "`""
+	return $ConnectionString
 }
 
 ##===========
@@ -389,13 +388,16 @@ Try
 	
 	log-info "Restore server configurations, Running Teleopti.Support.Tool.exe -CS ..."
 	$conn = GetConnectoinString
-	$p = Start-Process $SupportTool -ArgumentList "-CS" $conn -wait -NoNewWindow -PassThru
+	$args = @"
+"-CS" "$conn"
+"@
+	$p = Start-Process $SupportTool -ArgumentList $args -wait -NoNewWindow -PassThru
     $p.HasExited
     $LastExitCode = $p.ExitCode
-    
-    if ($LastExitCode -ne 0) {
+	
+	if ($LastExitCode -ne 0) {
 		log-error "SupportTool generated an error!"
-        throw "SupportTool generated an error!"
+		throw "SupportTool generated an error!"
     }
 
 	#Save machine key files for later usage on other instances
