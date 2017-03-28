@@ -112,16 +112,24 @@ namespace Stardust.Manager
 				}
 
 				if (!allAliveWorkerNodesUri.Any()) return;
+
                 //sending to the available nodes
-				foreach (var uri in allAliveWorkerNodesUri.Where(x=>!x.Value).OrderBy(x=> Guid.NewGuid()))
-				{
-					AssignJobToWorkerNodeWorker(uri.Key);
-					Thread.Sleep(500);
-				}
+                Random r = new Random();
+                var listOfNodes = allAliveWorkerNodesUri.Where(x => !x.Value).Select(y => y.Key).ToList();
+                foreach (int i in Enumerable.Range(0, listOfNodes.Count()).OrderBy(x => r.Next()))
+			    {
+                    this.Log().Debug("Selected a free node " + listOfNodes[i] + " with index " + i);
+                    AssignJobToWorkerNodeWorker(listOfNodes[i]);
+                    Thread.Sleep(500);
+                }
+
                 //sending jobs to the rest of the nodes
-                foreach (var uri in allAliveWorkerNodesUri.Where(x => x.Value).OrderBy(x => Guid.NewGuid()))
+                r = new Random();
+                listOfNodes = allAliveWorkerNodesUri.Where(x => x.Value).Select(y => y.Key).ToList();
+                foreach (int i in Enumerable.Range(0, listOfNodes.Count()).OrderBy(x => r.Next()))
                 {
-                    AssignJobToWorkerNodeWorker(uri.Key);
+                    this.Log().Debug("Selected a busy node " + listOfNodes[i] + " with index " + i);
+                    AssignJobToWorkerNodeWorker(listOfNodes[i]);
                     Thread.Sleep(500);
                 }
             }
