@@ -33,26 +33,29 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		<LocalStorage name="NETFXInstall" sizeInMB="1024" cleanOnRoleRecycle="false" />
 	</LocalResources>    
     <Startup>
-	<Task commandLine="installNET.cmd" executionContext="elevated" taskType="simple">
-		<Environment>
-		  <Variable name="PathToNETFXInstall">
-			<RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/LocalResources/LocalResource[@name='NETFXInstall']/@path" />
-		  </Variable>
-		  <Variable name="ComputeEmulatorRunning">
-			<RoleInstanceValue xpath="/RoleEnvironment/Deployment/@emulated" />
-		  </Variable>
-		</Environment>
-	</Task>
+	  <Task commandLine="installNET.cmd" executionContext="elevated" taskType="simple">
+		  <Environment>
+		    <Variable name="PathToNETFXInstall">
+			  <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/LocalResources/LocalResource[@name='NETFXInstall']/@path" />
+		    </Variable>
+		    <Variable name="ComputeEmulatorRunning">
+			  <RoleInstanceValue xpath="/RoleEnvironment/Deployment/@emulated" />
+		    </Variable>
+		  </Environment>
+	  </Task>
 	  <Task commandLine="HardenSSL.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="PatchDatabases.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="PrepareConfigAndSignClickOnce.cmd" executionContext="elevated" taskType="simple" />
       <Task commandLine="InstallServiceV2.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="InitializeCopyPayroll.cmd" executionContext="elevated" taskType="simple" />
-	  <Task commandLine="IIS7ConfigMoveToNET4.cmd" executionContext="elevated" taskType="background" />
-	  <Task commandLine="Add-TeleoptiFoldersAndShortcuts.cmd" executionContext="elevated" taskType="background" />	  
-	  <Task commandLine="RestartTeleopti.cmd" executionContext="elevated" taskType="background" />
 	</Startup>
+	<Runtime executionContext="elevated">
+      <EntryPoint>
+         <NetFxEntryPoint assemblyName="Teleopti.Ccc.Web" targetFrameworkVersion="4.6.1"/>
+      </EntryPoint>
+    </Runtime>
 	<ConfigurationSettings>
+		<Setting name="RoleStartupScripts" value="IIS7ConfigMoveToNET4.cmd!;Add-TeleoptiFoldersAndShortcuts.cmd!;RestartTeleopti.cmd" />
 		<Setting name="TeleoptiDriveMap.BlobPath" />
 		<Setting name="TeleoptiDriveMap.AccountName" />
 		<Setting name="TeleoptiDriveMap.AccountKey" />
