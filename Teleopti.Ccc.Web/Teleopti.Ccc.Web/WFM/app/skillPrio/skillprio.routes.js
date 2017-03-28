@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     angular
@@ -8,12 +8,6 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('skillPrio', {
             url: '/skillprio',
-            templateUrl: 'app/skillPrio/skillprio.html',
-            controller: 'skillPrioController as vm'
-        });
-
-        $stateProvider.state('skillPrioMode', {
-            url: '/skillprio/v2',
             templateUrl: 'app/skillPrio/skillprio.new.html',
             controller: 'skillPrioControllerNew as vm'
         });

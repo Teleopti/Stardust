@@ -1600,13 +1600,13 @@
     <Content Include="WFM\app\rta\_modules.js" />
     <Content Include="WFM\app\seatManagement\html\seatplaninitmanualperiod.html" />
     <Content Include="WFM\app\seatManagement\seatplaninitmanualperiod.directive.js" />
-    <Content Include="WFM\app\skillPrio\skillprio.activity.service.js" />
-    <Content Include="WFM\app\skillPrio\skillprio.aggregator.service.js" />
     <Content Include="WFM\app\skillPrio\skillPrio.backend.fake.js" />
-    <Content Include="WFM\app\skillPrio\skillprio.controller.spec.js" />
-    <Content Include="WFM\app\skillPrio\skillprio.service.js" />
+    <Content Include="WFM\app\skillPrio\skillPrio.controller.new.js" />
+    <Content Include="WFM\app\skillPrio\skillPRio.controller.new.spec.js" />
+    <Content Include="WFM\app\skillPrio\skillPrio.directive.dragAndDrop.js" />
+    <Content Include="WFM\app\skillPrio\skillPrio.new.html" />
+    <Content Include="WFM\app\skillPrio\skillPrio.service.new.js" />
     <Content Include="WFM\app\skillPrio\skillprio.service.spec.js" />
-    <Content Include="WFM\app\skillPrio\skillprio.skill.service.js" />
     <Content Include="WFM\app\staffing\staffing.controller.js" />
     <Content Include="WFM\app\staffing\staffing.controller.spec.js" />
     <Content Include="WFM\app\staffing\staffing.html" />
@@ -1638,8 +1638,6 @@
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.belongsToDateDecider.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleNote.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleNote.spec.js" />
-    <Content Include="WFM\app\skillPrio\skillprio.controller.js" />
-    <Content Include="WFM\app\skillPrio\skillprio.html" />
     <Content Include="WFM\app\skillPrio\skillprio.routes.js" />
     <Content Include="WFM\app\skillPrio\_modules.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.bootstrapCommon.js" />
