@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure;
@@ -7,9 +9,12 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Test
 {
@@ -43,27 +48,19 @@ namespace Teleopti.Wfm.Test
 
 			DataSourceHelper.BackupApplicationDatabase(123);
 		}
+		
 
 		private static void disposeUnitOfWork()
 		{
 			TestState.UnitOfWork.Dispose();
 			TestState.UnitOfWork = null;
 		}
-
-		//private static void openUnitOfWork()
-		//{
-		//	TestState.UnitOfWork = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork();
-		//}
+		
 
 		public static void BeginTest()
 		{
 			DataSourceHelper.RestoreApplicationDatabase(123);
 			DataSourceHelper.ClearAnalyticsData();
-
-			//openUnitOfWork();
-			//var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
-			//TestState.TestDataFactory = new TestDataFactory(new ThisUnitOfWork(TestState.UnitOfWork), tenantUnitOfWorkManager, tenantUnitOfWorkManager);
-			//ServiceLocatorForLegacy.NestedUnitOfWorkStrategy = new SirLeakAlot();
 		}
 
 		public static void EndTest()

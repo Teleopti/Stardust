@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Scenario { get; set; }
 		public DateOnly DateOnly { get; set; }
 		public double Demand { get; set; }
+		public double Shrinkage { get; set; }
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var scenario = scenarioRepository.LoadAll().Single(x => x.Description.Name == Scenario);
 
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, DateOnly, Demand);
+			skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(Shrinkage));
 			var skillDayRepository = new SkillDayRepository(currentUnitOfWork);
 			skillDayRepository.Add(skillDay);
 		}
