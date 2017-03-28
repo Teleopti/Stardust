@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using Autofac.Core.Lifetime;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
@@ -103,7 +104,7 @@ namespace Stardust.Manager
 		{
 			try
 			{
-				List<Uri> allAliveWorkerNodesUri;
+				Dictionary<Uri,bool> allAliveWorkerNodesUri;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
@@ -111,13 +112,19 @@ namespace Stardust.Manager
 				}
 
 				if (!allAliveWorkerNodesUri.Any()) return;
-
-				foreach (var uri in allAliveWorkerNodesUri)
+                //sending to the available nodes
+				foreach (var uri in allAliveWorkerNodesUri.Where(x=>!x.Value).OrderBy(x=> Guid.NewGuid()))
 				{
-					AssignJobToWorkerNodeWorker(uri);
+					AssignJobToWorkerNodeWorker(uri.Key);
 					Thread.Sleep(500);
 				}
-			}
+                //sending jobs to the rest of the nodes
+                foreach (var uri in allAliveWorkerNodesUri.Where(x => x.Value).OrderBy(x => Guid.NewGuid()))
+                {
+                    AssignJobToWorkerNodeWorker(uri.Key);
+                    Thread.Sleep(500);
+                }
+            }
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);

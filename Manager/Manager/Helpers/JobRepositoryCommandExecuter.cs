@@ -145,12 +145,12 @@ namespace Stardust.Manager.Helpers
 			return listToReturn;
 		}
 
-		public List<Uri> SelectAllAliveWorkerNodes(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
+		public Dictionary<Uri,bool> SelectAllAliveWorkerNodes(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
 		{
-			var allAliveWorkerNodesUri = new List<Uri>();
+			var allAliveWorkerNodesUri = new Dictionary<Uri, bool> ();
 			const string selectAllAliveWorkerNodesCommandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
 								(SELECT SentToWorkerNodeUri FROM Stardust.Job WITH(NOLOCK) WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
-									FROM [Stardust].WorkerNode WITH(NOLOCK)) w order by running";
+									FROM [Stardust].WorkerNode WITH(NOLOCK)) w";
 			using (var selectAllAliveWorkerNodesCommand = new SqlCommand(selectAllAliveWorkerNodesCommandText, sqlConnection, sqlTransaction))
 			{
 				using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReaderWithRetry(_retryPolicy))
@@ -158,9 +158,10 @@ namespace Stardust.Manager.Helpers
 					if (readerAliveWorkerNodes.HasRows)
 					{
 						var ordinalPosForUrl = readerAliveWorkerNodes.GetOrdinal("Url");
+						var ordinalPosForIsRunning = readerAliveWorkerNodes.GetOrdinal("Running");
 						while (readerAliveWorkerNodes.Read())
 						{
-							allAliveWorkerNodesUri.Add(new Uri(readerAliveWorkerNodes.GetString(ordinalPosForUrl)));
+							allAliveWorkerNodesUri.Add(new Uri(readerAliveWorkerNodes.GetString(ordinalPosForUrl)), readerAliveWorkerNodes.GetBoolean(ordinalPosForIsRunning));
 						}
 					}
 				}
