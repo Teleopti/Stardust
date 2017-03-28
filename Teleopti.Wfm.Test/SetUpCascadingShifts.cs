@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Test
@@ -17,7 +23,130 @@ namespace Teleopti.Wfm.Test
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
 		public ICurrentBusinessUnit CurrentBusinessUnit;
+		public IUpdateStaffingLevelReadModel UpdateStaffingLevelReadModel;
 
+		public string CreateDenyMessage30Min(int understaffedHour, CultureInfo culture, CultureInfo uiCulture, TimeZoneInfo timeZone, DateTime dateTime)
+		{
+			IEnumerable<TimePeriod> understaffedTimeperiods = new List<TimePeriod>
+			{
+				new TimePeriod(understaffedHour, 0, understaffedHour, 30),
+				new TimePeriod(understaffedHour, 30, understaffedHour + 1, 0)
+			};
+
+			var errorMessageBuilder = new StringBuilder();
+			var understaffingHoursValidationError = string.Format(uiCulture,
+																  Resources.ResourceManager.GetString("InsufficientStaffingHours", uiCulture),
+																  dateTime.ToString("d", culture));
+			var insufficientHours = string.Join(", ", understaffedTimeperiods.Select(t => t.ToShortTimeString(culture)).Take(4));
+			errorMessageBuilder.AppendLine($"{understaffingHoursValidationError}{insufficientHours}{Environment.NewLine}");
+			return errorMessageBuilder.ToString();
+		}
+
+
+		public void SetUpUnderStaffedAndOverStaffedSkillDays(double defaultDemand, Tuple<int, double> HourDemands)
+		{
+			var skillDayGoldToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				Scenario = "Scenario",
+				Skill = "GoldSkill",
+				DefaultDemand = defaultDemand,
+				Shrinkage = 0.2,
+				HourDemand = HourDemands
+			};
+			var skillDaySilverToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				Scenario = "Scenario",
+				Skill = "SilverSkill",
+				DefaultDemand = defaultDemand,
+				Shrinkage = 0.2,
+				HourDemand = HourDemands
+			};
+			var skillDayBronzeToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				Scenario = "Scenario",
+				Skill = "BronzeSkill",
+				DefaultDemand = defaultDemand,
+				Shrinkage = 0.2,
+				HourDemand = HourDemands
+			};
+
+			Data.Apply(skillDayGoldToday);
+			Data.Apply(skillDaySilverToday);
+			Data.Apply(skillDayBronzeToday);
+
+			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddDays(2)));
+		}
+
+		public void SetUpUnderStaffedSkillDays()
+		{
+			var skillDayGoldToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				Scenario = "Scenario",
+				Skill = "GoldSkill",
+				DefaultDemand = 2,
+				Shrinkage = 0.2
+			};
+			var skillDaySilverToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				Scenario = "Scenario",
+				Skill = "SilverSkill",
+				DefaultDemand = 2,
+				Shrinkage = 0.2
+			};
+			var skillDayBronzeToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				Scenario = "Scenario",
+				Skill = "BronzeSkill",
+				DefaultDemand = 2,
+				Shrinkage = 0.2
+			};
+
+			Data.Apply(skillDayGoldToday);
+			Data.Apply(skillDaySilverToday);
+			Data.Apply(skillDayBronzeToday);
+
+			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddDays(2)));
+		}
+
+		public void SetUpOverStaffedSkillDays()
+		{
+			var skillDayGoldToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				Scenario = "Scenario",
+				Skill = "GoldSkill",
+				DefaultDemand = 0.1,
+				Shrinkage = 0.2
+			};
+			var skillDaySilverToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				Scenario = "Scenario",
+				Skill = "SilverSkill",
+				DefaultDemand = 0.1,
+				Shrinkage = 0.2
+			};
+			var skillDayBronzeToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				Scenario = "Scenario",
+				Skill = "BronzeSkill",
+				DefaultDemand = 0.1,
+				Shrinkage = 0.2
+			};
+
+			Data.Apply(skillDayGoldToday);
+			Data.Apply(skillDaySilverToday);
+			Data.Apply(skillDayBronzeToday);
+
+			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddDays(2)));
+		}
 
 		public virtual void SetUpRelevantStuffWithCascading()
 		{
