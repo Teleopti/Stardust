@@ -414,8 +414,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test]
-		[Ignore("43659 - not yet red. just a start....")]
-		public void ShouldNotMoveDOsForOneAgentOnlyButChangeAfterEachPeriod()
+		[Ignore("#43659")]
+		public void ShouldNotMoveDOsForOneAgentOnlyButChangeAfterEachPeriod([Values(1,1,1,1,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)] int REMOVEME)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
@@ -429,11 +429,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				1, 2, 2, 2, 2, 2, 2, 
 				1, 2, 2, 2, 2, 2, 2));
 			PersonAssignmentRepository.Has(agent1, scenario, activity, new ShiftCategory("_").WithId(), DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), new TimePeriod(8, 0, 16, 0));
-			PersonAssignmentRepository.GetSingle(firstDay.AddDays(6), agent1).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.GetSingle(firstDay.AddDays(13), agent1).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(0).AddDays(6), agent1).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(1).AddDays(6), agent1).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.Has(agent2, scenario, activity, new ShiftCategory("_").WithId(), DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), new TimePeriod(8, 0, 16, 0));
-			PersonAssignmentRepository.GetSingle(firstDay.AddDays(6), agent2).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.GetSingle(firstDay.AddDays(13), agent2).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(0).AddDays(6), agent2).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(1).AddDays(6), agent2).SetDayOff(new DayOffTemplate());
+			DayOffRulesRepository.HasDefault(x => { x.ConsecutiveWorkdays = new MinMax<int>(1, 20); }); //just to make sure anything goes
+
 			//TEMP!
 			Console.WriteLine("innan:");
 			foreach (var personAssignment in PersonAssignmentRepository.LoadAll())
