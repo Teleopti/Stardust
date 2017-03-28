@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -60,7 +61,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		[Test]
 		public void ShouldNotPublishWhenExternalLogonsDoesNotChange()
 		{
-			Now.Is("2016-08-26 00:00");
 			Data
 				.WithAgent("pierre")
 				.WithPeriod("2016-08-25")
@@ -69,6 +69,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				.WithPeriod("2016-08-26")
 				.WithExternalLogon("user2")
 				.WithExternalLogon("user1");
+			Now.Is("2016-08-26 00:00");
+			Target.Handle(new TenantHourTickEvent());
+			Publisher.Clear();
 
 			Target.Handle(new TenantHourTickEvent());
 
@@ -78,49 +81,67 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		[Test]
 		public void ShouldPublishWhenTerminalDateChanged()
 		{
-			Now.Is("2016-08-26 00:00");
+			var person = Guid.NewGuid();
+			Data
+				.WithAgent(person, "pierre", "2016-08-25")
+				.WithDataSource(7, "7")
+				.WithExternalLogon("usercode");
+			Now.Is("2016-08-25 00:00");
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
+				PersonId = person,
 				PreviousTerminationDate = "2016-08-30".Utc(),
 				TerminationDate = "2016-08-25".Utc(),
 				ExternalLogons = new[] {new ExternalLogon {DataSourceId = 7, UserCode = "usercode"}, }
 			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			@event.ExternalLogons.Single().DataSourceId.Should().Be(7);
-			@event.ExternalLogons.Single().UserCode.Should().Be("usercode");
+			@event.ExternalLogons.Last().DataSourceId.Should().Be(7);
+			@event.ExternalLogons.Last().UserCode.Should().Be("usercode");
 		}
 
 		[Test]
 		public void ShouldPublishWhenTeamChanged()
 		{
+			var person = Guid.NewGuid();
+			Data
+				.WithAgent(person, "pierre")
+				.WithDataSource(7, "7")
+				.WithExternalLogon("usercode");
 			Now.Is("2016-08-26 00:00");
 
 			Target.Handle(new PersonTeamChangedEvent
 			{
+				PersonId = person,
 				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 7, UserCode = "usercode" }, }
 			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			@event.ExternalLogons.Single().DataSourceId.Should().Be(7);
-			@event.ExternalLogons.Single().UserCode.Should().Be("usercode");
+			@event.ExternalLogons.Last().DataSourceId.Should().Be(7);
+			@event.ExternalLogons.Last().UserCode.Should().Be("usercode");
 		}
 
 
 		[Test]
 		public void ShouldPublishWhenPersonPeriodChanged()
 		{
+			var person = Guid.NewGuid();
+			Data
+				.WithAgent(person, "pierre")
+				.WithDataSource(7, "7")
+				.WithExternalLogon("usercode");
 			Now.Is("2016-08-26 00:00");
 
 			Target.Handle(new PersonPeriodChangedEvent
 			{
+				PersonId = person,
 				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 7, UserCode = "usercode" }, }
 			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			@event.ExternalLogons.Single().DataSourceId.Should().Be(7);
-			@event.ExternalLogons.Single().UserCode.Should().Be("usercode");
+			@event.ExternalLogons.Last().DataSourceId.Should().Be(7);
+			@event.ExternalLogons.Last().UserCode.Should().Be("usercode");
 		}
 	}
 }

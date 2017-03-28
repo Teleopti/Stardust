@@ -88,10 +88,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldNotPublishWhenTeamDoesNotChange()
 		{
 			var teamId = Guid.NewGuid();
-			Now.Is("2016-02-01 00:00");
 			Data.WithAgent("pierre")
 				.WithPeriod("2016-01-02", teamId)
 				.WithPeriod("2016-02-01", teamId);
+			Now.Is("2016-02-01 00:00");
+			Target.Handle(new TenantHourTickEvent());
+			Publisher.Clear();
 
 			Target.Handle(new TenantHourTickEvent());
 

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -39,6 +40,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleStorageRepositoryWrapper>().As<IScheduleStorageRepositoryWrapper>();
 			builder.RegisterType<ProjectionVersionPersister>()
 				.As<IProjectionVersionPersister>()
+				.SingleInstance();
+			builder.RegisterType<PersonAssociationPublisherCheckSumPersister>()
+				.As<IPersonAssociationPublisherCheckSumPersister>()
 				.SingleInstance();
 			builder.RegisterType<PushMessagePersister>()
 				.As<IPushMessagePersister>()

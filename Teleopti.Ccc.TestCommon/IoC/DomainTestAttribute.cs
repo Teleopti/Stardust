@@ -116,6 +116,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
 			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();
 			system.UseTestDouble<FakeKeyValueStorePersister>().For<IKeyValueStorePersister>();
+			system.UseTestDouble<FakePersonAssociationPublisherCheckSumPersister>().For<IPersonAssociationPublisherCheckSumPersister>();
 
 			// licensing
 			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();

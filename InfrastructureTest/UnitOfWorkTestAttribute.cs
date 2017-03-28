@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override void AfterTest()
 		{
 			base.AfterTest();
-			_aspect.OnAfterInvocation(null, null);
+			_aspect?.OnAfterInvocation(null, null);
 			_aspect = null;
 			SetupFixtureForAssembly.RestoreCcc7Database();
 		}

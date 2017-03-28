@@ -192,6 +192,9 @@
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\OptionalColumnCollectionChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\MoveShiftCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\PersonAssociationChanged\OldChangesTest.cs" />
+    <Compile Include="ApplicationLayer\PersonAssociationChanged\DeletedPersonTest.cs" />
+    <Compile Include="ApplicationLayer\PersonAssociationChanged\TimeZoneTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsHourlyAvailabilityMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsOptionalColumnGroupPageHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPreferenceMatchingPersonTest.cs" />

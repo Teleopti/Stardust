@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using NodaTime;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -11,12 +10,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	public class PersonAssociationChangedEventPublisher : 
+	public class PersonAssociationChangedEventPublisher :
 		IHandleEvent<TenantHourTickEvent>,
 		IHandleEvent<TenantMinuteTickEvent>,
 		IHandleEvent<PersonTerminalDateChangedEvent>,
 		IHandleEvent<PersonTeamChangedEvent>,
 		IHandleEvent<PersonPeriodChangedEvent>,
+		IHandleEvent<PersonDeletedEvent>,
 		IRunOnHangfire
 	{
 		private readonly IPersonRepository _persons;
@@ -24,19 +24,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly INow _now;
 		private readonly IDistributedLockAcquirer _distributedLock;
 		private readonly IKeyValueStorePersister _keyValueStore;
+		private readonly IPersonAssociationPublisherCheckSumPersister _checkSums;
 
 		public PersonAssociationChangedEventPublisher(
 			IPersonRepository persons,
 			IEventPublisher eventPublisher,
 			INow now,
 			IDistributedLockAcquirer distributedLock,
-			IKeyValueStorePersister keyValueStore)
+			IKeyValueStorePersister keyValueStore,
+			IPersonAssociationPublisherCheckSumPersister checkSums)
 		{
 			_persons = persons;
 			_eventPublisher = eventPublisher;
 			_now = now;
 			_distributedLock = distributedLock;
 			_keyValueStore = keyValueStore;
+			_checkSums = checkSums;
 		}
 
 		[UnitOfWork]
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				if (_keyValueStore.Get("PersonAssociationChangedPublishTrigger", false))
 				{
 					_keyValueStore.Update("PersonAssociationChangedPublishTrigger", false);
-					publishEventsFor(d => true);
+					publishForAllPersons();
 				}
 			});
 		}
@@ -56,185 +59,120 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		[UnitOfWork]
 		public virtual void Handle(TenantHourTickEvent @event)
 		{
-			publishEventsFor(data =>
-			{
-				var previousTeam = data.previousPeriod?.Team.Id;
-				var teamId = data.currentPeriod?.Team.Id;
-
-				if (data.timeOfChange == null)
-					return false;
-				if (data.timeOfChange > data.now)
-					return false;
-				if (data.timeOfChange < data.now.AddDays(-1))
-					return false;
-
-				var sameTeam = previousTeam.HasValue &&
-							   teamId.HasValue &&
-							   previousTeam == teamId;
-
-				var sameExternalLogons =
-					(data.previousPeriod?.ExternalLogOnCollection.Select(x => x.AcdLogOnOriginalId).OrderBy(x => x))
-						.SequenceEqualNullSafe(
-							data.currentPeriod?.ExternalLogOnCollection.Select(x => x.AcdLogOnOriginalId).OrderBy(x => x)
-						);
-
-				return !(sameTeam && sameExternalLogons);
-
-			});
+			publishForAllPersons();
 		}
 
-		private class data
+		[UnitOfWork]
+		public virtual void Handle(PersonTeamChangedEvent @event)
 		{
-			public IPerson person;
-			public IPersonPeriod previousPeriod;
-			public IPersonPeriod currentPeriod;	
-			public DateTime? timeOfChange;
-			public DateTime now;
+			publishForPerson(@event.PersonId);
 		}
 
-		private void publishEventsFor(Func<data, bool> predicate)
+		[UnitOfWork]
+		public virtual void Handle(PersonPeriodChangedEvent @event)
+		{
+			publishForPerson(@event.PersonId);
+		}
+
+		[UnitOfWork]
+		public virtual void Handle(PersonTerminalDateChangedEvent @event)
+		{
+			publishForPerson(@event.PersonId);
+		}
+
+		[UnitOfWork]
+		public virtual void Handle(PersonDeletedEvent @event)
+		{
+			publishForPerson(@event.PersonId);
+		}
+
+		private void publishForAllPersons()
 		{
 			var now = _now.UtcDateTime();
+			var checkSums = _checkSums.Get();
 
-			_persons.LoadAll()
-				.Select(person =>
+			_persons
+				.LoadAll()
+				.ForEach(person =>
 				{
-					var timeZone = person.PermissionInformation.DefaultTimeZone();
-					var agentDate = new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(now, timeZone));
-					var currentPeriod = person.Period(agentDate);
-					var previousPeriod = this.previousPeriod(person, currentPeriod);
-					var time = timeOfChange(person.TerminalDate, currentPeriod, timeZone);
-
-					return new data
-					{
-						person = person,
-						previousPeriod = previousPeriod,
-						currentPeriod = currentPeriod,
-						timeOfChange = time,
-						now = now
-					};
-
-				})
-				.Where(predicate)
-				.ForEach(data =>
-				{
-
-					var teamId = data.currentPeriod?.Team.Id;
-					var siteId = data.currentPeriod?.Team.Site.Id;
-					var siteName = data.currentPeriod?.Team.Site.Description.Name;
-					var teamName = data.currentPeriod?.Team.Description.Name;
-					var businessUnitId = data.currentPeriod?.Team.Site.BusinessUnit.Id;
-
-					_eventPublisher.Publish(new PersonAssociationChangedEvent
-					{
-						PersonId = data.person.Id.Value,
-						BusinessUnitId = businessUnitId,
-						SiteId = siteId,
-						SiteName = siteName,
-						TeamId = teamId,
-						TeamName = teamName,
-						Timestamp = now,
-						ExternalLogons = (data.currentPeriod?.ExternalLogOnCollection ?? Enumerable.Empty<IExternalLogOn>())
-							.Select(x => new ExternalLogon
-							{
-								UserCode = x.AcdLogOnOriginalId,
-								DataSourceId = x.DataSourceId
-							}).ToArray()
-					});
+					publishForPerson(person.Id.Value, person, now, checkSums.SingleOrDefault(c => c.PersonId == person.Id.Value)?.CheckSum ?? 0);
 				});
 		}
 
-		private IPersonPeriod previousPeriod(IPerson person, IPersonPeriod currentPeriod)
+		private void publishForPerson(Guid personId)
 		{
-			var currentPeriodIndex = person.PersonPeriodCollection.IndexOf(currentPeriod);
-			IPersonPeriod previousPeriod = null;
-			if (currentPeriodIndex > 0)
-				previousPeriod = person.PersonPeriodCollection.ElementAt(currentPeriodIndex - 1);
-			return previousPeriod;
+			publishForPerson(
+				personId,
+				 _persons.Get(personId),
+				_now.UtcDateTime(),
+				_checkSums.Get(personId)?.CheckSum ?? 0
+			);
 		}
 
-		private DateTime? timeOfChange(DateOnly? terminalDate, IPersonPeriod currentPeriod, TimeZoneInfo timeZone)
+		private void publishForPerson(Guid personId, IPerson person, DateTime now, int checkSum)
 		{
-			var terminatedAt = terminationTime(terminalDate, timeZone);
-			if (terminatedAt <= _now.UtcDateTime())
-				return terminatedAt;
-			if (currentPeriod == null)
-				return null;
-			return TimeZoneInfo.ConvertTimeToUtc(currentPeriod.StartDate.Date, timeZone);
-		}
+			var timeZone = person?.PermissionInformation.DefaultTimeZone();
+			var agentDate = person != null ? new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(now, timeZone)) : (DateOnly?) null;
+			var currentPeriod = person?.Period(agentDate.Value);
+			var teamId = currentPeriod?.Team.Id;
+			var siteId = currentPeriod?.Team.Site.Id;
+			var siteName = currentPeriod?.Team.Site.Description.Name;
+			var teamName = currentPeriod?.Team.Description.Name;
+			var businessUnitId = currentPeriod?.Team.Site.BusinessUnit.Id;
 
-		public void Handle(PersonTerminalDateChangedEvent @event)
-		{
-			var timeZone = @event.TimeZoneInfoId != null
-				? TimeZoneInfo.FindSystemTimeZoneById(@event.TimeZoneInfoId)
-				: TimeZoneInfo.Utc;
-			var previousTerminatedAt = terminationTime(@event.PreviousTerminationDate, timeZone);
-			var terminatedAt = terminationTime(@event.TerminationDate, timeZone);
-
-			var now = _now.UtcDateTime();
-
-			if (previousTerminatedAt < now && terminatedAt < now)
-				return;
-			if (previousTerminatedAt > now && terminatedAt > now)
-				return;
-
-			_eventPublisher.Publish(new PersonAssociationChangedEvent
+			publishIfChanged(new PersonAssociationChangedEvent
 			{
-				PersonId = @event.PersonId,
-				BusinessUnitId = @event.BusinessUnitId,
-				SiteId = @event.SiteId,
-				SiteName = @event.SiteName,
-				TeamId = @event.TeamId,
-				TeamName = @event.TeamName,
+				PersonId = personId,
+				BusinessUnitId = businessUnitId,
+				SiteId = siteId,
+				SiteName = siteName,
+				TeamId = teamId,
+				TeamName = teamName,
 				Timestamp = now,
-				ExternalLogons = @event.ExternalLogons
-			});
+				ExternalLogons = (currentPeriod?.ExternalLogOnCollection ?? Enumerable.Empty<IExternalLogOn>())
+					.Select(x => new ExternalLogon
+					{
+						UserCode = x.AcdLogOnOriginalId,
+						DataSourceId = x.DataSourceId
+					}).ToArray()
+			}, checkSum);
 		}
 
-		private static DateTime terminationTime(DateTime? terminationDate, TimeZoneInfo timeZone)
+		private void publishIfChanged(PersonAssociationChangedEvent @event, int lastCheckSum)
 		{
-			var date = terminationDate.HasValue ? new DateOnly(terminationDate.Value) : null as DateOnly?;
-			return terminationTime(date, timeZone);
-		}
+			var currentCheckSum = calculateCheckSum(@event);
 
-		private static DateTime terminationTime(DateOnly? terminationDate, TimeZoneInfo timeZone)
-		{
-			if (!terminationDate.HasValue)
-				return DateTime.MaxValue;
-			return LocalDateTime.FromDateTime(terminationDate.Value.Date)
-				.PlusDays(1)
-				.InZoneLeniently(DateTimeZoneProviders.Bcl[timeZone.Id])
-				.ToDateTimeUtc();
-		}
+			if (currentCheckSum == lastCheckSum)
+				return;
 
-		public void Handle(PersonTeamChangedEvent @event)
-		{
-			_eventPublisher.Publish(new PersonAssociationChangedEvent
+			_checkSums.Persist(new PersonAssociationCheckSum
 			{
 				PersonId = @event.PersonId,
-				BusinessUnitId = @event.CurrentBusinessUnitId,
-				SiteId = @event.CurrentSiteId,
-				SiteName = @event.CurrentSiteName,
-				TeamId = @event.CurrentTeamId,
-				TeamName = @event.CurrentTeamName,
-				Timestamp = @event.Timestamp,
-				ExternalLogons = @event.ExternalLogons,
+				CheckSum = currentCheckSum
 			});
+
+			_eventPublisher.Publish(@event);
 		}
 
-		public void Handle(PersonPeriodChangedEvent @event)
+		private int calculateCheckSum(PersonAssociationChangedEvent @event)
 		{
-			_eventPublisher.Publish(new PersonAssociationChangedEvent
+			unchecked
 			{
-				PersonId = @event.PersonId,
-				BusinessUnitId = @event.CurrentBusinessUnitId,
-				SiteId = @event.CurrentSiteId,
-				SiteName = @event.CurrentSiteName,
-				TeamId = @event.CurrentTeamId,
-				TeamName = @event.CurrentTeamName,
-				Timestamp = @event.Timestamp,
-				ExternalLogons = @event.ExternalLogons
-			});
+				var teamId = @event.TeamId;
+				var hashCode = @event
+					.ExternalLogons
+					.EmptyIfNull()
+					.Aggregate(0, (acc, el) =>
+					{
+						var hc = acc;
+						hc = (hc*397) ^ el.DataSourceId.GetHashCode();
+						hc = (hc*397) ^ el.UserCode.GetHashCode();
+						return hc;
+					});
+				hashCode = (hashCode*397) ^ teamId.GetHashCode();
+
+				return hashCode;
+			}
 		}
 
 	}

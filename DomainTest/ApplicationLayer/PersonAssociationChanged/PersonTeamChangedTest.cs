@@ -24,12 +24,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		[Test]
 		public void ShouldPublishWithProperties()
 		{
-			Now.Is("2016-02-01 00:00:05");
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			
+			Data
+				.WithBusinessUnit(businessUnitId)
+				.WithSite(siteId, "site")
+				.WithTeam(teamId, "team")
+				.WithAgent(personId, "pierre", teamId, siteId, businessUnitId)
+				.WithDataSource(7, "7")
+				.WithExternalLogon("usercode");
+
+			Now.Is("2016-02-01 00:00:05");
 			Target.Handle(new PersonTeamChangedEvent
 			{
 				Timestamp = "2016-02-01 00:00:01".Utc(),
@@ -43,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 
 			var result = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
 			result.PersonId.Should().Be(personId);
-			result.Timestamp.Should().Be("2016-02-01 00:00:01".Utc());
+			result.Timestamp.Should().Be("2016-02-01 00:00:05".Utc());
 			result.BusinessUnitId.Should().Be(businessUnitId);
 			result.SiteId.Should().Be(siteId);
 			result.SiteName.Should().Be("site");

@@ -436,6 +436,7 @@
     <Compile Include="Repositories\PayrollFormatRepository.cs" />
     <Compile Include="Repositories\DayOffRulesRepository.cs" />
     <Compile Include="Repositories\PeopleForShiftTradeFinder.cs" />
+    <Compile Include="Repositories\PersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="Repositories\ProjectionVersionPersister.cs" />
     <Compile Include="Repositories\PersonInRoleQuerier.cs" />
     <Compile Include="Repositories\LoadSkillInIntradays.cs" />

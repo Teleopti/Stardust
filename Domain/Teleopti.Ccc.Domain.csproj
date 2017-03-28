@@ -220,6 +220,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorOld.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidator.cs" />
+    <Compile Include="ApplicationLayer\IPersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Helper\CellExtensions.cs" />

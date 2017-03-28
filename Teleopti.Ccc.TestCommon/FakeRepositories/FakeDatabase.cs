@@ -598,8 +598,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				_person.PermissionInformation.SetUICulture(uiCulture);
 
 			if (terminalDate != null)
-				_person.TerminatePerson(terminalDate.Date(), new PersonAccountUpdaterDummy());
+				WithTerminalDate(terminalDate);
 
+			return this;
+		}
+
+		public FakeDatabase WithTerminalDate(string terminalDate)
+		{
+			_person.TerminatePerson(terminalDate.Date(), new PersonAccountUpdaterDummy());
 			return this;
 		}
 
@@ -981,6 +987,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase RemovePerson(Guid personId)
+		{
+			_persons.Remove(_persons.Get(personId));
+			return this;
+		}
 
 
 
