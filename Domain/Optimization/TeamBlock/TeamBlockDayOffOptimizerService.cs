@@ -222,10 +222,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				allFailed[teamInfo] = true;
 			}
 
-			var matrixes = (from teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true)
-											from matrix in teamInfo.MatrixesForGroup()
-											select new Tuple<IScheduleMatrixPro, ITeamInfo>(matrix, teamInfo)).ToArray();
-			var numberOfMatrixes = matrixes.Length;
+			var matrixes = from teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true)
+				from matrix in teamInfo.MatrixesForGroup()
+				select new Tuple<IScheduleMatrixPro, ITeamInfo>(matrix, teamInfo);
+			if (optimizationPreferences.Extra.IsClassic())
+			{
+				matrixes = matrixes.Randomize();
+			}
+			var numberOfMatrixes = matrixes.Count();
 
 			foreach (var matrix in matrixes)
 			{

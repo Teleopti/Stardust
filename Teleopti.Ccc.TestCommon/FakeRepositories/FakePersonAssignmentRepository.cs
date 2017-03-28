@@ -124,5 +124,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.LoadAll<IPersonAssignment>().Single(pa => pa.Date == dateOnly && pa.Person.Equals(agent));
 		}
 
+		public void Clear()
+		{
+			foreach (var personAssignment in _storage.LoadAll<IPersonAssignment>())
+			{
+				_storage.Remove(personAssignment);
+			}
+		}
 	}
 }

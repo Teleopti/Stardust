@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			var allPeople = _personRepository.FindPeopleInOrganizationLight(period);
 			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization = allPeople.ToList();
+			schedulerStateHolderTo.AllPermittedPersons.Clear();
 			allPeople.ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
 		}
 

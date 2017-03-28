@@ -414,9 +414,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test]
-		[Ignore("#43659")]
-		public void ShouldNotMoveDOsForOneAgentOnlyButChangeAfterEachPeriod([Values(1,1,1,1,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)] int REMOVEME)
+		public void ShouldNotMoveDOsForOneAgentOnlyButChangeAfterEachPeriod()
 		{
+			const int numberOfAttempts = 20;
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
@@ -428,43 +428,28 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 
 				1, 2, 2, 2, 2, 2, 2, 
 				1, 2, 2, 2, 2, 2, 2));
-			PersonAssignmentRepository.Has(agent1, scenario, activity, new ShiftCategory("_").WithId(), DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), new TimePeriod(8, 0, 16, 0));
-			PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(0).AddDays(6), agent1).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(1).AddDays(6), agent1).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.Has(agent2, scenario, activity, new ShiftCategory("_").WithId(), DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), new TimePeriod(8, 0, 16, 0));
-			PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(0).AddDays(6), agent2).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(1).AddDays(6), agent2).SetDayOff(new DayOffTemplate());
 			DayOffRulesRepository.HasDefault(x => { x.ConsecutiveWorkdays = new MinMax<int>(1, 20); }); //just to make sure anything goes
 
-			//TEMP!
-			Console.WriteLine("innan:");
-			foreach (var personAssignment in PersonAssignmentRepository.LoadAll())
+			for (var i = 0; i < numberOfAttempts; i++)
 			{
-				if (personAssignment.DayOff() != null)
-				{
-					Console.WriteLine(personAssignment.Date.Subtract(firstDay).TotalDays);
-				}
+				PersonAssignmentRepository.Clear();
+				PersonAssignmentRepository.Has(agent1, scenario, activity, new ShiftCategory("_").WithId(), DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), new TimePeriod(8, 0, 16, 0));
+				PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(0).AddDays(6), agent1).SetDayOff(new DayOffTemplate());
+				PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(1).AddDays(6), agent1).SetDayOff(new DayOffTemplate());
+				PersonAssignmentRepository.Has(agent2, scenario, activity, new ShiftCategory("_").WithId(), DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), new TimePeriod(8, 0, 16, 0));
+				PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(0).AddDays(6), agent2).SetDayOff(new DayOffTemplate());
+				PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(1).AddDays(6), agent2).SetDayOff(new DayOffTemplate());
+
+				Target.Execute(planningPeriod.Id.Value);
+
+				var allDOs = PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null);
+				var movedD01 = allDOs.Single(x => x.Date == firstDay);
+				var movedD02 = allDOs.Single(x => x.Date == firstDay.AddWeeks(1));
+				if (!movedD01.Person.Equals(movedD02.Person))
+					return;
 			}
-			//
 
-			Target.Execute(planningPeriod.Id.Value);
-
-
-			//TEMP!
-			Console.WriteLine("efter:");
-			foreach (var personAssignment in PersonAssignmentRepository.LoadAll())
-			{
-				if (personAssignment.DayOff() != null)
-				{
-					Console.WriteLine(personAssignment.Date.Subtract(firstDay).TotalDays);
-				}
-			}
-			//
-
-			var allDOs = PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null);
-			var movedD01 = allDOs.Single(x => x.Date == firstDay);
-			var movedD02 = allDOs.Single(x => x.Date == firstDay.AddWeeks(1));
-			movedD01.Person.Should().Not.Be.EqualTo(movedD02.Person);
+			Assert.Fail($"Tried optimize {numberOfAttempts} number of times but always moving DOs from same agent. Giving up...");
 		}
 	}
 }

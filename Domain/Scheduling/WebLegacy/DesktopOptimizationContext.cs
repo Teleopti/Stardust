@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
 			var stateHolderFrom = schedulerStateHolderFrom();
-			stateHolderFrom.SchedulingResultState.PersonsInOrganization.Where(x => agentIds.Contains(x.Id.Value))
-				.ForEach(x => schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Add(x));
+			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization = stateHolderFrom.SchedulingResultState.PersonsInOrganization.Where(x => agentIds.Contains(x.Id.Value)).ToList();
+			schedulerStateHolderTo.AllPermittedPersons.Clear();
 			stateHolderFrom.AllPermittedPersons.Where(x => agentIds.Contains(x.Id.Value))
 				.ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
 		}
