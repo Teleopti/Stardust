@@ -23,7 +23,7 @@
 			'rtaAgentsBuildService',
 			'rtaRouteService',
 			'fakeTimeService',
-			'rtaLocaleLanguageSortingService',
+			'localeLanguageSortingService',
 			'Toggle',
 			'NoticeService'
 		];
@@ -45,7 +45,7 @@
 		rtaAgentsBuildService,
 		rtaRouteService,
 		fakeTimeService,
-		rtaLocaleLanguageSortingService,
+		localeLanguageSortingService,
 		toggleService,
 		NoticeService
 	) {
@@ -90,7 +90,7 @@
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
 		vm.pollingLock = true;
-		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
+		vm.sortByLocaleLanguage = localeLanguageSortingService.sort;
 		vm.getTableHeight = getTableHeight;
 		vm.getAdherenceForAgent = getAdherenceForAgent;
 		vm.selectAgent = selectAgent;

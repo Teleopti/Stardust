@@ -1458,6 +1458,7 @@
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearchPanel.tpl.html" />
     <Content Include="WFM\app\global\favoriteSearch\_modules.js" />
     <Content Include="WFM\app\global\focusInput\focusInput.directive.js" />
+    <Content Include="WFM\app\global\localeLanguageSort\localeLanguageSorting.service.js" />
     <Content Include="WFM\app\global\modal\miniConfirmModal.tpl.html" />
     <Content Include="WFM\app\global\modal\modal.service.js" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.component.js" />
@@ -1595,7 +1596,6 @@
     <Content Include="WFM\app\rta\rta.route.service.js" />
     <Content Include="WFM\app\rta\rta.route.service.spec.js" />
     <Content Include="WFM\app\rta\rta.service.js" />
-    <Content Include="WFM\app\rta\rta.sorting.localelanguage.service.js" />
     <Content Include="WFM\app\rta\rta.state.provider.js" />
     <Content Include="WFM\app\rta\filter\rta.filter.controller.overview.skillSelection.spec.js" />
     <Content Include="WFM\app\rta\_modules.js" />
