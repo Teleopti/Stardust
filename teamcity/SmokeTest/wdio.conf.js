@@ -50,6 +50,13 @@ exports.config = {
         maxInstances: 5,
         //
         browserName: 'chrome'
+    },{
+        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
+        // grid with only 5 firefox instance available you can make sure that not more than
+        // 5 instance gets started at a time.
+        maxInstances: 5,
+        //
+        browserName: 'internet explorer'
     }],
     //
     // ===================
@@ -114,6 +121,11 @@ exports.config = {
 				version: '2.25',
 				arch: process.arch,
 				baseURL: 'https://chromedriver.storage.googleapis.com'
+			},
+            'ie': {
+				version: '3.3.0',
+				arch: process.arch,
+				baseURL: 'https://selenium-release.storage.googleapis.com'
 			}
 		}
 	},
@@ -123,6 +135,11 @@ exports.config = {
 				version: '2.25',
 				arch: process.arch,
 				baseURL: 'https://chromedriver.storage.googleapis.com'
+			},
+            'ie': {
+				version: '3.3.0',
+				arch: process.arch,
+				baseURL: 'https://selenium-release.storage.googleapis.com'
 			}
 		}
 	},
