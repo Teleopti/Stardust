@@ -215,23 +215,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			var previousPeriodValue = periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			var currentMatrixCounter = 0;
-
 			var allFailed = new Dictionary<ITeamInfo, bool>();
-			foreach (var teamInfo in remainingInfoList)
+			var matrixes = new List<Tuple<IScheduleMatrixPro, ITeamInfo>>();
+			foreach (var teamInfo in remainingInfoList.Randomize()) //this randomize could be removed if we could randomize no matter IsClassic below...
 			{
 				allFailed[teamInfo] = true;
+				matrixes.AddRange(teamInfo.MatrixesForGroup().Select(scheduleMatrixPro => new Tuple<IScheduleMatrixPro, ITeamInfo>(scheduleMatrixPro, teamInfo)));
 			}
 
-			var matrixes = from teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true)
-				from matrix in teamInfo.MatrixesForGroup()
-				select new Tuple<IScheduleMatrixPro, ITeamInfo>(matrix, teamInfo);
-			if (optimizationPreferences.Extra.IsClassic())
-			{
-				matrixes = matrixes.Randomize();
-			}
-			var numberOfMatrixes = matrixes.Count();
-
-			foreach (var matrix in matrixes)
+			foreach (var matrix in optimizationPreferences.Extra.IsClassic() ? matrixes.Randomize() : matrixes)
 			{
 				currentMatrixCounter++;
 
@@ -308,7 +300,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							}
 						}
 
-						if (onReportProgress(schedulingProgress, numberOfMatrixes, currentMatrixCounter, matrix.Item2, previousPeriodValue))
+						if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, previousPeriodValue))
 						{
 							cancelAction();
 							return null;
