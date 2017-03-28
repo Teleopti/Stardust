@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	{
 		public override bool OnStart()
 		{
-			var startupScripts = CloudConfigurationManager.GetSetting("RoleStartupScripts");
+			var startupScripts = RoleEnvironment.GetConfigurationSettingValue("RoleStartupScripts");
 			if (!string.IsNullOrEmpty(startupScripts))
 			{
 				var scriptList = startupScripts.Split(';');
