@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var date = new DateOnly(2017, 1, 30);
-			var period = new DateOnlyPeriod(date, date.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var shiftCategoryA = new ShiftCategory("A").WithId();
 			var shiftCategoryB = new ShiftCategory("B").WithId();
 			var scenario = new Scenario("_");

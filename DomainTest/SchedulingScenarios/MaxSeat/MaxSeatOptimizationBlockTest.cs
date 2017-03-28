@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 2));
 			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(8, 16));
-			var schedules = ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agentScheduledForAnHourData.Assignment, ass });
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), new[] { agentScheduledForAnHourData.Assignment, ass });
 			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
 			optPreferences.Extra.UseBlockSameShiftCategory = true;
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 2));
 			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(8, 16));
-			var schedules = ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agentScheduledForAnHourData.Assignment, ass });
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), new[] { agentScheduledForAnHourData.Assignment, ass });
 			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
 			optPreferences.Extra.UseBlockSameShift = true;
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 2));
 			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(8, 16));
-			var schedules = ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agentScheduledForAnHourData.Assignment, ass });
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), new[] { agentScheduledForAnHourData.Assignment, ass });
 			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
 			optPreferences.Extra.UseBlockSameShift = true;
 			optPreferences.Extra.BlockTypeValue = BlockFinderType.BetweenDayOff;

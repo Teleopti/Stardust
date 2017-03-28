@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			ass2.AddActivity(lunch, new TimePeriod(11, 0, 12, 0));
 			ass2.SetShiftCategory(shiftCategory1);
 
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1),
 				new[] { agent }, new[] { ass1, ass2 }, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			ass4.AddActivity(lunch, new TimePeriod(11, 0, 12, 0));
 			ass4.SetShiftCategory(shiftCategory1);
 
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1),
 				new[] { agent, agent1 }, new[] { ass1, ass2, ass3, ass4 }, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			ass1.AddActivity(phoneActivity, new TimePeriod(11, 30, 12, 30));
 			ass1.SetShiftCategory(shiftCategory1);
 
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1),
 				new[] { agent }, new[] { ass1 }, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			ass1.AddActivity(lunch, new TimePeriod(11, 30, 12, 30));
 			ass1.SetShiftCategory(shiftCategory1);
 
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1),
 				new[] { agent }, new[] { ass1 }, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);

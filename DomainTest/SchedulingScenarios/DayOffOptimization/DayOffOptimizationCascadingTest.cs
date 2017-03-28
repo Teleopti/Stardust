@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOf(2), ruleSet, skillA, skillB);
 				agents.Add(agent);
 
-				PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1)), new TimePeriod(8, 0, 16, 0));
+				PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new TimePeriod(8, 0, 16, 0));
 				PersonAssignmentRepository.GetSingle(firstDay.AddDays(5), agent).SetDayOff(new DayOffTemplate()); 
 				PersonAssignmentRepository.GetSingle(firstDay.AddDays(6), agent).SetDayOff(new DayOffTemplate()); 
 			}
 			var agentB = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOf(2), ruleSet, skillB);
-			PersonAssignmentRepository.Has(agentB, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1)), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(agentB, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(firstDay.AddDays(5), agentB).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(firstDay.AddDays(6), agentB).SetDayOff(new DayOffTemplate());
 

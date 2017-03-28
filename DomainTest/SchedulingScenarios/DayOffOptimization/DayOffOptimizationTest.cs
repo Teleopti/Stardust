@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(planningPeriod.Id.Value);
 
 			var assignments =
-				PersonAssignmentRepository.Find(new[] {agent1}, new DateOnlyPeriod(firstDay, firstDay.AddWeeks(2)), scenario)
+				PersonAssignmentRepository.Find(new[] {agent1}, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), scenario)
 					.OrderBy(ass => ass.Date)
 					.ToList();
 
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(planningPeriod.Id.Value);
 
 			var assignments =
-				PersonAssignmentRepository.Find(new[] { agent1 }, new DateOnlyPeriod(firstDay, firstDay.AddWeeks(2)), scenario)
+				PersonAssignmentRepository.Find(new[] { agent1 }, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), scenario)
 					.OrderBy(ass => ass.Date)
 					.ToList();
 
@@ -428,10 +428,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 
 				1, 2, 2, 2, 2, 2, 2, 
 				1, 2, 2, 2, 2, 2, 2));
-			PersonAssignmentRepository.Has(agent1, scenario, activity, new ShiftCategory("_").WithId(), new DateOnlyPeriod(firstDay, firstDay.AddWeeks(2)), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(agent1, scenario, activity, new ShiftCategory("_").WithId(), DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(firstDay.AddDays(6), agent1).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(firstDay.AddDays(13), agent1).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.Has(agent2, scenario, activity, new ShiftCategory("_").WithId(), new DateOnlyPeriod(firstDay, firstDay.AddWeeks(2)), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(agent2, scenario, activity, new ShiftCategory("_").WithId(), DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(firstDay.AddDays(6), agent2).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(firstDay.AddDays(13), agent2).SetDayOff(new DayOffTemplate());
 			//TEMP!
@@ -461,7 +461,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			var allDOs = PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null);
 			var movedD01 = allDOs.Single(x => x.Date == firstDay);
-			var movedD02 = allDOs.Single(x => x.Date == firstDay.AddDays(7));
+			var movedD02 = allDOs.Single(x => x.Date == firstDay.AddWeeks(1));
 			movedD01.Person.Should().Not.Be.EqualTo(movedD02.Person);
 		}
 	}

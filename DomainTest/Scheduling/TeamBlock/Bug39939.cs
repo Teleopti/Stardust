@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldHandleStrangeSchedules()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
 
-			Target.DoScheduling(new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1)));
+			Target.DoScheduling(DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1));
 
 			var assignments = AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(12);

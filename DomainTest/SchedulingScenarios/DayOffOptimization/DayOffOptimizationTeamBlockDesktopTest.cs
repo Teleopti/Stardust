@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldCareAboutGroupType()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).IsOpen();
 			var scenario = new Scenario("_");
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldNotCrashOnAgentWithoutRuleSetBag()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).IsOpen();
 			var scenario = new Scenario("_");
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldNotPlaceShiftsOnClosedDaysWhenUsingSameShift()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity1 = new Activity("1").WithId();
 			var activity2 = new Activity("2").WithId();
 			activity1.RequiresSkill = true;
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			//hard-to-understand-test... setup is like in bugdb mentioned here: http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?Id=40314
 
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(3));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 3);
 			var activity = new Activity("_");
 			var channelSales = new Skill("A").For(activity).WithId().IsOpenDuringWeekends();
 			var directSales = new Skill("B").For(activity).WithId().IsOpen();

@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldBaseBestShiftOnPrimarySkillOpenHoursEvenIfSubskillIsOpenWithHigherDemand()
 		{
 			var date = new DateOnly(2016, 9, 19); //mån
-			var period = new DateOnlyPeriod(date, date.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");

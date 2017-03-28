@@ -30,6 +30,11 @@ namespace Teleopti.Interfaces.Domain
             period = new MinMax<DateOnly>(startDate, endDate);
         }
 
+	    public static DateOnlyPeriod CreateWithNumberOfWeeks(DateOnly startDate, int numberOfWeeks)
+	    {
+		    return new DateOnlyPeriod(startDate, startDate.AddWeeks(numberOfWeeks).AddDays(-1));
+	    }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DateOnlyPeriod"/> struct.
         /// </summary>

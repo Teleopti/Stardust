@@ -365,7 +365,7 @@ namespace Teleopti.Interfaces.Domain
 
 		public DateOnly AddWeeks(int weeks)
 		{
-			return AddDays(7*weeks - 1);
+			return AddDays(7*weeks);
 		}
 
 		/// <summary>

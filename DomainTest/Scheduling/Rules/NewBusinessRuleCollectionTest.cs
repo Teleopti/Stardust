@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var schedulePeriod = agent.SchedulePeriod(dateOnly);
 			schedulePeriod.PeriodType = SchedulePeriodType.Week;
 
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1),
 				new[] {agent}, Enumerable.Empty<IScheduleData>(), Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			ass1.SetShiftCategory(shiftCategory1);
 
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1),
 				new[] {agent}, new[] {ass1}, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);

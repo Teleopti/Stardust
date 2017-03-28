@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldMoveDayOffToDayWithLessDemand()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var skill = new Skill().For(activity).IsOpen();
 			var scenario = new Scenario("_");
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldMoveDayOffToDayWithLessDemandAndNotConsiderBrokenMaxSeatOnOtherSite()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_") {RequiresSeat = true};
 			var skill = new Skill().For(activity).IsOpen();
 			var skillMaxSeat = new Skill("SkillMaxSeat").For(activity).IsOpen();
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldMoveDayOffToDayWithLessDemand_MarkedBlankDay(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var skill = new Skill().For(activity).IsOpen();
 			var scenario = new Scenario("_");
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldMoveDayOffToDayWithLessDemandPerAgent_MarkedBlankDay(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var skill = new Skill().For(activity).IsOpen();
 			var scenario = new Scenario("_");
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldGetBackToLegalState(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var contract = new ContractWithMaximumTolerance();
 			var skill = new Skill().For(activity).IsOpen();
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldReScheduleWhiteSpotsAfterGetBackToLegalStateClassic()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var contract = new ContractWithMaximumTolerance();
 			var skill = new Skill().For(activity).IsOpen();
@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldGetBackToLegalStateWorkShifts()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var contract = new Contract("_")
 			{

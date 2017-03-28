@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var team = new Team().WithDescription(new Description("team"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var phoneActivity = new Activity("_");
 			var otherActivity = new Activity("other") {RequiresSkill = false};
 			var skill = SkillRepository.Has("skill", phoneActivity);
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var team = new Team().WithDescription(new Description("team"));
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var phoneActivity = new Activity("_");
 			var otherActivity = new Activity("other") {RequiresSkill = false};
 			var skill = SkillRepository.Has("skill", phoneActivity);
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var firstDay = new DateOnly(2015, 10, 12);
 			var secondDay = firstDay.AddDays(1);
 			var thirdDay = firstDay.AddDays(2);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var phoneActivity = new Activity("_") {AllowOverwrite = true};
 			var otherActivity = new Activity("other") {RequiresSkill = false};
 			var personalActivity = new Activity("personal") {RequiresSkill = false};
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var firstDay = new DateOnly(2015, 10, 12);
 			var secondDay = firstDay.AddDays(1);
 			var thirdDay = firstDay.AddDays(2);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var phoneActivity = new Activity("_") {AllowOverwrite = true};
 			var otherActivity = new Activity("other") {RequiresSkill = false};
 			var meetingActivity = new Activity("personal") {RequiresSkill = false};

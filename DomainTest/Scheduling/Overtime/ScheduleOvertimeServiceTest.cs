@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			SkillDayRepository.Has(new List<ISkillDay> { skillDay });
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(10, 0, 11, 0));
 			var ass = PersonAssignmentRepository.GetSingle(dateOnly);
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agent }, new[] { ass }, new[] { skillDay });
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), new[] { agent }, new[] { ass }, new[] { skillDay });
 			var overtimePreference = new OvertimePreferences
 			{
 				OvertimeType = definitionSet,
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			SkillDayRepository.Has(new List<ISkillDay> { skillDay, skillDay1, skillDay2 });
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly.AddDays(1), new TimePeriod(10, 0, 11, 0));
 			var ass = PersonAssignmentRepository.GetSingle(dateOnly.AddDays(1));
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agent }, new[] { ass }, new[] { skillDay, skillDay1, skillDay2 });
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), new[] { agent }, new[] { ass }, new[] { skillDay, skillDay1, skillDay2 });
 			var overtimePreference = new OvertimePreferences
 			{
 				OvertimeType = definitionSet,

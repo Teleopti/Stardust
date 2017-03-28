@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			ass2.AddActivity(phoneActivity, new TimePeriod(8, 0, 16, 0));
 			ass2.SetShiftCategory(shiftCategory2);
 
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1),
 				new[] { agent }, new[] { ass1, ass2 }, Enumerable.Empty<ISkillDay>());
 
 			var scheduleDayToModify = stateHolder.Schedules.SchedulesForDay(dateOnly).First();

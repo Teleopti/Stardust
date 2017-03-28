@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldBaseMoveOnNonShoveledResourceCalculation_BasedOnAndersCase()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var skillA = new Skill("A").For(activity).WithId().CascadingIndex(1).IsOpenBetween(8, 16);
 			var skillB = new Skill("B").For(activity).WithId().CascadingIndex(2).IsOpenBetween(8, 16);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldBaseMoveOnNonShoveledResourceCalculation()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var skillA = new Skill("A").For(activity).WithId().CascadingIndex(1).IsOpenBetween(8, 16);
 			var skillB = new Skill("B").For(activity).WithId().CascadingIndex(2).IsOpenBetween(8, 16);

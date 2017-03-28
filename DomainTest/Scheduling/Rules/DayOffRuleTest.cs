@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			setup();
 			var firstDay = new DateOnly(2016, 5, 22);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");

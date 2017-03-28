@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void TeamBlockSchedulingShouldNotUseShiftsMarkedForRestrictionOnlyWhenThereIsNoRestriction()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void TeamBlockSchedulingShouldUseShiftsMarkedForRestrictionOnlyWhenThereIsRestriction()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1)); //12 to 18
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1); //12 to 18
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var currentDay = new DateOnly(2016, 10, 24);
 			if (!isFirstDayOfWeek)
 				currentDay = currentDay.AddDays(1);
-			var period = new DateOnlyPeriod(currentDay, currentDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(currentDay, 1);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldConsiderCorrectShiftCategoryLimitation(string shiftCategoryLimitationOrder)
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("_", activity);
 			var scenario = ScenarioRepository.Has("_");

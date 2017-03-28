@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			//both agents in PersonsInOrganization
 			//one agent in filteredPersons
 			var firstDay = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var scenario = new Scenario("_");
 			var phoneActivity = new Activity("_");
 			var skill = SkillFactory.CreateSkillWithId("skill");
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldHandleBlockSamerStartTimeInCombinationWithRotationWithSpecifyedShiftCategoryOnBlockStartingDateBug41378()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var scenario = new Scenario("_");
 			var phoneActivity = new Activity("_");
 			var skill = SkillFactory.CreateSkillWithId("skill");
