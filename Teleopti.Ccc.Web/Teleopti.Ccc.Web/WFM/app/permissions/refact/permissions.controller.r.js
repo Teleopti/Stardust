@@ -5,9 +5,9 @@
 		.module('wfm.permissions')
 		.controller('PermissionsRefactController', PermissionsCtrl);
 
-	PermissionsCtrl.$inject = ['$filter', 'PermissionsServiceRefact', 'permissionsDataService'];
+	PermissionsCtrl.$inject = ['$filter', 'PermissionsServiceRefact', 'permissionsDataService', 'localeLanguageSortingService'];
 
-	function PermissionsCtrl($filter, PermissionsServiceRefact, permissionsDataService) {
+	function PermissionsCtrl($filter, PermissionsServiceRefact, permissionsDataService, localeLanguageSortingService) {
 		var vm = this;
 		vm.showCreateModal;
 		vm.roleName;

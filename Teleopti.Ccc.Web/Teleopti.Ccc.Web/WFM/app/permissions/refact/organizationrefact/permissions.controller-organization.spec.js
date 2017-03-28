@@ -23,6 +23,8 @@ describe('component: permissionsList', function() {
 		fakeBackend.clear();
 		vm = $controller('PermissionsRefactController');
 
+		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
+
 		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/AvailableData').respond(function(method, url, data, headers) {
 			return 200;
 		});
@@ -74,6 +76,7 @@ describe('component: permissionsList', function() {
 				AvailableFunctions: []
 			})
 			.withOrganizationSelection(BusinessUnit, DynamicOptions);
+		
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,
@@ -82,6 +85,7 @@ describe('component: permissionsList', function() {
 			select: vm.selectOrgData,
 			isSelected: vm.isOrgDataSelected
 		});
+
 		vm.selectedRole = vm.roles[0];
 		ctrl.selectedRole = vm.roles[0];
 

@@ -21,7 +21,7 @@
 		'rtaFormatService',
 		'rtaAdherenceService',
 		'NoticeService',
-		'rtaLocaleLanguageSortingService',
+		'localeLanguageSortingService',
 		'Toggle'
 	];
 
@@ -41,7 +41,7 @@
 		rtaFormatService,
 		rtaAdherenceService,
 		NoticeService,
-		rtaLocaleLanguageSortingService,
+		localeLanguageSortingService,
 		toggleService
 	) {
 
@@ -62,7 +62,7 @@
 		vm.siteIds = angular.isArray(siteId) ? siteId[0] || null : siteId;
 		vm.getAdherencePercent = rtaFormatService.numberToPercent;
 		vm.getAdherencePercent = rtaFormatService.numberToPercent;
-		vm.sortByLocaleLanguage = rtaLocaleLanguageSortingService.sort;
+		vm.sortByLocaleLanguage = localeLanguageSortingService.sort;
 		/***scoped functions */
 		vm.urlForSelectSkill = urlForSelectSkill;
 		vm.getStateForTeams = getStateForTeams;

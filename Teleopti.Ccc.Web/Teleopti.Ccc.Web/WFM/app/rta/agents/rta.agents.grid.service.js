@@ -4,9 +4,9 @@
 		.module('wfm.rta')
 		.factory('rtaGridService', rtaGridService);
 
-	rtaGridService.$inject = ['$translate', 'Toggle', 'uiGridConstants', 'rtaLocaleLanguageSortingService'];
+	rtaGridService.$inject = ['$translate', 'Toggle', 'uiGridConstants', 'localeLanguageSortingService'];
 
-	function rtaGridService($translate, toggleService, uiGridConstants, rtaLocaleLanguageSortingService) {
+	function rtaGridService($translate, toggleService, uiGridConstants, localeLanguageSortingService) {
 
 		var service = {
 			makeAllGrid: makeAllGrid,
@@ -58,14 +58,14 @@
 				sort: alarmOnly ? null : {
 					direction: 'asc'
 				},
-				sortingAlgorithm: rtaLocaleLanguageSortingService.sort
+				sortingAlgorithm: localeLanguageSortingService.sort
 			};
 			var siteAndTeam = {
 				displayName: $translate.instant('SiteTeam'),
 				field: 'SiteAndTeamName',
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate,
-				sortingAlgorithm: rtaLocaleLanguageSortingService.sort
+				sortingAlgorithm: localeLanguageSortingService.sort
 			};
 
 			var state = {
