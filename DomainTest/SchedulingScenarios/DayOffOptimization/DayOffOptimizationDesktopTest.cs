@@ -424,5 +424,45 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 					.Should()
 					.Be.EqualTo(TimeSpan.FromHours(8));
 		}
+
+		[Test]
+		[Ignore("43659 - just a start....")]
+		public void ShouldNotMoveDOsForOneAgentOnlyButChangeAfterEachPeriod()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(2));
+			var activity = new Activity("_");
+			var skill = new Skill().For(activity).IsOpen();
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var team = new Team { Site = new Site("_") };
+
+			//endast en agent nu, blir grönt och dagar hamnar där dom ska...
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			agent.SchedulePeriod(firstDay).SetDaysOff(1);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				5,1,5,5,5,25,5,
+				5,1,5,5,5,25,5);
+
+
+			var asses = Enumerable.Range(0, 14).Select(i => new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
+			asses[5].SetDayOff(new DayOffTemplate()); //saturday week 1
+			asses[12].SetDayOff(new DayOffTemplate()); //saturday week 2
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
+			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
+
+			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
+
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()
+				.Should().Be.False();//saturday week 1
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()
+				.Should().Be.True();//tuesday week 1
+
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(12)).HasDayOff()
+				.Should().Be.False();//saturday week 2
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(8)).HasDayOff()
+				.Should().Be.True();//tuesday week 2
+		}
 	}
 }
