@@ -461,7 +461,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			var allDOs = PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null);
 			var movedD01 = allDOs.Single(x => x.Date == firstDay);
-			var movedD02 = allDOs.Single(x => x.Date == firstDay.AddWeeks(1));
+			var movedD02 = allDOs.Single(x => x.Date == firstDay.AddDays(7));
 			movedD01.Person.Should().Not.Be.EqualTo(movedD02.Person);
 		}
 	}
