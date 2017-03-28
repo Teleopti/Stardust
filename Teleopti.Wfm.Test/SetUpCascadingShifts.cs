@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -43,7 +44,7 @@ namespace Teleopti.Wfm.Test
 		}
 
 
-		public void SetUpUnderStaffedAndOverStaffedSkillDays(double defaultDemand, Tuple<int, double> HourDemands)
+		public void SetUpMixedSkillDays(double defaultDemand, Tuple<int, double> hourDemands)
 		{
 			var skillDayGoldToday = new SkillDayConfigurable
 			{
@@ -52,7 +53,7 @@ namespace Teleopti.Wfm.Test
 				Skill = "GoldSkill",
 				DefaultDemand = defaultDemand,
 				Shrinkage = 0.2,
-				HourDemand = HourDemands
+				HourDemand = hourDemands
 			};
 			var skillDaySilverToday = new SkillDayConfigurable
 			{
@@ -61,7 +62,7 @@ namespace Teleopti.Wfm.Test
 				Skill = "SilverSkill",
 				DefaultDemand = defaultDemand,
 				Shrinkage = 0.2,
-				HourDemand = HourDemands
+				HourDemand = hourDemands
 			};
 			var skillDayBronzeToday = new SkillDayConfigurable
 			{
@@ -70,7 +71,7 @@ namespace Teleopti.Wfm.Test
 				Skill = "BronzeSkill",
 				DefaultDemand = defaultDemand,
 				Shrinkage = 0.2,
-				HourDemand = HourDemands
+				HourDemand = hourDemands
 			};
 
 			Data.Apply(skillDayGoldToday);
@@ -80,14 +81,14 @@ namespace Teleopti.Wfm.Test
 			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddDays(2)));
 		}
 
-		public void SetUpUnderStaffedSkillDays()
+		public void SetUpHighDemandSkillDays()
 		{
 			var skillDayGoldToday = new SkillDayConfigurable
 			{
 				DateOnly = new DateOnly(DateTime.UtcNow.Date),
 				Scenario = "Scenario",
 				Skill = "GoldSkill",
-				DefaultDemand = 2,
+				DefaultDemand = 5,
 				Shrinkage = 0.2
 			};
 			var skillDaySilverToday = new SkillDayConfigurable
@@ -95,7 +96,7 @@ namespace Teleopti.Wfm.Test
 				DateOnly = new DateOnly(DateTime.UtcNow.Date),
 				Scenario = "Scenario",
 				Skill = "SilverSkill",
-				DefaultDemand = 2,
+				DefaultDemand = 5,
 				Shrinkage = 0.2
 			};
 			var skillDayBronzeToday = new SkillDayConfigurable
@@ -103,7 +104,7 @@ namespace Teleopti.Wfm.Test
 				DateOnly = new DateOnly(DateTime.UtcNow.Date),
 				Scenario = "Scenario",
 				Skill = "BronzeSkill",
-				DefaultDemand = 2,
+				DefaultDemand = 5,
 				Shrinkage = 0.2
 			};
 
@@ -114,7 +115,7 @@ namespace Teleopti.Wfm.Test
 			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddDays(2)));
 		}
 
-		public void SetUpOverStaffedSkillDays()
+		public void SetUpLowDemandSkillDays()
 		{
 			var skillDayGoldToday = new SkillDayConfigurable
 			{
@@ -185,6 +186,10 @@ namespace Teleopti.Wfm.Test
 			{
 				Name = "PhoneActivity"
 			};
+			var activityWrong = new ActivityConfigurable
+			{
+				Name = "WrongActivity"
+			};
 
 			var bronzeSkill = new SkillConfigurable
 			{
@@ -210,6 +215,7 @@ namespace Teleopti.Wfm.Test
 
 
 			Data.Apply(activity);
+			Data.Apply(activityWrong);
 			Data.Apply(bronzeSkill);
 			Data.Apply(silverSkill);
 			Data.Apply(goldSkill);
@@ -251,9 +257,16 @@ namespace Teleopti.Wfm.Test
 				AvailableAbsence = absence.Name
 			};
 
-
 			Data.Apply(absence);
 			Data.Apply(wfcs);
+
+
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSetConfigurable
+			{
+				Name = "MultiplicatorDefinitionSet"
+			};
+
+			Data.Apply(multiplicatorDefinitionSet);
 
 			var shiftStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
 
@@ -274,8 +287,8 @@ namespace Teleopti.Wfm.Test
 			Data.Person(personAllSkills1.Name).Apply(personPeriodAllSkills);
 			Data.Person(personAllSkills1.Name).Person.AddSkill(new PersonSkill(goldSkill.Skill, new Percent(1)), Data.Person(personAllSkills1.Name).Person.Period(new DateOnly(2017, 03, 27)));
 			Data.Person(personAllSkills1.Name).Person.AddSkill(new PersonSkill(silverSkill.Skill, new Percent(1)), Data.Person(personAllSkills1.Name).Person.Period(new DateOnly(2017, 03, 27)));
-			AddShift(personAllSkills1.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
-			AddShift(personAllSkills1.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
+			AddShift(personAllSkills1.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			AddShift(personAllSkills1.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
 
 			var personPeriodAllSkills2 = new PersonPeriodConfigurable
 			{
@@ -294,8 +307,8 @@ namespace Teleopti.Wfm.Test
 			Data.Person(personAllSkills2.Name).Apply(personPeriodAllSkills2);
 			Data.Person(personAllSkills2.Name).Person.AddSkill(new PersonSkill(goldSkill.Skill, new Percent(1)), Data.Person(personAllSkills2.Name).Person.Period(new DateOnly(2017, 03, 27)));
 			Data.Person(personAllSkills2.Name).Person.AddSkill(new PersonSkill(silverSkill.Skill, new Percent(1)), Data.Person(personAllSkills2.Name).Person.Period(new DateOnly(2017, 03, 27)));
-			AddShift(personAllSkills2.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
-			AddShift(personAllSkills2.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
+			AddShift(personAllSkills2.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			AddShift(personAllSkills2.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
 
 			var personPeriodSilverBronze1 = new PersonPeriodConfigurable
 			{
@@ -313,8 +326,8 @@ namespace Teleopti.Wfm.Test
 			};
 			Data.Person(personSilverBronze1.Name).Apply(personPeriodSilverBronze1);
 			Data.Person(personSilverBronze1.Name).Person.AddSkill(new PersonSkill(silverSkill.Skill, new Percent(1)), Data.Person(personSilverBronze1.Name).Person.Period(new DateOnly(2017, 03, 27)));
-			AddShift(personSilverBronze1.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
-			AddShift(personSilverBronze1.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
+			AddShift(personSilverBronze1.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			AddShift(personSilverBronze1.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
 
 			var personPeriodSilverBronze2 = new PersonPeriodConfigurable
 			{
@@ -332,8 +345,8 @@ namespace Teleopti.Wfm.Test
 			};
 			Data.Person(personSilverBronze2.Name).Apply(personPeriodSilverBronze2);
 			Data.Person(personSilverBronze2.Name).Person.AddSkill(new PersonSkill(silverSkill.Skill, new Percent(1)), Data.Person(personSilverBronze2.Name).Person.Period(new DateOnly(2017, 03, 27)));
-			AddShift(personSilverBronze2.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
-			AddShift(personSilverBronze2.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
+			AddShift(personSilverBronze2.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			AddShift(personSilverBronze2.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
 
 			var personPeriodBronze1 = new PersonPeriodConfigurable
 			{
@@ -350,8 +363,8 @@ namespace Teleopti.Wfm.Test
 				Name = "PersonBronze1"
 			};
 			Data.Person(personBronze1.Name).Apply(personPeriodBronze1);
-			AddShift(personBronze1.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
-			AddShift(personBronze1.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
+			AddShift(personBronze1.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			AddShift(personBronze1.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity,  scenario.Scenario);
 
 			var personPeriodBronze2 = new PersonPeriodConfigurable
 			{
@@ -368,8 +381,60 @@ namespace Teleopti.Wfm.Test
 				Name = "PersonBronze2"
 			};
 			Data.Person(personBronze2.Name).Apply(personPeriodBronze2);
-			AddShift(personBronze2.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
-			AddShift(personBronze2.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, activity.Activity, scenario.Scenario);
+			AddShift(personBronze2.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			AddShift(personBronze2.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity,  scenario.Scenario);
+
+			var personPeriodBronze3 = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = bronzeSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personBronzeNoShift = new PersonConfigurable
+			{
+				Name = "PersonBronzeNoShift"
+			};
+			Data.Person(personBronzeNoShift.Name).Apply(personPeriodBronze3);
+
+			var personPeriodBronzeWrongActivity = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = bronzeSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personBronzeWrongActivity = new PersonConfigurable
+			{
+				Name = "PersonBronzeWrongActivity"
+			};
+			Data.Person(personBronzeWrongActivity.Name).Apply(personPeriodBronzeWrongActivity);
+			AddShift(personBronzeWrongActivity.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activityWrong.Activity,  scenario.Scenario);
+			AddShift(personBronzeWrongActivity.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activityWrong.Activity, scenario.Scenario);
+
+			var personPeriodOvertimeActivity = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = bronzeSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personBronzeOvertime = new PersonConfigurable
+			{
+				Name = "PersonBronzeOvertime"
+			};
+			Data.Person(personBronzeOvertime.Name).Apply(personPeriodOvertimeActivity);
+			AddShift(personBronzeOvertime.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario, multiplicatorDefinitionSet.MultiplicatorDefinitionSet, true);
+			AddShift(personBronzeOvertime.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario, multiplicatorDefinitionSet.MultiplicatorDefinitionSet, true);
 		}
 
 		public static void AddShift(string onPerson,
@@ -377,11 +442,14 @@ namespace Teleopti.Wfm.Test
 							int startHour,
 							int lenghtHour,
 							IShiftCategory shiftCategory,
-							IActivity activityLunch,
 							IActivity activityPhone,
-							IScenario scenario)
+							IScenario scenario,
+							IMultiplicatorDefinitionSet multiplicatorDefinitionSet = null,
+							bool isOverTime = false)
 		{
-			var shift = new ShiftForDate(dayLocal, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + lenghtHour), scenario, shiftCategory, activityPhone, activityLunch);
+			var shift = isOverTime ? new ShiftForDate(dayLocal, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + lenghtHour), scenario, shiftCategory, activityPhone, multiplicatorDefinitionSet, true) 
+				: new ShiftForDate(dayLocal, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + lenghtHour), false, scenario, shiftCategory, activityPhone, null, null);
+
 			Data.Person(onPerson).Apply(shift);
 		}
 	}

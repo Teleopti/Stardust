@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -18,18 +19,23 @@ namespace Teleopti.Ccc.TestCommon.TestData
 		public IActivity ActivityLunch;
 		public readonly TimeSpan StartTime;
 		public readonly TimeSpan EndTime;
+		public readonly bool IsOverTime;
+		public readonly IMultiplicatorDefinitionSet MultiplicatorDefinitionSet;
 
 		private readonly bool _withLunch;
 		private DateTimePeriod _assignmentPeriod;
 
+		public ShiftForDate(DateTime date, TimeSpan startTime, TimeSpan endTime, IScenario scenario, IShiftCategory shiftCategory, IActivity activityPhone, IMultiplicatorDefinitionSet multiplicatorDefinitionSet, bool isOverTime)
+			: this(date, startTime, endTime, false, scenario, shiftCategory, activityPhone, null, multiplicatorDefinitionSet, isOverTime) { }
 
 		public ShiftForDate(DateTime date, TimeSpan startTime, TimeSpan endTime, IScenario scenario, IShiftCategory shiftCategory, IActivity activityPhone, IActivity activityLunch)
-			: this(date, startTime, endTime, true, scenario, shiftCategory, activityPhone, activityLunch) { }
+			: this(date, startTime, endTime, true, scenario, shiftCategory, activityPhone, activityLunch, null) { }
 
 		public ShiftForDate(DateTime date, int startHour, IScenario scenario, IShiftCategory shiftCategory, IActivity activityPhone, IActivity activityLunch)
-			: this(date, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + 8), scenario, shiftCategory, activityPhone, activityLunch) { }
+			: this(date, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + 8), true, scenario, shiftCategory, activityPhone, activityLunch, null) { }
 
-		public ShiftForDate(DateTime date, TimeSpan startTime, TimeSpan endTime, bool withLunch, IScenario scenario, IShiftCategory shiftCategory, IActivity activityPhone, IActivity activityLunch)
+		public ShiftForDate(DateTime date, TimeSpan startTime, TimeSpan endTime, bool withLunch, IScenario scenario, 
+			IShiftCategory shiftCategory, IActivity activityPhone, IActivity activityLunch, IMultiplicatorDefinitionSet multiplicatorDefinitionSet, bool isOvertime = false)
 		{
 			StartTime = startTime;
 			EndTime = endTime;
@@ -39,6 +45,8 @@ namespace Teleopti.Ccc.TestCommon.TestData
 			Scenario = scenario;
 			ActivityLunch = activityLunch;
 			Date = date;
+			IsOverTime = isOvertime;
+			MultiplicatorDefinitionSet = multiplicatorDefinitionSet;
 		}
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson person, CultureInfo cultureInfo)
@@ -50,8 +58,12 @@ namespace Teleopti.Ccc.TestCommon.TestData
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, Scenario, new DateOnly(Date));
-			assignment.AddActivity(ActivityPhone, _assignmentPeriod);
 
+			if (IsOverTime)
+				assignment.AddOvertimeActivity(ActivityPhone, _assignmentPeriod, MultiplicatorDefinitionSet);
+			else
+				assignment.AddActivity(ActivityPhone, _assignmentPeriod);
+			
 			// add lunch
 			if (_withLunch)
 			{

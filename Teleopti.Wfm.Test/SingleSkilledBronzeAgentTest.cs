@@ -51,7 +51,7 @@ namespace Teleopti.Wfm.Test
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
-			SetUpOverStaffedSkillDays();
+			SetUpLowDemandSkillDays();
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
@@ -72,7 +72,7 @@ namespace Teleopti.Wfm.Test
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
-			SetUpOverStaffedSkillDays();
+			SetUpLowDemandSkillDays();
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
@@ -93,7 +93,7 @@ namespace Teleopti.Wfm.Test
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
-			SetUpUnderStaffedSkillDays();
+			SetUpHighDemandSkillDays();
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
@@ -115,7 +115,7 @@ namespace Teleopti.Wfm.Test
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
-			SetUpUnderStaffedSkillDays();
+			SetUpHighDemandSkillDays();
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
@@ -138,7 +138,7 @@ namespace Teleopti.Wfm.Test
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
 			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
-			SetUpUnderStaffedAndOverStaffedSkillDays(1, new Tuple<int, double>(requestStart.Hour, 2));
+			SetUpMixedSkillDays(1, new Tuple<int, double>(requestStart.Hour, 2));
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
@@ -151,6 +151,133 @@ namespace Teleopti.Wfm.Test
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.False();
 			req.DenyReason.Should().Be.EqualTo(CreateDenyMessage30Min(requestStart.Hour, person.PermissionInformation.Culture(), person.PermissionInformation.Culture(), TimeZoneInfo.Utc, requestStart.Date));
+		}
+
+		[Test]
+		public void ShouldBeApprovedIfNoShiftInRequestPeriodAndOverStaffed()
+		{
+			Now.Is(DateTime.UtcNow);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			SetUpRelevantStuffWithCascading();
+			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			SetUpLowDemandSkillDays();
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeNoShift");
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldBeApprovedIfNoShiftInRequestPeriodAndUnderstaffed()
+		{
+			Now.Is(DateTime.UtcNow);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			SetUpRelevantStuffWithCascading();
+			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			SetUpHighDemandSkillDays();
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeNoShift");
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldBeApprovedWhenActivityIsNotConnectedToPersonSkillAndOverStaffed()
+		{
+			Now.Is(DateTime.UtcNow);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			SetUpRelevantStuffWithCascading();
+			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			SetUpLowDemandSkillDays();
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeWrongActivity");
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldBeApprovedWhenActivityIsNotConnectedToPersonSkillAndUnderStaffed()
+		{
+			Now.Is(DateTime.UtcNow);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			SetUpRelevantStuffWithCascading();
+			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			SetUpHighDemandSkillDays();
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeWrongActivity");
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.False();
+			req.DenyReason.Should().StartWith(Resources.ResourceManager.GetString("InsufficientStaffingHours", person.PermissionInformation.Culture()).Substring(0, 10));
+		}
+
+		[Test]
+		public void ShouldBeApprovedIfOverstaffedAndActivityIsOvertime()
+		{
+			Now.Is(DateTime.UtcNow);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			SetUpRelevantStuffWithCascading();
+			SetUpLowDemandSkillDays();
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeOvertime");
+
+			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldBeDeniedIfUnderstaffedAndActivityIsOvertime()
+		{
+			Now.Is(DateTime.UtcNow);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			SetUpRelevantStuffWithCascading();
+			SetUpHighDemandSkillDays();
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeOvertime");
+
+			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.False();
 		}
 	}
 }
