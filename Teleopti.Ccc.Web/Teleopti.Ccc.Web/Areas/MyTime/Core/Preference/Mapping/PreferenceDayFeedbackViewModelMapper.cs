@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceDayFeedbackViewModelMapper
 	{
+		private const string timeSpanFormat = @"hh\:mm\:ss";
 		private readonly IPreferenceFeedbackProvider _preferenceFeedbackProvider;
 
 		public PreferenceDayFeedbackViewModelMapper(IPreferenceFeedbackProvider preferenceFeedbackProvider)
@@ -24,11 +25,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			{
 				Date = date.ToFixedClientDateOnlyFormat(),
 				DateInternal = date.Date,
-				RestTimeToNextDay = nightRestResult.RestTimeToNextDay,
-				RestTimeToPreviousDay = nightRestResult.RestTimeToPreviousDay,
+				RestTimeToNextDayTimeSpan = nightRestResult.RestTimeToNextDay.ToString(timeSpanFormat),
+				RestTimeToPreviousDayTimeSpan = nightRestResult.RestTimeToPreviousDay.ToString(timeSpanFormat),
+				ExpectedNightRestTimeSpan = nightRestResult.ExpectedNightRest.ToString(timeSpanFormat),
 				HasNightRestViolationToPreviousDay = nightRestResult.HasViolationToPreviousDay,
-				HasNightRestViolationToNextDay = nightRestResult.HasViolationToNextDay,
-				ExpectedNightRest = nightRestResult.ExpectedNightRest
+				HasNightRestViolationToNextDay = nightRestResult.HasViolationToNextDay
 			};
 
 			var workTimeResult = _preferenceFeedbackProvider.WorkTimeMinMaxForDate(date) ?? new WorkTimeMinMaxCalculationResult();

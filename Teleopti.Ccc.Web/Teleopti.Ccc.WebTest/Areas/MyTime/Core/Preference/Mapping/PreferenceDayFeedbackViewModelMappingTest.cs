@@ -1,6 +1,6 @@
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using System;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			Setup();
 			var testDate = new DateOnly(2029, 1, 2);
 			var targetReturn = Mapper.Map(testDate);
-			targetReturn.ExpectedNightRest.Should().Be.EqualTo(new TimeSpan(12, 0, 0));
+			targetReturn.ExpectedNightRestTimeSpan.Should().Be.EqualTo("12:00:00");
 		}
 
 		[Test]
