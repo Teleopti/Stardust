@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			var workTimeMinMax = workTimeResult.WorkTimeMinMax;
 			if (workTimeMinMax != null)
 			{
-				mappedResult.PossibleStartTimes = workTimeMinMax.StartTimeLimitation.ToString();
-				mappedResult.PossibleEndTimes = workTimeMinMax.EndTimeLimitation.ToString();
+				mappedResult.PossibleStartTimes = workTimeMinMax.StartTimeLimitation.ToString().ToLower();
+				mappedResult.PossibleEndTimes = workTimeMinMax.EndTimeLimitation.ToString().ToLower();
 
 				var workTimeLimitation = workTimeMinMax.WorkTimeLimitation;
 				mappedResult.PossibleContractTimeMinutesLower =
