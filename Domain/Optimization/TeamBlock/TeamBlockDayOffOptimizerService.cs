@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			_teamBlockDaysOffSameDaysOffLockSyncronizer.SyncLocks(selectedPeriod, optimizationPreferences, allTeamInfoListOnStartDate);
 
-			var remainingInfoList = new List<ITeamInfo>(allTeamInfoListOnStartDate);
+			var remainingInfoList = new List<ITeamInfo>(allTeamInfoListOnStartDate.Where(x => x.GroupMembers.Any()));
 
 			var cancelMe = false;
 			while (remainingInfoList.Count > 0)
@@ -222,97 +222,94 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				currentTeamInfoCounter++;
 
-				if (teamInfo.GroupMembers.Any())
+				var allFailed = true;
+				foreach (var matrix in teamInfo.MatrixesForGroup())
 				{
-					var allFailed = true;
-					foreach (var matrix in teamInfo.MatrixesForGroup())
+					if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff ))
 					{
-						if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff ))
+						if (!selectedPersons.Contains(matrix.Person)) 
+							continue;
+					}
+					rollbackService.ClearModificationCollection();
+					var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
+
+					var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(dayOffOptimizationPreference.ConsiderWeekBefore, dayOffOptimizationPreference.ConsiderWeekAfter, matrix);
+					var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, dayOffOptimizationPreference, _schedulerStateHolder().SchedulingResultState);
+
+					var movedDaysOff = _affectedDayOffs.Execute(matrix, dayOffOptimizationPreference, originalArray, resultingArray);
+					if (movedDaysOff != null)
+					{
+						if (!optimizationPreferences.Advanced.UseTweakedValues &&
+								optimizationPreferences.Extra.IsClassic() &&
+								!_dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix, resultingArray, originalArray, dayOffOptimizationPreference).IsBetter)
 						{
-							if (!selectedPersons.Contains(matrix.Person)) 
-								continue;
+							allFailed = false;
+							lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
+							lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
 						}
-						rollbackService.ClearModificationCollection();
-						var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
-
-						var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(dayOffOptimizationPreference.ConsiderWeekBefore, dayOffOptimizationPreference.ConsiderWeekAfter, matrix);
-						var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, dayOffOptimizationPreference, _schedulerStateHolder().SchedulingResultState);
-
-						var movedDaysOff = _affectedDayOffs.Execute(matrix, dayOffOptimizationPreference, originalArray, resultingArray);
-						if (movedDaysOff != null)
+						else
 						{
-							if (!optimizationPreferences.Advanced.UseTweakedValues &&
-									optimizationPreferences.Extra.IsClassic() &&
-									!_dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix, resultingArray, originalArray, dayOffOptimizationPreference).IsBetter)
+							var resCalcState = new UndoRedoContainer();
+							var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
+							if (optimizationPreferences.Extra.IsClassic())
 							{
+								//TODO: hack -> always do this
+								resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
+
+								//vad tror du claes? här? eller längre upp?
+								var personalSkillsDataExtractor = _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced, schedulingResultStateHolder);
+								var localPeriodValueCalculator = _optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
+								//
+								currentPeriodValue = new Lazy<double>(() => localPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization));
+								previousPeriodValue = localPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
+							}
+							var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
+								resourceCalculateDelayer,
+								schedulingResultStateHolder,
+								dayOffOptimizationPreferenceProvider,
+								currentPeriodValue,
+								previousPeriodValue,
+								movedDaysOff);
+
+							if (success)
+							{
+								previousPeriodValue = currentPeriodValue.Value;
 								allFailed = false;
-								lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-								lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
 							}
 							else
 							{
-								var resCalcState = new UndoRedoContainer();
-								var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 								if (optimizationPreferences.Extra.IsClassic())
 								{
 									//TODO: hack -> always do this
-									resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
-
-									//vad tror du claes? här? eller längre upp?
-									var personalSkillsDataExtractor = _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced, schedulingResultStateHolder);
-									var localPeriodValueCalculator = _optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
-									//
-									currentPeriodValue = new Lazy<double>(() => localPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization));
-									previousPeriodValue = localPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
-								}
-								var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
-									resourceCalculateDelayer,
-									schedulingResultStateHolder,
-									dayOffOptimizationPreferenceProvider,
-									currentPeriodValue,
-									previousPeriodValue,
-									movedDaysOff);
-
-								if (success)
-								{
-									previousPeriodValue = currentPeriodValue.Value;
-									allFailed = false;
+									resCalcState.UndoAll();
+									rollbackService.RollbackMinimumChecks();
 								}
 								else
 								{
-									if (optimizationPreferences.Extra.IsClassic())
-									{
-										//TODO: hack -> always do this
-										resCalcState.UndoAll();
-										rollbackService.RollbackMinimumChecks();
-									}
-									else
-									{
-										_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-									}
-
-									if (!optimizationPreferences.Advanced.UseTweakedValues)
-									{
-										if (!optimizationPreferences.Extra.IsClassic())
-										{
-											allFailed = false;
-										}
-										lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-										lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
-									}
+									_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 								}
 
-								if (onReportProgress(schedulingProgress, totalLiveTeamInfos, currentTeamInfoCounter, teamInfo, previousPeriodValue))
+								if (!optimizationPreferences.Advanced.UseTweakedValues)
 								{
-									cancelAction();
-									return null;
+									if (!optimizationPreferences.Extra.IsClassic())
+									{
+										allFailed = false;
+									}
+									lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
+									lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
 								}
+							}
+
+							if (onReportProgress(schedulingProgress, totalLiveTeamInfos, currentTeamInfoCounter, teamInfo, previousPeriodValue))
+							{
+								cancelAction();
+								return null;
 							}
 						}
 					}
-					if(allFailed)
-						teamInfosToRemove.Add(teamInfo);
 				}
+				if(allFailed)
+					teamInfosToRemove.Add(teamInfo);
 			}
 
 			return teamInfosToRemove;
@@ -333,43 +330,40 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				currentTeamInfoCounter++;
 
-				if (teamInfo.GroupMembers.Any())
+				var allFailed = true;
+				foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
 				{
-					var allFailed = true;
-					foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
-					{
-						rollbackService.ClearModificationCollection();
+					rollbackService.ClearModificationCollection();
 
-						var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
+					var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
 
-						bool checkPeriodValue;
-						var success = runOneTeam(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
-						                         resourceCalculateDelayer,
-						                         schedulingResultStateHolder,
-												 dayOffOptimizationPreference,
-												 dayOffOptimizationPreferenceProvider,
-												 out checkPeriodValue);
-						var currentPeriodValue = new Lazy<double>(()=> periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
-						success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
-							teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue, () =>
-							{
-								cancelMe = true;
-								cancelAction();
-							}, schedulingProgress);
-
-						if (success)
+					bool checkPeriodValue;
+					var success = runOneTeam(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
+						                        resourceCalculateDelayer,
+						                        schedulingResultStateHolder,
+												dayOffOptimizationPreference,
+												dayOffOptimizationPreferenceProvider,
+												out checkPeriodValue);
+					var currentPeriodValue = new Lazy<double>(()=> periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
+					success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
+						teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue, () =>
 						{
-							allFailed = false;
-							previousPeriodValue = currentPeriodValue.Value;
-						}
+							cancelMe = true;
+							cancelAction();
+						}, schedulingProgress);
 
-						if (cancelMe)
-							break;
+					if (success)
+					{
+						allFailed = false;
+						previousPeriodValue = currentPeriodValue.Value;
 					}
 
-					if (allFailed)
-						teamInfosToRemove.Add(teamInfo);
+					if (cancelMe)
+						break;
 				}
+
+				if (allFailed)
+					teamInfosToRemove.Add(teamInfo);
 
 				if (cancelMe)
 					break;
