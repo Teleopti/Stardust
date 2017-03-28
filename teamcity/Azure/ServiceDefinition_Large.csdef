@@ -57,7 +57,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		</Variable>
 	  </Environment>
       <EntryPoint>
-         <NetFxEntryPoint assemblyName="Teleopti.Ccc.Web" targetFrameworkVersion="4.6.1"/>
+         <NetFxEntryPoint assemblyName="Web\bin\Teleopti.Ccc.Web" targetFrameworkVersion="v4.0"/>
       </EntryPoint>
     </Runtime>
 	<ConfigurationSettings>
