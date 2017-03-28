@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.WindowsAzure.ServiceRuntime;
 
-namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
+namespace Teleopti.Support.Tool.AzureStartup
 {
 	public class StartupScriptRoleEntryPoint : RoleEntryPoint
 	{

@@ -55,7 +55,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		</Variable>
 	  </Environment>
       <EntryPoint>
-         <NetFxEntryPoint assemblyName="Teleopti.Ccc.Web.dll" targetFrameworkVersion="v4.5"/>
+         <NetFxEntryPoint assemblyName="Tools\SupportTools\Teleopti.Support.Tool.exe" targetFrameworkVersion="v4.5"/>
       </EntryPoint>
     </Runtime>
 	<ConfigurationSettings>
