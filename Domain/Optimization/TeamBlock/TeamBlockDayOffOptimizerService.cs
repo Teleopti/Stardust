@@ -215,16 +215,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			var teamInfosToRemove = new HashSet<ITeamInfo>();
 			var previousPeriodValue = periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-			var totalLiveTeamInfos = remainingInfoList.Count;
-			var currentTeamInfoCounter = 0;
+			var allMatrixes = remainingInfoList.SelectMany(x => x.MatrixesForGroup());
+			var numberOfMatrixes = allMatrixes.Count();
+			var currentMatrixCounter = 0;
 
 			foreach (var teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
-				currentTeamInfoCounter++;
-
 				var allFailed = true;
 				foreach (var matrix in teamInfo.MatrixesForGroup())
 				{
+					currentMatrixCounter++;
+
 					if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff ))
 					{
 						if (!selectedPersons.Contains(matrix.Person)) 
@@ -300,7 +301,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 								}
 							}
 
-							if (onReportProgress(schedulingProgress, totalLiveTeamInfos, currentTeamInfoCounter, teamInfo, previousPeriodValue))
+							if (onReportProgress(schedulingProgress, numberOfMatrixes, currentMatrixCounter, teamInfo, previousPeriodValue))
 							{
 								cancelAction();
 								return null;
