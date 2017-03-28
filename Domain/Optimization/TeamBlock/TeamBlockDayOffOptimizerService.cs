@@ -213,15 +213,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 																			Action cancelAction,
 																			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress schedulingProgress)
 		{
-			var teamInfosToRemove = new HashSet<ITeamInfo>();
 			var previousPeriodValue = periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			var allMatrixes = remainingInfoList.SelectMany(x => x.MatrixesForGroup());
 			var numberOfMatrixes = allMatrixes.Count();
 			var currentMatrixCounter = 0;
 
+			var allFailed = new Dictionary<ITeamInfo, bool>();
+			foreach (var teamInfo in remainingInfoList)
+			{
+				allFailed[teamInfo] = true;
+			}
+
+
 			foreach (var teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
-				var allFailed = true;
 				foreach (var matrix in teamInfo.MatrixesForGroup())
 				{
 					currentMatrixCounter++;
@@ -244,7 +249,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 								optimizationPreferences.Extra.IsClassic() &&
 								!_dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix, resultingArray, originalArray, dayOffOptimizationPreference).IsBetter)
 						{
-							allFailed = false;
+							allFailed[teamInfo] = false;
 							lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
 							lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
 						}
@@ -257,10 +262,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 								//TODO: hack -> always do this
 								resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 
-								//vad tror du claes? här? eller längre upp?
 								var personalSkillsDataExtractor = _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced, schedulingResultStateHolder);
 								var localPeriodValueCalculator = _optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
-								//
 								currentPeriodValue = new Lazy<double>(() => localPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization));
 								previousPeriodValue = localPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
 							}
@@ -275,7 +278,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							if (success)
 							{
 								previousPeriodValue = currentPeriodValue.Value;
-								allFailed = false;
+								allFailed[teamInfo] = false;
 							}
 							else
 							{
@@ -294,7 +297,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 								{
 									if (!optimizationPreferences.Extra.IsClassic())
 									{
-										allFailed = false;
+										allFailed[teamInfo] = false;
 									}
 									lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
 									lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
@@ -309,11 +312,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						}
 					}
 				}
-				if(allFailed)
-					teamInfosToRemove.Add(teamInfo);
 			}
 
-			return teamInfosToRemove;
+			return from allFailedKeyValue in allFailed
+				where allFailedKeyValue.Value
+				select allFailedKeyValue.Key;
 		}
 			
 		private IEnumerable<ITeamInfo> runOneOptimizationRound(IPeriodValueCalculator periodValueCalculatorForAllSkills, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, 
