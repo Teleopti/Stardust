@@ -23,6 +23,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 				);
 
 			context.MapRoute(
+				"MyTime-widget-alias_old",
+				"MyTime/CiscoWidget/{action}",
+				new { controller = "Widget", action = "Index" }
+				);
+
+			context.MapRoute(
 				"MyTime-calendar",
 				"MyTime/Share",
 				new { controller = "ShareCalendar", action = "iCal" }
