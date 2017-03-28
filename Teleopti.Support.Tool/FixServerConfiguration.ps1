@@ -18,7 +18,21 @@
 $directory = Get-ScriptDirectory
 
 $webConfig = $directory + '\..\TeleoptiCCC\Administration\Web.config';
+if(!(Test-Path $webConfig)){
+    $webConfig = $directory + '\..\..\..\sitesroot\8\Web.config';
+}
 $doc = (Get-Content $webConfig) -as [Xml];
 $root = $doc.get_DocumentElement();
-$connectionStr = ($root.connectionStrings.add|where {$_.name -eq "Tenancy"}).connectionString;
-.\Teleopti.Support.Tool.exe -CS "$connectionStr"
+
+$SupportTool = $directory + "\Teleopti.Support.Tool.exe"
+$conn = ($root.connectionStrings.add|where {$_.name -eq "Tenancy"}).connectionString;
+$args = @"
+"-CS" "$conn"
+"@
+$p = Start-Process $SupportTool -ArgumentList $args -wait -NoNewWindow -PassThru
+$p.HasExited
+$LastExitCode = $p.ExitCode
+
+if ($LastExitCode -ne 0) {
+	throw "SupportTool generated an error!"
+}
