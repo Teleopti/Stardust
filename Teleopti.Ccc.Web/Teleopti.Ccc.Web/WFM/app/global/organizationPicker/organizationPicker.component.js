@@ -42,7 +42,7 @@
 		ctrl.$onInit = function init() {
 			orgPickerSvc.getAvailableHierarchy(moment(ctrl.date).format('YYYY-MM-DD'))
 				.then(function (resp) {
-					populateGroupList({ sites: resp.data.Children });
+					populateGroupList(resp.data.Children);
 					if (!ctrl.preselectedTeamIds || !ctrl.preselectedTeamIds.length) {
 						ctrl.preselectedTeamIds = [];
 						if (resp.data.LogonUserTeamId) {
@@ -79,30 +79,26 @@
 			updateAllSiteSelection();
 		}
 
-		function populateGroupList(groupData) {
-			var groupList = [];
-			var availableTeamIds = [];
+		function populateGroupList(rawSites) {
+			var teamIds = [];
 
-			groupData.sites.forEach(function (g) {
-				var site = {
-					id: g.Id,
-					name: g.Name,
-					teams: [],
+			ctrl.groupList = rawSites.map(function (rawSite) {
+				return {
+					id: rawSite.Id,
+					name: rawSite.Name,
+					teams: rawSite.Children.map(function (team) {
+						teamIds.push(team.Id);
+						return {
+							id: team.Id,
+							name: team.Name
+						};
+					}),
 					isChecked: false,
 					expanded: false
 				};
-				g.Children.forEach(function (t) {
-					site.teams.push({
-						id: t.Id,
-						name: t.Name
-					});
-					availableTeamIds.push(t.Id);
-				});
-				groupList.push(site);
 			});
 
-			ctrl.groupList = groupList;
-			ctrl.availableTeamIds = availableTeamIds;
+			ctrl.availableTeamIds = teamIds;
 		}
 
 		ctrl.formatSelectedDisplayName = function () {

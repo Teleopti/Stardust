@@ -1,6 +1,6 @@
-﻿'use strict';
-describe('organizationPicker component tests',
+﻿describe('Organization Picker Component',
 	function() {
+		'use strict';
 
 		var $componentController, $q, $compile, $rootScope, $document;
 
@@ -70,46 +70,42 @@ describe('organizationPicker component tests',
 		}
 
 
-		it("should populate hierachy list",
-			inject(function() {
+		it('should populate hierachy list', function () {
+			var bindings = {
+				date: new Date('2015-09-01'),
+				onOpen: function () { },
+				onPick: angular.noop
+			};
 
-				var bindings = {
-					date: new Date('2015-09-01'),
-					onOpen: function() {},
-					onPick: angular.noop
-				}
+			var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
+			ctrl.$onInit();
 
-				var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
-				ctrl.$onInit();
+			expect(ctrl.groupList.length).toEqual(2);
+			expect(ctrl.groupList[0].id).toEqual('site1');
+			expect(ctrl.groupList[1].id).toEqual('site2');
+			expect(ctrl.groupList[0].teams.length).toEqual(1);
+			expect(ctrl.groupList[1].teams.length).toEqual(2);
+		});
 
-				expect(ctrl.groupList.length).toEqual(2);
-				expect(ctrl.groupList[0].id).toEqual("site1");
-				expect(ctrl.groupList[1].id).toEqual("site2");
-				expect(ctrl.groupList[0].teams.length).toEqual(1);
-				expect(ctrl.groupList[1].teams.length).toEqual(2);
-			}));
+		it('should extract the right abbreviation of the selected time zone', function () {
+			var bindings = {
+				date: new Date('2015-09-01'),
+				onOpen: function() {},
+				onPick: angular.noop
+			}
 
-		it("should extract the right abbreviation of the selected time zone ",
-			inject(function() {
+			var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
+			ctrl.$onInit();
 
-				var bindings = {
-					date: new Date('2015-09-01'),
-					onOpen: function() {},
-					onPick: angular.noop
-				}
+			ctrl.onPickerOpen();
+			ctrl.selectedTeamIds = ['team1'];
+			var displayName = ctrl.formatSelectedDisplayName();
+			expect(displayName).toEqual("team1");
 
-				var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
-				ctrl.$onInit();
-
-				ctrl.onPickerOpen();
-				ctrl.selectedTeamIds = ['team1'];
-				var displayName = ctrl.formatSelectedDisplayName();
-				expect(displayName).toEqual("team1");
-
-				ctrl.selectedTeamIds = [];
-				displayName = ctrl.formatSelectedDisplayName();
-				expect(displayName).toEqual("Organization");
-			}));
+			ctrl.selectedTeamIds = [];
+			displayName = ctrl.formatSelectedDisplayName();
+			expect(displayName).toEqual("Organization");
+		});
 
 		it("Should trigger onPick when selection done",
 			function() {
