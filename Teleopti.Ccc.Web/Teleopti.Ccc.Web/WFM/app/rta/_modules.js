@@ -11,8 +11,7 @@ angular
 		'toggleService',
 		'wfm.notice',
 		'pascalprecht.translate',
-		'currentUserInfoService',
-		'localeLanguageSortingService'
+		'currentUserInfoService'
 	])
 .run(runRtaModule);
 

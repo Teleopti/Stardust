@@ -63,10 +63,10 @@
 					</md-select-header>
 				</div>
 				<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.teamsSelected.length > 0 ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="vm.teamsSelected.length === 0" ng-click="vm.clearOrgSelection()">{{'ClearAll' | translate}}</button>
-				<md-optgroup ng-repeat="site in vm.sites | filter:vm.searchTerm | orderBy:'Name':false:vm.sortByLocaleLanguage" class="rta-option-group">
+				<md-optgroup ng-repeat="site in vm.sites | filter:vm.searchTerm | orderBy:'Name':sortByLocaleLanguage" class="rta-option-group">
 					<span ng-click="vm.expandSite(site)" class="rta-options-prepend"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
 					<md-checkbox ng-model="site.isChecked" ng-value="site.Id" ng-class="site.isMarked ? 'rta-marked-checkbox' : ''">{{site.Name}}</md-checkbox>
-					<md-option ng-show="site.isExpanded" ng-selected="vm.teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams | orderBy:'Name':false:vm.sortByLocaleLanguage">{{team.Name}}</md-option>
+					<md-option ng-show="site.isExpanded" ng-selected="vm.teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams | orderBy:'Name':sortByLocaleLanguage">{{team.Name}}</md-option>
 				</md-optgroup>
 				</md-select>
 				</md-input-container>

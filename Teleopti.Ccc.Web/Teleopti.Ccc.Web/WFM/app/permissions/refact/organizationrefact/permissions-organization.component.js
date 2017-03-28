@@ -1,7 +1,6 @@
-function PermissionsListController(permissionsDataService, NoticeService, localeLanguageSortingService, $translate) {
+function PermissionsListController(permissionsDataService, NoticeService, $translate) {
 	var ctrl = this;
 	ctrl.toggleNode = toggleNode;
-	ctrl.sortByLocaleLanguage = localeLanguageSortingService.sort;
 
 	function toggleNode(node) {
 

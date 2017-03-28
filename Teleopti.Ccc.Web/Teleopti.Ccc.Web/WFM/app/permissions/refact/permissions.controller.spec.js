@@ -36,8 +36,6 @@ describe('PermissionsController', function() {
 		fakeBackend.clear();
 		vm = $controller('PermissionsRefactController');
 
-		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
-
 		$httpBackend.whenPOST('../api/Permissions/Roles').respond(function(method, url, data, headers) {
 			return [201, {
 				DescriptionText: 'rolename',

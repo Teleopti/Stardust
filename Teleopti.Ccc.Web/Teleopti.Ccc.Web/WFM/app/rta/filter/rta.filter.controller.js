@@ -15,7 +15,6 @@
 			'rtaService',
 			'rtaRouteService',
 			'rtaNamesFormatService',
-			'localeLanguageSortingService',
 			'$q'
 		];
 
@@ -28,7 +27,6 @@
 		rtaService,
 		rtaRouteService,
 		rtaNamesFormatService,
-		localeLanguageSortingService,
 		$q
 	) {
 		var vm = this;
@@ -60,7 +58,6 @@
 		vm.showOrganization = $state.current.name === agentsState;
 		vm.clearSelection = clearSelection;
 		vm.stopOnKeyDown = stopOnKeyDown;
-		vm.sortByLocaleLanguage = localeLanguageSortingService.sort;
 
 		(function initialize() {
 			rtaService.getSkills()

@@ -32,7 +32,7 @@
 		<div class="con-row demo-outline">
 			<div class="con-flex">
 				<div class="wfm-grid">
-					<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in vm.sites | orderBy:'Name':false:vm.sortByLocaleLanguage">
+					<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in vm.sites | orderBy:'Name': sortByLocaleLanguage">
 						<a ui-sref="{{vm.getStateForTeams()}}" class="rta-card-link">
 											<div class="list-content"
 											ng-class="{good: vm.getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: vm.getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && vm.getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: vm.getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}" tabindex="-1">
