@@ -50,7 +50,7 @@
 				clickOutsideToClose: true,
 				escapeToClose: true,
 				focusOnOpen: false,
-				zIndex: 150,
+				zIndex: 40, // keep this below the z-index of modals defined in the styleguide
 				onRemoving: function() {
 					ctrl.currentName = ctrl.currentFavorite ? ctrl.currentFavorite.Name : '';
 				}
