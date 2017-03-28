@@ -13,8 +13,9 @@ exports.config = {
         './test/*.js'
     ],
 	suites: {
+		groundall: ['./test/ServiceBusAndMessageBrokerTest.js', './test/IframeGroundTest.js'],
 		ground: ['./test/ServiceBusAndMessageBrokerTest.js'],
-		azure: ['./test/ServiceBusAndMessageBrokerTest.js', './test/AzureAdTest.js', './test/IdpSamlOktaTest.js', './test/GoogleTest.js']
+		azure: ['./test/ServiceBusAndMessageBrokerTest.js', './test/AzureAdTest.js', './test/IdpSamlOktaTest.js', './test/GoogleTest.js', './test/IframeAzureTest.js']
 	},
     // Patterns to exclude.
     exclude: [
