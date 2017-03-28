@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 		}
 
-		public  string[] ColumnHeaderNames => _columnHeaders;
+		public string[] ColumnHeaderNames => _columnHeaders;
 
-		public  IDictionary<string, int> ColumnHeaderMap => _columnHeaderMap;
+		public IDictionary<string, int> ColumnHeaderMap => _columnHeaderMap;
 
 		public RawAgent GetDefaultAgent()
 		{
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			};
 		}
 
-		public MemoryStream GetFileTemplate(RawAgent agent)
+		public MemoryStream GetFileTemplate(params RawAgent[] agents)
 		{
 			const string sheetName = "Agents";
 
@@ -100,33 +100,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				}
 			}
 
+			for (var i = 0; i < agents.Length; i++)
+			{
+				var agent = agents[i];
+				var row = newSheet.CreateRow(i + 1);
 
-			var row = newSheet.CreateRow(1);
+				row.CreateCell(ColumnHeaderMap["Firstname"]).SetCellValue(agent.Firstname);
 
-			row.CreateCell(ColumnHeaderMap["Firstname"]).SetCellValue(agent.Firstname);
+				row.CreateCell(ColumnHeaderMap["Lastname"]).SetCellValue(agent.Lastname);
 
-			row.CreateCell(ColumnHeaderMap["Lastname"]).SetCellValue(agent.Lastname);
+				row.CreateCell(ColumnHeaderMap["WindowsUser"]).SetCellValue(agent.WindowsUser);
+				row.CreateCell(ColumnHeaderMap["ApplicationUserId"]).SetCellValue(agent.ApplicationUserId);
+				row.CreateCell(ColumnHeaderMap["Password"]).SetCellValue(agent.Password);
+				row.CreateCell(ColumnHeaderMap["Role"]).SetCellValue(agent.Role);
 
-			row.CreateCell(ColumnHeaderMap["WindowsUser"]).SetCellValue(agent.WindowsUser);
-			row.CreateCell(ColumnHeaderMap["ApplicationUserId"]).SetCellValue(agent.ApplicationUserId);
-			row.CreateCell(ColumnHeaderMap["Password"]).SetCellValue(agent.Password);
-			row.CreateCell(ColumnHeaderMap["Role"]).SetCellValue(agent.Role);
+				var startDateCell = row.CreateCell(ColumnHeaderMap["StartDate"]);
 
-			var startDateCell = row.CreateCell(ColumnHeaderMap["StartDate"]);
+				startDateCell.SetCellValue(agent.StartDate);
+				row.CreateCell(ColumnHeaderMap["Organization"]).SetCellValue(agent.Organization);
+				row.CreateCell(ColumnHeaderMap["Skill"]).SetCellValue(agent.Skill);
+				row.CreateCell(ColumnHeaderMap["ExternalLogon"]).SetCellValue(agent.ExternalLogon);
+				row.CreateCell(ColumnHeaderMap["Contract"]).SetCellValue(agent.Contract);
+				row.CreateCell(ColumnHeaderMap["ContractSchedule"]).SetCellValue(agent.ContractSchedule);
+				row.CreateCell(ColumnHeaderMap["PartTimePercentage"]).SetCellValue(agent.PartTimePercentage);
+				row.CreateCell(ColumnHeaderMap["ShiftBag"]).SetCellValue(agent.ShiftBag);
+				row.CreateCell(ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(agent.SchedulePeriodType);
 
-			startDateCell.SetCellValue(agent.StartDate);
-			row.CreateCell(ColumnHeaderMap["Organization"]).SetCellValue(agent.Organization);
-			row.CreateCell(ColumnHeaderMap["Skill"]).SetCellValue(agent.Skill);
-			row.CreateCell(ColumnHeaderMap["ExternalLogon"]).SetCellValue(agent.ExternalLogon);
-			row.CreateCell(ColumnHeaderMap["Contract"]).SetCellValue(agent.Contract);
-			row.CreateCell(ColumnHeaderMap["ContractSchedule"]).SetCellValue(agent.ContractSchedule);
-			row.CreateCell(ColumnHeaderMap["PartTimePercentage"]).SetCellValue(agent.PartTimePercentage);
-			row.CreateCell(ColumnHeaderMap["ShiftBag"]).SetCellValue(agent.ShiftBag);
-			row.CreateCell(ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(agent.SchedulePeriodType);
+				var schedulePeriodLengthCell = row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]);
 
-			var schedulePeriodLengthCell = row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]);
-
-			schedulePeriodLengthCell.SetCellValue(agent.SchedulePeriodLength);
+				schedulePeriodLengthCell.SetCellValue(agent.SchedulePeriodLength);
+			}
 			returnedFile.Write(ms);
 
 			return ms;

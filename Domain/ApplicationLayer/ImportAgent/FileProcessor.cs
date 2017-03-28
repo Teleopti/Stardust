@@ -12,13 +12,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public class FileProcessor : IFileProcessor
 	{
-		private readonly IImportAgentFileValidator _fileValidator;
 		private readonly IAgentPersister _agentPersister;
 		private readonly IWorkbookHandler _workbookHandler;
 
-		public FileProcessor(IImportAgentFileValidator fileValidator, IAgentPersister agentPersister, IWorkbookHandler workbookHandler)
+		public FileProcessor(IAgentPersister agentPersister, IWorkbookHandler workbookHandler)
 		{
-			_fileValidator = fileValidator;
 			_agentPersister = agentPersister;
 			_workbookHandler = workbookHandler;
 		}
@@ -37,16 +35,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 			return count;
 		}
-		
+
+
+
 		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentDefaults defaultValues = null)
 		{
-
-			_fileValidator.SetDefaultValues(defaultValues);
-
-			var extractedResult = _workbookHandler.ProcessSheet(sheet);
+			var extractedResult = _workbookHandler.ProcessSheet(sheet, defaultValues);
 			_agentPersister.Persist(extractedResult);
 			return extractedResult.Where(r => r.Feedback.ErrorMessages.Any() || r.Feedback.WarningMessages.Any()).ToList();
 		}
+
+
+		public FileProcessResult Process(ISheet sheet, ImportAgentDefaults defaultValues = null)
+		{
+			var extractedResult = _workbookHandler.ProcessSheet(sheet, defaultValues);
+			_agentPersister.Persist(extractedResult);
+			return new FileProcessResult
+			{
+				ExtractedResults = extractedResult
+			};
+		}
+
 
 		public string ValidateWorkbook(IWorkbook workbook)
 		{
@@ -138,5 +147,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		IWorkbook ParseFile(FileData fileData);
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);
 		string ValidateWorkbook(IWorkbook workbook);
+		FileProcessResult Process(ISheet sheet, ImportAgentDefaults defaults);
 	}
 }

@@ -166,9 +166,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 		}
 
-
-
-		public AgentDataModel MapRawData(RawAgent raw, out Feedback feedback)
+		public AgentDataModel MapRawData(RawAgent raw,  out Feedback feedback)
 		{
 			var agentInfo = new AgentDataModel();
 			feedback = new Feedback();
@@ -292,7 +290,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				f.ErrorMessages.Add(Resources.NoApplicationLogonAccountErrorMsgSemicolon);
 				return f;
 			}
-			
+
 			agent.Password = password;
 
 			return f;
@@ -346,12 +344,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		private Feedback parseExternalLogon(string rawExternalLogons, AgentDataModel agentInfo)
 		{
-			var feedback = new Feedback();		
+			var feedback = new Feedback();
 			if (rawExternalLogons == null)
 				return feedback;
 
 			var externalLogons = StringHelper.SplitStringList(rawExternalLogons);
-			var invalidLogons = new List<string>(); 
+			var invalidLogons = new List<string>();
 			foreach (var logon in externalLogons)
 			{
 				var externalLogon = _importAgentDataProvider.FindExternalLogOn(logon);
@@ -362,7 +360,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				else
 				{
 					agentInfo.ExternalLogons.Add(externalLogon);
-					
+
 				}
 			}
 
@@ -474,8 +472,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private Feedback parseRole(string rawRoleString, AgentDataModel agent)
 		{
 			var feedback = new Feedback();
-			var roleNames = rawRoleString != null ?StringHelper.SplitStringList(rawRoleString).ToList() : new List<string>();
-			
+			var roleNames = rawRoleString != null ? StringHelper.SplitStringList(rawRoleString).ToList() : new List<string>();
+
 			var invalidRoles = new List<string>();
 			foreach (var roleName in roleNames)
 			{
@@ -514,7 +512,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private Feedback parseOrganization(string rawOrganizationString, AgentDataModel agent)
 		{
 			var feedback = new Feedback();
-			var organizationParts = rawOrganizationString?.Split('/') ?? new string[] {};
+			var organizationParts = rawOrganizationString?.Split('/') ?? new string[] { };
 
 			ITeam team = null;
 
@@ -526,7 +524,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					team = _importAgentDataProvider.FindTeam(site, organizationParts[1]);
 				}
 			}
-			
+
 			if (team == null)
 			{
 				if (_defaultValues?.Team != null)
@@ -549,7 +547,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var feedback = new Feedback();
 			var skillNames = !rawSkillString.IsNullOrEmpty()
 				? StringHelper.SplitStringList(rawSkillString)
-				: new List<string>();			
+				: new List<string>();
 			var invalidSkills = new List<string>();
 			foreach (var skillName in skillNames)
 			{

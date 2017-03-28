@@ -21,6 +21,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 	}
 
+	public class FileProcessResult
+	{
+		public FileProcessResult()
+		{
+			ExtractedResults = new List<AgentExtractionResult>();
+		}
+		
+		public IList<string> ErrorMessages { get; set; }
+
+		public  IList<AgentExtractionResult> ExtractedResults { get;  set; }
+
+		
+	}
+
 	public class AgentExtractionResult 
 	{
 		public AgentDataModel Agent { get; set; }
@@ -28,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public IRow Row { get; set; }
 		public RawAgent Raw { get; set; }
 		public Feedback Feedback { get; }
-
+		
 		public AgentExtractionResult()
 		{
 			Feedback = new Feedback();

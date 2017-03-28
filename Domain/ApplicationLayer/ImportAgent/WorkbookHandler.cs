@@ -43,8 +43,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			return errorMessages;
 		}
 
-		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet)
+		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentDefaults defaultValues = null)
 		{
+			_rawAgentMapper.SetDefaultValues(defaultValues);
+
 			var results = new List<AgentExtractionResult>();
 			for (var i = 1; i <= sheet.LastRowNum; i++)
 			{
@@ -170,6 +172,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	public interface IWorkbookHandler
 	{
 		List<string> ValidateSheetColumnHeader(IWorkbook workbook);
-		IList<AgentExtractionResult> ProcessSheet(ISheet sheet);
+		IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentDefaults defaultValues = null);
 	}
 }
