@@ -253,6 +253,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		}
 
 
+		[Test]
+		public void ShouldRejectJobWhenJobHadHandled()
+		{
+			var jobResult = fakeJobResult();
+			var rawAgent = setupProviderData();
+
+			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test.xls", ms.ToArray()));
+			
+			Target.Handle(new ImportAgentEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+
+			Target.Handle(new ImportAgentEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+
+			jobResult.Version.GetValueOrDefault().Should().Be(2);
+			jobResult.Details.Count().Should().Be(1);
+		}
+
 		private IJobResult fakeJobResult()
 		{
 			var person = PersonFactory.CreatePerson().WithId();

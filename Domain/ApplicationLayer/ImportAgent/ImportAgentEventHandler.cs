@@ -30,11 +30,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			_fileProcessor = fileProcessor;
 		}
 
-		[AsSystem]
-		[UnitOfWork]
-		public virtual void Handle(ImportAgentEvent @event)
+
+		public void Handle(ImportAgentEvent @event)
 		{
 			var jobResult = _jobResultRepository.Get(@event.JobResultId);
+			UpdateJobVersion(jobResult);
+			HandleEvent(jobResult, @event.Defaults);
+		}
+
+		[UnitOfWork]
+		protected virtual void UpdateJobVersion(IJobResult jobResult)
+		{
+			var currentVersion = jobResult.Version.GetValueOrDefault();
+			jobResult.SetVersion(++currentVersion);
+		}
+
+		[AsSystem]
+		[UnitOfWork]
+		protected virtual void HandleEvent(IJobResult jobResult, ImportAgentDefaults defaults)
+		{
+
+			if (IfNeedRejectJob(jobResult))
+			{
+				return;
+			}
 
 			if (jobResult.Artifacts.IsNullOrEmpty())
 			{
@@ -67,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					return;
 				}
 
-				var result = _fileProcessor.Process(workbook.GetSheetAt(0), @event.Defaults);
+				var result = _fileProcessor.Process(workbook.GetSheetAt(0), defaults);
 				var total = _fileProcessor.GetNumberOfRecordsInSheet(workbook.GetSheetAt(0));
 				var faildAgents = result.ExtractedResults.Where(a => a.Feedback.ErrorMessages.Any());
 				var warningAgents = result.ExtractedResults.Where(a => (!a.Feedback.ErrorMessages.Any()) && a.Feedback.WarningMessages.Any());
@@ -113,6 +132,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 		}
 
+		private bool IfNeedRejectJob(IJobResult jobResult)
+		{
+			var version = jobResult.Version;
+			if (version.GetValueOrDefault() > 1)
+			{
+				return true;
+			}
+			return false;
+		}
 
 
 		private void SaveJobResultDetail(IJobResult result, string message, DetailLevel level = DetailLevel.Info, Exception exception = null)
