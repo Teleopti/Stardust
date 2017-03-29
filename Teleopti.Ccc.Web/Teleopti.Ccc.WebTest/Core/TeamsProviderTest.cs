@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			permittedHierachy.Name.Should().Be.EqualTo("_");
 			permittedHierachy.Children.First().Name.Should().Be.EqualTo("mysite");
 			permittedHierachy.Children.First().Children.Single().Name.Should().Be.EqualTo("myteam");
-			permittedHierachy.LogonUserTeamId.Should().Be(team.Id);
+			permittedHierachy.LogonUserTeamId.Should().Be(null);
 		}
 
 		[Test]
