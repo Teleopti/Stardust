@@ -51,6 +51,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 			return _feedbackMapper.Map(date);
 		}
 
+		public IEnumerable<PreferenceDayFeedbackViewModel> CreateDayFeedbackViewModel(DateOnlyPeriod period)
+		{
+			return _feedbackMapper.Map(period);
+		}
+
 		public PreferenceDayViewModel CreateDayViewModel(DateOnly date)
 		{
 			var preferenceDay = _preferenceProvider.GetPreferencesForDate(date);
