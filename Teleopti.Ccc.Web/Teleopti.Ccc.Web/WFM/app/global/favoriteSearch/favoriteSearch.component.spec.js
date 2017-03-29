@@ -1,7 +1,12 @@
-﻿'use strict';
-describe('favoriteSearch component tests', function () {
+﻿describe('Favorite Search Component', function () {
+	'use strict';
 
-	var $componentController, rootScope, $compile, favoriteSearchDataService,httpBackend;
+	var $componentController,
+	    rootScope,
+	    $compile,
+	    favoriteSearchDataService,
+	    httpBackend,
+	    scope;
 
 
 	beforeEach(module('wfm.templates'));
@@ -25,10 +30,11 @@ describe('favoriteSearch component tests', function () {
 		httpBackend = _$httpBackend_;
 
 		httpBackend.expectGET('../api/FavoriteSearch/GetPermission').respond(200, '');
+
+		scope = rootScope.$new();
 	}));
 
-	it("should populate favorite list", inject(function () {
-		var scope = rootScope.$new();
+	it('should populate favorite list', function () {
 		scope.getSearch = function () { };
 		scope.applyFavorite = function () { };
 
@@ -42,11 +48,10 @@ describe('favoriteSearch component tests', function () {
 		expect(ctrl.favoriteSearchList[0].Id).toEqual("1");
 		expect(ctrl.favoriteSearchList[1].Id).toEqual("2");
 		expect(ctrl.currentName).toEqual('test1');
-	}));
+	});
 
 	it('should save new favorite', function () {
-		var scope = rootScope.$new();
-		scope.getSearch = function () { return { TeamIds: ["team1"], SearchTerm: "agent" }; };
+		scope.getSearch = function () { return { TeamIds: ['team1'], SearchTerm: 'agent' }; };
 		scope.applyFavorite = function () { };
 
 		var element = angular.element('<favorite-search get-search="getSearch()" apply-favorite="applyFavorite()"></favorite-search>');
@@ -66,8 +71,9 @@ describe('favoriteSearch component tests', function () {
 	});
 
 	it('should update current favorite search', function () {
-		var scope = rootScope.$new();
-		scope.getSearch = function () { return { TeamIds: ["fakeTeamId"], SearchTerm: "agent" }; };
+		scope.getSearch = function () {
+			return { TeamIds: ['fakeTeamId'], SearchTerm: 'agent' };
+		};
 		scope.applyFavorite = function () { };
 
 		var element = angular.element('<favorite-search get-search="getSearch()" apply-favorite="applyFavorite()"></favorite-search>');
@@ -86,7 +92,6 @@ describe('favoriteSearch component tests', function () {
 	});
 
 	it('should make specific favorite default', function () {
-		var scope = rootScope.$new();
 		scope.getSearch = function () { return { TeamIds: ["fakeTeamId"], SearchTerm: "agent" }; };
 		scope.applyFavorite = function () { };
 
@@ -107,7 +112,6 @@ describe('favoriteSearch component tests', function () {
 
 
 	it('should delete specific favorite', function () {
-		var scope = rootScope.$new();
 		scope.getSearch = function () { };
 		scope.applyFavorite = function () { };
 
@@ -125,7 +129,6 @@ describe('favoriteSearch component tests', function () {
 	});
 
 	it('should reset current favorite when its deleted', function () {
-		var scope = rootScope.$new();
 		scope.getSearch = function () { return {TeamIds:['team1', 'team2'],SearchTerm:""}};
 		scope.applyFavorite = function () { };
 
@@ -152,7 +155,6 @@ describe('favoriteSearch component tests', function () {
 	});
 
 	it('should clear input when current favorite is cleared', function () {
-		var scope = rootScope.$new();
 		scope.getSearch = function () { return { TeamIds: ['team1', 'team2'], SearchTerm: "" } };
 		scope.applyFavorite = function () { };
 		scope.selectedFavorite = {
@@ -173,7 +175,7 @@ describe('favoriteSearch component tests', function () {
 		scope.$digest();
 
 		expect(ctrl.currentName).toEqual('');
-		
+
 	});
 
 	function FakeFavoriteSearchDataService() {
