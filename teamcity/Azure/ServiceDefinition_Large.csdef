@@ -54,6 +54,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 	<Runtime executionContext="elevated">
 	  <Environment>
 		<Variable name="RoleStartupScripts" value="IIS7ConfigMoveToNET4.cmd!;Add-TeleoptiFoldersAndShortcuts.cmd!;RestartTeleopti.cmd" >
+		  <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/ConfigurationSettings/Setting[@name='RoleStartupScripts']/@value" />
 		</Variable>
 	  </Environment>
       <EntryPoint>
@@ -61,6 +62,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
       </EntryPoint>
     </Runtime>
 	<ConfigurationSettings>
+		<Setting name="RoleStartupScripts" />
 		<Setting name="TeleoptiDriveMap.BlobPath" />
 		<Setting name="TeleoptiDriveMap.AccountName" />
 		<Setting name="TeleoptiDriveMap.AccountKey" />
