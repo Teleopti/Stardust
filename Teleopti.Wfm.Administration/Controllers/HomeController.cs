@@ -58,7 +58,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var builderAnal = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString);
 			var builderAgg = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
 
-         return Json(new TenantModel
+			return Json(new TenantModel
 			{
 				Name = tenant.Name,
 				Id = tenant.Id,
@@ -66,11 +66,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 				AppDatabase = builder.InitialCatalog,
 				AnalyticsDatabase = builderAnal.InitialCatalog,
 				AggregationDatabase = builderAgg.InitialCatalog,
-            Server =  builder.DataSource,
+				Server = builder.DataSource,
 				Version = _checkDatabaseVersions.GetVersions(tenant.DataSourceConfiguration.ApplicationConnectionString),
-            CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout]),
-             Active = tenant.Active
-         });
+				CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout]),
+				Active = tenant.Active
+			});
 		}
 
 		[HttpPost]

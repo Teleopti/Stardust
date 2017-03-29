@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Core
 
 			foreach (var site in sites)
 			{
-				var siteViewModel = new SiteViewModelWithTeams()
+				var siteViewModel = new SiteViewModelWithTeams
 				{
 					Id = site.Id.ToString(),
 					Name = site.Description.Name
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Core
 				siteViewModel.Children.AddRange(teamViewModels);
 			}
 
-			return new BusinessUnitWithSitesViewModel()
+			return new BusinessUnitWithSitesViewModel
 			{
 				Id = _currentBusinessUnit.Current().Id ?? Guid.Empty,
 				Name = _currentBusinessUnit.Current().Name,
@@ -74,12 +74,14 @@ namespace Teleopti.Ccc.Web.Core
 			var sites = _siteRepository.LoadAll().Where(site => site.BusinessUnit.Id == currentBusinessUnit.Id).OrderBy(site => site.Description.Name);
 			var siteViewModels = new List<SiteViewModelWithTeams>();
 
-			var logonUserTeamId = (_loggedOnUser.CurrentUser().MyTeam(date) != null && _loggedOnUser.CurrentUser().MyTeam(date).Site.BusinessUnit == currentBusinessUnit) ? _loggedOnUser.CurrentUser().MyTeam(date).Id : null;
-			var hasPermissonForLogonTeam = _permissionProvider.HasPersonPermission(permission, date, _loggedOnUser.CurrentUser());
+			var currentUser = _loggedOnUser.CurrentUser();
+			var myTeam = currentUser.MyTeam(date);
+			var logonUserTeamId = myTeam != null && myTeam.Site.BusinessUnit == currentBusinessUnit ? myTeam.Id : null;
+			var hasPermissonForLogonTeam = _permissionProvider.HasPersonPermission(permission, date, currentUser);
 
 			foreach (var site in sites)
 			{
-				var siteViewModel = new SiteViewModelWithTeams()
+				var siteViewModel = new SiteViewModelWithTeams
 				{
 					Id = site.Id.ToString(),
 					Name = site.Description.Name,
@@ -113,7 +115,7 @@ namespace Teleopti.Ccc.Web.Core
 
 			}
 
-			return new BusinessUnitWithSitesViewModel()
+			return new BusinessUnitWithSitesViewModel
 			{
 				Id = currentBusinessUnit.Id ?? Guid.Empty,
 				Name = currentBusinessUnit.Name,
