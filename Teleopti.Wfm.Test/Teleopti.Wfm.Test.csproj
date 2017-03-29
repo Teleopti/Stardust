@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="SetUpCascadingShifts.cs" />
     <Compile Include="MultiSkilledGoldSilverBronzeAgentSameDayTest.cs" />
+    <Compile Include="MultiSkilledGoldSilverBronzeAgentBulkTest.cs" />
     <Compile Include="SingleSkilledGoldAgentSameDayTest.cs" />
     <Compile Include="SingleSkilledGoldAgentBulkTest.cs" />
     <Compile Include="SingleSkilledBronzeAgentBulkTest.cs" />
