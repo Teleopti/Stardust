@@ -87,7 +87,7 @@ namespace Teleopti.Wfm.Test
 				DateOnly = new DateOnly(DateTime.UtcNow.Date),
 				Scenario = "Scenario",
 				Skill = "GoldSkill",
-				DefaultDemand = 5,
+				DefaultDemand = 10,
 				Shrinkage = 0.2
 			};
 			var skillDaySilverToday = new SkillDayConfigurable
@@ -95,7 +95,7 @@ namespace Teleopti.Wfm.Test
 				DateOnly = new DateOnly(DateTime.UtcNow.Date),
 				Scenario = "Scenario",
 				Skill = "SilverSkill",
-				DefaultDemand = 5,
+				DefaultDemand = 10,
 				Shrinkage = 0.2
 			};
 			var skillDayBronzeToday = new SkillDayConfigurable
@@ -103,7 +103,7 @@ namespace Teleopti.Wfm.Test
 				DateOnly = new DateOnly(DateTime.UtcNow.Date),
 				Scenario = "Scenario",
 				Skill = "BronzeSkill",
-				DefaultDemand = 5,
+				DefaultDemand = 10,
 				Shrinkage = 0.2
 			};
 
