@@ -196,21 +196,24 @@ namespace Teleopti.Wfm.Test
 				Activity = activity.Name,
 				Name = "BronzeSkill",
 				Resolution = 30,
-				CascadingIndex = 3
+				CascadingIndex = 3,
+				SeriousUnderstaffingThreshold = -1
 			};
 			var silverSkill = new SkillConfigurable
 			{
 				Activity = activity.Name,
 				Name = "SilverSkill",
 				Resolution = 30,
-				CascadingIndex = 2
+				CascadingIndex = 2,
+				SeriousUnderstaffingThreshold = -1
 			};
 			var goldSkill = new SkillConfigurable
 			{
 				Activity = activity.Name,
 				Name = "GoldSkill",
 				Resolution = 30,
-				CascadingIndex = 1
+				CascadingIndex = 1,
+				SeriousUnderstaffingThreshold = -1
 			};
 
 
@@ -310,6 +313,24 @@ namespace Teleopti.Wfm.Test
 			AddShift(personAllSkills2.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
 			AddShift(personAllSkills2.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
 
+			var personPeriodGold = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = goldSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personGold = new PersonConfigurable
+			{
+				Name = "PersonGold"
+			};
+			Data.Person(personGold.Name).Apply(personPeriodGold);
+			AddShift(personGold.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			AddShift(personGold.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+
 			var personPeriodSilverBronze1 = new PersonPeriodConfigurable
 			{
 				Contract = contract.Name,
@@ -400,6 +421,22 @@ namespace Teleopti.Wfm.Test
 			};
 			Data.Person(personBronzeNoShift.Name).Apply(personPeriodBronze3);
 
+			var personPeriodGoldNoShift = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = goldSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personGoldNoShift = new PersonConfigurable
+			{
+				Name = "PersonGoldNoShift"
+			};
+			Data.Person(personGoldNoShift.Name).Apply(personPeriodGoldNoShift);
+
 			var personPeriodBronzeWrongActivity = new PersonPeriodConfigurable
 			{
 				Contract = contract.Name,
@@ -418,7 +455,25 @@ namespace Teleopti.Wfm.Test
 			AddShift(personBronzeWrongActivity.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activityWrong.Activity,  scenario.Scenario);
 			AddShift(personBronzeWrongActivity.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activityWrong.Activity, scenario.Scenario);
 
-			var personPeriodOvertimeActivity = new PersonPeriodConfigurable
+			var personPeriodGoldWrongActivity = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = goldSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personGoldWrongActivity = new PersonConfigurable
+			{
+				Name = "PersonGoldWrongActivity"
+			};
+			Data.Person(personGoldWrongActivity.Name).Apply(personPeriodGoldWrongActivity);
+			AddShift(personGoldWrongActivity.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activityWrong.Activity, scenario.Scenario);
+			AddShift(personGoldWrongActivity.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activityWrong.Activity, scenario.Scenario);
+
+			var personPeriodBronzeOvertimeActivity = new PersonPeriodConfigurable
 			{
 				Contract = contract.Name,
 				ContractSchedule = contractSchedule.Name,
@@ -432,9 +487,27 @@ namespace Teleopti.Wfm.Test
 			{
 				Name = "PersonBronzeOvertime"
 			};
-			Data.Person(personBronzeOvertime.Name).Apply(personPeriodOvertimeActivity);
+			Data.Person(personBronzeOvertime.Name).Apply(personPeriodBronzeOvertimeActivity);
 			AddShift(personBronzeOvertime.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario, multiplicatorDefinitionSet.MultiplicatorDefinitionSet, true);
 			AddShift(personBronzeOvertime.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario, multiplicatorDefinitionSet.MultiplicatorDefinitionSet, true);
+
+			var personPeriodGoldOvertimeActivity = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = goldSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personGoldOvertime = new PersonConfigurable
+			{
+				Name = "PersonGoldOvertime"
+			};
+			Data.Person(personGoldOvertime.Name).Apply(personPeriodGoldOvertimeActivity);
+			AddShift(personGoldOvertime.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario, multiplicatorDefinitionSet.MultiplicatorDefinitionSet, true);
+			AddShift(personGoldOvertime.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario, multiplicatorDefinitionSet.MultiplicatorDefinitionSet, true);
 		}
 
 		public static void AddShift(string onPerson,

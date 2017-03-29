@@ -24,7 +24,7 @@ namespace Teleopti.Wfm.Test
 {
 	[DatabaseTest]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
-	public class SingleSkilledBronzeAgentBulkTest : SetUpCascadingShifts
+	public class SingleSkilledGoldAgentBulkTest : SetUpCascadingShifts
 	{
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public IBusinessUnitRepository BusinessUnitRepository;
@@ -58,7 +58,7 @@ namespace Teleopti.Wfm.Test
 				SetUpLowDemandSkillDays();
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
+				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGold");
 
 				var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddMinutes(30).Utc()));
@@ -95,7 +95,7 @@ namespace Teleopti.Wfm.Test
 				SetUpLowDemandSkillDays();
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
+				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGold");
 
 				var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
@@ -132,7 +132,7 @@ namespace Teleopti.Wfm.Test
 				SetUpHighDemandSkillDays();
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
+				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGold");
 
 				var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddMinutes(30).Utc()));
@@ -170,7 +170,7 @@ namespace Teleopti.Wfm.Test
 				SetUpHighDemandSkillDays();
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
+				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGold");
 				var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
 				personRequest = new PersonRequest(person, absenceRequest);
@@ -208,7 +208,7 @@ namespace Teleopti.Wfm.Test
 				SetUpMixedSkillDays(1, new Tuple<int, double>(requestStart.Hour, 10));
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
+				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGold");
 
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
 				personRequest = new PersonRequest(person, absenceRequest);
@@ -245,7 +245,7 @@ namespace Teleopti.Wfm.Test
 				SetUpLowDemandSkillDays();
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeNoShift");
+				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGoldNoShift");
 
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
 				personRequest = new PersonRequest(person, absenceRequest);
@@ -282,7 +282,7 @@ namespace Teleopti.Wfm.Test
 			SetUpHighDemandSkillDays();
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeNoShift");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGoldNoShift");
 
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
 			 personRequest = new PersonRequest(person, absenceRequest);
@@ -320,7 +320,7 @@ namespace Teleopti.Wfm.Test
 				SetUpLowDemandSkillDays();
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeWrongActivity");
+				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGoldWrongActivity");
 
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
 				personRequest = new PersonRequest(person, absenceRequest);
@@ -358,7 +358,7 @@ namespace Teleopti.Wfm.Test
 				SetUpHighDemandSkillDays();
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-				 person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeWrongActivity");
+				 person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGoldWrongActivity");
 
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
 				 personRequest = new PersonRequest(person, absenceRequest);
@@ -396,7 +396,7 @@ namespace Teleopti.Wfm.Test
 				SetUpLowDemandSkillDays();
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeOvertime");
+				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGoldOvertime");
 
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
 				personRequest = new PersonRequest(person, absenceRequest);
@@ -436,7 +436,7 @@ namespace Teleopti.Wfm.Test
 				SetUpHighDemandSkillDays();
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
-				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeOvertime");
+				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonGoldOvertime");
 
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
 				personRequest = new PersonRequest(person, absenceRequest);

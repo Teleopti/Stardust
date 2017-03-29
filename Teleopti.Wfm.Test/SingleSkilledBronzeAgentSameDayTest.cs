@@ -138,7 +138,7 @@ namespace Teleopti.Wfm.Test
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
 			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
-			SetUpMixedSkillDays(1, new Tuple<int, double>(requestStart.Hour, 2));
+			SetUpMixedSkillDays(1, new Tuple<int, double>(requestStart.Hour, 10));
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");

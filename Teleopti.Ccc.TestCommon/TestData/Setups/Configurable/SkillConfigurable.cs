@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public ISkill Skill { get; set; }
 		public int Resolution { get; set; }
 		public int? CascadingIndex { get; set; }
+		public double? SeriousUnderstaffingThreshold { get; set; }
 
 		public SkillConfigurable()
 		{
@@ -39,7 +41,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			Skill = SkillFactory.CreateSkill(Name, skillType, Resolution, timeZone, TimeSpan.Zero);
 			if(CascadingIndex.HasValue)
 				Skill.SetCascadingIndex(CascadingIndex.Value);
-
+			if (SeriousUnderstaffingThreshold.HasValue)
+				Skill.StaffingThresholds = new StaffingThresholds(new Percent(SeriousUnderstaffingThreshold.Value), Skill.StaffingThresholds.Understaffing, Skill.StaffingThresholds.Overstaffing);
 			var activityRepository = new ActivityRepository(currentUnitOfWork);
 			Skill.Activity = activityRepository.LoadAll().Single(b => b.Description.Name == Activity);
 
