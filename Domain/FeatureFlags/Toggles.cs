@@ -24,6 +24,7 @@
 		RTA_FasterAgentsView_42039,
 		RTA_MonitorAgentsInPermittedOrganizationOnly_40660,
 		RTA_SolidProofWhenManagingAgentAdherence_39351,
+		RTA_SnappierDisplayOfOverview_43568,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
