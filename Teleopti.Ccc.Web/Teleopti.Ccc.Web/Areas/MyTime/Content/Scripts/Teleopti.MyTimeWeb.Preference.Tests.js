@@ -1,5 +1,4 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Preference initializer");
 
@@ -18,11 +17,10 @@ $(document).ready(function () {
 				equal(options.data.To, '2012-06-12');
 			}
 		};
-
+		
 		expect(2);
 
 		var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
-
 		target.InitViewModels();
 	});
 
@@ -48,28 +46,16 @@ $(document).ready(function () {
 					if (options.data.Date == '2012-06-11')
 						options.success({
 							PossibleContractTimeMinutesLower: 6 * 60,
-							RestTimeToNextDay: {
-								"Hours": 10
-							},
-							RestTimeToPreviousDay: {
-								"Hours": 11
-							},
-							ExpectedNightRest: {
-								"Hours": 11
-							}
+							RestTimeToNextDayTimeSpan: "10:00:00",
+							RestTimeToPreviousDayTimeSpan: "11:00:00",
+							ExpectedNightRestTimeSpan: "11:00:00"
 						});
 					if (options.data.Date == '2012-06-12')
 						options.success({
 							PossibleContractTimeMinutesLower: 8 * 60,
-							RestTimeToNextDay: {
-								"Hours": 10
-							},
-							RestTimeToPreviousDay: {
-								"Hours": 11
-							},
-							ExpectedNightRest: {
-								"Hours": 11
-							}
+							RestTimeToNextDayTimeSpan: "10:00:00",
+							RestTimeToPreviousDayTimeSpan: "11:00:00",
+							ExpectedNightRestTimeSpan: "11:00:00"
 						});
 				}
 			}
@@ -78,7 +64,6 @@ $(document).ready(function () {
 		expect(3);
 
 		var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
-
 		target.InitViewModels();
 
 		equal($('#Preference-period-feedback-view').text(), "14:00");
@@ -104,15 +89,9 @@ $(document).ready(function () {
 				if (options.url == "PreferenceFeedback/Feedback") {
 					options.success({
 						PossibleContractTimeMinutesLower: 8 * 60,
-						RestTimeToNextDay: {
-							"Hours": 10
-						},
-						RestTimeToPreviousDay: {
-							"Hours": 11
-						},
-						ExpectedNightRest: {
-							"Hours": 11
-						}
+						RestTimeToNextDayTimeSpan: "10:00:00",
+						RestTimeToPreviousDayTimeSpan: "11:00:00",
+						ExpectedNightRestTimeSpan: "11:00:00"
 					});
 				}
 			}
@@ -160,7 +139,6 @@ $(document).ready(function () {
 		expect(2);
 
 		var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
-
 		target.InitViewModels();
 
 		equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeLower"]').text(), "4:00", "lower contract time");
@@ -187,9 +165,7 @@ $(document).ready(function () {
 		expect(2);
 
 		var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax, portal);
-
 		target.InitViewModels();
-
 	});
 
 	test("should clear day view models on init", function () {
@@ -221,15 +197,9 @@ $(document).ready(function () {
 					if (options.data.Date == '2012-06-19' || options.data.Date == '2012-06-20')
 						options.success({
 							PossibleContractTimeMinutesLower: 6 * 60,
-							RestTimeToNextDay: {
-								"Hours": 10
-							},
-							RestTimeToPreviousDay: {
-								"Hours": 11
-							},
-							ExpectedNightRest: {
-								"Hours": 11
-							}
+							RestTimeToNextDayTimeSpan: "10:00:00",
+							RestTimeToPreviousDayTimeSpan: "11:00:00",
+							ExpectedNightRestTimeSpan: "11:00:00"
 						});
 				}
 			}
@@ -289,22 +259,17 @@ $(document).ready(function () {
 						options.success({
 							HasNightRestViolationToPreviousDay: true,
 							HasNightRestViolationToNextDay: false,
-							DateInternal: "\/Date(1453824000000)\/",//2016-01-27
-
+							DateInternal: "\/Date(1453824000000)\/"//2016-01-27
 						});
-					
 				}
 			}
 		};
 
-
 		var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
-
 		target.InitViewModels();
 
 		equal($('#Preference-period-feedback-view').text(), Teleopti.MyTimeWeb.Common.FormatDate(moment(date)));
 		equal($('li[data-mytime-date="2016-01-26"]').text(), "true");
 		equal($('li[data-mytime-date="2016-01-27"]').text(), "true");
 	});
-
 });

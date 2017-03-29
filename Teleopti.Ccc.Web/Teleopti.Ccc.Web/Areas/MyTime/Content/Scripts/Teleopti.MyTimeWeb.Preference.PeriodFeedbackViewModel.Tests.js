@@ -89,22 +89,12 @@
 
 		var ajax1 = function(model, options) {
 			options.success({
-				RestTimeToNextDay: {
-				    "Hours": 10,
-				    "Minutes": 0
-				},
-				RestTimeToPreviousDay: {
-				    "Hours": 10,
-				    "Minutes": 0
-				},
-				ExpectedNightRest: {
-				    "Hours": 11,
-				    "Minutes": 0
-				},
+				RestTimeToNextDayTimeSpan: "10:00:00",
+				RestTimeToPreviousDayTimeSpan: "10:00:00",
+				ExpectedNightRestTimeSpan: "11:00:00",
 				HasNightRestViolationToPreviousDay: false,
 				HasNightRestViolationToNextDay: true,
-				DateInternal: "\/Date(1454515200000)\/", //2016-02-04
-
+				DateInternal: "\/Date(1454515200000)\/" //2016-02-04
 			});
 		};
 
@@ -114,22 +104,12 @@
 
 		var ajax2 = function(model, options) {
 			options.success({
-				RestTimeToNextDay: {
-				    "Hours": 10,
-				    "Minutes": 0
-				},
-				RestTimeToPreviousDay: {
-				    "Hours": 10,
-				    "Minutes": 0
-				},
-				ExpectedNightRest: {
-				    "Hours": 11,
-				    "Minutes": 0
-				},
+				RestTimeToNextDayTimeSpan: "10:00:00",
+				RestTimeToPreviousDayTimeSpan: "10:00:00",
+				ExpectedNightRestTimeSpan: "11:00:00",
 				HasNightRestViolationToPreviousDay: true,
 				HasNightRestViolationToNextDay: true,
-				DateInternal: "\/Date(1453737600000)\/", //2016-01-26
-
+				DateInternal: "\/Date(1453737600000)\/" //2016-01-26
 			});
 		};
 		

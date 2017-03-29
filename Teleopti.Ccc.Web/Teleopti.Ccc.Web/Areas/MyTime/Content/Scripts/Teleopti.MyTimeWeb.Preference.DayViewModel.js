@@ -4,6 +4,8 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -250,23 +252,25 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	this.MakeNightRestViolationObjs = function () {
 		var nightRestViolationObjs = [];
 		if (self.NightRestViolationSwitch()) {
-			var dateMoment = moment(self.RawDate());
 			if (self.HasNightRestViolationToPreviousDay()) {
-				nightRestViolationObjs.push({
-					nightRestTimes: self.ExpectedNightRest(),
-					sencondDay: Teleopti.MyTimeWeb.Common.FormatDate(dateMoment),
-					firstDay: Teleopti.MyTimeWeb.Common.FormatDate(dateMoment.subtract(1, "days")),
-					hoursBetweenTwoDays: self.RestTimeToPreviousDay()
-				});
+				var dateMoment = moment(self.RawDate());
+				var nightRestViolationObj = {};
+				nightRestViolationObj.nightRestTimes = self.ExpectedNightRest();
+				nightRestViolationObj.sencondDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment);
+				nightRestViolationObj.firstDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment.subtract(1, "days"));
+
+				nightRestViolationObj.hoursBetweenTwoDays = self.RestTimeToPreviousDay();
+				nightRestViolationObjs.push(nightRestViolationObj);
 			}
 
 			if (self.HasNightRestViolationToNextDay()) {
-				nightRestViolationObjs.push({
-					nightRestTimes: self.ExpectedNightRest(),
-					firstDay: Teleopti.MyTimeWeb.Common.FormatDate(dateMoment),
-					sencondDay: Teleopti.MyTimeWeb.Common.FormatDate(dateMoment.add(1, "days")),
-					hoursBetweenTwoDays: self.RestTimeToNextDay()
-				});
+				var dateMoment = moment(self.RawDate());
+				var nightRestViolationObj = {};
+				nightRestViolationObj.nightRestTimes = self.ExpectedNightRest();
+				nightRestViolationObj.firstDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment);
+				nightRestViolationObj.sencondDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment.add(1, "days"));
+				nightRestViolationObj.hoursBetweenTwoDays = self.RestTimeToNextDay();
+				nightRestViolationObjs.push(nightRestViolationObj);
 			}
 		}
 
