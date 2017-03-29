@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -11,9 +12,12 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		public bool HasShift { get; set; }
 		public bool HasPreference { get; set; }
 	}
-	
+
 	public interface IPersonPreferenceDayOccupationFactory
 	{
 		PersonPreferenceDayOccupation GetPreferenceDayOccupation(IPerson person, DateOnly date);
+
+		Dictionary<DateOnly, PersonPreferenceDayOccupation> GetPreferencePeriodOccupation(IPerson person,
+			DateOnlyPeriod period);
 	}
 }
