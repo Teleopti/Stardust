@@ -3671,8 +3671,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			SchedulerState.SchedulingResultState.Schedules.ModifiedPersonAccounts.Clear();
-			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXLoadingFormThreeDots"));
-			backgroundWorkerLoadData.ReportProgress(1);
+			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXInitializingTreeDots"));
 			backgroundWorkerLoadData.ReportProgress(1);
 
 			foreach (var tag in _schedulerState.CommonStateHolder.ActiveScheduleTags)
@@ -3701,6 +3700,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			GridHelper.GridlockWriteProtected(_schedulerState, LockManager);
 
 			_lastSaved = DateTime.Now;
+			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXLoadingFormThreeDots"));
 		}
 
 
