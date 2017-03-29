@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 {
@@ -76,36 +75,40 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles"), HttpGet]
-		public virtual ICollection<object> Get()
+		public virtual ICollection<RoleOverviewModel> Get()
 		{
 			var myRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
 			var roles = _roleRepository.LoadAllApplicationRolesSortedByName();
-			return roles.Select(r => new
+			var isAnyBuiltIn = myRoles.Any(myRole => myRole.BuiltIn);
+			return roles.Select(r =>
 			{
-				r.Name,
-				r.Id,
-				r.BuiltIn,
-				r.DescriptionText,
-				IsMyRole = myRoles.Any(myRole => myRole.Id.Value == r.Id),
-				IsAnyBuiltIn = myRoles.Any(myRole => myRole.BuiltIn)
+				return new RoleOverviewModel
+				{
+					Name = r.Name,
+					Id = r.Id,
+					BuiltIn = r.BuiltIn,
+					DescriptionText = r.DescriptionText,
+					IsMyRole = myRoles.Any(myRole => myRole.Id.Value == r.Id),
+					IsAnyBuiltIn = isAnyBuiltIn
+				};
 			}).ToArray();
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles/{roleId}"), HttpGet]
-		public virtual object Get(Guid roleId)
+		public virtual RoleDetailViewModel Get(Guid roleId)
 		{
 			var role = _roleRepository.Get(roleId);
-			return new
+			return new RoleDetailViewModel
 			{
-				role.Name,
-				role.Id,
-				role.BuiltIn,
-				role.DescriptionText,
-				role.AvailableData.AvailableDataRange,
-				AvailableBusinessUnits = role.AvailableData.AvailableBusinessUnits.Select(b => new { b.Name, b.Id }).ToArray(),
-				AvailableSites = role.AvailableData.AvailableSites.Select(s => new { s.Description.Name, s.Id }).ToArray(),
-				AvailableTeams = role.AvailableData.AvailableTeams.Select(t => new { t.Description.Name, t.Id }).ToArray(),
-				AvailableFunctions = role.ApplicationFunctionCollection.Select(f => new { f.Id, f.FunctionCode, f.FunctionPath, f.LocalizedFunctionDescription }).ToArray()
+				Name = role.Name,
+				Id = role.Id,
+				BuiltIn = role.BuiltIn,
+				DescriptionText = role.DescriptionText,
+				AvailableDataRange = role.AvailableData.AvailableDataRange,
+				AvailableBusinessUnits = role.AvailableData.AvailableBusinessUnits.Select(b => new NameIdModel { Name = b.Name, Id = b.Id }).ToArray(),
+				AvailableSites = role.AvailableData.AvailableSites.Select(s => new NameIdModel { Name = s.Description.Name, Id = s.Id }).ToArray(),
+				AvailableTeams = role.AvailableData.AvailableTeams.Select(t => new NameIdModel { Name = t.Description.Name, Id = t.Id }).ToArray(),
+				AvailableFunctions = role.ApplicationFunctionCollection.Select(f => new FunctionModel { Id = f.Id, FunctionCode = f.FunctionCode, FunctionPath = f.FunctionPath, LocalizedFunctionDescription = f.LocalizedFunctionDescription }).ToArray()
 			};
 		}
 
@@ -320,5 +323,42 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 
 			return Ok();
 		}
+	}
+
+	public class RoleOverviewModel
+	{
+		public string Name { get; set; }
+		public Guid? Id { get; set; }
+		public bool BuiltIn { get; set; }
+		public bool IsAnyBuiltIn { get; set; }
+		public string DescriptionText { get; set; }
+		public bool IsMyRole { get; set; }
+	}
+
+	public class FunctionModel
+	{
+		public Guid? Id { get; set; }
+		public string FunctionCode { get; set; }
+		public string FunctionPath { get; set; }
+		public string LocalizedFunctionDescription { get; set; }
+	}
+
+	public class NameIdModel
+	{
+		public Guid? Id { get; set; }
+		public string Name { get; set; }
+	}
+	
+	public class RoleDetailViewModel
+	{
+		public string Name { get; set; }
+		public Guid? Id { get; set; }
+		public bool BuiltIn { get; set; }
+		public string DescriptionText { get; set; }
+		public AvailableDataRangeOption AvailableDataRange { get; set; }
+		public NameIdModel[] AvailableBusinessUnits { get; set; }
+		public NameIdModel[] AvailableSites { get; set; }
+		public NameIdModel[] AvailableTeams { get; set; }
+		public FunctionModel[] AvailableFunctions { get; set; }
 	}
 }

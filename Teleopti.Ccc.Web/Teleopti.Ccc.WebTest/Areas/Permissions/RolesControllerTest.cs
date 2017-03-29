@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Permissions.Controllers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Permissions
 {
@@ -72,12 +71,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			adminRole.WithId();
 			ApplicationRoleRepository.Add(adminRole);
 
-			ICollection<object> result = Target.Get();
+			var result = Target.Get();
 
-			dynamic myReturnedRole = result.First(x => ((dynamic)x).Name == myRole.Name);
-			dynamic adminReturnedRole = result.First(x => ((dynamic)x).Name == adminRole.Name);
-			((bool)myReturnedRole.IsMyRole).Should().Be.EqualTo(true);
-			((bool)adminReturnedRole.IsMyRole).Should().Be.EqualTo(false);
+			var myReturnedRole = result.First(x => x.Name == myRole.Name);
+			var adminReturnedRole = result.First(x => x.Name == adminRole.Name);
+			myReturnedRole.IsMyRole.Should().Be.EqualTo(true);
+			adminReturnedRole.IsMyRole.Should().Be.EqualTo(false);
 		}
 
 		[Test]
