@@ -1832,7 +1832,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 		}
 
-		[Test][Ignore("Buggelibugg43729")]
+		[Test]
 		public void ShouldBeDeniedWhenMidnightShiftAndUnderStaffedAndRequestIsTomorrow()
 		{
 			Now.Is(new DateTime(2016, 12, 1, 22, 00, 00, DateTimeKind.Utc));

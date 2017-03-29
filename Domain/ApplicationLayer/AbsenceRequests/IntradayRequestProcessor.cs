@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
 					return;
 				}
+				var loadSchedulesPeriodToCoverForMidnightShifts = personRequest.Request.Period.ChangeStartTime(TimeSpan.FromDays(-1));
+				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
 
-				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), personRequest.Request.Period, _currentScenario.Current())[personRequest.Person];
-
-				var dateOnlyPeriod = personRequest.Request.Period.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone());
+				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone());
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
 				var allSkills = _skillRepository.LoadAll();
