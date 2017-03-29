@@ -86,6 +86,7 @@ Scenario: Tooltip of a pre-scheduled personal shift
 	| EndTime   | 2012-10-19 10:00 |
 	| Activity  | Administration   |
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback from pre-scheduled meeting
 	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled meeting with
@@ -100,6 +101,7 @@ Scenario: Feedback from pre-scheduled meeting
 	| Date            | 2012-10-19  |
 	| EndTime boundry | 18:00-18:00 |
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback from a pre-scheduled meeting outside of possible shifts
 	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled meeting with
@@ -114,6 +116,7 @@ Scenario: Feedback from a pre-scheduled meeting outside of possible shifts
 	| Date           | 2012-10-19         |
 	| Feedback error | No available shift |
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback from pre-scheduled personal shift
 	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled personal shift with

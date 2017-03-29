@@ -139,6 +139,7 @@ Scenario: Period feedback of nothing
 	When I view preferences
 	Then I should see a message that my preferences can result in 42 to 70 hours
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Period feedback of preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -191,6 +192,7 @@ Scenario: Period feedback of schedules
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 40 hours
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Period feedback of schedules and preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -220,8 +222,7 @@ Scenario: Period feedback of schedules and preferences
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 34 to 46 hours
 
-
-
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Period feedback of contract time absence
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -266,6 +267,7 @@ Scenario: Period feedback of contract time absence
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 40 hours
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Period feedback of non-contract time absence
 	Given I am an agent
 	And I have a scheduling period of 1 week

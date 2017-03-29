@@ -4,6 +4,7 @@ Feature: Preferences feedback
 	As an agent
 	I want feedback for my preferences
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback for a day with shift category preference
 	Given I am an agent
 	And I am american
@@ -13,7 +14,7 @@ Scenario: Feedback for a day with shift category preference
 	Then I should see the start time boundry 8 to 8
 	And I should see the end time boundry 16 to 16
 	And I should see the contract time boundry 8 to 8
-
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback for a day with start time limitation preference
 	Given I am an agent
 	And I have a shift bag with start times 8 to 13 and end times 12 to 22
@@ -21,6 +22,7 @@ Scenario: Feedback for a day with start time limitation preference
 	When I view preferences for date '2014-05-02'
 	Then I should see the start time boundry 8 to 10
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback for a day with end time limitation preference
 	Given I am an agent
 	And I have a shift bag with start times 8 to 9 and end times 12 to 22
@@ -28,6 +30,7 @@ Scenario: Feedback for a day with end time limitation preference
 	When I view preferences for date '2014-05-02'
 	Then I should see the end time boundry 13 to 19
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback for a day with work time limitation preference
 	Given I am an agent
 	And I have a shift bag with start times 8 to 9 and end times 12 to 22
@@ -35,6 +38,7 @@ Scenario: Feedback for a day with work time limitation preference
 	When I view preferences for date '2014-05-02'
 	Then I should see the contract time boundry 4 to 5
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback for a day with lunch start time limitation preference
 	Given I am an agent
 	And there is an activity named 'Lunch'
@@ -45,6 +49,7 @@ Scenario: Feedback for a day with lunch start time limitation preference
 	And I should see the end time boundry 19 to 19
 	And I should see the contract time boundry 10 to 10 
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback for a day with lunch end time limitation preference
 	Given I am an agent
 	And there is an activity named 'Lunch'
@@ -55,6 +60,7 @@ Scenario: Feedback for a day with lunch end time limitation preference
 	And I should see the end time boundry 18 to 18
 	And I should see the contract time boundry 9 to 9 
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback for a day with lunch length limitation preference
 	Given I am an agent
 	And there is an activity named 'Lunch'
@@ -86,6 +92,7 @@ Scenario: Feedback for a day with work time limitation availability
 	When I view preferences for date '2014-05-02'
 	Then I should see the contract time boundry 5 to 7
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback for a day with availability and preference
 	Given I am an agent
 	And I have a shift bag with two categories with shift start from 8 to 10 and from 12 to 14 and end from 16 to 18 and from 12 to 20
@@ -96,6 +103,7 @@ Scenario: Feedback for a day with availability and preference
 	And I should see the end time boundry 16 to 18
 	And I should see the contract time boundry 6 to 9
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback for a day with a schedule, preference and availability
 	Given I am an agent
 	And I have a shift bag
@@ -109,6 +117,7 @@ Scenario: Feedback for a day with a schedule, preference and availability
 	When I view preferences for date '2014-05-02'
 	Then I should see my shift for '2014-05-02'
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback from conflicting preferences and availability
 	Given I am an agent
 	And I have a shift bag
