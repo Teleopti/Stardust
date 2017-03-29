@@ -74,7 +74,8 @@ namespace Teleopti.Ccc.Web.Core
 			var sites = _siteRepository.LoadAll().Where(site => site.BusinessUnit.Id == currentBusinessUnit.Id).OrderBy(site => site.Description.Name);
 			var siteViewModels = new List<SiteViewModelWithTeams>();
 
-			var logonUserTeamId = (_loggedOnUser.CurrentUser().MyTeam(date) != null && _loggedOnUser.CurrentUser().MyTeam(date).Site.BusinessUnit == currentBusinessUnit ) ? _loggedOnUser.CurrentUser().MyTeam(date).Id : null;
+			var logonUserTeamId = (_loggedOnUser.CurrentUser().MyTeam(date) != null && _loggedOnUser.CurrentUser().MyTeam(date).Site.BusinessUnit == currentBusinessUnit) ? _loggedOnUser.CurrentUser().MyTeam(date).Id : null;
+			var hasPermissonForLogonTeam = _permissionProvider.HasPersonPermission(permission, date, _loggedOnUser.CurrentUser());
 
 			foreach (var site in sites)
 			{
@@ -95,8 +96,8 @@ namespace Teleopti.Ccc.Web.Core
 							Name = team.Description.Name
 						});
 					}
-					else if(logonUserTeamId != null && logonUserTeamId == team.Id 
-						&& _permissionProvider.HasPersonPermission(permission, date, _loggedOnUser.CurrentUser()))
+					else if (logonUserTeamId != null && logonUserTeamId == team.Id
+					       && hasPermissonForLogonTeam)
 					{
 						siteViewModel.Children.Add(new TeamViewModel
 						{
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.Web.Core
 				Id = currentBusinessUnit.Id ?? Guid.Empty,
 				Name = currentBusinessUnit.Name,
 				Children = siteViewModels,
-				LogonUserTeamId = logonUserTeamId
+				LogonUserTeamId = hasPermissonForLogonTeam ? logonUserTeamId : null
 			};
 		}
 	}
