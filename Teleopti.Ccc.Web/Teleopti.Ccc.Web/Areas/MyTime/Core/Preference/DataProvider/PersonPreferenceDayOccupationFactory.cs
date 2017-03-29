@@ -83,9 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 
 			var restriction = preference.Restriction;
-			var scheduleDay = _scheduleProvider.GetScheduleForPeriod(date.ToDateOnlyPeriod()) ?? new IScheduleDay[] { };
-			var minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person, date),
-				scheduleDay.SingleOrDefault());
+			var minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person, date), schedule);
 
 			personPreferenceDayOccupation.HasPreference = true;
 
@@ -109,8 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		{
 			var result = new Dictionary<DateOnly, PersonPreferenceDayOccupation>();
 			var schedules = _scheduleProvider.GetScheduleForPersonsInPeriod(period, new List<IPerson> {person}).ToDictionary(d => d.DateOnlyAsPeriod.DateOnly);
-			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(period).ToArray();
-
+			
 			var preferences = _preferenceProvider.GetPreferencesForPeriod(period).ToList();
 			var timeZone = _userTimezone.TimeZone();
 
@@ -160,10 +157,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				}
 
 				var restriction = preference.Restriction;
-
-				var scheduleDay = scheduleDays.FirstOrDefault(s => s.DateOnlyAsPeriod.DateOnly == date);
-				var minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person, date),
-					scheduleDay);
+				
+				var minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person, date), schedule);
 
 				personPreferenceDayOccupation.HasPreference = true;
 
