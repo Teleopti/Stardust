@@ -87,7 +87,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Ignore("WIP #39351")]
 		public void ShouldPublishRuleEventsFor2Changes()
 		{
 			var personId = Guid.NewGuid();
@@ -127,7 +126,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Ignore("WIP #39351")]
 		public void ShouldPublishRuleEventsFor2ChangesAfterShift()
 		{
 			var personId = Guid.NewGuid();
@@ -165,7 +163,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Ignore("WIP #39351")]
 		public void ShouldPublishRuleEventsFor2ChangesAfterShortActivity()
 		{
 			var personId = Guid.NewGuid();

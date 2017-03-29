@@ -1656,7 +1656,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamInAlarmReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Rta.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\RtaProcessor.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\AgentStateProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilder.cs" />

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				BelongsToDate = info.Schedule.BelongsToDate,
 				PersonId = info.PersonId,
-				Timestamp = info.CurrentTime,
+				Timestamp = info.Time,
 				StateName = info.State.StateGroupName(),
 				StateGroupId = info.State.StateGroupId(),
 				ActivityName = info.Schedule.CurrentActivityName(),

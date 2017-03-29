@@ -93,7 +93,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Ignore("WIP #39351")]
 		public void ShouldPublishWithTimeOfActivityChange()
 		{
 			var person = Guid.NewGuid();
@@ -101,9 +100,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2017-03-13 9:00", "2017-03-13 10:00")
-				.WithMappedRule("state1", phone)
 				.WithMappedRule(null, phone);
-			Now.Is("2017-03-13 9:05");
+			Now.Is("2017-03-13 08:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+			Publisher.Clear();
+			Now.Is("2017-03-13 10:05");
 
 			Target.SaveState(new StateForTest
 			{
@@ -111,12 +112,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "state1"
 			});
 
-			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>().First()
-				.Timestamp.Should().Be("2017-03-13 9:00".Utc());
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()
+				.Select(x => x.Timestamp)
+				.Should().Contain("2017-03-13 09:00".Utc());
 		}
 
 		[Test]
-		[Ignore("WIP #39351")]
 		public void ShouldPublishWithTimeOfShiftEnd()
 		{
 			var person = Guid.NewGuid();
@@ -124,8 +125,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2017-03-13 9:00", "2017-03-13 10:00")
-				.WithMappedRule("loggedoff", phone)
-				.WithMappedRule(null, phone);
+				.WithMappedRule("phone", phone)
+				.WithMappedRule("phone", null)
+				.WithMappedRule("loggedoff", null)
+				;
+			Now.Is("2017-03-13 09:00");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Publisher.Clear();
 			Now.Is("2017-03-13 10:05");
 
 			Target.SaveState(new StateForTest
@@ -134,8 +144,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "loggedoff"
 			});
 
-			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>().First()
-				.Timestamp.Should().Be("2017-03-13 10:00".Utc());
+			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()
+				.Select(x => x.Timestamp)
+				.Should().Contain("2017-03-13 10:00".Utc());
 		}
 
 		[Test]

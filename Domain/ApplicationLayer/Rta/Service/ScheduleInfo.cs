@@ -28,12 +28,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_nextActivity = new Lazy<ScheduledActivity>(nextActivity);
 			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(_currentActivity.Value));
 			_currentShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(_currentActivity.Value));
-			_previousActivity = new Lazy<ScheduledActivity>(() => (from l in _schedule.Value where l.EndDateTime <= context.CurrentTime select l).LastOrDefault());
+			_previousActivity = new Lazy<ScheduledActivity>(() => (from l in _schedule.Value where l.EndDateTime <= context.Time select l).LastOrDefault());
 			_shiftStartTimeForPreviousActivity = new Lazy<DateTime>(() => startTimeOfShift(_previousActivity.Value));
 			_shiftEndTimeForPreviousActivity = new Lazy<DateTime>(() => endTimeOfShift(_previousActivity.Value));
 			_belongsToDate = new Lazy<DateOnly?>(() =>
 			{
-				var activity = CurrentActivity() ?? activityNear(context.CurrentTime);
+				var activity = CurrentActivity() ?? activityNear(context.Time);
 				return activity?.BelongsToDate;
 			});
 			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(timeWindowActivities);
@@ -157,25 +157,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private IEnumerable<ScheduledActivity> timeWindowActivities()
 		{
-			return timeWindowActivities(_schedule.Value, _context.CurrentTime);
+			return timeWindowActivities(_schedule.Value, _context.Time);
 		}
 
 		private ScheduledActivity currentActivity()
 		{
-			return currentActivity(_schedule.Value, _context.CurrentTime);
+			return currentActivity(_schedule.Value, _context.Time);
 		}
 
 		private ScheduledActivity nextActivity()
 		{
-			return nextActivity(_schedule.Value, _currentActivity.Value, _context.CurrentTime);
+			return nextActivity(_schedule.Value, _currentActivity.Value, _context.Time);
 		}
 
 		private ScheduledActivity activityNear(DateTime time)
 		{
 			return (
 				from l in _schedule.Value
-				let ended = l.EndDateTime >= _context.CurrentTime.AddHours(-1) && l.StartDateTime < time
-				let starting = l.StartDateTime <= _context.CurrentTime.AddHours(1) && l.EndDateTime > time
+				let ended = l.EndDateTime >= _context.Time.AddHours(-1) && l.StartDateTime < time
+				let starting = l.StartDateTime <= _context.Time.AddHours(1) && l.EndDateTime > time
 				where ended || starting
 				select l
 				).FirstOrDefault();

@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	
 	public class Context
 	{
-		private readonly Action<Context> _updateState;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly Lazy<IEnumerable<ScheduledActivity>> _schedule;
+		private readonly IEnumerable<ScheduledActivity> _schedule;
 		private readonly InputInfo _input;
 
 		public Context(
@@ -15,14 +17,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			DeadLockVictim deadLockVictim,
 			InputInfo input, 
 			AgentState stored, 
-			Func<IEnumerable<ScheduledActivity>> schedule,
-			Action<Context> updateState, 
+			IEnumerable<ScheduledActivity> schedule,
 			StateMapper stateMapper,
 			ProperAlarm appliedAlarm)
 		{
 			Stored = stored;
 			_input = input;
-			CurrentTime = utcNow;
+			Time = utcNow;
 			DeadLockVictim = deadLockVictim;
 			PersonId = stored.PersonId;
 			BusinessUnitId = stored.BusinessUnitId;
@@ -30,17 +31,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			SiteId = stored.SiteId.GetValueOrDefault();
 			StateMapper = stateMapper;
 
-			_updateState = updateState ?? (c => {});
 			_appliedAlarm = appliedAlarm;
-			_schedule = new Lazy<IEnumerable<ScheduledActivity>>(schedule); ;
+			_schedule = schedule;
 
-			var schedules = new Lazy<IEnumerable<ScheduledActivity>>(() => _schedule.Value);
+			var schedules = new Lazy<IEnumerable<ScheduledActivity>>(() => _schedule);
 			Schedule = new ScheduleInfo(this, schedules);
 			State = new StateRuleInfo(this);
 			Adherence = new AdherenceInfo(this);
 		}
 
-		public DateTime CurrentTime { get; }
+		public DateTime Time { get; }
 
 		public Guid PersonId { get; }
 		public Guid BusinessUnitId { get; }
@@ -79,16 +79,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return true;
 			return false;
 		}
-
-		public void UpdateAgentState()
-		{
-			_updateState(this);
-		}
-
+		
 		// for logging
 		public override string ToString()
 		{
-			return $"Time: {CurrentTime}, UserCode: {_input?.UserCode}, StateCode: {_input?.StateCode}, SourceId: {_input?.SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
+			return $"Time: {Time}, UserCode: {_input?.UserCode}, StateCode: {_input?.StateCode}, SourceId: {_input?.SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
 		public string InputStateCode() => _input?.StateCode;
@@ -96,10 +91,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public DateTime? SnapshotId => _input?.SnapshotId ?? Stored.SnapshotId;
 		public int? SnapshotDataSourceId => _input?.SnapshotDataSourceId ??  Stored.SnapshotDataSourceId;
-		public DateTime? StateStartTime => State.StateChanged() ? CurrentTime : Stored.StateStartTime;
-		public DateTime? RuleStartTime => State.RuleChanged() ? CurrentTime : Stored.RuleStartTime;
+		public DateTime? StateStartTime => State.StateChanged() ? Time : Stored.StateStartTime;
+		public DateTime? RuleStartTime => State.RuleChanged() ? Time : Stored.RuleStartTime;
 		public bool IsAlarm => _appliedAlarm.IsAlarm(State);
-		public DateTime? AlarmStartTime => _appliedAlarm.StartTime(State, Stored, CurrentTime);
+		public DateTime? AlarmStartTime => _appliedAlarm.StartTime(State, Stored, Time);
 
 		public DeadLockVictim DeadLockVictim { get; }
 
@@ -114,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				SnapshotId = SnapshotId,
 				SnapshotDataSourceId = SnapshotDataSourceId,
 
-				ReceivedTime = CurrentTime,
+				ReceivedTime = Time,
 
 				StateGroupId = State.StateGroupId(),
 				StateStartTime = StateStartTime,

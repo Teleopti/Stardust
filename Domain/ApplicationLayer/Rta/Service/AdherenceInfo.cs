@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					else if (_context.Schedule.PreviousActivity() != null)
 						timeOfAdherenceChange = _context.Schedule.PreviousActivity().EndDateTime;
 					else
-						timeOfAdherenceChange = _context.CurrentTime;
+						timeOfAdherenceChange = _context.Time;
 
 					adherenceChanges.Add(new AdherenceChange
 					{
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					adherenceChanges.Add(new AdherenceChange
 					{
 						Adherence = adherence.Value,
-						Time = _context.CurrentTime
+						Time = _context.Time
 					});
 				}
 			}

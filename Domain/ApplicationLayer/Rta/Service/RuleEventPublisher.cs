@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_publisher.Publish(new PersonRuleChangedEvent
 			{
 				PersonId = context.PersonId,
-				Timestamp = context.CurrentTime,
+				Timestamp = context.Time,
 				BelongsToDate = context.Schedule.BelongsToDate,
 
 				StateName = context.State.StateGroupName(),

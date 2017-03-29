@@ -1,0 +1,169 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+{
+	public class ProcessResult
+	{
+		public bool Processed;
+		public AgentState State;
+		public IEnumerable<IEvent> Events;
+	}
+
+	public class ProcessInput
+	{
+		public readonly DateTime Time;
+		public readonly DeadLockVictim DeadLockVictim;
+		public readonly ProperAlarm AppliedAlarm;
+		public readonly IEnumerable<ScheduledActivity> Schedule;
+		public readonly StateMapper StateMapper;
+		public readonly InputInfo Input;
+		public readonly AgentState Stored;
+
+		public ProcessInput(
+			DateTime time,
+			DeadLockVictim deadLockVictim,
+			InputInfo input,
+			AgentState stored,
+			IEnumerable<ScheduledActivity> schedule,
+			StateMapper stateMapper,
+			ProperAlarm appliedAlarm)
+		{
+			Time = time;
+			DeadLockVictim = deadLockVictim;
+			Input = input;
+			Stored = stored;
+			Schedule = schedule;
+			StateMapper = stateMapper;
+			AppliedAlarm = appliedAlarm;
+		}
+
+	}
+
+	public class AgentStateProcessor
+	{
+		private readonly ShiftEventPublisher _shiftEventPublisher;
+		private readonly ActivityEventPublisher _activityEventPublisher;
+		private readonly StateEventPublisher _stateEventPublisher;
+		private readonly RuleEventPublisher _ruleEventPublisher;
+		private readonly AdherenceEventPublisher _adherenceEventPublisher;
+		private readonly IEventPublisherScope _eventPublisherScope;
+		private readonly ICurrentEventPublisher _eventPublisher;
+
+		public AgentStateProcessor(
+			ShiftEventPublisher shiftEventPublisher,
+			ActivityEventPublisher activityEventPublisher,
+			StateEventPublisher stateEventPublisher,
+			RuleEventPublisher ruleEventPublisher,
+			AdherenceEventPublisher adherenceEventPublisher,
+			IEventPublisherScope eventPublisherScope,
+			ICurrentEventPublisher eventPublisher)
+		{
+			_shiftEventPublisher = shiftEventPublisher;
+			_activityEventPublisher = activityEventPublisher;
+			_stateEventPublisher = stateEventPublisher;
+			_ruleEventPublisher = ruleEventPublisher;
+			_adherenceEventPublisher = adherenceEventPublisher;
+			_eventPublisherScope = eventPublisherScope;
+			_eventPublisher = eventPublisher;
+		}
+
+		[LogInfo]
+		public virtual ProcessResult Process(ProcessInput input)
+		{
+			var eventCollector = new EventCollector(_eventPublisher);
+
+			AgentState resultState;
+
+			using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
+			{
+				resultState = processRelevantMoments(input);
+			}
+
+			return new ProcessResult
+			{
+				Processed = resultState != null,
+				Events = eventCollector.Publish(),
+				State = resultState
+			};
+		}
+
+		private AgentState processRelevantMoments(ProcessInput processInput)
+		{
+			var times = new[] {processInput.Time};
+
+			if (processInput.Stored.ReceivedTime != null)
+			{
+				var from = processInput.Stored.ReceivedTime;
+				var to = processInput.Time;
+
+				var startingActivities = processInput.Schedule
+					.Where(x => x.StartDateTime > from && x.StartDateTime <= to)
+					.Select(x => x.StartDateTime);
+
+				var endingActivities = processInput.Schedule
+					.Where(x => x.EndDateTime > from && x.EndDateTime <= to)
+					.Select(x => x.EndDateTime);
+
+				times = times
+					.Concat(startingActivities)
+					.Concat(endingActivities)
+					.Distinct()
+					.OrderBy(x => x)
+					.ToArray();
+			}
+
+			var inState = processInput.Stored;
+			AgentState outState = null;
+			times.ForEach(time =>
+			{
+				var input = time == processInput.Time ? processInput.Input : null;
+				var context = new Context(
+					time,
+					processInput.DeadLockVictim,
+					input,
+					inState,
+					processInput.Schedule,
+					processInput.StateMapper,
+					processInput.AppliedAlarm);
+				if (context.ShouldProcessState())
+				{
+					process(context);
+					outState = context.MakeAgentState();
+				}
+				inState = outState;
+			});
+
+			return outState;
+		}
+
+		private void process(Context context)
+		{
+			_shiftEventPublisher.Publish(context);
+			_activityEventPublisher.Publish(context);
+			_stateEventPublisher.Publish(context);
+			_ruleEventPublisher.Publish(context);
+
+			//// remove!
+			context.Adherence.AdherenceChanges()
+				.ForEach(x => _adherenceEventPublisher.Publish(context, x.Time, x.Adherence));
+			// breaks a few tests, but correctly so?
+			//if (context.Stored.Adherence != context.Adherence.AdherenceForNewStateAndCurrentActivity())
+			//	_adherenceEventPublisher.Publish(context, context.CurrentTime, context.Adherence.AdherenceForNewStateAndCurrentActivity());
+
+			_eventPublisher.Current().Publish(new AgentStateChangedEvent
+			{
+				PersonId = context.PersonId,
+				CurrentTime = context.Time,
+				CurrentActivityName = context.Schedule.CurrentActivityName(),
+				NextActivityName = context.Schedule.NextActivityName(),
+				NextActivityStartTime = context.Schedule.NextActivityStartTime(),
+				ActivitiesInTimeWindow = context.Schedule.ActivitiesInTimeWindow(),
+			});
+		}
+	}
+}

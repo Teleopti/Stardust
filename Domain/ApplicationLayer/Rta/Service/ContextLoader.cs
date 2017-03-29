@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
 	{
-		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, RtaProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater) : base(dataSource, dataSourceMapper, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor, agentStateReadModelUpdater)
+		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater) : base(dataSource, dataSourceMapper, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor, agentStateReadModelUpdater)
 		{
 		}
 
@@ -59,10 +59,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly IConfigReader _config;
 		protected readonly DeadLockRetrier _deadLockRetrier;
 		private readonly IKeyValueStorePersister _keyValues;
-		private readonly RtaProcessor _processor;
+		private readonly AgentStateProcessor _processor;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 
-		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, RtaProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater)
+		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater)
 		{
 			_dataSource = dataSource;
 			_dataSourceMapper = dataSourceMapper;
@@ -223,23 +223,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return agentStates
 					.Invoke()
 					.Select(state =>
+							new ProcessInput(
+								strategy.CurrentTime,
+								strategy.DeadLockVictim,
+								strategy.GetInputFor(state),
+								state,
+								_scheduleCache.Read(state.PersonId),
+								_stateMapper,
+								_appliedAlarm
+							)
+					)
+					.Select(x => _processor.Process(x))
+					.Where(x => x.Processed)
+					.Select(x =>
 					{
-						return new Context(
-							strategy.CurrentTime,
-							strategy.DeadLockVictim,
-							strategy.GetInputFor(state),
-							state,
-							() => _scheduleCache.Read(state.PersonId),
-							c => _agentStatePersister.Update(c.MakeAgentState()), //remove
-							_stateMapper,
-							_appliedAlarm
-						);
-					})
-					.Where(x => x.ShouldProcessState())
-					.Select(x => new AgentStateReadModelUpdaterEventPackage
-					{
-						PersonId = x.PersonId,
-						Events = _processor.Process(x)
+						_agentStatePersister.Update(x.State);
+						return new AgentStateReadModelUpdaterEventPackage
+						{
+							PersonId = x.State.PersonId,
+							Events = x.Events
+						};
 					})
 					.ToArray();
 			});
