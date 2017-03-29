@@ -36,6 +36,39 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 
 		[Test]
+		[Ignore("#42836 - not yet red")]
+		public void ShouldUseCorrectPeriodPooPooSomething()
+		{
+			var firstDay = new DateOnly(2016, 05, 30);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			var team = new Team().WithDescription(new Description("team1"));
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var agent1 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+			var agent2 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+			DayOffTemplateRepository.Add(new DayOffTemplate());
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 2, 2, 2, 2, 2, 2));
+			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(2));
+			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(2));
+			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(4));
+			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.Hierarchy),
+				UseBlock = true,
+				UseTeam = true,
+				TeamSameShiftCategory = true
+			});
+
+			Target.DoScheduling(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
+
+			AssignmentRepository.LoadAll().Count(x => x.MainActivities().Any())
+				.Should().Be.EqualTo(3); //schedule all selected days except one that has DO
+		}
+
+		[Test]
 		public void TeamBlockSchedulingShouldNotUseShiftsMarkedForRestrictionOnlyWhenThereIsNoRestriction()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
