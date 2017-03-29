@@ -157,8 +157,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				}
 
 				var restriction = preference.Restriction;
-				
-				var minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person, date), schedule);
+
+				WorkTimeMinMaxCalculationResult minMax = null;
+				if (schedule != null)
+				{
+					minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person, date), schedule);
+				}
 
 				personPreferenceDayOccupation.HasPreference = true;
 

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				persons, 
 				new ScheduleDictionaryLoadOptions(false, loadNotes),
-				new DateOnlyPeriod(date, date),
+				date.ToDateOnlyPeriod(),
 			    defaultScenario);
 
 			return dictionary.SchedulesForDay(date);
@@ -54,13 +54,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		{
 			var defaultScenario = _scenarioRepository.Current();
 
+			var people = persons.ToArray();
 			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-				persons,
+				people,
 				new ScheduleDictionaryLoadOptions(false,false),
 				period,
 				defaultScenario);
 
-			return period.DayCollection().SelectMany(d => dictionary.SchedulesForDay(d));			
+			return dictionary.SchedulesForPeriod(period,people);
 		}
 
 		private IEnumerable<IScheduleDay> getSchedule(DateOnlyPeriod period,
