@@ -4,6 +4,7 @@ $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Preference day view model");
 
 	test("should read preference", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 
@@ -37,6 +38,8 @@ $(document).ready(function () {
 	});
 
 	test("should read dayoff", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
+
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 
@@ -48,6 +51,7 @@ $(document).ready(function () {
 	});
 
 	test("should read absence", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 
@@ -59,6 +63,7 @@ $(document).ready(function () {
 	});
 
 	test("should read person assignment", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 
@@ -76,6 +81,7 @@ $(document).ready(function () {
 	});
 
 	test("should load preference", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var ajax = function (model, options) {
 				equal(options.data.Date, "2012-06-11");
@@ -117,6 +123,7 @@ $(document).ready(function () {
 	});
 
 	test("should bind extended", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var element = $("#qunit-fixture")
 			.append("<div class='extended-indication' data-bind='visible: Extended' style='display: none'></div>")[0];
@@ -130,6 +137,7 @@ $(document).ready(function () {
 	});
 
 	test("should set preference", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 		var ajax = function (model, options) {
 				var result = jQuery.parseJSON(options.data);
 
@@ -154,6 +162,7 @@ $(document).ready(function () {
 	});
 
 	test("should set extended preference", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var ajax = function (model, options) {
 				var result = jQuery.parseJSON(options.data);
@@ -206,6 +215,7 @@ $(document).ready(function () {
 	});
 
 	test("should delete preference", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var ajax = function (mode, options) {
 				var result = jQuery.parseJSON(options.data);
@@ -231,6 +241,8 @@ $(document).ready(function () {
 	});
 
 	test("should format possible contract time", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
+
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		viewModelDay.PossibleContractTimeMinutesLower(6 * 60 + 30);
 		viewModelDay.PossibleContractTimeMinutesUpper(8 * 60 + 5);
@@ -241,6 +253,7 @@ $(document).ready(function () {
 	});
 
 	test("should load feedback", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var ajax = function (model, options) {
 				options.success({
@@ -267,6 +280,7 @@ $(document).ready(function () {
 	});
 
 	test("should compute DisplayFeedbackError", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 
@@ -287,6 +301,7 @@ $(document).ready(function () {
 	});
 
 	test("should compute DisplayFeedback", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 
@@ -324,6 +339,7 @@ $(document).ready(function () {
 	});
 
 	test("should set must have", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var ajax = function (model, options) {
 				var result = jQuery.parseJSON(options.data);
@@ -342,6 +358,7 @@ $(document).ready(function () {
 
 		equal(viewModelDay.MustHave(), true);
     });
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 	test("should make night rest violation objects", function () {
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
@@ -385,6 +402,7 @@ $(document).ready(function () {
 	});
 
 	test("should turn on the night rest violation switch", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
 
 		var ajax = function (model, options) {
 			options.success({

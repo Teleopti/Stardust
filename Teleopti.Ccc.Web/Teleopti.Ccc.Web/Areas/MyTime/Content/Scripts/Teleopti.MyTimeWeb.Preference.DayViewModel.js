@@ -1,9 +1,7 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/knockout-2.2.1.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
-/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 
@@ -17,7 +15,7 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
+Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData) {
 	var self = this;
 
 	var hasStringValue = function (value) {
@@ -60,6 +58,8 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	self.PersonAssignmentTimeSpan = ko.observable('');
 	self.PersonAssignmentContractTime = ko.observable('');
 	self.ContractTimeMinutes = ko.observable(0);
+	
+	
 
 	self.HasPreferenceCategory = ko.computed(function() {
 		return self.Preference() != undefined && self.Preference() != '';
@@ -148,6 +148,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 			self.MonthString(Teleopti.MyTimeWeb.Common.FormatMonthOnly(self.Date));
 		}
 
+	
 		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
 		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
 	};
@@ -220,35 +221,48 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	this.RestTimeToPreviousDay = ko.observable();
 	this.ExpectedNightRest = ko.observable();
 
-	this.LoadFeedback = function () {
+	this.LoadFeedback = function() {
 		if (!self.Feedback())
 			return null;
-		return ajaxForDate(self,{
-			url: "PreferenceFeedback/Feedback",
-			type: 'GET',
-			data: { Date: self.Date },
-			date: self.Date,
-			success: function (data) {
-				self.FeedbackError(data.FeedbackError);
-				self.PossibleStartTimes(data.PossibleStartTimes);
-				self.PossibleEndTimes(data.PossibleEndTimes);
-				self.PossibleContractTimeMinutesLower(data.PossibleContractTimeMinutesLower);
-				self.PossibleContractTimeMinutesUpper(data.PossibleContractTimeMinutesUpper);
 
-				self.RawDate(data.DateInternal);
-				self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
-				self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
-				self.RestTimeToNextDay(data.RestTimeToNextDayTimeSpan);
-				self.RestTimeToPreviousDay(data.RestTimeToPreviousDayTimeSpan);
-				self.ExpectedNightRest(data.ExpectedNightRestTimeSpan);
-			}
-		});
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
+			assignFeedbackData(feedBackData);
+		} else {
+			return ajaxForDate(self, {
+				url: "PreferenceFeedback/Feedback",
+				type: 'GET',
+				data: {
+					Date: self.Date
+				},
+				date: self.Date,
+				success: function(data) {
+					assignFeedbackData(data);
+				}
+			});
+		}
 	};
 
+	function assignFeedbackData(data) {
+		if(data){
+			self.FeedbackError(data.FeedbackError);
+			self.PossibleStartTimes(data.PossibleStartTimes);
+			self.PossibleEndTimes(data.PossibleEndTimes);
+			self.PossibleContractTimeMinutesLower(data.PossibleContractTimeMinutesLower);
+			self.PossibleContractTimeMinutesUpper(data.PossibleContractTimeMinutesUpper);
+
+			self.RawDate(data.DateInternal);
+			self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
+			self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
+			self.RestTimeToNextDay(data.RestTimeToNextDayTimeSpan);
+			self.RestTimeToPreviousDay(data.RestTimeToPreviousDayTimeSpan);
+			self.ExpectedNightRest(data.ExpectedNightRestTimeSpan);
+		}
+	}
+	
 	this.NightRestViolationSwitch = ko.computed(function () {
 		return self.HasNightRestViolationToPreviousDay() || self.HasNightRestViolationToNextDay();
 	});
-
+	
 	this.MakeNightRestViolationObjs = function () {
 		var nightRestViolationObjs = [];
 		if (self.NightRestViolationSwitch()) {
@@ -342,7 +356,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 			success: self.ReadPreference,
 			complete: function () {
 				deferred.resolve();
-				self.LoadFeedback();
+				self.LoadFeedback();			
 			}
 		});
 		return deferred.promise();

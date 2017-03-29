@@ -333,7 +333,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		});
 	};
 
-	function _initViewModels(loader) {
+	function _initViewModels(loader, callback) {
 		var date = portal ? portal.CurrentFixedDate() : null;
 		if (date == null) {
 			var periodData = $('#Preference-body').data('mytime-periodselection');
@@ -343,6 +343,27 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				date = moment().startOf('day').format('YYYY-MM-DD');
 			}
 		}
+
+		if(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")){
+			loadPreferenceDataByPeriod();
+		}else{
+			assignDataToCell();
+			callback && callback();
+		}
+
+		function loadPreferenceDataByPeriod(){
+			var params = {
+				startDate: date,
+				endDate: moment(date).add(42, 'day').format('YYYY-MM-DD')
+			};
+
+			$.get('PeriodPreferenceFeedback/PeriodFeedback?startDate='+params.startDate+'&endDate='+params.endDate).success(function(res){
+				assignDataToCell(res);
+				callback && callback();
+			});
+		}
+
+		function assignDataToCell(preferenceDataByPeriod){
 		var dayViewModels = {};
 
 		var dayViewModelsInPeriod = {};
@@ -360,7 +381,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		});
 
 		$('li[data-mytime-date]').each(function (index, element) {
-			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate);
+			var dayViewModel;
+			if(preferenceDataByPeriod && preferenceDataByPeriod.length > 0){
+				dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate, preferenceDataByPeriod[index]);
+			}else{
+				dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate, null);
+			}
 
 			dayViewModel.ReadElement(element);
 			dayViewModels[dayViewModel.Date] = dayViewModel;
@@ -372,7 +398,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				weekViewModels[Math.floor(index / 7)].DayViewModels.push(dayViewModel);
 			}
 		});
-
 
 
 		var from = $('li[data-mytime-date]').first().data('mytime-date');
@@ -422,6 +447,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					});
 			}
 		});
+		}
 	}
 
 	function _soon(call) {
@@ -525,9 +551,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 			_setWeeklyWorkTimeWidth();
 			_initAddExtendedButton();
-			_initViewModels(_soon);
-			_initPeriodSelection();
-			_initExtendedPanels();
+			_initViewModels(_soon, function(){
+				_initPeriodSelection();
+				_initExtendedPanels();
+			});
 
 		},
 		InitViewModels: function () {
@@ -545,4 +572,3 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 };
 
 Teleopti.MyTimeWeb.Preference = Teleopti.MyTimeWeb.PreferenceInitializer(new Teleopti.MyTimeWeb.Ajax(), Teleopti.MyTimeWeb.Portal);
-
