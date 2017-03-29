@@ -307,11 +307,25 @@ background-color: #cacaca;
 	border-left: 10px solid $blue-500;
 }
 
-.wfm-tip {
-		text-align: center;
-		border-radius: 6px;
-	}
+.ag-header {
+	position: relative;
+}
 
-	.wfm-tip-header {
-		padding-top: 27px;
-	}
+.ag-header-menu {
+	position: absolute; 
+	top: 8px; 
+	right: 8px; 
+}
+
+.wfm-tip {
+	text-align: center;
+	border-radius: 6px;
+}
+
+.wfm-tip-header {
+	padding-top: 27px;
+}
+
+.ag-chip {
+	pointer-events: none;
+}

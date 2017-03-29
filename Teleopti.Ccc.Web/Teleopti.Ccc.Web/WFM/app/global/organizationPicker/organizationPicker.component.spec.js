@@ -147,7 +147,7 @@
 				expect(selectedTeams.length).toEqual(2);
 			});
 
-		xit("should be the single mode",
+		it("should be the single mode",
 			function() {
 				var scope = $rootScope.$new();
 				var selectedTeams = [];

@@ -22,12 +22,12 @@
 		<div class="wfm-grid">
 			<div class="grid-card planingperiod-container" ng-repeat="agentGroup in vm.agentGroups | orderBy: '+Name'">
 				<div class="list-content" ng-class="{'agent-edit-active': activeEdit}">
-					<div ng-if="!activeEdit" class="sub-header panel" ng-click="vm.goAgentGroup(agentGroup.Id)">
+					<div ng-if="!activeEdit" class="sub-header ag-header" ng-click="vm.goAgentGroup(agentGroup.Id)">
 						{{agentGroup.Name}}
 					</div>
-					<div ng-if="activeEdit" class="sub-header panel" ng-click="vm.goEditAgentGroup(agentGroup.Id)">
+					<div ng-if="activeEdit" class="sub-header ag-header" ng-click="vm.goEditAgentGroup(agentGroup.Id)">
 						{{agentGroup.Name}}
-						<div class="head-actions panel-menu" ng-if="activeEdit">
+						<div class="head-actions ag-header-menu" ng-if="activeEdit">
 							<button class="wfm-btn btn-sm wfm-btn-invis-primary">Edit</button>
 						</div>
 					</div>
