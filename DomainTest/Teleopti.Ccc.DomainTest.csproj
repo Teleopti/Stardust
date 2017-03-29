@@ -768,7 +768,6 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
     <Compile Include="Optimization\MatrixListFactoryTest.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixKeepActivityLockerTest.cs" />
-    <Compile Include="Optimization\MatrixLockers\MatrixNotPermittedLockerTest.cs" />
     <Compile Include="Optimization\MatrixShiftsNotAvailibleLockerTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
@@ -878,8 +877,6 @@
     <Compile Include="Optimization\SchedulingStateHolderAllSkillExtractorTest.cs" />
     <Compile Include="Optimization\ScheduleMatrixPersonalSkillExtractorTest.cs" />
     <Compile Include="Optimization\DailySkillForecastAndScheduledValueCalculatorTest.cs" />
-    <Compile Include="Optimization\MatrixPersonalShiftLockerTest.cs" />
-    <Compile Include="Optimization\MatrixMeetingDayLockerTest.cs" />
     <Compile Include="Optimization\MatrixNoMainShiftLockerTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByAllSkillsExtractorTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest.cs" />
