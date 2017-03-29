@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	    public ISkillDay SkillDay { get; private set; }
 
-        private void CalculateEstimatedServiceLevel()
+        public void CalculateEstimatedServiceLevel()
         {
             var parent = SkillDay;
             

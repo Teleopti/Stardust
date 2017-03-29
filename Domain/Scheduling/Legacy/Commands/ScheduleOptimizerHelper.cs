@@ -369,7 +369,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private void runIntraInterval(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
 			DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter)
 		{
-			var args = new ResourceOptimizerProgressEventArgs(0, 0, Resources.CollectingData);
+			var args = new ResourceOptimizerProgressEventArgs(0, 0, Resources.CollectingData, optimizationPreferences.Advanced.RefreshScreenInterval);
 			_backgroundWorker.ReportProgress(1, args);
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _stateHolder().PersonsInOrganization, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(),
@@ -443,7 +443,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					if (!matrixOriginalStateContainer.IsFullyScheduled())
 					{
 
-						rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
+						rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService, optimizerPreferences);
 					}
 				}
 			}
@@ -463,10 +463,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedDays, _backgroundWorker, optimizerPreferences, dayOffOptimizationPreferenceProvider, new GroupPageLight("_", GroupPageType.SingleAgent),  _allResults, resourceOptimizerPersonOptimized);
 		}
 
-		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService)
+		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
 		{
 			var e = new ResourceOptimizerProgressEventArgs(0, 0,
-				Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name);
+				Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name, optimizationPreferences.Advanced.RefreshScreenInterval);
 			resourceOptimizerPersonOptimized(this, e);
 			if (e.Cancel) return;
 

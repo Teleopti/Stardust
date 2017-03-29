@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     public class ResourceOptimizerProgressEventArgs : CancelEventArgs
     {
         private readonly string _message;
+	    private readonly int _screenRefreshRate;
 	    private readonly Action _cancelAction;
 	    private readonly double _value;
         private readonly double _delta;
@@ -14,11 +15,12 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOptimizerProgressEventArgs"/> class.
         /// </summary>
-        public ResourceOptimizerProgressEventArgs(double value, double delta, string message, Action cancelAction = null)
+        public ResourceOptimizerProgressEventArgs(double value, double delta, string message, int screenRefreshRate, Action cancelAction = null)
         {
             _value = value;
             _delta = delta;
             _message = message;
+	        _screenRefreshRate = screenRefreshRate;
 	        _cancelAction = cancelAction ?? DummyAction;
         }
 
@@ -60,6 +62,11 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    public Action CancelAction
 	    {
 		    get { return _cancelAction; }
+	    }
+
+	    public int ScreenRefreshRate
+	    {
+		    get { return _screenRefreshRate; }
 	    }
     }
 }

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				e.Cancel = true;
 			}
-			var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.IntraIntervalOptimization + ": " + e.Message);
+			var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.IntraIntervalOptimization + ": " + e.Message, e.ScreenRefreshRate);
 			_backgroundWorker.ReportProgress(1, args);
 		}
 	}

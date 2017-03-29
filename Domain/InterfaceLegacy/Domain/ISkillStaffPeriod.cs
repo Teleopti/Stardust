@@ -377,6 +377,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	    Percent EstimatedServiceLevelShrinkage { get; }
 
+		void CalculateEstimatedServiceLevel();
+
 		bool HasIntraIntervalIssue { get; set; }
 		double IntraIntervalValue { get; set; }
 		IList<int> IntraIntervalSamples { get; set; }

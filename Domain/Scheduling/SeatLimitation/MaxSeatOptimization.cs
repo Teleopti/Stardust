@@ -117,7 +117,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeaksBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
-					backgroundWorker.ReportProgress(0, new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingMaxSeats + " " + checkedInfos + "/" + numInfos));
+					backgroundWorker.ReportProgress(0,
+						new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingMaxSeats + " " + checkedInfos + "/" + numInfos,
+							optimizationPreferences.Advanced.RefreshScreenInterval));
 					if (maxPeaksBefore.HasPeaks())
 					{
 						var scheduleCallback = new ScheduleChangeCallbackForMaxSeatOptimization(_scheduleChangesAffectedDates);
@@ -150,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
 					return;
 
-				backgroundWorker.ReportProgress(0, new ResourceOptimizerProgressEventArgs(0, 0, Resources.DoNotBreakMaxSeatDotDotDot));
+				backgroundWorker.ReportProgress(0, new ResourceOptimizerProgressEventArgs(0, 0, Resources.DoNotBreakMaxSeatDotDotDot, optimizationPreferences.Advanced.RefreshScreenInterval));
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
 					if (backgroundWorker.CancellationPending)

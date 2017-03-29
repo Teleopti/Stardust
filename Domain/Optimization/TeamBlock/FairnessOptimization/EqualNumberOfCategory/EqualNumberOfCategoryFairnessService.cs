@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				var message = Resources.FairnessOptimizationOn + " " + Resources.EqualOfEachShiftCategory + ": " +
 							  new Percent((totalBlockCount - blocksToWorkWith.Count) / totalBlockCount) + " " + Resources.Success + " = " + successes;
 
-				var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, message,()=>cancelMe=true));
+				var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, message, optimizationPreferences.Advanced.RefreshScreenInterval, ()=>cancelMe=true));
 				if (progressResult.ShouldCancel) cancelMe = true;
 			}
 

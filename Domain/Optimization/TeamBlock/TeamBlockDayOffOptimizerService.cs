@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
-		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, double periodValue)
+		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, double periodValue, int screenRefreshRate)
 		{
 			if (schedulingProgress.CancellationPending)
 			{
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 			var eventArgs = new ResourceOptimizerProgressEventArgs(0, 0,
 				Resources.OptimizingDaysOff + Resources.Colon + "(" + totalNumberOfTeamInfos.ToString("####") + ")(" +
-				teamInfoCounter.ToString("####") + ") " + currentTeamInfo.Name.DisplayString(20) + " (" + periodValue + ")");
+				teamInfoCounter.ToString("####") + ") " + currentTeamInfo.Name.DisplayString(20) + " (" + periodValue + ")", screenRefreshRate);
 			schedulingProgress.ReportProgress(1, eventArgs);
 			return false;
 		}
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						{
 							cancelMe = true;
 							cancelAction();
-						}, schedulingProgress);
+							}, schedulingProgress, optimizationPreferences.Advanced.RefreshScreenInterval);
 
 					if (success)
 					{
@@ -373,7 +373,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private bool handleResult(ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
 		                            double previousPeriodValue, bool success, ITeamInfo teamInfo,
-									int totalLiveTeamInfos, int currentTeamInfoCounter, Lazy<double> currentPeriodCalculator, bool checkPeriodValue, Action cancelAction, ISchedulingProgress schedulingProgress)
+									int totalLiveTeamInfos, int currentTeamInfoCounter, Lazy<double> currentPeriodCalculator, 
+									bool checkPeriodValue, Action cancelAction, ISchedulingProgress schedulingProgress, int screenRefreshRate)
 		{
 			var currentPeriodValue = previousPeriodValue;
 			if (success && checkPeriodValue)
@@ -385,7 +386,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 			}
-			if (onReportProgress(schedulingProgress, totalLiveTeamInfos, currentTeamInfoCounter, teamInfo, currentPeriodValue))
+			if (onReportProgress(schedulingProgress, totalLiveTeamInfos, currentTeamInfoCounter, teamInfo, currentPeriodValue, screenRefreshRate))
 			{
 				cancelAction();
 			}

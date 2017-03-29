@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 					string who = Resources.MoveTimeOn + "("+ activeTeams.Count + ")" + team.Name;
 					string success = !result ? " " + Resources.wasNotSuccessful : " " + Resources.wasSuccessful;
 
-					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, who + success + " " + newPeriodValue,()=>cancel=true));
+					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, who + success + " " + newPeriodValue, optimizerPreferences.Advanced.RefreshScreenInterval, ()=>cancel=true));
 					if (cancel || progressResult.ShouldCancel) return;
 				}
 

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var e = new ResourceOptimizerProgressEventArgs(0, 0,
 				string.Format(output, callbackInfo.NumberOfOptimizers, _counter++,
 					callbackInfo.Agent.Name.ToString(NameOrderOption.FirstNameLastName),
-					callbackInfo.WasSuccessful ? Resources.wasSuccessful : Resources.wasNotSuccessful));
+					callbackInfo.WasSuccessful ? Resources.wasSuccessful : Resources.wasNotSuccessful), 100);
 
 			_backgroundWorker.ReportProgress(1, e);
 		}

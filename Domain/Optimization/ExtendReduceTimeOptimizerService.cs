@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						string success = !result ? " " + Resources.wasNotSuccessful : " " + Resources.wasSuccessful;
 						string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ")";
 						
-						var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, who + success + values,()=>cancel=true));
+						var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, who + success + values, 100,()=>cancel=true));
 						if (cancel || progressResult.ShouldCancel) return;
 
 						lastPeriodValue = newPeriodValue;

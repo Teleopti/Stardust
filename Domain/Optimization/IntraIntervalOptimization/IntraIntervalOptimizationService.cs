@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						
 						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, optimizationPreferences, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, false);
 
-						var progressResult = onReportProgress(string.Concat("(", intervalIssuesAfter.IssuesOnDay.Count, "/", intervalIssuesAfter.IssuesOnDayAfter.Count, ")"), progressSkill, progressDate, progressPerson,()=>cancel=true);
+						var progressResult = onReportProgress(string.Concat("(", intervalIssuesAfter.IssuesOnDay.Count, "/", intervalIssuesAfter.IssuesOnDayAfter.Count, ")"), progressSkill, progressDate, progressPerson,()=>cancel=true, optimizationPreferences.Advanced.RefreshScreenInterval);
 						if (cancel || progressResult.ShouldCancel) return;
 
 						intervalIssuesBefore = intervalIssuesAfter;
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, optimizationPreferences, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, true);
 
-						var progressResult = onReportProgress(string.Concat("(", intervalIssuesAfter.IssuesOnDay.Count, "/", intervalIssuesAfter.IssuesOnDayAfter.Count, ")"), progressSkill, progressDate, progressPerson, () => cancel = true);
+						var progressResult = onReportProgress(string.Concat("(", intervalIssuesAfter.IssuesOnDay.Count, "/", intervalIssuesAfter.IssuesOnDayAfter.Count, ")"), progressSkill, progressDate, progressPerson, () => cancel = true, optimizationPreferences.Advanced.RefreshScreenInterval);
 						if (progressResult.ShouldCancel) return;
 
 						intervalIssuesBefore = intervalIssuesAfter;
@@ -124,13 +124,13 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			return affects;
 		}
 
-		private CancelSignal onReportProgress(string message, string skill, string date, string person, Action cancelAction)
+		private CancelSignal onReportProgress(string message, string skill, string date, string person, Action cancelAction, int screenRefreshRate)
 		{
 			var handler = ReportProgress;
 			if (handler != null)
 			{
 				var progressMessage = string.Concat(skill, " ", date, " ", person, " ", message);
-				var args = new ResourceOptimizerProgressEventArgs(0, 0, progressMessage,cancelAction);
+				var args = new ResourceOptimizerProgressEventArgs(0, 0, progressMessage, screenRefreshRate, cancelAction);
 
 				handler(this, args);
 
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		{
 			var handler = ReportProgress;
 			if (handler == null) return;
-			var args = new ResourceOptimizerProgressEventArgs(0, 0, message,()=>{});
+			var args = new ResourceOptimizerProgressEventArgs(0, 0, message, 100,()=>{});
 			handler(this, args);
 		}
 	}

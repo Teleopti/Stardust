@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (backgroundWorker != null)
 				{
-					var progress = new ResourceOptimizerProgressEventArgs(0, 0, string.Empty, ()=>cancel=true);
+					var progress = new ResourceOptimizerProgressEventArgs(0, 0, string.Empty, 100, ()=>cancel=true);
 
 					backgroundWorker.ReportProgress(1, progress);
 

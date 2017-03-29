@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
 
-			resourceOptimizerPersonOptimized(this, new ResourceOptimizerProgressEventArgs(0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots));
+			resourceOptimizerPersonOptimized(this, new ResourceOptimizerProgressEventArgs(0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots, optimizationPreferences.Advanced.RefreshScreenInterval));
 
 			// to make sure we are in legal state before we can do day off optimization
 			var displayList = stateHolder.CommonStateHolder.ActiveDayOffs.ToList();
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService);
 			}
 
-			resourceOptimizerPersonOptimized(this, new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots));
+			resourceOptimizerPersonOptimized(this, new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots, optimizationPreferences.Advanced.RefreshScreenInterval));
 			// schedule those are the white spots after back to legal state
 			_scheduleBlankSpots.Execute(matrixContainerList, optimizationPreferences);
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var isFullyScheduled = matrixContainer.IsFullyScheduled();
 				if (!isFullyScheduled)
 				{
-					rollbackMatrixChanges(matrixContainer, rollbackService, resourceOptimizerPersonOptimized);
+					rollbackMatrixChanges(matrixContainer, rollbackService, resourceOptimizerPersonOptimized, optimizationPreferences.Advanced.RefreshScreenInterval);
 					continue;
 				}
 				validMatrixContainerList.Add(matrixContainer);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				if (!matrixContainer.IsFullyScheduled())
 				{
-					rollbackMatrixChanges(matrixContainer, rollbackService, resourceOptimizerPersonOptimized);
+					rollbackMatrixChanges(matrixContainer, rollbackService, resourceOptimizerPersonOptimized, optimizationPreferences.Advanced.RefreshScreenInterval);
 				}
 			}
 		}
@@ -125,9 +125,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				optimizationPreferences, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 
-		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
+		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized, int screenRefreshRate)
 		{
-			var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name);
+			var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name, screenRefreshRate);
 			resourceOptimizerPersonOptimized(this, e);
 			if (e.Cancel) return;
 

@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			    double percentDone = 1 - (remainingBlocksCount/(double) originalBlocksCount);
 			    var progressResult =
 				    onBlockSwapped(new ResourceOptimizerProgressEventArgs(1, 1,
-					    message + " for " + mostSeniorTeamBlock.TeamInfo.Name + " " + new Percent(percentDone) + " done ",cancelAction));
+					    message + " for " + mostSeniorTeamBlock.TeamInfo.Name + " " + new Percent(percentDone) + " done ", optimizationPreferences.Advanced.RefreshScreenInterval, cancelAction));
 			    if (progressResult.ShouldCancel)
 			    {
 				    cancelAction();

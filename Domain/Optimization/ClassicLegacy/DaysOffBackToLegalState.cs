@@ -110,16 +110,16 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 							var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder(), _scheduleDayChangeCallback,
 								new ScheduleTagSetter(
 									KeepOriginalScheduleTag.Instance));
-							rollbackMatrixChanges(originalStateContainer, rollbackService, resourceOptimizerPersonOptimized);
+							rollbackMatrixChanges(originalStateContainer, rollbackService, resourceOptimizerPersonOptimized, optimizationPreferences.Advanced.RefreshScreenInterval);
 						}
 					}
 				}
 			}
 		}
 
-		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
+		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized, int screenRefreshRate)
 		{
-			var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name);
+			var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name, screenRefreshRate);
 			resourceOptimizerPersonOptimized(this, e);
 			if (e.Cancel) return;
 

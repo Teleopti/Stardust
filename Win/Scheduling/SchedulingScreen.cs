@@ -3346,7 +3346,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					progress.CancelAction();
 				}
 
-				if (_scheduleCounter >= _optimizerOriginalPreferences.SchedulingOptions.RefreshRate)
+				if (_scheduleCounter >= progress.ScreenRefreshRate)
 				{
 					_grid.Invalidate();
 					refreshSummarySkillIfActive();
@@ -3680,6 +3680,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (tag.Id != _currentSchedulingScreenSettings.DefaultScheduleTag) continue;
 				_defaultScheduleTag = tag;
 				break;
+			}
+
+			foreach (var skillDay in SchedulerState.SchedulingResultState.AllSkillDays())
+			{
+				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+				{
+					skillStaffPeriod.CalculateEstimatedServiceLevel();
+				}
 			}
 
 			var agentsDictionary = _schedulerState.FilteredCombinedAgentsDictionary;

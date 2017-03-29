@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						string who = optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
 						string success = result ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;						
 						
-						var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, progress + values + who + success, () => cancel = true));
+						var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, progress + values + who + success, 100, () => cancel = true));
 						if (cancel || progressResult.ShouldCancel) return;					
 					}
 

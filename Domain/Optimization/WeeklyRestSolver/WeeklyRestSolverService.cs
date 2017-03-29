@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 							{
 								var progressResult = onDayScheduled(new ResourceOptimizerProgressEventArgs(0, 0,
 									string.Format(UserTexts.Resources.ResolvingWeeklyRestFor, personWeek.Person.Name.FirstName,
-										personWeek.Person.Name.LastName),()=>cancel=true));
+										personWeek.Person.Name.LastName), optimizationPreferences.Advanced.RefreshScreenInterval, ()=>cancel=true));
 								if (cancel || progressResult.ShouldCancel) return;
 
 								var highProbablePosition = _identifyDayOffWithHighestSpan.GetHighProbableDayOffPosition(possiblePositionsToFix);

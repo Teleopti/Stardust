@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	            string message = !successfullSwap ? "Day off fairness Step2: Swap not successful" : "Day off fairness Step2: Swap successful";
 
 	            double percentDone = 1 - (remainingBlocksCount / (double)originalBlocksCount);
-                var progressResult = onBlockSwapped(new ResourceOptimizerProgressEventArgs(1, 1, message + " for " + mostSeniorTeamBlock.TeamInfo.Name + " " + new Percent(percentDone) + " done ",currentCancelAction));
+                var progressResult = onBlockSwapped(new ResourceOptimizerProgressEventArgs(1, 1, message + " for " + mostSeniorTeamBlock.TeamInfo.Name + " " + new Percent(percentDone) + " done ", optimizationPreferences.Advanced.RefreshScreenInterval, currentCancelAction));
 	            if (progressResult.ShouldCancel)
 	            {
 					currentCancelAction();
