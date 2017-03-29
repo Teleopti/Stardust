@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonMocks(false);
 				Expect.Call(_ruleSet.IsValidDate(DateOnly.MinValue)).Return(false);
-				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
+				Expect.Call(() => _matrix.LockDay(DateOnly.MinValue));
 			}
 
 			using (_mocks.Playback())

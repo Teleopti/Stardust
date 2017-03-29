@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_matrix.EffectivePeriodDays).Return(list);
 
 				Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2013, 6, 13));
-				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2013, 6, 13, 2013, 6, 13)));
+				Expect.Call(() => _matrix.LockDay(new DateOnly(2013, 6, 13)));
 
 				Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2013, 6, 14));
 
 				Expect.Call(_scheduleDayPro3.Day).Return(new DateOnly(2013, 6, 15));
-				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2013, 6, 15, 2013, 6, 15)));
+				Expect.Call(() => _matrix.LockDay(new DateOnly(2013, 6, 15)));
 			}
 
 			using (_mocks.Playback())

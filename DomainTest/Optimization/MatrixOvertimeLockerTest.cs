@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(personAssignment.OvertimeActivities()).Return(new[]{new OvertimeShiftLayer(new Activity("d"), new DateTimePeriod(2010,1,1,2010,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>())}).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
-                Expect.Call(() => _scheduleMatrixPro.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly))).Repeat.AtLeastOnce();
+                Expect.Call(() => _scheduleMatrixPro.LockDay(dateOnly)).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDayPro.Day).Return(dateOnly).Repeat.AtLeastOnce();
             }
 

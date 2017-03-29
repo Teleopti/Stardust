@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IList<DateOnly> daysToLock = locker.Execute(matrix, schedulingOptions);
 			foreach (var dateOnly in daysToLock)
 			{
-				matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+				matrix.LockDay(dateOnly);
 			}
 		}
 

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 						var activity = visualLayer.Payload as IActivity;
 						if (activity == null || !_keepActivities.Contains(activity)) continue;
 						var dateOnly = scheduleDayPro.Day;
-						scheduleMatrixPro.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+						scheduleMatrixPro.LockDay(dateOnly);
 						break;
 					}
 				}

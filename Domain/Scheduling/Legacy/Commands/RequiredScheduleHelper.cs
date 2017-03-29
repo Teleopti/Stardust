@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					foreach (var day in scheduleMatrixOriginalStateContainer.ScheduleMatrix.EffectivePeriodDays)
 					{
 						if (day.DaySchedulePart().IsScheduled())
-							scheduleMatrixOriginalStateContainer.ScheduleMatrix.LockPeriod(new DateOnlyPeriod(day.Day, day.Day));
+							scheduleMatrixOriginalStateContainer.ScheduleMatrix.LockDay(day.Day);
 					}
 				}
 

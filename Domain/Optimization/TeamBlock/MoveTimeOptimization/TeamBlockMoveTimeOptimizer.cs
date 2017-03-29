@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		{
 			foreach (var matrix in team.MatrixesForGroupAndDate(day))
 			{
-				matrix.LockPeriod(new DateOnlyPeriod(day, day));
+				matrix.LockDay(day);
 			}
 
 		}

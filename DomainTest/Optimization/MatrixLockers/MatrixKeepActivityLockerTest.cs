@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 				Expect.Call(_scheduleDayPro.Day).Return(_dateOnly);
-				Expect.Call(() => _scheduleMatrixPro.LockPeriod(new DateOnlyPeriod(_dateOnly, _dateOnly)));
+				Expect.Call(() => _scheduleMatrixPro.LockDay(_dateOnly));
 			}
 
 			using (_mock.Playback())

@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					writeToLogValueNotBetter();
 					foreach (var movedDay in movedDays)
 					{
-						currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(movedDay, movedDay));
+						currentScheduleMatrix.LockDay(movedDay);
 					}
 					return true;
 				}	
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 writeToLogDayOffBackToLegalStateRemovedDays(movedDays);
 				foreach (var day in movedDays)
 				{
-					currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(day, day));
+					currentScheduleMatrix.LockDay(day);
 				}
 				return true;
             }
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
 				var lastDay = movedDates.Last().DateChanged;
-				currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(lastDay, lastDay));
+				currentScheduleMatrix.LockDay(lastDay);
 				return true;
 			}
 
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				foreach (var movedDate in movedDates)
 				{
 					var previousScheduleDay = movedDate.PrevoiousSchedule = (IScheduleDay)currentScheduleMatrix.GetScheduleDayByKey(movedDate.DateChanged).DaySchedulePart().Clone();
-					if (previousScheduleDay.SignificantPart() != SchedulePartView.DayOff) currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(movedDate.DateChanged, movedDate.DateChanged));		
+					if (previousScheduleDay.SignificantPart() != SchedulePartView.DayOff) currentScheduleMatrix.LockDay(movedDate.DateChanged);
 				}	
 
 				return true;

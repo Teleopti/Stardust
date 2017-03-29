@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				var locks = gridlockManager.Gridlocks(currentPerson, day);
 				if (locks != null && locks.Count != 0)
-					matrix.LockPeriod(new DateOnlyPeriod(day, day));
+					matrix.LockDay(day);
 			}
 		}
     }

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 				
 				//Assert
 				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2000, 1, 2)).Repeat.Twice();
-				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(new DateOnly(2000, 1, 2), new DateOnly(2000, 1, 2))));
+				Expect.Call(() => _matrix.LockDay(new DateOnly(2000, 1, 2)));
 			}
 
 			using (_mocks.Playback())

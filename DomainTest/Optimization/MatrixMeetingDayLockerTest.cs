@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleDayPro2.Day)
                     .Return(new DateOnly(lockDate))
                     .Repeat.Times(2);
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(new DateOnly(lockDate), new DateOnly(lockDate)));
+                _scheduleMatrix.LockDay(new DateOnly(lockDate));
             }
             using (_mockRepository.Playback())
             {

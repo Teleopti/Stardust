@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private void lockDay(DateOnly day)
         {
-            _matrix.LockPeriod(new DateOnlyPeriod(day, day));
+            _matrix.LockDay(day);
         }
 
     }

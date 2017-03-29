@@ -579,7 +579,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				foreach (var scheduleMatrixPro in teamInfo.MatrixesForGroupAndDate(dateOnly))
 				{
-					scheduleMatrixPro.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+					scheduleMatrixPro.LockDay(dateOnly);
 				}
 			}
 		}

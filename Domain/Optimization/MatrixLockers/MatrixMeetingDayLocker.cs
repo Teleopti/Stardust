@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
                 {
                         if (scheduleDayPro.DaySchedulePart().PersonMeetingCollection().Count > 0)
                         {
-                            scheduleMatrix.LockPeriod(new DateOnlyPeriod(scheduleDayPro.Day, scheduleDayPro.Day));
+                            scheduleMatrix.LockDay(scheduleDayPro.Day);
                         }
                 }    
             }

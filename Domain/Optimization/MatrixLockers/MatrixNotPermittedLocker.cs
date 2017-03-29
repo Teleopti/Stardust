@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 							new PersistableScheduleDataForAuthorization(persistableScheduleData);
 						if (!_authorization.Current().IsPermitted(forAuthorization.FunctionPath, forAuthorization.DateOnly, forAuthorization.Person))
 						{
-							scheduleMatrixPro.LockPeriod(new DateOnlyPeriod(scheduleDayPro.Day, scheduleDayPro.Day));
+							scheduleMatrixPro.LockDay(scheduleDayPro.Day);
 							break;
 						}
 					}

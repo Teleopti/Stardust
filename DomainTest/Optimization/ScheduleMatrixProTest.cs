@@ -138,15 +138,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			DateOnlyPeriod partlyOutsidePeriod = new DateOnlyPeriod(2010, 1, 9, 2010, 1, 15);
 			Assert.Throws<ArgumentOutOfRangeException>(() => _target.UnlockPeriod(partlyOutsidePeriod));
 		}
-
-		[Test]
-		public void VerifyPeriodCouldBeLocked()
-		{
-			_target.UnlockPeriod(_period);
-			Assert.AreEqual(7, _target.UnlockedDays.Length);
-			DateOnlyPeriod twoDayPeriod = new DateOnlyPeriod(2010, 1, 10, 2010, 1, 11);
-			_target.LockPeriod(twoDayPeriod);
-			Assert.AreEqual(5, _target.UnlockedDays.Length);
-		}
     }
 }

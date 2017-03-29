@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 
-				scheduleMatrixPro.LockPeriod(removedScheduleDayPro.Day.ToDateOnlyPeriod());
+				scheduleMatrixPro.LockDay(removedScheduleDayPro.Day);
 				lockedDays.Add(removedScheduleDayPro.Day);
 
 				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder, rollbackService,

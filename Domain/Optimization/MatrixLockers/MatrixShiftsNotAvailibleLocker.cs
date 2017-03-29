@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 					}
 
 					if (!foundOne)
-						matrix.LockPeriod(dateOnly.ToDateOnlyPeriod());
+						matrix.LockDay(dateOnly);
 				}
 			}
 		}

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 
                     if (personAssignment != null && personAssignment.OvertimeActivities().Any())
                     {
-                        matrixPro.LockPeriod(new DateOnlyPeriod(scheduleDayPro.Day, scheduleDayPro.Day));
+                        matrixPro.LockDay(scheduleDayPro.Day);
                     }
                 }    
             }    

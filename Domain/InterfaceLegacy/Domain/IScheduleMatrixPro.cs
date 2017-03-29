@@ -83,11 +83,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="period">The period.</param>
 		void UnlockPeriod(DateOnlyPeriod period);
 
-        /// <summary>
-        /// Locks the given dateonly period.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        void LockPeriod(DateOnlyPeriod period);
+        void LockDay(DateOnly date);
 
         /// <summary>
         /// Gets the schedule day by key.

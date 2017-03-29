@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
                 Expect.Call(_scheduleDay2.PersonAbsenceCollection())
                     .Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod());
+                _scheduleMatrix.LockDay(new DateOnly());
             }
             using(_mockRepository.Playback())
             {
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
                 Expect.Call(_scheduleDay2.PersonAbsenceCollection())
                     .Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>{ personAbsence }));
-                _scheduleMatrix.LockPeriod(new DateOnlyPeriod());
+                _scheduleMatrix.LockDay(new DateOnly());
             }
             using (_mockRepository.Playback())
             {
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
 				Expect.Call(_scheduleDay2.PersonAbsenceCollection())
 					.Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { personAbsence }));
-				_scheduleMatrix.LockPeriod(new DateOnlyPeriod(2010, 1, 2, 2010, 1, 2));
+				_scheduleMatrix.LockDay(new DateOnly(2010, 1, 2));
 			}
 			using (_mockRepository.Playback())
 			{

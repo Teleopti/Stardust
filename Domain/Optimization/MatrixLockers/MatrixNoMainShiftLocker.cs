@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
                 	DateOnly dateOnly = day.Day;
 					if (!scheduleDay.IsScheduled())
                     {
-						scheduleMatrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+						scheduleMatrix.LockDay(dateOnly);
                     }
 					if (scheduleDay.PersonAbsenceCollection().Count > 0)
                     {
-						scheduleMatrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+						scheduleMatrix.LockDay(dateOnly);
                     }
                 }
             }

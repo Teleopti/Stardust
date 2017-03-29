@@ -76,15 +76,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
-        public void LockPeriod(DateOnlyPeriod period)
-        {
-            foreach (var dateOnly in period.DayCollection())
-            {
-	            _unLockedDays.Remove(dateOnly);
-            }
-        }
+		public void LockDay(DateOnly date)
+		{
+			_unLockedDays.Remove(date);
+		}
 
-        public IScheduleDayPro GetScheduleDayByKey(DateOnly dateOnly)
+		public IScheduleDayPro GetScheduleDayByKey(DateOnly dateOnly)
         {
             IScheduleDayPro ret;
             _outerWeeksPeriodDays.TryGetValue(dateOnly, out ret);

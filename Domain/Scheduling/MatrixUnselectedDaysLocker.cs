@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				{
 					var dateOnly = effectivePeriodDay.Day;
 					if (!_selectedPeriod.Contains(dateOnly))
-						matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+						matrix.LockDay(dateOnly);
 				}
 			}
 

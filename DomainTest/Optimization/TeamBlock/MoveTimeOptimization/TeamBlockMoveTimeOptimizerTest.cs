@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 					commonMocks(_today.AddDays(1), _scheduleDayPro2, _scheduleDay2, _projectionService2, _visualLayerCollection2, new TimeSpan(7));
 
 					Expect.Call(_teamInfo.MatrixesForGroupAndDate(new DateOnly(2014,5,15))).Return(_matrixList);
-					Expect.Call(() => _matrix1.LockPeriod(new DateOnlyPeriod(_today.AddDays(1), _today.AddDays(1))));
+					Expect.Call(() => _matrix1.LockDay(_today.AddDays(1)));
 				}
 				using (_mock.Playback())
 				{

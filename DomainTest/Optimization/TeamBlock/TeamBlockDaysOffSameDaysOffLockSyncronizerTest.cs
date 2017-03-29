@@ -65,9 +65,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var teamInfo = teamInfoFactory.CreateTeamInfo(new[] { agent1, agent2 }, agent1, selectedPeriod, allPersonMatrixList);
 			allTeamInfoListOnStartDate.Add(teamInfo);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockPeriod(selectedPeriod);
-			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).LockDay(dateOnly);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent2, dateOnly).UnlockPeriod(selectedPeriod);
-			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent2, dateOnly).LockPeriod(new DateOnlyPeriod(dateOnly.AddDays(2), dateOnly.AddDays(2)));
+			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent2, dateOnly).LockDay(dateOnly.AddDays(2));
 
 			Target.SyncLocks(selectedPeriod, optimizationPreferences, allTeamInfoListOnStartDate);
 
@@ -117,9 +117,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var teamInfo = teamInfoFactory.CreateTeamInfo(new[] { agent1, agent2 }, agent1, selectedPeriod, allPersonMatrixList);
 			allTeamInfoListOnStartDate.Add(teamInfo);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockPeriod(selectedPeriod);
-			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).LockDay(dateOnly);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent2, dateOnly).UnlockPeriod(selectedPeriod);
-			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent2, dateOnly).LockPeriod(new DateOnlyPeriod(dateOnly.AddDays(2), dateOnly.AddDays(2)));
+			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent2, dateOnly).LockDay(dateOnly.AddDays(2));
 
 			Target.SyncLocks(selectedPeriod, optimizationPreferences, allTeamInfoListOnStartDate);
 

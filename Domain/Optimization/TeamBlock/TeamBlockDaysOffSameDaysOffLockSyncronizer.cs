@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							{
 								foreach (var otherMatrixPro in teamInfo.MatrixesForGroupAndDate(dateOnly))
 								{
-									otherMatrixPro.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+									otherMatrixPro.LockDay(dateOnly);
 								}
 							}
 						}
