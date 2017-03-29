@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		private readonly IWorkTimeMinMaxCalculator _workTimeMinMaxCalculator;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScheduleProvider _scheduleProvider;
-		private readonly IPreferenceNightRestChecker _perferenceNightChecker;
+		private readonly IPreferenceNightRestChecker _perferenceNightRestChecker;
 		private readonly IPersonRuleSetBagProvider _ruleSetBagProvider;
 
 		public PreferenceFeedbackProvider(IWorkTimeMinMaxCalculator workTimeMinMaxCalculator, ILoggedOnUser loggedOnUser,
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			_workTimeMinMaxCalculator = workTimeMinMaxCalculator;
 			_loggedOnUser = loggedOnUser;
 			_scheduleProvider = scheduleProvider;
-			_perferenceNightChecker = perferenceNightChecker;
+			_perferenceNightRestChecker = perferenceNightChecker;
 			_ruleSetBagProvider = ruleSetBagProvider;
 		}
 
@@ -39,7 +40,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public PreferenceNightRestCheckResult CheckNightRestViolation(DateOnly date)
 		{
-			return _perferenceNightChecker.CheckNightRestViolation(_loggedOnUser.CurrentUser(), date);
+			return _perferenceNightRestChecker.CheckNightRestViolation(_loggedOnUser.CurrentUser(), date);
+		}
+
+		public IDictionary<DateOnly, PreferenceNightRestCheckResult> CheckNightRestViolation(DateOnlyPeriod period)
+		{
+			return _perferenceNightRestChecker.CheckNightRestViolation(_loggedOnUser.CurrentUser(), period);
 		}
 	}
 }
