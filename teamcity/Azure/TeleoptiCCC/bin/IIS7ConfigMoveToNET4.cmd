@@ -4,7 +4,6 @@ SET FILE=%~n0
 ECHO setting security for PowerShell on Azure instance >> %FILE%.log
 powershell set-executionpolicy unrestricted  >> %FILE%.log
 Call :ChangeAppPoolVersion Web v4.0
-Call :ChangeAppPoolVersion Broker v4.0
 Call :ChangeAppPoolVersion SDK v4.0
 Call :ChangeAppPoolVersion Analytics v4.0
 Call :ChangeAppPoolVersion RTA v4.0

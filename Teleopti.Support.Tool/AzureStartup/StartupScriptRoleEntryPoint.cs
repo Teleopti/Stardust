@@ -1,22 +1,31 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using log4net;
+using log4net.Config;
 using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace Teleopti.Support.Tool.AzureStartup
 {
 	public class StartupScriptRoleEntryPoint : RoleEntryPoint
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(StartupScriptRoleEntryPoint));
+
 		public override bool OnStart()
 		{
+			XmlConfigurator.Configure();
+
+			logger.Info($"Running OnStart from {AppDomain.CurrentDomain.BaseDirectory}");
 			var startupScripts = Environment.GetEnvironmentVariable("RoleStartupScripts");
 			if (!string.IsNullOrEmpty(startupScripts))
 			{
 				var scriptList = startupScripts.Split(';');
 				foreach (var script in scriptList)
 				{
+					logger.Info($"Running script {script}");
 					bool waitForExit = false;
 
 					string scriptCommandLine = script;
@@ -32,13 +41,21 @@ namespace Teleopti.Support.Tool.AzureStartup
 					{
 						FileName = args[0],
 						Arguments = string.Join(" ", args.Skip(1).ToArray()),
-						WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+						WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "bin"),
 						UseShellExecute = true,
 					};
-					var process = Process.Start(processStartInfo);
-					if (waitForExit)
+					try
 					{
-						process.WaitForExit();
+						var process = Process.Start(processStartInfo);
+						if (waitForExit)
+						{
+							process.WaitForExit();
+						}
+					}
+					catch (Exception e)
+					{
+						logger.Error($"Failed while running {script}", e);
+						throw;
 					}
 				}
 			}
