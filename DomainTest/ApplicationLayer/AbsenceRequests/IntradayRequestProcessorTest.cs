@@ -1832,6 +1832,58 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 		}
 
+		[Test][Ignore("Buggelibugg43729")]
+		public void ShouldBeDeniedWhenMidnightShiftAndUnderStaffedAndRequestIsTomorrow()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 9);
+			var requestPeriod = new DateTimePeriod(2016, 12, 2, 1, 2016, 12, 2, 2);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+																			   {
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = requestPeriod.StartDateTime,
+																					   EndDateTime = requestPeriod.EndDateTime,
+																					   Resource = 5,
+																					   SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																				   }
+																			   });
+
+			ScheduleForecastSkillReadModelRepository.Persist(new[]
+															 {
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = requestPeriod.StartDateTime,
+																	 EndDateTime = requestPeriod.EndDateTime,
+																	 Forecast = 10,
+																	 ForecastWithShrinkage = 10,
+																	 SkillId = skill.Id.GetValueOrDefault()
+																 }
+															 }, DateTime.Now);
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
+		}
+
+
 		[Test]
 		public void ShouldBeApprovedWhenNotScheduledToday()
 		{

@@ -62,6 +62,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="SetUpCascadingShifts.cs" />
+    <Compile Include="SingleSkilledGoldAgentSameDayTest.cs" />
     <Compile Include="SingleSkilledGoldAgentBulkTest.cs" />
     <Compile Include="SingleSkilledBronzeAgentBulkTest.cs" />
     <Compile Include="SingleSkilledBronzeAgentSameDayTest.cs" />
