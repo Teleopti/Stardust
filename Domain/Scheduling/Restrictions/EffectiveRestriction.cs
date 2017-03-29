@@ -20,8 +20,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         private readonly IShiftCategory _invalidCategory;
         private readonly IAbsence _invalidAbsence;
         private readonly IList<IActivityRestriction> _activityRestrictionCollection;
+	    private static readonly DateOnly ExitDate = new DateOnly(2050, 1, 1);
 
-        public EffectiveRestriction(
+	    public EffectiveRestriction(
             StartTimeLimitation startTimeLimitation,
             EndTimeLimitation endTimeLimitation,
             WorkTimeLimitation workTimeLimitation,
@@ -145,9 +146,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 return false;
             }
 
-            var dateOnly = new DateOnly(WorkShift.BaseDate);
             TimeZoneInfo tzInfo = TimeZoneInfo.Utc;
-            if (!VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, tzInfo, workShiftProjection.Layers))
+            if (!VisualLayerCollectionSatisfiesActivityRestriction(WorkShift.BaseDateOnly, tzInfo, workShiftProjection.Layers))
             {
                 return false;
             }
@@ -287,9 +287,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 return otherTime;
 
             if (min)
-                return TimeSpan.FromTicks(Math.Min(otherTime.Value.Ticks, thisTime.Value.Ticks));
+                return otherTime < thisTime ? otherTime : thisTime;
 
-            return TimeSpan.FromTicks(Math.Max(otherTime.Value.Ticks, thisTime.Value.Ticks));
+            return otherTime > thisTime ? otherTime : thisTime;
         }
 
         private IAbsence resolveAbsence(IAbsence other)
@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layers)
         {
-			if (scheduleDayDateOnly == new DateOnly(2050, 1, 1))
+			if (scheduleDayDateOnly == ExitDate)
 				return false;
 
             if (!layers.Any())
@@ -380,9 +380,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         {
             IActivityRestriction actRestriction = activityRestriction;
             
-			var layers = from l in layerCollection
-			             where l.ActivityId == activityRestriction.Activity.Id
-			             select l;
+			var layers = layerCollection.ToLookup(l => l.ActivityId)[activityRestriction.Activity.Id.GetValueOrDefault()];
 
 			foreach (var layer in layers)
             {
@@ -401,10 +399,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				if (actRestriction.EndTimeLimitation.EndTime.HasValue && period.EndTime > actRestriction.EndTimeLimitation.EndTime.Value)
 					continue;
                 //too short
-                if (actRestriction.WorkTimeLimitation.StartTime.HasValue && period.SpanningTime() < actRestriction.WorkTimeLimitation.StartTime.Value)
+	            var spanningTime = period.SpanningTime();
+	            if (actRestriction.WorkTimeLimitation.StartTime.HasValue && spanningTime < actRestriction.WorkTimeLimitation.StartTime.Value)
                     continue;
                 // too long
-				if (actRestriction.WorkTimeLimitation.EndTime.HasValue && period.SpanningTime() > actRestriction.WorkTimeLimitation.EndTime.Value)
+				if (actRestriction.WorkTimeLimitation.EndTime.HasValue && spanningTime > actRestriction.WorkTimeLimitation.EndTime.Value)
                     continue;
 
                 return true;

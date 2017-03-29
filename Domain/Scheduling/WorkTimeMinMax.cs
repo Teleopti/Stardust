@@ -3,11 +3,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-
     public class WorkTimeMinMax : IWorkTimeMinMax
     {
- 
-        public StartTimeLimitation StartTimeLimitation { get; set; }
+		public StartTimeLimitation StartTimeLimitation { get; set; }
         public EndTimeLimitation EndTimeLimitation { get; set; }
         public WorkTimeLimitation WorkTimeLimitation { get; set; }
 
@@ -29,36 +27,24 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         private static TimeSpan? minTimeSpan(TimeSpan? t1, TimeSpan? t2)
         {
-            TimeSpan? ret = checkInitial(t1, t2);
-            if (ret != TimeSpan.MinValue)
-                return ret;
+	        if (!t1.HasValue && !t2.HasValue) return null;
 
-            return TimeSpan.FromTicks(Math.Min(t1.Value.Ticks, t2.Value.Ticks));
+	        var span1 = t1.GetValueOrDefault(TimeSpan.MaxValue);
+	        var span2 = t2.GetValueOrDefault(TimeSpan.MaxValue);
+
+	        return span1 < span2 ? span1 : span2;
         }
 
         private static TimeSpan? maxTimeSpan(TimeSpan? t1, TimeSpan? t2)
         {
-            TimeSpan? ret = checkInitial(t1, t2);
-            if (ret != TimeSpan.MinValue)
-                return ret;
+			if (!t1.HasValue && !t2.HasValue) return null;
 
-            return TimeSpan.FromTicks(Math.Max(t1.Value.Ticks, t2.Value.Ticks));
-        }
+			var span1 = t1.GetValueOrDefault(TimeSpan.MinValue);
+			var span2 = t2.GetValueOrDefault(TimeSpan.MinValue);
 
-        private static TimeSpan? checkInitial(TimeSpan? t1, TimeSpan? t2)
-        {
-            if (!t1.HasValue && !t2.HasValue)
-                return null;
-
-            if (t1.HasValue && !t2.HasValue)
-                return t1;
-
-            if (!t1.HasValue)
-                return t2;
-
-            return TimeSpan.MinValue;
-        }
-
+			return span1 > span2 ? span1 : span2;
+		}
+		
     	public bool Equals(WorkTimeMinMax other)
     	{
     		if (ReferenceEquals(null, other)) return false;

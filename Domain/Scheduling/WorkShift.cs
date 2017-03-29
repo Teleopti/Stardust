@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 	    public static DateTime BaseDate { get; } = DateTime.SpecifyKind(new DateTime(1800, 1, 1), DateTimeKind.Utc);
+		public static DateOnly BaseDateOnly { get; } = new DateOnly(BaseDate);
 
 		public IShiftCategory ShiftCategory => _shiftCategory;
 

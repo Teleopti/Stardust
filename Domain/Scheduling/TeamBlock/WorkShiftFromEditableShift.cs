@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public IWorkShift Convert(IEditableShift mainShift, DateOnly currentDate, TimeZoneInfo timeZoneInfo)
 		{
 			var workShift = new WorkShift(mainShift.ShiftCategory);
-			var baseDate = new DateOnly(WorkShift.BaseDate);
+			var baseDate = WorkShift.BaseDateOnly;
 			var baseDateAdjustment = TimeSpan.MaxValue;
 
 			foreach (var editableShiftLayer in mainShift.LayerCollection)
