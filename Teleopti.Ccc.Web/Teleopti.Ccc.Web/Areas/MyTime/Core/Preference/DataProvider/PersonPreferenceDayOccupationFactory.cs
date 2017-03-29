@@ -43,10 +43,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			var schedule = _scheduleProvider.GetScheduleForPersons(date, new List<IPerson> {person}).FirstOrDefault();
 
 			var personPreferenceDayOccupation = new PersonPreferenceDayOccupation();
-			if (schedule?.PersonAssignment() != null)
+			var personAssignment = schedule?.PersonAssignment();
+			if (personAssignment != null)
 			{
-				var personAssignment = schedule.PersonAssignment();
-
 				personPreferenceDayOccupation.HasDayOff = personAssignment.DayOff() != null;
 
 				if (!personPreferenceDayOccupation.HasDayOff && personAssignment.MainActivities().Any())
@@ -83,7 +82,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 
 			var restriction = preference.Restriction;
-			var minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person, date), schedule);
+			WorkTimeMinMaxCalculationResult minMax = null;
+			if (schedule != null)
+			{
+				minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person, date), schedule);
+			}
 
 			personPreferenceDayOccupation.HasPreference = true;
 
