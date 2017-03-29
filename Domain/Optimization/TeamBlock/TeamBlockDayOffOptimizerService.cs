@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							}
 						}
 
-						if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, previousPeriodValue))
+						if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, previousPeriodValue, optimizationPreferences.Advanced.RefreshScreenInterval))
 						{
 							cancelAction();
 							return null;
