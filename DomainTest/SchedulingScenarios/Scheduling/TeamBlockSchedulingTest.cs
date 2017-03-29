@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(4, 5)]
 		[TestCase(5, 4)]
-		[Ignore("#42836 - not yet red")]
+		[Ignore("#42836 - will be fixed")]
 		public void ShouldHandleMixOfTeamAndBlock(int secondDOagent1, int secondDOagent2)
 		{
 			var firstDay = new DateOnly(2016, 05, 30);
