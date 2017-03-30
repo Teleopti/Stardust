@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			preferenceDayRepository.Stub(x => x.Find(period, person)).Return(preferenceDays);
+			preferenceDayRepository.Stub(x => x.Find(period, new List<IPerson>() {person})).Return(preferenceDays);
 
 			var target = new PreferenceProvider(preferenceDayRepository, loggedOnUser);
 

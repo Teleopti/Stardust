@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		public IEnumerable<IPreferenceDay> GetPreferencesForPeriod(DateOnlyPeriod period)
 		{
 			var user = _loggedOnUser.CurrentUser();
-			return _preferenceDayRepository.Find(period, user);
+			return _preferenceDayRepository.Find(period, new List<IPerson>() {user});
 		}
 	}
 }
