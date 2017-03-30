@@ -49,6 +49,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 				//an ugly solution for bug 39594
 				if (current.IsDirty())
 					current.Clear();
+
+				_jobStartTimeRepository.ResetLockTimestamp(_currentBusinessUnit.Current().Id.GetValueOrDefault());
 			}
 			finally
 			{
