@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("#42836 - will be fixed")]
 		public void ShouldHandleMixOfTeamAndBlock(bool reversedAgentOrder)
 		{
 			var firstDay = new DateOnly(2016, 05, 30);
@@ -72,7 +71,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("#42836 - will be fixed")]
 		public void ShouldHandleMixOfTeamAndBlockAndHaveToClearTeamBlock_BetweenDayOffs(bool reversedAgentOrder)
 		{
 			var firstDay = new DateOnly(2016, 05, 30);
@@ -112,7 +110,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("#42836 - will be fixed")]
 		public void ShouldHandleMixOfTeamAndBlockAndHaveToClearTeamBlock_SchedulePeriod(bool reversedAgentOrder)
 		{
 			var firstDay = new DateOnly(2016, 05, 30);

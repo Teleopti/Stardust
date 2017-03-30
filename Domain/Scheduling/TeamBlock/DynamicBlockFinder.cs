@@ -27,11 +27,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		public IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, IBlockFinder blockFinder, bool singleAgentTeam)
 		{
+			if (!singleAgentTeam)
+			{
+				return new BlockInfo(new DateOnlyPeriod(2015, 1, 1, 2018, 1, 1));
+			}
+			
+
 			IEnumerable<IScheduleMatrixPro> tempMatrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
 			if (!tempMatrixes.Any())
 				return null;
 
-			return blockFinder.Find(tempMatrixes, blockOnDate, singleAgentTeam, true);
+			return blockFinder.Find(tempMatrixes, blockOnDate, singleAgentTeam, true);	
 		}
 	}
 }

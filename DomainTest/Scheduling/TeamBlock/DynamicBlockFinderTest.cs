@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _matrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 			_matrixPro2 = _mock.StrictMock<IScheduleMatrixPro>();
 	        _teamInfo = _mock.StrictMock<ITeamInfo>();
-			_target = new DynamicBlockFinder();
+			_target = new DynamicBlockFinderOLD();
 			_date = new DateOnly(2013, 02, 22);
 		    _schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
             _range = _mock.StrictMock<IScheduleRange>();
