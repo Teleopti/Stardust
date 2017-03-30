@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				Date = startDate.Date,
 				NotScheduled = true
 			};
-			var analyticsPersonPeriod = new AnalyticsPersonPeriod { PersonId = 55, BusinessUnitId = 2, PersonPeriodCode = personPeriodId };
+			var analyticsPersonPeriod = new AnalyticsPersonPeriod { PersonId = 55, BusinessUnitId = 2, PersonPeriodCode = personPeriodId, PersonCode = personId};
 			
 			var existingSchedule = new FactScheduleRow
 			{

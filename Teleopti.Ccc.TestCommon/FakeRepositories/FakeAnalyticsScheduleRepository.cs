@@ -9,9 +9,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsScheduleRepository : IAnalyticsScheduleRepository
 	{
+		private readonly IAnalyticsPersonPeriodRepository _personPeriodRepository;
 		public List<IFactScheduleRow> FactScheduleRows = new List<IFactScheduleRow>();
 		public List<IAnalyticsFactScheduleDayCount> FactScheduleDayCountRows = new List<IAnalyticsFactScheduleDayCount>();
 		public List<IAnalyticsShiftLength> AnalyticsShiftLengths = new List<IAnalyticsShiftLength>();
+
+		public FakeAnalyticsScheduleRepository(IAnalyticsPersonPeriodRepository personPeriodRepository)
+		{
+			_personPeriodRepository = personPeriodRepository;
+		}
 
 		public void Has(IAnalyticsShiftLength shiftLength)
 		{
@@ -28,16 +34,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FactScheduleDayCountRows.Add(dayCount);
 		}
 
-		public void DeleteFactSchedule(int dateId, int personId, int scenarioId)
+		public void DeleteFactSchedule(int dateId, Guid personCode, int scenarioId)
 		{
+			var periods = _personPeriodRepository.GetPersonPeriods(personCode);
 			FactScheduleRows.RemoveAll(x => x.PersonPart != null
-											&& x.PersonPart.PersonId == personId
+											&& periods.Any(period => period.PersonId == x.PersonPart.PersonId)
 											&& x.DatePart != null
 											&& x.DatePart.ScheduleDateId == dateId
 											&& x.TimePart != null
 											&& x.TimePart.ScenarioId == scenarioId);
 
-			FactScheduleDayCountRows.RemoveAll(x => x.PersonId == personId
+			FactScheduleDayCountRows.RemoveAll(x => periods.Any(period => period.PersonId == x.PersonId)
 													&& x.ShiftStartDateLocalId == dateId 
 													&& x.ScenarioId == scenarioId);
 		}

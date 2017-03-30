@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					throw new PersonPeriodMissingInAnalyticsException(currentEventScheduleDay.PersonPeriodId);
 				}
 
-				_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
+				_analyticsScheduleRepository.DeleteFactSchedule(dateId, @event.PersonId, scenarioId);
 
 				if (!currentEventScheduleDay.NotScheduled)
 				{

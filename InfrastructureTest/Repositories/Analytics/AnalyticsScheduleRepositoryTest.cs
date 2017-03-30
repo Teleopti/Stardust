@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			WithAnalyticsUnitOfWork.Do(() =>
 			{
-				Target.DeleteFactSchedule(1, 1, 1);
+				Target.DeleteFactSchedule(1, Guid.NewGuid(), 1);
 			});
 		}
 

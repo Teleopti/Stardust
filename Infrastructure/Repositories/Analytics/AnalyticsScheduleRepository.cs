@@ -156,15 +156,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.ExecuteUpdate();
 		}
 
-		public void DeleteFactSchedule(int dateId, int personId, int scenarioId)
+		public void DeleteFactSchedule(int dateId, Guid personCode, int scenarioId)
 		{
 			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_fact_schedule_delete 
 												@shift_startdate_local_id=:{nameof(dateId)}, 
-												@person_id=:{nameof(personId)}, 
+												@person_code=:{nameof(personCode)}, 
 												@scenario_id=:{nameof(scenarioId)}")
-				.SetInt32(nameof(dateId), dateId)
-				.SetInt32(nameof(personId), personId)
-				.SetInt32(nameof(scenarioId), scenarioId)
+				.SetParameter(nameof(dateId), dateId)
+				.SetParameter(nameof(personCode), personCode)
+				.SetParameter(nameof(scenarioId), scenarioId)
 				.ExecuteUpdate();
 		}
 

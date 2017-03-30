@@ -10,21 +10,22 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_schedule_delete]
 	@shift_startdate_local_id int,
-	@person_id int,
+	@person_code uniqueidentifier,
 	@scenario_id int
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
+
 	DELETE FROM mart.fact_schedule
 	WHERE shift_startdate_local_id = @shift_startdate_local_id
-	AND person_id = @person_id
 	AND scenario_id = @scenario_id
+	AND person_id in (select person_id from mart.dim_person where person_code = @person_code)
 
 	DELETE FROM mart.fact_schedule_day_count
 	WHERE shift_startdate_local_id = @shift_startdate_local_id
-	AND person_id = @person_id
 	AND scenario_id = @scenario_id
+	AND person_id in (select person_id from mart.dim_person where person_code = @person_code)
 END
 
 GO
