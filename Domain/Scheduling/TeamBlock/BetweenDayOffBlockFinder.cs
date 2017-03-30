@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class BetweenDayOffBlockFinder : IBlockFinder
 	{
-		public IBlockInfo Find(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly blockOnDate, bool singleAgentTeam)
+		public IBlockInfo Find(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly blockOnDate, bool singleAgentTeam, bool TEMPTOGGLE)
 		{
 			var roleModelMatrix = matrixes.First();
 			var blockPeriodFinderBetweenDayOff = new BlockPeriodFinderBetweenDayOff();

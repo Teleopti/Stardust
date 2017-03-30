@@ -538,12 +538,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockSameTimeZoneValidator>().As<ITeamBlockSameTimeZoneValidator>().InstancePerLifetimeScope();
 		}
 
-		private static void registerTeamBlockCommon(ContainerBuilder builder)
+		private void registerTeamBlockCommon(ContainerBuilder builder)
 		{
 			builder.RegisterType<LocateMissingIntervalsIfMidNightBreak>().As<ILocateMissingIntervalsIfMidNightBreak>();
 			builder.RegisterType<FilterOutIntervalsAfterMidNight>().As<IFilterOutIntervalsAfterMidNight>().SingleInstance();
 			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>().SingleInstance();
-			builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836))
+			{
+				builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<DynamicBlockFinderOLD>().As<IDynamicBlockFinder>().SingleInstance();
+			}
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>().SingleInstance();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>().InstancePerLifetimeScope();
