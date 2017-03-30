@@ -96,7 +96,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(4));
 			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
 			AssignmentRepository.Has(agent2,scenario,activity, otherShiftCategory, firstDay.AddDays(4), new TimePeriod(8, 16));
-			
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 			{
 				UseTeam = true,
@@ -109,7 +108,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.DoScheduling(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
 
-			AssignmentRepository.LoadAll().Count(x => x.ShiftCategory != null && x.ShiftCategory.Equals(shiftCategory)).Should().Be.EqualTo(3);
+			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
+				.Should().Be.EqualTo(3);
 		}
 
 		[TestCase(true)]
@@ -148,7 +148,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.DoScheduling(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
 
-			AssignmentRepository.LoadAll().Count(x => x.ShiftCategory != null && x.ShiftCategory.Equals(shiftCategory)).Should().Be.EqualTo(3);
+			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
+				.Should().Be.EqualTo(3);
 		}
 
 
