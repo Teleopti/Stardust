@@ -93,12 +93,14 @@
 				<tr>
 					<th>Key</th>
 					<th>Value</th>
+					<th>Description</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="configuration in Configurations">
 					<td><a href="#configurationdetails\{{configuration.Key}}">{{configuration.Key}}</a></td>
 					<td><a href="#configurationdetails\{{configuration.Key}}">{{configuration.Value}}</a></td>
+					<td><a href="#configurationdetails\{{configuration.Key}}">{{configuration.Description}}</a></td>
 				</tr>
 			</tbody>
 		</table>

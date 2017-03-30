@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
 
@@ -25,11 +25,27 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("GetAllConfigurations")]
 		public virtual JsonResult<IEnumerable<ConfigurationModel>> GetAllConfigurations()
 		{
-			return Json(_serverConfigurationRepository.AllConfigurations().Select(c => new ConfigurationModel
+			var serverConfigurations = _serverConfigurationRepository.AllConfigurations();
+			return Json(map(serverConfigurations));
+		}
+
+		private IEnumerable<ConfigurationModel> map(IEnumerable<ServerConfiguration> serverConfigurations)
+		{
+			var result = new List<ConfigurationModel>();
+			foreach (var serverConfiguration in serverConfigurations)
 			{
-				Key = c.Key,
-				Value = c.Value
-			}));
+				var configurationModel = new ConfigurationModel
+				{
+					Key = serverConfiguration.Key,
+					Value = serverConfiguration.Value
+				};
+				if (configurationModel.Key == "FrameAncestors")
+				{
+					configurationModel.Description = "Add urls to let mytime or ASM widget work in an iframe.";
+				}
+				result.Add(configurationModel);
+			}
+			return result;
 		}
 
 		[HttpPost]
