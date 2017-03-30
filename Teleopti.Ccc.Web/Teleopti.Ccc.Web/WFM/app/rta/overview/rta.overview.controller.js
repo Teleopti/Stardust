@@ -53,6 +53,8 @@
 		var stateForAgentsByTeamsAndSkill = 'rta.agents({teamIds: team.Id, skillIds: vm.skillId})';
 		var stateForAgentsByTeamsAndSkillArea = 'rta.agents({teamIds: team.Id, skillAreaId: vm.skillAreaId})';
 		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
+		var pollingLock = true;
+		//var polling = null;
 		/***scoped variables */
 		vm.selectedItemIds = [];
 		vm.displaySkillOrSkillAreaFilter = false;
@@ -73,6 +75,7 @@
 		vm.openSelectedItems = openSelectedItems;
 
 		(function initialize() {
+			pollingLock = false;
 			rtaService.getSkillAreas().then(function (skillAreas) {
 				vm.skillAreas = skillAreas.SkillAreas;
 				getSitesOrTeams();
@@ -105,6 +108,9 @@
 		};
 
 		var polling = $interval(function () {
+			if(!pollingLock) return;
+			if (pollingLock) 
+					pollingLock = false;
 			if (vm.skillId !== null || vm.skillAreaId !== null) {
 				if (vm.skillAreaId !== null)
 					vm.skillId = skillIdsFromSkillArea(vm.skillAreaId);
@@ -113,20 +119,39 @@
 						skillIds: vm.skillId,
 						siteIds: vm.siteIds
 					})
-						.then(function (teamAdherences) { rtaAdherenceService.updateAdherence(vm.teams, teamAdherences); });
+						.then(function (teamAdherences) { 
+							pollingLock = true;
+							rtaAdherenceService.updateAdherence(vm.teams, teamAdherences); 
+						});
 				} else if (angular.isDefined(vm.sites)) {
 					rtaService.getAdherenceForSitesBySkills(vm.skillId)
-						.then(function (siteAdherences) { rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); });
+						.then(function (siteAdherences) { 
+							pollingLock = true; 
+							rtaAdherenceService.updateAdherence(vm.sites, siteAdherences);
+						});
 				};
 			}
 			else if (vm.siteIds) {
 				rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds })
-					.then(function (teamAdherence) { rtaAdherenceService.updateAdherence(vm.teams, teamAdherence); });
+					.then(function (teamAdherence) { 
+						pollingLock = true;
+						rtaAdherenceService.updateAdherence(vm.teams, teamAdherence); 
+					});
 			} else {
 				rtaService.getAdherenceForAllSites()
-					.then(function (siteAdherences) { rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); });
+					.then(function (siteAdherences) { 
+						pollingLock = true;
+						rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); 
+					});
 			}
 		}, pollingInterval);
+		
+		function cancelPolling() {
+			if (polling != null) {
+				$interval.cancel(polling);
+				pollingLock = true;
+			}
+		}
 
 		function getSitesOrTeams() {
 			if (vm.skillId !== null || vm.skillAreaId !== null) { return vm.siteIds !== null ? getTeamsBySkillsInfo() : getSitesBySkillsInfo(); }
@@ -147,6 +172,7 @@
 		};
 
 		function getTeamsBySkillsInfo() {
+			pollingLock = false;
 			vm.skillIds = getSkillIds();
 			return rtaService.getTeamsForSiteAndSkills({
 				skillIds: vm.skillIds,
@@ -156,37 +182,48 @@
 				return rtaService.getAdherenceForTeamsBySkills({
 					skillIds: vm.skillIds,
 					siteIds: vm.siteIds
-				}).then(function (teamAdherences) { rtaAdherenceService.updateAdherence(vm.teams, teamAdherences); });
+				}).then(function (teamAdherences) {
+					pollingLock = true;
+					rtaAdherenceService.updateAdherence(vm.teams, teamAdherences);
+				});
 			})
 		}
 
 		function getSitesBySkillsInfo() {
+			pollingLock = false;
 			vm.skillIds = getSkillIds();
 			return rtaService.getSitesForSkills(vm.skillIds)
 				.then(function (sites) {
 					vm.sites = sites;
 					return rtaService.getAdherenceForSitesBySkills(vm.skillIds);
-				}).then(function (siteAdherences) { rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); });
+				}).then(function (siteAdherences) {
+					pollingLock = true;
+					rtaAdherenceService.updateAdherence(vm.sites, siteAdherences);
+				});
 		}
 
 		function getTeamsInfo() {
+			pollingLock = false;
 			rtaService.getTeams({ siteId: vm.siteIds })
 				.then(function (teams) {
 					vm.teams = teams;
 					return rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds });
 				})
 				.then(function (teamAdherence) {
+					pollingLock = true;
 					rtaAdherenceService.updateAdherence(vm.teams, teamAdherence);
 				});
 		};
 
 		function getSitesInfo() {
+			pollingLock = false;
 			rtaService.getSites()
 				.then(function (sites) {
 					vm.sites = sites;
 					return rtaService.getAdherenceForAllSites();
 				})
 				.then(function (siteAdherences) {
+					pollingLock = true;
 					rtaAdherenceService.updateAdherence(vm.sites, siteAdherences);
 				});
 		}
@@ -203,7 +240,7 @@
 		function getSkillIds() {
 			return vm.skillAreaId !== null ? skillIdsFromSkillArea(vm.skillAreaId) : [vm.skillId];
 		}
-		
+
 		$scope.$watch(
 			function () { return $sessionStorage.buid; },
 			function (newValue, oldValue) {
@@ -212,7 +249,7 @@
 			}
 		);
 
-		$scope.$on('$destroy', function () { $interval.cancel(polling); });
+		$scope.$on('$destroy', function () { cancelPolling(); });
 
 		if (vm.siteIds === null) {
 			var message = $translate.instant('WFMReleaseNotification')
