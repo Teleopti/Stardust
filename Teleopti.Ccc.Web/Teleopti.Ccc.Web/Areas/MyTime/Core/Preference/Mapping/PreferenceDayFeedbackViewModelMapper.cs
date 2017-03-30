@@ -72,6 +72,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		{
 			var result = new List<PreferenceDayFeedbackViewModel>();
 			var nightResultResults = _preferenceFeedbackProvider.CheckNightRestViolation(period);
+			var workTimeMinMaxCalculationResults = _preferenceFeedbackProvider.WorkTimeMinMaxForPeriod(period);
+
 			foreach (var date in period.DayCollection())
 			{
 				var nightRestResult = nightResultResults[date];
@@ -87,10 +89,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					HasNightRestViolationToNextDay = nightRestResult.HasViolationToNextDay
 				};
 
-				var workTimeResult = _preferenceFeedbackProvider.WorkTimeMinMaxForDate(date) ??
-									 new WorkTimeMinMaxCalculationResult();
+				var workTimeMinMaxCalculationResult = workTimeMinMaxCalculationResults.ContainsKey(date)
+					? workTimeMinMaxCalculationResults[date]
+					: new WorkTimeMinMaxCalculationResult();
 
-				var workTimeMinMax = workTimeResult.WorkTimeMinMax;
+				var workTimeMinMax = workTimeMinMaxCalculationResult.WorkTimeMinMax;
 				if (workTimeMinMax != null)
 				{
 					var workTimelimitation = workTimeMinMax.WorkTimeLimitation;
@@ -104,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				}
 				else
 				{
-					mappedResult.FeedbackError = workTimeResult.RestrictionNeverHadThePossibilityToMatchWithShifts
+					mappedResult.FeedbackError = workTimeMinMaxCalculationResult.RestrictionNeverHadThePossibilityToMatchWithShifts
 						? ""
 						: Resources.NoAvailableShifts;
 				}
