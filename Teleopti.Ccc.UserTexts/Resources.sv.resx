@@ -14380,4 +14380,28 @@ Vill du registrera dig?</value>
   <data name="OptionalColumnRemoveGroupPageQuestion" xml:space="preserve">
     <value>Detta kommer att ta bort tilläggskolumngrupperingen så att du inte längre kan skapa rapporter baserat på den. Vill du fortsätta?</value>
   </data>
+  <data name="ViewStaffingInfo" xml:space="preserve">
+    <value>Visa bemanningsinfo</value>
+  </data>
+  <data name="TeleoptiMobileApp" xml:space="preserve">
+    <value>Teleopti Mobile App</value>
+  </data>
+  <data name="UseTeleoptiMobileAppToScanThisQRCode" xml:space="preserve">
+    <value>Använd Teleopti Mobile App för att scanna den här QR-koden</value>
+  </data>
+  <data name="WarnImportedAgents" xml:space="preserve">
+    <value>Importerade {0} agent(er) med varningar</value>
+  </data>
+  <data name="HideStaffingInfo" xml:space="preserve">
+    <value>Dölj bemanningsinfo</value>
+  </data>
+  <data name="StaffingInfo" xml:space="preserve">
+    <value>Bemanningsinfo</value>
+  </data>
+  <data name="EmptyFile" xml:space="preserve">
+    <value>Tom fil</value>
+  </data>
+  <data name="NoInput" xml:space="preserve">
+    <value>Input saknas</value>
+  </data>
 </root>
