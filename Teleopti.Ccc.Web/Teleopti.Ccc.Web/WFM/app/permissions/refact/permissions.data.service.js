@@ -20,8 +20,11 @@
 		this.findParentFunctions = findParentFunctions;
 		this.findFunction = findFunction;
 		this.findOrgData = findOrgData;
+		this.setIdForSiteWithAllTeamsSelected = setIdForSiteWithAllTeamsSelected;
+		this.getIdForSiteWithAllTeamsSelected = getIdForSiteWithAllTeamsSelected;
 
 		var selectedRole;
+		var idForSiteWithAllTeamsSelected = null;
 
 		function findChildFunctions(fn) {
 			function inner(functions) {
@@ -237,10 +240,22 @@
 				if (map.Teams == null) {
 					map.Teams = [];
 				}
+				if (getIdForSiteWithAllTeamsSelected() != null) {
+					map.Sites = [];
+					map.Sites.push(idForSiteWithAllTeamsSelected);
+				}
 				map.Teams = map.Teams.concat(orgData.Id);
 			}
 
 			return map;
+		}
+
+		function setIdForSiteWithAllTeamsSelected(id) {
+			idForSiteWithAllTeamsSelected = id;
+		}
+
+		function getIdForSiteWithAllTeamsSelected() {
+			return idForSiteWithAllTeamsSelected;
 		}
 
 		function prepareData(orgData, selectedRole) {

@@ -44,7 +44,7 @@ function PermissionsListController(permissionsDataService, NoticeService, locale
 			for (var i = 0; i < node.ChildNodes.length; i++) {
 				ctrl.select(node.ChildNodes[i], selectedOrNot);
 			}
-			
+
 			var noSiteSelected = ctrl.originalOrg.BusinessUnit.ChildNodes.every(function(site) {
 				return !ctrl.isSelected(site);
 			});
@@ -59,7 +59,7 @@ function PermissionsListController(permissionsDataService, NoticeService, locale
 			traverseNodes(node);
 		}
 		return originalNode;
-		
+
 	}
 
 	function traverseNodes(node) {
@@ -73,6 +73,14 @@ function PermissionsListController(permissionsDataService, NoticeService, locale
 					var anyTeamSelected = site.ChildNodes.some(function(team) {
 						return ctrl.isSelected(team);
 					});
+					var isAllTeamsSelected = site.ChildNodes.every(function(team) {
+						return ctrl.isSelected(team);
+					});
+					if (isAllTeamsSelected) {
+							permissionsDataService.setIdForSiteWithAllTeamsSelected(site.Id);
+					} else {
+						permissionsDataService.setIdForSiteWithAllTeamsSelected(null);
+					}
 					if (anyTeamSelected) {
 						ctrl.select(site, true);
 					} else {

@@ -143,6 +143,28 @@ describe('permissionsDataService', function() {
 		expect(response).toEqual(data);
 	});
 
+	it('should send site to server when selecting last team', function() {
+		var data = permissionsDataService.prepareData(BusinessUnit, role);
+
+		var obj = {
+			Id: role.Id,
+			Teams: [
+				BusinessUnit.ChildNodes[0].ChildNodes[0].Id
+			],
+			Sites: [
+				BusinessUnit.ChildNodes[0].Id
+			]
+		}
+
+		permissionsDataService.setIdForSiteWithAllTeamsSelected(BusinessUnit.ChildNodes[0].Id);
+
+		permissionsDataService.selectOrganization(BusinessUnit.ChildNodes[0].ChildNodes[0], role, true);
+		$httpBackend.flush();
+
+		expect(response).toEqual(obj);
+	});
+
+
 	it('should not persist previously sent bu', function() {
 		var data = permissionsDataService.prepareData(BusinessUnit, role);
 
