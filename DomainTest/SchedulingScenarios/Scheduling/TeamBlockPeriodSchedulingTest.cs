@@ -108,10 +108,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(3);
 		}
 
-		[TestCase(true)]
-		[TestCase(false)]
-		[Ignore("42836 to be fixed")]
-		public void ShouldHandleMixOfTeamAndBlockAndHaveToClearTeamBlock_BetweenDayOffsCase2(bool reversedAgentOrder)
+		[Test]
+		public void ShouldHandleMixOfTeamAndBlockAndHaveToClearTeamBlock_BetweenDayOffsCase2()
 		{
 			var firstDay = new DateOnly(2016, 05, 30);
 			var activity = ActivityRepository.Has("_");
@@ -123,9 +121,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			RuleSetBagRepository.Add(ruleSetBag);
 			var agent1 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
 			var agent2 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
-
-			if (reversedAgentOrder)
-				PersonRepository.ReversedOrder();
 			DayOffTemplateRepository.Add(new DayOffTemplate());
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 2, 2, 2, 2, 2, 2));
 			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(2));
@@ -136,8 +131,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent1, scenario, activity, otherShiftCategory, firstDay.AddDays(1), new TimePeriod(8, 16));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(1), new TimePeriod(8, 16));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(2), new TimePeriod(8, 16));
-
-
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 			{
 				UseTeam = true,
