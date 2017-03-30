@@ -14,5 +14,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			DataMaker.Data().Apply(table.CreateInstance<RtaMapConfigurable>());
 		}
+
+		[Given(@"there is a rule named '(.*)' with")]
+		public void GivenThereIsARuleNamedWith(string name, Table table)
+		{
+			var rule = table.CreateInstance<RtaMapConfigurable>();
+			rule.Name = name;
+			DataMaker.Data().Apply(rule);
+		}
+
 	}
 }

@@ -1,5 +1,4 @@
 ﻿@RTA
-@ignore
 Feature: Solid proof
 	As an adherence analyst I need to see all OoA occurrences and the exact reason why,
 	so that I have solid proof when I talk to team leads and agents about bad adherence.
@@ -16,30 +15,36 @@ Background:
 	| Field      | Value      |
 	| Team       | Motorhead  |
 	| Start Date | 2014-01-21 |
-	And there is a rule with 
+	And there is a rule named 'Adhering' with 
 	| Field       | Value    |
-	| Name        | Adhering |
-	| Adherence   | In       |
 	| Activity    | Phone    |
 	| Phone state | Ready    |
-	And there is a rule with 
+	| Adherence   | In       |
+	And there is a rule named 'Not adhering' with 
 	| Field       | Value        |
-	| Name        | Not adhering |
-	| Adherence   | Out          |
 	| Activity    | Phone        |
 	| Phone state | LoggedOff    |
-	And there is a rule with 
+	| Adherence   | Out          |
+	And there is a rule named 'Positive' with 
 	| Field       | Value    |
-	| Name        | Positive |
-	| Adherence   | Out      |
 	| Activity    |          |
 	| Phone state | Ready    |
-	And there is a rule with 
+	| Adherence   | Out      |
+	And there is a rule named 'Neutral' with 
 	| Field       | Value     |
-	| Name        | Neutral   |
-	| Adherence   | Neutral   |
 	| Activity    |           |
 	| Phone state | LoggedOff |
+	| Adherence   | Neutral   |
+	And there is a rule named 'Positive' with 
+	| Field       | Value    |
+	| Activity    | Lunch    |
+	| Phone state | Ready    |
+	| Adherence   | Out      |
+	And there is a rule named 'Adhering' with 
+	| Field       | Value     |
+	| Activity    | Lunch     |
+	| Phone state | LoggedOff |
+	| Adherence   | In        |
 	
 @OnlyRunIfEnabled('RTA_SolidProofWhenManagingAgentAdherence_39351')
 Scenario: See rule changes
@@ -52,9 +57,6 @@ Scenario: See rule changes
 	| Next activity start time | 2016-10-11 11:00 |
 	| Next activity end time   | 2016-10-11 12:00 |
 	And at '2016-10-11 08:30:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
-	And the time is '2016-10-11 09:00:00'
-	And the time is '2016-10-11 10:00:00'
-	And the time is '2016-10-11 11:00:00'
 	And the time is '2016-10-11 12:00:00'
 	When I view historical adherence for 'Mikkey Dee'
 	Then I should rule and state changes
@@ -74,11 +76,10 @@ Scenario: See state changes
 	And at '2016-10-11 08:40:00' 'Mikkey Dee' sets his phone state to 'Ready'
 	And at '2016-10-11 08:50:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
 	And at '2016-10-11 09:10:00' 'Mikkey Dee' sets his phone state to 'Ready'
-	And the time is '2016-10-11 12:00:00'
 	When I view historical adherence for 'Mikkey Dee'
 	Then I should rule and state changes
 	| Time     | Activity | State     | Rule     | Adherence |
 	| 08:30:00 |          | LoggedOff | Neutral  | Neutral   |
-	| 08:40:00 | Phone    | Ready     | Positive | Out       |
-	| 08:50:00 | Phone    | LoggedOff | Neutral  | Neutral   |
-	| 10:10:00 | Phone    | Ready     | Adhering | In        |
+	| 08:40:00 |          | Ready     | Positive | Out       |
+	| 08:50:00 |          | LoggedOff | Neutral  | Neutral   |
+	| 09:10:00 | Phone    | Ready     | Adhering | In        |
