@@ -39,6 +39,53 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		{
 		}
 
+		[TestCase(true)]
+		[TestCase(false)]
+		[Ignore("42836, to be fixed")]
+		public void ShouldHandleMixOfTeamAndBlockAndNotClearToMuch_BetweenDayOffs(bool reversedAgentOrder)
+		{
+			var firstDay = new DateOnly(2016, 05, 30);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var otherShiftCategory = new ShiftCategory("other").WithId();
+			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) { Description = new Description("_") }.WithId();
+			RuleSetBagRepository.Add(ruleSetBag);
+			var agent1 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
+			var agent2 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
+			if (reversedAgentOrder)
+				PersonRepository.ReversedOrder();
+			DayOffTemplateRepository.Add(new DayOffTemplate());
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 2, 2, 2, 2, 2, 2));
+			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(2));
+			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(2));
+			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(4));
+			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
+			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(4), new TimePeriod(8, 16));
+			AssignmentRepository.Has(agent1, scenario, activity, otherShiftCategory, firstDay, new TimePeriod(8, 16));
+			AssignmentRepository.Has(agent1, scenario, activity, otherShiftCategory, firstDay.AddDays(1), new TimePeriod(8, 16));
+			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay, new TimePeriod(8, 16));
+			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(1), new TimePeriod(8, 16));
+
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				UseTeam = true,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
+				UseBlock = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
+				TeamSameShiftCategory = true,
+				BlockSameShiftCategory = true
+			});
+
+			Target.DoScheduling(new DateOnlyPeriod(firstDay, firstDay.AddDays(4)));
+
+			AssignmentRepository.LoadAll()
+				.Count(x => otherShiftCategory.Equals(x.ShiftCategory))
+				.Should()
+				.Be.GreaterThanOrEqualTo(4); //<--
+		}
+
 		[Test]
 		public void TeamBlockSchedulingShouldNotUseShiftsMarkedForRestrictionOnlyWhenThereIsNoRestriction()
 		{
