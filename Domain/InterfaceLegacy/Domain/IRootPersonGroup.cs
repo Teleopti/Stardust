@@ -20,17 +20,15 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///</summary>
         bool IsSite { get; }
 
-		bool IsOptionalColumn { get; }
-
-		/// <summary>
-		/// Adds the person to group.
-		/// </summary>
-		/// <param name="person">The person.</param>
-		/// <remarks>
-		/// Created by: kosalanp
-		/// Created date: 2008-06-23
-		/// </remarks>
-		void AddPerson(IPerson person);
+        /// <summary>
+        /// Adds the person to group.
+        /// </summary>
+        /// <param name="person">The person.</param>
+        /// <remarks>
+        /// Created by: kosalanp
+        /// Created date: 2008-06-23
+        /// </remarks>
+        void AddPerson(IPerson person);
 
         /// <summary>
         /// Removes the person from group.

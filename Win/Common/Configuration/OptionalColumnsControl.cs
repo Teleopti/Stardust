@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				var rowIndex = tableLayoutPanel3.GetRow(checkBoxAdvAvailableAsGroupPage);
 				tableLayoutPanel3.RowStyles[rowIndex].Height = 0;
-				rowIndex = tableLayoutPanel3.GetRow(Max5GroupPages);
-				tableLayoutPanel3.RowStyles[rowIndex].Height = 0;
 			}
 		}
 		

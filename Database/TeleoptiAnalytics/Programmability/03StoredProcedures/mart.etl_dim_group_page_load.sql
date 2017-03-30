@@ -56,7 +56,7 @@ WHERE dgp.group_is_custom = 0
 							AND sgp.business_unit_code = dgp.business_unit_code
 					)
 
--- Delete Note group page from dimension that does not exist in stage.
+-- Delete Note group page (excluding Note) from dimension that does not exist in stage.
 DELETE FROM mart.dim_group_page
 FROM mart.dim_group_page dgp
 WHERE dgp.group_is_custom = 0
@@ -66,20 +66,6 @@ WHERE dgp.group_is_custom = 0
 						SELECT * FROM stage.stg_group_page_person sgp
 						WHERE sgp.group_is_custom = 0
 							AND sgp.group_page_name_resource_key = dgp.group_page_name_resource_key
-							AND sgp.group_name COLLATE Latin1_General_CS_AS = dgp.group_name COLLATE Latin1_General_CS_AS
-							AND sgp.business_unit_code = dgp.business_unit_code
-					)
-
--- Delete optional column group pages from dimension that does not exist in stage.
-DELETE FROM mart.dim_group_page
-FROM mart.dim_group_page dgp
-WHERE dgp.group_is_custom = 0
-	AND dgp.business_unit_code = @business_unit_code
-	AND dgp.group_page_name_resource_key is null
-	AND NOT EXISTS	(
-						SELECT * FROM stage.stg_group_page_person sgp
-						WHERE sgp.group_is_custom = 0
-							AND sgp.group_page_name_resource_key is null
 							AND sgp.group_name COLLATE Latin1_General_CS_AS = dgp.group_name COLLATE Latin1_General_CS_AS
 							AND sgp.business_unit_code = dgp.business_unit_code
 					)
@@ -132,21 +118,6 @@ ON
 		AND dgp.business_unit_code = sgp.business_unit_code
 WHERE dgp.group_is_custom = 0
 	AND dgp.group_page_name_resource_key = @note_resource_name
-
--- Update optional columns group pages
-UPDATE 
-	mart.dim_group_page 
-SET group_page_name			= sgp.group_page_name, 
-	business_unit_name		= sgp.business_unit_name,
-	datasource_update_date	= sgp.update_date
-FROM 
-	mart.dim_group_page dgp
-INNER JOIN 
-	stage.stg_group_page_person sgp
-ON 
-	sgp.group_page_code = dgp.group_page_code	
-WHERE dgp.group_is_custom = 0
-	AND dgp.group_page_name_resource_key is null
 
 
 -- Update custom group pages
@@ -382,57 +353,6 @@ BEGIN
 END
 CLOSE CustomCursor
 DEALLOCATE CustomCursor
-
--- Insert new optional column group pages
-DECLARE OptionalColumnCursor CURSOR FOR
-SELECT DISTINCT
-	sgp.group_page_code,
-	sgp.group_page_name,
-	sgp.group_page_name_resource_key,
-	sgp.group_code,
-	sgp.group_name COLLATE Latin1_General_CS_AS,
-	sgp.datasource_id
-FROM stage.stg_group_page_person sgp
-WHERE sgp.group_is_custom = 0
-	AND sgp.business_unit_code = @business_unit_code
-	AND sgp.group_page_name_resource_key is null
-	AND NOT EXISTS	(
-						SELECT * FROM mart.dim_group_page dgp
-						WHERE sgp.group_is_custom = 0
-							AND sgp.group_page_name_resource_key is null
-							AND sgp.group_name COLLATE Latin1_General_CS_AS = dgp.group_name COLLATE Latin1_General_CS_AS 
-							AND sgp.business_unit_code = dgp.business_unit_code
-					)
-OPEN OptionalColumnCursor
-FETCH NEXT FROM OptionalColumnCursor INTO @group_page_code,@group_page_name,@group_page_name_resource_key,@group_code,@group_name,@datasource_id
-WHILE @@FETCH_STATUS = 0
-BEGIN
-	SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
-	SET @counter = @counter + 1
-	
-	-- Insert row where the group page NOT already exists
-	INSERT INTO mart.dim_group_page
-	SELECT
-		@group_page_code,
-		@group_page_name,
-		@group_page_name_resource_key,
-		@counter,
-		@group_code,
-		@group_name,
-		0,
-		business_unit_id,
-		@business_unit_code,
-		business_unit_name,
-		@datasource_id,
-		GETDATE(),
-		GETDATE()
-	FROM mart.dim_business_unit
-	WHERE business_unit_code = @business_unit_code
-	
-	FETCH NEXT FROM OptionalColumnCursor INTO @group_page_code,@group_page_name,@group_page_name_resource_key,@group_code,@group_name,@datasource_id
-END
-CLOSE OptionalColumnCursor
-DEALLOCATE OptionalColumnCursor
 
 	
 GO

@@ -35,7 +35,7 @@
 			this.buttonDelete = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonNew = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.Max5GroupPages = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.autoLabelMax5GroupPages = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel5 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.comboBoxOptionalColumns = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.textBoxName = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
@@ -150,7 +150,7 @@
 			this.tableLayoutPanel3.ColumnCount = 2;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 204F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Controls.Add(this.Max5GroupPages, 0, 4);
+			this.tableLayoutPanel3.Controls.Add(this.autoLabelMax5GroupPages, 0, 4);
 			this.tableLayoutPanel3.Controls.Add(this.autoLabel5, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.comboBoxOptionalColumns, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.textBoxName, 1, 1);
@@ -173,19 +173,19 @@
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(744, 195);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
-			// Max5GroupPages
+			// autoLabelMax5GroupPages
 			// 
-			this.Max5GroupPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.Max5GroupPages.AutoSize = false;
-			this.tableLayoutPanel3.SetColumnSpan(this.Max5GroupPages, 2);
-			this.Max5GroupPages.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.Max5GroupPages.Location = new System.Drawing.Point(3, 148);
-			this.Max5GroupPages.Margin = new System.Windows.Forms.Padding(3);
-			this.Max5GroupPages.Name = "Max5GroupPages";
-			this.Max5GroupPages.Size = new System.Drawing.Size(729, 24);
-			this.Max5GroupPages.TabIndex = 13;
-			this.Max5GroupPages.Text = "xxMaximum5OptionalColumns";
-			this.Max5GroupPages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.autoLabelMax5GroupPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.autoLabelMax5GroupPages.AutoSize = false;
+			this.tableLayoutPanel3.SetColumnSpan(this.autoLabelMax5GroupPages, 2);
+			this.autoLabelMax5GroupPages.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.autoLabelMax5GroupPages.Location = new System.Drawing.Point(3, 148);
+			this.autoLabelMax5GroupPages.Margin = new System.Windows.Forms.Padding(3);
+			this.autoLabelMax5GroupPages.Name = "autoLabelMax5GroupPages";
+			this.autoLabelMax5GroupPages.Size = new System.Drawing.Size(729, 24);
+			this.autoLabelMax5GroupPages.TabIndex = 13;
+			this.autoLabelMax5GroupPages.Text = "xxMaximum5OptionalColumns";
+			this.autoLabelMax5GroupPages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// autoLabel5
 			// 
@@ -375,6 +375,6 @@
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelInfoAboutChanges;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel2;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvAvailableAsGroupPage;
-		private Syncfusion.Windows.Forms.Tools.AutoLabel Max5GroupPages;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelMax5GroupPages;
 	}
 }

@@ -8,12 +8,8 @@ using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +28,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		public void Setup()
 		{
 			_groupPageDataProvider = new GroupingsProviderForTest();
-			_target = new GroupPagePersonTransformer(() => _groupPageDataProvider, new FakeToggleManager());
+			_target = new GroupPagePersonTransformer(() => _groupPageDataProvider);
 			_englishCulture = CultureInfo.GetCultureInfo("en-GB");
 		}
 
@@ -114,9 +110,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		[Test]
 		public void ShouldReturnBuiltInGroupPagesIncludingOptionalColumns()
 		{
-			var toggleManager = new FakeToggleManager();
-			toggleManager.Enable(Toggles.Reporting_Optional_Columns_42066);
-			_target = new GroupPagePersonTransformer(() => _groupPageDataProvider, toggleManager);
 			IList<IGroupPage> dynamicGroupPages = _target.BuiltInGroupPages;
 
 			Assert.IsNotNull(dynamicGroupPages);
@@ -157,32 +150,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 				foreach (DataRow row in dataTable.Rows)
 				{
 					Assert.IsTrue(row["group_page_code"] != DBNull.Value);
-				}
-			}
-		}
-
-
-		[Test]
-		public void ShouldNotSetOptionalColumnGroupPageAsCustom()
-		{
-			var toggleManager = new FakeToggleManager();
-			toggleManager.Enable(Toggles.Reporting_Optional_Columns_42066);
-			_target = new GroupPagePersonTransformer(() => _groupPageDataProvider, toggleManager);
-			IList<IGroupPage> builtInGroupings = _target.BuiltInGroupPages;
-			var optionalColumn = _groupPageDataProvider.OptionalColumnCollectionAvailableAsGroupPage.First();
-
-			Assert.IsNull(builtInGroupings[0].Id);
-
-			using (DataTable dataTable = new DataTable())
-			{
-				dataTable.Locale = Thread.CurrentThread.CurrentCulture;
-				GroupPagePersonInfrastructure.AddColumnsToDataTable(dataTable);
-				_target.Transform(builtInGroupings, new List<IGroupPage>(), dataTable);
-
-				foreach (DataRow row in dataTable.Rows)
-				{
-					if((Guid)row["group_page_code"] == optionalColumn.Id.Value) ;
-						Assert.IsFalse((bool)row["group_is_custom"]);
 				}
 			}
 		}
@@ -309,7 +276,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		private IList<IPartTimePercentage> _partTimePercentageCollection;
 		private IList<IRuleSetBag> _ruleSetBagCollection;
 		private List<IGroupPage> _userDefinedGroupings;
-		private List<IOptionalColumn> _optionalColumnsAsGroupPage;
+		private readonly List<IOptionalColumn> _optionalColumnsAsGroupPage = new List<IOptionalColumn>();
 
 		public IEnumerable<IPerson> PersonCollection
 		{
@@ -333,7 +300,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 					IPersonPeriod pp1 = PersonPeriodFactory.CreatePersonPeriod(periodStartDate, personContract1, team1);
 					pp1.RuleSetBag = RuleSetBagCollection.First();
 					person1.AddPersonPeriod(pp1);
-					person1.AddOptionalColumnValue(new OptionalColumnValue("group1"), OptionalColumnCollectionAvailableAsGroupPage.First());
 
 					//Person 2
 					IPerson person2 = PersonFactory.CreatePerson("Billy", "Hamill");
@@ -499,12 +465,10 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		{
 			get
 			{
-				if (_optionalColumnsAsGroupPage == null)
+				return new List<IOptionalColumn>()
 				{
-					_optionalColumnsAsGroupPage = new List<IOptionalColumn>() {new OptionalColumn("opt column").WithId()};
-
-				}
-				return _optionalColumnsAsGroupPage;
+					new OptionalColumn("opt col") { AvailableAsGroupPage = true }
+				};
 			}
 		}
 	}

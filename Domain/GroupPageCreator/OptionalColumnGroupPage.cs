@@ -16,9 +16,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			var optionalColumn = entityCollection.First();
 
 			var groupPage = new GroupPage(optionalColumn.Name);
-			groupPage.SetId(optionalColumn.Id.Value);
 			var groups = new Dictionary<string, IList<IPerson>>();
-
 
 			foreach (var person in groupPageOptions.Persons)
 			{
@@ -34,15 +32,11 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 
 			foreach (var group in groups)
 			{
-				IRootPersonGroup rootGroup = new RootPersonGroup(group.Key)
-				{
-					Entity = optionalColumn
-				};
+				IRootPersonGroup rootGroup = new RootPersonGroup(group.Key);
 				foreach (var person in group.Value)
 				{
 					rootGroup.AddPerson(person);
 				}
-				rootGroup.SetId(Guid.NewGuid());
 				groupPage.AddRootPersonGroup(rootGroup);
 			}
 

@@ -139,7 +139,5 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual bool IsTeam => Entity != null && typeof(ITeam).IsInstanceOfType(Entity);
 
 	    public virtual bool IsSite => Entity != null && typeof(ISite).IsInstanceOfType(Entity);
-
-		public virtual bool IsOptionalColumn => Entity != null && typeof(IOptionalColumn).IsInstanceOfType(Entity);
-	}
+    }
 }
