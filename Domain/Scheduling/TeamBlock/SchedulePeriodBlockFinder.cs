@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return new BlockInfo(roleModelMatrix.SchedulePeriod.DateOnlyPeriod);
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836)]
 		private static IBlockInfo findRemoveMe(IEnumerable<IScheduleMatrixPro> matrixes)
 		{
 			var roleModelMatrix = matrixes.First();
