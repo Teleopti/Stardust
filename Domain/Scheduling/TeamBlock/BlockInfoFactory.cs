@@ -15,16 +15,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			while (true)
 			{
-				var startPeriod = periodForDate(allMatrixes, currentPeriod.Value.StartDate, periodForOneMatrix);
-				var endPeriod = periodForDate(allMatrixes, currentPeriod.Value.EndDate, periodForOneMatrix);
-				var newPeriod = startPeriod.MaximumPeriod(endPeriod);
+				var periodBasedOnStart = periodForDate(allMatrixes, currentPeriod.Value.StartDate, periodForOneMatrix);
+				var periodBasedOnEnd = periodForDate(allMatrixes, currentPeriod.Value.EndDate, periodForOneMatrix);
+				var newPeriod = periodBasedOnStart.MaximumPeriod(periodBasedOnEnd);
 				if (!newPeriod.HasValue || newPeriod.Value == currentPeriod.Value)
 				{
 					return new BlockInfo(currentPeriod.Value);
 				}
 				currentPeriod = newPeriod;
 			}
-			throw new Exception("If you end up here, the world has gone crazy");
 		}
 
 		private static DateOnlyPeriod? periodForDate(IEnumerable<IScheduleMatrixPro> allMatrixes, DateOnly startDate, Func<IScheduleMatrixPro, DateOnly, DateOnlyPeriod?> periodForOneMatrix)

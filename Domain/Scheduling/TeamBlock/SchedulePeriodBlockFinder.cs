@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (!TEMPTOGGLE)
 				return findRemoveMe(matrixes);
 
-			return new BlockInfoFactory().Execute(matrixes, blockOnDate, (scheduleMatrixPro, date) => scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod);
+			return new BlockInfoFactory().Execute(matrixes, blockOnDate, 
+				(scheduleMatrixPro, date) => scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod);
 		}
 
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836)]
