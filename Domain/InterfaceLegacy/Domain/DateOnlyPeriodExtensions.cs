@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -27,6 +28,18 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		public static DateOnlyPeriod Extend(this DateOnlyPeriod period, int days)
 		{
 			return new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(1));
+		}
+
+		public static DateOnlyPeriod? MaximumPeriod(this DateOnlyPeriod? period1, DateOnlyPeriod? period2)
+		{
+			if (!period2.HasValue)
+				return period1;
+			if (!period1.HasValue)
+				return period2;
+
+			var minStart = new DateOnly(new DateTime(Math.Min(period1.Value.StartDate.Date.Ticks, period2.Value.StartDate.Date.Ticks)));
+			var maxEnd = new DateOnly(new DateTime(Math.Max(period1.Value.EndDate.Date.Ticks, period2.Value.EndDate.Date.Ticks)));
+			return new DateOnlyPeriod(minStart, maxEnd);
 		}
 	}
 }
