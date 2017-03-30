@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			const double limit = 0.7999;
 
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.PersonsInOrganization, person, dateOnly, allScheduleMatrixPros);
-			var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder(), true);
+			var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder());
 			if (teamBlock == null)
 				return intervalIssuesBefore;
 			var totalScheduleRange = schedulingResultStateHolder.Schedules[person];

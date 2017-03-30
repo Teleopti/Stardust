@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				var unsuccessfulDays = new HashSet<DateOnly>();
 				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder,
-					rollbackService, resourceCalculateDelayer, scheduleMatrixes, shiftNudgeDirective, optimizationPreferences, limitation, isSingleAgentTeam, unsuccessfulDays);
+					rollbackService, resourceCalculateDelayer, scheduleMatrixes, shiftNudgeDirective, optimizationPreferences, limitation, unsuccessfulDays);
 
 				unsuccessfulDays.ForEach(x => scheduleMatrixPro.UnlockPeriod(x.ToDateOnlyPeriod()));
 				_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation, rollbackService);
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros,
 			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences,
-			IShiftCategoryLimitation limitation, bool isSingleAgentTeam, HashSet<DateOnly> lockedDays)
+			IShiftCategoryLimitation limitation, HashSet<DateOnly> lockedDays)
 		{
 			var removedScheduleDayPros = _removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation, rollbackService);
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var dateOnly = removedScheduleDayPro.Day;
 				var teamInfo = _teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.PersonsInOrganization,
 					scheduleMatrixPro.Person, dateOnly.ToDateOnlyPeriod(), allScheduleMatrixPros);
-				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder(), isSingleAgentTeam);
+				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder());
 				if (teamBlockInfo == null)
 					continue;
 
@@ -118,8 +118,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				lockedDays.Add(removedScheduleDayPro.Day);
 
 				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder, rollbackService,
-					resourceCalculateDelayer, allScheduleMatrixPros, shiftNudgeDirective, optimizationPreferences, limitation,
-					isSingleAgentTeam, lockedDays);
+					resourceCalculateDelayer, allScheduleMatrixPros, shiftNudgeDirective, optimizationPreferences, limitation, lockedDays);
 			}
 		}
 	}

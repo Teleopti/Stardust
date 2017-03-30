@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2), false);
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2));
 				Assert.IsNull(period);
 			}
 		}
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2), false);
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2));
 				Assert.IsNull(period);
 			}
 		}
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2), false);
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2));
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 3), period);
 			}
 		}
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		    using (_mocks.Playback())
 			{
-                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 11), false);
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 11));
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 21), period);
 			}
 		}
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1), false);
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1));
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
 			}
 		}
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 3), false);
+				var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 3));
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 2, 2013, 4, 3), period);
 			}
 	    }
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 3), false);
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 3));
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 2, 2013, 4, 3), period);
 			}
 		}
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mocks.Playback())
             {
-                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1), false);
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1));
                 Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
             }
         }
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mocks.Playback())
             {
-                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1), false);
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1));
                 Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
             }
         }

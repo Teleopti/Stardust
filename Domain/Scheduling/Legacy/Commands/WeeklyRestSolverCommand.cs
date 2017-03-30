@@ -15,20 +15,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class WeeklyRestSolverCommand : IWeeklyRestSolverCommand
 	{
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
-		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly Func<IWeeklyRestSolverService> _weeklyRestSolverService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
-			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, Func<IWeeklyRestSolverService> weeklyRestSolverService,
+			Func<IWeeklyRestSolverService> weeklyRestSolverService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			TeamInfoFactoryFactory teamInfoFactoryFactory)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
-			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_weeklyRestSolverService = weeklyRestSolverService;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -41,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
-				_teamBlockSchedulingOptions);
+			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
 
 			var schedulerStateHolder = _schedulerStateHolder();
 

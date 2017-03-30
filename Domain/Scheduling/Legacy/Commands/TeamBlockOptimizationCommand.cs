@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private ISchedulingProgress _backgroundWorker;
-		private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
 		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
@@ -89,7 +88,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
 			_matrixListFactory = matrixListFactory;
-			_teamBlockScheudlingOptions = teamBlockScheudlingOptions;
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 			_equalNumberOfCategoryFairness = equalNumberOfCategoryFairness;
 			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
@@ -131,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills, false, selectedPeriod.Inflate(1)))
 			{
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheudlingOptions);
+				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
 
 				if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
 				{

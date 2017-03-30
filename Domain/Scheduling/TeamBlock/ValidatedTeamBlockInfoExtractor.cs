@@ -14,17 +14,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         private readonly ITeamBlockSteadyStateValidator  _teamBlockSteadyStateValidator;
         private readonly ITeamBlockInfoFactory  _teamBlockInfoFactory;
-        private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 
 	    public ValidatedTeamBlockInfoExtractor(ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 	                                           ITeamBlockInfoFactory teamBlockInfoFactory,
-	                                           ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 	                                           ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker)
 	    {
 		    _teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 		    _teamBlockInfoFactory = teamBlockInfoFactory;
-		    _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		    _teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 	    }
 
@@ -48,11 +45,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    ITeamBlockInfo teamBlockInfo;
 				if (schedulingOptions.UseBlock)
 			    teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
-						schedulingOptions.BlockFinder(),
-				    _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
+						schedulingOptions.BlockFinder());
 		    else
-			    teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer, new SingleDayBlockFinder(), 
-				    _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
+			    teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer, new SingleDayBlockFinder());
 
 		    if (teamBlockInfo == null)
 			    return null;

@@ -71,8 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, _person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo );
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() {_person2});
 				Expect.Call(()=>_teamInfo.LockMember(_dateOnlyPeriod, _person2));
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder(),
-					false)).IgnoreArguments().Return(null);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder())).IgnoreArguments().Return(null);
 			}
 
 			using (_mock.Playback())
@@ -90,8 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, _person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person2 });
 				Expect.Call(() => _teamInfo.LockMember(_dateOnlyPeriod, _person2));
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder(),
-					false)).IgnoreArguments().Return(_teamBlockInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder())).IgnoreArguments().Return(_teamBlockInfo);
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_blockInfo.BlockPeriod).Return(_dateOnlyPeriod);
 			}
@@ -112,8 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, _person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person2 });
 				Expect.Call(() => _teamInfo.LockMember(_dateOnlyPeriod, _person2));
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder(),
-					true)).IgnoreArguments().Return(_teamBlockInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder())).IgnoreArguments().Return(_teamBlockInfo);
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_blockInfo.BlockPeriod).Return(_dateOnlyPeriod);
 			}

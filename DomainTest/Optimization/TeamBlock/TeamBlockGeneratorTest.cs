@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private MockRepository _mocks;
 		private ITeamInfoFactory _teamInfoFactory;
 		private ITeamBlockInfoFactory _teamBlockInfoFactory;
-	    private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
 	    [SetUp]
 		public void Setup()
@@ -26,8 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_mocks = new MockRepository();
 			_teamInfoFactory = _mocks.StrictMock<ITeamInfoFactory>();
 			_teamBlockInfoFactory = _mocks.StrictMock<ITeamBlockInfoFactory>();
-            _teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
-			_target = new TeamBlockGenerator(_teamInfoFactory, _teamBlockInfoFactory,_teamBlockSchedulingOptions);
+			_target = new TeamBlockGenerator(_teamInfoFactory, _teamBlockInfoFactory);
 		}
 
 		[Test]
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, person, selectedPeriod, matrixes)).Return(teaminfo);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teaminfo, dateOnly,
-																	  schedulingOptions.BlockFinder(), false)).IgnoreArguments()
+																	  schedulingOptions.BlockFinder())).IgnoreArguments()
 				      .Return(teamBlockInfo);
 			}
 			using (_mocks.Playback())
@@ -106,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, person, selectedPeriod, matrixes)).Return(teaminfo);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teaminfo, dateOnly,
-																	  schedulingOptions.BlockFinder(), false)).IgnoreArguments()
+																	  schedulingOptions.BlockFinder())).IgnoreArguments()
 						.Return(null);
 			}
 			using (_mocks.Playback())

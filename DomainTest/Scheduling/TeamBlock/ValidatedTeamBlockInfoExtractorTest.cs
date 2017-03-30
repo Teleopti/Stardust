@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IScheduleDay _scheduleDay;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IScheduleRange _scheduleRange;
-        private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
    		private ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 	    private GroupPageLight _groupPageLight;
 
@@ -44,9 +43,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _teamBlockSteadyStateValidator = _mocks.StrictMock<ITeamBlockSteadyStateValidator>();
             _teamBlockInfoFactory = _mocks.StrictMock<ITeamBlockInfoFactory>();
             _schedulingOptions = new SchedulingOptions();
-            _teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
 			_teamBlockSchedulingCompletionChecker = _mocks.StrictMock<ITeamBlockSchedulingCompletionChecker>();
-            _target = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator,_teamBlockInfoFactory,_teamBlockSchedulingOptions,_teamBlockSchedulingCompletionChecker);
+            _target = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator,_teamBlockInfoFactory,_teamBlockSchedulingCompletionChecker);
 
             _date = new DateOnly(2013, 02, 22);
             _person = PersonFactory.CreatePerson();
@@ -88,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(),
-                                                                      new SingleDayBlockFinder(), false)).IgnoreArguments().Return(null);
+                                                                      new SingleDayBlockFinder())).IgnoreArguments().Return(null);
             }
             Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, new DateOnly(), new List<IScheduleMatrixPro>(), _schedulingOptions, new DateOnlyPeriod()));
         }
@@ -101,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-																																			new SingleDayBlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
+																																			new SingleDayBlockFinder())).IgnoreArguments().Return(_teamBlockInfo);
 
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
@@ -126,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-																																			new SingleDayBlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
+																																			new SingleDayBlockFinder())).IgnoreArguments().Return(_teamBlockInfo);
 
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
@@ -153,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-																																			new SingleDayBlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
+																																			new SingleDayBlockFinder())).IgnoreArguments().Return(_teamBlockInfo);
 
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
@@ -183,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-																		new SingleDayBlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
+																		new SingleDayBlockFinder())).IgnoreArguments().Return(_teamBlockInfo);
 
 				Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();

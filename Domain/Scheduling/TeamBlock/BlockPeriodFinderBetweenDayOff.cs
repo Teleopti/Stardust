@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public class BlockPeriodFinderBetweenDayOff
     {
-        public DateOnlyPeriod? GetBlockPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnly providedDateOnly,bool isSingleAgentTeam)
+        public DateOnlyPeriod? GetBlockPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnly providedDateOnly)
         {
             //isSingleAgentTeam can be removed if more scheduling options are needed then we can move the scheduling options.
             if (scheduleMatrixPro == null) throw new ArgumentNullException("scheduleMatrixPro");

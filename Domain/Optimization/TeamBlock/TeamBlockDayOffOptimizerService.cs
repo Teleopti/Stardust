@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
-		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
-			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
+			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
 			TeamBlockDaysOffSameDaysOffLockSyncronizer teamBlockDaysOffSameDaysOffLockSyncronizer,
@@ -79,7 +78,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
-			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
@@ -446,7 +444,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var dateOnly in movedDaysOff.RemovedDaysOff)
 			{
-				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder(), _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
+				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder());
 
 				if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
 				{
@@ -559,7 +557,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var dateOnly in movedDaysOff.RemovedDaysOff)
 			{
-				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder(), _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
+				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder());
 
 				if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
 				{
@@ -594,9 +592,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
 				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
-																																								 schedulingOptions.BlockFinder(),
-				                                                                         _teamBlockSchedulingOptions
-					                                                                         .IsSingleAgentTeam(schedulingOptions));
+																																								 schedulingOptions.BlockFinder());
 				if (teamBlockInfo == null)
 					continue;
 				if (!_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))

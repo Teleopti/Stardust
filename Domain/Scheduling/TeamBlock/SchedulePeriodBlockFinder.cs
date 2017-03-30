@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class SchedulePeriodBlockFinder : IBlockFinder
 	{
-		public IBlockInfo Find(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly blockOnDate, bool singleAgentTeam, bool TEMPTOGGLE)
+		public IBlockInfo Find(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly blockOnDate, bool TEMPTOGGLE)
 		{
 			if (!TEMPTOGGLE)
 				return findRemoveMe(matrixes);

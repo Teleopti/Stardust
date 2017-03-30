@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
-		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IBackToLegalShiftService _backToLegalShiftService;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public BackToLegalShiftCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
-			ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 			IMatrixListFactory matrixListFactory,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IBackToLegalShiftService backToLegalShiftService,
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
-			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_matrixListFactory = matrixListFactory;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_backToLegalShiftService = backToLegalShiftService;
@@ -75,8 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 
-			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
-				_teamBlockSchedulingOptions);
+			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 			var allMatrixes = selectedPeriod.HasValue ? _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.PersonsInOrganization, selectedPeriod.Value) : new List<IScheduleMatrixPro>();
 			var selectedPersons = _extractor.ExtractPersons(selectedSchedules);

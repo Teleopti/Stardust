@@ -63,10 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 							teamInfo.LockMember(selectedPeriod , groupMember);
 	                }
 
-	                bool singleAgentTeam = groupOnGroupPageForTeamBlockPer.Type == GroupPageType.SingleAgent;
-
-	                ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
-		                blockFinder, singleAgentTeam);
+	                ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer, blockFinder);
 
                     if (teamBlockInfo == null) 
 						continue;

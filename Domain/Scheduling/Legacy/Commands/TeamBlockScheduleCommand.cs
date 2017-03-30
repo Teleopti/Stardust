@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private ISchedulingProgress _backgroundWorker;
 		private int _scheduledCount;
 		private ISchedulingOptions _schedulingOptions;
-		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
-			ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			ITeamMatrixChecker teamMatrixChecker,
@@ -69,7 +67,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
-			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_teamBlockScheduler = teamBlockScheduler;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
@@ -156,8 +153,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 			IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor =
-				new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator, _teamBlockInfoFactory,
-					_teamBlockSchedulingOptions, _teamBlockSchedulingCompletionChecker);
+				new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator, _teamBlockInfoFactory, _teamBlockSchedulingCompletionChecker);
 			var schedulingService =
 				new TeamBlockSchedulingService(schedulingOptions,
 					teamInfoFactory,

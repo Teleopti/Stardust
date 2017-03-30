@@ -18,13 +18,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
-	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
-	    public TeamBlockGenerator(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
+	    public TeamBlockGenerator(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
-	        _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -58,8 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				foreach (var day in daysInSelectedPeriod)
 				{
 					var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
-						schedulingOptions.BlockFinder(),
-						_teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
+						schedulingOptions.BlockFinder());
 					
 					if (teamBlock == null) continue;
 					allTeamBlocksInHashSet.Add(teamBlock);
