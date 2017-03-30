@@ -1301,18 +1301,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_intraday_settings_load_deviation", null, _dataMartConnectionString);
 		}
 
-		public IList<IOptionalColumn> LoadOptionalColumnAvailableAsGroupPage()
-		{
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var optionalColumnRepo = new OptionalColumnRepository(uow);
-				return optionalColumnRepo.LoadAll()
-					.Where(x => x.AvailableAsGroupPage)
-					.ToList();
-
-			}
-		}
-
 		public int FillSiteDataMart(IBusinessUnit businessUnit)
 		{
 			return

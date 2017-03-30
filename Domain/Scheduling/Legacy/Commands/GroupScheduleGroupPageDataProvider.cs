@@ -259,11 +259,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             }
         }
 
-		public IList<IOptionalColumn> OptionalColumnCollectionAvailableAsGroupPage
-		{
-			get { return new List<IOptionalColumn>(); }
-		}
-
 		public IEnumerable<IPerson> AllLoadedPersons
 		{
 			get {

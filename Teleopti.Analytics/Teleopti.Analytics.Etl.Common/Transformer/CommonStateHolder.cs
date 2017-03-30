@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.ReadModel;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
@@ -38,8 +39,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		private IList<IGroupPage> _userDefinedGroupings;
 		private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSetCollection;
 		private Dictionary<DateTimePeriod, IScheduleDictionary> _dictionaryCache;
-		private readonly ConcurrentDictionary<string, ILastChangedReadModel> _timeValues = new ConcurrentDictionary<string, ILastChangedReadModel>();
-		private IList<IOptionalColumn> _optionalColumnCollection;
 		private CommonStateHolder()
 		{
 		}
@@ -59,14 +58,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			get {
 				return _skillCollection ?? (_skillCollection = _jobParameters.Helper.Repository.LoadSkill(ActivityCollection));
-			}
-		}
-
-		public IList<IOptionalColumn> OptionalColumnCollectionAvailableAsGroupPage {
-			get
-			{
-				return _optionalColumnCollection ??
-						 (_optionalColumnCollection = _jobParameters.Helper.Repository.LoadOptionalColumnAvailableAsGroupPage());
 			}
 		}
 
@@ -373,6 +364,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return theDic[person].ScheduledDay(restrictionDate);
 		}
 
+		private readonly ConcurrentDictionary<string, ILastChangedReadModel> _timeValues = new ConcurrentDictionary<string, ILastChangedReadModel>();
 		public void SetThisTime(ILastChangedReadModel lastTime, string step)
 		{
 			_timeValues.AddOrUpdate(step, lastTime, (key, oldValue) => lastTime);

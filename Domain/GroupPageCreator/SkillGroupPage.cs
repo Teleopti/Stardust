@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.GroupPageCreator
 {
-	public class SkillGroupPage : IGroupPageCreator<ISkill>
+    public class SkillGroupPage : IGroupPageCreator<ISkill>
     {
         public IGroupPage CreateGroupPage(IEnumerable<ISkill> entityCollection, IGroupPageOptions groupPageOptions)
         {

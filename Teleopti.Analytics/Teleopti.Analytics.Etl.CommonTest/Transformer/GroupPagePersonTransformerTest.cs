@@ -108,15 +108,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		}
 
 		[Test]
-		public void ShouldReturnBuiltInGroupPagesIncludingOptionalColumns()
-		{
-			IList<IGroupPage> dynamicGroupPages = _target.BuiltInGroupPages;
-
-			Assert.IsNotNull(dynamicGroupPages);
-			Assert.AreEqual(7, dynamicGroupPages.Count);
-		}
-
-		[Test]
 		public void ShouldBeACertainNumberOfRowsAfterTransformation()
 		{
 			IEnumerable<IGroupPage> userDefinedGroupings = _target.UserDefinedGroupings;
@@ -276,7 +267,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		private IList<IPartTimePercentage> _partTimePercentageCollection;
 		private IList<IRuleSetBag> _ruleSetBagCollection;
 		private List<IGroupPage> _userDefinedGroupings;
-		private readonly List<IOptionalColumn> _optionalColumnsAsGroupPage = new List<IOptionalColumn>();
 
 		public IEnumerable<IPerson> PersonCollection
 		{
@@ -459,16 +449,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 				skill2.SetId(Guid.NewGuid());
 
 				return new List<ISkill> { skill1, skill2 };
-			}
-		}
-		public IList<IOptionalColumn> OptionalColumnCollectionAvailableAsGroupPage
-		{
-			get
-			{
-				return new List<IOptionalColumn>()
-				{
-					new OptionalColumn("opt col") { AvailableAsGroupPage = true }
-				};
 			}
 		}
 	}
