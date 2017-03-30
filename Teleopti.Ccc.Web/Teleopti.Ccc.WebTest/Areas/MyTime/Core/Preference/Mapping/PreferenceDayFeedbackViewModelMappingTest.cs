@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
-			
+
 			system.UseTestDouble<FakePreferenceProvider>().For<IPreferenceProvider>();
 			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
 			system.UseTestDouble<FakePersonRuleSetBagProvider>().For<IPersonRuleSetBagProvider>();
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			Setup();
 			var testDate = new DateOnly(2029, 1, 2);
-			var targetReturn =  Mapper.Map(testDate);
+			var targetReturn = Mapper.Map(testDate);
 			targetReturn.Date.Should().Be.EqualTo(testDate.ToFixedClientDateOnlyFormat());
 		}
 
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			Setup();
 			var testDate = new DateOnly(2029, 1, 2);
 			var targetReturn = Mapper.Map(testDate);
-			targetReturn.ExpectedNightRestTimeSpan.Should().Be.EqualTo("12:00:00");
+			targetReturn.ExpectedNightRestTimeSpan.Should().Be.EqualTo("12:00");
 		}
 
 		[Test]

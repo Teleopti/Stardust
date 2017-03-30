@@ -262,9 +262,9 @@ $(document).ready(function () {
 					PossibleEndTimes: "16:00-18:00",
 					PossibleContractTimeMinutesLower: 7 * 60,
 					PossibleContractTimeMinutesUpper: 12 * 60,
-					RestTimeToNextDayTimeSpan: "10:00:00",
-					RestTimeToPreviousDayTimeSpan: "11:00:00",
-					ExpectedNightRestTimeSpan: "11:00:00"
+					RestTimeToNextDayTimeSpan: "10:00",
+					RestTimeToPreviousDayTimeSpan: "11:00",
+					ExpectedNightRestTimeSpan: "11:00"
 				});
 		};
 
@@ -376,9 +376,9 @@ $(document).ready(function () {
 
 		var ajax = function (model, options) {
 			options.success({
-				RestTimeToNextDayTimeSpan: "10:00:00",
-				RestTimeToPreviousDayTimeSpan: "10:00:00",
-				ExpectedNightRestTimeSpan:"11:00:00",
+				RestTimeToNextDayTimeSpan: "10:00",
+				RestTimeToPreviousDayTimeSpan: "10:00",
+				ExpectedNightRestTimeSpan: "11:00",
 				HasNightRestViolationToPreviousDay: true,
 				HasNightRestViolationToNextDay: true,
 				DateInternal: "\/Date(1454515200000)\/"
@@ -392,13 +392,13 @@ $(document).ready(function () {
 
 		equal(nightRestViolationObjs[0].firstDay, Teleopti.MyTimeWeb.Common.FormatDate(minusOneDay)); //"2016-02-03"
 		equal(nightRestViolationObjs[0].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(currentDay)); //"2016-02-04"
-		equal(nightRestViolationObjs[0].nightRestTimes, '11:00:00');
-		equal(nightRestViolationObjs[0].hoursBetweenTwoDays, '10:00:00');
+		equal(nightRestViolationObjs[0].nightRestTimes, "11:00");
+		equal(nightRestViolationObjs[0].hoursBetweenTwoDays, "10:00");
 
 		equal(nightRestViolationObjs[1].firstDay, Teleopti.MyTimeWeb.Common.FormatDate(currentDay)); //"2016-02-04"
 		equal(nightRestViolationObjs[1].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(plusOneDay)); // "2016-02-05"
-		equal(nightRestViolationObjs[1].nightRestTimes, '11:00:00');
-		equal(nightRestViolationObjs[1].hoursBetweenTwoDays, '10:00:00');
+		equal(nightRestViolationObjs[1].nightRestTimes, "11:00");
+		equal(nightRestViolationObjs[1].hoursBetweenTwoDays, "10:00");
 	});
 
 	test("should turn on the night rest violation switch", function () {
@@ -406,9 +406,9 @@ $(document).ready(function () {
 
 		var ajax = function (model, options) {
 			options.success({
-				RestTimeToNextDayTimeSpan: "10:00:00",
-				RestTimeToPreviousDayTimeSpan: "10:00:00",
-				ExpectedNightRestTimeSpan: "11:00:00",
+				RestTimeToNextDayTimeSpan: "10:00",
+				RestTimeToPreviousDayTimeSpan: "10:00",
+				ExpectedNightRestTimeSpan: "11:00",
 				HasNightRestViolationToPreviousDay: true,
 				HasNightRestViolationToNextDay: false
 			});

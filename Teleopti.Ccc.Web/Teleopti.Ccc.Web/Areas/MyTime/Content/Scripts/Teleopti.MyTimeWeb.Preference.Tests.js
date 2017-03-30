@@ -47,16 +47,16 @@
 					if (options.data.Date == '2012-06-11')
 						options.success({
 							PossibleContractTimeMinutesLower: 6 * 60,
-							RestTimeToNextDayTimeSpan: "10:00:00",
-							RestTimeToPreviousDayTimeSpan: "11:00:00",
-							ExpectedNightRestTimeSpan: "11:00:00"
+							RestTimeToNextDayTimeSpan: "10:00",
+							RestTimeToPreviousDayTimeSpan: "11:00",
+							ExpectedNightRestTimeSpan: "11:00"
 						});
 					if (options.data.Date == '2012-06-12')
 						options.success({
 							PossibleContractTimeMinutesLower: 8 * 60,
-							RestTimeToNextDayTimeSpan: "10:00:00",
-							RestTimeToPreviousDayTimeSpan: "11:00:00",
-							ExpectedNightRestTimeSpan: "11:00:00"
+							RestTimeToNextDayTimeSpan: "10:00",
+							RestTimeToPreviousDayTimeSpan: "11:00",
+							ExpectedNightRestTimeSpan: "11:00"
 						});
 				}
 			}
@@ -92,9 +92,9 @@
 				if (options.url == "PreferenceFeedback/Feedback") {
 					options.success({
 						PossibleContractTimeMinutesLower: 8 * 60,
-						RestTimeToNextDayTimeSpan: "10:00:00",
-						RestTimeToPreviousDayTimeSpan: "11:00:00",
-						ExpectedNightRestTimeSpan: "11:00:00"
+						RestTimeToNextDayTimeSpan: "10:00",
+						RestTimeToPreviousDayTimeSpan: "11:00",
+						ExpectedNightRestTimeSpan: "11:00"
 					});
 				}
 			}
@@ -203,9 +203,9 @@
 					if (options.data.Date == '2012-06-19' || options.data.Date == '2012-06-20')
 						options.success({
 							PossibleContractTimeMinutesLower: 6 * 60,
-							RestTimeToNextDayTimeSpan: "10:00:00",
-							RestTimeToPreviousDayTimeSpan: "11:00:00",
-							ExpectedNightRestTimeSpan: "11:00:00"
+							RestTimeToNextDayTimeSpan: "10:00",
+							RestTimeToPreviousDayTimeSpan: "11:00",
+							ExpectedNightRestTimeSpan: "11:00"
 						});
 				}
 			}

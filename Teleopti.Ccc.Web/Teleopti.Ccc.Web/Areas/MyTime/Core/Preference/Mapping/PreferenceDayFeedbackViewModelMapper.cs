@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceDayFeedbackViewModelMapper
 	{
-		private const string timeSpanFormat = @"hh\:mm\:ss";
+		private const string timeSpanFormat = @"hh\:mm";
 		private readonly IPreferenceFeedbackProvider _preferenceFeedbackProvider;
 		private readonly IToggleManager _toggleManager;
 
