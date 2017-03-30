@@ -20,7 +20,12 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///</summary>
         bool IsSite { get; }
 
-        /// <summary>
+		///<summary>
+		/// Determines if this group is based on an optional column.
+		///</summary>
+		bool IsOptionalColumn { get; }
+
+	    /// <summary>
         /// Adds the person to group.
         /// </summary>
         /// <param name="person">The person.</param>

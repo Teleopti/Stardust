@@ -146,5 +146,12 @@ namespace Teleopti.Ccc.DomainTest.Common
             #endregion
 
         }
-    }
+
+		[Test]
+		public void ShouldIdentifyAsOptionalColumnEntity()
+		{
+			_child3.Entity = new OptionalColumn("");
+			Assert.IsTrue(_child3.IsOptionalColumn);
+		}
+	}
 }

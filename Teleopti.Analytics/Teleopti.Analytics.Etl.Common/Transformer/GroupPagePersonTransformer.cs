@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -14,10 +16,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 	public class GroupPagePersonTransformer : IGroupPagePersonTransformer
 	{
 		private readonly Func<IGroupPageDataProvider> _getGroupPageDataProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public GroupPagePersonTransformer(Func<IGroupPageDataProvider> getGroupPageDataProvider)
+		public GroupPagePersonTransformer(Func<IGroupPageDataProvider> getGroupPageDataProvider, IToggleManager toggleManager)
 		{
 			_getGroupPageDataProvider = getGroupPageDataProvider;
+			_toggleManager = toggleManager;
 		}
 
 		public IEnumerable<IGroupPage> UserDefinedGroupings
@@ -42,7 +46,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			get
 			{
-				var groupingsCreator = new GroupingsCreator(_getGroupPageDataProvider());
+				var groupingsCreator = new GroupingsCreator(_getGroupPageDataProvider(), _toggleManager);
 				return groupingsCreator.CreateBuiltInGroupPages(false);
 			}
 		}
@@ -69,6 +73,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 					{
 						bool isCustomGroup = false;
 						DataRow row = dataTable.NewRow();
+						
 
 						if (!groupPage.Id.HasValue)
 							groupPage.SetId(Guid.NewGuid());
@@ -76,7 +81,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 							rootGroup.SetId(Guid.Empty);
 
 
-						if (groupPage.DescriptionKey == null)
+						if (groupPage.DescriptionKey == null && !rootGroup.IsOptionalColumn)
 						{
 							isCustomGroup = true;
 							row["group_page_name_resource_key"] = DBNull.Value;

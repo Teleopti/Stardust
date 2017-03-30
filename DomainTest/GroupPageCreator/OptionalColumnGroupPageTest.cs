@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -36,11 +37,16 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 
 			groupPage.Description.Name.Should().Be.EqualTo(_optionalColumn.Name);
 			groupPage.DescriptionKey.Should().Be.EqualTo(null);
+			groupPage.Id.Should().Be.EqualTo(_optionalColumn.Id.Value);
 			groupPage.RootGroupCollection.Count.Should().Be.EqualTo(2);
 			var group1 = groupPage.RootGroupCollection.SingleOrDefault(x => x.Description.Name == "group 1");
-			var group2 = groupPage.RootGroupCollection.SingleOrDefault(x => x.Description.Name == "group 2");
+			var group2 = groupPage.RootGroupCollection.SingleOrDefault(x => x.Description.Name == "group 2");			
 			group1.PersonCollection.Should().Contain(person1);
 			group2.PersonCollection.Should().Contain(person2);
+			group1.Id.Should().Not.Be.EqualTo(null);
+			group2.Id.Should().Not.Be.EqualTo(null);
+			group1.Entity.Should().Be.SameInstanceAs(_optionalColumn);
+			group2.Entity.Should().Be.SameInstanceAs(_optionalColumn);
 		}
 
 		[Test]
@@ -62,6 +68,8 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 			group1.PersonCollection.Count.Should().Be.EqualTo(1);
 			group1.PersonCollection.First().Should().Be.SameInstanceAs(person1);
 		}
+
+		
 
 		[Test]
 		public void ShouldHandleEmptyEntityList()
