@@ -76,13 +76,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public IRuleSetBag ForDate(IPerson person, DateOnly date)
 		{
-			if (person == null) return null;
+			var personPeriod = person?.Period(date);
 
-			var personPeriod = person.Period(date);
-			if (personPeriod == null)
-				return null;
-
-			var ruleSetBag = personPeriod.RuleSetBag;
+			var ruleSetBag = personPeriod?.RuleSetBag;
 			return ruleSetBag != null ? _repository.FindWithRuleSetsAndAccessibility(ruleSetBag.Id.GetValueOrDefault()) : null;
 		}
 	}

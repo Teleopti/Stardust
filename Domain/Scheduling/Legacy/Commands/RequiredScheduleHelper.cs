@@ -89,11 +89,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes)
 		{
 			if (matrixList == null)
-				throw new ArgumentNullException("matrixList");
+				throw new ArgumentNullException(nameof(matrixList));
 			if (backgroundWorker == null)
-				throw new ArgumentNullException("backgroundWorker");
+				throw new ArgumentNullException(nameof(backgroundWorker));
 			if (schedulingOptions == null)
-				throw new ArgumentNullException("schedulingOptions");
+				throw new ArgumentNullException(nameof(schedulingOptions));
 			using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
 			{
 				if (backgroundWorker.CancellationPending)
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void ScheduleSelectedPersonDays(IEnumerable<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions)
 		{
-			if (matrixList == null) throw new ArgumentNullException("matrixList");
+			if (matrixList == null) throw new ArgumentNullException(nameof(matrixList));
 
 			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
 
@@ -223,8 +223,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void ScheduleSelectedStudents(IEnumerable<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,
 			ISchedulingOptions schedulingOptions)
 		{
-			if (allSelectedSchedules == null) throw new ArgumentNullException("allSelectedSchedules");
-			if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
+			if (allSelectedSchedules == null) throw new ArgumentNullException(nameof(allSelectedSchedules));
+			if (schedulingOptions == null) throw new ArgumentNullException(nameof(schedulingOptions));
 
 			IList<IScheduleDay> unlockedSchedules = new List<IScheduleDay>();
 			foreach (var scheduleDay in allSelectedSchedules)

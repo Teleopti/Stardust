@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		{
 			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_PreferencePerformanceForMultipleUsers_43322))
 			{
-				return Map(new DateOnlyPeriod(date, date)).FirstOrDefault();
+				return Map(date.ToDateOnlyPeriod()).FirstOrDefault();
 			}
 
 			var nightRestResult = _preferenceFeedbackProvider.CheckNightRestViolation(date);
