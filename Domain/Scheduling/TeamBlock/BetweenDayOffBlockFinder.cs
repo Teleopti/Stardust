@@ -14,9 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return findRemoveMe(matrixes, blockOnDate, singleAgentTeam);
 
 			var blockPeriodFinderBetweenDayOff = new BlockPeriodFinderBetweenDayOff();
-			return new BlockInfoFactory().Execute(singleAgentTeam,
-				matrixes,
-				scheduleMatrixPro => blockPeriodFinderBetweenDayOff.GetBlockPeriod(scheduleMatrixPro, blockOnDate, singleAgentTeam));
+			return new BlockInfoFactory().Execute(matrixes, scheduleMatrixPro => blockPeriodFinderBetweenDayOff.GetBlockPeriod(scheduleMatrixPro, blockOnDate, singleAgentTeam));
 		}
 
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836)]
