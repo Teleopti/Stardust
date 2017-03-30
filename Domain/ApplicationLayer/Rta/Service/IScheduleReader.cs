@@ -1,9 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IScheduleReader
 	{
-		IEnumerable<ScheduledActivity> Read();
+		IEnumerable<CurrentSchedule> Read(int? lastUpdate);
+	}
+
+	public class CurrentSchedule
+	{
+		public Guid PersonId;
+		public int LastUpdate;
+		public IEnumerable<ScheduledActivity> Schedule;
 	}
 }

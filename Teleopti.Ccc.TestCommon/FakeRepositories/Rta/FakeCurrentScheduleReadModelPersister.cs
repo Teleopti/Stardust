@@ -12,16 +12,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			public Guid PersonId;
 			public IEnumerable<ScheduledActivity> Schedules;
+			public int LastUpdate;
 			public bool Valid;
-
 		}
-
+		
 		private IEnumerable<data> _data = Enumerable.Empty<data>();
 
-		public IEnumerable<ScheduledActivity> Read()
+		public IEnumerable<CurrentSchedule> Read(int? lastUpdate)
 		{
 			return _data
-				.SelectMany(x => x.Schedules ?? Enumerable.Empty<ScheduledActivity>())
+				.Where(x => !lastUpdate.HasValue || x.LastUpdate > lastUpdate.Value)
+				.Select(x => new CurrentSchedule
+				{
+					PersonId = x.PersonId,
+					Schedule = x.Schedules ?? Enumerable.Empty<ScheduledActivity>()
+				})
 				.ToArray();
 		}
 		
@@ -29,8 +34,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			var data = _data.SingleOrDefault(x => x.PersonId == personId);
 			if (data == null)
-				_data = _data.Append(new data {PersonId = personId});
-			_data.Single(x => x.PersonId == personId).Valid = false;
+				_data = _data.Append(new data {PersonId = personId, Valid = false}).ToArray();
+			else
+				data.Valid = false;
 		}
 
 		public IEnumerable<Guid> GetInvalid()
@@ -43,20 +49,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void Persist(Guid personId, IEnumerable<ScheduledActivity> schedule)
 		{
+			var personSchedule = _data.Where(x => x.PersonId == personId);
+			var lastUpdate = personSchedule.IsEmpty() ? 0 : personSchedule.Max(x => x.LastUpdate);
 			_data = _data
 				.Where(x => x.PersonId != personId)
+				.Append(new data
+				{
+					PersonId = personId,
+					Schedules = schedule.ToArray(),
+					LastUpdate = lastUpdate + 1,
+					Valid = true
+				})
 				.ToArray();
-			if (schedule.Any())
-			{
-				_data = _data
-					.Append(new data
-					{
-						PersonId = personId,
-						Schedules = schedule.ToArray(),
-						Valid = true
-					})
-					.ToArray();
-			}
 		}
 
 	}

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
+using Newtonsoft.Json;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
@@ -7,8 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -16,23 +16,20 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
-		private readonly IJsonDeserializer _deserializer;
 
 		public AgentStateReadModelPersister(
 			ICurrentUnitOfWork unitOfWork,
-			IJsonSerializer serializer,
-			IJsonDeserializer deserializer)
+			IJsonSerializer serializer)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
-			_deserializer = deserializer;
 		}
 
 		[LogInfo]
 		public virtual void Persist(AgentStateReadModel model)
 		{
-			var query = _unitOfWork.Current()
-				.Session().CreateSQLQuery(@"
+			var query = _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
 					UPDATE [ReadModel].[AgentState]
 					SET
 						ReceivedTime = :ReceivedTime,
@@ -68,16 +65,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("IsRuleAlarm", model.IsRuleAlarm)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("AlarmColor", model.AlarmColor)
-				.SetParameter("Shift", _serializer.SerializeObject(model.Shift), NHibernateUtil.StringClob)
-				.SetParameter("OutOfAdherences", _serializer.SerializeObject(model.OutOfAdherences), NHibernateUtil.StringClob)
+				.SetParameter("Shift", model.Shift != null ? _serializer.SerializeObject(model.Shift) : null, NHibernateUtil.StringClob)
+				.SetParameter("OutOfAdherences", model.OutOfAdherences != null ? _serializer.SerializeObject(model.OutOfAdherences) : null, NHibernateUtil.StringClob)
 				.SetParameter("StateGroupId", model.StateGroupId);
-
+			
 			var updated = query.ExecuteUpdate();
 
 			if (updated == 0)
 			{
-				_unitOfWork.Current()
-					.Session().CreateSQLQuery(@"
+				_unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
 						INSERT INTO [ReadModel].[AgentState]
 						(
 							PersonId,
@@ -142,8 +139,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					.SetParameter("IsRuleAlarm", model.IsRuleAlarm)
 					.SetParameter("AlarmStartTime", model.AlarmStartTime)
 					.SetParameter("AlarmColor", model.AlarmColor)
-					.SetParameter("Shift", _serializer.SerializeObject(model.Shift), NHibernateUtil.StringClob)
-					.SetParameter("OutOfAdherences", _serializer.SerializeObject(model.OutOfAdherences), NHibernateUtil.StringClob)
+					.SetParameter("Shift", model.Shift != null ? _serializer.SerializeObject(model.Shift) : null, NHibernateUtil.StringClob)
+					.SetParameter("OutOfAdherences", model.OutOfAdherences != null ? _serializer.SerializeObject(model.OutOfAdherences) : null, NHibernateUtil.StringClob)
 					.SetParameter("StateGroupId", model.StateGroupId)
 					.ExecuteUpdate();
 			}
@@ -151,8 +148,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public virtual void UpsertDeleted(Guid personId, DateTime expiresAt)
 		{
-			_unitOfWork.Current()
-				.Session().CreateSQLQuery(@"
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
 MERGE INTO [ReadModel].[AgentState] AS T
 	USING (
 		VALUES
@@ -189,11 +186,10 @@ MERGE INTO [ReadModel].[AgentState] AS T
 
 		public void DeleteOldRows(DateTime now)
 		{
-			while (_unitOfWork.Current()
-				.Session().CreateSQLQuery(
-					@"DELETE TOP (100) FROM [ReadModel].[AgentState] WHERE ExpiresAt <= :now")
-				.SetParameter("now", now)
-				.ExecuteUpdate() > 0)
+			var query = _unitOfWork.Current().Session()
+				.CreateSQLQuery("DELETE TOP (100) FROM [ReadModel].[AgentState] WHERE ExpiresAt <= :now")
+				.SetParameter("now", now);
+			while (query.ExecuteUpdate() > 0)
 			{
 				Thread.Sleep(100);
 			}
@@ -201,22 +197,12 @@ MERGE INTO [ReadModel].[AgentState] AS T
 
 		public AgentStateReadModel Load(Guid personId)
 		{
-			var internalModel = _unitOfWork.Current()
-				.Session().CreateSQLQuery(@"SELECT TOP 1 * FROM [ReadModel].[AgentState] WHERE PersonId = :PersonId")
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery("SELECT TOP 1 * FROM [ReadModel].[AgentState] WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
 				.SetReadOnly(true)
-				.UniqueResult<internalModel>();
-			if (internalModel == null) return null;
-
-			((AgentStateReadModel) internalModel).Shift =
-				_deserializer.DeserializeObject<AgentStateActivityReadModel[]>(internalModel.Shift);
-			internalModel.Shift = null;
-			((AgentStateReadModel) internalModel).OutOfAdherences =
-				_deserializer.DeserializeObject<AgentStateOutOfAdherenceReadModel[]>(internalModel.OutOfAdherences);
-			internalModel.OutOfAdherences = null;
-
-			return internalModel;
+				.UniqueResult<AgentStateReadModel>();
 		}
 
 		public void UpsertAssociation(AssociationInfo info)
@@ -399,8 +385,12 @@ WHERE SiteId = :SiteId")
 
 		private class internalModel : AgentStateReadModel
 		{
-			public new string Shift { get; set; }
-			public new string OutOfAdherences { get; set; }
+			public new string Shift {
+				set { base.Shift = value != null ? JsonConvert.DeserializeObject<IEnumerable<AgentStateActivityReadModel>>(value) : null; }
+			}
+			public new string OutOfAdherences {
+				set { base.OutOfAdherences = value != null ? JsonConvert.DeserializeObject<IEnumerable<AgentStateOutOfAdherenceReadModel>>(value) : null; }
+			}
 		}
 	}
 }

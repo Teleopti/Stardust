@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Newtonsoft.Json;
 using NHibernate;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -14,25 +13,29 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
-		private readonly IJsonDeserializer _deserializer;
 
 		public CurrentScheduleReadModelPersister(
-			ICurrentReadModelUnitOfWork unitOfWork, 
-			IJsonSerializer serializer, 
-			IJsonDeserializer deserializer)
+			ICurrentReadModelUnitOfWork unitOfWork,
+			IJsonSerializer serializer)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
-			_deserializer = deserializer;
 		}
 
-		public IEnumerable<ScheduledActivity> Read()
+		public IEnumerable<CurrentSchedule> Read(int? lastUpdate)
 		{
+			var sql = "SELECT PersonId, LastUpdate, Schedule FROM ReadModel.CurrentSchedule WITH (NOLOCK)";
+			if (lastUpdate.HasValue)
+				return _unitOfWork.Current()
+					.CreateSqlQuery($"{sql} WHERE LastUpdate > :LastUpdate")
+					.SetParameter("LastUpdate", lastUpdate.Value)
+					.SetResultTransformer(Transformers.AliasToBean<internalCurrentSchedule>())
+					.List<CurrentSchedule>();
+
 			return _unitOfWork.Current()
-				.CreateSqlQuery("SELECT Schedule FROM ReadModel.CurrentSchedule")
-				.List<string>()
-				.SelectMany(x => _deserializer.DeserializeObject<IEnumerable<ScheduledActivity>>(x ?? "[]"))
-				.ToArray();
+				.CreateSqlQuery(sql)
+				.SetResultTransformer(Transformers.AliasToBean<internalCurrentSchedule>())
+				.List<CurrentSchedule>();
 		}
 
 		public void Invalidate(Guid personId)
@@ -58,28 +61,35 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public void Persist(Guid personId, IEnumerable<ScheduledActivity> schedule)
 		{
-			if (schedule.IsEmpty())
-			{
-				_unitOfWork.Current()
-					.CreateSqlQuery("DELETE ReadModel.CurrentSchedule WHERE PersonId = :PersonId")
-					.SetParameter("PersonId", personId)
-					.ExecuteUpdate();
-				return;
-			}
 			var serializedSchedule = _serializer.SerializeObject(schedule);
 
 			var updated = _unitOfWork.Current()
-				.CreateSqlQuery("UPDATE ReadModel.CurrentSchedule SET Schedule = :Schedule, Valid = 1 WHERE PersonId = :PersonId")
+				.CreateSqlQuery(@"
+UPDATE ReadModel.CurrentSchedule 
+SET
+	Schedule = :Schedule,
+	Valid = 1,
+	LastUpdate = CASE WHEN LastUpdate IS NULL THEN 1 ELSE LastUpdate + 1 END
+WHERE
+	PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
 				.SetParameter("Schedule", serializedSchedule, NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 
 			if (updated == 0)
 				_unitOfWork.Current()
-					.CreateSqlQuery("INSERT INTO ReadModel.CurrentSchedule (PersonId, Schedule, Valid) VALUES (:PersonId, :Schedule, 1)")
+					.CreateSqlQuery("INSERT INTO ReadModel.CurrentSchedule (PersonId, Schedule, LastUpdate, Valid) VALUES (:PersonId, :Schedule, 1, 1)")
 					.SetParameter("PersonId", personId)
 					.SetParameter("Schedule", serializedSchedule, NHibernateUtil.StringClob)
 					.ExecuteUpdate();
+		}
+
+		private class internalCurrentSchedule : CurrentSchedule
+		{
+			public new string Schedule
+			{
+				set { base.Schedule = JsonConvert.DeserializeObject<IEnumerable<ScheduledActivity>>(value ?? "[]"); }
+			}
 		}
 	}
 }

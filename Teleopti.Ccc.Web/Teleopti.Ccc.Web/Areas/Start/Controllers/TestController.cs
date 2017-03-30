@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HangfireUtilities _hangfire;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
+		private readonly ScheduleCache _schedule;
 
 		public TestController(
 			IMutateNow mutateNow,
@@ -63,7 +65,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
 			HangfireUtilities hangfire,
-			TenantTickEventPublisher tenantTickEventPublisher)
+			TenantTickEventPublisher tenantTickEventPublisher, 
+			ScheduleCache schedule)
 		{
 			_mutateNow = mutateNow;
 			_now = now;
@@ -80,6 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_findPersonInfo = findPersonInfo;
 			_hangfire = hangfire;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
+			_schedule = schedule;
 		}
 
 		[TestLog]
@@ -88,6 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 			_mutateNow.Reset();
+			_schedule.ClearCache();
 
 			((IdentityProviderProvider)_identityProviderProvider).SetDefaultProvider(defaultProvider);
 			_loadPasswordPolicyService.ClearFile();

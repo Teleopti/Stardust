@@ -208,10 +208,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private static IEnumerable<ScheduledActivity> activitiesBetween(IEnumerable<ScheduledActivity> schedule, DateTime start, DateTime end)
 		{
-			return from a in schedule
-				   where a.EndDateTime > start
-				   where a.StartDateTime <= end
-				   select a;
+			return (
+				from a in schedule
+				where a.EndDateTime > start
+				where a.StartDateTime <= end
+				select a
+			).ToArray();
 		}
 
 		private static ScheduledActivity currentActivity(IEnumerable<ScheduledActivity> schedule, DateTime time)

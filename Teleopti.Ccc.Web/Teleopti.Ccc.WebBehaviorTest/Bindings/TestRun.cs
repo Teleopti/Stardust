@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using log4net;
 using log4net.Config;
 using NUnit.Framework;
