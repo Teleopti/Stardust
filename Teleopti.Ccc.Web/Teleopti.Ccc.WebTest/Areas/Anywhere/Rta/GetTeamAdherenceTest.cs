@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			result.Name.Should().Be(team.Description.Name);
 			result.NumberOfAgents.Should().Be(0);
 			result.SiteId.Should().Be(site.Id.GetValueOrDefault());
-			result.Color.Should().Be("");
+			result.Color.Should().Be(null);
 			result.OutOfAdherence.Should().Be(0);
 		}
 	}
