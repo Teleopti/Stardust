@@ -15,13 +15,11 @@ namespace Teleopti.Ccc.Web.Core.Logging
 
 		public void LogException(Exception exception)
 		{
-
-			var innerMostException = getInnerMostException(exception);
-
-			if (innerMostException is HttpException && ((HttpException)innerMostException).GetHttpCode() == 404)
-				_logger.Warn(Log4NetModule.LogMessage404, innerMostException);
+			var httpException = getInnerMostException(exception) as HttpException;
+			if (httpException != null && httpException.GetHttpCode() == 404)
+				_logger.Warn(Log4NetModule.LogMessage404, exception);
 			else
-				_logger.Error(Log4NetModule.LogMessageException, innerMostException);
+				_logger.Error(Log4NetModule.LogMessageException, exception);
 		}
 
 		private static Exception getInnerMostException(Exception exception)
