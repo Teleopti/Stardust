@@ -89,7 +89,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					HasNightRestViolationToNextDay = nightRestResult.HasViolationToNextDay
 				};
 
-				var workTimeMinMaxCalculationResult = workTimeMinMaxCalculationResults.ContainsKey(date)
+				var workTimeMinMaxCalculationResult = workTimeMinMaxCalculationResults != null
+													  && workTimeMinMaxCalculationResults.ContainsKey(date)
 					? workTimeMinMaxCalculationResults[date]
 					: new WorkTimeMinMaxCalculationResult();
 
