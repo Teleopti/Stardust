@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	public class ImportAgentEventHandler : IHandleEvent<ImportAgentEvent>,
 		IRunOnStardust
 	{
-		private IJobResultRepository _jobResultRepository;
-		private IFileProcessor _fileProcessor;
+		private readonly IJobResultRepository _jobResultRepository;
+		private readonly IFileProcessor _fileProcessor;
 
 		public ImportAgentEventHandler(
 			IJobResultRepository jobResultRepository,
