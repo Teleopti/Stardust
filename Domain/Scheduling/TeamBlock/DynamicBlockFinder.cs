@@ -11,35 +11,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, IBlockFinder blockFinder, bool singleAgentTeam);
     }
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836)]
     public class DynamicBlockFinderOLD : IDynamicBlockFinder
     {
+	    private readonly bool _resourcePlannerTeamBlockPeriod42836Hack;
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836)]
+		public DynamicBlockFinderOLD(bool resourcePlannerTeamBlockPeriod42836_Hack)
+	    {
+		    _resourcePlannerTeamBlockPeriod42836Hack = resourcePlannerTeamBlockPeriod42836_Hack;
+	    }
+
 	    public IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, IBlockFinder blockFinder, bool singleAgentTeam)
 	    {
 		    IEnumerable<IScheduleMatrixPro> tempMatrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
 		    if (!tempMatrixes.Any())
 			    return null;
 
-		    return blockFinder.Find(tempMatrixes, blockOnDate, singleAgentTeam, false);
+		    return blockFinder.Find(tempMatrixes, blockOnDate, singleAgentTeam, _resourcePlannerTeamBlockPeriod42836Hack);
 	    }
     }
-
-
-	public class DynamicBlockFinder : IDynamicBlockFinder
-	{
-		public IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, IBlockFinder blockFinder, bool singleAgentTeam)
-		{
-			if (!singleAgentTeam)
-			{
-				return new BlockInfo(new DateOnlyPeriod(2015, 1, 1, 2018, 1, 1));
-			}
-			
-
-			IEnumerable<IScheduleMatrixPro> tempMatrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
-			if (!tempMatrixes.Any())
-				return null;
-
-			return blockFinder.Find(tempMatrixes, blockOnDate, singleAgentTeam, true);	
-		}
-	}
 }

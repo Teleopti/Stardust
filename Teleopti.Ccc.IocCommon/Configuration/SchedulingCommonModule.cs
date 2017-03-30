@@ -543,14 +543,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LocateMissingIntervalsIfMidNightBreak>().As<ILocateMissingIntervalsIfMidNightBreak>();
 			builder.RegisterType<FilterOutIntervalsAfterMidNight>().As<IFilterOutIntervalsAfterMidNight>().SingleInstance();
 			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836))
-			{
-				builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<DynamicBlockFinderOLD>().As<IDynamicBlockFinder>().SingleInstance();
-			}
+			builder.Register(c => new DynamicBlockFinderOLD(_configuration.Toggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836))).As<IDynamicBlockFinder>().SingleInstance();
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>().SingleInstance();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>().InstancePerLifetimeScope();

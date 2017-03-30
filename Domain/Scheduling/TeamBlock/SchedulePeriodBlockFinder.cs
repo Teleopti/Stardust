@@ -13,6 +13,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (!TEMPTOGGLE)
 				return findRemoveMe(matrixes);
 
+			//TEMP
+			if (!singleAgentTeam)
+			{
+				return new BlockInfo(new DateOnlyPeriod(2015, 1, 1, 2018, 1, 1));
+			}
+			//
+
+
 			var roleModelMatrix = matrixes.First();
 			return new BlockInfo(roleModelMatrix.SchedulePeriod.DateOnlyPeriod);
 		}
