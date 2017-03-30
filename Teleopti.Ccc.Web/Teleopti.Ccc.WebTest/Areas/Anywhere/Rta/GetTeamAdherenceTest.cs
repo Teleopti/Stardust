@@ -24,12 +24,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public FakeTeamRepository Teams;
 		public FakeSiteRepository Sites;
 		public FakeTeamInAlarmReader OutOfAdherence;
+		public FakeNumberOfAgentsInTeamReader AgentsInTeam;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakeTeamInAlarmReader>().For<ITeamInAlarmReader>();
+			system.UseTestDouble<FakeNumberOfAgentsInTeamReader>().For<INumberOfAgentsInTeamReader>();
 		}
 
 		[Test]
@@ -48,11 +50,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				IsRuleAlarm = true,
 				AlarmStartTime = DateTime.MinValue
 			});
+			AgentsInTeam.Has(team,3);
+			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.GetValueOrDefault()).Single();
 
-			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.GetValueOrDefault());
-
-			result.Single().Id.Should().Be(team.Id);
-			result.Single().OutOfAdherence.Should().Be(1);
+			result.Id.Should().Be(team.Id);
+			result.Name.Should().Be(team.Description.Name);
+			result.NumberOfAgents.Should().Be(3);
+			result.SiteId.Should().Be(site.Id.GetValueOrDefault());
+			result.OutOfAdherence.Should().Be(1);
+			result.Color.Should().Be("good");
 		}
 
 		[Test]
@@ -65,10 +71,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			Teams.Has(team);
 			Sites.Has(site);
 
-			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.GetValueOrDefault());
+			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.GetValueOrDefault()).Single();
 
-			result.Single().Id.Should().Be(team.Id);
-			result.Single().OutOfAdherence.Should().Be(0);
+			result.Id.Should().Be(team.Id);
+			result.Name.Should().Be(team.Description.Name);
+			result.NumberOfAgents.Should().Be(0);
+			result.SiteId.Should().Be(site.Id.GetValueOrDefault());
+			result.Color.Should().Be("");
+			result.OutOfAdherence.Should().Be(0);
 		}
 	}
 }

@@ -4,9 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
@@ -17,9 +20,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 	{
 		public FakeDatabase Database;
 		public AgentsInAlarmForTeamsViewModelBuilder Target;
+		public FakeNumberOfAgentsInTeamReader AgentsInTeam;
 		public FakeSiteRepository Sites;
 		public MutableNow Now;
-		
+
+		[Test]
+		public void ShouldBuild()
+		{
+			Now.Is("2016-10-17 08:10");
+			var personId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Database
+				.WithSite(siteId)
+				.WithTeam(teamId, "Team")
+				.WithAgentState_DontUse(new AgentStateReadModel
+				{
+					PersonId = personId,
+					SiteId = siteId,
+					TeamId = teamId,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-10-17 08:00".Utc(),
+				});
+			AgentsInTeam.Has(teamId, 3);
+
+			var viewModel = Target.GetOutOfAdherenceForTeamsOnSite(siteId).Single();
+
+			viewModel.Id.Should().Be(teamId);
+			viewModel.Name.Should().Be("Team");
+			viewModel.NumberOfAgents.Should().Be(3);
+			viewModel.SiteId.Should().Be(siteId);
+			viewModel.OutOfAdherence.Should().Be(1);
+			viewModel.Color.Should().Be("good");
+		}
+
 		[Test]
 		public void ShouldBuildForSkill()
 		{
@@ -30,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var teamId = Guid.NewGuid();
 			Database
 				.WithSite(siteId)
-				.WithTeam(teamId)
+				.WithTeam(teamId,"Team")
 				.WithAgentState_DontUse(new AgentStateReadModel
 				{
 					PersonId = personId,
@@ -40,11 +74,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					AlarmStartTime = "2016-10-17 08:00".Utc(),
 				})
 				.OnSkill_DontUse(skill);
+			AgentsInTeam.Has(teamId,2);
 
 			var viewModel = Target.ForSkills(siteId, new[] { skill }).Single();
 
 			viewModel.Id.Should().Be(teamId);
+			viewModel.Name.Should().Be("Team");
+			viewModel.NumberOfAgents.Should().Be(2);
+			viewModel.SiteId.Should().Be(siteId);
 			viewModel.OutOfAdherence.Should().Be(1);
+			viewModel.Color.Should().Be("warning");
 		}
 
 		[Test]

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.Where(x =>
 					x.SiteId == siteId &&
 					x.IsRuleAlarm &&
-					x.AlarmStartTime == DateTime.MinValue)
+					x.AlarmStartTime <= _now.UtcDateTime())
 				.GroupBy(x => x.TeamId)
 				.Select(x => new TeamInAlarmModel
 				{
