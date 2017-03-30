@@ -63,18 +63,6 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 		}
 
 		[Test]
-		public void ShouldLogInnerMostException()
-		{
-			var exception = new Exception(null, new Exception(null, new Exception()));
-			var logger = MockRepository.GenerateMock<ILog>();
-			var target = new Log4NetModule(null, () => exception, new Log4NetLogger(logger));
-
-			target.Application_Error(null, null);
-
-			logger.AssertWasCalled(x => x.Error(Log4NetModule.LogMessageException, exception.InnerException.InnerException));
-		}
-
-		[Test]
 		public void ShouldLog404AsWarning()
 		{
 			var exception = new HttpException(404, null);
