@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			: base(jobParameters)
 		{
 			Name = "stg_group_page_person";
-			Transformer = new GroupPagePersonTransformer(() => _jobParameters.StateHolder);
+			Transformer = new GroupPagePersonTransformer(() => _jobParameters.StateHolder, _jobParameters.ToggleManager);
 			GroupPagePersonInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.GroupPageCreator
@@ -8,10 +10,12 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 	public class GroupingsCreator : IGroupingsCreator
 	{
 		private readonly IGroupPageDataProvider _groupPageDataProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public GroupingsCreator(IGroupPageDataProvider groupPageDataProvider)
+		public GroupingsCreator(IGroupPageDataProvider groupPageDataProvider, IToggleManager toggleManager)
 		{
 			_groupPageDataProvider = groupPageDataProvider;
+			_toggleManager = toggleManager;
 		}
 
 		public IList<IGroupPage> CreateBuiltInGroupPages(bool includeNewHierarchyGrouping)
@@ -68,13 +72,16 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			groupPage = skillGroupPage.CreateGroupPage(_groupPageDataProvider.SkillCollection, options);
 			pages.Add(groupPage);
 
-			var optionalColumns = _groupPageDataProvider.OptionalColumnCollectionAvailableAsGroupPage;
-			var optionalColumnGroupPage = new OptionalColumnGroupPage();
-			foreach (var optionalColumn in optionalColumns)
+			if (_toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
 			{
-				pages.Add(optionalColumnGroupPage.CreateGroupPage(new []{ optionalColumn }, options));
+				var optionalColumns = _groupPageDataProvider.OptionalColumnCollectionAvailableAsGroupPage;
+				var optionalColumnGroupPage = new OptionalColumnGroupPage();
+				foreach (var optionalColumn in optionalColumns)
+				{
+					pages.Add(optionalColumnGroupPage.CreateGroupPage(new[] { optionalColumn }, options));
+				}
 			}
-
+			
 			return pages;
 		}
 	}
