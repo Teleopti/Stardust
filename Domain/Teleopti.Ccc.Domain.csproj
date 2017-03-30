@@ -231,6 +231,7 @@
     <Compile Include="MultiTenancy\TenantUserPersister.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
+    <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />
     <Compile Include="Staffing\SendUpdateStaffingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />

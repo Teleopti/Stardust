@@ -13,17 +13,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (!TEMPTOGGLE)
 				findRemoveMe(matrixes, blockOnDate, singleAgentTeam);
 
-			//TEMP
-			if (!singleAgentTeam)
-			{
-				return new BlockInfo(new DateOnlyPeriod(2015, 1, 1, 2018, 1, 1));
-			}
-			//
-
-			var roleModelMatrix = matrixes.First();
 			var blockPeriodFinderBetweenDayOff = new BlockPeriodFinderBetweenDayOff();
-			var blockPeriod = blockPeriodFinderBetweenDayOff.GetBlockPeriod(roleModelMatrix, blockOnDate, singleAgentTeam);
-			return blockPeriod == null ? null : new BlockInfo(blockPeriod.Value);
+			return new BlockInfoFactory().Execute(singleAgentTeam,
+				matrixes,
+				scheduleMatrixPro => blockPeriodFinderBetweenDayOff.GetBlockPeriod(scheduleMatrixPro, blockOnDate, singleAgentTeam));
 		}
 
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836)]
