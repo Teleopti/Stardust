@@ -223,6 +223,7 @@
     <Compile Include="ApplicationLayer\IPersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
+    <Compile Include="GroupPageCreator\GroupingsCreatorOptionalColumn.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
     <Compile Include="MultiTenancy\DuplicateApplicationLogonNameException.cs" />

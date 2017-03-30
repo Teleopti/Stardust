@@ -1,13 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -18,13 +13,11 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 	{
 		private GroupingsCreator _target;
 		private MockRepository mocks;
-		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			_toggleManager = mocks.Stub<IToggleManager>();
 		}
 
 		[Test]
@@ -33,8 +26,6 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 			IGroupPageDataProvider groupingsDataProvider = mocks.StrictMock<IGroupPageDataProvider>();
 			using (mocks.Record())
 			{
-				Expect.Call(_toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
-				.Return(false);
 				Expect.Call(groupingsDataProvider.BusinessUnit).Return(BusinessUnitFactory.BusinessUnitUsedInTest);
 				Expect.Call(groupingsDataProvider.ContractCollection).Return(new List<IContract>());
 				Expect.Call(groupingsDataProvider.ContractScheduleCollection).Return(new List<IContractSchedule>());
@@ -46,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 			}
 			using (mocks.Playback())
 			{
-				_target = new GroupingsCreator(groupingsDataProvider, _toggleManager);
+				_target = new GroupingsCreator(groupingsDataProvider);
 
 				IList<IGroupPage> groupPages = _target.CreateBuiltInGroupPages(true);
 

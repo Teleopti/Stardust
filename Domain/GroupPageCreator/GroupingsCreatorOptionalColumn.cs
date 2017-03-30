@@ -6,11 +6,11 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.GroupPageCreator
 {
-	public class GroupingsCreator : IGroupingsCreator
+	public class GroupingsCreatorOptionalColumn : IGroupingsCreator
 	{
 		private readonly IGroupPageDataProvider _groupPageDataProvider;
 
-		public GroupingsCreator(IGroupPageDataProvider groupPageDataProvider)
+		public GroupingsCreatorOptionalColumn(IGroupPageDataProvider groupPageDataProvider)
 		{
 			_groupPageDataProvider = groupPageDataProvider;
 		}
@@ -67,7 +67,14 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			options.CurrentGroupPageName = Resources.Skill;
 			options.CurrentGroupPageNameKey = "Skill";
 			groupPage = skillGroupPage.CreateGroupPage(_groupPageDataProvider.SkillCollection, options);
-			pages.Add(groupPage);			
+			pages.Add(groupPage);
+
+			var optionalColumns = _groupPageDataProvider.OptionalColumnCollectionAvailableAsGroupPage;
+			var optionalColumnGroupPage = new OptionalColumnGroupPage();
+			foreach (var optionalColumn in optionalColumns)
+			{
+				pages.Add(optionalColumnGroupPage.CreateGroupPage(new[] {optionalColumn}, options));
+			}
 
 			return pages;
 		}

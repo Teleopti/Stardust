@@ -5,11 +5,11 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
@@ -46,7 +46,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			get
 			{
-				var groupingsCreator = new GroupingsCreator(_getGroupPageDataProvider(), _toggleManager);
+				IGroupingsCreator groupingsCreator;
+				if (_toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
+					groupingsCreator = new GroupingsCreatorOptionalColumn(_getGroupPageDataProvider());
+				else
+					groupingsCreator = new GroupingsCreator(_getGroupPageDataProvider());
 				return groupingsCreator.CreateBuiltInGroupPages(false);
 			}
 		}

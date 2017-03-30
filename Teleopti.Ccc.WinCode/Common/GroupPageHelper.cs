@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public IGroupingsCreator CreateGroupingsCreator()
 		{
-			return new GroupingsCreator(this, null);
+			return new GroupingsCreator(this);
 		}
 
 
