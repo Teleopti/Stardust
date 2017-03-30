@@ -31,12 +31,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void UpdateLockTimestamp(Guid bu)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public void ResetLockTimestamp(Guid bu)
 		{
-			throw new NotImplementedException();
+			
 		}
 	}
 }
