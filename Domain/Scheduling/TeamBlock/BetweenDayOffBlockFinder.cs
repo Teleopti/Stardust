@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public IBlockInfo Find(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly blockOnDate, bool singleAgentTeam, bool TEMPTOGGLE)
 		{
 			if (!TEMPTOGGLE)
-				findRemoveMe(matrixes, blockOnDate, singleAgentTeam);
+				return findRemoveMe(matrixes, blockOnDate, singleAgentTeam);
 
 			var blockPeriodFinderBetweenDayOff = new BlockPeriodFinderBetweenDayOff();
 			return new BlockInfoFactory().Execute(singleAgentTeam,

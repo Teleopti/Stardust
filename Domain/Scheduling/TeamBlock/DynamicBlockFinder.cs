@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, IBlockFinder blockFinder, bool singleAgentTeam);
     }
 
-    public class DynamicBlockFinderOLD : IDynamicBlockFinder
+    public class DynamicBlockFinder : IDynamicBlockFinder
     {
 	    private readonly bool _resourcePlannerTeamBlockPeriod42836Hack;
 
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836)]
-		public DynamicBlockFinderOLD(bool resourcePlannerTeamBlockPeriod42836_Hack)
+		public DynamicBlockFinder(bool resourcePlannerTeamBlockPeriod42836_Hack)
 	    {
 		    _resourcePlannerTeamBlockPeriod42836Hack = resourcePlannerTeamBlockPeriod42836_Hack;
 	    }
