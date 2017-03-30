@@ -22,11 +22,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public AgentsInAlarmForSiteViewModelBuilder Target;
 		public FakeSiteRepository Sites;
 		public FakeSiteInAlarmReader AgentState;
+		public FakeNumberOfAgentsInSiteReader AgentsInSite;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakeSiteInAlarmReader>().For<ISiteInAlarmReader>();
+			system.UseTestDouble<FakeNumberOfAgentsInSiteReader>().For<INumberOfAgentsInSiteReader>();
 		}
 
 		[Test]
@@ -40,11 +42,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				IsRuleAlarm = true,
 				AlarmStartTime = DateTime.MinValue
 			});
+			AgentsInSite.Has(site.Id.Value,1);
 
-			var result = Target.Build();
+			var result = Target.Build().Single();
 
-			result.Single().Id.Should().Be(site.Id);
-			result.Single().OutOfAdherence.Should().Be(1);
+			result.Id.Should().Be(site.Id);
+			result.Name.Should().Be("s");
+			result.NumberOfAgents.Should().Be(1);
+			result.OpenHours.Count().Should().Be(0);
+			result.OutOfAdherence.Should().Be(1);
+			result.Color.Should().Be("danger");
 		}
 
 		[Test]
@@ -53,10 +60,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var site = new Site("s").WithId();
 			Sites.Has(site);
 			
-			var result = Target.Build();
+			var result = Target.Build().Single();
 
-			result.Single().Id.Should().Be(site.Id);
-			result.Single().OutOfAdherence.Should().Be(0);
+			result.Id.Should().Be(site.Id);
+			result.Name.Should().Be("s");
+			result.NumberOfAgents.Should().Be(0);
+			result.OpenHours.Count().Should().Be(0);
+			result.OutOfAdherence.Should().Be(0);
+			result.Color.Should().Be(null);
 		}
 
 		[Test]
