@@ -51,5 +51,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <value>The skill collection.</value>
         IList<ISkill> SkillCollection { get; }
+
+	    IList<IOptionalColumn> OptionalColumnCollectionAvailableAsGroupPage { get; }
     }
 }

@@ -15680,7 +15680,7 @@ Do you want to participate?</value>
     <value>Successfully imported {0} agent(s)</value>
     <comment>Message to notify user about agent import result. e.g. Successfully imported 5 agents</comment>
   </data>
-  <data name="AvailableAsGroupPage" xml:space="preserve">
+  <data name="AvailableAsGroupPageColon" xml:space="preserve">
     <value>Available As Group Page:*</value>
     <comment>Available As Group Page:*</comment>
   </data>

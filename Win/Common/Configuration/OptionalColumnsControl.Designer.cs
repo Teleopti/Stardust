@@ -184,7 +184,7 @@
 			this.autoLabelMax5GroupPages.Name = "autoLabelMax5GroupPages";
 			this.autoLabelMax5GroupPages.Size = new System.Drawing.Size(729, 24);
 			this.autoLabelMax5GroupPages.TabIndex = 13;
-			this.autoLabelMax5GroupPages.Text = "xx*Maximum 5 optional columns can be available as group pages.";
+			this.autoLabelMax5GroupPages.Text = "xxMaximum5OptionalColumns";
 			this.autoLabelMax5GroupPages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// autoLabel5
@@ -268,7 +268,7 @@
 			this.autoLabel2.Name = "autoLabel2";
 			this.autoLabel2.Size = new System.Drawing.Size(198, 24);
 			this.autoLabel2.TabIndex = 11;
-			this.autoLabel2.Text = "xxAvailable As Group Page:*";
+			this.autoLabel2.Text = "xxAvailableAsGroupPageColon";
 			this.autoLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// checkBoxAdvAvailableAsGroupPage
