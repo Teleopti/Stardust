@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class TeamBlockSchedulingTest
+	public class TeamBlockSchedulingTest : SchedulingScenario
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -34,6 +34,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakePreferenceDayRepository PreferenceDayRepository;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
+
+		public TeamBlockSchedulingTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
+		{
+		}
 
 		[Test]
 		public void TeamBlockSchedulingShouldNotUseShiftsMarkedForRestrictionOnlyWhenThereIsNoRestriction()

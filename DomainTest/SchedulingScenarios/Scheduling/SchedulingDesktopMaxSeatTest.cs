@@ -21,14 +21,18 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class SchedulingDesktopMaxSeatTest
+	public class SchedulingDesktopMaxSeatTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
-		
+
+		public SchedulingDesktopMaxSeatTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
+		{
+		}
+
 		[TestCase(true)]
 		[TestCase(false)]
 		[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	//TODO: before adding more tests here remove mess with mix of repos and stateholder
 	[DomainTest]
-	public class BackToLegalShiftCommandTest
+	public class BackToLegalShiftCommandTest : SchedulingScenario
 	{
 		public BackToLegalShiftCommand Target;
 		public FakePersonRepository PersonRepository;
@@ -36,6 +36,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IFillSchedulerStateHolder FillSchedulerStateHolder;
+
+		public BackToLegalShiftCommandTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
+		{
+		}
 
 		[Test]
 		public void ShouldRestoreToLegalShiftBagShiftWithSameStartAndEndTime()

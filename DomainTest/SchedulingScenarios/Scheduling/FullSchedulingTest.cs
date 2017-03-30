@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class FullSchedulingTest
+	public class FullSchedulingTest : SchedulingScenario
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -29,6 +29,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+
+		public FullSchedulingTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
+		{
+		}
 
 		[Test]
 		public void ShouldNotCreateTags()

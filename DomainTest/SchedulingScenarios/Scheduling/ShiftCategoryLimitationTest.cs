@@ -22,11 +22,15 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class ShiftCategoryLimitationTest
+	public class ShiftCategoryLimitationTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
+
+		public ShiftCategoryLimitationTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
+		{
+		}
 
 		[Test]
 		public void ShouldTryToReplaceSecondShiftIfFirstWasUnsuccessful()

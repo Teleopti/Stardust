@@ -19,11 +19,15 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class SchedulingRestrictionsDesktopTest
+	public class SchedulingRestrictionsDesktopTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+
+		public SchedulingRestrictionsDesktopTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
+		{
+		}
 
 		[Test]
 		public void ShouldNotScheduleShiftsForRestrictionsOnlyWhenNoRestrictionExists()

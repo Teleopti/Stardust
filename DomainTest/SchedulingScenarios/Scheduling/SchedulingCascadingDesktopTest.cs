@@ -20,11 +20,15 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class SchedulingCascadingDesktopTest
+	public class SchedulingCascadingDesktopTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+
+		public SchedulingCascadingDesktopTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
+		{
+		}
 
 		[Test]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()

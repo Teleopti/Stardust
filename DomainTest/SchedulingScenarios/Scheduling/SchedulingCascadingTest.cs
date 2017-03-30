@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class SchedulingCascadingTest
+	public class SchedulingCascadingTest : SchedulingScenario
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -28,6 +28,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+
+		public SchedulingCascadingTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
+		{
+		}
 
 		[Test]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
