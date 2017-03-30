@@ -34,8 +34,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date)
 		{
-			var scheduleDay = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date)) ?? new IScheduleDay[] { };
+			var scheduleDay = _scheduleProvider.GetScheduleForPeriod(date.ToDateOnlyPeriod()) ?? new IScheduleDay[] { };
 			return WorkTimeMinMaxForDate(date, scheduleDay.SingleOrDefault());
+		}
+
+		public IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> WorkTimeMinMaxForPeriod(DateOnlyPeriod period)
+		{
+			var result = new Dictionary<DateOnly, WorkTimeMinMaxCalculationResult>();
+			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(period).ToDictionary(d => d.DateOnlyAsPeriod.DateOnly);
+			foreach (var date in period.DayCollection())
+			{
+				IScheduleDay scheduleDay;
+				scheduleDays.TryGetValue(date, out scheduleDay);
+				result.Add(date, WorkTimeMinMaxForDate(date, scheduleDay));
+			}
+
+			return result;
 		}
 
 		public PreferenceNightRestCheckResult CheckNightRestViolation(DateOnly date)
