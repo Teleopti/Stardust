@@ -2,29 +2,21 @@
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class StaffingLevelController : ApiController
 	{
 		private readonly IEventPublisher _publisher;
-		private readonly IJobStartTimeRepository _jobStartTimeRepository;
-		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
-		public StaffingLevelController(IEventPublisher publisher, IJobStartTimeRepository jobStartTimeRepository, ICurrentBusinessUnit currentBusinessUnit)
+		public StaffingLevelController(IEventPublisher publisher)
 		{
 			_publisher = publisher;
-			_jobStartTimeRepository = jobStartTimeRepository;
-			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		[UnitOfWork, HttpGet, Route("TriggerResourceCalculate")]
 		public virtual IHttpActionResult TriggerResourceCalculate()
 		{
-			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
-			_jobStartTimeRepository.Update(bu);
 			_publisher.Publish(new UpdateStaffingLevelReadModelEvent
 			{
 				Days = 1

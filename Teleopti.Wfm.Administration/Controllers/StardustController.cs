@@ -115,7 +115,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 			
 			foreach (var bu in bus)
 			{
-				_jobStartTimeRepository.Update(bu);
 				if (logOnModel.Days == 1)
 					_eventPublisher.Publish(
 						new UpdateStaffingLevelReadModelEvent

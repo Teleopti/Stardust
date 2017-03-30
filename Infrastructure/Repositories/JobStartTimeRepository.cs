@@ -24,92 +24,76 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var startTime = DateTime.MinValue;
+			DateTime? lockTimestamp = null;
 			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
 			{
 				connection.Open();
 				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
 				{
-					using (var selectCommand = new SqlCommand(@"select StartTime from [JobStartTime] where BusinessUnit = @bu", connection, transaction))
+					using (var selectCommand = new SqlCommand(@"select StartTime, LockTimestamp from [JobStartTime] where BusinessUnit = @bu", connection, transaction))
 					{
 						selectCommand.Parameters.AddWithValue("@bu", bu);
-						var scalar = selectCommand.ExecuteScalar();
-						if (scalar != null)
-							startTime = (DateTime) scalar;
+						using (var reader = selectCommand.ExecuteReader())
+						{
+							if (reader.HasRows)
+							{
+								reader.Read();
+								startTime = reader.GetDateTime(0);
+								if(!reader.IsDBNull(1))
+									lockTimestamp = reader.GetDateTime(1);
+							}
+						}
 					}
-
-					//if less than one hour and lock is not null and in the past 
-					if (startTime.AddMinutes(thresholdMinutes) > _now.UtcDateTime()) return false;
-
-					using (var deleteCommand = new SqlCommand(@"delete from [JobStartTime] where BusinessUnit = @bu", connection, transaction))
+					
+					var isInvalidLockTimestamp = lockTimestamp != null && lockTimestamp < _now.UtcDateTime();
+					if (startTime.AddMinutes(thresholdMinutes) < _now.UtcDateTime() || isInvalidLockTimestamp)
 					{
-						deleteCommand.Parameters.AddWithValue("@bu", bu);
-						deleteCommand.ExecuteNonQuery();
-					}
+						using (var deleteCommand = new SqlCommand(@"delete from [JobStartTime] where BusinessUnit = @bu", connection, transaction))
+						{
+							deleteCommand.Parameters.AddWithValue("@bu", bu);
+							deleteCommand.ExecuteNonQuery();
+						}
 
-					using (var insertCommand = new SqlCommand(@"insert into [JobStartTime] (BusinessUnit, StartTime) Values (@bu,@startTime)", connection, transaction))
-					{
-						insertCommand.Parameters.AddWithValue("@bu", bu);
-						insertCommand.Parameters.AddWithValue("@startTime", _now.UtcDateTime());
-						//set lock time to null
-						insertCommand.ExecuteNonQuery();
+						using (var insertCommand = new SqlCommand(@"insert into [JobStartTime] (BusinessUnit, StartTime) Values (@bu,@startTime)", connection, transaction))
+						{
+							insertCommand.Parameters.AddWithValue("@bu", bu);
+							insertCommand.Parameters.AddWithValue("@startTime", _now.UtcDateTime());
+							//set lock time to null
+							insertCommand.ExecuteNonQuery();
+						}
+						transaction.Commit();
 					}
-					transaction.Commit();
+					else return false;
 				}
 			}
 			return true;
 		}
 
-		public void Update(Guid bu)
+		public void UpdateLockTimestamp(Guid bu)
 		{
 			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
 			{
 				connection.Open();
-				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+				using (var updateCommand = new SqlCommand(@"UPDATE [dbo].[JobStartTime] set LockTimestamp = @timestamp WHERE BusinessUnit = @bu", connection))
 				{
-					using (var deleteCommand = new SqlCommand(@"delete from [JobStartTime] where BusinessUnit = @bu", connection, transaction))
-					{
-						deleteCommand.Parameters.AddWithValue("@bu", bu);
-						deleteCommand.ExecuteNonQuery();
-					}
-
-					using (var insertCommand = new SqlCommand(@"insert into [JobStartTime] (BusinessUnit, StartTime) Values (@bu,@startTime)", connection, transaction))
-					{
-						insertCommand.Parameters.AddWithValue("@bu", bu);
-						insertCommand.Parameters.AddWithValue("@startTime", _now.UtcDateTime());
-						insertCommand.ExecuteNonQuery();
-					}
-					transaction.Commit();
+					updateCommand.Parameters.AddWithValue("@bu", bu);
+					updateCommand.Parameters.AddWithValue("@timestamp", _now.UtcDateTime().AddMinutes(1));
+					updateCommand.ExecuteNonQuery();
 				}
 			}
 		}
 
-		public void UpdateLockTimestamp()
+		public void ResetLockTimestamp(Guid bu)
 		{
+			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
+			{
+				connection.Open();
+				using (var updateCommand = new SqlCommand(@"UPDATE [dbo].[JobStartTime] set LockTimestamp = NULL WHERE BusinessUnit = @bu", connection))
+				{
+					updateCommand.Parameters.AddWithValue("@bu", bu);
+					updateCommand.ExecuteNonQuery();
+				}
+			}
 		}
-
-		public void ResetLockTimestamp()
-		{
-		}
-
-		//public IDictionary<Guid, DateTime> LoadAll()
-		//{
-		//	//var result =
-		//	//	((NHibernateUnitOfWork) _currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
-		//	//		@"SELECT BusinessUnit, StartTime  FROM [JobStartTime] with(nolock)")
-		//	//	.SetResultTransformer(Transformers.AliasToBean(typeof(StartTimePerBu)))
-		//	//	.List<StartTimePerBu>();
-		//	var result =
-		//		((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
-		//			@"SELECT BusinessUnit, StartTime FROM [JobStartTime]")
-		//		.SetResultTransformer(Transformers.AliasToBean(typeof(StartTimePerBu)))
-		//		.List<StartTimePerBu>();
-		//	return result.ToDictionary(x => x.BusinessUnit, y => y.StartTime);
-		//}
 	}
-
-	//internal class StartTimePerBu
-	//{
-	//	public Guid BusinessUnit { get; set; }
-	//	public DateTime StartTime { get; set; }
-	//}
 }

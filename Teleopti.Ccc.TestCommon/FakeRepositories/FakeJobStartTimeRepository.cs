@@ -29,19 +29,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return true;
 		}
 
-		public void Update(Guid bu)
-		{
-			if (Records.ContainsKey(bu))
-				Records.Remove(bu);
-			Records.Add(bu, _now.UtcDateTime());
-		}
-
-		public void UpdateLockTimestamp()
+		public void UpdateLockTimestamp(Guid bu)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void ResetLockTimestamp()
+		public void ResetLockTimestamp(Guid bu)
 		{
 			throw new NotImplementedException();
 		}

@@ -1,0 +1,1 @@
+ALTER TABLE dbo.JobStartTime ADD LockTimestamp DATETIME NULL; 
