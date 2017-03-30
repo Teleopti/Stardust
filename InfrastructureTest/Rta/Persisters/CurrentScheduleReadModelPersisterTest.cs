@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldPersistOne()
 		{
-			Target.Persist(Guid.NewGuid(), new[] {new ScheduledActivity()});
+			Target.Persist(Guid.NewGuid(), 1, new[] {new ScheduledActivity()});
 
 			Reader.Read(0).Should().Have.Count.EqualTo(1);
 		}
@@ -45,11 +45,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 					DisplayColor = Color.DarkGoldenrod.ToArgb()
 				}
 			};
-			Target.Persist(person, schedule);
+			Target.Persist(person, 1, schedule);
 
 			var result = Reader.Read(0).Single();
 			result.PersonId.Should().Be(person);
-			result.LastUpdate.Should().Be(1);
 			result.Schedule.Single().PersonId.Should().Be(person);
 			result.Schedule.Single().PayloadId.Should().Be(phone);
 			result.Schedule.Single().BelongsToDate.Should().Be("2017-03-23".Date());
@@ -66,11 +65,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Assert.DoesNotThrow(() =>
 			{
-				Target.Persist(personId, Enumerable.Range(0, 100).Select(i => new ScheduledActivity()));
+				Target.Persist(personId, 1, Enumerable.Range(0, 100).Select(i => new ScheduledActivity()));
 			});
 			Assert.DoesNotThrow(() =>
 			{
-				Target.Persist(personId, Enumerable.Range(0, 100).Select(i => new ScheduledActivity()));
+				Target.Persist(personId, 2, Enumerable.Range(0, 100).Select(i => new ScheduledActivity()));
 			});
 		}
 
@@ -78,8 +77,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldReplaceOnPersist()
 		{
 			var person = Guid.NewGuid();
-			Target.Persist(person, new[] { new ScheduledActivity(), new ScheduledActivity() });
-			Target.Persist(person, new[] { new ScheduledActivity() });
+			Target.Persist(person, 1, new[] { new ScheduledActivity(), new ScheduledActivity() });
+			Target.Persist(person, 2, new[] { new ScheduledActivity() });
 
 			Reader.Read(0).Should().Have.Count.EqualTo(1);
 		}
@@ -89,9 +88,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
-			Target.Persist(person1, new[] { new ScheduledActivity() });
-			Target.Persist(person2, new[] { new ScheduledActivity() });
-			Target.Persist(person2, Enumerable.Empty<ScheduledActivity>());
+			Target.Persist(person1, 1, new[] { new ScheduledActivity() });
+			Target.Persist(person2, 2, new[] { new ScheduledActivity() });
+			Target.Persist(person2, 3, Enumerable.Empty<ScheduledActivity>());
 
 			var result = Reader.Read(0);
 			result.Single(x => x.PersonId == person1).Schedule.Should().Have.Count.EqualTo(1);
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var person = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			Target.Persist(person, new[]
+			Target.Persist(person, 1, new[]
 			{
 				new ScheduledActivity
 				{
@@ -154,8 +153,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
-			Target.Persist(person1, new[] { new ScheduledActivity() });
-			Target.Persist(person2, new[] { new ScheduledActivity() });
+			Target.Persist(person1, 1, new[] { new ScheduledActivity() });
+			Target.Persist(person2, 2, new[] { new ScheduledActivity() });
 
 			Target.Invalidate(person1);
 
@@ -167,33 +166,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var person = Guid.NewGuid();
 
-			Target.Persist(person, new[] { new ScheduledActivity() });
+			Target.Persist(person, 1, new[] { new ScheduledActivity() });
 			Target.Invalidate(person);
-			Target.Persist(person, new[] { new ScheduledActivity(), new ScheduledActivity() });
+			Target.Persist(person, 2, new[] { new ScheduledActivity(), new ScheduledActivity() });
 
 			Target.GetInvalid().Should().Be.Empty();
 		}
-
-		[Test]
-		public void ShouldPersistWithScheduleVersion()
-		{
-			var person = Guid.NewGuid();
-
-			Target.Persist(person, new[] { new ScheduledActivity() });
-			Target.Persist(person, new[] { new ScheduledActivity() });
-
-			Reader.Read(0).Single().LastUpdate.Should().Be(2);
-		}
-
+		
 		[Test]
 		public void ShouldOnlyReadUpdates()
 		{
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
 
-			Target.Persist(person1, new[] { new ScheduledActivity() });
-			Target.Persist(person2, new[] { new ScheduledActivity() });
-			Target.Persist(person2, new[] { new ScheduledActivity() });
+			Target.Persist(person1, 1, new[] { new ScheduledActivity() });
+			Target.Persist(person2, 1, new[] { new ScheduledActivity() });
+			Target.Persist(person2, 2, new[] { new ScheduledActivity() });
 
 			Reader.Read(1).Single().PersonId.Should().Be(person2);
 		}
@@ -204,22 +192,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
 
-			Target.Persist(person1, new[] { new ScheduledActivity() });
-			Target.Persist(person2, new[] { new ScheduledActivity() });
-			Target.Persist(person2, new[] { new ScheduledActivity() });
+			Target.Persist(person1, 1, new[] { new ScheduledActivity() });
+			Target.Persist(person2, 1, new[] { new ScheduledActivity() });
+			Target.Persist(person2, 2, new[] { new ScheduledActivity() });
 
 			Reader.Read(null).Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
-		}
-
-		[Test]
-		public void ShouldUpdateNullLastUpdatedColumn()
-		{
-			var person = Guid.NewGuid();
-
-			Target.Invalidate(person);
-			Target.Persist(person, new[] { new ScheduledActivity() });
-
-			Reader.Read(0).Should().Not.Be.Empty();
 		}
 		
 	}

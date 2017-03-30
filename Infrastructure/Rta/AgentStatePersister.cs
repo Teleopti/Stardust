@@ -189,9 +189,17 @@ AND StateGroupId {stateGroups}")
 							.GroupBy(x => x.PersonId, (guid, states) => states.First())
 							.ToArray(),
 					MappingVersion = keyValues.SingleOrDefault(x => x.Key == "RuleMappingsVersion")?.Value,
-					ScheduleVersion = keyValues.SingleOrDefault(x => x.Key == "CurrentScheduleReadModelVersion")?.Value
+					ScheduleVersion = parseInt(keyValues.SingleOrDefault(x => x.Key == "CurrentScheduleReadModelVersion")?.Value)
 				};
 			});
+		}
+
+		private int parseInt(string version)
+		{
+			if (version == null)
+				return 0;
+			int result;
+			return int.TryParse(version, out result) ? result : 0;
 		}
 
 		private static string SelectAgentState = "SELECT * FROM [dbo].[AgentState] ";

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using NHibernate;
 using NHibernate.Transform;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<CurrentSchedule> Read(int? lastUpdate)
 		{
-			var sql = "SELECT PersonId, LastUpdate, Schedule FROM ReadModel.CurrentSchedule WITH (NOLOCK)";
+			var sql = "SELECT PersonId, Schedule FROM ReadModel.CurrentSchedule WITH (NOLOCK)";
 			if (lastUpdate.HasValue)
 				return _unitOfWork.Current()
 					.CreateSqlQuery($"{sql} WHERE LastUpdate > :LastUpdate")
@@ -59,27 +60,22 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<Guid>();
 		}
 
-		public void Persist(Guid personId, IEnumerable<ScheduledActivity> schedule)
+		public void Persist(Guid personId, int version, IEnumerable<ScheduledActivity> schedule)
 		{
 			var serializedSchedule = _serializer.SerializeObject(schedule);
 
 			var updated = _unitOfWork.Current()
-				.CreateSqlQuery(@"
-UPDATE ReadModel.CurrentSchedule 
-SET
-	Schedule = :Schedule,
-	Valid = 1,
-	LastUpdate = CASE WHEN LastUpdate IS NULL THEN 1 ELSE LastUpdate + 1 END
-WHERE
-	PersonId = :PersonId")
+				.CreateSqlQuery("UPDATE ReadModel.CurrentSchedule SET Schedule = :Schedule, Valid = 1, LastUpdate = :LastUpdate WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
+				.SetParameter("LastUpdate", version)
 				.SetParameter("Schedule", serializedSchedule, NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 
 			if (updated == 0)
 				_unitOfWork.Current()
-					.CreateSqlQuery("INSERT INTO ReadModel.CurrentSchedule (PersonId, Schedule, LastUpdate, Valid) VALUES (:PersonId, :Schedule, 1, 1)")
+					.CreateSqlQuery("INSERT INTO ReadModel.CurrentSchedule (PersonId, Schedule, LastUpdate, Valid) VALUES (:PersonId, :Schedule, :LastUpdate, 1)")
 					.SetParameter("PersonId", personId)
+					.SetParameter("LastUpdate", version)
 					.SetParameter("Schedule", serializedSchedule, NHibernateUtil.StringClob)
 					.ExecuteUpdate();
 		}
@@ -88,7 +84,11 @@ WHERE
 		{
 			public new string Schedule
 			{
-				set { base.Schedule = JsonConvert.DeserializeObject<IEnumerable<ScheduledActivity>>(value ?? "[]"); }
+				set
+				{
+					base.Schedule = value == null ? Enumerable.Empty<ScheduledActivity>() : JsonConvert.DeserializeObject<IEnumerable<ScheduledActivity>>(value); 
+					
+				}
 			}
 		}
 	}

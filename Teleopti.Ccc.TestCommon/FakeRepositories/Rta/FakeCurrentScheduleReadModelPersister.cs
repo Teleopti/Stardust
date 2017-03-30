@@ -47,17 +47,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.ToArray();
 		}
 
-		public void Persist(Guid personId, IEnumerable<ScheduledActivity> schedule)
+		public void Persist(Guid personId, int version, IEnumerable<ScheduledActivity> schedule)
 		{
-			var personSchedule = _data.Where(x => x.PersonId == personId);
-			var lastUpdate = personSchedule.IsEmpty() ? 0 : personSchedule.Max(x => x.LastUpdate);
 			_data = _data
 				.Where(x => x.PersonId != personId)
 				.Append(new data
 				{
 					PersonId = personId,
 					Schedules = schedule.ToArray(),
-					LastUpdate = lastUpdate + 1,
+					LastUpdate = version,
 					Valid = true
 				})
 				.ToArray();

@@ -15,5 +15,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			bool result;
 			return bool.TryParse(value, out result) ? result : @default;
 		}
+
+		public static void Update(this IKeyValueStorePersister instance, string key, int value)
+		{
+			instance.Update(key, value.ToString());
+		}
+
+		public static int? Get(this IKeyValueStorePersister instance, string key, int? @default)
+		{
+			var value = instance.Get(key);
+			if (string.IsNullOrEmpty(value))
+				return @default;
+			int result;
+			return int.TryParse(value, out result) ? result : @default;
+		}
 	}
 }

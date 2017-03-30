@@ -207,7 +207,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(person, Color.Orange, "2016-05-30 12:00", "2016-05-30 13:00");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.ClearAssignments(person)
+			Database
+				.ClearAssignments(person)
 				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
 				.WithSchedule(person, shortbreak, "2016-05-30 11:00", "2016-05-30 12:00")
 				.WithSchedule(person, Color.Pink, "2016-05-30 12:00", "2016-05-30 13:00");

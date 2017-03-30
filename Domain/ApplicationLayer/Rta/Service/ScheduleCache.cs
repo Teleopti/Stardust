@@ -11,15 +11,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private static readonly object lockObject = new object();
 		private readonly IScheduleReader _reader;
-		private readonly PerTenant<string> _version;
-		private readonly PerTenant<int?> _latestUpdate;
+		private readonly PerTenant<int?> _version;
 		private readonly PerTenant<IDictionary<Guid, IEnumerable<ScheduledActivity>>> _dictionary;
 
 		public ScheduleCache(IScheduleReader reader, ICurrentDataSource dataSource)
 		{
 			_reader = reader;
-			_version = new PerTenant<string>(dataSource);
-			_latestUpdate = new PerTenant<int?>(dataSource);
+			_version = new PerTenant<int?>(dataSource);
 			_dictionary = new PerTenant<IDictionary<Guid, IEnumerable<ScheduledActivity>>>(dataSource);
 		}
 
@@ -36,19 +34,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _reader.Read(lastUpdate);
 		}
 
-		public void Refresh(string latestVersion)
+		public void Refresh(int latestVersion)
 		{
 			lock (lockObject)
 			{
 				if (!shouldRefresh(latestVersion))
 					return;
 
-				var updatedActivities = Read(_latestUpdate.Value);
+				var updatedActivities = Read(_version.Value);
 
 				_dictionary.Set(
 					merge(_dictionary.Value, updatedActivities.ToDictionary(x => x.PersonId, x => x.Schedule))
 				);
-				_latestUpdate.Set(updatedActivities.IsEmpty() ? 0 : updatedActivities.Max(x => x.LastUpdate));
 				_version.Set(latestVersion);
 			}
 		}
@@ -56,11 +53,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public void ClearCache()
 		{
 			_version?.Clear();
-			_latestUpdate?.Clear();
 			_dictionary?.Clear();
 		}
 
-		private bool shouldRefresh(string latestVersion)
+		private bool shouldRefresh(int latestVersion)
 		{
 			return latestVersion != _version.Value || _version.Value == null;
 		}

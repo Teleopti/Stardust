@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 			Target.Handle(new TenantDayTickEvent());
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Persister.Read(0).Single().Schedule.Select(x => x.BelongsToDate)
+			Persister.Read(1).Single().Schedule.Select(x => x.BelongsToDate)
 				.Should().Contain("2017-01-27".Date());
 		}
 

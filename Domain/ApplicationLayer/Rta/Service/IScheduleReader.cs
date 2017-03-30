@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class CurrentSchedule
 	{
 		public Guid PersonId;
-		public int LastUpdate;
 		public IEnumerable<ScheduledActivity> Schedule;
 	}
 }
