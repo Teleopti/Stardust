@@ -40,9 +40,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			Now.Is("2016-03-01 09:50");
 			var bu = BusinessUnitFactory.CreateWithId("bu");
-			_fakeCurrentBusniessUnit.OnThisThreadUse(bu);
+			BusinessUnitRepository.Add(bu);
 			addPerson();
+			_fakeCurrentBusniessUnit.OnThisThreadUse(bu);
 			JobStartTimeRepository.CheckAndUpdate(60);
+			_fakeCurrentBusniessUnit.OnThisThreadUse(null);
 			Now.Is("2016-03-01 10:00");
 			Target.Handle(new TenantMinuteTickEvent());
 			Publisher.PublishedEvents.Count().Should().Be.EqualTo(0);
@@ -53,7 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
         {
 			Now.Is("2016-03-01 10:00");
 			var bu = BusinessUnitFactory.CreateWithId("bu");
-			_fakeCurrentBusniessUnit.OnThisThreadUse(bu);
+			BusinessUnitRepository.Add(bu);
+			//_fakeCurrentBusniessUnit.OnThisThreadUse(bu);
 			addPerson();
 			Target.Handle(new TenantMinuteTickEvent());
             Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
@@ -64,7 +67,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			Now.Is("2016-03-01 10:00");
 			var bu = BusinessUnitFactory.CreateWithId("bu");
-			_fakeCurrentBusniessUnit.OnThisThreadUse(bu);
+			BusinessUnitRepository.Add(bu);
+			//_fakeCurrentBusniessUnit.OnThisThreadUse(bu);
 			BusinessUnitRepository.Add(bu);
 			addPerson();
 			Target.Handle(new TenantMinuteTickEvent());
@@ -76,15 +80,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			Now.Is("2016-03-01 06:10");
 			var bu = BusinessUnitFactory.CreateWithId("bu");
-			_fakeCurrentBusniessUnit.OnThisThreadUse(bu);
 			var bu2 = BusinessUnitFactory.CreateWithId("B2");
 			BusinessUnitRepository.Add(bu);
 			BusinessUnitRepository.Add(bu2);
 
+			_fakeCurrentBusniessUnit.OnThisThreadUse(bu);
 			JobStartTimeRepository.CheckAndUpdate(60);
 			Now.Is("2016-03-01 08:10");
 			JobStartTimeRepository.CheckAndUpdate(60);
-
+			_fakeCurrentBusniessUnit.OnThisThreadUse(null);
 			addPerson();
 			Target.Handle(new TenantMinuteTickEvent());
 			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
@@ -95,7 +99,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			Now.Is("2016-03-01 08:10");
 			var bu = BusinessUnitFactory.CreateWithId("bu");
-			_fakeCurrentBusniessUnit.OnThisThreadUse(bu);
+			BusinessUnitRepository.Add(bu);
+			//_fakeCurrentBusniessUnit.OnThisThreadUse(bu);
 			addPerson();
 			Target.Handle(new TenantMinuteTickEvent());
 			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
