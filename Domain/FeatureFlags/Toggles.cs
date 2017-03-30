@@ -222,8 +222,8 @@
 		Staffing_ReadModel_UseSkillCombination_xx,
 		StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388,
 		ETL_SpeedUpNightlyDayOff_38213,
-		WfmPermission_RelaseRefactor_43587
-
+		WfmPermission_RelaseRefactor_43587,
+		WFM_ImproveIntradaySkillArea_37291
 		// ReSharper restore InconsistentNaming
 	}
 }
