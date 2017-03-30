@@ -14,6 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public AgentsInAlarmForSiteViewModelBuilder Target;
 		public FakeSiteInAlarmReader Database;
 		public FakeSiteRepository Sites;
+		public FakeNumberOfAgentsInSiteReader AgentsInSite;
 		public MutableNow Now;
 		public FakeUserUiCulture UiCulture;
 
@@ -32,28 +34,73 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			system.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
 		}
 
+
 		[Test]
-		public void ShouldBuildForSkill()
+		public void ShouldBuild()
 		{
-			Now.Is("2016-06-21 08:30");
+			Now.Is("2017-03-30 08:30");
 			var personId = Guid.NewGuid();
-			var siteId = Guid.NewGuid();
-			var skill = Guid.NewGuid();
-			Sites.Has(siteId);
+			var site = new Site("Site").WithId();
+			var startTime = new TimeSpan(10, 0, 0);
+			var endTime = new TimeSpan(17, 0, 0);
+			var timeperiod = new TimePeriod(startTime, endTime);
+			var siteOpenHour = new SiteOpenHour()
+			{
+				TimePeriod = timeperiod,
+				IsClosed = true,
+				WeekDay = DayOfWeek.Friday
+			};
+			site.AddOpenHour(siteOpenHour);
+
+			Sites.Has(site);
 			Database
 				.Has(new AgentStateReadModel
 				{
 					PersonId = personId,
-					SiteId = siteId,
+					SiteId = site.Id.Value,
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2017-03-30 08:29".Utc(),
+				});
+			AgentsInSite.Has(site.Id.Value, 3);
+			var viewModel = Target.Build().Single();
+
+			viewModel.Id.Should().Be(site.Id.Value);
+			viewModel.Name.Should().Be("Site");
+			viewModel.NumberOfAgents.Should().Be(3);
+			viewModel.OutOfAdherence.Should().Be(1);
+			viewModel.Color.Should().Be("good");
+			var openHour = viewModel.OpenHours.FirstOrDefault();
+			openHour.StartTime.Should().Be(startTime);
+			openHour.EndTime.Should().Be(endTime);
+			openHour.IsClosed.Should().Be(true);
+			openHour.WeekDay.Should().Be(DayOfWeek.Friday);
+		}
+		[Test]
+		public void ShouldBuildForSkill()
+		{
+			Now.Is("2017-03-30 08:30");
+			var personId = Guid.NewGuid();
+			var skill = Guid.NewGuid();
+			var site = new Site("Site").WithId();
+			Sites.Has(site);
+			Database
+				.Has(new AgentStateReadModel
+				{
+					PersonId = personId,
+					SiteId = site.Id.Value,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2017-03-30 08:29".Utc(),
 				})
 				.OnSkill(skill);
-
+			AgentsInSite.Has(site.Id.Value, 2);
 			var viewModel = Target.ForSkills(new[] { skill }).Single();
 
-			viewModel.Id.Should().Be(siteId);
+			viewModel.Id.Should().Be(site.Id.Value);
+			viewModel.Name.Should().Be("Site");
+			viewModel.NumberOfAgents.Should().Be(2);
 			viewModel.OutOfAdherence.Should().Be(1);
+			viewModel.Color.Should().Be("warning");
+			
 		}
 
 		[Test]
