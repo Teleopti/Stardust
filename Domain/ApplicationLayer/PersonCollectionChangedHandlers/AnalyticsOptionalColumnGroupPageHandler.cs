@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	public class AnalyticsOptionalColumnGroupPageHandler : IHandleEvent<OptionalColumnCollectionChangedEvent>,
 		IRunOnHangfire
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsOptionalColumnGroupPageHandler));
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private readonly IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
@@ -31,17 +33,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		[Attempts(10)]
 		public virtual void Handle(OptionalColumnCollectionChangedEvent @event)
 		{
+			logger.Debug($"Handle OptionalColumnCollectionChangedEvent for {@event.SerializedOptionalColumn}");
 			foreach (var optionalColumnId in  @event.OptionalColumnIdCollection)
 			{
 				var optionalColumn = _optionalColumnRepository.Get(optionalColumnId);
 				if (optionalColumn == null || !optionalColumn.AvailableAsGroupPage)
 				{
+					logger.Debug($"Either optional column is deleted or it´s not AvailableAsGroupPage. Deleting group page for optional column {optionalColumnId}");
 					DeleteGroupPage(optionalColumnId, @event.LogOnBusinessUnitId);
 					continue;
 				}
 				var personValues = _optionalColumnRepository.OptionalColumnValues(optionalColumn);
 				var newDimGroupPages = createNewDimGroupPages(optionalColumn, personValues, @event.LogOnBusinessUnitId);
 				var newBridgeGroupPagePersons = createNewBridgeGroupPagePerson(personValues, newDimGroupPages);
+				logger.Debug($"Prepare insert by deleting group page for optional column {optionalColumnId}");
 				_analyticsBridgeGroupPagePersonRepository.DeleteAllBridgeGroupPagePerson(new List<Guid>() {optionalColumnId}, @event.LogOnBusinessUnitId);
 				_analyticsGroupPageRepository.DeleteGroupPages(new List<Guid>() { optionalColumnId }, @event.LogOnBusinessUnitId);
 				saveNewDimGroupPages(newDimGroupPages);
@@ -54,6 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		{
 			foreach (var bridgeGroupPagePerson in newBridgeGroupPagePersons)
 			{
+				logger.Debug($"Insert into bridge group page person for {bridgeGroupPagePerson.Value.Count} persons and group {bridgeGroupPagePerson.Key}");
 				_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(bridgeGroupPagePerson.Value, bridgeGroupPagePerson.Key, businessUnitId);
 			}
 		}
@@ -62,6 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		{
 			foreach (var dimGroupPage in newDimGroupPages)
 			{
+				logger.Debug($"Insert group page for {dimGroupPage.GroupPageName}/{dimGroupPage.GroupName}. Group page code: {dimGroupPage.GroupPageCode}");
 				_analyticsGroupPageRepository.AddGroupPageIfNotExisting(dimGroupPage);
 			}
 		}
