@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
@@ -280,6 +281,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public int CountPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
 		{
 			return FindPeopleInAgentGroup(agentGroup, period).Count;
+		}
+
+		public void ReversedOrder()
+		{
+			var allAgents = _storage.LoadAll<IPerson>();
+			allAgents.ForEach(x => _storage.Remove(x));
+			allAgents.Reverse().ForEach(x => _storage.Add(x));
 		}
 	}
 }

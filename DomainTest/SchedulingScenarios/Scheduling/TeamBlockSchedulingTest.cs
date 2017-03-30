@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePreferenceDayRepository PreferenceDayRepository;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 
-		[TestCase(4, 5)]
-		[TestCase(5, 4)]
+		[TestCase(true)]
+		[TestCase(false)]
 		[Ignore("#42836 - will be fixed")]
-		public void ShouldHandleMixOfTeamAndBlock(int secondDOagent1, int secondDOagent2)
+		public void ShouldHandleMixOfTeamAndBlock(bool reversedAgentOrder)
 		{
 			var firstDay = new DateOnly(2016, 05, 30);
 			var activity = ActivityRepository.Has("_");
@@ -48,12 +48,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			RuleSetBagRepository.Add(ruleSetBag);
 			var agent1 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
 			var agent2 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
+			if(reversedAgentOrder)
+				PersonRepository.ReversedOrder();
 			DayOffTemplateRepository.Add(new DayOffTemplate());
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 2, 2, 2, 2, 2, 2));
 			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(2));
 			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(2));
-			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(secondDOagent1));
-			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(secondDOagent2));
+			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(4));
+			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 			{
 				UseTeam = true,
@@ -69,10 +71,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.LoadAll().Count(x => x.MainActivities().Any())
 				.Should().Be.EqualTo(3); //schedule all selected days except one that has DO
 		}
-		[TestCase(4, 5, null, 4)]
-		[TestCase(5, 4, 4, null)]
+
+		[TestCase(true)]
+		[TestCase(false)]
 		[Ignore("#42836 - will be fixed")]
-		public void ShouldHandleMixOfTeamAndBlockAndHaveToClearTeamBlock(int secondDOagent1, int secondDOagent2, int? assAgent1, int? assAgent2)
+		public void ShouldHandleMixOfTeamAndBlockAndHaveToClearTeamBlock(bool reversedAgentOrder)
 		{
 			var firstDay = new DateOnly(2016, 05, 30);
 			var activity = ActivityRepository.Has("_");
@@ -84,18 +87,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			RuleSetBagRepository.Add(ruleSetBag);
 			var agent1 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
 			var agent2 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
+			if(reversedAgentOrder)
+				PersonRepository.ReversedOrder();
 			DayOffTemplateRepository.Add(new DayOffTemplate());
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 2, 2, 2, 2, 2, 2));
 			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(2));
 			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(2));
-			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(secondDOagent1));
-			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(secondDOagent2));
-
-			if (assAgent1.HasValue)
-				AssignmentRepository.Has(agent1, scenario, activity, otherShiftCategory, firstDay.AddDays(assAgent1.Value), new TimePeriod(8, 16));
-
-			if (assAgent2.HasValue)
-				AssignmentRepository.Has(agent2,scenario,activity, otherShiftCategory,firstDay.AddDays(assAgent2.Value),new TimePeriod(8, 16));
+			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(4));
+			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
+			AssignmentRepository.Has(agent2,scenario,activity, otherShiftCategory, firstDay.AddDays(4), new TimePeriod(8, 16));
 			
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 			{
