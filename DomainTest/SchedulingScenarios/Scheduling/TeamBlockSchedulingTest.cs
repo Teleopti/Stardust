@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("42836, to be fixed")]
 		public void ShouldHandleMixOfTeamAndBlockAndNotClearToMuch_BetweenDayOffs(bool reversedAgentOrder)
 		{
 			var firstDay = new DateOnly(2016, 05, 30);
