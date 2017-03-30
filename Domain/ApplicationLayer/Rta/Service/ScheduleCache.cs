@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			IEnumerable<ScheduledActivity> result;
 			_dictionary.Value.TryGetValue(personId, out result);
-			Console.WriteLine($"Results: {result?.Count().ToString() ?? "null"}");
 			return result.EmptyIfNull();
 		}
 
@@ -46,10 +45,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				var updatedActivities = Read(_latestUpdate.Value);
 
-				var dict = merge(_dictionary.Value, updatedActivities.ToDictionary(x => x.PersonId, x => x.Schedule));
-				Console.WriteLine($"Entries: {dict.Count}");
 				_dictionary.Set(
-					dict
+					merge(_dictionary.Value, updatedActivities.ToDictionary(x => x.PersonId, x => x.Schedule))
 				);
 				_latestUpdate.Set(updatedActivities.IsEmpty() ? 0 : updatedActivities.Max(x => x.LastUpdate));
 				_version.Set(latestVersion);
