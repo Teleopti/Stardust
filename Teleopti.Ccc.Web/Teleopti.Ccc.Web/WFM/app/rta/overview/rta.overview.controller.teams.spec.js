@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaOverviewController', function() {
+describe('RtaOverviewController', function () {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -14,16 +14,16 @@ describe('RtaOverviewController', function() {
 
 	beforeEach(module('wfm.rta'));
 
-	beforeEach(function() {
-		module(function($provide) {
-			$provide.factory('$stateParams', function() {
+	beforeEach(function () {
+		module(function ($provide) {
+			$provide.factory('$stateParams', function () {
 				stateParams = {};
 				return stateParams;
 			});
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _NoticeService_) {
+	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _NoticeService_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
@@ -33,76 +33,58 @@ describe('RtaOverviewController', function() {
 		NoticeService = _NoticeService_;
 
 		scope = $controllerBuilder.setup('RtaOverviewController');
-
 		$fakeBackend.clear();
+
+		$fakeBackend.withToggle('RTA_SnappierDisplayOfOverview_43568');
 	}));
 
-	it('should display team for site', function() {
-		stateParams.siteIds = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
-		$fakeBackend.withTeam({
-			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+	it('should display team for site', function () {
+		stateParams.siteIds = "londonGuid";
+		$fakeBackend.withTeamAdherence({
+			SiteId: "londonGuid",
 			Name: "Green",
-			NumberOfAgents: 1
+			NumberOfAgents: 11,
+			OutOfAdherence: 5,
+			Color: "warning"
 		});
 
 		vm = $controllerBuilder.createController().vm;
 
 		expect(vm.teams[0].Name).toEqual("Green");
-		expect(vm.teams[0].NumberOfAgents).toEqual(1);
+		expect(vm.teams[0].NumberOfAgents).toEqual(11);
+		expect(vm.teams[0].OutOfAdherence).toEqual(5);
+		expect(vm.teams[0].Color).toEqual("warning");
 	});
 
-	it('should display agents out of adherence in the team', function() {
-		stateParams.siteIds = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
-		$fakeBackend.withTeam({
-				Id: "2d45a50e-db48-41db-b771-a53000ef6565",
-				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
-			})
-			.withTeam({
-				Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495",
-				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
-			})
-			.withTeamAdherence({
-				Id: "2d45a50e-db48-41db-b771-a53000ef6565",
-				OutOfAdherence: 1
-			})
-			.withTeamAdherence({
-				Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495",
-				OutOfAdherence: 5,
-			});
-
-		vm = $controllerBuilder.createController().vm;
-
-		expect(vm.teams[0].OutOfAdherence).toEqual(1);
-		expect(vm.teams[1].OutOfAdherence).toEqual(5);
-	});
-
-	it('should update adherence', function() {
-		stateParams.siteIds = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
-		$fakeBackend.withTeam({
-				Id: "2d45a50e-db48-41db-b771-a53000ef6565",
-				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
-			})
-			.withTeamAdherence({
-				Id: "2d45a50e-db48-41db-b771-a53000ef6565",
-				OutOfAdherence: 1
-			});
+	it('should update adherence', function () {
+		stateParams.siteIds = "londonGuid";
+		$fakeBackend.withTeamAdherence({
+			SiteId: "londonGuid",
+			NumberOfAgents: 11,
+			OutOfAdherence: 5,
+			Color: "warning"
+		});
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(function() {
-				$fakeBackend.clearTeamAdherences()
-					.withTeamAdherence({
-						Id: "2d45a50e-db48-41db-b771-a53000ef6565",
-						OutOfAdherence: 3
-					});
-			})
+		c.apply(function () {
+			$fakeBackend.clearTeamAdherences()
+				.withTeamAdherence({
+					SiteId: "londonGuid",
+					Name: "Green",
+					NumberOfAgents: 11,
+					OutOfAdherence: 2,
+					Color: "good"
+				});
+		})
 			.wait(5000);
 
-		expect(vm.teams[0].OutOfAdherence).toEqual(3);
+		expect(vm.teams[0].OutOfAdherence).toEqual(2);
+		expect(vm.teams[0].Color).toEqual("good");
 	});
 
-	it('should stop polling when page is about to destroy', function() {
-		stateParams.siteIds = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
+	it('should stop polling when page is about to destroy', function () {
+		stateParams.siteIds = "londonGuid";
 		$controllerBuilder.createController()
 			.wait(5000);
 
@@ -111,83 +93,83 @@ describe('RtaOverviewController', function() {
 		$httpBackend.verifyNoOutstandingRequest();
 	});
 
-	it('should go to agents for multiple teams', function() {
-		stateParams.siteIds = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
-		$fakeBackend.withTeam({
-				Id: "2d45a50e-db48-41db-b771-a53000ef6565"
-			})
-			.withTeam({
-				Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
+	it('should go to agents for multiple teams', function () {
+		stateParams.siteIds = "londonGuid";
+		$fakeBackend.withTeamAdherence({
+			Id: "redGuid"
+		})
+			.withTeamAdherence({
+				Id: "greenGuid"
 			});
 		spyOn($state, 'go');
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(function() {
-			vm.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
-			vm.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
+		c.apply(function () {
+			vm.toggleSelection("redGuid");
+			vm.toggleSelection("greenGuid");
 			vm.openSelectedItems();
 		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
-			teamIds: ['2d45a50e-db48-41db-b771-a53000ef6565',
-				"0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
+			teamIds: ['redGuid',
+				"greenGuid"
 			]
 		});
 	});
 
-	it('should go to agents after deselecting team', function() {
-		stateParams.siteIds = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
-		$fakeBackend.withTeam({
-				Id: "2d45a50e-db48-41db-b771-a53000ef6565"
-			})
+	it('should go to agents after deselecting team', function () {
+		stateParams.siteIds = "londonGuid";
+		$fakeBackend.withTeamAdherence({
+			Id: "redGuid"
+		})
 			.withTeam({
-				Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
+				Id: "greenGuid"
 			});
 		spyOn($state, 'go');
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(function() {
-			vm.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
-			vm.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
-			vm.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
+		c.apply(function () {
+			vm.toggleSelection("redGuid");
+			vm.toggleSelection("greenGuid");
+			vm.toggleSelection("redGuid");
 			vm.openSelectedItems();
 		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
-			teamIds: ["0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"]
+			teamIds: ["greenGuid"]
 		});
 	});
 
-	it('should go back to sites when business unit is changed', function() {
-		stateParams.siteIds = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
-		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
+	it('should go back to sites when business unit is changed', function () {
+		stateParams.siteIds = "londonGuid";
+		$sessionStorage.buid = "oldBuGuid";
 		spyOn($state, 'go');
 
 		$controllerBuilder.createController()
-			.apply(function() {
-				$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+			.apply(function () {
+				$sessionStorage.buid = "newBuGuid";
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta');
 	});
 
-	it('should not go back to sites overview when business unit is not initialized yet', function() {
-		stateParams.siteIds = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
+	it('should not go back to sites overview when business unit is not initialized yet', function () {
+		stateParams.siteIds = "londonGuid";
 		$sessionStorage.buid = undefined;
 		spyOn($state, 'go');
 
 		$controllerBuilder.createController()
-			.apply(function() {
-				$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+			.apply(function () {
+				$sessionStorage.buid = "newBuGuid";
 			});
 
 		expect($state.go).not.toHaveBeenCalledWith('rta');
 	});
 
-	it('should convert teams out of adherence and number of agents to percent', function() {
-		stateParams.siteIds = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
+	it('should convert teams out of adherence and number of agents to percent', function () {
+		stateParams.siteIds = "londonGuid";
 		//$fakeBackend.withTeamAdherence({
 		//		OutOfAdherence: 5
 		//	})
@@ -203,7 +185,7 @@ describe('RtaOverviewController', function() {
 	});
 
 
-	it('should not call notify service', function() {
+	it('should not call notify service', function () {
 		stateParams.siteIds = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
 		spyOn(NoticeService, 'info');
 

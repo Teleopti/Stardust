@@ -432,10 +432,10 @@
                 var returnOrg = [];
                 var skillIdsArray = angular.isArray(params.skillIds) ? params.skillIds : params.skillIds.split(",");
                 skillIdsArray.forEach(function (key) {
-                     if(uniqueSiteIds.indexOf(organizationsOnSkills[key][0].Id) < 0){
-                         uniqueSiteIds = uniqueSiteIds.concat(organizationsOnSkills[key][0].Id);
-                         returnOrg = returnOrg.concat(organizationsOnSkills[key]);
-                     }
+                    if (uniqueSiteIds.indexOf(organizationsOnSkills[key][0].Id) < 0) {
+                        uniqueSiteIds = uniqueSiteIds.concat(organizationsOnSkills[key][0].Id);
+                        returnOrg = returnOrg.concat(organizationsOnSkills[key]);
+                    }
                 });
 
                 if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
@@ -569,18 +569,42 @@
 
                 if (params.skillIds.length > 1) {
                     sAdherencesForSkill.forEach(function (sas) {
-                        if (angular.isDefined(adherenceBySiteId[sas.Id]))
-                            adherenceBySiteId[sas.Id] = adherenceBySiteId[sas.Id] + sas.OutOfAdherence;
-                        else
-                            adherenceBySiteId[sas.Id] = sas.OutOfAdherence;
+                        if (angular.isDefined(adherenceBySiteId[sas.Id])) {
+                            if (toggles['RTA_SnappierDisplayOfOverview_43568']) {
+                                adherenceBySiteId[sas.Id].OutOfAdherence = adherenceBySiteId[sas.Id].OutOfAdherence + sas.OutOfAdherence;
+                                adherenceBySiteId[sas.Id].NumberOfAgents = sas.NumberOfAgents;
+                                adherenceBySiteId[sas.Id].Color = (adherenceBySiteId[sas.Id].OutOfAdherence / adherenceBySiteId[sas.Id].NumberOfAgents) * 100 < 33 ? "good" : ((adherenceBySiteId[sas.Id].OutOfAdherence / adherenceBySiteId[sas.Id].NumberOfAgents) * 100 < 66 ? "warning" : "danger");
+                            }
+                            else {
+                                adherenceBySiteId[sas.Id].OutOfAdherence = adherenceBySiteId[sas.Id].OutOfAdherence + sas.OutOfAdherence
+                            }
+                        }
+                        else {
+                            adherenceBySiteId[sas.Id] = {};
+                            adherenceBySiteId[sas.Id].OutOfAdherence = sas.OutOfAdherence;
+                            if (toggles['RTA_SnappierDisplayOfOverview_43568']) {
+                                adherenceBySiteId[sas.Id].NumberOfAgents = sas.NumberOfAgents;
+                                adherenceBySiteId[sas.Id].Color = sas.Color;
+                            }
+                        }
                         return 0;
                     });
 
                     for (var id in adherenceBySiteId) {
-                        sAdherencesForMultipleSkills.push({
-                            Id: id,
-                            OutOfAdherence: adherenceBySiteId[id]
-                        });
+                        if (toggles['RTA_SnappierDisplayOfOverview_43568']) {
+                            sAdherencesForMultipleSkills.push({
+                                Id: id,
+                                OutOfAdherence: adherenceBySiteId[id].OutOfAdherence,
+                                NumberOfAgents: adherenceBySiteId[id].NumberOfAgents,
+                                Color: adherenceBySiteId[id].Color
+                            });
+                        }
+                        else {
+                            sAdherencesForMultipleSkills.push({
+                                Id: id,
+                                OutOfAdherence: adherenceBySiteId[id].OutOfAdherence,
+                            });
+                        }
                     }
                     sAdherencesForSkill = sAdherencesForMultipleSkills;
                 }
@@ -617,22 +641,45 @@
 
                 if (params.skillIds.length > 1) {
                     teamAdherencesBySkillId.forEach(function (tas) {
-                        if (angular.isDefined(adherenceByTeamId[tas.Id]))
-                            adherenceByTeamId[tas.Id] = adherenceByTeamId[tas.Id] + tas.OutOfAdherence;
-                        else
-                            adherenceByTeamId[tas.Id] = tas.OutOfAdherence;
+                        if (angular.isDefined(adherenceByTeamId[tas.Id])) {
+                            if (toggles['RTA_SnappierDisplayOfOverview_43568']) {
+                                adherenceByTeamId[tas.Id].OutOfAdherence = adherenceByTeamId[tas.Id].OutOfAdherence + tas.OutOfAdherence;
+                                adherenceByTeamId[tas.Id].NumberOfAgents = tas.NumberOfAgents;
+                                adherenceByTeamId[tas.Id].Color = (adherenceByTeamId[tas.Id].OutOfAdherence / adherenceByTeamId[tas.Id].NumberOfAgents) * 100 < 33 ? "good" : ((adherenceByTeamId[tas.Id].OutOfAdherence / adherenceByTeamId[tas.Id].NumberOfAgents) * 100 < 66 ? "warning" : "danger");
+                            }
+                            else {
+                                adherenceByTeamId[tas.Id].OutOfAdherence = adherenceByTeamId[tas.Id].OutOfAdherence + tas.OutOfAdherence
+                            }
+                        }
+                        else {
+                            adherenceByTeamId[tas.Id] = {};
+                            adherenceByTeamId[tas.Id].OutOfAdherence = tas.OutOfAdherence;
+                            if (toggles['RTA_SnappierDisplayOfOverview_43568']) {
+                                adherenceByTeamId[tas.Id].NumberOfAgents = tas.NumberOfAgents;
+                                adherenceByTeamId[tas.Id].Color = tas.Color;
+                            }
+                            
+                        }
                         return 0;
                     });
 
                     for (var id in adherenceByTeamId) {
-                        tAdherencesForMultipleSkills.push({
-                            Id: id,
-                            OutOfAdherence: adherenceByTeamId[id]
-                        });
+                        if (toggles['RTA_SnappierDisplayOfOverview_43568']) {
+                            tAdherencesForMultipleSkills.push({
+                                Id: id,
+                                OutOfAdherence: adherenceByTeamId[id].OutOfAdherence,
+                                NumberOfAgents: adherenceByTeamId[id].NumberOfAgents,
+                                Color: adherenceByTeamId[id].Color
+                            });
+                        } else {
+                            tAdherencesForMultipleSkills.push({
+                                Id: id,
+                                OutOfAdherence: adherenceByTeamId[id].OutOfAdherence
+                            });
+                        };
                     }
                     teamAdherencesBySkillId = tAdherencesForMultipleSkills;
                 }
-
                 return [200, teamAdherencesBySkillId];
             });
 
@@ -640,13 +687,16 @@
             function (params) {
                 if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
                     teamAdherences = filteredByPermission(teamAdherences, permittedTeamIds);
-                var result =
-                    teamAdherences.filter(function (ta) {
+                if (toggles['RTA_SnappierDisplayOfOverview_43568'])
+                    var result = teamAdherences;
+                else {
+                    result = teamAdherences.filter(function (ta) {
                         var t = teams.find(function (team) {
                             return team.Id === ta.Id;
                         });
                         return t != null && params.siteId === t.SiteId;
                     });
+                }
                 return [200, result];
             });
 
@@ -827,7 +877,7 @@
             skillIds.split(",").forEach(function (key) {
                 var skillIdAsAKey = key.trim();
                 //organizationsOnSkills[skillIdAsAKey] = organization;
-                if(angular.isDefined(organizationsOnSkills[skillIdAsAKey]))
+                if (angular.isDefined(organizationsOnSkills[skillIdAsAKey]))
                     organizationsOnSkills[skillIdAsAKey] = organizationsOnSkills[skillIdAsAKey].concat(organization);
                 else
                     organizationsOnSkills[skillIdAsAKey] = [organization];

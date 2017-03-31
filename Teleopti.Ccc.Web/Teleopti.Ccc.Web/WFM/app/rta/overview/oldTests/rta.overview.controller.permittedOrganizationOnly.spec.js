@@ -12,7 +12,7 @@ describe('RtaOverviewController', function () {
 		vm;
 
 	var stateParams = {};
-	var catchError = function (e) {
+	var catchError = function(e){
 		console.error(e);
 	}
 	beforeEach(module('wfm.rta'));
@@ -40,25 +40,20 @@ describe('RtaOverviewController', function () {
 
 		$fakeBackend.clear();
 		$fakeBackend.withToggle("RTA_MonitorAgentsInPermittedOrganizationOnly_40660");
-		$fakeBackend.withToggle('RTA_SnappierDisplayOfOverview_43568');
 
 	}));
 
 	it('should display permitted site', function () {
 		$fakeBackend
-			.withSiteAdherence({
+			.withSite({
 				Name: "London",
 				Id: "londonGuid",
-				NumberOfAgents: 11,
-				OutOfAdherence: 1,
-				Color: "good"
+				NumberOfAgents: 11
 			})
-			.withSiteAdherence({
+			.withSite({
 				Name: "Paris",
 				Id: "parisGuid",
-				NumberOfAgents: 12,
-				OutOfAdherence: 2,
-				Color: "good"
+				NumberOfAgents: 12
 			})
 			.withPermittedSites(["londonGuid"]);
 
@@ -67,23 +62,17 @@ describe('RtaOverviewController', function () {
 		expect(vm.sites.length).toEqual(1);
 		expect(vm.sites[0].Name).toEqual("London");
 		expect(vm.sites[0].NumberOfAgents).toEqual(11);
-		expect(vm.sites[0].OutOfAdherence).toEqual(1);
-		expect(vm.sites[0].Color).toEqual("good");
 	});
 
 	it('should filter agents out of adherence in permitted site - service', function () {
 		$fakeBackend
 			.withSiteAdherence({
 				Id: "londonGuid",
-				NumberOfAgents: 10,
-				OutOfAdherence: 1,
-				Color: "good"
+				OutOfAdherence: 1
 			})
 			.withSiteAdherence({
 				Id: "parisGuid",
-				NumberOfAgents: 8,
 				OutOfAdherence: 5,
-				Color: "danger"
 			})
 			.withPermittedSites(["londonGuid"]);
 
@@ -96,56 +85,76 @@ describe('RtaOverviewController', function () {
 		expect(siteAdherences.length).toEqual(1);
 		expect(siteAdherences[0].Id).toEqual("londonGuid");
 		expect(siteAdherences[0].OutOfAdherence).toEqual(1);
-		expect(siteAdherences[0].Color).toEqual("good");
+	});
+
+	it('should display agents out of adherence in permitted site', function () {
+		$fakeBackend.withSite({
+			Id: "londonGuid",
+			Name: "London",
+		})
+			.withSite({
+				Id: "parisGuid",
+				Name: "Paris",
+			})
+			.withSiteAdherence({
+				Id: "londonGuid",
+				OutOfAdherence: 1
+			})
+			.withSiteAdherence({
+				Id: "parisGuid",
+				OutOfAdherence: 5,
+			})
+			.withPermittedSites(["londonGuid"]);
+
+		vm = $controllerBuilder.createController().vm;
+
+		expect(vm.sites.length).toEqual(1);
+		expect(vm.sites[0].OutOfAdherence).toEqual(1);
 	});
 
 	it('should display permitted team for site', function () {
 		stateParams.siteIds = "londonGuid";
-		$fakeBackend.withTeamAdherence({
+		$fakeBackend.withTeam({
 			SiteId: "londonGuid",
 			Id: "teamGreenGuid",
-			NumberOfAgents: 10,
 			Name: "teamGreen",
-			OutOfAdherence: 1,
-			Color: "good"
+			NumberOfAgents: 1
 		})
-			.withTeamAdherence({
+			.withTeam({
 				SiteId: "londonGuid",
 				Id: "teamRedGuid",
-				NumberOfAgents: 20,
 				Name: "teamRed",
-				OutOfAdherence: 10,
-				Color: "warning"
+				NumberOfAgents: 3
 			})
 			.withPermittedTeams(["teamGreenGuid"]);
 
 		vm = $controllerBuilder.createController().vm;
 
 		expect(vm.teams[0].Name).toEqual("teamGreen");
-		expect(vm.teams[0].NumberOfAgents).toEqual(10);
-		expect(vm.teams[0].OutOfAdherence).toEqual(1);
-		expect(vm.teams[0].Color).toEqual("good");
+		expect(vm.teams[0].NumberOfAgents).toEqual(1);
 	});
 
 
 	it('should filter agents out of adherence in permitted team - service', function () {
-		$fakeBackend.withTeamAdherence({
+		$fakeBackend.withTeam({
 			SiteId: "londonGuid",
 			Id: "teamGreenGuid",
-			NumberOfAgents: 10,
-			Name: "teamGreen",
-			OutOfAdherence: 1,
-			Color: "good"
+			NumberOfAgents: 1
 		})
-			.withTeamAdherence({
-				SiteId: "londonGuid",
-				Id: "teamRedGuid",
-				NumberOfAgents: 20,
-				Name: "teamRed",
-				OutOfAdherence: 10,
-				Color: "warning"
-			})
-			.withPermittedTeams(["teamGreenGuid"]);
+		.withTeam({
+			SiteId: "londonGuid",
+			Id: "teamRedGuid",
+			NumberOfAgents: 3
+		})
+		.withTeamAdherence({
+			Id: "teamGreenGuid",
+			OutOfAdherence: 1
+		})
+		.withTeamAdherence({
+			Id: "teamRedGuid",
+			OutOfAdherence: 5,
+		})
+		.withPermittedTeams(["teamGreenGuid"]);
 
 		var teamAdherences = [];
 
@@ -155,126 +164,190 @@ describe('RtaOverviewController', function () {
 
 		$httpBackend.flush();
 		expect(teamAdherences[0].OutOfAdherence).toEqual(1);
-		expect(teamAdherences[0].NumberOfAgents).toEqual(10);
-		expect(teamAdherences[0].Color).toEqual("good");
 	});
 
-	it('should filter agents out of adherence in permitted sites for preselected skill - service', function () {
-		$fakeBackend
+	it('should display agents out of adherence in permitted team', function () {
+		stateParams.siteIds = "londonGuid";
+		$fakeBackend.withTeam({
+			SiteId: "londonGuid",
+			Id: "teamGreenGuid",
+			NumberOfAgents: 1
+		})
+		.withTeam({
+			SiteId: "londonGuid",
+			Id: "teamRedGuid",
+			NumberOfAgents: 3
+		})
+		.withTeamAdherence({
+			Id: "teamGreenGuid",
+			OutOfAdherence: 1
+		})
+		.withTeamAdherence({
+			Id: "teamRedGuid",
+			OutOfAdherence: 5,
+		})
+		.withPermittedTeams(["teamGreenGuid"]);
+
+		vm = $controllerBuilder.createController().vm;
+
+		expect(vm.teams.length).toEqual(1);
+		expect(vm.teams[0].Id).toEqual("teamGreenGuid");
+		expect(vm.teams[0].OutOfAdherence).toEqual(1);
+	});
+
+	it('should filter agents out of adherence in permitted sites for preselected skill - service', function() {
+			$fakeBackend
+			.withSite({
+				Id: "parisGuid"
+			})
 			.withSiteAdherenceForSkill({
 				Id: "parisGuid",
-				NumberOfAgents: 10,
 				OutOfAdherence: 5,
-				SkillId: "emailGuid",
-				Color: "warning"
+				SkillId: "emailGuid"
+			})
+			.withSite({
+				Id: "londonGuid"
 			})
 			.withSiteAdherenceForSkill({
 				Id: "londonGuid",
-				NumberOfAgents: 12,
-				OutOfAdherence: 2,
-				SkillId: "emailGuid",
-				Color: "good"
+				OutOfAdherence: 5,
+				SkillId: "emailGuid"
 			})
 			.withPermittedSites(["parisGuid"]);
-
+		
 		var sites = [];
 
-		rtaService.getAdherenceForSitesBySkills(["emailGuid"])
-			.then(function (sa) { sites = sa; })
+		rtaService.getSitesForSkills(["emailGuid"])
+			.then(function (s) { sites = s; })
 			.catch(catchError);
 
 		$httpBackend.flush();
 		expect(sites.length).toEqual(1);
 		expect(sites[0].Id).toEqual("parisGuid");
-		expect(sites[0].OutOfAdherence).toEqual(5);
-		expect(sites[0].NumberOfAgents).toEqual(10);
-		expect(sites[0].Color).toEqual("warning");
 	});
 
-	it('should display agents out of adherence in permitted sites for preselected skill', function () {
-		stateParams.skillIds = "emailGuid";
-		$fakeBackend
+	it('should filter agents out of adherence in permitted sites for preselected skill - service', function() {
+			$fakeBackend
+			.withSite({
+				Id: "parisGuid"
+			})
 			.withSiteAdherenceForSkill({
 				Id: "parisGuid",
-				NumberOfAgents: 10,
 				OutOfAdherence: 5,
-				SkillId: "emailGuid",
-				Color: "warning"
+				SkillId: "emailGuid"
+			})
+			.withSite({
+				Id: "londonGuid"
 			})
 			.withSiteAdherenceForSkill({
 				Id: "londonGuid",
-				NumberOfAgents: 20,
 				OutOfAdherence: 5,
-				SkillId: "emailGuid",
-				Color: "good"
+				SkillId: "emailGuid"
 			})
 			.withPermittedSites(["parisGuid"]);
+		
+		var siteAdherences = [];
 
+		rtaService.getAdherenceForSitesBySkills(["emailGuid"])
+			.then(function (sa) { siteAdherences = sa; })
+			.catch(catchError);
+
+		$httpBackend.flush();
+		expect(siteAdherences.length).toEqual(1);
+		expect(siteAdherences[0].Id).toEqual("parisGuid");
+		expect(siteAdherences[0].OutOfAdherence).toEqual(5);
+	});
+
+	it('should display agents out of adherence in permitted sites for preselected skill', function() {
+		stateParams.skillIds = "emailGuid";
+		$fakeBackend
+			.withSite({
+				Id: "parisGuid"
+			})
+			.withSiteAdherenceForSkill({
+				Id: "parisGuid",
+				OutOfAdherence: 5,
+				SkillId: "emailGuid"
+			})
+			.withSite({
+				Id: "londonGuid"
+			})
+			.withSiteAdherenceForSkill({
+				Id: "londonGuid",
+				OutOfAdherence: 5,
+				SkillId: "emailGuid"
+			})
+			.withPermittedSites(["parisGuid"]);
+		
 		vm = $controllerBuilder.createController().vm;
 
 		expect(vm.sites.length).toEqual(1);
 		expect(vm.sites[0].Id).toEqual("parisGuid");
 		expect(vm.sites[0].OutOfAdherence).toEqual(5);
-		expect(vm.sites[0].NumberOfAgents).toEqual(10);
-		expect(vm.sites[0].Color).toEqual("warning");
 	});
 
 	it('should display agents out of adherence in permitted team for preselected skill - service', function () {
 		stateParams.skillIds = "emailGuid";
 		stateParams.siteIds = "parisGuid";
 		$fakeBackend
+			.withTeam({
+				Id: "teamGreenGuid",
+				SiteId: "parisGuid"
+			})
+			.withTeam({
+				Id: "teamRedGuid",
+				SiteId: "parisGuid"
+			})
 			.withTeamAdherenceForSkill({
 				SiteId: "parisGuid",
 				Id: "teamGreenGuid",
-				NumberOfAgents: 10,
 				OutOfAdherence: 5,
-				SkillId: "emailGuid",
-				Color: "warning"
+				SkillId: "emailGuid"
 			})
 			.withTeamAdherenceForSkill({
 				SiteId: "parisGuid",
 				Id: "teamRedGuid",
-				NumberOfAgents: 10,
 				OutOfAdherence: 7,
-				SkillId: "emailGuid",
-				Color: "danger"
+				SkillId: "emailGuid"
 			})
 			.withPermittedTeams(["teamGreenGuid"]);
 
 		var teamAdherences = [];
 
-		rtaService.getAdherenceForTeamsBySkills({ siteIds: "parisGuid", skillIds: "emailGuid" })
-			.then(function (ta) { teamAdherences = ta; })
-			.catch(catchError);
+		rtaService.getAdherenceForTeamsBySkills({siteIds: "parisGuid", skillIds: "emailGuid"})
+		.then(function(ta){ teamAdherences = ta; })
+		.catch(catchError);
 
 		$httpBackend.flush();
 
 		expect(teamAdherences.length).toEqual(1);
 		expect(teamAdherences[0].Id).toEqual("teamGreenGuid");
 		expect(teamAdherences[0].OutOfAdherence).toEqual(5);
-		expect(teamAdherences[0].NumberOfAgents).toEqual(10);
-		expect(teamAdherences[0].Color).toEqual("warning");
 	});
 
 	it('should display agents out of adherence in permitted team for preselected skill', function () {
 		stateParams.skillIds = "emailGuid";
 		stateParams.siteIds = "parisGuid";
 		$fakeBackend
+			.withTeam({
+				Id: "teamGreenGuid",
+				SiteId: "parisGuid"
+			})
+			.withTeam({
+				Id: "teamRedGuid",
+				SiteId: "parisGuid"
+			})
 			.withTeamAdherenceForSkill({
 				SiteId: "parisGuid",
 				Id: "teamGreenGuid",
-				NumberOfAgents: 10,
 				OutOfAdherence: 5,
-				SkillId: "emailGuid",
-				Color: "warning"
+				SkillId: "emailGuid"
 			})
 			.withTeamAdherenceForSkill({
 				SiteId: "parisGuid",
 				Id: "teamRedGuid",
-				NumberOfAgents: 20,
 				OutOfAdherence: 7,
-				SkillId: "emailGuid",
-				Color: "good"
+				SkillId: "emailGuid"
 			})
 			.withPermittedTeams(["teamGreenGuid"]);
 
@@ -283,8 +356,6 @@ describe('RtaOverviewController', function () {
 		expect(vm.teams.length).toEqual(1);
 		expect(vm.teams[0].Id).toEqual("teamGreenGuid");
 		expect(vm.teams[0].OutOfAdherence).toEqual(5);
-		expect(vm.teams[0].NumberOfAgents).toEqual(10);
-		expect(vm.teams[0].Color).toEqual("warning");
 	});
 
 });

@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaOverviewController', function() {
+describe('RtaOverviewController', function () {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -13,16 +13,16 @@ describe('RtaOverviewController', function() {
 	var stateParams = {};
 
 	beforeEach(module('wfm.rta'));
-	beforeEach(function() {
-		module(function($provide) {
-			$provide.factory('$stateParams', function() {
+	beforeEach(function () {
+		module(function ($provide) {
+			$provide.factory('$stateParams', function () {
 				stateParams = {};
 				return stateParams;
 			});
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _$timeout_) {
+	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _$timeout_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
@@ -34,50 +34,49 @@ describe('RtaOverviewController', function() {
 		scope = $controllerBuilder.setup('RtaOverviewController');
 		$fakeBackend.clear();
 		spyOn($state, 'go');
+		$fakeBackend.withToggle('RTA_SnappierDisplayOfOverview_43568');
 	}));
 
-	it('should display agents out of adherence in sites for preselected skill', function() {
+	it('should display agents out of adherence in sites for preselected skill', function () {
 		stateParams.skillIds = "emailGuid";
-		$fakeBackend
-			.withSite({
-				Id: "parisGuid"
-			})
-			.withSiteAdherenceForSkill({
-				Id: "parisGuid",
-				OutOfAdherence: 5,
-				SkillId: "emailGuid"
-			});
+		$fakeBackend.withSiteAdherenceForSkill({
+			Id: "parisGuid",
+			NumberOfAgents: 11,
+			OutOfAdherence: 5,
+			SkillId: "emailGuid",
+			Color: "warning"
+		});
 
 		vm = $controllerBuilder.createController().vm;
 
 		expect(vm.sites.length).toEqual(1);
 		expect(vm.sites[0].Id).toEqual("parisGuid");
 		expect(vm.sites[0].OutOfAdherence).toEqual(5);
+		expect(vm.sites[0].Color).toEqual("warning");
 	});
 
-	it('should display agents out of adherence in sites for preselected skill area', function() {
+	it('should display agents out of adherence in sites for preselected skill area', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
-		$fakeBackend
-			.withSite({
-				Id: "londonGuid"
-			})
-			.withSite({
-				Id: "parisGuid"
-			})
-			.withSiteAdherenceForSkill({
-				Id: "londonGuid",
-				OutOfAdherence: 1,
-				SkillId: "phoneGuid"
-			})
+		$fakeBackend.withSiteAdherenceForSkill({
+			Id: "londonGuid",
+			NumberOfAgents: 11,
+			OutOfAdherence: 1,
+			SkillId: "phoneGuid",
+			Color: "good"
+		})
 			.withSiteAdherenceForSkill({
 				Id: "parisGuid",
+				NumberOfAgents: 10,
 				OutOfAdherence: 3,
-				SkillId: "emailGuid"
+				SkillId: "emailGuid",
+				Color: "good"
 			})
 			.withSiteAdherenceForSkill({
 				Id: "parisGuid",
+				NumberOfAgents: 10,
 				OutOfAdherence: 2,
-				SkillId: "phoneGuid"
+				SkillId: "phoneGuid",
+				Color: "good"
 			})
 			.withSkillAreas([{
 				Id: "emailAndPhoneGuid",
@@ -93,52 +92,56 @@ describe('RtaOverviewController', function() {
 		expect(vm.sites.length).toEqual(2);
 		expect(vm.sites[0].Id).toEqual("londonGuid");
 		expect(vm.sites[0].OutOfAdherence).toEqual(1);
+		expect(vm.sites[0].Color).toEqual("good");
 		expect(vm.sites[1].Id).toEqual("parisGuid");
 		expect(vm.sites[1].OutOfAdherence).toEqual(5);
+		expect(vm.sites[1].Color).toEqual("warning");
 	});
 
-	it('should update adherence for site and preselected skill', function() {
+	it('should update adherence for site and preselected skill', function () {
 		stateParams.skillIds = "phoneGuid";
 		$fakeBackend
-			.withSite({
-				Id: "londonGuid"
-			})
 			.withSiteAdherenceForSkill({
 				Id: "londonGuid",
+				NumberOfAgents: 10,
 				OutOfAdherence: 1,
-				SkillId: "phoneGuid"
+				SkillId: "phoneGuid",
+				Color: "good"
 			});
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(function() {
-				$fakeBackend.clearSiteAdherencesForSkill()
-					.withSiteAdherenceForSkill({
-						Id: "londonGuid",
-						OutOfAdherence: 3,
-						SkillId: "phoneGuid"
-					})
-			})
+		c.apply(function () {
+			$fakeBackend.clearSiteAdherencesForSkill()
+				.withSiteAdherenceForSkill({
+					Id: "londonGuid",
+					NumberOfAgents: 10,
+					OutOfAdherence: 5,
+					SkillId: "phoneGuid",
+					Color: "warning"
+				})
+		})
 			.wait(5000);
 
-		expect(vm.sites[0].OutOfAdherence).toEqual(3);
+		expect(vm.sites[0].OutOfAdherence).toEqual(5);
+		expect(vm.sites[0].Color).toEqual("warning");
 	});
 
-	it('should update adherence for site and preselected skill area', function() {
+	it('should update adherence for site and preselected skill area', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
-		$fakeBackend
-			.withSite({
-				Id: "londonGuid"
-			})
+		$fakeBackend.withSiteAdherenceForSkill({
+			Id: "londonGuid",
+			NumberOfAgents: 10,
+			OutOfAdherence: 2,
+			SkillId: "phoneGuid",
+			Color: "good"
+		})
 			.withSiteAdherenceForSkill({
 				Id: "londonGuid",
-				OutOfAdherence: 1,
-				SkillAreaId: "phoneGuid"
-			})
-			.withSiteAdherenceForSkill({
-				Id: "londonGuid",
-				OutOfAdherence: 5,
-				SkillId: "emailGuid"
+				NumberOfAgents: 10,
+				OutOfAdherence: 3,
+				SkillId: "emailGuid",
+				Color: "good"
 			})
 			.withSkillAreas([{
 				Id: "emailAndPhoneGuid",
@@ -151,21 +154,26 @@ describe('RtaOverviewController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(function() {
-				$fakeBackend.clearSiteAdherencesForSkill()
-					.withSiteAdherenceForSkill({
-						Id: "londonGuid",
-						OutOfAdherence: 3,
-						SkillId: "phoneGuid"
-					})
-					.withSiteAdherenceForSkill({
-						Id: "londonGuid",
-						OutOfAdherence: 4,
-						SkillId: "emailGuid"
-					})
-			})
+		c.apply(function () {
+			$fakeBackend.clearSiteAdherencesForSkill()
+				.withSiteAdherenceForSkill({
+					Id: "londonGuid",
+					NumberOfAgents: 10,
+					OutOfAdherence: 5,
+					SkillId: "phoneGuid",
+					Color: "warning"
+				})
+				.withSiteAdherenceForSkill({
+					Id: "londonGuid",
+					NumberOfAgents: 10,
+					OutOfAdherence: 4,
+					SkillId: "emailGuid",
+					Color: "warning"
+				})
+		})
 			.wait(5000);
 
-		expect(vm.sites[0].OutOfAdherence).toEqual(7);
+		expect(vm.sites[0].OutOfAdherence).toEqual(9);
+		expect(vm.sites[0].Color).toEqual("danger");
 	});
 });

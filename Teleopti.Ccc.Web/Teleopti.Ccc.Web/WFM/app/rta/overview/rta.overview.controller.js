@@ -66,198 +66,305 @@
 		vm.getAdherencePercent = rtaFormatService.numberToPercent;
 		vm.sortByLocaleLanguage = localeLanguageSortingService.sort;
 		/***scoped functions */
-		vm.urlForSelectSkill = urlForSelectSkill;
-		vm.getStateForTeams = getStateForTeams;
-		vm.getStateForAgents = getStateForAgents;
+
 		vm.goToDashboard = function () { rtaRouteService.goToSites(); };
 		vm.goToSelectSkill = function () { rtaRouteService.goToSelectSkill(); };
-		vm.toggleSelection = toggleSelection;
-		vm.openSelectedItems = openSelectedItems;
 
-		(function initialize() {
-			pollingLock = false;
-			rtaService.getSkillAreas().then(function (skillAreas) {
-				vm.skillAreas = skillAreas.SkillAreas;
-				getSitesOrTeams();
-			});
-		})();
+		if (toggleService.togglesLoaded.then(function () {
+			vm.urlForSelectSkill = urlForSelectSkill;
+			vm.getStateForTeams = getStateForTeams;
+			vm.getStateForAgents = getStateForAgents;
+			vm.toggleSelection = toggleSelection;
+			vm.openSelectedItems = openSelectedItems;
 
-		function urlForSelectSkill() { return rtaRouteService.urlForSelectSkill(); };
+			(function initialize() {
+				pollingLock = false;
+				if (toggleService.RTA_SnappierDisplayOfOverview_43568) {
+					rtaService.getSkillAreas().then(function (skillAreas) {
+						vm.skillAreas = skillAreas.SkillAreas;
+						getSitesOrTeams2();
+					});
+				}
+				else {
+					rtaService.getSkillAreas().then(function (skillAreas) {
+						vm.skillAreas = skillAreas.SkillAreas;
+						getSitesOrTeams();
+					});
+				}
+			})();
 
-		function getStateForTeams() {
-			if (vm.skillId !== null || vm.skillAreaId !== null)
-				return vm.skillAreaId !== null ? stateForTeamsBySkillArea : stateForTeamsBySkill;
-			else return stateForTeams;
-		};
+			function urlForSelectSkill() { return rtaRouteService.urlForSelectSkill(); };
 
-		function getStateForAgents() { return (vm.skillAreaId !== null) ? stateForAgentsByTeamsAndSkillArea : stateForAgentsByTeamsAndSkill; };
+			function getStateForTeams() {
+				if (vm.skillId !== null || vm.skillAreaId !== null)
+					return vm.skillAreaId !== null ? stateForTeamsBySkillArea : stateForTeamsBySkill;
+				else return stateForTeams;
+			};
 
-		function changed(newValue, oldValue) {
-			return newValue !== oldValue && angular.isDefined(oldValue) && oldValue != null && newValue == null;
-		}
+			function getStateForAgents() { return (vm.skillAreaId !== null) ? stateForAgentsByTeamsAndSkillArea : stateForAgentsByTeamsAndSkill; };
 
-		function toggleSelection(itemId) {
-			var index = vm.selectedItemIds.indexOf(itemId);
-			if (index > -1) vm.selectedItemIds.splice(index, 1);
-			else vm.selectedItemIds.push(itemId);
-		}
+			function changed(newValue, oldValue) {
+				return newValue !== oldValue && angular.isDefined(oldValue) && oldValue != null && newValue == null;
+			}
 
-		function openSelectedItems() {
-			if (vm.selectedItemIds.length === 0) return;
-			goToAgents(vm.selectedItemIds);
-		};
+			function toggleSelection(itemId) {
+				var index = vm.selectedItemIds.indexOf(itemId);
+				if (index > -1) vm.selectedItemIds.splice(index, 1);
+				else vm.selectedItemIds.push(itemId);
+			}
 
-		var polling = $interval(function () {
-			if(!pollingLock) return;
-			if (pollingLock) 
-					pollingLock = false;
-			if (vm.skillId !== null || vm.skillAreaId !== null) {
-				if (vm.skillAreaId !== null)
-					vm.skillId = skillIdsFromSkillArea(vm.skillAreaId);
-				if (vm.siteIds !== null && angular.isDefined(vm.teams)) {
-					rtaService.getAdherenceForTeamsBySkills({
-						skillIds: vm.skillId,
-						siteIds: vm.siteIds
-					})
-						.then(function (teamAdherences) { 
+			function openSelectedItems() {
+				if (vm.selectedItemIds.length === 0) return;
+				goToAgents(vm.selectedItemIds);
+			};
+
+			if (toggleService.RTA_SnappierDisplayOfOverview_43568) {
+				var polling2 = $interval(function () {
+					if (!pollingLock) return;
+					if (pollingLock)
+						pollingLock = false;
+					if (vm.skillId !== null || vm.skillAreaId !== null) {
+						if (vm.skillAreaId !== null)
+							vm.skillId = skillIdsFromSkillArea(vm.skillAreaId);
+						if (vm.siteIds !== null && angular.isDefined(vm.teams)) {
+							rtaService.getAdherenceForTeamsBySkills({
+								skillIds: vm.skillId,
+								siteIds: vm.siteIds
+							})
+								.then(function (teamAdherences) {
+									pollingLock = true;
+									vm.teams = teamAdherences;
+								});
+						} else if (angular.isDefined(vm.sites)) {
+							rtaService.getAdherenceForSitesBySkills(vm.skillId)
+								.then(function (siteAdherences) {
+									vm.sites = siteAdherences;
+									pollingLock = true;
+								});
+						};
+					}
+					else if (vm.siteIds) {
+						rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds })
+							.then(function (teamAdherences) {
+								vm.teams = teamAdherences;
+								pollingLock = true;
+							})
+					} else {
+						rtaService.getAdherenceForAllSites().then(function (siteAdherences) {
+							vm.sites = siteAdherences;
 							pollingLock = true;
-							rtaAdherenceService.updateAdherence(vm.teams, teamAdherences); 
 						});
-				} else if (angular.isDefined(vm.sites)) {
-					rtaService.getAdherenceForSitesBySkills(vm.skillId)
-						.then(function (siteAdherences) { 
-							pollingLock = true; 
-							rtaAdherenceService.updateAdherence(vm.sites, siteAdherences);
-						});
-				};
+					}
+				}, pollingInterval);
 			}
-			else if (vm.siteIds) {
-				rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds })
-					.then(function (teamAdherence) { 
+			else {
+				var polling = $interval(function () {
+					if (!pollingLock) return;
+					if (pollingLock)
+						pollingLock = false;
+					if (vm.skillId !== null || vm.skillAreaId !== null) {
+						if (vm.skillAreaId !== null)
+							vm.skillId = skillIdsFromSkillArea(vm.skillAreaId);
+						if (vm.siteIds !== null && angular.isDefined(vm.teams)) {
+							rtaService.getAdherenceForTeamsBySkills({
+								skillIds: vm.skillId,
+								siteIds: vm.siteIds
+							})
+								.then(function (teamAdherences) {
+									pollingLock = true;
+									rtaAdherenceService.updateAdherence(vm.teams, teamAdherences);
+								});
+						} else if (angular.isDefined(vm.sites)) {
+							rtaService.getAdherenceForSitesBySkills(vm.skillId)
+								.then(function (siteAdherences) {
+									pollingLock = true;
+									rtaAdherenceService.updateAdherence(vm.sites, siteAdherences);
+								});
+						};
+					}
+					else if (vm.siteIds) {
+						rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds })
+							.then(function (teamAdherence) {
+								pollingLock = true;
+								rtaAdherenceService.updateAdherence(vm.teams, teamAdherence);
+							});
+					} else {
+						rtaService.getAdherenceForAllSites()
+							.then(function (siteAdherences) {
+								pollingLock = true;
+								rtaAdherenceService.updateAdherence(vm.sites, siteAdherences);
+							});
+					}
+				}, pollingInterval);
+			};
+
+			function cancelPolling() {
+				if (polling != null) {
+					$interval.cancel(polling);
+					pollingLock = true;
+				}
+			}
+
+			function cancelPolling2() {
+				if (polling2 != null) {
+					$interval.cancel(polling2);
+					pollingLock = true;
+				}
+			}
+
+			function getSitesOrTeams() {
+				if (vm.skillId !== null || vm.skillAreaId !== null) { return vm.siteIds !== null ? getTeamsBySkillsInfo() : getSitesBySkillsInfo(); }
+				else { return vm.siteIds ? getTeamsInfo() : getSitesInfo(); }
+			};
+
+			function getSitesOrTeams2() {
+				if (vm.skillId !== null || vm.skillAreaId !== null) { return vm.siteIds !== null ? getTeamsBySkillsInfo2() : getSitesBySkillsInfo2(); }
+				else { return vm.siteIds ? getTeamsInfo2() : getSitesInfo2(); }
+			};
+
+			function goToAgents(selectedItemIds) {
+				var stateParamsObject = {};
+				var skillOrSkillAreaKey = vm.skillIds != null ? 'skillIds' : 'skillAreaId';
+				var skillOrSkillAreaValue = vm.skillIds != null ? vm.skillIds : vm.skillAreaId;
+				var sitesOrTeamsKey = vm.sites ? 'siteIds' : 'teamIds';
+				var sitesOrTeamsValue = selectedItemIds;
+				if (vm.skillIds || vm.skillAreaId) {
+					stateParamsObject[skillOrSkillAreaKey] = skillOrSkillAreaValue;
+				}
+				stateParamsObject[sitesOrTeamsKey] = sitesOrTeamsValue;
+				rtaRouteService.goToAgents(stateParamsObject);
+			};
+
+			function getTeamsBySkillsInfo() {
+				pollingLock = false;
+				vm.skillIds = getSkillIds();
+				return rtaService.getTeamsForSiteAndSkills({
+					skillIds: vm.skillIds,
+					siteIds: vm.siteIds
+				}).then(function (teams) {
+					vm.teams = teams;
+					return rtaService.getAdherenceForTeamsBySkills({
+						skillIds: vm.skillIds,
+						siteIds: vm.siteIds
+					}).then(function (teamAdherences) {
 						pollingLock = true;
-						rtaAdherenceService.updateAdherence(vm.teams, teamAdherence); 
+						rtaAdherenceService.updateAdherence(vm.teams, teamAdherences);
 					});
-			} else {
-				rtaService.getAdherenceForAllSites()
-					.then(function (siteAdherences) { 
-						pollingLock = true;
-						rtaAdherenceService.updateAdherence(vm.sites, siteAdherences); 
-					});
+				})
 			}
-		}, pollingInterval);
-		
-		function cancelPolling() {
-			if (polling != null) {
-				$interval.cancel(polling);
-				pollingLock = true;
-			}
-		}
 
-		function getSitesOrTeams() {
-			if (vm.skillId !== null || vm.skillAreaId !== null) { return vm.siteIds !== null ? getTeamsBySkillsInfo() : getSitesBySkillsInfo(); }
-			else { return vm.siteIds ? getTeamsInfo() : getSitesInfo(); }
-		};
-
-		function goToAgents(selectedItemIds) {
-			var stateParamsObject = {};
-			var skillOrSkillAreaKey = vm.skillIds != null ? 'skillIds' : 'skillAreaId';
-			var skillOrSkillAreaValue = vm.skillIds != null ? vm.skillIds : vm.skillAreaId;
-			var sitesOrTeamsKey = vm.sites ? 'siteIds' : 'teamIds';
-			var sitesOrTeamsValue = selectedItemIds;
-			if (vm.skillIds || vm.skillAreaId) {
-				stateParamsObject[skillOrSkillAreaKey] = skillOrSkillAreaValue;
-			}
-			stateParamsObject[sitesOrTeamsKey] = sitesOrTeamsValue;
-			rtaRouteService.goToAgents(stateParamsObject);
-		};
-
-		function getTeamsBySkillsInfo() {
-			pollingLock = false;
-			vm.skillIds = getSkillIds();
-			return rtaService.getTeamsForSiteAndSkills({
-				skillIds: vm.skillIds,
-				siteIds: vm.siteIds
-			}).then(function (teams) {
-				vm.teams = teams;
-				return rtaService.getAdherenceForTeamsBySkills({
+			function getTeamsBySkillsInfo2() {
+				pollingLock = false;
+				vm.skillIds = getSkillIds();
+				rtaService.getAdherenceForTeamsBySkills({
 					skillIds: vm.skillIds,
 					siteIds: vm.siteIds
 				}).then(function (teamAdherences) {
+					vm.teams = teamAdherences;
 					pollingLock = true;
-					rtaAdherenceService.updateAdherence(vm.teams, teamAdherences);
 				});
-			})
-		}
+			};
 
-		function getSitesBySkillsInfo() {
-			pollingLock = false;
-			vm.skillIds = getSkillIds();
-			return rtaService.getSitesForSkills(vm.skillIds)
-				.then(function (sites) {
-					vm.sites = sites;
-					return rtaService.getAdherenceForSitesBySkills(vm.skillIds);
-				}).then(function (siteAdherences) {
-					pollingLock = true;
-					rtaAdherenceService.updateAdherence(vm.sites, siteAdherences);
-				});
-		}
 
-		function getTeamsInfo() {
-			pollingLock = false;
-			rtaService.getTeams({ siteId: vm.siteIds })
-				.then(function (teams) {
-					vm.teams = teams;
-					return rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds });
-				})
-				.then(function (teamAdherence) {
-					pollingLock = true;
-					rtaAdherenceService.updateAdherence(vm.teams, teamAdherence);
-				});
-		};
-
-		function getSitesInfo() {
-			pollingLock = false;
-			rtaService.getSites()
-				.then(function (sites) {
-					vm.sites = sites;
-					return rtaService.getAdherenceForAllSites();
-				})
-				.then(function (siteAdherences) {
-					pollingLock = true;
-					rtaAdherenceService.updateAdherence(vm.sites, siteAdherences);
-				});
-		}
-
-		function skillIdsFromSkillArea(skillAreaId) {
-			return vm.skillAreas.find(function (skillArea) {
-				return skillArea.Id === skillAreaId;
-			})
-				.Skills.map(function (skill) {
-					return skill.Id;
-				});
-		};
-
-		function getSkillIds() {
-			return vm.skillAreaId !== null ? skillIdsFromSkillArea(vm.skillAreaId) : [vm.skillId];
-		}
-
-		$scope.$watch(
-			function () { return $sessionStorage.buid; },
-			function (newValue, oldValue) {
-				if (angular.isDefined(oldValue) && newValue !== oldValue)
-					rtaRouteService.goToSites();
+			function getSitesBySkillsInfo() {
+				pollingLock = false;
+				vm.skillIds = getSkillIds();
+				return rtaService.getSitesForSkills(vm.skillIds)
+					.then(function (sites) {
+						vm.sites = sites;
+						return rtaService.getAdherenceForSitesBySkills(vm.skillIds);
+					}).then(function (siteAdherences) {
+						pollingLock = true;
+						rtaAdherenceService.updateAdherence(vm.sites, siteAdherences);
+					});
 			}
-		);
 
-		$scope.$on('$destroy', function () { cancelPolling(); });
+			function getSitesBySkillsInfo2() {
+				pollingLock = false;
+				vm.skillIds = getSkillIds();
+				return rtaService.getAdherenceForSitesBySkills(vm.skillIds).then(function (sitesBySkill) {
+					vm.sites = sitesBySkill;
+					pollingLock = true;
+				});
+			}
 
-		if (vm.siteIds === null) {
-			var message = $translate.instant('WFMReleaseNotification')
-				.replace('{0}', 'RTA')
-				.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx'>")
-				.replace('{2}', '</a>')
-				.replace('{3}', "<a href='../Anywhere#realtimeadherencesites'>RTA</a>");
-			NoticeService.info(message, null, true);
+			function getTeamsInfo() {
+				pollingLock = false;
+				rtaService.getTeams({ siteId: vm.siteIds })
+					.then(function (teams) {
+						vm.teams = teams;
+						return rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds });
+					})
+					.then(function (teamAdherence) {
+						pollingLock = true;
+						rtaAdherenceService.updateAdherence(vm.teams, teamAdherence);
+					});
+			};
+
+			function getTeamsInfo2() {
+				pollingLock = false;
+				rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds }).then(function (teamAdherences) {
+					vm.teams = teamAdherences;
+					pollingLock = true;
+				});
+			};
+
+			function getSitesInfo() {
+				pollingLock = false;
+				rtaService.getSites()
+					.then(function (sites) {
+						vm.sites = sites;
+						return rtaService.getAdherenceForAllSites();
+					})
+					.then(function (siteAdherences) {
+						pollingLock = true;
+						rtaAdherenceService.updateAdherence(vm.sites, siteAdherences);
+					});
+			};
+
+			function getSitesInfo2() {
+				pollingLock = false;
+				rtaService.getAdherenceForAllSites().then(function (siteAdherences) {
+					vm.sites = siteAdherences;
+					pollingLock = true;
+				});
+			};
+
+			function skillIdsFromSkillArea(skillAreaId) {
+				return vm.skillAreas.find(function (skillArea) {
+					return skillArea.Id === skillAreaId;
+				})
+					.Skills.map(function (skill) {
+						return skill.Id;
+					});
+			};
+
+			function getSkillIds() {
+				return vm.skillAreaId !== null ? skillIdsFromSkillArea(vm.skillAreaId) : [vm.skillId];
+			}
+
+			$scope.$watch(
+				function () { return $sessionStorage.buid; },
+				function (newValue, oldValue) {
+					if (angular.isDefined(oldValue) && newValue !== oldValue)
+						rtaRouteService.goToSites();
+				}
+			);
+
+			$scope.$on('$destroy', function () {
+				if (toggleService.RTA_SnappierDisplayOfOverview_43568) { cancelPolling2(); }
+				else { cancelPolling(); }
+			});
+
+			if (vm.siteIds === null) {
+				var message = $translate.instant('WFMReleaseNotification')
+					.replace('{0}', 'RTA')
+					.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx'>")
+					.replace('{2}', '</a>')
+					.replace('{3}', "<a href='../Anywhere#realtimeadherencesites'>RTA</a>");
+				NoticeService.info(message, null, true);
+			}
 		}
+		));
 	};
 })();
