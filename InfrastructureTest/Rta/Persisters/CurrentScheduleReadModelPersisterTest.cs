@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Persist(person2, 1, new[] { new ScheduledActivity() });
 			Target.Persist(person2, 2, new[] { new ScheduledActivity() });
 
-			Reader.Read(null).Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
+			Reader.Read().Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
 		}
 		
 	}

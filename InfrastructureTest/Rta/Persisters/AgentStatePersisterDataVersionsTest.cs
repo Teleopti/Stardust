@@ -34,13 +34,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldReturnScheduleVersionLoadingByPersonId()
 		{
+			var version = CurrentScheduleReadModelVersion.Generate();
 			var state = new AgentStateForUpsert {PersonId = Guid.NewGuid()};
 
 			App.Do(() => Target.Upsert(state));
-			ReadModels.Do(() => KeyValueStore.Update("CurrentScheduleReadModelVersion", 5));
+			ReadModels.Do(() => KeyValueStore.Update("CurrentScheduleReadModelVersion", version));
 
 			var result = App.Get(() => Target.LockNLoad(new[] { state.PersonId }, DeadLockVictim.Yes));
-			result.ScheduleVersion.Should().Be(5);
+			result.ScheduleVersion.Should().Be(version);
 		}
 
 	}

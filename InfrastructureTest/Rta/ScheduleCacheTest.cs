@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldRefreshAllUpdates()
 		{
+			var version = CurrentScheduleReadModelVersion.Generate();
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
 
@@ -28,13 +29,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Persister.Persist(person2, 1, new[] { new ScheduledActivity() });
 			});
 
-			Target.Refresh(0);
-
+			Target.Refresh(null);
+			
 			WithUnitOfWork.Do(() => {
 				Persister.Persist(person1, 2, new[] { new ScheduledActivity(), new ScheduledActivity() });
 			});
 
-			Target.Refresh(1);
+			Target.Refresh(version);
 
 			Target.Read(person1).Should().Have.Count.EqualTo(2);
 		}
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldRefreshAllUpdates2()
 		{
+			var version = CurrentScheduleReadModelVersion.Generate();
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
 
@@ -50,13 +52,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Persister.Persist(person1, 1, new[] { new ScheduledActivity() });
 			});
 
-			Target.Refresh(0);
+			Target.Refresh(null);
 
 			WithUnitOfWork.Do(() => {
 				Persister.Persist(person2, 2, new[] { new ScheduledActivity() });
 			});
 
-			Target.Refresh(1);
+			Target.Refresh(version);
 
 			Target.Read(person2).Should().Not.Be.Empty();
 		}

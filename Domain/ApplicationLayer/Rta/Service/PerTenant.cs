@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class PerTenant<T>
 	{
 		private readonly ICurrentDataSource _dataSource;
-		private ConcurrentDictionary<string, T> _cache = new ConcurrentDictionary<string, T>();
+		private readonly ConcurrentDictionary<string, T> _cache = new ConcurrentDictionary<string, T>();
 
 		public PerTenant(ICurrentDataSource dataSource)
 		{
@@ -26,11 +26,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_cache.TryGetValue(_dataSource.CurrentName(), out ret);
 				return ret;
 			}
-		}
-
-		public void Clear()
-		{
-			_cache = new ConcurrentDictionary<string, T>();
 		}
 	}
 }

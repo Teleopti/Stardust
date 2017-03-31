@@ -23,18 +23,19 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_serializer = serializer;
 		}
 
-		public IEnumerable<CurrentSchedule> Read(int? lastUpdate)
+		public IEnumerable<CurrentSchedule> Read()
 		{
-			var sql = "SELECT PersonId, Schedule FROM ReadModel.CurrentSchedule WITH (NOLOCK)";
-			if (lastUpdate.HasValue)
-				return _unitOfWork.Current()
-					.CreateSqlQuery($"{sql} WHERE LastUpdate > :LastUpdate")
-					.SetParameter("LastUpdate", lastUpdate.Value)
-					.SetResultTransformer(Transformers.AliasToBean<internalCurrentSchedule>())
-					.List<CurrentSchedule>();
-
 			return _unitOfWork.Current()
-				.CreateSqlQuery(sql)
+				.CreateSqlQuery("SELECT PersonId, Schedule FROM ReadModel.CurrentSchedule WITH (NOLOCK)")
+				.SetResultTransformer(Transformers.AliasToBean<internalCurrentSchedule>())
+				.List<CurrentSchedule>();
+		}
+
+		public IEnumerable<CurrentSchedule> Read(int fromRevision)
+		{
+			return _unitOfWork.Current()
+				.CreateSqlQuery("SELECT PersonId, Schedule FROM ReadModel.CurrentSchedule WITH (NOLOCK) WHERE Revision > :Revision")
+				.SetParameter("Revision", fromRevision)
 				.SetResultTransformer(Transformers.AliasToBean<internalCurrentSchedule>())
 				.List<CurrentSchedule>();
 		}
@@ -65,17 +66,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			var serializedSchedule = _serializer.SerializeObject(schedule);
 
 			var updated = _unitOfWork.Current()
-				.CreateSqlQuery("UPDATE ReadModel.CurrentSchedule SET Schedule = :Schedule, Valid = 1, LastUpdate = :LastUpdate WHERE PersonId = :PersonId")
+				.CreateSqlQuery("UPDATE ReadModel.CurrentSchedule SET Schedule = :Schedule, Valid = 1, Revision = :Revision WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
-				.SetParameter("LastUpdate", version)
+				.SetParameter("Revision", version)
 				.SetParameter("Schedule", serializedSchedule, NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 
 			if (updated == 0)
 				_unitOfWork.Current()
-					.CreateSqlQuery("INSERT INTO ReadModel.CurrentSchedule (PersonId, Schedule, LastUpdate, Valid) VALUES (:PersonId, :Schedule, :LastUpdate, 1)")
+					.CreateSqlQuery("INSERT INTO ReadModel.CurrentSchedule (PersonId, Schedule, Revision, Valid) VALUES (:PersonId, :Schedule, :Revision, 1)")
 					.SetParameter("PersonId", personId)
-					.SetParameter("LastUpdate", version)
+					.SetParameter("Revision", version)
 					.SetParameter("Schedule", serializedSchedule, NHibernateUtil.StringClob)
 					.ExecuteUpdate();
 		}

@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 			_mutateNow.Reset();
-			_schedule.ClearCache();
 
 			((IdentityProviderProvider)_identityProviderProvider).SetDefaultProvider(defaultProvider);
 			_loadPasswordPolicyService.ClearFile();

@@ -1,3 +1,6 @@
+using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public static class KeyValueStorePersisterExtensions
@@ -16,18 +19,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			return bool.TryParse(value, out result) ? result : @default;
 		}
 
-		public static void Update(this IKeyValueStorePersister instance, string key, int value)
+		public static void Update(this IKeyValueStorePersister instance, string key, CurrentScheduleReadModelVersion value)
 		{
 			instance.Update(key, value.ToString());
 		}
 
-		public static int? Get(this IKeyValueStorePersister instance, string key, int? @default)
+		public static CurrentScheduleReadModelVersion Get(this IKeyValueStorePersister instance, string key, Func<CurrentScheduleReadModelVersion> @default)
 		{
 			var value = instance.Get(key);
 			if (string.IsNullOrEmpty(value))
-				return @default;
-			int result;
-			return int.TryParse(value, out result) ? result : @default;
+				return @default?.Invoke();
+			return CurrentScheduleReadModelVersion.Parse(value) ?? @default?.Invoke();
 		}
 	}
 }

@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			
 			WithUnitOfWork(() =>
 			{
-				persons = _keyValueStore.Get("CurrentScheduleReadModelVersion", null) == null ?
+				persons = _keyValueStore.Get("CurrentScheduleReadModelVersion") == null ?
 					_persons.LoadAll().Select(x => x.Id.Value).ToArray() :
 					_persister.GetInvalid();
 			});
@@ -90,14 +90,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					WithUnitOfWork(() =>
 					{
-						var version = _keyValueStore.Get("CurrentScheduleReadModelVersion", 0).Value + 1;
+						var version = _keyValueStore.Get("CurrentScheduleReadModelVersion", CurrentScheduleReadModelVersion.Generate)
+							.NextRevision();
 						_keyValueStore.Update("CurrentScheduleReadModelVersion", version);
-						persistSchedules(personsInBatch, version);
+						persistSchedules(personsInBatch, version.Revision());
 					});
 				});
 		}
 
-		private void persistSchedules(IEnumerable<Guid> personIds, int version)
+		private void persistSchedules(IEnumerable<Guid> personIds, int revision)
 		{
 			var time = _now.UtcDateTime();
 			var from = new DateOnly(time.AddDays(-1));
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							})
 							.ToArray();
 
-						_persister.Persist(x.Id.Value, version, scheduledActivities);
+						_persister.Persist(x.Id.Value, revision, scheduledActivities);
 					});
 
 				});

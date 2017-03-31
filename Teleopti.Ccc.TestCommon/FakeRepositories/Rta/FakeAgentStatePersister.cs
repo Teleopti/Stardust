@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 						.Where(x => personIds.Contains(x.PersonId))
 						.ToArray(),
 					MappingVersion = _keyValueStore.Get("RuleMappingsVersion"),
-					ScheduleVersion = _keyValueStore.Get("CurrentScheduleReadModelVersion", 0).Value
+					ScheduleVersion = _keyValueStore.Get("CurrentScheduleReadModelVersion", CurrentScheduleReadModelVersion.Generate)
 				};
 		}
 

@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		
 		private IEnumerable<data> _data = Enumerable.Empty<data>();
 
-		public IEnumerable<CurrentSchedule> Read(int? lastUpdate)
+		public IEnumerable<CurrentSchedule> Read(int fromRevision)
 		{
 			return _data
-				.Where(x => !lastUpdate.HasValue || x.LastUpdate > lastUpdate.Value)
+				.Where(x => x.LastUpdate > fromRevision)
 				.Select(x => new CurrentSchedule
 				{
 					PersonId = x.PersonId,
@@ -29,7 +29,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				})
 				.ToArray();
 		}
-		
+
+		public IEnumerable<CurrentSchedule> Read()
+		{
+			return _data
+				.Select(x => new CurrentSchedule
+				{
+					PersonId = x.PersonId,
+					Schedule = x.Schedules ?? Enumerable.Empty<ScheduledActivity>()
+				})
+				.ToArray();
+		}
+
 		public void Invalidate(Guid personId)
 		{
 			var data = _data.SingleOrDefault(x => x.PersonId == personId);
@@ -60,6 +71,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				})
 				.ToArray();
 		}
-
 	}
 }

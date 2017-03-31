@@ -5,7 +5,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IScheduleReader
 	{
-		IEnumerable<CurrentSchedule> Read(int? lastUpdate);
+		IEnumerable<CurrentSchedule> Read();
+		IEnumerable<CurrentSchedule> Read(int fromRevision);
 	}
 
 	public class CurrentSchedule

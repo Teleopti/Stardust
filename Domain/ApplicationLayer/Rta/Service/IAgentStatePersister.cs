@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public IEnumerable<AgentState> AgentStates;
 		public string MappingVersion;
-		public int ScheduleVersion;
+		public CurrentScheduleReadModelVersion ScheduleVersion;
 	}
 
 }
