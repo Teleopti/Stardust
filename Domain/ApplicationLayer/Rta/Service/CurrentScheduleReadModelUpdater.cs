@@ -71,20 +71,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void UpdateInvalids()
 		{
 			IEnumerable<Guid> persons = null;
-			int? version = 0;
-
+			
 			WithUnitOfWork(() =>
 			{
-				version = _keyValueStore.Get("CurrentScheduleReadModelVersion", null);
-				persons = version == null ?
+				persons = _keyValueStore.Get("CurrentScheduleReadModelVersion", null) == null ?
 					_persons.LoadAll().Select(x => x.Id.Value).ToArray() :
 					_persister.GetInvalid();
 			});
 
-			update(version ?? 0, persons);
+			update(persons);
 		}
 
-		private void update(int version, IEnumerable<Guid> personIds)
+		private void update(IEnumerable<Guid> personIds)
 		{
 			personIds
 				.Batch(50)
@@ -92,8 +90,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					WithUnitOfWork(() =>
 					{
-						PersistSchedules(personsInBatch, _now, _persons, _businessUnits, _scenarios, _schedules, (personId, schedule) => _persister.Persist(personId, version + 1, schedule));
-						_keyValueStore.Update("CurrentScheduleReadModelVersion", version + 1);
+						var version = _keyValueStore.Get("CurrentScheduleReadModelVersion", 0).Value + 1;
+						_keyValueStore.Update("CurrentScheduleReadModelVersion", version);
+						PersistSchedules(personsInBatch, _now, _persons, _businessUnits, _scenarios, _schedules, (personId, schedule) => _persister.Persist(personId, version, schedule));
 					});
 				});
 		}
