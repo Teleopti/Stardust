@@ -220,45 +220,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 	this.RestTimeToNextDay = ko.observable();
 	this.RestTimeToPreviousDay = ko.observable();
 	this.ExpectedNightRest = ko.observable();
-
-	this.LoadFeedback = function() {
-		if (!self.Feedback())
-			return null;
-
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
-			assignFeedbackData(feedBackData);
-		} else {
-			return ajaxForDate(self, {
-				url: "PreferenceFeedback/Feedback",
-				type: 'GET',
-				data: {
-					Date: self.Date
-				},
-				date: self.Date,
-				success: function(data) {
-					assignFeedbackData(data);
-				}
-			});
-		}
-	};
-
-	function assignFeedbackData(data) {
-		if(data){
-			self.FeedbackError(data.FeedbackError);
-			self.PossibleStartTimes(data.PossibleStartTimes);
-			self.PossibleEndTimes(data.PossibleEndTimes);
-			self.PossibleContractTimeMinutesLower(data.PossibleContractTimeMinutesLower);
-			self.PossibleContractTimeMinutesUpper(data.PossibleContractTimeMinutesUpper);
-
-			self.RawDate(data.DateInternal);
-			self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
-			self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
-			self.RestTimeToNextDay(data.RestTimeToNextDayTimeSpan);
-			self.RestTimeToPreviousDay(data.RestTimeToPreviousDayTimeSpan);
-			self.ExpectedNightRest(data.ExpectedNightRestTimeSpan);
-		}
-	}
-	
 	this.NightRestViolationSwitch = ko.computed(function () {
 		return self.HasNightRestViolationToPreviousDay() || self.HasNightRestViolationToNextDay();
 	});
@@ -408,4 +369,42 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 			return true;
 		return false;
 	});
+
+	if(feedBackData){
+		assignFeedbackData(feedBackData);
+	}
+
+	this.LoadFeedback = function() {
+		if (!self.Feedback())
+			return null;
+
+		return ajaxForDate(self, {
+			url: "PreferenceFeedback/Feedback",
+			type: 'GET',
+			data: {
+				Date: self.Date
+			},
+			date: self.Date,
+			success: function(data) {
+				assignFeedbackData(data);
+			}
+		});
+	};
+
+	function assignFeedbackData(data) {
+		if(data){
+			self.FeedbackError(data.FeedbackError);
+			self.PossibleStartTimes(data.PossibleStartTimes);
+			self.PossibleEndTimes(data.PossibleEndTimes);
+			self.PossibleContractTimeMinutesLower(data.PossibleContractTimeMinutesLower);
+			self.PossibleContractTimeMinutesUpper(data.PossibleContractTimeMinutesUpper);
+
+			self.RawDate(data.DateInternal);
+			self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
+			self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
+			self.RestTimeToNextDay(data.RestTimeToNextDayTimeSpan);
+			self.RestTimeToPreviousDay(data.RestTimeToPreviousDayTimeSpan);
+			self.ExpectedNightRest(data.ExpectedNightRestTimeSpan);
+		}
+	}
 };

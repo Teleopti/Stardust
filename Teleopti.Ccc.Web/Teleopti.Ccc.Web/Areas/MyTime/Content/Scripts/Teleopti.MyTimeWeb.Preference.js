@@ -441,10 +441,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 									week.LoadWeeklyWorkTimeSettings();
 								});
 							}
-							$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
-								day.LoadFeedback();
-							});
-
+							if (!Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")){
+								$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
+									day.LoadFeedback();
+								});
+							}
 							selectionViewModel.enableDateSelection();
 							callWhenAjaxIsCompleted(completelyLoaded);
 						});
