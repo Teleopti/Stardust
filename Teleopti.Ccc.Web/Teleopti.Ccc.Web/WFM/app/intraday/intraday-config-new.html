@@ -3,7 +3,7 @@
 		<h1><i class="mdi mdi-compass-outline"></i> {{'CreateSkillArea'|translate}}</h1>
 	</div>
 </div>
-<form name="form" class="wfm-form" novalidate>
+<form name="form" class="wfm-form" novalidate ng-submit="saveSkillArea(form)">
 	<div class="con-row">
 		<div class="con-flex">
 			<div class="panel material-depth-1">
@@ -11,7 +11,7 @@
 					<div class="con-flex">
 						<div class="form-input-wrap">
 							<label for="nameId">{{'Name'|translate}}:</label>
-							<input type="text" autofocus autocomplete="off" ng-model="skillAreaName" name="Name" ng-maxlength="45" maxlength="46" required="" id="skillAreaName" />
+							<input type="text" autofocus autocomplete="off" ng-model="skillAreaName" name="Name" ng-maxlength="45" maxlength="46" required id="skillAreaName" />
 							<div ng-cloak class="animate-show" ng-show="form.$submitted">
 								<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">
 									{{'NameRequired'|translate}}
@@ -38,9 +38,6 @@
 							</i>
 						</label>
 					</div>
-					<div class="con-flex x2">
-
-					</div>
 					<div class="con-flex">
 						<div class="wfm-checkbox">
 							<input type="checkbox" id="switchAll" ng-model="selectedFilter" />
@@ -51,7 +48,7 @@
 						</div>
 					</div>
 					<div class="con-flex">
-						<div class="wfm-checkbox">
+						<div class="wfm-checkbox" ng-init="supportedFilter = false">
 							<input type="checkbox" checked="checked" id="switchSupported" ng-model="supportedFilter" />
 							<label for="switchSupported">
 								<span class="wfm-checkbox-toggle"></span>
@@ -59,10 +56,11 @@
 							</label>
 						</div>
 					</div>
+					<div class="con-flex x3"></div>
 				</div>
 				<div class="con-row">
 					<div class="con-flex">
-						<div class="wfm-chip-wrap" ng-click="skill.isSelected=!skill.isSelected" ng-hide="(selectedFilter==true && !skill.isSelected) || (supportedFilter==false && !skill.DoDisplayData)" ng-repeat="skill in skills | filter:areaFilter">
+						<div class="wfm-chip-wrap" ng-click="skill.isSelected=!skill.isSelected" ng-hide="(selectedFilter==true && !skill.isSelected) || (supportedFilter==false && !skill.DoDisplayData)" ng-repeat="skill in skills | filter:areaFilter as filtered">
 							<span class="wfm-chip">
 								<span class="chip-handle chip-warning" ng-if="!skill.DoDisplayData && !skill.isSelected">
 									<i class="mdi mdi-alert"></i>
@@ -73,18 +71,21 @@
 								<span class="chip-handle chip-success" ng-if="skill.isSelected">
 									<i class="mdi mdi-check"></i>
 								</span>
-								<span class="chip-text">
+								<span class="chip-text skill-area-list">
 									{{skill.Name}}
 								</span>
+								<md-tooltip ng-if="!skill.DoDisplayData">
+									{{'UnsupportedSkillMsg'|translate}}
+								</md-tooltip>
 							</span>
 						</div>
+						<p ng-if="filtered.length < 1">{{'RepViewerNoMoreMatches'|translate}}</p>
 					</div>
 				</div>
 				<div class="con-footer">
-					<button class="wfm-btn wfm-btn-invis-default" ng-click="exitConfigMode()">{{'Cancel'|translate}}</button>
-					<button ng-if="skillAreaName && skillSelected()" class="wfm-btn wfm-btn-invis-primary skill-area-save" type="submit" ng-click="saveSkillArea(form)">{{'Create'|translate}} {{skillAreaName}}</button>
+					<button class="wfm-btn wfm-btn-invis-default" type="reset" ng-click="exitConfigMode()">{{'Cancel'|translate}}</button>
+					<button class="wfm-btn wfm-btn-invis-primary skill-area-save" type="submit">{{'Create'|translate}}</button>
 				</div>
-
 			</div>
 		</div>
 	</div>

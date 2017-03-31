@@ -24,7 +24,11 @@
 					return selectedSkillIds.length>0;
 				}
 
-				$scope.saveSkillArea = function () {
+				$scope.saveSkillArea = function (form) {
+					console.log(form);
+					if (form.$invalid) {
+							return
+					}
 					var selectedSkills = $filter('filter')($scope.skills, { isSelected: true });
 
 					var selectedSkillIds = selectedSkills.map(function (skill) {
