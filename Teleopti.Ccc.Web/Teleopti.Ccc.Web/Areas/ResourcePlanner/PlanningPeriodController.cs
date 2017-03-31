@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					ScheduleResult = JsonConvert.DeserializeObject<SchedulingResultModel>(lastJobResult.Details.First().Message),
 					OptimizationResult = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message),
 				});
-			return NotFound();
+			return Ok(new {});
 		}
 
 
@@ -229,12 +229,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_planningPeriodRespository.Add(nextPeriod);
 
 			var id = nextPeriod.Id.GetValueOrDefault();
-			return Created($"{Request.RequestUri}/{id}", new
+			var validationResults = _basicSchedulingValidator.Validate(new ValidationParameters
 			{
-				Id = id,
-				EndDate = nextPeriod.Range.EndDate.Date,
-				StartDate = nextPeriod.Range.StartDate.Date,
+				Period = nextPeriod.Range,
+				People = _agentGroupStaffLoader.Load(nextPeriod.Range, agentGroup).AllPeople.ToList()
 			});
+			
+			return Created($"{Request.RequestUri}/{id}", createPlanningPeriodModel(nextPeriod.Range, id, PlanningPeriodState.New, validationResults, agentGroup));
 		}
 
 
