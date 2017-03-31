@@ -1,23 +1,166 @@
-<div class="con-row">
-	<div class="con-flex">
-		<button type="button" name="button" ng-click="vm.startNextPlanningPeriod()" class="wfm-btn btn-sm wfm-btn-default" translate>New Planning Period</button>
+<div class="panel material-depth-1">
+	<div class="con-row">
+		<div class="con-flex pp-panel">
+			<span ng-show="vm.selectedPp == null"><i class="mdi mdi-information-outline"></i> Select a planning period</span>
+			<span ng-show="vm.selectedPp">Selected pp: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
+			<span class="pp-status" ng-show="vm.isRunning()">{{vm.status}}</span>
+		</div>
+		<div class="con-flex" ng-if="vm.show == false;">
+			<button class="pull-right wfm-btn wfm-btn-invis-primary" ng-click="vm.show =!vm.show">Switch Planning Period</button>
+		</div>
+		<div class="con-flex" ng-if="vm.show">
+			<button class="pull-right wfm-btn wfm-btn-invis-primary" ng-click="vm.show =!vm.show">Hide Planning Period List</button>
+		</div>
 	</div>
-</div>
-<div class="con-row">
-	<div class="con-flex">
-		<div class="wfm-grid">
-			<div class="grid-card" ng-repeat="p in vm.planningPeriods | orderBy: '-EndDate'">
-				<div class="list-content">
-					<div class="inner-card" ng-click="vm.showPlanningPeriod(p.Id)">
-						<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="card-context card-dot mdi mdi-calendar-check"></i>
-						<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="card-context card-dot-undone mdi mdi-calendar-remove"></i>
-						<span>{{p.StartDate | amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}</span>
-						<!--ng-click="vm.showPlanningPeriod(p.Id)"-->
+	<div ng-show="vm.isRunning()" class="test-schedule-is-running">
+		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+	</div>
+	<div class="con-row" ng-if="vm.show">
+		<div class="con-flex">
+			<div class="wfm-grid">
+				<div class="grid-card">
+					<div class="list-content">
+						<div class="pp-inner-card" ng-click="vm.startNextPlanningPeriod()">
+							<i class="card-context mdi mdi-plus"></i>
+							<span>Create Next Planning Period</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-card" ng-repeat="p in vm.planningPeriods | orderBy: '-EndDate'">
+					<div class="list-content" ng-class="{'pp-scheduled':p.State == 'Scheduled'}">
+						<div class="pp-inner-card" ng-click="vm.selectPp(p);">
+							<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="card-context mdi mdi-calendar-check"></i>
+							<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="card-context mdi mdi-calendar-remove"></i>
+							<span>{{p.StartDate | amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}</span>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
-<!-- {{vm.planningPeriods}} -->
+<div class="panel material-depth-1" ng-show="vm.selectedPp">
+	<div class="wfm-slide-tabs tabbed-panel">
+		<md-content class="md-padding">
+			<md-tabs md-dynamic-height md-border-bottom>
+				<md-tab label="Overview">
+					<md-content class="md-padding">
+						<div class="con-row">
+							<div class="con-flex">
+								<button class="wfm-btn material-depth-1" ng-click="vm.launchSchedule(vm.selectedPp)" ng-class="{'wfm-btn-primary-disabled': vm.isRunning(),'wfm-btn-primary':!vm.isRunning()}">{{'ScheduleVerb' | translate }}</button>
+								<button class="wfm-btn material-depth-1" ng-click="vm.intraOptimize(vm.selectedPp)" ng-class="{'wfm-btn-primary-disabled': vm.isRunning(),'wfm-btn-primary':!vm.isRunning()}">Intraday Optimize</button>
+								<button class="pull-right wfm-btn material-depth-1" ng-click="vm.publishSchedule(vm.selectedPp)" ng-class="{'wfm-btn-primary-disabled': vm.isRunning(), 'wfm-btn-primary':!vm.isRunning()}">Publish</button>
+							</div>
+						</div>
+						<div class="con-row">
+							<div class="con-flex result-container">
+								<div class="legends">
+									<span class="pp-agentnumber"> 
+										{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}
+									</span>
+									<span>
+										<div class="legend critUnderstaffed"></div>
+										{{'CriticalUnderstaffingColon' | translate}}
+									</span>
+									<span>
+										<div class="legend understaffed"></div>
+										{{'UnderstaffingColon'|translate}}
+									</span>
+									<span>
+										<div class="legend overstaffed"></div>
+										{{'OverstaffingColon'|translate}}
+									</span>
+									<span>
+										<div class="legend closed"></div>
+										{{'Closed'|translate}}
+									</span>
+								</div>
+								<div class="grid-scroll-wrap" ng-show="vm.dayNodes.length > 0">
+									<table ng-hide="dates.length > 0" class="overview">
+										<col width="20px" />
+										<tr ng-repeat="(index, subnode) in vm.dayNodes | limitTo:1 ">
+											<th class="datehead" ng-repeat="datenode in subnode.SkillDetails">
+												<p class="tabledate">{{datenode.Date | amDateFormat:"DD/MM" }}</p>
+											</th>
+										</tr>
+										<tr ng-repeat="(index, subnode) in vm.dayNodes ">
+											<td class="skillname">{{ subnode.SkillName }}</td>
+											<td class="long" ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend}">
+												<div class="resourceplanner-box" ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
+													<md-tooltip>
+														{{node.Date | amDateFormat:"L"}} - {{subnode.SkillName}}</br>
+														{{'RelativeDifference' | translate}}: {{node.parseDif}}%
+													</md-tooltip>
+												</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+								<div ng-show="vm.dayNodes.length == 0">
+									<span><i class="mdi mdi-information-outline"></i> This planning period has no previous schedule result.</span>
+								</div>
+							</div>
+						</div>
+					</md-content>
+				</md-tab>
+				<md-tab>
+					<md-tab-label>
+						<span>Validation</span>
+						<span class="pp-validation" ng-if="vm.totalValidationNumbers > 0">{{vm.totalValidationNumbers}}</span>
+					</md-tab-label>
+					<md-tab-body class="md-padding">
+						<div class="con-row" ng-show="vm.preValidation.length > 0">
+							<div class="con-flex">
+								<span>Pre-validation Errors</span>
+								<table class="wfm-table">
+									<thead>
+										<tr>
+											<th>Issue</th>
+											<th>Descrision</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="msg in vm.preValidation">
+											<td>{{msg.ResourceType}}: {{msg.ResourceName}}</td>
+											<td>
+												<div ng-repeat="item in msg.ValidationErrors">{{item}}</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="con-row" ng-show="vm.scheduleIssues.length > 0">
+							<div class="con-flex">
+								<span>Scheduled Errors</span>
+								<table class="wfm-table">
+									<thead>
+										<tr>
+											<th>Issue</th>
+											<th>Descrision</th>
+											<!--<th>Issues-Type</th>-->
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="msg in vm.scheduleIssues">
+											<td>Agent: {{msg.Name}}</td>
+											<td>{{msg.Message}}</td>
+											<!--<td>{{msg.BusinessRuleCategoryText}}</td>-->
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</md-tab-body>
+				</md-tab>
+				<md-tab label="Dayoff Rules">
+					<md-content class="md-padding">
+						<div class="con-row">
+							<div dayoff-rules></div>
+						</div>
+					</md-content>
+				</md-tab>
+			</md-tabs>
+		</md-content>
+	</div>
+</div>

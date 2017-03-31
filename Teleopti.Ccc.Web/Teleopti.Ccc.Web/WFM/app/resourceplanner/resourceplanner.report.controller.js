@@ -8,7 +8,7 @@
 				var toggledOptimization = false;
 				var toggledSchedulingOnStardust = false;
 				var tenMinutes = 1000 * 60 * 10;
-				var planningPeriodId = $stateParams.id;
+				var planningPeriodId = $stateParams.id ? $stateParams.id : $scope.id;
 				var checkProgressRef;
 				$scope.issues = [];
 				$scope.scheduledAgents = 0;
@@ -22,7 +22,7 @@
 				$scope.optimizeDayOffIsEnabled = optimizeDayOffIsEnabled;
 				$scope.intraOptimize = intraOptimize;
 				$scope.publishSchedule = publishSchedule;
-				
+
 				var keepAliveRef = $interval(function () {
 					planningPeriodService.keepAlive();
 				}, tenMinutes);
@@ -55,7 +55,7 @@
 								$scope.totalAgents = data.TotalAgents;
 							});
 					}
-					
+
 					$scope.planningPeriod = planningPeriod;
 					var scheduleResult = interResult.SkillResultList ? interResult.SkillResultList : [];
 					$scope.issues = result.BusinessRulesValidationResults ? result.BusinessRulesValidationResults : [];
@@ -80,7 +80,7 @@
 							});
 						checkIntradayOptimizationProgress();
 						checkProgressRef = $interval(function () {
-								checkIntradayOptimizationProgress();
+							checkIntradayOptimizationProgress();
 						}, 10000);
 					} else {
 						initResult($stateParams.interResult, $stateParams.result, $stateParams.planningperiod);
@@ -178,5 +178,5 @@
 					};
 				}
 			}
-		]);
+		])
 })();

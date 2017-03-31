@@ -329,3 +329,106 @@ background-color: #cacaca;
 .ag-chip {
 	pointer-events: none;
 }
+
+//need to clean up later
+
+.pp-inner-card {
+		padding: 4px;
+	}
+	
+	.pp-panel {
+		padding: 10px;
+		margin: 10px;
+	}
+	
+	.pp-agentnumber {
+		font-weight: bold;
+	}
+	
+	table.overview {
+		table-layout: fixed;
+		width: auto;
+		margin-top: 25px;
+	}
+	
+	.tabledate {
+		transform: rotate(-45deg);
+		position: relative;
+		margin-top: -25px;
+		z-index: 2;
+		margin-left: -10px;
+		left: 37px;
+		font-weight: normal;
+	}
+	
+	.resourceplanner-box {
+		width: 20px;
+		height: 20px;
+	}
+	
+	.resourceplanner-box:hover {
+		outline: 3px rgba(0, 0, 0, 0.54) solid;
+	}
+	
+	md-tooltip .md-content {
+		height: auto;
+	}
+	
+	.grid-scroll-wrap {
+		width: auto;
+		overflow-x: scroll;
+		overflow-y: visible;
+		padding-bottom: 1px;
+		min-height: 100px;
+		margin-left: 175px;
+		margin-top: 20px;
+		overflow: auto;
+	}
+	
+	.skillname {
+		position: absolute;
+		left: 0;
+		text-overflow: ellipsis;
+		overflow: visible;
+		margin-left: 13px;
+		padding-left: 20px;
+	}
+	
+	.long {
+		letter-spacing: 1em;
+	}
+	
+	.result-container .legends {
+		padding: 10px;
+		border-bottom: 1px solid gray;
+		border-top: 1px solid gray;
+	}
+	
+	.pp-validation {
+		position: absolute;
+		top: 11px;
+		z-index: 3;
+		background-color: #ee8f7d;
+		color: #FFF;
+		right: 6px;
+		padding: 4px 0;
+		border-radius: 50%;
+		width: auto;
+		min-width: 14px;
+		max-width: 24px;
+		height: 14px;
+		line-height: 0.5;
+		font-size: 12px;
+		box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.27);
+		font-weight: bold;
+	}
+	
+	.pp-scheduled {
+		background-color: #c2e085 !important;
+	}
+	
+	.pp-status {
+		padding: 6px;
+		background-color: #FFA726;
+		border-radius: 3px;
+	}

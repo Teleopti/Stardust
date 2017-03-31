@@ -40,13 +40,12 @@
 
 				function handleScheduleOrOptimizeError(message) {
 					if (!message)
-						message = "An error occurred. Please try again.";
+					{ message = "An error occurred. Please try again."; }
 					$scope.errorMessage = message;
 					$scope.schedulingPerformed = false;
 					$scope.status = '';
 					$scope.scheduleClicked = false;
 				}
-				
 
 				var tenMinutes = 1000 * 60 * 10;
 				var keepAliveRef = $interval(function () {
@@ -74,7 +73,6 @@
 									} else if (result.CurrentStep === 2) {
 										handleScheduleOrOptimizeError($translate.instant('FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError'));
 									}
-
 									$scope.lastJobSuccessful = false;
 								} else {
 									$scope.scheduleClicked = true;
@@ -119,17 +117,17 @@
 									.$promise.then(function (result) {
 										$scope.schedulingPerformed = true;
 										$state.go('resourceplanner.report',
-										{
-											id: p.Id,
-											result: scheduleResult,
-											interResult: result,
-											planningperiod: p,
-											ranSynchronously: true
-										});
+											{
+												id: p.Id,
+												result: scheduleResult,
+												interResult: result,
+												planningperiod: p,
+												ranSynchronously: true
+											});
 									},
-										handleScheduleOrOptimizeError);
+									handleScheduleOrOptimizeError);
 							},
-								handleScheduleOrOptimizeError);
+							handleScheduleOrOptimizeError);
 					}, handleScheduleOrOptimizeError);
 				}
 
@@ -143,15 +141,15 @@
 
 				$scope.goToReport = function (p) {
 					$state.go('resourceplanner.report',
-					{
-						id: p.Id
-					});
+						{
+							id: p.Id
+						});
 				};
 
 				$scope.shouldShowValidationErrors = function (planningPeriod) {
 					return planningPeriod.ValidationResult != undefined &&
 						planningPeriod.ValidationResult.InvalidResources.length > 0
-						 && planningPeriod.State === 'New';
+						&& planningPeriod.State === 'New';
 				}
 
 				toggleService.togglesLoaded.then(function () {
