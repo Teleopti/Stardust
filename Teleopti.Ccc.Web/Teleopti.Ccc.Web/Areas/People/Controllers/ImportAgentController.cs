@@ -10,10 +10,15 @@ using NPOI.XSSF.UserModel;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 using Teleopti.Ccc.Web.Areas.People.Core;
+using System.Web.Http.Results;
+using System;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
-	public class ImportAgentController: ApiController
+	[RoutePrefix("api/People")]
+	public class ImportAgentController : ApiController
 	{
 		private readonly IImportAgentDataProvider _importAgentDataProvider;
 		private readonly IFileProcessor _fileProcessor;
@@ -21,21 +26,48 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 
 		private const string newExcelFileContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 		private const string oldExcelFileContentType = "application/vnd.ms-excel";
+		private readonly IImportAgentJobService _importAgentJobService;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ImportAgentController(IImportAgentDataProvider importAgentDataProvider, IFileProcessor fileProcessor, IMultipartHttpContentExtractor multipartHttpContentExtractor)
+		public ImportAgentController(IImportAgentDataProvider importAgentDataProvider,
+			IFileProcessor fileProcessor,
+			IMultipartHttpContentExtractor multipartHttpContentExtractor,
+			IImportAgentJobService importAgentJobService,
+			ILoggedOnUser loggedOnUser)
 		{
 			_importAgentDataProvider = importAgentDataProvider;
 			_fileProcessor = fileProcessor;
 			_multipartHttpContentExtractor = multipartHttpContentExtractor;
+			_importAgentJobService = importAgentJobService;
+			_loggedOnUser = loggedOnUser;
 		}
 
-		[UnitOfWork, Route("api/People/GetImportAgentSettingsData"), HttpGet]
+		[UnitOfWork, Route("GetImportAgentSettingsData"), HttpGet]
 		public virtual ImportAgentsFieldOptionsModel GetImportAgentSettingsData()
 		{
 			return _importAgentDataProvider.FieldOptions();
 		}
 
-		[Route("api/People/UploadAgent"), HttpPost]
+		[Route("NewImportAgentJob"), HttpPost]
+		public async Task<OkResult> NewImportAgentJob()
+		{
+			var contents = await ReadAsMultipartAsync();
+			var defaults = _multipartHttpContentExtractor.ExtractFormModel<ImportAgentDefaults>(contents);
+			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents).SingleOrDefault();
+			CreateJob(fileData, defaults);
+			return Ok();
+		}
+
+		[UnitOfWork, NonAction]
+		public virtual IJobResult CreateJob(FileData fileData, ImportAgentDefaults defaults)
+		{
+			if (fileData?.Data?.Length == 0)
+			{
+				throw new ArgumentNullException(Resources.File, Resources.NoInput);
+			}
+			return _importAgentJobService.CreateJob(fileData, defaults, _loggedOnUser.CurrentUser());
+		}
+		[Route("UploadAgent"), HttpPost]
 		public async Task<HttpResponseMessage> UploadAgent()
 		{
 			if (!Request.Content.IsMimeMultipartContent())
@@ -103,6 +135,22 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			response.Content.Headers.ContentType = new MediaTypeHeaderValue(oldExcelFileContentType);
 
 			return response;
+		}
+
+
+		private async Task<IEnumerable<HttpContent>> ReadAsMultipartAsync()
+		{
+			try
+			{
+				var provider = new MultipartMemoryStreamProvider();
+				await Request.Content.ReadAsMultipartAsync(provider);
+				return provider.Contents;
+			}
+			catch (ArgumentNullException e)
+			{
+				throw new ArgumentNullException(e.ParamName, Resources.NoInput);
+			}
+
 		}
 	}
 }

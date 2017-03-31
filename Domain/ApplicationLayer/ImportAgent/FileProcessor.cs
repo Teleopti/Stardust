@@ -7,6 +7,7 @@ using NPOI.XSSF.UserModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
@@ -46,15 +47,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 
 
-		public FileProcessResult Process(ISheet sheet, ImportAgentDefaults defaultValues = null)
+		public AgentFileProcessResult Process(FileData fileData, ImportAgentDefaults defaultValues = null)
 		{
-			var extractedResult = _workbookHandler.ProcessSheet(sheet, defaultValues);
-			_agentPersister.Persist(extractedResult);
-			return new FileProcessResult
+			var processResult = new AgentFileProcessResult();
+
+			var workbook = this.ParseFile(fileData);
+			var sheet = workbook.GetSheetAt(0);
+
+			var error = this.ValidateWorkbook(workbook);
+			if (!error.IsNullOrEmpty())
 			{
-				ExtractedResults = extractedResult
-			};
+				processResult.DetailLevel = DetailLevel.Error;
+				processResult.ErrorMessages.Add(error);
+				return processResult;
+			}
+
+			var extractedResults = _workbookHandler.ProcessSheet(sheet, defaultValues);
+			_agentPersister.Persist(extractedResults);
+
+			processResult.WarningAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Warning).ToList();
+			processResult.FaildAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Error).ToList();
+			processResult.SucceedAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Info).ToList();
+
+			processResult.DetailLevel = processResult.FaildAgents.IsNullOrEmpty()
+				? DetailLevel.Error
+				: processResult.WarningAgents.IsNullOrEmpty() ? DetailLevel.Warning : DetailLevel.Info;
+
+			return processResult;
 		}
+
+
 
 
 		public string ValidateWorkbook(IWorkbook workbook)
@@ -147,6 +169,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		IWorkbook ParseFile(FileData fileData);
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);
 		string ValidateWorkbook(IWorkbook workbook);
-		FileProcessResult Process(ISheet sheet, ImportAgentDefaults defaults);
+		AgentFileProcessResult Process(FileData fileData, ImportAgentDefaults defaultValues = null);
 	}
 }

@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.DomainTest.Import
 		public FakeJobResultRepository JobResultRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeEventPublisher Publisher;
-		public IImportAgentService Target;
+		public IImportAgentJobService Target;
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<ImportAgentService>().For<IImportAgentService>();
+			system.UseTestDouble<ImportAgentJobService>().For<IImportAgentJobService>();
 			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();

@@ -35,7 +35,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		{
 			var jobResult = _jobResultRepository.Get(@event.JobResultId);
 			UpdateJobVersion(jobResult);
-			HandleEvent(jobResult, @event.Defaults);
+			if (IfNeedRejectJob(jobResult))
+			{
+				return;
+			}
+			HandleJob(jobResult, @event.Defaults);
 		}
 
 		[UnitOfWork]
@@ -47,89 +51,84 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		[AsSystem]
 		[UnitOfWork]
-		protected virtual void HandleEvent(IJobResult jobResult, ImportAgentDefaults defaults)
+		protected virtual void HandleJob(IJobResult jobResult, ImportAgentDefaults defaults)
 		{
-
-			if (IfNeedRejectJob(jobResult))
+			JobResultArtifact inputFile;
+			var errorMsg = validateJobInputArtifact(jobResult, out inputFile);
+			if (!errorMsg.IsNullOrEmpty())
 			{
+				saveJobResultDetail(jobResult, errorMsg, DetailLevel.Error);
+				return;
+			}
+			var fileData = new FileData
+			{
+				Data = inputFile.Content,
+				FileName = inputFile.Name
+			};
+
+			var processResult = _fileProcessor.Process(fileData, defaults);
+			if (!processResult.ErrorMessages.IsNullOrEmpty())
+			{
+				saveJobResultDetail(jobResult, string.Join(", ", processResult.ErrorMessages), DetailLevel.Error);
 				return;
 			}
 
+			saveJobArtifacts(jobResult, fileData, processResult);
+			saveJobResultDetail(jobResult,
+			$"success count:{processResult.SucceedAgents?.Count ?? 0}, failed count:{processResult.FaildAgents?.Count ?? 0}, warning count:{processResult.WarningAgents?.Count ?? 0}",
+			processResult.DetailLevel);
+		}
+
+		private string validateJobInputArtifact(IJobResult jobResult, out JobResultArtifact inputFile)
+		{
+			inputFile = null;
 			if (jobResult.Artifacts.IsNullOrEmpty())
 			{
-				SaveJobResultDetail(jobResult, Resources.NoInput, DetailLevel.Error);
-				return;
+				return Resources.NoInput;
 			}
+
 			if (jobResult.Artifacts.Count > 1)
 			{
-				SaveJobResultDetail(jobResult, Resources.InvalidInput, DetailLevel.Error);
-				return;
+				return Resources.InvalidInput;
 			}
 
-			var inputFile = jobResult.Artifacts.FirstOrDefault(a => a.Category == JobResultArtifactCategory.Input);
-			if (inputFile == null || inputFile.Content == null || inputFile.Content.Length == 0)
+			inputFile = jobResult.Artifacts.FirstOrDefault(a => a.Category == JobResultArtifactCategory.Input);
+			if (inputFile?.Content == null || inputFile.Content.Length == 0)
 			{
-				SaveJobResultDetail(jobResult, Resources.InvalidInput, DetailLevel.Error);
+				return Resources.InvalidInput;
 			}
-			else
+			return string.Empty;
+		}
+
+		private void saveJobArtifacts(IJobResult jobResult, FileData fileData, AgentFileProcessResult processResult)
+		{
+			var fileNameLength = fileData.FileName.Length;
+			var fileTypeIndex = fileData.FileName.LastIndexOf(".");
+			string fileName = fileData.FileName.Substring(0, fileNameLength - fileTypeIndex);
+			string fileType = fileData.FileName.Substring(fileTypeIndex + 1, fileNameLength - fileTypeIndex - 1);
+			var isXlsx = fileType.Equals("xlsx", StringComparison.OrdinalIgnoreCase);
+
+			if (!processResult.FaildAgents.IsNullOrEmpty())
 			{
-				var workbook = _fileProcessor.ParseFile(new FileData
-				{
-					Data = inputFile.Content,
-					FileName = inputFile.Name
-				});
+				var faildFile = _fileProcessor.CreateFileForInvalidAgents(processResult.FaildAgents, isXlsx);
 
-				var error = _fileProcessor.ValidateWorkbook(workbook);
-				if (!error.IsNullOrEmpty())
-				{
-					SaveJobResultDetail(jobResult, error, DetailLevel.Error);
-					return;
-				}
+				jobResult.AddArtifact(new JobResultArtifact(
+					JobResultArtifactCategory.OutputError,
+					$"{fileName}_error.{fileType}",
+					faildFile.ToArray()));
 
-				var result = _fileProcessor.Process(workbook.GetSheetAt(0), defaults);
-				var total = _fileProcessor.GetNumberOfRecordsInSheet(workbook.GetSheetAt(0));
-				var faildAgents = result.ExtractedResults.Where(a => a.Feedback.ErrorMessages.Any());
-				var warningAgents = result.ExtractedResults.Where(a => (!a.Feedback.ErrorMessages.Any()) && a.Feedback.WarningMessages.Any());
-
-				var failedCount = faildAgents.Count();
-				var warningCount = warningAgents.Count();
-				var successCount = total - failedCount - warningCount;
-
-				var fileNameLength = inputFile.Name.Length;
-				var fileTypeIndex = inputFile.Name.LastIndexOf(".");
-				string fileName = inputFile.Name.Substring(0, fileNameLength - fileTypeIndex);
-				string fileType = inputFile.Name.Substring(fileTypeIndex + 1, fileNameLength - fileTypeIndex - 1);
-				var level = DetailLevel.Info;
-				if (failedCount > 0)
-				{
-					var faildFile = _fileProcessor.CreateFileForInvalidAgents(faildAgents.ToList(),
-						fileType.Equals("xlsx", StringComparison.OrdinalIgnoreCase));
-
-					jobResult.AddArtifact(new JobResultArtifact(
-						JobResultArtifactCategory.OutputError,
-						$"{fileName}_error.{fileType}",
-						faildFile.ToArray()));
-
-					level = DetailLevel.Error;
-				}
-				if (warningCount > 0)
-				{
-					var warningFile = _fileProcessor.CreateFileForInvalidAgents(warningAgents.ToList(),
-						fileType.Equals("xlsx", StringComparison.OrdinalIgnoreCase));
-
-					jobResult.AddArtifact(new JobResultArtifact(
-						JobResultArtifactCategory.OutputWarning,
-						$"{fileName}_warning.{fileType}",
-						warningFile.ToArray()));
-				}
-
-				if (warningCount > 0 && failedCount == 0)
-				{
-					level = DetailLevel.Warning;
-				}
-
-				SaveJobResultDetail(jobResult, $"success count:{successCount}, failed count:{failedCount}, warning count:{warningCount}", level);
 			}
+			if (!processResult.WarningAgents.IsNullOrEmpty())
+			{
+				var warningFile = _fileProcessor.CreateFileForInvalidAgents(processResult.WarningAgents, isXlsx);
+
+				jobResult.AddArtifact(new JobResultArtifact(
+					JobResultArtifactCategory.OutputWarning,
+					$"{fileName}_warning.{fileType}",
+					warningFile.ToArray()));
+			}
+
+
 		}
 
 		private bool IfNeedRejectJob(IJobResult jobResult)
@@ -143,7 +142,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 
 
-		private void SaveJobResultDetail(IJobResult result, string message, DetailLevel level = DetailLevel.Info, Exception exception = null)
+		private void saveJobResultDetail(IJobResult result, string message, DetailLevel level = DetailLevel.Info, Exception exception = null)
 		{
 			var detail = new JobResultDetail(level, message, DateTime.UtcNow, exception);
 			result.AddDetail(detail);

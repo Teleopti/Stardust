@@ -143,7 +143,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentDefaults.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentEventHandler.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentFileValidator.cs" />
-    <Compile Include="ApplicationLayer\ImportAgent\ImportAgentService.cs" />
+    <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobService.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentsSettingDataModel.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\RawAgent.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\WorkbookHandler.cs" />

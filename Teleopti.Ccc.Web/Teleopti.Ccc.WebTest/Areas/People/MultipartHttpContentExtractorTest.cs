@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				Name = "file",
 				FileName = "textfile"
 			};
-
 			multipart.Add(fileContent);
 			var result = target.ExtractFileData(multipart).Single();
 
