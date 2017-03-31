@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IDictionary<ISkill, IResourceCalculationPeriod> relevantSkillStaffPeriods =
 				getRelevantSkillStaffPeriod(relevantSkills, completeIntervalPeriod);
 
-			if (relevantSkillStaffPeriods.Count > 0)
+			if (relevantSkillStaffPeriods.Count > 0 && dividedActivityData.PersonResources.Count > 0 && dividedActivityData.TargetDemands.Count > 0)
 			{
 				var furnessDataConverter = new FurnessDataConverter(dividedActivityData);
 				IFurnessData furnessData = furnessDataConverter.ConvertDividedActivityToFurnessData();

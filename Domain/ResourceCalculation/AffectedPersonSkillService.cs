@@ -16,14 +16,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 														 x.SkillType.ForecastSource != ForecastSource.NonBlendSkill);
         }
 
-	    public IEnumerable<ISkill> AffectedSkills
-	    {
-		    get
-		    {
-				var affectedSkills = new List<ISkill>();
-			    affectedSkills.AddRange(_affectedSkills);
-				return affectedSkills;
-		    }
-	    }
+	    public IEnumerable<ISkill> AffectedSkills => _affectedSkills.ToList();
     }
 }

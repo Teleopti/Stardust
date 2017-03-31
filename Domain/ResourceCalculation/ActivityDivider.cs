@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -140,15 +141,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         private static IEnumerable<ISkill> skillsInActivity(IAffectedPersonSkillService affectedPersonSkillService, IActivity activity)
         {
-            var distinctList = new HashSet<ISkill>();
-            foreach (var affectedSkill in affectedPersonSkillService.AffectedSkills)
-            {
-                if (affectedSkill.Activity.Equals(activity))
-                {
-                    distinctList.Add(affectedSkill);
-                }
-            }
-            return distinctList;
+            return new HashSet<ISkill>(affectedPersonSkillService.AffectedSkills.Where(s => s.Activity.Equals(activity)));
         }
     }
 }
