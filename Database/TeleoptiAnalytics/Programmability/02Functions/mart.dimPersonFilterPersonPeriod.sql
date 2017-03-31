@@ -7,7 +7,7 @@ GO
 -- Author:		David
 -- Create date: 2013-11-17
 -- Description:	Returns a table with Person information where valid_to_date and valid_to_interval_id are:
--- 1) using an adapted eternity date 2059-12-31 => Max from dim_date. This to make dim_person more "joinable".
+-- 1) using an adapted eternity date 2059-12-31 => Max from dim date. This to make dim person more "joinable".
 -- 2) converting UTC From+To into each agents localized From+To
 -----------------------------------------------
 -- update log
@@ -15,13 +15,7 @@ GO
 -- When			Who	What
 -- 2013-11-19	DJ	Adding valid_from_date_local+valid_to_date_local to dim_person
 -- =============================================
-/*
-set statistics IO on
-set statistics TIME on
-SELECT * FROM [mart].[dimPersonFilterPersonPeriod]('2001-02-01','2014-12-31','47A3D4AA-3CD8-4235-A7EB-9B5E015B2560')
-select * FROM [mart].[PersonCodeToId]('47A3D4AA-3CD8-4235-A7EB-9B5E015B2560','2001-02-01','2015-12-31',null,null)
-SELECT * FROM [mart].[dim_person] WHERE person_code = '47A3D4AA-3CD8-4235-A7EB-9B5E015B2560'
-*/
+
 CREATE FUNCTION [mart].[dimPersonFilterPersonPeriod] 
 (
 @date_from smalldatetime,

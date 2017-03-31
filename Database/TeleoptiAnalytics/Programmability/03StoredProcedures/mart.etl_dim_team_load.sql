@@ -132,7 +132,7 @@ WHERE
 						s.datasource_id			= p.datasource_id
 				)
 
---update historically rows in dim_person
+--update historically rows in dim person
 UPDATE mart.dim_person
 SET team_name			= t.team_name
 FROM mart.dim_team t

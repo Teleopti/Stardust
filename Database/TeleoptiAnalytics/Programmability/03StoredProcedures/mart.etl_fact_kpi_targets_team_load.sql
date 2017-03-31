@@ -13,7 +13,7 @@ GO
 --				2009-02-09 Stage moved to mart db, removed view KJ
 --				2009-02-11 New mart schema KJ
 --				2009-04-01 Insert 0 for teams and teams not selected (otherwise KPI in cube not working) KJ
---				2009-04-28 Verfication that team exists in dim_person otherwise error in cube KJ
+--				2009-04-28 Verfication that team exists in dim person otherwise error in cube KJ
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_kpi_targets_team_load]
 @business_unit_code uniqueidentifier	

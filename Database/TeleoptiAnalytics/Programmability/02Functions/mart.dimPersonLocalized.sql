@@ -7,7 +7,7 @@ GO
 -- Author:		David
 -- Create date: 2010-11-08
 -- Description:	Returns a table with Person information where valid_to_date and valid_to_interval_id are:
--- 1) using an adapted eternity date 2059-12-31 => Max from dim_date. This to make dim_person more "joinable".
+-- 1) using an adapted eternity date 2059-12-31 => Max from dim date. This to make dim person more "joinable".
 -- 2) converting UTC From+To into each agents localized From+To
 -----------------------------------------------
 -- update log

@@ -236,7 +236,7 @@ AND		calls_answ_within_sl > 0
 --than if I open the same skill and compare it to <Scheduled Agents> in the Scheduler?!"
 --ByDesign:
 --1) fact_schedule does not hold any info on how the Scheduler distribution over skills; i.e the forecast/need for each skill
---2) dim_person does NOT hold any direct skill-info, but skill_set info.
+--2) dim person does NOT hold any direct skill-info, but skill_set info.
 --Thus for every person holding a Skillset that includes the selected Skill, we get a count=1 in fact_schedule
 --Result: The report will show you: "How many agents would have been able to work on the particular skill, if necessary"
 INSERT #scheduled_agents(period,scheduled_agents_ready)

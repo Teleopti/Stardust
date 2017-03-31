@@ -5,7 +5,7 @@ GO
 -- =============================================
 -- Author:		DJ
 -- Create date: 2009-09-xx
--- Description:	Deletes fact-tables dependent on mart.dim_person
+-- Description:	Deletes fact-tables dependent on mart.dim person
 --				
 -- =============================================
 -- Change Log:
@@ -98,7 +98,7 @@ ALTER TABLE [mart].[fact_requested_days] NOCHECK CONSTRAINT [FK_fact_requested_d
 ALTER TABLE [mart].[fact_hourly_availability] NOCHECK CONSTRAINT [FK_fact_hourly_availability_dim_person]
 ALTER TABLE [mart].[fact_agent_skill] NOCHECK CONSTRAINT [FK_fact_agent_skill_dim_person]
 
---Do the delete in dim_person
+--Do the delete in dim person
 DELETE mart.dim_person
 FROM mart.dim_person p
 INNER JOIN #top t

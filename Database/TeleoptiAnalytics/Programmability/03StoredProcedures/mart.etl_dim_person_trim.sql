@@ -5,7 +5,7 @@ GO
 -- =============================================
 -- Author:		Jonas Nordh
 -- Create date: 200-09-25
--- Description:	Data that is bound to mart.dim_person is trimmed so that data only exists inside the person periods.
+-- Description:	Data that is bound to mart.dim person is trimmed so that data only exists inside the person periods.
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_person_trim]
 	

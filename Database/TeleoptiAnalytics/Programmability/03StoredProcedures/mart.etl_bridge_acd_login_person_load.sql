@@ -16,7 +16,7 @@ GO
 -- 2008-12-04 fixes for multi BU load KJ
 -- 2008-08-13 Added team_id KJ
 -- 2009-04-27 Change dateformat on min/max date DJ
--- 2010-10-22 Cover the case when dim_person is not loaded correctly (due to missing dim_date)
+-- 2010-10-22 Cover the case when dim person is not loaded correctly (due to missing dim date)
 -- 2010-11-08 Changed to use person_period_code in join instead of dates RK/TB
 -- =============================================
 --exec mart.etl_bridge_acd_login_person_load '77F2862D-7E84-470A-A2FC-9B6B00D7B265'

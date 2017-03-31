@@ -34,7 +34,7 @@ BEGIN
 		ON fact.group_page_id = dupl.remove_group_page_id
 	END
 
-	-- Delete  duplicates from dim_person
+	-- Delete  duplicates from dim person
 	DELETE mart.dim_group_page
 	FROM mart.dim_group_page gp
 	INNER JOIN #dupl AS dupl

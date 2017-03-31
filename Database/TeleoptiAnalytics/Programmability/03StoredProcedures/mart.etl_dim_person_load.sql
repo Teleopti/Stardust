@@ -5,8 +5,8 @@ GO
 -- =============================================
 -- Author:		ChLu
 -- Create date: 2008-01-30
--- Description:	Loads persons from stg_person to dim_person.
---				Also loads user/login info from dim_person to aspnet_Users and aspnet_Membership
+-- Description:	Loads persons from stg_person to dim person.
+--				Also loads user/login info from dim person to aspnet_Users and aspnet_Membership
 -- =============================================
 -- Change Log:
 -- Date			By		Description
@@ -22,14 +22,13 @@ GO
 -- 2009-04-27	DaJo	Change min/maxdate format
 -- 2009-09-21	DaJo	Added ToBeDeleted
 -- 2010-02-25	DaJo	Sync IsDeleted per BU
--- 2010-07-07	AnFo	Deleted PPs was not removed properly in dim_person
+-- 2010-07-07	AnFo	Deleted PPs was not removed properly in dim person
 -- 2010-09-15	DaJo	temp-fix of #11390 - Adding 24 h to ending person periods
--- 2010-11-30	DaJo	#12550 - Refactor dim_person_load to use Person_Period_Code as key
+-- 2010-11-30	DaJo	#12550 - Refactor dim person_load to use Person_Period_Code as key
 -- 2012-03-05	DaJo	#????? - Try to avoid IsDeleted to be set when multiple ETL processes run at the same time
 -- 2012-04-25	DaJo	#19150 - Add Windows credentials to cube
--- 2013-11-17	DaJo	#25718 - reduce the number of functions on dim_person
+-- 2013-11-17	DaJo	#25718 - reduce the number of functions on dim person
 -- =============================================
---EXEC [mart].[etl_dim_person_load] @current_business_unit_code = 'CE238444-059F-4E97-9039-A0A000A30CA4'
 CREATE PROCEDURE [mart].[etl_dim_person_load] 
 @current_business_unit_code uniqueidentifier
 WITH EXECUTE AS OWNER

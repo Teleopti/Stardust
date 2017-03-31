@@ -12,7 +12,6 @@ GO
 -- =============================================
 --EXEC report_permission_data_check_test '478E8CFB-5B92-4049-95FF-9ABE00250898',12
 
---SELECT * FROM DIM_PERSON WHERE TEAM_ID=21
 CREATE FUNCTION [mart].[AllOwnedTeams](@person_code uniqueidentifier,@report_id uniqueidentifier)
 RETURNS @teams TABLE (id int NOT NULL)
 AS
