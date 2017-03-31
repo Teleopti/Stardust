@@ -180,7 +180,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 				foreach (DataRow row in dataTable.Rows)
 				{
-					if((Guid)row["group_page_code"] == optionalColumn.Id.Value) ;
+					if((Guid)row["group_page_code"] == optionalColumn.Id.Value)
 						Assert.IsFalse((bool)row["group_is_custom"]);
 				}
 			}
