@@ -92,41 +92,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					{
 						var version = _keyValueStore.Get("CurrentScheduleReadModelVersion", 0).Value + 1;
 						_keyValueStore.Update("CurrentScheduleReadModelVersion", version);
-						PersistSchedules(personsInBatch, _now, _persons, _businessUnits, _scenarios, _schedules, (personId, schedule) => _persister.Persist(personId, version, schedule));
+						persistSchedules(personsInBatch, version);
 					});
 				});
 		}
 
-		public static void PersistSchedules(
-			IEnumerable<Guid> personIds,
-			INow now,
-			IPersonRepository persons,
-			IBusinessUnitRepository businessUnits,
-			IScenarioRepository scenarios,
-			IScheduleStorage schedules,
-			Action<Guid, IEnumerable<ScheduledActivity>> persister)
+		private void persistSchedules(IEnumerable<Guid> personIds, int version)
 		{
-			var time = now.UtcDateTime();
+			var time = _now.UtcDateTime();
 			var from = new DateOnly(time.AddDays(-1));
 			var to = new DateOnly(time.AddDays(1));
 			var loadPeriod = new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1));
 			var persistPeriod = new DateOnlyPeriod(from, to);
 
-			persons.FindPeople(personIds)
+			_persons.FindPeople(personIds)
 				.Select(x => new
 				{
-					businessUnitId = x.Period(new DateOnly(now.UtcDateTime()))?.Team?.Site?.BusinessUnit?.Id,
+					businessUnitId = x.Period(new DateOnly(time))?.Team?.Site?.BusinessUnit?.Id,
 					person = x
 				})
 				.Where(x => x.businessUnitId.HasValue)
 				.GroupBy(x => x.businessUnitId.Value, x => x.person)
 				.ForEach(personsInBusinessUnit =>
 				{
-					var scenario = scenarios.LoadDefaultScenario(businessUnits.Load(personsInBusinessUnit.Key));
+					var scenario = _scenarios.LoadDefaultScenario(_businessUnits.Load(personsInBusinessUnit.Key));
 					if (scenario == null)
 						return;
 
-					var scheduleDictionary = schedules.FindSchedulesForPersonsOnlyInGivenPeriod(
+					var scheduleDictionary = _schedules.FindSchedulesForPersonsOnlyInGivenPeriod(
 						personsInBusinessUnit,
 						new ScheduleDictionaryLoadOptions(false, false),
 						loadPeriod,
@@ -134,12 +127,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 					personsInBusinessUnit.ForEach(x =>
 					{
-						var projection =
+						var scheduledActivities = (
 							from scheduleDay in scheduleDictionary[x].ScheduledDayCollection(loadPeriod)
+							let belongsToDate = scheduleDay.DateOnlyAsPeriod.DateOnly
+							where persistPeriod.Contains(belongsToDate)
 							from layer in scheduleDay.ProjectionService().CreateProjection()
 							select new ScheduledActivity
 							{
-								BelongsToDate = scheduleDay.DateOnlyAsPeriod.DateOnly,
+								BelongsToDate = belongsToDate,
 								DisplayColor = layer.DisplayColor().ToArgb(),
 								EndDateTime = layer.Period.EndDateTime,
 								Name = layer.DisplayDescription().Name,
@@ -147,11 +142,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 								PersonId = x.Id.GetValueOrDefault(),
 								ShortName = layer.DisplayDescription().ShortName,
 								StartDateTime = layer.Period.StartDateTime
-							};
+							})
+							.ToArray();
 
-						var scheduledActivities = projection.Where(a => persistPeriod.Contains(a.BelongsToDate)).ToArray();
-
-						persister.Invoke(x.Id.Value, scheduledActivities);
+						_persister.Persist(x.Id.Value, version, scheduledActivities);
 					});
 
 				});
