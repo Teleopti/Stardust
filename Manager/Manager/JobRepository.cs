@@ -22,6 +22,7 @@ namespace Stardust.Manager
 		private readonly IHttpSender _httpSender;
 		private readonly JobRepositoryCommandExecuter _jobRepositoryCommandExecuter;
 		private readonly object _requeueJobLock = new object();
+		private readonly object _assigningJob = new object();
 
 		public JobRepository(ManagerConfiguration managerConfiguration,
 		                     RetryPolicyProvider retryPolicyProvider,
@@ -99,12 +100,12 @@ namespace Stardust.Manager
 			}
 		}
 
-		
+
 		public void AssignJobToWorkerNode()
 		{
 			try
 			{
-				Dictionary<Uri,bool> allAliveWorkerNodesUri;
+				List<Uri> allAliveWorkerNodesUri;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
@@ -113,26 +114,13 @@ namespace Stardust.Manager
 
 				if (!allAliveWorkerNodesUri.Any()) return;
 
-                //sending to the available nodes
-                Random r = new Random();
-                var listOfNodes = allAliveWorkerNodesUri.Where(x => !x.Value).Select(y => y.Key).ToList();
-                foreach (int i in Enumerable.Range(0, listOfNodes.Count()).OrderBy(x => r.Next()))
-			    {
-                    this.Log().Debug("Selected a free node " + listOfNodes[i] + " with index " + i);
-                    AssignJobToWorkerNodeWorker(listOfNodes[i]);
-                    Thread.Sleep(500);
-                }
-
-                //sending jobs to the rest of the nodes
-                r = new Random();
-                listOfNodes = allAliveWorkerNodesUri.Where(x => x.Value).Select(y => y.Key).ToList();
-                foreach (int i in Enumerable.Range(0, listOfNodes.Count()).OrderBy(x => r.Next()))
-                {
-                    this.Log().Debug("Selected a busy node " + listOfNodes[i] + " with index " + i);
-                    AssignJobToWorkerNodeWorker(listOfNodes[i]);
-                    Thread.Sleep(500);
-                }
-            }
+				//sending to the available nodes
+				foreach (var nodeUri in allAliveWorkerNodesUri)
+				{
+					AssignJobToWorkerNodeWorker(nodeUri);
+					Thread.Sleep(500);
+				}
+			}
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
@@ -373,58 +361,61 @@ namespace Stardust.Manager
 
 		private void AssignJobToWorkerNodeWorker(Uri availableNode)
 		{
-			try
+			lock (_assigningJob)
 			{
-				using (var sqlConnection = new SqlConnection(_connectionString))
+				try
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
-					var jobQueueItem = _jobRepositoryCommandExecuter.AcquireJobQueueItem(sqlConnection);
+					using (var sqlConnection = new SqlConnection(_connectionString))
+					{
+						sqlConnection.OpenWithRetry(_retryPolicy);
+						var jobQueueItem = _jobRepositoryCommandExecuter.AcquireJobQueueItem(sqlConnection);
 
-					if (jobQueueItem == null)
-					{
-						sqlConnection.Close();
-						return;
-					}
-					
-					var builderHelper = new NodeUriBuilderHelper(availableNode);
-					var urijob = builderHelper.GetJobTemplateUri();
-					var response = _httpSender.PostAsync(urijob, jobQueueItem).Result;
-					if (response != null && (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest)))
-					{
-						var sentToWorkerNodeUri = availableNode.ToString();
-						using (var sqlTransaction = sqlConnection.BeginTransaction())
+						if (jobQueueItem == null)
 						{
-							_jobRepositoryCommandExecuter.InsertIntoJob(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction);
-							_jobRepositoryCommandExecuter.DeleteJobFromJobQueue(jobQueueItem.JobId, sqlConnection, sqlTransaction);
-							_jobRepositoryCommandExecuter.InsertJobDetail(jobQueueItem.JobId, "Job Started", sqlConnection, sqlTransaction);
-							sqlTransaction.Commit();
+							sqlConnection.Close();
+							return;
 						}
 
-						if (!response.IsSuccessStatusCode) return;
-
-						urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
-						//what should happen if this response is not 200? 
-						_httpSender.PutAsync(urijob, null);
-					}
-					else
-					{
-						using (var sqlTransaction = sqlConnection.BeginTransaction())
+						var builderHelper = new NodeUriBuilderHelper(availableNode);
+						var urijob = builderHelper.GetJobTemplateUri();
+						var response = _httpSender.PostAsync(urijob, jobQueueItem).Result;
+						if (response != null && (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest)))
 						{
-							if (response == null)
+							var sentToWorkerNodeUri = availableNode.ToString();
+							using (var sqlTransaction = sqlConnection.BeginTransaction())
 							{
-								_jobRepositoryCommandExecuter.UpdateWorkerNode(false, availableNode.ToString(), sqlConnection, sqlTransaction);
+								_jobRepositoryCommandExecuter.InsertIntoJob(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction);
+								_jobRepositoryCommandExecuter.DeleteJobFromJobQueue(jobQueueItem.JobId, sqlConnection, sqlTransaction);
+								_jobRepositoryCommandExecuter.InsertJobDetail(jobQueueItem.JobId, "Job Started", sqlConnection, sqlTransaction);
+								sqlTransaction.Commit();
 							}
-							_jobRepositoryCommandExecuter.TagQueueItem(jobQueueItem.JobId, sqlConnection, sqlTransaction);
-							sqlTransaction.Commit();
+
+							if (!response.IsSuccessStatusCode) return;
+
+							urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
+							//what should happen if this response is not 200? 
+							_httpSender.PutAsync(urijob, null);
+						}
+						else
+						{
+							using (var sqlTransaction = sqlConnection.BeginTransaction())
+							{
+								if (response == null)
+								{
+									_jobRepositoryCommandExecuter.UpdateWorkerNode(false, availableNode.ToString(), sqlConnection, sqlTransaction);
+								}
+								_jobRepositoryCommandExecuter.TagQueueItem(jobQueueItem.JobId, sqlConnection, sqlTransaction);
+								sqlTransaction.Commit();
+							}
 						}
 					}
 				}
-			}
-			catch (Exception exp)
-			{
-				this.Log().Info(string.Format("Failed for node {0}", availableNode));
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-				throw;
+				catch (Exception exp)
+				{
+					this.Log().Info(string.Format("Failed for node {0}", availableNode));
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+					throw;
+				}
 			}
 		}
 

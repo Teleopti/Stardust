@@ -145,12 +145,12 @@ namespace Stardust.Manager.Helpers
 			return listToReturn;
 		}
 
-		public Dictionary<Uri,bool> SelectAllAliveWorkerNodes(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
+		public List<Uri> SelectAllAliveWorkerNodes(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
 		{
-			var allAliveWorkerNodesUri = new Dictionary<Uri, bool> ();
+			var allAliveWorkerNodesUri = new List<Uri> ();
 			const string selectAllAliveWorkerNodesCommandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
 								(SELECT SentToWorkerNodeUri FROM Stardust.Job WITH(NOLOCK) WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
-									FROM [Stardust].WorkerNode WITH(NOLOCK)) w";
+									FROM [Stardust].WorkerNode WITH(NOLOCK)) w order by Running";
 			using (var selectAllAliveWorkerNodesCommand = new SqlCommand(selectAllAliveWorkerNodesCommandText, sqlConnection, sqlTransaction))
 			{
 				using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReaderWithRetry(_retryPolicy))
@@ -158,10 +158,9 @@ namespace Stardust.Manager.Helpers
 					if (readerAliveWorkerNodes.HasRows)
 					{
 						var ordinalPosForUrl = readerAliveWorkerNodes.GetOrdinal("Url");
-						var ordinalPosForIsRunning = readerAliveWorkerNodes.GetOrdinal("Running");
 						while (readerAliveWorkerNodes.Read())
 						{
-							allAliveWorkerNodesUri.Add(new Uri(readerAliveWorkerNodes.GetString(ordinalPosForUrl)), readerAliveWorkerNodes.GetBoolean(ordinalPosForIsRunning));
+							allAliveWorkerNodesUri.Add(new Uri(readerAliveWorkerNodes.GetString(ordinalPosForUrl)));
 						}
 					}
 				}
@@ -387,24 +386,28 @@ namespace Stardust.Manager.Helpers
 			return sentToWorkerNodeUri;
 		}
 
-		public JobQueueItem AcquireJobQueueItem(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
+		public JobQueueItem AcquireJobQueueItem(SqlConnection sqlConnection)
 		{
 			JobQueueItem jobQueueItem;
-
-			using (var selectJobQueueItemCommand = new SqlCommand("[Stardust].[AcquireQueuedJob]", sqlConnection, sqlTransaction))
+			using (var sqlTransaction = sqlConnection.BeginTransaction())
 			{
-				selectJobQueueItemCommand.CommandType = CommandType.StoredProcedure;
-
-				var retVal = new SqlParameter("@idd", SqlDbType.UniqueIdentifier)
-				{ Direction = ParameterDirection.ReturnValue };
-				selectJobQueueItemCommand.Parameters.Add(retVal);
-
-				using (var reader = selectJobQueueItemCommand.ExecuteReaderWithRetry(_retryPolicy))
+				using (
+					var selectJobQueueItemCommand = new SqlCommand("[Stardust].[AcquireQueuedJob]", sqlConnection, sqlTransaction))
 				{
-					if (!reader.HasRows) return null;
-					reader.Read();
-					jobQueueItem = CreateJobQueueItemFromSqlDataReader(reader);
+					selectJobQueueItemCommand.CommandType = CommandType.StoredProcedure;
+
+					var retVal = new SqlParameter("@idd", SqlDbType.UniqueIdentifier)
+						{Direction = ParameterDirection.ReturnValue};
+					selectJobQueueItemCommand.Parameters.Add(retVal);
+
+					using (var reader = selectJobQueueItemCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (!reader.HasRows) return null;
+						reader.Read();
+						jobQueueItem = CreateJobQueueItemFromSqlDataReader(reader);
+					}
 				}
+				sqlTransaction.Commit();
 			}
 			return jobQueueItem;
 		}
