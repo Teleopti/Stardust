@@ -234,4 +234,4 @@ StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388 = RC # don't en
 QRCodeForMobileApps_42695 = RC
 
 ETL_SpeedUpNightlyDayOff_38213 = true
-WFM_ImproveIntradaySkillArea_37291 = RC
+WFM_ImproveIntradaySkillArea_37291 = DEV

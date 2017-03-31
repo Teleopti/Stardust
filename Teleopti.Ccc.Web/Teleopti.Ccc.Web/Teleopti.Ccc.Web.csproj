@@ -1468,6 +1468,7 @@
     <Content Include="WFM\app\global\organizationPicker\_modules.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
+    <Content Include="WFM\app\intraday\intraday-config-new.html" />
     <Content Include="WFM\app\people\html\wfm-import-agents.tpl.html" />
     <Content Include="WFM\app\people\people.component.wfmImportAgents.js" />
     <Content Include="WFM\app\permissions\refact\permissions.data.service.js" />
