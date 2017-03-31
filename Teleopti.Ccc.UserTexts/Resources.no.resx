@@ -8688,4 +8688,102 @@ ukedag</value>
   <data name="PublishSchedule" xml:space="preserve">
     <value>Publiser vakter</value>
   </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value>Totalt antall samtaler &lt;</value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>Samtaler &lt;</value>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>Samtale tid &lt;</value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW &lt;</value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>Prognostisert verdi overstyres </value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>Lagt til kampanje</value>
+  </data>
+  <data name="CouldNotApply" xml:space="preserve">
+    <value>Fikk ikke lagt til. Se problemstillingene ovenfor</value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>Løse</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>Køstatistikk uten løse</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistikk</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Varslinger</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>
+Deaktiver
+
+
+
+Deaktiver</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Aktiver</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>Overstyre  prognoserte verdier.</value>
+  </data>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>Tillatt</value>
+  </data>
+  <data name="ShrinkedAllowance" xml:space="preserve">
+    <value>TIllatt etter terskelverdi</value>
+  </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>"Ikke klar" verdier</value>
+  </data>
+  <data name="NoMessagesFound" xml:space="preserve">
+    <value>Ingen beskjed funnet</value>
+  </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>Noe gikk galt med fileksport, Prøv et annet lagringssted</value>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>Valgt lagringssted er ugyldig (mulig for lang?). Angi gyldig lagringssti</value>
+  </data>
+  <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
+    <value>Etter å ha sjekket mot "Behold aktiviteten"</value>
+  </data>
+  <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
+    <value>Tidsplanen din for {0} er endret!</value>
+  </data>
+  <data name="UseAverageShiftLengths" xml:space="preserve">
+    <value>Bruk gjennomsnittlig skift lengder</value>
+  </data>
+  <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
+    <value>Pålogging feilet! Kontoen er låst.</value>
+  </data>
+  <data name="LogOnFailedPasswordExpired" xml:space="preserve">
+    <value>Pålogging feilet! Passordet er utløpt </value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Hopp over</value>
+  </data>
+  <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
+    <value>Passordet har allerede utløpt.</value>
+  </data>
+  <data name="YourPasswordWillExpireSoon" xml:space="preserve">
+    <value>Passordet ditt utløper snart.</value>
+  </data>
+  <data name="WarningWithExclamatory" xml:space="preserve">
+    <value>Advarsel!</value>
+  </data>
+  <data name="Reforecast" xml:space="preserve">
+    <value>Prognostiser på nytt</value>
+  </data>
+  <data name="PeopleCap" xml:space="preserve">
+    <value>Medarbeidere</value>
+  </data>
 </root>
