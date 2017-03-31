@@ -3,6 +3,8 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
+	//REMOVE!!!!
+	//Using this will lead to bugs! (see eg #43743)
 	public class DoFullResourceOptimizationOneTime
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
