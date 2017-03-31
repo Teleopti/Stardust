@@ -40,8 +40,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[Test]
 		public void ShouldBaseMoveOnNonShoveledResourceCalculation_BasedOnAndersCase()
 		{
-			if (_beInResourceCalculatedStateAtStartup)
-				Assert.Ignore("#43743");
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
@@ -90,8 +88,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[Test]
 		public void ShouldBaseMoveOnNonShoveledResourceCalculation()
 		{
-			if (_beInResourceCalculatedStateAtStartup)
-				Assert.Ignore("#43743");
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");

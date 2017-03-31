@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ScheduleBlankSpots _scheduleBlankSpots;
 		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
-		private readonly DoFullResourceOptimizationOneTime _doFullResourcesFullResourceOptimizationOneTime;
+		private readonly IResourceCalculation _resourceCalculation;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 
 		public DayOffOptimizationDesktopTeamBlock(IResourceCalculation resourceOptimizationHelper,
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IScheduleDayEquator scheduleDayEquator,
 								ScheduleBlankSpots scheduleBlankSpots,
 								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
-								DoFullResourceOptimizationOneTime doFullResourcesFullResourceOptimizationOneTime,
+								IResourceCalculation resourceCalculation,
 								Func<IScheduleDayChangeCallback> scheduleDayChangeCallback)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayEquator = scheduleDayEquator;
 			_scheduleBlankSpots = scheduleBlankSpots;
 			_workShiftBackToLegalStateServiceProFactory = workShiftBackToLegalStateServiceProFactory;
-			_doFullResourcesFullResourceOptimizationOneTime = doFullResourcesFullResourceOptimizationOneTime;
+			_resourceCalculation = resourceCalculation;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					//////////////////
 				}
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
-				_doFullResourcesFullResourceOptimizationOneTime.ExecuteIfNecessary();
+				_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder(), _userTimeZone);
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(stateHolder.AllPermittedPersons, stateHolder.Schedules, groupPageLight);
