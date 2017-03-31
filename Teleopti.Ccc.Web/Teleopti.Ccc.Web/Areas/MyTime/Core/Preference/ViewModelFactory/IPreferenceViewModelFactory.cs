@@ -19,5 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		IEnumerable<PreferenceTemplateViewModel> CreatePreferenceTemplateViewModels();
 
 		PreferenceWeeklyWorkTimeViewModel CreatePreferenceWeeklyWorkTimeViewModel(DateOnly date);
+		IDictionary<DateOnly, PreferenceWeeklyWorkTimeViewModel> CreatePreferenceWeeklyWorkTimeViewModels(IEnumerable<DateOnly> dates);
 	}
 }

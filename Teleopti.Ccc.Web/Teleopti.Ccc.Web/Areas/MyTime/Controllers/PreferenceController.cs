@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -58,6 +59,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult WeeklyWorkTimeSetting(DateOnly date)
 		{
 			return Json(_viewModelFactory.CreatePreferenceWeeklyWorkTimeViewModel(date), JsonRequestBehavior.AllowGet);
+		}
+
+		[HttpPost]
+		[UnitOfWork]
+		public virtual JsonResult WeeklyWorkTimeSettings(DateOnly[] weekDates)
+		{
+			var result = _viewModelFactory.CreatePreferenceWeeklyWorkTimeViewModels(weekDates)
+				.Select(v => new
+			{
+				Date = v.Key.Date.ToString("yyyy-MM-dd"),
+				v.Value.MaxWorkTimePerWeekMinutes,
+				v.Value.MinWorkTimePerWeekMinutes
+			});
+
+			return Json(result, JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]

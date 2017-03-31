@@ -344,114 +344,151 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 		}
 
-		if(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")){
-			loadPreferenceDataByPeriod();
-		}else{
-			assignDataToCell();
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
+			_loadPreferenceDataByPeriod();
+		} else {
+			_assignPreferenceDataToDateCell();
 			callback && callback();
 		}
 
-		function loadPreferenceDataByPeriod(){
+		function _loadPreferenceDataByPeriod() {
 			var params = {
 				startDate: moment(date).subtract(7, 'day').format('YYYY-MM-DD'),
 				endDate: moment(date).add(34, 'day').format('YYYY-MM-DD')
 			};
 
-			$.get('PeriodPreferenceFeedback/PeriodFeedback?startDate='+params.startDate+'&endDate='+params.endDate).success(function(res){
-				assignDataToCell(res);
-				callback && callback();
+			ajax.Ajax({
+				url: "PeriodPreferenceFeedback/PeriodFeedback",
+				dataType: "json",
+				contentType: 'application/json; charset=utf-8',
+				type: 'GET',
+				data: {
+					startDate: params.startDate,
+					endDate: params.endDate
+				},
+				success: function(data) {
+					_assignPreferenceDataToDateCell(data);
+					callback && callback();
+				},
+				statusCode404: function() {},
 			});
 		}
 
-		function assignDataToCell(preferenceDataByPeriod){
-		var dayViewModels = {};
+		function _assignPreferenceDataToDateCell(preferenceDataByPeriod) {
+			var dayViewModels = {},
+				dayViewModelsInPeriod = {};
 
-		var dayViewModelsInPeriod = {};
-
-		$(".header-week-day")
-			.each(function(i, f) {
+			$(".header-week-day").each(function(i, f) {
 				var s = $(f).data('date');
 				$(f).text(moment(s).format('dddd'));
 			});
 
+			$('li[data-mytime-week]').each(function(index, element) {
+				weekViewModels[index] = new Teleopti.MyTimeWeb.Preference.WeekViewModel(ajax);
+				ko.applyBindings(weekViewModels[index], element);
+			});
 
-		$('li[data-mytime-week]').each(function (index, element) {
-			weekViewModels[index] = new Teleopti.MyTimeWeb.Preference.WeekViewModel(ajax);
-			ko.applyBindings(weekViewModels[index], element);
-		});
+			$('li[data-mytime-date]').each(function(index, element) {
+				var dayViewModel, preferenceData;
 
-		$('li[data-mytime-date]').each(function(index, element) {
-			var dayViewModel, preferenceData;
-
-			if (preferenceDataByPeriod && preferenceDataByPeriod.length > 0) {
-				preferenceData = preferenceDataByPeriod.filter(function(p) {
-					return p.Date == element.attributes['data-mytime-date'].value;
-				});
-				dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate, preferenceData[0]);
-			} else {
-				dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate, null);
-			}
-
-			dayViewModel.ReadElement(element);
-			dayViewModels[dayViewModel.Date] = dayViewModel;
-			if ($(element).hasClass("inperiod")) {
-				dayViewModelsInPeriod[dayViewModel.Date] = dayViewModel;
-			}
-			ko.applyBindings(dayViewModel, element);
-			if ($('li[data-mytime-week]').length > 0) {
-				weekViewModels[Math.floor(index / 7)].DayViewModels.push(dayViewModel);
-			}
-		});
-
-
-		var from = $('li[data-mytime-date]').first().data('mytime-date');
-		var to = $('li[data-mytime-date]').last().data('mytime-date');
-
-		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
-		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(
-			dayViewModelsInPeriod,
-			$('#Preference-body').data('mytime-maxmusthave'),
-			_setMustHave,
-			_setPreference,
-			_deletePreference,
-			$('#Preference-body').data('mytime-currentmusthave'));
-		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date, weekViewModels);
-
-
-		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
-		if (periodFeedbackElement) {
-			ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
-		}
-
-		loader = loader || function (call) { call(); };
-		loader(function () {
-
-			if (preferencesAndScheduleViewModel) {
-
-				preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to)
-					.done(function () {
-						loadingStarted = true;
-						_activateSelectable();
-						_activateMeetingTooltip();
-						readyForInteraction();
-						loader(function () {
-							periodFeedbackViewModel.LoadFeedback();
-							if ($('li[data-mytime-week]').length > 0) {
-								$.each(weekViewModels, function (index, week) {
-									week.LoadWeeklyWorkTimeSettings();
-								});
-							}
-							if (!Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")){
-								$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
-									day.LoadFeedback();
-								});
-							}
-							selectionViewModel.enableDateSelection();
-							callWhenAjaxIsCompleted(completelyLoaded);
-						});
+				if (preferenceDataByPeriod && preferenceDataByPeriod.length > 0) {
+					preferenceData = preferenceDataByPeriod.filter(function(p) {
+						return p.Date == element.attributes['data-mytime-date'].value;
 					});
+					dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate, preferenceData[0]);
+				} else {
+					dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate, null);
+				}
+
+				dayViewModel.ReadElement(element);
+				dayViewModels[dayViewModel.Date] = dayViewModel;
+				if ($(element).hasClass("inperiod")) {
+					dayViewModelsInPeriod[dayViewModel.Date] = dayViewModel;
+				}
+				ko.applyBindings(dayViewModel, element);
+				if ($('li[data-mytime-week]').length > 0) {
+					weekViewModels[Math.floor(index / 7)].DayViewModels.push(dayViewModel);
+				}
+			});
+
+			var from = $('li[data-mytime-date]').first().data('mytime-date');
+			var to = $('li[data-mytime-date]').last().data('mytime-date');
+
+			preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference
+				.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
+			selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(
+				dayViewModelsInPeriod,
+				$('#Preference-body').data('mytime-maxmusthave'),
+				_setMustHave,
+				_setPreference,
+				_deletePreference,
+				$('#Preference-body').data('mytime-currentmusthave'));
+
+			periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference
+				.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date, weekViewModels);
+
+			var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
+			if (periodFeedbackElement) {
+				ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
 			}
-		});
+
+			runLoader = loader ||
+				function(call) {
+					call();
+				};
+			runLoader(function() {
+				if (preferencesAndScheduleViewModel) {
+					preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to)
+						.done(function() {
+							loadingStarted = true;
+							_activateSelectable();
+							_activateMeetingTooltip();
+							readyForInteraction();
+							loader(function() {
+								periodFeedbackViewModel.LoadFeedback();
+
+								if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
+
+									ajax.Ajax({
+										url: "Preference/WeeklyWorkTimeSettings",
+										dataType: "json",
+										type: 'POST',
+										contentType: 'application/json; charset=utf-8',
+										data: JSON.stringify({
+											weekDates: (function(w) {
+												var dates = [];
+												for (key in w) {
+													dates.push(w[key].DayViewModels()[0].Date);
+												}
+												return dates;
+											})(weekViewModels)
+										}),
+										success: function(data) {
+											$.each(weekViewModels, function(index, weekViewModel) {
+												weekViewModel.readWeeklyWorkTimeSettings(data.filter(function(d) {
+													return d.Date == weekViewModel.DayViewModels()[0].Date;
+												})[0]);
+											});
+										}
+									});
+								} else {
+									if ($('li[data-mytime-week]').length > 0) {
+										$.each(weekViewModels,
+											function(index, week) {
+												week.LoadWeeklyWorkTimeSettings();
+											});
+									}
+									$.each(preferencesAndScheduleViewModel.DayViewModels,
+										function(index, day) {
+											day.LoadFeedback();
+										});
+								}
+								selectionViewModel.enableDateSelection();
+								callWhenAjaxIsCompleted(completelyLoaded);
+							});
+						});
+				}
+			});
 		}
 	}
 

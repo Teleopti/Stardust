@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
@@ -25,6 +26,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 
 			 result.MaxWorkTimePerWeekMinutes.Should().Be.EqualTo(weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes);
 			 result.MinWorkTimePerWeekMinutes.Should().Be.EqualTo(weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes);
+		}
+
+		[Test]
+		public void ShouldGetPreferenceWeeklyWorkTimeVMWithDates()
+		{
+			var date = new DateOnly(2017, 4, 1);
+			var dates = new List<DateOnly> {date, date.AddDays(7), date.AddDays(14)};
+			var weeklyWorkTimeProvider = MockRepository.GenerateMock<IPreferenceWeeklyWorkTimeSettingProvider>();
+			var target = new PreferenceViewModelFactory(null, null, null, weeklyWorkTimeProvider, null, null, null, null, null, null);
+
+			var weeklyWorkTimeSetting = new WeeklyWorkTimeSetting
+			{
+				MinWorkTimePerWeekMinutes = 120,
+				MaxWorkTimePerWeekMinutes = 360
+			};
+			weeklyWorkTimeProvider.Stub(x => x.RetrieveSetting(date)).IgnoreArguments().Return(weeklyWorkTimeSetting);
+
+			var result = target.CreatePreferenceWeeklyWorkTimeViewModels(dates);
+
+			result.Count.Should().Be.EqualTo(dates.Count);
+			result[date].MaxWorkTimePerWeekMinutes.Should().Be.EqualTo(360);
+			result[date].MinWorkTimePerWeekMinutes.Should().Be.EqualTo(120);
 		}
 	}
 }
