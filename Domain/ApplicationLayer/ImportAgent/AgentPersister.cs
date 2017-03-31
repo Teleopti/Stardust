@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRepository _personRepository;
 		private readonly ITenantUserPersister _tenantUserPersister;
-		
+
 		public AgentPersister(ILoggedOnUser loggedOnUser, IPersonRepository personRepository,
 			ITenantUserPersister tenantUserPersister)
 		{
 			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
-			_tenantUserPersister = tenantUserPersister;			
+			_tenantUserPersister = tenantUserPersister;
 		}
 
 		public void Persist(IEnumerable<AgentExtractionResult> data)
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					continue;
 				}
 
-				addPersonData(person, agentData);				
+				addPersonData(person, agentData);
 			}
 		}
 
@@ -68,18 +68,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var schedulePeriod = new SchedulePeriod(agentData.StartDate, agentData.SchedulePeriodType,
 				agentData.SchedulePeriodLength);
 
-			
+
 			person.AddSchedulePeriod(schedulePeriod);
 		}
 
 		private void addPersonPeriod(IPerson person, AgentDataModel agentData)
 		{
-			var personContract = new PersonContract(agentData.Contract,agentData.PartTimePercentage,agentData.ContractSchedule);
-			var personPeriod = new PersonPeriod(agentData.StartDate,personContract,agentData.Team);
+			var personContract = new PersonContract(agentData.Contract, agentData.PartTimePercentage, agentData.ContractSchedule);
+			var personPeriod = new PersonPeriod(agentData.StartDate, personContract, agentData.Team);
 
 
 			agentData.Skills.ForEach(s => personPeriod.AddPersonSkill(new PersonSkill(s, new Percent(1))));
-		
+
 			personPeriod.RuleSetBag = agentData.RuleSetBag;
 			foreach (var externalLogOn in agentData.ExternalLogons)
 			{
@@ -106,5 +106,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 	}
 
-	
+
 }

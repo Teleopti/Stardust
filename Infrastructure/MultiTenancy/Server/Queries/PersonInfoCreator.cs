@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		public void CreateAndPersistPersonInfo(IPersonInfoModel personInfo)
 		{
 			_persister.Persist(_infoMapper.Map(personInfo));
-
 		}
+
 	}
 }

@@ -146,6 +146,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobService.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentsSettingDataModel.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\RawAgent.cs" />
+    <Compile Include="ApplicationLayer\ImportAgent\TenantInfo.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\WorkbookHandler.cs" />
     <Compile Include="AgentInfo\PeopleSelection.cs" />
     <Compile Include="AgentInfo\PersonsThatChangedPersonSkillsDuringPeriodFinder.cs" />

@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 
 
-		public IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks, IPerson owner)
+		public IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks, IPerson owner, TenantInfo tenantInfo)
 		{
-			
+
 			var dateOnlyPeriod = DateOnly.Today.ToDateOnlyPeriod();
 			var jobResult = new JobResult(JobCategory.WebImportAgent, dateOnlyPeriod, owner, DateTime.UtcNow);
 			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, fileData.FileName, fileData.Data));
@@ -30,16 +30,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			_eventPublisher.Publish(new ImportAgentEvent
 			{
 				JobResultId = jobResult.Id.GetValueOrDefault(),
-				Defaults = fallbacks
+				Defaults = fallbacks,
+				TenantInfo = tenantInfo
 			});
 			return jobResult;
 		}
 
-	
+
 	}
 
 	public interface IImportAgentJobService
 	{
-		IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks, IPerson owner);
+		IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks, IPerson owner, TenantInfo tenantInfo);
 	}
 }

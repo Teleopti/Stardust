@@ -14,6 +14,8 @@ using System.Web.Http.Results;
 using System;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
@@ -28,18 +30,21 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private const string oldExcelFileContentType = "application/vnd.ms-excel";
 		private readonly IImportAgentJobService _importAgentJobService;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly ICurrentTenantUser _currentTenantUser;
 
 		public ImportAgentController(IImportAgentDataProvider importAgentDataProvider,
 			IFileProcessor fileProcessor,
 			IMultipartHttpContentExtractor multipartHttpContentExtractor,
 			IImportAgentJobService importAgentJobService,
-			ILoggedOnUser loggedOnUser)
+			ILoggedOnUser loggedOnUser,
+			ICurrentTenantUser currentTenantUser)
 		{
 			_importAgentDataProvider = importAgentDataProvider;
 			_fileProcessor = fileProcessor;
 			_multipartHttpContentExtractor = multipartHttpContentExtractor;
 			_importAgentJobService = importAgentJobService;
 			_loggedOnUser = loggedOnUser;
+			_currentTenantUser = currentTenantUser;
 		}
 
 		[UnitOfWork, Route("GetImportAgentSettingsData"), HttpGet]
@@ -65,7 +70,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			{
 				throw new ArgumentNullException(Resources.File, Resources.NoInput);
 			}
-			return _importAgentJobService.CreateJob(fileData, defaults, _loggedOnUser.CurrentUser());
+			var user = _currentTenantUser.CurrentUser();
+			return _importAgentJobService.CreateJob(fileData, defaults, _loggedOnUser.CurrentUser(), new TenantInfo {
+				TenantPassword = user.TenantPassword,
+				PersonId = user.Id
+			});
 		}
 		[Route("UploadAgent"), HttpPost]
 		public async Task<HttpResponseMessage> UploadAgent()

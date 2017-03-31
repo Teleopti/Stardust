@@ -16,17 +16,18 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
 namespace Teleopti.Ccc.DomainTest.Import
 {
 	[TestFixture, DomainTest]
-	public class ImportAgentServiceTest:ISetup
+	public class ImportAgentServiceTest : ISetup
 	{
 		public FakeJobResultRepository JobResultRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeEventPublisher Publisher;
 		public IImportAgentJobService Target;
-
+		public ICurrentTenantUser _currentTenantUser;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Import
 			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 		}
 
 		[Test]
@@ -53,8 +54,12 @@ namespace Teleopti.Ccc.DomainTest.Import
 				FileName = "test.xlsx",
 				Data = Encoding.ASCII.GetBytes("test")
 			};
-
-			Target.CreateJob(fileData, null, person);
+			var tenantUser = _currentTenantUser.CurrentUser();
+			Target.CreateJob(fileData, null, person, new TenantInfo
+			{
+				PersonId = tenantUser.Id,
+				TenantPassword = tenantUser.TenantPassword
+			});
 
 			var result = JobResultRepository.LoadAll().Single();
 
@@ -75,14 +80,18 @@ namespace Teleopti.Ccc.DomainTest.Import
 			};
 
 			var fallbacks = new ImportAgentDefaults();
-
-			var job = Target.CreateJob(fileData, fallbacks, person);
+			var tenantUser = _currentTenantUser.CurrentUser();
+			var job = Target.CreateJob(fileData, fallbacks, person, new TenantInfo
+			{
+				PersonId = tenantUser.Id,
+				TenantPassword = tenantUser.TenantPassword
+			});
 
 			var @event = Publisher.PublishedEvents.Single() as ImportAgentEvent;
 			@event.Should().Not.Be.Null();
 			@event.JobResultId.Should().Be(job.Id);
 			@event.Defaults.Should().Be(fallbacks);
-		
+
 		}
 
 	}

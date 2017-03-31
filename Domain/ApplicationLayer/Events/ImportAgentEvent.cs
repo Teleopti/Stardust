@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	public class ImportAgentEvent : EventWithLogOnContext
 	{
 		public Guid JobResultId { get; set; }
-		public ImportAgentDefaults Defaults { get; set; }	
+		public ImportAgentDefaults Defaults { get; set; }
+		public TenantInfo TenantInfo { get; internal set; }
 	}
 }

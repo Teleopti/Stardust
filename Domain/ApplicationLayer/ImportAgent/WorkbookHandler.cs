@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				{
 					continue;
 				}
-				var extractedRow = new AgentExtractionResult {Row = row};
+				var extractedRow = new AgentExtractionResult { Row = row };
 				IList<string> rowErrors;
 				var raw = ParseRow(row, out rowErrors);
 				extractedRow.Raw = raw;
@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			return results;
 		}
 
+		
 		protected RawAgent ParseRow(IRow row, out IList<string> errors)
 		{
 			var raw = new RawAgent();
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					if (cell.CellType == CellType.Numeric)
 						return cell.NumericCellValue;
 					break;
-				
+
 				default:
 					if (cell.CellType == CellType.String)
 						return cell.StringCellValue;

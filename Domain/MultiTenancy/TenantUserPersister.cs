@@ -31,21 +31,22 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 			{
 				errorMessages.Add(Resources.PasswordPolicyErrorMsgSemicolon);
 			}
-			catch(DuplicateIdentityException)
+			catch (DuplicateIdentityException)
 			{
 				errorMessages.Add(Resources.DuplicatedWindowsLogonErrorMsgSemicolon);
 			}
-			catch(DuplicateApplicationLogonNameException)
+			catch (DuplicateApplicationLogonNameException)
 			{
 				errorMessages.Add(Resources.DuplicatedApplicationLogonErrorMsgSemicolon);
 			}
-			catch(Exception exception)
+			catch (Exception exception)
 			{
 				errorMessages.Add(string.Format(Resources.InternalErrorXMsg, exception.Message));
 			}
 
 			return errorMessages;
 		}
+	
 		[TenantUnitOfWork]
 		protected virtual void PersistInternal(IPersonInfoModel personInfo)
 		{

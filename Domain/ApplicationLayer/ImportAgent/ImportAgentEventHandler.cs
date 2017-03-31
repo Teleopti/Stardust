@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	{
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IFileProcessor _fileProcessor;
-
 		public ImportAgentEventHandler(
 			IJobResultRepository jobResultRepository,
 			IFileProcessor fileProcessor,
