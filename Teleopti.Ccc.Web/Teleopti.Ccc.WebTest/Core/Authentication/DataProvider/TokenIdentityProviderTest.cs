@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 						new ClaimsIdentity(new[]
 						{
 							new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/TOPTINET#kunning$$$m"),
-							new Claim(ClaimTypes.AuthenticationMethod, "urn:Windows")
 						})
 					});
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo(@"TOPTINET\kunning.m");
@@ -54,7 +53,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 					new ClaimsIdentity(new[]
 					{
 						new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier),
-						new Claim(ClaimTypes.AuthenticationMethod, "urn:Teleopti")
 					})
 				});
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
@@ -85,7 +83,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 						new ClaimsIdentity(new[]
 						{
 							new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier),
-							new Claim(ClaimTypes.AuthenticationMethod, "urn:Teleopti"),
 							new Claim(ClaimTypes.IsPersistent, "true")
 						})
 					});
@@ -111,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		}
 
 		[Test]
-		public void ShouldSetIsPersistentToTrueIfOtherAuthenticationMethodWithAuthenticationMethod()
+		public void ShouldSetIsPersistentToFalse()
 		{
 			var httpContext = new FakeHttpContext();
 			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
@@ -123,10 +120,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 						new ClaimsIdentity(new[]
 						{
 							new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier),
-							new Claim(ClaimTypes.AuthenticationMethod, "urn:Others")
+							new Claim(ClaimTypes.IsPersistent, "false")
 						})
 					});
-			target.RetrieveToken().IsPersistent.Should().Be.True();
+			target.RetrieveToken().IsPersistent.Should().Be.False();
 		}
 
 		[Test]
