@@ -353,8 +353,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 		function loadPreferenceDataByPeriod(){
 			var params = {
-				startDate: date,
-				endDate: moment(date).add(42, 'day').format('YYYY-MM-DD')
+				startDate: moment(date).subtract(7, 'day').format('YYYY-MM-DD'),
+				endDate: moment(date).add(34, 'day').format('YYYY-MM-DD')
 			};
 
 			$.get('PeriodPreferenceFeedback/PeriodFeedback?startDate='+params.startDate+'&endDate='+params.endDate).success(function(res){
@@ -380,11 +380,15 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			ko.applyBindings(weekViewModels[index], element);
 		});
 
-		$('li[data-mytime-date]').each(function (index, element) {
-			var dayViewModel;
-			if(preferenceDataByPeriod && preferenceDataByPeriod.length > 0){
-				dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate, preferenceDataByPeriod[index]);
-			}else{
+		$('li[data-mytime-date]').each(function(index, element) {
+			var dayViewModel, preferenceData;
+
+			if (preferenceDataByPeriod && preferenceDataByPeriod.length > 0) {
+				preferenceData = preferenceDataByPeriod.filter(function(p) {
+					return p.Date == element.attributes['data-mytime-date'].value;
+				});
+				dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate, preferenceData[0]);
+			} else {
 				dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate, null);
 			}
 
