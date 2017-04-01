@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return response;
 		}
 
-		[Route("api/People/AgentTemplate"), HttpPost]
+		[Route("AgentTemplate"), HttpPost]
 		public HttpResponseMessage GetFileTemplateAgent()
 		{
 			var template = new AgentFileTemplate();

@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 
 		public void Handle(ImportAgentEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
 		{
+			setCurrentTenant(parameters);
 			var theRealOne = _componentContext.Resolve<IHandleEvent<ImportAgentEvent>>();
 			theRealOne.Handle(parameters);
 		}
