@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -39,6 +40,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public IRuleSetBag ForDate(IPerson person, DateOnly date)
 		{
 			return person.Period(date).RuleSetBag;
+		}
+
+		public IDictionary<DateOnly, IRuleSetBag> ForPeriod(IPerson person, DateOnlyPeriod period)
+		{
+			throw new NotImplementedException();
 		}
 	}
 

@@ -109,8 +109,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			DateOnlyPeriod period)
 		{
 			var result = new Dictionary<DateOnly, PersonPreferenceDayOccupation>();
-			var schedules = _scheduleProvider.GetScheduleForPersonsInPeriod(period, new List<IPerson> {person}).ToDictionary(d => d.DateOnlyAsPeriod.DateOnly);
-			
+			var schedules = _scheduleProvider.GetScheduleForPersonsInPeriod(period, new List<IPerson> {person})
+				.ToDictionary(d => d.DateOnlyAsPeriod.DateOnly);
+
+			var ruleSetBags = _personRuleSetBagProvider.ForPeriod(person, period);
 			var preferences = _preferenceProvider.GetPreferencesForPeriod(period).ToList();
 			var timeZone = _userTimezone.TimeZone();
 
@@ -164,7 +166,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				WorkTimeMinMaxCalculationResult minMax = null;
 				if (schedule != null)
 				{
-					minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person, date), schedule);
+					minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, ruleSetBags[date], schedule);
 				}
 
 				personPreferenceDayOccupation.HasPreference = true;

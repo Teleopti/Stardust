@@ -9,8 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -34,36 +32,67 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IRuleSetBag>();
 		}
 
+		/// <remarks>Don't remove the last 2 criterias, by doing it this way it will load the referred objects directly 
+		/// instead of ending up with lazy load calls later on. That has a significant difference when you’re loading 
+		/// shiftbags with many rulesets.</remarks>
 		public IRuleSetBag FindWithRuleSetsAndAccessibility(Guid id)
 		{
 			var mainCrit = DetachedCriteria.For<RuleSetBag>()
-					.Add(Restrictions.Eq("Id", id))
-					.SetFetchMode("RuleSetCollection", FetchMode.Join);
+				.Add(Restrictions.Eq("Id", id))
+				.SetFetchMode("RuleSetCollection", FetchMode.Join);
 
 			var subCrit = DetachedCriteria.For<RuleSetBag>("b")
-					.Add(Restrictions.Eq("b.Id", id))
-					.CreateAlias("RuleSetCollection", "r", JoinType.InnerJoin)
-					.SetProjection(Projections.Property("r.Id"));
+				.Add(Restrictions.Eq("b.Id", id))
+				.CreateAlias("RuleSetCollection", "r", JoinType.InnerJoin)
+				.SetProjection(Projections.Property("r.Id"));
 
 			var extCritTwo = DetachedCriteria.For<WorkShiftRuleSet>()
-					.Add(Subqueries.PropertyIn("Id", subCrit))
-					.SetFetchMode("AccessibilityDates", FetchMode.Join);
+				.Add(Subqueries.PropertyIn("Id", subCrit))
+				.SetFetchMode("AccessibilityDates", FetchMode.Join);
 
 			var extCritThree = DetachedCriteria.For<WorkShiftRuleSet>()
 				.Add(Subqueries.PropertyIn("Id", subCrit))
 				.SetFetchMode("AccessibilityDaysOfWeek", FetchMode.Join);
 
 			var res = Session.CreateMultiCriteria()
-								.Add(mainCrit)
-								//.Add(extCrit)
-								.Add(extCritTwo)
-								.Add(extCritThree)
-								.List();
+				.Add(mainCrit)
+				.Add(extCritTwo)
+				.Add(extCritThree)
+				.List();
 
-			var ruleSetBags =
-				CollectionHelper.ToDistinctGenericCollection<IRuleSetBag>(res[0]);
+			var ruleSetBags = CollectionHelper.ToDistinctGenericCollection<IRuleSetBag>(res[0]);
 
 			return ruleSetBags.FirstOrDefault();
+		}
+
+		public IRuleSetBag[] FindWithRuleSetsAndAccessibility(Guid[] ruleBagIds)
+		{
+			var mainCrit = DetachedCriteria.For<RuleSetBag>()
+				.Add(Restrictions.In("Id", ruleBagIds))
+				.SetFetchMode("RuleSetCollection", FetchMode.Join);
+
+			var subCrit = DetachedCriteria.For<RuleSetBag>("b")
+				.Add(Restrictions.In("b.Id", ruleBagIds))
+				.CreateAlias("RuleSetCollection", "r", JoinType.InnerJoin)
+				.SetProjection(Projections.Property("r.Id"));
+
+			var extCritTwo = DetachedCriteria.For<WorkShiftRuleSet>()
+				.Add(Subqueries.PropertyIn("Id", subCrit))
+				.SetFetchMode("AccessibilityDates", FetchMode.Join);
+
+			var extCritThree = DetachedCriteria.For<WorkShiftRuleSet>()
+				.Add(Subqueries.PropertyIn("Id", subCrit))
+				.SetFetchMode("AccessibilityDaysOfWeek", FetchMode.Join);
+
+			var res = Session.CreateMultiCriteria()
+				.Add(mainCrit)
+				.Add(extCritTwo)
+				.Add(extCritThree)
+				.List();
+
+			var ruleSetBags = CollectionHelper.ToDistinctGenericCollection<IRuleSetBag>(res[0]);
+
+			return ruleSetBags.ToArray();
 		}
 	}
 }

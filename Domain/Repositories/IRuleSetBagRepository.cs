@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.Domain.Repositories
     {
         IEnumerable<IRuleSetBag> LoadAllWithRuleSets();
 	    IRuleSetBag FindWithRuleSetsAndAccessibility(Guid id);
+		IRuleSetBag[] FindWithRuleSetsAndAccessibility(Guid[] ruleBagIds);
     }
 }

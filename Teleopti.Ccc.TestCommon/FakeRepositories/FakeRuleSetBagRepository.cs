@@ -54,5 +54,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _ruleSetBags.FirstOrDefault(r => r.Id == id);
 		}
+
+		public IRuleSetBag[] FindWithRuleSetsAndAccessibility(Guid[] ruleBagIds)
+		{
+			return _ruleSetBags.Where(r => ruleBagIds.Contains(r.Id.Value)).ToArray();
+		}
 	}
 }
