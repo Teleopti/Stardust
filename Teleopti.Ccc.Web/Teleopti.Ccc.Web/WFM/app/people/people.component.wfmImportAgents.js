@@ -1,10 +1,12 @@
 (function (angular) {
 	'use strict';
 
-	function WfmImportAgentsCtrl($translate, svc, peopleSvc) {
-		this._svc = svc;
-		this._peopleSvc = peopleSvc;
+	function WfmImportAgentsCtrl($translate, importAgentsService, PeopleService, Toggle) {
+		this._svc = importAgentsService;
+		this._peopleSvc = PeopleService;
 		this._translate = $translate;
+		this._toggles = Toggle;
+		this.runImportJobInBackground = this._toggles.Wfm_People_MoveImportJobToBackgroundService_43582;
 		this.fallbacks = {};
 		this.now = new Date();
 	}
@@ -46,8 +48,11 @@
 	WfmImportAgentsCtrl.prototype.clickImport = function () {
 		this.started = true;
 		var fields = this.setFallbacks ? this.fallbacks : undefined;
-		this._peopleSvc.uploadAgentFromFile(this.file, fields)
-			.then(this.handleImportResult.bind(this), this.handleImportError.bind(this));
+
+		if (!this.runImportJobInBackground) {
+			this._peopleSvc.uploadAgentFromFile(this.file, fields)
+				.then(this.handleImportResult.bind(this), this.handleImportError.bind(this));
+		} else {}
 	};
 
 	WfmImportAgentsCtrl.prototype.getTemplate = function () {
@@ -111,6 +116,6 @@
 		.component('wfmImportAgents',
 		{
 			templateUrl: 'app/people/html/wfm-import-agents.tpl.html',
-			controller: ['$translate', 'importAgentsService', 'PeopleService', WfmImportAgentsCtrl]
+			controller: ['$translate', 'importAgentsService', 'PeopleService', 'Toggle', WfmImportAgentsCtrl]
 		});
 })(angular);
