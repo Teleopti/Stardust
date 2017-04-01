@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 			saveJobArtifacts(jobResult, fileData, processResult);
 			saveJobResultDetail(jobResult,
-			$"success count:{processResult.SucceedAgents?.Count ?? 0}, failed count:{processResult.FaildAgents?.Count ?? 0}, warning count:{processResult.WarningAgents?.Count ?? 0}",
+			processResult.GetSummaryMessage(),
 			processResult.DetailLevel);
 		}
 

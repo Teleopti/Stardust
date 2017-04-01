@@ -1,6 +1,8 @@
 using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
@@ -19,6 +21,8 @@ namespace Teleopti.Ccc.TestCommon
 			_person = PersonFactory.CreatePersonWithId();
 			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 		}
+
+	
 
 		public void SetFakeLoggedOnUser(IPerson person)
 		{

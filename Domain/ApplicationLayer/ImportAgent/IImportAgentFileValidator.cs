@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NPOI.SS.UserModel;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
@@ -23,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 	}
 
-	public class AgentFileProcessResult
+	public class AgentFileProcessResult : IImportAgentResultCount
 	{
 		public AgentFileProcessResult()
 		{
@@ -35,8 +38,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public List<AgentExtractionResult> WarningAgents { get; internal set; }
 		public List<AgentExtractionResult> FaildAgents { get; internal set; }
 		public List<AgentExtractionResult> SucceedAgents { get; internal set; }
+		public int SuccessCount => SucceedAgents?.Count() ?? 0;
+		public int FaildCount  => FaildAgents?.Count() ?? 0; 
+		public int WarningCount => WarningAgents?.Count() ?? 0;
 	}
 
+	
 	public class AgentExtractionResult
 	{
 		public AgentDataModel Agent { get; set; }

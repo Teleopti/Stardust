@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 using Teleopti.Ccc.Web.Areas.People.Core;
 using System.Web.Http.Results;
 using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -58,6 +59,38 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			CreateJob(fileData, defaults);
 			return Ok();
 		}
+
+		[Route("AgentJobList"), HttpGet, UnitOfWork]
+		public virtual object GetAgentJobList()
+		{
+			return _importAgentJobService.GetJobsForLoggedOnBusinessUnit()?.Select(detail => new
+			{
+				JobResultId = detail.JobResult.Id,
+				Owner = detail.Owner.Name,
+				detail.Timestamp,
+				detail.SuccessCount,
+				detail.WarningCount,
+				detail.FaildCount,
+				detail.IsWorking,
+				FaildArtifact = detail.FaildArtifact == null ? null : new
+				{
+					detail.FaildArtifact.Name,
+					detail.FaildArtifact.Id
+				},
+				WarningArtifact = detail.WarningArtifact == null ? null : new
+				{
+					detail.WarningArtifact.Name,
+					detail.WarningArtifact.Id
+				},
+				InputArtifact = detail.InputArtifact == null ? null : new
+				{
+					detail.InputArtifact.Name,
+					detail.InputArtifact.Id
+				}
+			})
+			.ToList();
+		}
+		
 
 		[UnitOfWork]
 		[TenantUnitOfWork]
