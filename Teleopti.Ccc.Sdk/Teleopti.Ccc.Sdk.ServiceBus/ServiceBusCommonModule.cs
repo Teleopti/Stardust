@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<ICurrentUnitOfWorkFactory>().ExternallyOwned();
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
 			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();
-			builder.RegisterType<CurrentTenantUserFake>().As<ICurrentTenantUser>().SingleInstance();
+		
 			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<ServiceBusDelayedMessageSender>().As<IDelayedMessageSender>().SingleInstance();
 

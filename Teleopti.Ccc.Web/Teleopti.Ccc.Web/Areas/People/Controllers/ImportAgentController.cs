@@ -29,22 +29,18 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private const string newExcelFileContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 		private const string oldExcelFileContentType = "application/vnd.ms-excel";
 		private readonly IImportAgentJobService _importAgentJobService;
-		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly ICurrentTenantUser _currentTenantUser;
 
 		public ImportAgentController(IImportAgentDataProvider importAgentDataProvider,
 			IFileProcessor fileProcessor,
 			IMultipartHttpContentExtractor multipartHttpContentExtractor,
-			IImportAgentJobService importAgentJobService,
-			ILoggedOnUser loggedOnUser,
-			ICurrentTenantUser currentTenantUser)
+			IImportAgentJobService importAgentJobService
+			)
 		{
 			_importAgentDataProvider = importAgentDataProvider;
 			_fileProcessor = fileProcessor;
 			_multipartHttpContentExtractor = multipartHttpContentExtractor;
 			_importAgentJobService = importAgentJobService;
-			_loggedOnUser = loggedOnUser;
-			_currentTenantUser = currentTenantUser;
+
 		}
 
 		[UnitOfWork, Route("GetImportAgentSettingsData"), HttpGet]
@@ -63,18 +59,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return Ok();
 		}
 
-		[UnitOfWork, NonAction]
+		[UnitOfWork]
+		[TenantUnitOfWork]
 		public virtual IJobResult CreateJob(FileData fileData, ImportAgentDefaults defaults)
 		{
 			if (fileData?.Data?.Length == 0)
 			{
 				throw new ArgumentNullException(Resources.File, Resources.NoInput);
 			}
-			var user = _currentTenantUser.CurrentUser();
-			return _importAgentJobService.CreateJob(fileData, defaults, _loggedOnUser.CurrentUser(), new TenantInfo {
-				TenantPassword = user.TenantPassword,
-				PersonId = user.Id
-			});
+			return _importAgentJobService.CreateJob(fileData, defaults);
 		}
 		[Route("UploadAgent"), HttpPost]
 		public async Task<HttpResponseMessage> UploadAgent()
@@ -162,4 +155,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 
 		}
 	}
+
+
 }

@@ -11,6 +11,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
@@ -29,11 +30,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			_fileProcessor = fileProcessor;
 		}
 
-
-		public void Handle(ImportAgentEvent @event)
+		[AsSystem]
+		public virtual void Handle(ImportAgentEvent @event)
 		{
-			var jobResult = _jobResultRepository.Get(@event.JobResultId);
-			UpdateJobVersion(jobResult);
+			var jobResult = UpdateJobVersion(@event);
 			if (IfNeedRejectJob(jobResult))
 			{
 				return;
@@ -42,13 +42,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 
 		[UnitOfWork]
-		protected virtual void UpdateJobVersion(IJobResult jobResult)
+		protected virtual IJobResult UpdateJobVersion(ImportAgentEvent @event)
 		{
+			var jobResult = _jobResultRepository.Get(@event.JobResultId);
 			var currentVersion = jobResult.Version.GetValueOrDefault();
 			jobResult.SetVersion(++currentVersion);
+			return jobResult;
 		}
 
-		[AsSystem]
 		[UnitOfWork]
 		protected virtual void HandleJob(IJobResult jobResult, ImportAgentDefaults defaults)
 		{

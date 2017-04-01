@@ -12,26 +12,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	{
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IEventPublisher _eventPublisher;
-
-		public ImportAgentJobService(IJobResultRepository jobResultRepository, IEventPublisher eventPublisher)
+		private readonly ILoggedOnUser _loggedOnUser;
+		public ImportAgentJobService(
+			IJobResultRepository jobResultRepository,
+			IEventPublisher eventPublisher,
+			ILoggedOnUser loggedOnUser)
 		{
 			_jobResultRepository = jobResultRepository;
 			_eventPublisher = eventPublisher;
+			_loggedOnUser = loggedOnUser;
 		}
 
 
-		public IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks, IPerson owner, TenantInfo tenantInfo)
+		public IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks)
 		{
 
 			var dateOnlyPeriod = DateOnly.Today.ToDateOnlyPeriod();
-			var jobResult = new JobResult(JobCategory.WebImportAgent, dateOnlyPeriod, owner, DateTime.UtcNow);
+			var jobResult = new JobResult(JobCategory.WebImportAgent, dateOnlyPeriod, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
 			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, fileData.FileName, fileData.Data));
 			_jobResultRepository.Add(jobResult);
 			_eventPublisher.Publish(new ImportAgentEvent
 			{
 				JobResultId = jobResult.Id.GetValueOrDefault(),
-				Defaults = fallbacks,
-				TenantInfo = tenantInfo
+				Defaults = fallbacks
 			});
 			return jobResult;
 		}
@@ -41,6 +44,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 	public interface IImportAgentJobService
 	{
-		IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks, IPerson owner, TenantInfo tenantInfo);
+		IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks);
 	}
 }

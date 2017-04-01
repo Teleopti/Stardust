@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
@@ -59,8 +60,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<WebScheduleHandler>().As<IHandle<WebScheduleStardustEvent>>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<WebDayOffOptimizationHandler>().As<IHandle<WebDayoffOptimizationStardustEvent>>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<WebIntradayOptimizationHandler>().As<IHandle<WebIntradayOptimizationStardustEvent>>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<CurrentTenantUserFake>().As<ICurrentTenantUser>().SingleInstance();
+			builder.RegisterType<TenantAuthenticationFake>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<ImportAgentHandler>().As<IHandle<ImportAgentEvent>>().InstancePerLifetimeScope().ApplyAspects();
-
 		}
 	}
 }

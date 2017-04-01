@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
 			build.RegisterType<FindTenantByNameWithEnsuredTransaction>().As<IFindTenantByNameWithEnsuredTransaction>().SingleInstance();
 			build.RegisterType<FindTenantByName>().As<IFindTenantByName>().SingleInstance();
-
+			
 
 
 			build.Update(_container);

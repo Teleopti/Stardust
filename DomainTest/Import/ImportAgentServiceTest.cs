@@ -55,11 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Import
 				Data = Encoding.ASCII.GetBytes("test")
 			};
 			var tenantUser = _currentTenantUser.CurrentUser();
-			Target.CreateJob(fileData, null, person, new TenantInfo
-			{
-				PersonId = tenantUser.Id,
-				TenantPassword = tenantUser.TenantPassword
-			});
+			Target.CreateJob(fileData, null);
 
 			var result = JobResultRepository.LoadAll().Single();
 
@@ -81,11 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Import
 
 			var fallbacks = new ImportAgentDefaults();
 			var tenantUser = _currentTenantUser.CurrentUser();
-			var job = Target.CreateJob(fileData, fallbacks, person, new TenantInfo
-			{
-				PersonId = tenantUser.Id,
-				TenantPassword = tenantUser.TenantPassword
-			});
+			var job = Target.CreateJob(fileData, fallbacks);
 
 			var @event = Publisher.PublishedEvents.Single() as ImportAgentEvent;
 			@event.Should().Not.Be.Null();
