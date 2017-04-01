@@ -444,7 +444,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 							_activateSelectable();
 							_activateMeetingTooltip();
 							readyForInteraction();
-							loader(function() {
+							runLoader(function() {
 								periodFeedbackViewModel.LoadFeedback();
 
 								if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
