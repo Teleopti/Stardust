@@ -280,6 +280,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		{
 			var person = PersonFactory.CreatePerson().WithId();
 			var jobResult = new JobResult("WebImportAgent", DateOnly.Today.ToDateOnlyPeriod(), person, DateTime.UtcNow).WithId();
+			jobResult.SetVersion(1);
 			JobResultRepo.Add(jobResult);
 			var updated = JobResultRepo.Get(jobResult.Id.Value);
 			return updated;

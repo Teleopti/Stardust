@@ -17,11 +17,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 	public class ImportAgentHandler : IHandle<ImportAgentEvent>
 	{
 		private readonly IComponentContext _componentContext;
-		public ImportAgentHandler(
-			IComponentContext componentContext
-			)
+		private readonly IFindTenantByName _findTenantByName;
+		private readonly CurrentTenantUserFake _currentTenantUser;
+		public ImportAgentHandler(IComponentContext componentContext, IFindTenantByName findTenantByName, 
+			ICurrentTenantUser currentTenantUser)
 		{
 			_componentContext = componentContext;
+			_findTenantByName = findTenantByName;
+			_currentTenantUser = currentTenantUser as CurrentTenantUserFake;
 		}
 
 		public void Handle(ImportAgentEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
@@ -29,7 +32,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			var theRealOne = _componentContext.Resolve<IHandleEvent<ImportAgentEvent>>();
 			theRealOne.Handle(parameters);
 		}
-		
-	
+
+		[TenantUnitOfWork]
+		protected virtual void setCurrentTenant(ImportAgentEvent parameters)
+		{
+			var tenant = _findTenantByName.Find(parameters.LogOnDatasource);
+			_currentTenantUser.Set(new PersonInfo(tenant, Guid.Empty));
+		}
+
 	}
 }
