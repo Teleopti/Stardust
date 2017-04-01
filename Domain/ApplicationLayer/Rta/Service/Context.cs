@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly InputInfo _input;
 
 		public Context(
-			DateTime utcNow,
+			DateTime time,
 			DeadLockVictim deadLockVictim,
 			InputInfo input, 
 			AgentState stored, 
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			Stored = stored;
 			_input = input;
-			Time = utcNow;
+			Time = time;
 			DeadLockVictim = deadLockVictim;
 			PersonId = stored.PersonId;
 			BusinessUnitId = stored.BusinessUnitId;
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				RuleId = State.RuleId(),
 				RuleStartTime = RuleStartTime,
-				Adherence = Adherence.Adherence,
+				Adherence = Adherence.Adherence(),
 
 				AlarmStartTime = AlarmStartTime,
 

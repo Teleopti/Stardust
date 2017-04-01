@@ -12,18 +12,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_eventPublisher = eventPublisher;
 		}
 
-		public void Publish(Context info, DateTime time, EventAdherence toAdherence)
+		public void Publish(Context context)
 		{
+			var toAdherence = context.Adherence.Adherence();
+
+			if (context.Stored.Adherence == toAdherence)
+				return;
+
+			var time = context.Time;
+			
 			if (toAdherence == EventAdherence.In)
 			{
 				_eventPublisher.Publish(new PersonInAdherenceEvent
 				{
-					BelongsToDate = info.Schedule.BelongsToDate,
-					PersonId = info.PersonId,
+					BelongsToDate = context.Schedule.BelongsToDate,
+					PersonId = context.PersonId,
 					Timestamp = time,
-					BusinessUnitId = info.BusinessUnitId,
-					TeamId = info.TeamId,
-					SiteId = info.SiteId
+					BusinessUnitId = context.BusinessUnitId,
+					TeamId = context.TeamId,
+					SiteId = context.SiteId
 				});
 			}
 
@@ -31,12 +38,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				_eventPublisher.Publish(new PersonOutOfAdherenceEvent
 				{
-					BelongsToDate = info.Schedule.BelongsToDate,
-					PersonId = info.PersonId,
+					BelongsToDate = context.Schedule.BelongsToDate,
+					PersonId = context.PersonId,
 					Timestamp = time,
-					BusinessUnitId = info.BusinessUnitId,
-					TeamId = info.TeamId,
-					SiteId = info.SiteId
+					BusinessUnitId = context.BusinessUnitId,
+					TeamId = context.TeamId,
+					SiteId = context.SiteId
 				});
 			}
 
@@ -44,12 +51,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				_eventPublisher.Publish(new PersonNeutralAdherenceEvent
 				{
-					BelongsToDate = info.Schedule.BelongsToDate,
-					PersonId = info.PersonId,
+					BelongsToDate = context.Schedule.BelongsToDate,
+					PersonId = context.PersonId,
 					Timestamp = time,
-					BusinessUnitId = info.BusinessUnitId,
-					TeamId = info.TeamId,
-					SiteId = info.SiteId
+					BusinessUnitId = context.BusinessUnitId,
+					TeamId = context.TeamId,
+					SiteId = context.SiteId
 				});
 			}
 		}

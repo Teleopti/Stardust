@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				ActivityColor = info.Schedule.CurrentActivity()?.DisplayColor,
 				RuleName = info.State.RuleName(),
 				RuleColor = info.State.RuleDisplayColor(),
-				Adherence = info.Adherence.AdherenceForNewStateAndCurrentActivity(),
+				Adherence = info.Adherence.Adherence(),
 			});
 		}
 	}

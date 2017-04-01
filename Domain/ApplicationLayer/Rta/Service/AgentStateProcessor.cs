@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ProcessInput
 	{
-		public readonly DateTime Time;
+		public readonly DateTime CurrentTime;
 		public readonly DeadLockVictim DeadLockVictim;
 		public readonly ProperAlarm AppliedAlarm;
 		public readonly IEnumerable<ScheduledActivity> Schedule;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public readonly AgentState Stored;
 
 		public ProcessInput(
-			DateTime time,
+			DateTime currentTime,
 			DeadLockVictim deadLockVictim,
 			InputInfo input,
 			AgentState stored,
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateMapper stateMapper,
 			ProperAlarm appliedAlarm)
 		{
-			Time = time;
+			CurrentTime = currentTime;
 			DeadLockVictim = deadLockVictim;
 			Input = input;
 			Stored = stored;
@@ -94,12 +94,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private AgentState processRelevantMoments(ProcessInput processInput)
 		{
-			var times = new[] {processInput.Time};
+			var times = new[] {processInput.CurrentTime };
 
 			if (processInput.Stored.ReceivedTime != null)
 			{
 				var from = processInput.Stored.ReceivedTime;
-				var to = processInput.Time;
+				var to = processInput.CurrentTime;
 
 				var startingActivities = processInput.Schedule
 					.Where(x => x.StartDateTime > from && x.StartDateTime <= to)
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			AgentState outState = null;
 			times.ForEach(time =>
 			{
-				var input = time == processInput.Time ? processInput.Input : null;
+				var input = time == processInput.CurrentTime ? processInput.Input : null;
 				var context = new Context(
 					time,
 					processInput.DeadLockVictim,
@@ -147,18 +147,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_activityEventPublisher.Publish(context);
 			_stateEventPublisher.Publish(context);
 			_ruleEventPublisher.Publish(context);
-
-			//// remove!
-			context.Adherence.AdherenceChanges()
-				.ForEach(x => _adherenceEventPublisher.Publish(context, x.Time, x.Adherence));
-			// breaks a few tests, but correctly so?
-			//if (context.Stored.Adherence != context.Adherence.AdherenceForNewStateAndCurrentActivity())
-			//	_adherenceEventPublisher.Publish(context, context.CurrentTime, context.Adherence.AdherenceForNewStateAndCurrentActivity());
+			_adherenceEventPublisher.Publish(context);
 
 			_eventPublisher.Current().Publish(new AgentStateChangedEvent
 			{
 				PersonId = context.PersonId,
-				CurrentTime = context.Time,
+				Time = context.Time,
 				CurrentActivityName = context.Schedule.CurrentActivityName(),
 				NextActivityName = context.Schedule.NextActivityName(),
 				NextActivityStartTime = context.Schedule.NextActivityStartTime(),

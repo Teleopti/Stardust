@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				RuleName = context.State.RuleName(),
 				RuleColor = context.State.RuleDisplayColor(),
 
-				Adherence = context.Adherence.Adherence,
+				Adherence = context.Adherence.Adherence(),
 				StaffingEffect = context.State.StaffingEffect(),
 				IsAlarm = context.IsAlarm,
 				AlarmStartTime = context.AlarmStartTime,

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AgentStateChangedEvent : IEvent
 	{
 		public Guid PersonId { get; set; }
-		public DateTime CurrentTime { get; set; }
+		public DateTime Time { get; set; }
 
 		public string CurrentActivityName { get; set; }
 		public string NextActivityName { get; set; }
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		
 		private static void handle(AgentStateReadModel model, AgentStateChangedEvent @event)
 		{
-			model.ReceivedTime = @event.CurrentTime;
+			model.ReceivedTime = @event.Time;
 			model.PersonId = @event.PersonId;
 
 			model.Activity = @event.CurrentActivityName;

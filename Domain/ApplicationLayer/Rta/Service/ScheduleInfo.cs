@@ -110,18 +110,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _nextActivity.Value?.StartDateTime ?? _currentActivity.Value?.EndDateTime;
 		}
 
-		public DateTime? ActivityStartTime()
-		{
-			var currentActivity = _context.Schedule.CurrentActivity();
-			if (currentActivity == null)
-				return null;
-			var previousStateTime = _context.Stored.ReceivedTime();
-			var activityStartedInThePast = currentActivity.StartDateTime < previousStateTime;
-			return activityStartedInThePast
-				? previousStateTime
-				: currentActivity.StartDateTime;
-		}
-
 		public string NextActivityName()
 		{
 			return _nextActivity.Value?.Name;

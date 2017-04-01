@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -24,12 +25,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					BelongsToDate = context.Schedule.BelongsToDate,
 					PersonId = context.PersonId,
-					StartTime = context.Schedule.ActivityStartTime().Value,
-					Name = currentActivity.Name,
-					Adherence = context.Adherence.AdherenceForStoredStateAndCurrentActivity(),
+					StartTime = activityStartTime(context),
+					Name = currentActivity.Name
 				});
 			}
 
 		}
+
+		private DateTime activityStartTime(Context context)
+		{
+			var currentActivity = context.Schedule.CurrentActivity();
+			var previousStateTime = context.Stored.ReceivedTime();
+			var activityStartedInThePast = currentActivity.StartDateTime < previousStateTime;
+			return activityStartedInThePast
+				? context.Time
+				: currentActivity.StartDateTime;
+		}
+
 	}
 }

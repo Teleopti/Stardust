@@ -99,8 +99,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2014-10-20 9:00", "2014-10-20 10:00")
+				.WithMappedRule(null, null, -1)
 				.WithMappedRule(null, phone, 0)
 				.WithMappedRule("phone", phone, 0);
+			Now.Is("2014-10-20 0:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+			Publisher.Clear();
 			Now.Is("2014-10-20 9:05");
 
 			Target.SaveState(new StateForTest

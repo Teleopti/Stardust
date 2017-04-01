@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 10:00".Utc());
-			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.Out);
 			Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:00".Utc());
 			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
 			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Adherence.Should().Be(EventAdherence.In);
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPublishActivityAndAdherenceEventsFromLastStateChangeWhenRewritingHistory()
+		public void ShouldPublishActivityAndAdherenceEventsFromNowWhenRewritingHistory()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
@@ -81,9 +80,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.WithSchedule(personId, admin, "2014-10-20 9:00", "2014-10-20 10:00");
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
-			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:15".Utc());
-			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.In);
-			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 9:15".Utc());
+			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:30".Utc());
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 9:30".Utc());
 		}
 
 		[Test]
