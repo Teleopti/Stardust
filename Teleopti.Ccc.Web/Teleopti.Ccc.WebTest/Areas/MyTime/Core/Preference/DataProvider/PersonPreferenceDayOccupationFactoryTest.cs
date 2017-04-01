@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -78,6 +79,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			};
 
 			provider.Stub(x => x.ForDate(person, date3)).Return(bag);
+
+			var ruleSetBags1 = new Dictionary<DateOnly, IRuleSetBag>();
+			foreach (var date in new DateOnlyPeriod(date1, date4).DayCollection())
+			{
+				ruleSetBags1.Add(date, bag);
+			}
+			provider.Stub(x => x.ForPeriod(person, new DateOnlyPeriod(date1, date4))).IgnoreArguments().Return(ruleSetBags1);
+
+
 			mmc.Stub(x => x.WorkTimeMinMax(date3, bag, schedule3)).Return(workTimeMinMaxResult);
 
 			var trueToggleManager = new TrueToggleManager();
