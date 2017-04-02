@@ -713,7 +713,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				drawSkillGrid();
 				if (TestMode.Micke)
 				{
-					var skillGridMenuItem1 = new ToolStripMenuItem("Analyze resourses compared to last change");
+					var skillGridMenuItem1 = new ToolStripMenuItem("Analyze primary/shoveled resources...");
 					skillGridMenuItem1.Click += skillGridMenuItemAnalyzeResorceChangesClick;
 					_contextMenuSkillGrid.Items.Add(skillGridMenuItem1);
 					var skillGridMenuItem2 = new ToolStripMenuItem("Analyze shoveling");
@@ -4347,7 +4347,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				selectedTime = _skillIntradayGridControl.Presenter.SelectedIntervalTime();
 			}
-			var model = new ResourceCalculationAnalyzerModel(_schedulerState, _undoRedo, _container, _optimizationHelperExtended, selectedDate, selectedTime);
+			var model = new ResourceCalculationAnalyzerModel(_schedulerState, _container, _optimizationHelperExtended, selectedDate, selectedTime);
 			using (var resourceChanges = new ResourceCalculationAnalyzerView(model))
 			{
 				resourceChanges.ShowDialog(this);

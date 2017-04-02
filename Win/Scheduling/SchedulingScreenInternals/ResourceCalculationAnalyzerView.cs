@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 {
@@ -11,9 +10,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 	{
 		private readonly ResourceCalculationAnalyzerModel _model;
 		private readonly Dictionary<int, int> _columnWidths = new Dictionary<int, int>();
-		private int header = 150;
-		private int narrow = 80;
-		private int wide = 100;
+		private int header = 210;
+		private int narrow = 110;
+		private int wide = 160;
 
 		public ResourceCalculationAnalyzerView()
 		{
@@ -27,15 +26,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			_model = model;
 			_columnWidths.Add(0, header);
 			_columnWidths.Add(1, narrow);
-			_columnWidths.Add(2, narrow);
-			_columnWidths.Add(3, wide);
+			_columnWidths.Add(2, wide);
+			_columnWidths.Add(3, narrow);
 			_columnWidths.Add(4, wide);
 			_columnWidths.Add(5, narrow);
-			_columnWidths.Add(6, narrow);
-			_columnWidths.Add(7, narrow);
-			_columnWidths.Add(8, wide);
-			_columnWidths.Add(9, wide);
-			_columnWidths.Add(10, narrow);
 		}
 
 		private void resetColumnWiths()
@@ -92,33 +86,21 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 			listView1.Groups.Add("summary", "Summary");
 
-			var primaryGainLossSummary = 0d;
 			var shoveledGainLossSummary = 0d;
 			foreach (var pair in result)
 			{
 				var groupKey = (pair.Key.CascadingIndex ?? -1).ToString();
 				var item = new ListViewItem(pair.Key.Name);
 				item.Group = listView1.Groups[groupKey];
-				item.SubItems.Add(Math.Round(pair.Value.PrimaryPercentBefore.ValueAsPercent(), 2) + "%");
-				item.SubItems.Add(Math.Round(pair.Value.PrimaryPercentAfter.ValueAsPercent(), 2) + "%");
-				item.SubItems.Add(Math.Round(pair.Value.PrimaryResourcesBefore, 2).ToString());
-				item.SubItems.Add(Math.Round(pair.Value.PrimaryResourcesAfter, 2).ToString());
-				var primaryGainLoss = pair.Value.PrimaryResourcesAfter - pair.Value.PrimaryResourcesBefore;
-				primaryGainLossSummary += primaryGainLoss;
-				item.SubItems.Add(Math.Round(primaryGainLoss, 2).ToString());
-				if (primaryGainLoss > 0.00001)
-					item.ForeColor = Color.CornflowerBlue;
-				if (primaryGainLoss < -0.00001)
-					item.ForeColor = Color.Red;
-				item.SubItems.Add(Math.Round(pair.Value.ShoveledPercentBefore.ValueAsPercent(), 2) + "%");
-				item.SubItems.Add(Math.Round(pair.Value.ShoveledPercentAfter.ValueAsPercent(), 2) + "%");
-				item.SubItems.Add(Math.Round(pair.Value.ShoveledResourcesBefore, 2).ToString());
-				item.SubItems.Add(Math.Round(pair.Value.ShoveledResourcesAfter, 2).ToString());
-				var shoveledGainLoss = pair.Value.ShoveledResourcesAfter - pair.Value.ShoveledResourcesBefore;
+				item.SubItems.Add(Math.Round(pair.Value.PrimaryResources, 2).ToString());
+				item.SubItems.Add(Math.Round(pair.Value.PrimaryPercent.ValueAsPercent(), 2) + "%");
+				item.SubItems.Add(Math.Round(pair.Value.ShoveledResources, 2).ToString());
+				item.SubItems.Add(Math.Round(pair.Value.ShoveledPercent.ValueAsPercent(), 2) + "%");
+				var shoveledGainLoss = pair.Value.ShoveledResources - pair.Value.PrimaryResources;
 				shoveledGainLossSummary += shoveledGainLoss;
 				item.SubItems.Add(Math.Round(shoveledGainLoss, 2).ToString());
 				if (shoveledGainLoss > 0.00001)
-					item.ForeColor = Color.CornflowerBlue;
+					item.ForeColor = Color.Blue;
 				if (shoveledGainLoss < -0.00001)
 					item.ForeColor = Color.Red;
 				listView1.Items.Add(item);
@@ -126,16 +108,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 			var item1 = new ListViewItem("Totals");
 			item1.Group = listView1.Groups["summary"];
-			item1.SubItems.Add("");
-			item1.SubItems.Add("");
-			item1.SubItems.Add("");
-			item1.SubItems.Add("");
-			item1.SubItems.Add(Math.Round(primaryGainLossSummary, 2).ToString());
-			if (primaryGainLossSummary > 0.00001)
-				item1.ForeColor = Color.CornflowerBlue;
-			if (primaryGainLossSummary < -0.00001)
-				item1.ForeColor = Color.Red;
-
 			item1.SubItems.Add("");
 			item1.SubItems.Add("");
 			item1.SubItems.Add("");
@@ -156,31 +128,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			toolStripLabel1.Text = dateTimePicker2.Value.Date.ToShortDateString() + " " + dateTimePicker1.Value.TimeOfDay;
 			disableControls();
 			backgroundWorker1.RunWorkerAsync();	
-		}
-
-		private void toolStripButtonBefore_CheckedChanged(object sender, EventArgs e)
-		{
-			if (toolStripButtonBefore.Checked)
-			{
-				listView1.Columns[1].Width = _columnWidths[1];
-				listView1.Columns[3].Width = _columnWidths[3];
-				listView1.Columns[6].Width = _columnWidths[6];
-				listView1.Columns[8].Width = _columnWidths[8];
-			}
-			else
-			{
-				listView1.Columns[1].Width = 0;
-				listView1.Columns[3].Width = 0;
-				listView1.Columns[6].Width = 0;
-				listView1.Columns[8].Width = 0;
-			}
-
-			
-		}
-
-		private void toolStripButtonShowNotAffected_CheckedChanged(object sender, EventArgs e)
-		{
-
 		}
 
 		private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
