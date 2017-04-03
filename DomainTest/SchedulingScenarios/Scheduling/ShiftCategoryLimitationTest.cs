@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#42836 Not yet red for the right reason..")]
+		[Ignore("#42836 Not yet red..")]
 		public void ShouldRespectShiftCategoryLimitationWhenUsingTeamAndBlock()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
@@ -104,24 +102,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agentNotInSelection = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc);
 			selectedAgent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 0 });
 			agentNotInSelection.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 0 });
-			var selectedAgentAssignment = new PersonAssignment(selectedAgent, scenario, date.AddDays(1)).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
-			var selectedAgentFirstDayOff = new PersonAssignment(selectedAgent, scenario, date);
-			var selectedAgentSecondDayOff = new PersonAssignment(selectedAgent, scenario, date.AddDays(2));
-			selectedAgentFirstDayOff.SetDayOff(new DayOffTemplate());
-			selectedAgentSecondDayOff.SetDayOff(new DayOffTemplate());
-			var agentNotInSelectionFirstDayOff = new PersonAssignment(selectedAgent, scenario, date);
-			var agentNotInSelectionSecondDayOff = new PersonAssignment(selectedAgent, scenario, date.AddDays(2));
-			agentNotInSelectionFirstDayOff.SetDayOff(new DayOffTemplate());
-			agentNotInSelectionSecondDayOff.SetDayOff(new DayOffTemplate());
-			var asses = new List<IPersonAssignment>
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { selectedAgent, agentNotInSelection}, new[]
 			{
-				selectedAgentFirstDayOff,
-				selectedAgentAssignment,
-				selectedAgentSecondDayOff,
-				agentNotInSelectionFirstDayOff,
-				agentNotInSelectionSecondDayOff
-			};
-			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { selectedAgent, agentNotInSelection}, asses, new []{skillDay});
+				new PersonAssignment(selectedAgent, scenario, date).IsDayOff(),
+				new PersonAssignment(selectedAgent, scenario, date.AddDays(1)).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14)),
+				new PersonAssignment(selectedAgent, scenario, date.AddDays(2)).IsDayOff(),
+				new PersonAssignment(selectedAgent, scenario, date).IsDayOff(),
+				new PersonAssignment(selectedAgent, scenario, date.AddDays(2)).IsDayOff()
+			}, skillDay);
 			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
 			{
 				SchedulingOptions =
