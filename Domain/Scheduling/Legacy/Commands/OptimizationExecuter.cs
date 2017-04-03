@@ -68,7 +68,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
 			}
+#pragma warning disable 618
 			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
+#pragma warning restore 618
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
