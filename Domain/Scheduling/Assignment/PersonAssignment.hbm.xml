@@ -36,6 +36,7 @@
 
 		<list name="ShiftLayers"
 				cascade="all-delete-orphan"
+				collection-type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ShiftLayerCollectionType, Teleopti.Ccc.Infrastructure"
 				inverse="true">
 			<key column="Parent" on-delete ="cascade" />
 			<index type="Byte" column="OrderIndex" />

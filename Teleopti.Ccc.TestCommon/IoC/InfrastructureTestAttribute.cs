@@ -18,7 +18,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {

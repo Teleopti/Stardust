@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using NHibernate.Cfg;
 using NHibernate.Collection;
 using NHibernate.Collection.Generic;
 using NHibernate.Engine;
@@ -9,9 +8,7 @@ using NHibernate.Envers.Entities.Mapper.Relation;
 using NHibernate.Persister.Collection;
 using NHibernate.Type;
 using NHibernate.UserTypes;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
@@ -20,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	/// </summary>
 	public class ShiftLayerCollectionType : IUserCollectionType, ICustomCollectionMapperFactory
 	{
-		public const string ShiftLayerCollectionRole = "Teleopti.Ccc.Domain.Scheduling.Assignment.PersonAssignment.ShiftLayers";
+		private const string shiftLayerCollectionRole = "Teleopti.Ccc.Domain.Scheduling.Assignment.PersonAssignment.ShiftLayers";
 
 		public IPersistentCollection Instantiate(ISessionImplementor session, ICollectionPersister persister)
 		{
@@ -91,7 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public IType GetElementType(ISessionFactoryImplementor factory)
 		{
-			return factory.GetCollectionPersister(ShiftLayerCollectionRole).ElementType;
+			return factory.GetCollectionPersister(shiftLayerCollectionRole).ElementType;
 		}
 
 		private static bool AreCollectionElementsEqual(IEnumerable originalEnumerator, IEnumerator targetEnumerator, IType elementType, ISessionImplementor session)
@@ -124,29 +121,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public IPropertyMapper Create(IEnversProxyFactory enversProxyFactory, CommonCollectionMapperData commonCollectionMapperData, MiddleComponentData elementComponentData, MiddleComponentData indexComponentData, bool embeddableElementType)
 		{
 			return new ListCollectionMapper<IShiftLayer>(enversProxyFactory, commonCollectionMapperData, typeof(IList<IShiftLayer>), elementComponentData, indexComponentData, embeddableElementType);
-		}
-	}
-
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessPersonAssignmentUpdates_42159)]
-	public interface IChangeNHibernateConfiguration
-	{
-		void Execute(Configuration configuration);
-	}
-
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessPersonAssignmentUpdates_42159)]
-	public class NoNHibernateConfigurationChange : IChangeNHibernateConfiguration
-	{
-		public void Execute(Configuration configuration)
-		{
-		}
-	}
-
-	[RemoveMeWithToggle("Put this on PA mapping file instead", Toggles.ResourcePlanner_LessPersonAssignmentUpdates_42159)]
-	public class UpdatePersonAssignmentLayersCollectionType : IChangeNHibernateConfiguration
-	{
-		public void Execute(Configuration configuration)
-		{
-			configuration.GetCollectionMapping(ShiftLayerCollectionType.ShiftLayerCollectionRole).TypeName = "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ShiftLayerCollectionType, Teleopti.Ccc.Infrastructure";
 		}
 	}
 }

@@ -26,7 +26,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 			var builder = new ContainerBuilder();
 			var toggles = new FakeToggleManager();
 			toggles.Enable(Toggles.No_UnitOfWork_Nesting_42175);
-			toggles.Enable(Toggles.ResourcePlanner_LessPersonAssignmentUpdates_42159);
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://notinuse" }, toggles)));
 			builder.RegisterType<FakeToggleManager>().As<IToggleManager>().SingleInstance();
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
