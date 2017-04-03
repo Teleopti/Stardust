@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		{
 			_browser.RetryUntilTimeout(() =>
 			{
-				var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver) _browser.Native);
+				var selenium = (OpenQA.Selenium.Remote.RemoteWebDriver) _browser.Native;
 				selenium.FindElement(By.CssSelector(selector)).Clear();
 			}, options());
 		}
@@ -214,13 +214,14 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		{
 			var actual = "";
 			eventualAssert(() =>
-			{
-				var result = _browser.ExecuteScript(javascript);
-				actual = result == null ? null : result.ToString();
-				return actual;
-			},
+				{
+					var result = _browser.ExecuteScript(javascript);
+					actual = result?.ToString();
+					return actual;
+				},
 				Contains.Substring(text),
-				() => $"Failed to assert that javascript \"{javascript}\" returned a value containing \"{text}\". Last attempt returned \"{actual}\". ");
+				() =>
+					$"Failed to assert that javascript \"{javascript}\" returned a value containing \"{text}\". Last attempt returned \"{actual}\". ");
 		}
 
 		public void DumpInfo(Action<string> writer)
@@ -249,7 +250,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		{
 			object result = null;
 			_browser.RetryUntilTimeout(() => { result = _browser.ExecuteScript(javascript); }, options());
-			return result == null ? null : result.ToString();
+			return result?.ToString();
 		}
 
 		private void assert<T>(T value, Constraint constraint, string message)

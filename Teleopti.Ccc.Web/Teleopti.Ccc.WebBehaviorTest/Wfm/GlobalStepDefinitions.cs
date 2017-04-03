@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		public void WhenIPickBusinessUnit(string businessUnit)
 		{
 			Browser.Interactions.Click("#business-unit-select");
-			Browser.Interactions.ClickContaining("#business-unit-select li", businessUnit);
+			Browser.Interactions.ClickUsingJQuery($"#business-unit-select li:contains({businessUnit})");
 		}
 
 		public class BusinessUnitData
