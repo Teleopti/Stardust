@@ -25,13 +25,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public IResourceOptimizationHelperExtended ResourceCalculation;
 
 		public SchedulingCascadingDesktopTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
 		{
 		}
 
-		[Test]
-		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation(bool resourceCalculationHasBeenMade)
 		{
 			const int numberOfAgents = 100;
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
@@ -54,7 +56,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 								.WithPersonPeriod(ruleSet, skillA, skillB)
 								.WithSchedulePeriodOneDay(date))
 					.ToArray();
-
+			if(resourceCalculationHasBeenMade)
+				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), agents, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
 			
 			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),
@@ -75,8 +78,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					.Should().Be.EqualTo(numberOfAgents / 2);
 		}
 
-		[Test]
-		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation_TeamBlock()
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation_TeamBlock(bool resourceCalculationHasBeenMade)
 		{
 			const int numberOfAgents = 100;
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
@@ -91,9 +95,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)); //should not shovel resources here when deciding what shift to choose		
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), new ShiftCategory("_").WithId()));
 			var agents = Enumerable.Range(0,numberOfAgents).Select(i => new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneDay(date)).ToArray();
-
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), agents, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
 			var options = new SchedulingOptions {UseTeam = true, UseBlock = true};
+			if (resourceCalculationHasBeenMade)
+				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 
 			Target.Execute(new OptimizerOriginalPreferences(options),
 				new NoSchedulingProgress(),

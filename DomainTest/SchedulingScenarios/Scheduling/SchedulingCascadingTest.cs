@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -28,13 +29,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public IResourceOptimizationHelperExtended ResourceCalculation;
 
 		public SchedulingCascadingTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
 		{
 		}
 
-		[Test]
-		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation(bool resourceCalculationHasBeenMade)
 		{
 			const int numberOfAgents = 100;
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
@@ -56,9 +59,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				WorkTimeDirective =
 					new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
 			};
-
 			Enumerable.Range(0,100).ForEach(i => PersonRepository.Has(contract, new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skillA, skillB));
 			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, date, 1), skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)));
+			if(resourceCalculationHasBeenMade)
+				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 
 			Target.DoScheduling(date.ToDateOnlyPeriod());
 
