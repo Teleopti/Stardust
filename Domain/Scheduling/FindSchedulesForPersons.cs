@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	[RemoveMeWithToggle("Put this impl directly on ScheduleStorage instead.")]
 	public class FindSchedulesForPersons : ScheduleStorage, IFindSchedulesForPersons
 	{
 		public FindSchedulesForPersons(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper) 

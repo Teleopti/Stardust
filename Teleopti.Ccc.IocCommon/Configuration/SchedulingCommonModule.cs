@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			//REMOVE THIS BLOCK WITH TOGGLE and add As<IFindSchedulesForPersons> on org ScheduleStorage registration instead!
 			if(_configuration.Toggle(Toggles.ResourcePlanner_LoadingLessSchedules_42639))
 			{
 				builder.RegisterType<FindSchedulesForPersons>()
@@ -88,8 +87,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IFindSchedulesForPersons>()
 					.SingleInstance();
 			}
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 			builder.RegisterType<ScheduleStorage>()
 				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
