@@ -35,11 +35,33 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public void TriggerReccuringJobs()
 		{
+			triggerRecurringJob(null);
+		}
+
+		public void TriggerDailyRecurringJobs()
+		{
+			triggerRecurringJob(Cron.Daily());
+		}
+
+		public void TriggerHourlyRecurringJobs()
+		{
+			triggerRecurringJob(Cron.Hourly());
+		}
+
+		public void TriggerMinutelyRecurringJobs()
+		{
+			triggerRecurringJob(Cron.Minutely());
+		}
+
+		private void triggerRecurringJob(string cron)
+		{
 			var jobs = _storage.Value.GetConnection().GetRecurringJobs();
-			jobs.ForEach(j =>
-			{
-				recurringJobs.Trigger(j.Id);
-			});
+			jobs
+				.Where(j => cron == null || j.Cron == cron)
+				.ForEach(j =>
+				{
+					recurringJobs.Trigger(j.Id);
+				});
 		}
 
 		public void RequeueScheduledJobs()

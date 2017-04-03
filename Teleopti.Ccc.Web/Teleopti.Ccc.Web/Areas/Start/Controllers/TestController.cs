@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpGet]
 		public virtual ViewResult SetCurrentTime(long? ticks, string time)
 		{
-			setCurrentTime(ticks, time, true);
+			setCurrentTime(ticks, time);
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -225,20 +225,36 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		
 		[TestLog]
 		[HttpPost]
-		public virtual void SetCurrentTime(long? ticks, string time, bool? triggerRecurringJobs)
+		[ActionName("SetCurrentTime")]
+		public virtual void SetCurrentTimePost(long? ticks, string time)
 		{
-			setCurrentTime(ticks, time, triggerRecurringJobs ?? true);
+			setCurrentTime(ticks, time);
 		}
 
-		private void setCurrentTime(long? ticks, string time, bool triggerRecurringJobs)
+		private void setCurrentTime(long? ticks, string time)
 		{
+			var oldNow = _now.UtcDateTime();
 			if (ticks.HasValue)
 				_mutateNow.Is(DateTime.SpecifyKind(new DateTime(ticks.Value), DateTimeKind.Utc));
 			else
 				_mutateNow.Is(time.Utc());
+			var newNow = _now.UtcDateTime();
 
-			if (triggerRecurringJobs)
-				_tenantTickEventPublisher.WithPublishingsForTest(() => { _hangfire.TriggerReccuringJobs(); });
+			var diff = newNow.Subtract(oldNow);
+			_tenantTickEventPublisher.WithPublishingsForTest(() =>
+			{
+				var dayTick = Math.Abs(diff.TotalDays) > 0;
+				var hourTick = Math.Abs(diff.TotalHours) > 0;
+				var minuteTick = Math.Abs(diff.TotalMinutes) > 0;
+
+				if (dayTick)
+					_hangfire.TriggerDailyRecurringJobs();
+				if (hourTick)
+					_hangfire.TriggerHourlyRecurringJobs();
+				if (minuteTick)
+					_hangfire.TriggerMinutelyRecurringJobs();
+			});
+			_hangfire.WaitForQueue();
 		}
 
 	}

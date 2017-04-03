@@ -271,11 +271,12 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 		public IEnumerable<StateChange> OffChangesFor(string time)
 		{
-			yield return new StateChange
-			{
-				Time = $"{time}:00",
-				StateCode = $"LoggedOff"
-			};
+			return LoggedOffStates()
+				.Select(x => new StateChange
+				{
+					Time = $"{time}:00",
+					StateCode = x
+				});
 		}
 
 		public IEnumerable<StateChange> PhoneChangesFor(int calls, string time)
@@ -284,13 +285,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			return PhoneStates()
 				.Infinite()
 				.Take(calls * statesPerCall)
-				.Select((x, i) =>
-						new StateChange
-						{
-							Time = $"{time}:{i:00}",
-							StateCode = x
-						}
-				);
+				.Select((x, i) => new StateChange
+				{
+					Time = $"{time}:{i:00}",
+					StateCode = x
+				});
 		}
 
 		public IEnumerable<ExternalLogon> Logons()
