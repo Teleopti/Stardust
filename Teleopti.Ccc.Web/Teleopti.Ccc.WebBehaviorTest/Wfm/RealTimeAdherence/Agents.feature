@@ -107,14 +107,14 @@ Scenario: See all agents of the team even without state updates
 	Then I should see agent status for 'Ashley Andeen'
 
 Scenario: See state updates when call center is in Istanbul
-	Given the utc time is '2015-03-24 06:00:00'
-	And I am located in Istanbul
+	Given I am located in Istanbul
 	And 'Pierre Baldi' is located in Istanbul
 	And Pierre Baldi has a shift with
 		| Field                    | Value            |
 		| Start time               | 2015-03-24 08:00 |
 		| End time                 | 2015-03-24 10:00 |
 		| Activity                 | Phone            |
+	And the utc time is '2015-03-24 06:00:00'
 	When I view real time adherence for all agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And the utc time is '2015-03-24 06:15:00'
