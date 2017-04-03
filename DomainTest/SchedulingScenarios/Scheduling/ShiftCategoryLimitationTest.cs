@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -30,6 +31,66 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		public ShiftCategoryLimitationTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
 		{
+		}
+
+		[Test]
+		[Ignore("42836..to be fixed")]
+		public void ShouldNotTouchTeamMembersNotInSelectionWhenUsingTeamAndBlock()
+		{
+			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var date = new DateOnly(2017, 1, 22);
+			var period = new DateOnlyPeriod(date, date.AddDays(2));
+			var shiftCategoryBefore = new ShiftCategory("Before").WithId();
+			var shiftCategoryAfter = new ShiftCategory("After").WithId();
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date.AddDays(1), 2);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
+			var selectedAgent = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc);
+			var agentNotInSelection = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc);
+			selectedAgent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 0 });
+			agentNotInSelection.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 0 });
+			var selectedAgentAssignment = new PersonAssignment(selectedAgent, scenario, date.AddDays(1)).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
+			var selectedAgentFirstDayOff = new PersonAssignment(selectedAgent, scenario, date);
+			var selectedAgentSecondDayOff = new PersonAssignment(selectedAgent, scenario, date.AddDays(2));
+			selectedAgentFirstDayOff.SetDayOff(new DayOffTemplate());
+			selectedAgentSecondDayOff.SetDayOff(new DayOffTemplate());
+			var agentNotInSelectionFirstDayOff = new PersonAssignment(selectedAgent, scenario, date);
+			var agentNotInSelectionSecondDayOff = new PersonAssignment(selectedAgent, scenario, date.AddDays(2));
+			agentNotInSelectionFirstDayOff.SetDayOff(new DayOffTemplate());
+			agentNotInSelectionSecondDayOff.SetDayOff(new DayOffTemplate());
+
+			var asses = new List<IPersonAssignment>
+			{
+				selectedAgentFirstDayOff,
+				selectedAgentAssignment,
+				selectedAgentSecondDayOff,
+				agentNotInSelectionFirstDayOff,
+				agentNotInSelectionSecondDayOff
+			};
+
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { selectedAgent, agentNotInSelection}, asses, new []{skillDay});
+			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
+			{
+				SchedulingOptions =
+				{
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.Hierarchy),
+					UseTeam = true,
+					UseBlock = true,
+					UseShiftCategoryLimitations = true,
+					BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
+					BlockSameShiftCategory = true,
+					TeamSameShiftCategory = true,
+					AllowBreakContractTime = true
+				}
+			};
+
+			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(period, selectedAgent), new OptimizationPreferences(), null);
+
+			stateholder.Schedules[selectedAgent].ScheduledDay(date.AddDays(1)).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
+			stateholder.Schedules[agentNotInSelection].ScheduledDay(date.AddDays(1)).PersonAssignment(true).ShiftLayers.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
