@@ -7,7 +7,7 @@
 <div class="con-row">
 	<div class="con-flex">
 		<div class="panel material-depth-1">
-			<form name="form" class="wfm-form" novalidate>
+			<form name="form" class="wfm-form" novalidate ng-submit="saveSkillArea(form)">
 				<div class="con-row">
 					<div class="con-flex">
 						<dl>
@@ -56,7 +56,7 @@
 				</div>
 				<div class="con-footer">
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="exitConfigMode()">{{'Cancel'|translate}}</button>
-					<button ng-if="skillAreaName && skillSelected()" class="wfm-btn wfm-btn-invis-primary skill-area-save" type="submit" ng-click="saveSkillArea()">{{'Create'|translate}} {{skillAreaName}}</button>
+					<button ng-if="skillAreaName && skillSelected()" class="wfm-btn wfm-btn-invis-primary skill-area-save" type="submit">{{'Create'|translate}} {{skillAreaName}}</button>
 				</div>
 			</form>
 		</div>
