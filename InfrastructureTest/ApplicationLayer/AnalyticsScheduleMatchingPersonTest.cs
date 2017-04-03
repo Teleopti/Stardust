@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
@@ -11,9 +10,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 	[AnalyticsDatabaseTest]
 	[Toggle(Toggles.ETL_FixScheduleForPersonPeriod_41393)]
 	public class AnalyticsScheduleMatchingPersonTest
-	{
+	{ 
 		public AnalyticsScheduleMatchingPerson Target;
-		public IAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
 
 		[Test]
 		public void ShouldNotBlowUpWhenPersonDoesNotExist()

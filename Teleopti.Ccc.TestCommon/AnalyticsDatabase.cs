@@ -1,7 +1,10 @@
+using System;
 using System.Data.SqlClient;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;

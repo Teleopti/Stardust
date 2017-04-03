@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Exceptions;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -83,6 +85,25 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public int GetFactScheduleDeviationRowCount(int personId)
 		{
 			throw new NotImplementedException();
+		}
+
+		public IList<IDateWithDuplicate> GetDuplicateDatesForPerson(Guid personCode)
+		{
+			//var periods = _personPeriodRepository.GetPersonPeriods(personCode);
+			//FactScheduleRows.GroupBy(fs => fs.DatePart.ScheduleStartDateLocalId).Where(fs => fs.)
+			throw new NotImplementedException();
+		}
+
+		public void RunWithExceptionHandling(Action action)
+		{
+			try
+			{
+				action();
+			}
+			catch (ConstraintViolationException e)
+			{
+				throw new ConstraintViolationWrapperException(e);
+			}
 		}
 	}
 }

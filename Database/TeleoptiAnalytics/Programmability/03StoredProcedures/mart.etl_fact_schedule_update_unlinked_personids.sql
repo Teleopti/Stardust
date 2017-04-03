@@ -15,19 +15,20 @@ DECLARE @person TABLE
   valid_to_date smalldatetime, 
   to_be_deleted bit, 
   valid_from_date_id_local int, 
-  valid_to_date_id_local int
+  valid_to_date_id_local int,
+  valid_to_date_id int
 )
 
 -- select persons with the specific person period ids
-INSERT @person(person_id, valid_from_date, valid_to_date, to_be_deleted, valid_from_date_id_local, valid_to_date_id_local)
-SELECT person_id, valid_from_date, valid_to_date, to_be_deleted, valid_from_date_id_local, valid_to_date_id_local
+INSERT @person(person_id, valid_from_date, valid_to_date, to_be_deleted, valid_from_date_id_local, valid_to_date_id_local, valid_to_date_id)
+SELECT person_id, valid_from_date, valid_to_date, to_be_deleted, valid_from_date_id_local, valid_to_date_id_local, valid_to_date_id
 FROM mart.dim_person WITH (NOLOCK) 
 WHERE person_id IN (SELECT id from mart.SplitStringInt(@person_periodids))
 
 -- update the eternity date id with max date id
 UPDATE @person
 SET valid_to_date_id_local = (SELECT TOP 1 date_id from mart.dim_date with (nolock) ORDER BY date_id DESC) 
-WHERE valid_to_date_id_local = -2
+WHERE valid_to_date_id = -2
 
 -- update fact schedule with correct person period id
 UPDATE fs

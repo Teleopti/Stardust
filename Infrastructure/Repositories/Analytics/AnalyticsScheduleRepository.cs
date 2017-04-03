@@ -5,12 +5,12 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Analytics.Tables;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
@@ -184,17 +184,51 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetDateTime(nameof(datasourceUpdateDate), getSqlDateCompatibleOrDefault(datasourceUpdateDate, () => DateTime.UtcNow))
 				.ExecuteUpdate();
 		}
+		
+		public IList<IDateWithDuplicate> GetDuplicateDatesForPerson(Guid personCode)
+		{
+			return _analyticsUnitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(
+					$@"SELECT a.shift_startdate_local_id as {nameof(IDateWithDuplicate.DateId)}, a.scenario_id as {nameof(IDateWithDuplicate.ScenarioId)} FROM (
+						SELECT DISTINCT shift_startdate_local_id, scenario_id, person_id FROM mart.fact_schedule
+						WHERE person_id IN (SELECT person_id FROM mart.dim_person WHERE person_code = :{nameof(personCode)})) a
+						GROUP BY shift_startdate_local_id, scenario_id
+						HAVING COUNT(*) > 1
+					UNION
+					SELECT a.shift_startdate_local_id as {nameof(IDateWithDuplicate.DateId)}, a.scenario_id as {nameof(IDateWithDuplicate.ScenarioId)} FROM (
+						SELECT DISTINCT shift_startdate_local_id, scenario_id, person_id FROM mart.fact_schedule_day_count
+						WHERE person_id IN (SELECT person_id FROM mart.dim_person WHERE person_code = :{nameof(personCode)})) a
+						GROUP BY shift_startdate_local_id, scenario_id
+						HAVING COUNT(*) > 1")
+				.SetParameter(nameof(personCode), personCode)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(DateWithDuplicate)))
+				.SetReadOnly(true)
+				.List<IDateWithDuplicate>();
+		}
 
 		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
 		{
 			_analyticsUnitOfWork.Current()
-				.Session()
-				.CreateSQLQuery(
-					$@"exec mart.etl_fact_schedule_update_unlinked_personids 
-							@person_periodids=:PersonIds
-							")
-				.SetString("PersonIds", string.Join(",", personPeriodIds))
-				.ExecuteUpdate();
+			.Session()
+			.CreateSQLQuery(
+				$@"exec mart.etl_fact_schedule_update_unlinked_personids 
+						@person_periodids=:PersonIds
+						")
+			.SetString("PersonIds", string.Join(",", personPeriodIds))
+			.ExecuteUpdate();
+		}
+
+		public void RunWithExceptionHandling(Action action)
+		{
+			try
+			{
+				action();
+			}
+			catch (Foundation.ConstraintViolationException e)
+			{
+				throw new ConstraintViolationWrapperException(e);
+			}
 		}
 
 		public int GetFactScheduleRowCount(int personId)
@@ -251,6 +285,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		{
 			return () => { throw new ArgumentOutOfRangeException(parameterName, $"'{value}' is not valid to convert to a SqlDateTime"); };
 		}
+	}
+
+	public class DateWithDuplicate : IDateWithDuplicate
+	{
+		public int DateId { get; set; }
+		public int ScenarioId { get; set; }
 	}
 
 	public class AnalyticsPersonBusinessUnit : IAnalyticsPersonBusinessUnit

@@ -132,6 +132,7 @@
     <Compile Include="AgentInfo\FixedStaffLoader.cs" />
     <Compile Include="AgentInfo\IAgentGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
+    <Compile Include="ApplicationLayer\Events\ReloadSchedules.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentDataModel.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplate.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersister.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="GroupPageCreator\GroupingsCreatorOptionalColumn.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
+    <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
     <Compile Include="MultiTenancy\DuplicateApplicationLogonNameException.cs" />
     <Compile Include="MultiTenancy\DuplicateIdentityException.cs" />
     <Compile Include="MultiTenancy\PasswordStrengthException.cs" />
