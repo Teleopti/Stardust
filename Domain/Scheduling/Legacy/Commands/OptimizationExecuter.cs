@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
 			}
 #pragma warning disable 618
+			//TODO Can probably be removed
 			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
 #pragma warning restore 618
 
