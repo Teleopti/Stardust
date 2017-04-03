@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("42836..to be fixed")]
 		public void ShouldNotTouchTeamMembersNotInSelectionWhenUsingTeamAndBlock()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
@@ -61,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agentNotInSelectionSecondDayOff = new PersonAssignment(selectedAgent, scenario, date.AddDays(2));
 			agentNotInSelectionFirstDayOff.SetDayOff(new DayOffTemplate());
 			agentNotInSelectionSecondDayOff.SetDayOff(new DayOffTemplate());
-
 			var asses = new List<IPersonAssignment>
 			{
 				selectedAgentFirstDayOff,
@@ -70,7 +68,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				agentNotInSelectionFirstDayOff,
 				agentNotInSelectionSecondDayOff
 			};
-
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { selectedAgent, agentNotInSelection}, asses, new []{skillDay});
 			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
 			{

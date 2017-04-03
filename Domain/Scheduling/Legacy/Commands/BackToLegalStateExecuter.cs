@@ -81,13 +81,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, false);
 				IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedScheduleDays);
 
-				var allMatrixes = optimizationPreferences.Extra.UseTeams ?
-					_matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod.Value) :
-					new List<IScheduleMatrixPro>();
-
 				backToLegalState(matrixList, schedulerStateHolder, optimizationPreferences, backgroundWorker,
-					optimizerOriginalPreferences.SchedulingOptions, selectedPeriod.Value,
-					allMatrixes);
+					optimizerOriginalPreferences.SchedulingOptions, selectedPeriod.Value);
 			}
 
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
@@ -98,8 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulingProgress backgroundWorker,
 			ISchedulingOptions schedulingOptions,
-			DateOnlyPeriod selectedPeriod,
-			IList<IScheduleMatrixPro> allMatrixes)
+			DateOnlyPeriod selectedPeriod)
 		{
 			if (matrixList == null) throw new ArgumentNullException("matrixList");
 			if (schedulerStateHolder == null) throw new ArgumentNullException("schedulerStateHolder");
@@ -119,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				_requiredScheduleHelper.RemoveShiftCategoryBackToLegalState(matrixList, backgroundWorker, optimizationPreferences,
 					schedulingOptions,
-					selectedPeriod, allMatrixes);
+					selectedPeriod);
 			}
 		}
 	}

@@ -210,17 +210,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if (sameOpenHours)
             {
                 shiftList = _contractTimeShiftFilter.Filter(dateOnly, matrixList, shiftList, schedulingOptions, finderResult);
-	            IScheduleMatrixPro matrixForPerson = null;
-	            foreach (var scheduleMatrixPro in matrixList)
+	            var matrixForPerson = matrixList.FirstOrDefault(scheduleMatrixPro => scheduleMatrixPro.Person.Equals(person));
+	            if (matrixForPerson != null)
 	            {
-		            if (scheduleMatrixPro.Person.Equals(person))
-		            {
-			            matrixForPerson = scheduleMatrixPro;
-						break;
-		            }
-	            }
-				shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixForPerson, schedulingOptions);
-            }
+					shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixForPerson, schedulingOptions);
+				}
+			}
 
             shiftList = _commonMainShiftFilter.Filter(shiftList, effectiveRestriction);
 			shiftList = _mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(shiftList, schedulingOptions.MainShiftOptimizeActivitySpecification);

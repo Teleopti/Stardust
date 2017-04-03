@@ -126,26 +126,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
 					if (schedulingOptions.UseShiftCategoryLimitations)
 					{
-						IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 						var selectedPeriod = _periodExtractor.ExtractPeriod(selectedScheduleDays);
-						if (!selectedPeriod.HasValue) return;
-
-						if (schedulingOptions.UseTeam)
-						{
-							allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod.Value);
-						}
-
-						IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays =
-							_matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedScheduleDays);
-						if (matrixesOfSelectedScheduleDays.Count == 0)
+						if (!selectedPeriod.HasValue)
 							return;
 
+						var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedScheduleDays);
+						if (matrixesOfSelectedScheduleDays.Count == 0)
+							return;
 
 						_requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
 							backgroundWorker,
 							optimizationPreferences,
 							schedulingOptions,
-							selectedPeriod.Value, allMatrixes);
+							selectedPeriod.Value);
 						
 						ExecuteWeeklyRestSolverCommand(schedulingOptions, optimizationPreferences, selectedPersons,
 							selectedPeriod.Value, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);

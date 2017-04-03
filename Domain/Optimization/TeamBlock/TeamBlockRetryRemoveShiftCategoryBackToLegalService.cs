@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamBlockClearer _teamBlockClearer;
-		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly IShiftCategoryLimitCounter _shiftCategoryLimitCounter;
 		private readonly IWorkShiftSelector _workShiftSelector;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamInfoFactory teamInfoFactory, 
 			ITeamBlockInfoFactory teamBlockInfoFactory, 
 			ITeamBlockClearer teamBlockClearer, 
-			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, 
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, 
 			IShiftCategoryLimitCounter shiftCategoryLimitCounter, 
 			IWorkShiftSelector workShiftSelector, 
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockClearer = teamBlockClearer;
-			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_shiftCategoryLimitCounter = shiftCategoryLimitCounter;
 			_workShiftSelector = workShiftSelector;
@@ -53,12 +50,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, 
 			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> scheduleMatrixListPros,
-			IOptimizationPreferences optimizationPreferences,
-			IEnumerable<IScheduleMatrixPro> allScheduleMatrixListPros)
+			IOptimizationPreferences optimizationPreferences)
 		{
 			var shiftNudgeDirective = new ShiftNudgeDirective();
-			var isSingleAgentTeam = _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions);
-			var scheduleMatrixes = isSingleAgentTeam ? scheduleMatrixListPros : allScheduleMatrixListPros;
 
 			foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
 			{
@@ -66,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				var unsuccessfulDays = new HashSet<DateOnly>();
 				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder,
-					rollbackService, resourceCalculateDelayer, scheduleMatrixes, shiftNudgeDirective, optimizationPreferences, limitation, unsuccessfulDays);
+					rollbackService, resourceCalculateDelayer, scheduleMatrixListPros, shiftNudgeDirective, optimizationPreferences, limitation, unsuccessfulDays);
 
 				unsuccessfulDays.ForEach(x => scheduleMatrixPro.UnlockPeriod(x.ToDateOnlyPeriod()));
 				_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation, rollbackService);
