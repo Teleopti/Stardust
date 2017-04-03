@@ -188,7 +188,6 @@
     <Compile Include="AddOvertimeCommandTest.cs" />
     <Compile Include="Autofac\BackToLegalShiftModuleTest.cs" />
     <Compile Include="Autofac\EqualNumberOfCategoryFairnessModuleTest.cs" />
-    <Compile Include="Autofac\IntraIntervalOptimizationServiceModuleTest.cs" />
     <Compile Include="Autofac\IntraIntervalSolverServiceModuleTest.cs" />
     <Compile Include="Autofac\WeeklyRestSolverModuleTest.cs" />
     <Compile Include="Budgeting\BudgetPermissionServiceTest.cs" />

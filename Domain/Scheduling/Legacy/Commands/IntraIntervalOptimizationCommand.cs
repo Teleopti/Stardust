@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class IntraIntervalOptimizationCommand : IIntraIntervalOptimizationCommand
 	{
-		private readonly IIntraIntervalOptimizationService _intervalOptimizationService;
+		private readonly IntraIntervalOptimizationService _intervalOptimizationService;
 		private ISchedulingProgress _backgroundWorker;
 
-		public IntraIntervalOptimizationCommand(IIntraIntervalOptimizationService intervalOptimizationService)
+		public IntraIntervalOptimizationCommand(IntraIntervalOptimizationService intervalOptimizationService)
 		{
 			_intervalOptimizationService = intervalOptimizationService;
 		}

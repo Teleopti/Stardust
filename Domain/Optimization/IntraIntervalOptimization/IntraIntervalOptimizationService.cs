@@ -7,13 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
-	public interface IIntraIntervalOptimizationService
-	{
-		void Execute(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
-		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-	}
-
-	public class IntraIntervalOptimizationService : IIntraIntervalOptimizationService
+	public class IntraIntervalOptimizationService
 	{
 		private readonly IScheduleDayIntraIntervalIssueExtractor _scheduleDayIntraIntervalIssueExtractor;
 		private readonly IIntraIntervalOptimizer _intraIntervalOptimizer;
@@ -138,25 +132,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 					return new CancelSignal {ShouldCancel = true};
 			}
 			return new CancelSignal();
-		}
-	}
-
-	public class IntraIntervalOptimizationServiceToggle29846Off : IIntraIntervalOptimizationService
-	{
-		public void Execute(IOptimizationPreferences optimizationPreferences,
-			DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder,
-			IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer)
-		{
-		}
-
-		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-		public void OnReportProgress(string message)
-		{
-			var handler = ReportProgress;
-			if (handler == null) return;
-			var args = new ResourceOptimizerProgressEventArgs(0, 0, message, 100,()=>{});
-			handler(this, args);
 		}
 	}
 }
