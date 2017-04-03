@@ -61,7 +61,11 @@ namespace Teleopti.Ccc.TestCommon
 			double defaultDemand, params Tuple<TimePeriod, double>[] intervalDemands)
 		{
 			var skillDataPeriods = new List<ISkillDataPeriod>();
-			var intervals = dateOnly.ToDateTimePeriod(skill.TimeZone).Intervals(TimeSpan.FromMinutes(skill.DefaultResolution));
+			List<DateTimePeriod> intervals = dateOnly.ToDateTimePeriod(skill.TimeZone).Intervals(TimeSpan.FromMinutes(skill.DefaultResolution)).ToList();
+			var midnightBreakDate = TimeZoneHelper.ConvertToUtc(dateOnly.Date.AddDays(1), TimeZoneInfo.Utc);
+			var midnightBreakIntervals = new DateTimePeriod(midnightBreakDate,midnightBreakDate.Add(skill.MidnightBreakOffset))
+									 .Intervals(TimeSpan.FromMinutes(skill.DefaultResolution)).ToList();
+			intervals.AddRange(midnightBreakIntervals);
 			var startDateTime = intervals.First().StartDateTime;
 			var intervalDemandsDic = intervalDemands.ToDictionary(k => new DateTimePeriod(startDateTime.Add(k.Item1.StartTime), startDateTime.Add(k.Item1.EndTime)), v => v.Item2);
 			foreach (var interval in intervals)

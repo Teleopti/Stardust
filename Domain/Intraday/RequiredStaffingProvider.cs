@@ -114,24 +114,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (!latestStatsTime.HasValue || !requiredStaffingPerSkill.Any())
 				return new double?[] {};
 
-			returnValue.AddRange(requiredStaffingPerSkill
-				.OrderBy(x => x.StartTime)
-				.GroupBy(y => y.StartTime)
-				.Select(s => (double?)s.Sum(a => a.Agents))
-				.ToList());
-
-			var actualStartTime = requiredStaffingPerSkill.Min(x => x.StartTime);
-			var actualEndTime = requiredStaffingPerSkill.Max(x => x.StartTime).AddMinutes(minutesPerInterval);
-
-			var nullStart = timeSeries.Min();
-			var nullEnd = timeSeries.Max().AddMinutes(minutesPerInterval);
-
-			for (DateTime i = nullStart; i < actualStartTime; i = i.AddMinutes(minutesPerInterval))
-				returnValue.Insert(0, null);
-
-			for (DateTime i = actualEndTime; i < nullEnd; i = i.AddMinutes(minutesPerInterval))
-				returnValue.Add(null);
-
+			foreach (var interval in timeSeries)
+			{
+				var requiredStaffingInterval = requiredStaffingPerSkill.Where(x => x.StartTime == interval).ToList();
+				if (requiredStaffingInterval.Any())
+					returnValue.Add(requiredStaffingInterval.Sum(a => a.Agents));
+				else
+					returnValue.Add(null);
+			}
 
 			return returnValue.ToArray();
 		}
