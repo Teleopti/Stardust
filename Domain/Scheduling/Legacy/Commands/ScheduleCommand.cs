@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
 			}
-			//TODO: This is wrong I guess... Should be done inside rescalccontext block below probably. investigate!
+			//TODO: This is wrong I guess... Should be done inside rescalccontext block below probably. investigate! #43767
 #pragma warning disable 618
 			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
 #pragma warning restore 618
