@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -62,51 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				WorkTimeLimitation = new WorkTimeLimitation(avgWorkTime, avgWorkTime)
 			};
-		}
-	}
-
-	public interface IPersonRuleSetBagProvider
-	{
-		IRuleSetBag ForDate(IPerson person, DateOnly date);
-		IDictionary<DateOnly, IRuleSetBag> ForPeriod(IPerson person, DateOnlyPeriod period);
-	}
-
-	public class PersonRuleSetBagProvider : IPersonRuleSetBagProvider
-	{
-		private readonly IRuleSetBagRepository _repository;
-
-		public PersonRuleSetBagProvider(IRuleSetBagRepository repository)
-		{
-			_repository = repository;
-		}
-
-		public IRuleSetBag ForDate(IPerson person, DateOnly date)
-		{
-			var personPeriod = person?.Period(date);
-			var ruleSetBag = personPeriod?.RuleSetBag;
-			return ruleSetBag != null ? _repository.FindWithRuleSetsAndAccessibility(ruleSetBag.Id.GetValueOrDefault()) : null;
-		}
-
-		public IDictionary<DateOnly, IRuleSetBag> ForPeriod(IPerson person, DateOnlyPeriod period)
-		{
-			var ruleBagIdList = new List<Guid>();
-			var allRuleSetBagIds = new Dictionary<DateOnly, Guid?>();
-			foreach (var date in period.DayCollection())
-			{
-				var personPeriod = person?.Period(date);
-				var ruleSetBag = personPeriod?.RuleSetBag;
-				if (ruleSetBag?.Id != null && !ruleBagIdList.Contains(ruleSetBag.Id.Value))
-				{
-					ruleBagIdList.Add(ruleSetBag.Id.Value);
-				}
-				allRuleSetBagIds.Add(date, ruleSetBag?.Id);
-			}
-
-			var allRuleSetBags = ruleBagIdList.Any()
-				? _repository.FindWithRuleSetsAndAccessibility(ruleBagIdList.ToArray()).ToList()
-				: new List<IRuleSetBag>();
-
-			return allRuleSetBagIds.ToDictionary(item => item.Key, item => allRuleSetBags.SingleOrDefault(b => b.Id == item.Value));
 		}
 	}
 }

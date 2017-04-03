@@ -234,6 +234,8 @@
     <Compile Include="MultiTenancy\TenantUserPersister.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
+    <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
+    <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />
     <Compile Include="Staffing\SendUpdateStaffingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
