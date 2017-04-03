@@ -2218,6 +2218,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (rethrowBackgroundException(e))
 				return;
 
+			scheduleStatusBarUpdate(LanguageResourceHelper.Translate("XXLoadingFormThreeDots"));
 			afterBackgroundWorkersCompleted(e.Cancelled);
 		}
 
