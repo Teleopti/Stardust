@@ -56,7 +56,8 @@ namespace Teleopti.Wfm.Test
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
 
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddMinutes(30).Utc()));
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
@@ -77,7 +78,8 @@ namespace Teleopti.Wfm.Test
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
 
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
@@ -98,7 +100,8 @@ namespace Teleopti.Wfm.Test
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
 
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddMinutes(30).Utc()));
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
@@ -120,7 +123,8 @@ namespace Teleopti.Wfm.Test
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
 
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
@@ -137,7 +141,8 @@ namespace Teleopti.Wfm.Test
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			SetUpMixedSkillDays(1, new Tuple<int, double>(requestStart.Hour, 10));
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
@@ -159,7 +164,8 @@ namespace Teleopti.Wfm.Test
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			SetUpLowDemandSkillDays();
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
@@ -180,7 +186,8 @@ namespace Teleopti.Wfm.Test
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			SetUpHighDemandSkillDays();
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
@@ -201,7 +208,8 @@ namespace Teleopti.Wfm.Test
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			SetUpLowDemandSkillDays();
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
@@ -222,7 +230,8 @@ namespace Teleopti.Wfm.Test
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			SetUpRelevantStuffWithCascading();
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			SetUpHighDemandSkillDays();
 
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
@@ -249,7 +258,8 @@ namespace Teleopti.Wfm.Test
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeOvertime");
 
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
@@ -270,7 +280,8 @@ namespace Teleopti.Wfm.Test
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeOvertime");
 
-			var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + 2, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var requestStart = hourNow.AddHours(2);
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
