@@ -75,7 +75,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
 			}
+			//TODO: This is wrong I guess... Should be done inside rescalccontext block below probably. investigate!
+#pragma warning disable 618
 			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
+#pragma warning restore 618
 
 			//set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState
 			var useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;

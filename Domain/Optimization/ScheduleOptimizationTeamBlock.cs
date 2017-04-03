@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPersonRepository _personRepository;
-		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
+		private readonly IResourceCalculation _resourceCalculation;
 
 		public ScheduleOptimizationTeamBlock(
 			IFillSchedulerStateHolder fillSchedulerStateHolder, 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IUserTimeZone userTimeZone,
 			IPersonRepository personRepository,
-			DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime)
+			IResourceCalculation resourceCalculation)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_userTimeZone = userTimeZone;
 			_personRepository = personRepository;
-			_doFullResourceOptimizationOneTime = doFullResourceOptimizationOneTime;
+			_resourceCalculation = resourceCalculation;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true, period.Inflate(1)))
 			{
-				_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
+				_resourceCalculation.ResourceCalculate(period.Inflate(1), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, false));
 				_teamBlockDayOffOptimizerService.OptimizeDaysOff(
 					matrixListForDayOffOptimization, period,
 					schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(),
