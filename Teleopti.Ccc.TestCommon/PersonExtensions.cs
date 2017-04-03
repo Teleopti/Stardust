@@ -40,41 +40,35 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, params ISkill[] skills)
 		{
-			agent.addPeriod(null, null, null, skills);
-			return agent;
+			return agent.WithPersonPeriod(null, null, null, skills);
 		}
 
 		public static Person WithPersonPeriod(this Person agent, ITeam team, params ISkill[] skills)
 		{
-			agent.addPeriod(null, null, team, skills);
-			return agent;
+			return agent.WithPersonPeriod(null, null, team, skills);
 		}
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
 		{
-			agent.addPeriod(ruleSet, null, null, skills);
-			return agent;
+			return agent.WithPersonPeriod(ruleSet, null, null, skills);
 		}
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, ITeam team, params ISkill[] skills)
 		{
-			agent.addPeriod(ruleSet, null, team, skills);
-			return agent;
+			return agent.WithPersonPeriod(ruleSet, null, team, skills);
 		}
 
 		public static Person WithPersonPeriod(this Person agent, IContract contract, params ISkill[] skills)
 		{
-			agent.addPeriod(null, contract, null, skills);
-			return agent;
+			return agent.WithPersonPeriod(null, contract, null, skills);
 		}
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract, params ISkill[] skills)
 		{
-			agent.addPeriod(ruleSet, contract, null, skills);
-			return agent;
+			return agent.WithPersonPeriod(ruleSet, contract, null, skills);
 		}
 
-		private static void addPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract, ITeam team, params ISkill[] skills)
+		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract, ITeam team, params ISkill[] skills)
 		{
 			var personPeriod = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") });
 			if (skills.Any())
@@ -97,6 +91,7 @@ namespace Teleopti.Ccc.TestCommon
 				personPeriod.Team = team;
 			}
 			agent.AddPersonPeriod(personPeriod);
+			return agent;
 		}
 
 		public static Person WithSchedulePeriodOneDay(this Person agent, DateOnly date)
