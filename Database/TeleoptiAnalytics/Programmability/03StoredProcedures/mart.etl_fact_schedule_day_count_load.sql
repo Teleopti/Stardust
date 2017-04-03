@@ -113,7 +113,7 @@ FROM (
 	AND business_unit_code=@business_unit_code
 	) stg
 JOIN
-	mart.dim_person		dp
+	mart.dim_person		dp WITH (NOLOCK)
 ON
 	stg.person_code	= dp.person_code
 	AND --trim to person valid in this range
@@ -164,7 +164,7 @@ FROM (
 	WHERE schedule_date_local between @start_date and @end_date
 	AND business_unit_code=@business_unit_code
 	) stg
-JOIN mart.dim_person dp
+JOIN mart.dim_person dp WITH (NOLOCK)
 	ON stg.person_code = dp.person_code
 	AND stg.schedule_date_local BETWEEN dp.valid_from_date_local AND dp.valid_to_date_local  --Is person valid in this range	
 JOIN mart.dim_day_off dd

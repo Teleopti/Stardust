@@ -201,7 +201,7 @@ SELECT
 FROM #rights_agents a
 INNER JOIN #agents b
 	ON a.right_id = b.id
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	on p.person_id = b.id
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = b.id
@@ -277,7 +277,7 @@ SELECT	r.date_date AS 'date',
 		isnull(sum(r.after_call_work_time_s),0) AS after_call_work_time_s,
 		isnull(sum(r.talk_time_s),0) as talk_time_s
 FROM #pre_result_subSP r
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON r.person_id = p.person_id
 GROUP BY r.date_date, p.person_code, p.person_name
 ORDER BY p.person_name,r.date_date

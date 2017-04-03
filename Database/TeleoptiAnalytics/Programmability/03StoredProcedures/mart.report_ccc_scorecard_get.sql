@@ -16,7 +16,7 @@ SELECT
 	s.scorecard_code ID, 
 	s.scorecard_name Name, 
 	s.period Period
-from mart.dim_person p
+from mart.dim_person p WITH (NOLOCK)
 inner join mart.dim_team t
 on p.team_id=t.team_id
 inner join mart.dim_scorecard s

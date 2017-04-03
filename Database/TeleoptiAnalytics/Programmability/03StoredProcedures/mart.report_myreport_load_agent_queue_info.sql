@@ -25,7 +25,7 @@ select dd.date_id, dd.date_date into #dim_date from mart.dim_date dd
 where dd.date_date between @startDate and @endDate 
 order by dd.date_date asc
 
-select dp.person_id into #person from mart.dim_person dp 
+select dp.person_id into #person from mart.dim_person dp WITH (NOLOCK)
 where dp.person_code = @personCode 
 and convert(DATETIME, dp.valid_from_date) >= @startDate 
 and convert(DATETIME, dp.valid_to_date) <= @endDate

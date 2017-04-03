@@ -128,7 +128,7 @@ SELECT	d.date_id,
 		@hide_time_zone
 FROM 
 	#fact_schedule f
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON f.person_id=p.person_id
 	AND shift_startdate_local_id between p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_activity act
@@ -170,7 +170,7 @@ SELECT	d.date_id,
 		@hide_time_zone
 FROM 
 	#fact_schedule f
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON f.person_id=p.person_id
 	AND shift_startdate_local_id between p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_absence ab

@@ -199,7 +199,7 @@ SELECT @nowLocalDateId     = b.local_date_id,
 -----------
 INSERT INTO #person_id
 SELECT DISTINCT p.person_id
-  From [mart].[dim_person] p
+  From [mart].[dim_person] p WITH (NOLOCK)
  INNER JOIN [mart].[bridge_time_zone] tz
     ON tz.time_zone_id = p.time_zone_id
  INNER JOIN [mart].[dim_date] d
@@ -409,7 +409,7 @@ SELECT fs.shift_startdate_local_id,
            WHEN 3 THEN isnull(fsd.contract_time_s,0)
        END AS 'adherence_calc_s',
        @selected_adherence_type
-  FROM [mart].[dim_person] p
+  FROM [mart].[dim_person] p WITH (NOLOCK)
  INNER JOIN #fact_schedule fs
     ON fs.person_id = p.person_id
    AND @local_date between p.valid_from_date and p.valid_to_date
@@ -468,7 +468,7 @@ SELECT fsd.shift_startdate_local_id,
            WHEN 3 THEN isnull(fsd.contract_time_s,0)
        END AS 'adherence_calc_s',
        @selected_adherence_type
-  FROM [mart].[dim_person] p
+  FROM [mart].[dim_person] p WITH (NOLOCK)
  INNER JOIN #fact_schedule_deviation fsd
     ON fsd.person_id = p.person_id
    AND @local_date between p.valid_from_date and p.valid_to_date

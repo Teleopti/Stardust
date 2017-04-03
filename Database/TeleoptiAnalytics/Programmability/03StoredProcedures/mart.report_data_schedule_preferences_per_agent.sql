@@ -95,7 +95,7 @@ SELECT	p.person_code,
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON f.person_id=p.person_id
 	AND f.date_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_shift_category sc
@@ -131,7 +131,7 @@ SELECT	p.person_code,
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON f.person_id=p.person_id
 	AND f.date_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_day_off ddo
@@ -167,7 +167,7 @@ SELECT	p.person_code,
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON f.person_id=p.person_id
 	AND f.date_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_absence ab
@@ -203,7 +203,7 @@ SELECT	p.person_code,
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON f.person_id=p.person_id
 	AND f.date_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_date d 

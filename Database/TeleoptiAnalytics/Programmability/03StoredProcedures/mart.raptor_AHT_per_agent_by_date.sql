@@ -24,7 +24,7 @@ select p.person_code As PersonId,
   from mart.fact_agent_queue f
  inner join mart.bridge_acd_login_person b
     on f.acd_login_id = b.acd_login_id
- inner join mart.dim_person p
+ inner join mart.dim_person p WITH (NOLOCK)
     on p.person_id = b.person_id
 	and @local_date between p.valid_from_date and p.valid_to_date
  inner join mart.bridge_time_zone tz

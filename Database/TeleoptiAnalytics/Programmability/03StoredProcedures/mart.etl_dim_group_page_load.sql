@@ -38,7 +38,7 @@ SET @note_resource_name = 'Note'
 -- Delete all records for persons in current bu from bridge table
 DELETE FROM [mart].[bridge_group_page_person]
 	FROM [mart].[bridge_group_page_person] AS bgpp
-	INNER JOIN [mart].[dim_person] AS dp
+	INNER JOIN [mart].[dim_person] AS dp WITH (NOLOCK)
 		ON bgpp.person_id = dp.person_id
 		AND dp.business_unit_code = @business_unit_code
 

@@ -92,7 +92,7 @@ SELECT * FROM SplitStringInt(@absence_set)
 
 INSERT INTO #person
 SELECT p.person_id, p.person_code, p.person_name, valid_from_date_id_local, valid_to_date_id_local
-FROM mart.dim_person p
+FROM mart.dim_person p WITH (NOLOCK)
 INNER JOIN #rights_agents a ON p.person_id = a.right_id
 INNER JOIN #rights_teams t ON p.team_id = t.right_id
 
@@ -167,7 +167,7 @@ END
 INSERT INTO #full_absence_days
 SELECT p.person_code,d.date_date, absence_id,day_count
 FROM mart.fact_schedule_day_count f WITH (NOLOCK)
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
       ON f.person_id=p.person_id
 INNER JOIN mart.dim_date d 
       ON f.shift_startdate_local_id = d.date_id

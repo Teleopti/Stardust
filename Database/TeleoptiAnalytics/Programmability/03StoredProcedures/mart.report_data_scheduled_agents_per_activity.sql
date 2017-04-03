@@ -100,7 +100,7 @@ SELECT	d.date_date,
 FROM #fact_schedule fs
 INNER JOIN mart.dim_activity da
 	ON da.activity_id= fs.activity_id --activity
-INNER JOIN mart.dim_person dp
+INNER JOIN mart.dim_person dp WITH (NOLOCK)
 	ON dp.person_id= fs.person_id --person
 	AND fs.shift_startdate_local_id between dp.valid_from_date_id_local AND dp.valid_to_date_id_local
 INNER JOIN mart.bridge_time_zone b

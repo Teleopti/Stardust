@@ -18,7 +18,7 @@ BEGIN
 		on groups.group_page_id = bgpp.group_page_id
 	join (select person_id 
 			from mart.SplitStringGuid(@person_codes) 
-			join [mart].dim_person p 
+			join [mart].dim_person p  WITH (NOLOCK)
 				on p.person_code = id 
 			where p.business_unit_code = @business_unit_code) person
 		on person.person_id = bgpp.person_id

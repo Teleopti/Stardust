@@ -20,12 +20,12 @@ BEGIN
 	DELETE FROM mart.fact_schedule
 	WHERE shift_startdate_local_id = @shift_startdate_local_id
 	AND scenario_id = @scenario_id
-	AND person_id in (select person_id from mart.dim_person where person_code = @person_code)
+	AND person_id in (select person_id from mart.dim_person  WITH (NOLOCK) where person_code = @person_code)
 
 	DELETE FROM mart.fact_schedule_day_count
 	WHERE shift_startdate_local_id = @shift_startdate_local_id
 	AND scenario_id = @scenario_id
-	AND person_id in (select person_id from mart.dim_person where person_code = @person_code)
+	AND person_id in (select person_id from mart.dim_person  WITH (NOLOCK) where person_code = @person_code)
 END
 
 GO

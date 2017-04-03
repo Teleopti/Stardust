@@ -46,7 +46,7 @@ SET NOCOUNT OFF
 -- Delete rows from stage
 DELETE f
 FROM Stage.stg_schedule_preference stg
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON p.person_code = stg.person_code
 INNER JOIN mart.DimPersonLocalized(@start_date,@end_date)		dp
 ON
@@ -115,7 +115,7 @@ FROM
 	(
 		SELECT * FROM Stage.stg_schedule_preference
 	) AS f
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	on p.person_code = f.person_code
 INNER JOIN mart.DimPersonLocalized(@start_date,@end_date)		dp
 	ON	dp.person_id = p.person_id

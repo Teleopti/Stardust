@@ -12,7 +12,7 @@ AS
 BEGIN
 
 	delete bgpp from [mart].[bridge_group_page_person] bgpp
-	inner join mart.dim_person p
+	inner join mart.dim_person p WITH (NOLOCK)
 		on bgpp.person_id = p.person_id
 	left outer join mart.SplitStringInt(@person_ids) pp
 		on pp.id = p.person_id

@@ -60,7 +60,7 @@ SELECT
 FROM
 	Stage.stg_acd_login_person a
 INNER JOIN
-	mart.dim_person p
+	mart.dim_person p WITH (NOLOCK)
 ON
 	a.person_period_code = p.person_period_code
 FULL OUTER JOIN

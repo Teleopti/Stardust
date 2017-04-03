@@ -64,7 +64,7 @@ SET NOCOUNT ON;
 	--c) valid for this period
 	INSERT INTO #person_id
 	SELECT dp.person_id
-	FROM mart.dim_person dp
+	FROM mart.dim_person dp WITH (NOLOCK)
 	INNER JOIN #rights_teams t
 		ON dp.team_id = t.right_id
 	INNER JOIN #rights_agents a
@@ -82,7 +82,7 @@ SET NOCOUNT ON;
 	SET person_name =dp.person_name,
 		skill_name  =ds.skill_name
 	FROM #RESULT r
-	INNER JOIN  mart.dim_person dp
+	INNER JOIN  mart.dim_person dp WITH (NOLOCK)
 		ON dp.person_id=r.person_id
 	INNER JOIN mart.dim_skill ds 
 		ON r.skill_id=ds.skill_id

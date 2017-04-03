@@ -53,7 +53,7 @@ SET @group_page_agent_code = NULL
 
 --Get the agent_id and team_id for this PersonPeriod
 --Note: Currently use Top 1 just in case we have overlapping personperiods !!! 
-SELECT TOP 1 @agent_person_id = person_id,@team_set=team_id, @business_unit_id = business_unit_id,@business_unit_code =business_unit_code  FROM mart.dim_person
+SELECT TOP 1 @agent_person_id = person_id,@team_set=team_id, @business_unit_id = business_unit_id,@business_unit_code =business_unit_code  FROM mart.dim_person WITH (NOLOCK)
 WHERE person_code = @agent_person_code
 AND @date_from BETWEEN mart.dim_person.valid_from_date_local AND mart.dim_person.valid_to_date_local
 ORDER BY insert_date desc

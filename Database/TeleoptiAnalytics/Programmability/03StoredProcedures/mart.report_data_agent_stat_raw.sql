@@ -106,7 +106,7 @@ INNER JOIN mart.dim_acd_login da ON
 	fa.acd_login_id=da.acd_login_id
 INNER JOIN mart.bridge_acd_login_person bap
 	ON bap.acd_login_id=fa.acd_login_id
-INNER JOIN mart.dim_person p ON
+INNER JOIN mart.dim_person p  WITH (NOLOCK) ON
 	bap.person_id=p.person_id
 INNER JOIN mart.bridge_time_zone b
 	ON	fa.interval_id= b.interval_id

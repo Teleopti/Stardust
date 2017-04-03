@@ -89,7 +89,7 @@ begin
 	SELECT @me_as_id
 	INSERT INTO #selected_agents --Insert the current agent
 	SELECT @me_as_id
-	insert into #rights_teams select team_id from mart.dim_person where person_id = @me_as_id
+	insert into #rights_teams select team_id from mart.dim_person  WITH (NOLOCK) where person_id = @me_as_id
 end
 
 /* Check if time zone will be hidden (if only one exist then hide) */

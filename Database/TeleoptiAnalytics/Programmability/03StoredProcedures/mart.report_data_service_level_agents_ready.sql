@@ -253,7 +253,7 @@ SELECT	CASE @interval_type
 FROM mart.fact_schedule fs WITH (NOLOCK)
 INNER JOIN [mart].[DimPersonLocalized](@date_from, @date_to) dpl
 	ON dpl.person_id = fs.person_id
-INNER JOIN mart.dim_person dp 
+INNER JOIN mart.dim_person dp  WITH (NOLOCK)
 	ON dp.person_id = dpl.person_id
 	AND fs.shift_startdate_local_id BETWEEN dp.valid_from_date_id_local AND dp.valid_to_date_id_local
 INNER JOIN mart.bridge_skillset_skill bs 
@@ -300,7 +300,7 @@ INNER JOIN mart.bridge_acd_login_person bap
 	ON fa.acd_login_id=bap.acd_login_id
 INNER JOIN [mart].[DimPersonLocalized](@date_from, @date_to) dpl
 	ON dpl.person_id = bap.person_id
-INNER JOIN mart.dim_person dp 
+INNER JOIN mart.dim_person dp  WITH (NOLOCK)
 	ON dp.person_id = dpl.person_id
 INNER JOIN mart.bridge_skillset_skill bs 
 	ON dp.skillset_id = bs.skillset_id

@@ -121,7 +121,7 @@ SELECT
 	valid_from_date_id_local=p.valid_from_date_id_local,
 	valid_to_date_id_local=p.valid_to_date_id_local
 FROM #rights_agents a
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	on p.person_id = a.right_id
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = a.right_id
@@ -214,7 +214,7 @@ SELECT	r.date_date AS 'date',
 		SUM(r.deviation_s) AS 'deviation_s',
 		SUM(isnull(r.handling_time_s,0)) AS 'handling_time_s'
 FROM #pre_result_subSP r
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 ON r.person_id = p.person_id
 GROUP BY r.date_date, r.team_id, p.team_name
 ORDER BY p.team_name,r.date_date

@@ -186,7 +186,7 @@ BEGIN
 	FROM 
 		mart.fact_schedule fs
 	INNER JOIN 
-		mart.dim_person p 
+		mart.dim_person p  WITH (NOLOCK)
 	ON p.person_id=fs.person_id
 	WHERE fs.shift_startdate_local_id BETWEEN @start_date_id AND @end_date_id
 		AND fs.scenario_id = @scenario_id
@@ -231,7 +231,7 @@ BEGIN
 	ON
 		b.acd_login_id = fa.acd_login_id
 	INNER JOIN 
-		mart.dim_person p
+		mart.dim_person p WITH (NOLOCK)
 	ON 
 		p.person_id = b.person_id
 		AND
@@ -254,7 +254,7 @@ BEGIN
 				ch.schedule_date_local,
 				p.person_code
 		FROM stage.stg_schedule_changed ch
-		INNER JOIN mart.dim_person p
+		INNER JOIN mart.dim_person p WITH (NOLOCK)
 			ON p.person_code = ch.person_code
 				AND --trim
 				(
@@ -335,7 +335,7 @@ BEGIN
 			AND ch.person_id			= b.person_id
 			AND b.acd_login_id			= fa.acd_login_id
 		INNER JOIN 
-			mart.dim_person p
+			mart.dim_person p WITH (NOLOCK)
 		ON 
 		p.person_id = b.person_id
 		AND
@@ -406,7 +406,7 @@ BEGIN
 			fs.business_unit_id,
 			p.person_code
 		FROM mart.fact_schedule fs
-		INNER JOIN mart.dim_person p
+		INNER JOIN mart.dim_person p WITH (NOLOCK)
 			ON fs.person_id = p.person_id
 		WHERE shift_startdate_local_id between @from_date_id_utc-1 and @now_date_id_utc+1
 		AND
@@ -457,7 +457,7 @@ BEGIN
 			ON b.acd_login_id = fa.acd_login_id
 			AND b.business_unit_id=@business_unit_id
 		INNER JOIN 
-			mart.dim_person p
+			mart.dim_person p WITH (NOLOCK)
 		ON 
 		p.person_id = b.person_id
 		AND
@@ -484,7 +484,7 @@ BEGIN
 		FROM stage.stg_schedule_changed_servicebus ch WITH (NOLOCK) 
 		INNER JOIN mart.dim_date dd
 			ON dd.date_date = ch.schedule_date_local
-		INNER JOIN mart.dim_person p
+		INNER JOIN mart.dim_person p WITH (NOLOCK)
 			ON p.person_code = ch.person_code
 				AND --trim
 				(
@@ -561,7 +561,7 @@ BEGIN
 			INNER JOIN mart.fact_agent fa
 				ON b.acd_login_id = fa.acd_login_id
 			INNER JOIN 
-				mart.dim_person p
+				mart.dim_person p WITH (NOLOCK)
 			ON 
 			p.person_id = b.person_id
 				AND
@@ -612,7 +612,7 @@ BEGIN
 				AND ch.person_id			= b.person_id
 				AND b.acd_login_id			= fa.acd_login_id
 			INNER JOIN 
-			mart.dim_person p
+			mart.dim_person p WITH (NOLOCK)
 			ON 
 			p.person_id = b.person_id
 			AND

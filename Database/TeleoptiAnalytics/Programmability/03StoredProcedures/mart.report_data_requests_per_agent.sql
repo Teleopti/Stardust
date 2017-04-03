@@ -130,7 +130,7 @@ SELECT
 FROM mart.fact_request f
 inner join mart.dim_date d
 	on f.request_start_date_id = d.date_id
-inner join mart.dim_person p
+inner join mart.dim_person p WITH (NOLOCK)
 	on p.person_id = f.person_id
 	AND f.request_start_date_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 inner join #selected_agents s

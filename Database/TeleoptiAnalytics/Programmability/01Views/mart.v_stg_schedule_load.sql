@@ -43,7 +43,7 @@ SELECT
 	overtime_id							= ot.overtime_id
 FROM Stage.stg_schedule f
 INNER JOIN
-	mart.dim_person		dp
+	mart.dim_person		dp WITH (NOLOCK)
 ON
 	f.person_code		=			dp.person_code
 	AND --trim

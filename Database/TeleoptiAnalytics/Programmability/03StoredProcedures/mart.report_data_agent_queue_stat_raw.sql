@@ -111,7 +111,7 @@ INNER JOIN mart.dim_acd_login da ON
 	fq.acd_login_id=da.acd_login_id
 INNER JOIN mart.bridge_acd_login_person bap
 	ON bap.acd_login_id=da.acd_login_id
-INNER JOIN mart.dim_person dp
+INNER JOIN mart.dim_person dp WITH (NOLOCK)
 	ON dp.person_id=bap.person_id
 INNER JOIN mart.dim_queue dq 
 ON dq.queue_id=fq.queue_id

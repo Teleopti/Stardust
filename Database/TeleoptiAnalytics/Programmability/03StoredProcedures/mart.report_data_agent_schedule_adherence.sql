@@ -341,7 +341,7 @@ BEGIN --Standard Report Permisssions
 		dp.person_name,	
 		dp.valid_from_date_id_local,
 		dp.valid_to_date_id_local
-	FROM mart.dim_person dp
+	FROM mart.dim_person dp WITH (NOLOCK)
 	INNER JOIN #rights_teams t
 		ON dp.team_id = t.right_id
 	INNER JOIN #rights_agents a
@@ -367,7 +367,7 @@ BEGIN
 	dp.person_name,
 	dp.valid_from_date_id_local,
 	dp.valid_to_date_id_local
-	FROM mart.dim_person dp WHERE person_code = @agent_person_code
+	FROM mart.dim_person dp  WITH (NOLOCK) WHERE person_code = @agent_person_code
 END
 
 -- in case of -2 in valid_to_date_id_local, update the eternity date id with max date id

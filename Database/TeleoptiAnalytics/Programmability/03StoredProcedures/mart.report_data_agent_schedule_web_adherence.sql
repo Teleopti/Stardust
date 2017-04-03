@@ -24,7 +24,7 @@ as
 set nocount on
 
 declare @time_zone_id int
-select @time_zone_id = time_zone_id from mart.dim_person where person_code=@person_code
+select @time_zone_id = time_zone_id from mart.dim_person  WITH (NOLOCK) where person_code=@person_code
 
 
 CREATE TABLE #webresult (

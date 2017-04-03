@@ -93,7 +93,7 @@ SELECT
 	[scheduled_over_time_m],
 	[overtime_id]
 FROM mart.fact_schedule fs WITH (NOLOCK)
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON fs.person_id=p.person_id
 WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
 AND fs.scenario_id=@scenario_id
@@ -111,7 +111,7 @@ SELECT	d.date_id as 'date_id',
 		@hide_time_zone as 'hide_time_zone'
 FROM 
 	#fact_schedule f
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON f.person_id=p.person_id
 	AND f.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_overtime ot

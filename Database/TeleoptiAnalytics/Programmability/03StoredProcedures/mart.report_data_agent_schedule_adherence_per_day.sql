@@ -275,7 +275,7 @@ CREATE TABLE #person_id (person_id int)
 --c) valid for this period
 INSERT INTO #person_id
 SELECT dp.person_id
-FROM mart.dim_person dp
+FROM mart.dim_person dp WITH (NOLOCK)
 INNER JOIN #rights_teams t
 	ON dp.team_id = t.right_id
 INNER JOIN #rights_agents a
@@ -373,7 +373,7 @@ WHERE SchTemp.absence_id IS NULL
 --Get all intervals for the collection of person and teams
 INSERT #person_intervals
 	SELECT site_id,site_name,team_id,team_name,person_code,p.person_id,first_name,last_name,person_name,interval_id,interval_name
-	FROM mart.dim_person p
+	FROM mart.dim_person p WITH (NOLOCK)
 	INNER JOIN mart.dim_interval i
 		ON 1=1
 	INNER JOIN #person_id a
@@ -418,7 +418,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			@hide_time_zone,
 			isnull(count_activity_per_interval,2) --fake a mixed shift = white color
 			
-	FROM mart.dim_person p
+	FROM mart.dim_person p WITH (NOLOCK)
 	INNER JOIN #fact_schedule fs
 		ON fs.person_id=p.person_id
 	LEFT JOIN #fact_schedule_deviation fsd

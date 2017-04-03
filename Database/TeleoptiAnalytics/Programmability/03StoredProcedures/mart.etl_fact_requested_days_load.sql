@@ -73,7 +73,7 @@ INNER JOIN mart.dim_date dLocal
 	ON dLocal.date_date = CONVERT(smalldatetime,CONVERT(nvarchar(30), stg.request_date, 112))	
 INNER JOIN mart.dim_business_unit bu
 	ON bu.business_unit_code = stg.business_unit_code
-LEFT JOIN mart.dim_person dp
+LEFT JOIN mart.dim_person dp WITH (NOLOCK)
 ON
 	stg.person_code	= dp.person_code
 	AND	stg.request_date BETWEEN dp.valid_from_date AND dp.valid_to_date  --Is person valid in this range

@@ -37,7 +37,7 @@ CREATE TABLE #fact_schedule (person_code uniqueidentifier, date smalldatetime, s
 INSERT #fact_schedule(person_code,date,scheduled_ready_time_s)
 SELECT person_code,date_date,sum(scheduled_ready_time_m)*60
 FROM mart.fact_schedule fs
-INNER JOIN mart.dim_person p ON fs.person_id = p.person_id
+INNER JOIN mart.dim_person p  WITH (NOLOCK) ON fs.person_id = p.person_id
 INNER JOIN mart.bridge_time_zone b
            ON         fs.interval_id= b.interval_id
            AND fs.schedule_date_id= b.date_id
@@ -72,7 +72,7 @@ INNER JOIN mart.dim_date d
            ON b.local_date_id = d.date_id
 INNER JOIN (SELECT DISTINCT ba.acd_login_id, p.person_code
                                  FROM mart.bridge_acd_login_person ba
-                                 INNER JOIN mart.dim_person p
+                                 INNER JOIN mart.dim_person p WITH (NOLOCK)
                                             on p.person_id=ba.person_id
                                             AND (@date_from	between p.valid_from_date AND p.valid_to_date OR  @date_to	between p.valid_from_date AND p.valid_to_date)
                                             AND p.person_code = @person_code) tricky

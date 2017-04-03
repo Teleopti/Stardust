@@ -102,7 +102,7 @@ SELECT
 	fs.absence_id,
 	fs.day_count
 FROM mart.fact_schedule_day_count fs WITH (NOLOCK)
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON fs.person_id=p.person_id
 	AND fs.shift_startdate_local_id between p.valid_from_date_id_local and valid_to_date_id_local
 INNER JOIN mart.dim_date d
@@ -139,7 +139,7 @@ SELECT	p.person_id,
 		f.local_date
 FROM 
 	#fact_schedule_day_count f
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON f.person_id=p.person_id
 INNER JOIN mart.dim_day_off dd
 	ON dd.day_off_id=f.day_off_id
@@ -158,7 +158,7 @@ SELECT	p.person_id,
 		f.local_date
 FROM 
 	#fact_schedule_day_count f
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON f.person_id=p.person_id
 INNER JOIN mart.dim_absence da
 	ON da.absence_id=f.absence_id

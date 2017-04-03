@@ -16,7 +16,7 @@ declare @interval_to int
 declare @time_zone_id int
 set @interval_from=0
 select @interval_to=max(interval_id) from mart.dim_interval
-select @time_zone_id = time_zone_id from mart.dim_person where person_code=@person_code
+select @time_zone_id = time_zone_id from mart.dim_person  WITH (NOLOCK) where person_code=@person_code
 
 CREATE TABLE #tmpResult
 	(

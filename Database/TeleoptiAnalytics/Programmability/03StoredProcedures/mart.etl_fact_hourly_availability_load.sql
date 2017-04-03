@@ -54,7 +54,7 @@ INNER JOIN mart.dim_business_unit bu
 	ON bu.business_unit_code = stg.business_unit_code
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
-LEFT JOIN mart.dim_person dp
+LEFT JOIN mart.dim_person dp WITH (NOLOCK)
 ON
 	stg.person_code	= dp.person_code
 	AND	stg.restriction_date BETWEEN dp.valid_from_date AND dp.valid_to_date  --Is person valid in this range

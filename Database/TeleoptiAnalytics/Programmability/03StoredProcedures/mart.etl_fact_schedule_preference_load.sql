@@ -143,7 +143,7 @@ FROM
 	(
 		SELECT * FROM Stage.stg_schedule_preference WHERE convert(smalldatetime,floor(convert(decimal(18,8),restriction_date ))) between @start_date AND @end_date
 	) AS f
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	on p.person_code = f.person_code
 INNER JOIN mart.DimPersonLocalized(@start_date,@end_date)		dp
 	ON	dp.person_id = p.person_id

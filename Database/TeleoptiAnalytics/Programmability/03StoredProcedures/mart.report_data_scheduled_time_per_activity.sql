@@ -77,7 +77,7 @@ SELECT * FROM mart.SplitStringInt(@activity_set)
 INSERT INTO #fact_schedule
 SELECT shift_startdate_local_id,schedule_date_id, fs.person_id, interval_id, scenario_id, activity_id, scheduled_time_m
 FROM mart.fact_schedule fs WITH (NOLOCK)
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON fs.person_id=p.person_id
 	AND shift_startdate_local_id between p.valid_from_date_id_local AND p.valid_to_date_id_local
 WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))

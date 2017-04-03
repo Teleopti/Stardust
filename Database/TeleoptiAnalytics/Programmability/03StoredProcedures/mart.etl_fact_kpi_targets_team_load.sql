@@ -84,7 +84,7 @@ INNER JOIN
 	mart.dim_business_unit db
 ON 
 	db.business_unit_code=stg.business_unit_code
-WHERE dt.team_id IN (SELECT DISTINCT team_id FROM mart.dim_person) --20090428 Must exist in dim_person
+WHERE dt.team_id IN (SELECT DISTINCT team_id FROM mart.dim_person WITH (NOLOCK)) --20090428 Must exist in dim_person
 ORDER BY dk.kpi_id,dt.team_id
 
 --fill with 0 on teams with no selected targets
@@ -129,6 +129,6 @@ WHERE NOT EXISTS
 
 )
 AND dt.team_id>0
-AND dt.team_id IN (SELECT DISTINCT team_id FROM mart.dim_person)--20090428 Must exist in dim_person
+AND dt.team_id IN (SELECT DISTINCT team_id FROM mart.dim_person WITH (NOLOCK))--20090428 Must exist in dim_person
 GO
 

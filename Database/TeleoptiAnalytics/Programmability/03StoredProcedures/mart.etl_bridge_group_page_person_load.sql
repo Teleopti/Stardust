@@ -26,7 +26,7 @@ DELETE bridge
 FROM 
 	[mart].[bridge_group_page_person] bridge
 INNER JOIN 
-	mart.dim_person p
+	mart.dim_person p WITH (NOLOCK)
 ON 
 	p.person_id = bridge.person_id
 WHERE 
@@ -43,7 +43,7 @@ SELECT
 FROM 
 	stage.stg_group_page_person s
 INNER JOIN 
-	mart.dim_person p
+	mart.dim_person p  WITH (NOLOCK)
 ON 
 	p.person_code = s.person_code
 	AND p.business_unit_code = s.business_unit_code
@@ -66,7 +66,7 @@ SELECT
 FROM 
 	stage.stg_group_page_person s
 INNER JOIN 
-	mart.dim_person p
+	mart.dim_person p WITH (NOLOCK)
 ON 
 	p.person_code = s.person_code
 	AND p.business_unit_code = s.business_unit_code
@@ -90,7 +90,7 @@ SELECT
 FROM 
 	stage.stg_group_page_person s
 INNER JOIN 
-	mart.dim_person p
+	mart.dim_person p  WITH (NOLOCK)
 ON 
 	p.person_code = s.person_code
 	AND p.business_unit_code = s.business_unit_code

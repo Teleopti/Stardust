@@ -59,7 +59,7 @@ SELECT * FROM [mart].[DimPersonLocalized](@date_from,@date_to)
 --	person_code		= d.person_code,
 --	name			= '00000000-0000-0000-0000-000000000001'
 --FROM
---	mart.dim_person d
+--	mart.dim_person d WITH (NOLOCK)
 --WHERE person_id=-1 --Not Defined
 
 --Fix translation for "All" + "Not Defined"

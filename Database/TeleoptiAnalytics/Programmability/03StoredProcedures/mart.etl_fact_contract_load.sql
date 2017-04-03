@@ -69,7 +69,7 @@ SELECT
 FROM 
 	Stage.stg_contract f
 INNER JOIN	
-	mart.dim_person	dp	
+	mart.dim_person	dp	 WITH (NOLOCK)
 ON	
 	f.person_code	=	dp.person_code	AND	
 	f.date			BETWEEN	valid_from_date	AND valid_to_date

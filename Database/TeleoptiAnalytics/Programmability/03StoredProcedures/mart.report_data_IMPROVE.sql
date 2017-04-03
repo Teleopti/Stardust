@@ -197,7 +197,7 @@ SELECT
 	valid_from_date_id_local=p.valid_from_date_id_local,
 	valid_to_date_id_local=p.valid_to_date_id_local
 FROM #rights_agents a
-INNER JOIN mart.dim_person p
+INNER JOIN mart.dim_person p WITH (NOLOCK)
 	on p.person_id = a.right_id
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = a.right_id
