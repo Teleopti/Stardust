@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 			IMatrixListFactory matrixListFactory,
-			ITeamBlockSchedulingOptions teamBlockScheudlingOptions,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 			IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
 			ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
