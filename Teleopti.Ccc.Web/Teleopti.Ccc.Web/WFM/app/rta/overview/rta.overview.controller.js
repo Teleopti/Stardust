@@ -52,6 +52,8 @@
 		var stateForAgentsByTeamsAndSkillArea = 'rta.agents({teamIds: team.Id, skillAreaId: vm.skillAreaId})';
 		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
 		var pollingLock = true;
+		var previousState = "";
+		var currentState = "";
 		//var polling = null;
 		/***scoped variables */
 		vm.selectedItemIds = [];
@@ -63,6 +65,7 @@
 		vm.getAdherencePercent = rtaFormatService.numberToPercent;
 		vm.getAdherencePercent = rtaFormatService.numberToPercent;
 		vm.sortByLocaleLanguage = localeLanguageSortingService.sort;
+		vm.snappierToggleOn = false;
 		/***scoped functions */
 
 		vm.goToDashboard = function () { rtaRouteService.goToSites(); };
@@ -78,12 +81,14 @@
 			(function initialize() {
 				pollingLock = false;
 				if (toggleService.RTA_SnappierDisplayOfOverview_43568) {
+					vm.snappierToggleOn = true;
 					rtaService.getSkillAreas().then(function (skillAreas) {
 						vm.skillAreas = skillAreas.SkillAreas;
 						getSitesOrTeams2();
 					});
 				}
 				else {
+					vm.snappierToggleOn = false;
 					rtaService.getSkillAreas().then(function (skillAreas) {
 						vm.skillAreas = skillAreas.SkillAreas;
 						getSitesOrTeams();
@@ -130,13 +135,21 @@
 								siteIds: vm.siteIds
 							})
 								.then(function (teamAdherences) {
+									currentState = JSON.stringify(teamAdherences);
+									if (previousState != currentState) {
+										vm.teams = teamAdherences;
+										previousState = currentState;
+									}
 									pollingLock = true;
-									vm.teams = teamAdherences;
 								});
 						} else if (angular.isDefined(vm.sites)) {
 							rtaService.getAdherenceForSitesBySkills(vm.skillId)
 								.then(function (siteAdherences) {
-									vm.sites = siteAdherences;
+									currentState = JSON.stringify(siteAdherences);
+									if (previousState != currentState) {
+										vm.sites = siteAdherences;
+										previousState = currentState;
+									}
 									pollingLock = true;
 								});
 						};
@@ -144,12 +157,20 @@
 					else if (vm.siteIds) {
 						rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds })
 							.then(function (teamAdherences) {
-								vm.teams = teamAdherences;
+								currentState = JSON.stringify(teamAdherences);
+								if (previousState != currentState) {
+									vm.teams = teamAdherences;
+									previousState = currentState;
+								}
 								pollingLock = true;
 							})
 					} else {
 						rtaService.getAdherenceForAllSites().then(function (siteAdherences) {
-							vm.sites = siteAdherences;
+							currentState = JSON.stringify(siteAdherences);
+							if (previousState != currentState) {
+								vm.sites = siteAdherences;
+								previousState = currentState;
+							}
 							pollingLock = true;
 						});
 					}

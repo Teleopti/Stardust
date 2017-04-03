@@ -14,7 +14,8 @@
 			</div>
 		</div>
 		<div class="fab-wrapper">
-			<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': vm.selectedItemIds.length < 1, 'grow-out': vm.selectedItemIds.length > 0}" ng-click="vm.openSelectedItems()">
+			<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': vm.selectedItemIds.length < 1, 'grow-out': vm.selectedItemIds.length > 0}"
+			 ng-click="vm.openSelectedItems()">
 				<i class="mdi mdi-arrow-right"></i>
 				<md-tooltip>{{'Open'|translate}}</md-tooltip>
 			</button>
@@ -29,26 +30,22 @@
 				<div class="wfm-grid">
 					<div class="grid-card team" ng-if="team.NumberOfAgents > 0" ng-repeat="team in vm.teams | orderBy:'Name':false:vm.sortByLocaleLanguage">
 						<a ui-sref="{{vm.getStateForAgents()}}" class="rta-card-link">
-																									<div
-																													class="list-content"
-																													ng-class="{good: vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}" tabindex="-1">
-																													<div class="wfm-checkbox">
-																																	<label ng-attr-name="{{team.Name}}" ng-click="$event.stopPropagation()" tabindex="-1">
-																																	<input type="checkbox" value="value" ng-checked="vm.selectedSites.indexOf(team.Id) > -1" ng-click="vm.toggleSelection(team.Id)" ng-model="selected" tabindex="-1"/>
-																																					<span class="wfm-checkbox-toggle"></span>																											
-																																					<b>
-																																									<span class="wfm-checkbox-label org-name-container" ng-attr-data-max="{{team.NumberOfAgents}}" ng-attr-data-value="{{team.OutOfAdherence}}">
-																																													{{team.Name}}
-																																									</span>
-																																					</b>
-																																	</label>
-																													</br>
-																													<span class="full-padding">{{'InAlarm'|translate}}:
-																																	<b>{{team.OutOfAdherence}}</b>
-																													</span>
-																									</div>
-																					</div>
-																				</a>
+							<div class="list-content" ng-class="vm.snappierToggleOn ? team.Color : {good: vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}" tabindex="-1">
+								<div class="wfm-checkbox">
+									<label ng-attr-name="{{team.Name}}" ng-click="$event.stopPropagation()" tabindex="-1">
+										<input type="checkbox" value="value" ng-checked="vm.selectedSites.indexOf(team.Id) > -1" ng-click="vm.toggleSelection(team.Id)" ng-model="selected" tabindex="-1"/>
+											<span class="wfm-checkbox-toggle"></span>																											
+												<b><span class="wfm-checkbox-label org-name-container" ng-attr-data-max="{{team.NumberOfAgents}}" ng-attr-data-value="{{team.OutOfAdherence}}">
+													{{team.Name}}
+											</span></b>
+									</label>
+									</br>
+									<span class="full-padding">{{'InAlarm'|translate}}:
+											<b>{{team.OutOfAdherence}}</b>
+										</span>
+								</div>
+							</div>
+						</a>
 					</div>
 				</div>
 
