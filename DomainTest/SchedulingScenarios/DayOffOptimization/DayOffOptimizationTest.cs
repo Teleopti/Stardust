@@ -372,12 +372,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[7].CurrentDate).DayOff().Should().Be.Null();
 		}
 
-		[Test, Explicit("To be implemented, fix above and see what needs to be done/written")]
-		public void ShouldNotLeaveBlankSpotsWhenWhenDayoffsAreNotInLegalStateAtStart()
-		{
-			//something similar like above but different asserts
-		}
-
 		[Test]
 		public void ShouldNotCalculateIntraIntervalIssuses()
 		{
