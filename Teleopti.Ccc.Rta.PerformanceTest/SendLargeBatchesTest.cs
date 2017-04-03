@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -37,6 +37,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			stopwatch.Stop();
 
+			var elapsed = stopwatch.Elapsed;
+
 			var json = File.ReadAllText("serviceaccount.json");
 			var serviceaccount_json = JsonConvert.DeserializeObject<serviceaccount_json>(json);
 
@@ -53,21 +55,29 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				ApplicationName = "Google Sheets API",
 			});
 
-			var values = new List<IList<object>>
-			{
-				new object[]
-				{
-					typeof(SendLargeBatchesTest).Assembly.GetName().Version.ToString(),
-					stopwatch.Elapsed.TotalSeconds,
-					"",
-					"",
-					Environment.MachineName,
-					stopwatch.Elapsed
-				}
-			};
+			var headersRequest = service.Spreadsheets.Values
+				.Get("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "A1:1");
+			headersRequest.ValueRenderOption = SpreadsheetsResource.ValuesResource.GetRequest.ValueRenderOptionEnum.FORMULA;
+			var headers = headersRequest.Execute().Values[0];
+
+			var newRow = new object[20];
+			newRow[headers.IndexOf("version")] = typeof(SendLargeBatchesTest).Assembly.GetName().Version.ToString();
+			newRow[headers.IndexOf("seconds")] = elapsed.TotalSeconds;
+			newRow[headers.IndexOf("label")] = "ℹ️";
+			newRow[headers.IndexOf("tooltip")] = $@"=INDIRECT(""E""&ROW())&"" - (""&text(INDIRECT(""F""&ROW()), ""hh:MM:ss"")&"")""";
+			newRow[headers.IndexOf("agent")] = Environment.MachineName;
+			newRow[headers.IndexOf("duration")] = elapsed;
 
 			var appendRequest = service.Spreadsheets.Values
-				.Append(new ValueRange { Values = values }, "1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "A1");
+				.Append(new ValueRange
+					{
+						Values = new List<IList<object>>
+						{
+							newRow
+						}
+					},
+					"1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE",
+					"A1");
 			appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
 			appendRequest.Execute();
 		}
