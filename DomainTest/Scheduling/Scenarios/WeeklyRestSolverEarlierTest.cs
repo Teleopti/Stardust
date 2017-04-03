@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		public IWeeklyRestSolverCommand Target;
 		public IMatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
-		public CascadingResourceCalculation CascadingResourceCalculation;
+		public IResourceCalculation CascadingResourceCalculation;
 
 		private DateOnlyPeriod weekPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 04);
 		private readonly IScenario scenario = new Scenario("unimportant");

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		public IWeeklyRestSolverCommand Target;
 		public IMatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
-		public CascadingResourceCalculation CascadingResourceCalculation;
+		public IResourceCalculation CascadingResourceCalculation;
 
 		private DateOnlyPeriod weekPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 04);
 		private readonly IScenario scenario = new Scenario("unimportant");
