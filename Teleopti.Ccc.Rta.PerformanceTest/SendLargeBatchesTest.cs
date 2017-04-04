@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		{
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
+			var startTime = DateTime.Now;
 
 			States.SendAllAsLargeBatches();
 
@@ -56,17 +57,28 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			});
 
 			var headersRequest = service.Spreadsheets.Values
-				.Get("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "A1:1");
+				.Get("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "A1:2");
 			headersRequest.ValueRenderOption = SpreadsheetsResource.ValuesResource.GetRequest.ValueRenderOptionEnum.FORMULA;
-			var headers = headersRequest.Execute().Values[0];
+			var first2Rows = headersRequest.Execute();
+			var headers = first2Rows.Values[0];
+			var templateRow = first2Rows.Values[1];
+
+			var startIndex = headers.IndexOf("start");
+			var versionIndex = headers.IndexOf("version");
+			var secondsIndex = headers.IndexOf("seconds");
+			var labelIndex = headers.IndexOf("label");
+			var tooltipIndex = headers.IndexOf("tooltip");
+			var agentIndex = headers.IndexOf("agent");
+			var durationIndex = headers.IndexOf("duration");
 
 			var newRow = new object[20];
-			newRow[headers.IndexOf("version")] = typeof(SendLargeBatchesTest).Assembly.GetName().Version.ToString();
-			newRow[headers.IndexOf("seconds")] = elapsed.TotalSeconds;
-			newRow[headers.IndexOf("label")] = "ℹ️";
-			newRow[headers.IndexOf("tooltip")] = $@"=INDIRECT(""E""&ROW())&"" - (""&text(INDIRECT(""F""&ROW()), ""hh:MM:ss"")&"")""";
-			newRow[headers.IndexOf("agent")] = Environment.MachineName;
-			newRow[headers.IndexOf("duration")] = elapsed;
+			newRow[startIndex] = startTime.ToString("yyyy-MM-dd HH:mm");
+			newRow[versionIndex] = typeof(SendLargeBatchesTest).Assembly.GetName().Version.ToString();
+			newRow[secondsIndex] = elapsed.TotalSeconds;
+			newRow[labelIndex] = templateRow[labelIndex];
+			newRow[tooltipIndex] = templateRow[tooltipIndex];
+			newRow[agentIndex] = Environment.MachineName;
+			newRow[durationIndex] = elapsed;
 
 			var appendRequest = service.Spreadsheets.Values
 				.Append(new ValueRange
