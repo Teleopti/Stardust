@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class RemoveLayerFromSchedule : IRemoveLayerFromSchedule
 	{
-		public void Remove(IScheduleDay part, IShiftLayer layer)
+		public void Remove(IScheduleDay part, ShiftLayer layer)
 		{
 			var ass = part?.PersonAssignment();
 			ass?.RemoveActivity(layer);

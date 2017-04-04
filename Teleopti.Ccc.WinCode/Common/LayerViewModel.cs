@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Ccc.WinCode.Common.Models;
@@ -185,7 +186,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			//for activity layers - overriden in absencelayerviewmodel
 			if (ParentObservingCollection != null)
 			{
-				ParentObservingCollection.RemoveActivity(this, (IShiftLayer)Layer, SchedulePart);
+				ParentObservingCollection.RemoveActivity(this, (ShiftLayer)Layer, SchedulePart);
 				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
 			}
 		}

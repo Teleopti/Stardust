@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			scheduleBeTrade.Stub(s => s.Person).Return(person2);
 			var shiftLayer = new MainShiftLayer(new Activity("phone"), new DateTimePeriod(2001, 1, 1, 9, 2001, 1, 1, 17));
 			shiftLayer.Payload.InWorkTime = true;
-			pa.Stub(x => x.ShiftLayers).Return(new List<IShiftLayer> { shiftLayer });
+			pa.Stub(x => x.ShiftLayers).Return(new List<ShiftLayer> { shiftLayer });
 			scheduleBeTrade.Stub(s => s.PersonAssignment()).Return(pa);
 
 			var targetRel = new NonMainShiftActivityRule()
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			person2.SetId(Guid.NewGuid());
 			scheduleBeTrade.Stub(s => s.Person).Return(person2);
 			var shiftLayer =   new MainShiftLayer(new Activity("lunch"), new DateTimePeriod(2001, 1,1,11, 2001,1,1,12));
-			pa.Stub(x => x.ShiftLayers).Return(new List<IShiftLayer> { shiftLayer });
+			pa.Stub(x => x.ShiftLayers).Return(new List<ShiftLayer> { shiftLayer });
 			scheduleBeTrade.Stub(s => s.PersonAssignment()).Return(pa);
 			scheduleBeTrade.Stub(s => s.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
 
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var person2 = PersonFactory.CreatePerson();
 			person2.SetId(Guid.NewGuid());
 			scheduleBeTrade.Stub(s => s.Person).Return(person2);
-			pa.Stub(x => x.ShiftLayers).Return(new List<IShiftLayer> ());
+			pa.Stub(x => x.ShiftLayers).Return(new List<ShiftLayer> ());
 			scheduleBeTrade.Stub(s => s.PersonAssignment()).Return(pa);
 			scheduleBeTrade.Stub(s => s.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
 
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			shiftLayer.Payload.InWorkTime = true;
 			var pa2 = MockRepository.GenerateMock<IPersonAssignment>();
 			pa2.Stub(p => p.Date).Return(dateOnly);
-			pa2.Stub(x => x.ShiftLayers).Return(new List<IShiftLayer> { shiftLayer });
+			pa2.Stub(x => x.ShiftLayers).Return(new List<ShiftLayer> { shiftLayer });
 			scheduleBeTrade.Stub(s => s.PersonAssignment()).Return(pa2);
 
 			var targetRel = new NonMainShiftActivityRule()
@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			shiftLayer.Payload.InWorkTime = false;
 			var pa2 = MockRepository.GenerateMock<IPersonAssignment>();
 			pa2.Stub(p => p.Date).Return(dateOnly);
-			pa2.Stub(x => x.ShiftLayers).Return(new List<IShiftLayer> { shiftLayer });
+			pa2.Stub(x => x.ShiftLayers).Return(new List<ShiftLayer> { shiftLayer });
 			scheduleBeTrade.Stub(s => s.PersonAssignment()).Return(pa2);
 
 			string message = string.Format(CultureInfo.CurrentCulture,

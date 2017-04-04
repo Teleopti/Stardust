@@ -8,7 +8,7 @@ using NHibernate.Envers.Entities.Mapper.Relation;
 using NHibernate.Persister.Collection;
 using NHibernate.Type;
 using NHibernate.UserTypes;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public IPersistentCollection Instantiate(ISessionImplementor session, ICollectionPersister persister)
 		{
-			return new PersistentGenericList<IShiftLayer>(session);
+			return new PersistentGenericList<ShiftLayer>(session);
 		}
 
 		public IPersistentCollection Wrap(ISessionImplementor session, object collection)
 		{
-			return new PersistentGenericList<IShiftLayer>(session, (IList<IShiftLayer>)collection);
+			return new PersistentGenericList<ShiftLayer>(session, (IList<ShiftLayer>)collection);
 		}
 
 		public IEnumerable GetElements(object collection)
@@ -78,12 +78,12 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		protected void Clear(object collection)
 		{
-			((IList<IShiftLayer>)collection).Clear();
+			((IList<ShiftLayer>)collection).Clear();
 		}
 
 		protected void Add(object collection, object element)
 		{
-			((IList<IShiftLayer>)collection).Add((IShiftLayer)element);
+			((IList<ShiftLayer>)collection).Add((ShiftLayer)element);
 		}
 
 		public IType GetElementType(ISessionFactoryImplementor factory)
@@ -115,12 +115,12 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public object Instantiate(int anticipatedSize)
 		{
-			return anticipatedSize <= 0 ? new List<IShiftLayer>() : new List<IShiftLayer>(anticipatedSize + 1);
+			return anticipatedSize <= 0 ? new List<ShiftLayer>() : new List<ShiftLayer>(anticipatedSize + 1);
 		}
 
 		public IPropertyMapper Create(IEnversProxyFactory enversProxyFactory, CommonCollectionMapperData commonCollectionMapperData, MiddleComponentData elementComponentData, MiddleComponentData indexComponentData, bool embeddableElementType)
 		{
-			return new ListCollectionMapper<IShiftLayer>(enversProxyFactory, commonCollectionMapperData, typeof(IList<IShiftLayer>), elementComponentData, indexComponentData, embeddableElementType);
+			return new ListCollectionMapper<ShiftLayer>(enversProxyFactory, commonCollectionMapperData, typeof(IList<ShiftLayer>), elementComponentData, indexComponentData, embeddableElementType);
 		}
 	}
 }

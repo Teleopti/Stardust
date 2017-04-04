@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿using Teleopti.Ccc.Domain.Scheduling.Assignment;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Logic for removing Layer from schedule
@@ -14,7 +16,7 @@
         /// </summary>
         /// <param name="part">The part.</param>
         /// <param name="layer">The layer.</param>
-        void Remove(IScheduleDay part, IShiftLayer layer);
+        void Remove(IScheduleDay part, ShiftLayer layer);
 
         /// <summary>
         /// Removes the specified layer if it exists.

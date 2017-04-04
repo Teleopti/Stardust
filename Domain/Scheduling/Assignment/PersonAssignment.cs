@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{
-		private IList<IShiftLayer> _shiftLayers;
+		private IList<ShiftLayer> _shiftLayers;
 		private IPerson _person;
 		private IScenario _scenario;
 		private IShiftCategory _shiftCategory;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Date = date;
 			_person = agent;
 			_scenario = scenario;
-			_shiftLayers = new List<IShiftLayer>();
+			_shiftLayers = new List<ShiftLayer>();
 		}
 
 		protected PersonAssignment()
@@ -141,13 +141,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _shiftLayers.OfType<OvertimeShiftLayer>();
 		}
 
-		public virtual IEnumerable<IShiftLayer> ShiftLayers => _shiftLayers;
+		public virtual IEnumerable<ShiftLayer> ShiftLayers => _shiftLayers;
 
 		public virtual IPerson Person => _person;
 
 		public virtual IScenario Scenario => _scenario;
 
-		public virtual bool RemoveActivity(IShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
+		public virtual bool RemoveActivity(ShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			var removed = _shiftLayers.Remove(layer);
 
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
-			retobj._shiftLayers = new List<IShiftLayer>();
+			retobj._shiftLayers = new List<ShiftLayer>();
 			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IPersonAssignment EntityClone()
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
-			retobj._shiftLayers = new List<IShiftLayer>();
+			retobj._shiftLayers = new List<ShiftLayer>();
 			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
@@ -474,7 +474,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Insert(index,layer);
 		}
 
-		public virtual void MoveLayerDown(IShiftLayer shiftLayer)
+		public virtual void MoveLayerDown(ShiftLayer shiftLayer)
 		{
 			var t = shiftLayer.GetType();
 			var currentIndex = _shiftLayers.IndexOf(shiftLayer);
@@ -483,7 +483,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			moveLayer(_shiftLayers.IndexOf(toBeReplaced), currentIndex);
 		}
 
-		public virtual void MoveLayerUp(IShiftLayer shiftLayer)
+		public virtual void MoveLayerUp(ShiftLayer shiftLayer)
 		{
 			var t = shiftLayer.GetType();
 			var currentIndex = _shiftLayers.IndexOf(shiftLayer);
@@ -604,7 +604,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public virtual void MoveActivityAndKeepOriginalPriority(IShiftLayer shiftLayer, DateTime newStartTimeInUtc, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
+		public virtual void MoveActivityAndKeepOriginalPriority(ShiftLayer shiftLayer, DateTime newStartTimeInUtc, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
 		{
 			var originalOrderIndex = ShiftLayers.ToList().IndexOf(shiftLayer);
 			if (originalOrderIndex < 0)

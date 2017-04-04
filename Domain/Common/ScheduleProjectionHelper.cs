@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			var matchedLayerIds = new List<Guid>();
 			var personAssignment = scheduleDay.PersonAssignment();
-			var shiftLayersList = new List<IShiftLayer>();
+			var shiftLayersList = new List<ShiftLayer>();
 			if (personAssignment != null && personAssignment.ShiftLayers.Any())
 			{
 				shiftLayersList = personAssignment.ShiftLayers.ToList();
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			var matchedLayers = new List<PersonalShiftLayer>();
 			var personAssignment = scheduleDay.PersonAssignment();
-			var shiftLayersList = new List<IShiftLayer>();
+			var shiftLayersList = new List<ShiftLayer>();
 			if (personAssignment != null && personAssignment.ShiftLayers.Any())
 			{
 				shiftLayersList = personAssignment.ShiftLayers.ToList();
@@ -66,11 +66,11 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			return matchedLayerIds;
 		}
-		public IList<IShiftLayer> GetMatchedMainShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
+		public IList<ShiftLayer> GetMatchedMainShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
 		{
-			var matchedLayers = new List<IShiftLayer>();
+			var matchedLayers = new List<ShiftLayer>();
 			var personAssignment = scheduleDay.PersonAssignment();
-			var shiftLayersList = new List<IShiftLayer>();
+			var shiftLayersList = new List<ShiftLayer>();
 			if (personAssignment != null && personAssignment.ShiftLayers.Any())
 			{
 				shiftLayersList = personAssignment.ShiftLayers.ToList();

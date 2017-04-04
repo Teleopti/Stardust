@@ -1,5 +1,6 @@
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Common
 				{
 					if (CanMoveDown)
 					{
-						_assignment.MoveLayerDown(_layer as IShiftLayer);
+						_assignment.MoveLayerDown(_layer as ShiftLayer);
 						LayerMoved();
 					}
 
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Common
 				{
 					if (CanMoveUp)
 					{
-						_assignment.MoveLayerUp(_layer as IShiftLayer);
+						_assignment.MoveLayerUp(_layer as ShiftLayer);
 						LayerMoved();
 					}
 				}

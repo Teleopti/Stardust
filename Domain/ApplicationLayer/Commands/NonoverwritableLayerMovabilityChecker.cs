@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -57,10 +58,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return result.Any();
 		}	
 
-		public IList<IShiftLayer> GetNonoverwritableLayersToMove(IScheduleDay scheduleDay, DateTimePeriod newPeriod)
+		public IList<ShiftLayer> GetNonoverwritableLayersToMove(IScheduleDay scheduleDay, DateTimePeriod newPeriod)
 		{
 			var projection = scheduleDay.ProjectionService().CreateProjection();
-			if (!projection.HasLayers) return new List<IShiftLayer>(); ;
+			if (!projection.HasLayers) return new List<ShiftLayer>();
 
 			var conflictVisualLayers = projection.Where(l =>
 			{
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return conflictVisualLayers.SelectMany(l => _projectionHelper.GetMatchedMainShiftLayers(scheduleDay, l)).ToList();
 		}
 
-		public IList<IShiftLayer> GetNonoverwritableLayersToMove(IPerson person, DateOnly date, DateTimePeriod newPeriod)
+		public IList<ShiftLayer> GetNonoverwritableLayersToMove(IPerson person, DateOnly date, DateTimePeriod newPeriod)
 		{
 			var scheduleDay = _scheduleDayProvider.GetScheduleDay(date, person);
 			return GetNonoverwritableLayersToMove(scheduleDay, newPeriod);

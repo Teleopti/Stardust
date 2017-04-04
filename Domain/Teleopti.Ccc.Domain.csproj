@@ -780,7 +780,6 @@
     <Compile Include="InterfaceLegacy\Domain\IShiftExchangeCriteria.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftExchangeOffer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftFromMasterActivityService.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IShiftLayer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftLengthDecider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftProjectionCache.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftProjectionCacheManager.cs" />

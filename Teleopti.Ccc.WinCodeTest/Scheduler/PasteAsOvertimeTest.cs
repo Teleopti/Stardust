@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldPasteOnEmptyDay()
 		{
 			_target.Paste();
-			var shiftLayers = _destination.PersonAssignment().ShiftLayers as IList<IShiftLayer>;
+			var shiftLayers = _destination.PersonAssignment().ShiftLayers as IList<ShiftLayer>;
 
 			Assert.IsNotNull(shiftLayers);
 			Assert.AreEqual(2, shiftLayers.Count);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			_destination.PersonAssignment(true).SetDayOff(DayOffFactory.CreateDayOff());
 			_target.Paste();
-			var shiftLayers = _destination.PersonAssignment().ShiftLayers as IList<IShiftLayer>;
+			var shiftLayers = _destination.PersonAssignment().ShiftLayers as IList<ShiftLayer>;
 
 			Assert.IsNotNull(shiftLayers);
 			Assert.AreEqual(2, shiftLayers.Count);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			_destination.CreateAndAddActivity(_activity0,_period0,_shiftCategory);
 			_target.Paste();
-			var shiftLayers = _destination.PersonAssignment().ShiftLayers as IList<IShiftLayer>;
+			var shiftLayers = _destination.PersonAssignment().ShiftLayers as IList<ShiftLayer>;
 
 			Assert.IsNotNull(shiftLayers);
 			Assert.AreEqual(3, shiftLayers.Count);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			IAbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), _period1);
 			_destination.CreateAndAddAbsence(absenceLayer);
 			_target.Paste();
-			var shiftLayers = _destination.PersonAssignment().ShiftLayers as IList<IShiftLayer>;
+			var shiftLayers = _destination.PersonAssignment().ShiftLayers as IList<ShiftLayer>;
 
 			Assert.IsNotNull(shiftLayers);
 			Assert.AreEqual(2, shiftLayers.Count);

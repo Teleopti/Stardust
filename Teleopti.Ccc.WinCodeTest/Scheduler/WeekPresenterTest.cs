@@ -111,7 +111,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             mocks.VerifyAll();
         }
 
-        [Test]
+
+		[Test]
         public void VerifyCreateSpanDictionaryFromSchedulePersonalShift()
         {
             var pa1 = mocks.StrictMock<IPersonAssignment>();

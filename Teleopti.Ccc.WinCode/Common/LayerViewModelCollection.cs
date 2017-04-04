@@ -7,6 +7,7 @@ using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Common.Collections;
 using Teleopti.Interfaces.Domain;
 
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.WinCode.Common
         }
 
 
-		public void RemoveActivity(ILayerViewModel sender, IShiftLayer activityLayer, IScheduleDay scheduleDay)
+		public void RemoveActivity(ILayerViewModel sender, ShiftLayer activityLayer, IScheduleDay scheduleDay)
 		{
 			_removeService.Remove(scheduleDay, activityLayer);
 			CreateProjectionViewModels(scheduleDay);

@@ -1404,7 +1404,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
         	var startDateTime = _schedulerState.RequestedPeriod.Period().StartDateTime;
             var period = new DateTimePeriod(startDateTime.AddHours(3), startDateTime.AddHours(3.5));
-	        var shiftLayer = _mocks.StrictMock<IShiftLayer>();
+	        var shiftLayer =new MainShiftLayer(new Activity("_"), new DateTimePeriod());
 
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(ass.Period).Return(period);
@@ -1422,7 +1422,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(person, period));
             Expect.Call(_viewBase.TheGrid).Return(_grid);
             Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-	        Expect.Call(ass.ShiftLayers).Return(new List<IShiftLayer> {shiftLayer});
+	        Expect.Call(ass.ShiftLayers).Return(new List<ShiftLayer> {shiftLayer});
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             _target.AddPersonalShift();

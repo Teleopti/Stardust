@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return meetings != null && meetings.Any(personMeeting => isOverSchedule(personMeeting.Period, shiftLayers));
 		}
 
-		private bool isOverSchedule(DateTimePeriod period, IList<IShiftLayer> layers)
+		private bool isOverSchedule(DateTimePeriod period, IList<ShiftLayer> layers)
 		{
 			if (!layers.Any()) return true;
 

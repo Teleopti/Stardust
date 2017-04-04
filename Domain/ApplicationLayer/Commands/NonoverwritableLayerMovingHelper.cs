@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		TimeSpan GetMovingDistance(IScheduleDay scheduleDay, DateTimePeriod avoidPeriod, Guid shiftLayerId);
 		TimeSpan GetMovingDistance(IPerson person, DateOnly date, DateTimePeriod avoidPeriod, Guid shiftLayerId);
-		bool IsDestinationValidForMovedShiftLayer(IScheduleDay scheduleDay, IShiftLayer layer,TimeSpan distance);
+		bool IsDestinationValidForMovedShiftLayer(IScheduleDay scheduleDay, ShiftLayer layer,TimeSpan distance);
 	}
 
 	public class NonoverwritableLayerMovingHelper : INonoverwritableLayerMovingHelper
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var scheduleDay = _scheduleDayProvider.GetScheduleDay(date, person);
 			return GetMovingDistance(scheduleDay, avoidPeriod, shiftLayerId);
 		}
-		public bool IsDestinationValidForMovedShiftLayer(IScheduleDay scheduleDay, IShiftLayer layer,TimeSpan distance)
+		public bool IsDestinationValidForMovedShiftLayer(IScheduleDay scheduleDay, ShiftLayer layer,TimeSpan distance)
 		{			
 			var periodAtDestination = layer.Period.MovePeriod(distance);
 			var projectionPeriod = scheduleDay.ProjectionService().CreateProjection().Period();

@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IEnumerable<MainShiftLayer> MainActivities();
 		IEnumerable<PersonalShiftLayer> PersonalActivities();
 		IEnumerable<OvertimeShiftLayer> OvertimeActivities();
-		IEnumerable<IShiftLayer> ShiftLayers { get; }
+		IEnumerable<ShiftLayer> ShiftLayers { get; }
 		DateTimePeriod PeriodExcludingPersonalActivity();
-		bool RemoveActivity(IShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
+		bool RemoveActivity(ShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 		void AddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 
 		void AddOvertimeActivity(IActivity activity, DateTimePeriod period,
@@ -76,12 +76,12 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime,
 			TimeSpan length, TrackedCommandInfo trackedCommandInfo);
 
-		void MoveActivityAndKeepOriginalPriority(IShiftLayer shiftLayer, DateTime newStartTimeInUtc,
+		void MoveActivityAndKeepOriginalPriority(ShiftLayer shiftLayer, DateTime newStartTimeInUtc,
 			TrackedCommandInfo trackedCommandInfo, bool muteEvent = false);
 
 		void AddActivity(IActivity activity, TimePeriod period);
 		void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment sourceAssignment, TimeSpan periodOffset);
-		void MoveLayerDown(IShiftLayer shiftLayer);
-		void MoveLayerUp(IShiftLayer shiftLayer);
+		void MoveLayerDown(ShiftLayer shiftLayer);
+		void MoveLayerUp(ShiftLayer shiftLayer);
 	}
 }

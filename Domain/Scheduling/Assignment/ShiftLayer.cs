@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public abstract class ShiftLayer : AggregateEntity, IShiftLayer
+	public abstract class ShiftLayer : AggregateEntity, ILayer<IActivity>
 	{
 		protected ShiftLayer(IActivity activity, DateTimePeriod period)
 		{
@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 		
 
-		public virtual IShiftLayer EntityClone()
+		public virtual ShiftLayer EntityClone()
 		{
-			return (IShiftLayer)MemberwiseClone();
+			return (ShiftLayer)MemberwiseClone();
 		}
 	}
 }
