@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		private bool _logonDataCanBeChanged;
 		private bool _rightsHaveBeenChecked;
 		private readonly TenantAuthenticationData _tenantData;
-		
+
 		public PersonGeneralModel()
 		{
 			_optionalColumns = new List<IOptionalColumn>();
 		}
 
-		public PersonGeneralModel(IPerson person,  IAuthorization authorization,
+		public PersonGeneralModel(IPerson person, IAuthorization authorization,
 			IPersonAccountUpdater personAccountUpdater, LogonInfoModel logonInfoModel, IPasswordPolicy passwordPolicy)
 			: this()
 		{
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			_authorization = authorization;
 			_personAccountUpdater = personAccountUpdater;
 			_passwordPolicy = passwordPolicy;
-			_tenantData = new TenantAuthenticationData {PersonId = ContainedEntity.Id.GetValueOrDefault()};
+			_tenantData = new TenantAuthenticationData { PersonId = ContainedEntity.Id.GetValueOrDefault() };
 
 			if (logonInfoModel != null)
 			{
@@ -50,10 +50,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			}
 		}
 
-		public TenantAuthenticationData TenantData
-		{
-			get { return _tenantData; }
-		}
+		public TenantAuthenticationData TenantData => _tenantData;
+
 		public string FirstName
 		{
 			get
@@ -116,10 +114,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			}
 		}
 
-		public int? LanguageLCID
-		{
-			get { return ContainedEntity.PermissionInformation.CultureLCID(); }
-		}
+		public int? LanguageLCID => ContainedEntity.PermissionInformation.CultureLCID();
 
 		public Culture LanguageInfo
 		{
@@ -148,10 +143,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			}
 		}
 
-		public int? CultureLCID
-		{
-			get { return ContainedEntity.PermissionInformation.UICultureLCID(); }
-		}
+		public int? CultureLCID => ContainedEntity.PermissionInformation.UICultureLCID();
 
 		public Culture CultureInfo
 		{
@@ -200,6 +192,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			{
 				if (!logonDataCanBeChanged())
 					return;
+				value = value?.Trim();
 				_tenantData.Identity = value;
 				if (_tenantData.Identity == "")
 					_tenantData.Identity = null;
@@ -218,6 +211,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				if (!logonDataCanBeChanged())
 					return;
 
+				value = value?.Trim();
 				if (string.IsNullOrEmpty(value))
 				{
 					_isValid = true;
@@ -311,13 +305,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			_roleCollectionParser = new RoleCollectionParser(value, new RoleDisplay());
 		}
 
-		public IList<IOptionalColumn> OptionalColumns
-		{
-			get
-			{
-				return _optionalColumns;
-			}
-		}
+		public IList<IOptionalColumn> OptionalColumns => _optionalColumns;
 
 		public IWorkflowControlSet WorkflowControlSet
 		{
@@ -342,15 +330,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			}
 		}
 
-		public bool IsValid
-		{
-			get { return _isValid; }
-		}
+		public bool IsValid => _isValid;
 
-		public bool CanGray
-		{
-			get { return false; }
-		}
+		public bool CanGray => false;
 
 		public void SetOptionalColumns(IList<IOptionalColumn> columns)
 		{
