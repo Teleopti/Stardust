@@ -2689,9 +2689,6 @@
     <Compile Include="AgentInfo\Requests\TextRequest.cs" />
     <Compile Include="AgentInfo\ExternalLogOn.cs" />
     <Compile Include="AgentInfo\Requests\Request.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToTeamSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AgentInfo\PersonContract.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequest.cs" />
     <Compile Include="AgentInfo\PersonSkill.cs" />

@@ -1072,7 +1072,6 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeSwapDetailTest.cs" />
     <Compile Include="AgentInfo\Requests\TextRequestTest.cs" />
     <Compile Include="AgentInfo\ExternalLogOnTest.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToTeamSpecificationTest.cs" />
     <Compile Include="AgentInfo\PersonContractTest.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestTest.cs" />
     <Compile Include="AgentInfo\PersonSkillTest.cs" />
