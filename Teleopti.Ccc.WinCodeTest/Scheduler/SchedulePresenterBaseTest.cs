@@ -1189,7 +1189,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_day1.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
             Expect.Call(_ass.CheckRestrictions);
 	        Expect.Call(_ass.MainActivities()).Return(new List<IMainShiftLayer>());
-	        Expect.Call(_ass.OvertimeActivities()).Return(new List<IOvertimeShiftLayer>());
+	        Expect.Call(_ass.OvertimeActivities()).Return(new List<OvertimeShiftLayer>());
 
             var scheduleDictionary = CreateExpectationForModifySchedulePart(_day1, _person);
 
@@ -1280,7 +1280,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
             Expect.Call(person.IsAgent(new DateOnly(2001,1,1))).Return(true);
-			Expect.Call(ass.OvertimeActivities()).Return(new List<IOvertimeShiftLayer>());
+			Expect.Call(ass.OvertimeActivities()).Return(new List<OvertimeShiftLayer>());
 
             _mocks.ReplayAll();
             _target.AddOvertime(multiplicatorDefinitionSets);
@@ -1303,7 +1303,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
             Expect.Call(person.IsAgent(new DateOnly(2001, 1, 1))).Return(false);
             Expect.Call(() => _viewBase.ShowInformationMessage(UserTexts.Resources.CouldNotAddOverTimeNoPersonPeriods, UserTexts.Resources.Information));
-	        Expect.Call(ass.OvertimeActivities()).Return(new List<IOvertimeShiftLayer>());
+	        Expect.Call(ass.OvertimeActivities()).Return(new List<OvertimeShiftLayer>());
 
             _mocks.ReplayAll();
             _target.AddOvertime(multiplicatorDefinitionSets);

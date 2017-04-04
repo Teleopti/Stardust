@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         private DateTimePeriod _scheduleDayPeriod;
         private DayOff _dayOff;
         private IPersonAssignment _personAssignment;
-        private IEnumerable<IOvertimeShiftLayer> _overtimeShifts;
+        private IEnumerable<OvertimeShiftLayer> _overtimeShifts;
 
         [SetUp]
         public void Setup()
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             {
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
                 Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
-                Expect.Call(_personAssignment.OvertimeActivities()).Return(Enumerable.Empty<IOvertimeShiftLayer>());
+                Expect.Call(_personAssignment.OvertimeActivities()).Return(Enumerable.Empty<OvertimeShiftLayer>());
 	            Expect.Call(_personAssignment.DayOff()).Return(_dayOff).Repeat.AtLeastOnce();
             }
 
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
                 Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
-                Expect.Call(_personAssignment.OvertimeActivities()).Return(Enumerable.Empty<IOvertimeShiftLayer>());
+                Expect.Call(_personAssignment.OvertimeActivities()).Return(Enumerable.Empty<OvertimeShiftLayer>());
 	            Expect.Call(_personAssignment.DayOff()).Return(_dayOff);
             }
 

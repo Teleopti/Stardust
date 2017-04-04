@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.AreEqual(_period2, shiftLayers[1].Period);
 			Assert.AreEqual(_activity1, shiftLayers[0].Payload);
 			Assert.AreEqual(_activity2, shiftLayers[1].Payload);
-			Assert.AreEqual(_multiplicatorDefinitionSet, ((IOvertimeShiftLayer)shiftLayers[0]).DefinitionSet);
-			Assert.AreEqual(_multiplicatorDefinitionSet, ((IOvertimeShiftLayer)shiftLayers[1]).DefinitionSet);
+			Assert.AreEqual(_multiplicatorDefinitionSet, ((OvertimeShiftLayer)shiftLayers[0]).DefinitionSet);
+			Assert.AreEqual(_multiplicatorDefinitionSet, ((OvertimeShiftLayer)shiftLayers[1]).DefinitionSet);
 		}
 
 		[Test]
@@ -88,8 +88,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.AreEqual(_period2, shiftLayers[1].Period);
 			Assert.AreEqual(_activity1, shiftLayers[0].Payload);
 			Assert.AreEqual(_activity2, shiftLayers[1].Payload);
-			Assert.AreEqual(_multiplicatorDefinitionSet, ((IOvertimeShiftLayer)shiftLayers[0]).DefinitionSet);
-			Assert.AreEqual(_multiplicatorDefinitionSet, ((IOvertimeShiftLayer)shiftLayers[1]).DefinitionSet);
+			Assert.AreEqual(_multiplicatorDefinitionSet, ((OvertimeShiftLayer)shiftLayers[0]).DefinitionSet);
+			Assert.AreEqual(_multiplicatorDefinitionSet, ((OvertimeShiftLayer)shiftLayers[1]).DefinitionSet);
 			Assert.IsTrue(_destination.HasDayOff());
 		}
 
@@ -109,8 +109,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.AreEqual(_activity1, shiftLayers[1].Payload);
 			Assert.AreEqual(_activity2, shiftLayers[2].Payload);
 			Assert.AreEqual(typeof(MainShiftLayer), shiftLayers[0].GetType());
-			Assert.AreEqual(_multiplicatorDefinitionSet, ((IOvertimeShiftLayer)shiftLayers[1]).DefinitionSet);
-			Assert.AreEqual(_multiplicatorDefinitionSet, ((IOvertimeShiftLayer)shiftLayers[2]).DefinitionSet);
+			Assert.AreEqual(_multiplicatorDefinitionSet, ((OvertimeShiftLayer)shiftLayers[1]).DefinitionSet);
+			Assert.AreEqual(_multiplicatorDefinitionSet, ((OvertimeShiftLayer)shiftLayers[2]).DefinitionSet);
 		}
 
 		[Test]
@@ -127,8 +127,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.AreEqual(_period2, shiftLayers[1].Period);
 			Assert.AreEqual(_activity1, shiftLayers[0].Payload);
 			Assert.AreEqual(_activity2, shiftLayers[1].Payload);
-			Assert.AreEqual(_multiplicatorDefinitionSet, ((IOvertimeShiftLayer)shiftLayers[0]).DefinitionSet);
-			Assert.AreEqual(_multiplicatorDefinitionSet, ((IOvertimeShiftLayer)shiftLayers[1]).DefinitionSet);
+			Assert.AreEqual(_multiplicatorDefinitionSet, ((OvertimeShiftLayer)shiftLayers[0]).DefinitionSet);
+			Assert.AreEqual(_multiplicatorDefinitionSet, ((OvertimeShiftLayer)shiftLayers[1]).DefinitionSet);
 			Assert.AreEqual(1, _destination.PersonAbsenceCollection().Count);
 		}
 

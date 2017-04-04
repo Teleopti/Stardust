@@ -4,11 +4,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
-    public class OvertimeLayerAssembler : Assembler<IOvertimeShiftLayer,OvertimeLayerDto>, IOvertimeLayerAssembler
+    public class OvertimeLayerAssembler : Assembler<OvertimeShiftLayer,OvertimeLayerDto>, IOvertimeLayerAssembler
     {
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
         private readonly IAssembler<IActivity, ActivityDto> _activityAssembler;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             _activityAssembler = activityAssembler;
         }
 
-        public override OvertimeLayerDto DomainEntityToDto(IOvertimeShiftLayer entity)
+        public override OvertimeLayerDto DomainEntityToDto(OvertimeShiftLayer entity)
         {
         	var period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period);
             var activity = _activityAssembler.DomainEntityToDto(entity.Payload);
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                        };
         }
 
-        public override IOvertimeShiftLayer DtoToDomainEntity(OvertimeLayerDto dto)
+        public override OvertimeShiftLayer DtoToDomainEntity(OvertimeLayerDto dto)
         {
             IActivity activity = _activityAssembler.DtoToDomainEntity(dto.Activity);
             IMultiplicatorDefinitionSet definitionSet =

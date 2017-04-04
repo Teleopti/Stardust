@@ -136,9 +136,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _shiftLayers.OfType<IPersonalShiftLayer>();
 		}
 
-		public virtual IEnumerable<IOvertimeShiftLayer> OvertimeActivities()
+		public virtual IEnumerable<OvertimeShiftLayer> OvertimeActivities()
 		{
-			return _shiftLayers.OfType<IOvertimeShiftLayer>();
+			return _shiftLayers.OfType<OvertimeShiftLayer>();
 		}
 
 		public virtual IEnumerable<IShiftLayer> ShiftLayers => _shiftLayers;

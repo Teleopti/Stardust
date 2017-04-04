@@ -1,15 +1,15 @@
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
     public class OvertimeLayerViewModel : MoveableLayerViewModel
     {
-	    private readonly IOvertimeShiftLayer _layer;
+	    private readonly OvertimeShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
 
 	    public OvertimeLayerViewModel(IVisualLayer layer)
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCode.Common
         }
 
      
-        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator)
+        public OvertimeLayerViewModel(ILayerViewModelObserver observer, OvertimeShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator)
             : base(observer, layer, assignment, eventAggregator)
         {
 	        _layer = layer;

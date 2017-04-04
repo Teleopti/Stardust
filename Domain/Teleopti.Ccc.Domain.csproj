@@ -592,7 +592,6 @@
     <Compile Include="InterfaceLegacy\Domain\IOverrideTask.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeAvailability.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimePreferences.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IOvertimeShiftLayer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPairDictionaryFactory.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPairMatrixService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IParentChildEntity.cs" />

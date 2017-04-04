@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
@@ -135,7 +134,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 			return retDto;
 		}
 
-		private ShiftDto CreateOvertimeShiftDto(IEnumerable<IOvertimeShiftLayer> overtimeLayers, IPerson shiftOwner)
+		private ShiftDto CreateOvertimeShiftDto(IEnumerable<OvertimeShiftLayer> overtimeLayers, IPerson shiftOwner)
 		{
 			ShiftDto retDto = new ShiftDto();
 

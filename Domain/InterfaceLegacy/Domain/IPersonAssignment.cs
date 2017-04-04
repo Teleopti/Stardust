@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IShiftCategory ShiftCategory { get; }
 		IEnumerable<IMainShiftLayer> MainActivities();
 		IEnumerable<IPersonalShiftLayer> PersonalActivities();
-		IEnumerable<IOvertimeShiftLayer> OvertimeActivities();
+		IEnumerable<OvertimeShiftLayer> OvertimeActivities();
 		IEnumerable<IShiftLayer> ShiftLayers { get; }
 		DateTimePeriod PeriodExcludingPersonalActivity();
 		bool RemoveActivity(IShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);

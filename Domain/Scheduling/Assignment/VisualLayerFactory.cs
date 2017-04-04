@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IVisualLayer CreateShiftSetupLayer(ILayer<IActivity> layer, IPerson person)
 		{
 			var ret = new VisualLayer(layer.Payload, layer.Period, layer.Payload, person);
-			var overtimeLayer = layer as IOvertimeShiftLayer;
+			var overtimeLayer = layer as OvertimeShiftLayer;
 			if (overtimeLayer != null)
 			{
 				ret.DefinitionSet = overtimeLayer.DefinitionSet;

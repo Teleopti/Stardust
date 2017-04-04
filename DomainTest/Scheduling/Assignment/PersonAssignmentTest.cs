@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
 			target.AddOvertimeActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
-			var layer = target.OvertimeActivities().Single();
+			var layer = (IAggregateEntity)target.OvertimeActivities().Single();
 			Assert.AreSame(target, layer.Parent);
 			Assert.AreSame(target, layer.Root());
 		}

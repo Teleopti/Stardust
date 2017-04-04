@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private static bool tryReplaceOvertimeLayer(IPersonAssignment assignment, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
-			var layerAsOvertime = layerToRemove as IOvertimeShiftLayer;
+			var layerAsOvertime = layerToRemove as OvertimeShiftLayer;
 			if (layerAsOvertime != null)
 			{
 				var shiftLayers = assignment.ShiftLayers.ToList();

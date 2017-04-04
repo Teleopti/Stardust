@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var p2Period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_d1.StartDateTime.AddDays(-1)));
 			_person2.AddPersonPeriod(p2Period);
 
-			var definitionSet = ((IOvertimeShiftLayer)p1assignments[0].OvertimeActivities().ToList()[0]).DefinitionSet;
+			var definitionSet = p1assignments[0].OvertimeActivities().ToList()[0].DefinitionSet;
 			_person1.PersonPeriodCollection[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 			_person2.PersonPeriodCollection[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 

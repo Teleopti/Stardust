@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			foreach (var shiftLayer in shiftLayersList)
 			{
-				if (isOvertime && !(shiftLayer is IOvertimeShiftLayer))
+				if (isOvertime && !(shiftLayer is OvertimeShiftLayer))
 				{
 					continue;
 				}

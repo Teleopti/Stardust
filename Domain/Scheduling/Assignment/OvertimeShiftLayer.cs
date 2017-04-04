@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class OvertimeShiftLayer : ShiftLayer, IOvertimeShiftLayer
+	public class OvertimeShiftLayer : ShiftLayer
 	{
 		public OvertimeShiftLayer(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
 			:base(activity, period)
