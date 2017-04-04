@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
     {
         private EditLayerViewModel _target;
         private ILayerViewModel _layerViewModel;
-        private IMainShiftLayer _layer;
+        private MainShiftLayer _layer;
         private IActivity _activity;
         private DateTimePeriod _period;
         private TesterForCommandModels _commandTester;
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 
         private class ModelForTest : MainShiftLayerViewModel
         {
-            public ModelForTest(ILayerViewModelObserver observer, IMainShiftLayer layer) : base(observer, layer, null,new EventAggregator())
+            public ModelForTest(ILayerViewModelObserver observer, MainShiftLayer layer) : base(observer, layer, null,new EventAggregator())
             {
                 MovePermitted = true;
             }

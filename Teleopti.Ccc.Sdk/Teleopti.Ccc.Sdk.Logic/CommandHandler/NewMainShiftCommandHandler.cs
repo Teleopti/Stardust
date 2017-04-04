@@ -9,7 +9,6 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     {
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IShiftCategoryRepository _shiftCategoryRepository;
-        private readonly IActivityLayerAssembler<IMainShiftLayer> _mainActivityLayerAssembler;
+        private readonly IActivityLayerAssembler<MainShiftLayer> _mainActivityLayerAssembler;
 	    private readonly IScheduleTagAssembler _scheduleTagAssembler;
 	    private readonly IScheduleStorage _scheduleStorage;
         private readonly IScenarioRepository _scenarioRepository;
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly IScheduleSaveHandler _scheduleSaveHandler;
 
-    	public NewMainShiftCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftLayer> mainActivityLayerAssembler, IScheduleTagAssembler scheduleTagAssembler, IScheduleStorage scheduleStorage, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleSaveHandler scheduleSaveHandler)
+    	public NewMainShiftCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<MainShiftLayer> mainActivityLayerAssembler, IScheduleTagAssembler scheduleTagAssembler, IScheduleStorage scheduleStorage, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleSaveHandler scheduleSaveHandler)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _shiftCategoryRepository = shiftCategoryRepository;

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         private IAbsence _abs;
         private DateTimePeriod _period;
         private IEventAggregator _eventAggregator;
-        private IMainShiftLayer _actLayer;
+        private MainShiftLayer _actLayer;
         private ILayerViewModel _absenceLayerViewModel;
         private ILayerViewModel _overtimeLayerViewModel;
     

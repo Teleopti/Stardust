@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var sameActivity = new CommonActivity {Activity = _activity, Periods = new List<DateTimePeriod> {_period}};
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var shiftLayers = new List<IMainShiftLayer>{new MainShiftLayer(_activity, _period)};
+			var shiftLayers = new List<MainShiftLayer>{new MainShiftLayer(_activity, _period)};
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var sameActivity = new CommonActivity { Activity = _activity, Periods = new List<DateTimePeriod> { _period } };
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var shiftLayers = new List<IMainShiftLayer> { new MainShiftLayer(ActivityFactory.CreateActivity("new"), _period) };
+			var shiftLayers = new List<MainShiftLayer> { new MainShiftLayer(ActivityFactory.CreateActivity("new"), _period) };
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
@@ -108,8 +108,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var shiftLayers1 = new List<IMainShiftLayer> { new MainShiftLayer(ActivityFactory.CreateActivity("new1"), _period) };
-			var shiftLayers2 = new List<IMainShiftLayer> { new MainShiftLayer(ActivityFactory.CreateActivity("new2"), _period) };
+			var shiftLayers1 = new List<MainShiftLayer> { new MainShiftLayer(ActivityFactory.CreateActivity("new1"), _period) };
+			var shiftLayers2 = new List<MainShiftLayer> { new MainShiftLayer(ActivityFactory.CreateActivity("new2"), _period) };
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);

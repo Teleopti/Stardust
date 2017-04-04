@@ -126,9 +126,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			protected set { _shiftCategory = value; }
 		}
 
-		public virtual IEnumerable<IMainShiftLayer> MainActivities()
+		public virtual IEnumerable<MainShiftLayer> MainActivities()
 		{
-			return _shiftLayers.OfType<IMainShiftLayer>();
+			return _shiftLayers.OfType<MainShiftLayer>();
 		}
 
 		public virtual IEnumerable<IPersonalShiftLayer> PersonalActivities()

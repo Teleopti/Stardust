@@ -547,7 +547,6 @@
     <Compile Include="InterfaceLegacy\Domain\ILoggedOnUser.cs" />
     <Compile Include="InterfaceLegacy\Domain\ILogWriter.cs" />
     <Compile Include="InterfaceLegacy\Domain\ILongestPeriodForAssignmentCalculator.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IMainShiftLayer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMasterActivity.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMeeting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMeetingPayload.cs" />

@@ -2,6 +2,7 @@ using System;
 using Autofac;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
             builder.RegisterType<ActivityRestrictionAssembler<IActivityRestrictionTemplate>>().As
                 <IAssembler<IActivityRestrictionTemplate, ActivityRestrictionDto>>().InstancePerLifetimeScope();
 
-            builder.RegisterType<ActivityLayerAssembler<IMainShiftLayer>>().As<IActivityLayerAssembler<IMainShiftLayer>>().InstancePerLifetimeScope();
+            builder.RegisterType<ActivityLayerAssembler<MainShiftLayer>>().As<IActivityLayerAssembler<MainShiftLayer>>().InstancePerLifetimeScope();
             builder.RegisterType<ActivityLayerAssembler<IPersonalShiftLayer>>().As<IActivityLayerAssembler<IPersonalShiftLayer>>().InstancePerLifetimeScope();
 
         	builder.RegisterType<SdkProjectionServiceFactory>().As<ISdkProjectionServiceFactory>();

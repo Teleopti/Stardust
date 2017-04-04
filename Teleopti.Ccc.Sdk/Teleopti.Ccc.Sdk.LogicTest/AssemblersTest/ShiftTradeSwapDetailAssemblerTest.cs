@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			target.PersonAssembler = personAssembler;
 			target.SchedulePartAssembler = new SchedulePartAssembler(
 				new PersonAssignmentAssembler(shiftCategoryRepository,
-					new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+					new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 						activityAssembler),
 					new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
 						new DateTimePeriodAssembler(), activityAssembler),
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			target.PersonAssembler = personAssembler;
 			target.SchedulePartAssembler = new SchedulePartAssembler(
 				new PersonAssignmentAssembler(shiftCategoryRepository,
-					new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+					new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 						activityAssembler),
 					new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
 						new DateTimePeriodAssembler(), activityAssembler),

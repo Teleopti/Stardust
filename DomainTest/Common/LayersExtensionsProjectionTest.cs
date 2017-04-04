@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldReturnEmptyProjectionForZeroLayers()
 		{
-			new IMainShiftLayer[0].CreateProjection().Should().Be.Empty();
+			new MainShiftLayer[0].CreateProjection().Should().Be.Empty();
 		}
 	}
 }

@@ -153,14 +153,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyMoveAllTriggersParentCollection()
         {
             TimeSpan toMove = TimeSpan.FromHours(2);
-            var layer = mocks.Stub<IMainShiftLayer>();
+            var layer = new MainShiftLayer(new Activity("_"), period);
 	       
-            using (mocks.Record())
-            {
-                Expect.Call(layer.Period).Return(period).Repeat.Any();
-            }
-            using (mocks.Playback())
-            {
+            
+
                 ILayerViewModel model1 = new MainShiftLayerViewModel(target, layer, null,null);
                 ILayerViewModel model2 = new MainShiftLayerViewModel(target, layer, null,null);
                 model1.CanMoveAll = true;
@@ -170,7 +166,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 model1.MoveLayer(toMove);
                 Assert.AreEqual(period.StartDateTime.Add(toMove), model2.Period.StartDateTime);
                 Assert.AreEqual(period.EndDateTime.Add(toMove), model2.Period.EndDateTime);
-            }
         }
 
         [Test]

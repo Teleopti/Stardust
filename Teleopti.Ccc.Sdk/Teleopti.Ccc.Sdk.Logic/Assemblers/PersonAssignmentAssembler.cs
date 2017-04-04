@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	public class PersonAssignmentAssembler : ScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto>
 	{
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
-		private readonly IActivityLayerAssembler<IMainShiftLayer> _mainActivityLayerAssembler;
+		private readonly IActivityLayerAssembler<MainShiftLayer> _mainActivityLayerAssembler;
 		private readonly IActivityLayerAssembler<IPersonalShiftLayer> _personalActivityLayerAssembler;
 		private readonly IOvertimeLayerAssembler _overtimeShiftLayerAssembler;
 
-		public PersonAssignmentAssembler(IShiftCategoryRepository shiftCategoryRepository, IActivityLayerAssembler<IMainShiftLayer> mainActivityLayerAssembler, IActivityLayerAssembler<IPersonalShiftLayer> personalActivityLayerAssembler, IOvertimeLayerAssembler overtimeShiftLayerAssembler)
+		public PersonAssignmentAssembler(IShiftCategoryRepository shiftCategoryRepository, IActivityLayerAssembler<MainShiftLayer> mainActivityLayerAssembler, IActivityLayerAssembler<IPersonalShiftLayer> personalActivityLayerAssembler, IOvertimeLayerAssembler overtimeShiftLayerAssembler)
 		{
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_mainActivityLayerAssembler = mainActivityLayerAssembler;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 			};
 			if (entity.ShiftCategory != null)
 			{
-						retDto.MainShift = CreateMainShiftDto(entity.MainActivities(), entity.ShiftCategory, entity.Person);						
+				retDto.MainShift = CreateMainShiftDto(entity.MainActivities(), entity.ShiftCategory, entity.Person);
 			}
 	        var personalLayers = entity.PersonalActivities();
 			if (personalLayers.Any())
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 			}
 		}
 
-		private MainShiftDto CreateMainShiftDto(IEnumerable<IMainShiftLayer> mainShiftLayers, IShiftCategory shiftCategory, IPerson shiftOwner)
+		private MainShiftDto CreateMainShiftDto(IEnumerable<MainShiftLayer> mainShiftLayers, IShiftCategory shiftCategory, IPerson shiftOwner)
 		{
 			var retDto = new MainShiftDto
 				{

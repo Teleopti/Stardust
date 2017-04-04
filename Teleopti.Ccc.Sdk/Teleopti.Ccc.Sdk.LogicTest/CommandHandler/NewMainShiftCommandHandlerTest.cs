@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private MockRepository _mock;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IShiftCategoryRepository _shiftCategoryRepository;
-        private IActivityLayerAssembler<IMainShiftLayer> _mainActivityLayerAssembler;
+        private IActivityLayerAssembler<MainShiftLayer> _mainActivityLayerAssembler;
         private IScheduleStorage _scheduleStorage;
         private IScenarioRepository _scenarioRepository;
         private IPersonRepository _personRepository;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private readonly DateTimePeriod _period = new DateTimePeriod(_startDate, _startDate.AddDays(1));
         private SchedulePartFactoryForDomain _scheduleRange;
         private Collection<ActivityLayerDto> _activityLayerDtoCollection;
-        private Collection<IMainShiftLayer> _mainShiftActivityLayerCollection;
+        private Collection<MainShiftLayer> _mainShiftActivityLayerCollection;
     	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 	    private IScheduleTagAssembler _scheduleTagAssembler;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _shiftCategoryRepository = _mock.StrictMock<IShiftCategoryRepository>();
-            _mainActivityLayerAssembler = _mock.StrictMock<IActivityLayerAssembler<IMainShiftLayer>>();
+            _mainActivityLayerAssembler = _mock.StrictMock<IActivityLayerAssembler<MainShiftLayer>>();
             _scheduleStorage = _mock.StrictMock<IScheduleStorage>();
             _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
             _personRepository = _mock.StrictMock<IPersonRepository>();
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	        period.LocalEndDateTime = dtp.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
 			activityLayerDto.Period = period;
 			_activityLayerDtoCollection.Add(new ActivityLayerDto());
-            _mainShiftActivityLayerCollection = new Collection<IMainShiftLayer>();
+            _mainShiftActivityLayerCollection = new Collection<MainShiftLayer>();
 			_mainShiftActivityLayerCollection.Add(new MainShiftLayer(new Activity("hej"), dtp));
         }
 

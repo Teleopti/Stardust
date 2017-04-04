@@ -1,15 +1,15 @@
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
     public class MainShiftLayerViewModel : MoveableLayerViewModel
     {
-	    private readonly IMainShiftLayer _layer;
+	    private readonly MainShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
 
 	    public MainShiftLayerViewModel(IVisualLayer layer)
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
         }
 
-        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator)
+        public MainShiftLayerViewModel(ILayerViewModelObserver observer, MainShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator)
 				: base(observer, layer, assignment, eventAggregator)
         {
 	        _layer = layer;

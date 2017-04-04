@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -65,13 +66,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				return new List<OverlappingLayers>();
 
 			var personAssignment = scheduleDay.PersonAssignment();
-			var layers = (personAssignment?.MainActivities() ?? Enumerable.Empty<IMainShiftLayer>()).ToArray();
+			var layers = (personAssignment?.MainActivities() ?? Enumerable.Empty<MainShiftLayer>()).ToArray();
 			var meetings = scheduleDay.PersonMeetingCollection().ToArray();
 			var personalActivities = (personAssignment?.PersonalActivities() ?? Enumerable.Empty<IPersonalShiftLayer>()).ToArray();
 			return getOverlappingLayerses(layers,meetings,personalActivities);
 		}
 
-		private IList<OverlappingLayers> getOverlappingLayerses(IMainShiftLayer[] layers, IPersonMeeting[] meetings, IPersonalShiftLayer[] personalShiftLayers )
+		private IList<OverlappingLayers> getOverlappingLayerses(MainShiftLayer[] layers, IPersonMeeting[] meetings, IPersonalShiftLayer[] personalShiftLayers )
 		{
 			var result = new List<OverlappingLayers>();
 			if (layers.Length == 0) return result;

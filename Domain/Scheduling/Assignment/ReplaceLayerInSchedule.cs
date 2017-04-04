@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private static bool tryReplaceMainLayer(IPersonAssignment assignment, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
-			var layerAsMain = layerToRemove as IMainShiftLayer;
+			var layerAsMain = layerToRemove as MainShiftLayer;
 			if (layerAsMain != null)
 			{
 				var indexOfLayer = assignment.ShiftLayers.ToList().IndexOf(layerAsMain);

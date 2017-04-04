@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		DateOnly Date { get; }
 
 		IShiftCategory ShiftCategory { get; }
-		IEnumerable<IMainShiftLayer> MainActivities();
+		IEnumerable<MainShiftLayer> MainActivities();
 		IEnumerable<IPersonalShiftLayer> PersonalActivities();
 		IEnumerable<OvertimeShiftLayer> OvertimeActivities();
 		IEnumerable<IShiftLayer> ShiftLayers { get; }

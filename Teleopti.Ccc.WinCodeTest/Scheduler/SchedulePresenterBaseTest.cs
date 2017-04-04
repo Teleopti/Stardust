@@ -1188,7 +1188,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             ExpectCallsScheduleDayOnVerifyAddOvertimeTheNewWay();
             Expect.Call(_day1.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
             Expect.Call(_ass.CheckRestrictions);
-	        Expect.Call(_ass.MainActivities()).Return(new List<IMainShiftLayer>());
+	        Expect.Call(_ass.MainActivities()).Return(new List<MainShiftLayer>());
 	        Expect.Call(_ass.OvertimeActivities()).Return(new List<OvertimeShiftLayer>());
 
             var scheduleDictionary = CreateExpectationForModifySchedulePart(_day1, _person);
@@ -1274,7 +1274,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
 			Expect.Call(_viewBase.CreateAddOvertimeViewModel( null, multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
             Expect.Call(schedulePart.PersonAssignment()).Return(ass);
-			Expect.Call(ass.MainActivities()).Return(new List<IMainShiftLayer>());
+			Expect.Call(ass.MainActivities()).Return(new List<MainShiftLayer>());
             Expect.Call(dialog.Result).Return(false);
             LastCall.Repeat.Once();
             Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
@@ -1297,7 +1297,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(schedulePart.PersonAssignment()).Return(ass);
-			Expect.Call(ass.MainActivities()).Return(new List<IMainShiftLayer>());
+			Expect.Call(ass.MainActivities()).Return(new List<MainShiftLayer>());
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
             Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);

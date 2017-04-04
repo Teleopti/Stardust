@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var scenarioRepository = new FakeCurrentScenario();
 		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 		    var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-			    new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+			    new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 				    activityAssembler),
 			    new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 				    activityAssembler),
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var scenarioRepository = new FakeCurrentScenario();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var scenarioRepository = new FakeCurrentScenario();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var scenarioRepository = new FakeCurrentScenario();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
@@ -345,7 +345,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var scenarioRepository = new FakeCurrentScenario();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var scenarioRepository = new FakeCurrentScenario();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
@@ -446,7 +446,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var scenarioRepository = new FakeCurrentScenario();
 		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 		    var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-			    new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+			    new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 				    activityAssembler),
 			    new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 				    activityAssembler),
