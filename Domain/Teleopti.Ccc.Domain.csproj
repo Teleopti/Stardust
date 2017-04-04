@@ -477,7 +477,6 @@
     <Compile Include="InterfaceLegacy\Domain\IDateOnlyAsDateTimePeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDatesToPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDateSupplier.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IDayOff.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDayOffDecisionMaker.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDayOffDecisionMakerExecuter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDayOffLegalStateValidator.cs" />

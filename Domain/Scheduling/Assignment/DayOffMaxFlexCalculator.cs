@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return dayBefore ? adjustedFlexPeriodBefore(dayOff, projection, fullFlex) : adjustedFlexPeriodAfter(dayOff, projection, fullFlex);
 		}
 
-		private DateTimePeriod adjustedFlexPeriodBefore(IDayOff dayOff, IEnumerable<IVisualLayer> projection, DateTimePeriod fullFlex)
+		private DateTimePeriod adjustedFlexPeriodBefore(DayOff dayOff, IEnumerable<IVisualLayer> projection, DateTimePeriod fullFlex)
 		{
 			var endTime = _workTimeStartEndExtractor.WorkTimeEnd(projection);
 			if (endTime == null)
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return endTime.Value < fullFlex.StartDateTime ? fullFlex : new DateTimePeriod(endTime.Value, endTime.Value.Add(dayOff.TargetLength));
 		}
 
-		private DateTimePeriod adjustedFlexPeriodAfter(IDayOff dayOff, IEnumerable<IVisualLayer> projection, DateTimePeriod fullFlex)
+		private DateTimePeriod adjustedFlexPeriodAfter(DayOff dayOff, IEnumerable<IVisualLayer> projection, DateTimePeriod fullFlex)
 		{
 			var startTime = _workTimeStartEndExtractor.WorkTimeStart(projection);
 			if (startTime == null) 

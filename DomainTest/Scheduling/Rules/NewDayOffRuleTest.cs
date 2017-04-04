@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private ShiftCategory _category;
         private IScenario _scenario;
         private DateTime _start, _end;
-	    private IDayOff _dayOff1;
+	    private DayOff _dayOff1;
         private IPersonAssignment _personAssignmentConflictingWithDayOffEnd;
         private IPersonAssignment _personAssignmentConflictingWithDayOffStart;
         private IPersonAssignment _personAssignmentJustAfterDayOff;

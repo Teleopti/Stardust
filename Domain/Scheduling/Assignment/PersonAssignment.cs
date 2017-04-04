@@ -645,7 +645,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			
 		}
 
-		public virtual IDayOff DayOff()
+		public virtual DayOff DayOff()
 		{
 			if (_dayOffTemplate == null)
 				return null;

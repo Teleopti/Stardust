@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             }
         }
 
-        private static void checkPersonDayOffCollection(IDayOff dayOff, ValidatedSchedulePartDto resultSoFar)
+        private static void checkPersonDayOffCollection(DayOff dayOff, ValidatedSchedulePartDto resultSoFar)
         {
 					if (dayOff != null)
 					{

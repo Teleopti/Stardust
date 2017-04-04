@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 	{
 		IEnumerable<ITeamScheduleLayer> Layers { get; }
 		DateTime SortDate { get; }
-		IDayOff DayOff { get; }
+		DayOff DayOff { get; }
 	}
 
 	public class TeamScheduleProjection : ITeamScheduleProjection
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 		public IEnumerable<ITeamScheduleLayer> Layers { get; set; }
 		public DateTime SortDate { get; set; }
-		public IDayOff DayOff { get; set; }
+		public DayOff DayOff { get; set; }
 	}
 
 	public interface ITeamScheduleLayer

@@ -74,7 +74,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return false;
 		}
 
-		private static IDayOff extractDayOff(IScheduleDay scheduleDay)
+		private static DayOff extractDayOff(IScheduleDay scheduleDay)
 		{
 			if (scheduleDay.SignificantPart() == SchedulePartView.ContractDayOff)
 			{

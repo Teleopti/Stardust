@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class DayOff : IDayOff
+	public class DayOff
     {
 	    private DateTime _anchor;
         private TimeSpan _targetLength;

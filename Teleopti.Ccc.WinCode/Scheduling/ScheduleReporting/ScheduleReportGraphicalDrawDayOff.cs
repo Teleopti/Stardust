@@ -2,6 +2,7 @@
 using System.Linq;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             return new PdfLinearGradientBrush(rect, Color.WhiteSmoke, color, 90);
         }
 
-        public IDayOff PersonDayOff()
+        public DayOff PersonDayOff()
         {
             if(_scheduleDay.SignificantPartForDisplay() != SchedulePartView.DayOff) 
 				return null;

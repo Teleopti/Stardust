@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	{
 		private DayOffMaxFlexCalculator _flexCalculator;
 		private MockRepository _mock;
-		private IDayOff _dayOff;
+		private DayOff _dayOff;
 		private IScheduleDay _dayOffDay;
 		private IScheduleDay _scheduleDay;
 		private DateOnly _dateOnly;

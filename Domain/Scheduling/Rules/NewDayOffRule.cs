@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -98,10 +99,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			public bool HasAssignment { get; set; }
 			public Lazy<DateTime?> ProjectionStart { get; set; }
 			public Lazy<DateTime?> ProjectionEnd { get; set; }
-			public IDayOff DayOff { get; set; }
+			public DayOff DayOff { get; set; }
 		}
 
-		public bool DayOffDoesConflictWithActivity(IDayOff dayOff, DateTimePeriod assignmentBeforePeriod,
+		public bool DayOffDoesConflictWithActivity(DayOff dayOff, DateTimePeriod assignmentBeforePeriod,
 			DateTimePeriod assignmentAfterPeriod)
 		{
 			var dayOffErrorMessage1 = Resources.BusinessRuleDayOffErrorMessage1;
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return dayOffCannotBeMoved(dayOff, assignmentBeforePeriod, assignmentAfterPeriod);
 		}
 
-		private bool dayOffCannotBeMoved(IDayOff dayOff, DateTimePeriod assignmentBeforePeriod,
+		private bool dayOffCannotBeMoved(DayOff dayOff, DateTimePeriod assignmentBeforePeriod,
 			DateTimePeriod assignmentAfterPeriod)
 		{
 			var dateTimePeriod = dayOffStartEnd(dayOff);
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			}
 		}
 
-		public static bool DayOffConflictWithAssignmentBefore(IDayOff dayOff, DateTimePeriod periodOfAssignment)
+		public static bool DayOffConflictWithAssignmentBefore(DayOff dayOff, DateTimePeriod periodOfAssignment)
 		{
 			// if the assignment is on the same day then it's not a conflict
 			if (periodOfAssignment.StartDateTime.Date == dayOff.Anchor.Date)
@@ -170,7 +171,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 		// checkes if the activity starts before the end of the day off, does not use the flexibility (comes later)
-		public static bool DayOffConflictWithAssignmentAfter(IDayOff dayOff, DateTimePeriod periodOfAssignment)
+		public static bool DayOffConflictWithAssignmentAfter(DayOff dayOff, DateTimePeriod periodOfAssignment)
 		{
 			// if the assignment is on the same day then it's not a conflict
 			if (periodOfAssignment.StartDateTime.Date == dayOff.Anchor.Date)
@@ -185,7 +186,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return periodOfAssignment.StartDateTime < dayOffStartEnd(dayOff).EndDateTime;
 		}
 
-		private static DateTimePeriod dayOffStartEnd(IDayOff dayOff)
+		private static DateTimePeriod dayOffStartEnd(DayOff dayOff)
 		{
 			var startDayOff = dayOff.Anchor.AddMinutes(-(dayOff.TargetLength.TotalMinutes/2));
 			var endDayOff = dayOff.Anchor.AddMinutes((dayOff.TargetLength.TotalMinutes/2));
@@ -204,7 +205,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return response;
 		}
 
-		private DateTimePeriod periodOfLayerBefore(IDayOff personDayOff, dayForValidation[] daysToCheck)
+		private DateTimePeriod periodOfLayerBefore(DayOff personDayOff, dayForValidation[] daysToCheck)
 		{
 			var layerBeforePeriod = new DateTimePeriod(1900, 1, 1, 1900, 1, 2);
 
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return layerBeforePeriod;
 		}
 
-		private static dayForValidation getAssignmentJustBeforeDayOff(IDayOff dayOff, dayForValidation[] daysToCheck)
+		private static dayForValidation getAssignmentJustBeforeDayOff(DayOff dayOff, dayForValidation[] daysToCheck)
 		{
 			dayForValidation returnVal = null;
 			foreach (var day in daysToCheck)
@@ -244,7 +245,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return returnVal;
 		}
 
-		private DateTimePeriod periodOfLayerAfter(IDayOff personDayOff, dayForValidation[] daysToCheck)
+		private DateTimePeriod periodOfLayerAfter(DayOff personDayOff, dayForValidation[] daysToCheck)
 		{
 			var periodOfAssignmentAfter = new DateTimePeriod(2100, 1, 1, 2100, 1, 2);
 
@@ -258,7 +259,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return periodOfAssignmentAfter;
 		}
 
-		private static dayForValidation getAssignmentJustAfterDayOff(IDayOff dayOff, dayForValidation[] daysToCheck)
+		private static dayForValidation getAssignmentJustAfterDayOff(DayOff dayOff, dayForValidation[] daysToCheck)
 		{
 			return daysToCheck.Where(day => day.HasAssignment)
 				.Where(day => day.Date.Date > dayOff.Anchor.Date)

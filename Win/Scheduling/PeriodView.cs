@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (!scheduleDay.HasDayOff()) 
 				return;
 
-            IDayOff dayOff = scheduleDay.PersonAssignment().DayOff();
+            var dayOff = scheduleDay.PersonAssignment().DayOff();
             Rectangle rect = new Rectangle(e.Bounds.X + 4, e.Bounds.Y + 4, e.Bounds.Width - 8, e.Bounds.Height - 8);
             string shortName = dayOff.Description.ShortName;
             SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);

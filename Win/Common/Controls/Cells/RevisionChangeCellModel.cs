@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             if (revisionDisplayRow.ScheduleDay.SignificantPart() == SchedulePartView.DayOff)
             {
 
-				IDayOff personDayOff = revisionDisplayRow.ScheduleDay.PersonAssignment().DayOff();
+				var personDayOff = revisionDisplayRow.ScheduleDay.PersonAssignment().DayOff();
 
                 var start = timePeriod.StartDateTime;
                 var end = timePeriod.EndDateTime;

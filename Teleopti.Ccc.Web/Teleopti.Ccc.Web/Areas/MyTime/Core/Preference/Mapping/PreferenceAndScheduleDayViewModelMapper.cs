@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			};
 		}
 
-		private DayOffDayViewModel map(IDayOff s)
+		private DayOffDayViewModel map(DayOff s)
 		{
 			return new DayOffDayViewModel {DayOff = s.Description.Name};
 		}
