@@ -901,7 +901,7 @@
     <Compile Include="Common\TextBoxNameExtender.cs" />
     <Compile Include="Common\VirtualSkill.cs" />
     <Compile Include="Common\VirtualSkillSetting.cs" />
-    <Compile Include="DayViewNew.cs" />
+    <Compile Include="Scheduling\DayViewNew.cs" />
     <Compile Include="ExceptionHandling\SimpleExceptionHandlerView.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -8,13 +8,12 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win
+namespace Teleopti.Ccc.Win.Scheduling
 {
     public class DayViewNew : ScheduleViewBase
     {
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.Win
             IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
             : base(grid)
         {
-            if (grid == null) throw new ArgumentNullException("grid");
+            if (grid == null) throw new ArgumentNullException(nameof(grid));
 
             _presenter = new DayPresenterNew(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder,
                 scheduleDayChangeCallback, new DayPresenterScaleCalculator(), defaultScheduleTag);
