@@ -74,7 +74,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					from [mart].[bridge_group_page_person] bgpp WITH (NOLOCK) 
 					join [mart].[dim_group_page] gp WITH (NOLOCK) 
 						on bgpp.group_page_id = gp.group_page_id AND gp.business_unit_code=:{nameof(businessUnitId)}
-					where bgpp.person_id=:{nameof(personId)}")
+					where bgpp.person_id=:{nameof(personId)}
+					AND NOT (gp.group_is_custom=0 AND gp.group_page_name_resource_key is NULL)"
+					)
 				.SetParameter(nameof(personId), personId)
 				.SetParameter(nameof(businessUnitId), businessUnitId)
 				.List<Guid>();

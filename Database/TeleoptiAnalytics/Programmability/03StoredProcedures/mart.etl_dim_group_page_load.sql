@@ -400,6 +400,7 @@ WHERE sgp.group_is_custom = 0
 						SELECT * FROM mart.dim_group_page dgp
 						WHERE sgp.group_is_custom = 0
 							AND sgp.group_page_name_resource_key is null
+							AND sgp.group_page_name COLLATE Latin1_General_CS_AS = dgp.group_page_name COLLATE Latin1_General_CS_AS 
 							AND sgp.group_name COLLATE Latin1_General_CS_AS = dgp.group_name COLLATE Latin1_General_CS_AS 
 							AND sgp.business_unit_code = dgp.business_unit_code
 					)

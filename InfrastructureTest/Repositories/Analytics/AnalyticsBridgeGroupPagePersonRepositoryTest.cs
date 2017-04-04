@@ -196,5 +196,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			result.Should().Have.Count.EqualTo(2);
 		}
 
+		[Test]
+		public void ShouldGetBridgeGroupPagePersonExcludingOptionalColumnGroupPages()
+		{
+			createData();
+			var optionalColumnGroupPage = new AnalyticsGroup
+			{
+				GroupPageCode = Guid.NewGuid(),
+				GroupPageName = "GroupPageName3",
+				GroupPageNameResourceKey = null,
+				GroupCode = Guid.NewGuid(),
+				GroupName = "opt",
+				GroupIsCustom = false,
+				BusinessUnitCode = businessUnitId
+			};
+			var userDefinedGroupPage = new AnalyticsGroup
+			{
+				GroupPageCode = Guid.NewGuid(),
+				GroupPageName = "GroupPageName4",
+				GroupPageNameResourceKey = null,
+				GroupCode = Guid.NewGuid(),
+				GroupName = "ud",
+				GroupIsCustom = true,
+				BusinessUnitCode = businessUnitId
+			};
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(optionalColumnGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(userDefinedGroupPage);
+
+			Target.AddBridgeGroupPagePersonForPersonPeriod(analyticsPersonId1, new[] { group.GroupCode }, businessUnitId);
+			Target.AddBridgeGroupPagePersonForPersonPeriod(analyticsPersonId1, new[] { optionalColumnGroupPage.GroupCode }, businessUnitId);
+			Target.AddBridgeGroupPagePersonForPersonPeriod(analyticsPersonId1, new[] { userDefinedGroupPage.GroupCode }, businessUnitId);
+
+			var result = Target.GetGroupPagesForPersonPeriod(analyticsPersonId1, businessUnitId);
+			result.Count().Should().Be.EqualTo(2);
+			result.Should().Not.Contain(optionalColumnGroupPage.GroupCode);
+		}
+
 	}
 }
