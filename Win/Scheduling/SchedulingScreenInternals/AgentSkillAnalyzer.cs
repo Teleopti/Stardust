@@ -14,7 +14,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 {
@@ -156,7 +155,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private void autoResizeColumns(ListView listView)
 		{
-			//listView.SuspendLayout();
 			listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 			var columnWidths = new Dictionary<int, int>();
 			for (int i = 0; i < listView.Columns.Count; i++)
@@ -169,7 +167,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				if(columnWidths[i] > listView.Columns[i].Width)
 					listView.Columns[i].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
 			}
-			//listView.ResumeLayout();
 		}
 
 		private void drawVirtualGroupList(ISkill filterSkill, ListView listView)
@@ -197,8 +194,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 							loadedSkills++;
 					}
 
-					if (filterSkill != null && skillGroupModel.SkillsInSkillGroup.Contains(filterSkill))
-						return;
+					if (filterSkill != null && !skillGroupModel.SkillsInSkillGroup.Contains(filterSkill))
+						continue;
 
 					var item = new ListViewItem(islandCounter + ";" + skillGroupCounter) {Tag = skillGroupModel};
 					item.SubItems.Add(loadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + " (" + notLoadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + ")");
@@ -269,8 +266,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			item.Tag = skill;
 			if (color == Color.Black)
 			{
-				//var agentCount = _skillGroupsCreatorResult.GetPersonsForSkillKey(guidString).Count();
-				var agentCount = -100;
+				var agentCount = getPersonsOnSkill(skill).Count();
 				item.SubItems.Add(agentCount.ToString(CultureInfo.InvariantCulture).PadLeft(8));
 				var agentPercent = new Percent(agentCount/(double) _personList.Count());
 				item.SubItems.Add(Math.Round(agentPercent.ValueAsPercent(), 2).ToString("F").PadLeft(5));
@@ -372,10 +368,18 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private IEnumerable<IPerson> getPersonsOnSkill(ISkill skill)
 		{
-			return (from person in _personList
-				let personPeriod = person.Period(_date)
-				where personPeriod.PersonSkillCollection.Select(ps => ps.Skill.Id == skill.Id && ps.Active).Any()
-				select person).ToList();
+			var personsOnSkill = new List<IPerson>();
+			foreach (var person in _personList)
+			{
+				var personPeriod = person.Period(_date);
+				foreach (var personSkill in personPeriod.PersonSkillCollection)
+				{
+					if(personSkill.Skill.Id == skill.Id && personSkill.Active)
+						personsOnSkill.Add(person);
+				}
+			}
+
+			return personsOnSkill;
 		}
 
 		private void listViewIslandsSelectedIndexChanged(object sender, EventArgs e)
