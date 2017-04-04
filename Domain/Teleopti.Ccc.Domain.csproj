@@ -616,7 +616,6 @@
     <Compile Include="InterfaceLegacy\Domain\IPersonAccountCollection.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonAccountProjectionService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonAccountUpdater.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IPersonalShiftLayer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonAssignment.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonAssignmentRepository.cs" />

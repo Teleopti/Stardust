@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-				Expect.Call(_personAssignment.PersonalActivities()).Return(Enumerable.Empty<IPersonalShiftLayer>()).Repeat.AtLeastOnce();
+				Expect.Call(_personAssignment.PersonalActivities()).Return(Enumerable.Empty<PersonalShiftLayer>()).Repeat.AtLeastOnce();
 				Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 			}
 

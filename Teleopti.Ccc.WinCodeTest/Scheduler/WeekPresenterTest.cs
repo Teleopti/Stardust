@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var schedulePart = CreateScheduleDayAndSetBasicExpectation(SchedulePartView.PersonalShift);
             Expect.Call(schedulePart.PersonAssignment()).Return(pa1).Repeat.AtLeastOnce();
 	        Expect.Call(pa1.PersonalActivities())
-	              .Return(new List<IPersonalShiftLayer>
+	              .Return(new List<PersonalShiftLayer>
 		              {
 			              new PersonalShiftLayer(new Activity("d"), new DateTimePeriod(_date.AddHours(10), _date.AddHours(15)))
 		              })

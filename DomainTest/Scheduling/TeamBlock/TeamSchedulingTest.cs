@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    public void ShouldNotScheduleIfMainShiftPeriodNotContainsPersonalShift()
 	    {
 		    var personAssignment = _mock.StrictMock<IPersonAssignment>();
-		    var personalShiftLayer = _mock.StrictMock<IPersonalShiftLayer>();
-		    var personalActivities = new List<IPersonalShiftLayer> {personalShiftLayer};
+		    var personalShiftLayer = new PersonalShiftLayer(new Activity("_"), _dateOnlyAsDateTimePeriod.Period().MovePeriod(TimeSpan.FromHours(1)));
+		    var personalActivities = new List<PersonalShiftLayer> {personalShiftLayer};
 
 		    using (_mock.Record())
 		    {
@@ -144,7 +144,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			    Expect.Call(_scheduleDay.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
 			    Expect.Call(personAssignment.PersonalActivities()).Return(personalActivities).Repeat.Twice();
-			    Expect.Call(personalShiftLayer.Period).Return(_dateOnlyAsDateTimePeriod.Period().MovePeriod(TimeSpan.FromHours(1)));
 		    }
 
 		    using (_mock.Playback())

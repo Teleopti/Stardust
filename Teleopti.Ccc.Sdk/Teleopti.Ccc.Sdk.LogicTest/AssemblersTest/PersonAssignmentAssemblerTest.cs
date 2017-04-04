@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			    new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(),
 				    dateTimePeriodAssembler, activityAssembler);
 		    var personalShiftLayerAssembler =
-			    new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+			    new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(),
 				    dateTimePeriodAssembler, activityAssembler);
 		    var overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
 			    definitionSetRep);
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var mainShiftLayerAssembler =
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(),
 																	dateTimePeriodAssembler, activityAssembler);
-			var personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+			var personalShiftLayerAssembler = new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(),
 																								  dateTimePeriodAssembler, activityAssembler);
 			var overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler, definitionSetRep);
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var mainShiftLayerAssembler =
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(),
 																	dateTimePeriodAssembler, activityAssembler);
-			var personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+			var personalShiftLayerAssembler = new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(),
 																								  dateTimePeriodAssembler, activityAssembler);
 			var overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler, definitionSetRep);
 
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var mainShiftLayerAssembler =
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(),
 																	dateTimePeriodAssembler, activityAssembler);
-			var personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+			var personalShiftLayerAssembler = new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(),
 																								  dateTimePeriodAssembler, activityAssembler);
 			var overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler, definitionSetRep);
 
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var mainShiftLayerAssembler =
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(),
 																	dateTimePeriodAssembler, activityAssembler);
-			var personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+			var personalShiftLayerAssembler = new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(),
 																								  dateTimePeriodAssembler, activityAssembler);
 			var overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler, definitionSetRep);
 

@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var stubs = new StubFactory();
 			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.ShiftCategoryStub(Color.Coral));
-			personAssignment.Stub(x => x.PersonalActivities()).Return(new List<IPersonalShiftLayer>());
+			personAssignment.Stub(x => x.PersonalActivities()).Return(new List<PersonalShiftLayer>());
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today, SchedulePartView.MainShift, personAssignment);
 
 			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay);
@@ -287,14 +287,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var now = DateTime.Now;
 			var stubs = new StubFactory();
 			var personAssignment = MockRepository.GenerateMock<IPersonAssignment>();
-			var activityLayer = MockRepository.GenerateMock<IPersonalShiftLayer>();
 			var payload = MockRepository.GenerateMock<IActivity>();
 			payload.Stub(x => x.ConfidentialDescription(new Person())).IgnoreArguments().Return(new Description("activity"));
-			activityLayer.Stub(x => x.Payload).Return(payload);
-			activityLayer.Stub(x => x.Period).Return(new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)));
-
+			
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today);
-			personAssignment.Stub(x => x.PersonalActivities()).Return(new List<IPersonalShiftLayer>{activityLayer});
+			personAssignment.Stub(x => x.PersonalActivities()).Return(new List<PersonalShiftLayer>{new PersonalShiftLayer(payload, new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)))});
 			scheduleDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
 			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay);

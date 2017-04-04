@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			builder.RegisterType<LicenseCache>().As<ILicenseCache>();
 			builder.RegisterType<MainShiftLayerConstructor>().As<ILayerConstructor<MainShiftLayer>>().InstancePerLifetimeScope();
-			builder.RegisterType<PersonalShiftLayerConstructor>().As<ILayerConstructor<IPersonalShiftLayer>>().InstancePerLifetimeScope();
+			builder.RegisterType<PersonalShiftLayerConstructor>().As<ILayerConstructor<PersonalShiftLayer>>().InstancePerLifetimeScope();
 			builder.RegisterType<UserCultureProvider>().As<IUserCultureProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 

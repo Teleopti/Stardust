@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	    private bool _expectMovePermitted;
 		private LayerViewModel _target;
 		private MockRepository _mocks;
-		private IPersonalShiftLayer _layerWithPayload;
+		private PersonalShiftLayer _layerWithPayload;
 		private IActivity _payload;
 		private IScheduleDay _scheduleDay;
 		private CrossThreadTestRunner _testRunner;

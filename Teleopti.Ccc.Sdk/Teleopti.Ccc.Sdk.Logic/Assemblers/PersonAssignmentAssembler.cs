@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	{
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
 		private readonly IActivityLayerAssembler<MainShiftLayer> _mainActivityLayerAssembler;
-		private readonly IActivityLayerAssembler<IPersonalShiftLayer> _personalActivityLayerAssembler;
+		private readonly IActivityLayerAssembler<PersonalShiftLayer> _personalActivityLayerAssembler;
 		private readonly IOvertimeLayerAssembler _overtimeShiftLayerAssembler;
 
-		public PersonAssignmentAssembler(IShiftCategoryRepository shiftCategoryRepository, IActivityLayerAssembler<MainShiftLayer> mainActivityLayerAssembler, IActivityLayerAssembler<IPersonalShiftLayer> personalActivityLayerAssembler, IOvertimeLayerAssembler overtimeShiftLayerAssembler)
+		public PersonAssignmentAssembler(IShiftCategoryRepository shiftCategoryRepository, IActivityLayerAssembler<MainShiftLayer> mainActivityLayerAssembler, IActivityLayerAssembler<PersonalShiftLayer> personalActivityLayerAssembler, IOvertimeLayerAssembler overtimeShiftLayerAssembler)
 		{
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_mainActivityLayerAssembler = mainActivityLayerAssembler;
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 			return retDto;
 		}
 
-		private ShiftDto CreatePersonalShiftDto(IEnumerable<IPersonalShiftLayer> personalLayers, IPerson shiftOwner)
+		private ShiftDto CreatePersonalShiftDto(IEnumerable<PersonalShiftLayer> personalLayers, IPerson shiftOwner)
 		{
 			ShiftDto retDto = new ShiftDto();
 

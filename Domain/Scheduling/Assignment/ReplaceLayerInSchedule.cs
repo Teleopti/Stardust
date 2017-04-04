@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private static bool tryReplacePersonalLayer(IPersonAssignment assignment, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
-			var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
+			var layerAsPersonal = layerToRemove as PersonalShiftLayer;
 			if (layerAsPersonal != null)
 			{
 				var shiftLayers = assignment.ShiftLayers.ToList();

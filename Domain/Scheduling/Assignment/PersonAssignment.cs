@@ -131,9 +131,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _shiftLayers.OfType<MainShiftLayer>();
 		}
 
-		public virtual IEnumerable<IPersonalShiftLayer> PersonalActivities()
+		public virtual IEnumerable<PersonalShiftLayer> PersonalActivities()
 		{
-			return _shiftLayers.OfType<IPersonalShiftLayer>();
+			return _shiftLayers.OfType<PersonalShiftLayer>();
 		}
 
 		public virtual IEnumerable<OvertimeShiftLayer> OvertimeActivities()
@@ -561,7 +561,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			foreach (var shiftLayer in shiftLayers)
 			{
-				if (shiftLayer is IPersonalShiftLayer)
+				if (shiftLayer is PersonalShiftLayer)
 					continue;
 
 				var newPeriod = shiftLayer.Period.MovePeriod(distanceToMove);

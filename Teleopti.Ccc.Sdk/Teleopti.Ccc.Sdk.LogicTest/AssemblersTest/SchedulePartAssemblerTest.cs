@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 			    new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 				    activityAssembler),
-			    new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
+			    new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 				    activityAssembler),
 			    new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
 				    new FakeMultiplicatorDefinitionSetRepository()));
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
-				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
 					new FakeMultiplicatorDefinitionSetRepository()));
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
-				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
 					new FakeMultiplicatorDefinitionSetRepository()));
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
-				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
 					new FakeMultiplicatorDefinitionSetRepository()));
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
-				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
 					new FakeMultiplicatorDefinitionSetRepository()));
@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
-				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
 					new FakeMultiplicatorDefinitionSetRepository()));
@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
-				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
 					new FakeMultiplicatorDefinitionSetRepository()));
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
-				new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
+				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 					activityAssembler),
 				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
 					new FakeMultiplicatorDefinitionSetRepository()));
@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 			    new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
 				    activityAssembler),
-			    new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
+			    new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
 				    activityAssembler),
 			    new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
 				    new FakeMultiplicatorDefinitionSetRepository()));

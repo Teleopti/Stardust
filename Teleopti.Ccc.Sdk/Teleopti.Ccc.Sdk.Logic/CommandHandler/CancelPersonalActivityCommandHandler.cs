@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private static void cancelPersonalActivity(IPersonAssignment personAssignment, DateTimePeriod period)
 		{
 			var layers = personAssignment.PersonalActivities().ToList();
-			foreach (IPersonalShiftLayer layer in layers)
+			foreach (var layer in layers)
 			{
 				var layerPeriod = layer.Period;
 				if (!layerPeriod.Intersect(period)) continue;

@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.Domain.Common
 			return matchedLayerIds;
 		}
 
-		public IList<IPersonalShiftLayer> GetMatchedPersonalShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
+		public IList<PersonalShiftLayer> GetMatchedPersonalShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
 		{
-			var matchedLayers = new List<IPersonalShiftLayer>();
+			var matchedLayers = new List<PersonalShiftLayer>();
 			var personAssignment = scheduleDay.PersonAssignment();
 			var shiftLayersList = new List<IShiftLayer>();
 			if (personAssignment != null && personAssignment.ShiftLayers.Any())
@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			foreach (var shiftLayer in shiftLayersList)
 			{
-				var isPersonalLayer = shiftLayer is IPersonalShiftLayer;
+				var isPersonalLayer = shiftLayer is PersonalShiftLayer;
 				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && (layer.Period.Intersect(shiftLayer.Period)) && isPersonalLayer)
 				{
-					matchedLayers.Add(shiftLayer as IPersonalShiftLayer);
+					matchedLayers.Add(shiftLayer as PersonalShiftLayer);
 				}
 			}
 			return matchedLayers;
