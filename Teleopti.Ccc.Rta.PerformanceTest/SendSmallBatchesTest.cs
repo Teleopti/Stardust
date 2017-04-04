@@ -9,11 +9,15 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	public class SendSmallBatchesTest
 	{
 		public StatesSender States;
+		public PerformanceTest PerformanceTest;
 
 		[Test]
 		public void MeasurePerformance()
 		{
-			States.SendAllAsSmallBatches();
+			using (PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "SendSmallBatchesTest"))
+			{
+				States.SendAllAsSmallBatches();
+			}
 		}
 	}
 }

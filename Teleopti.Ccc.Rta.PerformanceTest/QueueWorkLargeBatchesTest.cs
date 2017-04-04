@@ -11,12 +11,17 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	{
 		public StatesSender States;
 		public HangfireUtilities Hangfire;
+		public PerformanceTest PerformanceTest;
 
 		[Test]
 		public void MeasurePerformance()
 		{
-			States.SendAllAsLargeBatches();
-			Hangfire.WaitForQueue();
+			using (PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "QueueWorkLargeBatchesTest"))
+			{
+				States.SendAllAsLargeBatches();
+				Hangfire.WaitForQueue();
+			}
 		}
-    }
+
+	}
 }

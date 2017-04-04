@@ -91,6 +91,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Code\ScheduleInvalidator.cs" />
+    <Compile Include="PerformanceTest.cs" />
     <Compile Include="QueueWorkLargeBatchesTest.cs" />
     <Compile Include="Measurements\MeasurementTest.cs" />
     <Compile Include="SendLargeBatchesTest.cs" />

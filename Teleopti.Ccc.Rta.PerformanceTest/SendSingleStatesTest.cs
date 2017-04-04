@@ -9,11 +9,15 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	public class SendSingleStatesTest
 	{
 		public StatesSender States;
+		public PerformanceTest PerformanceTest;
 
 		[Test]
 		public void MeasurePerformance()
 		{
-			States.SendAllAsSingles();
+			using (PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "SendSingleStatesTest"))
+			{
+				States.SendAllAsSingles();
+			}
 		}
 	}
 }
