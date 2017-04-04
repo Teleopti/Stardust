@@ -40,12 +40,12 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, params ISkill[] skills)
 		{
-			return agent.WithPersonPeriod(null, null, null, skills);
+			return agent.WithPersonPeriod((IRuleSetBag)null, null, null, skills);
 		}
 
 		public static Person WithPersonPeriod(this Person agent, ITeam team, params ISkill[] skills)
 		{
-			return agent.WithPersonPeriod(null, null, team, skills);
+			return agent.WithPersonPeriod((IRuleSetBag)null, null, team, skills);
 		}
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, IContract contract, params ISkill[] skills)
 		{
-			return agent.WithPersonPeriod(null, contract, null, skills);
+			return agent.WithPersonPeriod((IRuleSetBag)null, contract, null, skills);
 		}
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract, params ISkill[] skills)
@@ -70,6 +70,13 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract, ITeam team, params ISkill[] skills)
 		{
+			return ruleSet == null ? 
+				agent.WithPersonPeriod((IRuleSetBag)null, contract, team, skills) : 
+				agent.WithPersonPeriod(new RuleSetBag(ruleSet), contract, team, skills);
+		}
+
+		public static Person WithPersonPeriod(this Person agent, IRuleSetBag ruleSetBag, IContract contract, ITeam team, params ISkill[] skills)
+		{
 			var personPeriod = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") });
 			if (skills.Any())
 			{
@@ -78,9 +85,9 @@ namespace Teleopti.Ccc.TestCommon
 					personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 				}
 			}
-			if (ruleSet != null)
+			if (ruleSetBag != null)
 			{
-				personPeriod.RuleSetBag = new RuleSetBag(ruleSet);
+				personPeriod.RuleSetBag = ruleSetBag;
 			}
 			if (contract != null)
 			{
@@ -99,7 +106,6 @@ namespace Teleopti.Ccc.TestCommon
 			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 			return agent;
 		}
-
 
 		public static Person WithSchedulePeriodTwoDays(this Person agent, DateOnly date)
 		{
