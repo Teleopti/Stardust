@@ -17,10 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 			_repository = repository;
 		}
 
-		public int UnreadMessageCount
-		{
-			get { return _repository.CountUnread(_loggedOnUser.CurrentUser()); }
-		}
+		public int UnreadMessageCount => _repository.CountUnread(_loggedOnUser.CurrentUser());
 
 		public IList<IPushMessageDialogue> GetMessages(Paging paging)
 		{
