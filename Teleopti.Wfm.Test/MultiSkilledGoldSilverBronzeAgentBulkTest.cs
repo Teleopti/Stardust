@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
@@ -31,26 +30,24 @@ namespace Teleopti.Wfm.Test
 		public IDataSourceScope DataSourceScope;
 		public ImpersonateSystem ImpersonateSystem;
 		public WithUnitOfWork WithUnitOfWork;
-
-
+		
 		public IAbsenceRepository AbsenceRepository;
 		public IPersonRepository PersonRepository;
 		public IHandleEvent<NewMultiAbsenceRequestsCreatedEvent> UpdateRequestHandler;
 		public IPersonRequestRepository PersonRequestRepository;
 		public MutableNow Now;
 
-
 		[SetUp]
 		public void Setup()
 		{
 			SetupFixtureForAssembly.BeginTest();
 		}
-
-
+		
 		[Test]
 		public void ShouldBeApprovedIfOverstaffedSingleInterval()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -60,9 +57,9 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkills1");
 
-				var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+				var hourNow = now.Date.AddHours(now.Hour);
 				var requestStart = hourNow.AddHours(2);
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddMinutes(30).Utc()));
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddMinutes(30)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
@@ -88,7 +85,8 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeApprovedIfOverstaffedMultipleIntervals()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -98,9 +96,9 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkills1");
 
-				var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+				var hourNow = now.Date.AddHours(now.Hour);
 				var requestStart = hourNow.AddHours(2);
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddHours(3)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				PersonRequestRepository.Add(personRequest);
 				personRequest.Pending();
@@ -125,7 +123,8 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedSingleInterval()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
 			IPerson person;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -136,9 +135,9 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkills1");
 
-				var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+				var hourNow = now.Date.AddHours(now.Hour);
 				var requestStart = hourNow.AddHours(2);
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddMinutes(30).Utc()));
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddMinutes(30)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
@@ -164,7 +163,8 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedMultipleIntervals()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
 			IPerson person;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -174,9 +174,10 @@ namespace Teleopti.Wfm.Test
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkills1");
-				var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+
+				var hourNow = now.Date.AddHours(now.Hour);
 				var requestStart = hourNow.AddHours(2);
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddHours(3)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
@@ -202,10 +203,12 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedOnFirstHourAndOverstaffedOnSecond()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
 			IPerson person;
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(2);
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -215,7 +218,7 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkills1");
 
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddHours(2)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
@@ -241,9 +244,10 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeApprovedIfNoShiftInRequestPeriodAndOverStaffed()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(2);
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -253,7 +257,7 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkillsNoShift");
 
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddHours(2)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
@@ -279,9 +283,10 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeApprovedIfNoShiftInRequestPeriodAndUnderstaffed()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(2);
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -291,7 +296,7 @@ namespace Teleopti.Wfm.Test
 			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkillsNoShift");
 
-			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddHours(2)));
 			 personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
@@ -317,9 +322,10 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeApprovedWhenActivityIsNotConnectedToPersonSkillAndOverStaffed()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(2);
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -330,7 +336,7 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkillsWrongAct");
 
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddHours(2)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
@@ -356,10 +362,11 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeApprovedWhenActivityIsNotConnectedToPersonSkillAndUnderStaffed()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
 			IPerson person;
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(2);
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -369,7 +376,7 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				 person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkillsWrongAct");
 
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(2).Utc()));
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddHours(2)));
 				 personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
@@ -396,9 +403,10 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeApprovedIfOverstaffedAndActivityIsOvertime()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(2);
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -408,7 +416,7 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkillsOvertime");
 
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddHours(3)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
@@ -437,9 +445,10 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedAndActivityIsOvertime()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(2);
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -449,7 +458,7 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonAllSkillsOvertime");
 
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddHours(3)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);

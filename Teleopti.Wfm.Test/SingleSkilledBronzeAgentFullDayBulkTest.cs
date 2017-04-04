@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
@@ -49,7 +48,8 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeApprovedIfOverstaffedFullDay()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -59,8 +59,8 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
 
-				var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0);
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddDays(1).AddMinutes(-1).Utc()));
+				var requestStart = now.Date;
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddDays(1).AddMinutes(-1)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
@@ -86,7 +86,8 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderStaffedFullDay()
 		{
-			Now.Is(DateTime.UtcNow);
+			var now = DateTime.UtcNow;
+			Now.Is(now);
 			IPersonRequest personRequest;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -96,8 +97,8 @@ namespace Teleopti.Wfm.Test
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
 
-				var requestStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0);
-				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddDays(1).AddMinutes(-1).Utc()));
+				var requestStart = now.Date;
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddDays(1).AddMinutes(-1)));
 				personRequest = new PersonRequest(person, absenceRequest);
 				PersonRequestRepository.Add(personRequest);
 				personRequest.Pending();
