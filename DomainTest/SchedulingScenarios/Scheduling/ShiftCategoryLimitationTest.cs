@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -33,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#42836")]
 		public void ShouldRespectShiftCategoryLimitationWhenUsingTeamAndBlock()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
@@ -80,12 +80,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2), new OptimizationPreferences(), null);
 
-			stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2).Count(x =>
-				{
-					var shiftCat = x.PersonAssignment(true).ShiftCategory;
-					return shiftCat != null && shiftCat.Equals(shiftCat1);
-				})
-				.Should().Be.EqualTo(0);
+			var scheduledDays = stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2).Where(x =>
+				x.PersonAssignment(true).MainActivities().Any()).OrderBy(x=> x.DateOnlyAsPeriod.DateOnly).ToArray();
+
+			var nonScheduleDays = stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2).Where(x =>
+				x.PersonAssignment(true).MainActivities().IsEmpty() && !x.HasDayOff()).OrderBy(x => x.DateOnlyAsPeriod.DateOnly).ToArray();
+
+			for (var i = 0; i < 5; i++)
+			{
+				scheduledDays[i].DateOnlyAsPeriod.DateOnly.Should().Be.EqualTo(nonScheduleDays[i].DateOnlyAsPeriod.DateOnly);
+			}
 		}
 
 		[Test]

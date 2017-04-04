@@ -86,11 +86,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				schedulingOptions.NotAllowedShiftCategories.Clear();
 
-				foreach (var lim in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
+
+				foreach (var matrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 				{
-					if (_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(lim, teamInfo, dateOnly))
+					foreach (var shiftCategoryLimitation in matrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
 					{
-						schedulingOptions.NotAllowedShiftCategories.Add(lim.ShiftCategory);
+						if (_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(shiftCategoryLimitation, teamInfo, dateOnly))
+						{
+							schedulingOptions.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
+						}
 					}
 				}
 
