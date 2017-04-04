@@ -108,21 +108,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public override void Is(DateTime? utc)
 		{
-			var dayTick = Math.Abs(utc.GetValueOrDefault().Subtract(UtcDateTime()).TotalDays) >= 1;
-			var hourTick = Math.Abs(utc.GetValueOrDefault().Subtract(UtcDateTime()).TotalHours) >= 1;
-
+			var time = new TimePassingSimulator(UtcDateTime(), utc.GetValueOrDefault());
 			base.Is(utc);
 
 			//Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {utc}");
 
-			if (dayTick)
-				_publisher.Publish(new TenantDayTickEvent());
-			if (hourTick)
-				_publisher.Publish(new TenantHourTickEvent());
-			_publisher.Publish(new TenantMinuteTickEvent());
+			time.IfDayPassed(() => { _publisher.Publish(new TenantDayTickEvent()); });
+			time.IfHourPassed(() => { _publisher.Publish(new TenantHourTickEvent()); });
+			time.IfMinutePassed(() => { _publisher.Publish(new TenantMinuteTickEvent()); });
 		}
 	}
-
+	
 	public class FakeEventPublisher_ExperimentalEventPublishing : FakeEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;

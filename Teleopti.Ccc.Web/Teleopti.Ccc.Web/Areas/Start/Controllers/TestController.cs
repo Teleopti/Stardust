@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -239,20 +240,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			else
 				_mutateNow.Is(time.Utc());
 			var newNow = _now.UtcDateTime();
-
-			var diff = newNow.Subtract(oldNow);
+			
 			_tenantTickEventPublisher.WithPublishingsForTest(() =>
 			{
-				var dayTick = Math.Abs(diff.TotalDays) >= 1;
-				var hourTick = Math.Abs(diff.TotalHours) >= 1;
-				var minuteTick = Math.Abs(diff.TotalMinutes) >= 1;
-
-				if (dayTick)
-					_hangfire.TriggerDailyRecurringJobs();
-				if (hourTick)
-					_hangfire.TriggerHourlyRecurringJobs();
-				if (minuteTick)
-					_hangfire.TriggerMinutelyRecurringJobs();
+				var timePassed = new TimePassingSimulator(oldNow, newNow);
+				timePassed.IfDayPassed(_hangfire.TriggerDailyRecurringJobs);
+				timePassed.IfHourPassed(_hangfire.TriggerHourlyRecurringJobs);
+				timePassed.IfMinutePassed(_hangfire.TriggerMinutelyRecurringJobs);
 			});
 			_hangfire.WaitForQueue();
 		}
