@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public override int GetHashCode()
 		{
-			return _activity.GetHashCode() ^ _skills.MergedKey().GetHashCode();
+			return _activity.GetHashCode() ^ _skills.GetHashCode();
 		}
 	}
 }

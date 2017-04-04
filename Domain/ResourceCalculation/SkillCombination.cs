@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class SkillCombination
 	{
 		private readonly DateOnlyPeriod _period;
+		private readonly string _mergedKey;
 		private readonly IList<Guid> _skillKeys;
 		private readonly ConcurrentDictionary<Guid,SkillCombination> _activityCombinations = new ConcurrentDictionary<Guid, SkillCombination>();
 
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_skillKeys = Skills.Select(s => s.Id.GetValueOrDefault()).ToArray();
 			Key = toKey(_skillKeys);
 			OriginalKey = toKey(originalSkills.Select(s => s.Id.GetValueOrDefault()));
+			_mergedKey = Key + "+" + OriginalKey;
 		}
 
 		public string OriginalKey { get; }
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public string MergedKey()
 		{
-			return Key + "+" + OriginalKey;
+			return _mergedKey;
 		}
 
 		public SkillCombination ForActivity(Guid activityId)
@@ -51,17 +53,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _activityCombinations.GetOrAdd(activityId, id => new SkillCombination(
 				Skills.Where(
 					x =>
-						(x.SkillType != null && x.SkillType.ForecastSource == ForecastSource.MaxSeatSkill) ||
-						(x.Activity != null && x.Activity.Id.GetValueOrDefault() == id)).ToArray(), _period,
+						x.SkillType != null && x.SkillType.ForecastSource == ForecastSource.MaxSeatSkill ||
+						x.Activity != null && x.Activity.Id.GetValueOrDefault() == id).ToArray(), _period,
 				SkillEfficiencies,OriginalSkills.Where(
 					x =>
-						(x.SkillType != null && x.SkillType.ForecastSource == ForecastSource.MaxSeatSkill) ||
-						(x.Activity != null && x.Activity.Id.GetValueOrDefault() == id)).ToArray()));
+						x.SkillType != null && x.SkillType.ForecastSource == ForecastSource.MaxSeatSkill ||
+						x.Activity != null && x.Activity.Id.GetValueOrDefault() == id).ToArray()));
 		}
 
 		public string Key { get; }
 		public ISkill[] Skills { get; }
 		public ISkill[] OriginalSkills { get; }
 		public SkillEffiencyResource[] SkillEfficiencies { get; }
+
+		public override int GetHashCode()
+		{
+			return _mergedKey.GetHashCode();
+		}
 	}
 }
