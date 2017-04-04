@@ -81,6 +81,21 @@
 		table tr {
 			height: 30px;
 		}
+				table td.bronze{
+			background-image: url(../app/reports/images/bronze.png);
+			background-repeat: no-repeat;
+			background-position:center;
+		}
+		td.silver{
+			background-image: url(../app/reports/images/silver.png);
+			background-repeat: no-repeat;
+			background-position:center;
+		}
+		td.gold{
+			background-image: url(../app/reports/images/gold.png);
+			background-repeat: no-repeat;
+			background-position:center;
+		}
 		table td.agent-badge-num {
 			width: 10%;
 			text-align: center;

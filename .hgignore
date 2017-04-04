@@ -113,3 +113,5 @@ Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/.vscode/tasks.json
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.ServiceBusTest/PayrollTestDlls/Settings.Teliasonera.xml
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.ServiceBusTest/PayrollTestDlls/Config.RelesayTeliaSonera.xml
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.ServiceBusTest/PayrollTestDlls/ReadMe.txt
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/tmp/style_dark.css
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/tmp/style_classic.css
