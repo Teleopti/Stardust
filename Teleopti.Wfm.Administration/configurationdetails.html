@@ -1,7 +1,5 @@
 ﻿<div ng-controller="configurationDetailsController as vm" style="margin-left: 50px;margin-right: 50px">
 	<div class="row">
-		
-		
 		<div class="col-md-12">
 			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#/"><img alt="back" title="Back to Configurations" src="Content/images/left_round.png"/></a>
 
@@ -9,11 +7,10 @@
 		</div>
 		<div class="col-md-12">
 			<div>
-				<input class="form-control" type="text" ng-model="vm.Value" placeholder="Value">
+				<input class="form-control" type="text" ng-model="vm.Value" placeholder="{{vm.example}}">
 			</div>
 		</div>
 	</div>
-	
 	<div class="row">
 		<div style="margin-top: 30px" class="col-md-6">
 			<label class="ErrorLabel">Important: After saving, you need to run FixServerConfiguration.bat in administrator mode under Teleopti\SupportTools folder on all web servers, to be able to refresh server configuration.</label>
@@ -27,6 +24,5 @@
 			<label class="ErrorLabel">{{vm.Message}}</label>
 		</div>
 	</div>
-
 </div>
 

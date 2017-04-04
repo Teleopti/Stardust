@@ -9,11 +9,12 @@
 
 		vm.Key = $routeParams.key;
 		vm.Value = "";
-	    vm.SaveEnabled = true;
+		vm.SaveEnabled = true;
+		vm.example = "";
 
 		vm.Message = "";
 
-		vm.LoadConfiguration = function () {
+	    var loadConfiguration = function () {
 			$http.post('./Configuration', '"' + vm.Key + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.Value = data;
@@ -22,7 +23,18 @@
 				});
 		}
 
-		vm.LoadConfiguration();
+		loadConfiguration();
+
+		var check  = function () {
+			if (vm.Key === "FrameAncestors") {
+				return vm.example = "ex: http://anothersite.teleopti.com";
+			} else {
+				return vm.example = vm.Key;
+			}
+		}
+
+		check();
+
 		vm.save = function () {
 			$http.post('./SaveConfiguration', {
 				Key: vm.Key,
