@@ -53,56 +53,80 @@
 		</div>
 	</div>
 	<br />
+	<h2>Manage Installation</h2>
 
-	<h2>Tenants in this installation</h2>
-
-	<div>
-		<div>
-			<table>
-				<thead>
-				<tr>
-					<th>Name</th>
-					<th>Application database</th>
-					<th>Analytics database</th>
-					<th>Aggregation database</th>
-					<th>Version</th>
-					<th>Active</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr ng-repeat="tenant in Tenants">
-					<td>
-						<a href="#details\{{tenant.Name}}">
-							<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_group_black_24px.svg"></md-icon>{{tenant.Name}}</a>
-					</td>
-					<td><a href="#details\{{tenant.Name}}">{{tenant.AppDatabase}}</a> </td>
-					<td><a href="#details\{{tenant.Name}}">{{tenant.AnalyticsDatabase}}</a> </td>
-					<td><a href="#details\{{tenant.Name}}">&nbsp;{{tenant.AggregationDatabase}}</a> </td>
-					<td><a href="#details\{{tenant.Name}}">{{tenant.Version.ImportAppVersion}}</a> </td>
-					<td>{{tenant.Active}}</td>
-				</tr>
-				</tbody>
-			</table>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading"><strong>	Tenants In This Installation</strong>	</div>
+				<div class="panel-body text-container">
+					<table>
+						<thead>
+						<tr>
+							<th>Name</th>
+							<th>Application database</th>
+							<th>Analytics database</th>
+							<th>Aggregation database</th>
+							<th>Version</th>
+							<th>Active</th>
+							<th>Detail</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="tenant in Tenants">
+							<td>
+								<a href="#details\{{tenant.Name}}">
+									<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_group_black_24px.svg"></md-icon>{{tenant.Name}}
+								</a>
+							</td>
+							<td><a href="#details\{{tenant.Name}}">{{tenant.AppDatabase}}</a> </td>
+							<td><a href="#details\{{tenant.Name}}">{{tenant.AnalyticsDatabase}}</a> </td>
+							<td><a href="#details\{{tenant.Name}}">&nbsp;{{tenant.AggregationDatabase}}</a> </td>
+							<td><a href="#details\{{tenant.Name}}">{{tenant.Version.ImportAppVersion}}</a> </td>
+							<td>{{tenant.Active}}</td>
+							<td>
+								<a href="#details\{{tenant.Name}}">
+									<button class="btn btn-primary btn-xs">
+										<span class="text-white">Detail</span>
+									</button>
+								</a>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
-	</div>
-	
-	<h2>Configuration for this installation</h2>
-	<div>
-		<table>
-			<thead>
-				<tr>
-					<th>Key</th>
-					<th>Value</th>
-					<th>Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="configuration in Configurations">
-					<td><a href="#configurationdetails\{{configuration.Key}}">{{configuration.Key}}</a></td>
-					<td><a href="#configurationdetails\{{configuration.Key}}">{{configuration.Value}}</a></td>
-					<td><a href="#configurationdetails\{{configuration.Key}}">{{configuration.Description}}</a></td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading"><strong>	Manage Installation Configuration</strong>	</div>
+				<div class="panel-body text-container">
+					<table>
+						<thead>
+						<tr>
+							<th>Key</th>
+							<th>Value</th>
+							<th>Description</th>
+							<th>Edit</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="configuration in Configurations">
+							<td><a>{{configuration.Key}}</a></td>
+							<td><a>{{configuration.Value}}</a></td>
+							<td><a>{{configuration.Description}}</a></td>
+							<td>
+								<a href="#configurationdetails\{{configuration.Key}}">
+									<button class="btn btn-primary btn-xs">
+										<span class="text-white">Edit</span>
+									</button>
+								</a>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
