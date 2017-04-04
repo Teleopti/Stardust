@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -85,6 +86,67 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				scheduledDays.Count(x => x.PersonAssignment(true).MainActivities().Any()).Should().Be.EqualTo(1);
 				scheduledDays.Count(x => !x.PersonAssignment(true).MainActivities().Any()).Should().Be.EqualTo(1);
 			}
+		}
+
+		[Test]
+		[Ignore("42836, to be fixed")]
+		public void ShouldRespectShiftCategoryLimitationWhenUsingTeamAndBlockAndNotPossibleToScheduleFullBlockPeriod()
+		{
+			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var date = new DateOnly(2017, 1, 22);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+			var shiftCat1 = new ShiftCategory("1").WithId();
+			var shiftCat2 = new ShiftCategory("2").WithId();
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var skillDays = skill.CreateSkillDayWithDemand(scenario, period, TimeSpan.FromHours(1));
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCat1));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCat2));
+			var ruleSetBag = new RuleSetBag(ruleSet1);
+			ruleSetBag.AddRuleSet(ruleSet2);
+			var agent1 = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), team, skill).InTimeZone(TimeZoneInfo.Utc);
+			var agent2 = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), team, skill).InTimeZone(TimeZoneInfo.Utc);
+
+			agent1.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat1) { MaxNumberOf = 1 });
+			agent1.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat2) { MaxNumberOf = 1 });
+
+			agent2.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat1) { MaxNumberOf = 1 });
+			agent2.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat2) { MaxNumberOf = 1 });
+
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1, agent2 },
+					new[]
+					{
+						new PersonAssignment(agent1, scenario, date).IsDayOff(),
+						new PersonAssignment(agent2, scenario, date).IsDayOff(),
+						new PersonAssignment(agent1, scenario, date.AddDays(3)).IsDayOff(),
+						new PersonAssignment(agent2, scenario, date.AddDays(3)).IsDayOff()
+					},
+					skillDays
+			);
+			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
+			{
+				SchedulingOptions =
+				{
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.Hierarchy),
+					UseTeam = true,
+					UseBlock = true,
+					UseShiftCategoryLimitations = true,
+					BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
+					BlockSameShiftCategory = true,
+					TeamSameShiftCategory = true
+				}
+			};
+
+
+			var blockPeriod = new DateOnlyPeriod(date, date.AddDays(3));
+			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(blockPeriod, agent1, agent2), new OptimizationPreferences(), null);
+
+			var scheduledDays = stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2).Where(x =>
+				x.PersonAssignment(true).MainActivities().Any()).ToArray();
+
+			scheduledDays.Length.Should().Be.LessThanOrEqualTo(2);
 		}
 
 		[Test]
