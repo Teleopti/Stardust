@@ -41,17 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 
 			Persister.Read(personId, "2016-11-12".Date()).OutOfAdherences.Single().StartTime.Should().Be("2016-11-12 13:00".Utc());
 		}
-
-		[Test]
-		public void ShouldAddOutOfAdherenceToAgentDate()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, BelongsToDate = "2016-11-11".Date(), Timestamp = "2016-11-12 01:00".Utc() });
-
-			Persister.Read(personId, "2016-11-11".Date()).OutOfAdherences.Single().StartTime.Should().Be("2016-11-12 01:00".Utc());
-		}
-
+		
 		[Test]
 		public void ShouldPutOutOfAdherenceEndTime()
 		{
@@ -110,7 +100,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, BelongsToDate = "2016-11-11".Date(), Timestamp = "2016-11-11 22:00".Utc() });
 			Target.Handle(new PersonInAdherenceEvent { PersonId = personId, BelongsToDate = "2016-11-12".Date(), Timestamp = "2016-11-12 12:00".Utc() });
 
-			Persister.Read(personId, "2016-11-12".Date()).OutOfAdherences.Single().EndTime.Should().Be("2016-11-12 12:00".Utc());
+			Persister.Read(personId, "2016-11-11 00:00".Utc(), "2016-11-13 00:00".Utc())
+				.OutOfAdherences.Single().EndTime.Should().Be("2016-11-12 12:00".Utc());
 		}
 
 		[Test]
@@ -120,7 +111,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 
 			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, BelongsToDate = "2016-11-12".Date(), Timestamp = "2016-11-13 06:00".Utc() });
 
-			Persister.Read(personId, "2016-11-12".Date()).OutOfAdherences.Single().StartTime.Should().Be("2016-11-13 06:00".Utc());
+			Persister.Read(personId, "2016-11-13 00:00".Utc(), "2016-11-14 00:00".Utc())
+				.OutOfAdherences.Single().StartTime.Should().Be("2016-11-13 06:00".Utc());
 		}
 
 		[Test]
@@ -132,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, BelongsToDate = "2016-11-12".Date(), Timestamp = "2016-11-12 07:00".Utc() });
 			Target.Handle(new PersonInAdherenceEvent { PersonId = personId, BelongsToDate = "2016-11-12".Date(), Timestamp = "2016-11-12 07:30".Utc() });
 
-			var result = Persister.Read(personId, "2016-11-12".Date()).OutOfAdherences.Single();
+			var result = Persister.Read(personId, "2016-11-12 00:00".Utc(), "2016-11-13 00:00".Utc()).OutOfAdherences.Single();
 			result.StartTime.Should().Be("2016-11-12 06:00".Utc());
 			result.EndTime.Should().Be("2016-11-12 07:30".Utc());
 		}
