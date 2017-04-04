@@ -270,7 +270,8 @@ namespace Teleopti.Wfm.Test
 
 			Data.Apply(multiplicatorDefinitionSet);
 
-			var shiftStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var now = DateTime.UtcNow;
+			var shiftStart = now.Date.AddHours(now.Hour);
 
 			var personPeriodAllSkills = new PersonPeriodConfigurable
 			{
