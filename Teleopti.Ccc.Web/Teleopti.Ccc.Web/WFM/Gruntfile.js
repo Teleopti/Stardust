@@ -440,6 +440,6 @@ module.exports = function(grunt) {
     grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
 
     // for desktop client
-    grunt.registerTask('buildForDesktop', ['processhtml:distForDesktop']);
+    grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:dist']);
 
 };
