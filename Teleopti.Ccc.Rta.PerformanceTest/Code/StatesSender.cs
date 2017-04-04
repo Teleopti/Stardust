@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -18,17 +16,20 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly TestConfiguration _testConfiguration;
 		private readonly DataCreator _data;
 		private readonly Http _http;
+		private readonly ScheduleInvalidator _scheduleInvalidator;
 
 		public StatesSender(
 			MutableNow now, 
 			TestConfiguration testConfiguration,
 			DataCreator data,
-			Http http)
+			Http http,
+			ScheduleInvalidator scheduleInvalidator)
 		{
 			_now = now;
 			_testConfiguration = testConfiguration;
 			_data = data;
 			_http = http;
+			_scheduleInvalidator = scheduleInvalidator;
 		}
 
 		[TestLog]
@@ -60,10 +61,12 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		[TestLog]
 		protected virtual void SendStateChange(int batchSize, StateChange stateChange)
 		{
+			if (stateChange.ScheduleChangesPercent > 0)
+				_scheduleInvalidator.InvalidateSchedules(stateChange.ScheduleChangesPercent);
+
 			var now = stateChange.Time.Utc();
 			_now.Is(now);
 			_http.PostJson("/Test/SetCurrentTime", new {time = stateChange.Time});
-
 
 			_data.LogonsWorking()
 				.Select(logon => new ExternalUserStateWebModel
@@ -96,26 +99,52 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		{
 			var states = Enumerable.Empty<StateChange>();
 
-			states = states.Concat(_data.OffChangesFor("2016-02-26 07:00")); // 1 state changes, 1 adherence change(s)
+			states = states.Concat(OffChangesFor("2016-02-26 07:00")); // 1 state changes, 1 adherence change(s)
 			// 08:00 phone
-			states = states.Concat(_data.PhoneChangesFor(20, "2016-02-26 08:01")); // 40 state changes,  2 adherence change(s)
+			states = states.Concat(PhoneChangesFor(20, 5, "2016-02-26 08:01")); // 40 state changes,  2 adherence change(s)
 			// 10:00 break
-			states = states.Concat(_data.OffChangesFor("2016-02-26 10:01")); // 1 state changes,  2 adherence change(s)
+			states = states.Concat(OffChangesFor("2016-02-26 10:01")); // 1 state changes,  2 adherence change(s)
 			// 10:15 phone
-			states = states.Concat(_data.PhoneChangesFor(10, "2016-02-26 10:16")); // 20 state changes,  2 adherence change(s)
+			states = states.Concat(PhoneChangesFor(10, 5, "2016-02-26 10:16")); // 20 state changes,  2 adherence change(s)
 			// 11:30 lunch
-			states = states.Concat(_data.OffChangesFor("2016-02-26 10:35")); // 1 state changes,  2 adherence change(s)
+			states = states.Concat(OffChangesFor("2016-02-26 10:35")); // 1 state changes,  2 adherence change(s)
 			// 12:00 phone
-			states = states.Concat(_data.PhoneChangesFor(30, "2016-02-26 11:55")); // 60 state changes,  2 adherence change(s)
+			states = states.Concat(PhoneChangesFor(30, 5, "2016-02-26 11:55")); // 60 state changes,  2 adherence change(s)
 			// 15:00 break
-			states = states.Concat(_data.OffChangesFor("2016-02-26 14:55")); // 1 state changes,  2 adherence change(s)
+			states = states.Concat(OffChangesFor("2016-02-26 14:55")); // 1 state changes,  2 adherence change(s)
 			// 15:15 phone
-			states = states.Concat(_data.PhoneChangesFor(20, "2016-02-26 15:16")); // 40 state changes,  2 adherence change(s)
+			states = states.Concat(PhoneChangesFor(20, 5, "2016-02-26 15:16")); // 40 state changes,  2 adherence change(s)
 			// 17:00 off
-			states = states.Concat(_data.OffChangesFor("2016-02-26 17:05")); // 1 state changes,  2 adherence change(s)
+			states = states.Concat(OffChangesFor("2016-02-26 17:05")); // 1 state changes,  2 adherence change(s)
 
 			return states;
 		}
-		
+
+		public IEnumerable<StateChange> OffChangesFor(string time)
+		{
+			yield return new StateChange
+			{
+				ScheduleChangesPercent = 0,
+				Time = $"{time}:00",
+				StateCode = $"LoggedOff"
+			};
+		}
+
+		public IEnumerable<StateChange> PhoneChangesFor(int calls, int scheduleChangesPercent, string time)
+		{
+			var statesPerCall = _data.PhoneStates().Count();
+			return _data.PhoneStates()
+				.Infinite()
+				.Take(calls * statesPerCall)
+				.Select((x, i) =>
+						new StateChange
+						{
+							ScheduleChangesPercent = i == 0 ? scheduleChangesPercent : 0,
+							Time = $"{time}:{i:00}",
+							StateCode = x
+						}
+				);
+		}
+
 	}
 }

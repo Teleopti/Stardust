@@ -243,9 +243,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var diff = newNow.Subtract(oldNow);
 			_tenantTickEventPublisher.WithPublishingsForTest(() =>
 			{
-				var dayTick = Math.Abs(diff.TotalDays) > 0;
-				var hourTick = Math.Abs(diff.TotalHours) > 0;
-				var minuteTick = Math.Abs(diff.TotalMinutes) > 0;
+				var dayTick = Math.Abs(diff.TotalDays) >= 1;
+				var hourTick = Math.Abs(diff.TotalHours) >= 1;
+				var minuteTick = Math.Abs(diff.TotalMinutes) >= 1;
 
 				if (dayTick)
 					_hangfire.TriggerDailyRecurringJobs();

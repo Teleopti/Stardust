@@ -269,29 +269,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			yield return "Phone";
 		}
 
-		public IEnumerable<StateChange> OffChangesFor(string time)
-		{
-			return LoggedOffStates()
-				.Select(x => new StateChange
-				{
-					Time = $"{time}:00",
-					StateCode = x
-				});
-		}
-
-		public IEnumerable<StateChange> PhoneChangesFor(int calls, string time)
-		{
-			var statesPerCall = PhoneStates().Count();
-			return PhoneStates()
-				.Infinite()
-				.Take(calls * statesPerCall)
-				.Select((x, i) => new StateChange
-				{
-					Time = $"{time}:{i:00}",
-					StateCode = x
-				});
-		}
-
 		public IEnumerable<ExternalLogon> Logons()
 		{
 			return Enumerable.Range(0, _testConfiguration.NumberOfAgentsInSystem)

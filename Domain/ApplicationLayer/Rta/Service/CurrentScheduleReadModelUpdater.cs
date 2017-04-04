@@ -105,13 +105,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var to = new DateOnly(time.AddDays(1));
 			var loadPeriod = new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1));
 			var persistPeriod = new DateOnlyPeriod(from, to);
-
-			_persons.FindPeople(personIds)
+			var persons = _persons.FindPeople(personIds)
 				.Select(x => new
 				{
 					businessUnitId = x.Period(new DateOnly(time))?.Team?.Site?.BusinessUnit?.Id,
 					person = x
 				})
+				.ToArray();
+
+			persons
+				.Where(x => !x.businessUnitId.HasValue)
+				.ForEach(person =>
+				{
+					_persister.Persist(person.person.Id.Value, revision, Enumerable.Empty<ScheduledActivity>());
+				});
+
+			persons
 				.Where(x => x.businessUnitId.HasValue)
 				.GroupBy(x => x.businessUnitId.Value, x => x.person)
 				.ForEach(personsInBusinessUnit =>

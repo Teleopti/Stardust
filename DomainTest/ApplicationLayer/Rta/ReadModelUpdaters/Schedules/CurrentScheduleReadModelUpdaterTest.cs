@@ -238,5 +238,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedul
 			Persister.Read(0).Single().Schedule.Select(x => x.BelongsToDate)
 				.Should().Contain("2017-01-25".Date());
 		}
+
+		[Test]
+		public void ShouldUpdatePersonWithoutBusinessUnit()
+		{
+			var user = Guid.NewGuid();
+			Database
+				.WithPerson(user, "user");
+			Now.Is("2017-01-25 12:00");
+
+			Target.Handle(new ScheduleChangedEvent { PersonId = user });
+			Target.Handle(new TenantMinuteTickEvent());
+
+			Persister.GetInvalid().Should().Not.Contain(user);
+		}
 	}
 }
