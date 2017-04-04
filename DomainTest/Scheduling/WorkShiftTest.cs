@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyToMainShiftWorksOnDaylightSavingTimeDate()
         {
-            var tp1 = new DateTimePeriod(WorkShift.BaseDate.AddHours(0).AddMinutes(15),
+            var tp1 = new DateTimePeriod(WorkShift.BaseDate.AddMinutes(15),
                                                     WorkShift.BaseDate.AddHours(2).AddMinutes(15));
             var tp2 = new DateTimePeriod(WorkShift.BaseDate.AddHours(2).AddMinutes(15),
                                                     WorkShift.BaseDate.AddHours(8));

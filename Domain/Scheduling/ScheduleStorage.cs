@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IScenario scenario)
 		{
 			if (scheduleDictionaryLoadOptions == null)
-				throw new ArgumentNullException("scheduleDictionaryLoadOptions");
+				throw new ArgumentNullException(nameof(scheduleDictionaryLoadOptions));
 
 			var longDateTimePeriod = new DateTimePeriod(dictionaryPeriod.StartDateTime.AddDays(-1),
 														dictionaryPeriod.EndDateTime.AddDays(1));

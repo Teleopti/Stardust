@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			var hoursAsInts = new List<string>();
 			var asmZeroAsUtc = TimeZoneHelper.ConvertToUtc(asmZero, timeZone);
 			var beginningIsDst =
-				timeZone.IsDaylightSavingTime(TimeZoneInfo.ConvertTimeFromUtc(asmZeroAsUtc.AddHours(0), timeZone));
+				timeZone.IsDaylightSavingTime(TimeZoneInfo.ConvertTimeFromUtc(asmZeroAsUtc, timeZone));
 			var endIsDst = timeZone.IsDaylightSavingTime(TimeZoneInfo.ConvertTimeFromUtc(asmZeroAsUtc.AddHours(71), timeZone));
 			dstJudgement.IsContainsDSTStart = !beginningIsDst && endIsDst;
 			dstJudgement.IsContainsDSTEnd = beginningIsDst && !endIsDst;

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				{
 					if (!(model.ScheduledStaffing[i].HasValue && model.ForecastedStaffing[i].HasValue)) continue;
 
-					var staffingInterval = new SkillStaffingInterval()
+					var staffingInterval = new SkillStaffingInterval
 					{
 						CalculatedResource = model.ScheduledStaffing[i].Value,
 						FStaff = model.ForecastedStaffing[i].Value  // I believe model.ForecastedStaffing is taking shrinkage into account, make sure to test it

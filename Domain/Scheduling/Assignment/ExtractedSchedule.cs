@@ -464,7 +464,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteAbsence(bool all)
 		{
-			//IPersonAbsence personAbsenceUpForDelete = null;
 			IVisualLayerCollection layerCollection = ProjectionService().CreateProjection();
 			IList<IPersonAbsence> removeList = new List<IPersonAbsence>();
 
@@ -524,10 +523,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var highAss = PersonAssignment();
 
-			if (highAss != null)
-			{
-				highAss.ClearMainActivities();
-			}    
+			highAss?.ClearMainActivities();
 		}
 
 		public TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod)
@@ -611,7 +607,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			//add new splitted absences
 			foreach (IPersonAbsence newAbsence in splitList)
 			{
-				//newAbsence.LastChange = DateTime.UtcNow;
 				Add(newAbsence);
 			}      
 		}

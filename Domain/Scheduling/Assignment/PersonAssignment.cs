@@ -56,10 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual DateOnly Date { get; protected set; }
 
-		public virtual DateTimePeriod Period
-		{
-			get { return mergedMainShiftAndPersonalPeriods(); }
-		}
+		public virtual DateTimePeriod Period => mergedMainShiftAndPersonalPeriods();
 
 		public virtual DateTimePeriod PeriodExcludingPersonalActivity()
 		{
@@ -93,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			var dayOff = DayOff();
 			return dayOff == null ? 
-				new DateOnlyPeriod(Date, Date).ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) :	//don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
+				Date.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) :	//don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
 				new DateTimePeriod(dayOff.Anchor, dayOff.Anchor.AddTicks(1));
 		}
 
@@ -102,10 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return Scenario.Equals(scenario);
 		}
 
-		public virtual string FunctionPath
-		{
-			get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment; }
-		}
+		public virtual string FunctionPath { get; } = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
 
 		public virtual IPersistableScheduleData CreateTransient()
 		{
@@ -147,20 +141,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _shiftLayers.OfType<IOvertimeShiftLayer>();
 		}
 
-		public virtual IEnumerable<IShiftLayer> ShiftLayers
-		{
-			get { return _shiftLayers; }
-		}
+		public virtual IEnumerable<IShiftLayer> ShiftLayers => _shiftLayers;
 
-		public virtual IPerson Person
-		{
-			get { return _person; }
-		}
+		public virtual IPerson Person => _person;
 
-		public virtual IScenario Scenario
-		{
-			get { return _scenario; }
-		}
+		public virtual IScenario Scenario => _scenario;
 
 		public virtual bool RemoveActivity(IShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
@@ -211,10 +196,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			RestrictionSet.CheckEntity(this);
 		}
 
-		public virtual IRestrictionSet<IPersonAssignment> RestrictionSet
-		{
-			get { return PersonAssignmentRestrictionSet.CurrentPersonAssignmentRestrictionSet; }
-		}
+		public virtual IRestrictionSet<IPersonAssignment> RestrictionSet => PersonAssignmentRestrictionSet.CurrentPersonAssignmentRestrictionSet;
 
 		public virtual IProjectionService ProjectionService()
 		{
@@ -289,10 +271,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return retobj;
 		}
 
-		public virtual IAggregateRoot MainRoot
-		{
-			get { return Person; }
-		}
+		public virtual IAggregateRoot MainRoot => Person;
 
 		public virtual void AddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
@@ -541,7 +520,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				anyLayerFound = true;
 			}
 			if(!anyLayerFound)
-				throw new ArgumentException("No layer(s) found!", "activity");
+				throw new ArgumentException("No layer(s) found!", nameof(activity));
 
 			//will be fixed later (=Erik)
 			var newPeriod = new DateTimePeriod(newStartTime, newStartTime.Add(length));
@@ -629,7 +608,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var originalOrderIndex = ShiftLayers.ToList().IndexOf(shiftLayer);
 			if (originalOrderIndex < 0)
-				throw new ArgumentException("No layer(s) found!", "activity");
+				throw new ArgumentException("No layer(s) found!", nameof(shiftLayer));
 			RemoveActivity(shiftLayer);
 
 			var newLayerPeriod = new DateTimePeriod(newStartTimeInUtc, newStartTimeInUtc.Add(shiftLayer.Period.EndDateTime.Subtract(shiftLayer.Period.StartDateTime)));
@@ -740,7 +719,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != this.GetType()) return false;
+			if (obj.GetType() != GetType()) return false;
 			return Equals((IEntity)obj);
 		}
 
@@ -749,9 +728,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			var otherAsAss = other as IPersonAssignment;
-			return otherAsAss != null && (Equals(_person, otherAsAss.Person) &&
-						      Equals(_scenario, otherAsAss.Scenario) &&
-						      Date.Equals(otherAsAss.Date));
+			return otherAsAss != null && Equals(_person, otherAsAss.Person) && Equals(_scenario, otherAsAss.Scenario) && Date.Equals(otherAsAss.Date);
 		}
 
 		public override int GetHashCode()
@@ -759,8 +736,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			unchecked
 			{
 				var hashCode = Date.GetHashCode();
-				hashCode = (hashCode * 397) ^ (_person != null ? _person.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (_scenario != null ? _scenario.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (_person?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (_scenario?.GetHashCode() ?? 0);
 				return hashCode;
 			}
 		}

@@ -67,10 +67,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 					// Kolla så att både "det jag har" och "byt till" är skift eller DO
 					//Check so that "What I have" and "trade with" is a shift or DO
-					if (shiftTradeDetail.SchedulePartFrom.SignificantPart() != SchedulePartView.MainShift &&
-						shiftTradeDetail.SchedulePartFrom.SignificantPart() != SchedulePartView.DayOff) continue;
-					if (shiftTradeDetail.SchedulePartTo.SignificantPart() != SchedulePartView.MainShift &&
-						shiftTradeDetail.SchedulePartTo.SignificantPart() != SchedulePartView.DayOff) continue;
+					var fromSignificant = shiftTradeDetail.SchedulePartFrom.SignificantPart();
+					if (fromSignificant != SchedulePartView.MainShift &&
+						fromSignificant != SchedulePartView.DayOff) continue;
+					var toSignificant = shiftTradeDetail.SchedulePartTo.SignificantPart();
+					if (toSignificant != SchedulePartView.MainShift &&
+						toSignificant != SchedulePartView.DayOff) continue;
 
 					// Vill att "det jag har" ska bli "byt till"
 					// alltså, sätt hans mainshift på min schemadag (för att en ev korttidsfrånvaro på mig ska kunna beaktas)
