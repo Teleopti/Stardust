@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -108,13 +107,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			ruleSetBag.AddRuleSet(ruleSet2);
 			var agent1 = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), team, skill).InTimeZone(TimeZoneInfo.Utc);
 			var agent2 = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), team, skill).InTimeZone(TimeZoneInfo.Utc);
-
 			agent1.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat1) { MaxNumberOf = 1 });
 			agent1.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat2) { MaxNumberOf = 1 });
-
 			agent2.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat1) { MaxNumberOf = 1 });
 			agent2.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat2) { MaxNumberOf = 1 });
-
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1, agent2 },
 					new[]
 					{
@@ -143,10 +139,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var blockPeriod = new DateOnlyPeriod(date, date.AddDays(3));
 			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(blockPeriod, agent1, agent2), new OptimizationPreferences(), null);
 
-			var scheduledDays = stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2).Where(x =>
-				x.PersonAssignment(true).MainActivities().Any()).ToArray();
-
-			scheduledDays.Length.Should().Be.LessThanOrEqualTo(2);
+			stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2)
+				.Count(x => x.PersonAssignment(true).MainActivities().Any())
+				.Should().Be.LessThanOrEqualTo(2);
 		}
 
 		[Test]
