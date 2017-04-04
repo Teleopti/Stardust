@@ -27,8 +27,8 @@ WHERE PersonId = :PersonId
 AND [Timestamp] BETWEEN :StartTime AND :EndTime
 ORDER BY [Timestamp] ASC")
 				.SetParameter("PersonId", personId)
-				.SetParameter("StartTime", startTime.AddHours(-2))
-				.SetParameter("EndTime", endTime.AddDays(1))
+				.SetParameter("StartTime", startTime)
+				.SetParameter("EndTime", endTime)
 				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
 				.List<internalModel>();
 

@@ -117,55 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var historicalData = Target.Build(person).Changes.Single();
 			historicalData.Time.Should().Be("2017-03-07T14:00:00");
 		}
-
-		[Test]
-		public void ShouldGetChangesForAgentInChina()
-		{
-			Now.Is("2017-03-07 12:00");
-			var person = Guid.NewGuid();
-			Database.WithAgent(person, "nicklas", TimeZoneInfoFactory.ChinaTimeZoneInfo());
-			ReadModel.Persist(new HistoricalChangeReadModel
-			{
-				PersonId = person,
-				Timestamp = "2017-03-06 14:00".Utc()
-			});
-
-			var data = Target.Build(person);
-
-			data.Changes.Single().Time.Should().Be("2017-03-06T14:00:00");
-
-			// "2017-03-07 12:00" utc
-			// "2017-03-07 20:00" +8
-			// "2017-03-07" agents date
-			// "2017-03-07 00:00 - 2017-03-08 00:00" +8
-			// "2017-03-06 16:00 - 2017-03-07 16:00" utc
-			// "2017-03-06 14:00 - 2017-03-08 16:00" +extra
-		}
-
-		[Test]
-		public void ShouldGetChangesForAgentInHawaii()
-		{
-			Now.Is("2017-03-07 09:00");
-			var person = Guid.NewGuid();
-			Database.WithAgent(person, "nicklas", TimeZoneInfoFactory.HawaiiTimeZoneInfo());
-			ReadModel.Persist(new HistoricalChangeReadModel
-			{
-				PersonId = person,
-				Timestamp = "2017-03-06 08:00".Utc()
-			});
-
-			var data = Target.Build(person);
-
-			data.Changes.Single().Time.Should().Be("2017-03-06T08:00:00");
-
-			// "2017-03-07 09:00" utc
-			// "2017-03-06 23:00" -10
-			// "2017-03-06" agents date
-			// "2017-03-06 00:00 - 2017-03-07 00:00" -10
-			// "2017-03-06 10:00 - 2017-03-07 10:00" utc
-			// "2017-03-06 08:00 - 2017-03-08 10:00" +extra
-		}
-
+		
 		[Test]
 		public void ShouldExcludeChangesEarlierThanOneHourBeforeShiftStart()
 		{

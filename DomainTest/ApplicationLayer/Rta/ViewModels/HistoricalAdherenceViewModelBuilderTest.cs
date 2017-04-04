@@ -132,22 +132,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				{
 					new HistoricalOutOfAdherenceReadModel
 					{
-						StartTime = "2016-10-11 14:00".Utc(),
-						EndTime = "2016-10-11 15:00".Utc(),
+						StartTime = "2016-10-11 16:00".Utc(),
+						EndTime = "2016-10-11 17:00".Utc(),
 					}
 				}
 			});
 
 			var data = Target.Build(person);
 
-			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T14:00:00");
+			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T16:00:00");
 
 			// "2016-10-12 12:00" utc
 			// "2016-10-12 20:00" +8
 			// "2016-10-12" agents date
 			// "2016-10-12 00:00 - 2016-10-13 00:00" +8
 			// "2016-10-11 16:00 - 2016-10-12 16:00" utc
-			// "2016-10-11 14:00 - 2016-10-13 16:00" +extra
 		}
 
 		[Test]
@@ -163,22 +162,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				{
 					new HistoricalOutOfAdherenceReadModel
 					{
-						StartTime = "2016-10-11 08:00".Utc(),
-						EndTime = "2016-10-11 09:00".Utc()
+						StartTime = "2016-10-11 10:00".Utc(),
+						EndTime = "2016-10-11 11:00".Utc()
 					}
 				}
 			});
 
 			var data = Target.Build(person);
 
-			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T08:00:00");
+			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T10:00:00");
 
 			// "2016-10-12 09:00" utc
 			// "2016-10-11 23:00" -10
 			// "2016-10-11" agents date
 			// "2016-10-11 00:00 - 2016-10-12 00:00" -10
 			// "2016-10-11 10:00 - 2016-10-12 10:00" utc
-			// "2016-10-11 08:00 - 2016-10-13 10:00" +extra
 		}
 
 		[Test]

@@ -13,44 +13,102 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class HistoricalAdherenceViewModelBuilder
 	{
-		private readonly IHistoricalAdherenceReadModelReader _reader;
+		private readonly IHistoricalAdherenceReadModelReader _adherences;
 		private readonly ICurrentScenario _scenario;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _persons;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IHistoricalChangeReadModelReader _changeReader;
+		private readonly IHistoricalChangeReadModelReader _changes;
 
 		public HistoricalAdherenceViewModelBuilder(
-			IHistoricalAdherenceReadModelReader reader,
+			IHistoricalAdherenceReadModelReader adherences,
 			ICurrentScenario scenario,
 			IScheduleStorage scheduleStorage,
 			IPersonRepository persons,
 			INow now,
 			IUserTimeZone timeZone,
-			IHistoricalChangeReadModelReader changeReader)
+			IHistoricalChangeReadModelReader changes)
 		{
-			_reader = reader;
+			_adherences = adherences;
 			_scenario = scenario;
 			_scheduleStorage = scheduleStorage;
 			_persons = persons;
 			_now = now;
 			_timeZone = timeZone;
-			_changeReader = changeReader;
+			_changes = changes;
 		}
 		
-		private IEnumerable<internalHistoricalAdherenceActivityViewModel> getCurrentSchedules(IPerson person)
+		public HistoricalAdherenceViewModel Build(Guid personId)
+		{
+			var person = _persons.Load(personId);
+
+			var timeZone = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
+			var timeZoneTime = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), timeZone);
+			var date = new DateOnly(timeZoneTime);
+
+			var schedule = getCurrentSchedules(date, timeZone, person);
+			var startTime = TimeZoneInfo.ConvertTimeToUtc(timeZoneTime.Date, timeZone);
+			var endTime = startTime.AddDays(1);
+			if (schedule.Any())
+				startTime = schedule.Min(x => x.StartDateTime).AddHours(-1);
+			if (schedule.Any())
+				endTime = schedule.Min(x => x.EndDateTime).AddHours(1);
+			startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
+			endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
+
+			var historicalAdherence = _adherences.Read(personId, startTime, endTime);
+			var outOfAdherences = (historicalAdherence?.OutOfAdherences)
+				.EmptyIfNull()
+				.Select(y =>
+				{
+					string end = null;
+					if (y.EndTime.HasValue)
+						end = TimeZoneInfo.ConvertTimeFromUtc(y.EndTime.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
+					return new AgentOutOfAdherenceViewModel
+					{
+						StartTime = TimeZoneInfo.ConvertTimeFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+						EndTime = end
+					};
+				})
+				.ToArray();
+
+			var changes = _changes.Read(personId, startTime, endTime)
+				.Select(x => new HistoricalChangeViewModel
+				{
+					Time = TimeZoneInfo.ConvertTimeFromUtc(x.Timestamp, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+					Activity = x.ActivityName,
+					ActivityColor = x.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value)) : null,
+					State = x.StateName,
+					Rule = x.RuleName,
+					RuleColor = x.RuleColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor.Value)) : null,
+					Adherence = nameForAdherence(x.Adherence),
+					AdherenceColor = colorForAdherence(x.Adherence)
+				})
+				.ToArray();
+
+			var userNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
+			return new HistoricalAdherenceViewModel
+			{
+				PersonId = personId,
+				AgentName = person?.Name.ToString(),
+				Schedules = schedule,
+				Now = userNow.ToString("yyyy-MM-ddTHH:mm:ss"),
+				Changes = changes,
+				OutOfAdherences = outOfAdherences
+			};
+		}
+
+		private IEnumerable<internalHistoricalAdherenceActivityViewModel> getCurrentSchedules(DateOnly date, TimeZoneInfo timeZone, IPerson person)
 		{
 			var scenario = _scenario.Current();
 			if (scenario == null || person == null)
 				return Enumerable.Empty<internalHistoricalAdherenceActivityViewModel>();
 
-			var tz = person.PermissionInformation.DefaultTimeZone();
-			var utcDateTime = utcDateForSchedules(person);
-			var period = new DateOnlyPeriod(utcDateTime.AddDays(-2), utcDateTime.AddDays(2));
+			var period = new DateOnlyPeriod(date.AddDays(-2), date.AddDays(2));
 
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-				new[] {person},
+				new[] { person },
 				new ScheduleDictionaryLoadOptions(false, false),
 				period,
 				scenario);
@@ -58,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return (
 				from scheduleDay in schedules[person].ScheduledDayCollection(period)
 				from layer in scheduleDay.ProjectionService().CreateProjection()
-				where layer.Period.ToDateOnlyPeriod(tz).Contains(utcDateTime)
+				where layer.Period.ToDateOnlyPeriod(timeZone).Contains(date)
 				select new internalHistoricalAdherenceActivityViewModel
 				{
 					Name = layer.DisplayDescription().Name,
@@ -76,79 +134,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			public DateTime StartDateTime { get; set; }
 			public DateTime EndDateTime { get; set; }
 		}
-
-		public HistoricalAdherenceViewModel Build(Guid personId)
-		{
-			var person = _persons.Load(personId);
-			var utcDateTime = utcDateTimeForOoa(person);
-			var schedule = getCurrentSchedules(person);
-
-			var shiftStart = schedule.Any() ? schedule.Min(x => x.StartDateTime) : (DateTime?)null;
-			var shiftEnd = schedule.Any() ? schedule.Max(x => x.EndDateTime) : (DateTime?)null;
-
-			var historicalAdherence = _reader.Read(personId, utcDateTime, utcDateTime.AddDays(1));
-			var outOfAdherences = (historicalAdherence?.OutOfAdherences)
-				.EmptyIfNull()
-				.Select(y =>
-				{
-					string endTime = null;
-					if (y.EndTime.HasValue)
-						endTime = TimeZoneInfo.ConvertTimeFromUtc(y.EndTime.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
-					return new AgentOutOfAdherenceViewModel
-					{
-						StartTime = TimeZoneInfo.ConvertTimeFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-						EndTime = endTime
-					};
-				})
-				.ToArray();
-			var changes = _changeReader.Read(personId, utcDateTime, utcDateTime.AddDays(1))
-				.Where(x => shiftStart == null || x.Timestamp >= shiftStart.Value.AddHours(-1))
-				.Where(x => shiftEnd == null || x.Timestamp <= shiftEnd.Value.AddHours(1))
-				.Select(x => new HistoricalChangeViewModel
-				{
-					Time = TimeZoneInfo.ConvertTimeFromUtc(x.Timestamp, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-					Activity = x.ActivityName,
-					ActivityColor = x.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value)) : null,
-					State = x.StateName,
-					Rule = x.RuleName,
-					RuleColor = x.RuleColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor.Value)) : null,
-					Adherence = nameForAdherence(x.Adherence),
-					AdherenceColor = colorForAdherence(x.Adherence)
-				})
-				.ToArray();
-
-			var agentNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			return new HistoricalAdherenceViewModel
-			{
-				PersonId = personId,
-				AgentName = person?.Name.ToString(),
-				Schedules = schedule,
-				Now = agentNow.ToString("yyyy-MM-ddTHH:mm:ss"),
-				Changes = changes,
-				OutOfAdherences = outOfAdherences
-			};
-		}
-
-		private DateOnly utcDateForSchedules(IPerson person)
-		{
-			if (person == null)
-				return new DateOnly(_now.UtcDateTime());
-
-			var tz = person.PermissionInformation.DefaultTimeZone();
-			return new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), tz));
-		}
-
-		private DateTime utcDateTimeForOoa(IPerson person)
-		{
-			if (person == null)
-				return _now.UtcDateTime().Date;
-
-			var tz = person.PermissionInformation.DefaultTimeZone();
-			var tzNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), tz);
-			var tzDate = tzNow.Date;
-			return TimeZoneInfo.ConvertTimeToUtc(tzDate, tz);
-		}
-
+		
 		private string nameForAdherence(HistoricalChangeInternalAdherence? adherence)
 		{
 			if (!adherence.HasValue)

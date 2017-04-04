@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public IEnumerable<HistoricalChangeReadModel> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			return data
-				.Where(x => x.PersonId == personId && x.Timestamp >= startTime.AddHours(-2) && x.Timestamp <= endTime.AddDays(1))
+				.Where(x => x.PersonId == personId && x.Timestamp >= startTime && x.Timestamp <= endTime)
 				.ToArray();
 		}
 	}

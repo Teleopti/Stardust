@@ -27,20 +27,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public FakeDatabase Database;
 		public FakeHistoricalAdherenceReadModelPersister ReadModel;
 		public MutableNow Now;
+		public FakeUserTimeZone TimeZone;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo())).For<IUserTimeZone>();
+			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 		}
 
 		[Test]
-		public void ShouldGetNowForAgentInChinaWhenUserInStockholm()
+		public void ShouldGetNowWhenUserInStockholm()
 		{
+			TimeZone.IsSweden();
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
 
 			Database
-				.WithAgent(person, "name", TimeZoneInfoFactory.ChinaTimeZoneInfo());
+				.WithAgent(person, "name");
 
 			var historicalData = Target.Build(person);
 
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldGetHistoricalDataForAgentWhenUserInStockholm()
 		{
+			TimeZone.IsSweden();
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
 			ReadModel.Has(new HistoricalAdherenceReadModel
@@ -74,10 +77,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldGetScheduleWhenUserInStockholm()
 		{
+			TimeZone.IsSweden();
 			Now.Is("2016-10-11 09:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithAgent(person, "name", TimeZoneInfoFactory.UtcTimeZoneInfo())
+				.WithAgent(person, "name")
 				.WithAssignment(person, "2016-10-11")
 				.WithActivity(null, ColorTranslator.FromHtml("#80FF80"))
 				.WithAssignedActivity("2016-10-11 07:00", "2016-10-11 15:00");
@@ -90,11 +94,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
-		public void ShouldGetOutOfAdherencesForAgentInChinaWhenUserInStockholm()
+		public void ShouldGetOutOfAdherenceWhenUserInStockholm()
 		{
+			TimeZone.IsSweden();
 			Now.Is("2016-10-12 12:00");
 			var person = Guid.NewGuid();
-			Database.WithAgent(person, "nicklas", TimeZoneInfoFactory.ChinaTimeZoneInfo());
+			Database.WithAgent(person, "nicklas");
 			ReadModel.Has(new HistoricalAdherenceReadModel
 			{
 				PersonId = person,
@@ -102,39 +107,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				{
 					new HistoricalOutOfAdherenceReadModel
 					{
-						StartTime = "2016-10-11 14:00".Utc(),
-						EndTime = "2016-10-11 15:00".Utc(),
+						StartTime = "2016-10-12 14:00".Utc(),
+						EndTime = "2016-10-12 15:00".Utc(),
 					}
 				}
 			});
 
 			var data = Target.Build(person);
 
-			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T16:00:00");
+			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-12T16:00:00");
 		}
 
-		[Test]
-		public void ShouldGetOutOfAdherencesForAgentInHawaiiWhenUserInStockholm()
-		{
-			Now.Is("2016-10-12 09:00");
-			var person = Guid.NewGuid();
-			Database.WithAgent(person, "nicklas", TimeZoneInfoFactory.HawaiiTimeZoneInfo());
-			ReadModel.Has(new HistoricalAdherenceReadModel
-			{
-				PersonId = person,
-				OutOfAdherences = new[]
-				{
-					new HistoricalOutOfAdherenceReadModel
-					{
-						StartTime = "2016-10-11 08:00".Utc(),
-						EndTime = "2016-10-11 09:00".Utc()
-					}
-				}
-			});
-
-			var data = Target.Build(person);
-
-			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T10:00:00");
-		}
 	}
 }
