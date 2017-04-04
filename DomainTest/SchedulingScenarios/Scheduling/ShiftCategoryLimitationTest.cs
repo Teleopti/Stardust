@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -80,15 +79,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2), new OptimizationPreferences(), null);
 
-			var scheduledDays = stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2).Where(x =>
-				x.PersonAssignment(true).MainActivities().Any()).OrderBy(x=> x.DateOnlyAsPeriod.DateOnly).ToArray();
-
-			var nonScheduleDays = stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2).Where(x =>
-				x.PersonAssignment(true).MainActivities().IsEmpty() && !x.HasDayOff()).OrderBy(x => x.DateOnlyAsPeriod.DateOnly).ToArray();
-
-			for (var i = 0; i < 5; i++)
+			foreach (var day in new[]{date.AddDays(1), date.AddDays(3), date.AddDays(4), date.AddDays(5), date.AddDays(6)})
 			{
-				scheduledDays[i].DateOnlyAsPeriod.DateOnly.Should().Be.EqualTo(nonScheduleDays[i].DateOnlyAsPeriod.DateOnly);
+				var scheduledDays = stateholder.Schedules.SchedulesForDay(day);
+				scheduledDays.Count(x => x.PersonAssignment(true).MainActivities().Any()).Should().Be.EqualTo(1);
+				scheduledDays.Count(x => !x.PersonAssignment(true).MainActivities().Any()).Should().Be.EqualTo(1);
 			}
 		}
 
