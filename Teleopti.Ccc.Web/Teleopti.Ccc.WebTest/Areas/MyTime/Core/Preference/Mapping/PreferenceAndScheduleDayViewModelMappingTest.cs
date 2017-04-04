@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapPersonalShifts()
 		{
-			var now = DateTime.Now;
+			var now =new DateTime(2000,1,1,10,0,0);
 			var stubs = new StubFactory();
 			var personAssignment = MockRepository.GenerateMock<IPersonAssignment>();
 			var payload = MockRepository.GenerateMock<IActivity>();
