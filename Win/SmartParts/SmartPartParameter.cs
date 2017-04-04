@@ -1,5 +1,5 @@
 
-namespace Teleopti.Common.UI.SmartPartControls.SmartParts
+namespace Teleopti.Ccc.Win.SmartParts
 {
     /// <summary>
     /// Represents a Parameter class that pass use to pass Parameters to Smart part .

@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace Teleopti.Common.UI.SmartPartControls.SmartParts
+﻿namespace Teleopti.Ccc.Win.SmartParts
 {
     partial class SmartPartBase
     {
@@ -74,7 +72,7 @@ namespace Teleopti.Common.UI.SmartPartControls.SmartParts
 			// 
 			this.CloseButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
 			this.CloseButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.CloseButton.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.cancel;
+			this.CloseButton.Image = global::Teleopti.Ccc.Win.Properties.Resources.cancel;
 			this.CloseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.CloseButton.Name = "CloseButton";
 			this.CloseButton.Size = new System.Drawing.Size(23, 22);
@@ -86,7 +84,7 @@ namespace Teleopti.Common.UI.SmartPartControls.SmartParts
 			// 
 			this.FormTitle.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
 			this.FormTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.FormTitle.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.browser;
+			this.FormTitle.Image = global::Teleopti.Ccc.Win.Properties.Resources.browser;
 			this.FormTitle.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.FormTitle.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
 			this.FormTitle.Name = "FormTitle";
@@ -101,7 +99,6 @@ namespace Teleopti.Common.UI.SmartPartControls.SmartParts
 			this.addSmartPartsToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.addSmartPartsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.replaceSmartPartsToolStripMenuItem});
-			this.addSmartPartsToolStripMenuItem.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.dropdown;
 			this.addSmartPartsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.addSmartPartsToolStripMenuItem.Name = "addSmartPartsToolStripMenuItem";
 			this.addSmartPartsToolStripMenuItem.Size = new System.Drawing.Size(29, 22);
@@ -109,7 +106,7 @@ namespace Teleopti.Common.UI.SmartPartControls.SmartParts
 			// 
 			// replaceSmartPartsToolStripMenuItem
 			// 
-			this.replaceSmartPartsToolStripMenuItem.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.undo;
+			this.replaceSmartPartsToolStripMenuItem.Image = global::Teleopti.Ccc.Win.Properties.Resources.undo;
 			this.replaceSmartPartsToolStripMenuItem.Name = "replaceSmartPartsToolStripMenuItem";
 			this.replaceSmartPartsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
 			this.replaceSmartPartsToolStripMenuItem.Text = "Replace Smart Parts";

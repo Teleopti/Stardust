@@ -24,6 +24,7 @@
 using System.Windows.Forms;
 using EO.WebBrowser;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Win.SmartParts;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.wfmWebControl = new EO.WebBrowser.WinForm.WebControl();
 			this.webControlDataProtection = new EO.WebBrowser.WinForm.WebControl();
 			this.wfmWebView = new EO.WebBrowser.WebView();
-			this.gridWorkspace = new Teleopti.Common.UI.SmartPartControls.SmartParts.GridWorkspace();
+			this.gridWorkspace = new GridWorkspace();
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
 			this.backStageViewMain = new Syncfusion.Windows.Forms.BackStageView(this.components);
 			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
@@ -290,7 +291,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.gridWorkspace.AutoSize = true;
 			this.gridWorkspace.BackColor = System.Drawing.Color.White;
 			this.gridWorkspace.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gridWorkspace.GridSize = Teleopti.Common.UI.SmartPartControls.SmartParts.GridSizeType.TwoByOne;
+			this.gridWorkspace.GridSize = GridSizeType.TwoByOne;
 			this.gridWorkspace.Location = new System.Drawing.Point(0, 0);
 			this.gridWorkspace.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.gridWorkspace.Name = "gridWorkspace";
@@ -602,7 +603,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		//private System.Windows.Forms.SplitContainer splitContainer;
 		private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainer;
 		
-		private Teleopti.Common.UI.SmartPartControls.SmartParts.GridWorkspace gridWorkspace;
+		private GridWorkspace gridWorkspace;
 		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCurrentDatabase;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSpring;

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Forms;
 
-namespace Teleopti.Common.UI.SmartPartControls.SmartParts
+namespace Teleopti.Ccc.Win.SmartParts
 {
     /// <summary>
     /// Represent a Grid like Smart Client Workspace

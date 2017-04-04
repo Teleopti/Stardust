@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Common.UI.SmartPartControls.SmartParts
+namespace Teleopti.Ccc.Win.SmartParts
 {
 
     /// <summary>

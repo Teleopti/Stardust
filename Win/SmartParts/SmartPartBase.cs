@@ -6,9 +6,9 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Win.Properties;
 
-namespace Teleopti.Common.UI.SmartPartControls.SmartParts
+namespace Teleopti.Ccc.Win.SmartParts
 {
     public partial class SmartPartBase : UserControl
     {
@@ -60,13 +60,13 @@ namespace Teleopti.Common.UI.SmartPartControls.SmartParts
         {
             switch (smartPartBaseInageType)
             {
-                case 1: FormTitle.Image = Properties.Resources.win_apps;
+                case 1: FormTitle.Image = Resources.win_apps;
                     break;
 
-                case 2: FormTitle.Image = Properties.Resources.browser;
+                case 2: FormTitle.Image = Resources.browser;
                     break;
 
-                case 3: FormTitle.Image = Properties.Resources.WPF;
+                case 3: FormTitle.Image = Resources.WPF;
                     break;
 
                 default:

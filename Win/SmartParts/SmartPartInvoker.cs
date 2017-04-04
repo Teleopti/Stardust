@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Teleopti.Common.UI.SmartPartControls.SmartParts
+namespace Teleopti.Ccc.Win.SmartParts
 {
     /// <summary>
     /// Represents a Class that handles the Smart part visualization requests

@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Common.UI.SmartPartControls.SmartParts;
+using Teleopti.Ccc.Win.SmartParts;
 
 namespace Teleopti.Ccc.Win.Payroll
 {

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Common.UI.SmartPartControls.SmartParts
+﻿namespace Teleopti.Ccc.Win.SmartParts
 {
     partial class ExtendedSmartPartBase
     {

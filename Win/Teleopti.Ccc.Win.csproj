@@ -120,6 +120,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Practices.CompositeUI.1.0.0\lib\3.5\Microsoft.Practices.CompositeUI.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.CompositeUI.WinForms, Version=1.0.51205.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Practices.CompositeUI.W.1.0.0\lib\3.5\Microsoft.Practices.CompositeUI.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.CompositeUI.WPF, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Practices.CompositeUI.W.1.0.0\lib\3.5\Microsoft.Practices.CompositeUI.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ReportViewer.2015.12.0.2.2402\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
       <Private>True</Private>
@@ -2665,6 +2671,12 @@
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestFailValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestPassValidator.cs" />
     <Compile Include="Sikuli\Helpers\ValidatorHelperMethods.cs" />
+    <Compile Include="SmartParts\ExtendedSmartPartBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmartParts\ExtendedSmartPartBase.Designer.cs">
+      <DependentUpon>ExtendedSmartPartBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="SmartParts\Forecasting\BudgetsSmartPart.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2712,6 +2724,15 @@
     <Compile Include="SmartParts\Forecasting\ValidationSmartPart.Designer.cs">
       <DependentUpon>ValidationSmartPart.cs</DependentUpon>
     </Compile>
+    <Compile Include="SmartParts\GridSizeType.cs" />
+    <Compile Include="SmartParts\GridWorkspace.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmartParts\GridWorkspace.Designer.cs">
+      <DependentUpon>GridWorkspace.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\IExtendedSmartPartBase.cs" />
+    <Compile Include="SmartParts\ISmartPartCommand.cs" />
     <Compile Include="SmartParts\Payroll\PayrollExportDataGridView.xaml.cs">
       <DependentUpon>PayrollExportDataGridView.xaml</DependentUpon>
     </Compile>
@@ -2740,6 +2761,18 @@
     <Compile Include="SmartParts\Payroll\StatusWorkingView.xaml.cs">
       <DependentUpon>StatusWorkingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SmartParts\SmartPartBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmartParts\SmartPartBase.designer.cs">
+      <DependentUpon>SmartPartBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\SmartPartCommand.cs" />
+    <Compile Include="SmartParts\SmartPartEnvironment.cs" />
+    <Compile Include="SmartParts\SmartPartInformation.cs" />
+    <Compile Include="SmartParts\SmartPartInvoker.cs" />
+    <Compile Include="SmartParts\SmartPartParameter.cs" />
+    <Compile Include="SmartParts\SmartPartWorker.cs" />
     <Compile Include="TestMode.cs" />
     <EmbeddedResource Include="Backlog\AddActualBacklogView.resx">
       <DependentUpon>AddActualBacklogView.cs</DependentUpon>
@@ -3244,6 +3277,9 @@
       <DependentUpon>SkillGeneral.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="SmartParts\ExtendedSmartPartBase.resx">
+      <DependentUpon>ExtendedSmartPartBase.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SmartParts\Forecasting\BudgetsSmartPart.resx">
       <DependentUpon>BudgetsSmartPart.cs</DependentUpon>
     </EmbeddedResource>
@@ -3262,8 +3298,16 @@
     <EmbeddedResource Include="SmartParts\Forecasting\ValidationSmartPart.resx">
       <DependentUpon>ValidationSmartPart.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SmartParts\GridWorkspace.resx">
+      <DependentUpon>GridWorkspace.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SmartParts\Payroll\PayrollExportsSmartPart.resx">
       <DependentUpon>PayrollExportsSmartPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SmartParts\SmartPartBase.resx">
+      <DependentUpon>SmartPartBase.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Teleopti.Ccc.Sdk.ServiceBus.Client.config">
       <Link>Teleopti.Ccc.Sdk.ServiceBus.Client.config</Link>
@@ -3327,10 +3371,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj">
       <Project>{6116fc80-2475-447e-a90a-14b4db59e2a7}</Project>
       <Name>Teleopti.Ccc.Sdk.ClientProxies</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.SmartPartControls\Teleopti.Common.UI.SmartPartControls.csproj">
-      <Project>{92d88c7b-2401-4bc2-8f89-b919dbc6d143}</Project>
-      <Name>Teleopti.Common.UI.SmartPartControls</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
       <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>
@@ -3937,6 +3977,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\WPF.png" />
+    <None Include="Resources\win_apps.png" />
+    <None Include="Resources\undo1.png" />
+    <None Include="Resources\undo.png" />
+    <None Include="Resources\WPF1.png" />
     <None Include="Resources\WFMIcon.ico" />
     <None Include="Resources\WFM-Circle-Schedules.ico" />
     <None Include="Resources\WFM-Shifts.png" />
@@ -3966,8 +4011,10 @@
     <None Include="Resources\ccc_Activities_settings2.png" />
     <None Include="Resources\Budgets.ico" />
     <None Include="Resources\Budgets_filled_16x16.png" />
+    <None Include="Resources\browser.png" />
     <Content Include="Resources\bullet_black.png" />
     <Content Include="Resources\bullet_white.png" />
+    <None Include="Resources\cancel.png" />
     <Content Include="Resources\ccc_Add.png" />
     <None Include="Resources\ccc_Availability.png" />
     <None Include="Resources\ccc_Advanced_settings2.png" />

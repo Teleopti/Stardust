@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Common.UI.SmartPartControls.SmartParts;
+using Teleopti.Ccc.Win.SmartParts;
+
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
     partial class ForecasterNavigator

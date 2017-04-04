@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.SmartParts.Forecasting

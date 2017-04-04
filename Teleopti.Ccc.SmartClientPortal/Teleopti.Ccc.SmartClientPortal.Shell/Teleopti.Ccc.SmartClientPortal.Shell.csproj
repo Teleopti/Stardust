@@ -388,10 +388,6 @@
       <Project>{26C57CBE-E75F-42C9-9747-8016AEB305F2}</Project>
       <Name>Teleopti.Ccc.Win</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Common.UI.SmartPartControls\Teleopti.Common.UI.SmartPartControls.csproj">
-      <Project>{92D88C7B-2401-4BC2-8F89-B919DBC6D143}</Project>
-      <Name>Teleopti.Common.UI.SmartPartControls</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

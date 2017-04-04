@@ -49,10 +49,10 @@ using Teleopti.Ccc.Win.Permissions;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.Win.Shifts;
 using Teleopti.Ccc.Win.Sikuli;
+using Teleopti.Ccc.Win.SmartParts;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Main;
-using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 using Timer = System.Windows.Forms.Timer;
 
