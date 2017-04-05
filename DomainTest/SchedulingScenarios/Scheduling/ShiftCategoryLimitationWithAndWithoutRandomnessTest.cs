@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#42836")]
+		[Ignore("#43799")]
 		public void ShouldNotLeaveBlankSpotWhenAbleToSolve()
 		{
 			var date = new DateOnly(2017, 1, 22);
