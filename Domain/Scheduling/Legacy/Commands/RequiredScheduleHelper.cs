@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
 		private readonly IStudentSchedulingService _studentSchedulingService;
 		private readonly Func<IOptimizationPreferences> _optimizationPreferences;
-		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly IDaysOffSchedulingService _daysOffSchedulingService;
 		private readonly Func<IWorkShiftFinderResultHolder> _allResults;
@@ -45,9 +44,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly TeamBlockRetryRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
 		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
-		private readonly IUserTimeZone _userTimeZone;
-		private readonly RemoveScheduleDayProsBasedOnShiftCategoryLimitation _removeScheduleDayProsBasedOnShiftCategoryLimitation;
-
 
 		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, 
 				IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, 
@@ -55,7 +51,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, 
 				IStudentSchedulingService studentSchedulingService, 
 				Func<IOptimizationPreferences> optimizationPreferences, 
-				IResourceCalculation resourceOptimizationHelper, 
 				IGridlockManager gridlockManager, 
 				IDaysOffSchedulingService daysOffSchedulingService, 
 				Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, 
@@ -63,9 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IScheduleDayEquator scheduleDayEquator, 
 				IMatrixListFactory matrixListFactory,
 				TeamBlockRetryRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService,
-				INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory,
-				IUserTimeZone userTimeZone,
-				RemoveScheduleDayProsBasedOnShiftCategoryLimitation removeScheduleDayProsBasedOnShiftCategoryLimitation)
+				INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory)
 		{
 			_shiftCategoryBackToLegalState = shiftCategoryBackToLegalState;
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
@@ -73,7 +66,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_studentSchedulingService = studentSchedulingService;
 			_optimizationPreferences = optimizationPreferences;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_gridlockManager = gridlockManager;
 			_daysOffSchedulingService = daysOffSchedulingService;
 			_allResults = workShiftFinderResultHolder;
@@ -82,8 +74,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_matrixListFactory = matrixListFactory;
 			_teamBlockRemoveShiftCategoryBackToLegalService = teamBlockRemoveShiftCategoryBackToLegalService;
 			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
-			_userTimeZone = userTimeZone;
-			_removeScheduleDayProsBasedOnShiftCategoryLimitation = removeScheduleDayProsBasedOnShiftCategoryLimitation;
 		}
 
 		public void RemoveShiftCategoryBackToLegalState(
@@ -104,22 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 				{
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _resultStateHolder(), _userTimeZone);
-					foreach (var matrix in matrixList)
-					{
-						backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot));
-						_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, matrix, _resultStateHolder(), resourceCalculateDelayer, matrixList, optimizationPreferences);
-					}
-
-					var rollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(), _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-
-					foreach (var scheduleMatrixPro in matrixList)
-					{
-						foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
-						{
-							_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences,limitation, rollbackService);
-						}		
-					}
+					_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, _resultStateHolder(), matrixList, optimizationPreferences, backgroundWorker);
 				}
 				else
 				{

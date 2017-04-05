@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
@@ -23,6 +27,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly RemoveScheduleDayProsBasedOnShiftCategoryLimitation _removeScheduleDayProsBasedOnShiftCategoryLimitation;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IResourceCalculation _resourceCalculation;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public TeamBlockRetryRemoveShiftCategoryBackToLegalService(ITeamBlockScheduler teamBlockScheduler, 
 			ITeamInfoFactory teamInfoFactory, 
@@ -33,7 +39,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IWorkShiftSelector workShiftSelector, 
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			RemoveScheduleDayProsBasedOnShiftCategoryLimitation removeScheduleDayProsBasedOnShiftCategoryLimitation,
-			IScheduleDayChangeCallback scheduleDayChangeCallback)
+			IScheduleDayChangeCallback scheduleDayChangeCallback,
+			IResourceCalculation resourceCalculation,
+			IUserTimeZone userTimeZone)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamInfoFactory = teamInfoFactory;
@@ -45,26 +53,45 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_removeScheduleDayProsBasedOnShiftCategoryLimitation = removeScheduleDayProsBasedOnShiftCategoryLimitation;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_resourceCalculation = resourceCalculation;
+			_userTimeZone = userTimeZone;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
-			ISchedulingResultStateHolder schedulingResultStateHolder, 
-			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> scheduleMatrixListPros,
-			IOptimizationPreferences optimizationPreferences)
+		public void Execute(ISchedulingOptions schedulingOptions, 
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IEnumerable<IScheduleMatrixPro> scheduleMatrixListPros,
+			IOptimizationPreferences optimizationPreferences,
+			ISchedulingProgress backgroundWorker)
 		{
-			var shiftNudgeDirective = new ShiftNudgeDirective();
-
-			foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
+			foreach (var matrix in scheduleMatrixListPros)
 			{
-				var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+				backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot));
+				var shiftNudgeDirective = new ShiftNudgeDirective();
 
-				var unsuccessfulDays = new HashSet<DateOnly>();
-				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder,
-					rollbackService, resourceCalculateDelayer, scheduleMatrixListPros, shiftNudgeDirective, optimizationPreferences, limitation, unsuccessfulDays);
+				foreach (var limitation in matrix.SchedulePeriod.ShiftCategoryLimitationCollection())
+				{
+					var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
-				unsuccessfulDays.ForEach(x => scheduleMatrixPro.UnlockPeriod(x.ToDateOnlyPeriod()));
-				_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation, rollbackService);
+					var unsuccessfulDays = new HashSet<DateOnly>();
+					executePerShiftCategoryLimitation(schedulingOptions, matrix, schedulingResultStateHolder,
+						rollbackService, resourceCalculateDelayer, scheduleMatrixListPros, shiftNudgeDirective, optimizationPreferences, limitation, unsuccessfulDays);
+
+					unsuccessfulDays.ForEach(x => matrix.UnlockPeriod(x.ToDateOnlyPeriod()));
+					_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, matrix, optimizationPreferences, limitation, rollbackService);
+				}
 			}
+
+			//maybe not necessary when we put schedules "correct" above
+			var rollbackServiceTemp = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+			foreach (var scheduleMatrixPro in scheduleMatrixListPros)
+			{
+				foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
+				{
+					_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation, rollbackServiceTemp);
+				}
+			}
+			//
 		}
 
 		private void executePerShiftCategoryLimitation(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
