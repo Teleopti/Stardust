@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	{
 		public StatesSender States;
 		public HangfireUtilities Hangfire;
-		public TestCommon.PerformanceTest.PerformanceTest PerformanceTest;
+		public PerformanceTest PerformanceTest;
 
 		[Test]
 		public void MeasurePerformance()

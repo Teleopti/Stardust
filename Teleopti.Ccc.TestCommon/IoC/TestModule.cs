@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<PerformanceTest.PerformanceTest>().SingleInstance();
 			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();
 			builder.RegisterType<DefaultDataCreator>().SingleInstance();
 			builder.RegisterType<DefaultAnalyticsDataCreator>().SingleInstance();
