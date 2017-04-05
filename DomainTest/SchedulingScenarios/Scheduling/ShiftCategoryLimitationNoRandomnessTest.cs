@@ -20,17 +20,23 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
+	[TestFixture(true, true)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(false, false)]
 	public class ShiftCategoryLimitationNoRandomnessTest : SchedulingScenario, ISetup
 	{
+		private readonly bool _fakeRandomness;
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		public ShiftCategoryLimitationNoRandomnessTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
+		public ShiftCategoryLimitationNoRandomnessTest(bool resourcePlannerTeamBlockPeriod42836, bool fakeRandomness) : base(resourcePlannerTeamBlockPeriod42836)
 		{
+			_fakeRandomness = fakeRandomness;
 		}
 
 		[Test]
-		[Ignore("#42836")]
+		//[Ignore("#42836")]
 		public void ShouldNotLeaveBlankSpotWhenAbleToSolve()
 		{
 			var date = new DateOnly(2017, 1, 22);
@@ -78,7 +84,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<TakeShiftWithLatestShiftStartIfSameShiftValue>().For<IEqualWorkShiftValueDecider>();
+			if (_fakeRandomness)
+			{
+				system.UseTestDouble<TakeShiftWithLatestShiftStartIfSameShiftValue>().For<IEqualWorkShiftValueDecider>();
+			}
 		}
 	}
 }
