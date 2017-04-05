@@ -88,7 +88,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("42836, to be fixed")]
 		public void ShouldRespectShiftCategoryLimitationWhenUsingTeamAndBlockAndNotPossibleToScheduleFullBlockPeriod()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));

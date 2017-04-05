@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly TeamBlockRetryRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
 		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly RemoveScheduleDayProsBasedOnShiftCategoryLimitation _removeScheduleDayProsBasedOnShiftCategoryLimitation;
 
 
 		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, 
@@ -63,7 +64,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IMatrixListFactory matrixListFactory,
 				TeamBlockRetryRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService,
 				INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory,
-				IUserTimeZone userTimeZone)
+				IUserTimeZone userTimeZone,
+				RemoveScheduleDayProsBasedOnShiftCategoryLimitation removeScheduleDayProsBasedOnShiftCategoryLimitation)
 		{
 			_shiftCategoryBackToLegalState = shiftCategoryBackToLegalState;
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
@@ -81,6 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockRemoveShiftCategoryBackToLegalService = teamBlockRemoveShiftCategoryBackToLegalService;
 			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
 			_userTimeZone = userTimeZone;
+			_removeScheduleDayProsBasedOnShiftCategoryLimitation = removeScheduleDayProsBasedOnShiftCategoryLimitation;
 		}
 
 		public void RemoveShiftCategoryBackToLegalState(
@@ -106,6 +109,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					{
 						backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot));
 						_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, matrix, _resultStateHolder(), resourceCalculateDelayer, matrixList, optimizationPreferences);
+					}
+
+					var rollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(), _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+
+					foreach (var scheduleMatrixPro in matrixList)
+					{
+						foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
+						{
+							_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences,limitation, rollbackService);
+						}		
 					}
 				}
 				else
