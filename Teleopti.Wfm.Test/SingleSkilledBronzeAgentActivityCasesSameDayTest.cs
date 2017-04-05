@@ -20,7 +20,7 @@ namespace Teleopti.Wfm.Test
 {
 	[UnitOfWorkTest]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
-	public class SingleSkilledBronzeAgentActivityCasesTest : SetUpCascadingShifts
+	public class SingleSkilledBronzeAgentActivityCasesSameDayTest : SetUpCascadingShifts
 	{
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public IBusinessUnitRepository BusinessUnitRepository;
