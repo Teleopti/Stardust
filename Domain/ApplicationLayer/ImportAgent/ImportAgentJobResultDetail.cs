@@ -11,18 +11,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public class ImportAgentJobResultDetail : IImportAgentResultCount
 	{
+		public ImportAgentJobResultDetail(IJobResult result)
+		{
+			this.ResultDetail = result.Details.FirstOrDefault();
+			this.JobResult = result;
+			SetValues();
+		}
 
-		public DateTime Timestamp { get; set; }
-		public int SuccessCount { get; set; }
-		public int FaildCount { get; set; }
-		public int WarningCount { get; set; }
+		public IJobResultDetail ResultDetail { get; }
+		public int SuccessCount { get; private set; }
+		public int FaildCount { get; private set; }
+		public int WarningCount { get; private set; }
 
-		public bool IsWorking { get; set; }
+		public JobResultArtifact InputArtifact { get; private set; }
+		public JobResultArtifact FaildArtifact { get; private set; }
+		public JobResultArtifact WarningArtifact { get; private set; }
+		public IJobResult JobResult { get; }
 
-		public JobResultArtifact InputArtifact { get; set; }
-		public JobResultArtifact FaildArtifact { get; set; }
-		public JobResultArtifact WarningArtifact { get; set; }
-		public IPerson Owner { get; set; }
-		public IJobResult JobResult { get; set; }
+		private void SetValues()
+		{
+			if (ResultDetail != null)
+			{
+
+				this.InputArtifact = this.JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.Input);
+				if (JobResult.FinishedOk)
+				{
+					var summaryCount = ResultDetail.GetSummaryCount();
+					if (summaryCount != null)
+					{
+						this.SuccessCount = summaryCount.SuccessCount;
+						this.FaildCount = summaryCount.FaildCount;
+						this.WarningCount = summaryCount.WarningCount;
+						if (this.WarningCount > 0)
+						{
+							this.WarningArtifact = JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.OutputWarning);
+						}
+						if (this.FaildCount > 0)
+						{
+							this.FaildArtifact = JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.OutputError);
+						}
+
+					}
+				}
+			}
+		}
 	}
 }

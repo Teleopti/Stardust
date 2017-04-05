@@ -59,28 +59,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		{
 			var defaults = @event.Defaults;
 			var jobResult = getJobResult(@event);
-			JobResultArtifact inputFile;
-			var errorMsg = validateJobInputArtifact(jobResult, out inputFile);
-			if (!errorMsg.IsNullOrEmpty())
+			try
 			{
-				saveJobResultDetail(jobResult, errorMsg, DetailLevel.Error);
-				return;
+
+				JobResultArtifact inputFile;
+				var errorMsg = validateJobInputArtifact(jobResult, out inputFile);
+				if (!errorMsg.IsNullOrEmpty())
+				{
+					saveJobResultDetail(jobResult, errorMsg, DetailLevel.Error);
+					return;
+				}
+				var fileData = new FileData
+				{
+					Data = inputFile.Content,
+					FileName = inputFile.Name
+				};
+				var processResult = _fileProcessor.Process(fileData, defaults);
+				if (!processResult.ErrorMessages.IsNullOrEmpty())
+				{
+					saveJobResultDetail(jobResult, string.Join(", ", processResult.ErrorMessages), DetailLevel.Error);
+					return;
+				}
+				saveJobArtifacts(jobResult, fileData, processResult);
+				saveJobResultDetail(jobResult,
+				processResult.GetSummaryMessage(),
+				processResult.DetailLevel);
 			}
-			var fileData = new FileData
+			catch (Exception ex)
 			{
-				Data = inputFile.Content,
-				FileName = inputFile.Name
-			};
-			var processResult = _fileProcessor.Process(fileData, defaults);
-			if (!processResult.ErrorMessages.IsNullOrEmpty())
-			{
-				saveJobResultDetail(jobResult, string.Join(", ", processResult.ErrorMessages), DetailLevel.Error);
-				return;
+				saveJobResultDetail(jobResult, ex.Message, DetailLevel.Error, ex);
+
 			}
-			saveJobArtifacts(jobResult, fileData, processResult);
-			saveJobResultDetail(jobResult,
-			processResult.GetSummaryMessage(),
-			processResult.DetailLevel);
 		}
 
 		private string validateJobInputArtifact(IJobResult jobResult, out JobResultArtifact inputFile)

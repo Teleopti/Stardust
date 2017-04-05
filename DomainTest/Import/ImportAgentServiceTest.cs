@@ -21,6 +21,8 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Import
 {
@@ -31,14 +33,17 @@ namespace Teleopti.Ccc.DomainTest.Import
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeEventPublisher Publisher;
 		public IImportAgentJobService Target;
-
-
+		public ImportAgentEventHandler EventHandler;
+		public ICurrentTenantUser CurrentTenantUser;
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ImportAgentJobService>().For<IImportAgentJobService>();
 			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<ImportAgentEventHandler>().For<IHandleEvent<ImportAgentEvent>>();
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 		}
 
 		[Test]
@@ -89,23 +94,40 @@ namespace Teleopti.Ccc.DomainTest.Import
 
 			var list = Target.GetJobsForLoggedOnBusinessUnit();
 			list.Count.Should().Be(2);
-			list.Any(j => j.Owner.Id == person1.Id).Should().Be.False();
-			list.Any(j => j.Owner.Id == person2.Id).Should().Be.True();
-			list.Any(j => j.Owner.Id == person3.Id).Should().Be.True();
+			list.Any(j => j.JobResult.Owner.Id == person1.Id).Should().Be.False();
+			list.Any(j => j.JobResult.Owner.Id == person2.Id).Should().Be.True();
+			list.Any(j => j.JobResult.Owner.Id == person3.Id).Should().Be.True();
 		}
 
 		[Test]
-		public void ShouldGetCorrentJobsDetailWhenJobIsNotFinished()
+		public void ShouldGetCorrectJobsDetailWhenJobIsNotFinished()
 		{
 			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
 			var person1 = setCurrentLoggedOnUser(bu1);
 			var job1 = createValidJob();
+
 			var detail = Target.GetJobsForLoggedOnBusinessUnit().FirstOrDefault();
 
-			detail.IsWorking.Should().Be(false);
-		
+			detail.JobResult.IsWorking().Should().Be(true);
 		}
-	
+
+
+		[Test]
+		public void ShouldGetCorrectJobsDetailWhenJobIsFinished()
+		{
+			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
+			var person1 = setCurrentLoggedOnUser(bu1);
+			var job1 = createValidJob();
+		
+			EventHandler.Handle(new ImportAgentEvent {
+				JobResultId = job1.Id.GetValueOrDefault()
+			});
+			var detail = Target.GetJobsForLoggedOnBusinessUnit().FirstOrDefault();
+			detail.JobResult.IsWorking().Should().Be(false);
+			detail.ResultDetail?.DetailLevel.Should().Be(DetailLevel.Error);
+			detail.ResultDetail?.ExceptionMessage.Should().Not.Be.Empty();
+
+		}
 
 		private IPerson setCurrentLoggedOnUser(BusinessUnit bu = null)
 		{

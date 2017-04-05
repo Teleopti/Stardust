@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return _importAgentJobService.GetJobsForLoggedOnBusinessUnit()?.Select(detail => new
 			{
 				JobResultId = detail.JobResult.Id,
-				Owner = detail.Owner.Name,
-				detail.Timestamp,
+				Owner = detail.JobResult.Owner.Name,
+				detail.ResultDetail?.Timestamp,
 				detail.SuccessCount,
 				detail.WarningCount,
 				detail.FaildCount,
-				detail.IsWorking,
+				IsWorking = detail.JobResult.IsWorking(),
 				FaildArtifact = detail.FaildArtifact == null ? null : new
 				{
 					detail.FaildArtifact.Name,
