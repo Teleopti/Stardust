@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			contract = new Contract("contract1");
 			site = SiteFactory.CreateSimpleSite("d");
-			PersistAndRemoveFromUnitOfWork(contract);
+			PersistAndRemoveFromUnitOfWork (contract);
 			PersistAndRemoveFromUnitOfWork(site);
 		}
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
 
-			var team = createAndPersistTeam(site);
+			var team = createAndPersistTeam (site);
 			var workflowControlSet = createAndPersistWorkflowControlSet();
 
 			var per1 = createPersonWithWorkflowControlSet(workflowControlSet);
@@ -52,14 +52,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			createAndPersistPersonPeriod(per1, team);
 			createAndPersistPersonPeriod(per2, team);
 			createAndPersistPersonPeriod(per3, team);
-
+		
 			persistReadModel(per1, team, site);
 			persistReadModel(per2, team, site);
 			persistReadModel(per3, team, site);
 
 			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "").ToList();
 			result.Count.Should().Be.EqualTo(2);
-			result.Any(person => person.PersonId == per2.Id).Should().Be.True();
+			result.Any (person => person.PersonId == per2.Id).Should().Be.True();
 			result.Any(person => person.PersonId == per3.Id).Should().Be.True();
 		}
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
 
-			var team = createAndPersistTeam(site);
+			var team = createAndPersistTeam (site);
 			var skills = createAndPersistSkills();
 
 			var workflowControlSet = createAndPersistWorkflowControlSet(skills[0]);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
 
 			result.Count.Should().Be.EqualTo(1);
-			result.Any(r => r.PersonId.Equals(per3.Id.Value)).Should().Be(true);
+			result.Any (r => r.PersonId.Equals (per3.Id.Value)).Should().Be (true);
 		}
 
 		[Test]
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var per2 = createPersonWithWorkflowControlSet(workflowControlSet);
 			var per3 = createPersonWithWorkflowControlSet(workflowControlSet);
 
-			createAndPersistPersonPeriod(per1, team, skills[0]);
+			createAndPersistPersonPeriod(per1, team);
 			createAndPersistPersonPeriod(per2, team);
 			createAndPersistPersonPeriod(per3, team, skills[0]);
 
@@ -116,8 +116,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
 			result.ToArray().Length.Should().Be.EqualTo(1);
-			result.Any(r => r.PersonId.Equals(per3.Id.Value)).Should().Be(true);
 
+			result.Any(r => r.PersonId.Equals(per2.Id.Value)).Should().Be(true);
 		}
 
 
@@ -167,10 +167,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var per2 = createPersonWithWorkflowControlSet(workflowControlSetB);
 			var per3 = createPersonWithWorkflowControlSet(workflowControlSetB);
 
-			createAndPersistPersonPeriod(per1, team, skills);
+			createAndPersistPersonPeriod (per1, team, skills);
 			createAndPersistPersonPeriod(per2, team, skills);
-			createAndPersistPersonPeriod(per3, team, skills[1]);
-
+			createAndPersistPersonPeriod (per3, team, skills[1]);
+			
 			persistReadModel(per1, team, site);
 			persistReadModel(per2, team, site);
 			persistReadModel(per3, team, site);
@@ -196,117 +196,87 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var per1 = createPersonWithWorkflowControlSet(workflowControlSetA);
 			var per2 = createPersonWithWorkflowControlSet(workflowControlSetB);
-
+			
 
 			createAndPersistPersonPeriod(per1, team, skills[0]); //per1 only has one skill
 			createAndPersistPersonPeriod(per2, team, skills);
-
+			
 
 			persistReadModel(per1, team, site);
 			persistReadModel(per2, team, site);
-
+			
 
 			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
 			result.ToArray().Length.Should().Be.EqualTo(0);
-
+			
 		}
 
-		[Test]
-		public void ShouldFilterOutWhenFromAndToDoesNotHaveMatchingSkills()
+		private Team createAndPersistTeam (ISite site)
 		{
-			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
-
-			var team = createAndPersistTeam(site);
-			var skills = createAndPersistSkills();
-
-			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[0], skills[1]);
-			var workflowControlSetB = createAndPersistWorkflowControlSet(skills[1], skills[2]);
-
-			var per1 = createPersonWithWorkflowControlSet(workflowControlSetA);
-			var per2 = createPersonWithWorkflowControlSet(workflowControlSetB);
-
-
-			createAndPersistPersonPeriod(per1, team, skills); 
-			createAndPersistPersonPeriod(per2, team, skills[0], skills[1]);
-
-			persistReadModel(per1, team, site);
-			persistReadModel(per2, team, site);
-
-			var result = target.GetPeople(per1, new DateOnly(2017, 3, 23), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(0);
-		}
-
-		private Team createAndPersistTeam(ISite site)
-		{
-			PersistAndRemoveFromUnitOfWork(site);
+			PersistAndRemoveFromUnitOfWork (site);
 			var team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.SetDescription(new Description("sdf"));
-			PersistAndRemoveFromUnitOfWork(team);
+			team.SetDescription(new Description ("sdf"));
+			PersistAndRemoveFromUnitOfWork (team);
 			return team;
 		}
 
-		private ISkill[] createAndPersistSkills()
+		private ISkill[] createAndPersistSkills ()
 		{
 			var type = SkillTypeFactory.CreateSkillType();
-			PersistAndRemoveFromUnitOfWork(type);
+			PersistAndRemoveFromUnitOfWork (type);
 
-			var activity = new Activity("test");
-			PersistAndRemoveFromUnitOfWork(activity);
+			var activity = new Activity ("test");
+			PersistAndRemoveFromUnitOfWork (activity);
 
-			var swedish = SkillFactory.CreateSkill("Swedish", type, 15);
-			swedish.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
-			swedish.Activity = activity;
-			PersistAndRemoveFromUnitOfWork(swedish);
+			var skillA = SkillFactory.CreateSkill ("NewName", type, 15);
+			skillA.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
+			skillA.Activity = activity;
+			PersistAndRemoveFromUnitOfWork (skillA);
 
-			var english = SkillFactory.CreateSkill("English", type, 15);
-			english.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
-			english.Activity = activity;
-			PersistAndRemoveFromUnitOfWork(english);
-
-			var spanish = SkillFactory.CreateSkill("Spanish", type, 15);
-			spanish.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
-			spanish.Activity = activity;
-			PersistAndRemoveFromUnitOfWork(spanish);
+			var skillB = SkillFactory.CreateSkill ("NewName", type, 15);
+			skillB.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
+			skillB.Activity = activity;
+			PersistAndRemoveFromUnitOfWork (skillB);
 
 
-			return new[] { swedish, english, spanish };
+			return new [] {skillA, skillB} ;
 		}
 
 		private static IPerson createPersonWithWorkflowControlSet(IWorkflowControlSet workflowControlSet)
 		{
-			var person = PersonFactory.CreatePerson("a", "b");
+			var person =  PersonFactory.CreatePerson("a","b");
 			person.WorkflowControlSet = workflowControlSet;
 			return person;
 		}
 
-		private IPersonPeriod createAndPersistPersonPeriod(IPerson person, Team team, params ISkill[] skills)
+		private IPersonPeriod createAndPersistPersonPeriod (IPerson person, Team team, params ISkill[] skills)
 		{
-			var personPeriod = new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract), team);
-			skills.ForEach(skill =>
-		   {
-			   var personSkill = new PersonSkill(skill, new Percent(100));
-			   personPeriod.AddPersonSkill(personSkill);
-		   });
-			person.AddPersonPeriod(personPeriod);
+			var personPeriod = new PersonPeriod (new DateOnly (2011, 1, 1), createPersonContract (contract), team);
+			skills.ForEach (skill =>
+			{
+				var personSkill = new PersonSkill(skill, new Percent(100));
+				personPeriod.AddPersonSkill(personSkill);
+			});
+			person.AddPersonPeriod (personPeriod);
 			return personPeriod;
 		}
 
-		private IWorkflowControlSet createAndPersistWorkflowControlSet(params ISkill[] skills)
+		private IWorkflowControlSet createAndPersistWorkflowControlSet (params ISkill[] skills )
 		{
-			var workflowControlSet = new WorkflowControlSet("d")
+			var workflowControlSet = new WorkflowControlSet ("d")
 			{
-				SchedulePublishedToDate = new DateTime(2000, 1, 10),
-				PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11),
-				PreferenceInputPeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11)
+				SchedulePublishedToDate = new DateTime (2000, 1, 10),
+				PreferencePeriod = new DateOnlyPeriod (2000, 2, 10, 2000, 2, 11),
+				PreferenceInputPeriod = new DateOnlyPeriod (2000, 2, 10, 2000, 2, 11)
 			};
 
-			skills.ForEach(skill =>
-		   {
-			   workflowControlSet.AddSkillToMatchList(skill);
-		   });
-
-			PersistAndRemoveFromUnitOfWork(workflowControlSet);
+			skills.ForEach (skill =>
+			{
+				workflowControlSet.AddSkillToMatchList(skill);
+			});
+			
+			PersistAndRemoveFromUnitOfWork (workflowControlSet);
 
 			return workflowControlSet;
 		}

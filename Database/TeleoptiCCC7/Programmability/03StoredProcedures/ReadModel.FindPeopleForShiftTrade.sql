@@ -108,25 +108,23 @@ BEGIN
 END
                              
  --of that persons that have another WCS and have must have skills configured
- --if I don't have one or more of those skills the Skill column will be null
- --if other people donn't have the skills in WCS the OtherSkill column will be null 
-SELECT p.id, aps.Skill,ps.Skill as OtherSkill
+ --if I don't have one or more of those skills the Skill column will become null
+SELECT p.id, aps.Skill
 INTO #othersMustMatch
 FROM Person p
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN WorkflowControlSet wcs ON p.WorkflowControlSet = wcs.id
 INNER JOIN WorkflowControlSetSkills ws on ws.WorkflowControlSet =wcs.Id
 AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
-LEFT JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1 AND ws.Skill = ps.Skill
+INNER JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1 AND ws.Skill = ps.Skill
 LEFT JOIN #allPersonSkill aps ON aps.Skill = ps.Skill
 WHERE p.Id in(select * from #persons)
 
 --and then we remove the persons that had such a skill that i had not
---and remove persons that not match their WCS
 DELETE P
 FROM #persons p
 INNER JOIN #othersMustMatch o ON o.Id = p.Id
-WHERE o.Skill IS NULL or o.OtherSkill is null
+WHERE o.Skill IS NULL
 
 -- remove the possibility to trade with an agent when my workflowControlSet has a must have skill
 -- that the other agent has, but I do not.
