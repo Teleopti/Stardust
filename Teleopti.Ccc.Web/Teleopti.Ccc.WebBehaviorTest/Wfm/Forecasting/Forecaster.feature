@@ -13,7 +13,7 @@ Background:
 	And there is queue statistics for 'Queue1'
 	And there is a workload 'TheWorkload1' with skill 'TheSkill1' and queue 'Queue1'
 
-
+@ignore
 Scenario: Forecast all
 	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
@@ -33,7 +33,7 @@ Scenario: Forecast one workload
 	And Forecast has succeeded
 	Then there is forecast data for default period for 'TheWorkload2'
 	And there is no forecast data for default period for 'TheWorkload1'
-	
+@ignore
 Scenario: Add campaign
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -45,7 +45,7 @@ Scenario: Add campaign
 	And I increase the calls by 100 percent
 	And I apply the campaign
 	Then I should see that the total calls for the first day has the double forecasted value 
-
+@ignore
 Scenario: Keep campaigns when reforecasting
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -105,7 +105,7 @@ Scenario: Create new skill
 	| Sunday    | 9:00-17:00 |
 	And I save the new skill
 	Then I should see the new skill 'NewSkill1' in the list
-
+	@ignore
 Scenario: Override only forecasted calls for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -117,7 +117,7 @@ Scenario: Override only forecasted calls for one day
 	And I enter '500' calls per day
 	And I apply the override calls
 	Then I should see that the total calls for the first day is '500'
-
+	@ignore
 Scenario: Should disable override apply button when input field is empty
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -128,7 +128,7 @@ Scenario: Should disable override apply button when input field is empty
 	And I select to override forecasted values
 	And I check calls checkbox but enter no calls value
 	Then I should see override apply button disabled
-
+	@ignore
 Scenario: Override the forecasted values for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -144,7 +144,7 @@ Scenario: Override the forecasted values for one day
 	Then I should see that the total calls for the first day is '500'
 	And I should see that the total talk time for the first day is '100'
 	And I should see that the total after call work for the first day is '50'
-	
+	@ignore
 Scenario: Remove override values for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -162,7 +162,7 @@ Scenario: Remove override values for one day
 	And I select to modify the forecast
 	And I clear override values
 	Then I should see that there are no override values for the first day
-
+	@ignore
 Scenario: Keep override values when reforecasting
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -208,7 +208,7 @@ Scenario: Remove override values for one day when campaign exists
 	Then I should see that the total calls for the first day has the double forecasted value 
 	And I should see that the talk time for the first day no longer is overridden
 	And I should see that the after call work for the first day no longer is overridden
-	
+	@ignore
 Scenario: Remove campaign value for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
