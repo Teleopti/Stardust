@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	public class SendLargeBatchesTest
 	{
 		public StatesSender States;
-		public PerformanceTest PerformanceTest;
+		public TestCommon.PerformanceTest.PerformanceTest PerformanceTest;
 
 		[Test]
 		public void MeasurePerformance()
