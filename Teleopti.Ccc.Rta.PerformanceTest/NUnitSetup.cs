@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			IntegrationIoCTest.Setup(builder =>
 			{
-				builder.RegisterType<PerformanceTest>().SingleInstance();
 				builder.RegisterType<TestConfiguration>().SingleInstance();
 				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
 				builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();

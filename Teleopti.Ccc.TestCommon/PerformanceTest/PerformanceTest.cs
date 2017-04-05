@@ -9,7 +9,7 @@ using Google.Apis.Sheets.v4.Data;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain;
 
-namespace Teleopti.Ccc.Rta.PerformanceTest
+namespace Teleopti.Ccc.TestCommon.PerformanceTest
 {
 	public class PerformanceTest
 	{
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			var newRow = new object[20];
 			newRow[startIndex] = startTime.ToString("yyyy-MM-dd HH:mm");
-			newRow[versionIndex] = typeof(SendLargeBatchesTest).Assembly.GetName().Version.ToString();
+			newRow[versionIndex] = typeof(PerformanceTest).Assembly.GetName().Version.ToString();
 			newRow[secondsIndex] = elapsed.TotalSeconds;
 			newRow[labelIndex] = templateRow[labelIndex];
 			newRow[tooltipIndex] = templateRow[tooltipIndex];
