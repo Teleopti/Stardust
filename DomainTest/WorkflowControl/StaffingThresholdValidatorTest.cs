@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void ShouldThrowExceptionIfSkillStaffPeriodListIsNull()
 		{
 			var skill = SkillFactory.CreateSkill("test");
-			Assert.Throws<ArgumentNullException>(() => _target.ValidateSeriousUnderstaffing(skill, null, skill.TimeZone, new UnderstaffingDetails()));
+			Assert.Throws<ArgumentNullException>(() => _target.ValidateUnderstaffing(skill, null, skill.TimeZone, new UnderstaffingDetails()));
 		}
 
 		[Test]
@@ -522,8 +522,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			var underStaffDict = new UnderstaffingDetails();
 			underStaffDict.AddUnderstaffingDay(new DateOnly(2012, 12, 01));
-			underStaffDict.AddSeriousUnderstaffingDay(new DateOnly(2012, 12, 01));
-
+			
 			var target = new StaffingThresholdValidator();
 			var result = target.GetUnderStaffingDateString(underStaffDict, new CultureInfo(1033), new CultureInfo(1033));
 
@@ -531,14 +530,17 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		}
 
 		[Test]
-		public void VerifyUnderstaffingHourString()
+		public void ShouldCreateOneStringOfAdjacentPeriods()
 		{
 			var underStaffDict = new UnderstaffingDetails();
-			underStaffDict.AddUnderstaffingTime(new TimePeriod(10, 00, 10, 15));
-			underStaffDict.AddSeriousUnderstaffingTime(new TimePeriod(10, 00, 10, 15));
-
-			var target = new StaffingThresholdValidator();
-			var result = target.GetUnderStaffingHourString(underStaffDict, new CultureInfo(1033), new CultureInfo(1033), _timeZone, new DateTime(2012, 01, 01));
+			underStaffDict.AddUnderstaffingPeriod(new DateTimePeriod(new DateTime(2017,4,1,10,0,0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 10, 10, 0,DateTimeKind.Utc)));
+			underStaffDict.AddUnderstaffingPeriod(new DateTimePeriod(new DateTime(2017,4,1,10,30,0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 10, 45, 0, DateTimeKind.Utc)));
+			underStaffDict.AddUnderstaffingPeriod(new DateTimePeriod(new DateTime(2017,4,1,10,45,0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 11, 0, 0, DateTimeKind.Utc)));
+			underStaffDict.AddUnderstaffingPeriod(new DateTimePeriod(new DateTime(2017,4,1,12,45,0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 13, 0, 0, DateTimeKind.Utc)));
+			
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var target = new StaffingThresholdValidatorCascadingSkills();
+			var result = target.GetUnderStaffingPeriodsString(underStaffDict, new CultureInfo(1033), new CultureInfo(1033), timeZone);
 
 			Assert.That(result, Is.Not.Null.And.Not.Empty);
 		}

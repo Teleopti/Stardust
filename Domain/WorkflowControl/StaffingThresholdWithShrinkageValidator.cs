@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 			string validationError = numberOfRequestedDays > 1
 				? GetUnderStaffingDateString(underStaffingResultDict, culture, uiCulture)
-				: GetUnderStaffingHourString(underStaffingResultDict, culture, uiCulture, timeZone, absenceRequest.Period.StartDateTimeLocal(timeZone));
+				: GetUnderStaffingPeriodsString(underStaffingResultDict, culture, uiCulture, timeZone);
 			return new ValidatedRequest
 			{
 				IsValid = false,

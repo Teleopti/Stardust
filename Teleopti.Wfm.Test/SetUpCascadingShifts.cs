@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -27,19 +28,12 @@ namespace Teleopti.Wfm.Test
 
 		public string CreateDenyMessage30Min(int understaffedHour, CultureInfo culture, CultureInfo uiCulture, TimeZoneInfo timeZone, DateTime dateTime)
 		{
-			IEnumerable<TimePeriod> understaffedTimeperiods = new List<TimePeriod>
-			{
-				new TimePeriod(understaffedHour, 0, understaffedHour, 30),
-				new TimePeriod(understaffedHour, 30, understaffedHour + 1, 0)
-			};
+			var detail = new UnderstaffingDetails();
+			var val = new StaffingThresholdWithShrinkageValidator();
+			detail.AddUnderstaffingPeriod(new DateTimePeriod(dateTime.AddHours(understaffedHour), dateTime.AddHours(understaffedHour).AddMinutes(30)));
+			detail.AddUnderstaffingPeriod(new DateTimePeriod(dateTime.AddHours(understaffedHour).AddMinutes(30), dateTime.AddHours(understaffedHour).AddMinutes(60)));
 
-			var errorMessageBuilder = new StringBuilder();
-			var understaffingHoursValidationError = string.Format(uiCulture,
-																  Resources.ResourceManager.GetString("InsufficientStaffingHours", uiCulture),
-																  dateTime.ToString("d", culture));
-			var insufficientHours = string.Join(", ", understaffedTimeperiods.Select(t => t.ToShortTimeString(culture)).Take(4));
-			errorMessageBuilder.AppendLine($"{understaffingHoursValidationError}{insufficientHours}{Environment.NewLine}");
-			return errorMessageBuilder.ToString();
+			return val.GetUnderStaffingPeriodsString(detail, culture, uiCulture, timeZone);
 		}
 
 
