@@ -431,15 +431,15 @@ module.exports = function(grunt) {
     grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
     grunt.registerTask('devDist', ['ngtemplates', 'sass','imageEmbed', 'concat:distModules', 'concat:devJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'copy:devCss', 'newer:copy', 'generateIndexDev']);
     grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-    grunt.registerTask('dist', ['ngtemplates', 'sass','imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex', 'clean:dist', 'cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
     grunt.registerTask('nova', ['devDist', 'iisexpress:authBridge', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('build', ['msbuild:build']); // build the solution
     grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
     grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
     grunt.registerTask('eslint-beta', ['eslint']);
     grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
+    grunt.registerTask('dist', ['ngtemplates', 'sass','imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex', 'clean:dist', 'cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
 
     // for desktop client
-    grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:dist']);
+    grunt.registerTask('buildForDesktop', ['copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:dist']);
 
 };
