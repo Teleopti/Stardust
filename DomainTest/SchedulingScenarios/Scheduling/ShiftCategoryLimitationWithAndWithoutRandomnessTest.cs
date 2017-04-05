@@ -24,19 +24,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[TestFixture(false, true)]
 	[TestFixture(true, false)]
 	[TestFixture(false, false)]
-	public class ShiftCategoryLimitationNoRandomnessTest : SchedulingScenario, ISetup
+	public class ShiftCategoryLimitationWithAndWithoutRandomnessTest : SchedulingScenario, ISetup
 	{
 		private readonly bool _fakeRandomness;
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		public ShiftCategoryLimitationNoRandomnessTest(bool resourcePlannerTeamBlockPeriod42836, bool fakeRandomness) : base(resourcePlannerTeamBlockPeriod42836)
+		public ShiftCategoryLimitationWithAndWithoutRandomnessTest(bool resourcePlannerTeamBlockPeriod42836, bool fakeRandomness) : base(resourcePlannerTeamBlockPeriod42836)
 		{
 			_fakeRandomness = fakeRandomness;
 		}
 
 		[Test]
-		//[Ignore("#42836")]
+		[Ignore("#42836")]
 		public void ShouldNotLeaveBlankSpotWhenAbleToSolve()
 		{
 			var date = new DateOnly(2017, 1, 22);
