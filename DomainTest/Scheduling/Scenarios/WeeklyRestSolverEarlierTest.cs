@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -454,7 +453,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldHandleAgentsInUtcPlus8Bug37665()
 		{
-			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			phoneActivity.InWorkTime = true;
 			phoneActivity.InContractTime = true;
@@ -527,6 +525,105 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 
 			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
 				optimizationPreferences,
+				new List<IPerson> { agent },
+				new SchedulePartModifyAndRollbackService(
+					SchedulerStateHolder.SchedulingResultState,
+					new SchedulerStateScheduleDayChangedCallback(
+						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
+						() => SchedulerStateHolder
+						),
+					new ScheduleTagSetter(
+						new NullScheduleTag()
+						)
+					),
+					new ResourceCalculateDelayer(CascadingResourceCalculation, 1, true, SchedulerStateHolder.SchedulingResultState, UserTimeZone.Make()),
+				selectedPeriod,
+				matrixlist,
+				new NoSchedulingProgress(),
+				dayOffOptimzationPreferenceProvider
+				);
+
+			var movedSchedule = scheduleDictionary[agent].ScheduledDay(new DateOnly(2016, 3, 22));
+			var newEndTime = movedSchedule.PersonAssignment().Period.EndDateTimeLocal(movedSchedule.TimeZone);
+
+			newEndTime.TimeOfDay.TotalHours.Should().Be.LessThan(13.8); //13:45 is maximum end time
+		}
+
+		[Test]
+		public void ShouldNotThrowIfCalledAfterSchedulingAndOptimizationPreferencesIsNullBug43798()
+		{
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			phoneActivity.InWorkTime = true;
+			phoneActivity.InContractTime = true;
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var dateOnly = new DateOnly(2016, 3, 21);
+			weekPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(7));
+			var ruleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(0, 0, 23, 0, 15),
+					new TimePeriodWithSegment(new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(31)), TimeSpan.FromMinutes(15)),
+					shiftCategory));
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective =
+					new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(42))
+			};
+			var skill =
+				new Skill("_", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfoFactory.MoskowTimeZoneInfo()
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			SchedulerStateHolder.SchedulingResultState.AddSkills(skill);
+			var skillDayMo = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
+			var skillDayTu = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60));
+			var skillDayWe = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(2), TimeSpan.FromMinutes(60));
+			var skillDayTh = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(3), TimeSpan.FromMinutes(60));
+			var skillDayFr = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(4), TimeSpan.FromMinutes(60));
+			var skillDaySa = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(5), TimeSpan.FromMinutes(60));
+			var skillDaySu = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(6), TimeSpan.FromMinutes(60));
+			SchedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
+			SchedulerStateHolder.SchedulingResultState.SkillDays.Add(new KeyValuePair<ISkill, IEnumerable<ISkillDay>>(skill,
+				new[] { skillDayMo, skillDayTu, skillDayWe, skillDayTh, skillDayFr, skillDaySa, skillDaySu }));
+
+			var agent = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new[] { skill }).WithId();
+			agent.Period(dateOnly).PersonContract.Contract = contract;
+			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.RussiaTz7ZoneInfo());
+			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(weekPeriod, TimeZoneInfoFactory.MoskowTimeZoneInfo());
+			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
+			SchedulerStateHolder.FilterPersons(new[] { agent });
+			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
+
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
+			foreach (var date in weekPeriod.DayCollection())
+			{
+				var ass = new PersonAssignment(agent, scenario, date);
+				if (date == new DateOnly(2016, 03, 23))
+				{
+					ass.SetDayOff(new DayOffTemplate(new Description("DayOff")));
+				}
+				else
+				{
+					var startTimeUtc = TimeZoneHelper.ConvertToUtc(date.Date.AddHours(7).AddMinutes(45), agent.PermissionInformation.DefaultTimeZone());
+					var endTimeUtc = TimeZoneHelper.ConvertToUtc(date.Date.AddHours(15).AddMinutes(45), agent.PermissionInformation.DefaultTimeZone());
+					ass.AddActivity(phoneActivity, new DateTimePeriod(startTimeUtc, endTimeUtc));
+					ass.SetShiftCategory(shiftCategory);
+				}
+				scheduleDictionary.AddPersonAssignment(ass);
+			}
+
+			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
+
+			var selectedPeriod = new DateOnlyPeriod(2016, 3, 22, 2016, 3, 22);
+			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var optimizationPreferences = new OptimizationPreferences();
+
+			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
+				null,
 				new List<IPerson> { agent },
 				new SchedulePartModifyAndRollbackService(
 					SchedulerStateHolder.SchedulingResultState,

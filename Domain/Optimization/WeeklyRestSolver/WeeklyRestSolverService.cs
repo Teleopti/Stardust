@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var cancel = false;
+			var screenRefreshRate = optimizationPreferences?.Advanced.RefreshScreenInterval ?? schedulingOptions.RefreshRate;
 			foreach (var person in selectedPersons)
 			{
 				var personMatrixes = allPersonMatrixList.Where(s => s.Person == person && s.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue).ToList();
@@ -126,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 							{
 								var progressResult = onDayScheduled(new ResourceOptimizerProgressEventArgs(0, 0,
 									string.Format(UserTexts.Resources.ResolvingWeeklyRestFor, personWeek.Person.Name.FirstName,
-										personWeek.Person.Name.LastName), optimizationPreferences.Advanced.RefreshScreenInterval, ()=>cancel=true));
+										personWeek.Person.Name.LastName), screenRefreshRate, ()=>cancel=true));
 								if (cancel || progressResult.ShouldCancel) return;
 
 								var highProbablePosition = _identifyDayOffWithHighestSpan.GetHighProbableDayOffPosition(possiblePositionsToFix);
