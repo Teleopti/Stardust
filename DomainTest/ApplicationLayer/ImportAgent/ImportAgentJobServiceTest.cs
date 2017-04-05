@@ -112,8 +112,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
 			var person1 = setCurrentLoggedOnUser(bu1);
 			var job1 = createValidJob();
-		
-			EventHandler.Handle(new ImportAgentEvent {
+
+			EventHandler.Handle(new ImportAgentEvent
+			{
 				JobResultId = job1.Id.GetValueOrDefault()
 			});
 			var detail = Target.GetJobsForLoggedOnBusinessUnit().FirstOrDefault();
@@ -122,6 +123,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			detail.ResultDetail?.ExceptionMessage.Should().Not.Be.Empty();
 
 		}
+
+		[Test]
+		public void ShouldGetArtifactIfItExists()
+		{
+			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
+			var person1 = setCurrentLoggedOnUser(bu1);
+			var job1 = createValidJob();
+			job1.Artifacts.Add(new JobResultArtifact(JobResultArtifactCategory.OutputError, "test_error.xlsx", Encoding.ASCII.GetBytes("test")));
+
+			var artifact = Target.GetJobResultArtifact(job1.Id.GetValueOrDefault(), JobResultArtifactCategory.Input);
+			artifact.Name.Should().Be("test.xlsx");
+			artifact.Content.Should().Equals(Encoding.ASCII.GetBytes("test"));
+
+			artifact = Target.GetJobResultArtifact(job1.Id.GetValueOrDefault(), JobResultArtifactCategory.OutputError);
+			artifact.Name.Should().Be("test_error.xlsx");
+			artifact.Content.Should().Equals(Encoding.ASCII.GetBytes("test"));
+
+			artifact = Target.GetJobResultArtifact(job1.Id.GetValueOrDefault(), JobResultArtifactCategory.OutputWarning);
+			artifact.Should().Be.Null();
+		}
+
+
 
 		private IPerson setCurrentLoggedOnUser(Domain.Common.BusinessUnit bu = null)
 		{
@@ -141,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var fileData = new FileData()
 			{
 				FileName = "test.xlsx",
-				Data = Encoding.ASCII.GetBytes("test")
+				Data =  Encoding.ASCII.GetBytes("test")
 			};
 			return Target.CreateJob(fileData, fallbacks);
 		}

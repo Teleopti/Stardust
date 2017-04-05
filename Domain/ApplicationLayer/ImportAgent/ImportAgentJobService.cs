@@ -45,6 +45,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			return jobResult;
 		}
 
+		public JobResultArtifact GetJobResultArtifact(Guid id, JobResultArtifactCategory category)
+		{
+			var jobResult = _jobResultRepository.Get(id);
+			return jobResult?.Artifacts.FirstOrDefault(ar => ar.Category == category);
+		}
+
 		public IList<ImportAgentJobResultDetail> GetJobsForLoggedOnBusinessUnit()
 		{
 
@@ -53,11 +59,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 			return resultList.Select(jr => new ImportAgentJobResultDetail(jr)).ToList();
 		}
+
+		
 	}
 
 	public interface IImportAgentJobService
 	{
 		IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks);
 		IList<ImportAgentJobResultDetail> GetJobsForLoggedOnBusinessUnit();
+		JobResultArtifact GetJobResultArtifact(Guid id, JobResultArtifactCategory category);
 	}
 }

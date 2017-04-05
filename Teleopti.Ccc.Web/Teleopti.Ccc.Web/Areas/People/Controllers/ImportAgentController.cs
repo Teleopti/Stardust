@@ -17,6 +17,8 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using System.IO;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
@@ -90,7 +92,29 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			})
 			.ToList();
 		}
+
+		[Route("job/{id}/artifact"), HttpGet, UnitOfWork]
+		public virtual HttpResponseMessage DownloadArtifact(Guid id, JobResultArtifactCategory category)
+		{
+			var response = Request.CreateResponse();
+			var artifact = _importAgentJobService.GetJobResultArtifact(id, category);
+			if (artifact == null)
+			{
+				response.StatusCode = HttpStatusCode.NotFound;
+				return response;
+			}
 		
+			response.Content = new ByteArrayContent(artifact.Content);
+			var contentType = artifact.FileType.Equals("xlsx", StringComparison.OrdinalIgnoreCase)
+				? newExcelFileContentType
+				: oldExcelFileContentType;
+			response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+			response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+			{
+				FileName = artifact.Name
+			};
+			return response;
+		}
 
 		[UnitOfWork]
 		[TenantUnitOfWork]

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					saveJobResultDetail(jobResult, string.Join(", ", processResult.ErrorMessages), DetailLevel.Error);
 					return;
 				}
-				saveJobArtifacts(jobResult, fileData, processResult);
+				saveJobArtifacts(jobResult, inputFile, processResult);
 				saveJobResultDetail(jobResult,
 				processResult.GetSummaryMessage(),
 				processResult.DetailLevel);
@@ -113,12 +113,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			return string.Empty;
 		}
 
-		private void saveJobArtifacts(IJobResult jobResult, FileData fileData, AgentFileProcessResult processResult)
+		private void saveJobArtifacts(IJobResult jobResult, JobResultArtifact inputArtifact, AgentFileProcessResult processResult)
 		{
-			var fileNameLength = fileData.FileName.Length;
-			var fileTypeIndex = fileData.FileName.LastIndexOf(".");
-			string fileName = fileData.FileName.Substring(0, fileTypeIndex);
-			string fileType = fileData.FileName.Substring(fileTypeIndex + 1, fileNameLength - fileTypeIndex - 1);
+			string fileName = inputArtifact.FileName;
+			string fileType = inputArtifact.FileType;
 			var isXlsx = fileType.Equals("xlsx", StringComparison.OrdinalIgnoreCase);
 
 			if (!processResult.FaildAgents.IsNullOrEmpty())

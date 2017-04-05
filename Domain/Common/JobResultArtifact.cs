@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Common
 	}
 
 	public class JobResultArtifact : AggregateEntity
-	{		
+	{
 		private readonly JobResultArtifactCategory _category;
 		private readonly string _name;
 		private readonly byte[] _content;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public JobResultArtifact()
 		{
-			
+
 		}
 
 
@@ -56,5 +57,13 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return _createTime; }
 		}
+
+		public string FileName => isFileNameValid ? Name.Substring(0, Name.LastIndexOf(".") - 1) : string.Empty;
+
+		public string FileType => isFileNameValid ? Name.Substring(Name.LastIndexOf(".") + 1, Name.Length - (Name.LastIndexOf(".") + 1)) : string.Empty;
+
+		private bool isFileNameValid => !Name.IsNullOrEmpty() && Name.LastIndexOf(".") != -1;
+
+
 	}
 }
