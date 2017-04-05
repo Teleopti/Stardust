@@ -189,6 +189,10 @@ namespace Teleopti.Wfm.Test
 			{
 				Name = "WrongActivity"
 			};
+			var activityLunch = new ActivityConfigurable
+			{
+				Name = "LunchActivity"
+			};
 
 			var bronzeSkill = new SkillConfigurable
 			{
@@ -218,6 +222,7 @@ namespace Teleopti.Wfm.Test
 
 			Data.Apply(activity);
 			Data.Apply(activityWrong);
+			Data.Apply(activityLunch);
 			Data.Apply(bronzeSkill);
 			Data.Apply(silverSkill);
 			Data.Apply(goldSkill);
@@ -386,6 +391,24 @@ namespace Teleopti.Wfm.Test
 			Data.Person(personBronze1.Name).Apply(personPeriodBronze1);
 			AddShift(personBronze1.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
 			AddShift(personBronze1.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity,  scenario.Scenario);
+
+			var personPeriodBronzeWithLunch = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = bronzeSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personBronzeWithLunch = new PersonConfigurable
+			{
+				Name = "PersonBronzeWithLunch"
+			};
+			Data.Person(personBronzeWithLunch.Name).Apply(personPeriodBronzeWithLunch);
+			AddShiftWithLunch(personBronzeWithLunch.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activityLunch.Activity, scenario.Scenario);
+			AddShiftWithLunch(personBronzeWithLunch.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, activityLunch.Activity ,scenario.Scenario);
 
 			var personPeriodBronze2 = new PersonPeriodConfigurable
 			{
@@ -582,6 +605,22 @@ namespace Teleopti.Wfm.Test
 		{
 			var shift = isOverTime ? new ShiftForDate(dayLocal, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + lenghtHour), scenario, shiftCategory, activityPhone, multiplicatorDefinitionSet, true) 
 				: new ShiftForDate(dayLocal, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + lenghtHour), false, scenario, shiftCategory, activityPhone, null, null);
+
+			Data.Person(onPerson).Apply(shift);
+		}
+
+		public static void AddShiftWithLunch(string onPerson,
+					DateTime dayLocal,
+					int startHour,
+					int lenghtHour,
+					IShiftCategory shiftCategory,
+					IActivity activityPhone,
+					IActivity activityLunch,
+					IScenario scenario,
+					IMultiplicatorDefinitionSet multiplicatorDefinitionSet = null,
+					bool isOverTime = false)
+		{
+			var shift = new ShiftForDate(dayLocal, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + lenghtHour), true, scenario, shiftCategory, activityPhone, activityLunch, null);
 
 			Data.Person(onPerson).Apply(shift);
 		}
