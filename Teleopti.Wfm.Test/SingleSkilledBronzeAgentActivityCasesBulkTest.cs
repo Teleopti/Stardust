@@ -130,6 +130,7 @@ namespace Teleopti.Wfm.Test
 		}
 
 		[Test]
+		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInBeginningOfRequest()
 		{
 			Now.Is(DateTime.UtcNow);
