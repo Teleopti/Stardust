@@ -13627,4 +13627,209 @@ Teleopti R&amp;D</value>
   <data name="MultipleTeams" xml:space="preserve">
     <value>Несколько групп</value>
   </data>
+  <data name="AbsenceRequestExpiredThreshold" xml:space="preserve">
+    <value>Минимальное количество минут перед временем отсутствия, когда запрос актуален:</value>
+  </data>
+  <data name="ToggleClose" xml:space="preserve">
+    <value>Закрыт</value>
+  </data>
+  <data name="ValidateRequestsBasedOnExpiration" xml:space="preserve">
+    <value>Проверить по минимальному количеству минут перед временем отсутствия</value>
+  </data>
+  <data name="ArchiveSchedule" xml:space="preserve">
+    <value>Архивирование расписания</value>
+  </data>
+  <data name="ArchiveScheduleDescription" xml:space="preserve">
+    <value>Архивирование расписание со сценария по умолчанию на другой сценарий, перезаписывание любой предыдущей информации на другом сценарии.</value>
+  </data>
+  <data name="DoneArchivingForXPeopleDot" xml:space="preserve">
+    <value>Архивирование выполнено для {0} сотрудников.</value>
+  </data>
+  <data name="RunArchiving" xml:space="preserve">
+    <value>Запустить архивирование</value>
+  </data>
+  <data name="TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>Сценарий, с которого вы архивируете, должен быть по умолчанию.</value>
+  </data>
+  <data name="TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>Сценарий, на который вы архивируете, не должен быть по умолчанию.</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveFromDot" xml:space="preserve">
+    <value>Выберите сценарий откуда архивировать.</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveToDot" xml:space="preserve">
+    <value>Выберите сценарий куда архивировать.</value>
+  </data>
+  <data name="SendToAdministrator" xml:space="preserve">
+    <value>Отправить администратору</value>
+  </data>
+  <data name="AvailableForALimitedTimeOnly" xml:space="preserve">
+    <value>Доступно ограниченный период времени!</value>
+  </data>
+  <data name="OldIntraday" xml:space="preserve">
+    <value>Предыдущая версия Мониторинга</value>
+  </data>
+  <data name="TryingToResolveShiftCategoryLimitationsDotDotDot" xml:space="preserve">
+    <value>Попытка разрешить ограничения категории смен...</value>
+  </data>
+  <data name="OptimizingMaxSeats" xml:space="preserve">
+    <value>Оптимизация макс кол-ва рабочих мест</value>
+  </data>
+  <data name="ViewStaffingInfo" xml:space="preserve">
+    <value>Просмотр инфо о штате</value>
+  </data>
+  <data name="ShowAbsenceProbability" xml:space="preserve">
+    <value>Показать вероятность отсутствия</value>
+  </data>
+  <data name="ShowOvertimeProbability" xml:space="preserve">
+    <value>Показать вероятность сверхурочного времени</value>
+  </data>
+  <data name="ProbabilityToGetAbsenceColon" xml:space="preserve">
+    <value>Вероятность получить отсутствие:</value>
+  </data>
+  <data name="ProbabilityToGetOvertimeColon" xml:space="preserve">
+    <value>Вероятность получить сверхурочное время:</value>
+  </data>
+  <data name="DoNotBreakMaxSeatDotDotDot" xml:space="preserve">
+    <value>Не нарушать макс кол-во рабочих мест...</value>
+  </data>
+  <data name="AskMeLater" xml:space="preserve">
+    <value>Позже</value>
+  </data>
+  <data name="DataProtectionQuestion" xml:space="preserve">
+    <value>Присоединяйтесь к Центру по обслуживанию клиентов Teleopti. Вы получите доступ к советам, урокам и другой полезной информации. Для доступа к Центру по обслуживанию клиентов нам понадобится от Вас следующая информация. &lt;br&gt;&lt;br&gt;
+Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
+Имя: &lt;br&gt;{1}&lt;/b&gt;&lt;br&gt;
+Фамилия: &lt;br&gt;{2}&lt;/b&gt;&lt;br&gt;
+Язык: &lt;br&gt;{3}&lt;/b&gt;&lt;br&gt;
+Компания: &lt;br&gt;{4}&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+Эти данные обеспечат автоматический вход в Центр по обслуживанию клиентов. &lt;br&gt;&lt;br&gt;
+Хотите присоединиться?</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Нет, спасибо</value>
+  </data>
+  <data name="TeleoptiCustomerWeb" xml:space="preserve">
+    <value>Центр по обслуживанию клиентов</value>
+  </data>
+  <data name="DenyReasonTechnicalIssues" xml:space="preserve">
+    <value>Ваш запрос был отклонен по техническим причинам. Попробуйте еще раз позднее.</value>
+  </data>
+  <data name="TeleoptiMobileApp" xml:space="preserve">
+    <value>Teleopti мобильное приложение</value>
+  </data>
+  <data name="UseTeleoptiMobileAppToScanThisQRCode" xml:space="preserve">
+    <value>Использовать мобильное приложение Teleopti для сканирования QR кода</value>
+  </data>
+  <data name="ViewQRCodeForConfiguration" xml:space="preserve">
+    <value>Просмотр QR кода для настройки</value>
+  </data>
+  <data name="MonitorUpToXAgents" xml:space="preserve">
+    <value>Мониторинг до 50 операторов</value>
+  </data>
+  <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>Невозможно добавить оператора(-ов) в другом часовм поясе</value>
+  </data>
+  <data name="InvalidColumn" xml:space="preserve">
+    <value>Недопустимый {0} : {1}</value>
+  </data>
+  <data name="LatestScheduleResult" xml:space="preserve">
+    <value>Последний результат планирования</value>
+  </data>
+  <data name="SchedulePeriodType" xml:space="preserve">
+    <value>Тип периода планирования</value>
+  </data>
+  <data name="MissingColumn" xml:space="preserve">
+    <value>Отсутствующий столбец</value>
+  </data>
+  <data name="AdherenceFor" xml:space="preserve">
+    <value>Отсутствие для</value>
+  </data>
+  <data name="AfterShiftEnd" xml:space="preserve">
+    <value>После окончания смены</value>
+  </data>
+  <data name="BeforeShiftStart" xml:space="preserve">
+    <value>Перел началом смены</value>
+  </data>
+  <data name="NoShift" xml:space="preserve">
+    <value>Нет смены</value>
+  </data>
+  <data name="Rule" xml:space="preserve">
+    <value>Правило</value>
+  </data>
+  <data name="ImportAgents" xml:space="preserve">
+    <value>Импорт операторов</value>
+  </data>
+  <data name="RequireXCellFormat" xml:space="preserve">
+    <value>Ячейка не может быть проанализирована, требуется {0} форматированное значение</value>
+  </data>
+  <data name="DownloadTemplate" xml:space="preserve">
+    <value>Скачать шаблон</value>
+  </data>
+  <data name="SetFallbackValuesToReplaceInvalidOnes" xml:space="preserve">
+    <value>Установить резервные значения для замены недопустимых значений</value>
+  </data>
+  <data name="EnterANumber" xml:space="preserve">
+    <value>Введите значение</value>
+  </data>
+  <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
+    <value>{0} заменено на резервные значения</value>
+  </data>
+  <data name="NewImport" xml:space="preserve">
+    <value>Новый импорт</value>
+  </data>
+  <data name="ShiftBag" xml:space="preserve">
+    <value>Контейнер смен</value>
+  </data>
+  <data name="FailedToCreateSchedulingJobForSelectedPlanningPeriod" xml:space="preserve">
+    <value>Не удалось создать задачу планирования для выбранного периода.</value>
+  </data>
+  <data name="FailedToLoadDayoffRules" xml:space="preserve">
+    <value>Не удалось загрузить правила выходных дней.</value>
+  </data>
+  <data name="FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Не удалось оптимизировать выходные дни для выбранного периода по техническим причинам. Попробуйте еще раз.</value>
+  </data>
+  <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Не удалось запланировать выбранный период по техническим причинам. Попробуйте еще раз.</value>
+  </data>
+  <data name="OnlySupport" xml:space="preserve">
+    <value>Поддерживает только: {0}</value>
+  </data>
+  <data name="OutOfIndexRange" xml:space="preserve">
+    <value>Вне диапазона индексов {0} - {1}</value>
+  </data>
+  <data name="FailedToImportAgents" xml:space="preserve">
+    <value>Не удалось импортировать {0} операторов</value>
+  </data>
+  <data name="SuccessfullyImportedAgents" xml:space="preserve">
+    <value>Успешно импортировано {0} операторов</value>
+  </data>
+  <data name="AvailableAsGroupPage" xml:space="preserve">
+    <value>Доступно как группирование:*</value>
+  </data>
+  <data name="Maximum5OptionalColumns" xml:space="preserve">
+    <value>*Максимум 5 дополнительных столбцов могут быть использованы для группирований</value>
+  </data>
+  <data name="OptionalColumnCreateGroupPageQuestion" xml:space="preserve">
+    <value>Это действие создаст группирование для дополнительного столбца, и вы сможете использовать его в отчетности. Продолжить?</value>
+  </data>
+  <data name="OptionalColumnRemoveGroupPageQuestion" xml:space="preserve">
+    <value>Это действие удалит группирование для дополнительного столбца, и вы больше не сможете использовать его в отчетности. Продолжить?</value>
+  </data>
+  <data name="WarnImportedAgents" xml:space="preserve">
+    <value>{0} импортированных операторов содержат предупреждения</value>
+  </data>
+  <data name="HideStaffingInfo" xml:space="preserve">
+    <value>Скрыть инфо о штате</value>
+  </data>
+  <data name="StaffingInfo" xml:space="preserve">
+    <value>Инфо о штате</value>
+  </data>
+  <data name="EmptyFile" xml:space="preserve">
+    <value>Пустой файл</value>
+  </data>
+  <data name="NoInput" xml:space="preserve">
+    <value>Нет исходных данных</value>
+  </data>
 </root>
