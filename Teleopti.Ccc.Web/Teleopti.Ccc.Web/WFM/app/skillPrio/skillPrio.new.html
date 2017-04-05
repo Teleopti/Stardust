@@ -8,7 +8,11 @@
 			<span class="chip-handle chip-warning">
 			<i class="mdi mdi-alert"></i>
 			</span>
-				<span class="chip-text">You have unsaved changes</span>
+				<span class="chip-text">You have unsaved changes. 
+					<button class="wfm-btn wfm-btn-primary btn-sm sp-btn-sm" ng-click = "vm.save()">Save</button> 
+					your changes or 
+					<button class="wfm-btn wfm-btn-primary btn-sm sp-btn-sm" ng-click = "vm.cancelChanges()">Cancel</button> 
+					all changes.</span>
 				</span>
 			</div>
 		</div>
@@ -24,8 +28,10 @@
 			<div class="panel material-depth-1">
 				<div class="con-row">
 					<div class="con-flex">
-						<md-autocomplete ng-disabled="vm.isModified" id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="vm.selectedActivity" md-select-on-match="true" md-search-text="searchActivityText" md-selected-item-change="vm.selectActivity(vm.selectedActivity)"
-										md-items="activity in vm.queryActivities(searchActivityText)" md-item-text="activity.ActivityName" md-min-length="0" placeholder="Select Activity">
+						<md-autocomplete ng-disabled="vm.isModified" id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="vm.selectedActivity"
+						 md-select-on-match="true" md-search-text="searchActivityText" md-selected-item-change="vm.selectActivity(vm.selectedActivity)"
+						 md-items="activity in vm.queryActivities(searchActivityText)" md-item-text="activity.ActivityName" md-min-length="0"
+						 placeholder="Select Activity">
 							<md-item-template>
 								<span md-highlight-text="searchActivityText" md-highlight-flags="^i">{{activity.ActivityName}}</span>
 							</md-item-template>
@@ -48,29 +54,31 @@
 					   <md-tooltip>Filter</md-tooltip>
 					 </i>
 					</label>
-			    <div class="head-actions panel-menu">
+					<div class="head-actions panel-menu">
 						<i class="mdi mdi-checkbox-blank-circle skillPrio"></i> <span>Most Important</span>
-			      <div tabindex=0 class="context-menu card-context">
-			        <i class="mdi mdi-information-outline"></i>
+						<div tabindex=0 class="context-menu card-context">
+							<i class="mdi mdi-information-outline"></i>
 							<md-tooltip class="skillPrio">
 								Drag and drop skill to create or sort chains of prioritized skills<br>
 							</md-tooltip>
-			      </div>
-			    </div>
-			  </div>
+						</div>
+					</div>
+				</div>
 				<div class="con-row">
 					<div class="con-flex" ng-hide="vm.cascadeList[0].Skills.length === 0">
-							<ol parent-id="0" ng-model="vm.cascadeList" source="vm.unsortedList" class="unsortedList-container" droppable= "vm.optionDrop">
-								<li node-id="{{$index}}" ng-repeat="Skill in vm.cascadeList[0].Skills" ng-show="!skillFilter || ([Skill.SkillName]| filter:skillFilter).length" class="drag-handle horizontal-list drop-card-1 material-depth-1" draggable>
-										{{Skill.SkillName}}
-								</li>
-							</ol>
+						<ol parent-id="0" ng-model="vm.cascadeList" source="vm.unsortedList" class="unsortedList-container" droppable="vm.optionDrop">
+							<li node-id="{{$index}}" ng-repeat="Skill in vm.cascadeList[0].Skills" ng-show="!skillFilter || ([Skill.SkillName]| filter:skillFilter).length"
+							 class="drag-handle horizontal-list drop-card-1 material-depth-1" draggable>
+								{{Skill.SkillName}}
+							</li>
+						</ol>
 					</div>
 					<div class="con-flex" ng-show="vm.cascadeList.length >= 2" ng-class="{'skill-group-divider':vm.unsortedList.length > 0}">
 						<div ng-repeat="sortedRow in vm.cascadeList" ng-if="$index >= 1" class="skill-divider">
 							<ol parent-id="{{$parent.$index}}" ng-model="sortedRow.Skills" source="vm.cascadeList" class="cascadeList-container" droppable="vm.optionDrop">
 								{{sortedRow.Priority}}
-								<li node-id="{{$index}}" ng-repeat="Skill in sortedRow.Skills" ng-show="!skillFilter || ([Skill.SkillName]| filter:skillFilter).length"  class="drag-handle horizontal-list drop-card material-depth-1 drop-card-{{$parent.$index}}" draggable>
+								<li node-id="{{$index}}" ng-repeat="Skill in sortedRow.Skills" ng-show="!skillFilter || ([Skill.SkillName]| filter:skillFilter).length"
+								 class="drag-handle horizontal-list drop-card material-depth-1 drop-card-{{$parent.$index}}" draggable>
 									{{Skill.SkillName}}
 									<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill, $parent.$index)" class="mdi mdi-close drag-handle-delete">
 										<md-tooltip>Move skill to unsorted list</md-tooltip>

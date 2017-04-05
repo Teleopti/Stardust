@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
@@ -13,12 +13,13 @@
 		vm.isModified = false;
 		vm.selectedActivity = null;
 		vm.activites = [];
-		vm.skills = [];
 		vm.cascadeList = [];
+		var originData = [];
 		vm.toggledOptimization = checkToggles;
 		vm.selectActivity = selectActivity;
 		vm.queryActivities = queryActivities;
 		vm.moveBackToUnsort = moveBackToUnsort;
+		vm.cancelChanges = cancelChanges;
 		vm.save = save;
 
 		resetAllList();
@@ -31,23 +32,24 @@
 
 		function getActivities() {
 			var getAct = skillPrioServiceNew.getActivites.query();
-			return getAct.$promise.then(function(data) {
+			return getAct.$promise.then(function (data) {
 				vm.activites = data.sort(sortByName);
+				vm.selectedActivity = vm.activites[0];
 				return vm.activites;
 			});
 		}
 
 		function getSkills() {
 			var getSki = skillPrioServiceNew.getSkills.query();
-			return getSki.$promise.then(function(data) {
-				vm.skills = data;
-				selectActivity(vm.activites[0]);
-				return vm.skills;
+			return getSki.$promise.then(function (data) {
+				originData = angular.copy(data);
+				selectActivity(vm.selectedActivity);
+				return originData;
 			});
 		}
 
 		function checkToggles() {
-			toggleService.togglesLoaded.then(function() {
+			toggleService.togglesLoaded.then(function () {
 				vm.toggledOptimization = toggleService.Wfm_SkillPriorityRoutingGUI_39885;
 				if (!toggleService.Wfm_SkillPriorityRoutingGUI_39885) {
 					$location.path('#/')
@@ -56,7 +58,7 @@
 		}
 
 		vm.optionDrop = {
-			moveItem: function(parent_id, source_id, dest_parent_id) {
+			moveItem: function (parent_id, source_id, dest_parent_id) {
 				if (parent_id == dest_parent_id) {
 					if (vm.isModified === true) {
 						vm.isModified = true;
@@ -65,16 +67,38 @@
 					}
 					return;
 				} else {
-					vm.isModified = true;
 					var item = vm.cascadeList[parent_id].Skills.splice(source_id, 1);
 					var moved = vm.cascadeList[dest_parent_id].Skills.push(item[0]);
-					if (moved) {
+					if (moved !== null) {
 						autoNewRow();
 						sortSkill(dest_parent_id);
 						deleteEmptyRow(parent_id);
 					}
+					compareChange();
 				}
 			}
+		}
+
+		function compareChange() {
+			var changes = setPriorityForSkill().filter(belongsToActivity);
+			var origin = originData.filter(belongsToActivity).sort(sortByName);
+			var keepGoing = true;
+			angular.forEach(origin, function (skill, i) {
+				if (keepGoing) {
+					var index = findIndexInData(changes, 'SkillName', skill.SkillName);
+					if (index >= 0 && origin[i].Priority !== changes[index].Priority) {
+						keepGoing = false;
+						vm.isModified = true;
+					} else {
+						vm.isModified = false;
+					}
+				}
+			});
+		}
+
+		function cancelChanges() {
+			selectActivity(vm.selectedActivity);
+			vm.isModified = false;
 		}
 
 		function deleteEmptyRow(parent_id) {
@@ -113,7 +137,7 @@
 
 		function findIndexInData(data, property, value) {
 			var result = -1;
-			data.some(function(item, i) {
+			data.some(function (item, i) {
 				if (item[property] === value) {
 					result = i;
 					return true;
@@ -126,31 +150,31 @@
 			if (activity !== null) {
 				resetAllList();
 				vm.selectedActivity = activity;
-				var skillsOfSelectedActivity = vm.skills.filter(belongsToActivity).sort(sortByName);
+				var skillsOfSelectedActivity = angular.copy(originData.filter(belongsToActivity).sort(sortByName));
 				if (skillsOfSelectedActivity.length !== 0) {
 					addNewRow();
-					vm.cascadeList[0].Skills = skillsOfSelectedActivity.filter(lacksPriority);
-					var skillsHasPriority = skillsOfSelectedActivity.filter(hasPriority);
-					createCascadeLevel(skillsHasPriority);
+					createCascadeLevel(skillsOfSelectedActivity);
 				}
 			}
 		}
 
 		function createCascadeLevel(skills) {
 			if (skills.length > 0) {
-				for (var i = 0; i < skills.length; i++) {
-					var index = findIndexInData(vm.cascadeList, 'Priority', skills[i].Priority);
+				vm.cascadeList[0].Skills = skills.filter(lacksPriority);
+				var skillsHasPriority = skills.filter(hasPriority);
+				angular.forEach(skillsHasPriority, function (skill) {
+					var index = findIndexInData(vm.cascadeList, 'Priority', skill.Priority);
 					if (index >= 0) {
-						vm.cascadeList[index].Skills.push(skills[i]);
+						vm.cascadeList[index].Skills.push(skill);
 					} else {
 						addNewRow();
-						vm.cascadeList[vm.cascadeList.length - 1].Priority = skills[i].Priority;
-						vm.cascadeList[vm.cascadeList.length - 1].Skills.push(skills[i]);
+						vm.cascadeList[vm.cascadeList.length - 1].Priority = skill.Priority;
+						vm.cascadeList[vm.cascadeList.length - 1].Skills.push(skill);
 					}
-				}
+				});
 				vm.cascadeList.sort(sortByPriority);
+				addNewRow();
 			}
-			addNewRow();
 		}
 
 		function sortByName(a, b) {
@@ -190,19 +214,19 @@
 
 		function moveBackToUnsort(skills, skill, parent_id) {
 			if (skill) {
-				vm.isModified = true;
 				var index = findIndexInData(skills, 'SkillName', skill.SkillName);
 				skills.splice(index, 1);
 				vm.cascadeList[0].Skills.push(skill);
 				vm.cascadeList[0].Skills.sort(sortByName);
 				deleteEmptyRow(parent_id);
+				compareChange();
 			}
 		}
 
 		function save() {
 			var allData = setPriorityForSkill();
 			var query = skillPrioServiceNew.saveSkills.save(allData);
-			query.$promise.then(function() {
+			query.$promise.then(function () {
 				vm.isModified = false;
 				NoticeService.success('All changes are saved', 5000, true);
 			});
@@ -211,12 +235,12 @@
 		function setPriorityForSkill() {
 			var prepareSkills = [];
 			if (vm.cascadeList.length > 1) {
-				vm.cascadeList[0].Skills.forEach(function(skill) {
+				vm.cascadeList[0].Skills.forEach(function (skill) {
 					skill.Priority = null;
 					prepareSkills.push(skill);
 				});
 				for (var i = 1; i < vm.cascadeList.length; i++) {
-					vm.cascadeList[i].Skills.forEach(function(skill) {
+					vm.cascadeList[i].Skills.forEach(function (skill) {
 						skill.Priority = vm.cascadeList[i].Priority;
 						prepareSkills.push(skill);
 					})
