@@ -48,6 +48,7 @@ namespace Teleopti.Wfm.Test
 
 
 		[Test]
+		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunch()
 		{
 			Now.Is(DateTime.UtcNow);
@@ -88,6 +89,7 @@ namespace Teleopti.Wfm.Test
 		}
 
 		[Test]
+		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchShortRequest()
 		{
 			Now.Is(DateTime.UtcNow);
