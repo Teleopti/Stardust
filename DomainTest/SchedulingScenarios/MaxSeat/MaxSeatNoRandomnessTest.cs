@@ -67,17 +67,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<takeShiftWithLatestShiftStartIfSameShiftValue>().For<IEqualWorkShiftValueDecider>();
-		}
-
-		private class takeShiftWithLatestShiftStartIfSameShiftValue : IEqualWorkShiftValueDecider
-		{
-			public IShiftProjectionCache Decide(IShiftProjectionCache cache1, IShiftProjectionCache cache2)
-			{
-				return cache1.WorkShiftStartTime > cache2.WorkShiftStartTime ? 
-					cache1 : 
-					cache2;
-			}
+			system.UseTestDouble<TakeShiftWithLatestShiftStartIfSameShiftValue>().For<IEqualWorkShiftValueDecider>();
 		}
 	}
 }

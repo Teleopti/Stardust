@@ -33,53 +33,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#42836 (or maybe a seperate bug later)")]
-		public void ShouldNotLeaveBlankSpotWhenAbleToSolve([Values(1,1,1,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1)] int foo)
-		{
-			var date = new DateOnly(2017, 1, 22);
-			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
-			var shiftCat1 = new ShiftCategory("_").WithId();
-			var shiftCat2 = new ShiftCategory("_").WithId();
-			var scenario = new Scenario("_");
-			var activity = new Activity("_");
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
-			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 7,      7    , 7,      1     , 1, 1, 1);
-			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCat1));
-			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCat2));
-			var ruleSetBag = new RuleSetBag(ruleSet1);
-			ruleSetBag.AddRuleSet(ruleSet2);
-			var agent = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), skill).InTimeZone(TimeZoneInfo.Utc);
-			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat1) { MaxNumberOf = 3 });
-			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat2) { MaxNumberOf = 3 });
-			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent },
-				new[]
-				{
-					new PersonAssignment(agent, scenario, date.AddDays(1)).IsDayOff(),
-					new PersonAssignment(agent, scenario, date.AddDays(3)).IsDayOff()
-				},
-				skillDays
-			);
-			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
-			{
-				SchedulingOptions =
-				{
-					UseBlock = true,
-					UseShiftCategoryLimitations = true,
-					BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
-					BlockSameShiftCategory = true
-				}
-			};
-
-			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(period, agent), new OptimizationPreferences(), null);
-
-			stateholder.Schedules[agent]
-				.ScheduledDayCollection(period)
-				.Count(x => x.PersonAssignment(true).MainActivities().Any())
-				.Should()
-				.Be.EqualTo(5);
-		}
-
-		[Test]
 		public void ShouldRespectShiftCategoryLimitationWhenUsingTeamAndBlock()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
