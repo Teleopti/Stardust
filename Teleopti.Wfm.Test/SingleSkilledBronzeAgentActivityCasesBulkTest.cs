@@ -23,6 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Wfm.Test
 {
 	[DatabaseTest]
+	[Ignore("Amanda told me to")]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
 	public class SingleSkilledBronzeAgentActivityCasesBulkTest : SetUpCascadingShifts
 	{
