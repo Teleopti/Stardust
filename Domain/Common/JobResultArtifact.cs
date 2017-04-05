@@ -58,9 +58,9 @@ namespace Teleopti.Ccc.Domain.Common
 			get { return _createTime; }
 		}
 
-		public string FileName => isFileNameValid ? Name.Substring(0, Name.LastIndexOf(".") - 1) : string.Empty;
+		public virtual string FileName => isFileNameValid ? Name.Substring(0, Name.LastIndexOf(".")) : string.Empty;
 
-		public string FileType => isFileNameValid ? Name.Substring(Name.LastIndexOf(".") + 1, Name.Length - (Name.LastIndexOf(".") + 1)) : string.Empty;
+		public virtual string FileType => isFileNameValid ? Name.Substring(Name.LastIndexOf(".") + 1, Name.Length - (Name.LastIndexOf(".") + 1)) : string.Empty;
 
 		private bool isFileNameValid => !Name.IsNullOrEmpty() && Name.LastIndexOf(".") != -1;
 
