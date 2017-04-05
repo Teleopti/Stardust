@@ -1001,7 +1001,6 @@
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSingleDaySchedulerTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculatorTest.cs" />
