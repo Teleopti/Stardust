@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseStudentAvailability { get; set; }
 		public bool UseTeam { get; set; }
 
-        public GroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
+	    public GroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; } =new GroupPageLight("not set", GroupPageType.SingleAgent);
 		private BlockFinderType _blockFinderTypeForAdvanceScheduling;
 	    public bool BlockSameEndTime { get; set; }
         public bool BlockSameShiftCategory { get; set; }

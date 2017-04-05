@@ -36,10 +36,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Ignore("#42836 (or maybe a seperate bug later)")]
 		public void ShouldNotLeaveBlankSpotWhenAbleToSolve()
 		{
-			//REMOVEME!
-			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
-			/////
 			var date = new DateOnly(2017, 1, 22);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var shiftCat1 = new ShiftCategory("_").WithId();
@@ -52,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCat2));
 			var ruleSetBag = new RuleSetBag(ruleSet1);
 			ruleSetBag.AddRuleSet(ruleSet2);
-			var agent = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(),team, skill).InTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), skill).InTimeZone(TimeZoneInfo.Utc);
 			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat1) { MaxNumberOf = 3 });
 			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat2) { MaxNumberOf = 3 });
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent },
