@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 {
+	//TODO: remove this when we get more "real" teamblock scheduling tests
 	[TestFixture]
 	public class RuleSetSkillActivityCheckerTest
 	{
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[SetUp]
 		public void Setup()
 		{
-			_target = new RuleSetSkillActivityCheckerOLD(); //TODO: This will fail with new impl!
+			_target = new RuleSetSkillActivityChecker();
 			_act1 = ActivityFactory.CreateActivity("act1");
 			_act1.RequiresSkill = true;
 			_act2 = ActivityFactory.CreateActivity("act2");
@@ -70,16 +71,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			bool result = _target.CheckSkillActivities(_workShiftRuleSet, _skills);
 			Assert.IsTrue(result);
 		}
-
-		[Test]
-		public void ShouldIgnoreNoneSkillActivities()
-		{
-			_workShiftRuleSet.TemplateGenerator.BaseActivity = _act3;
-			var extender = new AutoPositionedActivityExtender(_act3, new TimePeriodWithSegment(), TimeSpan.FromMinutes(1));
-			_workShiftRuleSet.AddExtender(extender);
-			bool result = _target.CheckSkillActivities(_workShiftRuleSet, _skills);
-			Assert.IsTrue(result);
-		}
-
 	}
 }
