@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockDayOffsInPeriodValidator>().As<TeamBlockDayOffsInPeriodValidator>().As<ITeamBlockDayOffsInPeriodValidator>().SingleInstance();
 
 			//ITeamBlockRestrictionOverLimitValidator
-			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().InstancePerLifetimeScope();
+			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().SingleInstance();
 			builder.RegisterType<MatrixDataListInSteadyState>().As<IMatrixDataListInSteadyState>().InstancePerLifetimeScope();
 			builder.RegisterType<HasContractDayOffDefinition>().As<IHasContractDayOffDefinition>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleDayDataMapper>().As<IScheduleDayDataMapper>().InstancePerLifetimeScope();
@@ -570,13 +570,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockRestrictionAggregator>().As<ITeamBlockRestrictionAggregator>().SingleInstance();
 			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>().SingleInstance();
 			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>().SingleInstance();
-			builder.RegisterType<TeamMatrixChecker>().As<ITeamMatrixChecker>().InstancePerLifetimeScope();
-			//ITeamMatrixChecker
+			builder.RegisterType<TeamMatrixChecker>().As<ITeamMatrixChecker>().SingleInstance();
 
 			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>().SingleInstance();
 			builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();
-			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().InstancePerLifetimeScope();
-			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().InstancePerLifetimeScope();
+			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().SingleInstance();
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>().InstancePerLifetimeScope();
