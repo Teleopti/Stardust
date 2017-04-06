@@ -489,9 +489,9 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		[UnitOfWork]
-		public virtual Database WithStateGroup(string name, bool @default, bool logoutStateGroup)
+		public virtual Database WithStateGroup(string name, bool @default, bool isLogOutState)
 		{
-			addStateGroup(name, @default, logoutStateGroup);
+			addStateGroup(name, @default, isLogOutState);
 			return this;
 		}
 
@@ -509,12 +509,12 @@ namespace Teleopti.Ccc.TestCommon
 			return _stateGroups.LoadAll().Single(x => x.Name == _stateGroup);
 		}
 
-		private void addStateGroup(string name, bool @default, bool logoutStateGroup)
+		private void addStateGroup(string name, bool @default, bool isLogOutState)
 		{
 			_stateGroup = name;
 			var stateGroup = new RtaStateGroup(name, @default, true)
 			{
-				IsLogOutState = logoutStateGroup
+				IsLogOutState = isLogOutState
 			};
 			_stateGroups.Add(stateGroup);
 		}

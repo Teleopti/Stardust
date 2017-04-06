@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Analytics.WithDataSource(9, "sourceId");
 			Database
 				.WithStateGroup("default", true)
+				.WithStateGroup("logged out", false, true)
 				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.WithStateGroup("phone")
 				.WithStateCode("phone");

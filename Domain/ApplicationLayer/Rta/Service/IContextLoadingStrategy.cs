@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public override void VerifyConfiguration(StrategyContext strategyContext)
 		{
 			if (_stateMapper.LoggedOutStateGroupIds().IsEmpty())
-				strategyContext.AddException(new NoLoggedOffStateGroupsException("No Logged out StateGroup found"));
+				strategyContext.AddException(new NoLoggedOutStateGroupsException("No Logged out StateGroup found"));
 		}
 	}
 

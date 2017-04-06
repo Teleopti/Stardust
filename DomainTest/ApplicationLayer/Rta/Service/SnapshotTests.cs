@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldThrowIfNoLoggedOutStateGroups()
 		{
-			Assert.Throws<NoLoggedOffStateGroupsException>(() =>
+			Assert.Throws<NoLoggedOutStateGroupsException>(() =>
 			{
 				Target.CloseSnapshot(new CloseSnapshotForTest
 				{
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			});
 
-			Assert.Throws<NoLoggedOffStateGroupsException>(() =>
+			Assert.Throws<NoLoggedOutStateGroupsException>(() =>
 			{
 				Target.CloseSnapshot(new CloseSnapshotForTest
 				{
