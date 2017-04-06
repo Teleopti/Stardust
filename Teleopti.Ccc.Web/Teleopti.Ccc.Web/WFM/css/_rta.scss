@@ -56,14 +56,6 @@
 	color: $gray087 !important;
 } 
 
-.rta-no-cursor {
-    border: none;
-    color: transparent;
-    &:focus {
-        outline: none;
-    }
-}
-
 .rta-light-text {
 	color: $text-color-muted !important;
 }
