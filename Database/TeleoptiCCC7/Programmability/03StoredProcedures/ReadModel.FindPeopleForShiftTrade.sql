@@ -30,13 +30,13 @@ BEGIN
 
 	-- Get all skills that the persons I can change with must have
 select Skill 
-INTO #matching 
+INTO #fromWorkflowControlSetSkills
     FROM WorkflowControlSetSkills
     where WorkflowControlSet = @workflowControlSetId 
 
 -- ALL my skills so I can use that to see that I have all the skills that THEY have that I must have
 SELECT ps.Skill 
-into #allPersonSkill
+into #fromPersonSkill
                          FROM PersonSkill ps 
                          INNER JOIN PersonPeriod pp ON pp.Id = ps.Parent
                          AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
@@ -51,7 +51,7 @@ into #personSkill
                          INNER JOIN PersonPeriod pp ON pp.Id = ps.Parent
                          AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
                          INNER JOIN Person p ON pp.Parent = p.Id
-                         INNER JOIN #matching m on m.Skill = ps.Skill
+                         INNER JOIN #fromWorkflowControlSetSkills m on m.Skill = ps.Skill
                          WHERE p.id = @fromPersonId
                          AND ps.Active = 1
 
@@ -67,7 +67,7 @@ INSERT INTO @GroupIds
 DECLARE @numMatch int = (SELECT COUNT(*) FROM #personSkill)
 
 --  bypass syntax checking so we can fill #persons in else clause below --
-SELECT p.Id into #persons
+SELECT p.Id,p.WorkflowControlSet into #persons
 FROM Person p 
 WHERE 1=0;
 
@@ -75,7 +75,7 @@ IF (@numMatch = 0)
 BEGIN
        Insert
         into #persons
-        SELECT p.id
+        SELECT p.id,p.WorkflowControlSet
         FROM Person(nolock) p 
         INNER JOIN PersonPeriod(nolock) pp ON p.Id = pp.Parent
         AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
@@ -85,7 +85,7 @@ BEGIN
         AND p.WorkflowControlSet IS NOT NULL
         AND p.id <> @fromPersonId
 		AND p.IsDeleted = 0
-        GROUP BY p.id
+        GROUP BY p.id,p.WorkflowControlSet
 END
 ELSE
 BEGIN
@@ -93,7 +93,7 @@ BEGIN
  -- all the person that have the skills that are must to make trade
         Insert
         into #persons
-        SELECT p.id
+        SELECT p.id,p.WorkflowControlSet
         FROM Person(nolock) p 
         INNER JOIN PersonPeriod(nolock) pp ON p.Id = pp.Parent
         AND pp.Team in(SELECT * FROM @GroupIds)
@@ -103,47 +103,69 @@ BEGIN
         AND p.WorkflowControlSet IS NOT NULL
         AND p.id <> @fromPersonId
 		AND p.IsDeleted = 0
-        GROUP BY p.id
+        GROUP BY p.id,p.WorkflowControlSet
         HAVING count(*) = @numMatch       
 END
-                             
- --of that persons that have another WCS and have must have skills configured
- --if I don't have one or more of those skills the Skill column will become null
-SELECT p.id, aps.Skill
-INTO #othersMustMatch
-FROM Person p
-INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
-INNER JOIN WorkflowControlSet wcs ON p.WorkflowControlSet = wcs.id
-INNER JOIN WorkflowControlSetSkills ws on ws.WorkflowControlSet =wcs.Id
-AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
-INNER JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1 AND ws.Skill = ps.Skill
-LEFT JOIN #allPersonSkill aps ON aps.Skill = ps.Skill
-WHERE p.Id in(select * from #persons)
+           
+DECLARE @toPersonId uniqueidentifier, @toWorkflowControlSetId uniqueidentifier                  
+DECLARE persons_cursor CURSOR
+FOR SELECT id,WorkflowControlSet FROM #persons
 
---and then we remove the persons that had such a skill that i had not
-DELETE P
-FROM #persons p
-INNER JOIN #othersMustMatch o ON o.Id = p.Id
-WHERE o.Skill IS NULL
+OPEN persons_cursor
+FETCH NEXT FROM persons_cursor
+INTO @toPersonId,@toWorkflowControlSetId
 
--- remove the possibility to trade with an agent when my workflowControlSet has a must have skill
--- that the other agent has, but I do not.
+WHILE @@FETCH_STATUS = 0
+BEGIN
+	--ToPerson Skills
+	SELECT ps.Skill 
+	INTO #toPersonSkill
+    FROM PersonSkill ps 
+    INNER JOIN PersonPeriod pp ON pp.Id = ps.Parent
+    AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+    INNER JOIN Person p ON pp.Parent = p.Id
+    WHERE p.id = @toPersonId
+    AND ps.Active = 1
 
-SELECT p.id
-INTO #othersHaveMustHaveSkillFromMyWCS
-FROM Person p
-INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
-AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
-INNER JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1 
---INNER JOIN #matching ON #matching.Skill = ps.Skill
-WHERE p.Id in(select * from #persons)
-AND ps.Skill in ( select Skill from #matching)
-AND ps.SKill not in (select Skill from #allPersonSkill)
-										          
-DELETE P 
-FROM #persons p
-WHERE p.id in (select id from #othersHaveMustHaveSkillFromMyWCS)
-                                                  
+	--Different skills between FromPerson And ToPerson
+	SELECT isnull(tps.Skill, fps.Skill) Skill
+	INTO #differentSkill
+	FROM #toPersonSkill tps
+	FULL JOIN #fromPersonSkill fps on (tps.Skill = fps.Skill)
+	WHERE (tps.Skill is null or fps.Skill is null)
+
+	IF EXISTS (SELECT 1 FROM #differentSkill)
+	BEGIN
+		SELECT t.* INTO #skillsInWCS FROM
+		(
+			--check matching skills in ToWCS
+			SELECT Skill 
+			FROM WorkflowControlSetSkills wcsSkill
+			WHERE WorkflowControlSet = @toWorkflowControlSetId 
+			AND   wcsSkill.Skill IN (SELECT Skill FROM #differentSkill)
+			UNION ALL
+			--check matching skills in FromWCS
+			SELECT Skill
+			FROM #fromWorkflowControlSetSkills m
+			WHERE m.Skill IN (SELECT Skill FROM #differentSkill)
+		) t
+		IF EXISTS (SELECT 1 FROM #skillsInWCS)
+		BEGIN
+			DELETE FROM #persons WHERE CURRENT OF persons_cursor; 
+		END
+		DROP TABLE #skillsInWCS
+	END
+
+	DROP TABLE #toPersonSkill
+	DROP TABLE #differentSkill
+
+	FETCH NEXT FROM persons_cursor
+	INTO @toPersonId,@toWorkflowControlSetId
+END
+
+CLOSE persons_cursor 
+DEALLOCATE persons_cursor
+                    
 SELECT DISTINCT
 gr.PersonId as PersonId,
 gr.TeamId as TeamId,
@@ -151,7 +173,7 @@ gr.SiteId as SiteId,
 gr.BusinessUnitId as BusinessUnitId
 FROM ReadModel.GroupingReadOnly gr
 INNER JOIN Person p ON p.id = gr.PersonId
-WHERE gr.PersonId IN(select * from #persons)
+WHERE gr.PersonId IN(select id from #persons)
 AND @scheduleDate BETWEEN gr.StartDate and isnull(gr.EndDate,'2059-12-31')
 AND (gr.LeavingDate >= @scheduleDate OR gr.LeavingDate IS NULL)
 AND ((@namesearch is null or @namesearch = '')

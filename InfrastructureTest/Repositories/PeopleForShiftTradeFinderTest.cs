@@ -27,256 +27,281 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private PeopleForShiftTradeFinder target;
 		private IContract contract;
 		private ISite site;
+		private ITeam team;
+
 
 		[SetUp]
 		public void SetUp()
 		{
 			contract = new Contract("contract1");
 			site = SiteFactory.CreateSimpleSite("d");
-			PersistAndRemoveFromUnitOfWork (contract);
+			team = createAndPersistTeam(site);
+			PersistAndRemoveFromUnitOfWork(contract);
 			PersistAndRemoveFromUnitOfWork(site);
 		}
 
 		[Test]
 		public void ShouldGetPersonForDayAndTeam()
 		{
-			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
-
-			var team = createAndPersistTeam (site);
 			var workflowControlSet = createAndPersistWorkflowControlSet();
 
-			var per1 = createPersonWithWorkflowControlSet(workflowControlSet);
-			var per2 = createPersonWithWorkflowControlSet(workflowControlSet);
-			var per3 = createPersonWithWorkflowControlSet(workflowControlSet);
+			var per1 = createPersonWithSkill(team, workflowControlSet);
+			var per2 = createPersonWithSkill(team, workflowControlSet);
+			var per3 = createPersonWithSkill(team, workflowControlSet);
 
-			createAndPersistPersonPeriod(per1, team);
-			createAndPersistPersonPeriod(per2, team);
-			createAndPersistPersonPeriod(per3, team);
-		
-			persistReadModel(per1, team, site);
-			persistReadModel(per2, team, site);
-			persistReadModel(per3, team, site);
-
-			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "").ToList();
-			result.Count.Should().Be.EqualTo(2);
-			result.Any (person => person.PersonId == per2.Id).Should().Be.True();
-			result.Any(person => person.PersonId == per3.Id).Should().Be.True();
+			var result = invokeGetPeople(per1, team);
+			assertPeopleResult(result, 2, per2, per3);
 		}
 
 		[Test]
 		public void ShouldFilterPersonWithoutMustHaveSkill()
 		{
-			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
-
-			var team = createAndPersistTeam (site);
 			var skills = createAndPersistSkills();
 
 			var workflowControlSet = createAndPersistWorkflowControlSet(skills[0]);
 
-			var per1 = createPersonWithWorkflowControlSet(workflowControlSet);
-			var per2 = createPersonWithWorkflowControlSet(workflowControlSet);
-			var per3 = createPersonWithWorkflowControlSet(workflowControlSet);
+			var per1 = createPersonWithSkill(team, workflowControlSet, skills[0]);
+			var per2 = createPersonWithSkill(team, workflowControlSet);
+			var per3 = createPersonWithSkill(team, workflowControlSet, skills[0]);
 
-			createAndPersistPersonPeriod(per1, team, skills[0]);
-			createAndPersistPersonPeriod(per2, team);
-			createAndPersistPersonPeriod(per3, team, skills[0]);
-
-			persistReadModel(per1, team, site);
-			persistReadModel(per2, team, site);
-			persistReadModel(per3, team, site);
-
-			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-
-			result.Count.Should().Be.EqualTo(1);
-			result.Any (r => r.PersonId.Equals (per3.Id.Value)).Should().Be (true);
+			var result = invokeGetPeople(per1, team);
+			assertPeopleResult(result, 1, per3);
 		}
 
 		[Test]
 		public void ShouldFilterPersonWithMustHaveSkil()
 		{
-			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
-
-			var team = createAndPersistTeam(site);
 
 			var skills = createAndPersistSkills();
 
 			var workflowControlSet = createAndPersistWorkflowControlSet(skills[0]);
 
-			var per1 = createPersonWithWorkflowControlSet(workflowControlSet);
-			var per2 = createPersonWithWorkflowControlSet(workflowControlSet);
-			var per3 = createPersonWithWorkflowControlSet(workflowControlSet);
+			var per1 = createPersonWithSkill(team, workflowControlSet);
+			var per2 = createPersonWithSkill(team, workflowControlSet);
+			var per3 = createPersonWithSkill(team, workflowControlSet, skills[0]);
 
-			createAndPersistPersonPeriod(per1, team);
-			createAndPersistPersonPeriod(per2, team);
-			createAndPersistPersonPeriod(per3, team, skills[0]);
-
-			persistReadModel(per1, team, site);
-			persistReadModel(per2, team, site);
-			persistReadModel(per3, team, site);
-
-			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(1);
-
-			result.Any(r => r.PersonId.Equals(per2.Id.Value)).Should().Be(true);
+			var result = invokeGetPeople(per1, team);
+			assertPeopleResult(result, 1, per2);
 		}
 
 
 		[Test]
 		public void ShouldFilterPersonWithInactiveMustHaveSkil()
 		{
-			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
-
-			var team = createAndPersistTeam(site);
 
 			var skills = createAndPersistSkills();
 
 			var workflowControlSet = createAndPersistWorkflowControlSet(skills[0]);
 
-			var per1 = createPersonWithWorkflowControlSet(workflowControlSet);
+			var per1 = createPersonWithSkill(team, workflowControlSet, skills[0]);
 			var per2 = createPersonWithWorkflowControlSet(workflowControlSet);
-			var per3 = createPersonWithWorkflowControlSet(workflowControlSet);
+			var per3 = createPersonWithSkill(team, workflowControlSet, skills[0]);
 
-			createAndPersistPersonPeriod(per1, team, skills[0]);
 			var personPeriod2 = createAndPersistPersonPeriod(per2, team, skills[0]);
-			createAndPersistPersonPeriod(per3, team, skills[0]);
 
 			((PersonSkill)personPeriod2.PersonSkillCollection.Single()).Active = false;
 
-			persistReadModel(per1, team, site);
 			persistReadModel(per2, team, site);
-			persistReadModel(per3, team, site);
 
-			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(1);
-
-			result.Any(r => r.PersonId.Equals(per3.Id.Value)).Should().Be(true);
+			var result = invokeGetPeople(per1, team);
+			assertPeopleResult(result, 1, per3);
 		}
 
 		[Test]
 		public void ShouldFilterPersonWithoutSkillFromMergedWCSMustHaveSkills()
 		{
-			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
-
-			var team = createAndPersistTeam(site);
 			var skills = createAndPersistSkills();
 
 			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[0]);
 			var workflowControlSetB = createAndPersistWorkflowControlSet(skills[1]);
 
-			var per1 = createPersonWithWorkflowControlSet(workflowControlSetA);
-			var per2 = createPersonWithWorkflowControlSet(workflowControlSetB);
-			var per3 = createPersonWithWorkflowControlSet(workflowControlSetB);
+			var per1 = createPersonWithSkill(team, workflowControlSetA, skills);
+			var per2 = createPersonWithSkill(team, workflowControlSetB, skills);
+			var per3 = createPersonWithSkill(team, workflowControlSetB, skills[1]);
 
-			createAndPersistPersonPeriod (per1, team, skills);
-			createAndPersistPersonPeriod(per2, team, skills);
-			createAndPersistPersonPeriod (per3, team, skills[1]);
-			
-			persistReadModel(per1, team, site);
-			persistReadModel(per2, team, site);
-			persistReadModel(per3, team, site);
-
-			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(1);
-
-			result.Any(r => r.PersonId.Equals(per2.Id.Value)).Should().Be(true);
+			var result = invokeGetPeople(per1, team);
+			assertPeopleResult(result, 1, per2);
 		}
-
-
 
 		[Test]
 		public void ShouldFilterOutWhenFromDoesntHaveSkillFromMergedWCSMustHaveSkills()
 		{
-			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
 
-			var team = createAndPersistTeam(site);
 			var skills = createAndPersistSkills();
 
 			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[1]);
 			var workflowControlSetB = createAndPersistWorkflowControlSet(skills[0]);
 
-			var per1 = createPersonWithWorkflowControlSet(workflowControlSetA);
-			var per2 = createPersonWithWorkflowControlSet(workflowControlSetB);
-			
+			var per1 = createPersonWithSkill(team, workflowControlSetA, skills[0]);
+			var per2 = createPersonWithSkill(team, workflowControlSetB, skills);
 
-			createAndPersistPersonPeriod(per1, team, skills[0]); //per1 only has one skill
-			createAndPersistPersonPeriod(per2, team, skills);
-			
+			var result = invokeGetPeople(per1, team);
+			assertPeopleResult(result, 0);
 
-			persistReadModel(per1, team, site);
-			persistReadModel(per2, team, site);
-			
-
-			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(0);
-			
 		}
 
-		private Team createAndPersistTeam (ISite site)
+		[Test]
+		public void ShouldFilterPersonWhenDifferentSkillsInMergedMatchingSkills()
 		{
-			PersistAndRemoveFromUnitOfWork (site);
+
+			var skills = createAndPersistSkills();
+
+			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[0], skills[1]);
+			var workflowControlSetB = createAndPersistWorkflowControlSet(skills[1], skills[2]);
+
+			var per1 = createPersonWithSkill(team, workflowControlSetA, skills);
+			var per2 = createPersonWithSkill(team, workflowControlSetB, skills[0], skills[1]);
+
+			var result = invokeGetPeople(per1, team);
+			assertPeopleResult(result, 0);
+		}
+
+		[Test]
+		public void ShouldFilterPersonWithoutAnySkillSameAsPersonFromAndDifferentSkillsInMergedMatchingSkills()
+		{
+
+			var skills = createAndPersistSkills();
+
+			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[0], skills[1]);
+			var workflowControlSetB = createAndPersistWorkflowControlSet(skills[2]);
+
+			var per1 = createPersonWithSkill(team, workflowControlSetA, skills[1], skills[2]);
+			var per2 = createPersonWithSkill(team, workflowControlSetB, skills[0]);
+
+			var result = invokeGetPeople(per1, team);
+			assertPeopleResult(result, 0);
+		}
+
+		[Test]
+		public void ShouldNotFilterPersonWhenDifferentSkillsNotInMergedMatchingSkills()
+		{
+
+			var skills = createAndPersistSkills();
+
+			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[0], skills[1]);
+			var workflowControlSetB = createAndPersistWorkflowControlSet(skills[1]);
+
+			var per1 = createPersonWithSkill(team, workflowControlSetA, skills[0], skills[2]);
+			var per2 = createPersonWithSkill(team, workflowControlSetB, skills[0]);
+
+			var result = invokeGetPeople(per1, team);
+			assertPeopleResult(result, 1, per2);
+		}
+
+		[Test]
+		public void ShouldNotFilterPersonWhenDifferentSkillsIsEmpty()
+		{
+
+			var skills = createAndPersistSkills();
+
+			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[0], skills[1]);
+			var workflowControlSetB = createAndPersistWorkflowControlSet(skills[2]);
+
+			var per1 = createPersonWithSkill(team, workflowControlSetA, skills[2]);
+			var per2 = createPersonWithSkill(team, workflowControlSetB, skills[2]);
+
+			var result = invokeGetPeople(per1, team);
+			assertPeopleResult(result, 1, per2);
+		}
+
+
+		private IPerson createPersonWithSkill(ITeam team, IWorkflowControlSet workflowControlSet, params ISkill[] skills)
+		{
+			var person = createPersonWithWorkflowControlSet(workflowControlSet);
+			createAndPersistPersonPeriod(person, team, skills);
+			persistReadModel(person, team, site);
+			return person;
+		}
+
+		private IList<IPersonAuthorization> invokeGetPeople(IPerson personFrom, ITeam team)
+		{
+			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
+			var result = target.GetPeople(personFrom, new DateOnly(2017, 3, 23), new List<Guid> { team.Id.Value }, "");
+			return result;
+		}
+
+		private static void assertPeopleResult(IList<IPersonAuthorization> result, int expectedCount,
+			params IPerson[] expectedPeople)
+		{
+			result.ToArray().Length.Should().Be.EqualTo(expectedCount);
+			foreach (var expectedPerson in expectedPeople)
+			{
+				result.Any(r => r.PersonId.Equals(expectedPerson.Id.Value)).Should().Be(true);
+			}
+		}
+
+
+		private Team createAndPersistTeam(ISite site)
+		{
+			PersistAndRemoveFromUnitOfWork(site);
 			var team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.SetDescription(new Description ("sdf"));
-			PersistAndRemoveFromUnitOfWork (team);
+			team.SetDescription(new Description("sdf"));
+			PersistAndRemoveFromUnitOfWork(team);
 			return team;
 		}
 
-		private ISkill[] createAndPersistSkills ()
+		private ISkill[] createAndPersistSkills()
 		{
 			var type = SkillTypeFactory.CreateSkillType();
-			PersistAndRemoveFromUnitOfWork (type);
+			PersistAndRemoveFromUnitOfWork(type);
 
-			var activity = new Activity ("test");
-			PersistAndRemoveFromUnitOfWork (activity);
+			var activity = new Activity("test");
+			PersistAndRemoveFromUnitOfWork(activity);
 
-			var skillA = SkillFactory.CreateSkill ("NewName", type, 15);
-			skillA.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
-			skillA.Activity = activity;
-			PersistAndRemoveFromUnitOfWork (skillA);
+			var swedish = SkillFactory.CreateSkill("Swedish", type, 15);
+			swedish.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
+			swedish.Activity = activity;
+			PersistAndRemoveFromUnitOfWork(swedish);
 
-			var skillB = SkillFactory.CreateSkill ("NewName", type, 15);
-			skillB.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
-			skillB.Activity = activity;
-			PersistAndRemoveFromUnitOfWork (skillB);
+			var english = SkillFactory.CreateSkill("English", type, 15);
+			english.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
+			english.Activity = activity;
+			PersistAndRemoveFromUnitOfWork(english);
+
+			var spanish = SkillFactory.CreateSkill("Spanish", type, 15);
+			spanish.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
+			spanish.Activity = activity;
+			PersistAndRemoveFromUnitOfWork(spanish);
 
 
-			return new [] {skillA, skillB} ;
+			return new[] { swedish, english, spanish };
 		}
 
 		private static IPerson createPersonWithWorkflowControlSet(IWorkflowControlSet workflowControlSet)
 		{
-			var person =  PersonFactory.CreatePerson("a","b");
+			var person = PersonFactory.CreatePerson("a", "b");
 			person.WorkflowControlSet = workflowControlSet;
 			return person;
 		}
 
-		private IPersonPeriod createAndPersistPersonPeriod (IPerson person, Team team, params ISkill[] skills)
+		private IPersonPeriod createAndPersistPersonPeriod(IPerson person, ITeam team, params ISkill[] skills)
 		{
-			var personPeriod = new PersonPeriod (new DateOnly (2011, 1, 1), createPersonContract (contract), team);
-			skills.ForEach (skill =>
-			{
-				var personSkill = new PersonSkill(skill, new Percent(100));
-				personPeriod.AddPersonSkill(personSkill);
-			});
-			person.AddPersonPeriod (personPeriod);
+			var personPeriod = new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract), team);
+			skills.ForEach(skill =>
+		   {
+			   var personSkill = new PersonSkill(skill, new Percent(100));
+			   personPeriod.AddPersonSkill(personSkill);
+		   });
+			person.AddPersonPeriod(personPeriod);
 			return personPeriod;
 		}
 
-		private IWorkflowControlSet createAndPersistWorkflowControlSet (params ISkill[] skills )
+		private IWorkflowControlSet createAndPersistWorkflowControlSet(params ISkill[] skills)
 		{
-			var workflowControlSet = new WorkflowControlSet ("d")
+			var workflowControlSet = new WorkflowControlSet("d")
 			{
-				SchedulePublishedToDate = new DateTime (2000, 1, 10),
-				PreferencePeriod = new DateOnlyPeriod (2000, 2, 10, 2000, 2, 11),
-				PreferenceInputPeriod = new DateOnlyPeriod (2000, 2, 10, 2000, 2, 11)
+				SchedulePublishedToDate = new DateTime(2000, 1, 10),
+				PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11),
+				PreferenceInputPeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11)
 			};
 
-			skills.ForEach (skill =>
-			{
-				workflowControlSet.AddSkillToMatchList(skill);
-			});
-			
-			PersistAndRemoveFromUnitOfWork (workflowControlSet);
+			skills.ForEach(skill =>
+		   {
+			   workflowControlSet.AddSkillToMatchList(skill);
+		   });
+
+			PersistAndRemoveFromUnitOfWork(workflowControlSet);
 
 			return workflowControlSet;
 		}
