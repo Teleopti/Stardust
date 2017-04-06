@@ -394,5 +394,44 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				personAssignment.ShiftCategory.Should().Be.EqualTo(shiftCategoryB);
 			}
 		}
+
+		[Test]
+		[Ignore("42795, to be fixed")]
+		public void ShouldHandleMasterActivity()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = ActivityRepository.Has("_");
+			var masterActivity = new MasterActivity().WithId();
+			masterActivity.RequiresSkill = true;
+			masterActivity.ActivityCollection.Add(activity);
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var team = new Team().WithDescription(new Description("team"));
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var contract = new Contract("_");
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(masterActivity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team,  new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);	
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				DayOffTemplate = dayOffTemplate,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+				UseTeam = true,
+				TeamSameShiftCategory = true,
+				TagToUseOnScheduling = NullScheduleTag.Instance,
+				UseBlock = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
+			});
+
+			Target.DoScheduling(period);
+
+			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
+			assignments.Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
+		}
 	}
 }
