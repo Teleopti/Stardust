@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -28,6 +30,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
+	//TODO! Remove this test when we have more "real" teamblock scheduling tests
 	[TestWithStaticDependenciesAvoidUse]
 	[TestFixture]
 	public class WorkShiftFilterServiceTest
@@ -61,9 +64,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			};
 
 			_activity = ActivityFactory.CreateActivity("sd");
-			
+			var skill = new Skill("_").For(_activity);
 			_person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), _dateOnly);
 			_person.AddPersonPeriod(new PersonPeriod(new DateOnly(2012, 12, 12), PersonContractFactory.CreatePersonContract(), new Team()));
+			_person.AddSkill(skill, _dateOnly);
+
 			_matrix = ScheduleMatrixProFactory.Create(new DateOnlyPeriod(_dateOnly, _dateOnly),
 				new SchedulingResultStateHolder {Schedules = new ScheduleDictionaryForTest(new Scenario("Default"), _dateOnly.Date)}, _person,
 				new VirtualSchedulePeriod(_person, _dateOnly, new VirtualSchedulePeriodSplitChecker(_person)));
@@ -92,11 +97,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(8))), new WorkShiftWeekMinMaxCalculator()),
 				new CommonActivityFilter(),
 				new RuleSetAccordingToAccessabilityFilter(new RuleSetBagExtractorProvider(),
-					new TeamBlockIncludedWorkShiftRuleFilter(), new RuleSetSkillActivityCheckerOLD()), //TODO: This will fail with new impl!
+					new TeamBlockIncludedWorkShiftRuleFilter(), new RuleSetSkillActivityChecker()),
 				new ShiftProjectionCacheManager(new ShiftFromMasterActivityService(), new RuleSetDeletedActivityChecker(),
 					new RuleSetDeletedShiftCategoryChecker(),
 					new RuleSetProjectionEntityService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())),
-					new WorkShiftFromEditableShift()), new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityCheckerOLD(), new PersonalSkillsProvider()), //TODO: This will fail with new impl!
+					new WorkShiftFromEditableShift()), new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityChecker(), new PersonalSkillsProvider()),
 				new DisallowedShiftProjectionCashesFilter(), new ActivityRequiresSkillProjectionFilter(new PersonalSkillsProvider()),
 				new OpenHoursFilter(new IsAnySkillOpen()));
 			
@@ -187,9 +192,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			var masterActivity = new MasterActivity();
 			masterActivity.UpdateActivityCollection(new List<IActivity>{_activity});
-
-			_person.AddSkill(new PersonSkill(SkillFactory.CreateSkill("Skill with other activity"), new Percent(1)),
-				_person.Period(_dateOnly));
+			_person.RemoveSkill(_person.Period(_dateOnly).PersonSkillCollection.Single().Skill, _person.Period(_dateOnly));
+			_person.AddSkill(new PersonSkill(SkillFactory.CreateSkill("Skill with other activity"), new Percent(1)), _person.Period(_dateOnly));
 
 			var workShiftRuleSet =
 				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(masterActivity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
