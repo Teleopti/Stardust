@@ -93,6 +93,102 @@ namespace Teleopti.Wfm.Test
 		}
 
 		[Test]
+		public void ShouldBeDeniedIfUnderstaffedDuringAdministration()
+		{
+		    var now = DateTime.UtcNow;
+			Now.Is(now);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			var hourNow = now.Date.AddHours(now.Hour);
+			var requestStart = hourNow.AddHours(2);
+			SetUpRelevantStuffWithCascading();
+			SetUpMixedSkillDays(1, Tuple.Create(requestStart.Hour, (double)20));
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeWithAdmin");
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(4).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.False();
+			req.DenyReason.Should().Be.EqualTo(CreateDenyMessage30Min(requestStart.Hour, person.PermissionInformation.Culture(), person.PermissionInformation.Culture(), TimeZoneInfo.Utc, requestStart.Date));
+		}
+
+		[Test]
+		public void ShouldBeDeniedIfUnderstaffedDuringShortAdministration()
+		{
+			var now = DateTime.UtcNow;
+			Now.Is(now);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			var hourNow = now.Date.AddHours(now.Hour);
+			var requestStart = hourNow.AddHours(3);
+			SetUpRelevantStuffWithCascading();
+			SetUpMixedSkillDays(1, Tuple.Create(requestStart.Hour, (double)20));
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeWithAdmin");
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(1).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.False();
+			req.DenyReason.Should().Be.EqualTo(CreateDenyMessage30Min(requestStart.Hour, person.PermissionInformation.Culture(), person.PermissionInformation.Culture(), TimeZoneInfo.Utc, requestStart.Date));
+		}
+
+		[Test]
+		public void ShouldBeDeniedIfUnderstaffedWithNoSkillActivityAtTheStartOfRequest()
+		{
+			var now = DateTime.UtcNow;
+			Now.Is(now);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			var hourNow = now.Date.AddHours(now.Hour);
+			var requestStart = hourNow.AddHours(3);
+			SetUpRelevantStuffWithCascading();
+			SetUpMixedSkillDays(1, Tuple.Create(requestStart.Hour, (double)20));
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeWithNS");
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.False();
+			req.DenyReason.Should().Be.EqualTo(CreateDenyMessage30Min(requestStart.Hour, person.PermissionInformation.Culture(), person.PermissionInformation.Culture(), TimeZoneInfo.Utc, requestStart.Date));
+		}
+
+		[Test]
+		public void ShouldBeDeniedIfUnderstaffedWithNoSkillActivityAtTheEndOfRequest()
+		{
+			var now = DateTime.UtcNow;
+			Now.Is(now);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			var hourNow = now.Date.AddHours(now.Hour);
+			var requestStart = hourNow.AddHours(2);
+			SetUpRelevantStuffWithCascading();
+			SetUpMixedSkillDays(1, Tuple.Create(requestStart.Hour, (double)20));
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeWithNS");
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(4).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.False();
+			req.DenyReason.Should().Be.EqualTo(CreateDenyMessage30Min(requestStart.Hour, person.PermissionInformation.Culture(), person.PermissionInformation.Culture(), TimeZoneInfo.Utc, requestStart.Date));
+		}
+
+		[Test]
 		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInBeginningOfRequest()
 		{

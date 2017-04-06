@@ -4,8 +4,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
@@ -17,6 +15,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public bool? InReadyTime { get; set; }
 		public string BusinessUnit { get; set; }
 		public bool? InWorkTime { get; set; }
+
+		public bool? RequiresSkill { get; set; }
 
 	    public IActivity Activity;
 
@@ -41,6 +41,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				Activity.InWorkTime = InWorkTime.Value;
 			}
+
+		    if (RequiresSkill.HasValue)
+		        Activity.RequiresSkill = RequiresSkill.Value;
 
 			if(!string.IsNullOrEmpty(BusinessUnit))
 				Activity.SetBusinessUnit(new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit));
