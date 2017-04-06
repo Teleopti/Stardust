@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Aop;
@@ -134,30 +135,47 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var itemsCount = items.Count();
 			if (itemsCount > 0)
 			{
-				var transactionSize = calculateTransactionSize(strategy.MaxTransactionSize, strategy.ParallelTransactions, itemsCount);
+				var transactionSize = calculateTransactionSize(strategy.MaxTransactionSize, strategy.ParallelTransactions,
+					itemsCount);
 
 				var transactions = items
 					.Batch(transactionSize)
 					.Select(some => new Func<IEnumerable<AgentState>>(() =>
 					{
 						var result = _agentStatePersister.LockNLoad(some, strategy.DeadLockVictim);
-						_stateMapper.Refresh(result.MappingVersion);
-						_scheduleCache.Refresh(result.ScheduleVersion);
+						refreshCaches(strategy, strategyContext, result.ScheduleVersion, result.MappingVersion);
 						return result.AgentStates;
 					}))
 					.ToArray();
 
 				ProcessTransactions(_dataSource.CurrentName(), strategy, transactions, exceptions);
 			}
-
+			else
+			{
+				CurrentScheduleReadModelVersion scheduleVersion = null;
+				string mappingVersion = null;
+				strategyContext.WithReadModelUnitOfWork(() =>
+				{
+					scheduleVersion = _keyValues.Get("CurrentScheduleReadModelVersion", () => null);
+					mappingVersion = _keyValues.Get("RuleMappingsVersion");
+				});
+				refreshCaches(strategy, strategyContext, scheduleVersion, mappingVersion);
+			}
+			
 			if (exceptions.Count == 1)
 			{
 				var e = exceptions.First();
-				PreserveStack.For(e);
-				throw e;
+				ExceptionDispatchInfo.Capture(e).Throw();
 			}
 			if (exceptions.Any())
 				throw new System.AggregateException(exceptions);
+		}
+
+		private void refreshCaches(IContextLoadingStrategy strategy, StrategyContext strategyContext, CurrentScheduleReadModelVersion scheduleVersion, string mappingVersion)
+		{
+			_scheduleCache.Refresh(scheduleVersion);
+			_stateMapper.Refresh(mappingVersion);
+			strategy.VerifyConfiguration(strategyContext);
 		}
 
 		private static int calculateTransactionSize(int maxTransactionSize, int parallelTransactions, int thingsCount)

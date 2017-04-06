@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[MultiDatabaseTest]
 	public class SnapshotTest : ISetup
 	{
-		public DatabaseLegacy Database;
+		public Database Database;
+		public AnalyticsDatabase Analytics;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public WithUnitOfWork WithUnitOfWork;
 		public IPersonRepository Persons;
@@ -42,17 +43,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Publisher.AddHandler(typeof(CurrentScheduleReadModelUpdater));
 			Publisher.AddHandler(typeof(ExternalLogonReadModelUpdater));
 			var logOutBySnapshot = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot;
+			Analytics.WithDataSource(9, "sourceId");
 			Database
-				.WithDataSource("sourceId")
 				.WithAgent("user1")
 				.WithAgent("user2")
-
+				
 				.WithStateGroup("phone")
-				.WithRule("InAdherence", Adherence.In)
+				.WithStateCode("phone")
+				.WithRule("InAdherence", 0, Adherence.In)
 				.WithMapping("phone", "InAdherence")
 
-				.WithStateGroup(logOutBySnapshot)
-				.WithRule("OutAdherence", Adherence.Out)
+				.WithStateGroup(logOutBySnapshot, true, true)
+				.WithStateCode(logOutBySnapshot)
+				.WithRule("OutAdherence", -1, Adherence.Out)
 				.WithMapping(logOutBySnapshot, "OutAdherence")
 
 				.PublishRecurringEvents()

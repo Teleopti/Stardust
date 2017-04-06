@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		int ParallelTransactions { get; }
 		int MaxTransactionSize { get; }
 
+		void VerifyConfiguration(StrategyContext strategyContext);
+
 		IEnumerable<Guid> PersonIds(StrategyContext context);
 		InputInfo GetInputFor(AgentState state);
 	}
@@ -49,6 +51,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DeadLockVictim DeadLockVictim { get; protected set; }
 		public int ParallelTransactions { get; protected set; }
 		public int MaxTransactionSize { get; protected set; }
+
+		public virtual void VerifyConfiguration(StrategyContext strategyContext)
+		{
+		}
 
 		public abstract IEnumerable<Guid> PersonIds(StrategyContext context);
 		public abstract InputInfo GetInputFor(AgentState state);
@@ -141,6 +147,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				SnapshotId = _snapshotId,
 				SnapshotDataSourceId = _dataSourceId
 			};
+		}
+
+		public override void VerifyConfiguration(StrategyContext strategyContext)
+		{
+			if (_stateMapper.LoggedOutStateGroupIds().IsEmpty())
+				strategyContext.AddException(new NoLoggedOffStateGroupsException("No Logged out StateGroup found"));
 		}
 	}
 

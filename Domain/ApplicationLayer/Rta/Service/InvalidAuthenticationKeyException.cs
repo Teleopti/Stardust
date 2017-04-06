@@ -8,4 +8,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 		}
 	}
+
+	public class NoLoggedOffStateGroupsException : Exception
+	{
+		public NoLoggedOffStateGroupsException(string message) : base(message)
+		{
+		}
+	}
 }

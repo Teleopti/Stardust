@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
 				.WithMappedRule("statecode", Guid.Empty, null, "A State")
+				.WithStateGroup(null, "Logged Out", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 
@@ -84,6 +86,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDataSource("source2")
 				.WithAgent("usercode2", personId)
 				.WithMappedRule("statecode", Guid.Empty, null, "A State")
+				.WithStateGroup(null, "Logged Out", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
@@ -158,6 +162,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
 				.WithMappedRule("statecode1", Guid.Empty, null, "A State")
+				.WithStateGroup(null, "Logged Out", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
@@ -210,6 +216,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDataSource("source2")
 				.WithAgent("usercode2", personId)
 				.WithMappedRule("statecode1", Guid.Empty, null, "A State")
+				.WithStateGroup(null, "Logged Out", false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");

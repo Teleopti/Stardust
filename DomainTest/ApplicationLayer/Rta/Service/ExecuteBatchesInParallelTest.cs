@@ -61,6 +61,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("user1", personId1)
 				.WithAgent("user2", personId2)
+				.WithStateGroup(null, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, false, true)
+				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.WithMappedRule("ready")
 				.WithMappedRule("phone")

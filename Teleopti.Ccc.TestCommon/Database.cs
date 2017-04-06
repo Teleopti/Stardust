@@ -483,10 +483,15 @@ namespace Teleopti.Ccc.TestCommon
 			return this;
 		}
 
-		[UnitOfWork]
-		public virtual Database WithStateGroup(string name, bool @default)
+		public Database WithStateGroup(string name, bool @default)
 		{
-			addStateGroup(name, @default);
+			return WithStateGroup(name, @default, false);
+		}
+
+		[UnitOfWork]
+		public virtual Database WithStateGroup(string name, bool @default, bool logoutStateGroup)
+		{
+			addStateGroup(name, @default, logoutStateGroup);
 			return this;
 		}
 
@@ -500,14 +505,17 @@ namespace Teleopti.Ccc.TestCommon
 		private IRtaStateGroup stateGroup()
 		{
 			if (_stateGroup == null)
-				addStateGroup(RandomName.Make(), false);
+				addStateGroup(RandomName.Make(), false, false);
 			return _stateGroups.LoadAll().Single(x => x.Name == _stateGroup);
 		}
 
-		private void addStateGroup(string name, bool @default)
+		private void addStateGroup(string name, bool @default, bool logoutStateGroup)
 		{
 			_stateGroup = name;
-			var stateGroup = new RtaStateGroup(name, @default, true);
+			var stateGroup = new RtaStateGroup(name, @default, true)
+			{
+				IsLogOutState = logoutStateGroup
+			};
 			_stateGroups.Add(stateGroup);
 		}
 
@@ -580,6 +588,5 @@ namespace Teleopti.Ccc.TestCommon
 			_groupings.UpdateGroupingReadModel(_persons.LoadAll().Select(x => x.Id.Value).ToArray());
 			return this;
 		}
-
 	}
 }

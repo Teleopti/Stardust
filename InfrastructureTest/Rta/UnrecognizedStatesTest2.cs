@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
@@ -52,6 +53,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				.WithAgent("usercode2")
 				.WithAgent("usercode3")
 				.WithStateGroup("default", true)
+				.WithStateCode("default")
+				.WithStateGroup("logged out", false, true)
+				.WithStateCode("LOGGED-OFF")
 				.PublishRecurringEvents();
 			Context.Logout();
 

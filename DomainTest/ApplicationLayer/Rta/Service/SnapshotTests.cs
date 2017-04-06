@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -319,6 +320,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.StoredStateFor(user2)
 				.ReceivedTime.Should().Be("2014-10-20 10:00".Utc());
 		}
-		
+
+		[Test]
+		public void ShouldThrowIfNoLoggedOutStateGroups()
+		{
+			Assert.Throws<NoLoggedOffStateGroupsException>(() =>
+			{
+				Target.CloseSnapshot(new CloseSnapshotForTest
+				{
+					SnapshotId = Now.UtcDateTime()
+				});
+			});
+		}
+
+		[Test]
+		public void ShouldThrowIfNoLoggedOutStateGroups2()
+		{
+			Database
+				.WithAgent("user")
+				.WithStateGroup(null, "state")
+				.WithStateCode("statecode")
+				;
+
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "user",
+				StateCode = "statecode"
+			});
+
+			Assert.Throws<NoLoggedOffStateGroupsException>(() =>
+			{
+				Target.CloseSnapshot(new CloseSnapshotForTest
+				{
+					SnapshotId = Now.UtcDateTime()
+				});
+			});
+		}
+
 	}
 }
