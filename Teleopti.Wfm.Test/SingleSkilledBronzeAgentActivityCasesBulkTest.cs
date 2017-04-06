@@ -36,7 +36,6 @@ namespace Teleopti.Wfm.Test
 		public IPersonRepository PersonRepository;
 		public IHandleEvent<NewMultiAbsenceRequestsCreatedEvent> UpdateRequestHandler;
 		public IPersonRequestRepository PersonRequestRepository;
-		public MutableNow Now;
 
 
 		[SetUp]
@@ -49,10 +48,9 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunch()
 		{
-			var now = DateTime.UtcNow;
+			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
 			Now.Is(now);
-			var hourNow = now.Date.AddHours(now.Hour);
-			var requestStart = hourNow.AddHours(2);
+			var requestStart = now.AddHours(2);
 			IPersonRequest personRequest;
 			IPerson person;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -90,10 +88,9 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchShortRequest()
 		{
-			var now = DateTime.UtcNow;
+			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
 			Now.Is(now);
-			var hourNow = now.Date.AddHours(now.Hour);
-			var requestStart = hourNow.AddHours(3);
+			var requestStart = now.AddHours(3);
 			IPersonRequest personRequest;
 			IPerson person;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -131,10 +128,9 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInBeginningOfRequest()
 		{
-			var now = DateTime.UtcNow;
+			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
 			Now.Is(now);
-			var hourNow = now.Date.AddHours(now.Hour);
-			var requestStart = hourNow.AddHours(3);
+			var requestStart = now.AddHours(3);
 			IPersonRequest personRequest;
 			IPerson person;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -172,10 +168,9 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInEndOfRequest()
 		{
-			var now = DateTime.UtcNow;
+			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
 			Now.Is(now);
-			var hourNow = now.Date.AddHours(now.Hour);
-			var requestStart = hourNow.AddHours(1);
+			var requestStart = now.AddHours(1);
 			IPersonRequest personRequest;
 			IPerson person;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())

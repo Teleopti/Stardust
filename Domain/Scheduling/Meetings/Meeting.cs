@@ -280,7 +280,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		public virtual IList<IPersonMeeting> GetPersonMeetings(IPerson person)
 		{
 			IList<IPersonMeeting> personMeetings = new List<IPersonMeeting>();
-			IMeetingPerson meetingPerson = _meetingPersons.FirstOrDefault(mp => mp.Person.Equals(person));
+			//IMeetingPerson meetingPerson = _meetingPersons.FirstOrDefault(mp => mp.Person.Equals(person));
+			var meetingPerson = _meetingPersons.FirstOrDefault(mp => mp.Person.Id == person.Id);
 			if (meetingPerson != null)
 			{
 				foreach (DateOnly recurringDate in GetRecurringDates())

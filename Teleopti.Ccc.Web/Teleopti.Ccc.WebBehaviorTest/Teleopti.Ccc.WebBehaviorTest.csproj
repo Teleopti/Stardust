@@ -610,7 +610,6 @@
     <Compile Include="Data\Setups\Configurable\MessageConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\TextRequestConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PublicNoteConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\MeetingConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
     <Compile Include="MyTime\PreferencesFeedbackBlacklisting.feature.cs">
       <AutoGen>True</AutoGen>

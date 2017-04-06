@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -25,6 +26,7 @@ namespace Teleopti.Wfm.Test
 		public ICurrentTenantSession CurrentTenantSession;
 		public ICurrentBusinessUnit CurrentBusinessUnit;
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevelReadModel;
+		public MutableNow Now;
 
 		public string CreateDenyMessage30Min(int understaffedHour, CultureInfo culture, CultureInfo uiCulture, TimeZoneInfo timeZone, DateTime dateTime)
 		{
@@ -71,7 +73,7 @@ namespace Teleopti.Wfm.Test
 			Data.Apply(skillDaySilverToday);
 			Data.Apply(skillDayBronzeToday);
 
-			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddDays(2)));
+			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(Now.UtcDateTime().Date.AddDays(-1), Now.UtcDateTime().Date.AddDays(2)));
 		}
 
 		public void SetUpHighDemandSkillDays()
@@ -105,7 +107,7 @@ namespace Teleopti.Wfm.Test
 			Data.Apply(skillDaySilverToday);
 			Data.Apply(skillDayBronzeToday);
 
-			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddDays(2)));
+			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(Now.UtcDateTime().Date.AddDays(-1), Now.UtcDateTime().Date.AddDays(2)));
 		}
 
 		public void SetUpLowDemandSkillDays()
@@ -139,7 +141,7 @@ namespace Teleopti.Wfm.Test
 			Data.Apply(skillDaySilverToday);
 			Data.Apply(skillDayBronzeToday);
 
-			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddDays(2)));
+			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(Now.UtcDateTime().Date.AddDays(-1), Now.UtcDateTime().Date.AddDays(2)));
 		}
 
 		public virtual void SetUpRelevantStuffWithCascading()
@@ -153,6 +155,8 @@ namespace Teleopti.Wfm.Test
 			var contract = new ContractConfigurable { Name = "Kontrakt" };
 			var contractSchedule = new ContractScheduleConfigurable { Name = "Kontraktsschema" };
 			var partTimePercentage = new PartTimePercentageConfigurable { Name = "ppp" };
+			
+			var shiftStart = Now.UtcDateTime().Date.AddHours(Now.UtcDateTime().Hour);
 
 			var scenario = new ScenarioConfigurable
 			{
@@ -222,7 +226,6 @@ namespace Teleopti.Wfm.Test
 				SeriousUnderstaffingThreshold = -1
 			};
 
-
 			Data.Apply(activity);
 			Data.Apply(activityWrong);
 			Data.Apply(activityLunch);
@@ -279,9 +282,6 @@ namespace Teleopti.Wfm.Test
 			};
 
 			Data.Apply(multiplicatorDefinitionSet);
-
-			var now = DateTime.UtcNow;
-			var shiftStart = now.Date.AddHours(now.Hour);
 
 			var personPeriodAllSkills = new PersonPeriodConfigurable
 			{
@@ -414,6 +414,34 @@ namespace Teleopti.Wfm.Test
 			Data.Person(personBronzeWithLunch.Name).Apply(personPeriodBronzeWithLunch);
 			AddShiftWithLunch(personBronzeWithLunch.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activityLunch.Activity, scenario.Scenario);
 			AddShiftWithLunch(personBronzeWithLunch.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, activityLunch.Activity ,scenario.Scenario);
+
+			var personPeriodBronzeWithMeeting = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = bronzeSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personBronzeWithMeeting = new PersonConfigurable
+			{
+				Name = "PersonBronzeWithMeeting"
+			};
+			var meeting = new MeetingConfigurable
+			{
+				Description = "Meeting",
+				StartTime = shiftStart.AddHours(3),
+				EndTime = shiftStart.AddHours(4),
+				Subject = "Meeting Subject",
+				Scenario = scenario.Scenario,
+				Location = "Location"
+			};
+			Data.Person(personBronzeWithMeeting.Name).Apply(personPeriodBronzeWithMeeting);
+			Data.Person(personBronzeWithMeeting.Name).Apply(meeting);
+			AddShift(personBronzeWithMeeting.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			AddShift(personBronzeWithMeeting.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
 
 
 			var personPeriodBronzeWithAdministration = new PersonPeriodConfigurable

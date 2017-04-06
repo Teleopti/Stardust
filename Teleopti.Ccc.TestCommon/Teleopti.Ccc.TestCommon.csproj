@@ -446,6 +446,7 @@
     <Compile Include="TestData\Core\ITenantUserSetup.cs" />
     <Compile Include="FakeRepositories\FakeJobStartTimeRepository.cs" />
     <Compile Include="TestData\GlobalPrincipalState.cs" />
+    <Compile Include="TestData\MeetingConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ForecastConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ScheduleForecastSkillReadModelConfigurable.cs" />

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
@@ -35,7 +36,6 @@ namespace Teleopti.Wfm.Test
 		public IPersonRepository PersonRepository;
 		public IHandleEvent<NewMultiAbsenceRequestsCreatedEvent> UpdateRequestHandler;
 		public IPersonRequestRepository PersonRequestRepository;
-		public MutableNow Now;
 
 
 		[SetUp]
@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeApprovedIfOverstaffedFullDay()
 		{
-			var now = DateTime.UtcNow;
+			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
 			Now.Is(now);
 			IPersonRequest personRequest;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -86,7 +86,7 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderStaffedFullDay()
 		{
-			var now = DateTime.UtcNow;
+			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
 			Now.Is(now);
 			IPersonRequest personRequest;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())

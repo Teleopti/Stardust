@@ -415,7 +415,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private static void addPersonMeetings(IScheduleDictionary retDic, IEnumerable<IMeeting> meetings, bool onlyAddPersonsInList, IEnumerable<IPerson> addForThesePersons, bool loadDaysAfterLeft = false)
         {
-            foreach (IMeeting meeting in meetings)
+				foreach (IMeeting meeting in meetings)
             {
                 foreach (IMeetingPerson meetingPerson in meeting.MeetingPersons)
                 {
