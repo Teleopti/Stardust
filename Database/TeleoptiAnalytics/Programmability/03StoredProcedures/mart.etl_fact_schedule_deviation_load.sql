@@ -141,7 +141,13 @@ acd_login_id int not null,
 person_id int not null,
 business_unit_id int not null
 )
-
+CREATE TABLE #shift_start_intervals(
+	[date_id] [int] NOT NULL,
+	[person_id] [int] NOT NULL,
+	[shift_startdate_id] [int] NOT NULL,
+	[shift_startdate_local_id] [int] NOT NULL,
+	[shift_start_interval_id] [int] NOT NULL
+)
 
 --get the number of intervals outside shift to consider for adherence calc
 SELECT @interval_length_minutes = 1440/COUNT(*) from mart.dim_interval 
@@ -701,18 +707,42 @@ INNER JOIN
 WHERE shifts.shift_startdate_local_id IS NOT NULL 
 
 --ALL ROWS BEFORE SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
-UPDATE stat
-SET shift_startdate_local_id=shifts.shift_startdate_local_id,shift_startdate_id = shifts.shift_startdate_id, shift_startinterval_id=shifts.shift_startinterval_id
+INSERT INTO #shift_start_intervals
+SELECT 
+	shifts.date_id, 
+	shifts.person_id,
+	MIN(shifts.shift_startdate_id),
+	MIN(shifts.shift_startdate_local_id),
+	MIN(shifts.shift_startinterval_id)
 FROM #fact_schedule_deviation shifts
-INNER JOIN #fact_schedule_deviation stat
-ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
-WHERE stat.shift_startdate_id IS NULL 
-AND stat.interval_id < shifts.shift_startinterval_id 
-AND stat.interval_id >= shifts.shift_startinterval_id - @intervals_outside_shift-- ONLY 2 Hours back
-AND stat.date_id <= shifts.shift_startdate_id
-AND stat.date_id <= shifts.date_id --make sure the stat intervals are before shift
-AND stat.interval_id <= shifts.interval_id
-AND shifts.shift_startdate_local_id IS NOT NULL 
+	INNER JOIN #fact_schedule_deviation stat
+		ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
+WHERE 
+	stat.shift_startdate_id IS NULL 
+	AND stat.interval_id < shifts.shift_startinterval_id 
+	AND stat.interval_id >= shifts.shift_startinterval_id - @intervals_outside_shift-- ONLY 2 Hours back
+	AND stat.date_id <= shifts.shift_startdate_id
+	AND stat.date_id <= shifts.date_id --make sure the stat intervals are before shift
+	AND stat.interval_id <= shifts.interval_id
+	AND shifts.shift_startdate_local_id IS NOT NULL 
+GROUP BY 
+	shifts.date_id, 
+	shifts.person_id
+
+UPDATE stat
+SET shift_startdate_local_id = start.shift_startdate_local_id,
+	shift_startdate_id = start.shift_startdate_id, 
+	shift_startinterval_id = start.shift_start_interval_id
+FROM 
+	#fact_schedule_deviation stat
+	INNER JOIN #shift_start_intervals start
+		ON stat.date_id = start.date_id AND stat.person_id = start.person_id
+WHERE 
+	stat.shift_startdate_id IS NULL 
+	AND stat.interval_id < start.shift_start_interval_id 
+	AND stat.interval_id >= start.shift_start_interval_id - @intervals_outside_shift-- ONLY 2 Hours back
+	AND stat.date_id <= start.shift_startdate_id
+	AND stat.date_id <= start.date_id --make sure the stat intervals are before shift
 
 
 --ALL ROWS AFTER SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
