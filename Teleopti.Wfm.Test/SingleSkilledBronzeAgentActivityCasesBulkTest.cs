@@ -49,8 +49,9 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunch()
 		{
-			Now.Is(DateTime.UtcNow);
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0).Utc();
+			var now = DateTime.UtcNow;
+			Now.Is(now);
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(2);
 			IPersonRequest personRequest;
 			IPerson person;
@@ -89,8 +90,9 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchShortRequest()
 		{
-			Now.Is(DateTime.UtcNow);
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0).Utc();
+			var now = DateTime.UtcNow;
+			Now.Is(now);
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(3);
 			IPersonRequest personRequest;
 			IPerson person;
@@ -129,8 +131,9 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInBeginningOfRequest()
 		{
-			Now.Is(DateTime.UtcNow);
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0).Utc();
+			var now = DateTime.UtcNow;
+			Now.Is(now);
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(3);
 			IPersonRequest personRequest;
 			IPerson person;
@@ -169,8 +172,9 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInEndOfRequest()
 		{
-			Now.Is(DateTime.UtcNow);
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0).Utc();
+			var now = DateTime.UtcNow;
+			Now.Is(now);
+			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(1);
 			IPersonRequest personRequest;
 			IPerson person;
