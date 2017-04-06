@@ -1471,6 +1471,7 @@
     <Content Include="WFM\app\intraday\intraday-config-new.html" />
     <Content Include="WFM\app\people\html\wfm-import-agents.tpl.html" />
     <Content Include="WFM\app\people\people.component.wfmImportAgents.js" />
+    <Content Include="WFM\app\people\people.service.importAgents.js" />
     <Content Include="WFM\app\permissions\refact\permissions.data.service.js" />
     <Content Include="WFM\app\permissions\refact\permissions.data.service.spec.js" />
     <Content Include="WFM\app\permissions\refact\permissions.filter.r.js" />
