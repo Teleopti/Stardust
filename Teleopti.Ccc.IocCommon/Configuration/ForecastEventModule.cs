@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastsAnalyzeQuery>().As<IForecastsAnalyzeQuery>();
 			builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
 			builder.Register(getThreadJobResultFeedback).As<IJobResultFeedback>().SingleInstance();
-			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().InstancePerLifetimeScope();
+			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().SingleInstance();
 			builder.RegisterType<SaveForecastToSkill>().As<ISaveForecastToSkill>();
 			builder.RegisterType<MultisiteForecastToSkillAnalyzer>().As<IMultisiteForecastToSkillCommand>();
 			builder.RegisterType<OpenAndSplitSkillCommand>().As<IOpenAndSplitSkillCommand>();
