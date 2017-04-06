@@ -19,12 +19,13 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTestWithStaticDependenciesAvoidUse]
-	[TestFixture, SetCulture("en-US"), Ignore("This is not working! Now the text never shows 'critical' and the asserts are wrong")]
+	[TestFixture, SetCulture("en-US")]
 	public class MultiAbsenceRequestsUpdaterWithValidatorTest : ISetup
 	{
 		public IMultiAbsenceRequestsUpdater Target;
@@ -51,9 +52,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldPendingAndOnlyValidateStaffingThresholdValidator()
 		{
-			var personRequest = updateAbsenceRequestWithStaffingThresholdValidator(-0.5d);
+			var personRequest = updateAbsenceRequestWithStaffingThresholdValidator(-0.15d);
 			personRequest.IsPending.Should().Be.True();
-			personRequest.GetMessage(new NoFormatting()).Trim().Should().Be("Critical Understaffing on : 12/1/2016 at 12:00 AM - 12:00 AM");
+			personRequest.GetMessage(new NoFormatting()).Trim().Should().Contain(Resources.InsufficientStaffingDays);
 		}
 
 		[Test]
@@ -70,9 +71,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			var skill = SkillFactory.CreateSkillWithId("skill1");
 			SkillRepository.Add(skill);
-			var personRequest = updateAbsenceRequestWithStaffingThresholdValidator(-0.5d);
+			var personRequest = updateAbsenceRequestWithStaffingThresholdValidator(-0.15d);
 			personRequest.IsPending.Should().Be.True();
-			personRequest.GetMessage(new NoFormatting()).Trim().Should().Be("Critical Understaffing on : 12/1/2016 at 12:00 AM - 12:00 AM");
+			personRequest.GetMessage(new NoFormatting()).Trim().Should().Contain(Resources.InsufficientStaffingDays);
 			Assert.IsTrue(SchedulingResultStateHolder.SkillDays.Count > 0);
 		}
 
@@ -145,6 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skillStaffPeriod = MockRepository.GenerateMock<ISkillStaffPeriod>();
 			skillStaffPeriod.Stub(x => x.RelativeDifference).Return(relativeDifference);
 			skillStaffPeriod.Stub(x => x.Period).Return(skillDateTimePeriod);
+			skillStaffPeriod.Stub(x => x.DateTimePeriod).Return(skillDateTimePeriod);
 
 			var skillStaffPeriodHolder = new FakeSkillStaffPeriodHolder();
 			skillStaffPeriodHolder.SetDictionary(new SkillSkillStaffPeriodExtendedDictionary { { skill, new SkillStaffPeriodDictionary(skill) { skillStaffPeriod } } });
