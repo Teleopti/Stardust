@@ -49,6 +49,40 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return _mapper.Map(preferenceDay);
 		}
 
+		public IDictionary<DateOnly, PreferenceDayViewModel> PersistMultiDays(MultiPreferenceDaysInput input)
+		{
+			var ret = new Dictionary<DateOnly, PreferenceDayViewModel>();
+
+		    foreach (var date in input.Dates)
+			{
+				var dayInput = new PreferenceDayInput()
+				{
+					PreferenceId = input.PreferenceId,
+					TemplateName = input.TemplateName,
+					Date = date,
+					ActivityEarliestEndTime = input.ActivityEarliestEndTime,
+					ActivityEarliestStartTime = input.ActivityEarliestStartTime,
+					ActivityLatestEndTime = input.ActivityLatestEndTime,
+					ActivityLatestStartTime = input.ActivityLatestStartTime,
+					ActivityMaximumTime = input.ActivityMaximumTime,
+					ActivityMinimumTime = input.ActivityMinimumTime,
+					ActivityPreferenceId = input.ActivityPreferenceId,
+					EarliestEndTime = input.EarliestEndTime,
+					EarliestStartTime = input.EarliestStartTime,
+					EarliestEndTimeNextDay = input.EarliestEndTimeNextDay,
+					LatestStartTime = input.LatestStartTime,
+					LatestEndTime = input.LatestEndTime,
+					LatestEndTimeNextDay = input.LatestEndTimeNextDay,
+					MinimumWorkTime = input.MinimumWorkTime,
+					MaximumWorkTime = input.MaximumWorkTime
+				};
+			    var preferenceVM = Persist(dayInput);
+				ret.Add(date, preferenceVM);
+			}
+
+			return ret;
+		}
+
 		public bool MustHave(MustHaveInput input)
 		{
 			return _mustHaveRestrictionSetter.SetMustHave(input.Date, _loggedOnUser.CurrentUser(), input.MustHave);

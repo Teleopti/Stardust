@@ -105,6 +105,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpPostOrPut]
+		public virtual JsonResult ApplyPreferences(MultiPreferenceDaysInput input)
+		{
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
+
+		    var test = _preferencePersister.PersistMultiDays(input);
+			var result = test.Select(v => new
+			{
+				Date = v.Key.Date.ToString("yyyy-MM-dd"),
+				v.Value
+			});
+			return Json(result);
+		}
+
+		[UnitOfWork]
+		[HttpPostOrPut]
 		public virtual JsonResult MustHave(MustHaveInput input)
 		{
 			return Json(_preferencePersister.MustHave(input));

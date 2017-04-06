@@ -40,6 +40,26 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			preferenceDayRepository.AssertWasCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
+	    [Test]
+	    public void ShouldAddMultiPreference()
+	    {
+			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
+			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var target = new PreferencePersister(preferenceDayRepository, mustHaveRestrictionSetter,
+				loggedOnUser, new PreferenceDayInputMapper(new FakeShiftCategoryRepository(), new FakeDayOffTemplateRepository(),
+				new FakeAbsenceRepository(), new FakeActivityRepository(), loggedOnUser),
+				new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate()));
+			var input = new MultiPreferenceDaysInput()
+			{
+			    Dates = new List<DateOnly>{DateOnly.MinValue, DateOnly.Today, DateOnly.MaxValue}
+			};
+
+			target.PersistMultiDays(input);
+
+			preferenceDayRepository.AssertWasCalled(x => x.Add(null), o => o.IgnoreArguments());
+		}
+
 		[Test]
 		public void ShouldReturnInputResultModelOnAdd()
 		{
