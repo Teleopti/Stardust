@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 {
@@ -8,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 		public Guid ResourceId { get; set; }
 		public string ResourceName { get; set; }
 		public ICollection<string> ValidationErrors { get; set; }
+		[JsonConverter(typeof(StringEnumConverter))]
 		public ValidationResourceType ResourceType { get; set; }
 	}
 

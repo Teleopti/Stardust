@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -23,12 +22,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public IEnumerable<Tuple<string, IEnumerable<DateOnlyPeriod>>> ExistingForecastForAllSkills(DateOnlyPeriod range,
+		public IEnumerable<SkillMissingForecast> ExistingForecastForAllSkills(DateOnlyPeriod range,
 			IScenario scenario)
 		{
 			var existingForecastPerSkills = session(_currentUnitOfWork.Current()).GetNamedQuery("ExistingForecast")
 				.SetEntity("scenario", scenario)
-				.SetEntity("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current())
+				.SetEntity("businessUnit", scenario.BusinessUnit)
 				.SetDateOnly("startDate", range.StartDate)
 				.SetDateOnly("endDate", range.EndDate)
 				.SetString("longtermKey", TemplateReference.LongtermTemplateKey)
@@ -37,11 +36,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var datesToPeriod = new DatesToPeriod();
 			var group = existingForecastPerSkills.GroupBy(x => new {x.Name, x.Id});
-			return
-				group.Select(
-					x =>
-						new Tuple<string, IEnumerable<DateOnlyPeriod>>(x.Key.Name,
-							datesToPeriod.Convert(x.Where(d => d.CurrentDate.HasValue).Select(y => new DateOnly(y.CurrentDate.Value)))));
+			return group.Select(x => new SkillMissingForecast
+			{
+				SkillName = x.Key.Name,
+				SkillId = x.Key.Id,
+				Periods = datesToPeriod.Convert(x.Where(d => d.CurrentDate.HasValue).Select(y => new DateOnly(y.CurrentDate.Value)))
+			});
 		}
 
 		private static ISession session(IUnitOfWork uow)
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ((NHibernateUnitOfWork) uow).Session;
 		}
 	}
-
+	
 	class ExistingForecastPerSkill
 	{
 		public string Name { get; set; }

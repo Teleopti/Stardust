@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -22,17 +23,22 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var existingForecast =  _existingForecastRepository.ExistingForecastForAllSkills(range, scenario);
 
-
-			return existingForecast.Select(f => new Tuple<string, IEnumerable<DateOnlyPeriod>>(f.Item1, inverse(range, f.Item2).ToArray()))
-				.Where(e => e.Item2.Any()).Select(x => new MissingForecastModel
+			return existingForecast
+				.Select(skillMissingForecast => new MissingForecastModel
 				{
-					SkillName = x.Item1,
-					MissingRanges =
-						x.Item2.Select(y => new MissingForecastRange(){StartDate = y.StartDate.Date,EndDate = y.EndDate.Date}) .ToArray()
-				}).OrderBy(x => x.SkillName);
+					SkillName = skillMissingForecast.SkillName,
+					MissingRanges = inverse(range, skillMissingForecast.Periods).Select(r => new MissingForecastRange
+					{
+						StartDate = r.StartDate.Date,
+						EndDate = r.EndDate.Date
+					}).ToArray(),
+					SkillId = skillMissingForecast.SkillId
+				})
+				.Where(missingForecastModel => missingForecastModel.MissingRanges.Any())
+				.OrderBy(missingForecastModel => missingForecastModel.SkillName);
 		}
 
-		private IEnumerable<DateOnlyPeriod> inverse(DateOnlyPeriod range, IEnumerable<DateOnlyPeriod> raster)
+		private static IEnumerable<DateOnlyPeriod> inverse(DateOnlyPeriod range, IEnumerable<DateOnlyPeriod> raster)
 		{
 			var result = new List<DateOnlyPeriod>();
 			if (!raster.Any())
@@ -52,6 +58,17 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 			if (previousEnd < range.EndDate)
 				result.Add(new DateOnlyPeriod(previousEnd.AddDays(1), range.EndDate));
 			return result;
+		}
+
+		public IEnumerable<MissingForecastModel> GetMissingForecast(ICollection<IPerson> people, DateOnlyPeriod range)
+		{
+			var missingForecasts = GetMissingForecast(range);
+			var skills = new HashSet<ISkill>();
+			foreach (var periods in people.Select(person => person.PersonPeriods(range)))
+				foreach (var period in periods)
+					foreach (var personSkill in period.PersonSkillCollection)
+						skills.Add(personSkill.Skill);
+			return missingForecasts.Where(missingForecast => skills.Any(skill => skill.Id == missingForecast.SkillId)).ToList();
 		}
 	}
 

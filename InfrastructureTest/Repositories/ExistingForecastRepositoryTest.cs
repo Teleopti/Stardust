@@ -109,8 +109,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var range = new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31);
 			var result =  target.ExistingForecastForAllSkills(range, _scenario );
 			result.Count().Should().Be(1);
-			result.First().Item2.Count().Should().Be(1);
-			result.First().Item2.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 9));
+			result.First().Periods.Count().Should().Be(1);
+			result.First().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 9));
 		}
 
 		[Test]
@@ -130,11 +130,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var range = new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31);
 			var result = target.ExistingForecastForAllSkills(range, _scenario);
 			result.Count().Should().Be(2);
-			result.First().Item2.Count().Should().Be(1);
-			result.First().Item2.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 8));
+			result.First().Periods.Count().Should().Be(1);
+			result.First().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 8));
 
-			result.Last().Item2.Count().Should().Be(1);
-			result.Last().Item2.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 8));
+			result.Last().Periods.Count().Should().Be(1);
+			result.Last().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 8));
 		}
 
 		[Test]
@@ -153,8 +153,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var range = new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31);
 			var result = target.ExistingForecastForAllSkills(range, _scenario);
 			result.Count().Should().Be(1);
-			result.First().Item2.Count().Should().Be(1);
-			result.First().Item2.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 9));
+			result.First().Periods.Count().Should().Be(1);
+			result.First().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 9));
 		}
 
 		[Test]
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var range = new DateOnlyPeriod(2015, 06, 01, 2015, 06, 30);
 			var result = target.ExistingForecastForAllSkills(range, _scenario);
 			result.Count().Should().Be(1);
-			result.First().Item2.Should().Be.Empty();
+			result.First().Periods.Should().Be.Empty();
 		}
 	}
 }

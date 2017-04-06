@@ -249,23 +249,14 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			{
 				if (!createDefaultPlanningPeriod) return Ok(availablePlanningPeriods);
 				var planningPeriod = _nextPlanningPeriodProvider.Current(agentGroup);
-				var validationResults = _basicSchedulingValidator.Validate(new ValidationParameters
-				{
-					Period = planningPeriod.Range,
-					People = _agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup).AllPeople.ToList()
-				});
 				availablePlanningPeriods.Add(createPlanningPeriodModel(planningPeriod.Range,
-					planningPeriod.Id.GetValueOrDefault(), planningPeriod.State, validationResults, planningPeriod.AgentGroup));
+					planningPeriod.Id.GetValueOrDefault(), planningPeriod.State, null, planningPeriod.AgentGroup));
 			}
 			else
 			{
 				allPlanningPeriods.ForEach(
 					pp =>
-						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range, pp.Id.GetValueOrDefault(), pp.State, _basicSchedulingValidator.Validate(new ValidationParameters
-						{
-							Period = pp.Range,
-							People = _agentGroupStaffLoader.Load(pp.Range, pp.AgentGroup).AllPeople.ToList()
-						}), pp.AgentGroup)));
+						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range, pp.Id.GetValueOrDefault(), pp.State, null, pp.AgentGroup)));
 			}
 			return Ok(availablePlanningPeriods);
 		}

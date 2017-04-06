@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 		public ValidationResult Validate(ValidationParameters parameters)
 		{
 			var result = new ValidationResult();
-			_missingForecastProvider.GetMissingForecast(parameters.Period)
+			_missingForecastProvider.GetMissingForecast(parameters.People, parameters.Period)
 				.ForEach(r => result.Add(r));
 			_personPeriodValidator.GetPeopleMissingPeriod(parameters.People, parameters.Period)
 				.ForEach(r => result.Add(r));

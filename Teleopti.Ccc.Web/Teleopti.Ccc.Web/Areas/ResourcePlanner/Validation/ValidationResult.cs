@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 				{
 					ResourceName = error.SkillName,
 					ValidationErrors = error.MissingRanges.Select(x => $"{Resources.MissingForecastFrom} {x.StartDate:d} {Resources.ToText} {x.EndDate:d}").ToList(),
-					ResourceType = ValidationResourceType.Skill
+					ResourceType = ValidationResourceType.Skill,
+					ResourceId = error.SkillId
 				});
 		}
 	}
