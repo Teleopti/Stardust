@@ -11,6 +11,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
@@ -22,8 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private readonly IFileProcessor _fileProcessor;
 		public ImportAgentEventHandler(
 			IJobResultRepository jobResultRepository,
-			IFileProcessor fileProcessor,
-			ICurrentUnitOfWork currentUnitOfWork
+			IFileProcessor fileProcessor
 		 )
 		{
 			_jobResultRepository = jobResultRepository;
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 
 			inputFile = jobResult.Artifacts.FirstOrDefault(a => a.Category == JobResultArtifactCategory.Input);
-			if (inputFile?.Content == null || inputFile.Content.Length == 0)
+			if (inputFile?.Content?.Length == 0)
 			{
 				return Resources.InvalidInput;
 			}

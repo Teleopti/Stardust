@@ -1,15 +1,17 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NPOI.HSSF.UserModel;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 {
 	[TestFixture]
 	public class AgentFileTemplateTest
 	{
-		[Test] 
+		[Test]
 		[Ignore("should check manually")]
 		public void ShouldGetFileTemplate()
 		{
@@ -50,5 +52,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			defaultAgent.SchedulePeriodType.Should().Be.EqualTo(cells[14].StringCellValue);
 			defaultAgent.SchedulePeriodLength.Should().Be.EqualTo(cells[15].NumericCellValue); // Number
 		}
+
+		[Test]
+		[Ignore("get test file for develop test")]
+		public void GenerateBigAgentFile()
+		{
+			var agents = new List<RawAgent>();
+			var target = new AgentFileTemplate();
+			
+			for (int i = 0; i < 1000; i++)
+			{
+				var defaultAgent = target.GetDefaultAgent();
+				defaultAgent.Firstname += Guid.NewGuid().ToString().Replace("-","").Substring(0,5);
+				var identityUser = $"{defaultAgent.Firstname.ToLower()}.{defaultAgent.Lastname.ToLower()}@teleopti.com";
+				defaultAgent.ApplicationUserId = identityUser;
+				defaultAgent.WindowsUser = identityUser;
+				agents.Add(defaultAgent);
+			}
+			var fileStream = new AgentFileTemplate().GetFileTemplate(agents.ToArray()).ToArray();
+			File.WriteAllBytes(@"C:\big_agents.xls", fileStream);
+		}
+
 	}
 }
