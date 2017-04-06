@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.ToArray();
 			}
 
-			var inState = processInput.Stored;
+			var workingState = processInput.Stored;
 			AgentState outState = null;
 			times.ForEach(time =>
 			{
@@ -126,16 +126,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					time,
 					processInput.DeadLockVictim,
 					input,
-					inState,
+					workingState,
 					processInput.Schedule,
 					processInput.StateMapper,
 					processInput.AppliedAlarm);
 				if (context.ShouldProcessState())
 				{
 					process(context);
-					outState = context.MakeAgentState();
+					workingState = context.MakeAgentState();
+					outState = workingState;
 				}
-				inState = outState;
 			});
 
 			return outState;
