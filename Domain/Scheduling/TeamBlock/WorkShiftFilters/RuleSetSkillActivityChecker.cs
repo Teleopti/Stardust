@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		}
 	}
 
-
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MasterActivity_42795)]
 	public class RuleSetSkillActivityCheckerOLD : IRuleSetSkillActivityChecker
 	{
 		public bool CheckSkillActivities(IWorkShiftRuleSet ruleSet, IEnumerable<ISkill> skillList)
