@@ -17,13 +17,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Test
 {
 	[DatabaseTest]
-	[Ignore("Amanda told me to")]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
 	public class SingleSkilledBronzeAgentActivityCasesBulkTest : SetUpCascadingShifts
 	{
@@ -49,11 +47,10 @@ namespace Teleopti.Wfm.Test
 
 
 		[Test]
-		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunch()
 		{
 			Now.Is(DateTime.UtcNow);
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0).Utc();
 			var requestStart = hourNow.AddHours(2);
 			IPersonRequest personRequest;
 			IPerson person;
@@ -90,11 +87,10 @@ namespace Teleopti.Wfm.Test
 		}
 
 		[Test]
-		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchShortRequest()
 		{
 			Now.Is(DateTime.UtcNow);
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0).Utc();
 			var requestStart = hourNow.AddHours(3);
 			IPersonRequest personRequest;
 			IPerson person;
@@ -131,7 +127,6 @@ namespace Teleopti.Wfm.Test
 		}
 
 		[Test]
-		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInBeginningOfRequest()
 		{
 			Now.Is(DateTime.UtcNow);

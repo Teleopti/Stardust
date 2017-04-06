@@ -42,12 +42,11 @@ namespace Teleopti.Wfm.Test
 
 
 		[Test]
-		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunch()
 		{
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0).Utc();
 			var requestStart = hourNow.AddHours(2);
 			SetUpRelevantStuffWithCascading();
 			SetUpMixedSkillDays(1, Tuple.Create(requestStart.AddHours(1).Hour, (double)20));
@@ -66,12 +65,11 @@ namespace Teleopti.Wfm.Test
 		}
 
 		[Test]
-		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchShortRequest()
 		{
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0).Utc();
 			var requestStart = hourNow.AddHours(3);
 			SetUpRelevantStuffWithCascading();
 			SetUpMixedSkillDays(1, Tuple.Create(requestStart.Hour, (double)20));
@@ -186,12 +184,11 @@ namespace Teleopti.Wfm.Test
 		}
 
 		[Test]
-		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInBeginningOfRequest()
 		{
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0).Utc();
 			var requestStart = hourNow.AddHours(3);
 			SetUpRelevantStuffWithCascading();
 			SetUpMixedSkillDays(1, Tuple.Create(requestStart.Hour, (double)20));
@@ -210,12 +207,11 @@ namespace Teleopti.Wfm.Test
 		}
 
 		[Test]
-		[Ignore("Amanda told me to")]
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInEndOfRequest()
 		{
 			Now.Is(DateTime.UtcNow);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
-			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0);
+			var hourNow = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0).Utc();
 			var requestStart = hourNow.AddHours(1);
 			SetUpRelevantStuffWithCascading();
 			SetUpMixedSkillDays(1, Tuple.Create(requestStart.Hour + 2, (double)20));
