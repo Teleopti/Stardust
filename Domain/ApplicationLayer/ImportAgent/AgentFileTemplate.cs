@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			"Password",
 			"Role",
 			"StartDate",
-			"Organization",
+			"Site/Team",
 			"Skill",
 			"ExternalLogon",
 			"Contract",
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				StartDate = new DateTime(2017, 3, 1),
 				Organization = "London/Team Preferences",
 				Skill = "Direct Sales, Channel Sales",
-				ExternalLogon = "0019",
+				ExternalLogon = "",
 				Contract = "BTS",
 				ContractSchedule = "BTS",
 				PartTimePercentage = "75%",
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				var startDateCell = row.CreateCell(ColumnHeaderMap["StartDate"]);
 
 				startDateCell.SetCellValue(agent.StartDate);
-				row.CreateCell(ColumnHeaderMap["Organization"]).SetCellValue(agent.Organization);
+				row.CreateCell(ColumnHeaderMap["Site/Team"]).SetCellValue(agent.Organization);
 				row.CreateCell(ColumnHeaderMap["Skill"]).SetCellValue(agent.Skill);
 				row.CreateCell(ColumnHeaderMap["ExternalLogon"]).SetCellValue(agent.ExternalLogon);
 				row.CreateCell(ColumnHeaderMap["Contract"]).SetCellValue(agent.Contract);

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		{
 			var target = new AgentFileTemplate();
 			var file = target.GetFileTemplate(target.GetDefaultAgent());
-			using (var outputFile = File.Create(@"C:\Teleopti\Logs\agent_file_template.xls"))
+			using (var outputFile = File.Create(@"C:\TeleoptiWFM\SourceCode\main\Teleopti\Logs\agent_file_template.xls"))
 			{
 				file.Seek(0, SeekOrigin.Begin);
 				file.CopyTo(outputFile);

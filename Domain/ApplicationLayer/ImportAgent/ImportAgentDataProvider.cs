@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			{
 				return null;
 			}
-			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.DescriptionText?.Trim() == roleName.Trim());
+			return _applicationRoleRepository.LoadAll().FirstOrDefault(role => role.DescriptionText?.Trim().ToLowerInvariant() == roleName.Trim().ToLowerInvariant());
 		}
 
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		public ISkill FindSkill(string skillName)
 		{
-			return _skillRepository.LoadAll().FirstOrDefault(skill => skill.Name == skillName);
+			return _skillRepository.LoadAll().FirstOrDefault(skill => skill.Name.ToLowerInvariant() == skillName.ToLowerInvariant());
 		}
 
 	}

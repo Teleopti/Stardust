@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var errorMessages = new List<string>();
 			for (var i = 0; i < propertyInfos.Length; i++)
 			{
-				var expectedColumnName = propertyInfos[i].Name;
+				var expectedColumnName = propertyInfos[i].Name == "Organization"? "Site/Team":propertyInfos[i].Name;
 				if (i >= columnNames.Length)
 				{
 					errorMessages.Add(expectedColumnName);

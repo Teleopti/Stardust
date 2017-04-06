@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		public FakeApplicationRoleRepository RoleRepository;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 		public FakeLoggedOnUser CurrentLoggedOnUser;
+		public FakeSkillRepository SkillRepository;
 		public ImportAgentDataProvider Target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<ImportAgentDataProvider>().For<IImportAgentDataProvider>();
 			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 		}
 
 		[Test]
@@ -71,13 +73,38 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		}
 
 		[Test]
-		public void ShouldUseDescriptionTextForFindingRole()
+		public void ShouldUseDescriptionTextForFindingRoleWithoutCaseSensitivity()
 		{
-			var role = ApplicationRoleFactory.CreateRole("name", "description");
+			var role = ApplicationRoleFactory.CreateRole("name", "Description");
 			RoleRepository.Has(role);
 
 			var foundRole = Target.FindRole("description");
 			foundRole.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldMatchFirstForFindingRoleWithoutCaseSensitivityAndWithSimilarRoles()
+		{
+			var role = ApplicationRoleFactory.CreateRole("name", "description");
+			var roleBig = ApplicationRoleFactory.CreateRole("name", "Description");
+			RoleRepository.Has(roleBig);
+			RoleRepository.Has(role);
+			
+
+			var foundRole = Target.FindRole("description");
+			foundRole.Should().Not.Be.Null();
+		    foundRole.DescriptionText.Should().Be.EqualTo(roleBig.DescriptionText);
+		}
+
+
+		[Test]
+		public void ShouldMatchSkillWithoutCaseSensitivity()
+		{
+			var skill = SkillFactory.CreateSkill("testSkill");
+			SkillRepository.Has(skill);
+
+			var foundSkill = Target.FindSkill("testskill");
+			foundSkill.Should().Not.Be.Null();
 		}
 	}
 }
