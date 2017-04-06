@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[SetUp]
 		public void Setup()
 		{
-			_target = new RuleSetSkillActivityChecker();
+			_target = new RuleSetSkillActivityCheckerOLD(); //TODO: This will fail with new impl!
 			_act1 = ActivityFactory.CreateActivity("act1");
 			_act1.RequiresSkill = true;
 			_act2 = ActivityFactory.CreateActivity("act2");

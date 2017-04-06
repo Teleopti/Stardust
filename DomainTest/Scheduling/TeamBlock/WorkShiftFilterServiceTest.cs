@@ -92,11 +92,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(8))), new WorkShiftWeekMinMaxCalculator()),
 				new CommonActivityFilter(),
 				new RuleSetAccordingToAccessabilityFilter(new RuleSetBagExtractorProvider(),
-					new TeamBlockIncludedWorkShiftRuleFilter(), new RuleSetSkillActivityChecker()),
+					new TeamBlockIncludedWorkShiftRuleFilter(), new RuleSetSkillActivityCheckerOLD()), //TODO: This will fail with new impl!
 				new ShiftProjectionCacheManager(new ShiftFromMasterActivityService(), new RuleSetDeletedActivityChecker(),
 					new RuleSetDeletedShiftCategoryChecker(),
 					new RuleSetProjectionEntityService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())),
-					new WorkShiftFromEditableShift()), new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityChecker(), new PersonalSkillsProvider()),
+					new WorkShiftFromEditableShift()), new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityCheckerOLD(), new PersonalSkillsProvider()), //TODO: This will fail with new impl!
 				new DisallowedShiftProjectionCashesFilter(), new ActivityRequiresSkillProjectionFilter(new PersonalSkillsProvider()),
 				new OpenHoursFilter(new IsAnySkillOpen()));
 			
