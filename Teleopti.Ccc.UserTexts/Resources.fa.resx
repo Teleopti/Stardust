@@ -4900,9 +4900,6 @@
   <data name="Optimisation" xml:space="preserve">
     <value>بهینه سازی</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>استخدام بیش از حد مورد نیاز</value>
-  </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>اولویت:</value>
   </data>

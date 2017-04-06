@@ -6156,9 +6156,6 @@
   <data name="Optimisation" xml:space="preserve">
     <value>Optimizasyon</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Fazla kapasite</value>
-  </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Öncelik:</value>
   </data>

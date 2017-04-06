@@ -8095,9 +8095,6 @@ Teleopti R&amp;D</value>
   <data name="WorkflowControlSetColon" xml:space="preserve">
     <value>Workflow Control Set</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Überbesetzen</value>
-  </data>
   <data name="AddFromToPeriod" xml:space="preserve">
     <value>Von - Bis Periode hinzufügen</value>
   </data>

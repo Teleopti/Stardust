@@ -14404,4 +14404,7 @@ Vill du registrera dig?</value>
   <data name="NoInput" xml:space="preserve">
     <value>Input saknas</value>
   </data>
+  <data name="AvailableAsGroupPageColon" xml:space="preserve">
+    <value>Tillgänglig som gruppering:*</value>
+  </data>
 </root>

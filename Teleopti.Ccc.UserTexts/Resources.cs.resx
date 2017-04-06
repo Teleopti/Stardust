@@ -8192,9 +8192,6 @@ Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, ab
   <data name="Optimisation" xml:space="preserve">
     <value>Optimalizace</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Nadstav</value>
-  </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Priorita:</value>
   </data>
@@ -11670,9 +11667,6 @@ Detaily chyby:
   </data>
   <data name="DeleteCampaign" xml:space="preserve">
     <value>Smazat kampaň</value>
-  </data>
-  <data name="DISMISS" xml:space="preserve">
-    <value>ZRUŠIT</value>
   </data>
   <data name="OutboundCampaigns" xml:space="preserve">
     <value>Odchozí kampaň</value>
