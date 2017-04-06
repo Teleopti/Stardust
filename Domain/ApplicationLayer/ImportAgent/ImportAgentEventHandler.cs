@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 
 			inputFile = jobResult.Artifacts.FirstOrDefault(a => a.Category == JobResultArtifactCategory.Input);
-			if (inputFile?.Content?.Length == 0)
+			if ((inputFile?.Content?.Length ?? 0 ) == 0)
 			{
 				return Resources.InvalidInput;
 			}
