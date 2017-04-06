@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using System.Drawing;
@@ -33,6 +34,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			_description = new Description();
 		}
+
+		public virtual IList<IActivity> ActivityCollection => new[]{this};
 
 		public override void NotifyTransactionComplete(DomainUpdateType operation)
 		{

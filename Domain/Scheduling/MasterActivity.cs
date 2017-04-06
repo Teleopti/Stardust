@@ -8,12 +8,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
     {
         private IList<IActivity> _activityCollection = new List<IActivity>();
 
-        public virtual IList<IActivity> ActivityCollection
-        {
-            get { return _activityCollection; }
-        }
+        public override IList<IActivity> ActivityCollection => _activityCollection;
 
-        public virtual void UpdateActivityCollection(IList<IActivity> newActivityCollection)
+	    public virtual void UpdateActivityCollection(IList<IActivity> newActivityCollection)
         {
             _activityCollection = newActivityCollection;
         }

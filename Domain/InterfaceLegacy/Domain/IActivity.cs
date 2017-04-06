@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </remarks>
 	public interface IActivity : IPayload, IDeleteTag, IAggregateRootWithEvents
 	{
+		IList<IActivity> ActivityCollection { get; }
 
 		/// <summary>
 		/// Gets or sets the name.

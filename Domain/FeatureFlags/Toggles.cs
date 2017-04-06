@@ -163,6 +163,7 @@
 		ResourcePlanner_IntradayNoDailyValueCheck_42767,
 		ResourcePlanner_LoadingLessSchedules_42639,
 		ResourcePlanner_TeamBlockPeriod_42836,
+		ResourcePlanner_MasterActivity_42795,
 
 		Wfm_DisplayOnlineHelp_39402,
 

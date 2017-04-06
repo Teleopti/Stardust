@@ -8,11 +8,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     public interface IMasterActivity : IActivity
     {
         ///<summary>
-        /// Gets all the activities that the master can be converted to when scheduling.
-        ///</summary>
-        IList<IActivity> ActivityCollection { get; }
-
-        ///<summary>
         /// Replaces the ActivityCollection
         ///</summary>
         ///<param name="newActivityCollection"></param>
