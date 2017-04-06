@@ -205,5 +205,85 @@ namespace Teleopti.Wfm.Test
 			}
 		}
 
+		[Test]
+		public void ShouldBeDeniedIfUnderstaffedDuringMeeting()
+		{
+			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			Now.Is(now);
+			var requestStart = now.AddHours(2);
+			IPersonRequest personRequest;
+			IPerson person;
+			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				SetUpRelevantStuffWithCascading();
+				SetUpMixedSkillDays(1, Tuple.Create(requestStart.AddHours(1).Hour, (double)20));
+
+				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeWithMeeting");
+
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
+				personRequest = new PersonRequest(person, absenceRequest);
+				personRequest.Pending();
+				PersonRequestRepository.Add(personRequest);
+				uow.PersistAll();
+			}
+
+			UpdateRequestHandler.Handle(new NewMultiAbsenceRequestsCreatedEvent
+			{
+				PersonRequestIds = new List<Guid> { personRequest.Id.GetValueOrDefault() },
+				InitiatorId = Guid.Empty,
+				JobName = "JobName",
+				LogOnBusinessUnitId = TestState.BusinessUnit.Id.GetValueOrDefault(),
+				LogOnDatasource = "TestData",
+				Sent = DateTime.UtcNow
+			});
+			using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+				req.IsApproved.Should().Be.False();
+				req.DenyReason.Should().Be.EqualTo(CreateDenyMessage30Min(requestStart.AddHours(1).Hour, person.PermissionInformation.Culture(), person.PermissionInformation.Culture(), TimeZoneInfo.Utc, requestStart.Date));
+			}
+		}
+
+		[Test]
+		public void ShouldBeDeniedIfUnderstaffedDuringMeetingShortRequest()
+		{
+			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			Now.Is(now);
+			var requestStart = now.AddHours(3);
+			IPersonRequest personRequest;
+			IPerson person;
+			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				SetUpRelevantStuffWithCascading();
+				SetUpMixedSkillDays(1, Tuple.Create(requestStart.Hour, (double)20));
+
+				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+				person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronzeWithMeeting");
+
+				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(3).Utc()));
+				personRequest = new PersonRequest(person, absenceRequest);
+				personRequest.Pending();
+				PersonRequestRepository.Add(personRequest);
+				uow.PersistAll();
+			}
+
+			UpdateRequestHandler.Handle(new NewMultiAbsenceRequestsCreatedEvent
+			{
+				PersonRequestIds = new List<Guid> { personRequest.Id.GetValueOrDefault() },
+				InitiatorId = Guid.Empty,
+				JobName = "JobName",
+				LogOnBusinessUnitId = TestState.BusinessUnit.Id.GetValueOrDefault(),
+				LogOnDatasource = "TestData",
+				Sent = DateTime.UtcNow
+			});
+			using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+				req.IsApproved.Should().Be.False();
+				req.DenyReason.Should().Be.EqualTo(CreateDenyMessage30Min(requestStart.Hour, person.PermissionInformation.Culture(), person.PermissionInformation.Culture(), TimeZoneInfo.Utc, requestStart.Date));
+			}
+		}
+
 	}
 }
