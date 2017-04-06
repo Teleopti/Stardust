@@ -187,7 +187,16 @@ namespace Teleopti.Wfm.Test
 			{
 				Name = "LunchActivity"
 			};
-
+			var activityAdministration = new ActivityConfigurable
+			{
+				Name = "AdministrationActivity"
+			};
+			var nonSkillActivity = new ActivityConfigurable
+			{
+				Name = "NonSkillActivity",
+				RequiresSkill = false
+			};
+			
 			var bronzeSkill = new SkillConfigurable
 			{
 				Activity = activity.Name,
@@ -217,6 +226,8 @@ namespace Teleopti.Wfm.Test
 			Data.Apply(activity);
 			Data.Apply(activityWrong);
 			Data.Apply(activityLunch);
+			Data.Apply(activityAdministration);
+			Data.Apply(nonSkillActivity);
 			Data.Apply(bronzeSkill);
 			Data.Apply(silverSkill);
 			Data.Apply(goldSkill);
@@ -403,6 +414,43 @@ namespace Teleopti.Wfm.Test
 			Data.Person(personBronzeWithLunch.Name).Apply(personPeriodBronzeWithLunch);
 			AddShiftWithLunch(personBronzeWithLunch.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activityLunch.Activity, scenario.Scenario);
 			AddShiftWithLunch(personBronzeWithLunch.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, activityLunch.Activity ,scenario.Scenario);
+
+
+			var personPeriodBronzeWithAdministration = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = bronzeSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personBronzeWithAdministration = new PersonConfigurable
+			{
+				Name = "PersonBronzeWithAdmin"
+			};
+			Data.Person(personBronzeWithAdministration.Name).Apply(personPeriodBronzeWithAdministration);
+			//need to rename the method
+			AddShiftWithLunch(personBronzeWithAdministration.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activityAdministration.Activity, scenario.Scenario);
+
+			var personPeriodBronzeWithNonSkill = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = bronzeSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+			var personBronzeWithNonSkill = new PersonConfigurable
+			{
+				Name = "PersonBronzeWithNS"
+			};
+			Data.Person(personBronzeWithNonSkill.Name).Apply(personPeriodBronzeWithNonSkill);
+			AddShiftWithLunch(personBronzeWithNonSkill.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, nonSkillActivity.Activity, scenario.Scenario);
+
 
 			var personPeriodBronze2 = new PersonPeriodConfigurable
 			{
