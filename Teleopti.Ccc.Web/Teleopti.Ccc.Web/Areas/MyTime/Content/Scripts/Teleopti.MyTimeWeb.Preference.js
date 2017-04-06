@@ -87,30 +87,24 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				type: 'POST',
 				data: JSON.stringify({ dateList: dates }),
 				success: function (data) {
-					_onSuccessDeletePeriod(data, dates, successCb);
+					_onSuccessDeletePeriod(dates, successCb);
 				},
 				statusCode404: function () { },
 			});
 		}
 	}
 
-	function _onSuccessDeletePeriod(data, dates, successCb) {
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
-			data.forEach(function(d){
-				preferencesAndScheduleViewModel.DayViewModels[d.Date].ReadPreference(d.Value);
-			});
-			getNeighboringDatesFeedbackDataOfSelectedDates(dates);
-		} else {
-			dates.forEach(function(date) {
-				var dayViewModel = preferencesAndScheduleViewModel.DayViewModels[date];
-				dayViewModel.ClearPreference(successCb);
-				dayViewModel.LoadFeedback();
-			});
+	function _onSuccessDeletePeriod(dates, successCb) {
+		dates.forEach(function(date) {
+			var dayViewModel = preferencesAndScheduleViewModel.DayViewModels[date];
+			dayViewModel.ClearPreference(successCb);
+			dayViewModel.LoadFeedback();
+		});
 
-			periodFeedbackViewModel.LoadFeedback();
-			loadNeighborFeedback();
-			periodFeedbackViewModel.PossibleNightRestViolations();
-		}
+		periodFeedbackViewModel.LoadFeedback();
+		
+		loadNeighborFeedback();
+		periodFeedbackViewModel.PossibleNightRestViolations();
 	}
 
 	function _deletePreferenceTemplate(templateId) {
@@ -177,9 +171,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				postDates.push($(cell).data('mytime-date'));
 			});
 			setSelectedDatesPreferences(postDates, preference, validationErrorCallback);
-			periodFeedbackViewModel.LoadFeedback();
 			getNeighboringDatesFeedbackDataOfSelectedDates(postDates);
-			periodFeedbackViewModel.PossibleNightRestViolations();
 		} else {
 			$('#Preference-body-inner .ui-selected').each(function(index, cell) {
 				var date = $(cell).data('mytime-date');
