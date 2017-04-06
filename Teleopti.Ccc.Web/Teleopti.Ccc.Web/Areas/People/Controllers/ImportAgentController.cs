@@ -65,6 +65,18 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		[Route("AgentJobList"), HttpGet, UnitOfWork]
 		public virtual object GetAgentJobList()
 		{
+			Func<ImportAgentJobResultDetail, string> getErrorMessage = (detail) =>
+			{
+				if (detail.JobResult.HasError())
+				{
+					if (!(detail.ResultDetail?.Message.IsNullOrEmpty() ?? true))
+					{
+						return detail.ResultDetail?.Message;
+					}
+					return Resources.InternalErrorMessage;
+				}
+				return string.Empty;
+			};
 			return _importAgentJobService.GetJobsForLoggedOnBusinessUnit()?.Select(detail => new
 			{
 				JobResultId = detail.JobResult.Id,
@@ -88,7 +100,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				{
 					detail.InputArtifact.Name,
 					detail.InputArtifact.Id
-				}
+				},
+				HasError = detail.JobResult.HasError(),
+				ErrorMessage = getErrorMessage(detail)
 			})
 			.ToList();
 		}
@@ -103,7 +117,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				response.StatusCode = HttpStatusCode.NotFound;
 				return response;
 			}
-		
+
 			response.Content = new ByteArrayContent(artifact.Content);
 			var contentType = artifact.FileType.Equals("xlsx", StringComparison.OrdinalIgnoreCase)
 				? newExcelFileContentType

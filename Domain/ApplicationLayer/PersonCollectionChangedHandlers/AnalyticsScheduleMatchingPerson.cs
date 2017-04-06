@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			{
 				didRun = true;
 				foreach (var personId in @event.PersonIdCollection)
+				{
 					try
 					{
 						_analyticsScheduleRepository.RunWithExceptionHandling(() =>
@@ -58,7 +59,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						PublishFixSchedule(personId, @event);
 						throw;
 					}
-					
+				}
+
 			});
 			if (!didRun)
 				throw new Exception("Another handler is running currently, explicitly failing to retry!");
@@ -102,6 +104,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				return analyticsDate?.DateDate;
 			}).Where(d => d != null).Select(d => d.Value).ToList();
 		}
-		
+
 	}
 }
