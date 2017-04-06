@@ -153,6 +153,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _setPreference(preference,cb) {
 		var promises = [];
+
 		addExtendedPreferenceFormViewModel.ValidationError('');
 
 		var validationErrorCallback = function (data) {
@@ -165,89 +166,19 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		delete preference.SelectedTemplate;
 		delete preference.NewTemplateName;
 
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
-			var postDates = [];
-			$('#Preference-body-inner .ui-selected').each(function(index, cell) {
-				postDates.push($(cell).data('mytime-date'));
+		$('#Preference-body-inner .ui-selected').each(function(index, cell) {
+			var date = $(cell).data('mytime-date');
+			var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
+			promises.push(promise);
+		});
+		if (promises.length !== 0) {
+			$.when.apply(null, promises).done(function() {
+				periodFeedbackViewModel.LoadFeedback();
+				loadNeighborFeedback();
+				periodFeedbackViewModel.PossibleNightRestViolations();
+				if (cb) cb();
 			});
-			setSelectedDatesPreferences(postDates, preference, validationErrorCallback);
-			getNeighboringDatesFeedbackDataOfSelectedDates(postDates);
-		} else {
-			$('#Preference-body-inner .ui-selected').each(function(index, cell) {
-				var date = $(cell).data('mytime-date');
-				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
-				promises.push(promise);
-			});
-			if (promises.length !== 0) {
-				$.when.apply(null, promises).done(function() {
-					periodFeedbackViewModel.LoadFeedback();
-					loadNeighborFeedback();
-					periodFeedbackViewModel.PossibleNightRestViolations();
-					if (cb) cb();
-				});
-			}
 		}
-	}
-
-	function setSelectedDatesPreferences(postDates, preference, validationErrorCallback){
-		preference.Dates = postDates;
-		ajax.Ajax({
-			url: "Preference/ApplyPreferences",
-			dataType: "json",
-			contentType: 'application/json; charset=utf-8',
-			type: 'POST',
-			data: JSON.stringify(preference),
-			success: function(data) {
-				data.forEach(function(d){
-					preferencesAndScheduleViewModel.DayViewModels[d.Date].ReadPreference(d.Value);
-				})
-			},
-			statusCode404: function(jqXHR, textStatus, errorThrown) {
-				var errorMessage = $.parseJSON(jqXHR.responseText);
-				validationErrorCallback(errorMessage);
-			},
-		});
-	}
-
-	function getNeighboringDatesFeedbackDataOfSelectedDates(postDates){
-		var allDates = [];
-		$("#Preference-body-inner").find('li[data-mytime-date]').each(function(index, cell) {
-			allDates.push($(cell).data('mytime-date'));
-		});
-
-		var previousDate, nextDate, getDates = [];
-		allDates.forEach(function(date, index) {
-			if(postDates.indexOf(date) > -1){
-				if (index - 1 > 0)
-					previousDate = allDates[index - 1];
-				if (index + 1 < allDates.length)
-					nextDate = allDates[index + 1]
-
-				if(getDates.indexOf(previousDate) == -1)
-					getDates.push(previousDate);
-				if(getDates.indexOf(nextDate) == -1)
-					getDates.push(nextDate);
-			}
-		});
-
-		ajax.Ajax({
-			url: "PeriodPreferenceFeedback/PeriodFeedback",
-			dataType: "json",
-			contentType: 'application/json; charset=utf-8',
-			type: 'GET',
-			data: {
-				startDate: getDates[0],
-				endDate: getDates[getDates.length -1]
-			},
-			success: function(data) {
-				var updatedDatesData = data.filter(function(d){
-					return getDates.indexOf(d.Date) > -1 || postDates.indexOf(d.Date) > -1;
-				});
-				updatedDatesData.forEach(function(d){
-					preferencesAndScheduleViewModel.DayViewModels[d.Date].AssignFeedbackData(d);
-				});
-			}
-		});
 	}
 
 	function loadNeighborFeedback() {
