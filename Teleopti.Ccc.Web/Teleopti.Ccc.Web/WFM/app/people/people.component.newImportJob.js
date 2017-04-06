@@ -48,7 +48,10 @@
 	};
 
 	Ctrl.prototype.getTemplate = function () {
-		this._peopleService.downloadFileTemplateAgent();
+		this._peopleService.downloadFileTemplateAgent()
+			.then(function (response) {
+				this.parent.saveFile(response, 'agent_template.xls');
+			}.bind(this));
 	};
 
 	var component = {
