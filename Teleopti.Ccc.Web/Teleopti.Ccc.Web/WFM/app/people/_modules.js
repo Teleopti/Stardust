@@ -1,6 +1,7 @@
 ﻿(function() {
 	'use strict';
 	angular.module('wfm.people', [
+		'wfm.notice',
 		'toggleService',
 		'ui.grid.pagination',
 		'ui.grid.resizeColumns',

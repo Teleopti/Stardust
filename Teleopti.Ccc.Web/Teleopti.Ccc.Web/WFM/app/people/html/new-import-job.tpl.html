@@ -1,46 +1,20 @@
-<div ng-if="$ctrl.runImportJobInBackground"
-	ng-switch="$ctrl.page">
-	<div class="view-header">
-		<div class="view-title">
-			<h1 style="text-transform: capitalize;">
-				<i class="mdi mdi-account-multiple"></i>
-				<span>{{ 'ImportAgents'|translate }}</span>
-			</h1>
-		</div>
-	</div>
-	<import-job-list ng-switch-default></import-job-list>
-	<new-import-job ng-switch-when="new"></new-import-job>
-</div>
-
-<div class="panel material-depth-1 wfm-import-agents"
-	ng-if="!$ctrl.runImportJobInBackground">
+<div class="panel material-depth-1 new-import-job">
 	<div class="home" ng-if="!$ctrl.started">
 		<div class="sub-header">
-			<h2>{{ 'ImportAgents'|translate }}</h2>
-			<div class="head-actions panel-menu">
-				<div tabindex="0" class="context-menu card-context">
-					<i class="mdi mdi-dots-vertical"></i>
-					<span class="context-menu-left">
-						<ul class="wfm-list">
-							<li ng-click="$ctrl.getTemplate()"><i class="mdi mdi-download"></i>{{ 'DownloadTemplate'|translate }}</li>
-						</ul>
-					</span>
-				</div>
-			</div>
+			<h2>{{ 'NewImport'|translate }}</h2>
 		</div>
 		<div class="droparea"
-			 ngf-drop
-			 ngf-select
-			 ngf-multiple="false" ngf-keep="false"
-			 ngf-allow-dir="false"
-			 ngf-accept="'.xls,.xlsx'"
-			 ng-model="$ctrl.file" ng-model-rejected="$ctrl.rejFiles">
+				ngf-drop
+				ngf-select
+				ngf-multiple="false" ngf-keep="false"
+				ngf-allow-dir="false"
+				ngf-accept="'.xls,.xlsx'"
+				ng-model="$ctrl.file" ng-model-rejected="$ctrl.rejFiles">
 			{{ 'DragAndDropExcelFilesHereOrClickToUpload' | translate }}
 			<div ng-show="$ctrl.file" class="fileinfo">
 				{{ 'ImportFileNameColon'|translate }} &nbsp; {{$ctrl.file.name}} - {{$ctrl.file.size}}B
 			</div>
 		</div>
-		<!--<p class="dltpl"><a href="" ng-click="$ctrl.getTemplate()">{{ 'DownloadTemplate'|translate }}</a></p>-->
 		<div ng-if="!$ctrl.fetchingFieldOptions" class="wfm-checkbox">
 			<input type="checkbox" id="check1" ng-model="$ctrl.setFallbacks" />
 			<label for="check1">
@@ -73,9 +47,6 @@
 						<tr>
 							<td>Organization</td>
 							<td>
-								<!--<md-select class="md-no-underline" placeholder="{{ 'Organization'|translate }}" ng-model="$ctrl.fallbacks.organization">
-										<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.Teams" ng-value="id">{{::name}}</md-option>
-								</md-select>-->
 								<organization-picker date="$ctrl.now" on-pick="$ctrl.setTeam(teams)" single></organization-picker>
 							</td>
 						</tr>
@@ -147,45 +118,27 @@
 			</div>
 		</div>
 		<div class="footer">
-			<button class="wfm-btn"
-					ng-class="{'wfm-btn-invis-primary': !$ctrl.noFile(), 'wfm-btn-invis-disabled': $ctrl.noFile()}"
-					ng-disabled="$ctrl.noFile()"
-					ng-click="$ctrl.clickImport()">
-				{{ 'Import'|translate }}
-			</button>
-		</div>
-	</div>
-	<div class="importing con-row" ng-if="$ctrl.started">
-		<div class="con-flex" ng-if="!$ctrl.done">
-			<h3>Importing...</h3>
-			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-		</div>
-		<div class="con-flex" ng-if="$ctrl.done">
-			<div ng-show="$ctrl.result && ($ctrl.result.success > 0 || $ctrl.result.isAllSuccess)" class="alert-success notice-spacer">
-				<i class='mdi mdi-thumb-up'></i>{{ $ctrl.getMessage('success', $ctrl.result.success) }}.
+			<div class="left">
+				<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="$ctrl.getTemplate()">{{ 'DownloadTemplate'|translate }}</button>
 			</div>
-			<div ng-show="$ctrl.result && $ctrl.result.warning > 0" class="alert-warning notice-spacer">
-				<i class='mdi mdi-information'></i>{{ $ctrl.getMessage('warning', $ctrl.result.warning) }}.
-			</div>
-			<div ng-show="$ctrl.result && $ctrl.result.failure > 0" class="alert-danger notice-spacer">
-				<i class='mdi mdi-information'></i>{{ $ctrl.getMessage('failure', $ctrl.result.failure) }}.
-			</div>
-
-			<div ng-show="$ctrl.result && ($ctrl.result.warning + $ctrl.result.failure > 0)" class="alert-warning notice-spacer">
-				<i class='mdi mdi-information'></i>{{'PleaseFindTheDownloadedExcelSheetToCheckTheError'|translate}}
-			</div>
-			
-			<div ng-show="$ctrl.fileError" class="alert-warning notice-spacer">
-				<i class='mdi mdi-information'></i>{{ $ctrl.fileError }}.
-			</div>
-
-			<div>
-				<button class="wfm-btn wfm-btn-invis-primary"
-						ng-disabled="!$ctrl.done"
-						ng-click="$ctrl.reset()">
-					{{ 'NewImport'|translate }}
+			<div class="right">
+				<button type="button" class="wfm-btn wfm-btn-invis-default"
+					ng-click="$ctrl.gotoJobList()">
+					{{ 'Cancel'|translate }}
+				</button>
+				<button class="wfm-btn"
+						ng-class="{'wfm-btn-invis-primary': !$ctrl.noFile(), 'wfm-btn-invis-disabled': $ctrl.noFile()}"
+						ng-disabled="$ctrl.noFile()"
+						ng-click="$ctrl.createImportJob()">
+					{{ 'Start'|translate }}
 				</button>
 			</div>
+		</div>
+	</div>
+	<div ng-if="$ctrl.started">
+		<div class="con-flex">
+			<h3>{{ 'Uploading'|translate }}</h3>
+			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		</div>
 	</div>
 </div>

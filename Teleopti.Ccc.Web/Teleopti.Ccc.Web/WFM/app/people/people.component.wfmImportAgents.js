@@ -28,8 +28,8 @@
 	};
 
 	WfmImportAgentsCtrl.prototype.$onInit = function () {
-		this._svc.fetchOptions()
-			.then(this.onFieldOptionsFetched.bind(this));
+		this.optionsPromise = this._svc.fetchOptions();
+		this.optionsPromise.then(this.onFieldOptionsFetched.bind(this));
 	};
 
 	WfmImportAgentsCtrl.prototype.onFieldOptionsFetched = function (options) {
@@ -49,10 +49,8 @@
 		this.started = true;
 		var fields = this.setFallbacks ? this.fallbacks : undefined;
 
-		if (!this.runImportJobInBackground) {
-			this._peopleSvc.uploadAgentFromFile(this.file, fields)
-				.then(this.handleImportResult.bind(this), this.handleImportError.bind(this));
-		} else {}
+		this._peopleSvc.uploadAgentFromFile(this.file, fields)
+			.then(this.handleImportResult.bind(this), this.handleImportError.bind(this));
 	};
 
 	WfmImportAgentsCtrl.prototype.getTemplate = function () {

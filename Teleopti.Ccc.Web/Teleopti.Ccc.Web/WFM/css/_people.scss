@@ -293,18 +293,38 @@
 }
 
 wfm-import-agents {
+	.new-import-job {
+		padding: .4em;
+                max-width: 60em;
+                max-height: 72vh;
+
+                margin-bottom: 2rem;
+
+		transition: all 0.25s ease-in;
+
+		.footer {
+			display: flex;
+			margin-top: .6em;
+
+			.left, .right {
+				flex-basis: 50%;
+			}
+
+			.left {
+				text-align: left;
+			}
+
+			.right {
+				text-align: right;
+			}
+		}
+	}
 	.wfm-import-agents {
                 max-width: 60em;
                 min-height: 600px;
                 height: 72vh;
 
                 margin-bottom: 2rem;
-
-		.home {
-			height: 100%;
-			display: flex;
-			flex-direction: column;
-		}
 
 		.importing {
 			height: 100%;
@@ -314,20 +334,25 @@ wfm-import-agents {
 			text-align: right;
 		}
 
-		.wfm-table {
-			th, td {
-				border: none;
-			}
-
-			th {
-				text-align: start;
-			}
-
-			td {
-				line-height: 2em;
-			}
-		}
         }
+	.home {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+	.wfm-table {
+		th, td {
+			border: none;
+		}
+
+		th {
+			text-align: start;
+		}
+
+		td {
+			line-height: 2em;
+		}
+	}
         .droparea {
                 height: 65px;
                 margin: 0 5px;
@@ -352,4 +377,72 @@ wfm-import-agents {
         .fallbackstable .field {
                 width: 25%;
         }
+
+	import-job-list {
+
+		.button-bar {
+			margin: .4em 0 1em 0;
+
+			button.wfm-btn {
+				margin: 0;
+			}
+
+			button.wfm-btn + button.wfm-btn {
+				margin-left: .6em;
+			}
+		}
+
+		.job-list {
+			max-width: 80em;
+
+			h3 {
+				margin: 0 .8em;
+				font-weight: normal;
+			}
+
+			.header, .item {
+				display: flex;
+				padding: .8em;
+			}
+
+			.header {
+				background-color: #99d6ff;
+			}
+
+			.item + .item {
+				border-top: 1px solid rgba(0, 0, 0, .17);
+			}
+
+			.item {
+				box-sizing: border-box;
+				height: 6em;
+			}
+
+			.list .filename {
+				flex: 4 1 40%;
+			}
+
+			.list .created {
+				flex: 3 1 30%;
+			}
+
+			.list .status {
+				flex: 3 1 30%;
+			}
+
+			.list .status .errors {
+				padding-right: .4em;
+			}
+
+			.list .status .errors + .warnings {
+				border-left: 1px solid rgba(0, 0, 0, .87);
+				padding-left: .4em;
+			}
+
+			.none {
+				text-align: center;
+				padding: .8em;
+			}
+		}
+	}
 }

@@ -1,0 +1,27 @@
+<div class="button-bar">
+	<button type="button" class="wfm-btn wfm-btn-primary" ng-click="$ctrl.newImport()">{{ 'NewImport'|translate }}</button>
+	<button type="button" class="wfm-btn wfm-btn-default" ng-click="$ctrl.refreshList()">{{ 'Refresh'|translate }}</button>
+</div>
+
+<div class="panel material-depth-1 job-list">
+	<div ng-if="$ctrl.jobs.length === 0" class="none">{{ 'No Import Job'|translate }}</div>
+	<div ng-if="$ctrl.jobs.length !== 0" class="list">
+		<div class="header">
+			<div class="filename">Import job</div>
+			<div class="created">Time started</div>
+			<div class="status">Status</div>
+		</div>
+		<div ng-repeat="job in $ctrl.jobs | orderBy:'-startedTime' " class="item">
+			<div class="filename">{{ job.filename }}</div>
+			<div class="created">{{ job.startedTime|date:'short' }}</div>
+			<div class="status">
+				<span>{{ (job.inProgress ? 'InProgress' : 'Done')|translate  }}</span>
+				<br />
+				<span>{{ job.summary() }}</span>
+				<br />
+				<span ng-if="job.failed > 0" class="errors"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact?category=OutputError">{{ job.failed }}&nbsp;Error(s)</a></span>
+				<span ng-if="job.warned > 0" class="warnings"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact?category=OutputWarning">{{ job.warned }}&nbsp;Warning(s)</a></span>
+			</div>
+		</div>
+	</div>
+</div>

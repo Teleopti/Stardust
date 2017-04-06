@@ -3,6 +3,13 @@
 
 	angular.module('wfm.people').service('PeopleService', [
 		'$resource', '$http', function($resource, $http) {
+			var newImportJobUrl = '../api/People/NewImportAgentJob';
+			var uploadAgentUrl = '../api/People/UploadAgent';
+
+			this.newImportJob = function (file, fields) {
+				return submitFileAndFields(newImportJobUrl, file, fields);
+			};
+
 			this.search = $resource('../api/Search/People/Keyword', {
 				keyword: "@searchKey",
 				pageSize: "@pageSize",
@@ -71,8 +78,12 @@
 			};
 
 			this.uploadAgentFromFile = function (file, fields) {
+				return submitFileAndFields(uploadAgentUrl, file, fields);
+			};
+
+			function submitFileAndFields(url, file, fields) {
 				var config = {
-					url: '../api/People/UploadAgent',
+					url: url,
 					method: 'POST',
 					responseType: 'arraybuffer',
 					file: file,
@@ -85,7 +96,7 @@
 				}
 				config = overload(config);
 				return $http(config);
-			};
+			}
 
 			function normalizeFormData(fields) {
 				return {
