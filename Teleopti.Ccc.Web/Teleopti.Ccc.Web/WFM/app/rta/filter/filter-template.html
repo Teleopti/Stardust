@@ -1,7 +1,7 @@
-		<div class="con-row">
-			<div class="con-flex">
-				<div class="con-row rta-filters-container">
-					<span class="con-flex">
+<div class="con-row">
+	<div class="con-flex">
+		<div class="con-row rta-filters-container">
+			<span class="con-flex">
 						<md-autocomplete id="skill-id"
 										 ng-disabled="!vm.skillsLoaded"
 										 ng-attr-skillsLoaded="{{vm.skillsLoaded}}"
@@ -16,16 +16,16 @@
 										 placeholder="{{vm.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
 							<md-item-template>
 								<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-					</md-item-template>
-					<md-not-found>
-						{{'RepViewerNoMoreMatches'|translate}}
-					</md-not-found>
-					</md-autocomplete>
-					<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.clearSelection()">
+			</md-item-template>
+			<md-not-found>
+				{{'RepViewerNoMoreMatches'|translate}}
+			</md-not-found>
+			</md-autocomplete>
+			<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.clearSelection()">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
-					</span>
-					<span class="con-flex">
+			</span>
+			<span class="con-flex">
 						<md-autocomplete id="skill-area-id"
 										ng-disabled="!vm.skillAreasLoaded"
 										ng-attr-skillAreasLoaded="{{vm.skillAreasLoaded}}"
@@ -40,37 +40,60 @@
 										placeholder="{{vm.skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
 							<md-item-template>
 								<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
-					</md-item-template>
-					<md-not-found>
-						{{'RepViewerNoMoreMatches'|translate}}
-					</md-not-found>
-					</md-autocomplete>
-					<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkillArea" ng-click="vm.clearSelection()">
+			</md-item-template>
+			<md-not-found>
+				{{'RepViewerNoMoreMatches'|translate}}
+			</md-not-found>
+			</md-autocomplete>
+			<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkillArea" ng-click="vm.clearSelection()">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
-					</span>
-					<span class="con-flex rta-multiple-selection-panel">
-						<md-input-container class="rta-md-input-container" id="organization" md-no-float>
-							<label class="for-searchTerm"></label>
-							<md-select ng-model="vm.teamsSelected" class="rta-md-select" md-selected-text="vm.selectFieldText" ng-keydown="vm.stopOnKeyDown($event)" multiple md-on-close="vm.goToAgents()">
-								<div class="rta-select-header">
-									<md-select-header>
-										<i class="mdi mdi-magnify"></i>
-										<span ng-if="vm.searchTerm.length > 0" ng-click="vm.clearSearchTerm()" class="pull-right grow-out rta-clear-search cursor-pointer">
-											<i class="mdi mdi-close"></i>
-										</span>
-					<input ng-model="vm.searchTerm" type="search" placeholder="{{'SearchASiteOrTeam' | translate}}" ng-keydown="vm.onSearchOrganization($event)" class="picker-searchbox md-text rta-options-search-input">
-					</md-select-header>
-				</div>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.teamsSelected.length > 0 ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="vm.teamsSelected.length === 0" ng-click="vm.clearOrgSelection()">{{'ClearAll' | translate}}</button>
-				<md-optgroup ng-repeat="site in vm.sites | filter:vm.searchTerm | orderBy:'Name':false:vm.sortByLocaleLanguage" class="rta-option-group">
-					<span ng-click="vm.expandSite(site)" class="rta-options-prepend"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
-					<md-checkbox ng-model="site.isChecked" ng-value="site.Id" ng-class="site.isMarked ? 'rta-marked-checkbox' : ''">{{site.Name}}</md-checkbox>
-					<md-option ng-show="site.isExpanded" ng-selected="vm.teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams | orderBy:'Name':false:vm.sortByLocaleLanguage">{{team.Name}}</md-option>
-				</md-optgroup>
-				</md-select>
-				</md-input-container>
-				</span>
-			</div>
+			</span>
+			<span class="con-flex rta-multiple-selection-panel">
+				<div  class="relative" outside-click="vm.goToAgents()">
+							<input type="text" class="rta-no-cursor" placeholder="Select organization" ng-class="vm.defaultInputText ? 'rta-light-text' : ''" ng-click="vm.openPicker = !vm.openPicker" ng-value="vm.selectFieldText" ng-model="vm.searchTerm"/>
+						<form ng-cloak name="form" class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" novalidate ng-show="vm.openPicker">
+							<div class="sub-header">
+								<!--<h2>Select organization</h2>-->
+								<div>
+								<label for="filter" class="input-icon">
+									<i class="mdi mdi-filter-outline">
+										<input type="text" id="filter" placeholder="Filter organization" ng-model="vm.searchTerm">
+										<md-tooltip>Filter</md-tooltip>
+									</i>
+								</label>
+								</div>
+								<div>
+									<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.siteMarkedOrChecked ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" type="clear" ng-click="vm.clearOrgSelection()">{{'ClearAll' | translate}}</button>
+								</div>
 		</div>
+		<div class="panel">
+			<div ng-repeat="site in vm.sites | filter:vm.searchTerm | orderBy:'Name':false:vm.sortByLocaleLanguage" class="rta-option-group">
+				<!--Site Container-->
+				<div class="wfm-checkbox">
+					<span ng-click="vm.expandSite(site)" class="rta-options-prepend"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
+			<label>
+											<input type="checkbox" ng-click="site.toggle()" ng-checked="site.isChecked" value="{{site.Id}}">
+											<span ng-class="site.isMarked ? 'rta-marked-checkbox wfm-checkbox-toggle' : 'wfm-checkbox-toggle'"></span>
+											<span class="wfm-checkbox-label">{{site.Name}}</span>
+										</label>
+		</div>
+		<!--End of Site Container-->
+
+		<!--Team container-->
+		<div style="margin-left: 50px" class="wfm-checkbox" ng-show="site.isExpanded" ng-repeat="team in site.Teams | orderBy:'Name':false:vm.sortByLocaleLanguage">
+			<label>
+												<input type="checkbox" ng-click="team.toggle()" ng-checked="team.isChecked" value="{{team.Id}}">
+												<span class="wfm-checkbox-toggle"></span>
+												<span class="wfm-checkbox-label">{{team.Name}}</span>
+											</label>
+		</div>
+		<!--End of team container-->
 	</div>
+</div>
+</form>
+</div>
+</span>
+</div>
+</div>
+</div>
