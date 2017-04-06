@@ -19,7 +19,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Wfm.Test
 {
 	[UnitOfWorkTest]
-	[Ignore("Amanda told me to")]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
 	public class SingleSkilledBronzeAgentActivityCasesSameDayTest : SetUpCascadingShifts
 	{
@@ -28,8 +27,6 @@ namespace Teleopti.Wfm.Test
 		public IDataSourceScope DataSourceScope;
 		public ImpersonateSystem ImpersonateSystem;
 		public WithUnitOfWork WithUnitOfWork;
-
-
 		public IAbsenceRepository AbsenceRepository;
 		public IPersonRepository PersonRepository;
 		public IAbsenceRequestIntradayFilter AbsenceRequestIntradayFilter;
