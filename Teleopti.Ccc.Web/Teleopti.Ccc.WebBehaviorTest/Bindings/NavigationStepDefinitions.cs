@@ -382,13 +382,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoPermissions();
 		}
 
-		[When(@"I view new Permissions")]
-		public void WhenIViewNewPermissions()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoPermissionsNew();
-		}
-
 		[When(@"I view Seat map")]
 		public void WhenIViewSeatMap()
 		{
