@@ -13,27 +13,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	{
 		public bool CheckSkillActivities(IWorkShiftRuleSet ruleSet, IEnumerable<ISkill> skillList)
 		{
-			var baseActivities = ruleSet.TemplateGenerator.BaseActivity.ActivityCollection;
-			foreach (var baseActivity in baseActivities.Where(x => x.RequiresSkill))
+			if (ruleSet.TemplateGenerator.BaseActivity.ActivityCollection
+				.Any(baseActivity => !skillList.Any(skill => skill.Activity.Equals(baseActivity))))
 			{
-				if (!skillList.Any(skill => skill.Activity.Equals(baseActivity)))
-					return false;
+				return false;
 			}
 
-			foreach (var workShiftExtender in ruleSet.ExtenderCollection)
-			{
-				var baseExtendedActivities = workShiftExtender.ExtendWithActivity.ActivityCollection;
-				if (workShiftExtender.ExtendWithActivity.RequiresSkill)
-				{
-					foreach (var baseExtendedActivity in baseExtendedActivities)
-					{
-						if (!skillList.Any(skill => skill.Activity.Equals(baseExtendedActivity)))
-							return false;
-					}	
-				}
-			}
-
-			return true;
+			return ruleSet.ExtenderCollection
+				.SelectMany(workShiftExtender => workShiftExtender.ExtendWithActivity.ActivityCollection)
+				.All(baseExtendedActivity => skillList.Any(skill => skill.Activity.Equals(baseExtendedActivity)));
 		}
 	}
 
