@@ -404,15 +404,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = ActivityRepository.Has("_");
 			var masterActivity = new MasterActivity().WithId();
-			masterActivity.RequiresSkill = true;
 			masterActivity.ActivityCollection.Add(activity);
 			var skill = SkillRepository.Has("_", activity);
 			var scenario = ScenarioRepository.Has("_");
-			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(masterActivity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
-			var agent = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), new Team(),  new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);	
+			var agent = PersonRepository.Has(new Contract("_"), contractSchedule, new PartTimePercentage("_"), new Team(),  new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);	
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
@@ -429,29 +427,25 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
 
-		[Ignore("#42795 - REquires skill problem for first block in RuleSEtSkillActivityChecker")]
+		[Ignore("#42795 - Requires skill problem for first block in RuleSEtSkillActivityChecker")]
 		[Toggle(Toggles.ResourcePlanner_MasterActivity_42795)]
-		[TestCase(true, true, ExpectedResult = 0)]
-		[TestCase(true, false, ExpectedResult = 0)] //maybe this should be 5?
-		[TestCase(false, true, ExpectedResult = 0)]
-		[TestCase(false, false, ExpectedResult = 5)]
-		public int ShouldHandleMasterActivity_RequiresSkill_AgentDoesntKnowActivity(bool masterActivityRequiresSkill, bool activityRequiresSkill)
+		[TestCase(true, ExpectedResult = 0)]
+		[TestCase(false, ExpectedResult = 5)] 
+		public int ShouldHandleMasterActivity_RequiresSkill_AgentDoesntKnowActivity(bool masterActivityActivityRequiresSkill)
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var masterActivityActivity = ActivityRepository.Has("_");
-			masterActivityActivity.RequiresSkill = activityRequiresSkill;
+			masterActivityActivity.RequiresSkill = masterActivityActivityRequiresSkill;
 			var masterActivity = new MasterActivity().WithId();
-			masterActivity.RequiresSkill = masterActivityRequiresSkill;
 			masterActivity.ActivityCollection.Add(masterActivityActivity);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("_", activity);
 			var scenario = ScenarioRepository.Has("_");
-			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(masterActivity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
-			var agent = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+			var agent = PersonRepository.Has(new Contract("_"), contractSchedule, new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
@@ -477,17 +471,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var otherActivity = ActivityRepository.Has("_");
 			var masterActivity = new MasterActivity().WithId();
-			masterActivity.RequiresSkill = true;
 			masterActivity.ActivityCollection.Add(otherActivity);
 			var skillMainActivity = SkillRepository.Has("_", activity);
 			var skillExtendedActivity = SkillRepository.Has("_", otherActivity);
 			var scenario = ScenarioRepository.Has("_");
-			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityRelativeStartExtender(masterActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(0, 0, 0, 0, 15)));
-			var agent = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skillMainActivity, skillExtendedActivity);
+			var agent = PersonRepository.Has(new Contract("_"), contractSchedule, new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skillMainActivity, skillExtendedActivity);
 			SkillDayRepository.Has(skillMainActivity.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			SkillDayRepository.Has(skillExtendedActivity.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
