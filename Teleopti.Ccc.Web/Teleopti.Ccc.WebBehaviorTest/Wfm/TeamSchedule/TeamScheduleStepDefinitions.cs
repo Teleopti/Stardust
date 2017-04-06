@@ -349,13 +349,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should be able to see week view toggle button")]
 		public void ThenIShouldBeAbleToSeeWeekViewToggleButton()
 		{
-			Browser.Interactions.AssertAnyContains(".team-schedule .view-changer-wrapper .view-option", "Week");
+			Browser.Interactions.AssertAnyContains(".team-schedule .view-changer-wrapper .view-option", "WEEK");
 		}
 
 		[Then(@"I should be able to see day view toggle button")]
 		public void ThenIShouldBeAbleToSeeDayViewToggleButton()
 		{
-			Browser.Interactions.AssertAnyContains(".team-schedule .view-changer-wrapper .view-option", "Day");
+			Browser.Interactions.AssertAnyContains(".team-schedule .view-changer-wrapper .view-option", "DAY");
 		}
 
 		[When(@"I toggle ""(.*)"" view")]
