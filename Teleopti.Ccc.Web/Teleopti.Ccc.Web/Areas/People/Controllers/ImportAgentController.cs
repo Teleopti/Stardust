@@ -69,15 +69,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			{
 				JobResultId = detail.JobResult.Id,
 				Owner = detail.JobResult.Owner.Name,
-				detail.ResultDetail?.Timestamp,
+				detail.JobResult.Timestamp,
 				detail.SuccessCount,
 				detail.WarningCount,
-				detail.FaildCount,
+				detail.FailedCount,
 				IsWorking = detail.JobResult.IsWorking(),
-				FaildArtifact = detail.FaildArtifact == null ? null : new
+				FailedArtifact = detail.FailedArtifact == null ? null : new
 				{
-					detail.FaildArtifact.Name,
-					detail.FaildArtifact.Id
+					detail.FailedArtifact.Name,
+					detail.FailedArtifact.Id
 				},
 				WarningArtifact = detail.WarningArtifact == null ? null : new
 				{
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			.ToList();
 		}
 
-		[Route("job/{id}/artifact"), HttpGet, UnitOfWork]
+		[Route("job/{id}/artifact/{category}"), HttpGet, UnitOfWork]
 		public virtual HttpResponseMessage DownloadArtifact(Guid id, JobResultArtifactCategory category)
 		{
 			var response = Request.CreateResponse();

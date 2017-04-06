@@ -66,10 +66,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			_agentPersister.Persist(extractedResults);
 
 			processResult.WarningAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Warning).ToList();
-			processResult.FaildAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Error).ToList();
+			processResult.FailedAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Error).ToList();
 			processResult.SucceedAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Info).ToList();
 
-			processResult.DetailLevel = processResult.FaildAgents.IsNullOrEmpty()
+			processResult.DetailLevel = processResult.FailedAgents.IsNullOrEmpty()
 				? DetailLevel.Error
 				: processResult.WarningAgents.IsNullOrEmpty() ? DetailLevel.Warning : DetailLevel.Info;
 

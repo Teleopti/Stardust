@@ -36,10 +36,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public IList<string> ErrorMessages { get; set; }
 		public DetailLevel DetailLevel { get; set; }
 		public List<AgentExtractionResult> WarningAgents { get; internal set; }
-		public List<AgentExtractionResult> FaildAgents { get; internal set; }
+		public List<AgentExtractionResult> FailedAgents { get; internal set; }
 		public List<AgentExtractionResult> SucceedAgents { get; internal set; }
 		public int SuccessCount => SucceedAgents?.Count() ?? 0;
-		public int FaildCount  => FaildAgents?.Count() ?? 0; 
+		public int FailedCount  => FailedAgents?.Count() ?? 0; 
 		public int WarningCount => WarningAgents?.Count() ?? 0;
 	}
 

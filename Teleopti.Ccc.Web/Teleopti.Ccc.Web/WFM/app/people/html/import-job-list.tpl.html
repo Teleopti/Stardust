@@ -19,8 +19,8 @@
 				<br />
 				<span>{{ job.summary() }}</span>
 				<br />
-				<span ng-if="job.failed > 0" class="errors"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact?category=OutputError">{{ job.failed }}&nbsp;Error(s)</a></span>
-				<span ng-if="job.warned > 0" class="warnings"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact?category=OutputWarning">{{ job.warned }}&nbsp;Warning(s)</a></span>
+				<span ng-if="job.failed > 0" class="errors"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputError">{{ job.failed }}&nbsp;Error(s)</a></span>
+				<span ng-if="job.warned > 0" class="warnings"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputWarning">{{ job.warned }}&nbsp;Warning(s)</a></span>
 			</div>
 		</div>
 	</div>

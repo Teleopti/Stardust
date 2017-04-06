@@ -55,7 +55,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		{
 
 			var loggedOnBU = _loggedOnUser.CurrentUser().WorkflowControlSet.BusinessUnit.Id;
-			var resultList = _jobResultRepository.LoadAll().Where(r => r.Owner.WorkflowControlSet.BusinessUnit.Id == loggedOnBU).ToList();
+			var resultList = _jobResultRepository.LoadAll()
+				.Where(r => r.Owner.WorkflowControlSet.BusinessUnit.Id == loggedOnBU)
+				.OrderByDescending(r => r.Timestamp)
+				.ToList();
 
 			return resultList.Select(jr => new ImportAgentJobResultDetail(jr)).ToList();
 		}

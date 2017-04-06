@@ -20,38 +20,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		public IJobResultDetail ResultDetail { get; }
 		public int SuccessCount { get; private set; }
-		public int FaildCount { get; private set; }
+		public int FailedCount { get; private set; }
 		public int WarningCount { get; private set; }
 
 		public JobResultArtifact InputArtifact { get; private set; }
-		public JobResultArtifact FaildArtifact { get; private set; }
+		public JobResultArtifact FailedArtifact { get; private set; }
 		public JobResultArtifact WarningArtifact { get; private set; }
 		public IJobResult JobResult { get; }
 
 		private void SetValues()
 		{
-			if (ResultDetail != null)
+			this.InputArtifact = this.JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.Input);
+			if (ResultDetail != null && JobResult.FinishedOk)
 			{
-
-				this.InputArtifact = this.JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.Input);
-				if (JobResult.FinishedOk)
+				var summaryCount = ResultDetail.GetSummaryCount();
+				if (summaryCount != null)
 				{
-					var summaryCount = ResultDetail.GetSummaryCount();
-					if (summaryCount != null)
+					this.SuccessCount = summaryCount.SuccessCount;
+					this.FailedCount = summaryCount.FailedCount;
+					this.WarningCount = summaryCount.WarningCount;
+					if (this.WarningCount > 0)
 					{
-						this.SuccessCount = summaryCount.SuccessCount;
-						this.FaildCount = summaryCount.FaildCount;
-						this.WarningCount = summaryCount.WarningCount;
-						if (this.WarningCount > 0)
-						{
-							this.WarningArtifact = JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.OutputWarning);
-						}
-						if (this.FaildCount > 0)
-						{
-							this.FaildArtifact = JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.OutputError);
-						}
-
+						this.WarningArtifact = JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.OutputWarning);
 					}
+					if (this.FailedCount > 0)
+					{
+						this.FailedArtifact = JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.OutputError);
+					}
+
 				}
 			}
 		}

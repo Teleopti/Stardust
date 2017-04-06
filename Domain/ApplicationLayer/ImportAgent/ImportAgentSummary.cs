@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	{
 		public static string GetSummaryMessage(this IImportAgentResultCount count)
 		{
-			return $"success count:{count.SuccessCount}, failed count:{count.FaildCount}, warning count:{count.WarningCount}";
+			return $"success count:{count.SuccessCount}, failed count:{count.FailedCount}, warning count:{count.WarningCount}";
 		}
 
 		public static IImportAgentResultCount GetSummaryCount(this IJobResultDetail resultDetail)
@@ -32,19 +32,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public ImportAgentResultCount(int successCount, int faildCount, int warningCount)
 		{
 			this.SuccessCount = successCount;
-			this.FaildCount = faildCount;
+			this.FailedCount = faildCount;
 			this.WarningCount = warningCount;
 		}
 
 		public int SuccessCount { get; private set; }
-		public int FaildCount { get; private set; }
+		public int FailedCount { get; private set; }
 		public int WarningCount { get; private set; }
 	}
 
 	public interface IImportAgentResultCount
 	{
 		int SuccessCount { get; }
-		int FaildCount { get; }
+		int FailedCount { get; }
 		int WarningCount { get; }
 	}
 

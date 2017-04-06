@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = new JobResultDetail(DetailLevel.Info, "success count:2, failed count:6, warning count:1", DateTime.UtcNow, null);
 			var count = result.GetSummaryCount();
 			count.SuccessCount.Should().Be(2);
-			count.FaildCount.Should().Be(6);
+			count.FailedCount.Should().Be(6);
 			count.WarningCount.Should().Be(1);
 		}
 	}

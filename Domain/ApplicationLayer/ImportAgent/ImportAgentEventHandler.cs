@@ -119,9 +119,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			string fileType = inputArtifact.FileType;
 			var isXlsx = fileType.Equals("xlsx", StringComparison.OrdinalIgnoreCase);
 
-			if (!processResult.FaildAgents.IsNullOrEmpty())
+			if (!processResult.FailedAgents.IsNullOrEmpty())
 			{
-				var faildFile = _fileProcessor.CreateFileForInvalidAgents(processResult.FaildAgents, isXlsx);
+				var faildFile = _fileProcessor.CreateFileForInvalidAgents(processResult.FailedAgents, isXlsx);
 
 				jobResult.AddArtifact(new JobResultArtifact(
 					JobResultArtifactCategory.OutputError,

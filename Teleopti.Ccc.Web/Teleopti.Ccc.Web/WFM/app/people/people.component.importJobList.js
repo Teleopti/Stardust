@@ -48,14 +48,14 @@
 	Ctrl.prototype.onJobsFetched = function (data) {
 		this.jobs = data.map(function (j) {
 			var filename = j.InputArtifact ? j.InputArtifact.Name : 'No filename';
-			var job = new Job(j.JobResultId, filename, j.Timestamp, j.IsWorking, j.SuccessCount + j.WarningCount, j.FaildCount, j.WarningCount);
+			var job = new Job(j.JobResultId, filename, j.Timestamp, j.IsWorking, j.SuccessCount + j.WarningCount, j.FailedCount, j.WarningCount);
 
 			if (j.InputArtifact) {
 				job.artifacts.input = new Artifact(j.InputArtifact.Id, j.InputArtifact.Name);
 			}
 
 			if (job.failed > 0) {
-				job.artifacts.errors = new Artifact(j.FaildArtifact.Id, j.FaildArtifact.Name);
+				job.artifacts.errors = new Artifact(j.FailedArtifact.Id, j.FailedArtifact.Name);
 			}
 
 			if (job.warned > 0) {
