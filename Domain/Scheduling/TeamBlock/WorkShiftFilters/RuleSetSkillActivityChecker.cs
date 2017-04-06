@@ -22,10 +22,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			foreach (var workShiftExtender in ruleSet.ExtenderCollection)
 			{
+				var baseExtendedActivities = workShiftExtender.ExtendWithActivity.ActivityCollection;
 				if (workShiftExtender.ExtendWithActivity.RequiresSkill)
 				{
-					if (!skillList.Any(skill => skill.Activity.Equals(workShiftExtender.ExtendWithActivity)))
-						return false;
+					foreach (var baseExtendedActivity in baseExtendedActivities)
+					{
+						if (!skillList.Any(skill => skill.Activity.Equals(baseExtendedActivity)))
+							return false;
+					}	
 				}
 			}
 
