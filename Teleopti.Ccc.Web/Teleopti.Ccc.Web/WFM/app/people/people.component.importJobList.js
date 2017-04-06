@@ -9,7 +9,7 @@
 	function Job(id, filename, startedTime, inProgress, succeeded, failed, warned) {
 		this.id = id;
 		this.filename = filename;
-		this.startedTime = startedTime;
+		this.startedTime = startedTime ? new Date(startedTime) : null;
 		this.inProgress = inProgress;
 		this.succeeded = succeeded;
 		this.failed = failed;
