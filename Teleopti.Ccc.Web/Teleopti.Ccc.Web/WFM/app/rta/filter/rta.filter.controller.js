@@ -38,6 +38,7 @@
 		var skillAreaId = $stateParams.skillAreaId || undefined;
 		var agentsState = "rta.agents";
 		// scoped variables
+		vm.teamsSelected = [];
 		vm.selectFieldText;
 		vm.searchTerm = "";
 		//scoped functions
@@ -140,6 +141,7 @@
 			if (selectedFieldText.length > 0) {
 				vm.selectFieldText = selectedFieldText;
 			}
+			//vm.defaultInputText = vm.selectFieldText === $translate.instant('SelectOrganization');
 		}
 
 		/*********AUTOCOMPLETE*****/

@@ -51,14 +51,14 @@
 			</span>
 			<span class="con-flex rta-multiple-selection-panel">
 				<div  class="relative" outside-click="vm.goToAgents()">
-							<input type="text" placeholder="{{'SelectOrganization'|translate}}" ng-style="vm.openPicker && {'visibility': 'hidden'}" ng-class="vm.defaultInputText ? 'rta-light-text' : ''" ng-click="vm.openPicker = !vm.openPicker" ng-value="vm.selectFieldText" ng-model="vm.searchTerm"/>
+							<input type="text" placeholder="Select organization" ng-style="vm.openPicker && {'visibility': 'hidden'}" ng-class="vm.defaultInputText ? 'rta-light-text' : ''" ng-click="vm.openPicker = !vm.openPicker" ng-value="vm.selectFieldText" ng-model="vm.searchTerm"/>
 						<form ng-cloak name="form" class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" novalidate ng-show="vm.openPicker">
 							<div class="sub-header">
 								<!--<h2>Select organization</h2>-->
 								<div>
 								<label for="filter" class="input-icon">
 									<i class="mdi mdi-filter-outline">
-										<input type="text" id="filter" placeholder="{{'Filter'|translate}}" ng-model="vm.searchTerm">
+										<input type="text" id="filter" placeholder="Filter organization" ng-model="vm.searchTerm">
 										<md-tooltip>Filter</md-tooltip>
 									</i>
 								</label>
