@@ -543,7 +543,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var target = new StaffingThresholdValidatorCascadingSkills();
 			var result = target.GetUnderStaffingPeriodsString(underStaffDict, new CultureInfo(1033), new CultureInfo(1033), timeZone);
 
-			result.Length.Should().Be.EqualTo(2);
+			result.Length.Should().Be.GreaterThan(100);
 		}
 	}
 }
