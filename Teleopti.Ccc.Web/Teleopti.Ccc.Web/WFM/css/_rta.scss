@@ -52,10 +52,6 @@
 
 /////////End of Sites & teams///////////////
 ///////////rta-skills///////////////////////
-.rta-filter-panel {
-	color: $gray087 !important;
-} 
-
 .rta-top-buttons-wrapper {
 	margin-left: $full-padding*4;
 }
@@ -69,70 +65,9 @@
 	}
 }
 
-.rta-option-group {
-	margin: 0 16px 8px;
-
-	md-option {
-		margin-left: $full-padding*6;
-	}
-
-	label {
-		padding: 0 !important;
-	}
-
-	md-checkbox {
-		margin-bottom: 8px;
-	}
+.wfm-checkbox .rta-marked-checkbox:after{
+	background-color: $blue-300;
 }
-
-.rta-select-header {
-	margin: 0 16px;
-}
-
-.rta-options-search-input {
-	outline: 0;
-	padding-bottom: $full-padding*2;
-	padding-top: $full-padding*2;
-	border: 0;
-	height: 100%;
-	width: 86%;
-	background: transparent; //inherit does not work in IE
-}
-
-.rta-select-header,
-.rta-option-group {
-	border-bottom: 1px solid rgba(0,0,0,.06);
-	color: $gray087;
-}
-
-.md-checkbox-enabled[selected] .md-icon,
-.rta-option-group md-checkbox.md-checked .md-icon,
-.rta-option-group md-checkbox.rta-marked-checkbox .md-icon {
-	background-color: $blue-500;
-}
-
-.rta-option-group md-checkbox.rta-marked-checkbox .md-icon {
-	border: none !important;
-}
-
-.rta-md-input-container {
-	width: 100%;
-	margin: $half-padding*3 0 0 0 !important;
-}
-
-.rta-md-input-container {
-	padding: 0;
-
-	.md-select-placeholder, .md-select-value {
-		border-color: $gray-300;
-		min-height: 0;
-		padding: 0;
-	}
-	
-	.md-select-placeholder {
-		color: $text-color-muted !important;
-	}
-} 
 
 // This targets all md select items
 // .md-select-menu-container {
@@ -148,6 +83,19 @@
 }
 
 ///////////End of rta-skills///////////////////////
+///////////filters and picker///////////////////////
+.rta-filter-panel {
+	color: $gray087 !important;
+} 
+
+.wfm-dropdown-panel {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: $white;
+}
 ///////////rta-agents///////////////////////
 
 .rtagridcell {

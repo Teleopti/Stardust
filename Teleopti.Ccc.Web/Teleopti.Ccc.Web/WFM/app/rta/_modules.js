@@ -12,7 +12,8 @@ angular
 		'wfm.notice',
 		'pascalprecht.translate',
 		'currentUserInfoService',
-		'localeLanguageSortingService'
+		'localeLanguageSortingService',
+		'wfm.helpingDirectives'
 	])
 .run(runRtaModule);
 

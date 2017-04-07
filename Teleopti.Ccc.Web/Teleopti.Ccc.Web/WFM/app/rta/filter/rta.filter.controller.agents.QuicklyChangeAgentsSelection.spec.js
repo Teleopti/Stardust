@@ -32,7 +32,6 @@ describe('RtaFilterController', function () {
 		$timeout = _$timeout_;
 
 		scope = $controllerBuilder.setup('RtaFilterController');
-		//$state.current.name = 'rta.agents';
 
 		$fakeBackend.clear();
 		spyOn($state, 'go');
@@ -70,13 +69,12 @@ describe('RtaFilterController', function () {
 		expect(vm.sites[0].Id).toEqual('LondonGuid');
 		expect(vm.sites[0].Name).toEqual('London');
 		expect(vm.sites[0].Teams.length).toEqual(2);
-		expect(vm.sites[0].Teams).toEqual([{
-			Id: '1',
-			Name: 'Team Preferences'
-		}, {
-			Id: '2',
-			Name: 'Team Students'
-		}]);
+		expect(vm.sites[0].Teams[0].Id).toEqual('1');
+		expect(vm.sites[0].Teams[0].Name).toEqual('Team Preferences');
+		expect(vm.sites[0].Teams[0].isChecked).toEqual(false);
+		expect(vm.sites[0].Teams[1].Id).toEqual('2');
+		expect(vm.sites[0].Teams[1].Name).toEqual('Team Students');
+		expect(vm.sites[0].Teams[1].isChecked).toEqual(false);
 	});
 
 	it('should get organization by skill', function () {
@@ -100,13 +98,12 @@ describe('RtaFilterController', function () {
 		expect(vm.sites[0].Id).toEqual('LondonGuid');
 		expect(vm.sites[0].Name).toEqual('London');
 		expect(vm.sites[0].Teams.length).toEqual(2);
-		expect(vm.sites[0].Teams).toEqual([{
-			Id: '1',
-			Name: 'Team Preferences'
-		}, {
-			Id: '2',
-			Name: 'Team Students'
-		}]);
+		expect(vm.sites[0].Teams[0].Id).toEqual('1');
+		expect(vm.sites[0].Teams[0].Name).toEqual('Team Preferences');
+		expect(vm.sites[0].Teams[0].isChecked).toEqual(false);
+		expect(vm.sites[0].Teams[1].Id).toEqual('2');
+		expect(vm.sites[0].Teams[1].Name).toEqual('Team Students');
+		expect(vm.sites[0].Teams[1].isChecked).toEqual(false);
 	});
 
 	it('should get organization by skill area', function () {
@@ -139,13 +136,12 @@ describe('RtaFilterController', function () {
 		expect(vm.sites[0].Id).toEqual('LondonGuid');
 		expect(vm.sites[0].Name).toEqual('London');
 		expect(vm.sites[0].Teams.length).toEqual(2);
-		expect(vm.sites[0].Teams).toEqual([{
-			Id: '1',
-			Name: 'Team Preferences'
-		}, {
-			Id: '2',
-			Name: 'Team Students'
-		}]);
+		expect(vm.sites[0].Teams[0].Id).toEqual('1');
+		expect(vm.sites[0].Teams[0].Name).toEqual('Team Preferences');
+		expect(vm.sites[0].Teams[0].isChecked).toEqual(false);
+		expect(vm.sites[0].Teams[1].Id).toEqual('2');
+		expect(vm.sites[0].Teams[1].Name).toEqual('Team Students');
+		expect(vm.sites[0].Teams[1].isChecked).toEqual(false);
 	});
 
 	it('should select all teams when selecting site', function () {
@@ -161,9 +157,11 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.sites[0].toggle();
 		});
 
+
+		expect(vm.sites[0].isChecked).toBe(true);
 		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
 		expect(vm.sites[0].Teams[1].isChecked).toBe(true);
 	});
@@ -181,12 +179,13 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.sites[0].toggle();
+			vm.sites[0].toggle();
 		});
 
-		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[0])).toBe(false);
-		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[1])).toBe(false);
+		expect(vm.sites[0].isChecked).toBe(false);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(false);
+		expect(vm.sites[0].Teams[1].isChecked).toBe(false);
 	});
 
 	it('should unselect site when unselecting all teams and site was in stateParams', function () {
@@ -203,30 +202,13 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['LondonTeam2'];
+			vm.sites[0].Teams[0].toggle();
 		})
 			.apply(function () {
-				vm.teamsSelected = [];
+				vm.sites[0].Teams[1].toggle();
 			});
 
 		expect(vm.sites[0].isChecked).toBe(false);
-	});
-
-	it('should select team when selecting site', function () {
-		$fakeBackend.withOrganization({
-			Id: 'LondonGuid',
-			Teams: [{
-				Id: 'TeamGuid'
-			}]
-		});
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
-		});
-
-		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
 	});
 
 	it('should only unselect one team when a site was selected', function () {
@@ -242,14 +224,16 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.sites[0].toggle();
 		})
 			.apply(function () {
-				vm.teamsSelected = ['LondonTeam1'];
+				vm.sites[0].Teams[1].toggle();
 			});
 
-		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[0])).toBe(true);
-		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[1])).toBe(false);
+		expect(vm.sites[0].isChecked).toBe(false);
+		expect(vm.sites[0].isMarked).toBe(true);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
+		expect(vm.sites[0].Teams[1].isChecked).toBe(false);
 	});
 
 	it('should go to agents on site', function () {
@@ -263,7 +247,8 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.openPicker = true;
+			vm.sites[0].toggle();
 			vm.goToAgents();
 		});
 
@@ -293,8 +278,9 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
-			vm.forTest_selectSite(vm.sites[1]);
+			vm.openPicker = true;
+			vm.sites[0].toggle();
+			vm.sites[1].toggle();
 			vm.goToAgents();
 		});
 
@@ -320,7 +306,8 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['LondonTeam1'];
+			vm.openPicker = true;
+			vm.sites[0].Teams[0].toggle();
 			vm.goToAgents();
 		});
 
@@ -354,7 +341,9 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['LondonTeam1', 'ParisTeam1'];
+			vm.openPicker = true;
+			vm.sites[0].Teams[0].toggle();
+			vm.sites[1].Teams[0].toggle();
 			vm.goToAgents();
 		});
 
@@ -388,8 +377,9 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
-			vm.teamsSelected = ['ParisTeam1'];
+			vm.openPicker = true;
+			vm.sites[0].toggle();
+			vm.sites[1].Teams[0].toggle();
 			vm.goToAgents();
 		});
 
@@ -423,8 +413,10 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['LondonTeam1', 'ParisTeam1'];
-			vm.teamsSelected = ['ParisTeam1'];
+			vm.openPicker = true;
+			vm.sites[0].Teams[0].toggle();
+			vm.sites[0].Teams[0].toggle();
+			vm.sites[1].Teams[0].toggle();
 			vm.goToAgents();
 		});
 
@@ -454,9 +446,10 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
-			vm.forTest_selectSite(vm.sites[1]);
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.openPicker = true;
+			vm.sites[0].toggle();
+			vm.sites[1].toggle();
+			vm.sites[0].toggle();
 		})
 			.apply(function () {
 				vm.goToAgents();
@@ -486,7 +479,7 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.sites[0].toggle();
 		});
 
 		expect(vm.sites[0].isChecked).toBe(false);
@@ -506,12 +499,13 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['ParisTeam1'];
+			vm.sites[0].toggle();
+			vm.sites[0].Teams[0].toggle();
 		});
 
-		expect(vm.sites[0].isChecked).not.toBe(true);
-		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
-		expect(vm.sites[0].Teams[1].isChecked).toBe(false);
+		expect(vm.sites[0].isMarked).toBe(true);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(false);
+		expect(vm.sites[0].Teams[1].isChecked).toBe(true);
 	});
 
 
@@ -526,11 +520,9 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.sites[0].toggle();
+			vm.sites[0].toggle();
 		})
-			.apply(function () {
-				vm.forTest_selectSite(vm.sites[0]);
-			})
 			.apply(function () {
 				vm.goToAgents();
 			});
@@ -552,8 +544,8 @@ describe('RtaFilterController', function () {
 		vm = $controllerBuilder.createController().vm;
 
 		expect(vm.sites[0].isChecked).toEqual(true);
-		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[0])).toEqual(true);
-		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[1])).toEqual(true);
+		expect(vm.sites[0].Teams[0].isChecked).toEqual(true);
+		expect(vm.sites[0].Teams[1].isChecked).toEqual(true);
 	});
 
 	it('should unselect site when preselected and team is unselected', function () {
@@ -571,10 +563,11 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['ParisTeam2'];
+			vm.sites[0].Teams[0].toggle();
 		});
 
-		expect(vm.sites[0].isChecked).not.toEqual(true);
+		expect(vm.sites[0].isChecked).toEqual(false);
+		expect(vm.sites[0].isMarked).toEqual(true);
 		expect(vm.sites[0].Teams[0].isChecked).toEqual(false);
 		expect(vm.sites[0].Teams[1].isChecked).toEqual(true);
 	});
@@ -593,13 +586,12 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.sites[0].toggle();
+			vm.sites[0].Teams[0].toggle();
 		})
-			.apply(function () {
-				vm.teamsSelected = ['ParisTeam2'];
-			});
 
 		expect(vm.sites[0].isChecked).toEqual(false);
+		expect(vm.sites[0].isMarked).toEqual(true);
 		expect(vm.sites[0].Teams[0].isChecked).toEqual(false);
 		expect(vm.sites[0].Teams[1].isChecked).toEqual(true);
 	});
@@ -622,11 +614,10 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.openPicker = true;
+			vm.sites[0].toggle();
+			vm.goToAgents();
 		})
-			.apply(function () {
-				vm.goToAgents();
-			});
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['LondonGuid', 'ParisGuid'],
 			teamIds: []
@@ -664,7 +655,8 @@ describe('RtaFilterController', function () {
 
 		vm = $controllerBuilder.createController().vm;
 
-		expect(vm.sites[0].isChecked).not.toBe(true);
+		expect(vm.sites[0].isChecked).toBe(false);
+		expect(vm.sites[0].isMarked).toBe(true);
 		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
 	});
 
@@ -710,8 +702,8 @@ describe('RtaFilterController', function () {
 		vm = $controllerBuilder.createController().vm;
 
 		expect(vm.sites[0].isChecked).toBe(true);
-		expect(vm.teamChecked(vm.sites[0], vm.sites[0].Teams[0])).toBe(true);
-		expect(vm.sites[1].isChecked).not.toBe(true);
+		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
+		expect(vm.sites[1].isChecked).toBe(false);
 		expect(vm.sites[1].Teams[0].isChecked).toBe(true);
 	});
 
@@ -735,11 +727,11 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['LondonTeam1', 'ParisTeam2'];
+			vm.openPicker = true;
+			vm.sites[0].Teams[0].toggle();
+			vm.sites[1].Teams[0].toggle();
+			vm.goToAgents();
 		})
-			.apply(function () {
-				vm.goToAgents();
-			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['LondonGuid'],
@@ -764,12 +756,13 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
+			vm.sites[0].Teams[0].toggle();
+			vm.sites[0].Teams[1].toggle();
 		});
 		expect(vm.sites[0].isChecked).toEqual(true);
 	});
 
-	it('should not select site when some teams are selected', function () {
+	it('should mark site when some teams are selected', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
 			Teams: [{
@@ -782,12 +775,13 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['LondonTeam1'];
+			vm.sites[0].Teams[0].toggle();
 		});
 
+		expect(vm.sites[0].isMarked).toBe(true);
 		expect(vm.sites[0].Teams[0].isChecked).toBe(true);
-		expect(vm.sites[0].Teams[1].isChecked).not.toBe(true);
-		expect(vm.sites[0].isChecked).not.toBe(true);
+		expect(vm.sites[0].Teams[1].isChecked).toBe(false);
+		expect(vm.sites[0].isChecked).toBe(false);
 	});
 
 	it('should unselect site when all teams are unselected', function () {
@@ -804,14 +798,10 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.sites[0].toggle();
+			vm.sites[0].Teams[0].toggle();
+			vm.sites[0].Teams[1].toggle();
 		})
-			.apply(function () {
-				vm.teamsSelected = ['ParisTeam2'];
-			})
-			.apply(function () {
-				vm.teamsSelected = [];
-			});
 
 		expect(vm.sites[0].isChecked).toBe(false);
 	});
@@ -830,11 +820,12 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
+			vm.openPicker = true;
+			vm.sites[0].Teams[0].toggle();
+			vm.sites[0].Teams[1].toggle();
+			vm.goToAgents();
+
 		})
-			.apply(function () {
-				vm.goToAgents();
-			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['ParisGuid'],
@@ -860,11 +851,10 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = ['ParisTeam1'];
+			vm.openPicker = true;
+			vm.sites[0].Teams[1].toggle();
+			vm.goToAgents();
 		})
-			.apply(function () {
-				vm.goToAgents();
-			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: [],
@@ -896,12 +886,11 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.teamsSelected = [];
-			vm.forTest_selectSite(vm.sites[0]);
+			vm.openPicker = true;
+			vm.sites[1].Teams[1].toggle();
+			vm.sites[0].toggle();
+			vm.goToAgents();
 		})
-			.apply(function () {
-				vm.goToAgents();
-			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: [],
@@ -923,11 +912,9 @@ describe('RtaFilterController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			vm.forTest_selectSite(vm.sites[0])
+			vm.sites[0].toggle();
+			vm.sites[0].Teams[0].toggle();
 		})
-			.apply(function () {
-				vm.teamsSelected = [];
-			});
 
 		expect(vm.sites[0].isChecked).toBe(false);
 	});
