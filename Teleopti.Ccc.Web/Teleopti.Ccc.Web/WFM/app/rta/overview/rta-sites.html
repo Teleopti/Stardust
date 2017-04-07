@@ -14,14 +14,12 @@
 			</div>
 		</div>
 		<div class="fab-wrapper">
-			<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': vm.selectedItemIds.length < 1, 'grow-out': vm.selectedItemIds.length > 0}"
-			 ng-click="vm.openSelectedItems()">
+			<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': vm.selectedItemIds.length < 1, 'grow-out': vm.selectedItemIds.length > 0}" ng-click="vm.openSelectedItems()">
 				<i class="mdi mdi-arrow-right"></i>
 				<md-tooltip>{{'Open'|translate}}</md-tooltip>
 			</button>
 		</div>
 	</div>
-
 
 	<div class="panel material-depth-1 rta-filter-panel" ng-include="'app/rta/filter/filter-template.html'" ng-controller="RtaFilterController as vm"></div>
 

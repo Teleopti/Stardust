@@ -2671,7 +2671,9 @@
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestFailValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestPassValidator.cs" />
     <Compile Include="Sikuli\Helpers\ValidatorHelperMethods.cs" />
-    <Compile Include="SmartParts\ExtendedSmartPartBase.cs" />
+    <Compile Include="SmartParts\ExtendedSmartPartBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="SmartParts\ExtendedSmartPartBase.Designer.cs">
       <DependentUpon>ExtendedSmartPartBase.cs</DependentUpon>
     </Compile>
@@ -2723,7 +2725,9 @@
       <DependentUpon>ValidationSmartPart.cs</DependentUpon>
     </Compile>
     <Compile Include="SmartParts\GridSizeType.cs" />
-    <Compile Include="SmartParts\GridWorkspace.cs" />
+    <Compile Include="SmartParts\GridWorkspace.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="SmartParts\GridWorkspace.Designer.cs">
       <DependentUpon>GridWorkspace.cs</DependentUpon>
     </Compile>
@@ -2757,7 +2761,9 @@
     <Compile Include="SmartParts\Payroll\StatusWorkingView.xaml.cs">
       <DependentUpon>StatusWorkingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SmartParts\SmartPartBase.cs" />
+    <Compile Include="SmartParts\SmartPartBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="SmartParts\SmartPartBase.designer.cs">
       <DependentUpon>SmartPartBase.cs</DependentUpon>
     </Compile>
