@@ -35,5 +35,9 @@ begin
 	print 'ERROR: Log DB with name ='+@logdb_name+' does not exist on the server.'
 end
 
+--#43670 if the ETL Nightly too slow (e.g. 5h with larger customers) the Queue and Agent statistics will blocked for that time.
+--WORKAROUND: Make sure to update the Analytics DB name and un-commment the next line between version bythat the TLS will execute the "ETL" for you
+--exec TeleoptiAnalytics.dbo.p_update_stat_etl @log_object_id
+
 GO
 
