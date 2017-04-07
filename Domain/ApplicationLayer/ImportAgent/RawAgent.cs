@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public string Role { get; set; }
 		
 		[Order(6)]
-		public DateTime StartDate { get; set; }
+		public DateTime? StartDate { get; set; }
 		[Order(7)]
 		public string Organization { get; set; }
 		[Order(8)]
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		[Order(14)]
 		public string SchedulePeriodType { get; set; }
 		[Order(15)]
-		public double SchedulePeriodLength { get; set; }
+		public double? SchedulePeriodLength { get; set; }
 		
 	}
 }

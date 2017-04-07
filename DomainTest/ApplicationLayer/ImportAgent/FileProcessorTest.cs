@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 		}
 
-		private static string warningMessage(string column)
+		private static string warningMessage(string column, object value)
 		{
-			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, column);
+			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, column, value);
 		}
 
 		[Test, Ignore("file parsing")]
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(sheet);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "SchedulePeriodLength", "")).Should().Be.True();
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.ColumnCanNotBeEmpty, "SchedulePeriodLength")).Should().Be.True();
 		}
 
 		[Test]
@@ -478,7 +478,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { SchedulePeriodType = defaultSchedulePeriodType });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodType"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodType", defaultSchedulePeriodType));
 			result.Single().Agent.SchedulePeriodType.Should().Be.EqualTo(SchedulePeriodType.Week);
 		}
 
@@ -496,7 +496,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { SchedulePeriodType = defaultSchedulePeriodType });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodType"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodType", defaultSchedulePeriodType));
 			result.Single().Agent.SchedulePeriodType.Should().Be.EqualTo(SchedulePeriodType.Week);
 		}
 
@@ -517,7 +517,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { ExternalLogonId = defaultExternalLogon });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon", externalLogon.AcdLogOnName));
 			result.Single().Agent.ExternalLogons.Single().Should().Be.EqualTo(externalLogon);
 		}
 
@@ -538,7 +538,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { ExternalLogonId = defaultExternalLogon });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon", ""));
 			result.Single().Agent.ExternalLogons.Count.Should().Be(0);
 		}
 
@@ -559,7 +559,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { ShiftBagId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ShiftBag"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ShiftBag", ruleSetBag.Description));
 			result.Single().Agent.RuleSetBag.Should().Be.EqualTo(ruleSetBag);
 		}
 
@@ -581,7 +581,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { ShiftBagId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ShiftBag"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ShiftBag", ruleSetBag.Description));
 			result.Single().Agent.RuleSetBag.Should().Be.EqualTo(ruleSetBag);
 		}
 
@@ -589,7 +589,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public void WithDefaultsProvidedShouldBeAbleToFixEmptyPartTimePercentage()
 		{
 			var rawAgent = setupProviderData();
-			var defaultEntity = PartTimePercentageFactory.CreatePartTimePercentage("default");
+			var defaultEntity = PartTimePercentageFactory.CreatePartTimePercentage("default").WithId();
 			PartTimePercentageRepository.Add(defaultEntity);
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
@@ -603,7 +603,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { PartTimePercentageId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage", defaultEntity.Description.Name));
 			result.Single().Agent.PartTimePercentage.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -624,7 +624,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { PartTimePercentageId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage", defaultEntity.Description.Name));
 			result.Single().Agent.PartTimePercentage.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -647,7 +647,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { ContractScheduleId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ContractSchedule"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ContractSchedule", defaultEntity.Description));
 			result.Single().Agent.ContractSchedule.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -668,7 +668,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { ContractScheduleId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ContractSchedule"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ContractSchedule", defaultEntity.Description));
 			result.Single().Agent.ContractSchedule.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -691,7 +691,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { ContractId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Contract"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Contract), defaultEntity.Description.Name));
 			result.Single().Agent.Contract.Should().Be.EqualTo(defaultEntity);
 		}
 		[Test]
@@ -711,7 +711,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { ContractId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Contract"));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Contract", defaultEntity.Description));
 			result.Single().Agent.Contract.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -733,7 +733,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Role)));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Role), defaultEntity.Name));
 			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -754,7 +754,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Role)));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Role), defaultEntity.Name));
 			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -764,6 +764,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var rawAgent = setupProviderData();
 
 			var defaultEntity = TeamFactory.CreateSimpleTeam("default").WithId();
+			var site = SiteFactory.CreateSimpleSite("site default").WithId();
+			defaultEntity.Site = site;
 			TeamRepository.Add(defaultEntity);
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
@@ -776,7 +778,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { TeamId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Organization)));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Organization), defaultEntity.SiteAndTeam));
 			result.Single().Agent.Team.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -788,6 +790,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultEntity = TeamFactory.CreateSimpleTeam("default").WithId();
 			TeamRepository.Add(defaultEntity);
+			var site = SiteFactory.CreateSimpleSite("site default").WithId();
+			defaultEntity.Site = site;
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
@@ -797,7 +801,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { TeamId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Organization)));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Organization), defaultEntity.SiteAndTeam));
 			result.Single().Agent.Team.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -819,7 +823,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { SkillIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Skill)));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Skill), defaultEntity.Name));
 			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -840,7 +844,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { SkillIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Skill)));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Skill), defaultEntity.Name));
 			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -860,7 +864,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { StartDate = defaultValue.ToShortDateString() });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.StartDate)));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.StartDate), defaultValue.ToShortDateString()));
 			result.Single().Agent.StartDate.Should().Be.EqualTo(defaultValue);
 		}
 
@@ -879,7 +883,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), new ImportAgentDefaults { SchedulePeriodLength = "4" });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.SchedulePeriodLength)));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.SchedulePeriodLength), defaultValue));
 			result.Single().Agent.SchedulePeriodLength.Should().Be.EqualTo(defaultValue);
 		}
 
@@ -923,7 +927,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			ContractRepository.Add(contract);
 			var contractSchedule = ContractScheduleFactory.CreateContractSchedule("test schedule");
 			ContractScheduleRepository.Add(contractSchedule);
-			var partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("partTime");
+			var partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("partTime").WithId();
 			PartTimePercentageRepository.Add(partTimePercentage);
 			var shiftBag = new RuleSetBag(WorkShiftRuleSetFactory.Create());
 			shiftBag.Description = new Description("test");
@@ -953,7 +957,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		private string getMissingColumnsErrorMsg(params string[] excepts)
 		{
 
-			var colsMsg= string.Join(", ", new AgentFileTemplate().ColumnHeaderNames.Except(excepts));
+			var colsMsg = string.Join(", ", new AgentFileTemplate().ColumnHeaderNames.Except(excepts));
 			return string.Format(Resources.MissingColumnX, colsMsg);
 
 		}

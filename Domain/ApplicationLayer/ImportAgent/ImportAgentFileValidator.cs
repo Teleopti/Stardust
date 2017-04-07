@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
@@ -166,7 +167,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 		}
 
-		public AgentDataModel MapRawData(RawAgent raw,  out Feedback feedback)
+		public AgentDataModel MapRawData(RawAgent raw, out Feedback feedback)
 		{
 			var agentInfo = new AgentDataModel();
 			feedback = new Feedback();
@@ -188,30 +189,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			feedback.Merge(parsePartTimePercentage(raw.PartTimePercentage, agentInfo));
 			feedback.Merge(parseRuleSetBag(raw.ShiftBag, agentInfo));
 			feedback.Merge(parseSchedulePeriodType(raw.SchedulePeriodType, agentInfo));
-			feedback.Merge(parseSchedulePeriodLength((int)raw.SchedulePeriodLength, agentInfo));
+			feedback.Merge(parseSchedulePeriodLength(raw.SchedulePeriodLength, agentInfo));
 
 			return agentInfo;
 		}
 
-		private Feedback parseStartDate(DateTime startDate, AgentDataModel agentInfo)
+		private Feedback parseStartDate(DateTime? startDate, AgentDataModel agentInfo)
 		{
 			var feedback = new Feedback();
-			if (startDate == DateTime.MinValue || startDate == DateTime.MaxValue)
+			if (!startDate.HasValue)
 			{
 				if (_defaultValues != null && _defaultValues.StartDate.HasValue)
 				{
 					agentInfo.StartDate = _defaultValues.StartDate.Value;
-					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.StartDate)));
+					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.StartDate), agentInfo.StartDate.ToShortDateString()));
 					return feedback;
 				}
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.StartDate), ""));
+				feedback.ErrorMessages.Add(string.Format(Resources.ColumnCanNotBeEmpty, nameof(RawAgent.StartDate)));
 			}
 			else
 			{
-				agentInfo.StartDate = new DateOnly(startDate);
+				agentInfo.StartDate = new DateOnly(startDate.Value);
 			}
 			return feedback;
 		}
+
 
 		private Feedback parseFirstnameAndLastname(string rawFirstname, string rawLastname,
 			AgentDataModel agentInfo)
@@ -296,22 +298,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			return f;
 		}
 
-		private Feedback parseSchedulePeriodLength(int periodLength, AgentDataModel agentInfo)
+		private Feedback parseSchedulePeriodLength(double? periodLength, AgentDataModel agentInfo)
 		{
 			var feedback = new Feedback();
-			if (periodLength == 0)
+			if (!periodLength.HasValue)
 			{
 				if (_defaultValues?.SchedulePeriodLength != null)
 				{
 					agentInfo.SchedulePeriodLength = _defaultValues.SchedulePeriodLength.Value;
-					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.SchedulePeriodLength)));
+					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.SchedulePeriodLength), agentInfo.SchedulePeriodLength));
 					return feedback;
 				}
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.SchedulePeriodLength), ""));
+				feedback.ErrorMessages.Add(String.Format(Resources.ColumnCanNotBeEmpty, nameof(RawAgent.SchedulePeriodLength)));
 			}
 			else
 			{
-				agentInfo.SchedulePeriodLength = periodLength;
+				agentInfo.SchedulePeriodLength = (int)periodLength.Value;
 			}
 
 			return feedback;
@@ -331,14 +333,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			if (_defaultValues?.SchedulePeriodType != null)
 			{
 				agentInfo.SchedulePeriodType = _defaultValues.SchedulePeriodType.Value;
-				feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.SchedulePeriodType)));
+				feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.SchedulePeriodType), agentInfo.SchedulePeriodType));
 				return feedback;
 			}
 
 			var avaliableSchedulePeriodTypeValues = String.Join(", ", EnumExtensions
 															.GetValues(SchedulePeriodType.ChineseMonth)
 															.Select(t => t.ToString()));
-			feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.SchedulePeriodType), string.Format(Resources.OnlySupport, avaliableSchedulePeriodTypeValues)));
+			feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.SchedulePeriodType), string.Format(Resources.OnlySupport, avaliableSchedulePeriodTypeValues)));
 			return feedback;
 		}
 
@@ -370,17 +372,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				{
 					if (_defaultValues.ExternalLogon != null)
 						agentInfo.ExternalLogons.Add(_defaultValues.ExternalLogon);
-					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.ExternalLogon)));
+					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.ExternalLogon), _defaultValues.ExternalLogon?.AcdLogOnName));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.ExternalLogon), rawExternalLogons));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.ExternalLogon), rawExternalLogons));
 				return feedback;
 			}
 
 			if (invalidLogons.Any())
 			{
-				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.ExternalLogon), string.Join(",", invalidLogons)));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.ExternalLogon), string.Join(",", invalidLogons)));
 			}
 			return feedback;
 		}
@@ -394,11 +396,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (_defaultValues?.RuleSetBag != null)
 				{
 					agentInfo.RuleSetBag = _defaultValues.RuleSetBag;
-					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.ShiftBag)));
+					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.ShiftBag), agentInfo.RuleSetBag.Description.Name));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.ShiftBag), rawShiftBag));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.ShiftBag), rawShiftBag));
 				return feedback;
 			}
 
@@ -415,11 +417,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (_defaultValues?.PartTimePercentage != null)
 				{
 					agentInfo.PartTimePercentage = _defaultValues.PartTimePercentage;
-					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.PartTimePercentage)));
+					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.PartTimePercentage), _defaultValues.PartTimePercentage.Description.Name));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.PartTimePercentage), rawPartTimePercentage));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.PartTimePercentage), rawPartTimePercentage));
 				return feedback;
 			}
 
@@ -436,11 +438,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (_defaultValues?.ContractSchedule != null)
 				{
 					agentInfo.ContractSchedule = _defaultValues.ContractSchedule;
-					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.ContractSchedule)));
+					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.ContractSchedule), agentInfo.ContractSchedule.Description.Name));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.ContractSchedule), rawContractSchedule));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.ContractSchedule), rawContractSchedule));
 				return feedback;
 			}
 
@@ -457,11 +459,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (_defaultValues?.Contract != null)
 				{
 					agentInfo.Contract = _defaultValues.Contract;
-					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.Contract)));
+					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.Contract), agentInfo.Contract.Description.Name));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Contract), rawContract));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Contract), rawContract));
 				return feedback;
 			}
 
@@ -493,17 +495,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (_defaultValues != null && _defaultValues.Roles.Any())
 				{
 					agent.Roles.AddRange(_defaultValues.Roles);
-					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.Role)));
+					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.Role), _defaultValues.Roles, (role) => role.Name));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Role), string.Join(",", invalidRoles)));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Role), string.Join(",", invalidRoles)));
 				return feedback;
 			}
 
 			if (invalidRoles.Any())
 			{
-				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Role), string.Join(",", invalidRoles)));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Role), string.Join(",", invalidRoles)));
 			}
 
 			return feedback;
@@ -530,11 +532,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (_defaultValues?.Team != null)
 				{
 					agent.Team = _defaultValues.Team;
-					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.Organization)));
+					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.Organization), agent.Team?.SiteAndTeam));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Organization), rawOrganizationString));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Organization), rawOrganizationString));
 				return feedback;
 			}
 
@@ -567,25 +569,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (_defaultValues != null && _defaultValues.Skills.Any())
 				{
 					agent.Skills.AddRange(_defaultValues.Skills);
-					feedback.WarningMessages.Add(warningMessage(nameof(RawAgent.Skill)));
+					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.Skill), _defaultValues.Skills, skill => skill.Name));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Skill), string.Join(",", invalidSkills)));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Skill), string.Join(",", invalidSkills)));
 				return feedback;
 			}
 
 			if (invalidSkills.Any())
 			{
-				feedback.WarningMessages.Add(string.Format(Resources.InvalidColumn, nameof(RawAgent.Skill), string.Join(",", invalidSkills)));
+				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Skill), string.Join(",", invalidSkills)));
 			}
 
 			return feedback;
 		}
 
-		private static string warningMessage(string column)
+		private static string getWarningMessage<T>(string column, T value)
 		{
-			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, column);
+			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, column, value);
+		}
+
+		private static string getWarningMessage<T>(string column, IEnumerable<T> value, Func<T, string> getRealValue)
+		{
+			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, column, string.Join(", ", value.Select(obj => getRealValue(obj))));
+		}
+
+		private static string getInvalidColumnMessage<T>(string column, T value)
+		{
+			return string.Format(Resources.InvalidColumn, column, value);
 		}
 
 		private class defaultAgentDataModel

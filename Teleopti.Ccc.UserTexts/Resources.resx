@@ -15639,7 +15639,7 @@ Do you want to participate?</value>
     <value>Enter a number</value>
   </data>
   <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
-    <value>{0} fixed with fallback value</value>
+    <value>{0} fixed with fallback value {1}</value>
     <comment>Warning message template in fixing an invalid field with a pre-set fallback value. </comment>
   </data>
   <data name="NewImport" xml:space="preserve">
@@ -15715,6 +15715,10 @@ Do you want to participate?</value>
   <data name="NoInput" xml:space="preserve">
     <value>No input</value>
     <comment>No input in an import agent job</comment>
+  </data>
+  <data name="ColumnCanNotBeEmpty" xml:space="preserve">
+    <value>Column {0} cannot be empty</value>
+    <comment>Column Firstname cannot be empty</comment>
   </data>
   <data name="ANewImportJobHasBeenCreatedFor" xml:space="preserve">
     <value>A new import job has been created for '{0}'</value>

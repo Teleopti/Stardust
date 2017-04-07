@@ -115,8 +115,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				row.CreateCell(ColumnHeaderMap["Role"]).SetCellValue(agent.Role);
 
 				var startDateCell = row.CreateCell(ColumnHeaderMap["StartDate"]);
-
-				startDateCell.SetCellValue(agent.StartDate);
+				if (agent.StartDate.HasValue)
+				{
+					startDateCell.SetCellValue(agent.StartDate.Value);
+				}
 				row.CreateCell(ColumnHeaderMap["Site/Team"]).SetCellValue(agent.Organization);
 				row.CreateCell(ColumnHeaderMap["Skill"]).SetCellValue(agent.Skill);
 				row.CreateCell(ColumnHeaderMap["ExternalLogon"]).SetCellValue(agent.ExternalLogon);
@@ -127,8 +129,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				row.CreateCell(ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(agent.SchedulePeriodType);
 
 				var schedulePeriodLengthCell = row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]);
-
-				schedulePeriodLengthCell.SetCellValue(agent.SchedulePeriodLength);
+				if (agent.SchedulePeriodLength.HasValue)
+				{
+					schedulePeriodLengthCell.SetCellValue(agent.SchedulePeriodLength.Value);
+				}
 			}
 			returnedFile.Write(ms);
 

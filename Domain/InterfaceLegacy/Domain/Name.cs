@@ -1,4 +1,6 @@
 
+using System.Globalization;
+
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
@@ -77,7 +79,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
                 return string.Concat(LastName, ", ", FirstName);
         }
 
-        #region IEquatable<Name> Members
+
+	    #region IEquatable<Name> Members
 
         ///<summary>
         ///Indicates whether the current object is equal to another object of the same type.

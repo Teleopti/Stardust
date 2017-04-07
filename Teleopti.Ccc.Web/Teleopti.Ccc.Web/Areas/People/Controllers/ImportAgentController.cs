@@ -18,6 +18,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using System.IO;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
@@ -32,18 +33,20 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private const string newExcelFileContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 		private const string oldExcelFileContentType = "application/vnd.ms-excel";
 		private readonly IImportAgentJobService _importAgentJobService;
+		private readonly IPersonNameProvider _personNameProvider;
 
 		public ImportAgentController(IImportAgentDataProvider importAgentDataProvider,
 			IFileProcessor fileProcessor,
 			IMultipartHttpContentExtractor multipartHttpContentExtractor,
-			IImportAgentJobService importAgentJobService
+			IImportAgentJobService importAgentJobService,
+			IPersonNameProvider personNameProvider
 			)
 		{
 			_importAgentDataProvider = importAgentDataProvider;
 			_fileProcessor = fileProcessor;
 			_multipartHttpContentExtractor = multipartHttpContentExtractor;
 			_importAgentJobService = importAgentJobService;
-
+			_personNameProvider = personNameProvider;
 		}
 
 		[UnitOfWork, Route("GetImportAgentSettingsData"), HttpGet]
@@ -65,22 +68,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		[Route("AgentJobList"), HttpGet, UnitOfWork]
 		public virtual object GetAgentJobList()
 		{
-			Func<ImportAgentJobResultDetail, string> getErrorMessage = (detail) =>
-			{
-				if (detail.JobResult.HasError())
-				{
-					if (!(detail.ResultDetail?.Message.IsNullOrEmpty() ?? true))
-					{
-						return detail.ResultDetail?.Message;
-					}
-					return Resources.InternalErrorMessage;
-				}
-				return string.Empty;
-			};
 			return _importAgentJobService.GetJobsForLoggedOnBusinessUnit()?.Select(detail => new
 			{
 				JobResultId = detail.JobResult.Id,
-				Owner = detail.JobResult.Owner.Name,
+				Owner = _personNameProvider.BuildNameFromSetting(detail.JobResult.Owner.Name),
 				detail.JobResult.Timestamp,
 				detail.SuccessCount,
 				detail.WarningCount,
@@ -101,8 +92,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 					detail.InputArtifact.Name,
 					detail.InputArtifact.Id
 				},
-				HasError = detail.JobResult.HasError(),
-				ErrorMessage = getErrorMessage(detail)
+				detail.HasError,
+				ErrorMessage = detail.HasError ? detail.ResultDetail?.Message ?? Resources.InternalErrorMessage : string.Empty
 			})
 			.ToList();
 		}

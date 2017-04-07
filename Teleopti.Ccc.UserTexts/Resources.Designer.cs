@@ -6174,6 +6174,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Column {0} cannot be empty.
+        /// </summary>
+        public static string ColumnCanNotBeEmpty {
+            get {
+                return ResourceManager.GetString("ColumnCanNotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Column Only.
         /// </summary>
         public static string ColumnOnly {
@@ -13197,7 +13206,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} fixed with fallback value.
+        ///   Looks up a localized string similar to {0} fixed with fallback value {1}.
         /// </summary>
         public static string ImportAgentsColumnFixedWithFallbackValue {
             get {

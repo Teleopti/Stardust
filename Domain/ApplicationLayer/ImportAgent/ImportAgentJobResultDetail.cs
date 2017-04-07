@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
@@ -28,8 +29,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public JobResultArtifact WarningArtifact { get; private set; }
 		public IJobResult JobResult { get; }
 
+		public bool HasError { get; private set; }
+
 		private void SetValues()
 		{
+			
 			this.InputArtifact = this.JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.Input);
 			if (ResultDetail != null && JobResult.FinishedOk)
 			{
@@ -50,6 +54,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 				}
 			}
+
+			this.HasError = this.JobResult.HasError() &&
+							this.FailedArtifact == null;
+
 		}
 	}
 }
