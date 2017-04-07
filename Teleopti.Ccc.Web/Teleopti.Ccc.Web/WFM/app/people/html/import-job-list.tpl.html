@@ -16,7 +16,11 @@
 			<div class="created">{{ job.startedTime|date:'short' }}</div>
 			<div class="status">
 				<div>{{ (job.inProgress ? 'InProgress' : 'Done')|translate  }}</div>
-				<div ng-if="!job.inProgress">
+				<div ng-if="job.error">
+					<i class="mdi mdi-alert-octagon"></i>
+					<span>{{ job.error }}</span>
+				</div>
+				<div ng-if="!job.inProgress && !job.error">
 					<div>{{ job.summary() }}</div>
 					<div>
 						<span ng-if="job.failed > 0" class="errors"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputError">{{ job.failed }}&nbsp;Error(s)</a></span>

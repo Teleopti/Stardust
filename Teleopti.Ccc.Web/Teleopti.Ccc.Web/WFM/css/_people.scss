@@ -411,7 +411,7 @@ wfm-import-agents {
 
 			.item {
 				box-sizing: border-box;
-				height: 6em;
+				min-height: 6em;
 			}
 
 			.list .filename {
@@ -419,15 +419,22 @@ wfm-import-agents {
 			}
 
 			.list .created {
-				flex: 3 1 30%;
+				flex: 2 1 20%;
 			}
 
 			.list .status {
-				flex: 3 1 30%;
-			}
+				flex: 4 1 40%;
 
-			.list .status .errors {
-				padding-right: .4em;
+				i.mdi {
+					&:before {
+						font-size: 1em !important;
+						vertical-align: middle;
+					}
+				}
+
+				.errors {
+					padding-right: .4em;
+				}
 			}
 
 			.list .status .errors + .warnings {

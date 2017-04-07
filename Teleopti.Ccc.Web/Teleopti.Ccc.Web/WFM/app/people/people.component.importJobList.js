@@ -6,11 +6,12 @@
 		this.filename = filename;
 	}
 
-	function Job(id, filename, startedTime, inProgress, succeeded, failed, warned) {
+	function Job(id, filename, startedTime, inProgress, error, succeeded, failed, warned) {
 		this.id = id;
 		this.filename = filename;
 		this.startedTime = startedTime ? new Date(startedTime) : null;
 		this.inProgress = inProgress;
+		this.error = error;
 		this.succeeded = succeeded;
 		this.failed = failed;
 		this.warned = warned;
@@ -48,7 +49,7 @@
 	Ctrl.prototype.onJobsFetched = function (data) {
 		this.jobs = data.map(function (j) {
 			var filename = j.InputArtifact ? j.InputArtifact.Name : 'No filename';
-			var job = new Job(j.JobResultId, filename, j.Timestamp, j.IsWorking, j.SuccessCount + j.WarningCount, j.FailedCount, j.WarningCount);
+			var job = new Job(j.JobResultId, filename, j.Timestamp, j.IsWorking, j.ErrorMessage, j.SuccessCount + j.WarningCount, j.FailedCount, j.WarningCount);
 
 			if (j.InputArtifact) {
 				job.artifacts.input = new Artifact(j.InputArtifact.Id, j.InputArtifact.Name);
