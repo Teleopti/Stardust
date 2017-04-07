@@ -128,7 +128,6 @@ Scenario: Remember selected standard preference
 	And I click next virtual schedule period button
 	Then I should see the selected standard preference 'Night' in the split-button
 
-@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Add standard preference
 	Given I have a role with
          | Field                          | Value |
@@ -149,7 +148,6 @@ Scenario: Add standard preference
 	And I select shift category 'Night' as standard preference
 	Then I should see the standard preference 'Night' in the calendar
 
-@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Replace standard preference
 	Given I have a role with
          | Field                          | Value |
@@ -191,7 +189,6 @@ Scenario: Delete multiple standard preference
 	And I click the delete preference button
 	Then I should no longer see the 2 standard preferences in the calendar
 
-@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Set multiple preference
 	Given I have a role with
          | Field                          | Value |

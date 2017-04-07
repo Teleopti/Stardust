@@ -50,7 +50,6 @@ Background:
 	| Name     | Plus a long shift              |
 	| Rule set | Normal, Blacklisted, Just long |
 
-@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback from blacklisted shift with preference
 	Given I have a person period with 
 	| Field      | Value                  |
@@ -97,7 +96,6 @@ Scenario: No feedback from blacklisted shift without preference
 	| Date                  | 2012-10-10 |
 	| Contract time boundry | 9:00-9:00  |
 
-@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Prioritize feedback from normal over blacklisted shift even though I have a preference
 	Given I have a person period with 
 	| Field      | Value             |

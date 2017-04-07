@@ -73,7 +73,6 @@ Scenario: Feedback for a day with day off preference
 	When I view preferences for date '2012-10-13'
 	Then I should see no preference feedback on '2012-10-13'
 
-@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback for a day with absence preference
 	Given I have a person period with 
 	| Field             | Value         |

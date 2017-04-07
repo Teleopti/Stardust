@@ -165,6 +165,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			var message = data.Errors.join('</br>');
 			addExtendedPreferenceFormViewModel.ValidationError(message);
 		};
+
+		if(typeof preference == 'string' && preference.length > 0){
+			preference = {
+				PreferenceId : preference
+			};
+		}
+
 		if (preference.SelectedTemplate)
 			preference.TemplateName = preference.SelectedTemplate.Text;
 		delete preference.AvailableTemplates;
@@ -210,7 +217,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					preferencesAndScheduleViewModel.DayViewModels[d.Date].ReadPreference(d.Value);
 				})
 			},
-			statusCode404: function(jqXHR, textStatus, errorThrown) {
+			error: function(jqXHR, textStatus, errorThrown) {
 				var errorMessage = $.parseJSON(jqXHR.responseText);
 				validationErrorCallback(errorMessage);
 			},
