@@ -33,9 +33,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 		public void BatchTest()
 		{
 			var userCodes = Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
-			Publisher.AddHandler<MappingReadModelUpdater>();
 			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
 			Publisher.AddHandler<AgentStateMaintainer>();
+			Publisher.AddHandler<MappingReadModelUpdater>();
+			Publisher.AddHandler<ExternalLogonReadModelUpdater>();
+			Publisher.AddHandler<CurrentScheduleReadModelUpdater>();
 			using (EventPublisher.OnThisThreadPublishTo(Publisher))
 			{
 				Analytics.WithDataSource(9, "sourceId");
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 
 			var results = (
 				from api in new[] {"wcf", "json"}
-				from batchSize in new[] {500, 1000, 2500, 5000}
+				from batchSize in new[] {50, 100, 500, 1000, 5000}
 				from variation in new[] {"A", "B", "C"}
 				select new {api, batchSize, variation}).Select(x =>
 			{
