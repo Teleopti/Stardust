@@ -120,12 +120,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 			return new PreferenceDayViewModel { Color = "" };
 		}
-		
-		public IEnumerable<PreferenceDayViewModel> Delete(List<DateOnly> dates)
-		{
-			return dates.Select (date => _preferenceDayRepository.FindAndLock (date, _loggedOnUser.CurrentUser()))
-				.Where (preferences => !preferences.IsEmpty())
-				.Select (Delete).ToList();
-		}
+
+	    public IDictionary<DateOnly, PreferenceDayViewModel> Delete(List<DateOnly> dates)
+	    {
+	        var preferenceDayViewModel = new Dictionary<DateOnly, PreferenceDayViewModel>();
+	        foreach (var date in dates)
+	        {
+	            var preferences = _preferenceDayRepository.FindAndLock(date, _loggedOnUser.CurrentUser());
+	            preferenceDayViewModel.Add(date, Delete(preferences));
+
+	        }
+	        return preferenceDayViewModel;
+
+	    }
 	}
 }

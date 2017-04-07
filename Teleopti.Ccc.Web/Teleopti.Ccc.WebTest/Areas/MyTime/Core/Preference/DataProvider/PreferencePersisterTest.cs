@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			var result = target.Delete(new List<DateOnly>() { DateOnly.Today });
 
-			result.First().Preference.Should().Be.Null();
+			result.First().Value.Preference.Should().Be.Null();
 		}
 
 		[Test]

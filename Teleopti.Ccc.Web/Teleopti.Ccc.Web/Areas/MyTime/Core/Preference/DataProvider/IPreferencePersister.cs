@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	{
 		PreferenceDayViewModel Persist(PreferenceDayInput input);
 		IDictionary<DateOnly, PreferenceDayViewModel> PersistMultiDays(MultiPreferenceDaysInput input);
-		IEnumerable<PreferenceDayViewModel> Delete (List<DateOnly> dates);
+		IDictionary<DateOnly, PreferenceDayViewModel> Delete (List<DateOnly> dates);
 		bool MustHave(MustHaveInput input);
 	}
 }

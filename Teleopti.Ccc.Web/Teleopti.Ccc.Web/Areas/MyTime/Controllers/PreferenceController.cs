@@ -114,8 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				return ModelState.ToJson();
 			}
 
-		    var test = _preferencePersister.PersistMultiDays(input);
-			var result = test.Select(v => new
+			var result = _preferencePersister.PersistMultiDays(input).Select(v => new
 			{
 				Date = v.Key.Date.ToString("yyyy-MM-dd"),
 				v.Value
@@ -135,7 +134,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPost]
 		public virtual JsonResult PreferenceDelete(DateOnly[] dateList)
 		{
-			return Json(_preferencePersister.Delete(dateList.ToList()), JsonRequestBehavior.AllowGet);
+			var result = _preferencePersister.Delete(dateList.ToList()).Select(v => new
+			{
+				Date = v.Key.Date.ToString("yyyy-MM-dd"),
+				v.Value
+			});
+			return Json(result, JsonRequestBehavior.AllowGet);
 		}
 		
 		[HttpGet]
