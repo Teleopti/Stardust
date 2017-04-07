@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -542,7 +543,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var target = new StaffingThresholdValidatorCascadingSkills();
 			var result = target.GetUnderStaffingPeriodsString(underStaffDict, new CultureInfo(1033), new CultureInfo(1033), timeZone);
 
-			Assert.That(result, Is.Not.Null.And.Not.Empty);
+			result.Length.Should().Be.EqualTo(2);
 		}
 	}
 }

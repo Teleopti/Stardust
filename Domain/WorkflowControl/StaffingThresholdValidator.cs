@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		}
 	}
 
-	public class StaffingThresholdValidator :  IAbsenceRequestValidator
+	public class StaffingThresholdValidator : IAbsenceRequestValidator
 	{
 		private static readonly ILog requestsLogger = LogManager.GetLogger("Teleopti.Requests");
 		private const int maxUnderStaffingItemCount = 4;// bug #40906 needs to be max 4 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
 			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
 			var numberOfRequestedDays = dateOnlyPeriod.DayCount();
-			
+
 			var underStaffingResultDict = GetUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest, new PersonSkillProvider());
 
 			if (underStaffingResultDict.IsNotUnderstaffed())
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return new IntervalHasSeriousUnderstaffing(skill);
 		}
 
-	public string GetUnderStaffingDateString(UnderstaffingDetails underStaffing, CultureInfo culture, CultureInfo uiCulture)
+		public string GetUnderStaffingDateString(UnderstaffingDetails underStaffing, CultureInfo culture, CultureInfo uiCulture)
 		{
 			var errorMessageBuilder = new StringBuilder();
 
@@ -120,56 +120,31 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					underStaffing.UnderstaffingDays.Select(d => d.ToShortDateString(culture)).Take(maxUnderStaffingItemCount));
 				errorMessageBuilder.AppendLine($"{underStaffingValidationError}{inSufficientDates}{Environment.NewLine}");
 			}
-			
+
 			return errorMessageBuilder.ToString();
 		}
 
 		public string GetUnderStaffingPeriodsString(UnderstaffingDetails underStaffing, CultureInfo culture, CultureInfo uiCulture, TimeZoneInfo timeZone)
 		{
-			var errorMessageBuilder = new StringBuilder();
 			var insufficientPeriods = new List<string>();
 			if (underStaffing.UnderstaffingPeriods.Any())
 			{
-				
-				var underStaffingValidationError = Resources.ResourceManager.GetString("InsufficientStaffingDays", uiCulture);
-				errorMessageBuilder.AppendLine(underStaffingValidationError);
-				var sorted = underStaffing.UnderstaffingPeriods.OrderBy(x => x.StartDateTime);
-				
-				var lastPeriod = new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime());
-				var startPeriod = new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime());
+				var sorted = DateTimePeriod.MergePeriods(underStaffing.UnderstaffingPeriods).ToList();
+
 				foreach (var dateTimePeriod in sorted)
 				{
 					if (insufficientPeriods.Count > 5) continue;
-						if (lastPeriod.EndDateTime.Equals(dateTimePeriod.StartDateTime))
-						lastPeriod = dateTimePeriod;
-					else
-					{
-						//had one before
-						if (startPeriod.StartDateTime != DateTime.MinValue)
-						{
-							var stringStart = TimeZoneHelper.ConvertFromUtc(startPeriod.StartDateTime, timeZone).ToString(culture);
-							var stringEnd = TimeZoneHelper.ConvertFromUtc(lastPeriod.EndDateTime, timeZone).ToString(culture);
 
-							insufficientPeriods.Add(string.Join(" - ", stringStart, stringEnd));
-						}
-						startPeriod = dateTimePeriod;
-						lastPeriod = dateTimePeriod;
-					}
-					if (dateTimePeriod.Equals(sorted.Last()))
-					{
-						var stringStart = TimeZoneHelper.ConvertFromUtc(startPeriod.StartDateTime, timeZone).ToString(culture);
-						var stringEnd = TimeZoneHelper.ConvertFromUtc(lastPeriod.EndDateTime,timeZone).ToString(culture);
+					var stringStart = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.StartDateTime, timeZone).ToString(culture);
+					var stringEnd = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.EndDateTime, timeZone).ToString(culture);
 
-						insufficientPeriods.Add(string.Join(" - ", stringStart, stringEnd));
-					}
+					insufficientPeriods.Add(string.Join(" - ", stringStart, stringEnd));
 				}
-				
 			}
-			foreach (var insufficientPeriod in insufficientPeriods)
-			{
-				errorMessageBuilder.AppendLine(insufficientPeriod);
-			}
-			return errorMessageBuilder.ToString();
+
+			var underStaffingValidationError = Resources.ResourceManager.GetString("InsufficientStaffingDays", uiCulture);
+			var understaffingPeriods = string.Join(", " + Environment.NewLine, insufficientPeriods);
+			return underStaffingValidationError + understaffingPeriods;
 		}
 
 		public UnderstaffingDetails GetUnderStaffingDays(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest, PersonSkillProvider personSkillProvider)
@@ -188,7 +163,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			var calculatedPeriod = absenceRequest.Period;
 			var datesToResourceCalculate = calculatedPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-			
+
 			var resCalcData = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.ToResourceOptimizationData(true, false);
 			foreach (var dateOnly in datesToResourceCalculate.DayCollection())
 			{
@@ -253,7 +228,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				if (skill == null) continue;
 				if (validatePeriods.IsEmpty()) continue;
 
-				var validatedUnderStaffingResult = ValidateUnderstaffing(skill, validatePeriods.Where(x => ((SkillStaffingInterval) x).SkillId == skill.Id.GetValueOrDefault() && ((SkillStaffingInterval)x).FStaff > 0), timeZone, result);
+				var validatedUnderStaffingResult = ValidateUnderstaffing(skill, validatePeriods.Where(x => ((SkillStaffingInterval)x).SkillId == skill.Id.GetValueOrDefault() && ((SkillStaffingInterval)x).FStaff > 0), timeZone, result);
 				if (validatedUnderStaffingResult.IsValid) continue;
 
 				requestsLogger.Debug($"Understaffed on skill: {skill.Name}, Intervals: {string.Join(",", result.UnderstaffingPeriods.Select(x => x.StartDateTime))}");
@@ -270,7 +245,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var intervalHasSeriousUnderstaffing = getIntervalsForSeriousUnderstaffing(skill);
 			var seriousUnderStaffPeriods = skillStaffPeriodList.Where(intervalHasSeriousUnderstaffing.IsSatisfiedBy).ToArray();
 
-			if (!seriousUnderStaffPeriods.Any()) return new ValidatedRequest {IsValid = true};
+			if (!seriousUnderStaffPeriods.Any()) return new ValidatedRequest { IsValid = true };
 			seriousUnderStaffPeriods.Select(s => s.DateTimePeriod).ForEach(result.AddUnderstaffingPeriod);
 			return new ValidatedRequest { IsValid = false };
 		}
@@ -288,7 +263,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			validatedRequest.IsValid = isWithinUnderStaffingLimit;
 			if (!isWithinUnderStaffingLimit)
 				exceededUnderstaffingList.Select(s => s.DateTimePeriod).ForEach(result.AddUnderstaffingPeriod);
-			
+
 			return validatedRequest;
 		}
 

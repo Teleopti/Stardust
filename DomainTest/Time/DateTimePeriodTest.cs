@@ -974,5 +974,20 @@ namespace Teleopti.Ccc.DomainTest.Time
 								TimeSpan.FromHours(3)),
 						_period.TimePeriod((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))));
 			}
-    }
+
+		[Test]
+	   public void Should()
+	    {
+			var p1 = new DateTimePeriod(new DateTime(2017, 4, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 10, 15, 0, DateTimeKind.Utc));
+			var p2 = new DateTimePeriod(new DateTime(2017, 4, 1, 10, 15, 0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 10, 30, 0, DateTimeKind.Utc));
+			var p3 = new DateTimePeriod(new DateTime(2017, 4, 1, 10, 30, 0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 11, 0, 0, DateTimeKind.Utc));
+			var p4 = new DateTimePeriod(new DateTime(2017, 4, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 11, 0, 0, DateTimeKind.Utc));
+			var p5 = new DateTimePeriod(new DateTime(2017, 4, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 13, 0, 0, DateTimeKind.Utc));
+			var p6 = new DateTimePeriod(new DateTime(2017, 4, 1, 12, 30, 0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 13, 30, 0, DateTimeKind.Utc));
+
+
+		    var ret = DateTimePeriod.MergePeriods(new List<DateTimePeriod> {p1, p2, p3, p4, p5, p6});
+
+	    }
+	}
 }
