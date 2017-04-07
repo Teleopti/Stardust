@@ -166,6 +166,7 @@ Scenario: View available activity list when adding extended preference
 	| Value |
 	| Lunch |
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Replace extended preference
 	Given I have the role 'Access to extended preferences'
 	And I have an extended preference with
@@ -213,6 +214,7 @@ Scenario: Replace extended preference
 	| Activity time minimum       | 0:30       |
 	| Activity time maximum       | 1:00       |
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Validate preference times
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences for date '2012-06-20'

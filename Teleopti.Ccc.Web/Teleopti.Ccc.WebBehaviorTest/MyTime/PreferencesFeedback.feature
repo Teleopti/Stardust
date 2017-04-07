@@ -125,6 +125,7 @@ Scenario: Feedback from conflicting preferences and availability
 	When I view preferences for date '2014-05-02'
 	Then I should see that there are no available shifts
 
+@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
 Scenario: Feedback from an added preference
 	Given I have a role with
          | Field                          | Value |
