@@ -513,19 +513,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillAreaId=" + skillAreaId + "&pollingInterval=100");
 		}
 
-		public static void GotoRealTimeAdherenceAgentsOnTeam(Guid businessUnitId, Guid siteId, Guid teamId)
+		public static void GotoRealTimeAdherenceAgentsOnTeam( Guid teamId)
 		{
-			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId + "&pollingInterval=100");
+			GoToPage("wfm/#/rta/agents/?teamIds=" + teamId + "&pollingInterval=100");
 		}
 
-		public static void GotoRealTimeAdherenceAllAgentsOnTeam(Guid siteId, Guid teamId)
+		public static void GotoRealTimeAdherenceAllAgentsOnTeam(Guid teamId)
 		{
-			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId + "&showAllAgents=true" + "&pollingInterval=100");
+			GoToPage("wfm/#/rta/agents/?teamIds=" + teamId + "&showAllAgents=true" + "&pollingInterval=100");
 		}
 
-		public static void GotoRealTimeAdherenceAgentsWithoutStateOnTeam(Guid siteId, Guid teamId, Guid state)
+		public static void GotoRealTimeAdherenceAgentsWithoutStateOnTeam(Guid teamId, Guid state)
 		{
-			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId + "&es=" + state + "&pollingInterval=100");
+			GoToPage("wfm/#/rta/agents/?teamIds=" + teamId + "&es=" + state + "&pollingInterval=100");
 		}
 		
 		public static void GotoRealTimeAdherenceAllAgentsWithSkill(Guid skillId)
