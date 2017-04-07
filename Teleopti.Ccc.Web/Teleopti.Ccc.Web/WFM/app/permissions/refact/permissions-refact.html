@@ -64,7 +64,7 @@
 											{{'Copy' | translate}}
 										</md-tooltip>
 									</i>
-									<i class="mdi mdi-pencil" ng-click="editRoleModal = !editRoleModal; $event.stopPropagation();">
+									<i class="mdi mdi-pencil" id="edit-role-trigger" ng-click="editRoleModal = !editRoleModal; $event.stopPropagation();">
 										<md-tooltip>
 											{{'Edit' | translate}}
 										</md-tooltip>
@@ -85,7 +85,7 @@
 											<div class="con-flex">
 												<label for="editRole" class="input-icon">
 													<i class="mdi mdi-pencil">
-														<input type="text" id="editRole" ng-model="newRoleName" placeholder="New name">
+														<input type="text" id="edit-role-input" ng-model="newRoleName" placeholder="New name">
 														<md-tooltip>{{'Name' | translate}}</md-tooltip>
 													</i>
 												</label>
@@ -94,7 +94,7 @@
 									</div>
 									<div class="modal-actions">
 										<aside>
-											<button class="wfm-btn wfm-btn-invis-primary" type="submit" ng-click="editRoleModal=!editRoleModal" name="button">Edit</button>
+											<button class="wfm-btn wfm-btn-invis-primary" type="submit" id="edit-role-confirm" ng-click="editRoleModal=!editRoleModal" name="button">Edit</button>
 										</aside>
 									</div>
 								</form>
@@ -110,7 +110,7 @@
 											<div class="modal-actions">
 												<aside>
 													<button ng-click="confirmDeleteRole=false" class="wfm-btn wfm-btn-invis-default">{{'Close' | translate}}</button>
-													<button ng-click="confirmDeleteRole = false; vm.deleteRole(role)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate}}</button>
+													<button ng-click="confirmDeleteRole = false; vm.deleteRole(role)" id="delete-role" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate}}</button>
 												</aside>
 											</div>
 										</div>
@@ -192,7 +192,7 @@
 								</div>
 							</md-content>
 						</md-tab>
-						<md-tab label="{{'Data' | translate}}">
+						<md-tab id="data-tab" label="{{'Data' | translate}}">
 							<md-content class="md-padding">
 								<div class="con-row">
 									<div class="con-flex">
@@ -213,7 +213,7 @@
 								</div>
 								<div class="con-row">
 									<div class="con-flex">
-										<form class="permission-radio-buttons"  ng-class="{'non-pointer text-muted': vm.selectedRole.BuiltIn}">
+										<form class="permission-radio-buttons" ng-class="{'non-pointer text-muted': vm.selectedRole.BuiltIn}">
 											<div class="wfm-radio">
 												<label>
 													<span class="wfm-radio-label permission-filter-label" translate>Show</span>

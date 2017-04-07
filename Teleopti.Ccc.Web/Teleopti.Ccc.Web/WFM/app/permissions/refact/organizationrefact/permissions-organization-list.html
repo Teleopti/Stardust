@@ -52,10 +52,10 @@
 			</div>
 		</li>
 		<li ng-repeat="team in site.ChildNodes | orderBy:'Name':false:$ctrl.sortByLocaleLanguage" ng-click="$ctrl.toggleNode(team)" style="margin-left:60px;">
-			<span class="list-item-container">
+			<span class="list-item-container" id="team-list-label">
 				{{team.Name}}
 			</span>
-			<span ng-cloak ng-show="$ctrl.isSelected(team)" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+			<span ng-cloak ng-show="$ctrl.isSelected(team)" ng-class="{'test-class':$ctrl.isSelected(team)}" id="team-selection-indicator" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
 		</li>
 	</span>
 </ul>
