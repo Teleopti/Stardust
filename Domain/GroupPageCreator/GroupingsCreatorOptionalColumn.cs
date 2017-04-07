@@ -71,7 +71,9 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			var optionalColumnGroupPage = new OptionalColumnGroupPage();
 			foreach (var optionalColumn in optionalColumns)
 			{
-				pages.Add(optionalColumnGroupPage.CreateGroupPage(new[] {optionalColumn}, options));
+				var groupPageOptionalColumn = optionalColumnGroupPage.CreateGroupPage(new[] {optionalColumn}, options);
+				if (groupPageOptionalColumn != null)
+					pages.Add(groupPageOptionalColumn);
 			}
 
 			return pages;

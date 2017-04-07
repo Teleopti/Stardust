@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Common;
@@ -111,7 +112,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		}
 
 		[Test]
-		public void ShouldReturnBuiltInGroupPagesIncludingOptionalColumns()
+		public void ShouldReturnBuiltInGroupPagesIncludingOptionalColumnsWithValues()
 		{
 			var toggleManager = new FakeToggleManager();
 			toggleManager.Enable(Toggles.Reporting_Optional_Columns_42066);
@@ -500,7 +501,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			{
 				if (_optionalColumnsAsGroupPage == null)
 				{
-					_optionalColumnsAsGroupPage = new List<IOptionalColumn>() {new OptionalColumn("opt column").WithId()};
+					_optionalColumnsAsGroupPage = new List<IOptionalColumn>() {new OptionalColumn("opt column").WithId(), new OptionalColumn("opt column with no values for any persons").WithId()};
 
 				}
 				return _optionalColumnsAsGroupPage;
