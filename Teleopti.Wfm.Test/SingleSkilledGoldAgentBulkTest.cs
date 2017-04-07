@@ -23,6 +23,7 @@ namespace Teleopti.Wfm.Test
 {
 	[DatabaseTest]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
+	[Ignore("WIP")]
 	public class SingleSkilledGoldAgentBulkTest : SetUpCascadingShifts
 	{
 		public ICurrentUnitOfWork CurrentUnitOfWork;
