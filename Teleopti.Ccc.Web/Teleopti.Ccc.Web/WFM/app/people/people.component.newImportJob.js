@@ -1,8 +1,9 @@
 (function (angular) {
 	'use strict';
 
-	function Ctrl(PeopleService) {
+	function Ctrl(PeopleService, $translate) {
 		this._peopleService = PeopleService;
+		this._translate = $translate;
 
 		this.fallbacks = {};
 		this.now = new Date();
@@ -40,7 +41,7 @@
 
 		this._peopleService.newImportJob(this.file, fields)
 			.then(function (response) {
-				this.parent.message = ('A new import job has been created for \'{0}\'').replace('{0}', this.file.name);
+				this.parent.message = this._translate.instant('ANewImportJobHasBeenCreatedFor').replace('{0}', this.file.name);
 				this.gotoJobList();
 			}.bind(this), function (response) {
 				this.started = false;
@@ -59,7 +60,7 @@
 			parent: '^wfmImportAgents'
 		},
 		templateUrl: 'app/people/html/new-import-job.tpl.html',
-		controller: ['PeopleService', Ctrl]
+		controller: ['PeopleService', '$translate', Ctrl]
 	};
 
 	angular.module('wfm.people')

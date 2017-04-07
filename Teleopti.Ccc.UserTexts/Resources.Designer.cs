@@ -2519,6 +2519,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A new import job has been created for &apos;{0}&apos;.
+        /// </summary>
+        public static string ANewImportJobHasBeenCreatedFor {
+            get {
+                return ResourceManager.GetString("ANewImportJobHasBeenCreatedFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New shift trade request {0}, approve or deny in your request list..
         /// </summary>
         public static string ANewShiftTradeForOneDayHasBeenCreatedDot {
@@ -3549,7 +3558,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available As Group Page:*.
+        ///   Looks up a localized string similar to Available as Group Page*:.
         /// </summary>
         public static string AvailableAsGroupPageColon {
             get {
@@ -12927,7 +12936,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide staffing probability.
+        ///   Looks up a localized string similar to Hide staffing info.
         /// </summary>
         public static string HideStaffingInfo {
             get {
@@ -13197,6 +13206,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} imported. All succeeded. .
+        /// </summary>
+        public static string ImportAgentsJobResultSummaryForFullSuccess {
+            get {
+                return ResourceManager.GetString("ImportAgentsJobResultSummaryForFullSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} imported, {1} failed. .
+        /// </summary>
+        public static string ImportAgentsJobResultSummaryForNonfullSuccess {
+            get {
+                return ResourceManager.GetString("ImportAgentsJobResultSummaryForNonfullSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import error.
         /// </summary>
         public static string ImportError {
@@ -13238,6 +13265,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ImportingConfirmationWithParameters {
             get {
                 return ResourceManager.GetString("ImportingConfirmationWithParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import job.
+        /// </summary>
+        public static string ImportJob {
+            get {
+                return ResourceManager.GetString("ImportJob", resourceCulture);
             }
         }
         
@@ -13698,6 +13734,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InitializingTreeDots {
             get {
                 return ResourceManager.GetString("InitializingTreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In progress.
+        /// </summary>
+        public static string InProgress {
+            get {
+                return ResourceManager.GetString("InProgress", resourceCulture);
             }
         }
         
@@ -32115,6 +32160,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Timestamp {
             get {
                 return ResourceManager.GetString("Timestamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time started.
+        /// </summary>
+        public static string TimeStarted {
+            get {
+                return ResourceManager.GetString("TimeStarted", resourceCulture);
             }
         }
         

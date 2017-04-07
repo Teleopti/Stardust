@@ -15716,4 +15716,28 @@ Do you want to participate?</value>
     <value>No input</value>
     <comment>No input in an import agent job</comment>
   </data>
+  <data name="ANewImportJobHasBeenCreatedFor" xml:space="preserve">
+    <value>A new import job has been created for '{0}'</value>
+    <comment>Notice to show after an import agents job is created</comment>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForFullSuccess" xml:space="preserve">
+    <value>{0} imported. All succeeded. </value>
+    <comment>Result summary for jobs where all agents were imported successfully</comment>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForNonfullSuccess" xml:space="preserve">
+    <value>{0} imported, {1} failed. </value>
+    <comment>Result summary for jobs where some agents were imported, some were not</comment>
+  </data>
+  <data name="ImportJob" xml:space="preserve">
+    <value>Import job</value>
+    <comment>A background job of importing agents</comment>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>In progress</value>
+    <comment>Status of an import agents job</comment>
+  </data>
+  <data name="TimeStarted" xml:space="preserve">
+    <value>Time started</value>
+    <comment>Header of times when an import agents job started</comment>
+  </data>
 </root>

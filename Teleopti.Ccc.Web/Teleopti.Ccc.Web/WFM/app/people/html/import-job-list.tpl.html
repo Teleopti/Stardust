@@ -4,12 +4,12 @@
 </div>
 
 <div class="panel material-depth-1 job-list">
-	<div ng-if="$ctrl.jobs.length === 0" class="none">{{ 'No Import Job'|translate }}</div>
+	<div ng-if="$ctrl.jobs.length === 0" class="none">{{ 'None'|translate }}</div>
 	<div ng-if="$ctrl.jobs.length !== 0" class="list">
 		<div class="header">
-			<div class="filename">Import job</div>
-			<div class="created">Time started</div>
-			<div class="status">Status</div>
+			<div class="filename">{{ 'ImportJob'|translate }}</div>
+			<div class="created">{{ 'TimeStarted'|translate }}</div>
+			<div class="status">{{ 'Status'|translate }}</div>
 			<md-progress-linear class="refreshing" ng-if="$ctrl.refreshing" md-mode="indeterminate"></md-progress-linear>
 		</div>
 		<div ng-repeat="job in $ctrl.jobs" class="item">
@@ -22,10 +22,10 @@
 					<span>{{ job.error }}</span>
 				</div>
 				<div ng-if="!job.inProgress && !job.error">
-					<div>{{ job.summary() }}</div>
+					<div>{{ $ctrl.makeSummary(job) }}</div>
 					<div>
-						<span ng-if="job.failed > 0" class="errors"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputError">{{ job.failed }}&nbsp;Error(s)</a></span>
-						<span ng-if="job.warned > 0" class="warnings"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputWarning">{{ job.warned }}&nbsp;Warning(s)</a></span>
+						<span ng-if="job.failed > 0" class="errors"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputError">{{ 'Errors'|translate }}&nbsp;({{ job.failed }})</a></span>
+						<span ng-if="job.warned > 0" class="warnings"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputWarning">{{ 'Warnings'|translate }}&nbsp;({{ job.warned }})</a></span>
 					</div>
 				</div>
 			</div>

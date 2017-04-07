@@ -22,16 +22,10 @@
 		};
 	}
 
-	Job.prototype.summary = function () {
-		if (this.failed === 0) {
-			return ('{0} imported. All succeeded. ').replace('{0}', this.succeeded);
-		}
-		return ('{0} imported, {1} failed. ').replace('{0}', this.succeeded).replace('{1}', this.failed);
-	};
-
-	function Ctrl(NoticeService, importAgentsService) {
+	function Ctrl(NoticeService, importAgentsService, $translate) {
 		this._notice = NoticeService;
 		this._svc = importAgentsService;
+		this._translate = $translate;
 
 		this.jobs = [];
 	}
@@ -80,6 +74,13 @@
 			}.bind(this));
 	};
 
+	Ctrl.prototype.makeSummary = function (job) {
+		if (job.failed === 0) {
+			return this._translate.instant('ImportAgentsJobResultSummaryForFullSuccess').replace('{0}', job.succeeded);
+		}
+		return this._translate.instant('ImportAgentsJobResultSummaryForNonfullSuccess').replace('{0}', job.succeeded).replace('{1}', job.failed);
+	};
+
 	Ctrl.prototype.newImport = function () {
 		this.parent.page = 'new';
 	};
@@ -89,7 +90,7 @@
 			parent: '^wfmImportAgents'
 		},
 		templateUrl: 'app/people/html/import-job-list.tpl.html',
-		controller: ['NoticeService', 'importAgentsService', Ctrl]
+		controller: ['NoticeService', 'importAgentsService', '$translate', Ctrl]
 	};
 
 	angular.module('wfm.people')
