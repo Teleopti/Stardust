@@ -12,7 +12,7 @@
 				ng-model="$ctrl.file" ng-model-rejected="$ctrl.rejFiles">
 			{{ 'DragAndDropExcelFilesHereOrClickToUpload' | translate }}
 			<div ng-show="$ctrl.file" class="fileinfo">
-				{{ 'ImportFileNameColon'|translate }} &nbsp; {{$ctrl.file.name}} - {{$ctrl.file.size}}B
+				{{ 'ImportFileNameColon'|translate }} &nbsp; {{$ctrl.file.name}} - {{ $ctrl.file.size|filesize:0 }}
 			</div>
 		</div>
 		<div ng-if="!$ctrl.fetchingFieldOptions" class="wfm-checkbox">
@@ -127,8 +127,8 @@
 					{{ 'Cancel'|translate }}
 				</button>
 				<button class="wfm-btn"
-						ng-class="{'wfm-btn-invis-primary': !$ctrl.noFile(), 'wfm-btn-invis-disabled': $ctrl.noFile()}"
-						ng-disabled="$ctrl.noFile()"
+						ng-class="{'wfm-btn-invis-primary': !$ctrl.invalidFile(), 'wfm-btn-invis-disabled': $ctrl.invalidFile()}"
+						ng-disabled="$ctrl.invalidFile()"
 						ng-click="$ctrl.createImportJob()">
 					{{ 'Start'|translate }}
 				</button>

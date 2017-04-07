@@ -1473,6 +1473,7 @@
     <Content Include="WFM\app\people\people.component.importJobList.js" />
     <Content Include="WFM\app\people\people.component.newImportJob.js" />
     <Content Include="WFM\app\people\people.component.wfmImportAgents.js" />
+    <Content Include="WFM\app\people\people.filter.filesize.js" />
     <Content Include="WFM\app\people\people.service.importAgents.js" />
     <Content Include="WFM\app\permissions\refact\permissions.data.service.js" />
     <Content Include="WFM\app\permissions\refact\permissions.data.service.spec.js" />

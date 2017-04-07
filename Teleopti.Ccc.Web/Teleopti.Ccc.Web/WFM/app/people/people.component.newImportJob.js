@@ -30,8 +30,8 @@
 		this.fallbacks.team = teamId;
 	};
 
-	Ctrl.prototype.noFile = function () {
-		return !(!!this.file);
+	Ctrl.prototype.invalidFile = function () {
+		return !(!!this.file) || this.file.size > 300000;
 	};
 
 	Ctrl.prototype.createImportJob = function () {
