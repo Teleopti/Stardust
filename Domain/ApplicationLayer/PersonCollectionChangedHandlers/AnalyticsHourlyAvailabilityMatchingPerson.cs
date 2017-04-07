@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-	[EnabledBy(Toggles.ETL_SpeedUpNightlyAvailability_38926)]
+	[EnabledBy(Toggles.ETL_FixScheduleForPersonPeriod_41393)]
 	public class AnalyticsHourlyAvailabilityMatchingPerson : IHandleEvent<AnalyticsPersonPeriodRangeChangedEvent>, IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsHourlyAvailabilityMatchingPerson));
