@@ -36,6 +36,8 @@
 		this.jobs = [];
 	}
 
+	Ctrl.prototype.refreshing = false;
+
 	Ctrl.prototype.$onInit = function () {
 		if (angular.isString(this.parent.message) && this.parent.message.length > 0) {
 			this._notice.success(this.parent.message, 5000, true);
@@ -68,8 +70,14 @@
 	};
 
 	Ctrl.prototype.refreshList = function () {
+		this.refreshing = true;
 		this._svc.fetchJobs()
-			.then(this.onJobsFetched.bind(this));
+			.then(function (data) {
+				this.refreshing = false;
+				this.onJobsFetched(data);
+			}.bind(this), function () {
+				this.refreshing = false;
+			}.bind(this));
 	};
 
 	Ctrl.prototype.newImport = function () {

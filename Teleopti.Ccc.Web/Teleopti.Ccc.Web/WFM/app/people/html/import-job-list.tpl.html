@@ -1,6 +1,6 @@
 <div class="button-bar">
 	<button type="button" class="wfm-btn wfm-btn-primary" ng-click="$ctrl.newImport()">{{ 'NewImport'|translate }}</button>
-	<button type="button" class="wfm-btn wfm-btn-default" ng-click="$ctrl.refreshList()">{{ 'Refresh'|translate }}</button>
+	<button type="button" class="wfm-btn wfm-btn-default" ng-click="$ctrl.refreshList()" ng-disabled="$ctrl.refreshing">{{ 'Refresh'|translate }}</button>
 </div>
 
 <div class="panel material-depth-1 job-list">
@@ -10,6 +10,7 @@
 			<div class="filename">Import job</div>
 			<div class="created">Time started</div>
 			<div class="status">Status</div>
+			<md-progress-linear class="refreshing" ng-if="$ctrl.refreshing" md-mode="indeterminate"></md-progress-linear>
 		</div>
 		<div ng-repeat="job in $ctrl.jobs" class="item">
 			<div class="filename">{{ job.filename }}</div>

@@ -403,6 +403,13 @@ wfm-import-agents {
 
 			.header {
 				background-color: #99d6ff;
+				position: relative;
+
+				.refreshing {
+					position: absolute;
+					left: 0;
+					bottom: 0;
+				}
 			}
 
 			.item + .item {
