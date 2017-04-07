@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var adherence = _siteInAlarmReader.ReadForSkills(skillIds).ToLookup(a => a.SiteId, v => v.Count);
 			var sites = allPermittedSites();
-			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites.Select(x => x.Id.Value)) : new Dictionary<Guid, int>();
+			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.ForSkills(sites.Select(x => x.Id.Value), skillIds) : new Dictionary<Guid, int>();
 			var sitesOrdered = sites.OrderBy(x => x.Description.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
 			int tempNumberOfAgents;
 			var result = from site in sitesOrdered
