@@ -11,7 +11,7 @@
 			<div class="created">Time started</div>
 			<div class="status">Status</div>
 		</div>
-		<div ng-repeat="job in $ctrl.jobs | orderBy:'-startedTime' " class="item">
+		<div ng-repeat="job in $ctrl.jobs" class="item">
 			<div class="filename">{{ job.filename }}</div>
 			<div class="created">{{ job.startedTime|date:'short' }}</div>
 			<div class="status">
