@@ -24,33 +24,16 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	[SetUpFixture]
 	public class NUnitSetup
 	{
-		public ICurrentTransactionHooks TransactionHooks;
-		public DefaultDataCreator DefaultDataCreator;
-		public DataCreator DataCreator;
-		public DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
-		public HangfireClientStarter HangfireClientStarter;
-		public ImpersonateSystem Impersonate;
-		public IDataSourceScope DataSource;
-		public WithUnitOfWork WithUnitOfWork;
-		public IBusinessUnitRepository BusinessUnits;
-
 		[OneTimeSetUp]
 		public void Setup()
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			XmlConfigurator.Configure();
 
+			DataSourceHelper.CreateDatabases();
+
 			TestSiteConfigurationSetup.Setup();
-
-			var dataHash = DefaultDataCreator.HashValue ^ TestConfiguration.HashValue;
-			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Rta");
-
-			var haveDatabases =
-				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
-				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
-			if (!haveDatabases)
-				DataSourceHelper.CreateDatabases();
-
+			
 			IntegrationIoCTest.Setup(builder =>
 			{
 				builder.RegisterType<TestConfiguration>().SingleInstance();
@@ -60,33 +43,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				builder.RegisterType<ConfigurableSyncEventPublisher>().SingleInstance();
 				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			}, this);
-
-			HangfireClientStarter.Start();
-
-			if (!haveDatabases)
-			{
-				StateHolderProxyHelper.SetupFakeState(
-					DataSourceHelper.CreateDataSource(TransactionHooks),
-					DefaultPersonThatCreatesData.PersonThatCreatesDbData,
-					DefaultBusinessUnit.BusinessUnit
-				);
-
-				DefaultDataCreator.Create();
-				DefaultAnalyticsDataCreator.OneTimeSetup();
-				DataSourceHelper.ClearAnalyticsData();
-				DefaultAnalyticsDataCreator.Create();
-				DataCreator.Create();
-
-				DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
-				DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
-
-				StateHolderProxyHelper.Logout();
-			}
-
-			Guid businessUnitId;
-			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
-				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
-			Impersonate.Impersonate(DataSourceHelper.TestTenantName, businessUnitId);
+			
 		}
 		
 		[OneTimeTearDown]

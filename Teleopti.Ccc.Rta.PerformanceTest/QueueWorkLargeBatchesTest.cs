@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 {
 	[TestFixture]
 	[RtaPerformanceTest]
-	[Explicit]
 	public class QueueWorkLargeBatchesTest
 	{
 		public StatesSender States;

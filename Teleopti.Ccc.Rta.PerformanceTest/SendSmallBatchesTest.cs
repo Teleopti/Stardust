@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 {
 	[TestFixture]
 	[RtaPerformanceTest]
-	[Explicit]
 	public class SendSmallBatchesTest
 	{
 		public StatesSender States;
