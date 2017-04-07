@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
@@ -442,6 +441,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetReadOnly(true)
 				//.SetTimeout(120)
 				.UniqueResult<IAnalyticsPersonBusinessUnit>();
+		}
+
+		public void UpdateValidToLocalDateIds(IAnalyticsDate maxDate)
+		{
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+					$@"update dp
+						set 
+						  dp.valid_to_date_local = :{nameof(maxDate.DateDate)},
+						  dp.valid_to_date_id_local = :{nameof(maxDate.DateId)}
+						from mart.dim_person dp
+						  where dp.valid_to_date_id = -2 and dp.person_id >= 0")
+				.SetParameter(nameof(maxDate.DateDate), maxDate.DateDate)
+				.SetParameter(nameof(maxDate.DateId), maxDate.DateId)
+				.ExecuteUpdate();
 		}
 	}
 }

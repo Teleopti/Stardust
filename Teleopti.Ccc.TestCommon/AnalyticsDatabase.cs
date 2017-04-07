@@ -3,8 +3,6 @@ using System.Data.SqlClient;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
@@ -46,6 +44,18 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		[AnalyticsUnitOfWork]
+		public virtual AnalyticsDatabase WithDefaultDatasource()
+		{
+			return apply(new ExistingDatasources(new UtcAndCetTimeZones()));
+		}
+
+		[AnalyticsUnitOfWork]
+		public virtual AnalyticsDatabase WithDatesFrom(DateTime startDate, DateTime endDate)
+		{
+			return apply(new DatesFromPeriod(startDate, endDate));
+		}
+
+		[AnalyticsUnitOfWork]
 		public virtual AnalyticsDatabase WithQuarterOfAnHourInterval()
 		{
 			return apply(new QuarterOfAnHourInterval());
@@ -71,6 +81,12 @@ namespace Teleopti.Ccc.TestCommon
 				setup.Apply(connection, CultureInfo.CurrentCulture, CultureInfo.CurrentCulture);
 			}
 			return this;
+		}
+
+		[AnalyticsUnitOfWork]
+		public virtual AnalyticsDatabase WithAgent(Person person)
+		{
+			return apply(person);
 		}
 	}
 }

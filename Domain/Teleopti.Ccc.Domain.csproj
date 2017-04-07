@@ -131,6 +131,7 @@
     <Compile Include="AgentInfo\FixedStaffLoader.cs" />
     <Compile Include="AgentInfo\IAgentGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
+    <Compile Include="ApplicationLayer\Dates\AnalyticsPersonLocalDateUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\ReloadSchedules.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentDataModel.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplate.cs" />

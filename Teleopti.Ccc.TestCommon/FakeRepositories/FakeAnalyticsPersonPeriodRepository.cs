@@ -91,5 +91,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var personPeriod = fakePersonPeriods.SingleOrDefault(x => x.PersonPeriodCode == personPeriodCode);
 			return personPeriod == null ? null : new AnalyticsPersonBusinessUnit {BusinessUnitId = personPeriod.BusinessUnitId, PersonId = personPeriod.PersonId};
 		}
+
+		public void UpdateValidToLocalDateIds(IAnalyticsDate maxDate)
+		{
+			foreach (var period in fakePersonPeriods.Where(p => p.ValidToDateId == -2 && p.PersonId >= 0))
+			{
+				period.ValidToDateIdLocal = maxDate.DateId;
+				period.ValidToDateLocal = maxDate.DateDate;
+			}
+		}
 	}
 }
