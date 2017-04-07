@@ -64,11 +64,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayBeforeMove).Repeat.Times(2);
-                Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Times(1);
+                Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayBeforeMove);
+	            Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayAfterMove);
+				Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Times(1);
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(true).Repeat.Any();
                 Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
-                Expect.Call(_dayOffDecisionMakerExecuter.Execute(bitArrayBeforeMove, bitArrayBeforeMove, _matrix, _originalStateContainer))
+                Expect.Call(_dayOffDecisionMakerExecuter.Execute(bitArrayBeforeMove, bitArrayAfterMove, _matrix, _originalStateContainer)).IgnoreArguments()
                     .Return(true)
                     .Repeat.AtLeastOnce();
             }
@@ -96,13 +97,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayBeforeMove).Repeat.Times(6);
-                Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Times(3);
+	            Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayBeforeMove);
+	            Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayAfterMove);
+
+	            Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayBeforeMove);
+	            Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayAfterMove);
+
+	            Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayBeforeMove);
+	            Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayAfterMove);
+
+				Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Times(3);
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(false).Repeat.Once();
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(false).Repeat.Once();
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(true).Repeat.Once();
                 Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
-                Expect.Call(_dayOffDecisionMakerExecuter.Execute(bitArrayBeforeMove, bitArrayBeforeMove, _matrix, _originalStateContainer))
+                Expect.Call(_dayOffDecisionMakerExecuter.Execute(bitArrayBeforeMove, bitArrayAfterMove, _matrix, _originalStateContainer)).IgnoreArguments()
                     .Return(true)
                     .Repeat.AtLeastOnce();
             }

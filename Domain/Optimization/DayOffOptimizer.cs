@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             ILockableBitArray originalArray = _converter.Convert(matrix, _daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
             ILockableBitArray workingBitArray = _converter.Convert(matrix, _daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
-            bool decisionMakerFoundDays = _decisionMaker.Execute(workingBitArray, _scheduleResultDataExtractor.Values());
-            if (!decisionMakerFoundDays)
+            var decisionMakerFoundDays = _decisionMaker.Execute(workingBitArray, _scheduleResultDataExtractor.Values());
+            if (!decisionMakerFoundDays || originalArray.HasSameDayOffs(workingBitArray))
                 return false;
             bool decisionMakerChoiceResultedInBetterPeriod =
                 _dayOffDecisionMakerExecuter.Execute(workingBitArray, originalArray, matrix, originalStateContainer);

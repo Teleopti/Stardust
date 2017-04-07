@@ -42,15 +42,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             bitArray.PeriodArea = new MinMax<int>(0, 1);
             bitArray.Set(0, true);
 
-            using (_mocks.Record())
+	        ILockableBitArray bitArray2 = new LockableBitArray(2, false, false, null);
+	        bitArray.PeriodArea = new MinMax<int>(0, 1);
+
+			using (_mocks.Record())
             {
                 Expect.Call(_decisionMaker.Execute(null, null)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_dayOffDecisionMakerExecuter.Execute(null, null, _scheduleMatrix, _originalStateContainer)).IgnoreArguments().Return(true).Repeat.Once();
 
                 // not essetial to the test logic
                 Expect.Call(_scheduleMatrix.Person).Return(new Person()).Repeat.AtLeastOnce();
-                Expect.Call(_converter.Convert(_scheduleMatrix, false, false)).Return(bitArray).Repeat.AtLeastOnce();
-                Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Once();
+                Expect.Call(_converter.Convert(_scheduleMatrix, false, false)).Return(bitArray);
+	            Expect.Call(_converter.Convert(_scheduleMatrix, false, false)).Return(bitArray2);
+				Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Once();
             }
             using (_mocks.Playback())
             {

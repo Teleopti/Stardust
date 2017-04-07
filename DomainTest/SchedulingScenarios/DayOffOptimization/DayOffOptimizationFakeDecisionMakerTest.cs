@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 
 		[Test]
-		[Ignore("#43804")]
 		[Timeout(3000)]
 		public void ShouldNotHangIfDecisionMakerReturnsTrueButBitArraysAreTheSame()
 		{
