@@ -92,14 +92,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					AlarmStartTime = "2017-03-30 08:29".Utc(),
 				})
 				.OnSkill(skill);
-			AgentsInSite.Has(site.Id.Value, 2);
+			AgentsInSite.Has(site.Id.Value, skill, 1);
 			var viewModel = Target.ForSkills(new[] { skill }).Single();
 
 			viewModel.Id.Should().Be(site.Id.Value);
 			viewModel.Name.Should().Be("Site");
-			viewModel.NumberOfAgents.Should().Be(2);
+			viewModel.NumberOfAgents.Should().Be(1);
 			viewModel.OutOfAdherence.Should().Be(1);
-			viewModel.Color.Should().Be("warning");
+			viewModel.Color.Should().Be("danger");
 			
 		}
 
