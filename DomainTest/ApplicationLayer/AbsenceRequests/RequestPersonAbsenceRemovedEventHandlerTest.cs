@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -10,6 +12,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
@@ -20,8 +23,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	[TestFixture]
 	public class RequestPersonAbsenceRemovedEventHandlerTest : ISetup
 	{
-		public RequestPersonAbsenceRemovedEventHandler Target;
-
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public FakePersonRepository PersonRepository;
@@ -29,21 +30,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public ApprovalServiceForTest ApprovalService;
 		public PersonRequestAuthorizationCheckerForTest PersonRequestAuthorizationChecker;
 		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
-
+		public FakeTenants FakeTenants;
+		public ICommandDispatcher CommandDispatcher;
+		public FakeEventPublisher Publisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]
 		public void ShouldQueueCancelledRequest()
 		{
-			var removedEvent = createRequestPersonAbsenceRemovedEvent(true);
-			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
-			removedEvent.LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault();
-			BusinessUnitRepository.Add(businessUnit);
-			Target.Handle(removedEvent);
+			handle(true);
 
 			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);			
 		}
@@ -51,26 +51,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldNotQueueCancelledRequestIfNoWaitlistIsConfigured()
 		{
-			var removedEvent = createRequestPersonAbsenceRemovedEvent(false);
-			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
-			removedEvent.LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault();
-			BusinessUnitRepository.Add(businessUnit);
-			Target.Handle(removedEvent);
+			handle(); 
 
 			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
-		public void ShouldNotQueueIfAnyWorkflowControlSetIsWaitlisted()
+		public void ShouldQueueIfAnyWorkflowControlSetIsWaitlisted()
 		{
-			WorkflowControlSetRepository.Add(new WorkflowControlSet() {AbsenceRequestWaitlistEnabled = true});
-			var removedEvent = createRequestPersonAbsenceRemovedEvent(false);
+			addWaitlistEnabledWorkFlowControlSet();
+
+			handle();
+
+			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldRunWaitlistCommand()
+		{
+			addWaitlistEnabledWorkFlowControlSet();
+
+			handle();
+
+			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			Publisher.PublishedEvents.Single().Should().Be.OfType<RunRequestWaitlistEvent>();
+		}
+
+		private void addWaitlistEnabledWorkFlowControlSet()
+		{
+			WorkflowControlSetRepository.Add(new WorkflowControlSet() { AbsenceRequestWaitlistEnabled = true });
+		}
+
+		private void handle(bool enableWaitlist = false)
+		{
+			var removedEvent = createRequestPersonAbsenceRemovedEvent(enableWaitlist);
 			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			removedEvent.LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault();
 			BusinessUnitRepository.Add(businessUnit);
-			Target.Handle(removedEvent);
+			createHandler().Handle(removedEvent);
+		}
 
-			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
+		private RequestPersonAbsenceRemovedEventHandler createHandler()
+		{
+			return new RequestPersonAbsenceRemovedEventHandler(QueuedAbsenceRequestRepository, WorkflowControlSetRepository,
+				CommandDispatcher);
 		}
 
 		private RequestPersonAbsenceRemovedEvent createRequestPersonAbsenceRemovedEvent(bool enableWaitlist = false)
