@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 			try
 			{
+				jobLockTimer.Start();
 				_jobStartTimeRepository.UpdateLockTimestamp(_currentBusinessUnit.Current().Id.GetValueOrDefault());
 				var period = new DateTimePeriod(_now.UtcDateTime().AddDays(-1).AddHours(-1), _now.UtcDateTime().AddDays(@event.Days).AddHours(1));
 
