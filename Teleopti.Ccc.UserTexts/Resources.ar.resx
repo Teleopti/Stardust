@@ -9242,6 +9242,9 @@
   <data name="FullDay" xml:space="preserve">
     <value>يووم كامل </value>
   </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>اى مكان </value>
+  </data>
   <data name="MissingAbsenceType" xml:space="preserve">
     <value>نوع الغياب الغير موجود</value>
   </data>
@@ -10922,5 +10925,2267 @@
   </data>
   <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
     <value>لا يمكن نشر الإعلان فى يوم الغياب!</value>
+  </data>
+  <data name="CallsSlashDay" xml:space="preserve">
+    <value>مكالمات/لكل يوم </value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>مهارة جديدة</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>دقة</value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>تعرف طريقة التوقع:</value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>أفضل منهج</value>
+  </data>
+  <data name="WeekWithNumber" xml:space="preserve">
+    <value>أسبوع (0)</value>
+  </data>
+  <data name="StaffingLevels" xml:space="preserve">
+    <value>مستويات التعيين</value>
+  </data>
+  <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>تنبيه! لا توجد بيانات قديمة متاحة</value>
+  </data>
+  <data name="ProductActivationKeyV8" xml:space="preserve">
+    <value>هذا النظام مرخص (0) وفقا للشروط واللوائح الخاصة باتفاقية الترخيص فإن مفتاح تفعيل المنتج ستنتهى صلاحيته (1) 
+مفتاح تنشيط المنتج يغطى بحد أقصى (2)  من ممثل خدمة عملاء 
+النسخة الرئيسية (5)</value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>إنشاء مهارة</value>
+  </data>
+  <data name="AddCampaignIntro" xml:space="preserve">
+    <value>تحديد نسبة للزيادة  او النقصان المتوقع</value>
+  </data>
+  <data name="RequestDenyReasonAutoPurge" xml:space="preserve">
+    <value>رفض منذ عدم تنفيذ الطلب فى الوقت المحدد</value>
+  </data>
+  <data name="RequestWaitlistedReasonPersonAccount" xml:space="preserve">
+    <value>لا تملك وقتا كافيا متبقيا فى حسابك الشخصي</value>
+  </data>
+  <data name="Overstaff" xml:space="preserve">
+    <value>عمالة زائدة</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>غير مناسب</value>
+  </data>
+  <data name="SeatProductActivationKeyV8" xml:space="preserve">
+    <value>هذا النظام مرخص (0) وفقا للشروط واللوائح الخاصة باتفاقية الترخيص فإن مفتاح تفعيل المنتج ستنتهى صلاحيته (1) 
+مفتاح تنشيط المنتج يغطى بحد أقصى (2)  من مقعدين 
+النسخة الرئيسية (5)</value>
+  </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value>إجمالى المكالمات &lt;</value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>المكالمات &lt;</value>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>وقت التحدث &lt;</value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW &lt;</value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>القيمة المتوقعة تم تجاوزها</value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>تم إضافة حملة </value>
+  </data>
+  <data name="CouldNotApply" xml:space="preserve">
+    <value>لا يمكن التطبيق. انظر الموضوعات أعلاه</value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>متجاوزون</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>إحصائيات الطابور بدون متجاوزون</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>إحصائيات </value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>إشعارات </value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>تعطيل </value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>تمكين</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>نسخ القيم المتوقعة </value>
+  </data>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>مسموحية كاملة </value>
+  </data>
+  <data name="ShrinkedAllowance" xml:space="preserve">
+    <value>مسموحية بعد البداية</value>
+  </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>نجاح</value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>عملية التوقع تتم</value>
+  </data>
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>هذا هو التوقع الخاص بك. لكى يمكنك أن تعدل من المكالمات المختارة </value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>مسح اختيارات الرسم البياني</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>توقع</value>
+  </data>
+  <data name="CalculateBadgeWithRank" xml:space="preserve">
+    <value>حساب الشارة بترتيب</value>
+  </data>
+  <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
+    <value>استخدام الشارة فى المكالمات التى تم الرد عليها</value>
+  </data>
+  <data name="UseBadgeforAHT" xml:space="preserve">
+    <value>استخدام الشارة فى AHT</value>
+  </data>
+  <data name="UseBadgeforAdherence" xml:space="preserve">
+    <value>استخدام الشارة فى الالتزام</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>عتبة البرونز:</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
+    <value>عتبة الفضة:</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAnsweredCalls" xml:space="preserve">
+    <value>عتبة الذهب: </value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
+    <value>عتبة البرونز 
+(س س : د د : ث ث )</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
+    <value>عتبة الفضة
+(س س : د د : ث ث )</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
+    <value>عتبة الذهب
+(س س : د د : ث ث )</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAdherence" xml:space="preserve">
+    <value>عتبة البرونز (%)</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAdherence" xml:space="preserve">
+    <value>عتبة الفضة (%)</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAdherence" xml:space="preserve">
+    <value>عتبة الذهب (%)</value>
+  </data>
+  <data name="AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>شارة عتبة البرونز الخاصة بالمكالمات التى تم الرد عليها يجب أن تكون أقل من عتبة الفضة</value>
+  </data>
+  <data name="AnsweredCallsSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>شارة عتبة الفضة الخاصة بالمكالمات التى تم الرد عليها يجب أن تكون أقل من عتبة الذهب</value>
+  </data>
+  <data name="AHTBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>شارة عتبة البرونز الخاصة بالAHT التى تم الرد عليها يجب أن تكون أقل من عتبة الفضة</value>
+  </data>
+  <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>شارة عتبة الفضة الخاصة بالAHT التى تم الرد عليها يجب أن تكون أقل من عتبة الذهب</value>
+  </data>
+  <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
+    <value>شارة عتبة البرونز الخاصة بالالتزام التى تم الرد عليها يجب أن تكون أقل من عتبة الفضة</value>
+  </data>
+  <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
+    <value>شارة عتبة الفضة الخاصة بالالتزام التى تم الرد عليها يجب أن تكون أقل من عتبة الذهب</value>
+  </data>
+  <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
+    <value>كل أعضاء الفريق يجب أن يتم تحميلهم</value>
+  </data>
+  <data name="AnnouncementInvalid" xml:space="preserve">
+    <value>تبادل الورديات غير صحيح</value>
+  </data>
+  <data name="AnnouncementInvalidMessage" xml:space="preserve">
+    <value>نشر تبادل ورديتك (0) غير صحيح لان ورديتك تغيرت</value>
+  </data>
+  <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
+    <value>الشخص (0) لديه نشاط شخصى. نشاط الوقت الاضافي او الاجتماع فى الوردية فى التاريخ (1)</value>
+  </data>
+  <data name="NotifyAgent" xml:space="preserve">
+    <value>إبلاغ ممثل خدمة العملاء </value>
+  </data>
+  <data name="Everyone" xml:space="preserve">
+    <value>الجميع </value>
+  </data>
+  <data name="Announcement" xml:space="preserve">
+    <value>نشر تبادل الوردية </value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
+    <value>هل أنت متأكد من حذف (0) إعدادات الألعاب؟</value>
+  </data>
+  <data name="DeleteGamificationSetting" xml:space="preserve">
+    <value>حذف إعدادات الألعاب </value>
+  </data>
+  <data name="Gamification" xml:space="preserve">
+    <value>الألعاب </value>
+  </data>
+  <data name="NewGamificationSetting" xml:space="preserve">
+    <value>إعدادات جديدة للألعاب </value>
+  </data>
+  <data name="NewBadgeSetting" xml:space="preserve">
+    <value>إعدادات شارة جديدة</value>
+  </data>
+  <data name="RuleWithDifferentThreshold" xml:space="preserve">
+    <value>استخدام عتبات مختلفة</value>
+  </data>
+  <data name="RuleWithRatioConvertor" xml:space="preserve">
+    <value>استخدام نسبة التحويل </value>
+  </data>
+  <data name="ConfirmDeleteRequest" xml:space="preserve">
+    <value>هل انت متأكد من حذف هذا الطلب؟</value>
+  </data>
+  <data name="ShiftExchangeAnnouncement" xml:space="preserve">
+    <value>نشر تبادل الورديات </value>
+  </data>
+  <data name="ChooseGamificationSettingToChange" xml:space="preserve">
+    <value>اختيار إعدادات ألعاب للتعديل </value>
+  </data>
+  <data name="EnterGamificationSettingDetails" xml:space="preserve">
+    <value>ادخل تفاصيل ضبط الالعاب </value>
+  </data>
+  <data name="GamificationSettingColon" xml:space="preserve">
+    <value>إعدادات الألعاب</value>
+  </data>
+  <data name="GamificationSettingRuleSetsColon" xml:space="preserve">
+    <value>قاعدة:</value>
+  </data>
+  <data name="ManageGamificationSettings" xml:space="preserve">
+    <value>إدارة إعدادات الألعاب </value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>تم</value>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>منته </value>
+  </data>
+  <data name="OptionDayOff" xml:space="preserve">
+    <value>عطلة </value>
+  </data>
+  <data name="OptionDayOffOrEmptyDay" xml:space="preserve">
+    <value>عطلة أو يوم فارغ</value>
+  </data>
+  <data name="OptionEmptyDay" xml:space="preserve">
+    <value>يوم فارغ </value>
+  </data>
+  <data name="OptionWorkingDay" xml:space="preserve">
+    <value>يوم عمل </value>
+  </data>
+  <data name="LogOnFailedIdentityNotFound" xml:space="preserve">
+    <value>فشل التسجيل! لا يوجد حساب متصل ب (0)</value>
+  </data>
+  <data name="CannotFindDataSourceWithName" xml:space="preserve">
+    <value>لا يمكن العثور على مصدر بيانات خاص بالاسم: (0)</value>
+  </data>
+  <data name="SetSettingTargets" xml:space="preserve">
+    <value>إعداد أهداف الألعاب </value>
+  </data>
+  <data name="SelectSettingForTeams" xml:space="preserve">
+    <value>اختر إعدادات للاستخدامها للفرق </value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>إعدادات </value>
+  </data>
+  <data name="SeatPlanner" xml:space="preserve">
+    <value>مخطط المقاعد</value>
+  </data>
+  <data name="StartDateMustBeGreaterThanToday" xml:space="preserve">
+    <value>بداية التاريخ يجب أن تكون أكبر من اليوم </value>
+  </data>
+  <data name="AnyLocationShouldBeSelected" xml:space="preserve">
+    <value>الموقع يجب أن يتم اختياره</value>
+  </data>
+  <data name="AnyTeamShouldBeSelected" xml:space="preserve">
+    <value>الفريق يجب أن يتم اختياره</value>
+  </data>
+  <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
+    <value>فى (0) تم تحديد مقعد لك </value>
+  </data>
+  <data name="YouHaveNotBeenAllocatedSeat" xml:space="preserve">
+    <value>فى (0) لم يتم تحديد مقعد لك </value>
+  </data>
+  <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
+    <value>بداية التاريخ يجب أن نهاية التاريخ أو قبل ذلك </value>
+  </data>
+  <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
+    <value>بداية التاريخ يجب أن تكون اليوم أو بعد ذلك </value>
+  </data>
+  <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
+    <value>لوحة نشرة مجهولة</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>مختارات </value>
+  </data>
+  <data name="SearchHintForName" xml:space="preserve">
+    <value>ابحث بالاسم </value>
+  </data>
+  <data name="SureToMakeShiftTrade" xml:space="preserve">
+    <value>هل أنت متاكد من القيام بعملية تبادل الورديات التى ستقوم بإجراءها؟ </value>
+  </data>
+  <data name="LockBulletinBoardTrading" xml:space="preserve">
+    <value>نشرة من يأتى أولا ، يتلقى الخدمة أولا</value>
+  </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>الأسفل</value>
+  </data>
+  <data name="ManageSenioritySettings" xml:space="preserve">
+    <value>إدارة إعدادات الأقدمية</value>
+  </data>
+  <data name="RankShiftCategory" xml:space="preserve">
+    <value>ترتيب فئات الورديات من الأفضل للأسوأ</value>
+  </data>
+  <data name="RankWorkingDays" xml:space="preserve">
+    <value>ترتيب أيام العمل من الأفضل للأسوأ </value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>أعلى </value>
+  </data>
+  <data name="NoAbsenceToRemoveInCurrentShift" xml:space="preserve">
+    <value>لا يوجد غياب يتم حذفه فى الوردية الحالية</value>
+  </data>
+  <data name="AnnouncementTakenByOthers" xml:space="preserve">
+    <value>هذه الوردية تم أخذها من شخص آخر، فضلا اختر وردية أخرى فى لوحة تبادل الورديات </value>
+  </data>
+  <data name="ShowExcelReport" xml:space="preserve">
+    <value>اعرض تقرير الاكسيل </value>
+  </data>
+  <data name="ShowPDFReport" xml:space="preserve">
+    <value>اعرض تقرير PDF</value>
+  </data>
+  <data name="ShowWordReport" xml:space="preserve">
+    <value>اعرض تقرير الورد </value>
+  </data>
+  <data name="DayOffValueColon" xml:space="preserve">
+    <value>قيمة يوم العطلة: </value>
+  </data>
+  <data name="ShiftCategoryValueColon" xml:space="preserve">
+    <value>قيمة فئة الوردية: </value>
+  </data>
+  <data name="InAdherence" xml:space="preserve">
+    <value>فى الالتزام</value>
+  </data>
+  <data name="NeutralAdherence" xml:space="preserve">
+    <value>محايد </value>
+  </data>
+  <data name="MaximumNumberOfReportRowsReached" xml:space="preserve">
+    <value>تم الوصول إلى الحد الأقصى من صفوف التقرير</value>
+  </data>
+  <data name="NarrowToSeeAll" xml:space="preserve">
+    <value>قم بحصر المعايير لكى تتمكن من رؤية كل البيانات</value>
+  </data>
+  <data name="AddMustHave" xml:space="preserve">
+    <value>الإضافة يجب أن تشمل </value>
+  </data>
+  <data name="RemoveMustHave" xml:space="preserve">
+    <value>الحذف يجب أن يشمل </value>
+  </data>
+  <data name="DoubleTextBoxGoldThresholdForAdherence" xml:space="preserve">
+    <value>قيمة عتبة الذهب الخاصة بالالتزام يجب أن تكون أكبر من البقية</value>
+  </data>
+  <data name="DoubleTextBoxSilverThresholdForAdherence" xml:space="preserve">
+    <value>قيمة عتبة الفضة الخاصة بالالتزام يجب أن تكون أكبر من البقية</value>
+  </data>
+  <data name="GoldThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>قيمة عتبة الذهب الخاصة بالمكالمات التى تم الرد عليها يجب أن تكون أكبر من البقية</value>
+  </data>
+  <data name="SilverThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>قيمة عتبة الفضة الخاصة بالمكالمات التى تم الرد عليها يجب أن تكون أكبر من عتبة البرونز الخاصة بالمكالمات التى تم الرد عليها</value>
+  </data>
+  <data name="TimeSpanTextBoxGoldThresholdForAHT" xml:space="preserve">
+    <value>قيمة عتبة الذهب الخاصة بالAHT التى تم الرد عليها يجب أن تكون أصغر من البقية</value>
+  </data>
+  <data name="TimeSpanTextBoxSilverThresholdsForAHT" xml:space="preserve">
+    <value>قيمة عتبة الفضة الخاصة بالAHT التى تم الرد عليها يجب أن تكون أصغر من عتبة البرونز الخاصة ب AHT</value>
+  </data>
+  <data name="CreateNewRole" xml:space="preserve">
+    <value>أنشئ دور جديد </value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>تنقيح البيانات...</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>مزدوج</value>
+  </data>
+  <data name="ManagePermissions" xml:space="preserve">
+    <value>إدارة التصاريح</value>
+  </data>
+  <data name="ManagePermissionsIntro" xml:space="preserve">
+    <value>هنا يمكنك أن تحدد من مسموح له بالدخول لاجزاء محددة فى التطبيق</value>
+  </data>
+  <data name="NotSelectedItems" xml:space="preserve">
+    <value>بنود معطلة </value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>تنقيح التصاريح</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>تنقيح الأدوار...</value>
+  </data>
+  <data name="SelectedItems" xml:space="preserve">
+    <value>بنود مفعلة </value>
+  </data>
+  <data name="PersonFinderFieldRole" xml:space="preserve">
+    <value>دور </value>
+  </data>
+  <data name="NoGamificationSetting" xml:space="preserve">
+    <value>لا توجد إعدادات ألعاب </value>
+  </data>
+  <data name="SeatMap" xml:space="preserve">
+    <value>خريطة المقاعد</value>
+  </data>
+  <data name="SeatPlan" xml:space="preserve">
+    <value>خطة المقاعد </value>
+  </data>
+  <data name="CheckingForecastingRequirements" xml:space="preserve">
+    <value>فحص متطلبات التوقع </value>
+  </data>
+  <data name="IssuesText" xml:space="preserve">
+    <value>موضوعات </value>
+  </data>
+  <data name="MissingForecastFrom" xml:space="preserve">
+    <value>توقع مفقود من </value>
+  </data>
+  <data name="MissingSkills" xml:space="preserve">
+    <value>عمليات التوقع مفقودة فى تلك المهارات</value>
+  </data>
+  <data name="NextPlanningPeriodMessage" xml:space="preserve">
+    <value>فترة التخطيط القادمة ستكون من</value>
+  </data>
+  <data name="PlanningPeriodMissingMessage" xml:space="preserve">
+    <value>تلك المتطلبات مفقودة لكى يتم جدولة فترة التخطيط القادمة:</value>
+  </data>
+  <data name="ToText" xml:space="preserve">
+    <value>إلى </value>
+  </data>
+  <data name="showMoreHeaderFields" xml:space="preserve">
+    <value>حقول رئيسية إضافية</value>
+  </data>
+  <data name="AdherenceCannotBeEmpty" xml:space="preserve">
+    <value>حقل الالتزام لا يمكن أن يكون فارغا</value>
+  </data>
+  <data name="NextPlanningPeriod" xml:space="preserve">
+    <value>فترة التخطيط القادمة</value>
+  </data>
+  <data name="PlanningPeriod" xml:space="preserve">
+    <value>فترة التخطيط</value>
+  </data>
+  <data name="DaysAreScheduled" xml:space="preserve">
+    <value>الأيام تمت جدولتها</value>
+  </data>
+  <data name="ApplicationLogonExists" xml:space="preserve">
+    <value>اسم التسجيل موجود بالفعل (0)، فضلا اختر اسم اخر</value>
+  </data>
+  <data name="IdentityLogonExists" xml:space="preserve">
+    <value>الهوية (0)موجودة بالفعل، فضلا اختر هوية أخرى</value>
+  </data>
+  <data name="AddGlobalAuthorizationLabel" xml:space="preserve">
+    <value>اختر مستوى عالمي من الترخيص:</value>
+  </data>
+  <data name="AddSpecificAuthorizationLabel" xml:space="preserve">
+    <value>اضف ترخيص محدد فى القائمة الموجودة بالاسفل</value>
+  </data>
+  <data name="Outbound" xml:space="preserve">
+    <value>الصادر</value>
+  </data>
+  <data name="ForecastAll" xml:space="preserve">
+    <value>توقع الكل</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>نهج</value>
+  </data>
+  <data name="GenerateForecastTip" xml:space="preserve">
+    <value>انشئ توقع</value>
+  </data>
+  <data name="PeriodSelectionTip" xml:space="preserve">
+    <value>اختيار الفترة</value>
+  </data>
+  <data name="ViewChartTip" xml:space="preserve">
+    <value>اظهر طريقة الرسم البياني</value>
+  </data>
+  <data name="SelectForecastPeriodIntro" xml:space="preserve">
+    <value>اختر الفترة القادمة للتوقع</value>
+  </data>
+  <data name="ForecastPeriod" xml:space="preserve">
+    <value>الفترة القادمة</value>
+  </data>
+  <data name="ForecastPeriodLength" xml:space="preserve">
+    <value>فترة التوقع لا يمكن أن تتجاوز عام واحد</value>
+  </data>
+  <data name="ChangePlanningPeriodTo" xml:space="preserve">
+    <value>قم بتغيير فترة التوقع إلى </value>
+  </data>
+  <data name="HavingRangeOf" xml:space="preserve">
+    <value>الحصول على مدى </value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisCampaign" xml:space="preserve">
+    <value>هل أنت متاكد أنك تريد حذف هذه الحملة؟</value>
+  </data>
+  <data name="CallListLength" xml:space="preserve">
+    <value>طول قائمة المكالمات</value>
+  </data>
+  <data name="Campaign" xml:space="preserve">
+    <value>حملة</value>
+  </data>
+  <data name="CampaignName" xml:space="preserve">
+    <value>اسم الحملة </value>
+  </data>
+  <data name="Campaigns" xml:space="preserve">
+    <value>حملات</value>
+  </data>
+  <data name="ConnectAHT" xml:space="preserve">
+    <value>صل ال AHT</value>
+  </data>
+  <data name="ConnectRate" xml:space="preserve">
+    <value>صل معدل (%)</value>
+  </data>
+  <data name="DeleteCampaign" xml:space="preserve">
+    <value>احذف الحملة</value>
+  </data>
+  <data name="OutboundCampaigns" xml:space="preserve">
+    <value>الحملات الصادرة</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>تقدم</value>
+  </data>
+  <data name="RPCAHT" xml:space="preserve">
+    <value>RPC AHT(s)</value>
+  </data>
+  <data name="RPCR" xml:space="preserve">
+    <value>RPCP (%)</value>
+  </data>
+  <data name="TargetRate" xml:space="preserve">
+    <value>معدل الهدف (%)</value>
+  </data>
+  <data name="UnproductiveTime" xml:space="preserve">
+    <value>وقت غير منتج </value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>ساعات العمل </value>
+  </data>
+  <data name="PersonFinderFieldEmploymentNumber" xml:space="preserve">
+    <value>رقم التوظيف</value>
+  </data>
+  <data name="PersonFinderFieldFirstName" xml:space="preserve">
+    <value>الاسم الاول</value>
+  </data>
+  <data name="PersonFinderFieldNote" xml:space="preserve">
+    <value>ملاحظة</value>
+  </data>
+  <data name="SchedulePeriodNotInRange" xml:space="preserve">
+    <value>مدى فترة الجدولة ليست خلال فترة التخطيط</value>
+  </data>
+  <data name="TargetDayOffNotFulfilledMessage" xml:space="preserve">
+    <value>هدف ال(0) من أيام الاجازات لم يتم استيفاؤه</value>
+  </data>
+  <data name="UnsupportedTeamBlockOptimizationStep" xml:space="preserve">
+    <value>خطوات التحسين لم يتم تنفيذها لان الفريق او المجموعة لم يتم اختيارها</value>
+  </data>
+  <data name="ReportTimeoutMessage" xml:space="preserve">
+    <value>عذرا ولكن النظام مشغول بعض الشىء فى الوقت الحالى. حاول باستخدام نطاق أضيق من المعايير او حاول مرة ثانية فيما بعد</value>
+  </data>
+  <data name="SeatPlanStatusError" xml:space="preserve">
+    <value>بعض الممثلين لا يمكن تسكينهم فى مقاعد فى هذا اليوم</value>
+  </data>
+  <data name="SeatPlanStatusInProgress" xml:space="preserve">
+    <value>تخطيط المقاعد يتم تنفيذه حاليا لهذا اليوم</value>
+  </data>
+  <data name="SeatPlanStatusNoSeatPlanned" xml:space="preserve">
+    <value>لا توجد مقاعد مخطط لها فى هذا التاريخ</value>
+  </data>
+  <data name="SeatPlanStatusOK" xml:space="preserve">
+    <value>كل الممثلين الذين تم اختيارهم تم تخصيص مقاعد لهم</value>
+  </data>
+  <data name="AgentCountTitle" xml:space="preserve">
+    <value>ممثلين</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>تنقيح الاماكن</value>
+  </data>
+  <data name="LoadingSeatPlanStatus" xml:space="preserve">
+    <value>تحميل وضع خطة المقاعد</value>
+  </data>
+  <data name="NoLocationsAvailable" xml:space="preserve">
+    <value>لا توجد أماكن متاحة</value>
+  </data>
+  <data name="PlanningPeriodsFor" xml:space="preserve">
+    <value>فترات تخطيط لـ</value>
+  </data>
+  <data name="PlanSeats" xml:space="preserve">
+    <value>تخطيط المقاعد</value>
+  </data>
+  <data name="SeatCountTitle" xml:space="preserve">
+    <value>المقاعد</value>
+  </data>
+  <data name="SeatPlanSubmittedOK" xml:space="preserve">
+    <value>تخطيط المقاعد تم بنجاح</value>
+  </data>
+  <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
+    <value>الفرق او الاماكن لم يتم اختيارها</value>
+  </data>
+  <data name="CouldNotGetMessagesFromMessageBroker" xml:space="preserve">
+    <value>لم نتمكن من الحصول على الرسائل من منفذ الرسائل</value>
+  </data>
+  <data name="MyTeamSchedules" xml:space="preserve">
+    <value>جداول فريقي</value>
+  </data>
+  <data name="CreateCampaign" xml:space="preserve">
+    <value>أنشئ حملة</value>
+  </data>
+  <data name="EditCampaign" xml:space="preserve">
+    <value>أعد تحرير حملة </value>
+  </data>
+  <data name="NeededPersonHours" xml:space="preserve">
+    <value>الساعات المطلوبة</value>
+  </data>
+  <data name="StartTimeAndEndTimeMustBeSet" xml:space="preserve">
+    <value>بداية غير صحيحة او نهاية الوقت</value>
+  </data>
+  <data name="CampaignCreated" xml:space="preserve">
+    <value>الحملة (0) تم إنشاؤها</value>
+  </data>
+  <data name="CampaignFailedCreation" xml:space="preserve">
+    <value>فشل فى إنشاء حملة (0)</value>
+  </data>
+  <data name="CampaignFailedLoading" xml:space="preserve">
+    <value>فشل فى تحميل الحملة (0)</value>
+  </data>
+  <data name="CampaignFailedUpdate" xml:space="preserve">
+    <value>فشل فى تحديث الحملة (0)</value>
+  </data>
+  <data name="CampaignUpdated" xml:space="preserve">
+    <value>الحملة (0) تم تحديثها</value>
+  </data>
+  <data name="LargeValueRange" xml:space="preserve">
+    <value>0ـ 1000000</value>
+  </data>
+  <data name="NewActivityName" xml:space="preserve">
+    <value>لا يوجد اسم نشاط</value>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>1ـ100</value>
+  </data>
+  <data name="UseExistingActivity" xml:space="preserve">
+    <value>استخدم النشاط الموجود</value>
+  </data>
+  <data name="ValueRange" xml:space="preserve">
+    <value>0ـ9999</value>
+  </data>
+  <data name="NewCampaignName" xml:space="preserve">
+    <value>اسم حملة جديد</value>
+  </data>
+  <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
+    <value>كلا من الاسم الاول والاسم الاخير فارغين</value>
+  </data>
+  <data name="CampaignNameInvalid" xml:space="preserve">
+    <value>اسم الحملة المعطى غير صحيح. يمكن أن يحتوى على 255 حرفا على الاكثر</value>
+  </data>
+  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
+    <value>كلمة سر فارغة</value>
+  </data>
+  <data name="Ongoing" xml:space="preserve">
+    <value>جارى التنفيذ</value>
+  </data>
+  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>لا يوجد تسجيل لحساب</value>
+  </data>
+  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
+    <value>الدور (0) غير موجود:</value>
+  </data>
+  <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
+    <value>اسم مستخدم للتطبيق طويل للغاية:</value>
+  </data>
+  <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
+    <value>الاسم الاول طويل للغاية:</value>
+  </data>
+  <data name="TooLongLastnameErrorMsgSemicolon" xml:space="preserve">
+    <value>الاسم الاخير طويل للغاية:</value>
+  </data>
+  <data name="WindowsUserNameIsInvalidErrorMsgSemicolon" xml:space="preserve">
+    <value>اسم متسخدم الويندوز غير صحيح</value>
+  </data>
+  <data name="DuplicatedApplicationLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>اسم مستخدم للتطبيق مكرر:</value>
+  </data>
+  <data name="DuplicatedWindowsLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>مستخدم ويندوز مكرر</value>
+  </data>
+  <data name="PasswordPolicyErrorMsgSemicolon" xml:space="preserve">
+    <value>كلمة سر غير صحيحة:</value>
+  </data>
+  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>لا يوجد اسم مستخدم للتطبيق:</value>
+  </data>
+  <data name="AddBacklog" xml:space="preserve">
+    <value>عمل مؤجل يدوى</value>
+  </data>
+  <data name="CampaignOverstaff" xml:space="preserve">
+    <value>مبكر</value>
+  </data>
+  <data name="CampaignUnderSLA" xml:space="preserve">
+    <value>متأخر </value>
+  </data>
+  <data name="ManualPlan" xml:space="preserve">
+    <value>خطة يدوية</value>
+  </data>
+  <data name="Backlog" xml:space="preserve">
+    <value>عمل مؤجل </value>
+  </data>
+  <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
+    <value>اسحب واسقط.ملفات XLS أو .XLSX</value>
+  </data>
+  <data name="ImportUsers" xml:space="preserve">
+    <value>استيراد مستخدمين</value>
+  </data>
+  <data name="Healthy" xml:space="preserve">
+    <value>فى التوقيت</value>
+  </data>
+  <data name="ReferToFileTemplate" xml:space="preserve">
+    <value>من فضلك ارجع إلى نسخة الملف </value>
+  </data>
+  <data name="RejectedFiles" xml:space="preserve">
+    <value>ملفات مرفوضة:</value>
+  </data>
+  <data name="GenerateReport" xml:space="preserve">
+    <value>إنشاء تقرير </value>
+  </data>
+  <data name="NoReportForCurrentConditions" xml:space="preserve">
+    <value>لا توجد تقارير بالشروط الحالية</value>
+  </data>
+  <data name="SeatPlanReport" xml:space="preserve">
+    <value>تقرير خريطة المقاعد</value>
+  </data>
+  <data name="ManuallyPlanned" xml:space="preserve">
+    <value>مخطط يدويا</value>
+  </data>
+  <data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+    <value>الجميع فى هذه الصفحة تم اختيارهم</value>
+  </data>
+  <data name="SelectAllMatchedPeople" xml:space="preserve">
+    <value>اضغط هنا لاختيار الجميع فى كل صفحة </value>
+  </data>
+  <data name="PersonFinderFieldLastName" xml:space="preserve">
+    <value>الاسم الاخير</value>
+  </data>
+  <data name="ProcessFailedErrorColon" xml:space="preserve">
+    <value>العملية فشلت : خطأ:</value>
+  </data>
+  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
+    <value>تم التحديث بنجاح:</value>
+  </data>
+  <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
+    <value>تاريخ البدء يجب أن يكون مساو أو قبل تاريخ الانتهاء</value>
+  </data>
+  <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
+    <value>يجب تحديد تواريخ البدء والانتهاء</value>
+  </data>
+  <data name="ViewSeatBookings" xml:space="preserve">
+    <value>اعرض حجز المقاعد</value>
+  </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>قد تحتاج إلى تغيير حقيبة الورديات وفقا لما تم.</value>
+  </data>
+  <data name="ClosedDay" xml:space="preserve">
+    <value>يوم الغلق</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>اعرض التقرير</value>
+  </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>إدارة الاشخاص</value>
+  </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>تعديل مهارة</value>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>تغيير حقيبة الوردية</value>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>اختر حقيبة وردية</value>
+  </data>
+  <data name="SeatHasNoBookings" xml:space="preserve">
+    <value>لا يوجد جحز</value>
+  </data>
+  <data name="ConfirmDeleteCampaign" xml:space="preserve">
+    <value>هل أنت متاكد من أنك ترغب فى حذف تلك الحملة؟</value>
+  </data>
+  <data name="CampaignFailedRemove" xml:space="preserve">
+    <value>فشل فى حذف الحملة (0)</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>الأشخاص المختارون</value>
+  </data>
+  <data name="ResetSelection" xml:space="preserve">
+    <value>إعادة ضبط الاختيارات</value>
+  </data>
+  <data name="SelectDateInChart" xml:space="preserve">
+    <value>فضلا اختر التواريخ فى الرسم البيانى</value>
+  </data>
+  <data name="MissingColumnX" xml:space="preserve">
+    <value>أعمدة مفقودة (0)</value>
+  </data>
+  <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
+    <value>الملف المختار لا يمكن قبوله. فضلا تأكد من نوعية الملف </value>
+  </data>
+  <data name="SeatBookings" xml:space="preserve">
+    <value>حجز المقاعد</value>
+  </data>
+  <data name="FailedImportedCountColon" xml:space="preserve">
+    <value>استيراد فاشل</value>
+  </data>
+  <data name="InternalErrorXMsg" xml:space="preserve">
+    <value>حدثت بعض الأخطاء الداخلية </value>
+  </data>
+  <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
+    <value>فضلا اعثر على ملف الاكسيل المحمل من الانترنت للتأكد من تفاصيل الخطأ</value>
+  </data>
+  <data name="SuccessfullyImportedCountColon" xml:space="preserve">
+    <value>تم الاستيراد بنجاح</value>
+  </data>
+  <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
+    <value>اسم المستخدم بالبرنامج يجب أن يكون عنوانا بريديا صحيحا</value>
+  </data>
+  <data name="TooLongWindowsUserErrorMsgSemicolon" xml:space="preserve">
+    <value>مستخدم ويندوز طويل للغاية:</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>حجز مقعد (0) ل (1) تم حذفه</value>
+  </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>يجب أن تختار يوما واحدا فقط على الأقل</value>
+  </data>
+  <data name="CampaignThreshold" xml:space="preserve">
+    <value>عتبة الحملة </value>
+  </data>
+  <data name="RtaLoggedIn" xml:space="preserve">
+    <value>تم التسجيل بالدخول</value>
+  </data>
+  <data name="RtaLoggedOut" xml:space="preserve">
+    <value>تم التسجيل بالخروج</value>
+  </data>
+  <data name="ModifySkill" xml:space="preserve">
+    <value>تعديل المهارة</value>
+  </data>
+  <data name="SeatPlanResultDetailMessage" xml:space="preserve">
+    <value>محاولة (0) حجز مقاعد، (1) تمت بنجاح و (2) فشلت. ولذلك فإن (3) لم يتم جدولته</value>
+  </data>
+  <data name="Seasonality" xml:space="preserve">
+    <value>موسمية</value>
+  </data>
+  <data name="ClearBackgroundImage" xml:space="preserve">
+    <value>تنظيف صورة الخلفية</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>صورة</value>
+  </data>
+  <data name="Seat" xml:space="preserve">
+    <value>مقعد</value>
+  </data>
+  <data name="SetBackgroundImage" xml:space="preserve">
+    <value>ضع صورة خلفية</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>نص</value>
+  </data>
+  <data name="AlignBottom" xml:space="preserve">
+    <value>محاذاة القاع</value>
+  </data>
+  <data name="AlignLeft" xml:space="preserve">
+    <value>حاذى يسارا</value>
+  </data>
+  <data name="AlignRight" xml:space="preserve">
+    <value>حاذى يمينا</value>
+  </data>
+  <data name="AlignTop" xml:space="preserve">
+    <value>حاذى للأعلى</value>
+  </data>
+  <data name="BringToFront" xml:space="preserve">
+    <value>ادفع للأمام</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>أنشىء</value>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>افصل</value>
+  </data>
+  <data name="FlipItemHorizontally" xml:space="preserve">
+    <value>اقلب البنود المختارة أفقيا</value>
+  </data>
+  <data name="FlipItemVertically" xml:space="preserve">
+    <value>اقلب البنود المختارة رأسيا</value>
+  </data>
+  <data name="GroupSelectedItems" xml:space="preserve">
+    <value>ادمج البنود المختارة فى مجموعة</value>
+  </data>
+  <data name="MoveBack" xml:space="preserve">
+    <value>حرك للخلف</value>
+  </data>
+  <data name="MoveForwards" xml:space="preserve">
+    <value>حرك للأمام</value>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>أدر </value>
+  </data>
+  <data name="SendToBack" xml:space="preserve">
+    <value>أرسل للخلف </value>
+  </data>
+  <data name="SpaceHorizontally" xml:space="preserve">
+    <value>أوجد مساحة للبنود المختارة أفقيا</value>
+  </data>
+  <data name="SpaceVertically" xml:space="preserve">
+    <value>أوجد مساحة للبنود المختارة رأسيا</value>
+  </data>
+  <data name="RevertToLastSave" xml:space="preserve">
+    <value>ارجع إلى آخر حفظ </value>
+  </data>
+  <data name="UngroupItems" xml:space="preserve">
+    <value>إلغاء تجميع البنود </value>
+  </data>
+  <data name="NotAllowed" xml:space="preserve">
+    <value>غير مسموح!</value>
+  </data>
+  <data name="CreateAndManagePlanningPeriods" xml:space="preserve">
+    <value>أنشىء وأدر فترات التخطيط المختلفة</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>الوضع الافتراضى</value>
+  </data>
+  <data name="PlanningPeriodIsScheduled" xml:space="preserve">
+    <value>فترة التخطيط تمت جدولتها</value>
+  </data>
+  <data name="PlanningPeriods" xml:space="preserve">
+    <value>فترات التخطيط </value>
+  </data>
+  <data name="SelectedFiltersColon" xml:space="preserve">
+    <value>التنقيحات المختارة:</value>
+  </data>
+  <data name="StartNext" xml:space="preserve">
+    <value>ابدا التالى</value>
+  </data>
+  <data name="DailyTotal" xml:space="preserve">
+    <value>الإجمالى اليومي</value>
+  </data>
+  <data name="SelectToModify" xml:space="preserve">
+    <value>اختر الأيام فى الرسم البيانى قبل التعديل </value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>تعديل </value>
+  </data>
+  <data name="AccessAllFunctions" xml:space="preserve">
+    <value>الدخول لكل الوظائف:</value>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>التغيرات تم إبطالها فى الأدوار غير المحددة</value>
+  </data>
+  <data name="UnselectedItems" xml:space="preserve">
+    <value>بنود غير مختارة</value>
+  </data>
+  <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
+    <value>نتائج البحث لكلمات البحث ستتجاوز  500، فضلا نقح عملية البحث </value>
+  </data>
+  <data name="ValidationforFilter" xml:space="preserve">
+    <value>فضلا اضف منقح </value>
+  </data>
+  <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
+    <value>كل من عملية النسخ والحملة تم إضافتهما </value>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>الاسم مطلوب</value>
+  </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>إجمالى ACW &gt;</value>
+  </data>
+  <data name="ScheduleIsRunning" xml:space="preserve">
+    <value>تحذير: الخادم مشغول فى الجدولة، فضلا  حاول ثانية فيما بعد</value>
+  </data>
+  <data name="TotalTalkTimeCaret" xml:space="preserve">
+    <value>إجمالى وقت التحدث &lt;</value>
+  </data>
+  <data name="ChangePlanningPeriod" xml:space="preserve">
+    <value>تغيير فترة التخطيط</value>
+  </data>
+  <data name="EditFilter" xml:space="preserve">
+    <value>تحرير المنقح </value>
+  </data>
+  <data name="DeleteFilter" xml:space="preserve">
+    <value>احذف المنقح</value>
+  </data>
+  <data name="PickAnAbsence" xml:space="preserve">
+    <value>اختر الغياب </value>
+  </data>
+  <data name="ManageRules" xml:space="preserve">
+    <value>إدارة القواعد </value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>اضف مكاناً</value>
+  </data>
+  <data name="ManageMappings" xml:space="preserve">
+    <value>إدارة رسم خرائط القواعد </value>
+  </data>
+  <data name="Mappings" xml:space="preserve">
+    <value>قواعد رسم الخرائط</value>
+  </data>
+  <data name="Threshold" xml:space="preserve">
+    <value>عتبة</value>
+  </data>
+  <data name="IsAlarm" xml:space="preserve">
+    <value>تنبيه</value>
+  </data>
+  <data name="createNewRuleset" xml:space="preserve">
+    <value>انشىء مجموعة قواعد جديدة</value>
+  </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>لا توجد نتائج</value>
+  </data>
+  <data name="AlarmColor" xml:space="preserve">
+    <value>لون التنبيه</value>
+  </data>
+  <data name="CannotBeDeletedBecauseItIsBeingUsedInMappings" xml:space="preserve">
+    <value>لا يمكن حذفها لأنها مستخدمة فى رسم الخرائط </value>
+  </data>
+  <data name="SecondsSlashCalls" xml:space="preserve">
+    <value>ثوانى / مكالمة </value>
+  </data>
+  <data name="DaysAreSelectedFrom" xml:space="preserve">
+    <value>(0) أيام قد تم اختيارها من (1) إلى (2)</value>
+  </data>
+  <data name="SelectedDayIs" xml:space="preserve">
+    <value>اليوم المختار هو (0)</value>
+  </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>المكالمات المنسوخة او الحملة للسيناريو</value>
+  </data>
+  <data name="NameCantBeMoreThan" xml:space="preserve">
+    <value>الاسم يجب أن يكون أقل من 50 رمزاً</value>
+  </data>
+  <data name="SecondsSpan" xml:space="preserve">
+    <value>الثوانى يجب أن تكون بين 1 و 86400</value>
+  </data>
+  <data name="ShrinkageSpan" xml:space="preserve">
+    <value>الانكماش يجب أن يكون بين 1 و 99</value>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>كل الايام مغلقة</value>
+  </data>
+  <data name="LatestAcquiredTime" xml:space="preserve">
+    <value>آخر الأوقات المكتسبة </value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>حجم الصفحة </value>
+  </data>
+  <data name="TotalRequestsCount" xml:space="preserve">
+    <value>إجمالى عدد الطلبات</value>
+  </data>
+  <data name="ClearOverride" xml:space="preserve">
+    <value>نظف النسخ</value>
+  </data>
+  <data name="AddAbsenceSuccessedResult" xml:space="preserve">
+    <value>تم إضافة الغياب بنجاح إلى الممثلين المختارين</value>
+  </data>
+  <data name="AddAbsenceTotalResult" xml:space="preserve">
+    <value>إضافة غيابات ل (0) ممثل، (1) نجح و (2) فشل. </value>
+  </data>
+  <data name="SwapShifts" xml:space="preserve">
+    <value>تبديل الورديات</value>
+  </data>
+  <data name="ScheduleHasBeenChanged" xml:space="preserve">
+    <value>تغير الجدول عن طريق آخرين، فضلا اعد تحميل الجدول </value>
+  </data>
+  <data name="CommandFailed" xml:space="preserve">
+    <value>العملية المطلوبة فشلت. (0)</value>
+  </data>
+  <data name="RequestsHaveBeenApproved" xml:space="preserve">
+    <value>(0) طلب تم الموافقة عليه</value>
+  </data>
+  <data name="RequestsHaveBeenDenied" xml:space="preserve">
+    <value>(0) طلب تم رفضه</value>
+  </data>
+  <data name="FailedToSwapShifts" xml:space="preserve">
+    <value>فشل فى تبديل الورديات</value>
+  </data>
+  <data name="FinishedSwapShifts" xml:space="preserve">
+    <value>عملية تبديل الورديات انتهت بنجاح</value>
+  </data>
+  <data name="RemoveAbsence" xml:space="preserve">
+    <value>احذف غياب </value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
+    <value>هل أنت متأكد من أنك ترغب فى حذف (0) الغيابات من (1) ممثلين؟</value>
+  </data>
+  <data name="FailedToRemoveAbsence" xml:space="preserve">
+    <value>فشل فى حذف الغياب المختار </value>
+  </data>
+  <data name="FinishedRemoveAbsence" xml:space="preserve">
+    <value>تم حذف الغياب بنجاح</value>
+  </data>
+  <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
+    <value>لا تملك الصلاحية لإضافة غياب داخل اليوم ل (0)</value>
+  </data>
+  <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
+    <value>لا تملك صلاحيات لإضافة غياب يوم كامل ل (0)</value>
+  </data>
+  <data name="ConnectionErrorMessage" xml:space="preserve">
+    <value>الخادم لا يمكن الوصول إليه، افحص اتصالك بالانترنت أو اتصل بالمسئول </value>
+  </data>
+  <data name="InternalErrorMessage" xml:space="preserve">
+    <value>التطبيق واجه خطأ غير متوقع. ساعدنا فى تحسين خبرتك عن طريق إرسال تقرير الخطأ:</value>
+  </data>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>اعرض الوقت فى توقيت المنطقة الخاصة بى </value>
+  </data>
+  <data name="RequestSubmitterTimeZone" xml:space="preserve">
+    <value>اعرض الوقت فى توقيت المنطقة المطلوب</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>تنقيح الادوار </value>
+  </data>
+  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
+    <value>أبعاد غير صحيحة! توقع صورة أصغر من 2000×4000 </value>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>تحميل صورة </value>
+  </data>
+  <data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
+    <value>ليست JPEG, SVG أو PNG</value>
+  </data>
+  <data name="RequestsHaveNotBeenApproved" xml:space="preserve">
+    <value>(0) طلب لم يتم الموافقة عليه</value>
+  </data>
+  <data name="RequestsHaveNotBeenDenied" xml:space="preserve">
+    <value>(0) طلب لم يتم رفضه </value>
+  </data>
+  <data name="PresentTenseSchedule" xml:space="preserve">
+    <value>جدولة</value>
+  </data>
+  <data name="SelectedRequestsInfo" xml:space="preserve">
+    <value>تم اختيار (0) من (1) طلبات </value>
+  </data>
+  <data name="DayOffRules" xml:space="preserve">
+    <value>قواعد يوم العطلة </value>
+  </data>
+  <data name="NewDayOffRule" xml:space="preserve">
+    <value>قواعد يوم عطلة جديدة</value>
+  </data>
+  <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
+    <value>الممثلون تمت جدولتهم بنجاح</value>
+  </data>
+  <data name="CriticalUnderstaffingColon" xml:space="preserve">
+    <value>نقص حاد فى العمالة:</value>
+  </data>
+  <data name="InvalidInput" xml:space="preserve">
+    <value>إدخال غير صحيح</value>
+  </data>
+  <data name="UnderstaffingColon" xml:space="preserve">
+    <value>نقص فى العمالة: </value>
+  </data>
+  <data name="WeekendColon" xml:space="preserve">
+    <value>نهاية الأسبوع: </value>
+  </data>
+  <data name="OverstaffingColon" xml:space="preserve">
+    <value>عمالة زائدة:</value>
+  </data>
+  <data name="ClearCampaign" xml:space="preserve">
+    <value>تنظيف الحملة</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>هل تتذكرنى؟</value>
+  </data>
+  <data name="MyTeam" xml:space="preserve">
+    <value>فريقي</value>
+  </data>
+  <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
+    <value>فترة التخطيط ستكون من </value>
+  </data>
+  <data name="AppliedFilters" xml:space="preserve">
+    <value>الإعدادات تم تطبيقها فى التالى:</value>
+  </data>
+  <data name="SeatBookingsList" xml:space="preserve">
+    <value>قائمة حجز المقاعد</value>
+  </data>
+  <data name="SeatProperties" xml:space="preserve">
+    <value>خصائص المقعد</value>
+  </data>
+  <data name="IntraOptimize" xml:space="preserve">
+    <value>تحسين الوقت داخل اليوم </value>
+  </data>
+  <data name="ShowErrors" xml:space="preserve">
+    <value>اعرض الأخطاء </value>
+  </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>مجهول </value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>رقم غير صحيح </value>
+  </data>
+  <data name="ShowRightPanel" xml:space="preserve">
+    <value>اعرض اللوحة الصحيحة</value>
+  </data>
+  <data name="ShowOnlyAbsence" xml:space="preserve">
+    <value>اعرض الغيابات فقط</value>
+  </data>
+  <data name="HidePanel" xml:space="preserve">
+    <value>اخف اللوحة</value>
+  </data>
+  <data name="DoubleClickHereToEditText" xml:space="preserve">
+    <value>انقر نقر مزدوج هنا لتحرير النص</value>
+  </data>
+  <data name="EnableWaitlisting" xml:space="preserve">
+    <value>تفعيل قائمة الانتظار</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
+    <value>طلب الغياب ل (0) لا يمكن قبوله فى هذا الوقت وتم وضعه فى قائمة الانتظار.</value>
+  </data>
+  <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
+    <value>طلب الغياب ل (0) إلى (1) لا يمكن الموافقة عليه فى هذا الوقت وتم وضعه فى قائمة الانتظار.</value>
+  </data>
+  <data name="Waitlisted" xml:space="preserve">
+    <value>وضع فى قائمة الانتظار</value>
+  </data>
+  <data name="AddEmptyPeriod" xml:space="preserve">
+    <value>اضف ساعات مفتوحة</value>
+  </data>
+  <data name="DeletePeriod" xml:space="preserve">
+    <value>احذف فترة </value>
+  </data>
+  <data name="AgentDetails" xml:space="preserve">
+    <value>تفاصيل الممثل </value>
+  </data>
+  <data name="InAlarm" xml:space="preserve">
+    <value>فى المنبه </value>
+  </data>
+  <data name="SelectSites" xml:space="preserve">
+    <value>اختر مواقع </value>
+  </data>
+  <data name="SelectTeams" xml:space="preserve">
+    <value>اختر فرق </value>
+  </data>
+  <data name="Personalize" xml:space="preserve">
+    <value>قم بشخصنة </value>
+  </data>
+  <data name="ToggleLowLightFilter" xml:space="preserve">
+    <value>تثبيت منقح ضوء ضعيف </value>
+  </data>
+  <data name="NoHierarchiesExist" xml:space="preserve">
+    <value>لا يوجد تسلسل وظيفي لوحدة الأعمال الحالية.</value>
+  </data>
+  <data name="ToggleAll" xml:space="preserve">
+    <value>تثبيت الكل </value>
+  </data>
+  <data name="WaitlistPosition" xml:space="preserve">
+    <value>موقع قائمة الانتظار: </value>
+  </data>
+  <data name="LoadedColon" xml:space="preserve">
+    <value>تم تحميله: </value>
+  </data>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>احذف كل غياب الأيام</value>
+  </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>تثبيت هيئة سوداء </value>
+  </data>
+  <data name="CanNotModifyMyRole" xml:space="preserve">
+    <value>لا تستطيع تعديل دورك</value>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>مفتاح تنشيط منتج تليوبتى WFM النسخة 8 مطلوب لتشغيل النظام، فضلا اتصلا بخدمة الدعم التقنى او مديرك من أجل طلب مفتاح جديد.</value>
+  </data>
+  <data name="Replan" xml:space="preserve">
+    <value>إعادة تخطيط</value>
+  </data>
+  <data name="ConfirmToggleAllPermissions" xml:space="preserve">
+    <value>سيقوم هذا بتثبيت كل الوظائف، هل أنت متأكد من انك ترغب فى الاستمرار؟</value>
+  </data>
+  <data name="ConfirmToggleChildPermissions" xml:space="preserve">
+    <value>هذا الإجراء سيمحو تلك الوظيفة وكل الوظائف المنبثقة منها. هل أنت متأكد من أنك ترغب فى الاستمرار؟</value>
+  </data>
+  <data name="SameDay" xml:space="preserve">
+    <value>نفس اليوم</value>
+  </data>
+  <data name="FailedMessageForAddingActivity" xml:space="preserve">
+    <value>لا يمكن إضافة أى أنشطة للممثلين المختارين</value>
+  </data>
+  <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
+    <value>تم إضافة انشطة للممثلين المختارين بنجاح</value>
+  </data>
+  <data name="SelectAnActivity" xml:space="preserve">
+    <value>اختر نشاطا</value>
+  </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>لا يمكن حذف غياب من الجدول الذى تتم حمايته</value>
+  </data>
+  <data name="DenyReason" xml:space="preserve">
+    <value>ارفض السبب</value>
+  </data>
+  <data name="YouHaveSelectedXAgent" xml:space="preserve">
+    <value>لقد اخترت (0) ممثلين </value>
+  </data>
+  <data name="RemoveActivity" xml:space="preserve">
+    <value>احذف نشاطا</value>
+  </data>
+  <data name="PersonsAreWriteProtected" xml:space="preserve">
+    <value>الجدول محمي من الكتابة ل (0) للممثلين استخدم زر عدم الاختيار لكى تتمكن من تحديث الممثلين الذين لا يزالون يمكن تحرير النص الخاص بهم</value>
+  </data>
+  <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
+    <value>يجب أن تختر على الأقل ممثل واحد</value>
+  </data>
+  <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
+    <value>يجب أن تختار ممثلين للتبديل </value>
+  </data>
+  <data name="NoPermissionAddAgentActivity" xml:space="preserve">
+    <value>لا توجد صلاحيات لإضافة نشاط للممثلين</value>
+  </data>
+  <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
+    <value>لا توجد صلاحيات لحذف الأنشطة للموظفين</value>
+  </data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value>طلب الغياب ل (0) تم إلغاؤها والغياب تم حذفه من جدولك</value>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>طلب الغياب ل(0) - (1) تم إلغاؤه والغياب تم حذفه من جدولك</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>تم إلغاؤه </value>
+  </data>
+  <data name="ModifySkillArea" xml:space="preserve">
+    <value>تعديل منطقة المهارات</value>
+  </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>أنشئ منطقة مهارات </value>
+  </data>
+  <data name="ForecastedAverageHandleTime" xml:space="preserve">
+    <value>متوسط مدة المكالمة المتوقع</value>
+  </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>حركة المرور الواردة </value>
+  </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>هل قمت بمراقبة قيم الأداء داخل اليوم، ابدا باختيار أى من المهارة أو منطقتك</value>
+  </data>
+  <data name="OfferedAverageHandleTime" xml:space="preserve">
+    <value>متوسط  مدة المكالمة المعروضة </value>
+  </data>
+  <data name="SelectSkillArea" xml:space="preserve">
+    <value>اختر منطقة المهارة</value>
+  </data>
+  <data name="IncludedSkills" xml:space="preserve">
+    <value>مهارات متضمنة </value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
+    <value>هل أنت متأكد من أنك ترغب فى حذف (0) مهارات من (1) للممثلين.</value>
+  </data>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>تم حذف أنشطة للممثلين المختارين بنجاح</value>
+  </data>
+  <data name="FailedMessageForRemovingActivity" xml:space="preserve">
+    <value>باء حذف الأنشطة من الممثلين المختارين بالفشل</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
+    <value>طلب الغياب ل(0) لا يمكن إلغاؤه لان الغياب المرتبط به لا يمكن العثور عليه او أنه قد تم تعديله</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
+    <value>حذف الأنشطة ل(0) ممثل فى الأنشطة (1) تمت بنجاح (2) فشلت </value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
+    <value>طلب الغياب ل(0) لا يمكن إلغاؤه لـ (0) من (1) - (2) لان الغياب المرتبط به لا يمكن العثور عليه او أنه قد تم تعديله</value>
+  </data>
+  <data name="AddAbsenceFailed" xml:space="preserve">
+    <value>فشل فى إضافة غياب </value>
+  </data>
+  <data name="RequestsHaveBeenCancelled" xml:space="preserve">
+    <value>(0) طلب تم إلغاؤه</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingActivity" xml:space="preserve">
+    <value>إضافة أنشطة ل (0) ممثل، (1) نجح (2) فشل</value>
+  </data>
+  <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
+    <value>(0) طلب لم يتم إلغاؤهم </value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
+    <value>حذف الغياب ل (0) ممثل (1) نجح، (2) فشل</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>الغ الطلب </value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequest" xml:space="preserve">
+    <value>لا يمكن إلغاء طلب الغياب ل (0) فوق (1) لانه لم يتم الموافقة عليه</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
+    <value>لا يمكن إلغاء طلب الغياب لـ (0) من (1) - (2) لانه لم يتم الموافقة عليه</value>
+  </data>
+  <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
+    <value>هل أنت متأكد أنك ترغب فى إلغاء طلب هذا الغياب؟ </value>
+  </data>
+  <data name="CancelAbsenceRequest" xml:space="preserve">
+    <value>إلغاء طلب الغياب الذى تمت الموافقة عليه</value>
+  </data>
+  <data name="CancelAbsenceRequestDescription" xml:space="preserve">
+    <value>إذا ألغيت طلب الغياب الذى تمت الموافقة عليه فإن غياب تم إنشاؤه من هذا الطلب سيتم حذفه من جدول الممثل</value>
+  </data>
+  <data name="TryOutTheNewImprovedTeams" xml:space="preserve">
+    <value>جرب الفرق المتقدمة!</value>
+  </data>
+  <data name="WFMReleaseNotification" xml:space="preserve">
+    <value>(0) تم تطويره! نقدر إخطارك (1). (2) قديم (3) يمكن الدخول إليه لوقت محدد</value>
+  </data>
+  <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
+    <value>لا تستطيع ان تضيف نشاطا إلى (0) لليوم التالى بدون وردية</value>
+  </data>
+  <data name="PreviewTheNewIntradayTool" xml:space="preserve">
+    <value>اعرض الأداة الجديدة لانشطة ما بين اليوم</value>
+  </data>
+  <data name="ExtendExistingShift" xml:space="preserve">
+    <value>مد الوردية الحالية</value>
+  </data>
+  <data name="NonWorkingDays" xml:space="preserve">
+    <value>أيام غير عمل </value>
+  </data>
+  <data name="UseShiftsFromColon" xml:space="preserve">
+    <value>استخدم الورديات من: </value>
+  </data>
+  <data name="AbsenceRequestCancellationThreshold" xml:space="preserve">
+    <value>عدد الأيام قبل تاريخ الغياب التى تم طلبها قد يتم إلغاؤها</value>
+  </data>
+  <data name="AbsenceRequestExpiredThreshold" xml:space="preserve">
+    <value>عتبة الحد الأدني للوقت الذى تم الموافقة عليه (دقائق قبل تاريخ الطلب)</value>
+  </data>
+  <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
+    <value>لا يوجد تصريح لنقل نشاط للممثلين (0).</value>
+  </data>
+  <data name="SelectedAgentsColon" xml:space="preserve">
+    <value>الممثلون المختارون:</value>
+  </data>
+  <data name="CanNotMoveMultipleAcivitiesForAgent" xml:space="preserve">
+    <value>لا يمكن نقل أنشطة متعددة للممثل (0): </value>
+  </data>
+  <data name="CannotDeleteBaseActivity" xml:space="preserve">
+    <value>لا يمكن حذف النشاط الاساسي</value>
+  </data>
+  <data name="LatestActualInterval" xml:space="preserve">
+    <value>اخر فترة بينية حقيقية</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingActivity" xml:space="preserve">
+    <value>نقل الانشطة ل(0) ممثلين، (1) نجح و (2) فشل.</value>
+  </data>
+  <data name="SuccessfulMessageForMovingActivity" xml:space="preserve">
+    <value>تم نقل الأنشطة بنجاح للممثلين المختارين</value>
+  </data>
+  <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
+    <value>الوقت الجديد لا يمكن أن يتم تطبيقه </value>
+  </data>
+  <data name="ScheduleIsWriteProtected" xml:space="preserve">
+    <value>غير قادر على تغيير الجدول ل (0) فى (1) لأنها محمية ضد الكتابة.</value>
+  </data>
+  <data name="ConfirmCancelRequest" xml:space="preserve">
+    <value>إلغاء الطلب الذى الموافقة عليه سيزيل أى غياب مرتبط من جدولك. هل أنت متاكد من أنك ترغب فى الاستمرار؟</value>
+  </data>
+  <data name="AbsenceRequestCancellationThresholdExceeded" xml:space="preserve">
+    <value>من المتأخر للغاية أن يتم إلغاء هذا الطلب. هذا الطلب قد يتم إلغاؤه ليس بعد أكثر من (0) أيام قبل تاريخ البدء. </value>
+  </data>
+  <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
+    <value>لا يمكن إضافة نشاط خلال الوردية المرتبطة باليوم السابق</value>
+  </data>
+  <data name="LoadRequests" xml:space="preserve">
+    <value>تحميل الطلبات</value>
+  </data>
+  <data name="RequestInvalidStateTransition" xml:space="preserve">
+    <value>الطلب الذى قد يكون (0) لا يمكن أن يكون (1) </value>
+  </data>
+  <data name="PersonAssignmentIsNotValid" xml:space="preserve">
+    <value>تخصيص الشخص غير صحيح</value>
+  </data>
+  <data name="Unselect" xml:space="preserve">
+    <value>غير مختار </value>
+  </data>
+  <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
+    <value>لا يوجد تصريح لإضافة نشاط شخصي للممثل (0) </value>
+  </data>
+  <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
+    <value>لا يمكن إضافة أنشطة شخصية بدون وردية </value>
+  </data>
+  <data name="HelpLabel" xml:space="preserve">
+    <value>مساعدة</value>
+  </data>
+  <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
+    <value>الطلبات الموجودة فى قائمة الانتظار للفترة (0) بدأت فى التشغيل</value>
+  </data>
+  <data name="WaitlistPeriod" xml:space="preserve">
+    <value>كل الطلبات الموجودة فى قائمة الانتظر سيتم البدء فيها فى الفترة المختارة</value>
+  </data>
+  <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
+    <value>الطلبات الموجودة فى قائمة الانتظار للفترة (0) قد انتهت </value>
+  </data>
+  <data name="ProcessWaitlist" xml:space="preserve">
+    <value>البدء فى قائمة الانتظار</value>
+  </data>
+  <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
+    <value>عملية إنجار قائمة الانتظار ستتم فى الخلفية وقد تستغرق بعض الوقت حتى تنتهى.</value>
+  </data>
+  <data name="ShiftTrade" xml:space="preserve">
+    <value>تبادل الورديات</value>
+  </data>
+  <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
+    <value>لا يمكن نقل عددا من الانشطة للممثلين المختارين</value>
+  </data>
+  <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>النظام مرخص ل(0) وفقا لشروط وأحكام اتفاقية الترخيص. مفتاح تنشيط المنتج يغطى على الأكثر (1) ممثل
+النسخة الرئيسية: (4)</value>
+  </data>
+  <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>النظام مرخص ل(0) وفقا لشروط وأحكام اتفاقية الترخيص. مفتاح تنشيط المنتج يغطى على الأكثر (1) مقعد
+النسخة الرئيسية: (4)</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>تنقيح التقارير </value>
+  </data>
+  <data name="AbandonedRate" xml:space="preserve">
+    <value>نسبة فقد المكالمات </value>
+  </data>
+  <data name="SummaryUpToLatestActualInterval" xml:space="preserve">
+    <value>ملخص لاخر فترة بينية حقيقية</value>
+  </data>
+  <data name="ShiftLengthExceed36Hours" xml:space="preserve">
+    <value>طول الوردية تتجاوز 36 ساعة</value>
+  </data>
+  <data name="CannotUndoScheduleChange" xml:space="preserve">
+    <value>لا يمكن الرجوع فى تغيرات الجدول</value>
+  </data>
+  <data name="PreviewTheNewRequestsModule" xml:space="preserve">
+    <value>اعرض وحدات الطلبات الجديدة </value>
+  </data>
+  <data name="PreviewTheNewPeopleModule" xml:space="preserve">
+    <value>اعرض وحدة الاشخاص الجدد</value>
+  </data>
+  <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
+    <value>(0) تم تحسينه! نقدر  (1) إعلامك لنا (2)</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>مدى التاريخ</value>
+  </data>
+  <data name="ReportOptions" xml:space="preserve">
+    <value>تقرير الاختيارات</value>
+  </data>
+  <data name="ShowOnlyAgentsWithNoSeat" xml:space="preserve">
+    <value>اعرض الممثلين فقط بدون مقاعد</value>
+  </data>
+  <data name="AreYouSureToUndoSelectedSchedule" xml:space="preserve">
+    <value>هل أنت متاكد فى الرجوع فى تغييرات آخر جدول للممثلين المختارين؟</value>
+  </data>
+  <data name="FailedMessageForUndoSchedule" xml:space="preserve">
+    <value>فشل فى الرجوع فى تغييرات للممثلين المختارين</value>
+  </data>
+  <data name="PartialSuccessMessageForUndoSchedule" xml:space="preserve">
+    <value>الرجوع فى تغييرات الجدول ل (0) ممثل، (1) نجح و (2) فشل </value>
+  </data>
+  <data name="SuccessfulMessageForUndoSchedule" xml:space="preserve">
+    <value>تم بنجاح التراجع فى تغييرات آخر جدول للممثلين المختارين</value>
+  </data>
+  <data name="Backout" xml:space="preserve">
+    <value>تراجع</value>
+  </data>
+  <data name="ShiftTradeRequestScheduleChanged" xml:space="preserve">
+    <value>طلب تبادل الوردية ل(0) يجب أن يتم الموافقة عليه مرة أخرى. جدول الممثل الآخر قد تغير. </value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>توقف مؤقت </value>
+  </data>
+  <data name="PausedAt" xml:space="preserve">
+    <value>توقف بشكل مؤقت عند </value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>تشغيل </value>
+  </data>
+  <data name="RtaPauseDisableNotice" xml:space="preserve">
+    <value>مراقبة التزام الوقت الحقيقي مفعلة </value>
+  </data>
+  <data name="RtaPauseEnabledNotice" xml:space="preserve">
+    <value>مراقبة الوقت الحقيقي توقفت مؤقتا عند (0)! اعد التشغيل عند الضغط على زر تشغيل</value>
+  </data>
+  <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
+    <value>اختر الجميع فى كل صفحة </value>
+  </data>
+  <data name="UnselectAllPeopleInEveryPage" xml:space="preserve">
+    <value>لا تختر الجميع فى كل صفحة</value>
+  </data>
+  <data name="DeletePerson" xml:space="preserve">
+    <value>احذف أشخاص</value>
+  </data>
+  <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
+    <value>مدى التاريخ يمكن على أقصى تقدير أن يكون 60 يوما</value>
+  </data>
+  <data name="OrganizeCascadingSkills" xml:space="preserve">
+    <value>تنظيم المهارات الموزعة</value>
+  </data>
+  <data name="EditLocationProperty" xml:space="preserve">
+    <value>تحرير خصائص المكان</value>
+  </data>
+  <data name="LocationProperties" xml:space="preserve">
+    <value>خصائص المكان </value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>سابقة</value>
+  </data>
+  <data name="Suffix" xml:space="preserve">
+    <value>لاحقة</value>
+  </data>
+  <data name="NotAllowedChange" xml:space="preserve">
+    <value>تغيير غير مسموح</value>
+  </data>
+  <data name="NightRest" xml:space="preserve">
+    <value>راحة ليلية</value>
+  </data>
+  <data name="WeeklyRestTime" xml:space="preserve">
+    <value>وقت الراحة الاسبوعي </value>
+  </data>
+  <data name="PersonAccount" xml:space="preserve">
+    <value>حساب شخصي</value>
+  </data>
+  <data name="SkillOpeningHours" xml:space="preserve">
+    <value>مهارة الساعات المتاحة</value>
+  </data>
+  <data name="ShiftActivity" xml:space="preserve">
+    <value>نشاط الوردية </value>
+  </data>
+  <data name="MinWeeklyWorkTime" xml:space="preserve">
+    <value>الحد الادني لوقت العمل الاسبوعي </value>
+  </data>
+  <data name="BrokenRules" xml:space="preserve">
+    <value>قواعد منتهكة </value>
+  </data>
+  <data name="ShowWarnings" xml:space="preserve">
+    <value>اعرض التحذيرات</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRules" xml:space="preserve">
+    <value>وافق وفقا لقواعد العمل </value>
+  </data>
+  <data name="SubmitApproveBasedOnBusinessRulesSuccess" xml:space="preserve">
+    <value>الطلبات المختارة يتم تنفيذها للموافقة وفق قواعد العمل.</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRulesFinished" xml:space="preserve">
+    <value>تم تنفيذ الطلبات وفق قواعد العمل</value>
+  </data>
+  <data name="NoPermissionToModifyPersonAssignment" xml:space="preserve">
+    <value>معلومات إضافية حول طرق التوقع وكشف الخارج </value>
+  </data>
+  <data name="PartialSuccessMessageForEditingShiftCategory" xml:space="preserve">
+    <value>تغير فئات الوردية ل(0) ممثل، (1) نجح و (2) فشل.</value>
+  </data>
+  <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
+    <value>تغيير فئات الوردية بنجاح للممثلين المختارين</value>
+  </data>
+  <data name="MultipleSeatsSelected" xml:space="preserve">
+    <value>(تم اختيار عددا من المقاعد)</value>
+  </data>
+  <data name="SeatNumber" xml:space="preserve">
+    <value>رقم المقعد</value>
+  </data>
+  <data name="AgentsDoNotRequireSeats" xml:space="preserve">
+    <value>ممثلون لا يحتاجون مقاعد</value>
+  </data>
+  <data name="AgentsWithoutBookings" xml:space="preserve">
+    <value>ممثلون بدون حجز</value>
+  </data>
+  <data name="SeatBookingSummary" xml:space="preserve">
+    <value>ملخص حجز المقاعد</value>
+  </data>
+  <data name="SuccessfulBookings" xml:space="preserve">
+    <value>حجوزات ناجحة</value>
+  </data>
+  <data name="EditShiftCategory" xml:space="preserve">
+    <value>تحرير فئة الوردية</value>
+  </data>
+  <data name="SelectACategory" xml:space="preserve">
+    <value>اختر فئة</value>
+  </data>
+  <data name="LoadingSkills" xml:space="preserve">
+    <value>تحميل المهارات...</value>
+  </data>
+  <data name="LoadingSkillAreas" xml:space="preserve">
+    <value>تحميل مناطق المهارة...</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>العودة للقائمة</value>
+  </data>
+  <data name="NotOk" xml:space="preserve">
+    <value>ليس OK</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>حساب</value>
+  </data>
+  <data name="RequestInvalidMessageLength" xml:space="preserve">
+    <value>لا يمكن حفظ هذا الرد بشكل كامل لان الرسالة تتجاوز 2000 حرفا.</value>
+  </data>
+  <data name="RequestInvalidMessageModification" xml:space="preserve">
+    <value>لا يمكن حفظ ردك على هذا الطلب لانه قد تم التعامل معه (0)</value>
+  </data>
+  <data name="ReplyAndCancel" xml:space="preserve">
+    <value>رد والغ</value>
+  </data>
+  <data name="ReplySuccess" xml:space="preserve">
+    <value>رسالتك (0) للطلبات قد تم حفظها</value>
+  </data>
+  <data name="SelectBusinessRulesWithColon" xml:space="preserve">
+    <value>اختر قواعد العمل: </value>
+  </data>
+  <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
+    <value>افحص الطلبات وفقا لزيادة الميزانية</value>
+  </data>
+  <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
+    <value>افحص الطلبات بناء على فحص العمالة داخل اليوم</value>
+  </data>
+  <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
+    <value>غير مسموح بتحرير فئة الوردية للممثل. </value>
+  </data>
+  <data name="ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping" xml:space="preserve">
+    <value>هذا النشاط سينسخ الانشطة الحالية التى لا تسمح بالنسخ </value>
+  </data>
+  <data name="DoNotModifyForTheseAgents" xml:space="preserve">
+    <value>لا تقم بتغييرات لهؤلاء الممثلين</value>
+  </data>
+  <data name="OverrideForTheseAgents" xml:space="preserve">
+    <value>انسخ هؤلاء الممثلين</value>
+  </data>
+  <data name="ManageOpenHours" xml:space="preserve">
+    <value>موقع الساعات المتاحة</value>
+  </data>
+  <data name="SaveSiteOpenHoursSuccess" xml:space="preserve">
+    <value>الساعات المتاحة تم تحديثها</value>
+  </data>
+  <data name="TheFollowingAgentsHaveAffectedActivities" xml:space="preserve">
+    <value>الممثلون التالي أسماؤهم قد أثروا فى الأنشطة</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourErrorMessage" xml:space="preserve">
+    <value>لا توجد ساعات متاحة ل(0) تم العثور عليها فى الموقع (1) بين (2) - (3)</value>
+  </data>
+  <data name="SiteOpeningHours" xml:space="preserve">
+    <value>موقع الساعات المتاحة</value>
+  </data>
+  <data name="BySeniority" xml:space="preserve">
+    <value>بالاقدمية</value>
+  </data>
+  <data name="FirstComeFirstServed" xml:space="preserve">
+    <value>من يأتى أولا يحصل على الخدمة أولا</value>
+  </data>
+  <data name="ToggleClose" xml:space="preserve">
+    <value>التثبيت مغلق</value>
+  </data>
+  <data name="NoChangeHasBeenMade" xml:space="preserve">
+    <value>لم يتم تنفيذ أية تغييرات </value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
+    <value>النشاط غير القابل للنسخ (0) فى الفترة البينية (1) قد تم نسخه ب(2) فى الفترة البينية (3).</value>
+  </data>
+  <data name="ConfigureValidationWarnings" xml:space="preserve">
+    <value>إعداد تحذيرات الفحص</value>
+  </data>
+  <data name="MinWeeklyRestRuleName" xml:space="preserve">
+    <value>وقت الراحة الأسبوعي </value>
+  </data>
+  <data name="MinWeekWorkTimeRuleName" xml:space="preserve">
+    <value>أقل وقت عمل فى الأسبوع </value>
+  </data>
+  <data name="NewDayOffRuleName" xml:space="preserve">
+    <value>تداخل الوردية مع يوم العطلة</value>
+  </data>
+  <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
+    <value>أكثر وقت عمل فى الأسبوع </value>
+  </data>
+  <data name="NewNightlyRestRuleName" xml:space="preserve">
+    <value>وقت الراحة الليلي</value>
+  </data>
+  <data name="NotOverwriteLayerRuleName" xml:space="preserve">
+    <value>نسخ الأنشطة</value>
+  </data>
+  <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
+    <value>حرك الانشطة غير القابلة للنسخ لهؤلاء الممثلين</value>
+  </data>
+  <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
+    <value>النشاط الجديد المضاف يتداخل مع أنشطة غير قابلة للنسخ</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>تحذير</value>
+  </data>
+  <data name="BusinessRuleDayOffFriendlyName" xml:space="preserve">
+    <value>تصادم يوم العطلة </value>
+  </data>
+  <data name="BusinessRuleMaxWeekWorkTimeFriendlyName" xml:space="preserve">
+    <value>الأسبوع يضم وقت عمل كثير للغاية</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeFriendlyName" xml:space="preserve">
+    <value>الأسبوع يضم وقت عمل قليل للغاية</value>
+  </data>
+  <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
+    <value>الراحة الليلية انقطعت</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourFriendlyName" xml:space="preserve">
+    <value>نشاط خارج الساعات المتاحة للعمل للموقع </value>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenFriendlyName" xml:space="preserve">
+    <value>نشاط خارج الساعات المتاحة للمهارة</value>
+  </data>
+  <data name="BusinessRuleOverlappingFriendlyName3" xml:space="preserve">
+    <value>نشاط غير قابل للنسخ قد تم نسخه</value>
+  </data>
+  <data name="BusinessRulePersonAccountFriendlyName" xml:space="preserve">
+    <value>الحساب الشخصي يتجاوز القيمة الحاصلة</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
+    <value>انقطاع محدودية فئة الوردية فى الفترة</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
+    <value>انقطاع محدودية فئة الوردية فى الأسبوع</value>
+  </data>
+  <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
+    <value>الاسبوع لا يحتوى على الراحة الأسبوع المنصوص عليها</value>
+  </data>
+  <data name="Overwritable" xml:space="preserve">
+    <value>قابل للنسخ</value>
+  </data>
+  <data name="ValidationAlerts" xml:space="preserve">
+    <value>إنذارات الفحص </value>
+  </data>
+  <data name="AllPermittedSitesToMakeShiftTradeWith" xml:space="preserve">
+    <value>كل المواقع </value>
+  </data>
+  <data name="ReforecastedStaff" xml:space="preserve">
+    <value>ممثلون تم إعادة عملية التوقع لهم</value>
+  </data>
+  <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
+    <value>طلب تبادل الورديات تم رفضه لانه لا توجد مقاعد كافية</value>
+  </data>
+  <data name="EnableShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>تمكين أعلى فحص للمقاعد</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatValidationInterval" xml:space="preserve">
+    <value>الفترة البينية لاستخدامها فى وقت فحص استخدام المقاعد</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>فحص الحد الأقصى للمقاعد </value>
+  </data>
+  <data name="ShiftTradeRequestSettings" xml:space="preserve">
+    <value>إعدادات طلب تبادل الورديات</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>حرك نشاطا غير صحيحا ومتداخلا</value>
+  </data>
+  <data name="NoPermissionToMoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>ليس لديك صلاحيات لتحريك نشاطا غير صحيحا ومتداخلا</value>
+  </data>
+  <data name="OverlappedNonoverwritableActivitiesExist" xml:space="preserve">
+    <value>لا تزال هناك أنشطة غير قابلة للنسخ متداخلة</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivitySuccess" xml:space="preserve">
+    <value>تم نقل انشطة متداخلية وغير صحيحة بنجاح للممثلين المختارين</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivityWarning" xml:space="preserve">
+    <value>نقل أنشطة متداخلة وغير صحيحة ل(0) ممثل، (1) نجح و(2) فشل</value>
+  </data>
+  <data name="InternalNote" xml:space="preserve">
+    <value>ملاحظة داخلية</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>كامل </value>
+  </data>
+  <data name="MatchColon" xml:space="preserve">
+    <value>يطابق: </value>
+  </data>
+  <data name="FullOrPartial" xml:space="preserve">
+    <value>كامل أو جزئي</value>
+  </data>
+  <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
+    <value>لا تملك صلاحية لعرض الصفحة</value>
+  </data>
+  <data name="IntradayWithShrinkage" xml:space="preserve">
+    <value>أنشطة داخل اليوم مع الانكماش</value>
+  </data>
+  <data name="ValidateRequestsBasedOnExpiration" xml:space="preserve">
+    <value>افحص بالحد الادني للوقت الموافق عليه </value>
+  </data>
+  <data name="StaffingInformationMissing" xml:space="preserve">
+    <value>معلومات قوة العمل مفقودة فى المهارة (0)</value>
+  </data>
+  <data name="TeamsModule" xml:space="preserve">
+    <value>فرق</value>
+  </data>
+  <data name="RequiredStaff" xml:space="preserve">
+    <value>الممثلون المطلوبون </value>
+  </data>
+  <data name="RequestDenyReasonRequestExpired" xml:space="preserve">
+    <value>طلب الغياب الخاص بك تم رفضه تلقائياً. وقت البداية لهذا الطلب (0)، يجب على الأقل أن تكون (1) دقائق بعد الوقت الحالى. </value>
+  </data>
+  <data name="TheFollowingAgentsPersonAccountsWillBeAffected" xml:space="preserve">
+    <value>حسابات الممثلين التالية سوف تتأثر</value>
+  </data>
+  <data name="ThisAbsenceWillExceedPersonAccountLimits" xml:space="preserve">
+    <value>هذا الغياب سيتجاوز حدود الحساب </value>
+  </data>
+  <data name="RecipientHasNoShiftTradePermission" xml:space="preserve">
+    <value>المستقبل ليس لديه صلاحية تبادل ورديات </value>
+  </data>
+  <data name="AgentHistoricalAdherence" xml:space="preserve">
+    <value>بيانات الانضباط القديمة</value>
+  </data>
+  <data name="TooManySelectedAgents" xml:space="preserve">
+    <value>لقد اخترت عدد كبير جدا من الممثلين، فضلا اختر أقل من 55 ممثلا</value>
+  </data>
+  <data name="UnsupportedSkill" xml:space="preserve">
+    <value>مهارة غير مدعومة</value>
+  </data>
+  <data name="UnsupportedSkillMsg" xml:space="preserve">
+    <value>هذه المهارة غير مدعومة</value>
+  </data>
+  <data name="UnsupportedSkills" xml:space="preserve">
+    <value>(0) مهارات غير مدعومة</value>
+  </data>
+  <data name="AllRequests" xml:space="preserve">
+    <value>كافة التقارير</value>
+  </data>
+  <data name="CurrentRequests" xml:space="preserve">
+    <value>التقارير الحالية </value>
+  </data>
+  <data name="EmploymentNumber" xml:space="preserve">
+    <value>رقم التوظيف</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>منظمة</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>لوحة إعلانات </value>
+  </data>
+  <data name="SortByStartDate" xml:space="preserve">
+    <value>تاريخ البدء </value>
+  </data>
+  <data name="SortByUpdateDate" xml:space="preserve">
+    <value>تحديث التاريخ</value>
+  </data>
+  <data name="SkillAreaColon" xml:space="preserve">
+    <value>منطقة المهارات: </value>
+  </data>
+  <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
+    <value>لا يمكن تطبيق التغييرات للممثلين فى مناطق زمنية اخرى</value>
+  </data>
+  <data name="ArchiveSchedule" xml:space="preserve">
+    <value>جدول نشط</value>
+  </data>
+  <data name="TheActivityCanNotBeAddedTo" xml:space="preserve">
+    <value>لا يمكن إضافة النشاط إلى</value>
+  </data>
+  <data name="NoPermissionRemoveAgentAbsence" xml:space="preserve">
+    <value>لا يوجد تصريح لحذف الغياب من الممثلين</value>
+  </data>
+  <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
+    <value>لا يمكن إضافة الغياب إلى</value>
+  </data>
+  <data name="ImportSchedule" xml:space="preserve">
+    <value>استيراد جدول </value>
+  </data>
+  <data name="ValidatingPersons2" xml:space="preserve">
+    <value>فحص (0) شخصا من إجمالى (1) </value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>استمر </value>
+  </data>
+  <data name="MoveShift" xml:space="preserve">
+    <value>حرك وردية </value>
+  </data>
+  <data name="ArchiveScheduleDescription" xml:space="preserve">
+    <value>أرشفة الجدول من السيناريو التلقائي إلىى السيناريو الآخر، نسخ أى جدول قديم فى السيناريو المرجو للفترة المعطاة </value>
+  </data>
+  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+    <value>أنت على وشك نسخ كل الجدول الموجود للسيناريو (0) فى الفترة (1) - (2) و الفرق المختارة.</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>هل أنت واثق؟ </value>
+  </data>
+  <data name="DoneArchivingForXPeopleDot" xml:space="preserve">
+    <value>تمت أرشفة (0) شخصا</value>
+  </data>
+  <data name="FromScenarioColon" xml:space="preserve">
+    <value>من السيناريو:</value>
+  </data>
+  <data name="PickASmallerDatePeriodDot" xml:space="preserve">
+    <value>اختر أقصر فترة تاريخ.</value>
+  </data>
+  <data name="PickAtleastOneTeamDot" xml:space="preserve">
+    <value>اختر على الأقل فريقاً واحداً</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>تشغيل </value>
+  </data>
+  <data name="RunArchiving" xml:space="preserve">
+    <value>تشغيل الأرشفة</value>
+  </data>
+  <data name="TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>السيناريو الذى قمت بأرشفته يجب أن يكون السيناريو التلقائي</value>
+  </data>
+  <data name="TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>السيناريو الذى قمت بأرشفته لا يجب أن يكون السيناريو التلقائي</value>
+  </data>
+  <data name="ToScenarioColon" xml:space="preserve">
+    <value>إلى السيناريو:</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveFromDot" xml:space="preserve">
+    <value>يجب أن تختار سيناريو للأرشفة من</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveToDot" xml:space="preserve">
+    <value>يجب أن تختار سيناريو للأرشفة إلى</value>
+  </data>
+  <data name="YourSelectionResultedInZeroPeopleDot" xml:space="preserve">
+    <value>اختيارك أدى إلى 0 شخصا</value>
+  </data>
+  <data name="LoadingRequestsTreeDots" xml:space="preserve">
+    <value>تحيل الطلبات </value>
+  </data>
+  <data name="NotificationTimeToStay" xml:space="preserve">
+    <value>مدة الإخطار ( ثوانى ) </value>
+  </data>
+  <data name="PartialSuccessMessageForMovingShift" xml:space="preserve">
+    <value>تحريك ورديات ل(0) ممثلين، (1) تم بنجاح و (2) فشل</value>
+  </data>
+  <data name="SuccessfulMessageForMovingShift" xml:space="preserve">
+    <value>تم نقل الورديات للممثلين المختارين بنجاح </value>
+  </data>
+  <data name="NoSitesFound" xml:space="preserve">
+    <value>لم يتم العثور على المواقع للمهارات المختارة</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingOvertime" xml:space="preserve">
+    <value>إضافة نشاط الوقت الإضافي ل (0) ممثل، (1) نجح و (2) فشل.</value>
+  </data>
+  <data name="SelectAMultiplicatorDefinitionSet" xml:space="preserve">
+    <value>اختر طاقم تعريف مضاعف </value>
+  </data>
+  <data name="SuccessfulMessageForAddingOvertime" xml:space="preserve">
+    <value>تم إضافة وقت عمل إضافي بنجاح للممثلين المختارين.</value>
+  </data>
+  <data name="AddOvertimeActivity" xml:space="preserve">
+    <value>اضف نشاط وقت عمل إضافي</value>
+  </data>
+  <data name="RequestedPeriodIsTooLong" xml:space="preserve">
+    <value>الفترة المطلوبة طويلة للغاية</value>
+  </data>
+  <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
+    <value>لا يوجد تصريح لإضافة نشاط وقت عمل إضافي للممثلين (0)</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>مستوى</value>
+  </data>
+  <data name="YouNeedToSelectADateInTheFutureDot" xml:space="preserve">
+    <value>يجب أن تختار تاريخا فى المستقبل</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>أساسي</value>
+  </data>
+  <data name="DoneImportingForXPeopleDot" xml:space="preserve">
+    <value>تمت عملية الاستيراد ل(0) شخصاً</value>
+  </data>
+  <data name="ImportingConfirmationWithParameters" xml:space="preserve">
+    <value>أنت على وشك دمج الجدول فى السيناريو (0) مع الجدول الحالى فى السيناريو التلقائي للفترة (1) - (2) للفرق المختارة.</value>
+  </data>
+  <data name="ImportScheduleDescription" xml:space="preserve">
+    <value>استيراد الجدول من سيناريو آخر للسيناريو التلقائي، دمج مع الجدول الموجود فى السيناريو التلقائي للفترة المعطاة.</value>
+  </data>
+  <data name="RunImporting" xml:space="preserve">
+    <value>ابدا فى الاستيراد</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToImportFromDot" xml:space="preserve">
+    <value>يجب ان تختار سيناريو تستورد منه</value>
+  </data>
+  <data name="SendToAdministrator" xml:space="preserve">
+    <value>أرسل إلى المدير</value>
+  </data>
+  <data name="WhenValidationFails" xml:space="preserve">
+    <value>عندما يفشل الفحص</value>
+  </data>
+  <data name="ResetRules" xml:space="preserve">
+    <value>أعد تهيئة القواعد</value>
+  </data>
+  <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
+    <value>قواعد الفحص</value>
+  </data>
+  <data name="DescriptionOfDataPartOfAgentDay" xml:space="preserve">
+    <value>سيتم نقل وردية العمل إلى يوم آخر</value>
+  </data>
+  <data name="DescriptionOfNewShiftCategoryLimitationRule" xml:space="preserve">
+    <value>حدود فئة الوردية للفترة</value>
+  </data>
+  <data name="DescriptionOfWeekShiftCategoryLimitationRule" xml:space="preserve">
+    <value>حدود فئة الوردية للأسبوع</value>
+  </data>
+  <data name="DescriptionOfNewNightlyRestRule" xml:space="preserve">
+    <value>الراحة الليلية</value>
+  </data>
+  <data name="DescriptionOfNewMaxWeekWorkTimeRule" xml:space="preserve">
+    <value>الحد الأقصى للعمل أسبوعيا </value>
+  </data>
+  <data name="DescriptionOfMinWeeklyRestRule" xml:space="preserve">
+    <value>الحد الأدنى للراحة أسبوعيا </value>
+  </data>
+  <data name="DescriptionOfMinWeekWorkTimeRule" xml:space="preserve">
+    <value>الحد الأدنى للعمل أسبوعيا</value>
+  </data>
+  <data name="DescriptionOfNewDayOffRule" xml:space="preserve">
+    <value>يوم العطلة يتعارض مع النشاط</value>
+  </data>
+  <data name="DescriptionOfNotOverwriteLayerRule" xml:space="preserve">
+    <value>نشاط غير قابل للنسخ فى الوردية</value>
+  </data>
+  <data name="DescriptionOfNonMainShiftActivityRule" xml:space="preserve">
+    <value>أى اجتماع أو نشاط شخصي أو نشاط وقت إضافي </value>
+  </data>
+  <data name="DescriptionOfNewPersonAccountRule" xml:space="preserve">
+    <value>حساب شخصي </value>
+  </data>
+  <data name="DescriptionOfSiteOpenHoursRule" xml:space="preserve">
+    <value>موقع الساعات المتاحة للعمل </value>
+  </data>
+  <data name="DescriptionOfOpenHoursRule" xml:space="preserve">
+    <value>مهارة ساعات العمل المتاحة</value>
+  </data>
+  <data name="SearchAnOrganization" xml:space="preserve">
+    <value>ابحث بالمنظمة</value>
+  </data>
+  <data name="DenyDueToTechnicalProblems" xml:space="preserve">
+    <value>معلومات قوة العمل غير محدثة فى النظام. فضلا تواصل مع مدير النظام</value>
+  </data>
+  <data name="SearchASiteOrTeam" xml:space="preserve">
+    <value>ابحث عن موقع او عن فريق</value>
+  </data>
+  <data name="SeveralTeamsSelected" xml:space="preserve">
+    <value>(0) فريق قد تم اختياره</value>
+  </data>
+  <data name="ServiceLevel" xml:space="preserve">
+    <value>مستوى الخدمة</value>
+  </data>
+  <data name="UseSkillsColon" xml:space="preserve">
+    <value>استخدم مهارات </value>
+  </data>
+  <data name="AgentsInAlarm" xml:space="preserve">
+    <value>الممثلون فى التنبيه</value>
+  </data>
+  <data name="IncludeAgentsInStatesColon" xml:space="preserve">
+    <value>ضم ممثلين فى الحالات:</value>
+  </data>
+  <data name="FilterThreeDots" xml:space="preserve">
+    <value>تنقيح...</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>اخف المنقح</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>اعرض المنقح </value>
+  </data>
+  <data name="UpdateResourceCalculations" xml:space="preserve">
+    <value>تحديث حسابات المصادر </value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>أداء </value>
+  </data>
+  <data name="Staffing" xml:space="preserve">
+    <value>قوة العمل </value>
+  </data>
+  <data name="UsedTotal" xml:space="preserve">
+    <value>إجمالى المستخدم</value>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>مستخدم بواسطة (0)</value>
+  </data>
+  <data name="NoBudgetGroupFound" xml:space="preserve">
+    <value>لم يتم العثور علىى ميزانية المجموعة</value>
+  </data>
+  <data name="SelectABudgetGroupThreeDots" xml:space="preserve">
+    <value>اختر ميزانية مجموعة</value>
+  </data>
+  <data name="DescriptionOfShiftTradeTargetTimeSpecification" xml:space="preserve">
+    <value>سماحية وقت التعاقد</value>
+  </data>
+  <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">
+    <value>(0) بالفعل متواجد. هل انت متاكد من تغيره</value>
+  </data>
+  <data name="UpdateConfirmation" xml:space="preserve">
+    <value>تحديث التأكيد </value>
+  </data>
+  <data name="RemoveDefault" xml:space="preserve">
+    <value>احذف النسخة التلقائية</value>
+  </data>
+  <data name="SetAsDefault" xml:space="preserve">
+    <value>اضبط كشكل تلقائي</value>
+  </data>
+  <data name="MyBusinessUnit" xml:space="preserve">
+    <value>وحدة العمل الخاصة بى</value>
+  </data>
+  <data name="MyOwn" xml:space="preserve">
+    <value>الخاص بى </value>
+  </data>
+  <data name="MySite" xml:space="preserve">
+    <value>موقعى</value>
+  </data>
+  <data name="NeedToSelectARoleFirst" xml:space="preserve">
+    <value>اختر الدور أولا</value>
+  </data>
+  <data name="WebStaffing" xml:space="preserve">
+    <value>قوة العمل</value>
+  </data>
+  <data name="RemoveOvertime" xml:space="preserve">
+    <value>احذف الوقت الإضافي </value>
+  </data>
+  <data name="SaveFavoriteSearch" xml:space="preserve">
+    <value>احفظ بحث التفضيلات</value>
+  </data>
+  <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
+    <value>لا توجد صلاحية لحذف أنشطة الوقت الإضافي للممثلين</value>
+  </data>
+  <data name="PleaseChooseADate" xml:space="preserve">
+    <value>فضلا اختر تاريخ</value>
+  </data>
+  <data name="PleaseInputStartTime" xml:space="preserve">
+    <value>فضلا ادخل تاريخ البدء</value>
+  </data>
+  <data name="PleaseInputEndTime" xml:space="preserve">
+    <value>فضلا ادخل تاريخ الانتهاء </value>
+  </data>
+  <data name="ShiftTradeTargetTimePendingReason" xml:space="preserve">
+    <value>سماحية وقت تعاقد الجدول قد تم تمديدها</value>
+  </data>
+  <data name="SignInWithNoColon" xml:space="preserve">
+    <value>سجل بـ </value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>اختر منظمة</value>
+  </data>
+  <data name="TimeOOA" xml:space="preserve">
+    <value>وقت OOA </value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>تنظيف الكل </value>
+  </data>
+  <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
+    <value>من الممكن عرض الحد الأقصى من (0) ممثلين. مفتاح ال" فى التنبيه" تم تمكينه إذا لم يتجاوز عدد الممثلين (1)</value>
+  </data>
+  <data name="FavoriteSearch" xml:space="preserve">
+    <value>بحث التفضيلات</value>
+  </data>
+  <data name="ConfigureSkillPriorities" xml:space="preserve">
+    <value>ظبط أولويات المهارات</value>
+  </data>
+  <data name="NoSkillAreasFound" xml:space="preserve">
+    <value>لا توجد مناطق مهارات تم العثور عليها</value>
+  </data>
+  <data name="NoSkillFound" xml:space="preserve">
+    <value>لا توجد مهارة تم العثور عليها</value>
+  </data>
+  <data name="MultipleSites" xml:space="preserve">
+    <value>مواقع متعددة </value>
+  </data>
+  <data name="MultipleTeams" xml:space="preserve">
+    <value>فرق متعددة </value>
   </data>
 </root>
