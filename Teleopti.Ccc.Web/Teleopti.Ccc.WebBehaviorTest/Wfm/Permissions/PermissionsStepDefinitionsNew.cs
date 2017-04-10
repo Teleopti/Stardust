@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Permissions
 		[When(@"I delete a role '(.*)'")]
 		public void WhenIDeleteARole(string name)
 		{
-			Browser.Interactions.AssertAnyContains(".wfm-list li", name);
 			Browser.Interactions.ClickContaining(".wfm-list li", name);
 			Browser.Interactions.Click(".wfm-leave-behind span .mdi-delete");
 			Browser.Interactions.Click("#delete-role");
@@ -40,18 +39,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Permissions
 		[When(@"I edit the name of role '(.*)' and write '(.*)'")]
 		public void WhenIEditTheNameOfRoleAndWrite(string oldName, string newName)
 		{
-			Browser.Interactions.AssertAnyContains(".wfm-list li", oldName);
 			Browser.Interactions.ClickContaining(".wfm-list li", oldName);
 			Browser.Interactions.Click("#edit-role-trigger");
-			Browser.Interactions.IsVisible("#edit-role-input");
 			Browser.Interactions.FillWith("#edit-role-input", newName);
 			Browser.Interactions.Click("#edit-role-confirm");
 		}
 
 		[When(@"I copy role '(.*)'")]
 		public void WhenICopyRole(string name)
-		{	
-			Browser.Interactions.AssertAnyContains(".wfm-list li", name);
+		{
 			Browser.Interactions.ClickContaining(".wfm-list li", name);
 			Browser.Interactions.Click(".wfm-leave-behind span .mdi-content-copy");
 		}
@@ -80,7 +76,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Permissions
 		{
 			Browser.Interactions.AssertAnyContains(".wfm-list li", name);
 		}
-		
+
+
+		[Then(@"I should see a copy of '(.*)'")]
+		public void ThenIShouldSeeACopyOf(string name)
+		{
+			Browser.Interactions.AssertAnyContains(".wfm-list li", UserTexts.Resources.CopyOf + " " + name);
+		}
+
 		[Then(@"I should not see role '(.*)'")]
 		public void ThenIShouldNotSeeRole(string name)
 		{
@@ -108,8 +111,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Permissions
 
 		[Then(@"I should not see organization '(.*)' selected")]
 		public void ThenIShouldNotSeeOrganizationSelected(string name)
-		{	
-			Browser.Interactions.AssertNotExists("#team-selection-indicator",".test-class");
+		{
+			Browser.Interactions.AssertNotExists("#team-selection-indicator", ".test-class");
 		}
 	}
 }

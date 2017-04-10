@@ -41,7 +41,7 @@ Scenario: Copy a role
 	When I view new Permissions
 	And I create a new role 'RoleA'
 	And I copy role 'RoleA' 
-	Then I should see a role 'Kopia av RoleA'
+	Then I should see a copy of 'RoleA' 
 
 
 Scenario: Add a function to a role
