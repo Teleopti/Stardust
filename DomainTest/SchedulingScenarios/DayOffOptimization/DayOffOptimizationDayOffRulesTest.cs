@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[TestFixture(false)]
 	[TestFixture(true)]
 	[DomainTest]
-	public class DayOffOptimizationDayOffRulesTest : DayOffOptimizationScenario, ISetup
+	public class DayOffOptimizationDayOffRulesTest : DayOffOptimizationScenario
 	{
 		public IScheduleOptimization Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -301,12 +300,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate, agentWithValidDefaultFilter).DayOff().Should().Be.Null();
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agentWithExplicitFilter).DayOff().Should().Not.Be.Null();
-		}
-
-		public override void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			base.Setup(system, configuration);
-			system.UseTestDouble<OptimizationPreferencesDefaultValueProvider>().For<IOptimizationPreferencesProvider>();
 		}
 	}
 }

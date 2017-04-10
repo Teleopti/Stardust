@@ -402,7 +402,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
 			builder.RegisterType<AgentGroupStaffLoader>().As<IAgentGroupStaffLoader>().SingleInstance();
 			builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
-			builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
+			builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().AsSelf().As<IOptimizationPreferencesProvider>().SingleInstance();
 			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();
 			builder.RegisterType<FetchAgentGroupModel>().As<IFetchAgentGroupModel>().SingleInstance();
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
