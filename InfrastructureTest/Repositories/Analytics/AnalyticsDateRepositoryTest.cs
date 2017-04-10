@@ -2,9 +2,12 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -19,6 +22,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	{
 		public IAnalyticsDateRepository Target;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
+		public IDataSourceScope DataSource;
+		public ICurrentDataSource CurrentDataSource;
 		private AnalyticsDataFactory analyticsDataFactory;
 
 		[SetUp]
@@ -58,6 +63,42 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var dates = WithAnalyticsUnitOfWork.Get(() => Target.GetAllPartial());
 			dates.Count.Should().Be.EqualTo(7);
 			dates.Any(x => x.DateDate.Date == DateTime.Today).Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldCachePerTenant()
+		{
+			var now = DateTime.Now;
+			var date = WithAnalyticsUnitOfWork.Get(() => Target.Date(now));
+
+			WithAnalyticsUnitOfWork.Do(cuow =>
+			{
+				var sessionFactory = cuow.Current().FetchSession().SessionFactory;
+				sessionFactory.Statistics.Clear();
+
+				var result = Target.Date(now);
+
+				sessionFactory.Statistics.QueryExecutionCount.Should().Be.EqualTo(0);
+				result.DateId.Should().Be.EqualTo(date.DateId);
+				result.DateDate.Should().Be.EqualTo(date.DateDate);
+			});
+
+
+			using (DataSource.OnThisThreadUse(new DecoratorDataSource(CurrentDataSource.Current(),
+					"ThisDataSourceShouldHitTheDBNotCache")))
+			{
+				WithAnalyticsUnitOfWork.Do(cuow =>
+				{
+					var sessionFactory = cuow.Current().FetchSession().SessionFactory;
+					sessionFactory.Statistics.Clear();
+
+					var result = Target.Date(now);
+
+					sessionFactory.Statistics.QueryExecutionCount.Should().Be.EqualTo(1);
+					result.DateId.Should().Be.EqualTo(date.DateId);
+					result.DateDate.Should().Be.EqualTo(date.DateDate);
+				});
+			}
 		}
 	}
 }

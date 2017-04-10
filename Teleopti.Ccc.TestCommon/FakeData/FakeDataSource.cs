@@ -31,4 +31,45 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 		}
 	}
+
+	public class DecoratorDataSource : IDataSource
+	{
+		private readonly IDataSource _dataSourceImplementation;
+		private readonly string _dataSourceName;
+
+		public DecoratorDataSource(IDataSource dataSourceImplementation, string newDataSourceName)
+		{
+			_dataSourceImplementation = dataSourceImplementation;
+			_dataSourceName = newDataSourceName;
+		}
+		public void Dispose()
+		{
+			_dataSourceImplementation.Dispose();
+		}
+
+		public IUnitOfWorkFactory Application
+		{
+			get { return _dataSourceImplementation.Application; }
+		}
+
+		public IAnalyticsUnitOfWorkFactory Analytics
+		{
+			get { return _dataSourceImplementation.Analytics; }
+		}
+
+		public IReadModelUnitOfWorkFactory ReadModel
+		{
+			get { return _dataSourceImplementation.ReadModel; }
+		}
+
+		public string DataSourceName
+		{
+			get { return _dataSourceName; }
+		}
+
+		public void RemoveAnalytics()
+		{
+			_dataSourceImplementation.RemoveAnalytics();
+		}
+	}
 }
