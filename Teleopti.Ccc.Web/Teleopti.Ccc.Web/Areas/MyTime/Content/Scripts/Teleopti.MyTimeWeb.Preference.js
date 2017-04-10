@@ -429,16 +429,17 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		}
 
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
-			_loadPreferenceDataByPeriod();
+			_loadPreferenceFeedbackDataByPeriod();
 		} else {
-			_assignPreferenceDataToDateCell();
+			_assignPreferenceFeedbackDataToDateCell();
 			callback && callback();
 		}
 
-		function _loadPreferenceDataByPeriod() {
+		function _loadPreferenceFeedbackDataByPeriod() {
+			var startDate = ($('li[data-mytime-date]')[0].attributes['data-mytime-date'].value);
 			var params = {
-				startDate: moment(date).subtract(7, 'day').format('YYYY-MM-DD'),
-				endDate: moment(date).add(34, 'day').format('YYYY-MM-DD')
+				startDate: moment(startDate).format('YYYY-MM-DD'),
+				endDate: moment(startDate).add(42, 'day').format('YYYY-MM-DD')
 			};
 
 			ajax.Ajax({
@@ -451,14 +452,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					endDate: params.endDate
 				},
 				success: function(data) {
-					_assignPreferenceDataToDateCell(data);
+					_assignPreferenceFeedbackDataToDateCell(data);
 					callback && callback();
 				},
 				statusCode404: function() {},
 			});
 		}
 
-		function _assignPreferenceDataToDateCell(preferenceDataByPeriod) {
+		function _assignPreferenceFeedbackDataToDateCell(preferenceDataByPeriod) {
 			var dayViewModels = {},
 				dayViewModelsInPeriod = {};
 

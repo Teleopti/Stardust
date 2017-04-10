@@ -325,4 +325,96 @@
 
 		equal($('li[data-mytime-date="2012-06-11"]').text(), "7:30");
 	});
+
+	test("should load feedback data correctly when MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 is on", function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return true;
+		};
+
+		var preferenceHTML = '',
+			preferenceDaysNum = 42,
+			today = '2012-06-11',
+			startDate = '2012-05-21',
+			endDate = '2012-07-01',
+			dateStr = '';
+
+		for (var i = 0; i < preferenceDaysNum; i++) {
+			dateStr = moment(startDate).add('day', i).format('YYYY-MM-DD');
+			preferenceHTML += "<li data-mytime-date='" + dateStr + "' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />\n"
+		}
+
+		$("#qunit-fixture")
+			.html(preferenceHTML);
+
+		var ajax = {
+			Ajax: function(options) {
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					options.success(
+						[
+							{
+								Date: startDate,
+								Feedback: true
+							},
+						]
+					);
+				}
+				if (options.url == "PeriodPreferenceFeedback/PeriodFeedback") {
+					options.success([{
+						"Date": startDate,
+						"DateInternal": "\/Date(1337558400000)\/",
+						"PossibleStartTimes": "06:00-14:30",
+						"PossibleEndTimes": "14:30-23:00",
+						"PossibleContractTimeMinutesLower": "420",
+						"PossibleContractTimeMinutesUpper": "510",
+						"FeedbackError": null,
+						"HasNightRestViolationToPreviousDay": false,
+						"HasNightRestViolationToNextDay": false,
+						"ExpectedNightRestTimeSpan": "11:00",
+						"RestTimeToNextDayTimeSpan": "00:00",
+						"RestTimeToPreviousDayTimeSpan": "00:00"
+					},{
+						"Date": today,
+						"DateInternal": "\/Date(1339372800000)\/",
+						"PossibleStartTimes": "06:00-14:30",
+						"PossibleEndTimes": "14:30-23:00",
+						"PossibleContractTimeMinutesLower": "450",
+						"PossibleContractTimeMinutesUpper": "510",
+						"FeedbackError": null,
+						"HasNightRestViolationToPreviousDay": false,
+						"HasNightRestViolationToNextDay": false,
+						"ExpectedNightRestTimeSpan": "11:00",
+						"RestTimeToNextDayTimeSpan": "00:00",
+						"RestTimeToPreviousDayTimeSpan": "00:00"
+					},{
+						"Date": endDate,
+						"DateInternal": "\/Date(1341100800000)\/",
+						"PossibleStartTimes": "06:00-14:30",
+						"PossibleEndTimes": "14:30-23:00",
+						"PossibleContractTimeMinutesLower": "480",
+						"PossibleContractTimeMinutesUpper": "510",
+						"FeedbackError": null,
+						"HasNightRestViolationToPreviousDay": false,
+						"HasNightRestViolationToNextDay": false,
+						"ExpectedNightRestTimeSpan": "11:00",
+						"RestTimeToNextDayTimeSpan": "00:00",
+						"RestTimeToPreviousDayTimeSpan": "00:00"
+					}]);
+				}
+			}
+		};
+
+		expect(3);
+
+		var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax, {
+			CurrentFixedDate: function() {
+				return new Date('2012-06-11')
+			}
+		});
+
+		target.InitViewModels();
+
+		equal($('li[data-mytime-date="' + startDate + '"]').text(), "7:00");
+		equal($('li[data-mytime-date="' + today + '"]').text(), "7:30");
+		equal($('li[data-mytime-date="' + endDate + '"]').text(), "8:00");
+	});
 });
