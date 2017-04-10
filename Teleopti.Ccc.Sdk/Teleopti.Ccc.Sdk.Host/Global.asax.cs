@@ -40,9 +40,9 @@ using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.Payroll;
 using Teleopti.Ccc.Sdk.WcfHost.Ioc;
-using Teleopti.Ccc.Sdk.WcfService;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
-using Teleopti.Ccc.Sdk.WcfService.LogOn;
+using Teleopti.Ccc.Sdk.WcfHost.Service;
+using Teleopti.Ccc.Sdk.WcfHost.Service.Factory;
+using Teleopti.Ccc.Sdk.WcfHost.Service.LogOn;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		{
 			builder.RegisterType<TeleoptiCccSdkService>();
 			builder.RegisterType<GetPayrollResultById.MultiTenancyPayrollLogon>().As<GetPayrollResultById.IPayrollLogon>().InstancePerLifetimeScope();
-			builder.RegisterModule(new MultiTenancyModule(configuration));
+			builder.RegisterModule(new MultiTenancyModule());
 			builder.RegisterType<LicenseFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<TeleoptiPayrollExportFactory>().InstancePerLifetimeScope();

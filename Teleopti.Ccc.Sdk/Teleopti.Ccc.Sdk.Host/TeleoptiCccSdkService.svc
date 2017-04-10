@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Teleopti.Ccc.Sdk.WcfService.TeleoptiCccSdkService, Teleopti.Ccc.Sdk.WcfSdkService" Factory="Autofac.Integration.Wcf.AutofacServiceHostFactory, Autofac.Integration.Wcf" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Teleopti.Ccc.Sdk.WcfHost.Service.TeleoptiCccSdkService, Teleopti.Ccc.Sdk.WcfHost" Factory="Autofac.Integration.Wcf.AutofacServiceHostFactory, Autofac.Integration.Wcf" %>

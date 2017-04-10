@@ -18,7 +18,6 @@ using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.TestCommon;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IResourceCalculation resourceOptimizationHelper;
 		private ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation;
 		private ISchedulingResultStateHolder schedulingResultStateHolder;
-		private IServiceLevelCalculator serviceLevelCalculator;
 		private FakeSkillDayRepository skillDayRepository;
 		private FakeMultisiteDayRepository multisiteDayRepository;
 
@@ -73,12 +71,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 					new PeopleAndSkillLoaderDecider(personRepository, new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>())),
 					new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository));
 			schedulingResultStateHolder = new SchedulingResultStateHolder();
-			serviceLevelCalculator = new ServiceLevelCalculator();
 			target = new GetSkillDaysByPeriodQueryHandler(dateTimePeriodAssembler, assembler, currentScenario, personRepository,
 			                                              skillRepository, resourceCalculationPrerequisitesLoader,
 			                                              new FakeCurrentUnitOfWorkFactory(), resourceOptimizationHelper,
 			                                              loadSchedulingStateHolderForResourceCalculation,
-			                                              schedulingResultStateHolder, serviceLevelCalculator);
+			                                              schedulingResultStateHolder);
 		}
 
 		[Test]
@@ -167,7 +164,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 														  skillRepository, resourceCalculationPrerequisitesLoader,
 														  new FakeCurrentUnitOfWorkFactory(), resourceOptimizationHelper,
 														  loadSchedulingStateHolderForResourceCalculation,
-														  schedulingResultStateHolder, serviceLevelCalculator);
+														  schedulingResultStateHolder);
 
 			target.Handle(new GetSkillDaysByPeriodQueryDto
 			{

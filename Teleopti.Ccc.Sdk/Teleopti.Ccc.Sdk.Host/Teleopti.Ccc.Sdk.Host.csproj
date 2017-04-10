@@ -82,6 +82,10 @@
     <Reference Include="Common.Logging.Log4Net1211">
       <HintPath>..\..\packages\Common.Logging.Log4Net1211.2.2.0\lib\net40\Common.Logging.Log4Net1211.dll</HintPath>
     </Reference>
+    <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
@@ -134,6 +138,9 @@
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.Log4NetAppender.2.2.0\lib\net45\Microsoft.ApplicationInsights.Log4NetAppender.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="policy.2.3.FSharp.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.ServiceBus, Version=3.0.2.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.3.0.2\lib\4.0\Rhino.ServiceBus.dll</HintPath>
@@ -142,12 +149,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.Compression.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Pdf.12.1.0.44\lib\4.0\Syncfusion.Compression.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Core, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Core.12.1.0.43\lib\4.0\Syncfusion.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Pdf.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Pdf.12.1.0.44\lib\4.0\Syncfusion.Pdf.Base.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -163,6 +180,12 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.144\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    </Reference>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.144\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="GetPayrollResultById.aspx" />
@@ -193,6 +216,79 @@
     <Compile Include="Ioc\AssemblerModule.cs" />
     <Compile Include="Ioc\RequestFactoryModule.cs" />
     <Compile Include="SdkState.cs" />
+    <Compile Include="Service\AsyncResult.cs" />
+    <Compile Include="Service\AutofacServiceBus.cs" />
+    <Compile Include="Service\CreateScheduleDistributionAsyncResult.cs" />
+    <Compile Include="Service\Factory\AbsenceTypeFactory.cs" />
+    <Compile Include="Service\Factory\AcceptPreviouslyReferredShiftTradeCommand.cs" />
+    <Compile Include="Service\Factory\ActivityTypeFactory.cs" />
+    <Compile Include="Service\Factory\AnalyticsReportsFactory.cs" />
+    <Compile Include="Service\Factory\ContractFactory.cs" />
+    <Compile Include="Service\Factory\ContractScheduleFactory.cs" />
+    <Compile Include="Service\Factory\DateOnlyPeriodSerializer.cs" />
+    <Compile Include="Service\Factory\DayOffFactory.cs" />
+    <Compile Include="Service\Factory\IAuthorizationProvider.cs" />
+    <Compile Include="Service\Factory\IPersonRequestFactory.cs" />
+    <Compile Include="Service\Factory\LargeGuidCollectionSerializer.cs" />
+    <Compile Include="Service\Factory\LicenseFactory.cs" />
+    <Compile Include="Service\Factory\MessageBrokerFactory.cs" />
+    <Compile Include="Service\Factory\MultiTenancyAuthenticationFactory.cs" />
+    <Compile Include="Service\Factory\OrganizationFactory.cs" />
+    <Compile Include="Service\Factory\OvertimeDefinitionFactory.cs" />
+    <Compile Include="Service\Factory\PartTimePercentageFactory.cs" />
+    <Compile Include="Service\Factory\PayrollResultFactory.cs" />
+    <Compile Include="Service\Factory\PersistPersonRequest.cs" />
+    <Compile Include="Service\Factory\PersonRequestedShiftTrade.cs" />
+    <Compile Include="Service\Factory\PersonRequestFactory.cs" />
+    <Compile Include="Service\Factory\PersonsFromLoadOptionFactory.cs" />
+    <Compile Include="Service\Factory\PlanningTimeBankFactory.cs" />
+    <Compile Include="Service\Factory\PublicNoteTypeFactory.cs" />
+    <Compile Include="Service\Factory\ScheduleFactory.cs" />
+    <Compile Include="Service\Factory\ScheduleMailFactory.cs" />
+    <Compile Include="Service\Factory\ScheduleReporting\IPdfScheduleTemplate.cs" />
+    <Compile Include="Service\Factory\ScheduleReporting\PdfDayOfWeekHeader.cs" />
+    <Compile Include="Service\Factory\ScheduleReporting\PdfScheduleAssignment.cs" />
+    <Compile Include="Service\Factory\ScheduleReporting\PdfScheduleDayOff.cs" />
+    <Compile Include="Service\Factory\ScheduleReporting\PdfScheduleFullDayAbsence.cs" />
+    <Compile Include="Service\Factory\ScheduleReporting\PdfScheduleNotScheduled.cs" />
+    <Compile Include="Service\Factory\ScheduleReporting\PdfScheduleTemplate.cs" />
+    <Compile Include="Service\Factory\ScheduleReporting\PersonWithScheduleStream.cs" />
+    <Compile Include="Service\Factory\ScheduleReporting\ScheduleReportDetail.cs" />
+    <Compile Include="Service\Factory\ScheduleReporting\ScheduleToPdfManager.cs" />
+    <Compile Include="Service\Factory\ServiceBusSender.cs" />
+    <Compile Include="Service\Factory\ShiftCategoryFactory.cs" />
+    <Compile Include="Service\Factory\TeleoptiPayrollExportBuilder.cs" />
+    <Compile Include="Service\Factory\TeleoptiPayrollExportFactory.cs" />
+    <Compile Include="Service\Factory\WebWindowsUserProvider.cs" />
+    <Compile Include="Service\Factory\WriteProtectionFactory.cs" />
+    <Compile Include="Service\IInvokeQuery.cs" />
+    <Compile Include="Service\InvokeQuery.cs" />
+    <Compile Include="Service\LogOn\ApplicationDataSourceFromToken.cs" />
+    <Compile Include="Service\LogOn\ApplicationUserFromToken.cs" />
+    <Compile Include="Service\LogOn\BusinessUnitCache.cs" />
+    <Compile Include="Service\LogOn\BusinessUnitFromToken.cs" />
+    <Compile Include="Service\LogOn\ClaimCache.cs" />
+    <Compile Include="Service\LogOn\ClaimSetAuthorizationPolicy.cs" />
+    <Compile Include="Service\LogOn\CurrentPersonContainer.cs" />
+    <Compile Include="Service\LogOn\CustomAuthorizationManager.cs" />
+    <Compile Include="Service\LogOn\DataSourceForTenantServiceLocator.cs" />
+    <Compile Include="Service\LogOn\ICurrentPersonContainer.cs" />
+    <Compile Include="Service\LogOn\LicenseFromToken.cs" />
+    <Compile Include="Service\LogOn\PersonCache.cs" />
+    <Compile Include="Service\LogOn\PersonContainer.cs" />
+    <Compile Include="Service\LogOn\PersonInRoleCache.cs" />
+    <Compile Include="Service\LogOn\PersonInRoleCacheItem.cs" />
+    <Compile Include="Service\LogOn\SdkCurrentTenantCredentials.cs" />
+    <Compile Include="Service\LogOn\TeleoptiPrincipalAuthorizationPolicy.cs" />
+    <Compile Include="Service\LogOn\TeleoptiSecurityTokenAuthenticator.cs" />
+    <Compile Include="Service\LogOn\WindowsDataSourceFromToken.cs" />
+    <Compile Include="Service\LogOn\WindowsTokenAuthenticator.cs" />
+    <Compile Include="Service\LogOn\WindowsUserFromToken.cs" />
+    <Compile Include="Service\MultiTenancyModule.cs" />
+    <Compile Include="Service\QueryHandlerModule.cs" />
+    <Compile Include="Service\SdkCommandHandlersModule.cs" />
+    <Compile Include="Service\TeleoptiCccSdkService.cs" />
+    <Compile Include="Service\UpdateScheduleModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -206,6 +302,10 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
+      <Project>{98105bfe-6c3b-4c57-9141-6bd065c7e966}</Project>
+      <Name>Teleopti.Ccc.UserTexts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
@@ -226,10 +326,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.Logic\Teleopti.Ccc.Sdk.Logic.csproj">
       <Project>{1277112D-B11A-4358-AF9A-8C9C7A5E701E}</Project>
       <Name>Teleopti.Ccc.Sdk.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Sdk.Service\Teleopti.Ccc.Sdk.Service.csproj">
-      <Project>{C788BDAD-D961-4ED5-AB9A-6F7CFD06E25D}</Project>
-      <Name>Teleopti.Ccc.Sdk.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -252,7 +348,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

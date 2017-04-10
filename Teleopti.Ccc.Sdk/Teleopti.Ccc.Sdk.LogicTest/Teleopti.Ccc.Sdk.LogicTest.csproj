@@ -300,10 +300,6 @@
       <Project>{1277112D-B11A-4358-AF9A-8C9C7A5E701E}</Project>
       <Name>Teleopti.Ccc.Sdk.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Sdk.Service\Teleopti.Ccc.Sdk.Service.csproj">
-      <Project>{c788bdad-d961-4ed5-ab9a-6f7cfd06e25d}</Project>
-      <Name>Teleopti.Ccc.Sdk.Service</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,13 +1,13 @@
 using System;
 using Autofac;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
-using Teleopti.Interfaces.Domain;
+using ActivityRestrictionDomainObjectCreator = Teleopti.Ccc.Sdk.Logic.Restrictions.ActivityRestrictionDomainObjectCreator;
+using ActivityRestrictionTemplateDomainObjectCreator = Teleopti.Ccc.Sdk.Logic.Restrictions.ActivityRestrictionTemplateDomainObjectCreator;
+using PreferenceRestrictionConstructor = Teleopti.Ccc.Sdk.Logic.Restrictions.PreferenceRestrictionConstructor;
+using PreferenceRestrictionTemplateConstructor = Teleopti.Ccc.Sdk.Logic.Restrictions.PreferenceRestrictionTemplateConstructor;
 
 namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
 {

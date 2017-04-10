@@ -12,7 +12,6 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private readonly IServiceLevelCalculator _serviceLevelCalculator;
 
 		public GetSkillDaysByPeriodQueryHandler(IDateTimePeriodAssembler dateTimePeriodAssembler,
 			IAssembler<ISkillStaffPeriod, SkillDataDto> skillDataAssembler, ICurrentScenario scenarioRepository,
@@ -38,8 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			IResourceCalculation resourceOptimizationHelper,
 			ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IServiceLevelCalculator serviceLevelCalculator)
+			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
 			_skillDataAssembler = skillDataAssembler;
@@ -51,7 +48,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-			_serviceLevelCalculator = serviceLevelCalculator;
 		}
 
 		public ICollection<SkillDayDto> Handle(GetSkillDaysByPeriodQueryDto query)
@@ -94,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 						IList<ISkillStaffPeriod> skillStaffPeriods =
 							_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(
 								new List<ISkill> {skill}, dateOnly.ToDateOnlyPeriod().ToDateTimePeriod(timeZoneInfo));
-						skillDayDto.Esl = _serviceLevelCalculator.EstimatedServiceLevel(skillStaffPeriods).Value;
+						skillDayDto.Esl = SkillStaffPeriodHelper.EstimatedServiceLevel(skillStaffPeriods).Value;
 						skillDayDto.SkillId = skill.Id.GetValueOrDefault();
 						skillDayDto.SkillName = skill.Name;
 

@@ -178,10 +178,10 @@
     <Compile Include="CommandHandler\SetPersonExternalLogOnCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandler.cs" />
+    <Compile Include="Restrictions\PreferenceRestrictionConstructor.cs" />
     <Compile Include="QueryHandler\GetPersonsByIdentitiesQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonsByIdsQueryHandler.cs" />
     <Compile Include="ValidationExtensions.cs" />
-    <Compile Include="IServiceLevelCalculator.cs" />
     <Compile Include="IPayrollResultFactory.cs" />
     <Compile Include="IPersistPersonRequest.cs" />
     <Compile Include="MultiTenancy\TenantPeopleLoader.cs" />

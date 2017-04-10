@@ -1,16 +1,13 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Logic;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Sdk.WcfHost.Service.Factory;
 
 namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
 {
