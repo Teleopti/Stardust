@@ -161,7 +161,7 @@ MyTimeWeb_ShowContractTime_41462 = true
 MyTimeWeb_ViewIntradayStaffingProbability_41608 = RC
 MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = RC
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
-MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = DEV
+MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = RC
 
 Scheduler_IntradayOptimization_36617 = true
 Scheduler_ShowSkillPrioLevels_41980 = true
