@@ -19,15 +19,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IEventPublisher _eventPublisher;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 		public ImportAgentJobService(
 			IJobResultRepository jobResultRepository,
 			IEventPublisher eventPublisher,
-			ILoggedOnUser loggedOnUser)
+			ILoggedOnUser loggedOnUser,
+			ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_jobResultRepository = jobResultRepository;
 			_eventPublisher = eventPublisher;
 			_loggedOnUser = loggedOnUser;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 
@@ -53,13 +56,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		public IList<ImportAgentJobResultDetail> GetJobsForLoggedOnBusinessUnit()
 		{
-
-			var loggedOnBU = _loggedOnUser.CurrentUser().WorkflowControlSet.BusinessUnit.Id;
+			var loggedOnBU = _currentBusinessUnit.Current().Id;
 			var resultList = _jobResultRepository.LoadAll()
-				.Where(r => r.Owner.WorkflowControlSet.BusinessUnit.Id == loggedOnBU)
+				.Where(r=>r.JobCategory == JobCategory.WebImportAgent)
+				.Where(r => (r as JobResult).BusinessUnit.Id == loggedOnBU)
 				.OrderByDescending(r => r.Timestamp)
 				.ToList();
-
 			return resultList.Select(jr => new ImportAgentJobResultDetail(jr)).ToList();
 		}
 

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		private void SetValues()
 		{
-			
+
 			this.InputArtifact = this.JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.Input);
 			if (ResultDetail != null && JobResult.FinishedOk)
 			{
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				}
 			}
 
-			this.HasError = this.JobResult.HasError() &&
-							this.FailedArtifact == null;
+			this.HasError = this.JobResult.HasError()
+							&& this.FailedArtifact == null;
 
 		}
 	}

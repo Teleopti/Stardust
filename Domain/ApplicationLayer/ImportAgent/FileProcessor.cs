@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			processResult.FailedAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Error).ToList();
 			processResult.SucceedAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Info).ToList();
 
-			processResult.DetailLevel = processResult.FailedAgents.IsNullOrEmpty()
+			processResult.DetailLevel = !processResult.FailedAgents.IsNullOrEmpty()
 				? DetailLevel.Error
 				: processResult.WarningAgents.IsNullOrEmpty() ? DetailLevel.Warning : DetailLevel.Info;
 
