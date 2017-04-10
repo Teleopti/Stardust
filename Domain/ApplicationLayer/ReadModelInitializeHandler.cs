@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
@@ -81,6 +82,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForPersonScheduleDay>(@event));
 				}
 				messages.ForEach(m => _eventPublisher.Publish(m));
+				
+				// keep the lock for one extra minute, to avoid duplicate event.
+				Thread.Sleep(TimeSpan.FromMinutes(1));
 			});
 		}
 
