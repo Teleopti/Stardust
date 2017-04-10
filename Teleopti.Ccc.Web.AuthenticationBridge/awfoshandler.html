@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Teleopti WFM - Redirecting...</title>
+	<script type="text/javascript">
+		var run = function () {
+			var set = getParameterByName('Set');
+			if (set === 'x') {
+				setSessionToken('asdf');
+				return;
+			}
+
+			var token = getSessionToken();
+			var url = getParameterByName('RelayState');
+
+			window.location.replace('idp?protocol=awfos&ssoToken='+token+'&RelayState=' + url);
+		};
+
+		function getSessionToken() {
+			var token = localStorage.getItem('authtoken');
+			return token;
+		}
+
+		function setSessionToken(token) {
+			localStorage.setItem('authtoken', token);
+		}
+
+		function getParameterByName(name) {
+			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+				results = regex.exec(location.search);
+			return results === null ? "" : results[1];
+		}
+
+		window.onload = function () {
+			run();
+		};
+	</script>
+</head>
+<body>
+	<a href="javascript:void(0)" onclick="run();">Click here to continue if it doesn't automatically.</a>
+</body>
+</html>
