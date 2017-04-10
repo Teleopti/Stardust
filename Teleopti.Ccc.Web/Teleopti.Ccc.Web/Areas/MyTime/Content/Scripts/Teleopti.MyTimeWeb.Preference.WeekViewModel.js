@@ -30,17 +30,18 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 				sum = 0;
 				return false; //break here only count whole weeks now
 			}
-			 
-			 	 var value = day.PossibleContractTimeMinutesLower();
-			 	 if (value)
-			 	 	 sum += parseInt(value);
-			 	 var absenceValue = day.AbsenceContractTimeMinutes();
-			 	 if (absenceValue)
-			 	 	 sum += parseInt(absenceValue);
-			 	 sum += day.ContractTimeMinutes();
-			 
+
+			var value = day.PossibleContractTimeMinutesLower();
+			if (value)
+				 sum += parseInt(value);
+			var absenceValue = day.AbsenceContractTimeMinutes();
+			if (absenceValue)
+				 sum += parseInt(absenceValue);
+			sum += day.ContractTimeMinutes();
+
 			return true; //here continue the each loop
 		});
+
 		return sum;
 	});
 

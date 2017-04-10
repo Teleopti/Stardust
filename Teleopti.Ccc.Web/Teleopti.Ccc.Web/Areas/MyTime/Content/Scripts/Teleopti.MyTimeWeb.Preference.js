@@ -533,29 +533,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 								periodFeedbackViewModel.LoadFeedback();
 
 								if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
-
-									ajax.Ajax({
-										url: "Preference/WeeklyWorkTimeSettings",
-										dataType: "json",
-										type: 'POST',
-										contentType: 'application/json; charset=utf-8',
-										data: JSON.stringify({
-											weekDates: (function(w) {
-												var dates = [];
-												for (key in w) {
-													dates.push(w[key].DayViewModels()[0].Date);
-												}
-												return dates;
-											})(weekViewModels)
-										}),
-										success: function(data) {
-											$.each(weekViewModels, function(index, weekViewModel) {
-												weekViewModel.readWeeklyWorkTimeSettings(data.filter(function(d) {
-													return d.Date == weekViewModel.DayViewModels()[0].Date;
-												})[0]);
-											});
-										}
-									});
+									loadWeeklyWorkTimeSettings();
 								} else {
 									if ($('li[data-mytime-week]').length > 0) {
 										$.each(weekViewModels,
@@ -563,11 +541,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 												week.LoadWeeklyWorkTimeSettings();
 											});
 									}
-									$.each(preferencesAndScheduleViewModel.DayViewModels,
-										function(index, day) {
-											day.LoadFeedback();
-										});
 								}
+
+								$.each(preferencesAndScheduleViewModel.DayViewModels,
+									function(index, day) {
+										day.LoadFeedback();
+									});
+
 								selectionViewModel.enableDateSelection();
 								callWhenAjaxIsCompleted(completelyLoaded);
 							});
@@ -575,6 +555,31 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				}
 			});
 		}
+	}
+
+	function loadWeeklyWorkTimeSettings() {
+		ajax.Ajax({
+			url: "Preference/WeeklyWorkTimeSettings",
+			dataType: "json",
+			type: 'POST',
+			contentType: 'application/json; charset=utf-8',
+			data: JSON.stringify({
+				weekDates: (function(w) {
+					var dates = [];
+					for (key in w) {
+						dates.push(w[key].DayViewModels()[0].Date);
+					}
+					return dates;
+				})(weekViewModels)
+			}),
+			success: function(data) {
+				$.each(weekViewModels, function(index, weekViewModel) {
+					weekViewModel.readWeeklyWorkTimeSettings(data.filter(function(d) {
+						return d.Date == weekViewModel.DayViewModels()[0].Date;
+					})[0]);
+				});
+			}
+		});
 	}
 
 	function _soon(call) {

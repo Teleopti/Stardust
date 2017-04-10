@@ -58,7 +58,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 	self.PersonAssignmentTimeSpan = ko.observable('');
 	self.PersonAssignmentContractTime = ko.observable('');
 	self.ContractTimeMinutes = ko.observable(0);
-	
+	self.InitialFeedbackData = feedBackData;
 	
 
 	self.HasPreferenceCategory = ko.computed(function() {
@@ -387,13 +387,14 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 		}
 	};
 
-	if(feedBackData){
-		self.AssignFeedbackData(feedBackData);
-	}
-
 	self.LoadFeedback = function() {
 		if (!self.Feedback())
 			return null;
+
+		if(self.InitialFeedbackData){
+			self.AssignFeedbackData(self.InitialFeedbackData);
+			return;
+		}
 
 		return ajaxForDate(self, {
 			url: "PreferenceFeedback/Feedback",

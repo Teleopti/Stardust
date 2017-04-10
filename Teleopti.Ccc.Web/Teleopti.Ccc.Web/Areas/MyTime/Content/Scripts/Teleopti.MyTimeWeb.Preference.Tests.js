@@ -331,32 +331,47 @@
 			if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return true;
 		};
 
-		var preferenceHTML = '',
+		var weeksHTML = [],
+			datesHTML = [],
 			preferenceDaysNum = 42,
 			today = '2012-06-11',
 			startDate = '2012-05-21',
 			endDate = '2012-07-01',
-			dateStr = '';
+			dateStr = '',
+			periodDatesList = [];
+
+		var weeksHTMLHeader = '\n<ul class="calendarview-week" onselectstart="return false;"> ' +
+								'\n<li data-mytime-week="week" style="width: 55px;" data-bind="css: { \'week-view-non-editable\': !IsEditable() }" class="week-view-non-editable">' +
+									'\n<div class="day-header"></div>' +
+										'\n<div class="day-content"></div>' +
+									'\n</div>' +
+								'\n</li>' +
+							  '\n</ul>';
 
 		for (var i = 0; i < preferenceDaysNum; i++) {
 			dateStr = moment(startDate).add('day', i).format('YYYY-MM-DD');
-			preferenceHTML += "<li data-mytime-date='" + dateStr + "' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />\n"
+			periodDatesList.push(dateStr);
+			datesHTML.push("<li data-mytime-date='" + dateStr + "' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />");
+
+			if ((i+1) % 7 == 0) {
+				weeksHTML.push($(weeksHTMLHeader).append(datesHTML.toString().replace(/,/g, '\n'))[0].outerHTML);
+				datesHTML.length = 0;
+			}
 		}
 
-		$("#qunit-fixture")
-			.html(preferenceHTML);
+		$("#qunit-fixture").html("<div id='Preference-body-inner'>\n" + weeksHTML.toString().replace(/,/g, '\n') + "\n</div>");
 
 		var ajax = {
 			Ajax: function(options) {
 				if (options.url == "Preference/PreferencesAndSchedules") {
-					options.success(
-						[
-							{
-								Date: startDate,
-								Feedback: true
-							},
-						]
-					);
+					var fakePreferenceAndSchedulesData = [];
+					periodDatesList.forEach(function(d){
+						fakePreferenceAndSchedulesData.push({
+							Date: d,
+							Feedback: true
+						});
+					});
+					options.success(fakePreferenceAndSchedulesData);
 				}
 				if (options.url == "PeriodPreferenceFeedback/PeriodFeedback") {
 					options.success([{
@@ -372,7 +387,7 @@
 						"ExpectedNightRestTimeSpan": "11:00",
 						"RestTimeToNextDayTimeSpan": "00:00",
 						"RestTimeToPreviousDayTimeSpan": "00:00"
-					},{
+					}, {
 						"Date": today,
 						"DateInternal": "\/Date(1339372800000)\/",
 						"PossibleStartTimes": "06:00-14:30",
@@ -385,7 +400,7 @@
 						"ExpectedNightRestTimeSpan": "11:00",
 						"RestTimeToNextDayTimeSpan": "00:00",
 						"RestTimeToPreviousDayTimeSpan": "00:00"
-					},{
+					}, {
 						"Date": endDate,
 						"DateInternal": "\/Date(1341100800000)\/",
 						"PossibleStartTimes": "06:00-14:30",
@@ -416,5 +431,143 @@
 		equal($('li[data-mytime-date="' + startDate + '"]').text(), "7:00");
 		equal($('li[data-mytime-date="' + today + '"]').text(), "7:30");
 		equal($('li[data-mytime-date="' + endDate + '"]').text(), "8:00");
+	});
+
+	test("should calculate possible result weekly contract time (lower and higher) correctly when MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 is on", function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return true;
+		};
+
+		var weeksHTML = [],
+			datesHTML = [],
+			preferenceDaysNum = 42,
+			today = '2012-06-11',
+			startDate = '2012-05-21',
+			endDate = '2012-07-01',
+			dateStr = '',
+			periodDatesList = [];
+
+		var weeksHTMLHeader = '\n<ul class="calendarview-week" onselectstart="return false;"> ' +
+								'\n<li data-mytime-week="week" style="width: 55px;" data-bind="css: { \'week-view-non-editable\': !IsEditable() }" class="week-view-non-editable">' +
+									'\n<div class="day-header"></div>' +
+										'\n<div class="day-content"></div>' +
+										'\n<div class="day-content">' +
+										'\n<!-- ko if: IsWeeklyWorkTimeVisible -->' +
+											'\n<div class="min-hours-per-week">' +
+												'\n<span>&gt;</span> ' +
+												'\n<span data-bind="text:PossibleResultWeeklyContractTimeLower"></span>'+
+											'\n</div>' +
+											'\n<div class="max-hours-per-week">' +
+												'\n<span>&lt;</span>' +
+												'\n<span data-bind="text:PossibleResultWeeklyContractTimeUpper"></span>' +
+											'\n</div>' +
+										'\n<!-- /ko -->' +
+										'\n</div>' +
+									'\n</div>' +
+								'\n</li>' +
+							  '\n</ul>';
+
+		for (var i = 0; i < preferenceDaysNum; i++) {
+			dateStr = moment(startDate).add('day', i).format('YYYY-MM-DD');
+			periodDatesList.push(dateStr);
+			datesHTML.push("<li data-mytime-date='" + dateStr + "' class='inperiod feedback' data-mytime-editable='True' data-bind='text: PossibleContractTimeLower' />");
+
+			if ((i+1) % 7 == 0) {
+				weeksHTML.push($(weeksHTMLHeader).append(datesHTML.toString().replace(/,/g, '\n'))[0].outerHTML);
+				datesHTML.length = 0;
+			}
+		}
+
+		$("#qunit-fixture").html("<div id='Preference-body-inner'>\n" + weeksHTML.toString().replace(/,/g, '\n') + "\n</div>");
+
+		var ajax = {
+			Ajax: function(options) {
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					var fakePreferenceAndSchedulesData = [];
+					periodDatesList.forEach(function(d) {
+						var feedback = true;
+						var temp = {
+							Date: d
+						};
+
+						if (moment(d).isBefore(moment(today))) {
+							feedback = false;
+							temp.PersonAssignment = {
+								"ContractTime": "9:00",
+								"ContractTimeMinutes": 540,
+								"ShiftCategory": "Day",
+								"TimeSpan": "08:00 - 17:00"
+							};
+						}
+						temp.Feedback = feedback;
+						fakePreferenceAndSchedulesData.push(temp);
+					});
+					options.success(fakePreferenceAndSchedulesData);
+				}
+				if (options.url == "PeriodPreferenceFeedback/PeriodFeedback") {
+					var fakeData = [];
+					periodDatesList.forEach(function(date, index){
+						var dateInterval = (new Date(date)).getTime();
+						fakeData.push({
+							"Date": date,
+							"DateInternal": "\/Date(" + dateInterval + ")\/",
+							"PossibleStartTimes": "06:00-14:30",
+							"PossibleEndTimes": "14:30-23:00",
+							"PossibleContractTimeMinutesLower": "450",
+							"PossibleContractTimeMinutesUpper": "510",
+							"FeedbackError": null,
+							"HasNightRestViolationToPreviousDay": false,
+							"HasNightRestViolationToNextDay": false,
+							"ExpectedNightRestTimeSpan": "11:00",
+							"RestTimeToNextDayTimeSpan": "00:00",
+							"RestTimeToPreviousDayTimeSpan": "00:00"
+						});
+					});
+					options.success(fakeData);
+				}
+			}
+		};
+
+		expect(15);
+
+		var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax, {
+			CurrentFixedDate: function() {
+				return new Date('2012-06-11');
+			}
+		});
+
+		target.InitViewModels();
+
+		equal($('li[data-mytime-date="' + startDate + '"]').text(), "");
+		equal($('li[data-mytime-date="' + today + '"]').text(), "7:30");
+		equal($('li[data-mytime-date="' + endDate + '"]').text(), "7:30");
+
+		var assertPossibleResultMin1 = '63';	// 7 * 450 (ContractTimeMinutes) / 60
+		var assertPossibleResultMax1 = '63';	// 7 * 450 (ContractTimeMinutes) / 60
+		var assertPossibleResultMin2 = '52:30';	// 7 * 450 (PossibleContractTimeMinutesLower) / 60
+		var assertPossibleResultMax2 = "59:30";	// 7 * 510 (PossibleContractTimeMinutesUpper) / 60
+
+		$('li[data-mytime-week]').each(function(index, el) {
+			switch(index){
+				case 0: equal($(el).find('.min-hours-per-week').text().indexOf(assertPossibleResultMin1) > -1, true);
+						equal($(el).find('.max-hours-per-week').text().indexOf(assertPossibleResultMax1) > -1, true);
+				break;
+				case 1: equal($(el).find('.min-hours-per-week').text().indexOf(assertPossibleResultMin1) > -1, true);
+						equal($(el).find('.max-hours-per-week').text().indexOf(assertPossibleResultMax1) > -1, true);
+				break;
+				case 2: equal($(el).find('.min-hours-per-week').text().indexOf(assertPossibleResultMin1) > -1, true);
+						equal($(el).find('.max-hours-per-week').text().indexOf(assertPossibleResultMax1) > -1, true);
+				break;
+				case 3: equal($(el).find('.min-hours-per-week').text().indexOf(assertPossibleResultMin2) > -1, true);
+						equal($(el).find('.max-hours-per-week').text().indexOf(assertPossibleResultMax2) > -1, true);
+				break;
+				case 4: equal($(el).find('.min-hours-per-week').text().indexOf(assertPossibleResultMin2) > -1, true);
+						equal($(el).find('.max-hours-per-week').text().indexOf(assertPossibleResultMax2) > -1, true);
+				break;
+				case 5: equal($(el).find('.min-hours-per-week').text().indexOf(assertPossibleResultMin2) > -1, true);
+						equal($(el).find('.max-hours-per-week').text().indexOf(assertPossibleResultMax2) > -1, true);
+				break;
+			}
+		});
 	});
 });
