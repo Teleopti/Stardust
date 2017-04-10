@@ -99,7 +99,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			data.forEach(function(d){
 				preferencesAndScheduleViewModel.DayViewModels[d.Date].ReadPreference(d.Value);
 			});
-			getNeighboringDatesFeedbackDataOfSelectedDates(dates);
+			updateSelectedDatesAndNeighbors(dates);
 		} else {
 			dates.forEach(function(date) {
 				var dayViewModel = preferencesAndScheduleViewModel.DayViewModels[date];
@@ -185,7 +185,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			});
 			setSelectedDatesPreferences(postDates, preference, validationErrorCallback);
 			periodFeedbackViewModel.LoadFeedback();
-			getNeighboringDatesFeedbackDataOfSelectedDates(postDates);
+			updateSelectedDatesAndNeighbors(postDates);
 			periodFeedbackViewModel.PossibleNightRestViolations();
 		} else {
 			$('#Preference-body-inner .ui-selected').each(function(index, cell) {
@@ -213,18 +213,18 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			type: 'POST',
 			data: JSON.stringify(preference),
 			success: function(data) {
-				data.forEach(function(d){
-					preferencesAndScheduleViewModel.DayViewModels[d.Date].ReadPreference(d.Value);
-				})
+			    data.forEach(function(d) {
+			        preferencesAndScheduleViewModel.DayViewModels[d.Date].ReadPreference(d.Value);
+			    });
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				var errorMessage = $.parseJSON(jqXHR.responseText);
 				validationErrorCallback(errorMessage);
-			},
+			}
 		});
 	}
 
-	function getNeighboringDatesFeedbackDataOfSelectedDates(postDates){
+	function updateSelectedDatesAndNeighbors(postDates){
 		var allDates = [];
 		$("#Preference-body-inner").find('li[data-mytime-date]').each(function(index, cell) {
 			allDates.push($(cell).data('mytime-date'));
@@ -235,8 +235,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			if(postDates.indexOf(date) > -1){
 				if (index - 1 > 0)
 					previousDate = allDates[index - 1];
-				if (index + 1 < allDates.length)
-					nextDate = allDates[index + 1]
+			    if (index + 1 < allDates.length)
+			        nextDate = allDates[index + 1];
 
 				if(getDates.indexOf(previousDate) == -1)
 					getDates.push(previousDate);
