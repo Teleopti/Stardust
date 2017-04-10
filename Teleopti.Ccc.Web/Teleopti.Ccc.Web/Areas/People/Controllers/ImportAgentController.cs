@@ -15,7 +15,7 @@ using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
