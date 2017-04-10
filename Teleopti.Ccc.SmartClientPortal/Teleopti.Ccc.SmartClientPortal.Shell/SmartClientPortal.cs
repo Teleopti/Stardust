@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private readonly PortalSettings _portalSettings;
 		private readonly IToggleManager _toggleManager;
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
-		private bool canAccessInternet = true;
+		private bool showCustomerWebMenu = true;
 		private const string _permissionModule = "/permissions";
 		private WebUrlHolder _webUrlHolder;
 		private List<string> validUrls;
@@ -390,15 +391,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
 			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
 													ApplicationTextHelper.LoggedOnUserText;
-
-			if (!canAccessInternet)
-			{
-				goToLocalPage();
-			}
-			else
-			{
-				goToPublicPage(false);
-			}
+			goToPublicPage(false);
 
 			setNotifyData(_systemChecker.IsOk());
 
@@ -843,14 +836,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void webView1LoadFailed(object sender, LoadFailedEventArgs e)
 		{
-			canAccessInternet = false;
+			showCustomerWebMenu = false;
 			webControl1.Visible = false;
 			//we can't goto static page in this event, for some reason
 		}
 
 		private void webView1_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
 		{
-			if (!canAccessInternet)
+			if (!showCustomerWebMenu)
 			{
 				e.Menu.Items.Clear();
 				return;
@@ -957,8 +950,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			wfmWebControl.Visible = false;
 			webControlDataProtection.Visible = false;
 			webControl1.Visible = true;
-			// no internet
-			if (webView1.Title == "Static") return;
+			if (!checkInternetConnection())
+			{
+				showCustomerWebMenu = false;
+				goToLocalPage();
+				return;
+			}
+			showCustomerWebMenu = true;
 			if (!gotoStart && webView1.Url != "") return;
 			if (string.IsNullOrWhiteSpace(LoggedOnPerson.Email))
 			{
@@ -990,6 +988,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
+		private bool checkInternetConnection()
+		{
+			try
+			{
+				using (var client = new WebClient())
+				{
+					using (var stream = client.OpenRead("http://www.teleopti.com"))
+					{
+						return true;
+					}
+				}
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
 		private async void gotoCustomerWebAndLogOn()
 		{
 			try
@@ -998,18 +1014,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					var token = SingleSignOnHelper.SingleSignOn(LoggedOnPerson);
 					webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}", token);
-					canAccessInternet = true;
+					showCustomerWebMenu = true;
 				});
-			}
-			catch (ArgumentException exception)
-			{
-				_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
-				pleaseRegisterAnEmailAddress(exception.Message);
 			}
 			catch (Exception exception)
 			{
 				_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
-				canAccessInternet = false;
+				showCustomerWebMenu = false;
 				goToLocalPage();
 			}
 		}
@@ -1018,7 +1029,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			const string html = "<!doctype html><html><head></head><body style='font-family:Sans-Serif'>{0}</body></html>";
 			webView1.LoadHtml(string.Format(html, message));
-			canAccessInternet = true;
+			showCustomerWebMenu = true;
 		}
 
 		private async void gotoCustomerWeb()
@@ -1026,7 +1037,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			await Task.Run(() =>
 			{
 				webView1.Url = "http://www.teleopti.com/elogin.aspx?";
-				canAccessInternet = true;
+				showCustomerWebMenu = true;
 			});
 			
 		}
