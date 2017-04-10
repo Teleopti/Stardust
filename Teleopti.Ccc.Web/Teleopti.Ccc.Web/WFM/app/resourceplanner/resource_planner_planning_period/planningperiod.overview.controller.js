@@ -71,6 +71,10 @@
       $interval.cancel(keepAliveRef);
     }
 
+    $scope.$on('$destroy', function () {
+      destroyCheckState();
+    });
+
     function getStorePpFromlocal() {
       var pp = sessionStorage.getItem('selectedPp') ? JSON.parse(sessionStorage.getItem('selectedPp')) : null;
       if (pp && pp.AgentGroupId === agentGroupId) {
