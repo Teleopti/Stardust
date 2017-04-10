@@ -103,3 +103,28 @@ WHERE
 	s.group_is_custom = 0
 	AND g.business_unit_code = @business_unit_code
 	AND s.group_code = @empty_guid
+
+-- Insert persons for the optional column group pages
+INSERT INTO [mart].[bridge_group_page_person]
+SELECT 
+	group_page_id	= g.group_page_id,
+	person_id		= p.person_id,
+	datasource_id	= g.datasource_id,
+	insert_date		= getdate()
+FROM 
+	stage.stg_group_page_person s
+INNER JOIN 
+	mart.dim_person p  WITH (NOLOCK)
+ON 
+	p.person_code = s.person_code
+	AND p.business_unit_code = s.business_unit_code
+INNER JOIN 
+	mart.dim_group_page g
+ON 
+	s.group_name COLLATE Latin1_General_CS_AS = g.group_name COLLATE Latin1_General_CS_AS
+	AND s.group_is_custom = g.group_is_custom 
+WHERE
+	s.group_is_custom = 0
+	AND g.business_unit_code = @business_unit_code
+	AND s.group_code <> @empty_guid
+	And s.group_page_name_resource_key is NULL
