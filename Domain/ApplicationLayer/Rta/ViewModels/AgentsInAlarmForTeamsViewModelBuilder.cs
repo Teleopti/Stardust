@@ -53,8 +53,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var adherence = _teamInAlarmReader.ReadForSkills(siteId, skillIds).ToLookup(a => a.TeamId);
 			var teams = _teamRepository.FindTeamsForSite(siteId);
-			var numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams.Select(x => x.Id.Value));
+			var numberOfAgents = _numberOfAgentsInTeamReader.ForSkills(teams.Select(x => x.Id.Value),skillIds);
+			
 			return teams
+				.Where(t =>
+				{
+					int result;
+					var agents = numberOfAgents.TryGetValue(t.Id.Value, out result) ? result : 0;
+					return agents > 0;
+				})
 				.Select(t =>
 					{
 						int result;
