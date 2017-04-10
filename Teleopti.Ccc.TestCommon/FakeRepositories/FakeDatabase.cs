@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
@@ -58,6 +59,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 	public static class FakeDatabaseAgentExtensions
 	{
+		public static FakeDatabase WithAgent(this FakeDatabase database)
+		{
+			return database.WithAgent(null, RandomName.Make(), null, null, null, null, null, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid personId)
+		{
+			return database.WithAgent(personId, RandomName.Make(), null, null, null, null, null, null);
+		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name)
 		{
@@ -151,6 +161,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			database.WithExternalLogon(name);
 			return database;
 		}
+
 	}
 
 	public static class FakeDatabaseRuleExtensions
@@ -327,6 +338,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeSiteInAlarmReader _siteInAlarmReader;
 		private readonly FakeTeamInAlarmReader _teamInAlarmReader;
 		private readonly FakeMeetingRepository _meetings;
+		private readonly FakeAgentStateReadModelPersister _agentStates;
+		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 
 
 		private BusinessUnit _businessUnit;
@@ -380,7 +393,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeDataSources dataSources,
 			FakeSiteInAlarmReader siteInAlarmReader,
 			FakeTeamInAlarmReader teamInAlarmReader,
-			FakeMeetingRepository meetings
+			FakeMeetingRepository meetings,
+			FakeAgentStateReadModelPersister agentStates,
+			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId
 			)
 		{
 			_tenants = tenants;
@@ -412,6 +427,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_mappings = mappings;
 			_rules = rules;
 			_meetings = meetings;
+			_agentStates = agentStates;
+			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 
 			createDefaultData();
 		}
@@ -841,6 +858,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			ensureExists(_skills, skillId, () => withSkill(skillId));
 			_person.AddSkill(_skill, _personPeriod);
+			_groupings.Has(new ReadOnlyGroupDetail
+			{
+				BusinessUnitId = _businessUnit.Id.Value,
+				SiteId = _site.Id.Value,
+				TeamId = _team.Id.Value,
+				PersonId = _person.Id.Value,
+
+				FirstName = _person.Name.FirstName,
+				LastName= _person.Name.LastName,
+				EmploymentNumber= _person.EmploymentNumber,
+
+				PageId = _hardcodedSkillGroupingPageId.GetGuid(),
+				GroupId = skillId,
+			});
 			return this;
 		}
 
@@ -992,40 +1023,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_persons.Remove(_persons.Get(personId));
 			return this;
 		}
-
-
-
-
-		public FakeDatabase WithAgentState_DontUse(AgentStateReadModel agentStateReadModel)
+		
+		public FakeDatabase WithAgentState(AgentStateReadModel agentStateReadModel)
 		{
-			_siteInAlarmReader.Has(agentStateReadModel);
-			_teamInAlarmReader.Has(agentStateReadModel);
+			_agentStates.Has(agentStateReadModel);
 			return this;
 		}
 		
-		public FakeDatabase OnSkill_DontUse(Guid skill)
-		{
-			_siteInAlarmReader.OnSkill(skill);
-			_teamInAlarmReader.OnSkill(skill);
-			return this;
-		}
-
-		public FakeDatabase InSkillGroupPage_DontUse()
-		{
-			_groupings
-				.Has(new ReadOnlyGroupDetail
-				{
-					GroupId = _skill.Id.Value,
-					PersonId = _person.Id.Value,
-					SiteId = _site.Id.Value,
-					TeamId = _team.Id.Value,
-					FirstName = _person.Name.FirstName,
-					LastName = _person.Name.LastName,
-					EmploymentNumber = _person.EmploymentNumber
-				});
-			return this;
-		}
-
 
 
 
@@ -1044,6 +1048,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (all.IsEmpty())
 				createAction();
 		}
-
 	}
 }

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Aop
 	{
 		private readonly ILogManager _logManager;
 		private readonly InvocationInfoBuilder _builder;
-
+		   
 		public LogInfoAspect(ILogManager logManager)
 		{
 			_logManager = logManager;

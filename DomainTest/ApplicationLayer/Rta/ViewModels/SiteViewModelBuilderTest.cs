@@ -2,7 +2,9 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -71,16 +73,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldGetNumberOfAgents()
 		{
+			var personId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			Database
-				.WithSite(siteId, "Paris");
-			AgentsInSite.Has(siteId, 20);
+				.WithSite(siteId, "Paris")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId,
+					SiteId = siteId
+				});
 
 			var result = Target.Build().Single();
 
 			result.Name.Should().Be("Paris");
 			result.Id.Should().Be(siteId);
-			result.NumberOfAgents.Should().Be(20);
+			result.NumberOfAgents.Should().Be(1);
 		}
 		
 		[Test]
@@ -88,15 +95,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			var siteId = Guid.NewGuid();
 			var skillId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			Database
-				.WithSite(siteId, "Paris");
-			AgentsInSite.Has(siteId, skillId, 20);
+				.WithSite(siteId, "Paris")
+				.WithAgent(personId)
+				.WithSkill(skillId)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId,
+					SiteId = siteId
+				});
 
 			var result = Target.ForSkills(new [] {skillId}).Single();
 
 			result.Name.Should().Be("Paris");
 			result.Id.Should().Be(siteId);
-			result.NumberOfAgents.Should().Be(20);
+			result.NumberOfAgents.Should().Be(1);
 		}
 
 		[Test]
@@ -104,10 +118,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			var siteId = Guid.NewGuid();
 			var skillId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			Database
 				.WithSite(siteId)
+				.WithAgent(personId)
+				.WithSkill(skillId)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId,
+					SiteId = siteId
+				})
 				.WithSite();
-			AgentsInSite.Has(siteId, skillId, 20);
 
 			Target.ForSkills(new[] {skillId}).Single()
 				.Id.Should().Be(siteId);
@@ -120,13 +141,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var london = Guid.NewGuid();
 			var team1 = Guid.NewGuid();
 			var team2 = Guid.NewGuid();
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
 			Database
 				.WithSite(london, "London")
 				.WithTeam(team1,"Team1")
-				.WithTeam(team2, "Team2");
-
-			AgentsInSite.Has(london, 20);
-
+				.WithAgent(person1)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = person1,
+					SiteId = london,
+					TeamId = team1
+				})
+				.WithTeam(team2, "Team2")
+				.WithAgent(person2)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = person2,
+					SiteId = london,
+					TeamId = team2
+				});
+			
 			var org = Target.ForOrganization().Single();
 			
 			org.Id.Should().Be(london);
@@ -142,15 +177,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var excludedSite = Guid.NewGuid();
 			var team1 = Guid.NewGuid();
 			var team2 = Guid.NewGuid();
-
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
 			Database
 				.WithSite(london, "London")
 				.WithTeam(team1, "Team1")
+				.WithAgent(person1)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = person1,
+					SiteId = london,
+					TeamId = team1
+				})
 				.WithTeam(team2, "Team2")
+				.WithAgent(person2)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = person2,
+					SiteId = london,
+					TeamId = team2
+				})
 				.WithSite(excludedSite);
-
-			AgentsInSite.Has(london, 20);
-			AgentsInSite.Has(excludedSite, 20);
 
 			var org = Target.ForOrganization().Single();
 
@@ -167,15 +214,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var excludedSite = Guid.NewGuid();
 			var team1 = Guid.NewGuid();
 			var team2 = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 
 			Database
 				.WithSite(london, "London")
 				.WithTeam(team1, "Team1")
+				.WithAgent(personId)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId,
+					SiteId = london,
+					TeamId = team1
+				})
 				.WithSite(excludedSite, "excludedSite")
 				.WithTeam(team2, "Team2");
-
-			AgentsInSite.Has(london, 20);
-
+			
 			var org = Target.ForOrganization().Single();
 
 			org.Id.Should().Be(london);
@@ -197,17 +250,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Database
 				.WithSite(london, "London")
 				.WithTeam(team, "Team")
+				.WithAgent()
+				.WithSkill(skillId)
+				.WithAgent()
+				.WithSkill(wrongSkillId)
 				.WithTeam(londonWrongTeam, "LondonWrongTeam")
+				.WithAgent()
+				.WithSkill(wrongSkillId)
 				.WithSite(wrongSite, "WrongSite")
-				.WithTeam(wrongTeam, "WrongTeam");
-
-			AgentsInSite.Has(wrongSite, 20);
-
-			AgentsInSite.Has(london, skillId, 10);
-			AgentsInSite.Has(london, wrongSkillId, 10);
-
-			AgentsInTeam.Has(team, skillId,10);
-			AgentsInTeam.Has(londonWrongTeam, wrongSkillId, 10);
+				.WithTeam(wrongTeam, "WrongTeam")
+				.WithAgent()
+				;
 
 			var org = Target.ForOrganizationWithSkills(new[] { skillId }).Single();
 

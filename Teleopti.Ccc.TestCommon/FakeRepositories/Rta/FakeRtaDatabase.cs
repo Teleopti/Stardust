@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Interfaces.Domain;
@@ -87,7 +88,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeAgentStateReadModelPersister agentStateReadModels,
 			FakeSiteInAlarmReader siteInAlarmReader,
 			FakeTeamInAlarmReader teamInAlarmReader,
-			FakeMeetingRepository meetings
+			FakeMeetingRepository meetings,
+			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId
 			) : base(
 				tenants, 
 				persons, 
@@ -117,7 +119,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				dataSources,
 				siteInAlarmReader, 
 				teamInAlarmReader,
-				meetings)
+				meetings,
+				agentStateReadModels,
+				hardcodedSkillGroupingPageId)
 		{
 			_agentStates = agentStates;
 			_agentStateReadModels = agentStateReadModels;

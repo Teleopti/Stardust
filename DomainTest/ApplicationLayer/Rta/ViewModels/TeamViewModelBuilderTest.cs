@@ -80,14 +80,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var teamId = Guid.NewGuid();
 			Database
 				.WithSite(siteId)
-				.WithTeam(teamId, "Team Red");
-			AgentsInTeam.Has(teamId, 20);
+				.WithTeam(teamId, "Team Red")
+				.WithAgent();
 
 			var result = Target.Build(siteId).Single();
 
 			result.Name.Should().Be("Team Red");
 			result.Id.Should().Be(teamId);
-			result.NumberOfAgents.Should().Be(20);
+			result.NumberOfAgents.Should().Be(1);
 		}
 
 		[Test]
@@ -96,16 +96,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			var skillId = Guid.NewGuid();
+			var wrongPerson = Guid.NewGuid();
+			var wrongSkill = Guid.NewGuid();
 			Database
 				.WithSite(siteId)
-				.WithTeam(teamId, "Team Red");
-			AgentsInTeam.Has(teamId, skillId, 20);
+				.WithTeam(teamId, "Team Red")
+				.WithAgent()
+				.WithSkill(skillId)
+				.WithAgent(wrongPerson)
+				.WithSkill(wrongSkill);
+		
 
 			var result = Target.ForSkills(siteId, new[] { skillId }).Single();
 
 			result.Name.Should().Be("Team Red");
 			result.Id.Should().Be(teamId);
-			result.NumberOfAgents.Should().Be(20);
+			result.NumberOfAgents.Should().Be(1);
 		}
 
 		[Test]
@@ -118,8 +124,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Database
 				.WithSite(siteId)
 				.WithTeam(teamId1)
+				.WithAgent()
+				.WithSkill(skillId)
 				.WithTeam(teamId2);
-			AgentsInTeam.Has(teamId1, skillId, 20);
 
 			Target.ForSkills(siteId, new[] { skillId }).Single()
 				.Id.Should().Be(teamId1);

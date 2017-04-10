@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 	public class AgentsInAlarmForSiteViewModelBuilderTest : ISetup
 	{
 		public AgentsInAlarmForSiteViewModelBuilder Target;
-		public FakeSiteInAlarmReader Database;
+		public FakeDatabase Database;
 		public FakeSiteRepository Sites;
 		public FakeNumberOfAgentsInSiteReader AgentsInSite;
 		public MutableNow Now;
@@ -40,40 +40,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2017-03-30 08:30");
 			var personId = Guid.NewGuid();
-			var site = new Site("Site").WithId();
-			var startTime = new TimeSpan(10, 0, 0);
-			var endTime = new TimeSpan(17, 0, 0);
-			var timeperiod = new TimePeriod(startTime, endTime);
-			var siteOpenHour = new SiteOpenHour()
-			{
-				TimePeriod = timeperiod,
-				IsClosed = true,
-				WeekDay = DayOfWeek.Friday
-			};
-			site.AddOpenHour(siteOpenHour);
-
-			Sites.Has(site);
+			var siteId =Guid.NewGuid();
+			
 			Database
-				.Has(new AgentStateReadModel
+				.WithSite(siteId, "London")
+				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
-					SiteId = site.Id.Value,
+					SiteId = siteId,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2017-03-30 08:29".Utc(),
-				});
-			AgentsInSite.Has(site.Id.Value, 3);
+				})
+				.WithAgent(personId);
+
 			var viewModel = Target.Build().Single();
 
-			viewModel.Id.Should().Be(site.Id.Value);
-			viewModel.Name.Should().Be("Site");
-			viewModel.NumberOfAgents.Should().Be(3);
+			viewModel.Id.Should().Be(siteId);
+			viewModel.Name.Should().Be("London");
+			viewModel.NumberOfAgents.Should().Be(1);
 			viewModel.OutOfAdherence.Should().Be(1);
-			viewModel.Color.Should().Be("good");
-			var openHour = viewModel.OpenHours.FirstOrDefault();
-			openHour.StartTime.Should().Be(startTime);
-			openHour.EndTime.Should().Be(endTime);
-			openHour.IsClosed.Should().Be(true);
-			openHour.WeekDay.Should().Be(DayOfWeek.Friday);
+			viewModel.Color.Should().Be("danger");
 		}
 		[Test]
 		public void ShouldBuildForSkill()
@@ -81,26 +67,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2017-03-30 08:30");
 			var personId = Guid.NewGuid();
 			var skill = Guid.NewGuid();
-			var site = new Site("Site").WithId();
-			Sites.Has(site);
+			var  siteId = Guid.NewGuid();
 			Database
-				.Has(new AgentStateReadModel
+				.WithSite(siteId, "London")
+				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
-					SiteId = site.Id.Value,
+					SiteId = siteId,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2017-03-30 08:29".Utc(),
 				})
-				.OnSkill(skill);
-			AgentsInSite.Has(site.Id.Value, skill, 1);
+				.WithAgent(personId)
+				.WithSkill(skill);
+
 			var viewModel = Target.ForSkills(new[] { skill }).Single();
 
-			viewModel.Id.Should().Be(site.Id.Value);
-			viewModel.Name.Should().Be("Site");
+			viewModel.Id.Should().Be(siteId);
+			viewModel.Name.Should().Be("London");
 			viewModel.NumberOfAgents.Should().Be(1);
 			viewModel.OutOfAdherence.Should().Be(1);
 			viewModel.Color.Should().Be("danger");
-			
+
 		}
 
 		[Test]
@@ -110,33 +97,41 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
 			var skill = Guid.NewGuid();
-			Sites.Has(siteId1);
-			Sites.Has(siteId2);
+
+
+			var personId = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
 			Database
-				.Has(new AgentStateReadModel
+				.WithSite(siteId1)
+				.WithAgentState(new AgentStateReadModel
 				{
-					PersonId = Guid.NewGuid(),
+					PersonId = personId,
 					SiteId = siteId1,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-06-21 08:29".Utc(),
 				})
-				.OnSkill(skill)
-				.Has(new AgentStateReadModel
+				.WithAgent(personId)
+				.WithSkill(skill)
+				.WithSite(siteId2)
+				.WithAgentState(new AgentStateReadModel
 				{
-					PersonId = Guid.NewGuid(),
+					PersonId = personId2,
 					SiteId = siteId2,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-06-21 08:29".Utc(),
 				})
-				.OnSkill(skill)
-				.Has(new AgentStateReadModel
+				.WithAgent(personId2)
+				.WithSkill(skill)
+				.WithAgentState(new AgentStateReadModel
 				{
-					PersonId = Guid.NewGuid(),
+					PersonId = personId3,
 					SiteId = siteId2,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-06-21 08:29".Utc(),
 				})
-				.OnSkill(skill);
+				.WithAgent(personId3)
+				.WithSkill(skill);
 
 			var result = Target.ForSkills(new[] { skill });
 
@@ -149,14 +144,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			var skill = Guid.NewGuid();
 			var site = Guid.NewGuid();
-			Sites.Has(site);
+
 			Database
-				.Has(new AgentStateReadModel
+				.WithSite(site)
+				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = Guid.NewGuid(),
 					SiteId = site,
 				})
-				.OnSkill(skill);
+				.WithAgent()
+				.WithSkill(skill);
 
 			var viewModel = Target.ForSkills(new[] { skill }).Single();
 
@@ -168,22 +165,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public void ShouldNotCountSameAgentTwiceForSkillArea()
 		{
 			Now.Is("2016-06-21 08:30");
-			var personId1 = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var skill2 = Guid.NewGuid();
 			var skill1 = Guid.NewGuid();
-			Sites.Has(siteId);
+			var skill2 = Guid.NewGuid();
+
 			Database
-				.Has(new AgentStateReadModel
+				.WithSite(siteId)
+				.WithAgentState(new AgentStateReadModel
 				{
-					PersonId = personId1,
+					PersonId = personId,
 					SiteId = siteId,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-06-21 08:29".Utc(),
 				})
-				.OnSkill(skill1)
-				.OnSkill(skill2)
-				;
+				.WithAgent(personId)
+				.WithSkill(skill1)
+				.WithSkill(skill2);
 
 			var viewModel = Target.ForSkills(new[] { skill1, skill2 }).Single();
 

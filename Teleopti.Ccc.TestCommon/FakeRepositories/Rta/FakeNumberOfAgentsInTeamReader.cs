@@ -2,54 +2,58 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeNumberOfAgentsInTeamReader : INumberOfAgentsInTeamReader
 	{
-		private readonly List<agentsInTeam> _data = new List<agentsInTeam>();
+		private readonly IPersonRepository _persons;
+		private readonly INow _now;
+		private readonly IGroupingReadOnlyRepository _groupings;
+		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
+
+		public FakeNumberOfAgentsInTeamReader(IPersonRepository persons, INow now, HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId, IGroupingReadOnlyRepository groupings)
+		{
+			_persons = persons;
+			_now = now;
+			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
+			_groupings = groupings;
+		}
 
 		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> teams)
 		{
 			return
-				(from d in _data
-				 from t in teams
-				 where d.TeamId == t
-				 select d)
-				 .ToDictionary(x => x.TeamId, y => y.NumberOfAgents);
+				(from person in _persons.LoadAll()
+					from team in teams
+					let today = new DateOnly(_now.UtcDateTime())
+					let myTeam = person.MyTeam(today)
+					where myTeam?.Id != null && myTeam.Id.Value == team
+					group person by myTeam.Id.Value
+					into g
+				 select g)
+				.ToDictionary(g => g.Key, g => g.Count());
 		}
 
-		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> teams, IEnumerable<Guid> skillIds)
 		{
 			return
-				(from d in _data
-					from t in teamIds
-					from s in skillIds
-					where d.TeamId == t && d.SkillId == s
-					select d).ToDictionary(x => x.TeamId, y => y.NumberOfAgents);
-		}
+				(from person in _persons.LoadAll()
+				 from agentSkill in _groupings.DetailsForGroup(_hardcodedSkillGroupingPageId.GetGuid(), new DateOnly(_now.UtcDateTime()))
+				 from skill in skillIds
+				 from team in teams
+				 let today = new DateOnly(_now.UtcDateTime())
+				 let myTeam = person.MyTeam(today)
+				 where myTeam?.Id != null && myTeam.Id.Value == team &&
+				 agentSkill.GroupId == skill && agentSkill.PersonId == person.Id
+				 group person by myTeam.Id.Value
+					into g
+				 select g)
+				.ToDictionary(g => g.Key, g => g.Count());
 
-		public void Has(Guid teamId, int numberOfAgents)
-		{
-			Has(teamId, Guid.Empty, numberOfAgents);
-		}
-
-		public void Has(Guid teamId, Guid skillId, int numberOfAgents)
-		{
-			_data.Add(new agentsInTeam
-			{
-				TeamId = teamId,
-				SkillId = skillId,
-				NumberOfAgents = numberOfAgents
-			});
-		}
-
-
-		private class agentsInTeam
-		{
-			public Guid TeamId { get; set; }
-			public Guid SkillId { get; set; }
-			public int NumberOfAgents { get; set; }
 		}
 	}
 }

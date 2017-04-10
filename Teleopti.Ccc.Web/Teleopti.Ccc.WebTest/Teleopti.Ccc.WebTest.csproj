@@ -236,12 +236,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\Rta\FakeNumberOfAgentsInTeamReader.cs" />
     <Compile Include="Areas\Anywhere\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\ReportsControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\Rta\TeamsControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\Rta\GetSiteAdherenceTest.cs" />
-    <Compile Include="Areas\Anywhere\Rta\GetTeamAdherenceTest.cs" />
     <Compile Include="Areas\Anywhere\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\Anywhere\PersonScheduleDayViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\FakeClientBuilder.cs" />

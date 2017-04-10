@@ -2,64 +2,60 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeNumberOfAgentsInSiteReader : INumberOfAgentsInSiteReader
 	{
-		private readonly List<numberOfAgentsForSite> _data = new List<numberOfAgentsForSite>();
-		
-		public void Has(Guid siteId, int numberOfAgents)
-		{
-			Has(siteId, Guid.Empty, numberOfAgents);
-		}
+		private readonly IPersonRepository _persons;
+		private readonly INow _now;
+		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
+		private readonly IGroupingReadOnlyRepository _groupings;
+		private readonly FakeAgentStateReadModelPersister _agentStates;
 
-		public void Has(Guid siteId, Guid skillId, int numberOfAgents)
+		public FakeNumberOfAgentsInSiteReader(
+			IPersonRepository persons, 
+			INow now, 
+			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId, 
+			IGroupingReadOnlyRepository groupings, FakeAgentStateReadModelPersister agentStates)
 		{
-			_data.Add(
-				new numberOfAgentsForSite
-				{
-					SiteId = siteId,
-					SkillId = skillId,
-					NumberOfAgents = numberOfAgents
-				});
+			_persons = persons;
+			_now = now;
+			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
+			_groupings = groupings;
+			_agentStates = agentStates;
 		}
-
 		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> siteIds)
 		{
 			return 
 				(from siteId in siteIds
-					from model in _data
-					where siteId == model.SiteId
-					select new
-					{
-						SiteId = siteId,
-						NumberOfAgents = model.NumberOfAgents
-					}).ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
+					from model in _agentStates.Models
+				 where siteId == model.SiteId
+					group model by model.SiteId.Value into g
+				 select g
+					).ToDictionary(x => x.Key, y => y.Count());
 		}
 
 		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
 		{
-			return (
-				from siteId in siteIds
-				from skillId in skillIds
-				from model in _data
-				where model.SiteId == siteId &&
-					  model.SkillId == skillId
-				select new 
-				{
-					SiteId = siteId,
-					NumberOfAgents = model.NumberOfAgents
-				})
-				.ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
-		}
 
-		private class numberOfAgentsForSite
-		{
-			public Guid SiteId { get; set; }
-			public Guid SkillId { get; set; }
-			public int NumberOfAgents { get; set; }
+			return
+				(from person in _persons.LoadAll()
+				 let today = new DateOnly(_now.UtcDateTime())
+				 from agentSkill in _groupings.DetailsForGroup(_hardcodedSkillGroupingPageId.GetGuid(), today)
+				 from skill in skillIds
+				 from siteId in siteIds
+				 let site = person.MyTeam(today)?.Site
+				 where site?.Id != null && site.Id.Value == siteId &&
+				 agentSkill.GroupId == skill && agentSkill.PersonId == person.Id
+				 group person by site.Id.Value
+					into g
+				 select g)
+				.ToDictionary(g => g.Key, g => g.Count());
 		}
 	}
 }
