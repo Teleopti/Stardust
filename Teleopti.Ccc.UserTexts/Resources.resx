@@ -15744,4 +15744,8 @@ Do you want to participate?</value>
     <value>Time started</value>
     <comment>Header of times when an import agents job started</comment>
   </data>
+  <data name="InvalidParameters" xml:space="preserve">
+    <value>Invalid parameters</value>
+    <comment>Error message when handle command with invalid parameters</comment>
+  </data>
 </root>
