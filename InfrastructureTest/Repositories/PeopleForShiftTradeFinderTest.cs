@@ -204,6 +204,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			assertPeopleResult(result, 1, per2);
 		}
 
+		[Test]
+		public void ShouldFilterPersonWithoutSkill()
+		{
+			var skills = createAndPersistSkills();
+
+			var workflowControlSetA = createAndPersistWorkflowControlSet();
+			var workflowControlSetB = createAndPersistWorkflowControlSet(skills[0]);
+
+			var per1 = createPersonWithSkill(team, workflowControlSetA, skills[0]);
+			var per2 = createPersonWithSkill(team, workflowControlSetB);
+
+			var result = invokeGetPeople(per2, team);
+			assertPeopleResult(result, 0);
+		}
+
 
 		private IPerson createPersonWithSkill(ITeam team, IWorkflowControlSet workflowControlSet, params ISkill[] skills)
 		{
