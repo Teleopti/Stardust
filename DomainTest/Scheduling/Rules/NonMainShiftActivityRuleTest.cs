@@ -125,13 +125,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		}
 
 		[Test]
+		public void ShouldBeOkWithNullScheduleList()
+		{
+			new NonMainShiftActivityRule().Validate(null, null).Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldBeOkWithNoAssignment()
 		{
 			var scheduleOk = ScheduleDayFactory.Create(new DateOnly(2000, 1, 1));
+			new NonMainShiftActivityRule().Validate(null, new[] { scheduleOk }).Should().Be.Empty();
+		}
 
-			new DataPartOfAgentDay()
-				 .Validate(null, new[] { scheduleOk })
-				 .Should().Be.Empty();
+		[Test]
+		public void ShouldBeOkWithNullAssignment()
+		{
+			new NonMainShiftActivityRule().Validate(null, new IScheduleDay[] { null }).Should().Be.Empty();
 		}
 
 		[Test, SetUICulture("sv-SE")]
@@ -349,9 +358,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			pa2.Stub(x => x.ShiftLayers).Return(new List<ShiftLayer> { shiftLayer });
 			scheduleBeTrade.Stub(s => s.PersonAssignment()).Return(pa2);
 
-			string message = string.Format(CultureInfo.CurrentCulture,
-									 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithPersonalActivity.Person.Name,
-									 dateOnly.Date.ToShortDateString());
+			var message = string.Format(CultureInfo.CurrentCulture,
+				Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithPersonalActivity.Person.Name,
+				dateOnly.Date.ToShortDateString());
 			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
 											 scheduleDataWithPersonalActivity.Person, period, "tjillevippen");
 

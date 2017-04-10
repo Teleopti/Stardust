@@ -22,24 +22,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{
-			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var ret = new List<IBusinessRuleResponse>();
+			if (scheduleDays == null) return ret;
+
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			foreach (var scheduleDay in scheduleDays)
 			{
-				var assignment = scheduleDay.PersonAssignment();
-				var dateOnly = assignment.Date;
+				var assignment = scheduleDay?.PersonAssignment();
+				if (assignment == null) continue;
+
+				var hasMainShiftMeeting = isMeetingOverSchedule(scheduleDay);
+				var hasMainShiftActivity = isPersonalActivityOverSchedule(assignment);
+				var hasOvertimeActivity = assignment.OvertimeActivities() != null && assignment.OvertimeActivities().Any();
+				if (!hasMainShiftActivity && !hasMainShiftMeeting && !hasOvertimeActivity) continue;
+
 				var person = scheduleDay.Person;
-
-				var hasNonMainShiftMeeting = isMeetingOverSchedule(scheduleDay);
-				var hasNonMainShiftActivity = isPersonalActivityOverSchedule(assignment);
-				hasNonMainShiftActivity = hasNonMainShiftActivity || hasNonMainShiftMeeting ||
-										  (assignment.OvertimeActivities() != null && assignment.OvertimeActivities().Any());
-
-				if (!hasNonMainShiftActivity) continue;
-
+				var assignmentDate = assignment.Date;
 				var message = string.Format(currentUiCulture, Resources.HasNonMainShiftActivityErrorMessage, person.Name,
-					dateOnly.Date.ToShortDateString());
-				ret.Add(createResponse(scheduleDay.Person, dateOnly, message, typeof(NonMainShiftActivityRule)));
+					assignmentDate.Date.ToShortDateString());
+				ret.Add(createResponse(person, assignmentDate, message, typeof(NonMainShiftActivityRule)));
 			}
 
 			return ret;
