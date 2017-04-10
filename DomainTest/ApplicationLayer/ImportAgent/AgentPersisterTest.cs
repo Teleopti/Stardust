@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		{
 			var agentData = getAgentDataModel();
 
-			Target.Persist(new List<AgentExtractionResult> { new AgentExtractionResult { Agent = agentData } });
+			Target.Persist(new List<AgentExtractionResult> { new AgentExtractionResult { Agent = agentData } }, TimeZoneInfo.Utc);
 
 			var persistedUser = PersonRepository.LoadAll().Single();
 			var persistedTenant = TenantUserRepository.LastPersist;
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			
 			agentData.ApplicationUserId = "existingId@teleopti.com";
 			var holder = new AgentExtractionResult {Agent = agentData};
-			Target.Persist(new List<AgentExtractionResult> { holder });
+			Target.Persist(new List<AgentExtractionResult> { holder }, TimeZoneInfo.Utc);
 			PersonRepository.LoadAll().Should().Be.Empty();
 			holder.Feedback.ErrorMessages.Single().Should().Be(Resources.DuplicatedApplicationLogonErrorMsgSemicolon);
 		}
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var agentData = getAgentDataModel();
 			var holder = new AgentExtractionResult { Agent = agentData};
 			holder.Feedback.ErrorMessages.Add("existing data error");
-			Target.Persist(new List<AgentExtractionResult> { holder });
+			Target.Persist(new List<AgentExtractionResult> { holder }, TimeZoneInfo.Utc);
 			PersonRepository.LoadAll().Should().Be.Empty();
 		}
 

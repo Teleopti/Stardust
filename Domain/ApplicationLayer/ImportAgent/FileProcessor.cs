@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NPOI.HSSF.UserModel;
@@ -39,15 +40,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 
 
-		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentDefaults defaultValues = null)
+		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null)
 		{
 			var extractedResult = _workbookHandler.ProcessSheet(sheet, defaultValues);
-			_agentPersister.Persist(extractedResult);
+			_agentPersister.Persist(extractedResult, timezone);
 			return extractedResult.Where(r => r.Feedback.ErrorMessages.Any() || r.Feedback.WarningMessages.Any()).ToList();
 		}
 
 
-		public AgentFileProcessResult Process(FileData fileData, ImportAgentDefaults defaultValues = null)
+		public AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null)
 		{
 			var processResult = new AgentFileProcessResult();
 
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 
 			var extractedResults = _workbookHandler.ProcessSheet(sheet, defaultValues);
-			_agentPersister.Persist(extractedResults);
+			_agentPersister.Persist(extractedResults, timezone);
 
 			processResult.WarningAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Warning).ToList();
 			processResult.FailedAgents = extractedResults.Where(a => a.DetailLevel == DetailLevel.Error).ToList();
@@ -163,12 +164,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 	public interface IFileProcessor
 	{
-		IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentDefaults defaultValues = null);
+		IList<AgentExtractionResult> ProcessSheet(ISheet sheet, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null);
 		int GetNumberOfRecordsInSheet(ISheet sheet);
 		string ValidateSheetColumnHeader(IWorkbook workbook);
 		IWorkbook ParseFile(FileData fileData);
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);
 		string ValidateWorkbook(IWorkbook workbook);
-		AgentFileProcessResult Process(FileData fileData, ImportAgentDefaults defaultValues = null);
+		AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null);
 	}
 }

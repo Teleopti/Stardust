@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		{
 			var defaults = @event.Defaults;
 			var jobResult = getJobResult(@event);
+			var owner = jobResult.Owner;
 			try
 			{
 
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					Data = inputFile.Content,
 					FileName = inputFile.Name
 				};
-				var processResult = _fileProcessor.Process(fileData, defaults);
+				var processResult = _fileProcessor.Process(fileData, owner.PermissionInformation.DefaultTimeZone(), defaults);
 				if (!processResult.ErrorMessages.IsNullOrEmpty())
 				{
 					saveJobResultDetail(jobResult, string.Join(", ", processResult.ErrorMessages), DetailLevel.Error);

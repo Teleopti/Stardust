@@ -15,11 +15,7 @@ using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using System.IO;
-using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
@@ -34,12 +30,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private const string oldExcelFileContentType = "application/vnd.ms-excel";
 		private readonly IImportAgentJobService _importAgentJobService;
 		private readonly IPersonNameProvider _personNameProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public ImportAgentController(IImportAgentDataProvider importAgentDataProvider,
 			IFileProcessor fileProcessor,
 			IMultipartHttpContentExtractor multipartHttpContentExtractor,
 			IImportAgentJobService importAgentJobService,
-			IPersonNameProvider personNameProvider
+			IPersonNameProvider personNameProvider,
+			IUserTimeZone userTimeZone
 			)
 		{
 			_importAgentDataProvider = importAgentDataProvider;
@@ -47,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			_multipartHttpContentExtractor = multipartHttpContentExtractor;
 			_importAgentJobService = importAgentJobService;
 			_personNameProvider = personNameProvider;
+			_userTimeZone = userTimeZone;
 		}
 
 		[UnitOfWork, Route("GetImportAgentSettingsData"), HttpGet]
@@ -122,7 +121,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[UnitOfWork]
-		[TenantUnitOfWork]
 		public virtual IJobResult CreateJob(FileData fileData, ImportAgentDefaults defaults)
 		{
 			if (fileData?.Data?.Length == 0)
@@ -165,7 +163,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				return invalidFileResponse;
 			}
 			var total = _fileProcessor.GetNumberOfRecordsInSheet(workbook.GetSheetAt(0));
-			var invalidAgents = _fileProcessor.ProcessSheet(workbook.GetSheetAt(0), formData).ToList();
+			var invalidAgents = _fileProcessor.ProcessSheet(workbook.GetSheetAt(0), _userTimeZone.TimeZone(), formData).ToList();
 
 			var successCount = total - invalidAgents.Count;
 			var failedCount = invalidAgents.Count(a => a.Feedback.ErrorMessages.Any());

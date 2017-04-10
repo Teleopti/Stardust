@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -13,31 +14,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public interface IAgentPersister
 	{
-		void Persist(IEnumerable<AgentExtractionResult> data);
+		void Persist(IEnumerable<AgentExtractionResult> data, TimeZoneInfo timezone);
 	}
 
 	public class AgentPersister : IAgentPersister
 	{
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRepository _personRepository;
 		private readonly ITenantUserPersister _tenantUserPersister;
 
-		public AgentPersister(ILoggedOnUser loggedOnUser, IPersonRepository personRepository,
+		public AgentPersister(IPersonRepository personRepository,
 			ITenantUserPersister tenantUserPersister)
 		{
-			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
 			_tenantUserPersister = tenantUserPersister;
 		}
 
-		public void Persist(IEnumerable<AgentExtractionResult> data)
+		public void Persist(IEnumerable<AgentExtractionResult> data, TimeZoneInfo timezone)
 		{
 			foreach (var agentResult in data)
 			{
 				var agentData = agentResult.Agent;
 				if (agentResult.Feedback.ErrorMessages.Any() || agentData == null) continue;
 
-				var person = persistPerson(agentData);
+				var person = persistPerson(agentData, timezone);
 				var errorMessages = _tenantUserPersister.Persist(new PersonInfoModel
 				{
 					ApplicationLogonName = agentData.ApplicationUserId.IsNullOrEmpty() ? null : agentData.ApplicationUserId,
@@ -88,19 +87,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			person.AddPersonPeriod(personPeriod);
 		}
 
-		private IPerson persistPerson(AgentDataModel agentData)
+		private IPerson persistPerson(AgentDataModel agentData, TimeZoneInfo timezone)
 		{
-			var person = createPersonFromModel(agentData);
+			var person = createPersonFromModel(agentData, timezone);
 			_personRepository.Add(person);
 			return person;
 		}
 
-		private IPerson createPersonFromModel(AgentDataModel agentData)
+		private IPerson createPersonFromModel(AgentDataModel agentData, TimeZoneInfo timezone)
 		{
 			var person = new Person();
 			person.SetName(new Name(agentData.Firstname ?? " ", agentData.Lastname ?? " "));
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			person.PermissionInformation.SetDefaultTimeZone(timeZone);
+			
+			person.PermissionInformation.SetDefaultTimeZone(timezone);
 			agentData.Roles.ForEach(role => person.PermissionInformation.AddApplicationRole(role));
 			return person;
 		}
