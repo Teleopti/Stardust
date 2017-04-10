@@ -222,6 +222,10 @@
     function loadLastResult(pp) {
       vm.dayNodes = [];
       vm.scheduleIssues = [];
+      planningPeriodService.getNumberOfAgents({ id: pp.Id, startDate: pp.StartDate, endDate: pp.EndDate })
+        .$promise.then(function (data) {
+          vm.totalAgents = data.TotalAgents ? data.TotalAgents : 0;
+        });
       planningPeriodService.lastJobResult({ id: pp.Id })
         .$promise.then(function (data) {
           if (data.OptimizationResult) {
@@ -233,15 +237,12 @@
 
     function initResult(interResult, result, pp) {
       if (pp != undefined) {
-        planningPeriodService.getNumberOfAgents({ id: pp.Id, startDate: pp.StartDate, endDate: pp.EndDate })
-          .$promise.then(function (data) {
-            vm.totalAgents = data.TotalAgents ? data.TotalAgents : 0;
-            vm.scheduledAgents = result.ScheduledAgentsCount ? result.ScheduledAgentsCount : 0;
-            vm.dayNodes = interResult.SkillResultList ? interResult.SkillResultList : [];
-            parseRelativeDifference(vm.dayNodes);
-            parseWeekends(vm.dayNodes);
-            displayGrid();
-          });
+        vm.scheduledAgents = result.ScheduledAgentsCount ? result.ScheduledAgentsCount : 0;
+        vm.dayNodes = interResult.SkillResultList ? interResult.SkillResultList : [];
+        parseRelativeDifference(vm.dayNodes);
+        parseWeekends(vm.dayNodes);
+        displayGrid();
+
       }
     }
 
