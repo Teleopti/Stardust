@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public IJobResult JobResult { get; }
 
 		public bool HasError { get; private set; }
+		public bool HasException { get; private set; }
 
 		private void SetValues()
 		{
@@ -57,6 +58,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 			this.HasError = this.JobResult.HasError()
 							&& this.FailedArtifact == null;
+
+			this.HasException = !(this.ResultDetail?.ExceptionMessage.IsNullOrEmpty() ?? true)
+								|| !(this.ResultDetail?.InnerExceptionMessage.IsNullOrEmpty() ?? true);
+
 
 		}
 	}

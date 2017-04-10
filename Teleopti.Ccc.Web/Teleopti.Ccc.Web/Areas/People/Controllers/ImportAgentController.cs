@@ -92,7 +92,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 					detail.InputArtifact.Id
 				},
 				detail.HasError,
-				ErrorMessage = detail.HasError ? detail.ResultDetail?.Message ?? Resources.InternalErrorMessage : string.Empty
+				ErrorMessage = detail.HasError ?
+				(!detail.HasException ? detail.ResultDetail?.Message : Resources.InternalErrorMessage)
+				: string.Empty
 			})
 			.ToList();
 		}

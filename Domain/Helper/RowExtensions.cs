@@ -28,8 +28,9 @@ namespace Teleopti.Ccc.Domain.Helper
 					newCell = null;
 					continue;
 				}
-			
-				newCell.CellStyle.CloneStyleFrom(oldCell.CellStyle);
+				var newCellStyle = workbook.CreateCellStyle();
+				newCellStyle.CloneStyleFrom(oldCell.CellStyle);
+				newCell.CellStyle = newCellStyle;
 
 				if (newCell.CellComment != null) newCell.CellComment = oldCell.CellComment;
 				if (oldCell.Hyperlink != null) newCell.Hyperlink = oldCell.Hyperlink;
