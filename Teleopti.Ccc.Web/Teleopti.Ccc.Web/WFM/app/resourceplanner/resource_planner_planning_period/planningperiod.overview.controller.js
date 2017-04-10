@@ -222,6 +222,8 @@
     function loadLastResult(pp) {
       vm.dayNodes = [];
       vm.scheduleIssues = [];
+      vm.scheduledAgents = 0;
+      vm.totalAgents = 0;
       planningPeriodService.getNumberOfAgents({ id: pp.Id, startDate: pp.StartDate, endDate: pp.EndDate })
         .$promise.then(function (data) {
           vm.totalAgents = data.TotalAgents ? data.TotalAgents : 0;
@@ -242,7 +244,6 @@
         parseRelativeDifference(vm.dayNodes);
         parseWeekends(vm.dayNodes);
         displayGrid();
-
       }
     }
 
