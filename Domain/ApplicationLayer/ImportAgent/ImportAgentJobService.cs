@@ -19,18 +19,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IEventPublisher _eventPublisher;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 		public ImportAgentJobService(
 			IJobResultRepository jobResultRepository,
 			IEventPublisher eventPublisher,
-			ILoggedOnUser loggedOnUser,
-			ICurrentBusinessUnit currentBusinessUnit)
+			ILoggedOnUser loggedOnUser)
 		{
 			_jobResultRepository = jobResultRepository;
 			_eventPublisher = eventPublisher;
 			_loggedOnUser = loggedOnUser;
-			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 
@@ -54,12 +51,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			return jobResult?.Artifacts.FirstOrDefault(ar => ar.Category == category);
 		}
 
-		public IList<ImportAgentJobResultDetail> GetJobsForLoggedOnBusinessUnit()
+		public IList<ImportAgentJobResultDetail> GetJobsForCurrentBusinessUnit()
 		{
-			var loggedOnBU = _currentBusinessUnit.Current().Id;
 			var resultList = _jobResultRepository.LoadAll()
 				.Where(r=>r.JobCategory == JobCategory.WebImportAgent)
-				.Where(r => (r as JobResult).BusinessUnit.Id == loggedOnBU)
 				.OrderByDescending(r => r.Timestamp)
 				.ToList();
 			return resultList.Select(jr => new ImportAgentJobResultDetail(jr)).ToList();
@@ -71,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	public interface IImportAgentJobService
 	{
 		IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks);
-		IList<ImportAgentJobResultDetail> GetJobsForLoggedOnBusinessUnit();
+		IList<ImportAgentJobResultDetail> GetJobsForCurrentBusinessUnit();
 		JobResultArtifact GetJobResultArtifact(Guid id, JobResultArtifactCategory category);
 	}
 }

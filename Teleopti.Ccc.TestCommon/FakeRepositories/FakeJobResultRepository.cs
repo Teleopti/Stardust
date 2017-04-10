@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -12,11 +13,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeJobResultRepository : IJobResultRepository
 	{
-		private readonly ICollection<IJobResult> _result = new Collection<IJobResult>();
+		protected readonly ICollection<IJobResult> _result = new Collection<IJobResult>();
 
 		public void Add(IJobResult entity)
 		{
-			if(!entity.Id.HasValue)
+			if (!entity.Id.HasValue)
 				entity.SetId(Guid.NewGuid());
 			_result.Add(entity);
 		}
@@ -31,10 +32,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _result.Single(x => x.Id.Value == id);
 		}
 
-		public IList<IJobResult> LoadAll()
+		public virtual IList<IJobResult> LoadAll()
 		{
 			return _result.ToList();
 		}
+
+
 
 		public IJobResult Load(Guid id)
 		{
@@ -63,6 +66,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IJobResult FindWithNoLock(Guid jobResultId)
 		{
 			return Get(jobResultId);
+		}
+	}
+
+	public class FakeJobResultRepositoryForCurrentBusinessUnit : FakeJobResultRepository
+	{
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+
+		public FakeJobResultRepositoryForCurrentBusinessUnit(ICurrentBusinessUnit currentBusinessUnit)
+		{
+			_currentBusinessUnit = currentBusinessUnit;
+		}
+
+		public override IList<IJobResult> LoadAll()
+		{
+			return _result.Where(r => (r as JobResult).BusinessUnit?.Id == _currentBusinessUnit.Current()?.Id).ToList();
 		}
 	}
 }

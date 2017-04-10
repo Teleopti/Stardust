@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		[Route("AgentJobList"), HttpGet, UnitOfWork]
 		public virtual object GetAgentJobList()
 		{
-			return _importAgentJobService.GetJobsForLoggedOnBusinessUnit()?.Select(detail => new
+			return _importAgentJobService.GetJobsForCurrentBusinessUnit()?.Select(detail => new
 			{
 				JobResultId = detail.JobResult.Id,
 				Owner = _personNameProvider.BuildNameFromSetting(detail.JobResult.Owner.Name),

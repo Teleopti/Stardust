@@ -29,15 +29,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public IImportAgentJobService Target;
 		public ImportAgentEventHandler EventHandler;
 		public ICurrentTenantUser CurrentTenantUser;
+		public CurrentBusinessUnit CurrentBusinessUnit;
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ImportAgentJobService>().For<IImportAgentJobService>();
-			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
+			system.UseTestDouble<FakeJobResultRepositoryForCurrentBusinessUnit>().For<IJobResultRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			system.UseTestDouble<ImportAgentEventHandler>().For<IHandleEvent<ImportAgentEvent>>();
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			system.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 		}
 
 		[Test]
@@ -78,15 +80,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public void ShouldGetJobsForCurrentBusinessUnit()
 		{
 			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
-			var person1 = setCurrentLoggedOnUser(bu1);
-			createValidJob();
-			var bu2 = BusinessUnitFactory.CreateWithId("bu2");
-			var person2 = setCurrentLoggedOnUser(bu2);
-			createValidJob();
-			var person3 = setCurrentLoggedOnUser(bu2);
-			createValidJob();
+			var person1 = setCurrentLoggedOnUser();
+			CurrentBusinessUnit.OnThisThreadUse(bu1);
+			var result = createValidJob() as JobResult;
+			result.BusinessUnit.Should().Be(bu1);
 
-			var list = Target.GetJobsForLoggedOnBusinessUnit();
+			BusinessUnitFactory.CreateWithId("bu2");
+			var person2 = setCurrentLoggedOnUser();
+			createValidJob();
+			var person3 = setCurrentLoggedOnUser();
+			createValidJob();
+			var list = Target.GetJobsForCurrentBusinessUnit();
 			list.Count.Should().Be(2);
 			list.Any(j => j.JobResult.Owner.Id == person1.Id).Should().Be.False();
 			list.Any(j => j.JobResult.Owner.Id == person2.Id).Should().Be.True();
@@ -97,10 +101,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public void ShouldGetCorrectJobsDetailWhenJobIsNotFinished()
 		{
 			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
-			var person1 = setCurrentLoggedOnUser(bu1);
+			var person1 = setCurrentLoggedOnUser();
+			CurrentBusinessUnit.OnThisThreadUse(bu1);
 			var job1 = createValidJob();
 
-			var detail = Target.GetJobsForLoggedOnBusinessUnit().FirstOrDefault();
+			var detail = Target.GetJobsForCurrentBusinessUnit().FirstOrDefault();
 
 			detail.JobResult.IsWorking().Should().Be(true);
 		}
@@ -110,14 +115,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public void ShouldGetCorrectJobsDetailWhenJobIsFinished()
 		{
 			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
-			var person1 = setCurrentLoggedOnUser(bu1);
+			CurrentBusinessUnit.OnThisThreadUse(bu1);
+			var person1 = setCurrentLoggedOnUser();
 			var job1 = createValidJob();
 
 			EventHandler.Handle(new ImportAgentEvent
 			{
 				JobResultId = job1.Id.GetValueOrDefault()
 			});
-			var detail = Target.GetJobsForLoggedOnBusinessUnit().FirstOrDefault();
+			var detail = Target.GetJobsForCurrentBusinessUnit().FirstOrDefault();
 			detail.JobResult.IsWorking().Should().Be(false);
 			detail.ResultDetail?.DetailLevel.Should().Be(DetailLevel.Error);
 			detail.ResultDetail?.ExceptionMessage.Should().Not.Be.Empty();
@@ -128,7 +134,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public void ShouldGetArtifactIfItExists()
 		{
 			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
-			var person1 = setCurrentLoggedOnUser(bu1);
+			CurrentBusinessUnit.OnThisThreadUse(bu1);
+			var person1 = setCurrentLoggedOnUser();
 			var job1 = createValidJob();
 			job1.Artifacts.Add(new JobResultArtifact(JobResultArtifactCategory.OutputError, "test_error.xlsx", Encoding.ASCII.GetBytes("test")));
 
@@ -146,17 +153,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 
 
-		private IPerson setCurrentLoggedOnUser(Domain.Common.BusinessUnit bu = null)
+		private IPerson setCurrentLoggedOnUser()
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			if (bu != null)
-			{
-				person.WorkflowControlSet = new WorkflowControlSet();
-				person.WorkflowControlSet.SetBusinessUnit(bu);
-			}
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			return person;
 		}
+
 
 
 		private IJobResult createValidJob(ImportAgentDefaults fallbacks = null)
@@ -164,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var fileData = new FileData()
 			{
 				FileName = "test.xlsx",
-				Data =  Encoding.ASCII.GetBytes("test")
+				Data = Encoding.ASCII.GetBytes("test")
 			};
 			return Target.CreateJob(fileData, fallbacks);
 		}
