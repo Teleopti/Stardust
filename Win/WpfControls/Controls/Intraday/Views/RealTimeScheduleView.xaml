@@ -1,0 +1,323 @@
+﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Intraday.Views.RealTimeScheduleView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:userTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
+    xmlns:converters="clr-namespace:Teleopti.Ccc.WinCode.Converters;assembly=Teleopti.Ccc.WinCode"
+			 mc:Ignorable="d"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 d:DesignWidth="1448"
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+    xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode"
+    xmlns:converters1="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters"
+    xmlns:timeline="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Time.Timeline"
+    xmlns:layers="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Layers">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
+				<ResourceDictionary Source="..\..\..\Resources\DateTimeConverters.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:CustomSorterBlankAlwaysLast x:Key="NextActivityStartDateTimeComparer" PropertyPath="NextActivityStartDateTime"/>
+			<converters:CustomSorterBlankAlwaysLast x:Key="NextActivityDescriptionComparer" PropertyPath="NextActivityDescription"/>
+			<converters:CustomSorterBlankAlwaysLast x:Key="CurrentActivityDescriptionComparer" PropertyPath="CurrentActivityDescription"/>
+			<converters:CustomSorterBlankAlwaysLast x:Key="EnteredCurrentStateComparer" PropertyPath="TimeInCurrentState"/>
+
+			<converters1:ColorConverter x:Key="colorConverter"/>
+			<converters1:VisibilityConverter x:Key="visibilityConverter"/>
+			<converters1:DateTimeToLocalAndNotMinValueConverter x:Key="DateTimeToLocalAndNotMinValueConverter"/>
+			<converters:SimpleConverter x:Key="SimpleConverter"/>
+			<converters:ElapsedTimeConverter x:Key="ElapsedTimeConverter" />
+			<Style TargetType="Control" x:Key="SpecialHeader">
+				<Setter Property="Background" Value="{StaticResource RaptorStandardGradientBrush}"/>
+				<Setter Property="Cursor" Value="Hand"/>
+			</Style>
+
+			<Style TargetType="Control" x:Key="SpecialLeftHeader" BasedOn="{StaticResource HeaderStyle}">
+				<Setter Property="BorderBrush" Value="{StaticResource RaptorStandardCellBorderBrush}"/>
+				<Setter Property="BorderThickness" Value="0.5"/>
+				<Setter Property="Cursor" Value="Hand"/>
+			</Style>
+			<Style TargetType="Control" x:Key="HeaderWithHand" BasedOn="{StaticResource HeaderStyle}">
+				<Setter Property="Cursor" Value="Hand"/>
+			</Style>
+			<Style TargetType="layers:LayerListBox" x:Key="LayerListBoxStyle">
+				<Setter Property="HorizontalAlignment" Value="Stretch"/>
+				<Setter Property="VerticalAlignment" Value="Stretch"/>
+				<Setter Property="ItemContainerStyle">
+					<Setter.Value>
+						<Style TargetType="ListBoxItem">
+							<Setter Property="HorizontalContentAlignment" Value="Left"/>
+							<Setter Property="VerticalContentAlignment" Value="Center"/>
+						</Style>
+					</Setter.Value>
+				</Setter>
+			</Style>
+			<ContextMenu x:Key="ContextMenuCopy">
+				<MenuItem Header="{x:Static userTexts:Resources.Copy}" Click="ContextMenu_OnClick"/>
+			</ContextMenu>
+		</ResourceDictionary>
+
+	</UserControl.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<DataGrid Grid.ColumnSpan="4"
+					   HorizontalScrollBarVisibility="Visible" 
+                       FrozenColumnCount="9" 
+                       BorderBrush="{StaticResource RaptorStandardGradientBrush}" 
+                       Background="{StaticResource RaptorStandardLightGradientBrush}"  
+                       HorizontalAlignment="Stretch"  
+					   VerticalAlignment="Stretch" 
+					   ItemsSource="{Binding Path=DayLayerViewModel.ModelEditable}"
+					   AutoGenerateColumns="False"
+                       CellStyle="{StaticResource UnclickableCellStyle}"
+                       SelectionMode="Single" CanUserSortColumns="True"
+                       RowStyle="{StaticResource RtaScheduleRowStyle}"
+                       EnableColumnVirtualization="True"
+                       VirtualizingStackPanel.VirtualizationMode="Standard"
+					   EnableRowVirtualization="False"
+                       VerticalGridLinesBrush="DarkGray"
+                       HorizontalGridLinesBrush="DarkGray"
+					   x:Name="RealTimeDataGrid"
+					   x:FieldModifier="private"
+					   ContextMenu="{StaticResource ContextMenuCopy}"
+					   ColumnHeaderHeight="53"
+					   converters1:CustomSortBehaviour.AllowCustomSort="True">
+			
+			<!--AgentName Column-->
+			<DataGrid.Columns>
+				<DataGridTextColumn  HeaderStyle="{StaticResource SpecialLeftHeader}"
+                                             Header="{x:Static Member=userTexts:Resources.AgentName}" 
+                                             Width="Auto"
+                                             CanUserSort="True"
+                                             SortMemberPath="CommonNameDescription"
+                                             CanUserReorder="False"
+                                             Binding="{Binding Path=CommonNameDescription,Mode=OneWay, FallbackValue=''}" >
+				
+				</DataGridTextColumn>
+
+				<!--AgentGroup Column-->
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
+                                             Header="{x:Static Member=userTexts:Resources.Team}" 
+                                             Width="Auto"                            
+                                             CanUserSort="True"
+                                             SortMemberPath="Team.Description.Name"
+                                         CanUserReorder="False"
+                                             Binding="{Binding Path=Team.Description.Name,Mode=OneWay, FallbackValue=''}"/>
+
+				<!--AgentState Column-->
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
+                                             Header="{x:Static Member=userTexts:Resources.State}" 
+                                             Width="Auto" 
+                                             CanUserSort="True"
+                                             SortMemberPath="CurrentStateDescription"
+                                         CanUserReorder="False"
+                                             Binding="{Binding Path=CurrentStateDescription,Mode=OneWay, FallbackValue=''}">
+					
+				</DataGridTextColumn>
+
+				<!-- Current Activity Column-->
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
+                                             Header="{x:Static Member=userTexts:Resources.Scheduled}" 
+                                             Width="Auto" 
+                                             CanUserSort="True"
+                                             
+											CanUserReorder="False"
+                                             Binding="{Binding Path=CurrentActivityDescription,Mode=OneWay, FallbackValue=''}"
+											  converters1:CustomSortBehaviour.CustomSorter="{StaticResource CurrentActivityDescriptionComparer}"/>
+
+				<!--Next Activity Column-->
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
+                                             Header="{x:Static Member=userTexts:Resources.Next}" 
+                                             Width="Auto" 
+                                             CanUserSort="True"
+                                             SortMemberPath="NextActivityDescription"
+											CanUserReorder="False"
+                                             Binding="{Binding Path=NextActivityDescription,Mode=OneWay, FallbackValue=''}"
+											 converters1:CustomSortBehaviour.CustomSorter="{StaticResource NextActivityDescriptionComparer}"/>
+
+				<!--Next Start Column-->
+				<DataGridTemplateColumn HeaderStyle="{StaticResource HeaderWithHand}"
+                                            Header="{x:Static Member=userTexts:Resources.NextStart}" 
+                                            Width="Auto" 
+                                            CanUserSort="True"
+                                            SortMemberPath="NextActivityStartDateTime"
+                                            CanUserReorder="False"
+											ClipboardContentBinding="{Binding NextActivityStartDateTime}"
+											CopyingCellClipboardContent="NextActivityStartDateTimeColumn_OnCopyingCellClipboardContent"
+											converters1:CustomSortBehaviour.CustomSorter="{StaticResource NextActivityStartDateTimeComparer}">
+
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock VerticalAlignment="Top" x:Name="NextStartTextBlock">
+								<TextBlock.Text>
+									<MultiBinding Converter="{StaticResource DateTimeToLocalAndNotMinValueConverter}">
+										<MultiBinding.Bindings>
+											<Binding Path="NextActivityStartDateTime"/>
+											<Binding RelativeSource="{RelativeSource Self}" Path="(guiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
+										</MultiBinding.Bindings>
+									</MultiBinding>
+								</TextBlock.Text>
+							</TextBlock>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+
+				<!--Alarm name Column-->
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
+                                             Header="{x:Static Member=userTexts:Resources.Name}" 
+                                             Width="Auto"
+                                             CanUserSort="True"
+                                             SortMemberPath="AlarmDescription"
+                                         CanUserReorder="False"
+                                             Binding="{Binding Path=AlarmDescription,Mode=OneWay, FallbackValue=''}">
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="Background" Value="{Binding Color, Converter={StaticResource colorConverter}}"/>
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
+
+				<!--Alarm time Column-->
+				<DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
+                                             Header="{x:Static Member=userTexts:Resources.Time}" 
+                                             Width="Auto"
+											 CanUserSort="True"
+                                             SortMemberPath="EnteredCurrentState"
+                                             Binding="{Binding Path=EnteredCurrentState, Converter={StaticResource ElapsedTimeConverter}, Mode=OneWay}"
+											 converters1:CustomSortBehaviour.CustomSorter="{StaticResource EnteredCurrentStateComparer}">
+					
+					<DataGridTextColumn.ClipboardContentBinding>
+						<Binding Path="EnteredCurrentState" Converter="{StaticResource ElapsedTimeConverter}"/>
+					</DataGridTextColumn.ClipboardContentBinding>
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="Visibility" Value="{Binding HasAlarm, Converter={StaticResource visibilityConverter}}"/>
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
+
+
+				<!--Pinned Column-->
+				<DataGridTemplateColumn 
+					CanUserReorder="False"
+					SortMemberPath="IsPinned" 
+					CanUserSort="True" 
+					HeaderStyle="{StaticResource HeaderWithHand}" 
+					Header="{x:Static Member=userTexts:Resources.Pin}"
+					CellStyle="{StaticResource PinnedCellStyle}"
+					CopyingCellClipboardContent="PinnedColumn_OnCopyingCellClipboardContent">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox 
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center" 
+								IsChecked="{Binding Path=IsPinned,Mode=TwoWay,Converter={StaticResource SimpleConverter}, FallbackValue=False, UpdateSourceTrigger=PropertyChanged}" 
+								Opacity="1" 
+								Cursor="Hand"
+								PreviewMouseDown="CheckBox_OnPreviewMouseDown"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<!-- ScheduleColumn -->
+				<!-- Note: In codebehind, we get the schedulecolumn by getting the last column!!!! Dont move this column without refactoring the codebehind! -->
+				<DataGridTemplateColumn CanUserReorder="False" 
+											 HeaderStyle="{StaticResource SpecialHeader}"
+											 CellStyle="{StaticResource CellStyle}"
+                                             SortMemberPath="ScheduleStartDateTime"
+                                             CanUserSort="True" 
+											 Width="2400">
+
+					<DataGridTemplateColumn.Header>
+						<timeline:TimelineControl IsHitTestVisible="False" DataContext="{Binding Path=TimelineModel}" Loaded="TimelineControl_Loaded" />
+						<!--<RtaTimeSchedule:RealTimeScheduleViewModel />-->
+					</DataGridTemplateColumn.Header>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Grid >
+
+								<layers:LayerListBox x:Name="layrBox" DataContext="{Binding Path=Layers}" Loaded="LayerListBox_Loaded" PreviewMouseLeftButtonDown="layer_Clicked"
+											    Background="{StaticResource RaptorStandardLightGradientBrush}" Style="{StaticResource LayerListBoxStyle}" 
+												ToolTip="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.TimelineModel.NowPeriod}"/>
+								
+								<!-- Just ripped the timeindicator from the timeline, could be in a common view -->
+								<common:DateTimePeriodPanel  common:DateTimePeriodPanel.DateTimePeriod="{Binding ElementName=layrBox, Path=Period}" 
+									 HorizontalAlignment="Stretch" 
+									 VerticalAlignment="Stretch"
+									 IsHitTestVisible="False"
+									 Background="Transparent">
+
+									<Border HorizontalAlignment="Stretch" 
+					VerticalAlignment="Stretch"
+					common:DateTimePeriodPanel.DateTimePeriod="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.TimelineModel.NowPeriod}"
+					Background="Transparent"
+					BorderBrush="Red"
+					BorderThickness="0,0,1,0">
+
+									</Border>
+								</common:DateTimePeriodPanel>
+
+							</Grid>
+
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+			<!-- Note: In codebehind, we get the schedulecolumn by getting the last column!!!! Dont move this column without refactoring the codebehind! -->
+
+
+		</DataGrid>
+		<TextBox x:Name="Aa"
+                 FontWeight ="Bold"
+                 FontFamily ="SegoeUI, Segoe UI, Tahoma"
+                 VerticalAlignment="Top" 
+                 Grid.Column="0"
+                 Margin="7,1,0,0"
+                 Height="25"
+                 Width="{Binding Path=AgentColumnWidth}"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 Text="{x:Static userTexts:Resources.Agent}" 
+                 BorderThickness="0.3"
+                 IsHitTestVisible="False"
+                 BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" Background="{StaticResource RaptorAgentGradientSeeThroughBrush}"/>
+		<TextBox x:Name="Bb"
+                 FontWeight ="Bold"
+                 FontFamily ="SegoeUI, Segoe UI, Tahoma"
+                 VerticalAlignment="Top"
+                 Margin="0,1,0,0"
+                 Grid.Column="1"
+                 Height="25"
+                 Width="{Binding Path=ActivityColumnWidth}"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 Text="{x:Static userTexts:Resources.Activity}" 
+                 BorderThickness="0,0.3,0.3,0.3" 
+                 IsHitTestVisible="False"
+                 BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" Background="{StaticResource RaptorActivityGradientSeeThroughBrush}"/>
+		<TextBox x:Name="Cc"
+                 FontWeight ="Bold"
+                 FontFamily ="SegoeUI, Segoe UI, Tahoma"
+                 VerticalAlignment="Top"
+                 Margin="0,1,0,0"
+                 Grid.Column="2"
+                 Height="25"
+                 Width="{Binding Path=AlarmColumnWith}"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 Text="{x:Static userTexts:Resources.Alarm}" 
+                 BorderThickness="0,0.3,0.3,0.3" 
+                 IsHitTestVisible="False"
+                 BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" Background="{StaticResource RaptorAlarmGradientSeeThroughBrush}"/>
+	</Grid>
+</UserControl>

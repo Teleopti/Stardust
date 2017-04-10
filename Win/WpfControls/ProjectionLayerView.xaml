@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.ProjectionLayerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters"
+			 xmlns:wpfControls="clr-namespace:Teleopti.Ccc.Win.WpfControls">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources\CommonBrushes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:ColorConverter x:Key="ColorConverter"/>
+
+            <DataTemplate x:Key="DescriptiveTemplate">
+                <wpfControls:LayerDescriptiveView DataContext="{Binding}" Background="{DynamicResource RaptorStandardMeetingGradientBrush}"/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                BorderBrush="SteelBlue" 
+                BorderThickness="0.5" 
+                Opacity="1"
+                CornerRadius="2"
+                Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
+                >
+      
+    </Border>
+    <UserControl.ToolTip>
+        <ToolTip Opacity="0.8">
+            <ContentControl Content="{Binding}" 
+                            ContentTemplate="{StaticResource DescriptiveTemplate}" />
+        </ToolTip>
+    </UserControl.ToolTip>
+</UserControl>

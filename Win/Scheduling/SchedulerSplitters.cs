@@ -13,9 +13,9 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
+using Teleopti.Ccc.Win.WpfControls.Controls.Requests.Views;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
-using Teleopti.Ccc.WpfControls.Controls.Requests.Views;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling

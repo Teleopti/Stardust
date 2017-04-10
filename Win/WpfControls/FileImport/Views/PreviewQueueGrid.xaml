@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.FileImport.Views.PreviewQueueGrid"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+    MinHeight="300" MinWidth="300"
+    FocusManager.FocusedElement="{Binding ElementName=lv}">
+    
+    
+    <Control.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\Resources\CommonBrushes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <HierarchicalDataTemplate x:Key="dt"  ItemsSource="{Binding Path=Queue}">
+            </HierarchicalDataTemplate>
+        </ResourceDictionary>
+
+    </Control.Resources>
+    
+    
+    
+    <Grid GuiHelpers:VisualTreeTranslator.Translate="False">
+        <ListView Name="lv" x:FieldModifier="private" ItemsSource="{Binding Path=ImportPreview}" ItemTemplate="{StaticResource dt}" Margin="2,0,-2,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn  Header="Interval" DisplayMemberBinding="{Binding Interval}" />
+                    <GridViewColumn  Header="Date" DisplayMemberBinding="{Binding Date}" />
+                    <GridViewColumn  Header="Time" DisplayMemberBinding="{Binding Time}" />
+                    <GridViewColumn  Header="Queue" DisplayMemberBinding="{Binding Queue}" />
+                    <GridViewColumn  Header="Queue Name" DisplayMemberBinding="{Binding QueueName}" />
+                    <GridViewColumn  Header="Offered Direct Call Count" DisplayMemberBinding="{Binding OfferedDirectCallCount}" />
+                    <GridViewColumn  Header="Overflow In Call Count" DisplayMemberBinding="{Binding OverflowInCallCount}" />
+                    <GridViewColumn  Header="Abandon Call Count" DisplayMemberBinding="{Binding AbandonCallCount}" />
+                    <GridViewColumn  Header="Overflow Outcall Count" DisplayMemberBinding="{Binding OverflowOutcallCount}" />
+                    <GridViewColumn  Header="Answered Call Count" DisplayMemberBinding="{Binding AnsweredCallCount}" />
+                    <GridViewColumn  Header="Queued And Answered Call Duration" DisplayMemberBinding="{Binding QueuedAndAnsweredCallDuration}" />
+                    <GridViewColumn  Header="Queued And Abandon Call Duration" DisplayMemberBinding="{Binding QueuedAndAbandonCallDuration}" />
+                    <GridViewColumn  Header="Talking Call Duration" DisplayMemberBinding="{Binding TalkingCallDuration}" />
+                    <GridViewColumn  Header="Wrap Up Duration" DisplayMemberBinding="{Binding WrapUpDuration}" />
+                    <GridViewColumn  Header="Queued Answered Longest Queue Duration" DisplayMemberBinding="{Binding QueuedAnsweredLongestQueueDuration}" />
+                    <GridViewColumn  Header="Average Avail Member Count" DisplayMemberBinding="{Binding AverageAvailMemberCount}" />
+                    <GridViewColumn  Header="Answered Service Level Count" DisplayMemberBinding="{Binding AnsweredServiceLevelCount}" />
+                    <GridViewColumn  Header="Wait Duration" DisplayMemberBinding="{Binding WaitDuration}" />
+                    <GridViewColumn  Header="Abandon Short Call Count" DisplayMemberBinding="{Binding AbandonShortCallCount}" />
+                    <GridViewColumn  Header="Abandon Within Service Level Count" DisplayMemberBinding="{Binding AbandonWithinServiceLevelCount}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>

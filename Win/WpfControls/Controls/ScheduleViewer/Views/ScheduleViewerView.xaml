@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Views.ScheduleViewerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode"
+			 xmlns:Models="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Models"
+			 xmlns:views="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Views">
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <DataTemplate DataType="{x:Type Models:ScheduleRangeViewModel}" x:Key="ScheduleRangeViewTemplate">
+                <views:ScheduleRangeView DataContext="{Binding}"/>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+  
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <TextBlock Text="xxScheduleViewer    " FontSize="22" FontWeight="Bold"/>
+            <TextBlock Text="{Binding Path=SelectedPeriod}" FontSize="22" FontWeight="Bold"/>
+            <TextBlock Text="   Ribbon?? " FontSize="8"/>
+            <GroupBox Header="xxViews">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="View1" Command="{Binding Path=ToggleShowSchedules.Command}" Commands:CreateCommandBinding.CommandModel="{Binding Path=ToggleShowSchedules}"/>
+                    <Button Content="View1" Command="{Binding Path=ToggleShowDays.Command}" Commands:CreateCommandBinding.CommandModel="{Binding Path=ToggleShowDays}"/>
+                    <Button Content="View1" Command="{Binding Path=ToggleShowDetails.Command}" Commands:CreateCommandBinding.CommandModel="{Binding Path=ToggleShowDetails}"/>
+                   
+                </StackPanel>
+            </GroupBox>
+
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" >
+            <ListBox ItemsSource="{Binding Ranges}" ItemTemplate="{StaticResource  ScheduleRangeViewTemplate}" />
+        </ScrollViewer>
+    </Grid>
+
+</UserControl>

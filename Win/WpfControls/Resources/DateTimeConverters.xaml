@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:DateTimeConverters="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode"
+					xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters">
+    <converters:ColorConverter x:Key="ColorConverter"/>
+    <converters:TextConverter x:Key="TextConverter"/>
+    <converters:ILayerConverter x:Key="ILayerConverter" />
+    <converters:DateTimeConverter x:Key="DateTimeConverter" />
+    <converters:DateTimeToTimeConverter x:Key="DateTimeToTimeConverter"/>
+    <DateTimeConverters:DateTimeToLocalConverter x:Key="DateTimeToLocalConverter"/>
+    <DateTimeConverters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
+</ResourceDictionary>

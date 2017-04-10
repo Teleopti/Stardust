@@ -2774,6 +2774,329 @@
     <Compile Include="SmartParts\SmartPartParameter.cs" />
     <Compile Include="SmartParts\SmartPartWorker.cs" />
     <Compile Include="TestMode.cs" />
+    <Compile Include="WpfControls\Commands\RoutedCommands.cs" />
+    <Compile Include="WpfControls\Common\AddDialogComposer.cs" />
+    <Compile Include="WpfControls\Common\DatePickerExtensions.cs" />
+    <Compile Include="WpfControls\Common\ErrorBorder.xaml.cs">
+      <DependentUpon>ErrorBorder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Common\Interop\MultipleHostControl.xaml.cs">
+      <DependentUpon>MultipleHostControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Common\Interop\TabbedHostView.xaml.cs">
+      <DependentUpon>TabbedHostView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Common\Interop\WpfExtensions.cs" />
+    <Compile Include="WpfControls\Common\OkCancelWindow.xaml.cs">
+      <DependentUpon>OkCancelWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AddToSchedule\AddAbsencePreview.xaml.cs">
+      <DependentUpon>AddAbsencePreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AddToSchedule\AddAbsenceView.xaml.cs">
+      <DependentUpon>AddAbsenceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AddToSchedule\AddActivityPreview.xaml.cs">
+      <DependentUpon>AddActivityPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AddToSchedule\AddActivityView.xaml.cs">
+      <DependentUpon>AddActivityView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AddToSchedule\AddDayOffPreview.xaml.cs">
+      <DependentUpon>AddDayOffPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AddToSchedule\AddDayOffView.xaml.cs">
+      <DependentUpon>AddDayOffView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AddToSchedule\AddOvertimePreview.xaml.cs">
+      <DependentUpon>AddOvertimePreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AddToSchedule\AddOvertimeView.xaml.cs">
+      <DependentUpon>AddOvertimeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AddToSchedule\AddPersonalActivityPreview.xaml.cs">
+      <DependentUpon>AddPersonalActivityPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AddToSchedule\AddPersonalActivityView.xaml.cs">
+      <DependentUpon>AddPersonalActivityView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\AnalogPresenter.xaml.cs">
+      <DependentUpon>AnalogPresenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\DateTimePeriodControl\EditableDateTimePeriodPreview.xaml.cs">
+      <DependentUpon>EditableDateTimePeriodPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\DateTimePeriodControl\EditableDateTimePeriodView.xaml.cs">
+      <DependentUpon>EditableDateTimePeriodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\DateTimePeriodControl\EditableEndDateView.xaml.cs">
+      <DependentUpon>EditableEndDateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\DateTimePeriodControl\EditableEndTimeOfDayView.xaml.cs">
+      <DependentUpon>EditableEndTimeOfDayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\DateTimePeriodControl\EditableStartDateView.xaml.cs">
+      <DependentUpon>EditableStartDateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\DateTimePeriodControl\EditableStartTimeOfDayView.xaml.cs">
+      <DependentUpon>EditableStartTimeOfDayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\AbsenceShortView.xaml.cs">
+      <DependentUpon>AbsenceShortView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\ActivityShortView.xaml.cs">
+      <DependentUpon>ActivityShortView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\DayOffShortView.xaml.cs">
+      <DependentUpon>DayOffShortView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\EditLayerSimpleRowView.xaml.cs">
+      <DependentUpon>EditLayerSimpleRowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\EditLayerView.xaml.cs">
+      <DependentUpon>EditLayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\ExpandedLayersPreView.xaml.cs">
+      <DependentUpon>ExpandedLayersPreView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\ExpandedLayersView.xaml.cs">
+      <DependentUpon>ExpandedLayersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\MultipicatorShortView.xaml.cs">
+      <DependentUpon>MultipicatorShortView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\SelectedLayerView.xaml.cs">
+      <DependentUpon>SelectedLayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\ShiftCategoryShortView.xaml.cs">
+      <DependentUpon>ShiftCategoryShortView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\ShiftCategoryView.xaml.cs">
+      <DependentUpon>ShiftCategoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\ShiftEditorSettingsSimpleRowView.xaml.cs">
+      <DependentUpon>ShiftEditorSettingsSimpleRowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\ShiftEditorSettingsView.xaml.cs">
+      <DependentUpon>ShiftEditorSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\Views\WpfShiftEditorView.xaml.cs">
+      <DependentUpon>WpfShiftEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Editor\WpfShiftEditor.xaml.cs">
+      <DependentUpon>WpfShiftEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Intraday\AgentStateLayerView.xaml.cs">
+      <DependentUpon>AgentStateLayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Intraday\IIntradaySchedulesControl.cs" />
+    <Compile Include="WpfControls\Controls\Intraday\Models\RealTimeScheduleViewModel.cs" />
+    <Compile Include="WpfControls\Controls\Intraday\PinnedLayerView.xaml.cs">
+      <DependentUpon>PinnedLayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Intraday\RealTimeScheduleControl.xaml.cs">
+      <DependentUpon>RealTimeScheduleControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Intraday\SimpleLayerView.xaml.cs">
+      <DependentUpon>SimpleLayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Intraday\StaffingEffectView.xaml.cs">
+      <DependentUpon>StaffingEffectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Intraday\Views\RealTimeScheduleView.xaml.cs">
+      <DependentUpon>RealTimeScheduleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\BasicScheduleLayerView.xaml.cs">
+      <DependentUpon>BasicScheduleLayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\BasicSchedulesView.xaml.cs">
+      <DependentUpon>BasicSchedulesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\ExpandedLayersExpandedPreview.xaml.cs">
+      <DependentUpon>ExpandedLayersExpandedPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\ExpandedLayersExpandedView.xaml.cs">
+      <DependentUpon>ExpandedLayersExpandedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\LayerEditorView.xaml.cs">
+      <DependentUpon>LayerEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\LayerGroupBackgroundPreview.xaml.cs">
+      <DependentUpon>LayerGroupBackgroundPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\LayerGroupBackgroundView.xaml.cs">
+      <DependentUpon>LayerGroupBackgroundView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\LayerGroupForegroundPreview.xaml.cs">
+      <DependentUpon>LayerGroupForegroundPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\LayerGroupForegroundView.xaml.cs">
+      <DependentUpon>LayerGroupForegroundView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\LayerGroupPreview.xaml.cs">
+      <DependentUpon>LayerGroupPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\LayerGroupView.xaml.cs">
+      <DependentUpon>LayerGroupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Layers\LayerListBox.xaml.cs">
+      <DependentUpon>LayerListBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\LayerTemplateSelector.cs" />
+    <Compile Include="WpfControls\Controls\Messaging\PushMessageControl.xaml.cs">
+      <DependentUpon>PushMessageControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\PushMessageForm.xaml.cs">
+      <DependentUpon>PushMessageForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\SendPushMessageUserControl.xaml.cs">
+      <DependentUpon>SendPushMessageUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\Views\CustomAnswerView.xaml.cs">
+      <DependentUpon>CustomAnswerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\Views\FollowUpDialogueMessageView.xaml.cs">
+      <DependentUpon>FollowUpDialogueMessageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\Views\FollowUpPushMessageDialogueView.xaml.cs">
+      <DependentUpon>FollowUpPushMessageDialogueView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\Views\FollowUpPushMessageView.xaml.cs">
+      <DependentUpon>FollowUpPushMessageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\Views\FollowUpServiceView.xaml.cs">
+      <DependentUpon>FollowUpServiceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\Views\PushMessageView.xaml.cs">
+      <DependentUpon>PushMessageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\Views\ReplyOptionView.xaml.cs">
+      <DependentUpon>ReplyOptionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\Views\SendPushMessageView.xaml.cs">
+      <DependentUpon>SendPushMessageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\Views\StandardAnswerView.xaml.cs">
+      <DependentUpon>StandardAnswerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Messaging\Views\YesNoAnswerView.xaml.cs">
+      <DependentUpon>YesNoAnswerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Notes\NotesEditor.xaml.cs">
+      <DependentUpon>NotesEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\OutlookTimePicker.cs" />
+    <Compile Include="WpfControls\Controls\Progress.xaml.cs">
+      <DependentUpon>Progress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Requests\Views\HandlePersonRequestView.xaml.cs">
+      <DependentUpon>HandlePersonRequestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\ScheduleViewer\Models\ScheduleRangeViewModel.cs" />
+    <Compile Include="WpfControls\Controls\ScheduleViewer\Models\ScheduleViewerScheduleDayViewModel.cs" />
+    <Compile Include="WpfControls\Controls\ScheduleViewer\Models\ScheduleViewerViewModel.cs" />
+    <Compile Include="WpfControls\Controls\ScheduleViewer\ScheduleDictionaryViewer.xaml.cs">
+      <DependentUpon>ScheduleDictionaryViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\ScheduleViewer\Views\ScheduleRangeView.xaml.cs">
+      <DependentUpon>ScheduleRangeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\ScheduleViewer\Views\ScheduleViewerScheduleDayView.xaml.cs">
+      <DependentUpon>ScheduleViewerScheduleDayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\ScheduleViewer\Views\ScheduleViewerScheduleDayViewDetailed.xaml.cs">
+      <DependentUpon>ScheduleViewerScheduleDayViewDetailed.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\ScheduleViewer\Views\ScheduleViewerScheduleDayViewSchedule.xaml.cs">
+      <DependentUpon>ScheduleViewerScheduleDayViewSchedule.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\ScheduleViewer\Views\ScheduleViewerView.xaml.cs">
+      <DependentUpon>ScheduleViewerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Scheduling\BusinessRuleResponseDialog.xaml.cs">
+      <DependentUpon>BusinessRuleResponseDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Scheduling\BusinessRuleResponseListView.xaml.cs">
+      <DependentUpon>BusinessRuleResponseListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\Timeline\TimelineControl.xaml.cs">
+      <DependentUpon>TimelineControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\Timeline\TimelineControlView.xaml.cs">
+      <DependentUpon>TimelineControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\Timeline\Views\DayTickMarkView.xaml.cs">
+      <DependentUpon>DayTickMarkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\Timeline\Views\HourTickMarkView.xaml.cs">
+      <DependentUpon>HourTickMarkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\Timeline\Views\MonthTickMarkView.xaml.cs">
+      <DependentUpon>MonthTickMarkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\Timeline\Views\ShortTickMarkView.xaml.cs">
+      <DependentUpon>ShortTickMarkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\Timeline\Views\ThreeHourTickMarkView.xaml.cs">
+      <DependentUpon>ThreeHourTickMarkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\Timeline\Views\TickMarkTemplateSelector.cs" />
+    <Compile Include="WpfControls\Controls\Time\Timeline\Views\TickMarkView.xaml.cs">
+      <DependentUpon>TickMarkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\Timeline\Views\WeekTickMarkView.xaml.cs">
+      <DependentUpon>WeekTickMarkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\Timeline\Views\YearTickMarkView.xaml.cs">
+      <DependentUpon>YearTickMarkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\TimePanel\SimpleTimePanel.xaml.cs">
+      <DependentUpon>SimpleTimePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Controls\Time\TimePicker.cs" />
+    <Compile Include="WpfControls\Controls\Time\TimeZoom\Views\TimeZoomView.xaml.cs">
+      <DependentUpon>TimeZoomView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\Converters\ColorConverter.cs" />
+    <Compile Include="WpfControls\Converters\ColorConverterSoft.cs" />
+    <Compile Include="WpfControls\Converters\CustomSortBehaviour.cs" />
+    <Compile Include="WpfControls\Converters\DateTimeConverter.cs" />
+    <Compile Include="WpfControls\Converters\DateTimeResolutionConverter.cs" />
+    <Compile Include="WpfControls\Converters\DateTimeToHourConverter.cs" />
+    <Compile Include="WpfControls\Converters\DateTimeToLocalAndNotMinValueConverter.cs" />
+    <Compile Include="WpfControls\Converters\DateTimeToTimeConverter.cs" />
+    <Compile Include="WpfControls\Converters\ILayerConverter.cs" />
+    <Compile Include="WpfControls\Converters\LessThanConverter.cs" />
+    <Compile Include="WpfControls\Converters\MultiValueAndConverter.cs" />
+    <Compile Include="WpfControls\Converters\MultiValueOrConverter.cs" />
+    <Compile Include="WpfControls\Converters\StringToColorConverter.cs" />
+    <Compile Include="WpfControls\Converters\TextConverter.cs" />
+    <Compile Include="WpfControls\Converters\TimeToAngleConverter.cs" />
+    <Compile Include="WpfControls\Converters\VisibilityConverter.cs" />
+    <Compile Include="WpfControls\FileImport\ImportWizardWindow.xaml.cs">
+      <DependentUpon>ImportWizardWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\FileImport\Persister.cs" />
+    <Compile Include="WpfControls\FileImport\ViewModels\PrepareTextViewModel.cs" />
+    <Compile Include="WpfControls\FileImport\ViewModels\PreviewQueueGridViewModel.cs" />
+    <Compile Include="WpfControls\FileImport\Views\PrepareTextView.xaml.cs">
+      <DependentUpon>PrepareTextView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\FileImport\Views\PreviewQueueGrid.xaml.cs">
+      <DependentUpon>PreviewQueueGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\LayerDescriptiveView.xaml.cs">
+      <DependentUpon>LayerDescriptiveView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\LayerView.xaml.cs">
+      <DependentUpon>LayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\MeetingView.xaml.cs">
+      <DependentUpon>MeetingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfControls\ProjectionLayerView.xaml.cs">
+      <DependentUpon>ProjectionLayerView.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Backlog\AddActualBacklogView.resx">
       <DependentUpon>AddActualBacklogView.cs</DependentUpon>
     </EmbeddedResource>
@@ -3380,10 +3703,6 @@
       <Project>{3B495E4B-1803-413C-9480-40C8EFCCBA45}</Project>
       <Name>Teleopti.Ccc.WinCode</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.WpfControls\Teleopti.Ccc.WpfControls.csproj">
-      <Project>{737F96C2-0301-4519-8A52-6C46AD25325D}</Project>
-      <Name>Teleopti.Ccc.WpfControls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
@@ -3977,6 +4296,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="WpfControls\Resources\Filter2HS.png" />
+    <Resource Include="WpfControls\Resources\ccc_Agent_ListRequests_32x32.png" />
     <None Include="Resources\WPF.png" />
     <None Include="Resources\win_apps.png" />
     <None Include="Resources\undo1.png" />
@@ -4306,6 +4627,526 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SmartParts\Payroll\StatusWorkingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Common\ErrorBorder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Common\Interop\MultipleHostControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Common\Interop\TabbedHostView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Common\OkCancelWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AddToSchedule\AddAbsencePreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AddToSchedule\AddAbsenceView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AddToSchedule\AddActivityPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AddToSchedule\AddActivityView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AddToSchedule\AddDayOffPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AddToSchedule\AddDayOffView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AddToSchedule\AddOvertimePreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AddToSchedule\AddOvertimeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AddToSchedule\AddPersonalActivityPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AddToSchedule\AddPersonalActivityView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\AnalogPresenter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\DateTimePeriodControl\EditableDateTimePeriodPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\DateTimePeriodControl\EditableDateTimePeriodView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\DateTimePeriodControl\EditableEndDateView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\DateTimePeriodControl\EditableEndTimeOfDayView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\DateTimePeriodControl\EditableStartDateView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\DateTimePeriodControl\EditableStartTimeOfDayView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\AbsenceShortView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\ActivityShortView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\DayOffShortView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\EditLayerSimpleRowView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\EditLayerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\ExpandedLayersPreView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\ExpandedLayersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\MultipicatorShortView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\SelectedLayerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\ShiftCategoryShortView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\ShiftCategoryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\ShiftEditorSettingsSimpleRowView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\ShiftEditorSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\Views\WpfShiftEditorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Editor\WpfShiftEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Intraday\AgentStateLayerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Intraday\PinnedLayerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Intraday\RealTimeScheduleControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Intraday\SimpleLayerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Intraday\StaffingEffectView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Intraday\Views\RealTimeScheduleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\BasicScheduleLayerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\BasicSchedulesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\ExpandedLayersExpandedPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\ExpandedLayersExpandedView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\LayerEditorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\LayerGroupBackgroundPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\LayerGroupBackgroundView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\LayerGroupForegroundPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\LayerGroupForegroundView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\LayerGroupPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\LayerGroupView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Layers\LayerListBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\PushMessageControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\PushMessageForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\SendPushMessageUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\CustomAnswerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\FollowUpDialogueMessageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\FollowUpPushMessageDialogueView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\FollowUpPushMessageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\FollowUpServiceView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\MessageResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\PushMessageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\ReplyOptionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\SendPushMessageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\StandardAnswerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Messaging\Views\YesNoAnswerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Notes\NotesEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Progress.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Requests\Views\HandlePersonRequestView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\ScheduleViewer\ScheduleDictionaryViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\ScheduleViewer\Views\ScheduleRangeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\ScheduleViewer\Views\ScheduleViewerScheduleDayView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\ScheduleViewer\Views\ScheduleViewerScheduleDayViewDetailed.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\ScheduleViewer\Views\ScheduleViewerScheduleDayViewSchedule.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\ScheduleViewer\Views\ScheduleViewerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Scheduling\BusinessRuleResponseDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Scheduling\BusinessRuleResponseListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\TimelineControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\TimelineControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\Views\DayTickMarkView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\Views\HourTickMarkView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\Views\MonthTickMarkView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\Views\ShortTickMarkView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\Views\ThreeHourTickMarkView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\Views\TickMarkResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\Views\TickMarkView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\Views\WeekTickMarkView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\Timeline\Views\YearTickMarkView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\TimePanel\SimpleTimePanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Controls\Time\TimeZoom\Views\TimeZoomView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\FileImport\ImportWizardWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\FileImport\Views\PrepareTextView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\FileImport\Views\PreviewQueueGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\LayerDescriptiveView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\LayerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\MeetingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\ProjectionLayerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\AvayaBrushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\CCCBrushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Common.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\CommonBrushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\CommonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\DateTimeConverters.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\ExtendedResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\FlatBrushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\AllFlatStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatCheckBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatColors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatCombo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatContextMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatListBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatRadio.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatScroll.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatSlider.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatTextBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Flat\FlatToolTip.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\ListViewDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\MVVM.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\MVVMPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\RibbonResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\ShiftEditor Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Resources\SimpleLayerViewDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfControls\Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

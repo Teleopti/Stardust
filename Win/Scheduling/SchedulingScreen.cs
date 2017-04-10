@@ -81,6 +81,9 @@ using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.Reporting;
 using Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences;
 using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
+using Teleopti.Ccc.Win.WpfControls.Controls.Editor;
+using Teleopti.Ccc.Win.WpfControls.Controls.Notes;
+using Teleopti.Ccc.Win.WpfControls.Controls.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -91,9 +94,6 @@ using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Ccc.WinCode.Scheduling.GridlockCommands;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
-using Teleopti.Ccc.WpfControls.Controls.Editor;
-using Teleopti.Ccc.WpfControls.Controls.Notes;
-using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 #endregion

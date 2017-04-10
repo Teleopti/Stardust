@@ -25,11 +25,11 @@ using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Grouping.Events;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
-using Teleopti.Ccc.WpfControls.Common.Interop;
-using Teleopti.Ccc.WpfControls.Controls.Messaging;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Win.WpfControls.Common.Interop;
+using Teleopti.Ccc.Win.WpfControls.Controls.Messaging;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 {

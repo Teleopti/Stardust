@@ -1,6 +1,0 @@
-﻿<UserControl x:Class="Teleopti.Ccc.WpfControls.Controls.Time.TimePanel.SimpleTimePanel"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Timeline="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Time.Timeline">
-  <Timeline:TimelineControl />
-</UserControl>

@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Messaging.Views.ReplyOptionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode"
+    xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\..\Resources\CommonBrushes.xaml"/>
+                <ResourceDictionary Source="MessageResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+			<converters:VisibilityConverter x:Key="visibilityConverter"/>
+			<converters:ReversedVisibilityConverter x:Key="reversedVisibilityConverter"/>
+			
+            <!--Style for Filter ToggleButton-->
+            <Style TargetType="ToggleButton">
+                <Style.Setters>
+                    <Setter Property="Background" Value="{StaticResource RaptorStandardGradientBrush}" />
+                </Style.Setters>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=FilterIsActive}" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+        
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <!--<Button Commands:CreateCommandBinding.Command="{Binding Path=FilterCommand}" Command="{Binding Path=FilterCommand.Command}">-->
+	<GroupBox>
+		<GroupBox.Header>
+			<StackPanel Orientation="Horizontal">
+				<Border Height="12"
+					Width="12"
+					Background="{StaticResource Raptor_HelpIcon}"
+					Margin="2"
+					Visibility="{Binding Path=IsNotRepliedOption,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}"/>
+                <TextBlock Text="{Binding Path=Reply}" Visibility="{Binding Path=FilterIsActive,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}"  FontWeight="Bold"  />
+				<TextBlock Text="{Binding Path=Reply}"
+						  
+						   Visibility="{Binding Path=FilterIsActive,Converter={StaticResource reversedVisibilityConverter}, FallbackValue=Hidden}" />
+			</StackPanel>
+		</GroupBox.Header>
+		<Grid MinWidth="100" HorizontalAlignment="Stretch" Margin="10,2,2,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/> 
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="80"/>
+            </Grid.ColumnDefinitions>
+			<StackPanel Orientation="Horizontal">
+				
+				
+				
+				
+			</StackPanel>
+			
+
+            <Grid HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1">
+                <ProgressBar Value="{Binding Path=FilteredView.Count, Mode=OneWay}" 
+                             Maximum="{Binding Path=Total, Mode=OneWay}" 
+                             HorizontalContentAlignment="Stretch"
+                             Foreground="{StaticResource RaptorStandardHoverGradientBrush}"/> 
+
+                <TextBlock Text="{Binding Path=FilteredView.Count}" 
+                       FontSize="16" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"/>
+
+           
+        </Grid>
+        <ToggleButton IsChecked="{Binding Path=FilterIsActive, Mode=OneWay}" 
+                          Grid.Row="1" Grid.Column="0"
+                          Commands:CreateCommandBinding.CommandModel="{Binding Path=FilterCommand}" 
+                          Command="{Binding Path=FilterCommand.Command}">
+        </ToggleButton>
+    </Grid>
+	</GroupBox>
+    <!--</Button>-->
+</UserControl>

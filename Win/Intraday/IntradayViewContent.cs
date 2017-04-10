@@ -20,6 +20,10 @@ using Teleopti.Ccc.Win.Common.Controls.Chart;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.Win.Scheduling.SkillResult;
+using Teleopti.Ccc.Win.WpfControls.Common.Interop;
+using Teleopti.Ccc.Win.WpfControls.Controls.Editor;
+using Teleopti.Ccc.Win.WpfControls.Controls.Intraday;
+using Teleopti.Ccc.Win.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
@@ -28,12 +32,8 @@ using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
-using Teleopti.Ccc.WpfControls.Common.Interop;
-using Teleopti.Ccc.WpfControls.Controls.Intraday;
-using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Interfaces.Domain;
 using Cursors = System.Windows.Forms.Cursors;
-using Teleopti.Ccc.WpfControls.Controls.Editor;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 
 namespace Teleopti.Ccc.Win.Intraday

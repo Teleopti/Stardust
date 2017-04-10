@@ -1,0 +1,60 @@
+﻿<!-- DataContext = LayerGroupViewModel-->
+    <UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Layers.LayerGroupPreview"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode"
+    xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters"
+    xmlns:layers="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Layers"
+    HorizontalAlignment="Stretch" 
+                 VerticalAlignment="Stretch"
+                 HorizontalContentAlignment="Stretch" 
+                 VerticalContentAlignment="Stretch" >
+    <UserControl.Resources>
+        <converters:ReversedVisibilityConverter x:Key="visibilityConverter"/>
+        <DataTemplate x:Key="groupBackground" DataType="common:LayerGroupViewModel">
+            <layers:LayerGroupBackgroundPreview/>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="groupForground" DataType="common:LayerGroupViewModel">
+            <layers:LayerGroupForegroundPreview/>
+        </DataTemplate>
+        
+    </UserControl.Resources>
+    <Grid Visibility="{Binding Path=Layers.IsEmpty, Converter={StaticResource visibilityConverter}, FallbackValue=Visible}">
+        <!--The background-->
+        <ContentControl Content="{Binding}" ContentTemplate="{StaticResource groupBackground}"/>
+
+        <!-- The actual layers -->
+        <ItemsControl ItemsSource="{Binding Path=Layers}">
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Style.Setters>
+                        <Setter Property="ContentControl.HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="ContentControl.VerticalContentAlignment" Value="Stretch" />
+                        <Setter Property="common:DateTimePeriodPanel.DateTimePeriod" >
+                            <Setter.Value>
+                                <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
+                            </Setter.Value>
+                        </Setter>
+                    </Style.Setters>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <common:DateTimePeriodPanel IsItemsHost="True" 
+                                                Overlap="0.95"
+                                                Background="Transparent">
+                    </common:DateTimePeriodPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+        <!--The foreground-->
+        <ContentControl Content="{Binding}" 
+                        ContentTemplate="{StaticResource groupForground}" 
+                        IsHitTestVisible="False" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch"/>
+
+    </Grid>
+</UserControl>

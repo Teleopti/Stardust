@@ -1,0 +1,63 @@
+﻿<ListBox x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Layers.LayerListBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode"
+    xmlns:intraday="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Intraday"
+    ItemsSource="{Binding}"
+	ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+	ScrollViewer.VerticalScrollBarVisibility="Disabled"
+	BorderThickness="0"
+	BorderBrush="Transparent"
+	x:Name="Main">
+	<ListBox.Resources>
+		<DataTemplate x:Key="LayerTemplate">
+			<intraday:SimpleLayerView/>
+		</DataTemplate>
+	</ListBox.Resources>
+	<!-- Set the container to be able to place the items in the correct in time-->
+	<ListBox.ItemContainerStyle>
+		<Style TargetType="ListBoxItem" >
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="ListBoxItem" >
+						<Border
+                        Name="Bd"
+                        BorderThickness="{TemplateBinding Border.BorderThickness}"
+                        Margin="0"
+                        Padding="0"
+                        BorderBrush="{TemplateBinding Border.BorderBrush}"
+                        Background="{TemplateBinding Panel.Background}"
+                        SnapsToDevicePixels="True">
+
+							<ContentPresenter
+                            Content="{TemplateBinding ContentControl.Content}"
+                            HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+							ContentTemplate="{StaticResource LayerTemplate}" />
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+			<Setter Property="VerticalContentAlignment" Value="Stretch" />
+			<!-- Data binding for DateTimePeriodPanel -->
+			<Setter Property="common:DateTimePeriodPanel.DateTimePeriod">
+				<Setter.Value>
+                    <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</ListBox.ItemContainerStyle>
+
+	<!--The layoutpanel (just a DateTimePeriodpanel bound to the controls Period-property-->
+	<ListBox.ItemsPanel>
+		<ItemsPanelTemplate>
+			<common:DateTimePeriodPanel 
+				common:DateTimePeriodPanel.DateTimePeriod="{Binding ElementName=Main, Path=Period}"
+				Overlap="{Binding ElementName=Main, Path=Offset}"
+				IsItemsHost="True"
+				Background="Transparent"/>
+		</ItemsPanelTemplate>
+	</ListBox.ItemsPanel>
+</ListBox>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Teleopti.Ccc.Win.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -3589,8 +3590,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripButton toolStripButtonReplyAndDeny;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOptimize;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemScheduleHourlyEmployees;
-        private Teleopti.Ccc.WpfControls.Controls.Notes.NotesEditor notesEditor;
-        //private Teleopti.Ccc.WpfControls.Common.Interop.MultipleHostControl hostedComponent1;
+        private NotesEditor notesEditor;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddOverTime;
         private System.Windows.Forms.ImageList imageListSkillTypeIcons;
         private Teleopti.Ccc.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl toolStripSpinningProgressControl1;

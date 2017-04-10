@@ -1,0 +1,61 @@
+﻿<!--Uses DatTimeperiodViewModel as DataContext-->
+<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.DateTimePeriodControl.EditableStartTimeOfDayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+    xmlns:dateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode" 
+    xmlns:system="clr-namespace:System;assembly=mscorlib" 
+    TextBox.GotKeyboardFocus="textBoxGotKeyboardFocus" Height="22" Width="70">
+        
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\Resources\Common.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <dateTimeConverter:DateTimeToLocalStringConverter x:Key="startDateTimeToLocalStringConverter"/>
+            <dateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</dateTimeConverter:DateTimeParseMode>
+            <dateTimeConverter:TimeSpanToDateTimeConverter x:Key="timeSpanToDateTime"/>
+          
+            <DataTemplate DataType="{x:Type system:TimeSpan}">
+                <TextBlock Text="{Binding StringFormat=t,Converter={StaticResource timeSpanToDateTime}}"  />
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+        
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="20"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+
+
+		<ComboBox IsEditable="True" ItemsSource="{Binding Path=SelectableStartTimes}" Grid.ColumnSpan="2"
+                  KeyboardNavigation.ControlTabNavigation="Continue"
+                  KeyboardNavigation.TabIndex="0">
+			<ComboBox.SelectedItem>
+                     <MultiBinding Converter="{StaticResource startDateTimeToLocalStringConverter}" ConverterParameter="{StaticResource TimeMode}" Mode="TwoWay">
+                        <MultiBinding.Bindings>
+                            <Binding Path="Start"/>
+                            <Binding RelativeSource="{RelativeSource Self}" Path="(guiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
+                        </MultiBinding.Bindings>
+                    </MultiBinding>
+            </ComboBox.SelectedItem>
+        </ComboBox>
+        
+        <TextBox Grid.Column="0">
+
+            <TextBox.Text>
+                <MultiBinding Converter="{StaticResource startDateTimeToLocalStringConverter}" 
+                          ConverterParameter="{StaticResource TimeMode}" Mode="TwoWay">
+                    <MultiBinding.Bindings>
+                        <Binding Path="Start"/>
+                        <Binding RelativeSource="{RelativeSource Self}" Path="(guiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </TextBox.Text>
+        </TextBox>
+
+    </Grid>
+</UserControl>

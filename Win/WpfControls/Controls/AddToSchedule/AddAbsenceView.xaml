@@ -1,0 +1,68 @@
+﻿<!--uses AddAbsenceViewModel as DataContext-->
+<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.AddToSchedule.AddAbsenceView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
+			 xmlns:Scheduling="clr-namespace:Teleopti.Ccc.Domain.Scheduling;assembly=Teleopti.Ccc.Domain"
+			 xmlns:views="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Editor.Views"
+			 xmlns:dateTimePeriodControl="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.DateTimePeriodControl"
+			 xmlns:common="clr-namespace:Teleopti.Ccc.Win.WpfControls.Common"
+			 Loaded="AddAbsenceView_OnLoaded"
+    Height="Auto" Width="Auto">
+
+    <UserControl.Resources>
+
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\..\Resources\Common.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<Style TargetType="ComboBox" x:Key="BasicComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate DataType="{x:Type Scheduling:Absence}">
+            <views:AbsenceShortView />
+        </DataTemplate>
+		</ResourceDictionary>
+
+	</UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="34"></RowDefinition>
+            <RowDefinition Height="34"></RowDefinition>
+            <RowDefinition Height="34"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Content="{x:Static UserTexts:Resources.AbsencesColon}" Margin="1,2,0,4" HorizontalAlignment="Left" Width="62.467" />
+        <Label Grid.Row="1" Content="{x:Static UserTexts:Resources.FromColon}" Margin="1,2,1,4" />
+        <Label Grid.Row="2" Content="{x:Static UserTexts:Resources.ToColon}" Margin="1,2,1,4" />
+        <ComboBox Height="28" 
+                  Width="182" 
+                  HorizontalAlignment="Left"  
+                  Grid.Column="1" 
+                  ItemsSource="{Binding Path=Payloads}"
+                  IsSynchronizedWithCurrentItem="True"
+                  IsTextSearchEnabled="True" 
+                  TextSearch.TextPath="Description" Style="{StaticResource BasicComboBox}"
+				  x:Name="Payloads">
+
+        </ComboBox>
+        <dateTimePeriodControl:EditableDateTimePeriodView Grid.RowSpan="2" DataContext="{Binding Path=PeriodViewModel}" Grid.Row="1" Grid.Column="1">
+        </dateTimePeriodControl:EditableDateTimePeriodView>
+        <common:ErrorBorder HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                Grid.Row="1" Grid.RowSpan="2"
+                Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding Path=PeriodViewModel}"/>
+    </Grid>
+</UserControl>

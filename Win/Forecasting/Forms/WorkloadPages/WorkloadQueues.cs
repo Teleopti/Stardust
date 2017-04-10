@@ -11,7 +11,7 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WpfControls.FileImport;
+using Teleopti.Ccc.Win.WpfControls.FileImport;
 using Teleopti.Interfaces.Domain;
 
 

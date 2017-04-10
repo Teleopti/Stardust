@@ -1,4 +1,6 @@
 ﻿using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
+using Teleopti.Ccc.Win.WpfControls.Common.Interop;
+using Teleopti.Ccc.Win.WpfControls.Controls.Requests.Views;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -76,9 +78,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.agentRestrictionGrid1 = new Teleopti.Ccc.Win.Scheduling.AgentRestrictions.AgentRestrictionGrid(this.components);
 			this.grid = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.elementHostRequests = new System.Windows.Forms.Integration.ElementHost();
-			this.handlePersonRequestView1 = new Teleopti.Ccc.WpfControls.Controls.Requests.Views.HandlePersonRequestView();
+			this.handlePersonRequestView1 = new HandlePersonRequestView();
 			this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-			this.multipleHostControl1 = new Teleopti.Ccc.WpfControls.Common.Interop.MultipleHostControl();
+			this.multipleHostControl1 = new MultipleHostControl();
 			this.tabInfoPanels = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvAgentInfo = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tabPageAdvShiftCategoryDistribution = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
@@ -812,9 +814,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         private Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer teleoptiLessIntellegentSplitContainerView;
         private Syncfusion.Windows.Forms.Grid.GridControl grid;
         private System.Windows.Forms.Integration.ElementHost elementHostRequests;
-        private Teleopti.Ccc.WpfControls.Controls.Requests.Views.HandlePersonRequestView handlePersonRequestView1;
+        private HandlePersonRequestView handlePersonRequestView1;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
-        private Teleopti.Ccc.WpfControls.Common.Interop.MultipleHostControl multipleHostControl1;
+        private MultipleHostControl multipleHostControl1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelRestrictionSummery;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelRestrictionButtons;
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv chbAvailability;

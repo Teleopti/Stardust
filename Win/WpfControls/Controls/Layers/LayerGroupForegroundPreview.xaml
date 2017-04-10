@@ -1,0 +1,8 @@
+﻿<!-- DataContext LayerGroupViewModel -->
+    <UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Layers.LayerGroupForegroundPreview"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Text="{Binding Path=Description}"/>
+    </Grid>
+</UserControl>

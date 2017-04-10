@@ -1,0 +1,51 @@
+﻿<!--DataContext: ExpandedLayersViewModel
+	Description: Show a part of a LayerViewModelCollection (ie: Absences, MainShift, Layers before 12:00 etc)
+	And decide if they should be in editmode/expanded etc (GroupOfLayersViewModel)
+	-->
+
+<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Editor.Views.ExpandedLayersPreview"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode"
+			 xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
+			 xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters"
+			 xmlns:layers="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Layers"
+			 Commands:CreateCommandBinding.Command="{Binding Path=ToggleEditModeCommand}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:VisibilityConverter x:Key="visibilityConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!--Normal view Shows the VisualLayers (created from projection by the LayerViewModelCollection-->
+        <layers:LayerListBox Period="{Binding Path=Period}" 
+						 ItemsSource="{Binding Path=Layers.VisualLayers}"
+                         Offset="0"
+						 VerticalAlignment="Stretch"
+					     Height="{Binding Path=LayerHeight}"/>
+
+        <!--The expanded layers-->
+        <layers:ExpandedLayersExpandedPreview
+                                Period="{Binding Path=Period}" 
+                                Offset="1"
+                                Grid.Row="1"
+								VerticalAlignment="Stretch"
+								Visibility="{Binding Path=EditMode,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}"/>
+
+
+        <Button Content="{x:Static UserTexts:Resources.Show}"
+                       
+				        Command="{Binding Path=ToggleEditModeCommand.Command}" 
+				        HorizontalAlignment="Left" 
+				        VerticalAlignment="Top">
+
+        </Button>
+
+    </Grid>
+</UserControl>

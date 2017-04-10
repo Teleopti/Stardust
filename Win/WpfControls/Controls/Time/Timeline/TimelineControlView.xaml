@@ -1,0 +1,364 @@
+﻿<!-- DataContext = TimelineControlViewModel-->
+    <UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Time.Timeline.TimelineControlView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				 xmlns:Common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode"
+    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+    xmlns:Editor="clr-namespace:Teleopti.Ccc.WinCode.Scheduling.Editor;assembly=Teleopti.Ccc.WinCode"
+    xmlns:views="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Time.Timeline.Views"
+				 xmlns:Timeline="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Time.Timeline"
+    xmlns:controls="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Views\TickMarkResources.xaml"/>
+                <ResourceDictionary Source="..\..\..\Resources\CommonBrushes.xaml"/>
+				<ResourceDictionary Source="..\..\..\Resources\DateTimeConverters.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="MenuItem" x:Key="MenuItemStyle">
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <views:TickMarkTemplateSelector x:Key="selectorForTickMarks"/>
+
+      
+        <DataTemplate x:Key="TickMarkTemplate" 
+                      DataType="ListBoxItem" >
+            <views:HourTickMarkView DataContext="{Binding}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HoverTemplate">
+            <Rectangle HorizontalAlignment="Stretch" 
+                       VerticalAlignment="Stretch" 
+                       Fill="Red" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="SelectedPeriodTemplate">
+            <Grid HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.ColumnSpan="5" Fill="{DynamicResource RaptorStandardHoverGradientBrush}">
+
+                </Rectangle>
+
+
+					<Label Grid.Column="0" Foreground="{StaticResource CommonDarkBrush}">
+                        <Label.Content>
+                            <MultiBinding  Converter="{StaticResource DateTimeToTimeConverter}">
+                                <MultiBinding.Bindings>
+                                    <Binding Path="StartDateTime"/>
+                                    <Binding RelativeSource="{RelativeSource Self}" Path="(GuiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
+                                </MultiBinding.Bindings>
+                            </MultiBinding>
+                        </Label.Content>
+                    </Label>
+                
+                    <controls:AnalogPresenter  Grid.Column="1" VerticalAlignment="Stretch" Height="30" Width="30" >
+                        <controls:AnalogPresenter.DataContext>
+                            <MultiBinding Converter="{StaticResource DateTimeToLocalConverter}">
+                                <MultiBinding.Bindings>
+                                    <Binding Path="StartDateTime"/>
+                                    <Binding RelativeSource="{RelativeSource Self}" Path="(GuiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
+                                </MultiBinding.Bindings>
+                            </MultiBinding>
+                        </controls:AnalogPresenter.DataContext>
+                    </controls:AnalogPresenter>
+
+                    <TextBlock Grid.Column="2" Text="{Binding ElapsedTime, RelativeSource={RelativeSource FindAncestor, AncestorType=Timeline:TimelineControlView}, StringFormat=t,Converter={StaticResource TimeSpanToStringConverter}}" FontWeight="Bold"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Opacity="0.8"/>
+                
+                    <controls:AnalogPresenter  Grid.Column="3" VerticalAlignment="Stretch" Height="30" Width="30" >
+                        <controls:AnalogPresenter.DataContext>
+                            <MultiBinding Converter="{StaticResource DateTimeToLocalConverter}">
+                                <MultiBinding.Bindings>
+                                    <Binding Path="EndDateTime"/>
+                                    <Binding RelativeSource="{RelativeSource Self}" Path="(GuiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
+                                </MultiBinding.Bindings>
+                            </MultiBinding>
+                        </controls:AnalogPresenter.DataContext>
+                    </controls:AnalogPresenter>
+
+                    <Label Grid.Column="4">
+                        <Label.Content>
+                            <MultiBinding  Converter="{StaticResource DateTimeToTimeConverter}">
+                                <MultiBinding.Bindings>
+                                    <Binding Path="EndDateTime"/>
+                                    <Binding RelativeSource="{RelativeSource Self}" Path="(GuiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
+                                </MultiBinding.Bindings>
+                            </MultiBinding>
+                        </Label.Content>
+                    </Label>
+
+                   
+            </Grid>
+        </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+        
+
+    <Grid Background="{StaticResource RaptorStandardGradientBrush}" >
+        <Grid.ContextMenu>
+            <ContextMenu x:Name="TimeLineContextMenu"  IsVisibleChanged="ContextMenu_IsVisibleChanged" MouseLeftButtonUp="TimelineControlView_PreviewMouseUp" MouseLeftButtonDown="TimelineControlView_PreviewMouseUp">
+                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddActivityWithPeriod}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddAbsenceWithPeriod}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddOvertimeWithPeriod}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddPersonalShiftWithPeriod}" Style="{StaticResource MenuItemStyle}"/>
+            </ContextMenu>
+              
+        </Grid.ContextMenu>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!--TickMarks-->
+        <Button Opacity="0" Grid.ColumnSpan="3" x:Name="hiddenButtonForFocusThatShouldBeHandledInViewModelInstead" x:FieldModifier="private" Grid.RowSpan="2"/>
+        <ListBox ItemsSource="{Binding Path=TickMarks}" 
+				  Grid.Row="1"
+				 Margin="0"
+				 Padding="0"
+                 Grid.ColumnSpan="2"
+                 BorderThickness="0"
+				 Background="Transparent"
+                 ItemTemplateSelector="{StaticResource selectorForTickMarks}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 MouseEnter="DateTimePeriodPanel_MouseEnter"
+                 MouseLeave="DateTimePeriodPanel_MouseLeave">
+            <ListBox.Style>
+                <Style TargetType="ItemsControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=ShowTickMark}" Value="False" >
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Common:DateTimePeriodPanel.DateTimePeriod" Value="{Binding Path=Period}"/>
+                    <Setter Property="Control.Margin" Value="0"/>
+                    <Setter Property="Control.Padding" Value="0"/>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Stretch"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Common:DateTimePeriodPanel  IsItemsHost="True" 
+                                                Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}">
+                        <Panel.Style>
+                            <Style TargetType="Panel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=ShowTickMark}" Value="False" >
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Panel.Style>
+                    </Common:DateTimePeriodPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+        </ListBox>
+
+        <!--Layers-->
+        <ItemsControl ItemsSource="{Binding Path=Layers}" 
+					   Grid.Row="1"
+					  Grid.ColumnSpan="2">
+
+            <ItemsControl.Style>
+                <Style TargetType="ItemsControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=ShowLayers}" Value="False" >
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.Style>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Common:DateTimePeriodPanel.DateTimePeriod" Value="{Binding Path=Period}"/>
+                    <Setter Property="Control.Margin" Value="0"/>
+                    <Setter Property="Control.Padding" Value="0"/>
+                    <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Control.BorderThickness" Value="0"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Common:DateTimePeriodPanel  IsItemsHost="True" 
+                                                Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}"
+                                                >
+                        <Panel.Style>
+                            <Style TargetType="Panel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=ShowLayers}" Value="False" >
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Panel.Style>
+
+                    </Common:DateTimePeriodPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+        </ItemsControl>
+
+        <!--HoverPeriod & SelectedPeriod -->
+        <Common:DateTimePeriodPanel  VerticalAlignment="Stretch" 
+                                    HorizontalAlignment="Stretch" 
+                                    Common:DateTimePeriodPanel.DateTimePeriod="{Binding Period}"
+                                    Grid.ColumnSpan="2"
+                                    Opacity="0.8"
+									  Grid.Row="1"
+                                    MouseMove="DateTimePeriodPanel_MouseMove"
+                                    MouseDown="DateTimePeriodPanel_MouseDown"
+                                    MouseUp="DateTimePeriodPanel_MouseUp"
+                                    MouseEnter="DateTimePeriodPanel_MouseEnter"
+                                    MouseLeave="DateTimePeriodPanel_MouseLeave">
+            <Panel.Background>
+                <SolidColorBrush Color="Gray" Opacity="0"/>
+            </Panel.Background>
+
+          
+            <ContentControl Content="{Binding Path=HoverTime}" 
+                            ContentTemplate="{StaticResource HoverTemplate}"
+                            Common:DateTimePeriodPanel.DateTimePeriod="{Binding HoverPeriod}" 
+                            >
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=ShowHoverTime}" Value="False" >
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+            <ContentControl Content="{Binding Path=SelectedPeriod}"
+                            ContentTemplate="{StaticResource SelectedPeriodTemplate}"
+                            Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=SelectedPeriod}"
+                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=ShowSelectedPeriod}" Value="False" >
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+           
+
+
+        </Common:DateTimePeriodPanel>
+
+		
+		<!--Date-->
+		<ListBox Background="Transparent" 
+				 IsHitTestVisible="False"
+				 ItemsSource="{Binding Path=TickMarkDays}"
+				 Margin="0"
+				 Padding="0"
+			     Grid.ColumnSpan="2"
+                 BorderThickness="0"
+				 Grid.Row="0"
+				 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+				 >
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Border HorizontalAlignment="Stretch" Background="Transparent" >
+						<TextBlock Text="{Binding Path=StartDateTime, StringFormat=d}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Border> 
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+			<ListBox.Style>
+				<Style TargetType="ItemsControl">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding Path=ShowDate}" Value="False" >
+							<Setter Property="Visibility" Value="Collapsed"/>
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</ListBox.Style>
+			<ListBox.ItemContainerStyle>
+				<Style TargetType="ListBoxItem">
+					<Setter Property="Common:DateTimePeriodPanel.DateTimePeriod" Value="{Binding}"/>
+					<Setter Property="Control.Margin" Value="0"/>
+					<Setter Property="Control.Padding" Value="0"/>
+					<Setter Property="HorizontalAlignment" Value="Stretch"/>
+					<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+					<Setter Property="Opacity" Value="0.7"/>
+				</Style>
+			</ListBox.ItemContainerStyle>
+
+			<ListBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<Common:DateTimePeriodPanel  IsItemsHost="True" 
+                                                Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}">
+						<Panel.Style>
+							<Style TargetType="Panel">
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Path=ShowDate}" Value="False" >
+										<Setter Property="Visibility" Value="Collapsed"/>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</Panel.Style>
+					</Common:DateTimePeriodPanel>
+				</ItemsPanelTemplate>
+			</ListBox.ItemsPanel>
+
+		</ListBox>
+		
+		<!-- Nowperiod-->
+		<Common:DateTimePeriodPanel  Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}" 
+									 HorizontalAlignment="Stretch" 
+									 VerticalAlignment="Stretch"
+									 Grid.ColumnSpan="2"
+									 Grid.RowSpan="2"
+									 IsHitTestVisible="False"
+									 Background="Transparent"
+									 Opacity="{Binding Path=NowTimeOpacity}">
+			<Panel.Style>
+				<Style TargetType="Panel">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding Path=ShowNowPeriod}" Value="False" >
+							<Setter Property="Visibility" Value="Collapsed"/>
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Panel.Style>
+			
+			<Border HorizontalAlignment="Stretch" 
+					VerticalAlignment="Stretch"
+					Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=NowPeriod}"
+					Background="Transparent"
+					BorderBrush="Red"
+					BorderThickness="0,0,1,0"
+					>
+				
+			</Border>
+		</Common:DateTimePeriodPanel>
+	</Grid>
+</UserControl>

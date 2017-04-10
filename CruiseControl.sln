@@ -52,8 +52,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.UserTexts", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.SmartClientPortal.Shell", "Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\Teleopti.Ccc.SmartClientPortal.Shell.csproj", "{38E1AC89-30E7-4C85-B521-3DA9D73BA2FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.WpfControls", "Teleopti.Ccc.WpfControls\Teleopti.Ccc.WpfControls.csproj", "{737F96C2-0301-4519-8A52-6C46AD25325D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Messaging", "Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj", "{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Interfaces", "Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj", "{8D2565F2-7C44-45B7-96AD-2CD900E033A1}"
@@ -360,18 +358,6 @@ Global
 		{38E1AC89-30E7-4C85-B521-3DA9D73BA2FA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{38E1AC89-30E7-4C85-B521-3DA9D73BA2FA}.Release|x86.ActiveCfg = Release|x86
 		{38E1AC89-30E7-4C85-B521-3DA9D73BA2FA}.Release|x86.Build.0 = Release|x86
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Release|.NET.ActiveCfg = Release|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{737F96C2-0301-4519-8A52-6C46AD25325D}.Release|x86.ActiveCfg = Release|Any CPU
 		{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -1291,8 +1277,8 @@ Global
 		{096E69DA-1F3B-4E43-848D-FA5D92281394} = {FEFF4A24-4851-4A21-BF0F-68A36655E0E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1

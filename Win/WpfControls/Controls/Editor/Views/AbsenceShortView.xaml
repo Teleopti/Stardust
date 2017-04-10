@@ -1,0 +1,33 @@
+﻿<!--Holds a Absence as DataContext-->
+<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Editor.Views.AbsenceShortView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
+                <ResourceDictionary Source="..\..\..\Resources\Icons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:ColorConverter x:Key="colorConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+	<StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="2">
+        <Border BorderBrush="{StaticResource RaptorBlack}"
+                BorderThickness="0"
+                Padding="2"
+                CornerRadius="0" 
+                Background="{Binding Path=DisplayColor, Converter={StaticResource colorConverter}, FallbackValue=White}"
+                MinWidth="28"
+				>
+
+            <TextBlock Text="{Binding Path=Description.ShortName}"
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"
+					  
+                     />
+
+        </Border>
+        <TextBlock Text="{Binding Path=Description.Name, FallbackValue=''}" Padding="4,1,1,1" />
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,205 @@
+﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Requests.Views.HandlePersonRequestView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:userTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+             guiHelpers:HelpProvider.HelpString="Schedule+gridRequests" Loaded="UserControl_Loaded">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\..\..\Resources\CommonBrushes.xaml"/>
+				<ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+
+			<Style TargetType="{x:Type Control}" BasedOn="{StaticResource HeaderStyle}" x:Key="RtaSpecialHeaderStyle">
+			</Style>
+			<Style TargetType="{x:Type DataGridRow}" x:Key="RequestRowStyle">
+				<Setter Property="IsEnabled" Value="{Binding Path=IsWithinSchedulePeriod}" />
+				<Setter Property="VerticalContentAlignment" Value="Center"/>
+				<Setter Property="Padding" Value="10,10"/>
+				<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				<Style.Triggers>
+					<Trigger Property="IsEnabled" Value="False">
+						<Setter Property="Background" Value="{StaticResource RaptorDisabledSelectionGradientBrush}" />
+						<Setter Property="ToolTip" Value="xxTheRequestIsNotWithinOpenedScheduledPeriod"/>
+						<Setter Property="Foreground" Value="Gray"/>
+						<Setter Property="IsHitTestVisible" Value="False" />
+					</Trigger>
+
+					<Trigger Property="IsMouseOver" Value="True">
+						<Setter Property="FontWeight" Value="Bold"/>
+					</Trigger>
+					<Trigger Property="IsSelected" Value="True">
+						<Setter Property="Background" Value="{StaticResource RaptorDarkGridSelectionGradientBrush}"/>
+					</Trigger>
+				</Style.Triggers>
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<DataGrid ItemsSource="{Binding Path=PersonRequestViewModels}"
+                       RowDetailsVisibilityMode="Collapsed"
+                       IsSynchronizedWithCurrentItem="true"
+                       BorderBrush="{StaticResource RaptorStandardGradientBrush}" 
+                       Background="{StaticResource RaptorStandardLightGradientBrush}"  
+                       HorizontalAlignment="Stretch"
+					   VerticalAlignment="Stretch" 
+					   AutoGenerateColumns="False"
+                       SelectionMode="Extended" 
+						IsReadOnly="True"
+					   EnableRowVirtualization="true"
+					   EnableColumnVirtualization="true"
+                       VirtualizingStackPanel.VirtualizationMode="Standard" 
+                       CellStyle="{StaticResource CellStyle}"
+                       RowStyle="{StaticResource RequestRowStyle}"
+                       VerticalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
+                       HorizontalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
+                       MinRowHeight="22"
+					   CanUserResizeColumns="True"
+						CanUserAddRows="False"
+                       x:Name="requestGrid"
+					   SelectedCellsChanged="requestGrid_SelectedCellsChanged" 
+					   MouseDoubleClick="requestGrid_MouseDoubleClick"
+					   PreviewMouseDown="RequestGrid_OnPreviewMouseDown" 
+					   Sorting="RequestGrid_OnSorting">
+
+
+		<DataGrid.Columns>
+			<DataGridTemplateColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Width="27"
+                                             SortMemberPath="Headers"
+                                             x:Name="Headers">
+				<DataGridTemplateColumn.CellTemplate>
+					<DataTemplate>
+						<Expander IsExpanded="False" LostFocus="Expander_LostFocus" Expanded="Expander_Expanded" Collapsed="Expander_Collapsed" MinHeight="22"/>
+					</DataTemplate>
+				</DataGridTemplateColumn.CellTemplate>
+			</DataGridTemplateColumn>
+
+
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Header="{x:Static Member=userTexts:Resources.Date}" 
+                                             Width="Auto"
+                                             SortMemberPath="RequestedDate" 
+                                             Binding="{Binding Path=RequestedDate, Mode=OneWay}">
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Header="{x:Static Member=userTexts:Resources.Agent}" 
+                                             Width="*"
+											 SortMemberPath="Name"
+                                             Binding="{Binding Path=Name, Mode=OneWay}"/>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Header="{x:Static Member=userTexts:Resources.Seniority}" 
+                                             Width="*"
+											 SortMemberPath="Seniority"
+                                             Binding="{Binding Path=Seniority, Mode=OneWay}">
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Header="{x:Static Member=userTexts:Resources.RequestType}" 
+                                             Width="*"
+											 SortMemberPath="RequestType"
+                                             Binding="{Binding Path=RequestType, Mode=OneWay}">
+			</DataGridTextColumn>
+
+			<DataGridTemplateColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Header="{x:Static Member=userTexts:Resources.RequestStatus}" 
+                                             Width="*"
+                                             SortMemberPath="StatusText">
+				<DataGridTemplateColumn.CellTemplate>
+
+					<DataTemplate>
+
+						<TextBlock VerticalAlignment="Top" x:Name="requestStatusTextBlock" Text="{Binding Path=StatusText}" MinHeight="22"/>
+						<DataTemplate.Triggers>
+							<DataTrigger Binding="{Binding Path=IsNew}" Value="True">
+								<DataTrigger.Setters>
+									<Setter TargetName="requestStatusTextBlock" Property="TextBlock.Background" Value="{StaticResource RaptorNew}"/>
+								</DataTrigger.Setters>
+							</DataTrigger>
+
+							<DataTrigger Binding="{Binding Path=IsDenied}" Value="True">
+								<DataTrigger.Setters>
+									<Setter TargetName="requestStatusTextBlock" Property="TextBlock.Background" Value="{StaticResource RaptorDenied}"/>
+								</DataTrigger.Setters>
+							</DataTrigger>
+
+							<DataTrigger Binding="{Binding Path=IsPending}" Value="True">
+								<DataTrigger.Setters>
+									<Setter TargetName="requestStatusTextBlock"  Property="TextBlock.Background" Value="{StaticResource RaptorPending}"/>
+								</DataTrigger.Setters>
+							</DataTrigger>
+
+							<DataTrigger Binding="{Binding Path=IsApproved}" Value="True">
+								<DataTrigger.Setters>
+									<Setter TargetName="requestStatusTextBlock"  Property="TextBlock.Background" Value="{StaticResource RaptorApproved}"/>
+								</DataTrigger.Setters>
+							</DataTrigger>
+
+						</DataTemplate.Triggers>
+					</DataTemplate>
+				</DataGridTemplateColumn.CellTemplate>
+			</DataGridTemplateColumn>
+
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Header="{x:Static Member=userTexts:Resources.Details}" 
+                                             Width="2*"
+                                             SortMemberPath="Details"
+                                             Binding="{Binding Path=Details, Mode=OneWay}">
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Header="{x:Static Member=userTexts:Resources.Subject}" 
+                                             Width="*"
+											 SortMemberPath="Subject"
+                                             Binding="{Binding Path=Subject, Mode=OneWay}">
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Header="{x:Static Member=userTexts:Resources.Message}" 
+                                             Width="*"
+											 SortMemberPath="Message"
+                                             Binding="{Binding Path=Message, Mode=OneWay}">
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Header="{x:Static Member=userTexts:Resources.LastUpdated}" 
+                                             Width="*"
+                                             SortMemberPath="LastUpdatedDisplay"
+                                             Binding="{Binding Path=LastUpdatedDisplay, Mode=OneWay}">
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                                             Header="{x:Static Member=userTexts:Resources.Left}" 
+                                             Width="*"
+                                             SortMemberPath="Left"
+                                             Binding="{Binding Path=Left, Mode=OneWay}">
+
+			</DataGridTextColumn>
+		</DataGrid.Columns>
+
+		<DataGrid.RowDetailsTemplate>
+			<DataTemplate>
+
+				<!-- MouseLeave -->
+				<Border BorderBrush="Gray" Margin="10,10,30,10" Padding="5" ClipToBounds="True" BorderThickness="1" CornerRadius="5" Background="{StaticResource RaptorStandardLightGradientBrush}">
+					<Grid Margin="10,10,30,10" ClipToBounds="True">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="*" />
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static Member=userTexts:Resources.Subject}" Margin="5" FontWeight="Bold"/>
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static Member=userTexts:Resources.Message}" Margin="5" FontWeight="Bold"/>
+						<TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static Member=userTexts:Resources.Details}" Margin="5" FontWeight="Bold"/>
+
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Subject}" Margin="5"/>
+						<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Message}" Margin="5"/>
+						<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Details}" Margin="5" TextWrapping="Wrap"/>
+					</Grid>
+				</Border>
+			</DataTemplate>
+		</DataGrid.RowDetailsTemplate>
+	</DataGrid>
+</UserControl>

@@ -1,0 +1,15 @@
+﻿<Window x:Class="Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.ScheduleDictionaryViewer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Models="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Models"
+    xmlns:views="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Views"
+    Title="ScheduleViewer" MinHeight="300" MinWidth="300">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type Models:ScheduleViewerViewModel}">
+            <views:ScheduleViewerView DataContext="{Binding}"/>
+        </DataTemplate>
+    </Window.Resources>
+    
+        <ContentControl Content="{Binding}"/>
+  
+</Window>

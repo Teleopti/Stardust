@@ -1,0 +1,85 @@
+﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.FileImport.Views.PrepareTextView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+    GuiHelpers:VisualTreeTranslator.Translate="true"
+    FocusManager.FocusedElement="{Binding ElementName=combo}">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="150"/>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <GroupBox Grid.Row="0">
+            <GroupBox.Header>
+                <TextBlock Text="xxConfiguration"/>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition  />
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+    
+                <Label>xxEncoding</Label>
+                <ComboBox Grid.Column="1" Name="combo" 
+                          DisplayMemberPath="EncodingName"  
+                          ItemsSource="{Binding Path=EncodingCollection}"   
+                          IsSynchronizedWithCurrentItem="True"
+                          SelectionChanged="combo_SelectionChanged"
+                          GuiHelpers:VisualTreeTranslator.Translate="False"/>
+                
+               
+
+                <Label Grid.Row="1">xxTimeZone</Label>
+                <ComboBox Grid.Column="1" Grid.Row="1"
+                          DisplayMemberPath="DisplayName" 
+                          ItemsSource="{Binding Path=TimeZoneCollection}"
+                          IsSynchronizedWithCurrentItem="True"
+                          GuiHelpers:VisualTreeTranslator.Translate="False"/>
+               
+
+                <Label Grid.Row="2" >xxDelimiter</Label>
+                <ComboBox Grid.Row="2" 
+                          Grid.Column="1" 
+                          Name="separatorCombo" 
+                          ItemsSource="{Binding Path=SeparatorCollection}"   
+                          SelectedIndex="0" 
+                          SelectionChanged="separator_SelectionChanged" 
+                          GuiHelpers:VisualTreeTranslator.Translate="False"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1">
+            <GroupBox.Header>
+                <TextBlock Text="xxPreview"/>
+            </GroupBox.Header>
+               <TextBox  HorizontalContentAlignment="Left" VerticalContentAlignment="Top" 
+                         Text ="{Binding Path=PreviewText, Mode=OneWay}" 
+                         GuiHelpers:VisualTreeTranslator.Translate="False"></TextBox>
+        </GroupBox>
+
+    </Grid>
+
+
+</UserControl>

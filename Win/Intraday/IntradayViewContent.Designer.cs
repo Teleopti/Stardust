@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Ccc.WpfControls.Controls.Intraday;
+using Teleopti.Ccc.Win.WpfControls.Controls.Intraday;
 
 namespace Teleopti.Ccc.Win.Intraday
 {
@@ -74,12 +74,12 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.tabPageAdv1 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.elementHostShiftEditor = new System.Windows.Forms.Integration.ElementHost();
 			this.elementHostDayLayerView = new System.Windows.Forms.Integration.ElementHost();
-			this.dayLayerView1 = new Teleopti.Ccc.WpfControls.Controls.Intraday.RealTimeScheduleControl();
+			this.dayLayerView1 = new RealTimeScheduleControl();
 			this.elementHostPinnedLayerView = new System.Windows.Forms.Integration.ElementHost();
 			this.elementHostAgentState = new System.Windows.Forms.Integration.ElementHost();
-			this.agentStateLayerView1 = new Teleopti.Ccc.WpfControls.Controls.Intraday.AgentStateLayerView();
+			this.agentStateLayerView1 = new AgentStateLayerView();
 			this.elementHostStaffingEffect = new System.Windows.Forms.Integration.ElementHost();
-			this.staffingEffectView1 = new Teleopti.Ccc.WpfControls.Controls.Intraday.StaffingEffectView();
+			this.staffingEffectView1 = new StaffingEffectView();
 			this.timerRefreshSchedule = new System.Windows.Forms.Timer(this.components);
 			this.backgroundWorkerFetchData = new System.ComponentModel.BackgroundWorker();
 			((System.ComponentModel.ISupportInitialize)(this.dockingManager1)).BeginInit();
