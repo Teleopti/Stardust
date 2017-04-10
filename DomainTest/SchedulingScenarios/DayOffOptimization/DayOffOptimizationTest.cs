@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -38,8 +37,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public IScheduleStorage ScheduleStorage;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		public FakePreferenceDayRepository PreferenceDayRepository;
-		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
 		public DayOffOptimizationTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
 		{
@@ -504,42 +501,43 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		[Test]
 		[Ignore("#43689")]
-		public void ShouldTryAgainAfterRestrictionHasBlockedMove()
+		public void ShouldTryAgainAfterMoveWasFailedDueToNigtlyRest()
 		{
 			var firstDay = new DateOnly(2015, 10, 26); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
 			var scenario = ScenarioRepository.Has("some name");
-			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOf(2);
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+			var contractWith8HourNightlyRest = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(60), TimeSpan.FromHours(8), TimeSpan.FromHours(10))
+			};
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 7, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contractWith8HourNightlyRest, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				10,
-				1, //restriction blocks this day
-				2,
-				10,
-				10,
-				10,
-				10
+				10, //nattskift
+				20, //DO - cannot be moved
+				10, //DO - can be moved
+				10, //nattskift
+				1, //nattskift
+				2, //nattskift
+				10  //nattskift
 			));
-			PreferenceDayRepository.Add(new PreferenceDay(agent, firstDay.AddDays(1),
-				new PreferenceRestriction
-				{
-					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(6))
-				}).WithId());
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new TimePeriod(6, 0, 14, 0));
-			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
-			var optPrefs = OptimizationPreferencesProvider.Fetch();
-			optPrefs.General.UsePreferences = true;
-			optPrefs.General.PreferencesValue = 1d;
-			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new TimePeriod(20, 0, 28, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate).SetDayOff(new DayOffTemplate());
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate).DayOff()
-				.Should().Not.Be.Null();
+			foreach (var ass in PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null))
+			{
+				Console.WriteLine(ass.Date);
+			}
+
+			PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null).Select(x => x.Date)
+				.Should().Have.SameValuesAs(skillDays[1].CurrentDate, skillDays[4].CurrentDate);
 		}
 	}
 }
