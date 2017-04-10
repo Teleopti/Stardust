@@ -436,7 +436,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		}
 
 		function _loadPreferenceFeedbackDataByPeriod() {
-			var startDate = ($('li[data-mytime-date]')[0].attributes['data-mytime-date'].value);
+			var startDate = $('li[data-mytime-date]')[0].attributes['data-mytime-date'].value;
 			var params = {
 				startDate: moment(startDate).format('YYYY-MM-DD'),
 				endDate: moment(startDate).add(42, 'day').format('YYYY-MM-DD')
