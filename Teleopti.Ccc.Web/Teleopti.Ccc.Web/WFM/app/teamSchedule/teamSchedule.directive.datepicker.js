@@ -10,7 +10,8 @@
 				selectedDate: '=',
 				step: '@?',
 				isCalendarOpened: '=?status',
-				onDateChange: '&'
+				onDateChange: '&',
+				options: '='
 			},
 			controller: ['$timeout', teamScheduleDatePickerCtrl],
 			controllerAs: 'vm',

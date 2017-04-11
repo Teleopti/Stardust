@@ -4,6 +4,11 @@
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1'  width='120px'><text x='0' y='35' fill='red' transform='rotate(20,35,25)' font-size='20'>DEV TOOLS</text></svg>");
             background-color: tomato;
         }
+        
+        .full button span {
+            background-color: #9CCC65;
+            border-radius: 32px;
+        }
     </style>
     <div class="con-row developerTools" ng-show="vm.devTogglesEnabled">
         <md-tooltip>This is only visible for dev toggles</md-tooltip>
@@ -16,23 +21,22 @@
             <div class="wfm-switch con-flex split-3-1">
                 <input type="checkbox" id="switch1" ng-click="vm.toggleDraggable()" />
                 <label for="switch1">
-		<span class="wfm-switch-label">Allow interval select</span>
-		<span class="wfm-switch-toggle"></span>
-	</label>
+                    <span class="wfm-switch-label">Allow interval select</span>
+                    <span class="wfm-switch-toggle"></span>
+                </label>
             </div>
         </div>
         <div class="con-flex"></div>
     </div>
     <div class="con-row">
-        <div class="con-flex">
-            <div class="panel con-flex material-depth-1">
-                <div class="con-row">
-                    <span class="con-flex">
+        <div class="con-flex panel material-depth-1">
+            <div class="con-row">
+                <span class="con-flex">
 						<md-autocomplete id="skill-id"
 						class="autocomplete-skill"
 						md-selected-item="vm.selectedSkill"
 						md-search-text="searchSkillText"
-						md-selected-item-change="vm.selectedSkillChange(skill)"
+						md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)"
 						md-items="skill in vm.querySearchSkills(searchSkillText)"
 						md-item-text="skill.Name"
 						md-min-length="0"
@@ -41,18 +45,18 @@
 							<i class="mdi mdi-phone" ng-if="skill.DoDisplayData"></i>
 							<i class="mdi mdi-alert" ng-if="!skill.DoDisplayData"></i>
 							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-                    <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
-                    <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
-                    </md-item-template>
-                    <md-not-found>
-                        {{'RepViewerNoMoreMatches'|translate}}
-                    </md-not-found>
-                    </md-autocomplete>
-                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkill" ng-click="clearSkillHelper()">
+                <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
+                <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
+                </md-item-template>
+                <md-not-found>
+                    {{'RepViewerNoMoreMatches'|translate}}
+                </md-not-found>
+                </md-autocomplete>
+                <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkill" ng-click="clearSkillHelper()">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
-                    </span>
-                    <span class="con-flex">
+                </span>
+                <span class="con-flex">
 						<md-autocomplete id="area-id"
 						class="autocomplete-skill"
 						md-selected-item="vm.selectedArea"
@@ -66,43 +70,43 @@
 							<i class="mdi mdi-phone" ng-if="skill.DoDisplayData"></i>
 							<i class="mdi mdi-alert" ng-if="!skill.DoDisplayData"></i>
 							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
-                    <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
-                    <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
-                    </md-item-template>
-                    <md-not-found>
-                        {{'RepViewerNoMoreMatches'|translate}}
-                    </md-not-found>
-                    </md-autocomplete>
-                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkill" ng-click="clearSkillHelper()">
+                <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
+                <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
+                </md-item-template>
+                <md-not-found>
+                    {{'RepViewerNoMoreMatches'|translate}}
+                </md-not-found>
+                </md-autocomplete>
+                <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkill" ng-click="clearSkillHelper()">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
-                    </span>
+                </span>
+                <span class="con-flex datepicker-container" ng-click="$event.stopPropagation()" style="margin-top: -10px;">
+                <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.generateChart(vm.selectedSkill.Id,vm.selectedDate)" options="vm.options" class="inline-block"></team-schedule-datepicker>
+            </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel material-depth-1">
+    <div class="sub-header">
+        <h2>Staffing - {{vm.selectedDate | date:'yyyy-MM-dd'}}</h2>
+    </div>
+    <div class="con-row">
+        <div class="con-flex">
+            <div ng-show="vm.staffingDataAvailable" class="wfm-chart intraday-chart" id="staffingChart"></div>
+            <div ng-hide="vm.staffingDataAvailable" class="con-row error-message">
+                <div class="con-flex">
+                    <h1>fix your stuff, foo</h1>
                 </div>
             </div>
         </div>
     </div>
-    <div class="panel material-depth-1">
-        <div class="sub-header">
-            <h2>Staffing</h2>
-        </div>
-        <div class="con-row">
-            <div class="con-flex">
-
-                <div ng-show="vm.staffingDataAvailable" class="wfm-chart intraday-chart" id="staffingChart">
-
-                </div>
-                <div ng-hide="vm.staffingDataAvailable" class="con-row error-message">
-                    <div class="con-flex">
-                        <h1>fix your stuff, foo</h1>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="con-footer">
-            <button class="wfm-btn" ng-class="vm.hasRequestedSuggestion ? 'wfm-btn-invis-disabled' : 'wfm-btn-invis-primary'"  ng-disabled="vm.hasRequestedSuggestion" ng-click="vm.suggestOvertime()">Get Suggestions for overtime</button>
-            <button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData" ng-click="vm.addOvertime()">Apply Suggestion</button>
-        </div>
-
+    <div class="con-footer">
+        <button class="wfm-btn" ng-class="vm.hasRequestedSuggestion ? 'wfm-btn-invis-disabled' : 'wfm-btn-invis-primary'" ng-disabled="vm.hasRequestedSuggestion"
+            ng-click="vm.suggestOvertime()">Get Suggestions for overtime</button>
+        <button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData"
+            ng-click="vm.addOvertime()">Apply Suggestion</button>
     </div>
+</div>
 </div>

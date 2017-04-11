@@ -24,36 +24,87 @@
 		vm.triggerResourceCalc = triggerResourceCalc;
 		vm.timeSerie = [];
 		vm.overTimeModels = [];
-
+		vm.selectedDate = new Date();
+		vm.options = { customClass: getDayClass };
+		vm.events = [];
+		vm.devTogglesEnabled = false;
+		vm.generateChart = generateChart;
 		var allSkills = [];
 		var allSkillAreas = [];
+		var currentSkills;
+		var staffingData = {};
+		var sample = {
+			date: null,
+			status: 'full'
+		}
+		
 		getSkills();
 		getSkillAreas();
-		var currentSkills;
+		checkToggles();
+		setPrepareDays();
 
-		function getSkillStaffing(skillId) {
-			if (!skillId) return;
-			return staffingService.getSkillStaffing.get({ id: skillId });
+		function setPrepareDays() {
+			for (var i = 0; i < 14; i++) {
+				var newDate = new Date();
+				newDate.setDate(newDate.getDate() + i);
+				var insertData = angular.copy(sample);
+				insertData.date = newDate;
+				vm.events.push(insertData);
+			}
 		}
 
-		var getSkillsForArea = getSkillAreaStaffing();
-		var staffingData = {};
-		vm.devTogglesEnabled = false;
-		checkToggles();
-		////////////////
+		function getDayClass(data) {
+			var date = data.date,
+				mode = data.mode;
+			if (mode === 'day') {
+				var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
+				for (var i = 0; i < vm.events.length; i++) {
+					var currentDay = new Date(vm.events[i].date).setHours(0, 0, 0, 0);
+					if (dayToCheck === currentDay) {
+						return vm.events[i].status;
+					}
+				}
+			}
+			return '';
+		}
+
 		function checkToggles() {
 			toggleService.togglesLoaded.then(function () {
 				vm.devTogglesEnabled = toggleService.WfmStaffing_AllowActions_42524;
 			});
 		}
 
+		// old function to get skill Staffing -- might delete later
+		function getSkillStaffing(skillId) {
+			if (!skillId) return;
+			return staffingService.getSkillStaffing.get({ id: skillId });
+		}
+
+		// old function to get skill area Staffing -- might delete later
+		function getSkillAreaStaffing(areaId) {
+			if (!areaId) return;
+			return staffingService.getSkillAreaStaffing.get({ id: areaId });
+		}
+
+		function getSkillStaffingByDate(skillId, date) {
+			var data = { SkillId: skillId, DateTime: date };
+			return staffingService.getSkillStaffingByDate.get(data);
+		}
+
+		function getSkillAreaStaffingByDate(skillId, date) {
+			var data = { SkillId: skillId, DateTime: date };
+			return staffingService.getSkillAreaStaffingByDate.get(data);
+		}
+
 		function generateChart(skillId, areaId) {
 			if (skillId) {
-				var query = getSkillStaffing(skillId);
+				var query = getSkillStaffingByDate(skillId, vm.selectedDate);
 			} else if (areaId) {
-				var query = getSkillAreaStaffing(areaId);
+				var query = getSkillAreaStaffingByDate(areaId, vm.selectedDate);
 			}
+			// console.log('send', query);
 			query.$promise.then(function (result) {
+				// console.log('get',result);
 				staffingData.time = [];
 				staffingData.scheduledStaffing = [];
 				staffingData.forcastedStaffing = [];
@@ -77,8 +128,6 @@
 			});
 		}
 
-
-
 		function staffingPrecheck(data) {
 			if (!angular.equals(data, {}) && data != null) {
 				if (data.Time && data.ScheduledStaffing && data.ForecastedStaffing) {
@@ -94,7 +143,7 @@
 			vm.hasSuggestionData = false;
 			vm.hasRequestedSuggestion = false
 		}
-		
+
 		function selectSkillOrArea(skill, area) {
 			clearSuggestions()
 			if (!skill) {
@@ -111,8 +160,7 @@
 		function getSkills() {
 			var query = staffingService.getSkills.query();
 			query.$promise.then(function (skills) {
-				selectSkillOrArea(skills[0])
-				generateChart(skills[0].Id, null);
+				selectSkillOrArea(skills[0]);
 				allSkills = skills;
 			})
 		}
@@ -124,16 +172,12 @@
 			})
 		}
 
-		function getSkillAreaStaffing(areaId) {
-			if (!areaId) return;
-			return staffingService.getSkillAreaStaffing.get({ id: areaId });
-		}
-
 		function selectedSkillChange(skill) {
 			if (skill == null) return;
 			generateChart(skill.Id, null);
 			selectSkillOrArea(skill, null);
 		}
+		
 		function selectedAreaChange(area) {
 			if (area == null) return;
 			generateChart(null, area.Id);
@@ -163,8 +207,8 @@
 		function addOvertime() {
 			vm.hasSuggestionData = false;
 			if (vm.overTimeModels.length === 0) {
-			    vm.hasRequestedSuggestion = false;
-			    return;
+				vm.hasRequestedSuggestion = false;
+				return;
 			}
 			var query = staffingService.addOvertime.save(vm.overTimeModels);
 			query.$promise.then(function () {

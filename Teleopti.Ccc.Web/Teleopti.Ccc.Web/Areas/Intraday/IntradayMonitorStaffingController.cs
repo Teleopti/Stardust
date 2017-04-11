@@ -38,32 +38,20 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing")]
-		public virtual IHttpActionResult MonitorSkillAreaStaffing([FromBody] SomeSkillAreaModel model)
+		public virtual IHttpActionResult MonitorSkillAreaStaffingByDate(Guid SkillAreaId, DateTime DateTime)
 		{
-			var skillArea = _skillAreaRepository.Get(model.SkillAreaId);
+			var skillArea = _skillAreaRepository.Get(SkillAreaId);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
 			//return Ok(_staffingViewModelCreator.Load(skillIdList, new DateOnly(model.DateTime)));
 			return Ok(_staffingViewModelCreator.Load(skillIdList));
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing")]
-		public virtual IHttpActionResult MonitorSkillStaffing([FromBody] SomeSkillModel model)
+		public virtual IHttpActionResult MonitorSkillStaffingByDate(Guid SkillId, DateTime DateTime)
 		{
 			//return Ok(_staffingViewModelCreator.Load(new[] {model.SkillId}, new DateOnly(model.DateTime)));
-			return Ok(_staffingViewModelCreator.Load(new[] {model.SkillId}));
+			return Ok(_staffingViewModelCreator.Load(new[] { SkillId }));
 		}
-	}
-
-	public class SomeSkillAreaModel
-	{
-		public Guid SkillAreaId;
-		public DateTime DateTime;
-	}
-
-	public class SomeSkillModel
-	{
-		public Guid SkillId;
-		public DateTime DateTime;
 	}
 
 }
