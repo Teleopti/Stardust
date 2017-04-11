@@ -23,9 +23,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
 
-			//if (useShrinkage)
-			//	return getForecastWithShrinkageFromReadModel(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), new DateTimePeriod(usersNow.Date.ToUniversalTime(), usersNow.AddDays(1).Date.ToUniversalTime()));
-
 			var staffingIntervals = new List<StaffingIntervalModel>();
 			var resolution = TimeSpan.FromMinutes(minutesPerInterval);
 			foreach (var skill in skills)

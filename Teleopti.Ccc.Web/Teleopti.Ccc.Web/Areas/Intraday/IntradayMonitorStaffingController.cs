@@ -21,18 +21,46 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			_staffingViewModelCreator = staffingViewModelCreator;
 		}
 
+
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing/{id}")]
-		public virtual IHttpActionResult MonitorSkillAreaStaffing(Guid Id)
+		public virtual IHttpActionResult MonitorSkillAreaStaffing(Guid id)
 		{
-			var skillArea = _skillAreaRepository.Get(Id);
+			var skillArea = _skillAreaRepository.Get(id);
+			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
+			return Ok(_staffingViewModelCreator.Load(skillIdList));
+		}
+
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing/{id}")]
+		public virtual IHttpActionResult MonitorSkillStaffing(Guid id)
+		{
+			return Ok(_staffingViewModelCreator.Load(new[] { id }));
+		}
+
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing")]
+		public virtual IHttpActionResult MonitorSkillAreaStaffing([FromBody] SomeSkillAreaModel model)
+		{
+			var skillArea = _skillAreaRepository.Get(model.SkillAreaId);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
 			return Ok(_staffingViewModelCreator.Load(skillIdList));
 		}
 		
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing/{id}")]
-		public virtual IHttpActionResult MonitorSkillStaffing(Guid Id)
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing")]
+		public virtual IHttpActionResult MonitorSkillStaffing([FromBody] SomeSkillModel model)
 		{
-			return Ok(_staffingViewModelCreator.Load(new[] { Id }));
+			return Ok(_staffingViewModelCreator.Load(new[] {model.SkillId}));
 		}
 	}
+
+	public class SomeSkillAreaModel
+	{
+		public Guid SkillAreaId;
+		public DateTime DateTime;
+	}
+
+	public class SomeSkillModel
+	{
+		public Guid SkillId;
+		public DateTime DateTime;
+	}
+
 }
