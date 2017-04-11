@@ -19,12 +19,12 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewModels, date, weekViewModels) {
 	var self = this;
 
+	this.FeedbackLoaded = ko.observable(false);
 	this.DayViewModels = dayViewModels;
 	this.WeekViewModels = weekViewModels;
 
 	this.PreferencePeriod = ko.observable();
 	this.PreferenceOpenPeriod = ko.observable();
-
 
 	this.LoadFeedback = function () {
 		ajax.Ajax({
@@ -32,6 +32,9 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 			dataType: "json",
 			data: { Date: date },
 			type: 'GET',
+			beforeSend:function(){
+				//self.FeedbackLoaded(false);
+			},
 			success: function(data, textStatus, jqXHR) {
 				self.TargetDaysOffLower(data.TargetDaysOff.Lower);
 				self.TargetDaysOffUpper(data.TargetDaysOff.Upper);
@@ -46,6 +49,8 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 				self.PreferenceOpenPeriod(Teleopti.MyTimeWeb.Common.FormatDatePeriod(
 					moment(data.PreferenceOpenPeriodStart),
 					moment(data.PreferenceOpenPeriodEnd)));
+
+				self.FeedbackLoaded(true);
 			}
 		});
 	};

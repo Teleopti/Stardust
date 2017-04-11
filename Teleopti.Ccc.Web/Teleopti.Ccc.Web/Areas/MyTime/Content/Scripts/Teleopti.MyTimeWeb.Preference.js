@@ -165,7 +165,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		addExtendedPreferenceFormViewModel.ValidationError('');
 
 		var validationErrorCallback = function (data) {
-			var message = data.Errors.join('</br>');
+			var message = data.Errors && data.Errors.join('</br>');
 			addExtendedPreferenceFormViewModel.ValidationError(message);
 		};
 
@@ -396,10 +396,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			type: type,
 			beforeSend: function (jqXHR) {
 				model.AjaxError('');
-				model.IsLoading(true);
+				//model.IsLoading(true);
 			},
 			complete: function (jqXHR, textStatus) {
-				model.IsLoading(false);
+				//model.IsLoading(false);
 				if (complete)
 					complete(jqXHR, textStatus);
 			},

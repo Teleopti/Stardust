@@ -17,7 +17,7 @@
 							<i class="glyphicon glyphicon-chevron-left"></i>
 						</button>
 					</span>
-					<input class="form-control text-center date-input-style" style="font-size: 13px;" data-bind="value: displayDate" type="text" readonly="readonly" />
+					<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly" />
 					<span class="input-group-btn">
 						<button class="btn btn-default moment-datepicker" type="button">
 							<i class="glyphicon glyphicon-calendar"></i>
@@ -84,7 +84,7 @@
 
 					<!-- ko if: mustHaveEnabled -->
 					<li class="col-xs-12 col-sm-4 w-40">
-						<div class="input-group">
+						<div class="input-group must-have-menu">
 							<div class="btn-group" role="group">
 								<div class="btn-group" role="group">
 									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -119,10 +119,10 @@
 		</div>
 		<div class="phone-background" ></div>
 	</div>
-	<div id="Preference-period-feedback-view" class="m-b-10" data-bind="css:{'phone-warning-indicator':IsPreferenceForMobileEnabled && IsHostAMobile}" data-mytime-isweeklyworktimeenabled="@Model.IsWeeklyWorkTimeEnabled" >
+	<div id="Preference-period-feedback-view" class="m-b-10" data-bind="css:{'phone-warning-indicator':IsPreferenceForMobileEnabled && IsHostAMobile}" data-mytime-isweeklyworktimeenabled="@Model.IsWeeklyWorkTimeEnabled">
 		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: PreferenceFeedbackClass,text:WarningCount" class="warning-count">!</span></div>
-		<div data-bind="css:{warningDetail:shouldShowWarningDetail()}">
-			<div class="alert alert-preference " data-bind="css: PreferenceFeedbackClass">
+		<div class="hide-at-start" data-bind="css:{warningDetail:shouldShowWarningDetail(), 'show-after-loaded': FeedbackLoaded()}">
+			<div class="alert alert-preference" data-bind="css: PreferenceFeedbackClass">
 				<div>
 					<!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->
 					@Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>"))
@@ -242,111 +242,108 @@
 									<span class="floatright day-header-right badge day-header-text" data-bind="text: DayString"></span>
 								</div>
 								<div class="day-content">
-									<figure class="cover-me" data-bind="visible: IsLoading"><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." /></figure>
-
-									<!-- ko if: HasAjaxError -->
-									<div class="error" data-bind="text: AjaxError" style="font-weight: bold;"></div>
-									<!-- /ko -->
-
-									<div class="preference">
-										<div class="displayinline-block">
-											<!--ko if: MustHave -->
-											<div class="preference-indicator">
-												<span class="preference-must-have" data-bind="css: {'glyphicon glyphicon-heart': MustHave}"></span>
-											</div>
-											<!--/ko-->
-											<div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }"></div>
-											<!--ko if: NightRestViolationSwitch -->
-											<div class="night-rest-violation"></div>
-											<!--/ko-->
-											<!-- ko if: tooltipText -->
-											<div class="preference-indicator">
-												<div class="extended-indication" data-bind="tooltip: { title: tooltipText, html: true }">&raquo;</div>
-											</div>
-											<!-- /ko -->
-											<!-- ko if: HasPersonalShiftsOrMeetings -->
-											<div class="preference-indicator">
-												<i class="meeting-icon glyphicon glyphicon-user">
-													<!--<i class="glyphicon glyphicon-user ml10"></i>-->
-												</i>
-
-												<div class="meeting-tooltip" style="display: none">
-													<!-- ko if: HasMeetings -->
-													<table>
-														<thead>@Resources.Meetings</thead>
-														<tbody data-bind="foreach: Meetings">
-															<tr>
-																<td data-bind="text: TimeSpan"></td>
-															</tr>
-															<tr>
-																<td>
-																	<div class="preference-tooltip-subject">
-																		<label class="preference-tooltip-font" data-bind="text : Subject"></label>
-																	</div>
-																</td>
-																<!-- ko if: IsOptional -->
-																<td>(@Resources.Optional)</td>
-																<!-- /ko -->
-															</tr>
-														</tbody>
-													</table>
-													<!-- /ko -->
-													<!-- ko if: HasPersonalShifts -->
-													<table>
-														<thead>@Resources.PersonalShift</thead>
-														<tbody data-bind="foreach: PersonalShifts">
-															<tr>
-																<td data-bind="text: Subject"></td>
-																<td>:</td>
-																<td data-bind="text: TimeSpan"></td>
-															</tr>
-														</tbody>
-													</table>
-													<!-- /ko -->
+									<figure class="cover-me" data-bind="visible: IsLoading()"><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." /></figure>
+									<div class="hide-at-start" data-bind="css:{'show-after-loaded': !IsLoading()}">
+										<!-- ko if: HasAjaxError -->
+										<div class="error" data-bind="text: AjaxError"></div>
+										<!-- /ko -->
+										<div class="preference">
+											<div class="displayinline-block">
+												<!--ko if: MustHave -->
+												<div class="preference-indicator">
+													<span class="preference-must-have" data-bind="css: {'glyphicon glyphicon-heart': MustHave}"></span>
 												</div>
+												<!--/ko-->
+												<div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }"></div>
+												<!--ko if: NightRestViolationSwitch -->
+												<div class="night-rest-violation"></div>
+												<!--/ko-->
+												<!-- ko if: tooltipText -->
+												<div class="preference-indicator">
+													<div class="extended-indication" data-bind="tooltip: { title: tooltipText, html: true }">&raquo;</div>
+												</div>
+												<!-- /ko -->
+												<!-- ko if: HasPersonalShiftsOrMeetings -->
+												<div class="preference-indicator">
+													<i class="meeting-icon glyphicon glyphicon-user"></i>
+													<div class="meeting-tooltip">
+														<!-- ko if: HasMeetings -->
+														<table>
+															<thead>@Resources.Meetings</thead>
+															<tbody data-bind="foreach: Meetings">
+																<tr>
+																	<td data-bind="text: TimeSpan"></td>
+																</tr>
+																<tr>
+																	<td>
+																		<div class="preference-tooltip-subject">
+																			<label class="preference-tooltip-font" data-bind="text : Subject"></label>
+																		</div>
+																	</td>
+																	<!-- ko if: IsOptional -->
+																	<td>(@Resources.Optional)</td>
+																	<!-- /ko -->
+																</tr>
+															</tbody>
+														</table>
+														<!-- /ko -->
+														<!-- ko if: HasPersonalShifts -->
+														<table>
+															<thead>@Resources.PersonalShift</thead>
+															<tbody data-bind="foreach: PersonalShifts">
+																<tr>
+																	<td data-bind="text: Subject"></td>
+																	<td>:</td>
+																	<td data-bind="text: TimeSpan"></td>
+																</tr>
+															</tbody>
+														</table>
+														<!-- /ko -->
+													</div>
+												</div>
+												<!-- /ko -->
 											</div>
-											<!-- /ko -->
 										</div>
-									</div>
 
-									<!-- ko if: HasDayOff -->
-									<div class="dayoff" data-bind="text: DayOff"></div>
-									<!-- /ko -->
-									<!-- ko if: HasAbsence -->
-									<div class="absence">
-										<span class="displayblock fullwidth" data-bind="text: Absence"></span>
-										<span class="absence-contract-time displayblock fullwidth" data-bind="text: AbsenceContractTime"></span>
+										<!-- ko if: HasDayOff -->
+										<div class="dayoff" data-bind="text: DayOff"></div>
+										<!-- /ko -->
+										<!-- ko if: HasAbsence -->
+										<div class="absence">
+											<span class="displayblock fullwidth" data-bind="text: Absence"></span>
+											<span class="absence-contract-time displayblock fullwidth" data-bind="text: AbsenceContractTime"></span>
+										</div>
+										<!-- /ko -->
+										<!-- ko if: HasPersonAssignmentShiftCategory -->
+										<div class="scheduled day-content-text">
+											<span class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentShiftCategory"></span>
+											<strong class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentTimeSpan"></strong>
+											<span class="schedule-contract-time displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentContractTime"></span>
+										</div>
+										<!-- /ko -->
+										@if (day.InPeriod)
+										{
+											<!-- ko if: Feedback -->
+												<!-- ko if: DisplayFeedbackError -->
+													<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
+												<!-- /ko -->
+												<!-- ko if: DisplayFeedback -->
+													<div class="possible-start-times time-limitation clearleftfloat">
+														<span class="glyphicon glyphicon-step-backward"></span>
+														<span data-bind="text: PossibleStartTimes"></span>
+													</div>
+													<div class="possible-end-times time-limitation clearleftfloat">
+														<span class="glyphicon glyphicon-step-forward"></span>
+														<span data-bind="text: PossibleEndTimes"></span>
+													</div>
+													<div class="possible-contract-times time-limitation clearleftfloat">
+														<span class="glyphicon glyphicon-resize-horizontal"></span>
+														<span data-bind="text: PossibleContractTimes"></span>
+													</div>
+												<!-- /ko -->
+											<!-- /ko -->
+										}
 									</div>
-									<!-- /ko -->
-									<!-- ko if: HasPersonAssignmentShiftCategory -->
-									<div class="scheduled day-content-text">
-										<span class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentShiftCategory"></span>
-										<strong class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentTimeSpan"></strong>
-										<span class="schedule-contract-time displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentContractTime"></span>
-									</div>
-									<!-- /ko -->
-									@if (day.InPeriod)
-									{
-										<!-- ko if: Feedback -->
-										<!-- ko if: DisplayFeedbackError -->
-										<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
-										<!-- /ko -->
-										<!-- ko if: DisplayFeedback -->
-										<div class="possible-start-times time-limitation clearleftfloat">
-											<span class="glyphicon glyphicon-step-backward"></span>
-											<span data-bind="text: PossibleStartTimes"></span>
-										</div>
-										<div class="possible-end-times time-limitation clearleftfloat">
-											<span class="glyphicon glyphicon-step-forward"></span>
-											<span data-bind="text: PossibleEndTimes"></span>
-										</div>
-										<div class="possible-contract-times time-limitation clearleftfloat">
-											<span class="glyphicon glyphicon-resize-horizontal"></span>
-											<span data-bind="text: PossibleContractTimes"></span>
-										</div>
-										<!-- /ko -->
-										<!-- /ko -->
-									}
 								</div>
 							</div>
 						</li>

@@ -1,4 +1,11 @@
-﻿
+﻿.hide-at-start{
+	display: none;
+}
+
+.hide-at-start.show-after-loaded{
+	display: block;
+}
+
 .alert-preference {
 	width: 1024px;
 	margin: auto;
@@ -250,6 +257,9 @@
 .preference-must-have {
 	margin-bottom: 3px;
 }
+.nav > li > .input-group.must-have-menu{
+	margin: 0;
+}
 .preference-indicator 
 {
 	float: left;
@@ -303,6 +313,15 @@
 	right: 0;
 	height: 20px;
 	width: 20px;
+}
+
+#Preference-body-inner ul.weekdays {
+	min-height: 17px;
+	padding: 0;
+}
+
+.header-week-day{
+	min-height: 17px;
 }
 
 .day-header-text {
@@ -471,12 +490,16 @@ div.qtip-content {
 }
 
 .musthave-textcolor>li>a:hover {
-color: #333333;
+	color: #333333;
 }
 
 .day-content .weekly-work-time-alert-editable {
 	color: red;
 	font-weight: bold;
+}
+
+.day-content .error{
+	font-weight: 600;
 }
 
 .day-content .weekly-work-time-alert-noneditable {
@@ -492,10 +515,6 @@ color: #333333;
 	margin: auto;
 	text-align: center;
 	padding: 10px 0;
-}
-
-#Preference-body-inner ul.weekdays {
-	padding: 0;
 }
 
 .min-hours-per-week {
@@ -531,4 +550,8 @@ color: #333333;
 		margin-bottom: 10px;
 		padding-bottom: 10px;
 	}
+}
+
+.meeting-tooltip{
+	display: none;
 }

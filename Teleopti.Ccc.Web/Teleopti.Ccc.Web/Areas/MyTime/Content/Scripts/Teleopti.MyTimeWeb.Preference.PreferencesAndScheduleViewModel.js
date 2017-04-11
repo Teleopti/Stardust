@@ -27,11 +27,6 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 				From: from,
 				To: to
 			},
-			beforeSend: function (jqXHR) {
-			    $.each(self.DayViewModels, function (index, day) {
-					day.IsLoading(true);
-				});
-			},
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
@@ -54,7 +49,6 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 					if (element.PersonalShifts) {
 						dayViewModel.PersonalShifts(element.PersonalShifts);
 					}
-					dayViewModel.IsLoading(false);
 				});
 				deferred.resolve();
 			}

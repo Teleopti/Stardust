@@ -26,9 +26,10 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 
 	self.DayString = ko.observable();
 	self.MonthString = ko.observable();
+	self.PreferencePerformanceForMultipleUsersEnabled = ko.observable(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322"));
 
 	self.HasPreference = true;
-	self.IsLoading = ko.observable(false);
+	self.IsLoading = ko.observable(true);
 	self.Preference = ko.observable();
 	self.MustHave = ko.observable();
 	self.Extended = ko.observable();
@@ -388,13 +389,18 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 	};
 
 	self.LoadFeedback = function() {
-		if (!self.Feedback())
-			return null;
+		if (!self.Feedback()){
+			self.IsLoading(false);
+			return;
+		}
 
 		if(self.InitialFeedbackData){
 			self.AssignFeedbackData(self.InitialFeedbackData);
+			self.IsLoading(false);
 			return;
 		}
+
+		self.IsLoading(true);
 
 		return ajaxForDate(self, {
 			url: "PreferenceFeedback/Feedback",
@@ -405,6 +411,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 			date: self.Date,
 			success: function(data) {
 				self.AssignFeedbackData(data);
+				self.IsLoading(false);
 			}
 		});
 	};
