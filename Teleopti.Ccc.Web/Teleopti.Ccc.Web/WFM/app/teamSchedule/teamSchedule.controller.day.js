@@ -328,7 +328,7 @@
 			focusingSearch: false
 		};
 		vm.selectedFavorite = $stateParams.do? $stateParams.selectedFavorite: null;
-	
+
 		vm.validateWarningEnabled = false;
 
 		vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
@@ -357,7 +357,8 @@
 		};
 
 		vm.hideSearchIfNoSelectedTeam = function () {
-			if (angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0) {
+			var toggle = vm.toggles.DisplayScheduleOnBusinessHierachyEnabled;
+			if (!toggle || (angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0)) {
 				return 'visible';
 			}
 			return 'hidden';
