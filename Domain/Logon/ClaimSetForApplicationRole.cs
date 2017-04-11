@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IdentityModel.Claims;
+﻿using System.IdentityModel.Claims;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -18,19 +17,15 @@ namespace Teleopti.Ccc.Domain.Logon
 
 		public ClaimSet Transform(IApplicationRole role, string tenantName)
         {
-            var claims = new List<Claim>();
-
             var availableFunctions = _functionsForRoleProvider.AvailableFunctions(role, tenantName);
 
-			claims.AddRange(
-				availableFunctions
+			var claims = availableFunctions
 					.Select(applicationFunction =>
 					        new Claim(
 					        	string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", applicationFunction.FunctionPath),
 								applicationFunction,
 					        	Rights.PossessProperty
-					        	))
-				);
+					        	)).ToList();
 
 			if (role.AvailableData != null)
 			{

@@ -12,9 +12,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using DeviceInfoProvider = Teleopti.Ccc.Sdk.ServiceBus.HealthCheck.DeviceInfoProvider;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {

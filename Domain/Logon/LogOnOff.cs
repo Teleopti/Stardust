@@ -36,11 +36,8 @@ namespace Teleopti.Ccc.Domain.Logon
 		    _tokenIdentityProvider = tokenIdentityProvider;
 	    }
 
-		public void LogOn(string tenant, IPerson user, Guid businessUnitId)
-		{
-			LogOnWithoutPermissions(_dataSource.Tenant(tenant), user, _businessUnits.Load(businessUnitId));
-			setupClaims(tenant);
-		}
+	    public void LogOn(string tenant, IPerson user, Guid businessUnitId)
+		    => LogOn(_dataSource.Tenant(tenant), user, _businessUnits.Load(businessUnitId));
 
 		public void LogOn(IDataSource dataSource, IPerson user, IBusinessUnit businessUnit)
 		{
