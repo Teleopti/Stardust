@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var optPrefs = new OptimizationPreferences
 			{
 				General = {ScheduleTag = new ScheduleTag()},
-				Extra = {UseTeamSameDaysOff = true}
+				Extra = {UseTeamSameDaysOff = true, UseTeams = true}
 			};
 			var groupPageLight = new GroupPageLight("_", GroupPageType.RuleSetBag);
 

@@ -207,6 +207,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test]
+		public void ShouldUseSettingForDayOffPerWeek_Valid_EvenWhenUseTeamSameDaysOffIsTrueButUseTeamIsNot()
+		{
+			var optPrefs = OptimizationPreferencesProvider.Fetch();
+			optPrefs.Extra.UseTeams = false;
+			optPrefs.Extra.UseTeamSameDaysOff = true;
+			ShouldUseSettingForDayOffPerWeek_Valid();
+		}
+
+		[Test]
 		public void ShouldNotContinueWhenWorsePeriodValueAndUsingTweakedValues()
 		{
 			var prefUsedInThisTest = OptimizationPreferencesProvider.Fetch();

@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			while (remainingInfoList.Count > 0)
 			{
 				IEnumerable<ITeamInfo> teamInfosToRemove;
-				if(optimizationPreferences.Extra.UseTeamSameDaysOff)
+				if(optimizationPreferences.Extra.UseTeams && optimizationPreferences.Extra.UseTeamSameDaysOff)
 				{
 					teamInfosToRemove = runOneOptimizationRound(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
 					                                            remainingInfoList, schedulingOptions,
