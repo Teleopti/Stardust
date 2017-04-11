@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Remove("2016-10-24".Utc());
 
 			var result = Reader.Read(personId, "2016-10-01 00:00".Utc(), "2016-10-31 00:00".Utc());
-			result.Should().Have.Count.EqualTo(2);
+			result.Should().Have.Count.EqualTo(4);
 		}
 	}
 }
