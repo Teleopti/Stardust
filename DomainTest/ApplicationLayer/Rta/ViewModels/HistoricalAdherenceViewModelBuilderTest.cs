@@ -110,6 +110,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
+		public void ShouldGetSchedules()
+		{
+			Now.Is("2016-10-11 17:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person, "name")
+				.WithAssignment(person, "2016-10-11")
+				.WithActivity(null, "phone")
+				.WithAssignedActivity("2016-10-11 09:00", "2016-10-11 12:00")
+				.WithActivity(null, "email")
+				.WithAssignedActivity("2016-10-11 12:00", "2016-10-11 17:00")
+				;
+			ReadModel.AddOut(person, "2016-10-11 11:00".Utc());
+			ReadModel.AddIn(person, "2016-10-11 11:05".Utc());
+			ReadModel.AddOut(person, "2016-10-11 13:30".Utc());
+			ReadModel.AddIn(person, "2016-10-11 17:00".Utc());
+
+			var historicalData = Target.Build(person);
+
+			historicalData.OutOfAdherences.Should().Have.Count.EqualTo(2);
+		}
+
+		[Test]
 		public void ShouldGetOutOfAdherencesForAgentInChina()
 		{
 			Now.Is("2016-10-12 12:00");

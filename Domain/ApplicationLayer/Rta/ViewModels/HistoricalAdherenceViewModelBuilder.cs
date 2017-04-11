@@ -52,9 +52,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var startTime = TimeZoneInfo.ConvertTimeToUtc(timeZoneTime.Date, timeZone);
 			var endTime = startTime.AddDays(1);
 			if (schedule.Any())
+			{
 				startTime = schedule.Min(x => x.StartDateTime).AddHours(-1);
-			if (schedule.Any())
-				endTime = schedule.Min(x => x.EndDateTime).AddHours(1);
+				endTime = schedule.Max(x => x.EndDateTime).AddHours(1);
+			}
 			startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
 			endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
 
