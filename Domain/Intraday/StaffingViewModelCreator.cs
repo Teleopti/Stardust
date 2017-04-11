@@ -55,20 +55,30 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
 
-		public IntradayStaffingViewModel Load(Guid[] skillIdList, bool useShrinkage = false)
+		public IntradayStaffingViewModel Load(Guid[] skillIdList, DateOnly? dateOnly = null,  bool useShrinkage = false)
 		{
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
-			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			var usersToday = new DateOnly(usersNow);
+
+			DateOnly userDateOnly;
+			if (dateOnly == null)
+			{
+				var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
+				userDateOnly = new DateOnly(usersNow);
+			}
+			else
+			{
+				userDateOnly = dateOnly.Value;
+			}
+			
 
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			if (!skills.Any())
 				return new IntradayStaffingViewModel();
-			var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(usersToday.AddDays(-1), usersToday.AddDays(1)),skills, scenario);
+			var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(userDateOnly.AddDays(-1), userDateOnly.AddDays(1)),skills, scenario);
 			
-			var actualCallsPerSkillInterval = _intradayQueueStatisticsLoader.LoadActualCallPerSkillInterval(skills, _timeZone.TimeZone(), usersToday);
+			var actualCallsPerSkillInterval = _intradayQueueStatisticsLoader.LoadActualCallPerSkillInterval(skills, _timeZone.TimeZone(), userDateOnly);
 			var latestStatsTime = getLastestStatsTime(actualCallsPerSkillInterval);
 			
 			var forecastedCallsModel = _forecastedCallsProvider.Load(skills, skillDays, latestStatsTime, minutesPerInterval);
@@ -112,6 +122,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 	public interface IStaffingViewModelCreator
 	{
-		IntradayStaffingViewModel Load(Guid[] skillIdList, bool useShrinkage = false);
+		IntradayStaffingViewModel Load(Guid[] skillIdList, DateOnly? dateOnly = null, bool useShrinkage = false);
 	}
 }

@@ -826,14 +826,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			ScheduleForecastSkillReadModelRepository.Persist(skillStaffingIntervals, DateTime.UtcNow);
 			SkillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
 
-			var vm = Target.Load(new[] {skill.Id.GetValueOrDefault()}, true);
+			var vm = Target.Load(new[] {skill.Id.GetValueOrDefault()}, null, true);
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(1);
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
 			vm.DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(1);
 			vm.DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(14);
 
-			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, true);
+			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, null, true);
 
 			vm2.DataSeries.Time.Length.Should().Be.EqualTo(1);
 			vm2.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
@@ -875,11 +875,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			
 			SkillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
 
-			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, true);
+			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, null, true);
 			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(1.25);
 
-			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, true);
+			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, null, true);
 
 			vm2.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
 			vm2.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(2);
@@ -933,7 +933,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			ScheduleForecastSkillReadModelRepository.Persist(skillStaffingIntervals, DateTime.UtcNow);
 			SkillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
 
-			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, true);
+			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, null, true);
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
@@ -941,7 +941,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(14);
 			vm.DataSeries.ScheduledStaffing.Last().Should().Be.EqualTo(14);
 
-			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, true);
+			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, null, true);
 
 			vm2.DataSeries.Time.Length.Should().Be.EqualTo(2);
 			vm2.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
@@ -991,7 +991,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
 
-			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, true);
+			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, null, true);
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(4);
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
@@ -999,7 +999,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(1.25);
 			vm.DataSeries.ForecastedStaffing.Last().Should().Be.EqualTo(1.25);
 
-			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, true);
+			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, null, true);
 
 			vm2.DataSeries.Time.Length.Should().Be.EqualTo(4);
 			vm2.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));

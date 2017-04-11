@@ -380,7 +380,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			var interval1 = startDate.AddMinutes(15);
 			var interval2 = startDate.AddMinutes(30);
 
-			StaffingViewModelCreator.Stub(s => s.Load(new[] {skillId}, useShrinkage)).Return(new IntradayStaffingViewModel
+			StaffingViewModelCreator.Stub(s => s.Load(new[] {skillId}, null, useShrinkage)).Return(new IntradayStaffingViewModel
 			{
 				StaffingHasData = forecastedStaffing.Any(),
 				DataSeries = new StaffingDataSeries

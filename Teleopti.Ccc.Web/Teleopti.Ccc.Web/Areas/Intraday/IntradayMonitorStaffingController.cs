@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
@@ -41,12 +42,14 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		{
 			var skillArea = _skillAreaRepository.Get(model.SkillAreaId);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
+			//return Ok(_staffingViewModelCreator.Load(skillIdList, new DateOnly(model.DateTime)));
 			return Ok(_staffingViewModelCreator.Load(skillIdList));
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing")]
 		public virtual IHttpActionResult MonitorSkillStaffing([FromBody] SomeSkillModel model)
 		{
+			//return Ok(_staffingViewModelCreator.Load(new[] {model.SkillId}, new DateOnly(model.DateTime)));
 			return Ok(_staffingViewModelCreator.Load(new[] {model.SkillId}));
 		}
 	}

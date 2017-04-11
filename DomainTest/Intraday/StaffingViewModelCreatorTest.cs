@@ -843,7 +843,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill);
 			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
 
-			var vm = Target.Load(new[] { skill.Id.Value }, true);
+			var vm = Target.Load(new[] { skill.Id.Value }, null, true);
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(1);
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(scheduledStaffingList.First().StartDateTime, TimeZone.TimeZone()));
@@ -864,7 +864,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			skillday.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.5));
 			SkillDayRepository.Has(skillday);
 
-			var vm = Target.Load(new[] { skill.Id.Value }, true);
+			var vm = Target.Load(new[] { skill.Id.Value }, null, true);
 			
 			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(2);
@@ -894,7 +894,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill);
 			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
 
-			var vm = Target.Load(new[] { skill.Id.Value }, true);
+			var vm = Target.Load(new[] { skill.Id.Value }, null, true);
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(scheduledStaffingList.First().StartDateTime, TimeZone.TimeZone()));

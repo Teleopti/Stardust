@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (intradyStaffingViewModelCache != null)
 				return intradyStaffingViewModelCache;
 
-			var intradyStaffingViewModel = _staffingViewModelCreator.Load(new[] {skillId}, useShrinkage);
+			var intradyStaffingViewModel = _staffingViewModelCreator.Load(new[] {skillId}, null, useShrinkage);
 			logIntradayStaffingViewModel(skillId, useShrinkage, intradyStaffingViewModel);
 			if (!existsStaffingData(intradyStaffingViewModel))
 				return intradyStaffingViewModel;
