@@ -78,10 +78,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					saveJobResultDetail(jobResult, string.Join(", ", processResult.ErrorMessages), DetailLevel.Error);
 					return;
 				}
+				
 				saveJobArtifacts(jobResult, inputFile, processResult);
 				saveJobResultDetail(jobResult,
-				processResult.GetSummaryMessage(),
-				processResult.DetailLevel);
+					processResult.GetSummaryMessage(),
+					processResult.DetailLevel);
+
 			}
 			catch (Exception ex)
 			{

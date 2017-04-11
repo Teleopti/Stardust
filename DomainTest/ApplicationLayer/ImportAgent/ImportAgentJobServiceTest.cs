@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 	[TestFixture, DomainTest]
 	public class ImportAgentJobServiceTest : ISetup
 	{
-		public FakeJobResultRepository JobResultRepository;
+		public IJobResultRepository JobResultRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeEventPublisher Publisher;
 		public IImportAgentJobService Target;
@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public void ShouldCreateJob()
 		{
 			setCurrentLoggedOnUser();
+			CurrentBusinessUnit.OnThisThreadUse(BusinessUnitFactory.CreateWithId("bu"));
 			var job = createValidJob();
-
 			var result = JobResultRepository.LoadAll().Single();
 
 			result.JobCategory.Should().Be(JobCategory.WebImportAgent);
@@ -85,11 +85,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = createValidJob() as JobResult;
 			result.BusinessUnit.Should().Be(bu1);
 
-			BusinessUnitFactory.CreateWithId("bu2");
+			var bu2 = BusinessUnitFactory.CreateWithId("bu2");
+			CurrentBusinessUnit.OnThisThreadUse(bu2);
 			var person2 = setCurrentLoggedOnUser();
 			createValidJob();
 			var person3 = setCurrentLoggedOnUser();
 			createValidJob();
+			
+
 			var list = Target.GetJobsForCurrentBusinessUnit();
 			list.Count.Should().Be(2);
 			list.Any(j => j.JobResult.Owner.Id == person1.Id).Should().Be.False();

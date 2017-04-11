@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		[Order(6)]
 		public DateTime? StartDate { get; set; }
 		[Order(7)]
+		[Description("Site/Team")]
 		public string Organization { get; set; }
 		[Order(8)]
 		public string Skill { get; set; }

@@ -15747,5 +15747,8 @@ Do you want to participate?</value>
   <data name="InvalidParameters" xml:space="preserve">
     <value>Invalid parameters</value>
     <comment>Error message when handle command with invalid parameters</comment>
+  <data name="MaximumNumberOfAgentRowsReach" xml:space="preserve">
+    <value>Maximum number of agent rows {0} reach.</value>
+  </data>
   </data>
 </root>

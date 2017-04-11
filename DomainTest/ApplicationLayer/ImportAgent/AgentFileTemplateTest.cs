@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var agents = new List<RawAgent>();
 			var target = new AgentFileTemplate();
 
-			for (int i = 0; i < 1000; i++)
+			for (int i = 0; i < 5000; i++)
 			{
 				var defaultAgent = target.GetDefaultAgent();
 				defaultAgent.Firstname += Guid.NewGuid().ToString().Replace("-", "").Substring(0, 5);

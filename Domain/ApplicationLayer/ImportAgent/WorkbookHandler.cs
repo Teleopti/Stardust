@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -27,7 +28,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var errorMessages = new List<string>();
 			for (var i = 0; i < propertyInfos.Length; i++)
 			{
-				var expectedColumnName = propertyInfos[i].Name == "Organization"? "Site/Team":propertyInfos[i].Name;
+				var pro = propertyInfos[i];
+				var expectedColumnName = pro.GetCustomAttribute<DescriptionAttribute>()?.Description ?? pro.Name;
 				if (i >= columnNames.Length)
 				{
 					errorMessages.Add(expectedColumnName);

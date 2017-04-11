@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NPOI.HSSF.UserModel;
@@ -25,6 +26,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
+using System.Globalization;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 {
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public FakeSiteRepository SiteRepository;
 		public FakeTeamRepository TeamRepository;
 		public FakeExternalLogOnRepository ExternalLogOnRepository;
+		public IFileProcessor FileProcessor;
 
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public FakeCurrentDatasource CurrentDatasource;
@@ -76,6 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			system.UseTestDouble<FakeExternalLogOnRepository>().For<IExternalLogOnRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			system.UseTestDouble<FileProcessor>().For<IFileProcessor>();
 		}
 
 		[Test]
@@ -216,9 +220,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public void ShouldWriteErrorArtifactWhenHavingFailureWithValidInputArtifact()
 		{
 			var jobResult = fakeJobResult();
-			var rawAgent = setupProviderData();
-			rawAgent.Role = "notExistRole";
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			List<RawAgent> agents = new List<RawAgent>();
+			for (int i = 0; i < 100; i++)
+			{
+				var rawAgent = setupProviderData();
+				rawAgent.Role = "notExistRole";
+				agents.Add(rawAgent);
+			}
+			var ms = new AgentFileTemplate().GetFileTemplate(agents.ToArray());
 			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test.xls", ms.ToArray()));
 
 			Target.Handle(new ImportAgentEvent
@@ -226,9 +235,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 				JobResultId = jobResult.Id.Value
 			});
 			var message = jobResult.Details.Single().Message;
-			message.Should().Be.EqualTo("success count:0, failed count:1, warning count:0");
+			message.Should().Be.EqualTo("success count:0, failed count:100, warning count:0");
+
 			jobResult.Artifacts.Where(ar => ar.Category == JobResultArtifactCategory.OutputError).Count().Should().Be(1);
 			jobResult.Artifacts.Where(ar => ar.Category == JobResultArtifactCategory.OutputWarning).Count().Should().Be(0);
+
+			var failedArtifact = jobResult.Artifacts.Single(ar => ar.Category == JobResultArtifactCategory.OutputError);
+			var wookbook = FileProcessor.ParseFile(new FileData
+			{
+				FileName = failedArtifact.Name,
+				Data = failedArtifact.Content
+			});
+			wookbook.GetSheet("Agents").LastRowNum.Should().Be(100);
+			wookbook.GetSheet("Agents").GetRow(1).GetCell(6).CellStyle.DataFormat.Should().Equals(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
 		}
 
 
@@ -267,7 +286,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
 			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test.xls", ms.ToArray()));
-			
+
 			Target.Handle(new ImportAgentEvent
 			{
 				JobResultId = jobResult.Id.Value

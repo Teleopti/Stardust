@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	{
 		private readonly IAgentPersister _agentPersister;
 		private readonly IWorkbookHandler _workbookHandler;
-
+		private const int MAXIMUM_NUMBER_OF_AGENT_ROWS_REACH = 5000;
 		public FileProcessor(IAgentPersister agentPersister, IWorkbookHandler workbookHandler)
 		{
 			_agentPersister = agentPersister;
@@ -99,10 +99,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			{
 				return errorMsg;
 			}
-
-			if (GetNumberOfRecordsInSheet(sheet) == 0)
+			var numberOfRecords = GetNumberOfRecordsInSheet(sheet);
+			if (numberOfRecords == 0)
 			{
 				return Resources.NoDataAvailable;
+			}
+
+			if (numberOfRecords > MAXIMUM_NUMBER_OF_AGENT_ROWS_REACH)
+			{
+				return string.Format(Resources.MaximumNumberOfAgentRowsReach, MAXIMUM_NUMBER_OF_AGENT_ROWS_REACH);
 			}
 
 			return string.Empty;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Helper
@@ -15,9 +16,7 @@ namespace Teleopti.Ccc.Domain.Helper
 				return;
 			}
 
-			var maxIndex = sourceRow.LastCellNum;
 			var sheet = targetRow.Sheet;
-			var workbook = sheet.Workbook;
 
 			for (int i = startIndex; i < endIndex + 1; i++)
 			{
@@ -25,12 +24,19 @@ namespace Teleopti.Ccc.Domain.Helper
 				var newCell = targetRow.CreateCell(i);
 				if (oldCell == null)
 				{
-					newCell = null;
 					continue;
 				}
-				var newCellStyle = workbook.CreateCellStyle();
-				newCellStyle.CloneStyleFrom(oldCell.CellStyle);
-				newCell.CellStyle = newCellStyle;
+				ICellStyle cellStyle = null;
+				if (sheet.Workbook.NumCellStyles > 0)
+				{
+					cellStyle = sheet.Workbook.GetCellStyleAt(0);
+				}
+				else
+				{
+					cellStyle = sheet.Workbook.CreateCellStyle();
+				}
+				cellStyle.CloneStyleFrom(oldCell.CellStyle);
+				newCell.CellStyle = cellStyle;
 
 				if (newCell.CellComment != null) newCell.CellComment = oldCell.CellComment;
 				if (oldCell.Hyperlink != null) newCell.Hyperlink = oldCell.Hyperlink;
@@ -76,6 +82,7 @@ namespace Teleopti.Ccc.Domain.Helper
 			}
 
 		}
+
 
 		public static bool IsBlank(this IRow row)
 		{
