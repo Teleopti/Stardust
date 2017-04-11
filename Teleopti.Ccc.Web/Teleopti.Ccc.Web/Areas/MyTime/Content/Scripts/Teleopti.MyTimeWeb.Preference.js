@@ -97,9 +97,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _onSuccessDeletePeriod(data, dates, successCb) {
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
 			data.forEach(function(d){
-				preferencesAndScheduleViewModel.DayViewModels[d.Date].ReadPreference(d.Value);
+				preferencesAndScheduleViewModel.DayViewModels[d.Date].ClearPreference(successCb);
+				preferencesAndScheduleViewModel.DayViewModels[d.Date].LoadFeedback();
 			});
 			updateSelectedDatesAndNeighbors(dates);
+			periodFeedbackViewModel.LoadFeedback();
+			periodFeedbackViewModel.PossibleNightRestViolations();
 		} else {
 			dates.forEach(function(date) {
 				var dayViewModel = preferencesAndScheduleViewModel.DayViewModels[date];
