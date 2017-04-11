@@ -45,6 +45,43 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
+		public void ShouldUseSpecifiecDateTime()
+		{
+			TimeZone.IsSweden();
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var scheduledStartTime = new DateTime(2016, 8, 27, 8, 0, 0, DateTimeKind.Utc);
+
+			var scenario = fakeScenarioAndIntervalLength();
+			var act = ActivityRepository.Has("act");
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false, act);
+			SkillRepository.Has(skill);
+
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime().AddDays(1), new TimePeriod(8, 0, 8, 30), false);
+			SkillDayRepository.Has(skillDay);
+
+			var userTomorrow = TimeZoneHelper.ConvertFromUtc(Now.UtcDateTime().AddDays(1), TimeZone.TimeZone());
+			var userTomorrowDateOnly = new DateOnly(userTomorrow);
+			
+			populateStaffingReadModels(skill, scheduledStartTime, scheduledStartTime.AddMinutes(minutesPerInterval), 15);
+			populateStaffingReadModels(skill, scheduledStartTime.AddMinutes(minutesPerInterval), scheduledStartTime.AddMinutes(minutesPerInterval*2), 10);
+			
+			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, userTomorrowDateOnly);
+
+			var staffingIntervals = skillDay.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervals.First().Period.StartDateTime, TimeZone.TimeZone()));
+			vm.DataSeries.Time.Last().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervals.Last().Period.StartDateTime, TimeZone.TimeZone()));
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ForecastedStaffing.First().Should().Be.GreaterThan(0d);
+			vm.DataSeries.ForecastedStaffing.Last().Should().Be.GreaterThan(0d);
+			vm.DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(15);
+			vm.DataSeries.ScheduledStaffing.Last().Should().Be.EqualTo(10);
+			vm.StaffingHasData.Should().Be.EqualTo(true);
+		}
+
+		[Test]
 		public void ShouldReturnForecastedStaffing()
 		{
 			TimeZone.IsSweden();
