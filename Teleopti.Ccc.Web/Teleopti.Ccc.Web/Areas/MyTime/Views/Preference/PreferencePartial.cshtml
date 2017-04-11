@@ -36,31 +36,32 @@
 					}
 					else
 					{
-						<li class="dropdown preference-split-button col-xs-12 col-sm-4 w-30" data-mytime-preference-option="[@{
-							                                                                                                var oIdx = 0;
-							                                                                                                foreach (var optionGroup in Model.Options.PreferenceOptions)
-							                                                                                                {
-								                                                                                                oIdx++;
-								                                                                                                if (optionGroup.Text != Resources.ShiftCategory)
-								                                                                                                {
-									                                                                                                @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},")
-								                                                                                                }
-								                                                                                                var idx = 0;
-								                                                                                                foreach (var option in optionGroup.Options)
-								                                                                                                {
-									                                                                                                if (idx + 1 == optionGroup.Options.Count() && Model.Options.PreferenceOptions.Count() == oIdx)
-									                                                                                                {
-										                                                                                                @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'}")
-									                                                                                                }
-									                                                                                                else
-									                                                                                                {
-										                                                                                                @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},")
+						<li class="dropdown preference-split-button col-xs-12 col-sm-4 w-30" 
+						data-mytime-preference-option="[@{
+														var oIdx = 0;
+														foreach (var optionGroup in Model.Options.PreferenceOptions)
+														{
+															oIdx++;
+															if (optionGroup.Text != Resources.ShiftCategory)
+															{
+																@Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},")
+															}
+															var idx = 0;
+															foreach (var option in optionGroup.Options)
+															{
+																if (idx + 1 == optionGroup.Options.Count() && Model.Options.PreferenceOptions.Count() == oIdx)
+																{
+																	@Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'}")
+																}
+																else
+																{
+																	@Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},")
 
-									                                                                                                }
-									                                                                                                idx++;
-								                                                                                                }
-							                                                                                                }
-						                                                                                                }]">
+																}
+																idx++;
+															}
+														}
+														}]">
 							<button type="button" data-toggle="dropdown" style="margin-left: 15px" class="btn btn-default navbar-btn dropdown-toggle">
 								<span data-bind="'text': selectedPreferenceText()"></span>
 								<span class="caret"></span>
@@ -74,7 +75,7 @@
 								<!-- /ko -->
 							</ul>
 						</li>
-	}
+					}
 					<li class="col-xs-12 col-sm-4 w-30">
 						<a href="#" data-bind="click: deletePreference">
 							<i class="glyphicon glyphicon-remove"></i>&nbsp;<span>@Resources.Remove</span>
@@ -110,14 +111,15 @@
 		</ul>
 	</div>
 </div>
+
 <div id="preferencebody" class="container pagebody">
-<div id="Preference-add-extended-form" data-bind="visible: AddPreferenceFormVisible,css:{'phone-form-preference':IsPreferenceForMobileEnabled && IsHostAMobile}">
-	<div class="well well-small clearfix form-preference" >
-		@Html.Partial("AddPreferencesPartial")
+	<div id="Preference-add-extended-form" data-bind="visible: AddPreferenceFormVisible,css:{'phone-form-preference':IsPreferenceForMobileEnabled && IsHostAMobile}">
+		<div class="well well-small clearfix form-preference" >
+			@Html.Partial("AddPreferencesPartial")
+		</div>
+		<div class="phone-background" ></div>
 	</div>
-	<div class="phone-background" ></div>
-</div>
-<div id="Preference-period-feedback-view" class="m-b-10" data-bind="css:{'phone-warning-indicator':IsPreferenceForMobileEnabled && IsHostAMobile}" data-mytime-isweeklyworktimeenabled="@Model.IsWeeklyWorkTimeEnabled" >
+	<div id="Preference-period-feedback-view" class="m-b-10" data-bind="css:{'phone-warning-indicator':IsPreferenceForMobileEnabled && IsHostAMobile}" data-mytime-isweeklyworktimeenabled="@Model.IsWeeklyWorkTimeEnabled" >
 		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: PreferenceFeedbackClass,text:WarningCount" class="warning-count">!</span></div>
 		<div data-bind="css:{warningDetail:shouldShowWarningDetail()}">
 			<div class="alert alert-preference " data-bind="css: PreferenceFeedbackClass">
@@ -190,7 +192,6 @@
 		 data-mytime-currentmusthave="@Model.CurrentMustHave"
 		 data-period-start-date='@Model.PeriodSelection.StartDate.ToString("yyyy-MM-dd")'
 		 data-period-end-date='@Model.PeriodSelection.EndDate.ToString("yyyy-MM-dd")'>
-		
 
 		<div id="Preference-body-inner" class="well clearfix pd0 body-inner">
 			<ul class="weekdays">
