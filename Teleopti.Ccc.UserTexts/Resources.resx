@@ -15662,7 +15662,7 @@ Do you want to participate?</value>
     <comment>Failed to Optimize Dayoff for selected Planning Period due to Technical error.</comment>
   </data>
   <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
-    <value>Failed to schedule for selected planning period due to technical error.. Please try again.</value>
+    <value>Failed to schedule for selected planning period due to technical error. Please try again.</value>
     <comment>Failed to Schedule for selected Planning Period due to Technical error.</comment>
   </data>
   <data name="OnlySupport" xml:space="preserve">
