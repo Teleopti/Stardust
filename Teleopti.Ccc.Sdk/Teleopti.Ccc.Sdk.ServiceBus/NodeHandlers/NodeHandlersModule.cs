@@ -1,10 +1,8 @@
 ﻿using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
-using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
@@ -19,8 +17,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
@@ -60,8 +56,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<WebScheduleHandler>().As<IHandle<WebScheduleStardustEvent>>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<WebDayOffOptimizationHandler>().As<IHandle<WebDayoffOptimizationStardustEvent>>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<WebIntradayOptimizationHandler>().As<IHandle<WebIntradayOptimizationStardustEvent>>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<CurrentTenantUserFake>().As<ICurrentTenantUser>().SingleInstance();
-			builder.RegisterType<TenantAuthenticationFake>().As<ITenantAuthentication>().SingleInstance();
+			builder.RegisterType<TenantAuthenticationAlwaysAuthenticated>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<ImportAgentHandler>().As<IHandle<ImportAgentEvent>>().InstancePerLifetimeScope().ApplyAspects();
 		}
 	}

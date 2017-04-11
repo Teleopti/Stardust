@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<PersonInfoMapper>().As<IPersonInfoMapper>().SingleInstance();
+			builder.RegisterType<PersonInfoHelper>().As<IPersonInfoHelper>().SingleInstance();
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
 			builder.RegisterType<ImportAgentFileValidator>().As<IImportAgentFileValidator>().SingleInstance();
 			builder.RegisterType<TenantUserPersister>().As<ITenantUserPersister>().SingleInstance().ApplyAspects();

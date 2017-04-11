@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using NPOI.HSSF.UserModel;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -9,10 +8,8 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
@@ -31,6 +28,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 
 		[AsSystem]
+		[TenantScope]
+		[UnitOfWork]
 		public virtual void Handle(ImportAgentEvent @event)
 		{
 			if (IfNeedRejectJob(@event))
@@ -40,8 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			HandleJob(@event);
 		}
 
-		[UnitOfWork]
-		protected virtual bool IfNeedRejectJob(ImportAgentEvent @event)
+		protected bool IfNeedRejectJob(ImportAgentEvent @event)
 		{
 			var jobResult = getJobResult(@event);
 			var version = jobResult.Version;
@@ -53,9 +51,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			jobResult.SetVersion(++currentVersion);
 			return false;
 		}
-
-		[UnitOfWork]
-		protected virtual void HandleJob(ImportAgentEvent @event)
+		
+		protected void HandleJob(ImportAgentEvent @event)
 		{
 			var defaults = @event.Defaults;
 			var jobResult = getJobResult(@event);

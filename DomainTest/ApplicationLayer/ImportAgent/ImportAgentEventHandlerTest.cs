@@ -24,6 +24,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 {
@@ -43,6 +44,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public FakeExternalLogOnRepository ExternalLogOnRepository;
 
 		public TenantUnitOfWorkFake TenantUnitOfWork;
+		public FakeCurrentDatasource CurrentDatasource;
+		public FakeTenants FindTenantByName;
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 
@@ -56,8 +59,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			system.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
 			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			system.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
+			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
+			system.UseTestDouble<FakeTenants>().For<IFindTenantByName>();
 
 
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
@@ -199,7 +203,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			Target.Handle(new ImportAgentEvent
 			{
-				JobResultId = jobResult.Id.Value
+				JobResultId = jobResult.Id.Value,
+				LogOnDatasource = CurrentDatasource.CurrentName()
 			});
 			var message = jobResult.Details.Single().Message;
 			message.Should().Be.EqualTo("success count:1, failed count:0, warning count:0");
@@ -244,7 +249,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 				Defaults = new ImportAgentDefaults
 				{
 					SchedulePeriodType = validPeriodType
-				}
+				},
+				LogOnDatasource = "test"
 			});
 			var message = jobResult.Details.Single().Message;
 			message.Should().Be.EqualTo("success count:0, failed count:0, warning count:1");
@@ -288,6 +294,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 		private RawAgent setupProviderData()
 		{
+			CurrentDatasource.FakeName("test");
+			FindTenantByName.Has(new Tenant("test"));
 			var role = ApplicationRoleFactory.CreateRole("agent", "role description");
 
 			RoleRepository.Add(role);

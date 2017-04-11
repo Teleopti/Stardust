@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		[Route("NewImportAgentJob"), HttpPost]
 		public async Task<OkResult> NewImportAgentJob()
 		{
-			var contents = await ReadAsMultipartAsync();
+			var contents = await readAsMultipartAsync();
 			var defaults = _multipartHttpContentExtractor.ExtractFormModel<ImportAgentDefaults>(contents);
 			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents).SingleOrDefault();
 			CreateJob(fileData, defaults);
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 
-		private async Task<IEnumerable<HttpContent>> ReadAsMultipartAsync()
+		private async Task<IEnumerable<HttpContent>> readAsMultipartAsync()
 		{
 			try
 			{

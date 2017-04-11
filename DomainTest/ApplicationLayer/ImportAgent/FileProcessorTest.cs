@@ -6,6 +6,7 @@ using NPOI.SS.UserModel;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -18,6 +19,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -39,6 +41,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public FakeExternalLogOnRepository ExternalLogOnRepository;
 
 		public TenantUnitOfWorkFake TenantUnitOfWork;
+		public FakeCurrentDatasource CurrentDatasource;
+		public FakeTenants FindTenantByName;
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -61,6 +65,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 
 			system.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
+			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
+			system.UseTestDouble<FakeTenants>().For<IFindTenantByName>();
 			system.UseTestDouble<CheckPasswordStrengthFake>().For<ICheckPasswordStrength>();
 			system.UseTestDouble<DeletePersonInfoFake>().For<IDeletePersonInfo>();
 			system.UseTestDouble<ApplicationUserQueryFake>().For<IApplicationUserQuery>();
@@ -71,7 +77,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			system.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
 			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 		}
 
 		private static string warningMessage(string column, object value)
@@ -911,6 +916,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 		private RawAgent setupProviderData()
 		{
+			CurrentDatasource.FakeName("test");
+			FindTenantByName.Has(new Tenant("test"));
 			var role = ApplicationRoleFactory.CreateRole("agent", "role description");
 
 			RoleRepository.Add(role);

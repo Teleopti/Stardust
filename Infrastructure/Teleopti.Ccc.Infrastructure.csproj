@@ -259,13 +259,16 @@
     <Compile Include="Hangfire\AttemptsFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
+    <Compile Include="MultiTenancy\IPersonInfoHelper.cs" />
     <Compile Include="MultiTenancy\IPersonInfoMapper.cs" />
+    <Compile Include="MultiTenancy\PersonInfoHelper.cs" />
     <Compile Include="MultiTenancy\PersonInfoMapper.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IPersistPersonInfo.cs" />
     <Compile Include="MultiTenancy\Admin\IServerConfigurationRepository.cs" />
     <Compile Include="MultiTenancy\Admin\ServerConfigurationRepository.cs" />
     <Compile Include="MultiTenancy\Server\ServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoCreator.cs" />
+    <Compile Include="MultiTenancy\Server\TenantAuthenticationAlwaysAuthenticated.cs" />
     <Compile Include="Repositories\JobStartTimeRepository.cs" />
     <Compile Include="Intraday\PersonProviderForOvertime.cs" />
     <Compile Include="Repositories\ScheduleForecastSkillReadModelRepository.cs" />

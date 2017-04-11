@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -14,6 +15,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -27,18 +29,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public AgentPersister Target;
 
 		public FakePersonRepository PersonRepository;
-		public FakeLoggedOnUser LoggedOnUser;
 		public PersistPersonInfoFake TenantUserRepository;
-		public CurrentTenantFake CurrentTenant;
 		public CheckPasswordStrengthFake CheckPasswordStrengthFake;
+		public FakeCurrentDatasource CurrentDatasource;
+		public FakeTenants FindTenantByName;
 
 		public void Setup(ISystem system,IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
 			system.UseTestDouble<TenantUserPersister>().For<ITenantUserPersister>();
-			system.UseTestDouble<PersonInfoMapper>().For<IPersonInfoMapper>();
-			system.UseTestDouble<CurrentTenantFake>().For<ICurrentTenant>();
+			system.UseTestDouble<PersonInfoHelper>().For<IPersonInfoHelper>();
+			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
+			system.UseTestDouble<FakeTenants>().For<IFindTenantByName>();
 			system.UseTestDouble<CheckPasswordStrengthFake>().For<ICheckPasswordStrength>();
 			system.AddService<AgentPersister>();
 		}
@@ -106,6 +108,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 		private AgentDataModel getAgentDataModel()
 		{
+			CurrentDatasource.FakeName("test");
+			FindTenantByName.Has(new Tenant("test"));
 			var agent = new AgentDataModel
 			{
 				Firstname = "a",

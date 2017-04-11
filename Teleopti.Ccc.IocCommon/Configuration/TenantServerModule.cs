@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
 			builder.RegisterType<PersonInfoCreator>().As<IPersonInfoCreator>().SingleInstance();
+			builder.RegisterType<PersonInfoHelper>().As<IPersonInfoHelper>().SingleInstance();
 			builder.RegisterType<DeletePersonInfo>().As<IDeletePersonInfo>().SingleInstance();
 			builder.RegisterType<VerifyPasswordPolicy>().As<IVerifyPasswordPolicy>().SingleInstance();
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();
