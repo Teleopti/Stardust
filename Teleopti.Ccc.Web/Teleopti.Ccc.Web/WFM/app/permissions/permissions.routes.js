@@ -7,7 +7,7 @@
   function stateConfig($stateProvider) {
     $stateProvider
       .state('permissions', {
-        url: '/permissions?open',
+        url: '/permissions',
         resolve: {
           toggles: function (Toggle) {
 	          return Toggle;
