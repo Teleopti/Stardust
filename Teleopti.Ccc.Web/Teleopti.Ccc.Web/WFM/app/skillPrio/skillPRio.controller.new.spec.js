@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('skillPrioControllerNew', function () {
+describe('skillPrioControllerNew', function () {
 	var $httpBackend,
 		$controller,
 		fakeBackend;
