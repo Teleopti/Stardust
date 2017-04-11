@@ -54,7 +54,7 @@
 					vm.setReady(true);
 				} else {
 					teamScheduleSvc.getSchedules(vm.date, checkedPersonIdList).then(function(data) {
-						vm.scheduleManagementSvc.resetSchedules(data.Schedules, moment(vm.date));
+						vm.scheduleManagementSvc.resetSchedules(data.Schedules, moment(vm.date), vm.timezone);
 						vm.setReady(true);
 					});
 				}
