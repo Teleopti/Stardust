@@ -198,13 +198,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
 					if (!validatedUnderStaffingResult.IsValid)
 					{
-						result.AddUnderstaffingDay(localPeriod.StartDate);
+						result.AddUnderstaffingDay(new DateOnly(TimeZoneHelper.ConvertFromUtc(sharedPeriod.Value.StartDateTime, timeZone)));
 					}
 
 					var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
 					if (!validatedSeriousUnderStaffingResult.IsValid)
 					{
-						result.AddUnderstaffingDay(localPeriod.StartDate);
+						result.AddUnderstaffingDay(new DateOnly(TimeZoneHelper.ConvertFromUtc(sharedPeriod.Value.StartDateTime, timeZone)));
 					}
 				}
 			}
