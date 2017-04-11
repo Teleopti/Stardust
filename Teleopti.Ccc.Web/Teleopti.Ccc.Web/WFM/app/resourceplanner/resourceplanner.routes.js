@@ -53,7 +53,7 @@
 				isImportSchedule: true
 			}
 		}).state('resourceplanner.newoverview', {   //from here is new
-			url: '/resourceplanner/v2',
+			url: '/v2',
 			templateUrl: 'app/resourceplanner/resource_planner_v2/resourceplanning.overview.html',
 			controller: 'resourceplanningOverviewController as vm'
 		}).state('resourceplanner.createagentgroup', {

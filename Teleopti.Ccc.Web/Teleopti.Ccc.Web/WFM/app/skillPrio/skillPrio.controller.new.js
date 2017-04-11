@@ -14,7 +14,7 @@
 		vm.selectedActivity = null;
 		vm.activites = [];
 		vm.cascadeList = [];
-		var originData = [];
+		vm.skills = [];
 		vm.toggledOptimization = checkToggles;
 		vm.selectActivity = selectActivity;
 		vm.queryActivities = queryActivities;
@@ -42,9 +42,9 @@
 		function getSkills() {
 			var getSki = skillPrioServiceNew.getSkills.query();
 			return getSki.$promise.then(function (data) {
-				originData = angular.copy(data);
+				vm.skills = angular.copy(data);
 				selectActivity(vm.selectedActivity);
-				return originData;
+				return vm.skills;
 			});
 		}
 
@@ -81,7 +81,7 @@
 
 		function compareChange() {
 			var changes = setPriorityForSkill().filter(belongsToActivity);
-			var origin = originData.filter(belongsToActivity).sort(sortByName);
+			var origin = vm.skills.filter(belongsToActivity).sort(sortByName);
 			var keepGoing = true;
 			angular.forEach(origin, function (skill, i) {
 				if (keepGoing) {
@@ -150,7 +150,7 @@
 			if (activity !== null) {
 				resetAllList();
 				vm.selectedActivity = activity;
-				var skillsOfSelectedActivity = angular.copy(originData.filter(belongsToActivity).sort(sortByName));
+				var skillsOfSelectedActivity = angular.copy(vm.skills.filter(belongsToActivity).sort(sortByName));
 				if (skillsOfSelectedActivity.length !== 0) {
 					addNewRow();
 					createCascadeLevel(skillsOfSelectedActivity);
