@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
@@ -19,9 +16,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public HistoricalAdherenceReadModel Read(Guid personId, DateTime startTime, DateTime endTime)
+		public IEnumerable<HistoricalAdherenceReadModel> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
-			var result = _unitOfWork.Current()
+			return _unitOfWork.Current()
 				.CreateSqlQuery(@"
 SELECT *
 FROM [ReadModel].[HistoricalAdherence]
@@ -31,51 +28,24 @@ ORDER BY [Timestamp] ASC")
 				.SetParameter("PersonId", personId)
 				.SetParameter("StartTime", startTime)
 				.SetParameter("EndTime", endTime)
-				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherenceInternalModel>())
-				.List<HistoricalAdherenceInternalModel>();
-
-			return BuildReadModel(result, personId);
+				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherenceReadModel>())
+				.List<HistoricalAdherenceReadModel>();
 		}
 
-		public static HistoricalAdherenceReadModel BuildReadModel(IEnumerable<HistoricalAdherenceInternalModel> data, Guid personId)
+		public HistoricalAdherenceReadModel ReadLastBefore(Guid personId, DateTime timestamp)
 		{
-			var seed = new HistoricalAdherenceReadModel
-			{
-				PersonId = personId,
-				OutOfAdherences = Enumerable.Empty<HistoricalOutOfAdherenceReadModel>()
-			};
-			return data.Aggregate(seed, (x, im) =>
-			{
-				if (im.Adherence == HistoricalAdherenceInternalAdherence.Out)
-				{
-					if (x.OutOfAdherences.IsEmpty(y => !y.EndTime.HasValue))
-						x.OutOfAdherences = x.OutOfAdherences
-							.Append(new HistoricalOutOfAdherenceReadModel {StartTime = im.Timestamp})
-							.ToArray();
-				}
-				else
-				{
-					var existing = x.OutOfAdherences.FirstOrDefault(y => !y.EndTime.HasValue);
-					if (existing != null)
-						existing.EndTime = im.Timestamp;
-				}
-
-				return x;
-			});
+			return _unitOfWork.Current()
+				.CreateSqlQuery(@"
+SELECT TOP 1 *
+FROM [ReadModel].[HistoricalAdherence]
+WHERE PersonId = :PersonId
+AND [Timestamp] < :Timestamp
+ORDER BY [Timestamp] DESC")
+				.SetParameter("PersonId", personId)
+				.SetParameter("Timestamp", timestamp)
+				
+				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherenceReadModel>())
+				.UniqueResult<HistoricalAdherenceReadModel>();
 		}
-	}
-
-	public class HistoricalAdherenceInternalModel
-	{
-		public Guid PersonId { get; set; }
-		public DateTime Timestamp { get; set; }
-		public HistoricalAdherenceInternalAdherence Adherence { get; set; }
-	}
-
-	public enum HistoricalAdherenceInternalAdherence
-	{
-		In,
-		Neutral,
-		Out
 	}
 }

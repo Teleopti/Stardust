@@ -38,11 +38,46 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			var result = WithReadModelUnitOfWork.Get(() => Reader.Read(person, "2016-10-18 00:00".Utc(), "2016-10-19 00:00".Utc()));
 
-			result.OutOfAdherences.First().StartTime.Should().Be("2016-10-18 08:00".Utc());
-			result.OutOfAdherences.First().EndTime.Should().Be("2016-10-18 08:05".Utc());
-			result.OutOfAdherences.Last().StartTime.Should().Be("2016-10-18 09:00".Utc());
-			result.OutOfAdherences.Last().EndTime.Should().Be("2016-10-18 09:15".Utc());
+			result.Select(x => x.Timestamp)
+				.Should().Have
+				.SameValuesAs("2016-10-18 08:00".Utc(), "2016-10-18 08:05".Utc(), "2016-10-18 09:00".Utc(), "2016-10-18 09:15".Utc());
 		}
-		
+
+
+		[Test]
+		public void ShouldReadFromYesterday()
+		{
+
+			var person = Guid.NewGuid();
+			WithReadModelUnitOfWork.Do(() =>
+			{
+				Persister.AddOut(person, "2016-10-17 08:00".Utc());
+				Persister.AddIn(person, "2016-10-18 08:05".Utc());
+			});
+
+			var result = WithReadModelUnitOfWork.Get(() => Reader.ReadLastBefore(person, "2016-10-18 08:05".Utc()));
+
+			result.Timestamp
+				.Should().Be("2016-10-17 08:00".Utc());
+		}
+
+		[Test]
+		public void ShouldReadLatestFromYesterday()
+		{
+
+			var person = Guid.NewGuid();
+			WithReadModelUnitOfWork.Do(() =>
+			{
+				Persister.AddNeutral(person, "2016-10-17 07:59".Utc());
+				Persister.AddOut(person, "2016-10-17 08:00".Utc());
+				Persister.AddIn(person, "2016-10-18 08:05".Utc());
+			});
+
+			var result = WithReadModelUnitOfWork.Get(() => Reader.ReadLastBefore(person, "2016-10-18 08:05".Utc()));
+
+			result.Timestamp
+				.Should().Be("2016-10-17 08:00".Utc());
+		}
+
 	}
 }

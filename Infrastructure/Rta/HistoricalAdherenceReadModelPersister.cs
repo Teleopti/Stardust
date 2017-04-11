@@ -15,17 +15,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public void AddIn(Guid personId, DateTime timestamp)
 		{
-			add(personId, timestamp, HistoricalAdherenceInternalAdherence.In);
+			add(personId, timestamp, HistoricalAdherenceReadModelAdherence.In);
 		}
 
 		public void AddNeutral(Guid personId, DateTime timestamp)
 		{
-			add(personId, timestamp, HistoricalAdherenceInternalAdherence.Neutral);
+			add(personId, timestamp, HistoricalAdherenceReadModelAdherence.Neutral);
 		}
 
 		public void AddOut(Guid personId, DateTime timestamp)
 		{
-			add(personId, timestamp, HistoricalAdherenceInternalAdherence.Out);
+			add(personId, timestamp, HistoricalAdherenceReadModelAdherence.Out);
 		}
 
 		public void Remove(DateTime until)
@@ -37,7 +37,7 @@ DELETE FROM [ReadModel].[HistoricalAdherence] WHERE Timestamp < :ts")
 				.ExecuteUpdate();
 		}
 
-		private void add(Guid personId, DateTime timestamp, HistoricalAdherenceInternalAdherence adherence)
+		private void add(Guid personId, DateTime timestamp, HistoricalAdherenceReadModelAdherence adherence)
 		{
 			_unitOfWork.Current()
 				.CreateSqlQuery(@"

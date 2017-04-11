@@ -55,18 +55,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			TimeZone.IsSweden();
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
-			ReadModel.Has(new HistoricalAdherenceReadModel
-			{
-				PersonId = person,
-				OutOfAdherences = new[]
+			ReadModel.Has(person, new[]
 				{
 					new HistoricalOutOfAdherenceReadModel
 					{
 						StartTime = "2016-10-10 06:05".Utc(),
 						EndTime = "2016-10-10 06:15".Utc()
 					}
-				}
-			});
+				});
 
 			var historicalData = Target.Build(person);
 
@@ -100,16 +96,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-10-12 12:00");
 			var person = Guid.NewGuid();
 			Database.WithAgent(person, "nicklas");
-			ReadModel.Has(new HistoricalAdherenceReadModel
+			ReadModel.Has(person, new[]
 			{
-				PersonId = person,
-				OutOfAdherences = new[]
+				new HistoricalOutOfAdherenceReadModel
 				{
-					new HistoricalOutOfAdherenceReadModel
-					{
-						StartTime = "2016-10-12 14:00".Utc(),
-						EndTime = "2016-10-12 15:00".Utc(),
-					}
+					StartTime = "2016-10-12 14:00".Utc(),
+					EndTime = "2016-10-12 15:00".Utc(),
 				}
 			});
 

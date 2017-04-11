@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -58,25 +59,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
 
 			var historicalAdherence = _adherences.Read(personId, startTime, endTime);
-			var outOfAdherences = (historicalAdherence?.OutOfAdherences)
-				.EmptyIfNull()
-				.Select(y =>
-				{
-					string end = null;
-					if (y.EndTime.HasValue)
-						end = TimeZoneInfo.ConvertTimeFromUtc(y.EndTime.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
-					return new AgentOutOfAdherenceViewModel
-					{
-						StartTime = TimeZoneInfo.ConvertTimeFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-						EndTime = end
-					};
-				})
-				.ToArray();
+			var first = historicalAdherence.FirstOrDefault();
+			if (first?.Adherence != HistoricalAdherenceReadModelAdherence.Out)
+			{
+				historicalAdherence = new[] {_adherences.ReadLastBefore(personId, first?.Timestamp ?? _now.UtcDateTime())}
+					.Concat(historicalAdherence)
+					.Where(x => x != null)
+					.ToArray();
+			}
+			var outOfAdherences = buildViewModel(historicalAdherence.EmptyIfNull());
 
 			var changes = _changes.Read(personId, startTime, endTime)
 				.Select(x => new HistoricalChangeViewModel
 				{
-					Time = TimeZoneInfo.ConvertTimeFromUtc(x.Timestamp, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+					Time = formatForUser(x.Timestamp),
 					Activity = x.ActivityName,
 					ActivityColor = x.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value)) : null,
 					State = x.StateName,
@@ -169,6 +165,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				default:
 					throw new ArgumentOutOfRangeException(nameof(adherence), adherence, null);
 			}
+		}
+
+		private IEnumerable<AgentOutOfAdherenceViewModel> buildViewModel(IEnumerable<HistoricalAdherenceReadModel> data)
+		{
+			var seed = Enumerable.Empty<AgentOutOfAdherenceViewModel>();
+			return data.Aggregate(seed, (x, model) =>
+				{
+					if (model.Adherence == HistoricalAdherenceReadModelAdherence.Out)
+					{
+						if (x.IsEmpty(y => y.EndTime == null))
+							x = x
+								.Append(new AgentOutOfAdherenceViewModel
+								{
+									StartTime = formatForUser(model.Timestamp)
+								})
+								.ToArray();
+					}
+					else
+					{
+						var existing = x.FirstOrDefault(y => y.EndTime == null);
+						if (existing != null)
+							existing.EndTime = formatForUser(model.Timestamp);
+					}
+
+					return x;
+				})
+				.ToArray();
+		}
+
+		private string formatForUser(DateTime time)
+		{
+			return TimeZoneInfo.ConvertTimeFromUtc(time, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
 		}
 	}
 }

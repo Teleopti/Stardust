@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.AddIn(personId, "2016-10-13 12:15".Utc());
 
 			var result = Reader.Read(personId, "2016-10-13 00:00".Utc(), "2016-10-14 00:00".Utc());
-			result.OutOfAdherences.Single().StartTime.Should().Be("2016-10-13 12:00".Utc());
-			result.OutOfAdherences.Single().EndTime.Should().Be("2016-10-13 12:15".Utc());
+			result.First().Timestamp.Should().Be("2016-10-13 12:00".Utc());
+			result.Last().Timestamp.Should().Be("2016-10-13 12:15".Utc());
 		}
 
 		[Test]
@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.AddNeutral(personId, "2016-10-13 12:15".Utc());
 
 			var result = Reader.Read(personId, "2016-10-13 00:00".Utc(), "2016-10-14 00:00".Utc());
-			result.OutOfAdherences.Single().StartTime.Should().Be("2016-10-13 12:00".Utc());
-			result.OutOfAdherences.Single().EndTime.Should().Be("2016-10-13 12:15".Utc());
+			result.First().Timestamp.Should().Be("2016-10-13 12:00".Utc());
+			result.Last().Timestamp.Should().Be("2016-10-13 12:15".Utc());
 		}
 
 		[Test]
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Remove("2016-10-24".Utc());
 
 			var result = Reader.Read(personId, "2016-10-01 00:00".Utc(), "2016-10-31 00:00".Utc());
-			result.OutOfAdherences.Should().Have.Count.EqualTo(2);
+			result.Should().Have.Count.EqualTo(2);
 		}
 	}
 }

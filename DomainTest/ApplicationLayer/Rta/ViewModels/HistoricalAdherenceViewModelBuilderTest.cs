@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -53,16 +55,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
-			ReadModel.Has(new HistoricalAdherenceReadModel
+			ReadModel.Has(person, new[]
 			{
-				PersonId = person,
-				OutOfAdherences = new[]
+				new HistoricalOutOfAdherenceReadModel
 				{
-					new HistoricalOutOfAdherenceReadModel
-					{
-						StartTime = "2016-10-10 08:05".Utc(),
-						EndTime = "2016-10-10 08:15".Utc()
-					}
+					StartTime = "2016-10-10 08:05".Utc(),
+					EndTime = "2016-10-10 08:15".Utc()
 				}
 			});
 
@@ -82,16 +80,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgent(person, "name");
 
 			ReadModel
-				.Has(new HistoricalAdherenceReadModel
-				{
-					PersonId = person,
-					OutOfAdherences = new[] { new HistoricalOutOfAdherenceReadModel { StartTime = "2016-10-08 00:00".Utc() } }
-				})
-				.Has(new HistoricalAdherenceReadModel
-				{
-					PersonId = person,
-					OutOfAdherences = new[] { new HistoricalOutOfAdherenceReadModel { StartTime = "2016-10-10 00:00".Utc() } }
-				});
+				.Has(person, new[] { new HistoricalOutOfAdherenceReadModel { StartTime = "2016-10-08 00:00".Utc() } })
+				.Has(person, new[] { new HistoricalOutOfAdherenceReadModel { StartTime = "2016-10-10 00:00".Utc() } });
 
 			var historicalData = Target.Build(person);
 
@@ -125,18 +115,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-10-12 12:00");
 			var person = Guid.NewGuid();
 			Database.WithAgent(person, "nicklas", TimeZoneInfoFactory.ChinaTimeZoneInfo());
-			ReadModel.Has(new HistoricalAdherenceReadModel
-			{
-				PersonId = person,
-				OutOfAdherences = new[]
+			ReadModel.Has(person, new[]
 				{
 					new HistoricalOutOfAdherenceReadModel
 					{
 						StartTime = "2016-10-11 16:00".Utc(),
 						EndTime = "2016-10-11 17:00".Utc(),
 					}
-				}
-			});
+				});
 
 			var data = Target.Build(person);
 
@@ -155,18 +141,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-10-12 09:00");
 			var person = Guid.NewGuid();
 			Database.WithAgent(person, "nicklas", TimeZoneInfoFactory.HawaiiTimeZoneInfo());
-			ReadModel.Has(new HistoricalAdherenceReadModel
-			{
-				PersonId = person,
-				OutOfAdherences = new[]
+			ReadModel.Has(person, new[]
 				{
 					new HistoricalOutOfAdherenceReadModel
 					{
 						StartTime = "2016-10-11 10:00".Utc(),
 						EndTime = "2016-10-11 11:00".Utc()
 					}
-				}
-			});
+				});
 
 			var data = Target.Build(person);
 
@@ -209,10 +191,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var person = Guid.NewGuid();
 
 			Database.WithAgent(person, "nicklas");
-			ReadModel.Has(new HistoricalAdherenceReadModel
-			{
-				PersonId = person,
-				OutOfAdherences = new[]
+			ReadModel.Has(person, new[]
 				{
 					new HistoricalOutOfAdherenceReadModel
 					{
@@ -222,12 +201,60 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					{
 						StartTime = "2016-10-12 09:00".Utc()
 					}
+				});
+
+			var data = Target.Build(person);
+
+			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-12T08:00:00");
+		}
+
+		[Test]
+		public void ShouldReadOutOfAdherenceStartedOneDayAgo()
+		{
+			Now.Is("2016-10-12 12:00");
+			var person = Guid.NewGuid();
+
+			Database.WithAgent(person, "nicklas");
+			ReadModel.Has(person, new[]
+				{
+					new HistoricalOutOfAdherenceReadModel
+					{
+						StartTime = "2016-10-11 09:00".Utc()
+					}
+				});
+
+			var data = Target.Build(person);
+
+			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T09:00:00");
+		}
+
+		[Test]
+		public void ShouldReadOutOfAdherenceStartedOneDayAgo2()
+		{
+			Now.Is("2016-10-12 12:00");
+			var person = Guid.NewGuid();
+
+			Database.WithAgent(person, "nicklas");
+			ReadModel.Has(new[]
+			{
+				new HistoricalAdherenceReadModel
+				{
+					PersonId = person,
+					Adherence = HistoricalAdherenceReadModelAdherence.Out,
+					Timestamp = "2016-10-11 09:00".Utc()
+				},
+				new HistoricalAdherenceReadModel
+				{
+					PersonId = person,
+					Adherence = HistoricalAdherenceReadModelAdherence.In,
+					Timestamp = "2016-10-12 11:00".Utc()
 				}
 			});
 
 			var data = Target.Build(person);
 
-			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-12T08:00:00");
+			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T09:00:00");
+			data.OutOfAdherences.Single().EndTime.Should().Be("2016-10-12T11:00:00");
 		}
 	}
 }
