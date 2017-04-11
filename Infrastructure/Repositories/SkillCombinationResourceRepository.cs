@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -21,18 +20,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
-		private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
 		private readonly RetryPolicy _retryPolicy;
 		private readonly object skillCombinationLock = new object();
 
 		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWork currentUnitOfWork,
-												  ICurrentBusinessUnit currentBusinessUnit, 
-												  IRequestStrategySettingsReader requestStrategySettingsReader)
+												  ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_now = now;
 			_currentUnitOfWork = currentUnitOfWork;
 			_currentBusinessUnit = currentBusinessUnit;
-			_requestStrategySettingsReader = requestStrategySettingsReader;
 			_retryPolicy = new RetryPolicy<SqlTransientErrorDetectionStrategyWithTimeouts>(5, TimeSpan.FromMilliseconds(100));
 		}
 
