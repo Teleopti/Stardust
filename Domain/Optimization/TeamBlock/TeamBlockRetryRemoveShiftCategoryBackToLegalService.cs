@@ -64,9 +64,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingProgress backgroundWorker)
 		{
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
+			backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot));
 			foreach (var matrix in scheduleMatrixListPros)
 			{
-				backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot));
 				var shiftNudgeDirective = new ShiftNudgeDirective();
 
 				foreach (var limitation in matrix.SchedulePeriod.ShiftCategoryLimitationCollection())
