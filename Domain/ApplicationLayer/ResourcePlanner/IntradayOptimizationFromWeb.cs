@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public void Execute(Guid planningPeriodId, bool runAsynchronously)
 		{
 			var intradayOptimizationCommand = IntradayOptimizationCommand(planningPeriodId, runAsynchronously);
+			if (intradayOptimizationCommand == null) return;
 			_intradayOptimizationCommandHandler.Execute(intradayOptimizationCommand);
 		}
 
@@ -45,15 +47,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				PlanningPeriodId = planningPeriodId,
 				RunAsynchronously = runAsynchronously
 			};
+			if (planningPeriod.AgentGroup != null)
+			{
+				var people = _personRepository.FindPeopleInAgentGroup(planningPeriod.AgentGroup, planningPeriod.Range);
+				if (!people.Any()) return null;
+				intradayOptimizationCommand.AgentsToOptimize = people;
+			}
 			if (runAsynchronously)
 			{
 				var jobResultId = saveJobResult(planningPeriod);
 				intradayOptimizationCommand.JobResultId = jobResultId;
-			}
-			if (planningPeriod.AgentGroup != null)
-			{
-				var people = _personRepository.FindPeopleInAgentGroup(planningPeriod.AgentGroup, planningPeriod.Range);
-				intradayOptimizationCommand.AgentsToOptimize = people;
 			}
 			return intradayOptimizationCommand;
 		}
