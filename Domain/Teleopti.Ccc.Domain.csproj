@@ -242,6 +242,8 @@
     <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />
+    <Compile Include="Security\Principal\IUpdatedBySystemUser.cs" />
+    <Compile Include="Security\Principal\UpdatedBySystemUser.cs" />
     <Compile Include="Staffing\SendUpdateStaffingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />

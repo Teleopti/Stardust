@@ -11,18 +11,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly INow _now;
-		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
-		public JobStartTimeRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, INow now, ICurrentBusinessUnit currentBusinessUnit)
+		public JobStartTimeRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, INow now)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_now = now;
-			_currentBusinessUnit = currentBusinessUnit;
 		}
 
-		public bool CheckAndUpdate(int thresholdMinutes)
+		public bool CheckAndUpdate(int thresholdMinutes, Guid bu)
 		{
-			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var startTime = DateTime.MinValue;
 			DateTime? lockTimestamp = null;
 			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))

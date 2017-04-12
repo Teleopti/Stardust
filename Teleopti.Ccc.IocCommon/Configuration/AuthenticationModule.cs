@@ -117,6 +117,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IUpdatedBy>()
 				.As<IUpdatedByScope>()
 				.SingleInstance();
+
+			builder.RegisterType<UpdatedBySystemUser>().As<IUpdatedBySystemUser>();
 		}
 	}
 }

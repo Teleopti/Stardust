@@ -1,6 +1,7 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.IocCommon
 			{
 				builder.RegisterType<PersistableScheduleDataPermissionChecker>().As<IPersistableScheduleDataPermissionChecker>().SingleInstance();
 			}
+			
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule(new AnalyticsUnitOfWorkModule(_configuration));
 			builder.RegisterModule(new DataSourceModule(_configuration));

@@ -24,10 +24,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldPersistStartTime()
 		{
+			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 09:50");
-			Target.CheckAndUpdate(60);
+			Target.CheckAndUpdate(60, businessUnitId);
+			
 			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select StartTime from JobStartTime where BusinessUnit = :bu")
-				.SetGuid("bu", CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetGuid("bu", businessUnitId)
 				.List<DateTime>();
 			result.Any().Should().Be.True();
 		}
@@ -35,10 +37,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldPersistTimelockAsNull()
 		{
+			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 09:50");
-			Target.CheckAndUpdate(60);
+			Target.CheckAndUpdate(60, businessUnitId);
 			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select LockTimestamp from JobStartTime where BusinessUnit = :bu")
-				.SetGuid("bu", CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetGuid("bu", businessUnitId)
 				.List<DateTime?>();
 			result.First().Should().Be.Null();
 		}
@@ -46,41 +49,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldCheckAndUpdateWhenNoRecord()
 		{
+			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 09:50");
-			var isUpdated = Target.CheckAndUpdate(60);
+			var isUpdated = Target.CheckAndUpdate(60, businessUnitId);
 			isUpdated.Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldCheckAndUpdateWhenOldRecord()
 		{
+			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 07:50");
-			Target.CheckAndUpdate(60);
+			Target.CheckAndUpdate(60, businessUnitId);
 			Now.Is("2016-03-01 09:50");
-			var isUpdated = Target.CheckAndUpdate(60);
+			var isUpdated = Target.CheckAndUpdate(60, businessUnitId);
 			isUpdated.Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldCheckAndUpdateIfLockTimestampIsNotValid()
 		{
+			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 09:40");
-			Target.CheckAndUpdate(60);
-			Target.UpdateLockTimestamp(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+			Target.CheckAndUpdate(60, businessUnitId);
+			Target.UpdateLockTimestamp(businessUnitId);
 			Now.Is("2016-03-01 09:50");
-			var isUpdated = Target.CheckAndUpdate(60);
+			var isUpdated = Target.CheckAndUpdate(60, businessUnitId);
 			isUpdated.Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldUpdateTimestampTo1MinuteFromNow()
 		{
+			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 09:40");
-			Target.CheckAndUpdate(60); 
+			Target.CheckAndUpdate(60, businessUnitId); 
 			Now.Is("2016-03-01 09:50");
-			Target.UpdateLockTimestamp(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+			Target.UpdateLockTimestamp(businessUnitId);
 			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select LockTimestamp from JobStartTime where BusinessUnit = :bu")
-				.SetGuid("bu", CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetGuid("bu", businessUnitId)
 				.List<DateTime?>();
 			result.First().Should().Be.EqualTo(Now.UtcDateTime().AddMinutes(1));
 		}
@@ -88,13 +95,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldResetTimestamp()  
 		{
+			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 09:40");
-			Target.CheckAndUpdate(60);
-			Target.UpdateLockTimestamp(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+			Target.CheckAndUpdate(60, businessUnitId);
+			Target.UpdateLockTimestamp(businessUnitId);
 			Now.Is("2016-03-01 09:50");
-			Target.ResetLockTimestamp(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+			Target.ResetLockTimestamp(businessUnitId);
 			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select LockTimestamp from JobStartTime where BusinessUnit = :bu")
-				.SetGuid("bu", CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetGuid("bu", businessUnitId)
 				.List<DateTime?>();
 			result.First().Should().Be.Null();
 		}
@@ -102,34 +110,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotUpdateIfLockTimestampIsValid()
 		{
+			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 09:40");
-			Target.CheckAndUpdate(60);
+			Target.CheckAndUpdate(60, businessUnitId);
 			Now.Is("2016-03-01 09:50");
-			Target.UpdateLockTimestamp(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
-			var isUpdated = Target.CheckAndUpdate(60);
+			Target.UpdateLockTimestamp(businessUnitId);
+			var isUpdated = Target.CheckAndUpdate(60, businessUnitId);
 			isUpdated.Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldNotUpdateIfLockTimestampIsNullAndStartTimeIsNotOld()
 		{
+			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 09:40");
-			Target.CheckAndUpdate(60);
+			Target.CheckAndUpdate(60, businessUnitId);
 			Now.Is("2016-03-01 09:50");
-			var isUpdated = Target.CheckAndUpdate(60);
+			var isUpdated = Target.CheckAndUpdate(60, businessUnitId);
 			isUpdated.Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldResetLockTimeStampIfInvalid() 
 		{
+			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 09:40");
-			Target.CheckAndUpdate(60);
-			Target.UpdateLockTimestamp(CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+			Target.CheckAndUpdate(60, businessUnitId);
+			Target.UpdateLockTimestamp(businessUnitId);
 			Now.Is("2016-03-01 09:50");
-			Target.CheckAndUpdate(60);
+			Target.CheckAndUpdate(60, businessUnitId);
 			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select LockTimestamp from JobStartTime where BusinessUnit = :bu")
-				.SetGuid("bu", CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetGuid("bu", businessUnitId)
 				.List<DateTime?>();
 			result.First().Should().Be.Null();
 		}

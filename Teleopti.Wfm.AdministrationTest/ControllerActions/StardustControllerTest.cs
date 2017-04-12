@@ -20,7 +20,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void TestFixtureSetUp()
 		{
 			StardustRepository = new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			var fakeThisIsAnnoying = new FakeJobStartTimeRepository(new MutableNow(), new FakeCurrentBusinessUnit());
+			var fakeThisIsAnnoying = new FakeJobStartTimeRepository(new MutableNow());
 			Target = new StardustController(StardustRepository, new FakeEventPublisher(), new FakeTenants(), fakeThisIsAnnoying);
 		}
 
