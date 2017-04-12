@@ -1,3 +1,5 @@
+alter table Readmodel.AgentState alter column EmploymentNumber nvarchar(50)
+
 UPDATE Readmodel.AgentState
 SET 
 	FirstName = p.FirstName,
