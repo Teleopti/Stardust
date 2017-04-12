@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			_publisher.Publish(new UpdateStaffingLevelReadModelEvent
 			{
-				Days = 1
+				Days = 14
 			});
 
 			return Ok();
