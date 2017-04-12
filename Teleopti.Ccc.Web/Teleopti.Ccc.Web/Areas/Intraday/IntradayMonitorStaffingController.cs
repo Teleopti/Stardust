@@ -42,15 +42,15 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		{
 			var skillArea = _skillAreaRepository.Get(SkillAreaId);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			//return Ok(_staffingViewModelCreator.Load(skillIdList, new DateOnly(model.DateTime)));
-			return Ok(_staffingViewModelCreator.Load(skillIdList));
+			return Ok(_staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime)));
+			//return Ok(_staffingViewModelCreator.Load(skillIdList));
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing")]
 		public virtual IHttpActionResult MonitorSkillStaffingByDate(Guid SkillId, DateTime DateTime)
 		{
-			//return Ok(_staffingViewModelCreator.Load(new[] {model.SkillId}, new DateOnly(model.DateTime)));
-			return Ok(_staffingViewModelCreator.Load(new[] { SkillId }));
+			return Ok(_staffingViewModelCreator.Load(new[] {SkillId }, new DateOnly(DateTime)));
+			//return Ok(_staffingViewModelCreator.Load(new[] { SkillId }));
 		}
 	}
 
