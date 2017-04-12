@@ -54,6 +54,8 @@ if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPersons')
 	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPersons', 10)
 if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepReadmodels')
 	insert into PurgeSetting ([Key], [Value]) values('DaysToKeepReadmodels', 30)
+if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepJobResultArtifacts')
+	insert into PurgeSetting ([Key], [Value]) values('DaysToKeepJobResultArtifacts', 10)
 
 --Persons who has left, i.e. with a since long past leaving date
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPersons'),getdate())
@@ -444,6 +446,19 @@ where NotScheduled = 1
 delete ReadModel.PersonScheduleDay
 where Start is NULL and [End] is NULL
 
+--delete job result artifacts according to purge setting
+select @KeepUntil = DATEADD(day, -1*(select isnull(Value, 10) from PurgeSetting where [Key] = 'DaysToKeepJobResultArtifacts'), GETDATE())
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) dbo.JobResultArtifact
+	where CreateTime < @KeepUntil
+
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+	
 --Data from DELETED Scenarios
 --Schedules
 set @RowCount = 1
