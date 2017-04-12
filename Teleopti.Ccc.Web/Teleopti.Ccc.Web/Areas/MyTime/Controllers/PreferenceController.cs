@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IPreferencePersister _preferencePersister;
 		private readonly IPreferenceTemplatePersister _preferenceTemplatePersister;
 
-		public PreferenceController(IPreferenceViewModelFactory viewModelFactory, IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider, IPreferencePersister preferencePersister, IPreferenceTemplatePersister preferenceTemplatePersister)
+		public PreferenceController(IPreferenceViewModelFactory viewModelFactory, IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider,
+			IPreferencePersister preferencePersister, IPreferenceTemplatePersister preferenceTemplatePersister)
 		{
 			_viewModelFactory = viewModelFactory;
 			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
@@ -37,10 +38,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		public virtual ViewResult Index(DateOnly? date)
 		{
-			date = !date.HasValue ? _virtualSchedulePeriodProvider.CalculatePreferenceDefaultDate() : _virtualSchedulePeriodProvider.GetCurrentOrNextVirtualPeriodForDate(date.Value).StartDate;
+			date = !date.HasValue
+				? _virtualSchedulePeriodProvider.CalculatePreferenceDefaultDate()
+				: _virtualSchedulePeriodProvider.GetCurrentOrNextVirtualPeriodForDate(date.Value).StartDate;
 
 			if (_virtualSchedulePeriodProvider.MissingPersonPeriod(date))
 				return View("NoPersonPeriodPartial");
+
 			if (_virtualSchedulePeriodProvider.MissingSchedulePeriod())
 				return View("NoSchedulePeriodPartial");
 			
@@ -101,6 +105,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				return ModelState.ToJson();
 			}
 			return Json(_preferencePersister.Persist(input));
+		}
+
+		[UnitOfWork]
+		[ActionName("PeriodFeedback")]
+		public virtual JsonResult GetPreferenceFeedbackForPeriod(DateOnly startDate, DateOnly endDate)
+		{
+			var preferenceFeedbacks = _viewModelFactory.CreateDayFeedbackViewModel(new DateOnlyPeriod(startDate, endDate));
+			return Json(preferenceFeedbacks, JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]

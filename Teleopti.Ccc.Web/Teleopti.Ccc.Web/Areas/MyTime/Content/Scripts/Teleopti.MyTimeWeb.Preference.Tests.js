@@ -298,7 +298,7 @@
 						]
 					);
 				}
-				if (options.url == "PeriodPreferenceFeedback/PeriodFeedback") {
+				if (options.url == "Preference/PeriodFeedback") {
 					options.success([{
 						"Date": "2012-06-11",
 						"DateInternal": "\/Date(1339372800000)\/",
@@ -373,7 +373,7 @@
 					});
 					options.success(fakePreferenceAndSchedulesData);
 				}
-				if (options.url == "PeriodPreferenceFeedback/PeriodFeedback") {
+				if (options.url == "Preference/PeriodFeedback") {
 					options.success([{
 						"Date": startDate,
 						"DateInternal": "\/Date(1337558400000)\/",
@@ -504,7 +504,7 @@
 					});
 					options.success(fakePreferenceAndSchedulesData);
 				}
-				if (options.url == "PeriodPreferenceFeedback/PeriodFeedback") {
+				if (options.url == "Preference/PeriodFeedback") {
 					var fakeData = [];
 					periodDatesList.forEach(function(date, index){
 						var dateInterval = (new Date(date)).getTime();

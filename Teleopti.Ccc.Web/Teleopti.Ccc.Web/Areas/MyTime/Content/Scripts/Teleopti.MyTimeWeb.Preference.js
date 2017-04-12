@@ -249,7 +249,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		});
 
 		ajax.Ajax({
-			url: "PeriodPreferenceFeedback/PeriodFeedback",
+			url: "Preference/PeriodFeedback",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: 'GET',
@@ -446,7 +446,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			};
 
 			ajax.Ajax({
-				url: "PeriodPreferenceFeedback/PeriodFeedback",
+				url: "Preference/PeriodFeedback",
 				dataType: "json",
 				contentType: 'application/json; charset=utf-8',
 				type: 'GET',
