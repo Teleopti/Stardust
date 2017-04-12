@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
@@ -104,6 +105,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			{
 				DataSeries = new StaffingDataSeries
 				{
+					Date = userDateOnly,
 					Time = timeSeries,
 					ForecastedStaffing = _forecastedStaffingProvider.DataSeries(forecastedStaffing,timeSeries),
 					UpdatedForecastedStaffing = updatedForecastedSeries,
@@ -112,6 +114,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 				},
 				StaffingHasData = forecastedStaffing.Any()
 			};
+		}
+
+		public IEnumerable<IntradayStaffingViewModel> Load(Guid[] skillIdList, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage = false)
+		{
+			return dateOnlyPeriod.DayCollection().Select(day => Load(skillIdList, day, useShrinkage)).ToList();
 		}
 
 		private static DateTime? getLastestStatsTime(IList<SkillIntervalStatistics> actualCallsPerSkillInterval)
@@ -123,5 +130,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 	public interface IStaffingViewModelCreator
 	{
 		IntradayStaffingViewModel Load(Guid[] skillIdList, DateOnly? dateOnly = null, bool useShrinkage = false);
+		IEnumerable<IntradayStaffingViewModel> Load(Guid[] skillIdList, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage = false);
 	}
 }
