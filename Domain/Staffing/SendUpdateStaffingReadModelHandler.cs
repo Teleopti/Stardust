@@ -13,18 +13,19 @@ namespace Teleopti.Ccc.Domain.Staffing
     {
 	    private readonly IJobStartTimeRepository _jobStartTimeRepository;
         private readonly IBusinessUnitRepository _businessUnitRepository;
-        private readonly IEventPublisher _publisher;
 	    private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
 	    private readonly IUpdatedBySystemUser _updatedBySystemUser;
+	    private readonly IUpdateStaffingLevelReadModelSender _updateStaffingLevelReadModelSender;
 
-		public SendUpdateStaffingReadModelHandler(IBusinessUnitRepository businessUnitRepository, IEventPublisher publisher, 
-			IRequestStrategySettingsReader requestStrategySettingsReader, IJobStartTimeRepository jobStartTimeRepository, IUpdatedBySystemUser updatedBySystemUser)
+		public SendUpdateStaffingReadModelHandler(IBusinessUnitRepository businessUnitRepository, 
+			IRequestStrategySettingsReader requestStrategySettingsReader, IJobStartTimeRepository jobStartTimeRepository, IUpdatedBySystemUser updatedBySystemUser, 
+			IUpdateStaffingLevelReadModelSender updateStaffingLevelReadModelSender)
         {
             _businessUnitRepository = businessUnitRepository;
-            _publisher = publisher;
 	        _requestStrategySettingsReader = requestStrategySettingsReader;
 	        _jobStartTimeRepository = jobStartTimeRepository;
 	        _updatedBySystemUser = updatedBySystemUser;
+	        _updateStaffingLevelReadModelSender = updateStaffingLevelReadModelSender;
         }
 
 		[UnitOfWork]
@@ -40,14 +41,50 @@ namespace Teleopti.Ccc.Domain.Staffing
 				{
 					var businessUnitId = businessUnit.Id.GetValueOrDefault();
 					if (!_jobStartTimeRepository.CheckAndUpdate(updateResourceReadModelIntervalMinutes, businessUnitId)) return;
-
-					_publisher.Publish(new UpdateStaffingLevelReadModelEvent
-					{
-						Days = 1,
-						LogOnBusinessUnitId = businessUnitId
-					});
+					_updateStaffingLevelReadModelSender.Send();
 				});
 			}
 		}
     }
+
+	public class UpdateStaffingLevelReadModelSender1Day : IUpdateStaffingLevelReadModelSender
+	{
+		private readonly IEventPublisher _publisher;
+
+		public UpdateStaffingLevelReadModelSender1Day(IEventPublisher publisher)
+		{
+			_publisher = publisher;
+		}
+
+		public void Send()
+		{
+			_publisher.Publish(new UpdateStaffingLevelReadModelEvent
+			{
+				Days = 1
+			});
+		}
+	}
+
+	public class UpdateStaffingLevelReadModelSender14Days : IUpdateStaffingLevelReadModelSender
+	{
+		private readonly IEventPublisher _publisher;
+
+		public UpdateStaffingLevelReadModelSender14Days(IEventPublisher publisher)
+		{
+			_publisher = publisher;
+		}
+
+		public void Send()
+		{
+			_publisher.Publish(new UpdateStaffingLevelReadModelEvent
+			{
+				Days = 14
+			});
+		}
+	}
+
+	public interface IUpdateStaffingLevelReadModelSender
+	{
+		void Send();
+	}
 }

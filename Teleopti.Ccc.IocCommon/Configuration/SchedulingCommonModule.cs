@@ -53,6 +53,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -440,6 +441,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 			{
 				builder.RegisterType<UpdateStaffingLevelReadModel>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope();
+			}
+
+			if (_configuration.Toggle(Toggles.Staffing_ReadModel_Update14Days_43840))
+			{
+				builder.RegisterType<UpdateStaffingLevelReadModelSender14Days>().As<IUpdateStaffingLevelReadModelSender>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<UpdateStaffingLevelReadModelSender1Day>().As<IUpdateStaffingLevelReadModelSender>().InstancePerLifetimeScope();
 			}
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312))

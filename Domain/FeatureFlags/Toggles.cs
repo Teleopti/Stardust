@@ -220,6 +220,7 @@
 		WfmStaffing_AllowActions_42524,
 		Reporting_Optional_Columns_42066,
 		Staffing_ReadModel_UseSkillCombination_xx,
+		Staffing_ReadModel_Update14Days_43840,
 		StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388,
 		ETL_SpeedUpNightlyDayOff_38213,
 		WfmPermission_RelaseRefactor_43587,

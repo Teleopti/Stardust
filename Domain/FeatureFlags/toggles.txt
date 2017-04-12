@@ -226,11 +226,13 @@ Wfm_Intraday_ESL_41827 = true
 Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
 Landing_Page_Data_Protection_Question_35721 = true
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = RC
-
 Reporting_Optional_Columns_42066 = RC
+
 Staffing_ReadModel_UseSkillCombination_xx = true
 WfmStaffing_AllowActions_42524 = RC #Enables the entire Staffing page!
 StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388 = true # don't enable without Staffing_ReadModel_UseSkillCombination_xx
+Staffing_ReadModel_Update14Days_43840 = RC # don't enable without StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388
+
 QRCodeForMobileApps_42695 = RC
 
 ETL_SpeedUpNightlyDayOff_38213 = true
