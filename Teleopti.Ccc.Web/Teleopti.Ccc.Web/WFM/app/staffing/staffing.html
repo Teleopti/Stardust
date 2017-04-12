@@ -12,7 +12,6 @@
     </style>
     <div class="con-row developerTools" ng-show="vm.devTogglesEnabled">
         <md-tooltip>This is only visible for dev toggles</md-tooltip>
-
         <div class="con-flex"></div>
         <div class="con-flex">
             <button class="wfm-btn wfm-btn-default" ng-click="vm.triggerResourceCalc()">Trigger Resource Calc</button>
@@ -31,59 +30,57 @@
     <div class="con-row">
         <div class="con-flex panel material-depth-1">
             <div class="con-row">
-                <span class="con-flex">
-						<md-autocomplete id="skill-id"
-						class="autocomplete-skill"
-						md-selected-item="vm.selectedSkill"
-						md-search-text="searchSkillText"
-						md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)"
-						md-items="skill in vm.querySearchSkills(searchSkillText)"
-						md-item-text="skill.Name"
-						md-min-length="0"
-						placeholder="{{'SelectSkill'|translate}}">
-						<md-item-template>
-							<i class="mdi mdi-phone" ng-if="skill.DoDisplayData"></i>
-							<i class="mdi mdi-alert" ng-if="!skill.DoDisplayData"></i>
-							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-                <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
-                <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
-                </md-item-template>
-                <md-not-found>
-                    {{'RepViewerNoMoreMatches'|translate}}
-                </md-not-found>
-                </md-autocomplete>
-                <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkill" ng-click="clearSkillHelper()">
+                <div class="con-flex x2">
+                    <md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="vm.selectedSkill" md-search-text="searchSkillText"
+                        md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)"
+                        md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+                        <md-item-template>
+                            <i class="mdi mdi-phone" ng-if="skill.DoDisplayData"></i>
+                            <i class="mdi mdi-alert" ng-if="!skill.DoDisplayData"></i>
+                            <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
+                            <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
+                            <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
+                        </md-item-template>
+                        <md-not-found>
+                            {{'RepViewerNoMoreMatches'|translate}}
+                        </md-not-found>
+                    </md-autocomplete>
+                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkill" ng-click="clearSkillHelper()">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
-                </span>
-                <span class="con-flex">
-						<md-autocomplete id="area-id"
-						class="autocomplete-skill"
-						md-selected-item="vm.selectedArea"
-						md-search-text="searchSkillAreaText"
-						md-selected-item-change="vm.selectedAreaChange(area)"
-						md-items="area in vm.querySearchAreas(searchSkillAreaText)"
-						md-item-text="area.Name"
-						md-min-length="0"
-						placeholder="{{'SelectSkillArea'|translate}}">
-						<md-item-template>
-							<i class="mdi mdi-phone" ng-if="skill.DoDisplayData"></i>
-							<i class="mdi mdi-alert" ng-if="!skill.DoDisplayData"></i>
-							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
-                <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
-                <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
-                </md-item-template>
-                <md-not-found>
-                    {{'RepViewerNoMoreMatches'|translate}}
-                </md-not-found>
-                </md-autocomplete>
-                <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkill" ng-click="clearSkillHelper()">
+                </div>
+                <div class="con-flex x2">
+                    <md-autocomplete id="area-id" class="autocomplete-skill" md-selected-item="vm.selectedArea" md-search-text="searchSkillAreaText"
+                        md-selected-item-change="vm.selectedAreaChange(area)" md-items="area in vm.querySearchAreas(searchSkillAreaText)"
+                        md-item-text="area.Name" md-min-length="0" placeholder="{{'SelectSkillArea'|translate}}">
+                        <md-item-template>
+                            <i class="mdi mdi-phone" ng-if="skill.DoDisplayData"></i>
+                            <i class="mdi mdi-alert" ng-if="!skill.DoDisplayData"></i>
+                            <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
+                            <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
+                            <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
+                        </md-item-template>
+                        <md-not-found>
+                            {{'RepViewerNoMoreMatches'|translate}}
+                        </md-not-found>
+                    </md-autocomplete>
+                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="selectedSkill" ng-click="clearSkillHelper()">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
-                </span>
-                <span class="con-flex datepicker-container" ng-click="$event.stopPropagation()" style="margin-top: -10px;">
-                <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.generateChart(vm.selectedSkill.Id,vm.selectedDate)" options="vm.options" class="inline-block"></team-schedule-datepicker>
-            </span>
+                </div>
+                <div class="con-flex">
+                    <div class="wfm-checkbox"  style="margin: 5px auto;">
+                        <input type="checkbox" id="check2" ng-checked="vm.useShrinkage" ng-click="vm.useShrinkageForStaffing()"/>
+                        <label for="check2">
+                            <span class="wfm-checkbox-toggle"></span>
+                            <span class="wfm-checkbox-label">Use Shrinkage</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="con-flex datepicker-container" style="margin-top: -10px;">
+                    <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.generateChart(vm.selectedSkill,vm.selectedDate)"
+                        options="vm.options" class="inline-block"></team-schedule-datepicker>
+                </div>
             </div>
         </div>
     </div>

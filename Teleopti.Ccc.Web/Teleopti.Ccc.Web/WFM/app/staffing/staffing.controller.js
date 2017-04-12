@@ -28,6 +28,8 @@
 		vm.options = { customClass: getDayClass };
 		vm.events = [];
 		vm.devTogglesEnabled = false;
+		vm.useShrinkage = false;
+		vm.useShrinkageForStaffing = useShrinkageForStaffing;
 		vm.generateChart = generateChart;
 		var allSkills = [];
 		var allSkillAreas = [];
@@ -86,25 +88,29 @@
 			return staffingService.getSkillAreaStaffing.get({ id: areaId });
 		}
 
-		function getSkillStaffingByDate(skillId, date) {
-			var data = { SkillId: skillId, DateTime: date };
+		function getSkillStaffingByDate(skillId, date, shrinkage) {
+			var data = { SkillId: skillId, DateTime: date, UseShrinkage: shrinkage};
 			return staffingService.getSkillStaffingByDate.get(data);
 		}
 
-		function getSkillAreaStaffingByDate(skillId, date) {
-			var data = { SkillId: skillId, DateTime: date };
+		function getSkillAreaStaffingByDate(skillId, date, shrinkage) {
+			var data = { SkillId: skillId, DateTime: date, UseShrinkage: shrinkage};
 			return staffingService.getSkillAreaStaffingByDate.get(data);
 		}
 
-		function generateChart(skillId, areaId) {
-			if (skillId) {
-				var query = getSkillStaffingByDate(skillId, vm.selectedDate);
-			} else if (areaId) {
-				var query = getSkillAreaStaffingByDate(areaId, vm.selectedDate);
+		function useShrinkageForStaffing() {
+			vm.useShrinkage = !vm.useShrinkage;
+			generateChart(vm.selectedSkill, vm.selectedArea);
+		}
+
+		function generateChart(skill, area) {
+			if (skill) {
+				var query = getSkillStaffingByDate(skill.Id, vm.selectedDate, vm.useShrinkage);
+			} else if (area) {
+				var query = getSkillAreaStaffingByDate(area.Id, vm.selectedDate, vm.useShrinkage);
 			}
-			// console.log('send', query);
 			query.$promise.then(function (result) {
-				// console.log('get',result);
+				console.log(vm.selectedSkill, vm.selectedArea, vm.useShrinkage);
 				staffingData.time = [];
 				staffingData.scheduledStaffing = [];
 				staffingData.forcastedStaffing = [];
@@ -174,13 +180,13 @@
 
 		function selectedSkillChange(skill) {
 			if (skill == null) return;
-			generateChart(skill.Id, null);
+			generateChart(skill, null);
 			selectSkillOrArea(skill, null);
 		}
 		
 		function selectedAreaChange(area) {
 			if (area == null) return;
-			generateChart(null, area.Id);
+			generateChart(null, area);
 			selectSkillOrArea(null, area);
 		}
 
@@ -213,7 +219,7 @@
 			var query = staffingService.addOvertime.save(vm.overTimeModels);
 			query.$promise.then(function () {
 				if (vm.selectedSkill) {
-					generateChart(vm.selectedSkill.Id, null);
+					generateChart(vm.selectedSkill, null);
 				} else if (vm.selectedSkillArea) {
 					generateChart(null, vm.selectedSkillArea);
 				}
