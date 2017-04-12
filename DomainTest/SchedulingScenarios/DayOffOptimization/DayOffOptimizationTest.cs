@@ -579,5 +579,43 @@ Not really sure we need to make this green. If this is ignored in X weeks -> sim
 				.Should().Not.Be.Null();
 		}
 
+		[TestCase(true)]
+		[TestCase(false)]
+		[Ignore("#43689")]
+		public void ShouldTryAgainAfterShiftCategoryLimitationHasBlockedFirstMove(bool order)
+		{
+			var firstDay = new DateOnly(2015, 10, 26); //mon
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var shiftCategory = new ShiftCategory("allowed").WithId();
+			var shiftCategoryNotAllowed = new ShiftCategory("not allowed").WithId();
+			var allowedRuleset = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var notAllowedRuleset = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategoryNotAllowed));
+			var bag = order ? new RuleSetBag(allowedRuleset, notAllowedRuleset) : new RuleSetBag(notAllowedRuleset, allowedRuleset);
+			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, bag, skill);
+			agent.SchedulePeriod(firstDay).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryNotAllowed) { MaxNumberOf = 0 });
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				10,
+				1, 
+				10,
+				10,
+				10,
+				10,
+				10
+			));
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new TimePeriod(6, 0, 14, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
+			var optPrefs = OptimizationPreferencesProvider.Fetch();
+			optPrefs.General.UseShiftCategoryLimitations = true;
+			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).DayOff()
+				.Should().Not.Be.Null();
+		}
 	}
 }

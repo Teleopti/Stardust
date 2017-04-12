@@ -41,9 +41,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _ruleSetCollection = new List<IWorkShiftRuleSet>();
         }
 
-	    public RuleSetBag(IWorkShiftRuleSet workShiftRuleSet) : this()
+	    public RuleSetBag(params IWorkShiftRuleSet[] workShiftRuleSets) : this()
 	    {
-		    AddRuleSet(workShiftRuleSet);
+		    foreach (var workShiftRuleSet in workShiftRuleSets)
+		    {
+			    AddRuleSet(workShiftRuleSet);
+			}
 	    }
 
 		#endregion Constructors 
