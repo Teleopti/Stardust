@@ -11,6 +11,41 @@ using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.TestCommon.PerformanceTest
 {
+
+
+	// Use this query if you want to extract performance data from team city
+	
+	//	--select 
+	//	--replace(test_name, 'Teleopti.Ccc.Rta.PerformanceTest.dll: ', '') name,
+	//	--* 
+	//	--from
+	//	--test_names 
+	//	--where test_name like '%Rta.PerformanceTest%' 
+	//	--order by
+	//	--name
+
+	//	select
+	//	convert(varchar, dateadd(S, cast(h.build_start_time_server/1000 as int), '1970-01-01'), 120) start,
+	//	substring(h.build_number, charindex(' - ', h.build_number) + 3, 100) [version],
+	//convert(varchar, cast(t.duration as float)/1000, 128) seconds,
+	//'' label,
+	//'' tooltip,
+	//h.agent_name agent,
+	//convert(varchar, dateadd(ms, t.duration, 0), 108) duration,
+	//'Extracted from team city test ' + replace(n.test_name, 'Teleopti.Ccc.Rta.PerformanceTest.dll: ', '') comment
+	//from
+	//test_info t
+	//left join test_names n on
+	//n.id = t.test_name_id
+	//left join history h on
+	//h.build_id = t.build_id
+	//where
+	//n.test_name like '%Rta.PerformanceTest%'
+	//order by
+	//comment,
+	//start
+
+
 	public class PerformanceTest
 	{
 		public PerformanceTest()
