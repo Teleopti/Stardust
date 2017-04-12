@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Intraday;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var currentBu = new FakeCurrentBusinessUnit();
 			currentBu.FakeBusinessUnit(BusinessUnitFactory.CreateWithId(theSkill.BusinessUnit.Id.GetValueOrDefault()));
 
-			var skillCombinationReadModel = new SkillCombinationResourceRepository(new MutableNow(_theDate.Date.AddHours(7)), currentUnitOfWork, currentBu , new FakeRequestStrategySettingsReader());
+			var skillCombinationReadModel = new SkillCombinationResourceRepository(new MutableNow(_theDate.Date.AddHours(7)), currentUnitOfWork, currentBu);
 			skillCombinationReadModel.PersistSkillCombinationResource(_theDate.Date.AddHours(7), new List<SkillCombinationResource> {new SkillCombinationResource
 																	  {
 																		 StartDateTime = _theDate.Date.AddHours(8),
