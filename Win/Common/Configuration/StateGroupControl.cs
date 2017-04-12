@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			string text = string.Format(
 				CurrentCulture,
 				Resources.AreYouSureYouWantToDeleteItem,
-				stateToDelete.StateCode);
+				stateToDelete.Name);
 
 			string caption = string.Format(CurrentCulture, Resources.ConfirmDelete);
 			DialogResult response = ViewBase.ShowConfirmationMessage(text, caption);
@@ -315,7 +315,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private static void createChildNode(TreeNodeAdv parentNode, IRtaState state)
 		{
-			var node = new TreeNodeAdv(state.StateCode) { TagObject = state };
+			var node = new TreeNodeAdv(state.Name)
+			{
+				TagObject = state,
+				HelpText = state.StateCode
+			};
 			parentNode.Nodes.Add(node);
 		}
 
@@ -534,6 +538,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				setAvailableDescriptionToNode(e.Node);
 				setUseForLogOutDescriptionToNode(e.Node);
 			}
+			else
+			{
+				// State name changed
+				var state = e.Node.TagObject as IRtaState;
+				if (state != null) state.Name = e.Node.Text;
+			}
 		}
 
 		private void treeViewAdv1AfterCheck(object sender, TreeNodeAdvEventArgs e)
@@ -624,8 +634,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				// be sure to remove ev. desc. in node text before editing state group name
 				e.Node.Text = stateGroup.Name;
 			}
-			if (e.Node.TagObject is IRtaState)
-				e.Cancel = true;
 		}
 
 		private void treeViewAdv1EditCancelled(object sender, TreeNodeAdvEditEventArgs e)

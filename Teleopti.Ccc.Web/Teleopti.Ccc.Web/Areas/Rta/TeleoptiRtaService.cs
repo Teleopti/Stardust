@@ -122,12 +122,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				throw new InvalidStateCodeException("State code is required");
 
 			stateCode = stateCode.Trim();
-
-			if (string.IsNullOrEmpty(platformTypeId))
-				throw new InvalidPlatformException("Platform type id is required");
-			var parsedPlatformTypeId = Guid.Parse(platformTypeId);
-			if (parsedPlatformTypeId != Guid.Empty)
-				stateCode = $"{stateCode} ({parsedPlatformTypeId.ToString().ToUpper()})";
+			
+			if (!string.IsNullOrEmpty(platformTypeId) && platformTypeId != Guid.Empty.ToString())
+				stateCode = $"{stateCode} ({platformTypeId})";
 
 			if (stateCode.Length > 300)
 				throw new InvalidStateCodeException("State code can not exceed 300 characters (including platform type id)");
