@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
+﻿using System;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				{
 					var businessUnitId = businessUnit.Id.GetValueOrDefault();
 					if (!_jobStartTimeRepository.CheckAndUpdate(updateResourceReadModelIntervalMinutes, businessUnitId)) return;
-					_updateStaffingLevelReadModelSender.Send();
+					_updateStaffingLevelReadModelSender.Send(businessUnitId);
 				});
 			}
 		}
@@ -56,11 +57,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_publisher = publisher;
 		}
 
-		public void Send()
+		public void Send(Guid businessUnitId)
 		{
 			_publisher.Publish(new UpdateStaffingLevelReadModelEvent
 			{
-				Days = 1
+				Days = 1,
+				LogOnBusinessUnitId = businessUnitId
 			});
 		}
 	}
@@ -74,17 +76,18 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_publisher = publisher;
 		}
 
-		public void Send()
+		public void Send(Guid businessUnitId)
 		{
 			_publisher.Publish(new UpdateStaffingLevelReadModelEvent
 			{
-				Days = 14
+				Days = 14,
+				LogOnBusinessUnitId = businessUnitId
 			});
 		}
 	}
 
 	public interface IUpdateStaffingLevelReadModelSender
 	{
-		void Send();
+		void Send(Guid businessUnitId);
 	}
 }
