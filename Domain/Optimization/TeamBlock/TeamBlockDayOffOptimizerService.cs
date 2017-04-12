@@ -454,14 +454,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 			}
 
-			if (optimizationPreferences.Extra.IsClassic())
-			{
-				//TODO - investigate...
-				// * run also when normal team/block?
-				// * lock also added DO days?
-				lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
-			}
-
 			return checkPeriodValue(currentPeriodValue, previousPeriodValue);
 		}
 
