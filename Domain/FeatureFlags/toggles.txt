@@ -143,7 +143,7 @@ Wfm_Intraday_38074 = true
 
 Wfm_People_PrepareForRelease_39040 = RC #Was not ready enough
 Wfm_People_ImportAndCreateAgentFromFile_42528 = RC
-Wfm_People_SetFallbackValuesForImporting_43289 = RC
+Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = DEV
 
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
@@ -158,8 +158,8 @@ MyTimeWeb_PreferenceForMobile_40265 = true
 MyTimeWeb_StudentAvailabilityForMobile_42498 = true
 MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747 = true
 MyTimeWeb_ShowContractTime_41462 = true
-MyTimeWeb_ViewIntradayStaffingProbability_41608 = RC
-MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = RC
+MyTimeWeb_ViewIntradayStaffingProbability_41608 = RC #Do not release yet, need more accurate numbers first.
+MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = RC #Do not release yet, need more accurate numbers first.
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
 MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = RC
 
@@ -229,8 +229,8 @@ Wfm_ResourcePlanner_SchedulingOnStardust_42874 = RC
 
 Reporting_Optional_Columns_42066 = RC
 Staffing_ReadModel_UseSkillCombination_xx = true
-WfmStaffing_AllowActions_42524 = RC
-StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388 = RC # don't enable without Staffing_ReadModel_UseSkillCombination_xx
+WfmStaffing_AllowActions_42524 = true
+StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388 = true # don't enable without Staffing_ReadModel_UseSkillCombination_xx
 QRCodeForMobileApps_42695 = RC
 
 ETL_SpeedUpNightlyDayOff_38213 = true
