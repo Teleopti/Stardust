@@ -291,7 +291,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							{
 								allFailed[matrix.Item2] = false;
 								lockDaysInMatrixes(movedDaysOff.AddedDaysOff, matrix.Item2);
-								lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, matrix.Item2);
+
+								//TEST
+								if (!optimizationPreferences.Extra.IsClassic())
+								{
+									lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, matrix.Item2);
+								}
 							}
 						}
 
