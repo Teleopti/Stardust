@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 		private readonly AffectedDayOffs _affectedDayOffs;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
+		private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
 
 		public TeamBlockDayOffOptimizerService(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -67,7 +68,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder,
 			AffectedDayOffs affectedDayOffs,
-			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
+			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
+			IShiftCategoryLimitationChecker shiftCategoryLimitationChecker)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -91,6 +93,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
 			_affectedDayOffs = affectedDayOffs;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
+			_shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
 		}
 
 		public void OptimizeDaysOff(
@@ -404,8 +407,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, matrix.Person);
 			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, matrix.Person);
-			
-			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder))
+
+			var personToSetShiftCategoryLimitationFor = optimizationPreferences.Extra.IsClassic() ? matrix.Person : null;
+			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, personToSetShiftCategoryLimitationFor))
 			{
 				return false;
 			}
@@ -507,7 +511,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo,
 			                                         movedDaysOff.RemovedDaysOff,
 			                                         rollbackService, resourceCalculateDelayer,
-			                                         schedulingResultStateHolder);
+			                                         schedulingResultStateHolder, null);
 			if (!success)
 			{
 				checkPeriodValue = true;
@@ -579,12 +583,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                       IEnumerable<DateOnly> removedDaysOff,
 		                                       ISchedulePartModifyAndRollbackService rollbackService,
 		                                       IResourceCalculateDelayer resourceCalculateDelayer,
-												ISchedulingResultStateHolder schedulingResultStateHolder)
+												ISchedulingResultStateHolder schedulingResultStateHolder,
+												IPerson personToSetShiftCategoryLimitationFor)
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
-				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
-																																								 schedulingOptions.BlockFinder());
+				if (personToSetShiftCategoryLimitationFor != null)
+				{
+					_shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, personToSetShiftCategoryLimitationFor, dateOnly);
+				}
+				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder());
 				if (teamBlockInfo == null)
 					continue;
 				if (!_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))

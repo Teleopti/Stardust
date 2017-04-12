@@ -581,7 +581,6 @@ Not really sure we need to make this green. If this is ignored in X weeks -> sim
 
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("#43689")]
 		public void ShouldTryAgainAfterShiftCategoryLimitationHasBlockedFirstMove(bool order)
 		{
 			var firstDay = new DateOnly(2015, 10, 26); //mon
