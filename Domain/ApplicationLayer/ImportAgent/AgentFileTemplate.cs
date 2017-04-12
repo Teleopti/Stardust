@@ -76,30 +76,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var returnedFile = GetTemplateWorkbook(sheetName);
 			var newSheet = returnedFile.GetSheet(sheetName);
 
-			var fmt = returnedFile.CreateDataFormat();
-			var textStyle = returnedFile.CreateCellStyle();
-			textStyle.DataFormat = fmt.GetFormat("@");
-			var numberStyle = returnedFile.CreateCellStyle();
-			numberStyle.DataFormat = fmt.GetFormat("0");
-			var dateStyle = returnedFile.CreateCellStyle();
-			dateStyle.DataFormat = fmt.GetFormat(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
-
-			for (var i = 0; i < ColumnHeaderMap.Count; i++)
-			{
-				if (ColumnHeaderMap["StartDate"] == i)
-				{
-					newSheet.SetDefaultColumnStyle(i, dateStyle);
-				}
-				else if (ColumnHeaderMap["SchedulePeriodLength"] == i)
-				{
-					newSheet.SetDefaultColumnStyle(i, numberStyle);
-				}
-				else
-				{
-					newSheet.SetDefaultColumnStyle(i, textStyle);
-				}
-			}
-
 			for (var i = 0; i < agents.Length; i++)
 			{
 				var agent = agents[i];
@@ -143,6 +119,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		{
 			var returnedFile = isXlsx ? (IWorkbook)new XSSFWorkbook() : new HSSFWorkbook();
 			var newsheet = returnedFile.CreateSheet(invalidUserSheetName);
+
+			var fmt = returnedFile.CreateDataFormat();
+			var textStyle = returnedFile.CreateCellStyle();
+			textStyle.DataFormat = fmt.GetFormat("@");
+			var numberStyle = returnedFile.CreateCellStyle();
+			numberStyle.DataFormat = fmt.GetFormat("0");
+			var dateStyle = returnedFile.CreateCellStyle();
+			dateStyle.DataFormat = fmt.GetFormat(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
+
+			for (var i = 0; i < ColumnHeaderMap.Count; i++)
+			{
+				if (ColumnHeaderMap["StartDate"] == i)
+				{
+					newsheet.SetDefaultColumnStyle(i, dateStyle);
+				}
+				else if (ColumnHeaderMap["SchedulePeriodLength"] == i)
+				{
+					newsheet.SetDefaultColumnStyle(i, numberStyle);
+				}
+				else
+				{
+					newsheet.SetDefaultColumnStyle(i, textStyle);
+				}
+			}
 
 			var row = newsheet.CreateRow(0);
 			for (var i = 0; i < ColumnHeaderNames.Length; i++)

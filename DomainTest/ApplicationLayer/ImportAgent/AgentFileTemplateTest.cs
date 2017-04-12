@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		{
 			var agents = new List<RawAgent>();
 			var target = new AgentFileTemplate();
-
+			
 			for (int i = 0; i < 5000; i++)
 			{
 				var defaultAgent = target.GetDefaultAgent();
@@ -67,6 +67,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 				var identityUser = $"{defaultAgent.Firstname.ToLower()}.{defaultAgent.Lastname.ToLower()}@teleopti.com";
 				defaultAgent.ApplicationUserId = identityUser;
 				defaultAgent.WindowsUser = identityUser;
+				if (i > 4000)
+				{
+					defaultAgent.Role = string.Empty;
+				}
 				agents.Add(defaultAgent);
 			}
 			var fileStream = new AgentFileTemplate().GetFileTemplate(agents.ToArray()).ToArray();

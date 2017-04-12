@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			row.CopyTo(nextRow);
 
 			Assert.AreEqual(nextRow.Cells.Count, row.Cells.Count);
-			Assert.AreEqual(nextRow.Cells[0].CellStyle, row.Cells[0].CellStyle);
 		}
 
 		[Test]

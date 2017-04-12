@@ -11036,7 +11036,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to schedule for selected planning period due to technical error.. Please try again..
+        ///   Looks up a localized string similar to Failed to schedule for selected planning period due to technical error. Please try again..
         /// </summary>
         public static string FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError {
             get {
@@ -13206,7 +13206,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} fixed with fallback value {1}.
+        ///   Looks up a localized string similar to {0} fixed with &apos;{1}&apos;.
         /// </summary>
         public static string ImportAgentsColumnFixedWithFallbackValue {
             get {

@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Helper
 			}
 
 			var sheet = targetRow.Sheet;
-			var workbook = sheet.Workbook;
 			for (int i = startIndex; i < endIndex + 1; i++)
 			{
 				var oldCell = sourceRow.GetCell(i);
@@ -26,14 +25,6 @@ namespace Teleopti.Ccc.Domain.Helper
 				{
 					continue;
 				}
-
-				ICellStyle cellStyle = GetExistsCellStyle(targetRow, oldCell.CellStyle);
-				if (cellStyle == null)
-				{
-					cellStyle = workbook.CreateCellStyle();
-					cellStyle.CloneStyleFrom(oldCell.CellStyle);
-				}
-				newCell.CellStyle = cellStyle;
 
 				if (newCell.CellComment != null) newCell.CellComment = oldCell.CellComment;
 				if (oldCell.Hyperlink != null) newCell.Hyperlink = oldCell.Hyperlink;
@@ -78,43 +69,6 @@ namespace Teleopti.Ccc.Domain.Helper
 				}
 			}
 
-		}
-
-		private static ICellStyle GetExistsCellStyle(IRow row, ICellStyle style)
-		{
-			for (short i = 0; i < row.Sheet.Workbook.NumCellStyles; i++)
-			{
-				var currentStyle = row.Sheet.Workbook.GetCellStyleAt(i);
-				if (Equals(currentStyle, style, new[] { nameof(currentStyle.Index), nameof(currentStyle.FontIndex) }))
-				{
-					return currentStyle;
-				}
-			}
-			return null;
-		}
-
-		private static bool Equals<T>(T entity1, T entity2, params string[] exceptedProperties)
-		{
-			var properties = typeof(T).GetProperties(BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public)
-				.Where(p => !exceptedProperties.Contains(p.Name, StringComparer.OrdinalIgnoreCase));
-			foreach (var pro in properties)
-			{
-				var value = pro.GetValue(entity1);
-				var value2 = pro.GetValue(entity2);
-				if (value == null)
-				{
-					continue;
-				}
-				if (!value.GetType().IsValueType)
-				{
-					Equals(value, value2);
-				}
-				if (!pro.GetValue(entity1).Equals(pro.GetValue(entity2)))
-				{
-					return false;
-				}
-			}
-			return true;
 		}
 
 		public static bool IsBlank(this IRow row)
