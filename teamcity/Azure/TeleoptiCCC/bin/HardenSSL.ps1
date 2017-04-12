@@ -196,9 +196,11 @@ $hasheskey.Close();
 
 
 # If any settings were changed, reboot
+<#
 If ($reboot) {
 	Write-Host "Rebooting now..."
 	# shutdown: restart, time 5 sec, comment "..", force running apps to close
 	# machine readable reason, planned, 2:4 as reason
 	shutdown.exe /r /t 5 /c "Crypto settings changed" /f /d p:2:4
 }
+#>
