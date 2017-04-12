@@ -289,7 +289,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 							if (!optimizationPreferences.Advanced.UseTweakedValues)
 							{
-								allFailed[matrix.Item2] = false;
+								if (!optimizationPreferences.Extra.IsClassic()) //removing this makes boolingdb lot slower...
+								{
+									allFailed[matrix.Item2] = false;
+								}
 								lockDaysInMatrixes(movedDaysOff.AddedDaysOff, matrix.Item2);
 								lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, matrix.Item2);
 							}
