@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			protected bool Equals(key other)
 			{
 				return dataSourceId == other.dataSourceId 
-					   && string.Equals(userCode, other.userCode);
+					   && string.Equals(userCode, other.userCode, StringComparison.OrdinalIgnoreCase);
 			}
 
 			public override bool Equals(object obj)
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				unchecked
 				{
-					return (dataSourceId*397) ^ (userCode != null ? userCode.GetHashCode() : 0);
+					return (dataSourceId*397) ^ (userCode != null ? userCode.ToUpper().GetHashCode() : 0);
 				}
 			}
 			#endregion

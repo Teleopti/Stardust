@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			protected bool Equals(stateCodeMappingKey other)
 			{
 				return businessUnitId.Equals(other.businessUnitId)
-					&& string.Equals(stateCode, other.stateCode);
+					&& string.Equals(stateCode, other.stateCode, StringComparison.OrdinalIgnoreCase);
 			}
 
 			public override bool Equals(object obj)
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				unchecked
 				{
 					var hashCode = businessUnitId.GetHashCode();
-					hashCode = (hashCode * 397) ^ (stateCode?.GetHashCode() ?? 0);
+					hashCode = (hashCode * 397) ^ (stateCode?.ToUpper().GetHashCode() ?? 0);
 					return hashCode;
 				}
 			}
