@@ -446,15 +446,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				return true;
 			}
 
-			foreach (var dateOnly in movedDaysOff.RemovedDaysOff)
+			if (!optimizationPreferences.Extra.IsClassic())
 			{
-				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder());
-
-				if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
+				foreach (var dateOnly in movedDaysOff.RemovedDaysOff)
 				{
-					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-					lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-					lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+					ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder());
+
+					if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
+					{
+						_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+						lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
+						lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+					}
 				}
 			}
 
