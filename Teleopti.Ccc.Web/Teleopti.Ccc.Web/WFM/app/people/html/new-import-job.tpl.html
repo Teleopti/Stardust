@@ -12,7 +12,7 @@
 				ng-model="$ctrl.file" ng-model-rejected="$ctrl.rejFiles">
 			{{ 'DragAndDropExcelFilesHereOrClickToUpload' | translate }}
 			<div ng-show="$ctrl.file" class="fileinfo">
-				{{ 'ImportFileNameColon'|translate }} &nbsp; {{$ctrl.file.name}} - {{ $ctrl.file.size|filesize:0 }}
+				{{ 'ImportFileNameColon'|translate }} &nbsp; {{$ctrl.file.name}} - {{ $ctrl.file.size|filesize:2 }}
 			</div>
 		</div>
 		<div ng-if="!$ctrl.fetchingFieldOptions" class="wfm-checkbox">

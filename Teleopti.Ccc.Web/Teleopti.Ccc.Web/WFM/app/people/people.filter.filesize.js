@@ -18,13 +18,13 @@
 					precision = 1;
 				}
 
-				var unitIndex = Math.floor(Math.log(bytes) / Math.log(1000));
+				var unitIndex = Math.floor(Math.log(bytes) / Math.log(1024));
 
 				if (unitIndex > units.length - 1) {
 					unitIndex = units.length - 1;
 				}
 
-				var value = bytes / Math.pow(1000, unitIndex);
+				var value = bytes / Math.pow(1024, unitIndex);
 
 				return value.toFixed(precision) + ' ' + units[unitIndex];
 			};

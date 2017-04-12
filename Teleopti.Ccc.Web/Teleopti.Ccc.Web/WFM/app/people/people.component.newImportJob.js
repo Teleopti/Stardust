@@ -32,7 +32,7 @@
 	};
 
 	Ctrl.prototype.invalidFile = function () {
-		return !(!!this.file) || this.file.size > 300000;
+		return !(!!this.file) || this.file.size > 2097152;
 	};
 
 	Ctrl.prototype.createImportJob = function () {
