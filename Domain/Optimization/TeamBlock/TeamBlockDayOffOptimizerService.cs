@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 							if (!optimizationPreferences.Advanced.UseTweakedValues)
 							{
-								if (!optimizationPreferences.Extra.IsClassic()) //removing this makes boolingdb lot slower...
+								if (!optimizationPreferences.Extra.IsClassic()) //removing this if makes boolingdb lot slower...
 								{
 									allFailed[matrix.Item2] = false;
 								}
