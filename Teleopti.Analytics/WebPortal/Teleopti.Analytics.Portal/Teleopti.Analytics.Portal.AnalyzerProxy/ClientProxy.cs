@@ -36,7 +36,9 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 			//RecycleBin = 3
 		}
 
-		private ClientProxy() { }
+		private ClientProxy()
+		{
+		}
 
 		public ClientProxy(string olapServer, string olapDatabase)
 			: this()
@@ -46,7 +48,8 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 			_log.Debug("Start of ClientProxy constructor");
 			_az = new Analyzer2005();
 
-			_log.DebugFormat("Analyzer URL will be set to: {0}", Settings.Default.Teleopti_Analytics_Portal_AnalyzerProxy_AnalyzerRef_Analyzer2005.Trim());
+			_log.DebugFormat("Analyzer URL will be set to: {0}",
+				Settings.Default.Teleopti_Analytics_Portal_AnalyzerProxy_AnalyzerRef_Analyzer2005.Trim());
 			_az.Url = Settings.Default.Teleopti_Analytics_Portal_AnalyzerProxy_AnalyzerRef_Analyzer2005;
 			setAnalyzerInfo();
 
@@ -65,7 +68,8 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 			analyzerAuthentication();
 		}
 
-		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain,
+			SslPolicyErrors sslpolicyerrors)
 		{
 			return true;
 		}
@@ -88,11 +92,17 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 		private void logonUser()
 		{
 			if (string.IsNullOrEmpty(Settings.Default.PM_Anonymous_User_Name.Trim())
-					|| string.IsNullOrEmpty(Settings.Default.PM_Anonymous_User_Password.Trim()))
+				|| string.IsNullOrEmpty(Settings.Default.PM_Anonymous_User_Password.Trim()))
 			{
 				_log.Debug("Analyzer Anonymous authentication failed. User and/or Password are missing!");
 				throw new InvalidOperationException("Analyzer Anonymous authentication failed. User and/or Password are missing!");
 			}
+			_log.Debug("Calling AnalyzerLogonUser with retries");
+			currentContext = Retry.Do(AnalyzerLogonUser, TimeSpan.FromSeconds(3));
+		}
+
+		private SecurityContext AnalyzerLogonUser()
+		{
 			string[] credentials = Settings.Default.PM_Anonymous_User_Name.Trim().Split("\\".ToCharArray());
 			string domain = credentials[0];
 			string user = credentials[1];
@@ -110,7 +120,7 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 				throw new InvalidOperationException(msgFailure);
 			}
 			_log.Debug("Analyzer Anonymous authentication successful.");
-			currentContext = securityContext;
+			return securityContext;
 		}
 
 		public void LogOffUser()
