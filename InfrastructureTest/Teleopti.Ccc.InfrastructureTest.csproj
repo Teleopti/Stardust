@@ -321,6 +321,7 @@
     <Compile Include="Rta\Persisters\HistoricalChangeReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelUpdaterTest.cs" />
+    <Compile Include="Rta\UnorderedEventsTest.cs" />
     <Compile Include="Rta\ScheduleCacheTest.cs" />
     <Compile Include="Rta\SiteInAlarmForSkillTest.cs" />
     <Compile Include="Rta\SiteInAlarmReaderTest.cs" />

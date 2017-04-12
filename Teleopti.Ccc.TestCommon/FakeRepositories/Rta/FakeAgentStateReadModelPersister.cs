@@ -163,7 +163,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			foreach (var agent in agentsInTeam)
 			{
 				agent.TeamName = name;
-				_data.TryUpdate(agent.PersonId, agent, agent);
 			}
 		}
 
@@ -176,7 +175,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			foreach (var agent in agentsInSite)
 			{
 				agent.SiteName = name;
-				_data.TryUpdate(agent.PersonId, agent, agent);
 			}
 		}
 
