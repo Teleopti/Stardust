@@ -38,24 +38,11 @@ namespace Teleopti.Wfm.Test
 			return val.GetUnderStaffingPeriodsString(detail, culture, uiCulture, timeZone);
 		}
 
-		public string CreateDenyMessage30MinTowHous(int understaffedHour, CultureInfo culture, CultureInfo uiCulture, TimeZoneInfo timeZone, DateTime dateTime)
-		{
-			var detail = new UnderstaffingDetails();
-			var val = new StaffingThresholdWithShrinkageValidator();
-			detail.AddUnderstaffingPeriod(new DateTimePeriod(dateTime.AddHours(understaffedHour), dateTime.AddHours(understaffedHour).AddMinutes(30)));
-			detail.AddUnderstaffingPeriod(new DateTimePeriod(dateTime.AddHours(understaffedHour).AddMinutes(30), dateTime.AddHours(understaffedHour).AddMinutes(60)));
-			detail.AddUnderstaffingPeriod(new DateTimePeriod(dateTime.AddHours(understaffedHour).AddMinutes(60), dateTime.AddHours(understaffedHour).AddMinutes(90)));
-			detail.AddUnderstaffingPeriod(new DateTimePeriod(dateTime.AddHours(understaffedHour).AddMinutes(90), dateTime.AddHours(understaffedHour).AddMinutes(120)));
-
-			return val.GetUnderStaffingPeriodsString(detail, culture, uiCulture, timeZone);
-		}
-
-
 		public void SetUpMixedSkillDays(double defaultDemand, Tuple<int, double> hourDemands)
 		{
 			var skillDayGoldToday = new SkillDayConfigurable
 			{
-				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
 				Scenario = "Scenario",
 				Skill = "GoldSkill",
 				DefaultDemand = defaultDemand,
@@ -64,7 +51,7 @@ namespace Teleopti.Wfm.Test
 			};
 			var skillDaySilverToday = new SkillDayConfigurable
 			{
-				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
 				Scenario = "Scenario",
 				Skill = "SilverSkill",
 				DefaultDemand = defaultDemand,
@@ -73,7 +60,7 @@ namespace Teleopti.Wfm.Test
 			};
 			var skillDayBronzeToday = new SkillDayConfigurable
 			{
-				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
 				Scenario = "Scenario",
 				Skill = "BronzeSkill",
 				DefaultDemand = defaultDemand,
@@ -92,7 +79,7 @@ namespace Teleopti.Wfm.Test
 		{
 			var skillDayGoldToday = new SkillDayConfigurable
 			{
-				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
 				Scenario = "Scenario",
 				Skill = "GoldSkill",
 				DefaultDemand = 10,
@@ -100,7 +87,7 @@ namespace Teleopti.Wfm.Test
 			};
 			var skillDaySilverToday = new SkillDayConfigurable
 			{
-				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
 				Scenario = "Scenario",
 				Skill = "SilverSkill",
 				DefaultDemand = 10,
@@ -108,7 +95,7 @@ namespace Teleopti.Wfm.Test
 			};
 			var skillDayBronzeToday = new SkillDayConfigurable
 			{
-				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
 				Scenario = "Scenario",
 				Skill = "BronzeSkill",
 				DefaultDemand = 10,
@@ -126,7 +113,7 @@ namespace Teleopti.Wfm.Test
 		{
 			var skillDayGoldToday = new SkillDayConfigurable
 			{
-				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
 				Scenario = "Scenario",
 				Skill = "GoldSkill",
 				DefaultDemand = 0.1,
@@ -134,7 +121,7 @@ namespace Teleopti.Wfm.Test
 			};
 			var skillDaySilverToday = new SkillDayConfigurable
 			{
-				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
 				Scenario = "Scenario",
 				Skill = "SilverSkill",
 				DefaultDemand = 0.1,
@@ -142,7 +129,7 @@ namespace Teleopti.Wfm.Test
 			};
 			var skillDayBronzeToday = new SkillDayConfigurable
 			{
-				DateOnly = new DateOnly(DateTime.UtcNow.Date),
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
 				Scenario = "Scenario",
 				Skill = "BronzeSkill",
 				DefaultDemand = 0.1,
@@ -474,39 +461,9 @@ namespace Teleopti.Wfm.Test
 			//need to rename the method
 			AddShiftWithLunch(personBronzeWithAdministration.Name, shiftStart, 0, 9, shiftCategory.ShiftCategory, activity.Activity, activityAdministration.Activity, scenario.Scenario);
 
-			var personPeriodBronzeOpenHours = new PersonPeriodConfigurable
-			{
-				Contract = contract.Name,
-				ContractSchedule = contractSchedule.Name,
-				PartTimePercentage = partTimePercentage.Name,
-				StartDate = new DateTime(1980, 01, 01),
-				Team = team.Name,
-				Skill = bronzeSkill.Name,
-				WorkflowControlSet = wfcs.Name
-			};
-			var personBronzeOpenHoursOutsideShift = new PersonConfigurable
-			{
-				Name = "PrsnBronzeOutsideShift"
-			};
-			Data.Person(personBronzeOpenHoursOutsideShift.Name).Apply(personPeriodBronzeOpenHours);
-			AddShift(personBronzeOpenHoursOutsideShift.Name, shiftStart.Date, 6, 4, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			personSetupForShiftHours(contract, contractSchedule, partTimePercentage, team, bronzeSkill, wfcs, shiftStart, shiftCategory, activity, scenario);
 
-			var personBronzeBetweenShifts = new PersonConfigurable
-			{
-				Name = "PrsnBronzeBtwnShift"
-			};
-			Data.Person(personBronzeBetweenShifts.Name).Apply(personPeriodBronzeOpenHours);
-			AddShift(personBronzeBetweenShifts.Name, shiftStart.Date.AddDays(-1), 20, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
-			AddShift(personBronzeBetweenShifts.Name, shiftStart.Date, 20, 22, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
-
-			var personAbsenceInMiddleOfShift = new PersonConfigurable
-			{
-				Name = "PAInMiddleOfShift"
-			};
-			Data.Person(personAbsenceInMiddleOfShift.Name).Apply(personPeriodBronzeOpenHours);
-			AddShift(personAbsenceInMiddleOfShift.Name, shiftStart.Date, 5, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
-
-			var personPeriodBronzeWithNonSkill = new PersonPeriodConfigurable
+		    var personPeriodBronzeWithNonSkill = new PersonPeriodConfigurable
 			{
 				Contract = contract.Name,
 				ContractSchedule = contractSchedule.Name,
@@ -707,7 +664,71 @@ namespace Teleopti.Wfm.Test
 			AddShift(personAllSkillsOvertime.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario, multiplicatorDefinitionSet.MultiplicatorDefinitionSet, true);
 		}
 
-		public static void AddShift(string onPerson,
+	    private static void personSetupForShiftHours(ContractConfigurable contract,ContractScheduleConfigurable contractSchedule, PartTimePercentageConfigurable partTimePercentage,
+	        TeamConfigurable team, SkillConfigurable bronzeSkill, WorkflowControlSetConfigurable wfcs, DateTime shiftStart,ShiftCategoryConfigurable shiftCategory, ActivityConfigurable activity, ScenarioConfigurable scenario)
+	    {
+	        var personPeriodBronzeOpenHours = new PersonPeriodConfigurable
+	        {
+	            Contract = contract.Name,
+	            ContractSchedule = contractSchedule.Name,
+	            PartTimePercentage = partTimePercentage.Name,
+	            StartDate = new DateTime(1980, 01, 01),
+	            Team = team.Name,
+	            Skill = bronzeSkill.Name,
+	            WorkflowControlSet = wfcs.Name
+	        };
+	        var personBronzeOpenHoursOutsideShift = new PersonConfigurable
+	        {
+	            Name = "PrsnBronzeOutsideShift"
+	        };
+	        Data.Person(personBronzeOpenHoursOutsideShift.Name).Apply(personPeriodBronzeOpenHours);
+	        AddShift(personBronzeOpenHoursOutsideShift.Name, shiftStart.Date, 6, 4, shiftCategory.ShiftCategory,
+	            activity.Activity, scenario.Scenario);
+
+			var personBronzeBetweenShifts = new PersonConfigurable
+			{
+				Name = "PrsnBronzeBtwnShift"
+			};
+			Data.Person(personBronzeBetweenShifts.Name).Apply(personPeriodBronzeOpenHours);
+			AddShift(personBronzeBetweenShifts.Name, shiftStart.Date.AddDays(-1), 20, 9, shiftCategory.ShiftCategory,
+				activity.Activity, scenario.Scenario);
+			AddShift(personBronzeBetweenShifts.Name, shiftStart.Date, 20, 22, shiftCategory.ShiftCategory, activity.Activity,
+				scenario.Scenario);
+
+			var personAbsenceInMiddleOfShift = new PersonConfigurable
+			{
+				Name = "PAInMiddleOfShift"
+			};
+			Data.Person(personAbsenceInMiddleOfShift.Name).Apply(personPeriodBronzeOpenHours);
+			AddShift(personAbsenceInMiddleOfShift.Name, shiftStart.Date, 5, 9, shiftCategory.ShiftCategory, activity.Activity,
+				scenario.Scenario);
+
+			var personAbsenceWithinShiftEndsAfterShiftOverstaffed = new PersonConfigurable
+			{
+				Name = "PAWSEASO"
+			};
+			Data.Person(personAbsenceWithinShiftEndsAfterShiftOverstaffed.Name).Apply(personPeriodBronzeOpenHours);
+			AddShift(personAbsenceWithinShiftEndsAfterShiftOverstaffed.Name, shiftStart.Date, 5, 4, shiftCategory.ShiftCategory, activity.Activity,
+				scenario.Scenario);
+
+			var personAbsenceWithinShiftEndsAfterShiftUndertsaffed = new PersonConfigurable
+			{
+				Name = "PAWSEASU"
+			};
+			Data.Person(personAbsenceWithinShiftEndsAfterShiftUndertsaffed.Name).Apply(personPeriodBronzeOpenHours);
+			AddShift(personAbsenceWithinShiftEndsAfterShiftUndertsaffed.Name, shiftStart.Date, 5, 4, shiftCategory.ShiftCategory, activity.Activity,
+				scenario.Scenario);
+
+			var personAbsenceAcrossTwoShifts = new PersonConfigurable
+			{
+				Name = "PATwoShiftSpawn"
+			};
+			Data.Person(personAbsenceAcrossTwoShifts.Name).Apply(personPeriodBronzeOpenHours);
+			AddShift(personAbsenceAcrossTwoShifts.Name, shiftStart.Date.AddDays(-1), 23, 4, shiftCategory.ShiftCategory, activity.Activity,scenario.Scenario);
+			AddShift(personAbsenceAcrossTwoShifts.Name, shiftStart.Date, 10, 1, shiftCategory.ShiftCategory, activity.Activity,scenario.Scenario);
+		}
+
+	    public static void AddShift(string onPerson,
 							DateTime dayLocal,
 							int startHour,
 							int lenghtHour,

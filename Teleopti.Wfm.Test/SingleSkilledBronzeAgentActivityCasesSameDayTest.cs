@@ -19,7 +19,6 @@ namespace Teleopti.Wfm.Test
 {
 	[UnitOfWorkTest]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
-	[Ignore("WIP")]
 	public class SingleSkilledBronzeAgentActivityCasesSameDayTest : SetUpCascadingShifts
 	{
 		public ICurrentUnitOfWork CurrentUnitOfWork;

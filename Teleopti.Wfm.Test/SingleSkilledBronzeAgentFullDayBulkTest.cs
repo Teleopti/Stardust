@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -23,7 +22,6 @@ namespace Teleopti.Wfm.Test
 {
 	[DatabaseTest]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
-	[Ignore("WIP")]
 	public class SingleSkilledBronzeAgentFullDayBulkTest : SetUpCascadingShifts
 	{
 		public ICurrentUnitOfWork CurrentUnitOfWork;
