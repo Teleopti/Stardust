@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -531,6 +532,68 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Any(personAssignment => personAssignment.MainActivities().Any())
 				.Should().Be.False();
+		}
+
+		[Test]
+		[Toggle(Toggles.ResourcePlanner_MasterActivity_42795)]
+		public void ShouldBePossibleToHaveSkillAgentDoesntKnowIfNotRequiresSkillAndNotMasterSkill()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = ActivityRepository.Has("_");
+			activity.RequiresSkill = false;
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(new Contract("_"), contractSchedule, new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, new Skill("_").For(new Activity()));
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				DayOffTemplate = dayOffTemplate,
+				TagToUseOnScheduling = NullScheduleTag.Instance,
+				UseBlock = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
+			});
+
+			Target.DoScheduling(period);
+
+			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
+		}
+
+		[Test]
+		[Toggle(Toggles.ResourcePlanner_MasterActivity_42795)]
+		public void ShouldBePossibleToHaveSkillInExtenderAgentDoesntKnowIfNotRequiresSkillAndNotMasterSkill()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var baseActivity = ActivityRepository.Has("_");
+			var extenderActivity = ActivityRepository.Has("_");
+			extenderActivity.RequiresSkill = false;
+			var skill = SkillRepository.Has("_", baseActivity);
+			var scenario = ScenarioRepository.Has("_");
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(baseActivity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
+			ruleSet.AddExtender(new ActivityRelativeStartExtender(extenderActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(0, 0, 0, 0, 15)));
+			var agent = PersonRepository.Has(new Contract("_"), contractSchedule, new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				DayOffTemplate = dayOffTemplate,
+				TagToUseOnScheduling = NullScheduleTag.Instance,
+				UseBlock = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
+			});
+
+			Target.DoScheduling(period);
+
+			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
 	}
 }
