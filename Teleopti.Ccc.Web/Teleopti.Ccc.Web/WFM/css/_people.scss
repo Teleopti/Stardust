@@ -421,26 +421,30 @@ wfm-import-agents {
 				min-height: 6em;
 			}
 
-			.list .filename {
-				flex: 4 1 40%;
-			}
 
-			.list .created {
-				flex: 2 1 20%;
-			}
-
-			.list .status {
-				flex: 4 1 40%;
-
-				i.mdi {
-					&:before {
-						font-size: 1em !important;
-						vertical-align: middle;
-					}
+			.list {
+				.filename {
+					flex: 3 1 30%;
 				}
+				.owner {
+					flex: 2 1 20%;
+				}
+				.created {
+					flex: 2 1 20%;
+				}
+				.status {
+					flex: 3 1 30%;
 
-				.errors {
-					padding-right: .4em;
+					i.mdi {
+						&:before {
+							font-size: 1em !important;
+							vertical-align: middle;
+						}
+					}
+
+					.errors {
+						padding-right: .4em;
+					}
 				}
 			}
 

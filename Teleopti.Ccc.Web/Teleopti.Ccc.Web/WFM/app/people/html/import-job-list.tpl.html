@@ -8,12 +8,14 @@
 	<div ng-if="$ctrl.jobs.length !== 0" class="list">
 		<div class="header">
 			<div class="filename">{{ 'ImportJob'|translate }}</div>
+			<div class="owner">{{ 'Owner'|translate }}</div>
 			<div class="created">{{ 'TimeStarted'|translate }}</div>
 			<div class="status">{{ 'Status'|translate }}</div>
 			<md-progress-linear class="refreshing" ng-if="$ctrl.refreshing" md-mode="indeterminate"></md-progress-linear>
 		</div>
 		<div ng-repeat="job in $ctrl.jobs" class="item">
 			<div class="filename">{{ job.filename }}</div>
+			<div class="owner">{{ job.owner }}</div>
 			<div class="created">{{ job.startedTime|date:'short' }}</div>
 			<div class="status">
 				<div>{{ (job.inProgress ? 'InProgress' : 'Done')|translate  }}</div>
