@@ -184,6 +184,7 @@
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
     <Compile Include="FakeData\FakeLatestStatisticsIntervalIdLoader.cs" />
     <Compile Include="FakeData\FakeNewBusinessRuleCollection.cs" />
+    <Compile Include="FakeData\FakePersonSkillProvider.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
     <Compile Include="FakeData\FakeScheduleRangePersister.cs" />
     <Compile Include="FakeData\ConfigurablePermissions.cs" />
