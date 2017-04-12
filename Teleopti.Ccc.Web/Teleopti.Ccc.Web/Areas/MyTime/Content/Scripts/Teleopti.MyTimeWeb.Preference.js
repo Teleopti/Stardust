@@ -98,10 +98,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
 			data.forEach(function(d){
 				preferencesAndScheduleViewModel.DayViewModels[d.Date].ClearPreference(successCb);
-				preferencesAndScheduleViewModel.DayViewModels[d.Date].LoadFeedback();
 			});
-			updateSelectedDatesAndNeighbors(dates);
 			periodFeedbackViewModel.LoadFeedback();
+			updateSelectedDatesAndNeighbors(dates);
 			periodFeedbackViewModel.PossibleNightRestViolations();
 		} else {
 			dates.forEach(function(date) {
@@ -186,11 +185,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			$('#Preference-body-inner .ui-selected').each(function(index, cell) {
 				postDates.push($(cell).data('mytime-date'));
 			});
-			setSelectedDatesPreferences(postDates, preference, validationErrorCallback);
-			periodFeedbackViewModel.LoadFeedback();
-			updateSelectedDatesAndNeighbors(postDates);
-            periodFeedbackViewModel.PossibleNightRestViolations();
-            if (cb) cb();
+			setSelectedDatesPreferences(postDates, preference, validationErrorCallback, cb);
 		} else {
 			$('#Preference-body-inner .ui-selected').each(function(index, cell) {
 				var date = $(cell).data('mytime-date');
@@ -208,7 +203,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		}
 	}
 
-	function setSelectedDatesPreferences(postDates, preference, validationErrorCallback){
+	function setSelectedDatesPreferences(postDates, preference, validationErrorCallback, cb){
 		preference.Dates = postDates;
 		ajax.Ajax({
 			url: "Preference/ApplyPreferences",
@@ -217,9 +212,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			type: 'POST',
 			data: JSON.stringify(preference),
 			success: function(data) {
-			    data.forEach(function(d) {
-			        preferencesAndScheduleViewModel.DayViewModels[d.Date].ReadPreference(d.Value);
-			    });
+				data.forEach(function(d) {
+					preferencesAndScheduleViewModel.DayViewModels[d.Date].ReadPreference(d.Value);
+				});
+				periodFeedbackViewModel.LoadFeedback();
+				updateSelectedDatesAndNeighbors(postDates, cb);
+				periodFeedbackViewModel.PossibleNightRestViolations();
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				var errorMessage = $.parseJSON(jqXHR.responseText);
@@ -228,7 +226,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		});
 	}
 
-	function updateSelectedDatesAndNeighbors(postDates){
+	function updateSelectedDatesAndNeighbors(postDates, cb){
 		var allDates = [];
 		$("#Preference-body-inner").find('li[data-mytime-date]').each(function(index, cell) {
 			allDates.push($(cell).data('mytime-date'));
@@ -239,8 +237,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			if(postDates.indexOf(date) > -1){
 				if (index - 1 > 0)
 					previousDate = allDates[index - 1];
-			    if (index + 1 < allDates.length)
-			        nextDate = allDates[index + 1];
+				if (index + 1 < allDates.length)
+					nextDate = allDates[index + 1];
 
 				if(getDates.indexOf(previousDate) == -1)
 					getDates.push(previousDate);
@@ -265,6 +263,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				updatedDatesData.forEach(function(d){
 					preferencesAndScheduleViewModel.DayViewModels[d.Date].AssignFeedbackData(d);
 				});
+				if(cb) cb();
 			}
 		});
 	}

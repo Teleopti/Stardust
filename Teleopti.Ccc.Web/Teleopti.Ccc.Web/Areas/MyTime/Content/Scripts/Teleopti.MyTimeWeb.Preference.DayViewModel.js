@@ -371,20 +371,22 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 		return false;
 	});
 
-	self.AssignFeedbackData = function(feedbackData) {
-		if(feedbackData){
-			self.FeedbackError(feedbackData.FeedbackError);
-			self.PossibleStartTimes(feedbackData.PossibleStartTimes);
-			self.PossibleEndTimes(feedbackData.PossibleEndTimes);
-			self.PossibleContractTimeMinutesLower(feedbackData.PossibleContractTimeMinutesLower);
-			self.PossibleContractTimeMinutesUpper(feedbackData.PossibleContractTimeMinutesUpper);
+	self.AssignFeedbackData = function(data) {
+		if (!self.Feedback()){
+			return;
+		}else if(data){
+			self.FeedbackError(data.FeedbackError);
+			self.PossibleStartTimes(data.PossibleStartTimes);
+			self.PossibleEndTimes(data.PossibleEndTimes);
+			self.PossibleContractTimeMinutesLower(data.PossibleContractTimeMinutesLower);
+			self.PossibleContractTimeMinutesUpper(data.PossibleContractTimeMinutesUpper);
 
-			self.RawDate(feedbackData.DateInternal);
-			self.HasNightRestViolationToPreviousDay(feedbackData.HasNightRestViolationToPreviousDay);
-			self.HasNightRestViolationToNextDay(feedbackData.HasNightRestViolationToNextDay);
-			self.RestTimeToNextDay(feedbackData.RestTimeToNextDayTimeSpan);
-			self.RestTimeToPreviousDay(feedbackData.RestTimeToPreviousDayTimeSpan);
-			self.ExpectedNightRest(feedbackData.ExpectedNightRestTimeSpan);
+			self.RawDate(data.DateInternal);
+			self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
+			self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
+			self.RestTimeToNextDay(data.RestTimeToNextDayTimeSpan);
+			self.RestTimeToPreviousDay(data.RestTimeToPreviousDayTimeSpan);
+			self.ExpectedNightRest(data.ExpectedNightRestTimeSpan);
 		}
 	};
 
