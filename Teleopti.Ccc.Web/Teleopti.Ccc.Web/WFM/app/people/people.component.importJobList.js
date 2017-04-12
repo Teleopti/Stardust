@@ -51,11 +51,11 @@
 				job.artifacts.input = new Artifact(j.InputArtifact.Id, j.InputArtifact.Name);
 			}
 
-			if (job.failed > 0) {
+			if (job.failed > 0 && j.FailedArtifact) {
 				job.artifacts.errors = new Artifact(j.FailedArtifact.Id, j.FailedArtifact.Name);
 			}
 
-			if (job.warned > 0) {
+			if (job.warned > 0 && j.WarningArtifact) {
 				job.artifacts.warnings = new Artifact(j.WarningArtifact.Id, j.WarningArtifact.Name);
 			}
 

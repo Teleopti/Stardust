@@ -24,8 +24,8 @@
 				<div ng-if="!job.inProgress && !job.error">
 					<div>{{ $ctrl.makeSummary(job) }}</div>
 					<div>
-						<span ng-if="job.failed > 0" class="errors"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputError">{{ 'Errors'|translate }}&nbsp;({{ job.failed }})</a></span>
-						<span ng-if="job.warned > 0" class="warnings"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputWarning">{{ 'Warnings'|translate }}&nbsp;({{ job.warned }})</a></span>
+						<span ng-if="job.failed > 0 && job.artifacts.errors" class="errors"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputError">{{ 'Errors'|translate }}&nbsp;({{ job.failed }})</a></span>
+						<span ng-if="job.warned > 0 && job.artifacts.warnings" class="warnings"><a target="_blank" ng-href="../api/People/job/{{job.id}}/artifact/OutputWarning">{{ 'Warnings'|translate }}&nbsp;({{ job.warned }})</a></span>
 					</div>
 				</div>
 			</div>
