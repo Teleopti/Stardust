@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 				var viewer = new ReportViewer { ProcessingMode = ProcessingMode.Local };
 				viewer.LocalReport.ReportPath = reportPath;
 				var repInfos = viewer.LocalReport.GetParameters();
-
+				
 				foreach (var repInfo in repInfos)
 				{
 					var i = 0;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 						}
 						if (param.ParameterName.ToLower(CultureInfo.CurrentCulture) == "@" + repInfo.Name.ToLower(CultureInfo.CurrentCulture))
 						{
-							@params.Add(new ReportParameter(repInfo.Name, paramtersText[i], false));
+							@params.Add(new ReportParameter(repInfo.Name, truncateTextParameter(paramtersText[i]), false));
 							added = true;
 						}
 						if (!added && repInfo.Name == "culture")
@@ -90,6 +90,17 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 					Extension = extension
 				};
 			}
+		}
+
+		private string truncateTextParameter(string text)
+		{
+			if (string.IsNullOrEmpty(text))
+				return text;
+			int maxStringLengthAllowed = 32767;
+			if (text.Length > maxStringLengthAllowed)
+				return text.Substring(0, maxStringLengthAllowed - 3) + "...";
+
+			return text;
 		}
 
 		private static string formatToString(ReportFormat format)
