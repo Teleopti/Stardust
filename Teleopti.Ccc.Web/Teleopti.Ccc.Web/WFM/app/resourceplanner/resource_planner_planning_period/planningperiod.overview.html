@@ -2,7 +2,7 @@
 	<div class="con-row">
 		<div class="con-flex pp-panel">
 			<span ng-show="vm.selectedPp == null"><i class="mdi mdi-information-outline"></i> Select a planning period</span>
-			<span ng-show="vm.selectedPp">Selected pp: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
+			<span ng-show="vm.selectedPp">Selected Period: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
 			<span class="pp-status" ng-show="vm.isRunning()">{{vm.status}}</span>
 		</div>
 		<div class="con-flex" ng-if="vm.show == false;">
@@ -54,10 +54,10 @@
 						</div>
 						<div class="con-row">
 							<div class="con-flex result-container">
-								<div class="legends">
-									<span class="pp-agentnumber"> 
-										{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}
-									</span>
+								<span class="pp-agentnumber"> 
+									{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}
+								</span>
+								<div class="legends" ng-show="vm.dayNodes.length > 0">
 									<span>
 										<div class="legend critUnderstaffed"></div>
 										{{'CriticalUnderstaffingColon' | translate}}
@@ -109,6 +109,11 @@
 						<span class="pp-validation" ng-if="vm.totalValidationNumbers > 0">{{vm.totalValidationNumbers}}</span>
 					</md-tab-label>
 					<md-tab-body class="md-padding">
+						<div class="con-row" ng-show="vm.preValidation.length == 0 && vm.scheduleIssues.length == 0 ">
+							<div class="con-flex">
+								<span><i class="mdi mdi-information-outline"></i>There are no validation errors for this planning period</span>
+							</div>
+						</div>
 						<div class="con-row" ng-show="vm.preValidation.length > 0">
 							<div class="con-flex">
 								<span>Pre-validation Errors</span>
