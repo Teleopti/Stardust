@@ -65,6 +65,7 @@
     <Compile Include="MultiSkilledGoldSilverBronzeAgentSameDayTest.cs" />
     <Compile Include="MultiSkilledGoldSilverBronzeAgentBulkTest.cs" />
     <Compile Include="SingleSkilledBronzeAgentActivityCasesBulkTest.cs" />
+    <Compile Include="SingleSkilledBronzeAgentActivityCasesSameDayShiftOpenHourTest.cs" />
     <Compile Include="SingleSkilledBronzeAgentFullDayBulkTest.cs" />
     <Compile Include="SingleSkilledBronzeAgentActivityCasesSameDayTest.cs" />
     <Compile Include="SingleSkilledGoldAgentSameDayTest.cs" />
