@@ -149,16 +149,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var errorMessageColumnIndex = columnsCount;
 			var warningMessageColumnIndex = columnsCount + 1;
 
-			newSheet.GetRow(0).CreateCell(errorMessageColumnIndex).SetCellValue("ErrorMessage");
-			newSheet.GetRow(0).CreateCell(warningMessageColumnIndex).SetCellValue("WarningMessage");
+			var hasErrorMessages = agents.Any(a => !a.Feedback.ErrorMessages.IsNullOrEmpty());
+			var hasWarningMessages = agents.Any(a => !a.Feedback.WarningMessages.IsNullOrEmpty());
+
+			if (hasErrorMessages)
+			{
+				newSheet.GetRow(0).CreateCell(errorMessageColumnIndex).SetCellValue("ErrorMessage");
+			}
+			if (hasWarningMessages)
+			{
+				newSheet.GetRow(0).CreateCell(warningMessageColumnIndex).SetCellValue("WarningMessage");
+			}
 
 			for (var i = 0; i < agents.Count; i++)
 			{
 				var sourceRow = agents[i].Row;
 				var newRow = newSheet.CreateRow(i + 1);
 				sourceRow.CopyTo(newRow, 0, columnsCount - 1);
-				newRow.CreateCell(errorMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.ErrorMessages));
-				newRow.CreateCell(warningMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.WarningMessages));
+				if (hasErrorMessages)
+				{
+					newRow.CreateCell(errorMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.ErrorMessages));
+				}
+				if (hasWarningMessages)
+				{
+					newRow.CreateCell(warningMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.WarningMessages));
+				}
 			}
 			returnedFile.Write(ms);
 			return ms;
