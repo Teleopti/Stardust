@@ -189,7 +189,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			setSelectedDatesPreferences(postDates, preference, validationErrorCallback);
 			periodFeedbackViewModel.LoadFeedback();
 			updateSelectedDatesAndNeighbors(postDates);
-			periodFeedbackViewModel.PossibleNightRestViolations();
+            periodFeedbackViewModel.PossibleNightRestViolations();
+            if (cb) cb();
 		} else {
 			$('#Preference-body-inner .ui-selected').each(function(index, cell) {
 				var date = $(cell).data('mytime-date');
