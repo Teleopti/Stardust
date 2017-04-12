@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Timers;
+﻿using System.Timers;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;

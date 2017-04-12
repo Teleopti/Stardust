@@ -5,11 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Security.Policy;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using log4net;
 using log4net.Config;
+using log4net.Repository.Hierarchy;
 using Stardust.Node;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -78,20 +81,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			bool.TryParse(ConfigurationManager.AppSettings["UseRhino"], out useRhino);
 
-			if (useRhino)
-			{
-				logger.Debug("Using rhino and it services");
+		    if (useRhino)
+		    {
+		        logger.Debug("Using rhino and it services");
 
-				_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-				_generalBus.Start();
+		        _generalBus = new ConfigFileDefaultHost("GeneralQueue.config",
+		            new GeneralBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
+		        _generalBus.Start();
 
-				_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-				_requestBus.Start();
+		        _requestBus = new ConfigFileDefaultHost("RequestQueue.config",
+		            new BusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
+		        _requestBus.Start();
 
-				_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-				_denormalizeBus.Start();
-			}
-			AppDomain.MonitoringIsEnabled = true;
+		        _denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config",
+		            new DenormalizeBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
+		        _denormalizeBus.Start();
+		    }
+		    else
+		    {
+		        try
+		        {
+		            AppDomain.CurrentDomain.SetThreadPrincipal(new GenericPrincipal(new GenericIdentity("Anonymous"),
+		                new string[] {}));
+		        }
+		        catch (PolicyException)
+		        {
+		            //no way of knowing if the the principal is set or not
+		        }
+		    }
+		    AppDomain.MonitoringIsEnabled = true;
 
 			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
 
