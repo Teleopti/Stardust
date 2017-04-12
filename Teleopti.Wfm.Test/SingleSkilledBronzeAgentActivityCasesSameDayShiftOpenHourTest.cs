@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -32,8 +31,7 @@ namespace Teleopti.Wfm.Test
 		public IPersonRepository PersonRepository;
 		public IAbsenceRequestIntradayFilter AbsenceRequestIntradayFilter;
 		public IPersonRequestRepository PersonRequestRepository;
-		public MutableNow Now;
-
+		
 
 		[SetUp]
 		public void Setup()
