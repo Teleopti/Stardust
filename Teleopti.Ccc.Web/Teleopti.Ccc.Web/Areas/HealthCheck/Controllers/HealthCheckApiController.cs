@@ -104,8 +104,11 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 							{
 								result.Add(new Tuple<string, bool, string>(value, false, "Skip"));
 							}
-							var pingResult = pingAddress(uri);
-							result.Add(new Tuple<string, bool, string>(value, pingResult.Item1, pingResult.Item2));
+							else
+							{
+								var pingResult = pingAddress(uri);
+								result.Add(new Tuple<string, bool, string>(value, pingResult.Item1, pingResult.Item2));
+							}
 						}
 					}
 					return result;
