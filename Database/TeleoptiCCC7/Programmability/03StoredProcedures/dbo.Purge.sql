@@ -54,6 +54,8 @@ if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPersons')
 	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPersons', 10)
 if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepReadmodels')
 	insert into PurgeSetting ([Key], [Value]) values('DaysToKeepReadmodels', 30)
+if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepJobResultArtifacts')
+	insert into PurgeSetting ([Key], [Value]) values('DaysToKeepJobResultArtifacts', 30)
 
 --Persons who has left, i.e. with a since long past leaving date
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPersons'),getdate())
@@ -512,6 +514,20 @@ begin
 	delete top (1000) Note
 	from Note pa
 	inner join Scenario s on s.id = pa.Scenario and s.IsDeleted = 1 and s.DefaultScenario <> 1
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+--delete job result artifacts according to purge setting
+select @KeepUntil = DATEADD(day, -1*(select isnull(Value, 30) from PurgeSetting where [Key] = 'DaysToKeepJobResultArtifacts'), GETDATE())
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) dbo.JobResultArtifact
+	where CreateTime < @KeepUntil
 
 	select @RowCount = @@rowcount
 	if datediff(second,@start,getdate()) > @timeout 
