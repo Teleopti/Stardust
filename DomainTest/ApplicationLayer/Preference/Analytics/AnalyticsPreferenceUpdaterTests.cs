@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -11,163 +10,148 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
-	public class AnalyticsPreferenceUpdaterTests
+	[DomainTestWithStaticDependenciesAvoidUse]
+	public class AnalyticsPreferenceUpdaterTests : ISetup
 	{
-		private AnalyticsPreferenceUpdater _target;
-		private IAnalyticsPersonPeriodRepository _personPeriodRepository;
-		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
-		private IPreferenceDayRepository _preferenceDayRepository;
-		private IScenarioRepository _scenarioRepository;
-		private IScheduleStorage _scheduleStorage;
-		private IAnalyticsPreferenceRepository _analyticsPreferenceRepository;
-		private IAnalyticsDateRepository _analyticsDateRepository;
-		private FakePersonRepository _personRepository;
-		private FakeAnalyticsDayOffRepository _analyticsDayOffRepository;
-		private FakeAnalyticsScenarioRepository _analyticsScenarioRepository;
-		private FakeAnalyticsAbsenceRepository _analyticsAbsenceRepository;
-		private FakeAnalyticsShiftCategoryRepository _analyticsShiftCategoryRepository;
+		public AnalyticsPreferenceUpdater Target;
+		public IAnalyticsPersonPeriodRepository PersonPeriodRepository;
+		public IPreferenceDayRepository PreferenceDayRepository;
+		public IScenarioRepository ScenarioRepository;
+		public IScheduleStorage ScheduleStorage;
+		public IAnalyticsPreferenceRepository AnalyticsPreferenceRepository;
+		public FakeAnalyticsDateRepository AnalyticsDateRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeAnalyticsDayOffRepository AnalyticsDayOffRepository;
+		public FakeAnalyticsScenarioRepository AnalyticsScenarioRepository;
+		public FakeAnalyticsAbsenceRepository AnalyticsAbsenceRepository;
+		public FakeAnalyticsShiftCategoryRepository AnalyticsShiftCategoryRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
+		private readonly Guid _businessUnitId = Guid.NewGuid();
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_personPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
+			system.AddService<AnalyticsPreferenceUpdater>();
+		}
 
-			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
-			_preferenceDayRepository = new FakePreferenceDayRepository();
-			_scenarioRepository = new FakeScenarioRepository();
-			_scheduleStorage = new FakeScheduleDataReadScheduleStorage();
-			_analyticsPreferenceRepository = new FakeAnalyticsPreferenceRepository();
-			_analyticsDateRepository = new FakeAnalyticsDateRepository(
-				new DateTime(2001, 01, 01),
-				new DateTime(2002, 12, 31));
-			_personRepository = new FakePersonRepositoryLegacy2();
-			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
-			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
-			_analyticsAbsenceRepository = new FakeAnalyticsAbsenceRepository(
-				new List<AnalyticsAbsence>
-				{
-					new AnalyticsAbsence {AbsenceCode = Guid.Empty, AbsenceId = -1},
-					new AnalyticsAbsence {AbsenceCode = Guid.NewGuid(), AbsenceId = 1}
-				});
-
-			_analyticsShiftCategoryRepository = new FakeAnalyticsShiftCategoryRepository(
-				new List<AnalyticsShiftCategory>
-				{
-					new AnalyticsShiftCategory {ShiftCategoryCode = Guid.Empty, ShiftCategoryId = -1},
-					new AnalyticsShiftCategory {ShiftCategoryCode = Guid.NewGuid(), ShiftCategoryId = 1}
-				});
-			_target = new AnalyticsPreferenceUpdater(
-				_scenarioRepository,
-				_preferenceDayRepository,
-				_personPeriodRepository,
-				_analyticsBusinessUnitRepository,
-				_analyticsDateRepository,
-				_scheduleStorage,
-				_analyticsPreferenceRepository,
-				_personRepository,
-				_analyticsDayOffRepository,
-				_analyticsScenarioRepository,
-				_analyticsAbsenceRepository,
-				_analyticsShiftCategoryRepository);
+		private void setup()
+		{
+			AnalyticsDateRepository.HasDatesBetween(new DateTime(2001, 01, 01), new DateTime(2002, 12, 31));
+			AnalyticsAbsenceRepository.AddAbsence(new AnalyticsAbsence { AbsenceCode = Guid.Empty, AbsenceId = -1 });
+			AnalyticsAbsenceRepository.AddAbsence(new AnalyticsAbsence { AbsenceCode = Guid.NewGuid(), AbsenceId = 1 });
+			AnalyticsShiftCategoryRepository.AddShiftCategory(new AnalyticsShiftCategory { ShiftCategoryCode = Guid.Empty, ShiftCategoryId = -1 });
+			AnalyticsShiftCategoryRepository.AddShiftCategory(new AnalyticsShiftCategory { ShiftCategoryCode = Guid.NewGuid(), ShiftCategoryId = 1 });
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 		}
 
 		[Test]
 		public void ShouldHandleEventForNewScenario()
 		{
+			setup();
+
 			var date1 = new DateTime(2001, 1, 1);
 			IPerson person;
 			IScenario scenario;
 			var preferenceDay = setupValidPreferenceDay(date1, out person, out scenario);
 
-			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
+			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(date1).DateId,
+				DateId = AnalyticsDateRepository.Date(date1).DateId,
 				ScenarioId = 123 // Not matched
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
 
-			_target.Handle(new PreferenceChangedEvent
+			Target.Handle(new PreferenceChangedEvent
 			{
 				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
 				RestrictionDate = date1,
-				ScenarioId = scenario.Id.GetValueOrDefault()
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = _businessUnitId
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
 		}
 
 		[Test]
 		public void ShouldHandleEventForNotNewScenario()
 		{
+			setup();
+
 			var date1 = new DateTime(2001, 1, 1);
 			IPerson person;
 			IScenario scenario;
 			var preferenceDay = setupValidPreferenceDay(date1, out person, out scenario);
 
-			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
+			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(date1).DateId,
+				DateId = AnalyticsDateRepository.Date(date1).DateId,
 				ScenarioId = 123 // Not matched
 			});
-			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
+			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(date1).DateId,
+				DateId = AnalyticsDateRepository.Date(date1).DateId,
 				ScenarioId = 0 // Matched
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
 
-			_target.Handle(new PreferenceChangedEvent
+			Target.Handle(new PreferenceChangedEvent
 			{
 				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
 				RestrictionDate = date1,
-				ScenarioId = scenario.Id.GetValueOrDefault()
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = _businessUnitId
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
 		}
 
 		[Test]
 		public void ShouldHandleDeletedPreferenceDay()
 		{
+			setup();
+
 			var date = new DateTime(2001, 1, 1);
 			var person = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
 			var personPeriodCode = Guid.NewGuid();
 			person.AddPersonPeriod(newTestPersonPeriod(date, personPeriodCode));
-			_personPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
-			_personRepository.Add(person);
-			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
+			PersonPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
+			PersonRepository.Add(person);
+			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(date).DateId
+				DateId = AnalyticsDateRepository.Date(date).DateId
 			});
 
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
 
-			_target.Handle(new PreferenceDeletedEvent
+			Target.Handle(new PreferenceDeletedEvent
 			{
 				PreferenceDayId = Guid.NewGuid(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = date
+				RestrictionDate = date,
+				LogOnBusinessUnitId = _businessUnitId
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(0);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldHandleAndHaveFulfillment()
 		{
+			setup();
+
 			var date = new DateTime(2001, 1, 1);
 			var preferenceRestriction = new PreferenceRestriction
 			{
@@ -180,138 +164,152 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, ActivityFactory.CreateActivity("sdfsdf"), new DateTimePeriod(2001, 1, 1, 2002, 1, 1), preferenceRestriction.ShiftCategory);
 
-			_scheduleStorage.Add(assignment);
+			ScheduleStorage.Add(assignment);
 
-			_target.Handle(new PreferenceChangedEvent
+			Target.Handle(new PreferenceChangedEvent
 			{
 				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = date
+				RestrictionDate = date,
+				LogOnBusinessUnitId = _businessUnitId
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
-			_analyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesFulfilled.Should().Be.EqualTo(1);
-			_analyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesUnfulfilled.Should().Be.EqualTo(0);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesFulfilled.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesUnfulfilled.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldHandleDeleteAndAddPreference()
 		{
+			setup();
+
 			IPerson person;
 			IScenario scenario;
 			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person, out scenario);
 
-			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
+			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId
+				DateId = AnalyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId
 			});
-			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
+			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(new DateTime(2001, 1, 2)).DateId
+				DateId = AnalyticsDateRepository.Date(new DateTime(2001, 1, 2)).DateId
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
 
-			_target.Handle(new PreferenceChangedEvent
+			Target.Handle(new PreferenceChangedEvent
 			{
 				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1)
+				RestrictionDate = new DateTime(2001, 1, 1),
+				LogOnBusinessUnitId = _businessUnitId
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
-			_analyticsPreferenceRepository.PreferencesForPerson(0).First(a => a.DateId == _analyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId).PreferencesFulfilled.Should().Be.EqualTo(0);
-			_analyticsPreferenceRepository.PreferencesForPerson(0).First(a => a.DateId == _analyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId).PreferencesUnfulfilled.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).First(a => a.DateId == AnalyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId).PreferencesFulfilled.Should().Be.EqualTo(0);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).First(a => a.DateId == AnalyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId).PreferencesUnfulfilled.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldHandleAndAddPreference()
 		{
+			setup();
+
 			IPerson person;
 			IScenario scenario;
 			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person, out scenario);
 
-			_target.Handle(new PreferenceChangedEvent
+			Target.Handle(new PreferenceChangedEvent
 			{
 				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1)
+				RestrictionDate = new DateTime(2001, 1, 1),
+				LogOnBusinessUnitId = _businessUnitId
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
-			_analyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesFulfilled.Should().Be.EqualTo(0);
-			_analyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesUnfulfilled.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesFulfilled.Should().Be.EqualTo(0);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesUnfulfilled.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldHandleSameEventTwicePreference()
 		{
+			setup();
+
 			IPerson person;
 			IScenario scenario;
 			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person, out scenario);
 
-			_target.Handle(new PreferenceChangedEvent
+			Target.Handle(new PreferenceChangedEvent
 			{
 				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1)
+				RestrictionDate = new DateTime(2001, 1, 1),
+				LogOnBusinessUnitId = _businessUnitId
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
-			_target.Handle(new PreferenceChangedEvent
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
+			Target.Handle(new PreferenceChangedEvent
 			{
 				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1)
+				RestrictionDate = new DateTime(2001, 1, 1),
+				LogOnBusinessUnitId = _businessUnitId
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
-			_analyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesFulfilled.Should().Be.EqualTo(0);
-			_analyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesUnfulfilled.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesFulfilled.Should().Be.EqualTo(0);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesUnfulfilled.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldHandleAndMapEverything()
 		{
+			setup();
+
 			var date = new DateTime(2001, 1, 1);
 			var preferenceRestriction = new PreferenceRestriction
 			{
-				ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej").WithId(_analyticsShiftCategoryRepository.ShiftCategories().First(a => a.ShiftCategoryId == 1).ShiftCategoryCode),
-				Absence = AbsenceFactory.CreateAbsence("Absence").WithId(_analyticsAbsenceRepository.Absences().First(a => a.AbsenceId == 1).AbsenceCode),
+				ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej").WithId(AnalyticsShiftCategoryRepository.ShiftCategories().First(a => a.ShiftCategoryId == 1).ShiftCategoryCode),
+				Absence = AbsenceFactory.CreateAbsence("Absence").WithId(AnalyticsAbsenceRepository.Absences().First(a => a.AbsenceId == 1).AbsenceCode),
 				DayOffTemplate = DayOffFactory.CreateDayOff().WithId(),
 				MustHave = true
 			};
 
-			_analyticsDayOffRepository.AddOrUpdate(new AnalyticsDayOff { DayOffName = preferenceRestriction.DayOffTemplate.Description.Name,
+			AnalyticsDayOffRepository.AddOrUpdate(new AnalyticsDayOff { DayOffName = preferenceRestriction.DayOffTemplate.Description.Name,
 				DayOffCode = preferenceRestriction.DayOffTemplate.Id.GetValueOrDefault(), BusinessUnitId = 1});
 
 			var person = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
-			_personRepository.Add(person);
+			PersonRepository.Add(person);
 			var personPeriodCode = Guid.NewGuid();
 			person.AddPersonPeriod(newTestPersonPeriod(date, personPeriodCode));
-			_personPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
+			PersonPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
 
 			var scenario = new FakeCurrentScenario().Current();
 			scenario.DefaultScenario = true;
 			scenario.EnableReporting = true;
-			_scenarioRepository.Add(scenario);
-			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenario.Id.GetValueOrDefault(), ScenarioId = 1});
+			ScenarioRepository.Add(scenario);
+			AnalyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenario.Id.GetValueOrDefault(), ScenarioId = 1});
 
 			var preferenceDay = new PreferenceDay(person, new DateOnly(date), preferenceRestriction);
 			preferenceDay.WithId();
-			_scheduleStorage.Add(preferenceDay);
-			_preferenceDayRepository.Add(preferenceDay);
+			ScheduleStorage.Add(preferenceDay);
+			PreferenceDayRepository.Add(preferenceDay);
 
-			_target.Handle(new PreferenceChangedEvent
+			Target.Handle(new PreferenceChangedEvent
 			{
 				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1)
+				RestrictionDate = new DateTime(2001, 1, 1),
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
-			var item = _analyticsPreferenceRepository.PreferencesForPerson(0).First();
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
+			var item = AnalyticsPreferenceRepository.PreferencesForPerson(0).First();
 			item.AbsenceId.Should().Be.EqualTo(1);
 			item.DayOffId.Should().Be.EqualTo(1);
 			item.ShiftCategoryId.Should().Be.EqualTo(1);
 			item.DatasourceId.Should().Be.EqualTo(1);
-			item.DateId.Should().Be.EqualTo(_analyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId);
+			item.DateId.Should().Be.EqualTo(AnalyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId);
 			item.ScenarioId.Should().Be.EqualTo(1);
 			item.BusinessUnitId.Should().Be.EqualTo(1);
 			item.IntervalId.Should().Be.EqualTo(0);
@@ -323,16 +321,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		[Test]
 		public void ShouldHandleEventWithInvalidRestriction()
 		{
+			setup();
+
 			IPerson person;
 			var preferenceDay = setupInvalidPreferenceDay(new DateTime(2001, 1, 1), out person);
 
-			_target.Handle(new PreferenceChangedEvent
+			Target.Handle(new PreferenceChangedEvent
 			{
 				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1)
+				RestrictionDate = new DateTime(2001, 1, 1),
+				LogOnBusinessUnitId = _businessUnitId
 			});
-			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(0);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(0);
 		}
 
 		private static PersonPeriod newTestPersonPeriod(DateTime startDate, Guid? id = null)
@@ -352,21 +353,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		private PreferenceDay setupPreferenceDay(DateTime date, IPreferenceRestriction preferenceRestriction, out IPerson person, out IScenario scenario)
 		{
 			person = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
-			_personRepository.Add(person);
+			PersonRepository.Add(person);
 			var personPeriodCode = Guid.NewGuid();
 			person.AddPersonPeriod(newTestPersonPeriod(date, personPeriodCode));
-			_personPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
+			PersonPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
 
 			scenario = new FakeCurrentScenario().Current();
 			scenario.DefaultScenario = true;
 			scenario.EnableReporting = true;
-			_scenarioRepository.Add(scenario);
-			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenario.Id.GetValueOrDefault() });
+			ScenarioRepository.Add(scenario);
+			AnalyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenario.Id.GetValueOrDefault() });
 
 			var preferenceDay = new PreferenceDay(person, new DateOnly(date), preferenceRestriction);
 			preferenceDay.WithId();
-			_scheduleStorage.Add(preferenceDay);
-			_preferenceDayRepository.Add(preferenceDay);
+			ScheduleStorage.Add(preferenceDay);
+			PreferenceDayRepository.Add(preferenceDay);
 			return preferenceDay;
 		}
 

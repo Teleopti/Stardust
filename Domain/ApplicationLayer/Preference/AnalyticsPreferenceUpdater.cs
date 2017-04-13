@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			logger.Info("New instance of handler was created");
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
 		[Attempts(10)]
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			_analyticsPreferenceRepository.DeletePreferences(analyticsDate.DateId, analyticsPersonPeriod.PersonId);
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
 		[Attempts(10)]
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			commonHandle(@event.PreferenceDayId, @event.RestrictionDate.Date, @event.PersonId, @event.ScenarioId);
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
 		[Attempts(10)]

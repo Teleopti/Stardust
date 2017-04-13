@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -11,15 +10,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsFactSchedulePersonMapperTest : ISetup
+	public class AnalyticsFactSchedulePersonMapperTest
 	{
 		public IAnalyticsFactSchedulePersonMapper Target;
 		public FakeAnalyticsPersonPeriodRepository AnalyticsPersonPeriods;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.AddService<FakeAnalyticsPersonPeriodRepository>();
-		}
 
 		[Test]
 		public void ShouldGetDataFromRepository()
@@ -41,6 +35,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			result.BusinessUnitId.Should().Be.EqualTo(-1);
 			result.PersonId.Should().Be.EqualTo(-1);
 		}
-		
 	}
 }

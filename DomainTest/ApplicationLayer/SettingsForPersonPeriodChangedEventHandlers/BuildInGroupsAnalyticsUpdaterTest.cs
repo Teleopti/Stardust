@@ -8,50 +8,46 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
 {
 	[TestFixture]
-	public class BuildInGroupsAnalyticsUpdaterTest
+	[DomainTest]
+	public class BuildInGroupsAnalyticsUpdaterTest : ISetup
 	{
-		private BuildInGroupsAnalyticsUpdater _target;
-		private IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
-		private ISkillRepository _skillRepository;
-		private IPartTimePercentageRepository _partTimePercentageRepository;
-		private IRuleSetBagRepository _ruleSetBagRepository;
-		private IContractRepository _contractRepository;
-		private IContractScheduleRepository _contractScheduleRepository;
-		private Guid _businessUnitId;
+		public BuildInGroupsAnalyticsUpdater Target;
+		public IAnalyticsGroupPageRepository AnalyticsGroupPageRepository;
+		public ISkillRepository SkillRepository;
+		public IPartTimePercentageRepository PartTimePercentageRepository;
+		public IRuleSetBagRepository RuleSetBagRepository;
+		public IContractRepository ContractRepository;
+		public IContractScheduleRepository ContractScheduleRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
+		private readonly Guid _businessUnitId = Guid.NewGuid();
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_analyticsGroupPageRepository = new FakeAnalyticsGroupPageRepository();
-			_skillRepository = new FakeSkillRepository();
-			_partTimePercentageRepository = new FakePartTimePercentageRepository();
-			_ruleSetBagRepository = new FakeRuleSetBagRepository();
-			_contractRepository = new FakeContractRepository();
-			_contractScheduleRepository = new FakeContractScheduleRepository();
-
-			_target = new BuildInGroupsAnalyticsUpdater(_analyticsGroupPageRepository, _skillRepository, _partTimePercentageRepository, _ruleSetBagRepository, _contractRepository, _contractScheduleRepository);
-			_businessUnitId = Guid.NewGuid();
+			system.AddService<BuildInGroupsAnalyticsUpdater>();
 		}
 
 		[Test]
 		public void ShouldUpdatePartTimePercentage()
 		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId});
-			_partTimePercentageRepository.Add(new PartTimePercentage(updateGroupName).WithId(entityId));
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId});
+			PartTimePercentageRepository.Add(new PartTimePercentage(updateGroupName).WithId(entityId));
 
-			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
+			Target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
 				.GroupName.Should()
 				.Be.EqualTo(updateGroupName);
 		}
@@ -59,14 +55,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldUpdateRuleSetBag()
 		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
-			_ruleSetBagRepository.Add(new RuleSetBag { Description = new Description(updateGroupName) }.WithId(entityId));
-			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
+			RuleSetBagRepository.Add(new RuleSetBag { Description = new Description(updateGroupName) }.WithId(entityId));
+			Target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
 				.GroupName.Should()
 				.Be.EqualTo(updateGroupName);
 		}
@@ -74,15 +71,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldUpdateContract()
 		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
-			_contractRepository.Add(new Contract(updateGroupName).WithId(entityId));
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
+			ContractRepository.Add(new Contract(updateGroupName).WithId(entityId));
 
-			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
+			Target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
 				.GroupName.Should()
 				.Be.EqualTo(updateGroupName);
 		}
@@ -90,15 +88,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldUpdateContractSchedule()
 		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
-			_contractScheduleRepository.Add(new ContractSchedule(updateGroupName).WithId(entityId));
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
+			ContractScheduleRepository.Add(new ContractSchedule(updateGroupName).WithId(entityId));
 
-			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
+			Target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
 				.GroupName.Should()
 				.Be.EqualTo(updateGroupName);
 		}
@@ -106,17 +105,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldUpdateSkill()
 		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
 			var skill = new Domain.Forecasting.Skill("_").WithId(entityId);
 			skill.ChangeName(updateGroupName);
-			_skillRepository.Add(skill);
+			SkillRepository.Add(skill);
 
-			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
+			Target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
 				.GroupName.Should()
 				.Be.EqualTo(updateGroupName);
 		}
@@ -124,24 +124,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldNotUpdateIfNotExisting()
 		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var entityId = Guid.NewGuid();
 
-			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
+			Target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
 				.Should().Be.Null();
 		}
 
 		[Test]
 		public void ShouldNotUpdateIfNotSpecificType()
 		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var entityId = Guid.NewGuid();
 
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
 
-			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
+			Target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
 				.GroupName.Should()
 				.Be.EqualTo("GroupName");
 		}

@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsFactScheduleDateMapperTest : ISetup
+	public class AnalyticsFactScheduleDateMapperTest
 	{
 		public IAnalyticsFactScheduleDateMapper Target;
 		public FakeAnalyticsDateRepository AnalyticsDates;
@@ -26,11 +25,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private const int minutesPerInterval = 15;
 		private DateTime _scheduleChangeTime;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.AddService(new FakeAnalyticsDateRepository(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1));
-		}
-
 		[SetUp]
 		public void Setup()
 		{
@@ -41,20 +35,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_layer = new ProjectionChangedEventLayer
 			{
 				StartDateTime = _shiftStartDateUtc,
-				EndDateTime = _shiftEndDateUtc,
+				EndDateTime = _shiftEndDateUtc
 			};
 		}
 
 		[Test]
 		public void ShouldMapShiftStartDateLocalToId()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
+
 			analyticsFactScheduleDate.ScheduleStartDateLocalId.Should().Be.EqualTo(secondDateId);
 		}
 
 		[Test]
 		public void ShouldMapScheduleDateUtcToId()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.ScheduleDateId.Should().Be.EqualTo(firstDateId);
 		}
@@ -62,6 +61,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnNullWhenShiftStartLocalDateIdNotFound()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, new DateOnly(1974, 12, 27), _layer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.Should().Be.Null();
 		}
@@ -69,6 +70,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnNullWhenShiftStartUtcDateIdNotFound()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(new DateTime(1974, 12, 27), _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.Should().Be.Null();
 		}
@@ -76,6 +79,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnNullWhenActivityStartDateIdNotFound()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var invalidLayer = new ProjectionChangedEventLayer
 			{
 				StartDateTime = new DateTime(2014, 12, 1, 0, 0, 0, DateTimeKind.Utc),
@@ -88,6 +93,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldCreateDatesAndMapWhenActivityEndDateIdNotFound()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var invalidLayer = new ProjectionChangedEventLayer
 			{
 				StartDateTime = new DateTime(2014, 12, 3, 0, 0, 0, DateTimeKind.Utc),
@@ -104,6 +111,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnNullWhenShiftStartDateIdNotFound()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var invalidLayer = new ProjectionChangedEventLayer
 			{
 				StartDateTime = new DateTime(2014, 12, 3, 0, 0, 0, DateTimeKind.Utc),
@@ -117,6 +126,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldCreateDatesAndMapWhenShiftEndDateIdNotFound()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var invalidLayer = new ProjectionChangedEventLayer
 			{
 				StartDateTime = new DateTime(2014, 12, 3, 0, 0, 0, DateTimeKind.Utc),
@@ -134,6 +145,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapActivityStart()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.ActivityStartTime.Should().Be.EqualTo(_layer.StartDateTime);
 			analyticsFactScheduleDate.ActivityStartDateId.Should().Be.EqualTo(firstDateId);
@@ -142,6 +155,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapActivityEnd()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.ActivityEndTime.Should().Be.EqualTo(_layer.EndDateTime);
 			analyticsFactScheduleDate.ActivityEndDateId.Should().Be.EqualTo(secondDateId);
@@ -150,6 +165,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapShiftStart()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.ShiftStartTime.Should().Be.EqualTo(_shiftStartDateUtc);
 			analyticsFactScheduleDate.ShiftStartDateId.Should().Be.EqualTo(firstDateId);
@@ -158,6 +175,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapShiftEnd()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.ShiftEndTime.Should().Be.EqualTo(_shiftEndDateUtc);
 			analyticsFactScheduleDate.ShiftEndDateId.Should().Be.EqualTo(secondDateId);
@@ -166,6 +185,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapLayerStartToIntervalId()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.IntervalId.Should().Be.EqualTo(92);
 		}
@@ -173,6 +194,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapShiftTimesToIntervalId()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.ShiftStartIntervalId.Should().Be.EqualTo(92);
 			analyticsFactScheduleDate.ShiftEndIntervalId.Should().Be.EqualTo(11);
@@ -181,6 +204,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapDatasourceUpdateDate()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.DatasourceUpdateDate.Should().Be.EqualTo(_scheduleChangeTime);
 		}

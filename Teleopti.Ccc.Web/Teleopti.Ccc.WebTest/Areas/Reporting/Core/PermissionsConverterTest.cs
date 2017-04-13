@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<PermissionsConverter>();
-			system.AddService<FakeAnalyticsTeamRepository>();
 		}
 
 		[Test]

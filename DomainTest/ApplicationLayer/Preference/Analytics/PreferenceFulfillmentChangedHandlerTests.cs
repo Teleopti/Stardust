@@ -12,34 +12,34 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 {
 	[TestFixture]
-	public class PreferenceFulfillmentChangedHandlerTests
+	[DomainTest]
+	public class PreferenceFulfillmentChangedHandlerTests : ISetup
 	{
-		private PreferenceFulfillmentChangedHandler _target;
-		private IPreferenceDayRepository _preferenceDayRepository;
-		private FakePersonRepository _personRepository;
-		private FakeEventPublisher _eventPublisher;
+		public PreferenceFulfillmentChangedHandler Target;
+		public IPreferenceDayRepository PreferenceDayRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeEventPublisher EventPublisher;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_preferenceDayRepository = new FakePreferenceDayRepository();
-			_personRepository = new FakePersonRepositoryLegacy2();
-			_eventPublisher = new FakeEventPublisher();
-
-			_target = new PreferenceFulfillmentChangedHandler(_preferenceDayRepository, _personRepository, _eventPublisher);
+			system.AddService<PreferenceFulfillmentChangedHandler>();
 		}
 
 		[Test]
 		public void ShouldPublishEvent()
 		{
-			var person = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
-			person.WithId();
-			_personRepository.Add(person);
-			_preferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
+			var businessUnitId = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
+			var person = PersonFactory.CreatePerson("firstName", "lastName").WithId();
+			PersonRepository.Add(person);
+			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
 
 			var list = new Collection<ProjectionChangedEventScheduleDay>
 			{
@@ -49,24 +49,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				}
 			};
 
-			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
-			_target.Handle(new ProjectionChangedEvent
+			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			Target.Handle(new ProjectionChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				ScheduleDays = list
+				ScheduleDays = list,
+				LogOnBusinessUnitId = businessUnitId
 			});
 
-			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldPublishTwoEvents()
 		{
-			var person = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
-			person.WithId();
-			_personRepository.Add(person);
-			_preferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
-			_preferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today.AddDays(1), new PreferenceRestriction()));
+			var businessUnitId = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
+			var person = PersonFactory.CreatePerson("firstName", "lastName").WithId();
+			PersonRepository.Add(person);
+			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
+			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today.AddDays(1), new PreferenceRestriction()));
 
 			var list = new Collection<ProjectionChangedEventScheduleDay>
 			{
@@ -80,24 +82,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				}
 			};
 
-			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
-			_target.Handle(new ProjectionChangedEvent
+			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			Target.Handle(new ProjectionChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				ScheduleDays = list
+				ScheduleDays = list,
+				LogOnBusinessUnitId = businessUnitId
 			});
 
-			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(2);
+			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
 		public void ShouldPublishOneEvents()
 		{
-			var person = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
-			person.WithId();
-			_personRepository.Add(person);
-			_preferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
-			_preferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today.AddDays(1), new PreferenceRestriction()));
+			var businessUnitId = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
+			var person = PersonFactory.CreatePerson("firstName", "lastName").WithId();
+			PersonRepository.Add(person);
+			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
+			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today.AddDays(1), new PreferenceRestriction()));
 
 			var list = new Collection<ProjectionChangedEventScheduleDay>
 			{
@@ -107,22 +111,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				}
 			};
 
-			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
-			_target.Handle(new ProjectionChangedEvent
+			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			Target.Handle(new ProjectionChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				ScheduleDays = list
+				ScheduleDays = list,
+				LogOnBusinessUnitId = businessUnitId
 			});
 
-			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldNotPublishEvent()
 		{
-			var person = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
-			person.WithId();
-			_personRepository.Add(person);
+			var businessUnitId = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
+			var person = PersonFactory.CreatePerson("firstName", "lastName").WithId();
+			PersonRepository.Add(person);
 
 			var list = new Collection<ProjectionChangedEventScheduleDay>
 			{
@@ -132,13 +138,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				}
 			};
 
-			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
-			_target.Handle(new ProjectionChangedEvent
+			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			Target.Handle(new ProjectionChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				ScheduleDays = list
+				ScheduleDays = list,
+				LogOnBusinessUnitId = businessUnitId
 			});
-			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
 		}
 	}
 }

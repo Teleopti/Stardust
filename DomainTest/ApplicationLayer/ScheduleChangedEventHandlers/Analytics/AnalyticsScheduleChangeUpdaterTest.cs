@@ -49,22 +49,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddService<FakeIntervalLengthFetcher>();
-			system.AddService<FakeAnalyticsScheduleRepository>();
-			system.AddService<FakeAnalyticsShiftCategoryRepository>();
-			system.AddService<FakeAnalyticsAbsenceRepository>();
-			system.AddService<FakeAnalyticsActivityRepository>();
-			system.AddService<FakeAnalyticsOvertimeRepository>();
-			system.AddService<FakeAnalyticsScenarioRepository>();
-			system.AddService<FakeAnalyticsPersonPeriodRepository>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
-			system.AddService(new FakeAnalyticsDateRepository(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31)));
 			system.AddService<AnalyticsScheduleChangeUpdater>();
 		}
 
 		[Test]
 		public void ShouldNotTryToSaveScheduleChangeWhenDateIdMappingFails()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
 			var person = PersonFactory.CreatePerson().WithId(personId);
@@ -112,6 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldNotTryToSaveScheduleChangeWhenPersonPeriodMissingFromAnalytics()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
 			var person = PersonFactory.CreatePerson().WithId(personId);
@@ -146,6 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldSaveFactScheduleAndFactScheduleDayCountFromApplicationDatabase()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var shiftCategoryId = Guid.NewGuid();
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
@@ -203,6 +197,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldOnlyDeleteScheduleIfNotScheduled()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
 			var person = PersonFactory.CreatePerson().WithId(personId);
@@ -256,6 +251,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldPersistScheduleDayCountWhenDayOff()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
 			var person = PersonFactory.CreatePerson().WithId(personId);
@@ -312,6 +308,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldPersistScheduleDayCountWhenFullDayAbsence()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
 			var person = PersonFactory.CreatePerson().WithId(personId);
@@ -376,6 +373,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldNotBeHandledScenarioDoesNotExistInAnalytics()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
 			var person = PersonFactory.CreatePerson().WithId(personId);
@@ -419,6 +417,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Toggle(Toggles.ETL_SpeedUpFactScheduleNightly_38019)]
 		public void ShouldNotBeHandledBecauseFilterWhenNotDefaultScenarioAndNotReportable()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
 			var scenario = ScenarioFactory.CreateScenario("Default", false, false).WithId(scenarioId);
 

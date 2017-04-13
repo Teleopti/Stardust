@@ -9,90 +9,90 @@ using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 {
 	[TestFixture]
-	public class AnalyticsWorkloadUpdaterTest
+	[DomainTest]
+	public class AnalyticsWorkloadUpdaterTest : ISetup
 	{
-		private AnalyticsWorkloadUpdater _target;
-		private Guid workloadId;
-		private Guid businessUnitId;
-		private IWorkloadRepository _workloadRepository;
-		private IAnalyticsSkillRepository _analyticsSkillRepository;
-		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
-		private FakeAnalyticsWorkloadRepository _analyticsWorkloadRepository;
+		public AnalyticsWorkloadUpdater Target;
+		public IWorkloadRepository WorkloadRepository;
+		public IAnalyticsSkillRepository AnalyticsSkillRepository;
+		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
+		public FakeAnalyticsWorkloadRepository AnalyticsWorkloadRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		[SetUp]
-		public void Setup()
+		private readonly Guid workloadId = Guid.NewGuid();
+		private readonly Guid businessUnitId = Guid.NewGuid();
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_workloadRepository = new FakeWorkloadRepository();
-			_analyticsSkillRepository = new FakeAnalyticsSkillRepository();
-			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
-			_analyticsWorkloadRepository = new FakeAnalyticsWorkloadRepository();
-
-			_target = new AnalyticsWorkloadUpdater(_workloadRepository, _analyticsSkillRepository, _analyticsBusinessUnitRepository, _analyticsWorkloadRepository);
-			workloadId = Guid.NewGuid();
-			businessUnitId = Guid.NewGuid();
+			system.AddService<AnalyticsWorkloadUpdater>();
 		}
 
 		[Test]
 		public void ShouldDoNothingWhenWorkloadMissing()
 		{
-			_target.Handle(new WorkloadChangedEvent {WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId});
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
+			Target.Handle(new WorkloadChangedEvent {WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId});
 
-			_analyticsWorkloadRepository.Workloads.Should().Be.Empty();
+			AnalyticsWorkloadRepository.Workloads.Should().Be.Empty();
 		}
 
 		[Test]
 		public void ShouldThrowWhenBusinessUnitMissingFromAnalytics()
 		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
 			var skill = SkillFactory.CreateSkill("TestSkill");
 			var workload = WorkloadFactory.CreateWorkload(skill);
 			workload.SetId(workloadId);
-			_workloadRepository.Add(workload);
-			_analyticsBusinessUnitRepository.ReturnNull = true;
+			WorkloadRepository.Add(workload);
+			AnalyticsBusinessUnitRepository.ReturnNull = true;
 
-			Assert.Throws<BusinessUnitMissingInAnalyticsException>(() => _target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId }));
+			Assert.Throws<BusinessUnitMissingInAnalyticsException>(() => Target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId }));
 		}
 
 		[Test]
 		public void ShouldThrowWhenSkillMissingFromAnalytics()
 		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
 			var skill = SkillFactory.CreateSkill("TestSkill");
 			var workload = WorkloadFactory.CreateWorkload(skill);
 			workload.SetId(workloadId);
-			_workloadRepository.Add(workload);
+			WorkloadRepository.Add(workload);
 
-			Assert.Throws<SkillMissingInAnalyticsException>(() => _target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId }));
+			Assert.Throws<SkillMissingInAnalyticsException>(() => Target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId }));
 		}
 
 		[Test]
 		public void ShouldAddWorkloadAndBridge()
 		{
-			var skill = SkillFactory.CreateSkill("TestSkill");
-			skill.SetId(Guid.NewGuid());
-			var workload = WorkloadFactory.CreateWorkload(skill);
-			workload.SetId(workloadId);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
+			var skill = SkillFactory.CreateSkill("TestSkill").WithId();
+			var workload = WorkloadFactory.CreateWorkload(skill).WithId(workloadId);
 			workload.QueueAdjustments = new QueueAdjustment();
 			var queueMartId = 3;
 			workload.AddQueueSource(new QueueSource("TestQueue", "Something", 1, 2, queueMartId, 4));
-			_workloadRepository.Add(workload);
+			WorkloadRepository.Add(workload);
 			var skillId = 123;
 			var analyticsSkill = new AnalyticsSkill {SkillCode = skill.Id.GetValueOrDefault(), SkillId = skillId, SkillName = skill.Name, TimeZoneId = 12};
-			_analyticsSkillRepository.AddOrUpdateSkill(analyticsSkill);
-			_target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId });
+			AnalyticsSkillRepository.AddOrUpdateSkill(analyticsSkill);
+			Target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId });
 
-			_analyticsWorkloadRepository.Workloads.Should().Not.Be.Empty();
-			var analyticsWorkload = _analyticsWorkloadRepository.Workloads.Single();
+			AnalyticsWorkloadRepository.Workloads.Should().Not.Be.Empty();
+			var analyticsWorkload = AnalyticsWorkloadRepository.Workloads.Single();
 			analyticsWorkload.SkillCode.Should().Be.EqualTo(skill.Id.GetValueOrDefault());
 			analyticsWorkload.SkillName.Should().Be.EqualTo(skill.Name);
 			analyticsWorkload.SkillId.Should().Be.EqualTo(analyticsSkill.SkillId);
 			analyticsWorkload.TimeZoneId.Should().Be.EqualTo(analyticsSkill.TimeZoneId);
 
-			var bridgeQueueWorkloads = _analyticsWorkloadRepository.GetBridgeQueueWorkloads(analyticsWorkload.WorkloadId);
+			var bridgeQueueWorkloads = AnalyticsWorkloadRepository.GetBridgeQueueWorkloads(analyticsWorkload.WorkloadId);
 			bridgeQueueWorkloads.Should().Not.Be.Empty();
 			var bridgeQueueWorkload = bridgeQueueWorkloads.Single();
 			bridgeQueueWorkload.QueueId.Should().Be.EqualTo(queueMartId);

@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsFactScheduleMapperTest : ISetup
+	public class AnalyticsFactScheduleMapperTest
 	{
 		public IAnalyticsFactScheduleMapper Target;
 		public FakeIntervalLengthFetcher IntervalLength;
@@ -30,15 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private readonly Guid personCode = Guid.NewGuid();
 		private readonly Guid scenarioCode = Guid.NewGuid();
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.AddService<FakeIntervalLengthFetcher>();
-			system.AddService<FakeAnalyticsScheduleRepository>();
-			system.AddService<FakeAnalyticsAbsenceRepository>();
-			system.AddService<FakeAnalyticsActivityRepository>();
-			system.AddService<FakeAnalyticsOvertimeRepository>();
-			system.AddService(new FakeAnalyticsDateRepository(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31)));
-		}
 
 		private IScheduleDay getBaseScheduleDay(DateTime scheduleChangeTime)
 		{
@@ -48,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnEmptyListIfNoShift()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var scheduleChangeTime = DateTime.Now;
 			var result = Target.AgentDaySchedule(new ProjectionChangedEventScheduleDay(), getBaseScheduleDay(scheduleChangeTime), null, scheduleChangeTime, 1, 1, scenarioCode, personCode);
 			result.Count.Should().Be.EqualTo(0);
@@ -56,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldGetIntervalLength()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var eventScheduleDay = new ProjectionChangedEventScheduleDay
 			{
 				Shift = new ProjectionChangedEventShift
@@ -71,6 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnCorrectSchemaWithBrokenInterval() // PBI 37562
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var shiftStart = new DateTime(2015, 1, 1, 8, 10, 0, DateTimeKind.Utc);
 			var eventScheduleDay = new ProjectionChangedEventScheduleDay
 			{
@@ -96,6 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnNullWhenDateCouldNotBeHandled()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var shiftStart = new DateTime(2015, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var eventScheduleDay = new ProjectionChangedEventScheduleDay
 			{
@@ -118,6 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldGatherPartsForFactScheduleRow()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var shiftStart = new DateTime(2015, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var eventScheduleDay = new ProjectionChangedEventScheduleDay
 			{
@@ -143,6 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldGetTimeCorrectly()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var scheduleChangeTime = DateTime.Now;
 			var baseScheduleDay = getBaseScheduleDay(scheduleChangeTime);
 			var shiftStart = new DateTime(2015, 1, 1, 8, 0, 0, DateTimeKind.Utc);

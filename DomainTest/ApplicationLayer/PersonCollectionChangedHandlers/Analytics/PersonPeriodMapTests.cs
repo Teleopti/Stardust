@@ -5,23 +5,22 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	public class PersonPeriodMapTests
+	[Toggle(Toggles.ETL_EventbasedDate_39562)]
+	[TestFixture]
+	[DomainTest]
+	public class PersonPeriodMapTests : ISetup
 	{
-		private FakeAnalyticsPersonPeriodRepository fakeAnalyticsPersonPeriodRepository;
-		private FakeAnalyticsSkillRepository fakeAnalyticsSkillRepository;
-		private FakeAnalyticsBusinessUnitRepository fakeAnalyticsBusinessUnitRepository;
-		private FakeAnalyticsTeamRepository fakeAnalyticsTeamRepository;
-		private PersonPeriodTransformer personPeriodTransformer;
-		private IAnalyticsDateRepository _analyticsDateRepository;
-		private IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
-		private IAnalyticsIntervalRepository _analyticsIntervalRepository;
-		private FakeGlobalSettingDataRepository _globalSettingDataRepository;
-		private AnalyticsPersonPeriodDateFixer _analyticsPersonPeriodDateFixer;
+		public FakeAnalyticsSkillRepository AnalyticsSkillRepository;
+		public PersonPeriodTransformer Target;
+		public FakeAnalyticsDateRepository AnalyticsDateRepository;
 
 		private readonly AnalyticsSkill fakeSkill1 = new AnalyticsSkill
 		{
@@ -39,12 +38,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			SkillCode = Guid.NewGuid()
 		};
 
-		[SetUp]
-		public void SetupTests()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_analyticsIntervalRepository = new FakeAnalyticsIntervalRepository();
-			fakeAnalyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
-			fakeAnalyticsSkillRepository = new FakeAnalyticsSkillRepository();
+			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
+			system.AddService<PersonPeriodTransformer>();
+		}
+
+		private void setupTests()
+		{
 
 			var fakeSkills = new List<AnalyticsSkill>
 			{
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				fakeSkill2,
 				fakeSkill3
 			};
-			fakeAnalyticsSkillRepository.SetSkills(fakeSkills);
+			AnalyticsSkillRepository.SetSkills(fakeSkills);
 
 			var skills1 = fakeSkills; // 1,2,3
 			var skills2 = fakeSkills.Take(2).ToList(); // 1,2
@@ -75,112 +76,110 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			foreach (var newBridges in PersonPeriodTransformer.NewBridgeSkillSetSkillsFromSkills(skills1, skillSet1.SkillsetId))
 			{
-				fakeAnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridges);
+				AnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridges);
 			}
 			foreach (var newBridges in PersonPeriodTransformer.NewBridgeSkillSetSkillsFromSkills(skills2, skillSet2.SkillsetId))
 			{
-				fakeAnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridges);
+				AnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridges);
 			}
 			foreach (var newBridges in PersonPeriodTransformer.NewBridgeSkillSetSkillsFromSkills(skills3, skillSet3.SkillsetId))
 			{
-				fakeAnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridges);
+				AnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridges);
 			}
-			fakeAnalyticsSkillRepository.SetSkillSets(fakeSkillSets);
+			AnalyticsSkillRepository.SetSkillSets(fakeSkillSets);
 
-			fakeAnalyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
-			fakeAnalyticsTeamRepository = new FakeAnalyticsTeamRepository();
-			_analyticsDateRepository = new FakeAnalyticsDateRepository(
-				new DateTime(2015, 01, 01),
+			AnalyticsDateRepository.HasDatesBetween(new DateTime(2015, 01, 01),
 				new DateTime(2017, 12, 31));
-			_analyticsTimeZoneRepository = new FakeAnalyticsTimeZoneRepository();
-
-			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
-
-			
-			_analyticsPersonPeriodDateFixer = new AnalyticsPersonPeriodDateFixer(_analyticsDateRepository, _analyticsIntervalRepository);
-			personPeriodTransformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository,
-				fakeAnalyticsSkillRepository, 
-				fakeAnalyticsBusinessUnitRepository, 
-				fakeAnalyticsTeamRepository, 
-				new ReturnNotDefined(), 
-				_analyticsTimeZoneRepository, 
-				_analyticsIntervalRepository,
-				_globalSettingDataRepository,
-				_analyticsPersonPeriodDateFixer);
 		}
 
 		[Test]
 		public void NoSkills_MapSkillSet_NotDefined()
 		{
+			setupTests();
+
 			var skillsList = new List<Guid>();
-			var skillSet = personPeriodTransformer.MapSkillsetId(skillsList, 0, new ReturnNotDefined());
+			var skillSet = Target.MapSkillsetId(skillsList, 0, new ReturnNotDefined());
 			Assert.AreEqual(-1, skillSet);
 		}
 
 		[Test]
 		public void OneSkill_MapSkillSet_GotCorrectSkillSet()
 		{
+			setupTests();
+
 			var skills = new List<Guid> { fakeSkill1.SkillCode };
-			var skillSet = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			var skillSet = Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
 			Assert.AreEqual(3, skillSet);
 		}
 
 		[Test]
 		public void TwoSkills_MapSkillSet_GotCorrectSkillSet()
 		{
+			setupTests();
+
 			var skills = new List<Guid>
 			{
 				fakeSkill1.SkillCode,
 				fakeSkill2.SkillCode
 			};
-			var skillSet = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			var skillSet = Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
 			Assert.AreEqual(2, skillSet);
 		}
 
 		[Test]
 		public void OneSkill_MapSkillSet_NewSkillSet()
 		{
+			setupTests();
+
 			var skills = new List<Guid> { fakeSkill2.SkillCode };
-			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			var newSkillSetId = Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
 			Assert.AreEqual(4, newSkillSetId);
 		}
 
 		[Test]
 		public void OneNewSkillNotYetInAnalytics_MapSkillSet_NotDefinedSkillset()
 		{
+			setupTests();
+
 			var skills = new List<Guid> { Guid.NewGuid() };
-			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			var newSkillSetId = Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
 			Assert.AreEqual(-1, newSkillSetId);
 		}
 
 		[Test]
 		public void OneSkill_MapNewSkillSet_NewBridgeRowsForSkillSet()
 		{
-			var nrOfBridgeRows = fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count;
-			var skills = new List<Guid> { fakeSkill2.SkillCode };
-			personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			setupTests();
 
-			Assert.AreEqual(nrOfBridgeRows + 1, fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
+			var nrOfBridgeRows = AnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count;
+			var skills = new List<Guid> { fakeSkill2.SkillCode };
+			Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
+
+			Assert.AreEqual(nrOfBridgeRows + 1, AnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
 		}
 
 		[Test]
 		public void OneSkill_MapSkillSet_NoNewBridgeOrSkillSet()
 		{
-			var nrOfBridgeRows = fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count;
-			var nrOfSkillSets = fakeAnalyticsSkillRepository.SkillSets().Count;
+			setupTests();
+
+			var nrOfBridgeRows = AnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count;
+			var nrOfSkillSets = AnalyticsSkillRepository.SkillSets().Count;
 
 			var skills = new List<Guid> { fakeSkill1.SkillCode };
-			personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
 
-			Assert.AreEqual(nrOfBridgeRows, fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
-			Assert.AreEqual(nrOfSkillSets, fakeAnalyticsSkillRepository.SkillSets().Count);
+			Assert.AreEqual(nrOfBridgeRows, AnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
+			Assert.AreEqual(nrOfSkillSets, AnalyticsSkillRepository.SkillSets().Count);
 		}
 
 		[Test]
 		public void TwoSkill_MapNewSkillSet_TwoNewBridgeRowsAndSkillSet()
 		{
-			var nrOfBridgeRows = fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count;
-			var nrOfSkillSets = fakeAnalyticsSkillRepository.SkillSets().Count;
+			setupTests();
+
+			var nrOfBridgeRows = AnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count;
+			var nrOfSkillSets = AnalyticsSkillRepository.SkillSets().Count;
 
 			var skills = new List<Guid>
 			{
@@ -188,15 +187,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				fakeSkill3.SkillCode
 			};
 
-			personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
 
-			Assert.AreEqual(nrOfBridgeRows + 2, fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
-			Assert.AreEqual(nrOfSkillSets + 1, fakeAnalyticsSkillRepository.SkillSets().Count);
+			Assert.AreEqual(nrOfBridgeRows + 2, AnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
+			Assert.AreEqual(nrOfSkillSets + 1, AnalyticsSkillRepository.SkillSets().Count);
 		}
 
 		[Test]
 		public void OneSkill_TransformToNewSkillSet_CorrectNewSkillSet()
 		{
+			setupTests();
+
 			var skills = new List<AnalyticsSkill>
 			{
 				new AnalyticsSkill
@@ -219,6 +220,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void TwoSkill_TransformToNewSkillSet_CorrectNewSkillSet()
 		{
+			setupTests();
+
 			var skills = new List<AnalyticsSkill>
 			{
 				new AnalyticsSkill
@@ -249,6 +252,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void OneSkill_TransformToBridgeRows_CorrectBridge()
 		{
+			setupTests();
+
 			var skills = new List<AnalyticsSkill>
 			{
 				new AnalyticsSkill

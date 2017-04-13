@@ -38,17 +38,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddService<FakeAnalyticsPermissionRepository>();
-			system.AddService<FakeAnalyticsPermissionExecutionRepository>();
-			system.AddService(new FakeAnalyticsBusinessUnitRepository{UseList = true});
 			system.AddService<AnalyticsPermissionsUpdater>();
 			system.AddService<PermissionsConverter>();
-			system.AddService<FakeAnalyticsTeamRepository>();
 		}
 
 		[Test]
 		public void ShouldNotUpdatePermissionsIfRecentlyUpdated()
 		{
+			AnalyticsBusinessUnitRepository.UseList = true;
 			PersonRepository.Has(PersonFactory.CreatePerson("_").WithId(personId));
 			AnalyticsBusinessUnitRepository.AddOrUpdate(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId,BusinessUnitCode = businessUnitId});
 			Now.Is(DateTime.UtcNow);
@@ -63,6 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		[Test]
 		public void ShouldUpdateWithEmptySetWhenNoPermissions()
 		{
+			AnalyticsBusinessUnitRepository.UseList = true;
 			PersonRepository.Has(PersonFactory.CreatePerson("_").WithId(personId));
 			Now.Is(DateTime.UtcNow - TimeSpan.FromMinutes(16));
 			AnalyticsPermissionExecutionRepository.Has(Now);
@@ -77,6 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		[Test]
 		public void ShouldRemovePermissionsThatAreNotInApplicationDatabase()
 		{
+			AnalyticsBusinessUnitRepository.UseList = true;
 			PersonRepository.Has(PersonFactory.CreatePerson("_").WithId(personId));
 			Now.Is(DateTime.UtcNow - TimeSpan.FromMinutes(16));
 			AnalyticsPermissionExecutionRepository.Has(Now);
@@ -94,6 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		[Test]
 		public void ShouldAddPermissionsThatAreInApplicationDatabase()
 		{
+			AnalyticsBusinessUnitRepository.UseList = true;
 			var person = PersonFactory.CreatePerson("_").WithId(personId);
 			var applicationRole = new ApplicationRole();
 			var analyticTeam = new AnalyticTeam { TeamCode = teamId, TeamId = 123 };
@@ -132,6 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		[Test]
 		public void ShouldUpdateWithEmptySetWhenExistsInBoth()
 		{
+			AnalyticsBusinessUnitRepository.UseList = true;
 			var person = PersonFactory.CreatePerson("_").WithId(personId);
 			var applicationRole = new ApplicationRole();
 			var analyticTeam = new AnalyticTeam { TeamCode = teamId, TeamId = 123 };

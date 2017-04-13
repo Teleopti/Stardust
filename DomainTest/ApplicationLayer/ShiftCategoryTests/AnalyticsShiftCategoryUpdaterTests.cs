@@ -6,43 +6,43 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryTests
 {
 	[TestFixture]
-	public class AnalyticsShiftCategoryUpdaterTests
+	[DomainTest]
+	public class AnalyticsShiftCategoryUpdaterTests : ISetup
 	{
-		private AnalyticsShiftCategoryUpdater _target;
-		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
-		private FakeShiftCategoryRepository _shiftCategoryRepository;
-		private FakeAnalyticsShiftCategoryRepository _analyticsShiftCategoryRepository;
+		public AnalyticsShiftCategoryUpdater Target;
+		public FakeShiftCategoryRepository ShiftCategoryRepository;
+		public FakeAnalyticsShiftCategoryRepository AnalyticsShiftCategoryRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
-			_shiftCategoryRepository = new FakeShiftCategoryRepository();
-			_analyticsShiftCategoryRepository = new FakeAnalyticsShiftCategoryRepository();
-			_target = new AnalyticsShiftCategoryUpdater(_shiftCategoryRepository, _analyticsShiftCategoryRepository, _analyticsBusinessUnitRepository);
+			system.AddService<AnalyticsShiftCategoryUpdater>();
 		}
 
 		[Test]
 		public void ShouldAddShiftCategoryToAnalytics()
 		{
-			_analyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(0);
+			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(0);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory1", "red");
 			shiftCategory.SetId(Guid.NewGuid());
-			_shiftCategoryRepository.Add(shiftCategory);
-			_target.Handle(new ShiftCategoryChangedEvent
+			ShiftCategoryRepository.Add(shiftCategory);
+			Target.Handle(new ShiftCategoryChangedEvent
 			{
 				ShiftCategoryId = shiftCategory.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			});
 
-			_analyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
-			var analyticsShiftCategory = _analyticsShiftCategoryRepository.ShiftCategories().First();
+			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
+			var analyticsShiftCategory = AnalyticsShiftCategoryRepository.ShiftCategories().First();
 			analyticsShiftCategory.ShiftCategoryCode.Should().Be.EqualTo(shiftCategory.Id.GetValueOrDefault());
 			analyticsShiftCategory.DisplayColor.Should().Be.EqualTo(shiftCategory.DisplayColor.ToArgb());
 			analyticsShiftCategory.ShiftCategoryName.Should().Be.EqualTo(shiftCategory.Description.Name);
@@ -51,26 +51,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryTests
 		[Test]
 		public void ShouldUpdateShiftCategoryToAnalytics()
 		{
-			_analyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(0);
+			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(0);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("New Shift Category Name", "red");
 			shiftCategory.SetId(Guid.NewGuid());
-			_shiftCategoryRepository.Add(shiftCategory);
-			_analyticsShiftCategoryRepository.AddShiftCategory(new AnalyticsShiftCategory
+			ShiftCategoryRepository.Add(shiftCategory);
+			AnalyticsShiftCategoryRepository.AddShiftCategory(new AnalyticsShiftCategory
 			{
 				ShiftCategoryCode = shiftCategory.Id.GetValueOrDefault(),
 				ShiftCategoryName = "Old Shift Category Name",
 				DisplayColor = 123
 			});
-			_analyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
+			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
 
-			_target.Handle(new ShiftCategoryChangedEvent
+			Target.Handle(new ShiftCategoryChangedEvent
 			{
 				ShiftCategoryId = shiftCategory.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			});
 
-			_analyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
-			var analyticsScenario = _analyticsShiftCategoryRepository.ShiftCategories().First();
+			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
+			var analyticsScenario = AnalyticsShiftCategoryRepository.ShiftCategories().First();
 			analyticsScenario.ShiftCategoryName.Should().Be.EqualTo("New Shift Category Name");
 			analyticsScenario.DisplayColor.Should().Be.EqualTo(Color.FromName("red").ToArgb());
 		}
@@ -78,25 +79,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryTests
 		[Test]
 		public void ShouldSetShiftCategoryToDelete()
 		{
-			_analyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(0);
+			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(0);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory1", "red");
 			shiftCategory.SetId(Guid.NewGuid());
-			_shiftCategoryRepository.Add(shiftCategory);
-			_analyticsShiftCategoryRepository.AddShiftCategory(new AnalyticsShiftCategory
+			ShiftCategoryRepository.Add(shiftCategory);
+			AnalyticsShiftCategoryRepository.AddShiftCategory(new AnalyticsShiftCategory
 			{
 				ShiftCategoryCode = shiftCategory.Id.GetValueOrDefault()
 			});
-			_analyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
-			_analyticsShiftCategoryRepository.ShiftCategories().First().IsDeleted.Should().Be.False();
+			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
+			AnalyticsShiftCategoryRepository.ShiftCategories().First().IsDeleted.Should().Be.False();
 
-			_target.Handle(new ShiftCategoryDeletedEvent
+			Target.Handle(new ShiftCategoryDeletedEvent
 			{
 				ShiftCategoryId = shiftCategory.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			});
 
-			_analyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
-			var analyticsShiftCategory = _analyticsShiftCategoryRepository.ShiftCategories().First();
+			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
+			var analyticsShiftCategory = AnalyticsShiftCategoryRepository.ShiftCategories().First();
 			analyticsShiftCategory.IsDeleted.Should().Be.True();
 		}
 	}

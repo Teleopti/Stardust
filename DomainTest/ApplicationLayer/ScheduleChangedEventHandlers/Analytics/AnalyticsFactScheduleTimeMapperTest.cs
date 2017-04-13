@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytic
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsFactScheduleTimeMapperTest : ISetup
+	public class AnalyticsFactScheduleTimeMapperTest
 	{
 		public IAnalyticsFactScheduleTimeMapper Target;
 		public FakeAnalyticsScheduleRepository AnalyticsSchedules;
@@ -36,14 +35,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private readonly Guid _guidActInNone = Guid.NewGuid();
 		private readonly Guid _guidAbsInPaid = Guid.NewGuid();
 		private readonly Guid _guidAbsNotPaid = Guid.NewGuid();
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.AddService<FakeAnalyticsScheduleRepository>();
-			system.AddService<FakeAnalyticsActivityRepository>();
-			system.AddService<FakeAnalyticsOvertimeRepository>();
-			system.AddService<FakeAnalyticsAbsenceRepository>();
-		}
 
 		[SetUp]
 		public void Setup()

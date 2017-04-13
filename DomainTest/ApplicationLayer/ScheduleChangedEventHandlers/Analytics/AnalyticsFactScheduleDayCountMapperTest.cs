@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -14,22 +13,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsFactScheduleDayCountMapperTest : ISetup
+	public class AnalyticsFactScheduleDayCountMapperTest
 	{
 		public IAnalyticsFactScheduleDayCountMapper Target;
 		public FakeAnalyticsAbsenceRepository AnalyticsAbsences;
+		public FakeAnalyticsDateRepository AnalyticsDates;
 
 		private ProjectionChangedEventScheduleDay _scheduleDay;
 		private AnalyticsFactSchedulePerson _personPart;
 		private const int scenarioId = 10;
 		private const int shiftCategoryId = 11;
 		private const int dateId = 1;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.AddService(new FakeAnalyticsDateRepository(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1));
-			system.AddService<FakeAnalyticsAbsenceRepository>();
-		}
 
 		[SetUp]
 		public void Setup()
@@ -45,6 +39,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnNullWhenDateMappingFails()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			_scheduleDay.Date = new DateTime(2014, 12, 01);
 
 			var result = Target.Map(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
@@ -55,6 +51,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMap()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var result = Target.Map(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
 
 			result.ShiftStartDateLocalId.Should().Be.EqualTo(dateId);
@@ -73,6 +71,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnNullIfShiftButNoShiftCategory()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
+
 			var result = Target.Map(_scheduleDay, _personPart, scenarioId, -1);
 			result.Should().Be.Null();
 		}
@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapFullDayAbsence()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
 			_scheduleDay.IsFullDayAbsence = true;
 			var absence = new AnalyticsAbsence { AbsenceCode = Guid.NewGuid(), AbsenceId = 44 };
 			_scheduleDay.Shift.Layers = new List<ProjectionChangedEventLayer>
@@ -105,6 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnNullIfAbsenceMappingFails()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
 			_scheduleDay.IsFullDayAbsence = true;
 			var invalidCode = Guid.NewGuid();
 			_scheduleDay.Shift.Layers = new List<ProjectionChangedEventLayer>
@@ -125,10 +127,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapDayOff()
 		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
 			_scheduleDay.DayOff = new ProjectionChangedEventDayOff { Anchor = DateTime.Now };
 			_scheduleDay.Name = "MyDayOff";
 			_scheduleDay.ShortName = "DO";
-
 
 			var result = Target.Map(_scheduleDay, _personPart, scenarioId, -1);
 

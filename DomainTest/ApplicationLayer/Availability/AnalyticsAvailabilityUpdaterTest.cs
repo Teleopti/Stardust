@@ -19,8 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 {
 	[TestFixture]
-	[DomainTest]
-	[TestWithStaticDependenciesAvoidUse]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	public class AnalyticsAvailabilityUpdaterTest : ISetup
 	{
 		public AnalyticsAvailabilityUpdater Target;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 		public FakeAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
 		public FakeAnalyticsDateRepository AnalyticsDateRepository;
 		public FakeAnalyticsScenarioRepository AnalyticsScenarioRepository;
-		public FakePersonRepositoryLegacy2 PersonRepository;
+		public IPersonRepository PersonRepository;
 		public IScheduleStorage ScheduleStorage;
 		public FakeAnalyticsHourlyAvailabilityRepository AnalyticsHourlyAvailabilityRepository;
 		public IScenarioRepository ScenarioRepository;
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<AnalyticsAvailabilityUpdater>();
-			system.AddService<FakePersonRepositoryLegacy2>();
 		}
 
 		[Test]
@@ -52,8 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 
 			var personCode = Guid.NewGuid();
 			var today = DateOnly.Today;
-			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1));
-			person.SetId(personCode);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1)).WithId(personCode);
 			PersonRepository.Add(person);
 			AvailabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
 
@@ -77,8 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			var scenarioCode = Guid.NewGuid();
 			var personPeroidId = Guid.NewGuid();
 			var today = DateOnly.Today;
-			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1));
-			person.SetId(personCode);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1)).WithId(personCode);
 			var personPeriod = person.PersonPeriodCollection.First();
 			personPeriod.SetId(personPeroidId);
 			var scenario = new Scenario("Asd");
@@ -118,8 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			var scenarioCode = Guid.NewGuid();
 			var personPeroidId = Guid.NewGuid();
 			var today = DateOnly.Today;
-			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1));
-			person.SetId(personCode);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1)).WithId(personCode);
 			var personPeriod = person.PersonPeriodCollection.First();
 			personPeriod.SetId(personPeroidId);
 			var scenario = new Scenario("Asd");
@@ -154,8 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			var scenarioCode = Guid.NewGuid();
 			var personPeroidId = Guid.NewGuid();
 			var today = DateOnly.Today;
-			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1));
-			person.SetId(personCode);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1)).WithId(personCode);
 			var personPeriod = person.PersonPeriodCollection.First();
 			personPeriod.SetId(personPeroidId);
 			var scenario = new Scenario("Asd");

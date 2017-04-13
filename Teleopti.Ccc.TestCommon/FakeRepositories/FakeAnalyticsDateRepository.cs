@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_fakeDates.Clear();
 		}
 
-		public void HasDatesBetween(DateTime start, DateTime end)
+		public void HasDatesBetween(DateTime start, DateTime end, int indexStart = 0)
 		{
 			_fakeDates.Clear();
-			initDates(start, end, 0);
+			initDates(start, end, indexStart);
 		}
 
 		private void initDates(DateTime start, DateTime end, int indexStart)

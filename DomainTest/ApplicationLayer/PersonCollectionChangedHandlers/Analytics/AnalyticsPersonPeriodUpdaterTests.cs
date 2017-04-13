@@ -6,40 +6,42 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
 	[TestFixture]
 	[TestWithStaticDependenciesAvoidUse]
-	public class AnalyticsPersonPeriodUpdaterTests
+	[DomainTest]
+	public class AnalyticsPersonPeriodUpdaterTests : ISetup
 	{
-		private AnalyticsPersonPeriodUpdater _target;
-		private IAnalyticsPersonPeriodRepository _personPeriodRepository;
-		private FakeAnalyticsSkillRepository _analyticsSkillRepository;
-		private IPersonRepository _personRepository;
-		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
-		private IAnalyticsTeamRepository _analyticsTeamRepository;
+		public AnalyticsPersonPeriodUpdater Target;
+		public IAnalyticsPersonPeriodRepository PersonPeriodRepository;
+		public FakeAnalyticsSkillRepository AnalyticsSkillRepository;
+		public IPersonRepository PersonRepository;
+		public IAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
+		public IAnalyticsTeamRepository AnalyticsTeamRepository;
 
-		private FakeEventPublisher _eventPublisher;
-		private IAnalyticsDateRepository _analyticsDateRepository;
-		private IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
-		private IGlobalSettingDataRepository _globalSettingDataRepository;
-		private IAnalyticsIntervalRepository _analyticsIntervalRepository;
+		public FakeEventPublisher EventPublisher;
+		public FakeAnalyticsDateRepository AnalyticsDateRepository;
+		public IAnalyticsTimeZoneRepository AnalyticsTimeZoneRepository;
+		public IGlobalSettingDataRepository GlobalSettingDataRepository;
+		public IAnalyticsIntervalRepository AnalyticsIntervalRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		private Guid testPerson1Id;
+		private readonly Guid _businessUnitId = Guid.NewGuid();
 
 		private readonly AnalyticsSkill fakeSkill3 = new AnalyticsSkill
 		{
@@ -47,25 +49,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			SkillCode = Guid.NewGuid()
 		};
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			system.AddService<AnalyticsPersonPeriodUpdater>();
+			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
+		}
 
-			_personPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
-			_analyticsIntervalRepository = new FakeAnalyticsIntervalRepository();
-
-			_analyticsSkillRepository = new FakeAnalyticsSkillRepository();
-			var skills = new List<AnalyticsSkill> {fakeSkill3};
-			_analyticsSkillRepository.SetSkills(skills);
-			_personRepository = new FakePersonRepositoryLegacy2();
-			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
-			_analyticsTeamRepository = new FakeAnalyticsTeamRepository();
-			_eventPublisher = new FakeEventPublisher();
-			_analyticsDateRepository = new FakeAnalyticsDateRepository(
-				new DateTime(2015, 01, 01),
+		private void basicSetup()
+		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
+			AnalyticsSkillRepository.SetSkills(new List<AnalyticsSkill> { fakeSkill3 });
+			AnalyticsDateRepository.HasDatesBetween(new DateTime(2015, 01, 01),
 				new DateTime(2017, 12, 31));
-			_analyticsTimeZoneRepository = new FakeAnalyticsTimeZoneRepository();
-			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+
 			var p1 = new Person
 			{
 				Email = "test1@test.se",
@@ -84,226 +80,249 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			testPerson1Id = p1.Id.GetValueOrDefault();
 
-			_personRepository.Add(p1);
-			_personRepository.Add(p2);
-			_personRepository.Add(p3);
-			
-			var personPeriodFilter = new PersonPeriodFilter(_analyticsDateRepository);
-			var personPeriodTransformer = new PersonPeriodTransformer(_personPeriodRepository, 
-				_analyticsSkillRepository, 
-				_analyticsBusinessUnitRepository, 
-				_analyticsTeamRepository, 
-				new ReturnNotDefined(),
-				_analyticsTimeZoneRepository,
-				_analyticsIntervalRepository,
-				_globalSettingDataRepository, new AnalyticsPersonPeriodDateFixer(_analyticsDateRepository, _analyticsIntervalRepository));
-
-			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, new EventPopulatingPublisher(new CurrentEventPublisher(_eventPublisher), new DummyInfrastructureInfoPopulator()), new ThisAnalyticsUnitOfWork(new FakeUnitOfWork()), personPeriodFilter, personPeriodTransformer);
+			PersonRepository.Add(p1);
+			PersonRepository.Add(p2);
+			PersonRepository.Add(p3);
 		}
 
 		[Test]
 		public void NoPersonPeriodOnPerson_HandlePersonPeriodChanged_NoPersonPeriodAddedInAnalytics()
 		{
+			basicSetup();
+
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
-			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(0);
-			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
+			Assert.AreEqual(0, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(0);
+			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void NewPersonPeriod_HandlePersonPeriodChanged_NewPersonPeriodAddedInAnalytics()
 		{
+			basicSetup();
+
 			// Given when adding a person period
-			_personRepository.FindPeople(new List<Guid> { testPerson1Id }).First().AddPersonPeriod(newTestPersonPeriod(new DateTime(2016, 1, 1)));
+			PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First().AddPersonPeriod(newTestPersonPeriod(new DateTime(2016, 1, 1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
 			// Then there should be one person period for that person
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 		}
 
 		[Test]
 		public void TwoNewPersonPeriods_HandlePersonPeriodChanged_NewPersonPeriodAddedInAnalytics()
 		{
+			basicSetup();
+
 			// Given when adding two person period
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2016, 1, 1)));
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2016, 2, 1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
 			// Then there should be one person period for that person
-			Assert.AreEqual(2, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			Assert.AreEqual(2, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 		}
 
 		[Test]
 		public void NewPersonPeriodWithLaterStart_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
 		{
+			basicSetup();
+
 			// Given when adding person period
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2020, 1, 1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
 			// Then
-			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			Assert.AreEqual(0, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 		}
 
 		[Test]
 		public void NewPersonPeriodWithStartBeforeAnalyticsDates_HandlePersonPeriodChanged_NewPersonPeriodAddedInAnalyticsWithNewStartDate()
 		{
+			basicSetup();
+
 			// Given when adding person period
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2001, 1, 1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
 			// Then
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 		}
 
 		[Test]
 		public void NewPersonPeriodOnStartAnalyticsDate_HandlePersonPeriodChanged_NewPersonPeriodAddedInAnalytics()
 		{
+			basicSetup();
+
 			// Given when adding person period
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2015, 1, 1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
 			// Then
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 		}
 
 		[Test]
 		public void NewPersonPeriodOnEndAnalyticsDate_HandlePersonPeriodChanged_NewPersonPeriodAddedInAnalytics()
 		{
+			basicSetup();
+
 			// Given when adding person period
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2017, 12, 31)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
 			// Then
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 		}
 
 		[Test]
 		public void ShouldPublishAnalyticsPersonPeriodRangeChangedEventWhenAddedPersonPeriod()
 		{
-			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod()
+			basicSetup();
+
+			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod()
 			{
 				PersonId = 1,
 				PersonCode = testPerson1Id
 			});
 
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
-			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
+			Assert.AreEqual(0, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldPublishAnalyticsPersonPeriodRangeChangedEventWhenPersonPeriodEndChanged()
 		{
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			basicSetup();
+
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			var personPeriodId = Guid.NewGuid();
 			var startDate = new DateTime(2017, 12, 31);
 			person.AddPersonPeriod(newTestPersonPeriod(startDate, personPeriodId));
-			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonId = 1,
 				PersonCode = testPerson1Id,
-				ValidFromDateIdLocal = _analyticsDateRepository.Date(startDate).DateId,
-				ValidToDateIdLocal = _analyticsDateRepository.Date(startDate).DateId+1,
+				ValidFromDateIdLocal = AnalyticsDateRepository.Date(startDate).DateId,
+				ValidToDateIdLocal = AnalyticsDateRepository.Date(startDate).DateId+1,
 				PersonPeriodCode = personPeriodId
 			});
 
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldPublishAnalyticsPersonPeriodRangeChangedEventWhenPersonPeriodStartChanged()
 		{
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			basicSetup();
+
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			var personPeriodId = Guid.NewGuid();
 			var startDate = new DateTime(2017, 12, 31);
 			person.AddPersonPeriod(newTestPersonPeriod(startDate, personPeriodId));
-			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonId = 1,
 				PersonCode = testPerson1Id,
-				ValidFromDateIdLocal = _analyticsDateRepository.Date(startDate).DateId -1,
-				ValidToDateIdLocal = _analyticsDateRepository.Date(startDate).DateId,
+				ValidFromDateIdLocal = AnalyticsDateRepository.Date(startDate).DateId -1,
+				ValidToDateIdLocal = AnalyticsDateRepository.Date(startDate).DateId,
 				PersonPeriodCode = personPeriodId
 			});
 
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldPublishAnalyticsPersonPeriodRangeChangedEventWhenDeletedPersonPeriod()
 		{
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			basicSetup();
+
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2017, 12, 31)));
 
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldNotPublishAnalyticsPersonPeriodRangeChangedEventWhenPersonPeriodAlreadyDeleted()
 		{
-			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			basicSetup();
+
+			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonId = 1,
 				PersonCode = testPerson1Id,
@@ -311,50 +330,57 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				ToBeDeleted = true
 			});
 
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(0);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodRangeChangedEvent)).Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void NewPersonPeriodOnDayAfterEndAnalyticsDate_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
 		{
+			basicSetup();
+
 			// Given when adding person period
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2017, 12, 31).AddDays(1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
 			// Then
-			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(0);
-			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
+			Assert.AreEqual(0, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(0);
+			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void NewPersonPeriodOnDayBeforeStartAnalyticsDate_HandlePersonPeriodChanged_NewPersonPeriodAddedInAnalyticsWithNewStartDate()
 		{
+			basicSetup();
+
 			// Given when adding person period
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2015, 1, 1).AddDays(-1)));
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
 			// Then
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_personPeriodRepository.GetPersonPeriods(testPerson1Id)
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			PersonPeriodRepository.GetPersonPeriods(testPerson1Id)
 				.First().ValidFromDate.Should()
 				.Be.EqualTo(new DateTime(2015, 1, 1));
 		}
@@ -362,34 +388,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void NewPersonPeriodWithSkillNotYetInAnalytics_HandleEvent_ShouldWorkAndPublishEvents()
 		{
+			basicSetup();
+
 			// Given when adding person period
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			var r = newTestPersonPeriod(new DateTime(2015, 1, 1).AddDays(-1));
 
 			IActivity act = new Activity("for test");
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
-			ISkill skill = new Domain.Forecasting.Skill("for test", "sdf", Color.Blue, 3, skType);
-			skill.Activity = act;
-			skill.TimeZone = TimeZoneInfo.Local;
-
+			var skill = new Domain.Forecasting.Skill("for test", "sdf", Color.Blue, 3, skType)
+			{
+				Activity = act,
+				TimeZone = TimeZoneInfo.Local
+			};
 			r.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			person.AddPersonPeriod(r);
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
 			// Then
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 		}
 
 		[Test]
 		public void NewPersonPeriodWithSkillNotYetInAnalytics_HandleEvent_ShouldWorkAndPublishEventsWithSkillsWhichExistsInAnalytics()
 		{
+			basicSetup();
+
 			// Given when adding person period
-			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
 			var r = newTestPersonPeriod(new DateTime(2015, 1, 1).AddDays(-1));
 
 			IActivity act = new Activity("for test");
@@ -408,29 +440,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			person.AddPersonPeriod(r);
 
 			// When handling event
-			_target.Handle(new PersonCollectionChangedEvent
+			Target.Handle(new PersonCollectionChangedEvent
 			{
-				PersonIdCollection = { testPerson1Id }
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
 			});
 
 			// Then
-			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 		}
 
 		private static PersonPeriod newTestPersonPeriod(DateTime startDate, Guid? id = null)
 		{
-			var personPeriod = new PersonPeriod(new DateOnly(startDate),
+			return new PersonPeriod(new DateOnly(startDate),
 				new PersonContract(new Contract("ContractNameTest"),
 					new PartTimePercentage("100%"),
 					new ContractSchedule("ScheduleName")),
 				new Team
 				{
 					Site = new Site("SiteName")
-				});
-			personPeriod.SetId(id ?? Guid.NewGuid());
-			return personPeriod;
+				}).WithId(id ?? Guid.NewGuid());
 		}
-
-
 	}
 }

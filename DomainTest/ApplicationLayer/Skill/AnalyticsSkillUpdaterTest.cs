@@ -5,31 +5,25 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
-	public class AnalyticsSkillUpdaterTest
+	[DomainTestWithStaticDependenciesAvoidUse]
+	public class AnalyticsSkillUpdaterTest : ISetup
 	{
-		private AnalyticsSkillUpdater target;
-		private FakeAnalyticsSkillRepository analyticsSkillRepository;
-		private ISkillRepository skillRepository;
-		private FakeAnalyticsTimeZoneRepository analyticsTimeZoneRepository;
-		private FakeAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository;
+		public AnalyticsSkillUpdater Target;
+		public FakeAnalyticsSkillRepository AnalyticsSkillRepository;
+		public ISkillRepository SkillRepository;
 
-		[SetUp]
-		public void SetUp()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			analyticsSkillRepository = new FakeAnalyticsSkillRepository();
-			skillRepository = new FakeSkillRepository();
-			analyticsTimeZoneRepository = new FakeAnalyticsTimeZoneRepository();
-			analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
-			target = new AnalyticsSkillUpdater(skillRepository, analyticsSkillRepository, analyticsBusinessUnitRepository,
-				analyticsTimeZoneRepository);
+			system.AddService<AnalyticsSkillUpdater>();
 		}
 
 		[Test]
@@ -40,10 +34,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 				SkillId = Guid.NewGuid()
 			};
 			var skill = SkillFactory.CreateSkill("skillName1").WithId(@event.SkillId);
-			skillRepository.Add(skill);
-			target.Handle(@event);
+			SkillRepository.Add(skill);
+			Target.Handle(@event);
 
-			analyticsSkillRepository.Skills(2)
+			AnalyticsSkillRepository.Skills(2)
 				.FirstOrDefault(x => x.SkillCode == skill.Id.GetValueOrDefault())
 				.Should()
 				.Not.Be.Null();
@@ -57,11 +51,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 				SkillId = Guid.NewGuid()
 			};
 			var skill = SkillFactory.CreateSkill("skillName1").WithId(@event.SkillId);
-			skillRepository.Add(skill);
+			SkillRepository.Add(skill);
 
-			target.Handle(@event);
+			Target.Handle(@event);
 
-			analyticsSkillRepository.Skills(2)
+			AnalyticsSkillRepository.Skills(2)
 				.FirstOrDefault(x => x.SkillCode == skill.Id.GetValueOrDefault())
 				.Should()
 				.Not.Be.Null();
