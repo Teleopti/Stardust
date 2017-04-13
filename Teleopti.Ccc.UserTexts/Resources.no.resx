@@ -6307,9 +6307,6 @@ Ukedag</value>
   <data name="Optimisation" xml:space="preserve">
     <value>Optimalisering</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Overbemannet</value>
-  </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Prioritet:</value>
   </data>
