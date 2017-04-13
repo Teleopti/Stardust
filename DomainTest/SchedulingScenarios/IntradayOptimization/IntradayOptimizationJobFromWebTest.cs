@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -23,12 +24,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeAgentGroupRepository AgentGroupRepository;
 		public IntradayOptimizationFromWeb Target;
 		public FakeJobResultRepository JobResultRepository;
+		public FakePersonRepository PersonRepository;
+
+		[Test]
+		public void ShouldNotSaveJobResultForEmptyAgentGroup()
+		{
+			var team = new Team { Site = new Site("site") };
+			var agentGroup = new AgentGroup("Europe").AddFilter(new TeamFilter(team));
+			PlanningPeriodRepository.Has(DateOnly.Today, 1, agentGroup);
+
+			Target.Execute(Guid.NewGuid(), true);
+
+			JobResultRepository.LoadAll().Should().Be.Empty();
+		}
 
 		[Test]
 		public void ShouldSaveJobResult()
 		{
 			var team = new Team { Site = new Site("site") };
 			var agentGroup = new AgentGroup("Europe").AddFilter(new TeamFilter(team));
+			PersonRepository.Add(PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today, team));
 
 			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, 1, agentGroup);
 
