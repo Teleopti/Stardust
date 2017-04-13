@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -18,15 +19,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly LoaderForResourceCalculation _loaderForResourceCalculation;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
+		private readonly IStardustJobFeedback _stardustJobFeedback;
 
 		public UpdateStaffingLevelReadModel2WeeksHandler(INow now, CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory, 
-			LoaderForResourceCalculation loaderForResourceCalculation, IResourceCalculation resourceCalculation, ISkillCombinationResourceRepository skillCombinationResourceRepository)
+			LoaderForResourceCalculation loaderForResourceCalculation, IResourceCalculation resourceCalculation, ISkillCombinationResourceRepository skillCombinationResourceRepository, IStardustJobFeedback stardustJobFeedback)
 		{
 			_now = now;
 			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
 			_loaderForResourceCalculation = loaderForResourceCalculation;
 			_resourceCalculation = resourceCalculation;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
+			_stardustJobFeedback = stardustJobFeedback;
 		}
 
 		[AsSystem]
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public virtual void Handle(UpdateStaffingLevelReadModel2WeeksEvent @event)
 		{
 			var updateThingy= new UpdateStaffingLevelReadModelOnlySkillCombinationResources(_now, _cascadingResourceCalculationContextFactory,
-				_loaderForResourceCalculation,_resourceCalculation, _skillCombinationResourceRepository);
+				_loaderForResourceCalculation,_resourceCalculation, _skillCombinationResourceRepository, _stardustJobFeedback);
 			updateThingy.Update(new DateTimePeriod(_now.UtcDateTime().AddDays(-1).AddHours(-1), _now.UtcDateTime().AddDays(@event.Days).AddHours(1)));
 		}
 	}

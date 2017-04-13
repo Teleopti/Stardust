@@ -32,24 +32,18 @@ namespace Teleopti.Ccc.Domain.Staffing
 		[UnitOfWork]
 		public virtual void Handle(UpdateStaffingLevelReadModelEvent @event)
 		{
-			
 			var jobLockTimer = new Timer(30000) {AutoReset = true};
 			jobLockTimer.Elapsed += updateJobLock;
 
 			try
 			{
 				jobLockTimer.Start();
-				_jobStartTimeRepository.UpdateLockTimestamp(_currentBusinessUnit.Current().Id.GetValueOrDefault());
+				_jobStartTimeRepository.UpdateLockTimestamp(@event.LogOnBusinessUnitId);
 				var period = new DateTimePeriod(_now.UtcDateTime().AddDays(-1).AddHours(-1), _now.UtcDateTime().AddDays(@event.Days).AddHours(1));
 
 				_updateStaffingLevelReadModel.Update(period);
 
-				var current = _currentFactory.Current().CurrentUnitOfWork();
-				//an ugly solution for bug 39594
-				if (current.IsDirty())
-					current.Clear();
-
-				_jobStartTimeRepository.ResetLockTimestamp(_currentBusinessUnit.Current().Id.GetValueOrDefault());
+				_jobStartTimeRepository.ResetLockTimestamp(@event.LogOnBusinessUnitId);
 			}
 			finally
 			{

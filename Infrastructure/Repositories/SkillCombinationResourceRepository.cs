@@ -22,13 +22,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly RetryPolicy _retryPolicy;
 		private readonly object skillCombinationLock = new object();
+		private readonly IStardustJobFeedback _stardustJobFeedback;
 
 		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWork currentUnitOfWork,
-												  ICurrentBusinessUnit currentBusinessUnit)
+												  ICurrentBusinessUnit currentBusinessUnit, IStardustJobFeedback stardustJobFeedback)
 		{
 			_now = now;
 			_currentUnitOfWork = currentUnitOfWork;
 			_currentBusinessUnit = currentBusinessUnit;
+			_stardustJobFeedback = stardustJobFeedback;
 			_retryPolicy = new RetryPolicy<SqlTransientErrorDetectionStrategyWithTimeouts>(5, TimeSpan.FromMilliseconds(100));
 		}
 
@@ -108,6 +110,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public virtual void PersistSkillCombinationResource(DateTime dataLoaded, IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
+			_stardustJobFeedback.SendProgress($"Start persist {skillCombinationResources.Count()} skillCombinationResources for bu {bu}.");
 			lock (skillCombinationLock)
 			{
 				var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
