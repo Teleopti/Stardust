@@ -74,14 +74,17 @@
 			params: {
 				groupId: ''
 			}
+		}).state('resourceplanner.dayoffrules', {
+			params: {
+				filterId: {},
+				periodId: {},
+				isDefault: {},
+				groupId: undefined
+			},
+			url: '/agentgroup/:groupId/dayoffrules/',
+			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.createform.html',
+			controller: 'dayoffRuleCreateController as vm'
 		});
-		// .state('resourceplanner.oneagentroup', {
-		// 	url: '/agentgroup/:groupId/planningperiod',
-		// 	templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
-		// 	controller: 'planningPeriodOverviewController as vm',
-		// 	params: {
-		// 		groupId: ''
-		// 	}
-		// });
 	}
 })();
+

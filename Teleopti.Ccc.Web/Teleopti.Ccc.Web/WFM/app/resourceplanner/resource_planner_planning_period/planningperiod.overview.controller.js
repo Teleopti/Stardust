@@ -25,7 +25,7 @@
     vm.scheduleIssues = [];
     vm.dayNodes = [];
     vm.gridOptions = {};
-    vm.totalAgents = 0;
+    vm.totalAgents = null;
     vm.scheduledAgents = 0;
     vm.totalValidationNumbers = 0;
     vm.selectPp = selectPp;
@@ -33,7 +33,7 @@
     vm.startNextPlanningPeriod = startNextPlanningPeriod;
     vm.intraOptimize = intraOptimize;
     vm.publishSchedule = publishSchedule;
-    vm.isRunning = isRunning;
+    vm.isDisable = isDisable;
 
     checkToggle();
     destroyCheckState();
@@ -60,8 +60,8 @@
       }, 10000);
     }
 
-    function isRunning() {
-      if (vm.schedulingPerformed || vm.optimizeRunning) {
+    function isDisable() {
+      if (vm.schedulingPerformed || vm.optimizeRunning || vm.totalAgents == 0) {
         return true;
       }
     }
@@ -109,6 +109,7 @@
         sessionStorage.setItem('selectedPp', JSON.stringify(pp));
         destroyCheckState();
         checkState(vm.selectedPp);
+        getTotalAgents(vm.selectedPp);
         loadLastResult(vm.selectedPp);
         getPrevalidationByPpId(vm.selectedPp);
         return vm.selectedPp;
@@ -183,10 +184,12 @@
     }
 
     function intraOptimize(pp) {
-      vm.optimizeRunning = true;
-      ResourcePlannerReportSrvc.intraOptimize({ id: pp.Id, runAsynchronously: true }).$promise.then(function () {
-        checkIntradayOptimizationProgress(pp);
-      });
+      if (pp) {
+        vm.optimizeRunning = true;
+        ResourcePlannerReportSrvc.intraOptimize({ id: pp.Id, runAsynchronously: true }).$promise.then(function () {
+          checkIntradayOptimizationProgress(pp);
+        });
+      }
     }
 
     function checkIntradayOptimizationProgress(pp) {
@@ -223,15 +226,17 @@
       });
     };
 
-    function loadLastResult(pp) {
-      vm.dayNodes = [];
-      vm.scheduleIssues = [];
-      vm.scheduledAgents = 0;
-      vm.totalAgents = 0;
+    function getTotalAgents (pp) {
       planningPeriodService.getNumberOfAgents({ id: pp.Id, startDate: pp.StartDate, endDate: pp.EndDate })
         .$promise.then(function (data) {
           vm.totalAgents = data.TotalAgents ? data.TotalAgents : 0;
         });
+    }
+
+    function loadLastResult(pp) {
+      vm.dayNodes = [];
+      vm.scheduleIssues = [];
+      vm.scheduledAgents = 0;
       planningPeriodService.lastJobResult({ id: pp.Id })
         .$promise.then(function (data) {
           if (data.OptimizationResult) {

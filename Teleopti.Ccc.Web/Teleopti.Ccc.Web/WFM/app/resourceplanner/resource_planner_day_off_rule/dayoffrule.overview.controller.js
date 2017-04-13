@@ -27,8 +27,8 @@
 		}
 
 		function editRuleset(dayOffRule) {
-			// temporary use the old one, should be rebuilt
-			$state.go('resourceplanner.filter', {
+			// temporary use the old one, should be rebuilt; resourceplanner.filter => resourceplanner.dayoffrules
+			$state.go('resourceplanner.dayoffrules', {
 				filterId: dayOffRule.Id,
 				groupId: $stateParams.groupId,
 				isDefault: dayOffRule.Default,
@@ -44,8 +44,8 @@
 		}
 
 		function createRuleset() {
-			// temporary use the old one, should be rebuilt
-			$state.go('resourceplanner.filter', {
+			// temporary use the old one, should be rebuilt; resourceplanner.filter => resourceplanner.dayoffrules
+			$state.go('resourceplanner.dayoffrules', {
 				groupId: $stateParams.groupId,
 				periodId: undefined
 			});
@@ -55,7 +55,7 @@
 	function dayoffRulesDirective() {
 		var directive = {
 			restrict: 'EA',
-      scope: {}, 
+      scope: {},
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
 			controller: 'dayoffRuleOverviewController as vm',
 			bindToController: true
