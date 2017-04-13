@@ -60,62 +60,62 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-	<xsd:element name="root" msdata:IsDataSet="true">
-	  <xsd:complexType>
-		<xsd:choice maxOccurs="unbounded">
-		  <xsd:element name="metadata">
-			<xsd:complexType>
-			  <xsd:sequence>
-				<xsd:element name="value" type="xsd:string" minOccurs="0" />
-			  </xsd:sequence>
-			  <xsd:attribute name="name" use="required" type="xsd:string" />
-			  <xsd:attribute name="type" type="xsd:string" />
-			  <xsd:attribute name="mimetype" type="xsd:string" />
-			  <xsd:attribute ref="xml:space" />
-			</xsd:complexType>
-		  </xsd:element>
-		  <xsd:element name="assembly">
-			<xsd:complexType>
-			  <xsd:attribute name="alias" type="xsd:string" />
-			  <xsd:attribute name="name" type="xsd:string" />
-			</xsd:complexType>
-		  </xsd:element>
-		  <xsd:element name="data">
-			<xsd:complexType>
-			  <xsd:sequence>
-				<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-				<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-			  </xsd:sequence>
-			  <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-			  <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-			  <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-			  <xsd:attribute ref="xml:space" />
-			</xsd:complexType>
-		  </xsd:element>
-		  <xsd:element name="resheader">
-			<xsd:complexType>
-			  <xsd:sequence>
-				<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-			  </xsd:sequence>
-			  <xsd:attribute name="name" type="xsd:string" use="required" />
-			</xsd:complexType>
-		  </xsd:element>
-		</xsd:choice>
-	  </xsd:complexType>
-	</xsd:element>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
   </xsd:schema>
   <resheader name="resmimetype">
-	<value>text/microsoft-resx</value>
+    <value>text/microsoft-resx</value>
   </resheader>
   <resheader name="version">
-	<value>2.0</value>
+    <value>2.0</value>
   </resheader>
   <resheader name="reader">
-	<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-	<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Masked Edit Text Box</value>
@@ -15680,13 +15680,9 @@ Do you want to participate?</value>
     <value>Successfully imported {0} agent(s)</value>
     <comment>Message to notify user about agent import result. e.g. Successfully imported 5 agents</comment>
   </data>
-  <data name="AvailableAsGroupPageColon" xml:space="preserve">
-    <value>Available as Group Page*:</value>
-    <comment>Available As Group Page:*</comment>
-  </data>
   <data name="Maximum5OptionalColumns" xml:space="preserve">
-    <value>*Maximum 5 optional columns can be available as group pages.</value>
-    <comment>*Maximum 5 optional columns can be available as group pages.</comment>
+    <value>*Maximum 5 optional columns can be available as dynamic group pages.</value>
+    <comment>*Maximum 5 optional columns can be available as dynamic group pages.</comment>
   </data>
   <data name="OptionalColumnCreateGroupPageQuestion" xml:space="preserve">
     <value>This will create a group page for the optional column so that you can pull reports based on that. Do you want to continue?</value>
@@ -15750,5 +15746,9 @@ Do you want to participate?</value>
   </data>
   <data name="MaximumNumberOfAgentRowsReach" xml:space="preserve">
     <value>Maximum number of agent rows {0} reach.</value>
+  </data>
+  <data name="DynamicGroupPageColon" xml:space="preserve">
+    <value>Dynamic Group Page*:</value>
+    <comment>Dynamic Group Page*:</comment>
   </data>
 </root>

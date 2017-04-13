@@ -268,7 +268,7 @@
 			this.autoLabel2.Name = "autoLabel2";
 			this.autoLabel2.Size = new System.Drawing.Size(198, 24);
 			this.autoLabel2.TabIndex = 11;
-			this.autoLabel2.Text = "xxAvailableAsGroupPageColon";
+			this.autoLabel2.Text = "xxDynamicGroupPageColon";
 			this.autoLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// checkBoxAdvAvailableAsGroupPage

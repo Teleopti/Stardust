@@ -3558,15 +3558,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available as Group Page*:.
-        /// </summary>
-        public static string AvailableAsGroupPageColon {
-            get {
-                return ResourceManager.GetString("AvailableAsGroupPageColon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Available for a limited time only!.
         /// </summary>
         public static string AvailableForALimitedTimeOnly {
@@ -9475,6 +9466,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DurationColon {
             get {
                 return ResourceManager.GetString("DurationColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dynamic Group Page*:.
+        /// </summary>
+        public static string DynamicGroupPageColon {
+            get {
+                return ResourceManager.GetString("DynamicGroupPageColon", resourceCulture);
             }
         }
         
@@ -15953,7 +15953,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to *Maximum 5 optional columns can be available as group pages..
+        ///   Looks up a localized string similar to *Maximum 5 optional columns can be available as dynamic group pages..
         /// </summary>
         public static string Maximum5OptionalColumns {
             get {
