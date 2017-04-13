@@ -26,6 +26,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_fakeDates.Clear();
 		}
 
+		public void HasDatesBetween(DateTime start, DateTime end)
+		{
+			_fakeDates.Clear();
+			initDates(start, end, 0);
+		}
+
 		private void initDates(DateTime start, DateTime end, int indexStart)
 		{
 			if (_fakeDates.All(a => a.DateId != AnalyticsDate.NotDefined.DateId)) _fakeDates.Add(AnalyticsDate.NotDefined);

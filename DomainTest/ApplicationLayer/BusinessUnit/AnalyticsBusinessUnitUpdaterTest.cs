@@ -3,37 +3,37 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.BusinessUnit;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.BusinessUnit
 {
 	[TestFixture]
-	public class AnalyticsBusinessUnitUpdaterTest
+	[DomainTest]
+	public class AnalyticsBusinessUnitUpdaterTest : ISetup
 	{
-		private AnalyticsBusinessUnitUpdater _target;
-		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
+		public AnalyticsBusinessUnitUpdater Target;
+		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository {UseList = true};
-
-			_target = new AnalyticsBusinessUnitUpdater(_analyticsBusinessUnitRepository);
+			system.AddService<AnalyticsBusinessUnitUpdater>();
 		}
 
 		[Test]
 		public void ShouldAddOrUpdateBusinessUnit()
 		{
+			AnalyticsBusinessUnitRepository.UseList = true;
 			var expected = new BusinessUnitChangedEvent
 			{
 				BusinessUnitId = Guid.NewGuid(),
 				BusinessUnitName = "TestBu",
 				UpdatedOn = DateTime.UtcNow
 			};
-			_target.Handle(expected);
+			Target.Handle(expected);
 
-			var result = _analyticsBusinessUnitRepository.Get(expected.BusinessUnitId);
+			var result = AnalyticsBusinessUnitRepository.Get(expected.BusinessUnitId);
 			result.Should().Not.Be.Null();
 
 			result.BusinessUnitCode.Should().Be.EqualTo(expected.BusinessUnitId);

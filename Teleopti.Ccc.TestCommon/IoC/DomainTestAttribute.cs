@@ -187,6 +187,31 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
 			system.UseTestDouble<FakeJobStartTimeRepository>().For<IJobStartTimeRepository>();
 
+			system.UseTestDouble<FakeAnalyticsAbsenceRepository>().For<IAnalyticsAbsenceRepository>();
+			system.UseTestDouble<FakeAnalyticsActivityRepository>().For<IAnalyticsActivityRepository>();
+			system.UseTestDouble<FakeAnalyticsBridgeGroupPagePersonRepository>().For<IAnalyticsBridgeGroupPagePersonRepository>();
+			system.UseTestDouble<FakeAnalyticsBridgeTimeZoneRepository>().For<IAnalyticsBridgeTimeZoneRepository>();
+			system.UseTestDouble<FakeAnalyticsBusinessUnitRepository>().For<IAnalyticsBusinessUnitRepository>();
+			system.UseTestDouble<FakeAnalyticsDateRepository>().For<IAnalyticsDateRepository>();
+			system.UseTestDouble<FakeAnalyticsDayOffRepository>().For<IAnalyticsDayOffRepository>();
+			system.UseTestDouble<FakeAnalyticsForecastWorkloadRepository>().For<IAnalyticsForecastWorkloadRepository>();
+			system.UseTestDouble<FakeAnalyticsGroupPageRepository>().For<IAnalyticsGroupPageRepository>();
+			system.UseTestDouble<FakeAnalyticsHourlyAvailabilityRepository>().For<IAnalyticsHourlyAvailabilityRepository>();
+			system.UseTestDouble<FakeAnalyticsIntervalRepository>().For<IAnalyticsIntervalRepository>();
+			system.UseTestDouble<FakeAnalyticsOvertimeRepository>().For<IAnalyticsOvertimeRepository>();
+			system.UseTestDouble<FakeAnalyticsPermissionExecutionRepository>().For<IAnalyticsPermissionExecutionRepository>();
+			system.UseTestDouble<FakeAnalyticsPermissionRepository>().For<IAnalyticsPermissionRepository>();
+			system.UseTestDouble<FakeAnalyticsPersonPeriodRepository>().For<IAnalyticsPersonPeriodRepository>();
+			system.UseTestDouble<FakeAnalyticsPreferenceRepository>().For<IAnalyticsPreferenceRepository>();
+			system.UseTestDouble<FakeAnalyticsRequestRepository>().For<IAnalyticsRequestRepository>();
+			system.UseTestDouble<FakeAnalyticsScenarioRepository>().For<IAnalyticsScenarioRepository>();
+			system.UseTestDouble<FakeAnalyticsScheduleRepository>().For<IAnalyticsScheduleRepository>();
+			system.UseTestDouble<FakeAnalyticsShiftCategoryRepository>().For<IAnalyticsShiftCategoryRepository>();
+			system.UseTestDouble<FakeAnalyticsSkillRepository>().For<IAnalyticsSkillRepository>();
+			system.UseTestDouble<FakeAnalyticsTeamRepository>().For<IAnalyticsTeamRepository>();
+			system.UseTestDouble<FakeAnalyticsTimeZoneRepository>().For<IAnalyticsTimeZoneRepository>();
+			system.UseTestDouble<FakeAnalyticsWorkloadRepository>().For<IAnalyticsWorkloadRepository>();
+
 			fakePrincipal(system);
 		}
 

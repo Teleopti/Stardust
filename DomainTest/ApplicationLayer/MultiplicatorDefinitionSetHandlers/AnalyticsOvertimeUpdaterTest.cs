@@ -8,52 +8,55 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.MultiplicatorDefinitionSetHandlers
 {
 	[TestFixture]
-	public class AnalyticsOvertimeUpdaterTest
+	[DomainTest]
+	public class AnalyticsOvertimeUpdaterTest : ISetup
 	{
-		private AnalyticsOvertimeUpdater _target;
+		public AnalyticsOvertimeUpdater Target;
+		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public IAnalyticsOvertimeRepository AnalyticsOvertimeRepository;
+		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
 
-		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
-		private IAnalyticsOvertimeRepository _analyticsOvertimeRepository;
-		private IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
-
-		private MultiplicatorDefinitionSet multiplicatorDefinitionSet;
-
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
-			_analyticsOvertimeRepository = new FakeAnalyticsOvertimeRepository();
-			_multiplicatorDefinitionSetRepository = new FakeMultiplicatorDefinitionSetRepository();
-			multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("Test", MultiplicatorType.Overtime).WithId(Guid.NewGuid());
-			_multiplicatorDefinitionSetRepository.Add(multiplicatorDefinitionSet);
-
-			_target = new AnalyticsOvertimeUpdater(_analyticsOvertimeRepository, _analyticsBusinessUnitRepository, _multiplicatorDefinitionSetRepository);
+			system.AddService<AnalyticsOvertimeUpdater>();
 		}
 
 		[Test, TestCaseSource(nameof(overtimeEvents))]
 		public void ShouldAddOrUpdate(MultiplicatorDefinitionSetChangedBase @event)
 		{
-			@event.MultiplicatorDefinitionSetId = multiplicatorDefinitionSet.Id.GetValueOrDefault();
-			_target.Handle((dynamic)@event);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(@event.LogOnBusinessUnitId));
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("Test", MultiplicatorType.Overtime).WithId(Guid.NewGuid());
+			MultiplicatorDefinitionSetRepository.Add(multiplicatorDefinitionSet);
 
-			var analyticsOvertime = _analyticsOvertimeRepository.Overtimes().FirstOrDefault(x => x.OvertimeCode == multiplicatorDefinitionSet.Id);
+			@event.MultiplicatorDefinitionSetId = multiplicatorDefinitionSet.Id.GetValueOrDefault();
+			Target.Handle((dynamic)@event);
+
+			var analyticsOvertime = AnalyticsOvertimeRepository.Overtimes().FirstOrDefault(x => x.OvertimeCode == multiplicatorDefinitionSet.Id);
 			analyticsOvertime.Should().Not.Be.Null();
 		}
 
 		[Test, TestCaseSource(nameof(nonOvertimeEvents))]
 		public void ShouldDoNothingWhenWrongTypeOfMultiplicatorDefinitionSet(MultiplicatorDefinitionSetChangedBase @event)
 		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(@event.LogOnBusinessUnitId));
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("Test", MultiplicatorType.Overtime).WithId(Guid.NewGuid());
+			MultiplicatorDefinitionSetRepository.Add(multiplicatorDefinitionSet);
+
 			@event.MultiplicatorDefinitionSetId = multiplicatorDefinitionSet.Id.GetValueOrDefault();
 
-			_target.Handle((dynamic)@event);
+			Target.Handle((dynamic)@event);
 
-			_analyticsOvertimeRepository.Overtimes().Should().Be.Empty();
+			AnalyticsOvertimeRepository.Overtimes().Should().Be.Empty();
 		}
 
 		#region TestData
@@ -82,6 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.MultiplicatorDefinitionSetHan
 				MultiplicatorType = type
 			};
 		}
+
 		#endregion
 	}
 }

@@ -287,7 +287,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ShiftExchangeOfferHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\SettingsForPersonPeriodChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryTests\AnalyticsShiftCategoryUpdaterTests.cs" />
-    <Compile Include="ApplicationLayer\ActivityTests\ActivityChangedHandlerTests.cs" />
+    <Compile Include="ApplicationLayer\Activities\ActivityChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddPersonalActivityCommandHandlerTest.cs" />
@@ -325,7 +325,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RunWaitlistCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceTests\AnalyticsAbsenceUpdaterTests.cs" />
+    <Compile Include="ApplicationLayer\Absences\AnalyticsAbsenceUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\ScenarioTests\Analytics\ScenarioChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjectionReadOnlyUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdaterTest.cs" />

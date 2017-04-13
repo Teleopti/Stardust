@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 			logger.Debug($"New instance of {nameof(AnalyticsActivityUpdater)} was created");
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
 		[Attempts(10)]

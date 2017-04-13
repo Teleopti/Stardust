@@ -7,35 +7,37 @@ using Teleopti.Ccc.Domain.ApplicationLayer.DayOff;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 {
 	[TestFixture]
-	public class AnalyticsDayOffUpdaterTests
+	[DomainTest]
+	public class AnalyticsDayOffUpdaterTests : ISetup
 	{
-		private AnalyticsDayOffUpdater _target;
-		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
-		private IAnalyticsDayOffRepository _analyticsDayOffRepository;
-		private IDayOffTemplateRepository _dayOffTemplateRepository;
+		public AnalyticsDayOffUpdater Target;
+		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public IAnalyticsDayOffRepository AnalyticsDayOffRepository;
+		public IDayOffTemplateRepository DayOffTemplateRepository;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
-			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
-			_dayOffTemplateRepository = new FakeDayOffTemplateRepository();
-
-			_target = new AnalyticsDayOffUpdater(_analyticsBusinessUnitRepository, _analyticsDayOffRepository, _dayOffTemplateRepository);
+			system.AddService<AnalyticsDayOffUpdater>();
 		}
 
 		[Test]
 		public void ShouldHandleEventAndAdd()
 		{
-			var id = Guid.NewGuid();
 			var businessUnitCode = Guid.NewGuid();
-			_analyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(0);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitCode));
+
+			var id = Guid.NewGuid();
+			AnalyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(0);
 			var @event = new DayOffTemplateChangedEvent
 			{
 				DayOffTemplateId = id,
@@ -44,12 +46,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 
 			var dayOffTemplate = new DayOffTemplate { UpdatedOn = DateTime.Today }.WithId(id);
 			dayOffTemplate.ChangeDescription("DayOffName", "DD");
-			_dayOffTemplateRepository.Add(dayOffTemplate);
+			DayOffTemplateRepository.Add(dayOffTemplate);
 
-			_target.Handle(@event);
+			Target.Handle(@event);
 
-			_analyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(1);
-			var analyticsDayOff = _analyticsDayOffRepository.DayOffs().First();
+			AnalyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(1);
+			var analyticsDayOff = AnalyticsDayOffRepository.DayOffs().First();
 			analyticsDayOff.DayOffCode.Should().Be.EqualTo(dayOffTemplate.Id.GetValueOrDefault());
 			analyticsDayOff.DayOffName.Should().Be.EqualTo(dayOffTemplate.Description.Name);
 			analyticsDayOff.DayOffShortname.Should().Be.EqualTo(dayOffTemplate.Description.ShortName);
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 			analyticsDayOff.DisplayColor.Should().Be.EqualTo(dayOffTemplate.DisplayColor.ToArgb());
 			analyticsDayOff.DisplayColorHtml.Should().Be.EqualTo(ColorTranslator.ToHtml(dayOffTemplate.DisplayColor));
 			analyticsDayOff.DatasourceId.Should().Be.EqualTo(1);
-			analyticsDayOff.BusinessUnitId.Should().Be.EqualTo(_analyticsBusinessUnitRepository.Get(businessUnitCode).BusinessUnitId);
+			analyticsDayOff.BusinessUnitId.Should().Be.EqualTo(AnalyticsBusinessUnitRepository.Get(businessUnitCode).BusinessUnitId);
 		}
 
 		[Test]
@@ -65,7 +67,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 		{
 			var id = Guid.NewGuid();
 			var businessUnitCode = Guid.NewGuid();
-			_analyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(0);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitCode));
+			AnalyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(0);
 			var @event = new DayOffTemplateChangedEvent
 			{
 				DayOffTemplateId = id,
@@ -74,18 +77,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 
 			var dayOffTemplate = new DayOffTemplate { UpdatedOn = DateTime.Today }.WithId(id);
 			dayOffTemplate.ChangeDescription("DayOffName", "DD");
-			_dayOffTemplateRepository.Add(dayOffTemplate);
+			DayOffTemplateRepository.Add(dayOffTemplate);
 
-			_target.Handle(@event);
-			_analyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(1);
-			_analyticsDayOffRepository.DayOffs().First().DayOffName.Should().Be.EqualTo(dayOffTemplate.Description.Name);
+			Target.Handle(@event);
+			AnalyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(1);
+			AnalyticsDayOffRepository.DayOffs().First().DayOffName.Should().Be.EqualTo(dayOffTemplate.Description.Name);
 
 			dayOffTemplate.ChangeDescription("DayOffName update", "DD");
 
-			_target.Handle(@event);
+			Target.Handle(@event);
 
-			_analyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(1);
-			var analyticsDayOff = _analyticsDayOffRepository.DayOffs().First();
+			AnalyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(1);
+			var analyticsDayOff = AnalyticsDayOffRepository.DayOffs().First();
 			analyticsDayOff.DayOffCode.Should().Be.EqualTo(dayOffTemplate.Id.GetValueOrDefault());
 			analyticsDayOff.DayOffName.Should().Be.EqualTo(dayOffTemplate.Description.Name);
 			analyticsDayOff.DayOffShortname.Should().Be.EqualTo(dayOffTemplate.Description.ShortName);
@@ -93,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 			analyticsDayOff.DisplayColor.Should().Be.EqualTo(dayOffTemplate.DisplayColor.ToArgb());
 			analyticsDayOff.DisplayColorHtml.Should().Be.EqualTo(ColorTranslator.ToHtml(dayOffTemplate.DisplayColor));
 			analyticsDayOff.DatasourceId.Should().Be.EqualTo(1);
-			analyticsDayOff.BusinessUnitId.Should().Be.EqualTo(_analyticsBusinessUnitRepository.Get(businessUnitCode).BusinessUnitId);
+			analyticsDayOff.BusinessUnitId.Should().Be.EqualTo(AnalyticsBusinessUnitRepository.Get(businessUnitCode).BusinessUnitId);
 		}
 	}
 }

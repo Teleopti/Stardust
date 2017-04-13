@@ -9,67 +9,70 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 {
 	[TestFixture]
+	[DomainTest]
 	[TestWithStaticDependenciesAvoidUse]
-	public class AnalyticsAvailabilityUpdaterTest
+	public class AnalyticsAvailabilityUpdaterTest : ISetup
 	{
-		private AnalyticsAvailabilityUpdater _target;
-		private IStudentAvailabilityDayRepository _availabilityDayRepository;
-		private IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
-		private IAnalyticsDateRepository _analyticsDateRepository;
-		private IAnalyticsScenarioRepository _analyticsScenarioRepository;
-		private IPersonRepository _personRepository;
-		private IScheduleStorage _scheduleStorage;
-		private FakeAnalyticsHourlyAvailabilityRepository _analyticsHourlyAvailabilityRepository;
-		private IScenarioRepository _scenarioRepository;
+		public AnalyticsAvailabilityUpdater Target;
+		public FakeStudentAvailabilityDayRepository AvailabilityDayRepository;
+		public FakeAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
+		public FakeAnalyticsDateRepository AnalyticsDateRepository;
+		public FakeAnalyticsScenarioRepository AnalyticsScenarioRepository;
+		public FakePersonRepositoryLegacy2 PersonRepository;
+		public IScheduleStorage ScheduleStorage;
+		public FakeAnalyticsHourlyAvailabilityRepository AnalyticsHourlyAvailabilityRepository;
+		public IScenarioRepository ScenarioRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		private const int businessUnitId = 123;
 		private const int personId = 321;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_availabilityDayRepository = new FakeStudentAvailabilityDayRepository();
-			_analyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
-			_analyticsDateRepository = new FakeAnalyticsDateRepository(DateTime.Today-TimeSpan.FromDays(100), DateTime.Today + TimeSpan.FromDays(100));
-			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
-			_personRepository = new FakePersonRepositoryLegacy2();
-			_scheduleStorage = new FakeScheduleStorage();
-			_analyticsHourlyAvailabilityRepository = new FakeAnalyticsHourlyAvailabilityRepository();
-			_scenarioRepository = new FakeScenarioRepository();
-
-			_target = new AnalyticsAvailabilityUpdater(_availabilityDayRepository, _analyticsPersonPeriodRepository,
-				_analyticsDateRepository, _analyticsScenarioRepository, _personRepository, _scheduleStorage,
-				_analyticsHourlyAvailabilityRepository, _scenarioRepository);
+			system.AddService<AnalyticsAvailabilityUpdater>();
+			system.AddService<FakePersonRepositoryLegacy2>();
 		}
 
 		[Test]
 		public void PersonPeriodMissingFromAnalyticsShouldThrow()
 		{
+			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(100), DateTime.Today + TimeSpan.FromDays(100));
+			var businessUnitCode = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitCode));
+
 			var personCode = Guid.NewGuid();
 			var today = DateOnly.Today;
 			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1));
 			person.SetId(personCode);
-			_personRepository.Add(person);
-			_availabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
+			PersonRepository.Add(person);
+			AvailabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
 
-			Assert.Throws<ApplicationException>(() => _target.Handle(new AvailabilityChangedEvent
+			Assert.Throws<ApplicationException>(() => Target.Handle(new AvailabilityChangedEvent
 			{
 				AvailabilityId = Guid.NewGuid(),
 				PersonId = personCode,
-				Date = today
+				Date = today,
+				LogOnBusinessUnitId = businessUnitCode
 			}));
 		}
 
 		[Test]
 		public void ShouldAddHourlyAvailabilityForScenario()
 		{
+			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(100), DateTime.Today + TimeSpan.FromDays(100));
+			var businessUnitCode = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitCode));
+
 			var personCode = Guid.NewGuid();
 			var scenarioCode = Guid.NewGuid();
 			var personPeroidId = Guid.NewGuid();
@@ -82,21 +85,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			scenario.SetId(scenarioCode);
 			scenario.EnableReporting = true;
 
-			_personRepository.Add(person);
-			_availabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
-			_analyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod {PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
-			_analyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
-			_scenarioRepository.Add(scenario);
+			PersonRepository.Add(person);
+			AvailabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
+			AnalyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod {PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
+			AnalyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
+			ScenarioRepository.Add(scenario);
 
-			_target.Handle(new AvailabilityChangedEvent
+			Target.Handle(new AvailabilityChangedEvent
 			{
 				AvailabilityId = Guid.NewGuid(),
 				PersonId = personCode,
-				Date = today
+				Date = today,
+				LogOnBusinessUnitId = businessUnitCode
 			});
 
-			_analyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Not.Be.Empty();
-			var result = _analyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Single();
+			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Not.Be.Empty();
+			var result = AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Single();
 			result.PersonId.Should().Be.EqualTo(personId);
 			result.BusinessUnitId.Should().Be.EqualTo(businessUnitId);
 			result.ScenarioId.Should().Be.GreaterThan(0);
@@ -106,6 +110,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 		[Test]
 		public void ShouldNotAddHourlyAvailabilityForNonReportableScenario()
 		{
+			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(100), DateTime.Today + TimeSpan.FromDays(100));
+			var businessUnitCode = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitCode));
+
 			var personCode = Guid.NewGuid();
 			var scenarioCode = Guid.NewGuid();
 			var personPeroidId = Guid.NewGuid();
@@ -118,25 +126,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			scenario.SetId(scenarioCode);
 			scenario.EnableReporting = false;
 			
-			_personRepository.Add(person);
-			_availabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
-			_analyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
-			_analyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
-			_scenarioRepository.Add(scenario);
+			PersonRepository.Add(person);
+			AvailabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
+			AnalyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
+			AnalyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
+			ScenarioRepository.Add(scenario);
 
-			_target.Handle(new AvailabilityChangedEvent
+			Target.Handle(new AvailabilityChangedEvent
 			{
 				AvailabilityId = Guid.NewGuid(),
 				PersonId = personCode,
-				Date = today
+				Date = today,
+				LogOnBusinessUnitId = businessUnitCode
 			});
 
-			_analyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Be.Empty();
+			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Be.Empty();
 		}
 
 		[Test]
 		public void ShouldRemoveHourlyAvailabilityForScenario()
 		{
+			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(100), DateTime.Today + TimeSpan.FromDays(100));
+			var businessUnitCode = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitCode));
+
 			var personCode = Guid.NewGuid();
 			var scenarioCode = Guid.NewGuid();
 			var personPeroidId = Guid.NewGuid();
@@ -148,20 +161,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			var scenario = new Scenario("Asd");
 			scenario.SetId(scenarioCode);
 
-			_personRepository.Add(person);
-			_analyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
-			_analyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
-			_scenarioRepository.Add(scenario);
-			_analyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Add(new AnalyticsHourlyAvailability {DateId = _analyticsDateRepository.Date(today.Date).DateId, PersonId = personId, ScenarioId = _analyticsScenarioRepository.Scenarios().First().ScenarioId});
+			PersonRepository.Add(person);
+			AnalyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
+			AnalyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
+			ScenarioRepository.Add(scenario);
+			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Add(new AnalyticsHourlyAvailability {DateId = AnalyticsDateRepository.Date(today.Date).DateId, PersonId = personId, ScenarioId = AnalyticsScenarioRepository.Scenarios().First().ScenarioId});
 
-			_target.Handle(new AvailabilityChangedEvent
+			Target.Handle(new AvailabilityChangedEvent
 			{
 				AvailabilityId = Guid.NewGuid(),
 				PersonId = personCode,
-				Date = today
+				Date = today,
+				LogOnBusinessUnitId = businessUnitCode
 			});
 
-			_analyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Be.Empty();
+			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Be.Empty();
 		}
 	}
 }

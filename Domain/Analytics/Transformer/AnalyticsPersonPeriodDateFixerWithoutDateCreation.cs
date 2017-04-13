@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		}
 
 		// Old way of not creating dates with new date repositry.
-		public new DateTime ValidToDate(DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo)
+		public override DateTime ValidToDate(DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo)
 		{
 			var validToDate = personPeriodEndDate.Equals(AnalyticsDate.Eternity.DateDate) || personPeriodEndDate > AnalyticsDateRepository.MaxDate().DateDate
 				? AnalyticsDate.Eternity.DateDate

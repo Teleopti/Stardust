@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.GlobalSettingData;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
@@ -22,8 +21,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<AnalyticsPersonNameUpdater>().For<AnalyticsPersonNameUpdater>();
-			system.UseTestDouble<FakeAnalyticsPersonPeriodRepository>().For<IAnalyticsPersonPeriodRepository>();
-			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
 		}
 
 		[Test]

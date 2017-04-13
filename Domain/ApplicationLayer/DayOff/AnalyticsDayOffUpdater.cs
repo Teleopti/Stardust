@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 			logger.Info($"New instance of {nameof(AnalyticsDayOffUpdater)} was created");
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
 		[Attempts(10)]

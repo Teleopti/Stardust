@@ -2,49 +2,57 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	public class AcdLoginPersonMapTests
+	[TestFixture]
+	[DomainTest]
+	public class AcdLoginPersonMapTests : ISetup
 	{
-		private FakeAnalyticsPersonPeriodRepository fakeAnalyticsPersonPeriodRepository;
-		private AcdLoginPersonTransformer _acdLoginPersonTransformer;
+		public AcdLoginPersonTransformer Target;
+		public FakeAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
 
-		[SetUp]
-		public void SetupTests()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			fakeAnalyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
+			system.AddService<AcdLoginPersonTransformer>();
+		}
 
-			_acdLoginPersonTransformer = new AcdLoginPersonTransformer(fakeAnalyticsPersonPeriodRepository);
-
-			fakeAnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 1 });
-			fakeAnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 2 });
-			fakeAnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 3 });
-			fakeAnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 1 });
-			fakeAnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 3, PersonId = -1 });
+		private void setupTests()
+		{
+			AnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 1 });
+			AnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 2 });
+			AnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 3 });
+			AnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 1 });
+			AnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 3, PersonId = -1 });
 		}
 
 		[Test]
 		public void CompletlyNewAcdLoginForPersonBridge_Add_NewBridgeCreated()
 		{
+			setupTests();
+
 			var newBridge = new AnalyticsBridgeAcdLoginPerson
 			{
 				AcdLoginId = 4,
 				PersonId = 4
 			};
-			fakeAnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(newBridge);
-			var bridge1 = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(4);
-			var bridge2 = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(4);
+			AnalyticsPersonPeriodRepository.AddBridgeAcdLoginPerson(newBridge);
+			var bridge1 = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(4);
+			var bridge2 = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(4);
 			Assert.AreEqual(bridge1, bridge2);
 		}
 
 		[Test]
 		public void DeleteAcdLoginForPerson_LastRowOnAcdLogin_OneNotDefinedRowForAcdLogin()
 		{
-			_acdLoginPersonTransformer.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 1 });
+			setupTests();
 
-			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(2);
+			Target.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 1 });
+
+			var bridgeRowsForAcdLogin = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(2);
 			Assert.AreEqual(1, bridgeRowsForAcdLogin.Count);
 			Assert.AreEqual(2, bridgeRowsForAcdLogin.First().AcdLoginId);
 			Assert.AreEqual(-1, bridgeRowsForAcdLogin.First().PersonId);
@@ -54,16 +62,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void DeleteAcdLoginForPerson_NotLastRowOnAcdLogin_NoNotDefinedRowForAcdLogin()
 		{
-			_acdLoginPersonTransformer.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 1 });
-			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(1);
+			setupTests();
+
+			Target.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 1 });
+			var bridgeRowsForAcdLogin = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(1);
 			Assert.AreEqual(0, bridgeRowsForAcdLogin.Count(a => a.PersonId == -1));
 		}
 
 		[Test]
 		public void NewAcdLoginForPerson_FirstRowForAcdLogin_OneRowForAcdLogin()
 		{
-			_acdLoginPersonTransformer.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 3, PersonId = 1 });
-			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(3);
+			setupTests();
+
+			Target.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 3, PersonId = 1 });
+			var bridgeRowsForAcdLogin = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(3);
 			Assert.AreEqual(1, bridgeRowsForAcdLogin.Count);
 			Assert.AreEqual(3, bridgeRowsForAcdLogin.First().AcdLoginId);
 			Assert.AreEqual(1, bridgeRowsForAcdLogin.First().PersonId);
@@ -72,8 +84,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void NewAcdLoginForPerson_SecondRowForAcdLogin_TwoRowsForAcdLoginNoNotDefinedRow()
 		{
-			_acdLoginPersonTransformer.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 3 });
-			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(2);
+			setupTests();
+
+			Target.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 3 });
+			var bridgeRowsForAcdLogin = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(2);
 			Assert.AreEqual(2, bridgeRowsForAcdLogin.Count);
 			Assert.AreEqual(0, bridgeRowsForAcdLogin.Count(a => a.PersonId == -1));
 		}
@@ -81,27 +95,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void NewAcdLoginForPerson_DuplicateRow_SameRowsAsBefore()
 		{
-			var numberOfRowsBefore = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(1).Count;
-			_acdLoginPersonTransformer.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 1 });
-			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(1);
+			setupTests();
+
+			var numberOfRowsBefore = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(1).Count;
+			Target.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 1, PersonId = 1 });
+			var bridgeRowsForAcdLogin = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForAcdLoginPersons(1);
 			Assert.AreEqual(numberOfRowsBefore, bridgeRowsForAcdLogin.Count);
 		}
 
 		[Test]
 		public void NewAcdLoginForPerson_NewRow_AnotherRowForPerson()
 		{
-			var numberOfRowsBefore = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1).Count;
-			_acdLoginPersonTransformer.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 4, PersonId = 1 });
-			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1);
+			setupTests();
+
+			var numberOfRowsBefore = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1).Count;
+			Target.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 4, PersonId = 1 });
+			var bridgeRowsForAcdLogin = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1);
 			Assert.AreEqual(numberOfRowsBefore + 1, bridgeRowsForAcdLogin.Count);
 		}
 
 		[Test]
 		public void DeleteAcdLoginForPerson_DeleteRow_OneLessBridgeRowForPerson()
 		{
-			var numberOfRowsBefore = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1).Count;
-			_acdLoginPersonTransformer.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 1 });
-			var bridgeRowsForAcdLogin = fakeAnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1);
+			setupTests();
+
+			var numberOfRowsBefore = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1).Count;
+			Target.DeleteAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson { AcdLoginId = 2, PersonId = 1 });
+			var bridgeRowsForAcdLogin = AnalyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(1);
 			Assert.AreEqual(numberOfRowsBefore - 1, bridgeRowsForAcdLogin.Count);
 		}
 	}

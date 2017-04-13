@@ -4,52 +4,43 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Dates;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.DistributedLock;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Date
 {
 	[TestFixture]
-	public class AnalyticsDateChangedHandlerTest
+	[DomainTest]
+	public class AnalyticsDateChangedHandlerTest : ISetup
 	{
-		private Func<AnalyticsDateChangedHandler> target;
-		private FakeAnalyticsDateRepository _analyticsDateRepository;
-		private IAnalyticsIntervalRepository _analyticsIntervalRepository;
-		private IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
-		private FakeAnalyticsBridgeTimeZoneRepository _analyticsBridgeTimeZoneRepository;
-		private IDistributedLockAcquirer _distributedLockAcquirer;
+		public AnalyticsDateChangedHandler Target;
+		public FakeAnalyticsDateRepository AnalyticsDateRepository;
+		public FakeAnalyticsBridgeTimeZoneRepository AnalyticsBridgeTimeZoneRepository;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_analyticsIntervalRepository = new FakeAnalyticsIntervalRepository();
-			_analyticsTimeZoneRepository = new FakeAnalyticsTimeZoneRepository();
-			_analyticsBridgeTimeZoneRepository = new FakeAnalyticsBridgeTimeZoneRepository();
-			_distributedLockAcquirer = new FakeDistributedLockAcquirer();
-
-			target = () => new AnalyticsDateChangedHandler(_analyticsDateRepository, _analyticsIntervalRepository, _analyticsTimeZoneRepository, _analyticsBridgeTimeZoneRepository, _distributedLockAcquirer);
+			system.AddService<AnalyticsDateChangedHandler>();
 		}
 
 		[Test]
 		public void ShouldAddOneEntryForEachTimezoneDateIntervalCombination()
 		{
-			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2016, 01, 01), new DateTime(2016, 01, 31));
+			AnalyticsDateRepository.HasDatesBetween(new DateTime(2016, 01, 01), new DateTime(2016, 01, 31));
 
-			target().Handle(new AnalyticsDatesChangedEvent());
+			Target.Handle(new AnalyticsDatesChangedEvent());
 
-			_analyticsBridgeTimeZoneRepository.Bridges.Count.Should().Be.EqualTo(31*96*2-4); // 31 days, 96 intervals, 2 timezones, excluding 4 who are on the next day and can't be mapped
+			AnalyticsBridgeTimeZoneRepository.Bridges.Count.Should().Be.EqualTo(31*96*2-4); // 31 days, 96 intervals, 2 timezones, excluding 4 who are on the next day and can't be mapped
 		}
 
 		[Test]
 		public void ShouldRepeatFourIntervalsInLocalWhenWinterTimeChangeHappens()
 		{
-			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2016, 10, 29), new DateTime(2016, 10, 31)); // Winter time happens on 30
+			AnalyticsDateRepository.HasDatesBetween(new DateTime(2016, 10, 29), new DateTime(2016, 10, 31)); // Winter time happens on 30
 
-			target().Handle(new AnalyticsDatesChangedEvent());
+			Target.Handle(new AnalyticsDatesChangedEvent());
 
-			var bridgesDuringDstShift = _analyticsBridgeTimeZoneRepository.Bridges.Where(x => x.DateId == 1 && x.TimeZoneId == 2).ToList();
+			var bridgesDuringDstShift = AnalyticsBridgeTimeZoneRepository.Bridges.Where(x => x.DateId == 1 && x.TimeZoneId == 2).ToList();
 			bridgesDuringDstShift
 				.Count(x => x.LocalIntervalId == 8 || x.LocalIntervalId == 9 || x.LocalIntervalId == 10 || x.LocalIntervalId == 11).Should().Be.EqualTo(8);
 		}
@@ -57,11 +48,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Date
 		[Test]
 		public void ShouldSkipFourIntervalsInLocalWhenSummerTimeChangeHappens()
 		{
-			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2016, 03, 26), new DateTime(2016, 03, 28)); // Summer time happens on 27
+			AnalyticsDateRepository.HasDatesBetween(new DateTime(2016, 03, 26), new DateTime(2016, 03, 28)); // Summer time happens on 27
 
-			target().Handle(new AnalyticsDatesChangedEvent());
+			Target.Handle(new AnalyticsDatesChangedEvent());
 
-			var bridgesDuringDstShift = _analyticsBridgeTimeZoneRepository.Bridges.Where(x => x.DateId == 1 && x.TimeZoneId == 2).ToList();
+			var bridgesDuringDstShift = AnalyticsBridgeTimeZoneRepository.Bridges.Where(x => x.DateId == 1 && x.TimeZoneId == 2).ToList();
 			bridgesDuringDstShift
 				.Count(x => x.LocalIntervalId == 8 || x.LocalIntervalId == 9 || x.LocalIntervalId == 10 || x.LocalIntervalId == 11).Should().Be.EqualTo(0);
 
@@ -70,21 +61,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Date
 		[Test]
 		public void ShouldAddOneEntryForEachTimezoneDateIntervalCombinationForTimeZoneChanged()
 		{
-			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2016, 01, 01), new DateTime(2016, 01, 31));
+			AnalyticsDateRepository.HasDatesBetween(new DateTime(2016, 01, 01), new DateTime(2016, 01, 31));
 
-			target().Handle(new AnalyticsTimeZoneChangedEvent());
+			Target.Handle(new AnalyticsTimeZoneChangedEvent());
 
-			_analyticsBridgeTimeZoneRepository.Bridges.Count.Should().Be.EqualTo(31 * 96 * 2 - 4); // 31 days, 96 intervals, 2 timezones, excluding 4 who are on the next day and can't be mapped
+			AnalyticsBridgeTimeZoneRepository.Bridges.Count.Should().Be.EqualTo(31 * 96 * 2 - 4); // 31 days, 96 intervals, 2 timezones, excluding 4 who are on the next day and can't be mapped
 		}
 
 		[Test]
 		public void ShouldRepeatFourIntervalsInLocalWhenWinterTimeChangeHappensForTimeZoneChanged()
 		{
-			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2016, 10, 29), new DateTime(2016, 10, 31)); // Winter time happens on 30
+			AnalyticsDateRepository.HasDatesBetween(new DateTime(2016, 10, 29), new DateTime(2016, 10, 31)); // Winter time happens on 30
 
-			target().Handle(new AnalyticsTimeZoneChangedEvent());
+			Target.Handle(new AnalyticsTimeZoneChangedEvent());
 
-			var bridgesDuringDstShift = _analyticsBridgeTimeZoneRepository.Bridges.Where(x => x.DateId == 1 && x.TimeZoneId == 2).ToList();
+			var bridgesDuringDstShift = AnalyticsBridgeTimeZoneRepository.Bridges.Where(x => x.DateId == 1 && x.TimeZoneId == 2).ToList();
 			bridgesDuringDstShift
 				.Count(x => x.LocalIntervalId == 8 || x.LocalIntervalId == 9 || x.LocalIntervalId == 10 || x.LocalIntervalId == 11).Should().Be.EqualTo(8);
 		}
@@ -92,11 +83,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Date
 		[Test]
 		public void ShouldSkipFourIntervalsInLocalWhenSummerTimeChangeHappensForTimeZoneChanged()
 		{
-			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2016, 03, 26), new DateTime(2016, 03, 28)); // Summer time happens on 27
+			AnalyticsDateRepository.HasDatesBetween(new DateTime(2016, 03, 26), new DateTime(2016, 03, 28)); // Summer time happens on 27
 
-			target().Handle(new AnalyticsTimeZoneChangedEvent());
+			Target.Handle(new AnalyticsTimeZoneChangedEvent());
 
-			var bridgesDuringDstShift = _analyticsBridgeTimeZoneRepository.Bridges.Where(x => x.DateId == 1 && x.TimeZoneId == 2).ToList();
+			var bridgesDuringDstShift = AnalyticsBridgeTimeZoneRepository.Bridges.Where(x => x.DateId == 1 && x.TimeZoneId == 2).ToList();
 			bridgesDuringDstShift
 				.Count(x => x.LocalIntervalId == 8 || x.LocalIntervalId == 9 || x.LocalIntervalId == 10 || x.LocalIntervalId == 11).Should().Be.EqualTo(0);
 

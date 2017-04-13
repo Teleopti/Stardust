@@ -11,9 +11,11 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -21,31 +23,24 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
 	[TestFixture]
-	public class AnalyticsPersonGroupsHandlerTest
+	[DomainTest]
+	public class AnalyticsPersonGroupsHandlerTest : ISetup
 	{
-		private AnalyticsPersonGroupsHandler _target;
-		private IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
-		private FakeAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
-		private FakePersonRepository _personRepository;
-		private IGroupPageRepository _groupPageRepository;
-		private IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
-		private Guid _businessUnitId;
+		public AnalyticsPersonGroupsHandler Target;
+		public IAnalyticsGroupPageRepository AnalyticsGroupPageRepository;
+		public FakeAnalyticsBridgeGroupPagePersonRepository AnalyticsBridgeGroupPagePersonRepository;
+		public FakePersonRepository PersonRepository;
+		public IGroupPageRepository GroupPageRepository;
+		public IAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
+
+		private readonly Guid _businessUnitId = Guid.NewGuid();
 		private Guid _personPeriodId;
 		private IPerson _person;
 		private AnalyticsPersonPeriod _analyticsPersonPeriod;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			
-			_personRepository = new FakePersonRepositoryLegacy2();
-			_analyticsGroupPageRepository = new FakeAnalyticsGroupPageRepository();
-			_analyticsBridgeGroupPagePersonRepository = new FakeAnalyticsBridgeGroupPagePersonRepository();
-			_groupPageRepository = new FakeGroupPageRepository();
-			_analyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
-
-			_target = new AnalyticsPersonGroupsHandler(_personRepository, _analyticsBridgeGroupPagePersonRepository, _analyticsGroupPageRepository, _groupPageRepository, _analyticsPersonPeriodRepository);
-			_businessUnitId = Guid.NewGuid();
+			system.AddService<AnalyticsPersonGroupsHandler>();
 		}
 
 		private void createPerson(IPerson person, bool createInAnalytics=true)
@@ -55,24 +50,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			if (_person.PersonPeriodCollection.Any())
 			{
 				_person.PersonPeriodCollection.First().SetId(_personPeriodId);
-				var bu = new Domain.Common.BusinessUnit("Test");
-				bu.SetId(_businessUnitId);
+				var bu = BusinessUnitFactory.CreateSimpleBusinessUnit("Test").WithId(_businessUnitId);
 				_person.PersonPeriodCollection.First().Team.Site = new Site("Test");
 				_person.PersonPeriodCollection.First().Team.Site.SetBusinessUnit(bu);
 			}
 				
-			_personRepository.Has(_person);
+			PersonRepository.Has(_person);
 			if (createInAnalytics)
 			{
 				_analyticsPersonPeriod = new AnalyticsPersonPeriod { PersonCode = person.Id.GetValueOrDefault(), PersonPeriodCode = _personPeriodId, PersonId = 1, BusinessUnitCode = _businessUnitId};
-				_analyticsPersonPeriodRepository.AddPersonPeriod(_analyticsPersonPeriod);
+				AnalyticsPersonPeriodRepository.AddPersonPeriod(_analyticsPersonPeriod);
 			}
 		}
 
 		private IContract createContract()
 		{
-			var contract = ContractFactory.CreateContract("TestContract1");
-			contract.SetId(Guid.NewGuid());
+			var contract = ContractFactory.CreateContract("TestContract1").WithId(Guid.NewGuid());
 			var personContract = PersonContractFactory.CreatePersonContract(contract);
 			_person.PersonPeriodCollection.First().PersonContract = personContract;
 			return contract;
@@ -80,8 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 		private IContractSchedule createContractSchedule()
 		{
-			var contractSchedule = ContractScheduleFactory.CreateContractSchedule("TestContractSchedule1");
-			contractSchedule.SetId(Guid.NewGuid());
+			var contractSchedule = ContractScheduleFactory.CreateContractSchedule("TestContractSchedule1").WithId(Guid.NewGuid());
 			var personContract = PersonContractFactory.CreatePersonContract();
 			personContract.ContractSchedule = contractSchedule;
 			_person.PersonPeriodCollection.First().PersonContract = personContract;
@@ -90,8 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 		private IPartTimePercentage createPartTimePercentage()
 		{
-			var partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("TestPartTimePercentage1");
-			partTimePercentage.SetId(Guid.NewGuid());
+			var partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("TestPartTimePercentage1").WithId(Guid.NewGuid());
 			var personContract = PersonContractFactory.CreatePersonContract();
 			personContract.PartTimePercentage = partTimePercentage;
 			_person.PersonPeriodCollection.First().PersonContract = personContract;
@@ -109,10 +100,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 		private static IGroupPage createPersonGroup(out RootPersonGroup rootPersonGroup, IPerson person)
 		{
-			var groupPage = new GroupPage("CustomGroup");
-			groupPage.SetId(Guid.NewGuid());
-			rootPersonGroup = new RootPersonGroup("CustomRootGroup");
-			rootPersonGroup.SetId(Guid.NewGuid());
+			var groupPage = new GroupPage("CustomGroup").WithId(Guid.NewGuid());
+			rootPersonGroup = new RootPersonGroup("CustomRootGroup").WithId(Guid.NewGuid());
 			groupPage.AddRootPersonGroup(rootPersonGroup);
 			rootPersonGroup.AddPerson(person);
 			return groupPage;
@@ -125,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			Assert.Throws<PersonPeriodMissingInAnalyticsException>(
 				() =>
-					_target.Handle(new AnalyticsPersonCollectionChangedEvent
+					Target.Handle(new AnalyticsPersonCollectionChangedEvent
 					{
 						LogOnBusinessUnitId = _businessUnitId,
 						PersonIdCollection = {_person.Id.GetValueOrDefault()}
@@ -136,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void ShouldDeleteEverythingForNonExistingPerson()
 		{
 			var personId = Guid.NewGuid();
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(new AnalyticsBridgeGroupPagePerson
 				{
 					BusinessUnitCode = _businessUnitId,
@@ -146,16 +135,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 					PersonCode = personId
 				})
 				.WithPersonMapping(personId, 1);
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { personId } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { personId } });
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Should().Be.Empty();
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Should().Be.Empty();
 		}
 
 		[Test]
 		public void ShouldDeleteEverythingForPersonWithNoPeriods()
 		{
 			createPerson(new Person(), false);
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(new AnalyticsBridgeGroupPagePerson
 				{
 					BusinessUnitCode = _businessUnitId,
@@ -167,9 +156,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				.WithPersonMapping(_person.Id.GetValueOrDefault(), 1);
 
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Should().Be.Empty();
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Should().Be.Empty();
 		}
 
 		[Test]
@@ -179,13 +168,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			createPerson(PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new[] {skill}));
 
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Skill, GroupPageNameResourceKey = "Skill", BusinessUnitCode = _businessUnitId};
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			var addedGroupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(skill.Id.GetValueOrDefault(), _businessUnitId);
+			var addedGroupPage = AnalyticsGroupPageRepository.GetGroupPageByGroupCode(skill.Id.GetValueOrDefault(), _businessUnitId);
 			addedGroupPage.Should().Not.Be.Null();
 			addedGroupPage.GroupPageCode.Should().Be.EqualTo(analyticsGroupPage.GroupPageCode);
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(analyticsGroupPage.GroupPageName);
@@ -193,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			addedGroupPage.GroupName.Should().Be.EqualTo(skill.Name);
 			addedGroupPage.GroupIsCustom.Should().Be.False();
 
-			var bridge = _analyticsBridgeGroupPagePersonRepository.Bridges.Single();
+			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();
 			bridge.PersonId.Should().Be.EqualTo(_analyticsPersonPeriod.PersonId);
 			bridge.PersonCode.Should().Be.EqualTo(_person.Id.GetValueOrDefault());
 			bridge.BusinessUnitCode.Should().Be.EqualTo(_businessUnitId);
@@ -207,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			createPerson(PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new[] { skill }));
 
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Skill, GroupPageNameResourceKey = "Skill", BusinessUnitCode = _businessUnitId, GroupCode = skill.Id.GetValueOrDefault()};
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
 			var analyticsBridge = new AnalyticsBridgeGroupPagePerson
 			{
@@ -217,17 +206,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				PersonCode = _person.Id.GetValueOrDefault(),
 				GroupPageCode = analyticsGroupPage.GroupPageCode
 			};
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(analyticsBridge)
 				.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(skill.Id.Value, _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(skill.Id.Value, _businessUnitId)
 				.Should()
 				.Be.SameInstanceAs(analyticsGroupPage);
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
 		}
 
 
@@ -238,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var contract = createContract();
 
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Contracts, GroupPageNameResourceKey = "Contracts", BusinessUnitCode = _businessUnitId, GroupCode = contract.Id.GetValueOrDefault()};
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
 			var analyticsBridge = new AnalyticsBridgeGroupPagePerson
 			{
@@ -248,17 +237,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				PersonCode = _person.Id.GetValueOrDefault(),
 				GroupPageCode = analyticsGroupPage.GroupPageCode
 			};
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(analyticsBridge)
 				.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(contract.Id.GetValueOrDefault(), _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(contract.Id.GetValueOrDefault(), _businessUnitId)
 				.Should()
 				.Be.SameInstanceAs(analyticsGroupPage);
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
 		}
 
 		[Test]
@@ -267,13 +256,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			createPerson(PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today));
 			var contract = createContract();
 
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Contracts, GroupPageNameResourceKey = "Contracts", BusinessUnitCode = _businessUnitId};
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			var addedGroupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(contract.Id.GetValueOrDefault(), _businessUnitId);
+			var addedGroupPage = AnalyticsGroupPageRepository.GetGroupPageByGroupCode(contract.Id.GetValueOrDefault(), _businessUnitId);
 			addedGroupPage.Should().Not.Be.Null();
 			addedGroupPage.GroupPageCode.Should().Be.EqualTo(analyticsGroupPage.GroupPageCode);
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(analyticsGroupPage.GroupPageName);
@@ -281,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			addedGroupPage.GroupName.Should().Be.EqualTo(contract.Description.Name);
 			addedGroupPage.GroupIsCustom.Should().Be.False();
 
-			var bridge = _analyticsBridgeGroupPagePersonRepository.Bridges.Single();
+			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();
 			bridge.PersonId.Should().Be.EqualTo(_analyticsPersonPeriod.PersonId);
 			bridge.PersonCode.Should().Be.EqualTo(_person.Id.GetValueOrDefault());
 			bridge.BusinessUnitCode.Should().Be.EqualTo(_businessUnitId);
@@ -294,11 +283,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			createPerson(PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today));
 			var contract = createContract();
 
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			var addedGroupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(contract.Id.GetValueOrDefault(), _businessUnitId);
+			var addedGroupPage = AnalyticsGroupPageRepository.GetGroupPageByGroupCode(contract.Id.GetValueOrDefault(), _businessUnitId);
 			addedGroupPage.Should().Not.Be.Null();
 			addedGroupPage.GroupPageCode.Should().Not.Be.EqualTo(Guid.Empty);
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(Resources.Contracts);
@@ -306,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			addedGroupPage.GroupName.Should().Be.EqualTo(contract.Description.Name);
 			addedGroupPage.GroupIsCustom.Should().Be.False();
 
-			var bridge = _analyticsBridgeGroupPagePersonRepository.Bridges.Single();
+			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();
 			bridge.PersonId.Should().Be.EqualTo(_analyticsPersonPeriod.PersonId);
 			bridge.PersonCode.Should().Be.EqualTo(_person.Id.GetValueOrDefault());
 			bridge.BusinessUnitCode.Should().Be.EqualTo(_businessUnitId);
@@ -320,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var contractSchedule = createContractSchedule();
 
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.ContractSchedule, GroupPageNameResourceKey = "ContractSchedule", BusinessUnitCode = _businessUnitId, GroupCode = contractSchedule.Id.GetValueOrDefault() };
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
 			var analyticsBridge = new AnalyticsBridgeGroupPagePerson
 			{
@@ -330,17 +319,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				PersonCode = _person.Id.GetValueOrDefault(),
 				GroupPageCode = analyticsGroupPage.GroupPageCode
 			};
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(analyticsBridge)
 				.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(contractSchedule.Id.GetValueOrDefault(), _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(contractSchedule.Id.GetValueOrDefault(), _businessUnitId)
 				.Should()
 				.Be.SameInstanceAs(analyticsGroupPage);
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
 		}
 
 		[Test]
@@ -349,13 +338,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			createPerson(PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today));
 			var contractSchedule = createContractSchedule();
 
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.ContractSchedule, GroupPageNameResourceKey = "ContractSchedule", BusinessUnitCode = _businessUnitId};
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			var addedGroupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(contractSchedule.Id.GetValueOrDefault(), _businessUnitId);
+			var addedGroupPage = AnalyticsGroupPageRepository.GetGroupPageByGroupCode(contractSchedule.Id.GetValueOrDefault(), _businessUnitId);
 			addedGroupPage.Should().Not.Be.Null();
 			addedGroupPage.GroupPageCode.Should().Be.EqualTo(analyticsGroupPage.GroupPageCode);
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(analyticsGroupPage.GroupPageName);
@@ -363,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			addedGroupPage.GroupName.Should().Be.EqualTo(contractSchedule.Description.Name);
 			addedGroupPage.GroupIsCustom.Should().Be.False();
 
-			var bridge = _analyticsBridgeGroupPagePersonRepository.Bridges.Single();
+			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();
 			bridge.PersonId.Should().Be.EqualTo(_analyticsPersonPeriod.PersonId);
 			bridge.PersonCode.Should().Be.EqualTo(_person.Id.GetValueOrDefault());
 			bridge.BusinessUnitCode.Should().Be.EqualTo(_businessUnitId);
@@ -377,7 +366,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var partTimePercentage = createPartTimePercentage();
 
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.PartTimepercentages, GroupPageNameResourceKey = "PartTimepercentages", BusinessUnitCode = _businessUnitId, GroupCode = partTimePercentage.Id.GetValueOrDefault()};
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
 			var analyticsBridge = new AnalyticsBridgeGroupPagePerson
 			{
@@ -387,17 +376,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				PersonCode = _person.Id.GetValueOrDefault(),
 				GroupPageCode = analyticsGroupPage.GroupPageCode
 			};
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(analyticsBridge)
 				.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(partTimePercentage.Id.GetValueOrDefault(), _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(partTimePercentage.Id.GetValueOrDefault(), _businessUnitId)
 				.Should()
 				.Be.SameInstanceAs(analyticsGroupPage);
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
 		}
 
 		[Test]
@@ -406,13 +395,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			createPerson(PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today));
 			var partTimePercentage = createPartTimePercentage();
 
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.PartTimepercentages, GroupPageNameResourceKey = "PartTimepercentages", BusinessUnitCode = _businessUnitId};
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			var addedGroupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(partTimePercentage.Id.GetValueOrDefault(), _businessUnitId);
+			var addedGroupPage = AnalyticsGroupPageRepository.GetGroupPageByGroupCode(partTimePercentage.Id.GetValueOrDefault(), _businessUnitId);
 			addedGroupPage.Should().Not.Be.Null();
 			addedGroupPage.GroupPageCode.Should().Be.EqualTo(analyticsGroupPage.GroupPageCode);
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(analyticsGroupPage.GroupPageName);
@@ -420,7 +409,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			addedGroupPage.GroupName.Should().Be.EqualTo(partTimePercentage.Description.Name);
 			addedGroupPage.GroupIsCustom.Should().Be.False();
 
-			var bridge = _analyticsBridgeGroupPagePersonRepository.Bridges.Single();
+			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();
 			bridge.PersonId.Should().Be.EqualTo(_analyticsPersonPeriod.PersonId);
 			bridge.PersonCode.Should().Be.EqualTo(_person.Id.GetValueOrDefault());
 			bridge.BusinessUnitCode.Should().Be.EqualTo(_businessUnitId);
@@ -434,7 +423,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var ruleSetBag = createRuleSetBag();
 
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.RuleSetBag, GroupPageNameResourceKey = "RuleSetBag", BusinessUnitCode = _businessUnitId, GroupCode = ruleSetBag.Id.GetValueOrDefault()};
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
 			var analyticsBridge = new AnalyticsBridgeGroupPagePerson
 			{
@@ -444,17 +433,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				PersonCode = _person.Id.GetValueOrDefault(),
 				GroupPageCode = analyticsGroupPage.GroupPageCode
 			};
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(analyticsBridge)
 				.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(ruleSetBag.Id.GetValueOrDefault(), _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(ruleSetBag.Id.GetValueOrDefault(), _businessUnitId)
 				.Should()
 				.Be.SameInstanceAs(analyticsGroupPage);
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
 		}
 
 		[Test]
@@ -463,13 +452,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			createPerson(PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today));
 			var ruleSetBag = createRuleSetBag();
 
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.RuleSetBag, GroupPageNameResourceKey = "RuleSetBag", BusinessUnitCode = _businessUnitId};
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			var addedGroupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(ruleSetBag.Id.GetValueOrDefault(), _businessUnitId);
+			var addedGroupPage = AnalyticsGroupPageRepository.GetGroupPageByGroupCode(ruleSetBag.Id.GetValueOrDefault(), _businessUnitId);
 			addedGroupPage.Should().Not.Be.Null();
 			addedGroupPage.GroupPageCode.Should().Be.EqualTo(analyticsGroupPage.GroupPageCode);
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(analyticsGroupPage.GroupPageName);
@@ -477,7 +466,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			addedGroupPage.GroupName.Should().Be.EqualTo(ruleSetBag.Description.Name);
 			addedGroupPage.GroupIsCustom.Should().Be.False();
 
-			var bridge = _analyticsBridgeGroupPagePersonRepository.Bridges.Single();
+			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();
 			bridge.PersonId.Should().Be.EqualTo(_analyticsPersonPeriod.PersonId);
 			bridge.PersonCode.Should().Be.EqualTo(_person.Id.GetValueOrDefault());
 			bridge.BusinessUnitCode.Should().Be.EqualTo(_businessUnitId);
@@ -491,7 +480,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_person.Note = "TestNote1";
 
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Note, GroupPageNameResourceKey = "Note", BusinessUnitCode = _businessUnitId, GroupCode = _person.Note.GenerateGuid() };
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
 			var analyticsBridge = new AnalyticsBridgeGroupPagePerson
 			{
@@ -502,17 +491,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				GroupPageCode = analyticsGroupPage.GroupPageCode
 			};
 
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(analyticsBridge)
 				.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(_person.Note.GenerateGuid(), _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(_person.Note.GenerateGuid(), _businessUnitId)
 				.Should()
 				.Be.SameInstanceAs(analyticsGroupPage);
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
 		}
 
 		[Test]
@@ -521,14 +510,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			createPerson(PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today));
 			_person.Note = "TestNote1";
 
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Note, GroupPageNameResourceKey = "Note", BusinessUnitCode = _businessUnitId };
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			var addedGroupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(_person.Note.GenerateGuid(), _businessUnitId);
+			var addedGroupPage = AnalyticsGroupPageRepository.GetGroupPageByGroupCode(_person.Note.GenerateGuid(), _businessUnitId);
 			addedGroupPage.Should().Not.Be.Null();
 			addedGroupPage.GroupPageCode.Should().Be.EqualTo(analyticsGroupPage.GroupPageCode);
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(analyticsGroupPage.GroupPageName);
@@ -536,7 +525,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			addedGroupPage.GroupName.Should().Be.EqualTo(_person.Note);
 			addedGroupPage.GroupIsCustom.Should().Be.False();
 
-			var bridge = _analyticsBridgeGroupPagePersonRepository.Bridges.Single();
+			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();
 			bridge.PersonId.Should().Be.EqualTo(_analyticsPersonPeriod.PersonId);
 			bridge.PersonCode.Should().Be.EqualTo(_person.Id.GetValueOrDefault());
 			bridge.BusinessUnitCode.Should().Be.EqualTo(_businessUnitId);
@@ -550,13 +539,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			RootPersonGroup rootPersonGroup;
 			var groupPage = createPersonGroup(out rootPersonGroup, _person);
 
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_groupPageRepository.Add(groupPage);
+			GroupPageRepository.Add(groupPage);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			var addedGroupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId);
+			var addedGroupPage = AnalyticsGroupPageRepository.GetGroupPageByGroupCode(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId);
 			addedGroupPage.Should().Not.Be.Null();
 			addedGroupPage.GroupPageCode.Should().Be.EqualTo(groupPage.Id.GetValueOrDefault());
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(groupPage.Description.Name);
@@ -564,7 +553,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			addedGroupPage.GroupName.Should().Be.EqualTo(rootPersonGroup.Description.Name);
 			addedGroupPage.GroupIsCustom.Should().Be.True();
 
-			var bridge = _analyticsBridgeGroupPagePersonRepository.Bridges.Single();
+			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();
 			bridge.PersonId.Should().Be.EqualTo(_analyticsPersonPeriod.PersonId);
 			bridge.PersonCode.Should().Be.EqualTo(_person.Id.GetValueOrDefault());
 			bridge.BusinessUnitCode.Should().Be.EqualTo(_businessUnitId);
@@ -579,10 +568,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			RootPersonGroup rootPersonGroup;
 			var groupPage = createPersonGroup(out rootPersonGroup, _person);
 
-			_groupPageRepository.Add(groupPage);
+			GroupPageRepository.Add(groupPage);
 
 			var analyticsGroupPage = new AnalyticsGroup { GroupPageCode = groupPage.Id.GetValueOrDefault(), GroupPageName = groupPage.Description.Name, GroupPageNameResourceKey = groupPage.DescriptionKey, BusinessUnitCode = _businessUnitId , GroupCode = rootPersonGroup.Id.GetValueOrDefault() };
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 
 			var analyticsBridge = new AnalyticsBridgeGroupPagePerson
 			{
@@ -592,17 +581,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				PersonCode = _person.Id.GetValueOrDefault(),
 				GroupPageCode = analyticsGroupPage.GroupPageCode
 			};
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(analyticsBridge)
 				.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId)
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId)
 				.Should()
 				.Be.SameInstanceAs(analyticsGroupPage);
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Single().Should().Be.SameInstanceAs(analyticsBridge);
 		}
 
 		[Test]
@@ -611,7 +600,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var existingGrouping = Guid.NewGuid();
 			createPerson(PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today));
 
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(new AnalyticsBridgeGroupPagePerson
 				{
 					BusinessUnitCode = _businessUnitId,
@@ -622,9 +611,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				})
 				.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Should().Be.Empty();
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Should().Be.Empty();
 		}
 
 		[Test]
@@ -633,7 +622,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var existingGrouping = Guid.NewGuid();
 			createPerson(PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today));
 
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(new AnalyticsBridgeGroupPagePerson
 				{
 					BusinessUnitCode = _businessUnitId,
@@ -644,12 +633,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				})
 				.WithPersonMapping(_person.Id.GetValueOrDefault(), _analyticsPersonPeriod.PersonId);
 
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup {GroupCode = existingGrouping, BusinessUnitCode = _businessUnitId});
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup {GroupCode = existingGrouping, BusinessUnitCode = _businessUnitId});
 
-			_target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
+			Target.Handle(new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId, PersonIdCollection = { _person.Id.GetValueOrDefault() } });
 
-			_analyticsGroupPageRepository.GetGroupPageByGroupCode(existingGrouping, _businessUnitId).Should().Be.Null();
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Should().Be.Empty();
+			AnalyticsGroupPageRepository.GetGroupPageByGroupCode(existingGrouping, _businessUnitId).Should().Be.Null();
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Should().Be.Empty();
 		}
 	}
 }

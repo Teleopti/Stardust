@@ -4,87 +4,101 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Analytics
 {
+	[DomainTest]
 	[TestFixture]
-	public class AnalyticsScheduleChangeFilterTests
+	public class AnalyticsScheduleChangeFilterTests : ISetup
 	{
-		private AnalyticsScheduleChangeForAllReportableScenariosFilter filter;
-		private IScenarioRepository scenarioRepository;
+		public AnalyticsScheduleChangeForAllReportableScenariosFilter Target;
+		public IScenarioRepository Scenarios;
 		private Scenario reportableScenario;
 		private Scenario notReportableScenario;
 		private Scenario defaultScenario;
 
-		[SetUp]
-		public void AnalyticsScheduleChangeFilterTestsSetup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			defaultScenario = new Scenario("Default");
-			defaultScenario.WithId();
-			defaultScenario.DefaultScenario = true;
-			defaultScenario.EnableReporting = false;
+			system.AddService<AnalyticsScheduleChangeForAllReportableScenariosFilter>();
+		}
 
-			reportableScenario = new Scenario("Reportable");
-			reportableScenario.WithId();
-			reportableScenario.DefaultScenario = false;
-			reportableScenario.EnableReporting = true;
+		private void addScenarios()
+		{
+			defaultScenario = new Scenario("Default")
+			{
+				DefaultScenario = true,
+				EnableReporting = false
+			}.WithId();
 
-			notReportableScenario = new Scenario("Not reportable");
-			notReportableScenario.WithId();
-			notReportableScenario.DefaultScenario = false;
-			notReportableScenario.EnableReporting = false;
+			reportableScenario = new Scenario("Reportable")
+			{
+				DefaultScenario = false,
+				EnableReporting = true
+			}.WithId();
 
-			scenarioRepository = new FakeScenarioRepository();
-			scenarioRepository.Add(reportableScenario);
-			scenarioRepository.Add(notReportableScenario);
-
-			filter = new AnalyticsScheduleChangeForAllReportableScenariosFilter(scenarioRepository);
+			notReportableScenario = new Scenario("Not reportable")
+			{
+				DefaultScenario = false,
+				EnableReporting = false
+			}.WithId();
+			Scenarios.Add(reportableScenario);
+			Scenarios.Add(notReportableScenario);
+			Scenarios.Add(defaultScenario);
 		}
 
 		[Test]
 		public void DefaultScenarioReportable_ShoulBeProcessed()
 		{
+			addScenarios();
+
 			var @event = new ProjectionChangedEvent
 			{
 				IsDefaultScenario = true,
 				ScenarioId = defaultScenario.Id.GetValueOrDefault()
 			};
-			filter.ContinueProcessingEvent(@event).Should().Be.True();
+			Target.ContinueProcessingEvent(@event).Should().Be.True();
 		}
 
 		[Test]
 		public void DefaultScenarioNotReportable_ShoulBeProcessed()
 		{
+			addScenarios();
+
 			var @event = new ProjectionChangedEvent
 			{
 				IsDefaultScenario = true,
 				ScenarioId = defaultScenario.Id.GetValueOrDefault()
 			};
-			filter.ContinueProcessingEvent(@event).Should().Be.True();
+			Target.ContinueProcessingEvent(@event).Should().Be.True();
 		}
 
 		[Test]
 		public void ScenarioReportable_ShoulBeProcessed()
 		{
+			addScenarios();
+
 			var @event = new ProjectionChangedEvent
 			{
 				IsDefaultScenario = false,
 				ScenarioId = reportableScenario.Id.GetValueOrDefault()
 			};
-			filter.ContinueProcessingEvent(@event).Should().Be.True();
+			Target.ContinueProcessingEvent(@event).Should().Be.True();
 		}
 
 		[Test]
 		public void ScenarioNotReportable_ShoulNotBeProcessed()
 		{
+			addScenarios();
+
 			var @event = new ProjectionChangedEvent
 			{
 				IsDefaultScenario = false,
 				ScenarioId = notReportableScenario.Id.GetValueOrDefault()
 			};
-			filter.ContinueProcessingEvent(@event).Should().Be.False();
+			Target.ContinueProcessingEvent(@event).Should().Be.False();
 		}
 	}
 }
