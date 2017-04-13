@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.Util
 {
@@ -16,6 +17,10 @@ namespace Teleopti.Ccc.Domain.Util
 		/// <returns></returns>
 		public static IEnumerable<string> SplitStringList(string combinedList, char splitter = ',', bool uniqueResult = true)
 		{
+			if (combinedList.IsNullOrEmpty())
+			{
+				return Enumerable.Empty<string>();
+			}
 			const string splitPatternTemplate = "[^{0}\"]+|\"[^\"]*\"";
 
 			var splitPattern = string.Format(splitPatternTemplate, splitter);
@@ -28,10 +33,10 @@ namespace Teleopti.Ccc.Domain.Util
 			return uniqueResult ? new HashSet<string>(result) : result;
 		}
 
-	    public static bool StringContainsChinese(string input)
-	    {
-            var regex = new Regex(@"\p{IsCJKUnifiedIdeographs}");
-            return regex.IsMatch(input);
-	    }
+		public static bool StringContainsChinese(string input)
+		{
+			var regex = new Regex(@"\p{IsCJKUnifiedIdeographs}");
+			return regex.IsMatch(input);
+		}
 	}
 }

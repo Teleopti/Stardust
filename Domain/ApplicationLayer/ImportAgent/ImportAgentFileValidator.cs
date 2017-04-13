@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Util;
@@ -19,10 +23,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private defaultAgentDataModel _defaultValues;
 
 		private readonly IImportAgentDataProvider _importAgentDataProvider;
+		private readonly AgentFileTemplate _agentFileTemplate;
 
 		public ImportAgentFileValidator(IImportAgentDataProvider importAgentDataProvider)
 		{
 			_importAgentDataProvider = importAgentDataProvider;
+			_agentFileTemplate = new AgentFileTemplate(); ;
 		}
 
 		public void SetDefaultValues(ImportAgentDefaults defaultValues)
@@ -86,13 +92,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			if (!defaultValues.ExternalLogonId.IsNullOrEmpty())
 			{
 				Guid externalLogonId;
-				if (Guid.TryParse(defaultValues.ExternalLogonId, out externalLogonId))
+				if (Guid.TryParse(defaultValues.ExternalLogonId, out externalLogonId) && externalLogonId != Guid.Empty)
 				{
 					var externalLogon = _importAgentDataProvider.FindExternalLogOn(externalLogonId);
 					if (externalLogon != null)
 					{
 						_defaultValues.ExternalLogon = externalLogon;
 					}
+
 				}
 			}
 
@@ -172,15 +179,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var agentInfo = new AgentDataModel();
 			feedback = new Feedback();
 
+
 			agentInfo.Firstname = raw.Firstname;
 			agentInfo.Lastname = raw.Lastname;
 
 			feedback.Merge(parseFirstnameAndLastname(raw.Firstname, raw.Lastname, agentInfo));
 			feedback.Merge(parseWindowsUserAndApplicationLogonId(raw.WindowsUser, raw.ApplicationUserId, agentInfo));
 			feedback.Merge(parseApplicationUserIdAndPassword(raw.ApplicationUserId, raw.Password, agentInfo));
+			IEnumerable<Feedback> emptyFeedbacks = validateRequiredColumns(raw);
+			if (!emptyFeedbacks.IsNullOrEmpty())
+			{
+				feedback.Merge(emptyFeedbacks.ToArray());
+				return agentInfo;
+			}
 			feedback.Merge(parseRole(raw.Role, agentInfo));
 			feedback.Merge(parseStartDate(raw.StartDate, agentInfo));
-
 			feedback.Merge(parseOrganization(raw.Organization, agentInfo));
 			feedback.Merge(parseSkill(raw.Skill, agentInfo));
 			feedback.Merge(parseExternalLogon(raw.ExternalLogon, agentInfo));
@@ -202,10 +215,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (_defaultValues != null && _defaultValues.StartDate.HasValue)
 				{
 					agentInfo.StartDate = _defaultValues.StartDate.Value;
-					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.StartDate), agentInfo.StartDate.ToShortDateString()));
+					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.StartDate), agentInfo.StartDate.ToShortDateString()));
 					return feedback;
 				}
-				feedback.ErrorMessages.Add(string.Format(Resources.ColumnCanNotBeEmpty, nameof(RawAgent.StartDate)));
+				feedback.ErrorMessages.Add(getMessage(Resources.ColumnCanNotBeEmpty, nameof(RawAgent.StartDate)));
 			}
 			else
 			{
@@ -213,7 +226,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 			return feedback;
 		}
-
 
 		private Feedback parseFirstnameAndLastname(string rawFirstname, string rawLastname,
 			AgentDataModel agentInfo)
@@ -301,21 +313,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private Feedback parseSchedulePeriodLength(double? periodLength, AgentDataModel agentInfo)
 		{
 			var feedback = new Feedback();
-			if (!periodLength.HasValue)
+			if (!periodLength.HasValue && _defaultValues?.SchedulePeriodLength != null)
 			{
-				if (_defaultValues?.SchedulePeriodLength != null)
-				{
-					agentInfo.SchedulePeriodLength = _defaultValues.SchedulePeriodLength.Value;
-					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.SchedulePeriodLength), agentInfo.SchedulePeriodLength));
-					return feedback;
-				}
-				feedback.ErrorMessages.Add(String.Format(Resources.ColumnCanNotBeEmpty, nameof(RawAgent.SchedulePeriodLength)));
+				agentInfo.SchedulePeriodLength = _defaultValues.SchedulePeriodLength.Value;
+				feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.SchedulePeriodLength), agentInfo.SchedulePeriodLength));
+				return feedback;
 			}
-			else
-			{
-				agentInfo.SchedulePeriodLength = (int)periodLength.Value;
-			}
-
+			agentInfo.SchedulePeriodLength = (int)periodLength.Value;
 			return feedback;
 		}
 
@@ -330,17 +334,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				return feedback;
 			}
 
-			if (_defaultValues?.SchedulePeriodType != null)
+			if (_defaultValues?.SchedulePeriodType != null && (_defaultValues?.SchedulePeriodType.HasValue ?? false))
 			{
 				agentInfo.SchedulePeriodType = _defaultValues.SchedulePeriodType.Value;
-				feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.SchedulePeriodType), agentInfo.SchedulePeriodType));
+				feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.SchedulePeriodType), agentInfo.SchedulePeriodType));
 				return feedback;
 			}
 
 			var avaliableSchedulePeriodTypeValues = String.Join(", ", EnumExtensions
 															.GetValues(SchedulePeriodType.ChineseMonth)
 															.Select(t => t.ToString()));
-			feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.SchedulePeriodType), string.Format(Resources.OnlySupport, avaliableSchedulePeriodTypeValues)));
+			feedback.ErrorMessages.Add(getMessage(Resources.InvalidColumn, nameof(RawAgent.SchedulePeriodType), string.Format(Resources.OnlySupport, avaliableSchedulePeriodTypeValues)));
 			return feedback;
 		}
 
@@ -358,12 +362,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (externalLogon == null)
 				{
 					invalidLogons.Add(logon);
+					continue;
 				}
-				else
-				{
-					agentInfo.ExternalLogons.Add(externalLogon);
-
-				}
+				agentInfo.ExternalLogons.Add(externalLogon);
 			}
 
 			if (!agentInfo.ExternalLogons.Any())
@@ -372,17 +373,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				{
 					if (_defaultValues.ExternalLogon != null)
 						agentInfo.ExternalLogons.Add(_defaultValues.ExternalLogon);
-					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.ExternalLogon), _defaultValues.ExternalLogon?.AcdLogOnName));
+					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.ExternalLogon), _defaultValues?.ExternalLogon?.AcdLogOnName));
 					return feedback;
 				}
-
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.ExternalLogon), rawExternalLogons));
-				return feedback;
 			}
-
 			if (invalidLogons.Any())
 			{
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.ExternalLogon), string.Join(",", invalidLogons)));
+				feedback.ErrorMessages.Add(getMessage(Resources.InvalidColumn, nameof(RawAgent.ExternalLogon), invalidLogons, null));
 			}
 			return feedback;
 		}
@@ -391,91 +388,83 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		{
 			var feedback = new Feedback();
 			var ruleSetBag = _importAgentDataProvider.FindRuleSetBag(rawShiftBag);
+			agentInfo.RuleSetBag = ruleSetBag;
 			if (ruleSetBag == null)
 			{
 				if (_defaultValues?.RuleSetBag != null)
 				{
 					agentInfo.RuleSetBag = _defaultValues.RuleSetBag;
-					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.ShiftBag), agentInfo.RuleSetBag.Description.Name));
+					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.ShiftBag), agentInfo.RuleSetBag.Description.Name));
 					return feedback;
 				}
-
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.ShiftBag), rawShiftBag));
-				return feedback;
+				feedback.ErrorMessages.Add(getMessage(Resources.InvalidColumn, nameof(RawAgent.ShiftBag), rawShiftBag));
 			}
-
-			agentInfo.RuleSetBag = ruleSetBag;
 			return feedback;
+
 		}
 
 		private Feedback parsePartTimePercentage(string rawPartTimePercentage, AgentDataModel agentInfo)
 		{
 			var feedback = new Feedback();
 			var partTimePercentage = _importAgentDataProvider.FindPartTimePercentage(rawPartTimePercentage);
+			agentInfo.PartTimePercentage = partTimePercentage;
 			if (partTimePercentage == null)
 			{
 				if (_defaultValues?.PartTimePercentage != null)
 				{
 					agentInfo.PartTimePercentage = _defaultValues.PartTimePercentage;
-					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.PartTimePercentage), _defaultValues.PartTimePercentage.Description.Name));
+					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.PartTimePercentage), _defaultValues.PartTimePercentage.Description.Name));
 					return feedback;
 				}
+				feedback.ErrorMessages.Add(getMessage(Resources.InvalidColumn, nameof(RawAgent.PartTimePercentage), rawPartTimePercentage));
 
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.PartTimePercentage), rawPartTimePercentage));
-				return feedback;
 			}
 
-			agentInfo.PartTimePercentage = partTimePercentage;
 			return feedback;
+
 		}
 
 		private Feedback parseContractSchedule(string rawContractSchedule, AgentDataModel agentInfo)
 		{
 			var feedback = new Feedback();
-			var contractSchedule = _importAgentDataProvider.FindContractSchedule(rawContractSchedule);
-			if (contractSchedule == null)
+			agentInfo.ContractSchedule = _importAgentDataProvider.FindContractSchedule(rawContractSchedule);
+			if (agentInfo.ContractSchedule == null)
 			{
 				if (_defaultValues?.ContractSchedule != null)
 				{
 					agentInfo.ContractSchedule = _defaultValues.ContractSchedule;
-					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.ContractSchedule), agentInfo.ContractSchedule.Description.Name));
+					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.ContractSchedule), agentInfo.ContractSchedule.Description.Name));
 					return feedback;
 				}
-
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.ContractSchedule), rawContractSchedule));
-				return feedback;
+				feedback.ErrorMessages.Add(getMessage(Resources.InvalidColumn, nameof(RawAgent.ContractSchedule), rawContractSchedule));
 			}
-
-			agentInfo.ContractSchedule = contractSchedule;
 			return feedback;
+
 		}
 
 		private Feedback parseContract(string rawContract, AgentDataModel agentInfo)
 		{
 			var feedback = new Feedback();
-			var contract = _importAgentDataProvider.FindContract(rawContract);
-			if (contract == null)
+			agentInfo.Contract = _importAgentDataProvider.FindContract(rawContract);
+			if (agentInfo.Contract == null)
 			{
 				if (_defaultValues?.Contract != null)
 				{
 					agentInfo.Contract = _defaultValues.Contract;
-					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.Contract), agentInfo.Contract.Description.Name));
+					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue,
+						nameof(RawAgent.Contract), agentInfo.Contract.Description.Name));
 					return feedback;
 				}
-
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Contract), rawContract));
-				return feedback;
+				feedback.ErrorMessages.Add(getMessage(Resources.InvalidColumn, nameof(RawAgent.Contract), rawContract));
 			}
-
-			agentInfo.Contract = contract;
 			return feedback;
+
 		}
 
 		private Feedback parseRole(string rawRoleString, AgentDataModel agent)
 		{
-			var feedback = new Feedback();
-			var roleNames = rawRoleString != null ? StringHelper.SplitStringList(rawRoleString).ToList() : new List<string>();
-
+			Feedback feedback = new Feedback();
+			var roleNames = StringHelper.SplitStringList(rawRoleString).ToList();
 			var invalidRoles = new List<string>();
 			foreach (var roleName in roleNames)
 			{
@@ -492,64 +481,53 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 			if (!agent.Roles.Any())
 			{
-				if (_defaultValues != null && _defaultValues.Roles.Any())
+				if (_defaultValues?.Roles != null && _defaultValues.Roles.Any())
 				{
 					agent.Roles.AddRange(_defaultValues.Roles);
-					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.Role), _defaultValues.Roles, (role) => role.Name));
+					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.Role),
+						_defaultValues.Roles, (role) => role.Name));
 					return feedback;
 				}
-
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Role), string.Join(",", invalidRoles)));
-				return feedback;
 			}
-
 			if (invalidRoles.Any())
 			{
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Role), string.Join(",", invalidRoles)));
+				feedback.ErrorMessages.Add(getMessage(Resources.InvalidColumn, nameof(RawAgent.Role), invalidRoles, null));
 			}
-
 			return feedback;
+
 		}
 
 		private Feedback parseOrganization(string rawOrganizationString, AgentDataModel agent)
 		{
-			var feedback = new Feedback();
+			Feedback feedback = new Feedback();
 			var organizationParts = rawOrganizationString?.Split('/') ?? new string[] { };
-
-			ITeam team = null;
 
 			if (organizationParts.Length == 2)
 			{
 				var site = _importAgentDataProvider.FindSite(organizationParts[0]);
 				if (site != null)
 				{
-					team = _importAgentDataProvider.FindTeam(site, organizationParts[1]);
+					agent.Team = _importAgentDataProvider.FindTeam(site, organizationParts[1]);
 				}
 			}
 
-			if (team == null)
+			if (agent.Team == null)
 			{
 				if (_defaultValues?.Team != null)
 				{
 					agent.Team = _defaultValues.Team;
-					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.Organization), agent.Team?.SiteAndTeam));
+					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.Organization), agent.Team?.SiteAndTeam));
 					return feedback;
 				}
+				feedback.ErrorMessages.Add(getMessage(Resources.InvalidColumn, nameof(RawAgent.Organization), rawOrganizationString));
 
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Organization), rawOrganizationString));
-				return feedback;
 			}
-
-			agent.Team = team;
 			return feedback;
 		}
-
 		private Feedback parseSkill(string rawSkillString, AgentDataModel agent)
 		{
-			var feedback = new Feedback();
-			var skillNames = !rawSkillString.IsNullOrEmpty()
-				? StringHelper.SplitStringList(rawSkillString)
-				: new List<string>();
+			Feedback feedback = new Feedback();
+			var skillNames = StringHelper.SplitStringList(rawSkillString);
 			var invalidSkills = new List<string>();
 			foreach (var skillName in skillNames)
 			{
@@ -557,48 +535,119 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (skill == null)
 				{
 					invalidSkills.Add(skillName);
+					continue;
 				}
-				else
-				{
-					agent.Skills.Add(skill);
-				}
+				agent.Skills.Add(skill);
 			}
 
 			if (!agent.Skills.Any())
 			{
-				if (_defaultValues != null && _defaultValues.Skills.Any())
+				if (_defaultValues?.Skills != null)
 				{
 					agent.Skills.AddRange(_defaultValues.Skills);
-					feedback.WarningMessages.Add(getWarningMessage(nameof(RawAgent.Skill), _defaultValues.Skills, skill => skill.Name));
+					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue,
+						nameof(RawAgent.Skill), _defaultValues.Skills, skill => skill.Name));
 					return feedback;
 				}
 
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Skill), string.Join(",", invalidSkills)));
-				return feedback;
 			}
-
 			if (invalidSkills.Any())
 			{
-				feedback.ErrorMessages.Add(getInvalidColumnMessage(nameof(RawAgent.Skill), string.Join(",", invalidSkills)));
+				feedback.ErrorMessages.Add(getMessage(Resources.InvalidColumn, nameof(RawAgent.Skill), invalidSkills, null));
 			}
-
 			return feedback;
 		}
 
-		private static string getWarningMessage<T>(string column, T value)
+		private IEnumerable<Feedback> validateRequiredColumns(RawAgent agent)
 		{
-			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, column, value);
+			foreach (var column in _agentFileTemplate.ColumnHeaders)
+			{
+				Feedback feedback = null;
+				switch (column.Name)
+				{
+					case nameof(RawAgent.Skill):
+						feedback = checkIfColumnIsNullOrEmpty(agent, column, _defaultValues?.Skills);
+						break;
+					case nameof(RawAgent.Role):
+						feedback = checkIfColumnIsNullOrEmpty(agent, column, _defaultValues?.Roles);
+						break;
+					case nameof(RawAgent.Contract):
+						feedback = checkIfColumnIsNullOrEmpty(agent, column, _defaultValues?.Contract);
+						break;
+					case nameof(RawAgent.ContractSchedule):
+						feedback = checkIfColumnIsNullOrEmpty(agent, column, _defaultValues?.ContractSchedule);
+						break;
+					case nameof(RawAgent.Organization):
+						feedback = checkIfColumnIsNullOrEmpty(agent, column, _defaultValues?.Team);
+						break;
+					case nameof(RawAgent.PartTimePercentage):
+						feedback = checkIfColumnIsNullOrEmpty(agent, column, _defaultValues?.PartTimePercentage);
+						break;
+					case nameof(RawAgent.ShiftBag):
+						feedback = checkIfColumnIsNullOrEmpty(agent, column, _defaultValues?.RuleSetBag);
+						break;
+					case nameof(RawAgent.StartDate):
+						feedback = checkIfColumnIsNullOrEmpty(agent, column, _defaultValues?.StartDate);
+						break;
+					case nameof(RawAgent.SchedulePeriodLength):
+						feedback = checkIfColumnIsNullOrEmpty(agent, column, _defaultValues?.SchedulePeriodLength);
+						break;
+					case nameof(RawAgent.SchedulePeriodType):
+						feedback = checkIfColumnIsNullOrEmpty(agent, column, _defaultValues?.SchedulePeriodType);
+						break;
+
+				}
+				if (feedback != null && feedback.ErrorMessages.Any())
+				{
+					yield return feedback;
+				}
+			}
 		}
 
-		private static string getWarningMessage<T>(string column, IEnumerable<T> value, Func<T, string> getRealValue)
+		private Feedback checkIfColumnIsNullOrEmpty<T>(RawAgent agent, PropertyInfo column, T defaultValue)
 		{
-			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, column, string.Join(", ", value.Select(obj => getRealValue(obj))));
+
+			if (column == null)
+			{
+				return null;
+			}
+			var hasDefaultValue = defaultValue is IEnumerable
+				? !(defaultValue as IEnumerable<object>).IsNullOrEmpty()
+				: defaultValue as object != getDefaultValue(typeof(T));
+			if (column.GetValue(agent) == getDefaultValue(column.PropertyType) && !hasDefaultValue)
+			{
+				var feedback = new Feedback();
+				feedback.ErrorMessages.Add(getMessage(Resources.ColumnCanNotBeEmpty, _agentFileTemplate.GetColumnDisplayName(column.Name)));
+				return feedback;
+			}
+			return null;
 		}
 
-		private static string getInvalidColumnMessage<T>(string column, T value)
+		private object getDefaultValue(Type type)
 		{
-			return string.Format(Resources.InvalidColumn, column, value);
+			if (type.IsValueType)
+			{
+				return Activator.CreateInstance(type);
+			}
+			return null;
 		}
+
+		private string getMessage(string format, string column)
+		{
+			return string.Format(format, _agentFileTemplate.GetColumnDisplayName(column));
+		}
+
+		private string getMessage<T>(string format, string column, T value)
+		{
+			return string.Format(format, _agentFileTemplate.GetColumnDisplayName(column), value);
+		}
+
+		private string getMessage<T>(string format, string column, IEnumerable<T> value, Func<T, string> getRealValue)
+		{
+			return getMessage(format, column, string.Join(", ", value.Select(obj => getRealValue == null ? obj.ToString() : getRealValue(obj))));
+		}
+
+
 
 		private class defaultAgentDataModel
 		{

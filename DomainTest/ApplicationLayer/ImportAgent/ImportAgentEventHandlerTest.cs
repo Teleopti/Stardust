@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var jobResult = fakeJobResult();
 			var workbook = new HSSFWorkbook();
 			var sheet = workbook.CreateSheet();
-			sheet.CreateRow(0).CreateCell(0).SetCellValue("Firstname");
+			sheet.CreateRow(0).CreateCell(0).SetCellValue(nameof(RawAgent.Firstname));
 			using (var stream = new MemoryStream())
 			{
 				workbook.Write(stream);
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			});
 			var headers = new AgentFileTemplate().ColumnHeaderNames;
 			var message = jobResult.Details.Single().Message;
-			message.Should().Be.EqualTo(string.Format(Resources.MissingColumnX, string.Join(", ", headers.Except(new[] { "Firstname" }))));
+			message.Should().Be.EqualTo(string.Format(Resources.MissingColumnX, string.Join(", ", headers.Except(new[] { nameof(RawAgent.Firstname) }))));
 		}
 
 		[Test]

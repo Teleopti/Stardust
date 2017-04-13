@@ -1,9 +1,10 @@
 using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
-
+	[AttributeUsage(AttributeTargets.Property)]
 	public class OrderAttribute : Attribute
 	{
 		public OrderAttribute(int order)
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		public int Order { get; private set; }
 	}
+
 	public class RawAgent
 	{
 		[Order(0)]

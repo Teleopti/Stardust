@@ -1,49 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Teleopti.Ccc.Domain.Forecasting.Export;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public class AgentFileTemplate
 	{
-		private readonly string[] _columnHeaders = {
-			"Firstname",
-			"Lastname",
-			"WindowsUser",
-			"ApplicationUserId",
-			"Password",
-			"Role",
-			"StartDate",
-			"Site/Team",
-			"Skill",
-			"ExternalLogon",
-			"Contract",
-			"ContractSchedule",
-			"PartTimePercentage",
-			"ShiftBag",
-			"SchedulePeriodType",
-			"SchedulePeriodLength"
-		};
 
 
+		private const string SHEETNAME = "Agents";
+		internal readonly PropertyInfo[] ColumnHeaders =
+			typeof(RawAgent).GetProperties().OrderBy(p => p.GetCustomAttribute<OrderAttribute>().Order).ToArray();
 
-		private readonly IDictionary<string, int> _columnHeaderMap = new Dictionary<string, int>();
-
-		public AgentFileTemplate()
-		{
-			for (var i = 0; i < _columnHeaders.Length; i++)
-			{
-				_columnHeaderMap.Add(_columnHeaders[i], i);
-			}
-		}
-
-		public string[] ColumnHeaderNames => _columnHeaders;
-
-		public IDictionary<string, int> ColumnHeaderMap => _columnHeaderMap;
+		public string[] ColumnHeaderNames => ColumnHeaders
+			.Select(header => GetColumnDisplayName(header.Name))
+			.ToArray();
 
 		public RawAgent GetDefaultAgent()
 		{
@@ -70,50 +49,43 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		public MemoryStream GetFileTemplate(params RawAgent[] agents)
 		{
-			const string sheetName = "Agents";
-
 			var ms = new MemoryStream();
-			var returnedFile = GetTemplateWorkbook(sheetName);
-			var newSheet = returnedFile.GetSheet(sheetName);
+			var returnedFile = GetTemplateWorkbook(SHEETNAME);
+			var newSheet = returnedFile.GetSheet(SHEETNAME);
 
 			for (var i = 0; i < agents.Length; i++)
 			{
 				var agent = agents[i];
 				var row = newSheet.CreateRow(i + 1);
-
-				row.CreateCell(ColumnHeaderMap["Firstname"]).SetCellValue(agent.Firstname);
-
-				row.CreateCell(ColumnHeaderMap["Lastname"]).SetCellValue(agent.Lastname);
-
-				row.CreateCell(ColumnHeaderMap["WindowsUser"]).SetCellValue(agent.WindowsUser);
-				row.CreateCell(ColumnHeaderMap["ApplicationUserId"]).SetCellValue(agent.ApplicationUserId);
-				row.CreateCell(ColumnHeaderMap["Password"]).SetCellValue(agent.Password);
-				row.CreateCell(ColumnHeaderMap["Role"]).SetCellValue(agent.Role);
-
-				var startDateCell = row.CreateCell(ColumnHeaderMap["StartDate"]);
-				if (agent.StartDate.HasValue)
+				for (int j = 0; j < ColumnHeaders.Length; j++)
 				{
-					startDateCell.SetCellValue(agent.StartDate.Value);
-				}
-				row.CreateCell(ColumnHeaderMap["Site/Team"]).SetCellValue(agent.Organization);
-				row.CreateCell(ColumnHeaderMap["Skill"]).SetCellValue(agent.Skill);
-				row.CreateCell(ColumnHeaderMap["ExternalLogon"]).SetCellValue(agent.ExternalLogon);
-				row.CreateCell(ColumnHeaderMap["Contract"]).SetCellValue(agent.Contract);
-				row.CreateCell(ColumnHeaderMap["ContractSchedule"]).SetCellValue(agent.ContractSchedule);
-				row.CreateCell(ColumnHeaderMap["PartTimePercentage"]).SetCellValue(agent.PartTimePercentage);
-				row.CreateCell(ColumnHeaderMap["ShiftBag"]).SetCellValue(agent.ShiftBag);
-				row.CreateCell(ColumnHeaderMap["SchedulePeriodType"]).SetCellValue(agent.SchedulePeriodType);
+					var value = ColumnHeaders[j].GetValue(agent);
+					var cell = row.CreateCell(j);
+					if (value != null)
+					{
+						DateTime dateValue;
+						if (DateTime.TryParse(value.ToString(), out dateValue))
+						{
+							cell.SetCellValue(((DateTime?)value).Value);
+							continue;
+						}
+						Double numberValue;
+						if (Double.TryParse(value.ToString(), out numberValue))
+						{
+							cell.SetCellValue(numberValue);
+							continue;
+						}
+						cell.SetCellValue(value.ToString());
+					}
 
-				var schedulePeriodLengthCell = row.CreateCell(ColumnHeaderMap["SchedulePeriodLength"]);
-				if (agent.SchedulePeriodLength.HasValue)
-				{
-					schedulePeriodLengthCell.SetCellValue(agent.SchedulePeriodLength.Value);
 				}
 			}
 			returnedFile.Write(ms);
 
 			return ms;
 		}
+
+
 
 		public IWorkbook GetTemplateWorkbook(string invalidUserSheetName, bool isXlsx = false)
 		{
@@ -128,13 +100,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var dateStyle = returnedFile.CreateCellStyle();
 			dateStyle.DataFormat = fmt.GetFormat(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
 
-			for (var i = 0; i < ColumnHeaderMap.Count; i++)
+			for (var i = 0; i < ColumnHeaders.Length; i++)
 			{
-				if (ColumnHeaderMap["StartDate"] == i)
+				var column = ColumnHeaders[i];
+
+				if (column.PropertyType == typeof(DateTime?))
 				{
 					newsheet.SetDefaultColumnStyle(i, dateStyle);
 				}
-				else if (ColumnHeaderMap["SchedulePeriodLength"] == i)
+				else if (column.PropertyType == typeof(double?))
 				{
 					newsheet.SetDefaultColumnStyle(i, numberStyle);
 				}
@@ -145,13 +119,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 
 			var row = newsheet.CreateRow(0);
-			for (var i = 0; i < ColumnHeaderNames.Length; i++)
+			for (var i = 0; i < ColumnHeaders.Length; i++)
 			{
-				row.CreateCell(i).SetCellValue(ColumnHeaderNames[i]);
+				row.CreateCell(i).SetCellValue(GetColumnDisplayName(ColumnHeaders[i].Name));
 			}
 
 			return returnedFile;
 		}
 
+		public string GetColumnDisplayName(string name)
+		{
+			var column = ColumnHeaders.FirstOrDefault(c => c.Name == name);
+			if (column != null)
+				return column.GetCustomAttribute<DescriptionAttribute>()?.Description ?? column.Name;
+			return string.Empty;
+		}
 	}
 }

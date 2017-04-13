@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public FakeCurrentDatasource CurrentDatasource;
 		public FakeTenants FindTenantByName;
-
+		private AgentFileTemplate _agentFileTemplate;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -77,12 +77,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			system.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
 			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			_agentFileTemplate = new AgentFileTemplate();
 		}
 
-		private static string warningMessage(string column, object value)
-		{
-			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, column, value);
-		}
+
 
 		[Test, Ignore("file parsing")]
 		public void ShouldParseWorkbookFromHttpContent()
@@ -122,8 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		[Test]
 		public void ShouldValidateWorkbookWithCorrectColumnHeader()
 		{
-			var fileTemplate = new AgentFileTemplate();
-			var workbook = fileTemplate.GetTemplateWorkbook("test");
+			var workbook = _agentFileTemplate.GetTemplateWorkbook("test");
 
 
 			var result = Target.ValidateSheetColumnHeader(workbook);
@@ -134,9 +131,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		[Test]
 		public void ShouldValidateExcelFileWithCorrectColumnHeaderAndRedundantColumns()
 		{
-			var fileTemplate = new AgentFileTemplate();
-			var workbook = fileTemplate.GetTemplateWorkbook("test");
-			workbook.GetSheetAt(0).GetRow(0).CreateCell(fileTemplate.ColumnHeaderNames.Length).SetCellValue("redundant");
+			var workbook = _agentFileTemplate.GetTemplateWorkbook("test");
+			workbook.GetSheetAt(0).GetRow(0).CreateCell(_agentFileTemplate.ColumnHeaderNames.Length).SetCellValue("redundant");
 
 			var result = Target.ValidateSheetColumnHeader(workbook);
 
@@ -170,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		[Test]
 		public void ShouldParseRawDataWithCorrectColumnInput()
 		{
-			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent { Firstname = "test", StartDate = new DateTime(2017, 3, 1) });
+			var ms = _agentFileTemplate.GetFileTemplate(new RawAgent { Firstname = "test", StartDate = new DateTime(2017, 3, 1) });
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc);
@@ -183,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		[Test]
 		public void ShouldParseRawValueIfExternalLogonColumnTypeNotMatch()
 		{
-			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var workbook = _agentFileTemplate.GetTemplateWorkbook("testAgent");
 			var sheet = workbook.GetSheetAt(0);
 			var row = sheet.CreateRow(1);
 			row.CreateCell(0).SetCellValue("ashley");
@@ -206,16 +202,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			row.CreateCell(15).SetCellValue(4);
 			row.Cells[9].SetCellType(CellType.Numeric);
 
-			var result = Target.ProcessSheet(sheet,TimeZoneInfo.Utc);
+			var result = Target.ProcessSheet(sheet, TimeZoneInfo.Utc);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "ExternalLogon", string.Format(Resources.RequireXCellFormat, "text"))).Should().Be.True();
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, nameof(RawAgent.ExternalLogon), string.Format(Resources.RequireXCellFormat, "text"))).Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldParseRawValueIfStartDateColumnTypeNotMatch()
 		{
-			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var workbook = _agentFileTemplate.GetTemplateWorkbook("testAgent");
 			var sheet = workbook.GetSheetAt(0);
 			var row = sheet.CreateRow(1);
 			row.CreateCell(0).SetCellValue("ashley");
@@ -237,16 +233,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			row.CreateCell(14).SetCellValue("week");
 			row.CreateCell(15).SetCellValue(4);
 
-			var result = Target.ProcessSheet(sheet,TimeZoneInfo.Utc);
+			var result = Target.ProcessSheet(sheet, TimeZoneInfo.Utc);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "StartDate", string.Format(Resources.RequireXCellFormat, "date"))).Should().Be.True();
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, nameof(RawAgent.StartDate), string.Format(Resources.RequireXCellFormat, "date"))).Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldParseRawValueIfPartimePercentageColumnTypeNotMatch()
 		{
-			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var workbook = _agentFileTemplate.GetTemplateWorkbook("testAgent");
 			var sheet = workbook.GetSheetAt(0);
 			var row = sheet.CreateRow(1);
 			row.CreateCell(0).SetCellValue("ashley");
@@ -269,16 +265,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			row.CreateCell(15).SetCellValue(4);
 			row.Cells[12].SetCellType(CellType.Numeric);
 
-			var result = Target.ProcessSheet(sheet,TimeZoneInfo.Utc);
+			var result = Target.ProcessSheet(sheet, TimeZoneInfo.Utc);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "StartDate", string.Format(Resources.RequireXCellFormat, "date"))).Should().Be.True();
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, nameof(RawAgent.StartDate), string.Format(Resources.RequireXCellFormat, "date"))).Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldGiveCorrectErrorIfRequiredColumnCellIsEmpty()
 		{
-			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var workbook = _agentFileTemplate.GetTemplateWorkbook("testAgent");
 			var sheet = workbook.GetSheetAt(0);
 			var row = sheet.CreateRow(1);
 			row.CreateCell(0).SetCellValue("ashley");
@@ -300,16 +296,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			row.CreateCell(14).SetCellValue("week");
 			row.CreateCell(15);
 
-			var result = Target.ProcessSheet(sheet,TimeZoneInfo.Utc);
+			var result = Target.ProcessSheet(sheet, TimeZoneInfo.Utc);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.ColumnCanNotBeEmpty, "SchedulePeriodLength")).Should().Be.True();
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.ColumnCanNotBeEmpty, nameof(RawAgent.SchedulePeriodLength))).Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldNotGiveErrorIfNullableColumnCellIsEmpty()
 		{
-			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var workbook = _agentFileTemplate.GetTemplateWorkbook("testAgent");
 			var sheet = workbook.GetSheetAt(0);
 			var row = sheet.CreateRow(1);
 			row.CreateCell(0);
@@ -332,16 +328,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			row.CreateCell(15);
 			row.Cells[12].SetCellType(CellType.Numeric);
 
-			var result = Target.ProcessSheet(sheet,TimeZoneInfo.Utc);
+			var result = Target.ProcessSheet(sheet, TimeZoneInfo.Utc);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, "Firstname", string.Format(Resources.RequireXCellFormat, "text"))).Should().Be.False();
+			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.InvalidColumn, nameof(RawAgent.Firstname), string.Format(Resources.RequireXCellFormat, "text"))).Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldSkipEmptyRows()
 		{
-			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var workbook = _agentFileTemplate.GetTemplateWorkbook("testAgent");
 			var sheet = workbook.GetSheetAt(0);
 			sheet.CreateRow(1);
 			sheet.CreateRow(2);
@@ -354,7 +350,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		[Test]
 		public void ShouldWriteErrorMsgForInvalidInput()
 		{
-			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent { Firstname = "test", StartDate = new DateTime(2017, 3, 1) });
+			var ms = _agentFileTemplate.GetFileTemplate(new RawAgent { Firstname = "test", StartDate = new DateTime(2017, 3, 1) });
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc);
@@ -368,7 +364,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		[Test]
 		public void ShouldSpotUserWithEmptyFirstnameAndLastname()
 		{
-			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent { Firstname = "", Lastname = "", StartDate = new DateTime(2017, 3, 1) });
+			var ms = _agentFileTemplate.GetFileTemplate(new RawAgent { Firstname = "", Lastname = "", StartDate = new DateTime(2017, 3, 1) });
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc);
@@ -380,7 +376,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		[Test]
 		public void ShouldSpotUserWithEmptyApplicationLogonIdAndWindowsUser()
 		{
-			var ms = new AgentFileTemplate().GetFileTemplate(new RawAgent { ApplicationUserId = "", WindowsUser = "", StartDate = new DateTime(2017, 3, 1) });
+			var ms = _agentFileTemplate.GetFileTemplate(new RawAgent { ApplicationUserId = "", WindowsUser = "", StartDate = new DateTime(2017, 3, 1) });
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc);
@@ -392,7 +388,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		[Test]
 		public void ShouldNotGiveErrorIfExternalLogonIsEmpty()
 		{
-			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var workbook = _agentFileTemplate.GetTemplateWorkbook("testAgent");
 			var sheet = workbook.GetSheetAt(0);
 			var row = sheet.CreateRow(1);
 			row.CreateCell(0);
@@ -414,7 +410,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			row.CreateCell(14).SetCellValue("week");
 			row.CreateCell(15).SetCellValue(4);
 
-			var result = Target.ProcessSheet(sheet,TimeZoneInfo.Utc);
+			var result = Target.ProcessSheet(sheet, TimeZoneInfo.Utc);
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Feedback.ErrorMessages.Count(m => m.Contains("ExternalLogOn")).Should().Be(0);
@@ -423,7 +419,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		[Test]
 		public void ShouldValidateMultipleExternalLogon()
 		{
-			var workbook = new AgentFileTemplate().GetTemplateWorkbook("testAgent");
+			var workbook = _agentFileTemplate.GetTemplateWorkbook("testAgent");
 			var sheet = workbook.GetSheetAt(0);
 			var row = sheet.CreateRow(1);
 			row.CreateCell(0);
@@ -445,20 +441,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			row.CreateCell(14).SetCellValue("week");
 			row.CreateCell(15).SetCellValue(4);
 
-			var result = Target.ProcessSheet(sheet,TimeZoneInfo.Utc);
+			var result = Target.ProcessSheet(sheet, TimeZoneInfo.Utc);
 			var externalLogonProName = nameof(RawAgent.ExternalLogon);
 			result.Count.Should().Be.EqualTo(1);
 			var errForExtLogon =
 				result.First().Feedback.ErrorMessages.Where(r => r.Contains(externalLogonProName)).Single();
 			errForExtLogon.Should()
-				.Be.EqualTo(string.Format(Resources.InvalidColumn, externalLogonProName, "0019,0018"));
+				.Be.EqualTo(string.Format(Resources.InvalidColumn, externalLogonProName, "0019, 0018"));
 		}
 
 		[Test]
 		public void ShouldPersistAgentWithValidData()
 		{
 			var rawAgent = setupProviderData();
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc);
@@ -475,7 +471,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultSchedulePeriodType = "Week";
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 			var sheet = workbook.GetSheetAt(0);
 			sheet.GetRow(1).RemoveCell(sheet.GetRow(1).GetCell(14));
@@ -483,7 +479,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { SchedulePeriodType = defaultSchedulePeriodType });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodType", defaultSchedulePeriodType));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.SchedulePeriodType), defaultSchedulePeriodType));
 			result.Single().Agent.SchedulePeriodType.Should().Be.EqualTo(SchedulePeriodType.Week);
 		}
 
@@ -495,13 +491,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultSchedulePeriodType = "Week";
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { SchedulePeriodType = defaultSchedulePeriodType });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("SchedulePeriodType", defaultSchedulePeriodType));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.SchedulePeriodType), defaultSchedulePeriodType));
 			result.Single().Agent.SchedulePeriodType.Should().Be.EqualTo(SchedulePeriodType.Week);
 		}
 
@@ -516,13 +512,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultExternalLogon = externalLogon.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { ExternalLogonId = defaultExternalLogon });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon", externalLogon.AcdLogOnName));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.ExternalLogon), externalLogon.AcdLogOnName));
 			result.Single().Agent.ExternalLogons.Single().Should().Be.EqualTo(externalLogon);
 		}
 
@@ -532,18 +528,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var rawAgent = setupProviderData();
 			rawAgent.ExternalLogon = "Invalid external logon";
 
-			var externalLogon = ExternalLogOnFactory.CreateExternalLogOn().WithId();
-			ExternalLogOnRepository.Add(externalLogon);
-
-			var defaultExternalLogon = Guid.Empty.ToString();
-
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
-			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { ExternalLogonId = defaultExternalLogon });
+			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { ExternalLogonId = Guid.Empty.ToString() });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ExternalLogon", ""));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.ExternalLogon), ""));
 			result.Single().Agent.ExternalLogons.Count.Should().Be(0);
 		}
 
@@ -558,13 +549,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = ruleSetBag.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { ShiftBagId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ShiftBag", ruleSetBag.Description));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.ShiftBag), ruleSetBag.Description));
 			result.Single().Agent.RuleSetBag.Should().Be.EqualTo(ruleSetBag);
 		}
 
@@ -578,7 +569,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = ruleSetBag.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 			var row = workbook.GetSheetAt(0).GetRow(1);
 			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(13));
@@ -586,7 +577,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { ShiftBagId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ShiftBag", ruleSetBag.Description));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.ShiftBag), ruleSetBag.Description));
 			result.Single().Agent.RuleSetBag.Should().Be.EqualTo(ruleSetBag);
 		}
 
@@ -599,7 +590,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 			var row = workbook.GetSheetAt(0).GetRow(1);
 			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(12));
@@ -608,7 +599,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { PartTimePercentageId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage", defaultEntity.Description.Name));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.PartTimePercentage), defaultEntity.Description.Name));
 			result.Single().Agent.PartTimePercentage.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -623,13 +614,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { PartTimePercentageId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("PartTimePercentage", defaultEntity.Description.Name));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.PartTimePercentage), defaultEntity.Description.Name));
 			result.Single().Agent.PartTimePercentage.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -643,7 +634,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 			var row = workbook.GetSheetAt(0).GetRow(1);
 			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(11));
@@ -652,7 +643,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { ContractScheduleId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ContractSchedule", defaultEntity.Description));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.ContractSchedule), defaultEntity.Description));
 			result.Single().Agent.ContractSchedule.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -667,13 +658,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { ContractScheduleId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("ContractSchedule", defaultEntity.Description));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.ContractSchedule), defaultEntity.Description));
 			result.Single().Agent.ContractSchedule.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -688,7 +679,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 			var row = workbook.GetSheetAt(0).GetRow(1);
 			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(10));
@@ -696,7 +687,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { ContractId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Contract), defaultEntity.Description.Name));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Contract), defaultEntity.Description.Name));
 			result.Single().Agent.Contract.Should().Be.EqualTo(defaultEntity);
 		}
 		[Test]
@@ -710,13 +701,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { ContractId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage("Contract", defaultEntity.Description));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Contract), defaultEntity.Description));
 			result.Single().Agent.Contract.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -730,7 +721,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 			var row = workbook.GetSheetAt(0).GetRow(1);
 			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(5));
@@ -738,7 +729,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Role), defaultEntity.Name));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Role), defaultEntity.Name));
 			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -753,13 +744,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Role), defaultEntity.Name));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Role), defaultEntity.Name));
 			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -775,7 +766,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 			var row = workbook.GetSheetAt(0).GetRow(1);
 			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(7));
@@ -783,7 +774,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { TeamId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Organization), defaultEntity.SiteAndTeam));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Organization), defaultEntity.SiteAndTeam));
 			result.Single().Agent.Team.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -800,13 +791,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { TeamId = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Organization), defaultEntity.SiteAndTeam));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Organization), defaultEntity.SiteAndTeam));
 			result.Single().Agent.Team.Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -820,7 +811,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 			var row = workbook.GetSheetAt(0).GetRow(1);
 			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(8));
@@ -828,7 +819,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { SkillIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Skill), defaultEntity.Name));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Skill), defaultEntity.Name));
 			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -843,13 +834,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = defaultEntity.Id.Value.ToString();
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { SkillIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.Skill), defaultEntity.Name));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Skill), defaultEntity.Name));
 			result.Single().Agent.Skills.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -861,7 +852,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = DateOnly.Today;
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 			var row = workbook.GetSheetAt(0).GetRow(1);
 			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(6));
@@ -869,7 +860,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { StartDate = defaultValue.ToShortDateString() });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.StartDate), defaultValue.ToShortDateString()));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.StartDate), defaultValue.ToShortDateString()));
 			result.Single().Agent.StartDate.Should().Be.EqualTo(defaultValue);
 		}
 
@@ -880,7 +871,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			var defaultValue = 4;
 
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
 			var workbook = new HSSFWorkbook(ms);
 			var row = workbook.GetSheetAt(0).GetRow(1);
 			workbook.GetSheetAt(0).GetRow(1).RemoveCell(row.GetCell(15));
@@ -888,7 +879,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { SchedulePeriodLength = "4" });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(warningMessage(nameof(RawAgent.SchedulePeriodLength), defaultValue));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.SchedulePeriodLength), defaultValue));
 			result.Single().Agent.SchedulePeriodLength.Should().Be.EqualTo(defaultValue);
 		}
 
@@ -910,7 +901,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			{
 				row.CreateCell(j).SetCellValue(j);
 			}
-			var result = Target.ProcessSheet(sheet,TimeZoneInfo.Utc);
+			var result = Target.ProcessSheet(sheet, TimeZoneInfo.Utc);
 			Assert.AreEqual(result.Count, 1);
 		}
 
@@ -960,13 +951,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 				SchedulePeriodLength = 4
 			};
 		}
-
+		private string getWarningMessage(string column, object value)
+		{
+			return string.Format(Resources.ImportAgentsColumnFixedWithFallbackValue, _agentFileTemplate.GetColumnDisplayName(column), value);
+		}
 		private string getMissingColumnsErrorMsg(params string[] excepts)
 		{
 
-			var colsMsg = string.Join(", ", new AgentFileTemplate().ColumnHeaderNames.Except(excepts));
+			var colsMsg = string.Join(", ", _agentFileTemplate.ColumnHeaderNames.Except(excepts.Select(ex => _agentFileTemplate.GetColumnDisplayName(ex))));
 			return string.Format(Resources.MissingColumnX, colsMsg);
 
 		}
 	}
 }
+

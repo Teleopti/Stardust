@@ -19,11 +19,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			WarningMessages = new List<string>();
 		}
 
-		public void Merge(Feedback other)
+		public void Merge(params Feedback[] others)
 		{
-			ErrorMessages.AddRange(other.ErrorMessages);
-			WarningMessages.AddRange(other.WarningMessages);
+			foreach (var other in others)
+			{
+				ErrorMessages.AddRange(other.ErrorMessages);
+				WarningMessages.AddRange(other.WarningMessages);
+			}
+		
 		}
+
+	
 	}
 
 	public class AgentFileProcessResult : IImportAgentResultCount
@@ -38,9 +44,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public List<AgentExtractionResult> WarningAgents { get; internal set; }
 		public List<AgentExtractionResult> FailedAgents { get; internal set; }
 		public List<AgentExtractionResult> SucceedAgents { get; internal set; }
-		public int SuccessCount => SucceedAgents?.Count() ?? 0;
-		public int FailedCount  => FailedAgents?.Count() ?? 0; 
-		public int WarningCount => WarningAgents?.Count() ?? 0;
+		public int SuccessCount => SucceedAgents?.Count ?? 0;
+		public int FailedCount  => FailedAgents?.Count ?? 0; 
+		public int WarningCount => WarningAgents?.Count ?? 0;
 	}
 
 	

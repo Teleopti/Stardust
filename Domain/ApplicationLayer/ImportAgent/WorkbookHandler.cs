@@ -12,23 +12,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public class WorkbookHandler : IWorkbookHandler
 	{
-		private static readonly PropertyInfo[] propertyInfos =
-			typeof(RawAgent).GetProperties().OrderBy(p => p.GetCustomAttribute<OrderAttribute>().Order).ToArray();
-
 		private readonly IImportAgentFileValidator _rawAgentMapper;
+		private readonly AgentFileTemplate _agentFileTemplate;
 
 		public WorkbookHandler(IImportAgentFileValidator rawAgentMapper)
 		{
 			_rawAgentMapper = rawAgentMapper;
+			_agentFileTemplate = new AgentFileTemplate();
 		}
 
 		public List<string> ValidateSheetColumnHeader(IWorkbook workbook)
 		{
 			var columnNames = extractSheetColumnNames(workbook).ToArray();
 			var errorMessages = new List<string>();
-			for (var i = 0; i < propertyInfos.Length; i++)
+			for (var i = 0; i < _agentFileTemplate.ColumnHeaders.Length; i++)
 			{
-				var pro = propertyInfos[i];
+				var pro = _agentFileTemplate.ColumnHeaders[i];
 				var expectedColumnName = pro.GetCustomAttribute<DescriptionAttribute>()?.Description ?? pro.Name;
 				if (i >= columnNames.Length)
 				{
@@ -48,7 +47,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public IList<AgentExtractionResult> ProcessSheet(ISheet sheet, ImportAgentDefaults defaultValues = null)
 		{
 			_rawAgentMapper.SetDefaultValues(defaultValues);
-
 			var results = new List<AgentExtractionResult>();
 			for (var i = 1; i <= sheet.LastRowNum; i++)
 			{
@@ -81,14 +79,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			return results;
 		}
 
-		
+
 		protected RawAgent ParseRow(IRow row, out IList<string> errors)
 		{
 			var raw = new RawAgent();
 			errors = new List<string>();
-			for (var i = 0; i < propertyInfos.Length; i++)
+			for (var i = 0; i < _agentFileTemplate.ColumnHeaders.Length; i++)
 			{
-				var pro = propertyInfos[i];
+				var pro = _agentFileTemplate.ColumnHeaders[i];
 				var cell = row.GetCell(i);
 				try
 				{

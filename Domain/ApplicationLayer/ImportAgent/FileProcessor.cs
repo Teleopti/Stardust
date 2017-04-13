@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var agentTemplate = new AgentFileTemplate();
 			var returnedFile = agentTemplate.GetTemplateWorkbook(invalidUserSheetName, isXlsx);
 			var newSheet = returnedFile.GetSheet(invalidUserSheetName);
-			var columnsCount = agentTemplate.ColumnHeaderNames.Length;
+			var columnsCount = agentTemplate.ColumnHeaders.Length;
 			var errorMessageColumnIndex = columnsCount;
 			var warningMessageColumnIndex = columnsCount + 1;
 
