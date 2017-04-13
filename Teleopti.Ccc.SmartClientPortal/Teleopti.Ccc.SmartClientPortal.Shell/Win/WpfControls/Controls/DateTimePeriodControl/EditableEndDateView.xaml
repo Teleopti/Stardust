@@ -2,8 +2,8 @@
     <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl.EditableEndDateView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode"
-				 xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+    xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter"
+				 xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
 				 xmlns:common="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common">
     <UserControl.Resources>
         <ResourceDictionary>

@@ -2,7 +2,7 @@
     <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers.LayerGroupPreview"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode"
+    xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common"
     xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
     xmlns:layers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers"
     HorizontalAlignment="Stretch" 

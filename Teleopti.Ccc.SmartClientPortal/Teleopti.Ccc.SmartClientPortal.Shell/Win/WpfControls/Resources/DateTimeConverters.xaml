@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:DateTimeConverters="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode"
+					xmlns:DateTimeConverters="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter"
 					xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters">
     <converters:ColorConverter x:Key="ColorConverter"/>
     <converters:TextConverter x:Key="TextConverter"/>

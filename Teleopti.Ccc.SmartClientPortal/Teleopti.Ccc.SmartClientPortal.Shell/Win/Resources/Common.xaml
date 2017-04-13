@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
-    xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters;assembly=Teleopti.Ccc.WinCode">
+    xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters">
   
     <!-- Resources , sets the fallback to aero -->
     <ResourceDictionary.MergedDictionaries>

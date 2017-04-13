@@ -1,7 +1,7 @@
 ﻿<ItemsControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers.BasicSchedulesView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode"
+    xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common"
     xmlns:layers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers"
     ItemsSource="{Binding}">
 

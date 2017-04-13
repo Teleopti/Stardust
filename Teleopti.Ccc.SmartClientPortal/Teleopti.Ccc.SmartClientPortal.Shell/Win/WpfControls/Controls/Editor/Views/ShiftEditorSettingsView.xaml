@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor.Views.ShiftEditorSettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters;assembly=Teleopti.Ccc.WinCode">
+    xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

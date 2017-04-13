@@ -2,7 +2,7 @@
     <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers.ExpandedLayersExpandedPreview"
      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode"
+    xmlns:Common="clr-namespace:Teleopti.Ccc.WinCode.Common"
     x:Name="main" x:FieldModifier="private">
     <UserControl.Resources>
         <ResourceDictionary>
