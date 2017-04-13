@@ -102,9 +102,42 @@ namespace Teleopti.Wfm.Test
 				Shrinkage = 0.2
 			};
 
+			var skillDayPrivateCustomerToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(Now.UtcDateTime()),
+				Scenario = "Scenario",
+				Skill = "privateCustomerSkill",
+				DefaultDemand = 10,
+				Shrinkage = 0.2,
+				OpenHours = new TimePeriod(9,17)
+			};
+
+			var skillDayPrivateCustomerTomrrow = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(Now.UtcDateTime()).AddDays(1),
+				Scenario = "Scenario",
+				Skill = "privateCustomerSkill",
+				DefaultDemand = 10,
+				Shrinkage = 0.2,
+				OpenHours = new TimePeriod(9, 17)
+			};
+
+			var skillDayBusinessCustomerToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(Now.UtcDateTime()),
+				Scenario = "Scenario",
+				Skill = "businessCustomerSkill",
+				DefaultDemand = 10,
+				Shrinkage = 0.2,
+				OpenHours = new TimePeriod(9, 12)
+			};
+
 			Data.Apply(skillDayGoldToday);
 			Data.Apply(skillDaySilverToday);
 			Data.Apply(skillDayBronzeToday);
+			Data.Apply(skillDayPrivateCustomerToday);
+			Data.Apply(skillDayPrivateCustomerTomrrow);
+			Data.Apply(skillDayBusinessCustomerToday);
 
 			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(Now.UtcDateTime().Date.AddDays(-1), Now.UtcDateTime().Date.AddDays(2)));
 		}
@@ -135,10 +168,40 @@ namespace Teleopti.Wfm.Test
 				DefaultDemand = 0.1,
 				Shrinkage = 0.2
 			};
+			var skillDayPrivateCustomerToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
+				Scenario = "Scenario",
+				Skill = "privateCustomerSkill",
+				DefaultDemand = 0.1,
+				Shrinkage = 0.2,
+				OpenHours = new TimePeriod(9, 17)
+			};
+			var skillDayPrivateCustomerTomrrow = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(Now.UtcDateTime()).AddDays(1),
+				Scenario = "Scenario",
+				Skill = "privateCustomerSkill",
+				DefaultDemand = 10,
+				Shrinkage = 0.2,
+				OpenHours = new TimePeriod(9, 17)
+			};
+			var skillDayBusinessCustomerToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
+				Scenario = "Scenario",
+				Skill = "businessCustomerSkill",
+				DefaultDemand = 0.1,
+				Shrinkage = 0.2,
+				OpenHours = new TimePeriod(9, 12)
+			};
 
 			Data.Apply(skillDayGoldToday);
 			Data.Apply(skillDaySilverToday);
 			Data.Apply(skillDayBronzeToday);
+			Data.Apply(skillDayPrivateCustomerToday);
+			Data.Apply(skillDayPrivateCustomerTomrrow);
+			Data.Apply(skillDayBusinessCustomerToday);
 
 			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(Now.UtcDateTime().Date.AddDays(-1), Now.UtcDateTime().Date.AddDays(2)));
 		}
@@ -208,6 +271,22 @@ namespace Teleopti.Wfm.Test
 				CascadingIndex = 3,
 				SeriousUnderstaffingThreshold = -1
 			};
+			var privateCustomerSkill = new SkillConfigurable
+			{
+				Activity = activity.Name,
+				Name = "privateCustomerSkill",
+				Resolution = 30,
+				CascadingIndex = 3,
+				SeriousUnderstaffingThreshold = -1
+			};
+			var businessCustomerSkill = new SkillConfigurable
+			{
+				Activity = activity.Name,
+				Name = "businessCustomerSkill",
+				Resolution = 30,
+				CascadingIndex = 3,
+				SeriousUnderstaffingThreshold = -1
+			};
 			var silverSkill = new SkillConfigurable
 			{
 				Activity = activity.Name,
@@ -231,6 +310,8 @@ namespace Teleopti.Wfm.Test
 			Data.Apply(activityAdministration);
 			Data.Apply(nonSkillActivity);
 			Data.Apply(bronzeSkill);
+			Data.Apply(privateCustomerSkill);
+			Data.Apply(businessCustomerSkill);
 			Data.Apply(silverSkill);
 			Data.Apply(goldSkill);
 
@@ -252,10 +333,27 @@ namespace Teleopti.Wfm.Test
 				Open24Hours = true,
 				SkillName = bronzeSkill.Name
 			};
+			var workloadPrivateCustomerSkill = new WorkloadConfigurable
+			{
+				WorkloadName = "WorkLoadBronzePrivateCustomerSkill",
+				Open24Hours = false,
+				SkillName = privateCustomerSkill.Name,
+				OpenHourPeriod = new TimePeriod(9,17)
+			};
+
+			var workloadBusinessCustomerSkill = new WorkloadConfigurable
+			{
+				WorkloadName = "WorkLoadBronzePrivateCustomerSkill",
+				Open24Hours = false,
+				SkillName = businessCustomerSkill.Name,
+				OpenHourPeriod = new TimePeriod(9,12)
+			};
 
 			Data.Apply(workloadGold);
 			Data.Apply(workloadSilver);
 			Data.Apply(workloadBronze);
+			Data.Apply(workloadPrivateCustomerSkill);
+			Data.Apply(workloadBusinessCustomerSkill);
 
 			var absence = new AbsenceConfigurable
 			{
@@ -463,7 +561,9 @@ namespace Teleopti.Wfm.Test
 
 			personSetupForShiftHours(contract, contractSchedule, partTimePercentage, team, bronzeSkill, wfcs, shiftStart, shiftCategory, activity, scenario);
 
-		    var personPeriodBronzeWithNonSkill = new PersonPeriodConfigurable
+			personSetupForSkillOpenhours(contract, contractSchedule, partTimePercentage, team, privateCustomerSkill, wfcs, shiftStart, shiftCategory, activity, scenario, businessCustomerSkill);
+
+			var personPeriodBronzeWithNonSkill = new PersonPeriodConfigurable
 			{
 				Contract = contract.Name,
 				ContractSchedule = contractSchedule.Name,
@@ -724,11 +824,71 @@ namespace Teleopti.Wfm.Test
 				Name = "PATwoShiftSpawn"
 			};
 			Data.Person(personAbsenceAcrossTwoShifts.Name).Apply(personPeriodBronzeOpenHours);
-			AddShift(personAbsenceAcrossTwoShifts.Name, shiftStart.Date.AddDays(-1), 23, 4, shiftCategory.ShiftCategory, activity.Activity,scenario.Scenario);
-			AddShift(personAbsenceAcrossTwoShifts.Name, shiftStart.Date, 10, 1, shiftCategory.ShiftCategory, activity.Activity,scenario.Scenario);
+			AddShift(personAbsenceAcrossTwoShifts.Name, shiftStart.Date, 15, 1, shiftCategory.ShiftCategory, activity.Activity,scenario.Scenario);
+			AddShift(personAbsenceAcrossTwoShifts.Name, shiftStart.AddDays(1).Date, 9, 1, shiftCategory.ShiftCategory, activity.Activity,scenario.Scenario);
 		}
 
-	    public static void AddShift(string onPerson,
+		private static void personSetupForSkillOpenhours(ContractConfigurable contract, ContractScheduleConfigurable contractSchedule, PartTimePercentageConfigurable partTimePercentage,
+		  TeamConfigurable team, SkillConfigurable privateCustomerSkill, WorkflowControlSetConfigurable wfcs, DateTime shiftStart, ShiftCategoryConfigurable shiftCategory, ActivityConfigurable activity, ScenarioConfigurable scenario, SkillConfigurable businessCustomerSkill)
+		{
+			var personPeriodBronzeSkillOpenHours = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = privateCustomerSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+
+			var personBronzeOpenHoursOutsideShift = new PersonConfigurable
+			{
+				Name = "OutsideOfOpenHours"
+			};
+			Data.Person(personBronzeOpenHoursOutsideShift.Name).Apply(personPeriodBronzeSkillOpenHours);
+			AddShift(personBronzeOpenHoursOutsideShift.Name, shiftStart.Date, 6, 1, shiftCategory.ShiftCategory,activity.Activity, scenario.Scenario);
+
+			var personBronzeOpenHoursBeforeShift = new PersonConfigurable
+			{
+				Name = "BeforeOpenHoursO"
+			};
+			Data.Person(personBronzeOpenHoursBeforeShift.Name).Apply(personPeriodBronzeSkillOpenHours);
+			AddShift(personBronzeOpenHoursBeforeShift.Name, shiftStart.Date, 8, 11, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+
+			var personBronzeOpenHoursBeforeShiftU = new PersonConfigurable
+			{
+				Name = "BeforeOpenHoursU"
+			};
+			Data.Person(personBronzeOpenHoursBeforeShiftU.Name).Apply(personPeriodBronzeSkillOpenHours);
+			AddShift(personBronzeOpenHoursBeforeShiftU.Name, shiftStart.Date, 8, 11, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+
+			var personBronzeAfterOpenHoursO = new PersonConfigurable
+			{
+				Name = "AfterOpenHoursO"
+			};
+			Data.Person(personBronzeAfterOpenHoursO.Name).Apply(personPeriodBronzeSkillOpenHours);
+			AddShift(personBronzeAfterOpenHoursO.Name, shiftStart.Date, 16, 2, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+
+			var personBronzeAfterOpenHoursU = new PersonConfigurable
+			{
+				Name = "AfterOpenHoursU"
+			};
+			Data.Person(personBronzeAfterOpenHoursU.Name).Apply(personPeriodBronzeSkillOpenHours);
+			AddShift(personBronzeAfterOpenHoursU.Name, shiftStart.Date, 16, 2, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+
+			var multiSkillPerson = new PersonConfigurable
+			{
+				Name = "multiSkillPerson"
+			};
+			Data.Person(multiSkillPerson.Name).Apply(personPeriodBronzeSkillOpenHours);
+			Data.Person(multiSkillPerson.Name).Person.AddSkill(new PersonSkill(businessCustomerSkill.Skill, new Percent(1)), Data.Person(multiSkillPerson.Name).Person.Period(new DateOnly(2016, 03, 27)));
+			AddShift(multiSkillPerson.Name, shiftStart.Date, 13, 1, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+
+
+		}
+
+		public static void AddShift(string onPerson,
 							DateTime dayLocal,
 							int startHour,
 							int lenghtHour,

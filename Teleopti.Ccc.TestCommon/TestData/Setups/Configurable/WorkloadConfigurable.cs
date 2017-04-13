@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
@@ -13,6 +16,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string QueueSourceName { get; set; }
 		public string WorkloadName { get; set; }
 		public bool Open24Hours { get; set; }
+		public TimePeriod OpenHourPeriod { get; set; }
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -25,7 +29,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 			foreach (var dayTemplate in wl.TemplateWeekCollection)
 			{
-				dayTemplate.Value.MakeOpen24Hours();
+				if(Open24Hours)
+					dayTemplate.Value.MakeOpen24Hours();
+				else
+				{
+				    dayTemplate.Value.ChangeOpenHours(new List<TimePeriod>(){OpenHourPeriod});
+				}
 			}
 			new WorkloadRepository(currentUnitOfWork).Add(wl);
 		}

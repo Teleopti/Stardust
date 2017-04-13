@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public double DefaultDemand { get; set; }
 		public double Shrinkage { get; set; }
 		public Tuple<int, double> HourDemand { get; set; }
+		public TimePeriod? OpenHours { get; set; }
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -33,7 +35,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 			var hourDemandTimespan = TimeSpan.FromMinutes(HourDemand.Item2 * skill.DefaultResolution * (TimeSpan.FromHours(1).Ticks / TimeSpan.FromMinutes(skill.DefaultResolution).Ticks));
 
-			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, DateOnly,defaultDemandTimespan, new Tuple<int, TimeSpan>(HourDemand.Item1, hourDemandTimespan));
+		    ISkillDay skillDay;
+			skillDay = !OpenHours.HasValue ? 
+								skill.CreateSkillDayWithDemandPerHour(scenario, DateOnly,defaultDemandTimespan, new Tuple<int, TimeSpan>(HourDemand.Item1, hourDemandTimespan)) 
+											:
+								skill.CreateSkillDayWithDemandPerHour(scenario, DateOnly, defaultDemandTimespan, new Tuple<int, TimeSpan>(HourDemand.Item1, hourDemandTimespan),OpenHours.Value );
 			skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(Shrinkage));
 			var skillDayRepository = new SkillDayRepository(currentUnitOfWork);
 			skillDayRepository.Add(skillDay);
