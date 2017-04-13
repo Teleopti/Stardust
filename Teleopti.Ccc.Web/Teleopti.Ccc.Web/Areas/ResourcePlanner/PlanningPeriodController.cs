@@ -43,6 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult JobResult(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
+			if (planningPeriod == null)
+				return BadRequest("Invalid planningPeriodId");
 			var range = planningPeriod.Range;
 			var lastJobResult = planningPeriod.JobResults
 				.Where(x => x.JobCategory == JobCategory.WebSchedule && x.FinishedOk)
@@ -68,6 +70,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult JobStatus(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
+			if (planningPeriod == null)
+				return BadRequest("Invalid planningPeriodId");
 			var lastJobResult = planningPeriod.JobResults
 				.Where(x => x.JobCategory == JobCategory.WebSchedule)
 				.OrderByDescending(x => x.Timestamp)
@@ -88,6 +92,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult IntradayOptimizationJobStatus(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
+			if (planningPeriod == null)
+				return BadRequest("Invalid planningPeriodId");
 			var lastJobResult = planningPeriod.JobResults.Where(x => x.JobCategory == JobCategory.WebIntradayOptimiztion).OrderByDescending(x => x.Timestamp).FirstOrDefault();
 			if (lastJobResult != null)
 				return Ok(new
@@ -103,7 +109,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetAllPlanningPeriods(Guid agentGroupId)
 		{
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
-			var agentGroup = _agentGroupRepository.Load(agentGroupId);
+			var agentGroup = _agentGroupRepository.Get(agentGroupId);
+			if (agentGroup == null)
+				return BadRequest("Invalid agentGroupId");
 			var allPlanningPeriods = _planningPeriodRespository.LoadForAgentGroup(agentGroup).ToList();
 			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, true, agentGroup);
 		}
@@ -133,7 +141,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}")]
 		public virtual IHttpActionResult GetPlanningPeriod(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
+			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
+			if (planningPeriod == null)
+				return BadRequest("Invalid planningPeriodId");
 			var validationResult = new ValidationResult();
 			if (planningPeriod.AgentGroup != null)
 			{
@@ -150,7 +160,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}/suggestions")]
 		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
+			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
+			if (planningPeriod == null)
+				return BadRequest("Invalid planningPeriodId");
 			var suggestion = _planningPeriodRespository.Suggestions(_now);
 			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
 			return Ok(result.Select(r => new SuggestedPlanningPeriodRangeModel
@@ -165,7 +177,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}/countagents")]
 		public virtual IHttpActionResult GetAgentCount(Guid planningPeriodId, DateTime startDate, DateTime endDate)
 		{
-			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
+			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
+			if (planningPeriod == null)
+				return BadRequest("Invalid planningPeriodId");
 			var period = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 			var numberOfAgents = _agentGroupStaffLoader.NumberOfAgents(period, planningPeriod.AgentGroup);
 			return Ok(new
@@ -177,7 +191,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpPut, Route("api/resourceplanner/planningperiod/{planningPeriodId}")]
 		public virtual IHttpActionResult ChangeRange(Guid planningPeriodId, [FromBody] PlanningPeriodChangeRangeModel model)
 		{
-			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
+			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
+			if (planningPeriod == null)
+				return BadRequest("Invalid planningPeriodId");
 			planningPeriod.ChangeRange(new SchedulePeriodForRangeCalculation
 			{
 				Number = model.Number,
@@ -202,14 +218,18 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/agentgroup/{agentGroupId}/nextplanningperiod")]
 		public virtual IHttpActionResult GetNextPlanningPeriod(Guid agentGroupId)
 		{
-			var agentGroup = _agentGroupRepository.Load(agentGroupId);
+			var agentGroup = _agentGroupRepository.Get(agentGroupId);
+			if (agentGroup == null)
+				return BadRequest("Invalid agentGroupId");
 			return nextPlanningPeriod(agentGroup);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/planningperiod/{planningPeriodId}/publish")]
 		public virtual IHttpActionResult Publish(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
+			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
+			if (planningPeriod == null)
+				return BadRequest("Invalid planningPeriodId");
 			planningPeriod.Publish(_agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup).FixedStaffPeople.ToArray());
 			return Ok();
 		}
