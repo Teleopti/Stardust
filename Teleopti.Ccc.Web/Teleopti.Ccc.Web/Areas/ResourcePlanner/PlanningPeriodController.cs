@@ -141,9 +141,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}")]
 		public virtual IHttpActionResult GetPlanningPeriod(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
-			if (planningPeriod == null)
-				return BadRequest("Invalid planningPeriodId");
+			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
 			var validationResult = new ValidationResult();
 			if (planningPeriod.AgentGroup != null)
 			{
@@ -160,9 +158,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}/suggestions")]
 		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRespository.Get(planningPeriodId);
-			if (planningPeriod == null)
-				return BadRequest("Invalid planningPeriodId");
+			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
 			var suggestion = _planningPeriodRespository.Suggestions(_now);
 			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
 			return Ok(result.Select(r => new SuggestedPlanningPeriodRangeModel
