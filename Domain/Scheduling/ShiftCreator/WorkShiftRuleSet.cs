@@ -4,11 +4,9 @@ using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
-using InParameter = Teleopti.Interfaces.Domain.InParameter;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 {
-
 	/// <summary>
     /// Holding rules, limiters and extenders, used
     /// when creating work shifts.
@@ -45,8 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 		protected WorkShiftRuleSet() { }
 
-		#region Properties (6) 
-		// ReSharper disable ConvertToAutoProperty
+	    // ReSharper disable ConvertToAutoProperty
 		public virtual Description Description
 		{
 			get { return _description; }
@@ -74,8 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 	        concrete?.RuleSetCollectionWritable.Remove(this);
 	        _ruleSetBagCollection.Remove(ruleSetBag);
         }
-
-        
+		
         public virtual ICollection<IRuleSetBag> RuleSetBagCollectionWritable => _ruleSetBagCollection;
 
 	    public virtual IWorkShiftTemplateGenerator TemplateGenerator
@@ -94,10 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 	    public virtual IEnumerable<DateOnly> AccessibilityDates => _accessibilityDates;
 
-	    #endregion Properties 
-
-		#region Methods (4) 
-		public virtual void AddExtender(IWorkShiftExtender extender)
+	    public virtual void AddExtender(IWorkShiftExtender extender)
         {
             InParameter.NotNull(nameof(extender), extender);
             if(extender.Parent != null)
@@ -193,11 +186,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 	        _accessibilityDaysOfWeek = new HashSet<DayOfWeek>();
 	        _accessibilityDates = new HashSet<DateOnly>();
         }
-        #endregion Methods 
 
-        #region ICloneableEntity<WorkShiftRuleSet> Members (2) 
-
-        /// <summary>
+	    /// <summary>
         /// Returns a clone of this T with IEntitiy.Id set to null.
         /// </summary>
         /// <returns></returns>
@@ -240,8 +230,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
             return retobj;
         }
-
-
+		
         /// <summary>
         /// Returns a clone of this T with IEntitiy.Id as this T.
         /// </summary>
@@ -278,13 +267,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             return retobj;
         }
 
-        #endregion
-
-        public virtual object Clone()
+	    public virtual object Clone()
         {
             return EntityClone();
         }
-
 	}
-
 }
