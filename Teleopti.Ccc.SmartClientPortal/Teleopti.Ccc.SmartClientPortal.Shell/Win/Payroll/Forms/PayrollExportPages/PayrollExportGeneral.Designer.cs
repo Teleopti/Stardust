@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Forms.PayrollExportPages
 {
     partial class PayrollExportGeneral
     {

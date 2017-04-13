@@ -8,14 +8,14 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.GridBinding;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.GridBinding;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class RequestAllowanceView : BaseDialogForm, IRequestAllowanceView
 	{

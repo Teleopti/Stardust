@@ -4,7 +4,7 @@
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
     xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters;assembly=Teleopti.Ccc.WinCode"
              xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
-           xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Intraday.StaffingEffectView"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.StaffingEffectView"
            GuiHelpers:HelpProvider.HelpString="IntradayView+IntradayStaffingEffect"
     Height="Auto" Width="Auto" Loaded="UserControl_Loaded" d:DesignWidth="143" d:DesignHeight="142">
 

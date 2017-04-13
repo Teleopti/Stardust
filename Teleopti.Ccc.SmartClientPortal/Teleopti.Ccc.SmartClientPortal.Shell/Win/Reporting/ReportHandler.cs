@@ -13,22 +13,21 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.ExceptionHandling;
-using Teleopti.Ccc.Win.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Reporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	public static class ReportHandler
 	{

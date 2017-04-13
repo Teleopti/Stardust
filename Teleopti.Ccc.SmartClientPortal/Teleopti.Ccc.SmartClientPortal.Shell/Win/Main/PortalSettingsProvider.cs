@@ -1,9 +1,8 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
     public class PortalSettingsProvider
     {

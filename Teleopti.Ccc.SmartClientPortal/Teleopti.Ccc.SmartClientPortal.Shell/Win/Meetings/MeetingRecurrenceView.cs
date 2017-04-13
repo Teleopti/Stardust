@@ -3,13 +3,13 @@ using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
 	/// <summary>
 	/// Manages recurrent meetings

@@ -6,11 +6,9 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public class VirtualSkillHelper : IVirtualSkillHelper
 	{

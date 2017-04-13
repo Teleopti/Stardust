@@ -1,8 +1,8 @@
-using Teleopti.Ccc.Win.Common.Controls.Columns;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
+using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
 {
     /// <summary>
     /// Represents the column disable condition for the column accrued of the person account.

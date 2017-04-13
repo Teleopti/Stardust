@@ -1,37 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Win.Common;
-using System.Windows.Forms;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Win.Main;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.Win.PeopleAdmin.Views;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Grouping.Events;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Win.WpfControls.Common.Interop;
-using Teleopti.Ccc.Win.WpfControls.Controls.Messaging;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 {
 	public partial class PeopleNavigator : BaseUserControl, IPeopleNavigator
 	{

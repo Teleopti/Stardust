@@ -15,7 +15,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals
 {
 	public partial class AgentSkillAnalyzer : Form
 	{

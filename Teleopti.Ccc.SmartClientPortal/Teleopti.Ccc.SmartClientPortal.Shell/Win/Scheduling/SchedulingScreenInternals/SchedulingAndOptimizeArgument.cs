@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals
 {
 	internal class SchedulingAndOptimizeArgument
 	{

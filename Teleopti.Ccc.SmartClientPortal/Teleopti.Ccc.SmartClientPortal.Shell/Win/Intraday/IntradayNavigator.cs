@@ -12,16 +12,15 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Main;
-using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 {
 	public class IntradayNavigator : SchedulerNavigator
 	{

@@ -6,10 +6,8 @@ using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	public partial class ChangePasswordControl : BaseUserControl, ISettingPage, IChangePasswordView, ICheckBeforeClosing
 	{

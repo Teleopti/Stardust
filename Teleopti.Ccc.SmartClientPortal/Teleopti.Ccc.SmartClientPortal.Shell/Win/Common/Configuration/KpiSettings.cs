@@ -10,13 +10,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Win.Common.Configuration.Columns;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

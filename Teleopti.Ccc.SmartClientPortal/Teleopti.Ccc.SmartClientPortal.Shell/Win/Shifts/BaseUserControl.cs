@@ -2,17 +2,17 @@
 
 using System.Collections.Generic;
 using Teleopti.Ccc.WinCode.Payroll;
-using Teleopti.Ccc.WinCode.Shifts.Views;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.WinCode.Shifts.Views;
 
 #endregion
 
-namespace Teleopti.Ccc.Win.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
     /// <summary>
     /// The base user control for payrol related views.
     /// </summary>
-    public class BaseUserControl : Common.BaseUserControl, ICommonOperation
+    public class BaseUserControl : SmartClientPortal.Shell.Win.Common.BaseUserControl, ICommonOperation
     {
         private readonly IExplorerPresenter _explorerPresenter;
 

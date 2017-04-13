@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
 	public partial class SkillResultHighlightGridControl : GridControl, IHelpContext
 	{

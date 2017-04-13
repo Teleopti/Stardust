@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Chart
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart
 {
     public class DataToChartEventArgs : EventArgs
     {

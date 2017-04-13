@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Teleopti.Ccc.Win.WpfControls.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters
 {
     [ValueConversion(typeof(double), typeof(bool), ParameterType = typeof(double))]
     public class LessThanConverter : IValueConverter

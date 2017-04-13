@@ -9,14 +9,12 @@ using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Matrix;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Win.Reporting;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Matrix
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Matrix
 {
 	public partial class MatrixNavigationView : BaseUserControl, IMatrixNavigationView
 	{

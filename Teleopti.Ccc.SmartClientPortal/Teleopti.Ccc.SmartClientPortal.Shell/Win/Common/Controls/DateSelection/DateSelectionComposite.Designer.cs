@@ -1,6 +1,4 @@
-﻿using DateRangeChangedEventArgs=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs;
-
-namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {
 	partial class DateSelectionComposite : BaseUserControl
 	{
@@ -33,8 +31,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.btnApply = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.periodListSelectionBox1 = new Teleopti.Ccc.Win.Common.Controls.PeriodListSelectionBox();
-			this.dateSelectionControl1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionControl();
+			this.periodListSelectionBox1 = new PeriodListSelectionBox();
+			this.dateSelectionControl1 = new DateSelectionControl();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -95,7 +93,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateSelectionControl1.ShowTabArea = true;
 			this.dateSelectionControl1.Size = new System.Drawing.Size(169, 207);
 			this.dateSelectionControl1.TabIndex = 9;
-			this.dateSelectionControl1.AddButtonClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionControl1AddButtonClicked);
+			this.dateSelectionControl1.AddButtonClicked += new System.EventHandler<DateRangeChangedEventArgs>(this.dateSelectionControl1AddButtonClicked);
 			// 
 			// DateSelectionComposite
 			// 

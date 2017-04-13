@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Teleopti.Ccc.WinCode.FileImport;
 
-namespace Teleopti.Ccc.Win.WpfControls.FileImport.ViewModels
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport.ViewModels
 {
     public class PreviewQueueGridViewModel : IModel
     {

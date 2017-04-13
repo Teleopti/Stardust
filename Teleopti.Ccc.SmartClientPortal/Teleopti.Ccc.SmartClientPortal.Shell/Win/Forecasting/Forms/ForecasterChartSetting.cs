@@ -4,10 +4,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common.Chart;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
     public class ForecasterChartSetting
     {

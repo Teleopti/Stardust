@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Teleopti.Ccc.Win.WpfControls.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters
 {
     /// <summary>
     /// Converts a bool to Visibility so you can show items dependning on a bool

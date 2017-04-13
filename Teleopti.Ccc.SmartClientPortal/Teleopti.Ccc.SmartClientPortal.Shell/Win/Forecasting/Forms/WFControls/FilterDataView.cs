@@ -4,11 +4,11 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadDayTemplatesPages;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 {
 	public partial class FilterDataView : BaseDialogForm, INotifyWorkloadDayFiltered
 	{

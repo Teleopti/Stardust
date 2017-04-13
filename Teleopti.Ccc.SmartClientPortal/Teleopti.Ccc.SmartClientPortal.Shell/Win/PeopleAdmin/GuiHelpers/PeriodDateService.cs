@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
     /// <summary>
     /// This is used for validating period dates in period grids.

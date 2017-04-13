@@ -1,6 +1,7 @@
-﻿using Teleopti.Ccc.Win.PeopleAdmin.Views;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
 {
 	partial class PeopleWorksheet
 	{
@@ -49,11 +50,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.externalFilteringLabel = new System.Windows.Forms.Label();
 			this.externalFilteringTextBox = new System.Windows.Forms.TextBox();
-			this.shiftCategoryLimitationView = new Teleopti.Ccc.Win.PeopleAdmin.Views.ShiftCategoryLimitationView();
+			this.shiftCategoryLimitationView = new ShiftCategoryLimitationView();
 			this.contextMenuStripGridView = new Syncfusion.Windows.Forms.Tools.ContextMenuStripEx();
 			this.contextMenuStripExExternalLogOn = new Syncfusion.Windows.Forms.Tools.ContextMenuStripEx();
 			this.xxSearchThreeDotsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.peopleRibbon = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.peopleRibbon = new RibbonControlAdvFixed();
 			this.toolStripTabItem1 = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonMainSave = new System.Windows.Forms.ToolStripButton();
@@ -965,7 +966,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Label externalFilteringLabel;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed peopleRibbon;
+		private RibbonControlAdvFixed peopleRibbon;
 		private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItem1;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExEditing;
 		private System.Windows.Forms.ToolStripButton toolStripButtonFind;

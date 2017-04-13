@@ -1,9 +1,8 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
 	/// <summary>
 	/// Person account updater that works with the Win project's FilteredPeopleHolder's domain data

@@ -16,7 +16,7 @@ using Teleopti.Ccc.WinCode.Meetings.Overview;
 using Teleopti.Interfaces.Domain;
 using Module = Autofac.Module;
 
-namespace Teleopti.Ccc.Win.Meetings.Overview
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 {
     
 

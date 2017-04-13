@@ -6,12 +6,12 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
     public class WorkloadDetailView : AbstractDetailView
     {

@@ -3,14 +3,14 @@ using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.Common.Controls.Rows;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Scheduling.SkillResult;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling.SkillResult
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 {
 	public class SkillFullPeriodGridControl : SkillResultGridControlBase, ISkillFullPeriodGridControl
     {

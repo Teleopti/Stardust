@@ -2,7 +2,7 @@ using System;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
     [Serializable]
     public class PortalSettings : SettingValue, IPortalSettings

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Payroll.Interfaces;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {
 	public partial class ManageDefinitionSetForm : BaseDialogForm
 	{

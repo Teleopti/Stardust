@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.SmartClientPortal.Shell.Properties;
 
-namespace Teleopti.Ccc.Win.SmartParts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
 {
     public partial class SmartPartBase : UserControl
     {

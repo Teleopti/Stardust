@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Teleopti.Ccc.Win.WpfControls.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters
 {
     /// <summary>
     /// Converter to retrun a color from a string

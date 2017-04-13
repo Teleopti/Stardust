@@ -5,7 +5,7 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Time.Timeline;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Time.TimePanel
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.TimePanel
 {
 
     /// <summary>

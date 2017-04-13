@@ -7,7 +7,7 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Converters;
 using Teleopti.Ccc.WinCode.Intraday;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday
 {
     /// <summary>
     /// Interaction logic for PinnedLayerView.xaml

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Common.Controls
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
     /// <summary>
     /// Determines which type of date header to show

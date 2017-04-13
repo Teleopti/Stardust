@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Meetings
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
 	partial class AddressBookView
 	{

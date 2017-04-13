@@ -2,13 +2,13 @@
 using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class FilterHourlyAvailabilityView : BaseDialogForm
 	{

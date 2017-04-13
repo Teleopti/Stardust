@@ -2,7 +2,7 @@ using System;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals
 {
     internal class CutPasteHandlerFactory : IDisposable
     {

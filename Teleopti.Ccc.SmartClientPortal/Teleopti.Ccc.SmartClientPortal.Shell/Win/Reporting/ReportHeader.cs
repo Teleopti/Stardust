@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Reporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	public partial class ReportHeader : BaseUserControl
 	{

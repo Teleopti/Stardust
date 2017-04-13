@@ -1,7 +1,7 @@
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
     public class TreeFamily
     {

@@ -1,7 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 {
     public partial class WFValidate : WFBaseControl
     {

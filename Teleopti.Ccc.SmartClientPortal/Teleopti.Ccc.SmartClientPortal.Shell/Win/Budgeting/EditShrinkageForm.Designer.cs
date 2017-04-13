@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Win.Common;
-
-namespace Teleopti.Ccc.Win.Budgeting
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
     partial class EditShrinkageForm
     {

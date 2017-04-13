@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.Matrix
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Matrix
 {
     partial class MatrixNavigationView
     {

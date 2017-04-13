@@ -1,8 +1,8 @@
-﻿using Teleopti.Ccc.Win.Common;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 
-namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {
     public class PayrollBaseUserControl : BaseUserControlWithMessageBrokerHandler, ICommonBehavior
     {

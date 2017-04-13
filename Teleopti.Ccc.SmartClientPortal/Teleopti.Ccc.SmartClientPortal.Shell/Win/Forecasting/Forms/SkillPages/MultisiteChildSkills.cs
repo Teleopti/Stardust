@@ -9,13 +9,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.SkillPages;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 {
 	public partial class MultisiteChildSkills : BaseUserControl, IPropertyPage
 	{

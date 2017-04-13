@@ -1,6 +1,8 @@
 ﻿
 
-namespace Teleopti.Ccc.Win.Permissions
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Permissions
 {
 	partial class PermissionsExplorer
 	{
@@ -69,7 +71,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageSeparator2 = new Syncfusion.Windows.Forms.BackStageSeparator();
 			this.backStageButton3 = new Syncfusion.Windows.Forms.BackStageButton();
 			this.backStageButton4 = new Syncfusion.Windows.Forms.BackStageButton();
-			this.ExplorerRibbon = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ExplorerRibbon = new RibbonControlAdvFixed();
 			this.toolStripTabItem1 = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonMainSave = new System.Windows.Forms.ToolStripButton();
@@ -1039,7 +1041,7 @@ namespace Teleopti.Ccc.Win.Permissions
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.Panel panelData;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel DataBarItem;
-		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ExplorerRibbon;
+		private RibbonControlAdvFixed ExplorerRibbon;
 		private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItem1;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExClipboard;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExRoles;

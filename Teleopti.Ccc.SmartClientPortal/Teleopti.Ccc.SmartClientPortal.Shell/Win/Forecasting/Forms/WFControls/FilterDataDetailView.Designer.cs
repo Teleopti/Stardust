@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 {
     partial class FilterDataDetailView
     {

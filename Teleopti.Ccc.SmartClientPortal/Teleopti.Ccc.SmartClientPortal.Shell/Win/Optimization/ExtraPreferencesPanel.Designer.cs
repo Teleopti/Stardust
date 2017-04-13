@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Optimization
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {
     partial class ExtraPreferencesPanel
     {

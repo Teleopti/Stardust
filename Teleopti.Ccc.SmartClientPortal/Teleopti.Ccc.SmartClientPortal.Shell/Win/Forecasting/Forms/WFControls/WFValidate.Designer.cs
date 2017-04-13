@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 {
 	partial class WFValidate
 	{
@@ -30,7 +30,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.workflowValidateView = new Teleopti.Ccc.Win.Forecasting.Forms.WFControls.WorkflowValidateView();
+			this.workflowValidateView = new WorkflowValidateView();
 			this.SuspendLayout();
 			// 
 			// workflowValidateView

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPages
 {
     partial class WorkloadOpenHours
     {
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle1 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			this.tableLayoutPanelOpenHoursRtl = new System.Windows.Forms.TableLayoutPanel();
 			this.lblOpenHours = new System.Windows.Forms.Label();
-			this.weekOpenHoursGridWorkload = new Teleopti.Ccc.Win.Forecasting.Forms.WeekOpenHoursGrid();
+			this.weekOpenHoursGridWorkload = new WeekOpenHoursGrid();
 			this.tableLayoutPanelOpenHoursRtl.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.weekOpenHoursGridWorkload)).BeginInit();
 			this.SuspendLayout();

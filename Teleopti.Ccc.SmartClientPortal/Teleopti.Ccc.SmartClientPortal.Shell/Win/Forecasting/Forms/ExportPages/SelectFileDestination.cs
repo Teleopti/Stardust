@@ -1,23 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Collections.Generic;
+using log4net;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
-using log4net;
 
-
-namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 {
 	public partial class SelectFileDestination : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
 	{

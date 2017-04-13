@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
     partial class SkillSummary
     {

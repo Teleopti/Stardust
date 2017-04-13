@@ -7,7 +7,7 @@ using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.WinCode.Shifts.Views;
 
-namespace Teleopti.Ccc.Win.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
     public partial class VisualizeGridView : BaseUserControl, IVisualizeView
     {

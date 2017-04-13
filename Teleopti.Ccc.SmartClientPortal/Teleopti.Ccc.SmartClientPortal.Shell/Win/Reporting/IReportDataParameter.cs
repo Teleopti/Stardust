@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Ccc.Win.Reporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
     public interface IReportDataParameter
     {

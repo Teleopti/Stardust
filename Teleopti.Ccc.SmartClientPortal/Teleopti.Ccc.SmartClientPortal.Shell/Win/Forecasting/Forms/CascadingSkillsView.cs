@@ -5,11 +5,10 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Forecasting.Cascading;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_CascadingSkillsGUI_40018)]
 	public partial class CascadingSkillsView : BaseDialogForm

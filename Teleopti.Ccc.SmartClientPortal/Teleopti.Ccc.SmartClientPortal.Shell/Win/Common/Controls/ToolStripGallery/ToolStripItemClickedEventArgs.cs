@@ -1,8 +1,8 @@
 ﻿using System;
-using Syncfusion.Windows.Forms.Tools;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.ToolStripGallery
 {
     /// <summary>
     /// Provides data for Item Clicked events on a ToolStrip Item.

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
-namespace Teleopti.Ccc.Win.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 {
-	public partial class IntradayWebNavigator : Common.BaseUserControl
+	public partial class IntradayWebNavigator : BaseUserControl
 	{
 		private readonly IComponentContext _container;
 

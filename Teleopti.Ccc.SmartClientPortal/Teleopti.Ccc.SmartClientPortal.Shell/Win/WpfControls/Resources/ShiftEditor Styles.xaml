@@ -6,7 +6,7 @@
     xmlns:Interfaces="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Interfaces"
     xmlns:domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Ccc.Domain"
     xmlns:domain1="clr-namespace:Teleopti.Ccc.Domain.InterfaceLegacy.Domain;assembly=Teleopti.Ccc.Domain"
-    xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters">
+    xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters">
     
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml"/>

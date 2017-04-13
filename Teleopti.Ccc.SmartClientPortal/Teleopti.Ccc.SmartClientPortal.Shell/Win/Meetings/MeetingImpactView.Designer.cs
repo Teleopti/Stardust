@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Meetings
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
 	partial class MeetingImpactView
 	{
@@ -44,16 +46,16 @@
 			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.dateTimePickerAdvStartSlotPeriod = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
 			this.dateTimePickerAdvEndSlotPeriod = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
-			this.office2007OutlookTimePickerStartSlotPeriod = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
-			this.office2007OutlookTimePickerEndSlotPeriod = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.office2007OutlookTimePickerStartSlotPeriod = new Office2007OutlookTimePicker(this.components);
+			this.office2007OutlookTimePickerEndSlotPeriod = new Office2007OutlookTimePicker(this.components);
 			this.buttonAdvNext = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvPrevious = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.tabControlSkillResultGrid = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.outlookTimePickerEndTime = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
-			this.outlookTimePickerStartTime = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.outlookTimePickerEndTime = new Office2007OutlookTimePicker(this.components);
+			this.outlookTimePickerStartTime = new Office2007OutlookTimePicker(this.components);
 			this.dateTimePickerAdvEndDate = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
 			this.dateTimePickerAdvStartDate = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
 			this.autoLabelEndTime = new Syncfusion.Windows.Forms.Tools.AutoLabel();
@@ -807,8 +809,8 @@
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelEndTime;
 		private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvStartDate;
 		private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvEndDate;
-		private Common.Controls.Office2007OutlookTimePicker outlookTimePickerStartTime;
-		private Common.Controls.Office2007OutlookTimePicker outlookTimePickerEndTime;
+		private Office2007OutlookTimePicker outlookTimePickerStartTime;
+		private Office2007OutlookTimePicker outlookTimePickerEndTime;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvPickBest;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel3;
@@ -816,8 +818,8 @@
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel2;
 		private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvStartSlotPeriod;
 		private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvEndSlotPeriod;
-		private Common.Controls.Office2007OutlookTimePicker office2007OutlookTimePickerStartSlotPeriod;
-		private Common.Controls.Office2007OutlookTimePicker office2007OutlookTimePickerEndSlotPeriod;
+		private Office2007OutlookTimePicker office2007OutlookTimePickerStartSlotPeriod;
+		private Office2007OutlookTimePicker office2007OutlookTimePickerEndSlotPeriod;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvNext;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvPrevious;
 		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelTop;

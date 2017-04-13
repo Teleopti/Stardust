@@ -9,7 +9,7 @@ using System.Windows.Media;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Requests.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Views
 {
     /// <summary>
     /// Interaction logic for HandlePersonRequestView.xaml

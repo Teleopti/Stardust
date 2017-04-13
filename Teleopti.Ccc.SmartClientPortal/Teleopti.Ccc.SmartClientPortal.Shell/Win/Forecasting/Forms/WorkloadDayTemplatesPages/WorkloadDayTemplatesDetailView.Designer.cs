@@ -1,6 +1,7 @@
-﻿using DateSelectionComposite=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionComposite;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using DateSelectionComposite=Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection.DateSelectionComposite;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 {
     partial class WorkloadDayTemplatesDetailView
     {
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.xpBoxPeriodSelection = new Syncfusion.Windows.Forms.Tools.XPTaskBar();
 			this.xpSelectperiod = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
 			this.gradientPanel2 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-			this.dateSelectionComposite1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionComposite();
+			this.dateSelectionComposite1 = new DateSelectionComposite();
 			this.xpSmothing = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
 			this.gradientPanel3 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -144,7 +145,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.dateSelectionComposite1.Name = "dateSelectionComposite1";
 			this.dateSelectionComposite1.Size = new System.Drawing.Size(195, 440);
 			this.dateSelectionComposite1.TabIndex = 0;
-			this.dateSelectionComposite1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionComposite1_DateRangeChanged);
+			this.dateSelectionComposite1.DateRangeChanged += new System.EventHandler<DateRangeChangedEventArgs>(this.dateSelectionComposite1_DateRangeChanged);
 			// 
 			// xpSmothing
 			// 

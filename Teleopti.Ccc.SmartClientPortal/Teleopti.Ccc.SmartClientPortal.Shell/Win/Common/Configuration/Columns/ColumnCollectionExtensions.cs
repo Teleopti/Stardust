@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Win.Common.Configuration.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
 {
     public static class ColumnCollectionExtensions
     {

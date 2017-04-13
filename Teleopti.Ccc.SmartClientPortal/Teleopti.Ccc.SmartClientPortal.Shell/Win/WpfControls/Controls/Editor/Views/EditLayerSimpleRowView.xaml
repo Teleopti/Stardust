@@ -1,13 +1,13 @@
 ﻿<!--DataContext: EditLayerViewModel-->
-<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Editor.Views.EditLayerSimpleRowView"
+<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor.Views.EditLayerSimpleRowView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode"
     xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode"
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
     xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
-    xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters"
-    xmlns:views="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Editor.Views">
+    xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
+    xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor.Views">
 
 
     <UserControl.Resources>

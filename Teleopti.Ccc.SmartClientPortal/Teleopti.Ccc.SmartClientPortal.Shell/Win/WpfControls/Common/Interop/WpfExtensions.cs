@@ -7,7 +7,7 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using FlowDirection=System.Windows.FlowDirection;
 
-namespace Teleopti.Ccc.Win.WpfControls.Common.Interop
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop
 {
     public static class WpfExtensions
     {

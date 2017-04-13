@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {
     partial class DateSelectionCalendar : BaseUserControl
     {

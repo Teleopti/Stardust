@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Meetings.Overview
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 {
 	partial class ExportMeetingView
 	{
@@ -37,7 +39,7 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.progressBarExporting = new System.Windows.Forms.ProgressBar();
 			this.labelExportResult = new System.Windows.Forms.Label();
-			this.dateSelectionFromTo1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
+			this.dateSelectionFromTo1 = new DateSelectionFromTo();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonClose = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonExport = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -248,7 +250,7 @@
 		private System.Windows.Forms.ProgressBar progressBarExporting;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label labelExportResult;
-		private Common.Controls.DateSelection.DateSelectionFromTo dateSelectionFromTo1;
+		private DateSelectionFromTo dateSelectionFromTo1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonExport;
 	}

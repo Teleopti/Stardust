@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.WinCode.Scheduling;
-
-namespace Teleopti.Ccc.Win.Scheduling
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	partial class RequestDetailsView
 	{

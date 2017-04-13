@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Teleopti.Ccc.Win.SmartParts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
 {
     /// <summary>
     /// Represents a .

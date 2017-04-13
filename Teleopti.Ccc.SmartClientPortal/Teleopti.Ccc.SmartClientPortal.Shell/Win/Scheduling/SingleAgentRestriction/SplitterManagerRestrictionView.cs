@@ -1,7 +1,7 @@
 ﻿using System;
 using Syncfusion.Windows.Forms.Tools.Enums;
 
-namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction
 {
     public class SplitterManagerRestrictionView : IDisposable
     {

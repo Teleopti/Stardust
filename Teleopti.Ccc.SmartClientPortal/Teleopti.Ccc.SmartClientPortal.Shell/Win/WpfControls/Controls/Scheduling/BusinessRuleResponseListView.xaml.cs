@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.WpfControls.Controls.Scheduling
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Scheduling
 {
     /// <summary>
     /// Interaction logic for BusinessRuleResponseListView.xaml

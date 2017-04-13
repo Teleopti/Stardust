@@ -8,12 +8,11 @@ using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Main;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
 	public partial class LoginWebView : MetroForm, ILogonView
 	{

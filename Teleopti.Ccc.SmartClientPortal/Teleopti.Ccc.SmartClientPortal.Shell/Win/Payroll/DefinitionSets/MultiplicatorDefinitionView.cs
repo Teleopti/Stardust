@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Configuration;
-using Teleopti.Ccc.Win.Common.Configuration.Columns;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 using Teleopti.Interfaces.Domain;
-using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 
-namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public partial class MultiplicatorDefinitionView : PayrollGridViewBase, IMultiplicatorDefinitionView

@@ -1,10 +1,10 @@
 using System;
 using System.Windows;
 using Syncfusion.Windows.Forms;
-using Teleopti.Ccc.Win.WpfControls.FileImport.ViewModels;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport.ViewModels;
 using Teleopti.Ccc.WinCode.FileImport;
 
-namespace Teleopti.Ccc.Win.WpfControls.FileImport
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport
 {
     /// <summary>
     /// Interaction logic for ImportWizardWindow.xaml

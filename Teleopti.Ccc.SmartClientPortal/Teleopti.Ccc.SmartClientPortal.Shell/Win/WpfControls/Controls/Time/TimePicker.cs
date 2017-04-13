@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Time
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time
 {
    [TemplatePart(Name = "PART_Hours", Type = typeof(TextBox)),
    TemplatePart(Name = "PART_Minutes", Type = typeof(TextBox)),

@@ -1,5 +1,7 @@
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 {
     partial class SkillGeneral
     {
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.labelDefaultResolution = new System.Windows.Forms.Label();
 			this.labelTimeZone = new System.Windows.Forms.Label();
 			this.labelTotalOpeningHours = new System.Windows.Forms.Label();
-			this.office2007OutlookTimePickerMidnightOffsetBreak = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.office2007OutlookTimePickerMidnightOffsetBreak = new Office2007OutlookTimePicker(this.components);
 			this.comboBoxAdvIntervalLength = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.numericUpDownMaxParallel = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
@@ -425,7 +427,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelForRtl;
         private System.Windows.Forms.Label labelMidnightBreakOffset;
         private System.Windows.Forms.Label labelTotalOpeningHours;
-        private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker office2007OutlookTimePickerMidnightOffsetBreak;
+        private Office2007OutlookTimePicker office2007OutlookTimePickerMidnightOffsetBreak;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvIntervalLength;
         private System.Windows.Forms.ErrorProvider errorProvider1;
 		private System.Windows.Forms.Label label1;

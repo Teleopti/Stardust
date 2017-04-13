@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Common.Controls.Chart
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart
 {
     partial class GridToChart
     {

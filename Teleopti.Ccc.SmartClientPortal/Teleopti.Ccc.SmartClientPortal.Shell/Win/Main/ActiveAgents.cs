@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
 	public partial class ActiveAgents : BaseDialogForm
 	{

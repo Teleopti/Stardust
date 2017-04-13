@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
-using System;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Cells
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {
     [Serializable]
 	public class NumericReadOnlyCellModel : GridStaticCellModel, INumericCellModelWithDecimals, ICustomPreferredCellSize

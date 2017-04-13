@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Rows;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Rows
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 {
     class TotalVolumeTaskIndexGridRow : GridRow
     {

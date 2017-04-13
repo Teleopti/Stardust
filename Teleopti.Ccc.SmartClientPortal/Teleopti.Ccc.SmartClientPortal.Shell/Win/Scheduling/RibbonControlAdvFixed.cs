@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Syncfusion.Windows.Forms.Tools;
 using Syncfusion.Windows.Forms.Tools.Win32API;
 
-namespace Syncfusion.Windows.Forms.Tools
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
     // This code exists to fix this bug:
     //

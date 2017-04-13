@@ -7,9 +7,8 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Configuration.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
 {
     public class SFGridColumnGridHelper<T> : IDisposable
     {

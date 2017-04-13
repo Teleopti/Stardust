@@ -4,10 +4,9 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
 	public class ChildSkillDetailView : AbstractDetailView
 	{

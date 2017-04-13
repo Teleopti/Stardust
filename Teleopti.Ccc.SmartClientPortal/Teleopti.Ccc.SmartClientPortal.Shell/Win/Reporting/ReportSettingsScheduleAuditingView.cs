@@ -7,14 +7,14 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.ExceptionHandling;
+using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.WinCode.Presentation;
 
-namespace Teleopti.Ccc.Win.Reporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	public partial class ReportSettingsScheduleAuditingView : BaseUserControl, IReportSettingsScheduleAuditingView
 	{

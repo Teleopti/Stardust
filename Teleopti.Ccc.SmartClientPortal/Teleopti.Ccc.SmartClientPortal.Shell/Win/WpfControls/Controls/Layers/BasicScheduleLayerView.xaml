@@ -1,7 +1,7 @@
-﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Layers.BasicScheduleLayerView"
+﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers.BasicScheduleLayerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters">
+    xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters">
 	<UserControl.Resources>
 		<converters:ColorConverter x:Key="ColorConverter"/>
 	</UserControl.Resources>

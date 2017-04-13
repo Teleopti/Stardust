@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Intraday
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 {
     partial class IntradayWebNavigator
 	{

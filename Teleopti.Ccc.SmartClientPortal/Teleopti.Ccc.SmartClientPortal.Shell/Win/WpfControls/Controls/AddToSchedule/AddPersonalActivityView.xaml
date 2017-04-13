@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.AddToSchedule.AddPersonalActivityView"
+﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.AddToSchedule.AddPersonalActivityView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
 			 xmlns:Scheduling="clr-namespace:Teleopti.Ccc.Domain.Scheduling;assembly=Teleopti.Ccc.Domain"
-			 xmlns:views="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Editor.Views"
-			 xmlns:dateTimePeriodControl="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.DateTimePeriodControl"
-			 xmlns:common="clr-namespace:Teleopti.Ccc.Win.WpfControls.Common"
+			 xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor.Views"
+			 xmlns:dateTimePeriodControl="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl"
+			 xmlns:common="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common"
 			 Loaded="AddPersonalActivityView_OnLoaded"
     >
     <UserControl.Resources>

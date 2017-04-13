@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 	static public class EventHelper
 	{

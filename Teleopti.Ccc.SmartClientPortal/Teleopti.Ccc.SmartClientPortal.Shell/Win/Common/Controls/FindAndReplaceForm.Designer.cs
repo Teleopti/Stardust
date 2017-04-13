@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Common.Controls
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
 	partial class FindAndReplaceForm
 	{
@@ -45,7 +47,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.ribbonControlAdvSearch = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdvSearch = new RibbonControlAdvFixed();
 			this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelTopMain = new System.Windows.Forms.TableLayoutPanel();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -1688,7 +1690,7 @@
 
 		#endregion
 
-		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdvSearch;
+		private RibbonControlAdvFixed ribbonControlAdvSearch;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTopMain;
 		private System.Windows.Forms.Panel panel1;

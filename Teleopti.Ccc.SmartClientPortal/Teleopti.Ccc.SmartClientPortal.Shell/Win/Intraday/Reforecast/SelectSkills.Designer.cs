@@ -1,9 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
-using Teleopti.Ccc.UserTexts;
-
-namespace Teleopti.Ccc.Win.Intraday.Reforecast
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday.Reforecast
 {
     partial class SelectSkills
     {

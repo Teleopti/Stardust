@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.DateTimePeriodControl
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl
 {
     /// <summary>
     /// Interaction logic for EditableStartTimeOfDay.xaml

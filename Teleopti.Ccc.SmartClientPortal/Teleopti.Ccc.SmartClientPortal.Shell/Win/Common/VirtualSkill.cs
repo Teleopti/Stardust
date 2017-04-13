@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2239:ProvideDeserializationMethodsForOptionalFields"), Serializable]
     public class VirtualSkill

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 {
 	public class PerShiftCategoryChart : ChartControl
 	{

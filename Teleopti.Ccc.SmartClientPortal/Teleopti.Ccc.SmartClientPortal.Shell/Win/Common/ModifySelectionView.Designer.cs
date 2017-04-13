@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.UserTexts;
-
-namespace Teleopti.Ccc.Win.Common
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 	partial class ModifySelectionView
 	{

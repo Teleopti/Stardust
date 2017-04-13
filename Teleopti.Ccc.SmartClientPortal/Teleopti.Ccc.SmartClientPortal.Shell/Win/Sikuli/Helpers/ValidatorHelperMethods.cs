@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Sikuli.Helpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 {
 	internal static class ValidatorHelperMethods
 	{

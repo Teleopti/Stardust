@@ -22,10 +22,10 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Forecasting.Forms;
-using Teleopti.Ccc.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Forecasting.Cascading;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -34,9 +34,8 @@ using Teleopti.Ccc.WinCode.Meetings.Events;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class SchedulerNavigator : BaseUserControl, IScheduleNavigator
 	{

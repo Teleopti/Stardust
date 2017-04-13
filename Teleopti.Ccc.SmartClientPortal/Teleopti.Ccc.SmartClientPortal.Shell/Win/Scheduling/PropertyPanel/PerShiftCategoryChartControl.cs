@@ -6,11 +6,10 @@ using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 {
 	class PerShiftCategoryChartControl : BaseUserControl, INeedShiftCategoryDistributionModel
     {
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxAdvActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.perShiftCategoryChart1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.PerShiftCategoryChart();
+			this.perShiftCategoryChart1 = new PerShiftCategoryChart();
 			this.label1 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvActivity)).BeginInit();

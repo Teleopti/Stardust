@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Grouping
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {
     partial class GroupPageSettings
     {

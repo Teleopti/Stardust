@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Common.Controls
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
     partial class FromToTimePicker
     {
@@ -30,8 +30,8 @@
         {
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.office2007OutlookTimePickerStartTime = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
-			this.office2007OutlookTimePickerEndTime = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.office2007OutlookTimePickerStartTime = new Office2007OutlookTimePicker(this.components);
+			this.office2007OutlookTimePickerEndTime = new Office2007OutlookTimePicker(this.components);
 			this.checkBoxAdvWholeDay = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerStartTime)).BeginInit();

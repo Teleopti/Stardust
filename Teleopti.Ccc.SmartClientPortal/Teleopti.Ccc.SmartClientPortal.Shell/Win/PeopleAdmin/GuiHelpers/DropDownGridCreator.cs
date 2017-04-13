@@ -2,12 +2,12 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
 	public sealed class DropDownGridCreator : IDisposable
 	{

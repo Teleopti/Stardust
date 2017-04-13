@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 {
 	partial class PeopleAdminFilterPanel
 	{

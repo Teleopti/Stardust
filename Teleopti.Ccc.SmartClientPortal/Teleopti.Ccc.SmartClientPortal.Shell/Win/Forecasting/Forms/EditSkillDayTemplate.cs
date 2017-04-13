@@ -9,11 +9,11 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.Chart;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
 	public partial class EditSkillDayTemplate : BaseRibbonFormWithUnitOfWork
 	{

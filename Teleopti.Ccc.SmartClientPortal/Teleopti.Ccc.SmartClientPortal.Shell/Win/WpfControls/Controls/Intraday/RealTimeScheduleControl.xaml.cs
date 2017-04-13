@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Windows;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.WpfControls.Controls.Intraday.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Models;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday
 {
     /// <summary>
     /// Wrapper for the Intraday grid

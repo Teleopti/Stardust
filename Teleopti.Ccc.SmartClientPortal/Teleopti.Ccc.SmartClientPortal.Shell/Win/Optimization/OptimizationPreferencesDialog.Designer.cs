@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Optimization
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {
 	partial class OptimizationPreferencesDialog
 	{
@@ -36,15 +36,15 @@
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tabControlTopLevel = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageGeneral = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.generalPreferencesPanel1 = new Teleopti.Ccc.Win.Optimization.GeneralPreferencesPanel();
+			this.generalPreferencesPanel1 = new GeneralPreferencesPanel();
 			this.tabPageDaysOff = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.dayOffPreferencesPanel1 = new Teleopti.Ccc.Win.Optimization.DayOffPreferencesPanel();
+			this.dayOffPreferencesPanel1 = new DayOffPreferencesPanel();
 			this.tabPageExtra = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.extraPreferencesPanel1 = new Teleopti.Ccc.Win.Optimization.ExtraPreferencesPanel();
+			this.extraPreferencesPanel1 = new ExtraPreferencesPanel();
 			this.tabPageShifts = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.shiftsPreferencesPanel1 = new Teleopti.Ccc.Win.Optimization.ShiftsPreferencesPanel();
+			this.shiftsPreferencesPanel1 = new ShiftsPreferencesPanel();
 			this.tabPageAdvanced = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.advancedPreferencesPanel1 = new Teleopti.Ccc.Win.Optimization.AdvancedPreferencesPanel();
+			this.advancedPreferencesPanel1 = new AdvancedPreferencesPanel();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlTopLevel)).BeginInit();

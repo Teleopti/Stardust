@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Payroll.Overtime
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Overtime
 {
     partial class MultiplicatorControlView
     {

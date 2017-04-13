@@ -2,9 +2,8 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Main;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Main.LogonScreens
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main.LogonScreens
 {
 	public partial class SelectDatasourceScreen : UserControl, ILogonStep
 	{

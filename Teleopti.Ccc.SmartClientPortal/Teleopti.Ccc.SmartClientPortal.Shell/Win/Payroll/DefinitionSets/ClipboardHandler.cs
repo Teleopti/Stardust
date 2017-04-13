@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {
     public class ClipboardHandler
     {

@@ -9,7 +9,7 @@ using System.Reflection;
 
 #endregion
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 
     /// <summary>

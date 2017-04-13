@@ -1,7 +1,6 @@
-﻿using System;
-using Teleopti.Ccc.Win.SmartParts;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts;
 
-namespace Teleopti.Ccc.Win.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 {
     partial class PayrollExportNavigator
     {

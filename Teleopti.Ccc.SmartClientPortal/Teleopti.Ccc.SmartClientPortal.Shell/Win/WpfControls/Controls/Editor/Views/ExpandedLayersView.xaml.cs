@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.WpfControls.Controls.Editor.Views
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor.Views
 {
     /// <summary>
     /// Interaction logic for GroupOfLayersView.xaml

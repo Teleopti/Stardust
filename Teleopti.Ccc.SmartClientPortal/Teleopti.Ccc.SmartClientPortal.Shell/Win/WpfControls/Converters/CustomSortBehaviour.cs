@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Teleopti.Ccc.WinCode.Converters;
 
-namespace Teleopti.Ccc.Win.WpfControls.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters
 {
 	public class CustomSortBehaviour
 	{

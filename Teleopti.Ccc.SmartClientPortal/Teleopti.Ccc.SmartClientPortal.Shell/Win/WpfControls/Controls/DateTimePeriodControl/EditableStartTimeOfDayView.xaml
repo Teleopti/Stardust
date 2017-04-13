@@ -1,5 +1,5 @@
 ﻿<!--Uses DatTimeperiodViewModel as DataContext-->
-<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.DateTimePeriodControl.EditableStartTimeOfDayView"
+<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl.EditableStartTimeOfDayView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"

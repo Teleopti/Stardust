@@ -6,7 +6,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {
 	public static class DateTimePickerAdvExtension
 	{

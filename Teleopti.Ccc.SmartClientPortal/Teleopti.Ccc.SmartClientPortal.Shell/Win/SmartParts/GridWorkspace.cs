@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.SmartParts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
 {
     /// <summary>
     /// Represent a Grid like Smart Client Workspace

@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Win.Sikuli.Helpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 {
 	public interface ITestDuration
 	{

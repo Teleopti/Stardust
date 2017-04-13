@@ -3,7 +3,7 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {
 	public partial class DateNavigateControl : BaseUserControl
 	{

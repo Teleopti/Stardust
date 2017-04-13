@@ -11,16 +11,14 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common.Configuration.Columns;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	public partial class ShiftCategorySettingsControl : BaseUserControl, ISettingPage
 	{

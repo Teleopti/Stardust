@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Syncfusion.Windows.Forms.Grid;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Presentation;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 {
 	public abstract class GridViewBase : IDisposable
 	{

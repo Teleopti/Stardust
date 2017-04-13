@@ -10,7 +10,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Properties;
 using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.PreferenceCellPainters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.PreferenceCellPainters
 {
     class EffectiveRestrictionRtlPainter : PreferenceCellPainterBase
     {

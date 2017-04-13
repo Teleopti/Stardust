@@ -1,8 +1,7 @@
-﻿using System.Drawing;
-using SchedulingSessionPreferencesPanel=
-	Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences.SchedulingSessionPreferencesTabPanel;
+﻿using SchedulingSessionPreferencesPanel=
+	Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionPreferences.SchedulingSessionPreferencesTabPanel;
 
-namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionPreferences
 {
 	partial class SchedulingSessionPreferencesDialog
 	{
@@ -40,9 +39,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tabControlTopLevel = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageSchedulingOptions = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.schedulingSessionPreferencesTabPanel1 = new Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences.SchedulingSessionPreferencesTabPanel();
+			this.schedulingSessionPreferencesTabPanel1 = new SchedulingSessionPreferencesPanel();
 			this.tabPageDayOffPlanningOptions = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.dayOffPreferencesPanel1 = new Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences.ResourceOptimizerDayOffPreferencesPanel();
+			this.dayOffPreferencesPanel1 = new ResourceOptimizerDayOffPreferencesPanel();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();

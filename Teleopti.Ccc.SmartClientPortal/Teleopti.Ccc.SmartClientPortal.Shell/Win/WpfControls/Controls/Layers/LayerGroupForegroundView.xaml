@@ -1,5 +1,5 @@
 ﻿<!-- DataContext LayerGroupViewModel -->
-    <UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Layers.LayerGroupForegroundView"
+    <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers.LayerGroupForegroundView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>

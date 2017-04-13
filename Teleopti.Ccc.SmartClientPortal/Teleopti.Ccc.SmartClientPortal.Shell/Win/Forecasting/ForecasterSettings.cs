@@ -1,11 +1,10 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Forecasting.Forms;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
 
-namespace Teleopti.Ccc.Win.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
 {
     [Serializable]
     public class ForecasterSettings : SettingValue

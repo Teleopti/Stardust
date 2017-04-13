@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using Teleopti.Ccc.WinCode.Converters.DateTimeConverter;
 
-namespace Teleopti.Ccc.Win.WpfControls.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters
 {
     [ValueConversion(typeof(DateTime), typeof(string), ParameterType = typeof(TimeZoneInfo))]
     public class DateTimeToTimeConverter : DateTimeBaseConverter

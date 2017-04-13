@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
     /// <summary>
     /// Constants defined in people admin.

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Teleopti.Ccc.Win.GridBinding
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.GridBinding
 {
 	public class ModelProperty<T> : IModelProperty<T>
 	{

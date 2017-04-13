@@ -1,7 +1,6 @@
-﻿using System;
-using Teleopti.Ccc.Win.Main;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
 	partial class ForecastWorkflow
 	{
@@ -36,11 +35,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.components = new System.ComponentModel.Container();
 			this.tabControlAdv1 = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabValidation = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.wfValidate = new Teleopti.Ccc.Win.Forecasting.Forms.WFControls.WFValidate();
+			this.wfValidate = new WFValidate();
 			this.tabSeason = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.wfSeasonalityTabs = new Teleopti.Ccc.Win.Forecasting.Forms.WFControls.WFSeasonalityTabs();
+			this.wfSeasonalityTabs = new WFSeasonalityTabs();
 			this.tabTemplation = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.wfTemplateTabs = new Teleopti.Ccc.Win.Forecasting.Forms.WFControls.WFTemplateTabs();
+			this.wfTemplateTabs = new WFTemplateTabs();
 			this.btnFinish = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.btnForward = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.btnBack = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -301,11 +300,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private Syncfusion.Windows.Forms.ButtonAdv btnForward;
 		private Syncfusion.Windows.Forms.ButtonAdv btnBack;
 		private Syncfusion.Windows.Forms.ButtonAdv btnCancel;
-		private Teleopti.Ccc.Win.Forecasting.Forms.WFControls.WFSeasonalityTabs wfSeasonalityTabs;
+		private WFSeasonalityTabs wfSeasonalityTabs;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabTemplation;
-		private Teleopti.Ccc.Win.Forecasting.Forms.WFControls.WFTemplateTabs wfTemplateTabs;
+		private WFTemplateTabs wfTemplateTabs;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabValidation;
-		private Teleopti.Ccc.Win.Forecasting.Forms.WFControls.WFValidate wfValidate;
+		private WFValidate wfValidate;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;
 

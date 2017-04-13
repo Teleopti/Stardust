@@ -8,17 +8,16 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.Common.Controls.Rows;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Scheduling.SkillResult
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 {
     public class SkillIntradayGridPresenter
     {

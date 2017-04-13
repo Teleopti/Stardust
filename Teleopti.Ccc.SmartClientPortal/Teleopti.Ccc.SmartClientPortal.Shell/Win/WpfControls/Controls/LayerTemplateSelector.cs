@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls
 {
     /// <summary>
     /// Simple TemplateSelector for connection layers to templates based on the properties

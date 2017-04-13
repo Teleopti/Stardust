@@ -6,9 +6,8 @@ using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 {
     public class PdfScheduleAssignment : PdfScheduleTemplate
     {

@@ -8,14 +8,14 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.Chart;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.Win.ExceptionHandling;
-using Teleopti.Ccc.Win.Forecasting.Forms.WFControls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 {
     public partial class WorkflowTotalView : BaseUserControl
     {

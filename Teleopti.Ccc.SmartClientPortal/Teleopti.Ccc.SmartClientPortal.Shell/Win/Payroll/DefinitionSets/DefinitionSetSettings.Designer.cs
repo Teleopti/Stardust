@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {
     partial class DefinitionSetSettings
     {

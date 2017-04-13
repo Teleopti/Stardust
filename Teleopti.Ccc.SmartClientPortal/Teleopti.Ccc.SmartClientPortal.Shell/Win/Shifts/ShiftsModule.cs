@@ -11,7 +11,7 @@ using Teleopti.Ccc.WinCode.Shifts.Presenters;
 using Teleopti.Ccc.WinCode.Shifts.Views;
 using Module = Autofac.Module;
 
-namespace Teleopti.Ccc.Win.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
     public class ShiftsModule : Module
     {

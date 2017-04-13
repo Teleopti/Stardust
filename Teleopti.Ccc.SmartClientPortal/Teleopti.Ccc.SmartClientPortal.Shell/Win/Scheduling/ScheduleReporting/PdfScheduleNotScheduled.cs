@@ -5,7 +5,7 @@ using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 {
     public class PdfScheduleNotScheduled : PdfScheduleTemplate
     {

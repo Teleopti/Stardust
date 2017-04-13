@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
     partial class EditMultisiteDayTemplate
     {
@@ -36,7 +38,7 @@
 			this.labelTemplateName = new System.Windows.Forms.Label();
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvOK = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxTemplateName)).BeginInit();
@@ -214,7 +216,7 @@
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
 		  private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxTemplateName;
         private System.Windows.Forms.Label labelTemplateName;
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+        private RibbonControlAdvFixed ribbonControlAdv1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;
 

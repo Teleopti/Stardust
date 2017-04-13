@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     public partial class MoreOrLessButton : BaseUserControl
     {

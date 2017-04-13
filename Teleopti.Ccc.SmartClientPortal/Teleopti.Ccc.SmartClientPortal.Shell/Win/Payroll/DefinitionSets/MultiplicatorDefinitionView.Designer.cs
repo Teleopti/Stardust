@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {
     partial class MultiplicatorDefinitionView
     {

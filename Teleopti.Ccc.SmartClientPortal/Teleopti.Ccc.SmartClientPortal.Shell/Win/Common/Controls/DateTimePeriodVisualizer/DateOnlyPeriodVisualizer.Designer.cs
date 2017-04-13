@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateTimePeriodVisualizer
 {
     partial class DateOnlyPeriodVisualizer
     {

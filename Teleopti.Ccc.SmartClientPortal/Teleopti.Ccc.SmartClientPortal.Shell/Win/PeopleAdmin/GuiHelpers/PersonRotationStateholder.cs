@@ -4,12 +4,12 @@ using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.PeopleAdmin.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
     /// <summary>
     /// The stateholder implementation related to person rotations

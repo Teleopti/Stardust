@@ -1,6 +1,6 @@
-﻿using DateSelectionControl=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionControl;
+﻿using DateSelectionControl=Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection.DateSelectionControl;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
 	partial class OutlierSpecificDatesSelection
 	{
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.listBoxSelectedDates = new System.Windows.Forms.ListBox();
 			this.buttonAdvRemove = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvAdd = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.dateSelectionControl1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionControl();
+			this.dateSelectionControl1 = new DateSelectionControl();
 			this.tableLayoutPanelDateSelection.SuspendLayout();
 			this.SuspendLayout();
 			// 

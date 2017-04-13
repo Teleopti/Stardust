@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction
 {
     public partial class CellComment : Form
     {

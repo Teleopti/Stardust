@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Teleopti.Ccc.Win.SmartParts.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll
 {
     /// <summary>
     /// Interaction logic for StatusErrorView.xaml

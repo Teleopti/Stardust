@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Reporting
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
     partial class ReportHeader
     {
@@ -35,7 +37,7 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.autoLabelHeaderText = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.spinningProgressControl1 = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.SpinningProgressControl();
+			this.spinningProgressControl1 = new SpinningProgressControl();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxUp)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxDown)).BeginInit();
@@ -180,6 +182,6 @@
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelHeaderText;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
-		private Common.Controls.SpinningProgress.SpinningProgressControl spinningProgressControl1;
+		private SpinningProgressControl spinningProgressControl1;
     }
 }

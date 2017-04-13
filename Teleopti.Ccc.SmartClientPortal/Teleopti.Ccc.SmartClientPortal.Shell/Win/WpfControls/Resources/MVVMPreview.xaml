@@ -5,11 +5,11 @@
 					xmlns:Editor="clr-namespace:Teleopti.Ccc.WinCode.Scheduling.Editor;assembly=Teleopti.Ccc.WinCode"
     xmlns:Timeline="clr-namespace:Teleopti.Ccc.WinCode.Common.Time.Timeline;assembly=Teleopti.Ccc.WinCode"
 					xmlns:Scheduling="clr-namespace:Teleopti.Ccc.WinCode.Scheduling;assembly=Teleopti.Ccc.WinCode"
-					xmlns:timeline="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Time.Timeline"
-					xmlns:views="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Editor.Views"
-					xmlns:wpfControls="clr-namespace:Teleopti.Ccc.Win.WpfControls"
-					xmlns:layers="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Layers"
-					xmlns:addToSchedule="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.AddToSchedule">
+					xmlns:timeline="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline"
+					xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor.Views"
+					xmlns:wpfControls="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls"
+					xmlns:layers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers"
+					xmlns:addToSchedule="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.AddToSchedule">
     
     <!--<Style TargetType="Control">
         <Style.Setters>

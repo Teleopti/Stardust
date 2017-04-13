@@ -4,7 +4,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.Common.Configuration.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
 {
     public abstract class SFGridColumnBase<T> : ISortColumn<T>
     {

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Time.Timeline.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline.Views
 {
     /// <summary>
     /// Interaction logic for ShortTickMarkView.xaml

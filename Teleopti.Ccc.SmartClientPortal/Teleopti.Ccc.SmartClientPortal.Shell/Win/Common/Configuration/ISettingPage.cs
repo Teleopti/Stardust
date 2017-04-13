@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Common.Configuration
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	/// <summary>
 	/// Interface for controls which can be added to OptionDialog.

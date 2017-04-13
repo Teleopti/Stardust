@@ -2,7 +2,7 @@
 using System.Linq;
 using Syncfusion.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
 	public partial class PreLogonScreen : MetroForm
 	{

@@ -13,18 +13,18 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
-using Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 {
 	public class UpdateClosePreviousEventArgs : EventArgs
 	{

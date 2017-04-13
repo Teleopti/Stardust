@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals
 {
     public class EditorCutPasteHandler : BaseCutPasteHandler
     {

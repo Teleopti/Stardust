@@ -3,7 +3,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 {
 	public class AgentRestrictionsAvailableDrawer : IAgentRestrictionsDrawer
 	{

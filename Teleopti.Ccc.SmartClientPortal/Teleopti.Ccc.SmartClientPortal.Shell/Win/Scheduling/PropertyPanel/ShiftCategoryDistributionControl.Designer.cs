@@ -1,7 +1,4 @@
-﻿using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-
-namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 {
 	partial class ShiftCategoryDistributionControl
 	{
@@ -33,13 +30,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		{
 			this.tabControlShiftCategoryDistribution = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPagePerDate = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.shiftPerDateControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.ShiftPerDateControl();
+			this.shiftPerDateControl1 = new ShiftPerDateControl();
 			this.tabPagePerAgent = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.shiftPerAgentControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.ShiftPerAgentControl();
+			this.shiftPerAgentControl1 = new ShiftPerAgentControl();
 			this.tabPageDistribution = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.shiftStatisticsControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.ShiftStatisticsControl();
-			this.perShiftCategoryChartControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.PerShiftCategoryChartControl();
+			this.shiftStatisticsControl1 = new ShiftStatisticsControl();
+			this.perShiftCategoryChartControl1 = new PerShiftCategoryChartControl();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlShiftCategoryDistribution)).BeginInit();
 			this.tabControlShiftCategoryDistribution.SuspendLayout();
 			this.tabPagePerDate.SuspendLayout();

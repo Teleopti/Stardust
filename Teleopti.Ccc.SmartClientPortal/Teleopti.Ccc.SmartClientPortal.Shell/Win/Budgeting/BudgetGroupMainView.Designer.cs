@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
-using Teleopti.Ccc.WinCode.Budgeting.Presenters;
+﻿using System.Windows.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 
-namespace Teleopti.Ccc.Win.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	partial class BudgetGroupMainView
 	{
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BudgetGroupMainView));
-			this.ribbonControlAdvFixed1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdvFixed1 = new RibbonControlAdvFixed();
 			this.backStageView1 = new Syncfusion.Windows.Forms.BackStageView(this.components);
 			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
 			this.backStageButton1 = new Syncfusion.Windows.Forms.BackStageButton();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.gradientPanelMain = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.statusStripEx1 = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
 			this.toolStripStatusLabelBudgetGroupMainView = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStripSpinningProgressControlStatus = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
+			this.toolStripSpinningProgressControlStatus = new ToolStripSpinningProgressControl();
 			this.toolStripEx2 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdvFixed1)).BeginInit();
@@ -451,8 +451,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelMain;
 		private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripEx1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelBudgetGroupMainView;
-		private Common.Controls.SpinningProgress.ToolStripSpinningProgressControl toolStripSpinningProgressControlStatus;
-		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdvFixed1;
+		private ToolStripSpinningProgressControl toolStripSpinningProgressControlStatus;
+		private RibbonControlAdvFixed ribbonControlAdvFixed1;
 		private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItem2;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx1;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExLoad;

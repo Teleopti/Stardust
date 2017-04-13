@@ -5,11 +5,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Ccc.Win.Common;
 
-namespace Teleopti.Ccc.Win.Reporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
     public partial class ReportScenarioSelector : BaseUserControl
     {

@@ -1,5 +1,8 @@
 ﻿
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 {
 	partial class SkillDistributions
 	{
@@ -45,12 +48,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.integerTextBoxMinimumAgents = new Syncfusion.Windows.Forms.Tools.IntegerTextBox();
 			this.labelMaximumAgents = new System.Windows.Forms.Label();
 			this.panelMoreOrLess = new System.Windows.Forms.Panel();
-			this.moreOrLessButtonOptions = new Teleopti.Ccc.Win.Common.MoreOrLessButton();
-			this.serviceLevelPercentTextBox = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
-			this.minimumOccupancyPercentTextBox = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
-			this.shrinkagePercentTextBox = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
-			this.maximunOccupancyPercentTextBox = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
-			this.efficiencyPercentTextBox = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
+			this.moreOrLessButtonOptions = new MoreOrLessButton();
+			this.serviceLevelPercentTextBox = new TeleoptiPercentTextBox();
+			this.minimumOccupancyPercentTextBox = new TeleoptiPercentTextBox();
+			this.shrinkagePercentTextBox = new TeleoptiPercentTextBox();
+			this.maximunOccupancyPercentTextBox = new TeleoptiPercentTextBox();
+			this.efficiencyPercentTextBox = new TeleoptiPercentTextBox();
 			this.panelMain.SuspendLayout();
 			this.tableLayoutPanelMainRtl.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.integerTextBoxServiceLevelSeconds)).BeginInit();
@@ -297,7 +300,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.moreOrLessButtonOptions.Margin = new System.Windows.Forms.Padding(0);
 			this.moreOrLessButtonOptions.Name = "moreOrLessButtonOptions";
 			this.moreOrLessButtonOptions.Size = new System.Drawing.Size(87, 22);
-			this.moreOrLessButtonOptions.State = Teleopti.Ccc.Win.Common.MoreOrLessState.Less;
+			this.moreOrLessButtonOptions.State = MoreOrLessState.Less;
 			this.moreOrLessButtonOptions.StateAsBoolean = false;
 			this.moreOrLessButtonOptions.TabIndex = 12;
 			this.moreOrLessButtonOptions.Visible = false;
@@ -415,7 +418,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 		private System.Windows.Forms.Label labelMaximumAgents;
 		private System.Windows.Forms.Label labelMinimumAgents;
 		private System.Windows.Forms.Label labelMinimumOccupancy;
-		private Teleopti.Ccc.Win.Common.MoreOrLessButton moreOrLessButtonOptions;
+		private MoreOrLessButton moreOrLessButtonOptions;
 		private Syncfusion.Windows.Forms.Tools.IntegerTextBox integerTextBoxServiceLevelSeconds;
 		private Syncfusion.Windows.Forms.Tools.IntegerTextBox integerTextBoxMaximumAgents;
 		private Syncfusion.Windows.Forms.Tools.IntegerTextBox integerTextBoxMinimumAgents;
@@ -423,11 +426,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMoreOptionsRtl;
 		private System.Windows.Forms.Label labelMaximumOccupancy;
 		private System.Windows.Forms.Label labelShrinkage;
-		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox serviceLevelPercentTextBox;
-		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox minimumOccupancyPercentTextBox;
-		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox maximunOccupancyPercentTextBox;
-		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox shrinkagePercentTextBox;
+		private TeleoptiPercentTextBox serviceLevelPercentTextBox;
+		private TeleoptiPercentTextBox minimumOccupancyPercentTextBox;
+		private TeleoptiPercentTextBox maximunOccupancyPercentTextBox;
+		private TeleoptiPercentTextBox shrinkagePercentTextBox;
 		private System.Windows.Forms.Label labelEfficiency;
-		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox efficiencyPercentTextBox;
+		private TeleoptiPercentTextBox efficiencyPercentTextBox;
 	}
 }

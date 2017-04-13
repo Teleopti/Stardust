@@ -1,5 +1,7 @@
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPages
 {
     partial class WorkloadQueueAdjustment
     {
@@ -32,19 +34,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
         {
 			this.tableLayoutPanelForRtl = new System.Windows.Forms.TableLayoutPanel();
 			this.labelOffered = new System.Windows.Forms.Label();
-			this.percentTextBoxOffered = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
-			this.percentTextBoxOverflowIn = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
+			this.percentTextBoxOffered = new TeleoptiPercentTextBox();
+			this.percentTextBoxOverflowIn = new TeleoptiPercentTextBox();
 			this.labelOverflowIn = new System.Windows.Forms.Label();
 			this.labelAbandoned = new System.Windows.Forms.Label();
-			this.percentTextBoxAbandoned = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
+			this.percentTextBoxAbandoned = new TeleoptiPercentTextBox();
 			this.labelOverflowOut = new System.Windows.Forms.Label();
-			this.percentTextBoxOverflowOut = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
+			this.percentTextBoxOverflowOut = new TeleoptiPercentTextBox();
 			this.labelAbandonedShort = new System.Windows.Forms.Label();
 			this.labelAbandonedWithinServiceLevel = new System.Windows.Forms.Label();
-			this.percentTextBoxAbandonedShort = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
-			this.percentTextBoxAbandonedWithinServiceLevel = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
+			this.percentTextBoxAbandonedShort = new TeleoptiPercentTextBox();
+			this.percentTextBoxAbandonedWithinServiceLevel = new TeleoptiPercentTextBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.percentTextBoxAbandonedAfterServiceLevel = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
+			this.percentTextBoxAbandonedAfterServiceLevel = new TeleoptiPercentTextBox();
 			this.labelCalculatedCalls = new System.Windows.Forms.Label();
 			this.labelMultiplyOffered = new System.Windows.Forms.Label();
 			this.labelEquals = new System.Windows.Forms.Label();
@@ -483,17 +485,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelForRtl;
         private System.Windows.Forms.Label labelOverflowIn;
         private System.Windows.Forms.Label labelAbandoned;
-        private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxOffered;
-        private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxOverflowIn;
-        private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxAbandoned;
+        private TeleoptiPercentTextBox percentTextBoxOffered;
+        private TeleoptiPercentTextBox percentTextBoxOverflowIn;
+        private TeleoptiPercentTextBox percentTextBoxAbandoned;
         private System.Windows.Forms.Label labelOverflowOut;
-        private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxOverflowOut;
+        private TeleoptiPercentTextBox percentTextBoxOverflowOut;
         private System.Windows.Forms.Label labelAbandonedShort;
         private System.Windows.Forms.Label labelAbandonedWithinServiceLevel;
-        private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxAbandonedShort;
-        private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxAbandonedWithinServiceLevel;
+        private TeleoptiPercentTextBox percentTextBoxAbandonedShort;
+        private TeleoptiPercentTextBox percentTextBoxAbandonedWithinServiceLevel;
         private System.Windows.Forms.Label label3;
-        private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxAbandonedAfterServiceLevel;
+        private TeleoptiPercentTextBox percentTextBoxAbandonedAfterServiceLevel;
         private System.Windows.Forms.Label labelEquals;
         private System.Windows.Forms.Label labelCalculatedCalls;
         private System.Windows.Forms.Label labelMultiplyOffered;

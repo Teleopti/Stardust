@@ -1,7 +1,7 @@
 ﻿using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 {
 	public abstract class DropDownGridViewBase : GridViewBase
 	{

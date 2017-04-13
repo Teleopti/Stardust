@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     public static class MessageDialogs
     {

@@ -1,8 +1,8 @@
-﻿using Syncfusion.Windows.Forms.Grid;
+﻿using System.Collections.ObjectModel;
+using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Common;
-using System.Collections.ObjectModel;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns
 {
     public class EditableTextColumn<T> : ColumnBase<T>
     {

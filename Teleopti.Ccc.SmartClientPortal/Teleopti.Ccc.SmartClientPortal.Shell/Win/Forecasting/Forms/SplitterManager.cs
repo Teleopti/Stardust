@@ -2,7 +2,7 @@
 using Syncfusion.Windows.Forms.Tools;
 using Syncfusion.Windows.Forms.Tools.Enums;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
     class SplitterManager : IDisposable
     {

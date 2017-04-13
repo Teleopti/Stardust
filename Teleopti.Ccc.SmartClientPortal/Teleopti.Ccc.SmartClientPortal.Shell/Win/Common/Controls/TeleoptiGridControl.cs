@@ -7,18 +7,17 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.Common.Controls.Chart;
-using Teleopti.Ccc.Win.Forecasting;
-using Teleopti.Ccc.Win.Forecasting.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
 	public class TeleoptiGridControl : GridControl, ITeleoptiGridControl
 	{

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionPreferences
 {
 	partial class ResourceOptimizerDayOffPreferencesPanel
 	{

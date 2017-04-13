@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.QuickForecast
 {
     partial class SelectHistoricalDateRange
     {
@@ -30,7 +32,7 @@
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectHistoricalDateRange));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.HistoricalFromTo = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
+			this.HistoricalFromTo = new ReportDateFromToSelector();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -80,7 +82,7 @@
 
         #endregion
 
-        private Reporting.ReportDateFromToSelector HistoricalFromTo;
+        private ReportDateFromToSelector HistoricalFromTo;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 
     }

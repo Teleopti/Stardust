@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Main.LogonScreens
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main.LogonScreens
 {
 	partial class LoginScreen
 	{

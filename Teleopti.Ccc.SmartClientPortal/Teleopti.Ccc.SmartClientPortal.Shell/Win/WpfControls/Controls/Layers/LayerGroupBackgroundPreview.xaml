@@ -1,6 +1,6 @@
 ﻿<!--DataContext LayerGroupViewModel--> 
     <!-- DataContext LayerGroupViewModel -->
-    <UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Layers.LayerGroupBackgroundPreview"
+    <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers.LayerGroupBackgroundPreview"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 

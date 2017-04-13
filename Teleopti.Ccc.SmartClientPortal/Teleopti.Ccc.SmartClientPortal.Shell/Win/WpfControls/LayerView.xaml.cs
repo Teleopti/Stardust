@@ -7,7 +7,7 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace Teleopti.Ccc.Win.WpfControls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls
 {
 	/// <summary>
 	/// Interaction logic for LayerView.xaml

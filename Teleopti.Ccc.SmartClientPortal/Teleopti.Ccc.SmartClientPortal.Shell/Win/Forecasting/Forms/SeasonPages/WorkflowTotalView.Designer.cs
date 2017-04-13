@@ -1,7 +1,9 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using DateSelectionFromTo=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using DateSelectionFromTo=Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection.DateSelectionFromTo;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 {
 	partial class WorkflowTotalView
 	{
@@ -40,11 +42,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.xpTaskBarTotal = new Syncfusion.Windows.Forms.Tools.XPTaskBar();
 			this.xpTaskBarBoxPeriod = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-			this.scenarioSelectorControl = new Teleopti.Ccc.Win.Common.Controls.ScenarioSelector();
-			this.dateSelectionFromToTarget = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
+			this.scenarioSelectorControl = new ScenarioSelector();
+			this.dateSelectionFromToTarget = new DateSelectionFromTo();
 			this.xpTaskBarBoxSpecialEvents = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
 			this.gradientPanel2 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-			this.outlierBox = new Teleopti.Ccc.Win.Common.Controls.OutlierBox();
+			this.outlierBox = new OutlierBox();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).BeginInit();
 			this.splitContainerAdv1.Panel2.SuspendLayout();
 			this.splitContainerAdv1.SuspendLayout();
@@ -154,7 +156,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.dateSelectionFromToTarget.Size = new System.Drawing.Size(161, 173);
 			this.dateSelectionFromToTarget.TabIndex = 0;
 			this.dateSelectionFromToTarget.TodayButtonText = "xxToday";
-			this.dateSelectionFromToTarget.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dualPeriodHandler1_DateRangeChanged);
+			this.dateSelectionFromToTarget.DateRangeChanged += new System.EventHandler<DateRangeChangedEventArgs>(this.dualPeriodHandler1_DateRangeChanged);
 			// 
 			// xpTaskBarBoxSpecialEvents
 			// 
@@ -224,8 +226,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 		private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxSpecialEvents;
 		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel2;
 		private DateSelectionFromTo dateSelectionFromToTarget;
-		private Teleopti.Ccc.Win.Common.Controls.OutlierBox outlierBox;
-		private Teleopti.Ccc.Win.Common.Controls.ScenarioSelector scenarioSelectorControl;
+		private OutlierBox outlierBox;
+		private ScenarioSelector scenarioSelectorControl;
 
 	}
 }

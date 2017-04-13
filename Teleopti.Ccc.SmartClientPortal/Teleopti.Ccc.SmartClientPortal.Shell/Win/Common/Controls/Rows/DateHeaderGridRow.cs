@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
-using System.Globalization;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Rows
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 {
     public class DateHeaderGridRow:IGridRow
     {

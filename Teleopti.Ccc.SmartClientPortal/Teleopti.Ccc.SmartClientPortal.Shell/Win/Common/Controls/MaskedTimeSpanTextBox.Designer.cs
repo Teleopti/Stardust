@@ -1,8 +1,6 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
     partial class MaskedTimeSpanTextBox
     {

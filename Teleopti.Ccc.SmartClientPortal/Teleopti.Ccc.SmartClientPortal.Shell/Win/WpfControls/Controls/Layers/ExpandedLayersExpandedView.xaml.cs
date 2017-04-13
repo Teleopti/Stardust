@@ -2,7 +2,7 @@
 using System.Windows;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Layers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers
 {
     /// <summary>
     /// Interaction logic for LayerEditListBox.xaml

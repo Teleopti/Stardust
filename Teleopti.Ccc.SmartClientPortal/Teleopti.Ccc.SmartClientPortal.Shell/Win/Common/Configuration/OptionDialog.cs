@@ -4,11 +4,10 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	public partial class OptionDialog : BaseDialogForm 
 	{

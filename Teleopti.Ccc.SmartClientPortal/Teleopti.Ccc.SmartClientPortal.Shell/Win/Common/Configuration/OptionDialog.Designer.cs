@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Common.Configuration
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
     partial class OptionDialog
     {
@@ -34,7 +36,7 @@
 			this.tableLayoutPanelBottom = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonAdvOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.ribbonControlAdvForm = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdvForm = new RibbonControlAdvFixed();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelBottom.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdvForm)).BeginInit();
@@ -167,7 +169,7 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBottom;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOK;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdvForm;
+        private RibbonControlAdvFixed ribbonControlAdvForm;
         private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;
 
     }

@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPages
 {
     partial class OpenHourDialog
     {
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.groupBoxOpenHour = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanelOpenHoursRtl = new System.Windows.Forms.TableLayoutPanel();
 			this.autoLabelTo = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.timePicker = new Teleopti.Ccc.Win.Common.Controls.FromToTimePicker();
+			this.timePicker = new FromToTimePicker();
 			this.autoLabelFrom = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.chbClose = new System.Windows.Forms.CheckBox();
 			this.btnOk = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -287,7 +288,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 
         #endregion
 
-        private Teleopti.Ccc.Win.Common.Controls.FromToTimePicker timePicker;
+        private FromToTimePicker timePicker;
         private Syncfusion.Windows.Forms.ButtonAdv btnOk;
         private System.Windows.Forms.GroupBox groupBoxOpenHour;
         private Syncfusion.Windows.Forms.ButtonAdv btnCancel;

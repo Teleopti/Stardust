@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Collections;
 using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.ToolStripGallery
 {
     /// <summary>
     /// Represents a ToolStripGallery instance

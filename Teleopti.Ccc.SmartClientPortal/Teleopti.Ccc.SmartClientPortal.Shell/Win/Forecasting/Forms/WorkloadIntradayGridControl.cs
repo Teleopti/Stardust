@@ -5,14 +5,14 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Common.Controls.Rows;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
     public class WorkloadIntradayGridControl : BaseIntradayGridControl
     {

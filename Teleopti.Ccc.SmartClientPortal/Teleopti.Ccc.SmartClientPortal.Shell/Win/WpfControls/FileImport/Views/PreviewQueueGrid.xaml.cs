@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace Teleopti.Ccc.Win.WpfControls.FileImport.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport.Views
 {
     /// <summary>
     /// Interaction logic for PreviewQueueGridViewModel.xaml

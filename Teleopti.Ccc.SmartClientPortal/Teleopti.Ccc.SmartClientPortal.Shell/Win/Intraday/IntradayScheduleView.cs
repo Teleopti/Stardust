@@ -5,15 +5,15 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 {
     /// <summary>
     /// Base view class

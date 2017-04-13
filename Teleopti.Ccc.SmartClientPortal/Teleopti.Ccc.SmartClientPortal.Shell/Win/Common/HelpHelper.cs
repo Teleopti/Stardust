@@ -3,7 +3,7 @@ using System.Web;
 using System.Windows.Forms;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 	public class HelpHelper : IHelpHelper
 	{

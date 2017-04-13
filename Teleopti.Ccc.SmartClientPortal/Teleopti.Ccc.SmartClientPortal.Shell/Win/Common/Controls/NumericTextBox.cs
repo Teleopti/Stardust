@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
 	public class NumericTextBox : TextBox
 	{

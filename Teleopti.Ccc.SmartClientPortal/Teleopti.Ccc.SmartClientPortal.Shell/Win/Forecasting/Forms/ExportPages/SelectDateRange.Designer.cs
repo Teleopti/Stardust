@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 {
 	partial class SelectDateRange
 	{
@@ -30,7 +32,7 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectDateRange));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.reportDateFromToSelector1 = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
+			this.reportDateFromToSelector1 = new ReportDateFromToSelector();
 			this.label1 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -93,7 +95,7 @@
 
 		#endregion
 
-		private Reporting.ReportDateFromToSelector reportDateFromToSelector1;
+		private ReportDateFromToSelector reportDateFromToSelector1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label label1;
 

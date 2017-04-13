@@ -2,14 +2,14 @@
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Ccc.WinCode.Permissions.Events;
 
-namespace Teleopti.Ccc.Win.Permissions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Permissions
 {
     public partial class PermissionViewer : BaseDialogForm, IPermissionViewerRoles
     {

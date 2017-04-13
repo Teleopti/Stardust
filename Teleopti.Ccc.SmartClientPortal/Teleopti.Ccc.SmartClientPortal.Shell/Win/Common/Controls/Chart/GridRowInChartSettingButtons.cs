@@ -4,9 +4,8 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Chart
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart
 {
 	public partial class GridRowInChartSettingButtons : UserControl
 	{

@@ -1,6 +1,7 @@
-﻿using DateSelectionComposite=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionComposite;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using DateSelectionComposite=Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection.DateSelectionComposite;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 {
     partial class WorkflowDataSummaryView
     {
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.xpTaskBarBoxHistoricalDepth = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
 			this.gradientPanel2 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.gradientPanel3 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-			this.dateSelectionCompositeHistoricalPeriod = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionComposite();
+			this.dateSelectionCompositeHistoricalPeriod = new DateSelectionComposite();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).BeginInit();
 			this.splitContainerAdv1.Panel2.SuspendLayout();
 			this.splitContainerAdv1.SuspendLayout();
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.dateSelectionCompositeHistoricalPeriod.Name = "dateSelectionCompositeHistoricalPeriod";
 			this.dateSelectionCompositeHistoricalPeriod.Size = new System.Drawing.Size(182, 415);
 			this.dateSelectionCompositeHistoricalPeriod.TabIndex = 0;
-			this.dateSelectionCompositeHistoricalPeriod.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionComposite1_DateRangeChanged);
+			this.dateSelectionCompositeHistoricalPeriod.DateRangeChanged += new System.EventHandler<DateRangeChangedEventArgs>(this.dateSelectionComposite1_DateRangeChanged);
 			// 
 			// WorkflowDataSummaryView
 			// 

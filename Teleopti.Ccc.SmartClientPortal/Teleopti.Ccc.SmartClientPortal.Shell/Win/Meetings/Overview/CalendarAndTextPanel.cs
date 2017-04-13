@@ -7,7 +7,7 @@ using Syncfusion.Windows.Forms.Schedule;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Meetings.Overview
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 {
 	public partial class CalendarAndTextPanel : UserControl, ILocalized
 	{

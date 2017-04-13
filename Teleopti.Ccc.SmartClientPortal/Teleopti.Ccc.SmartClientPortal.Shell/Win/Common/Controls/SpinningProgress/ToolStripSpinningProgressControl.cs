@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.Common.Controls.SpinningProgress
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress
 {
     [System.ComponentModel.DesignerCategory("code")]
     [System.Windows.Forms.Design.ToolStripItemDesignerAvailability(System.Windows.Forms.Design.ToolStripItemDesignerAvailability.StatusStrip)]

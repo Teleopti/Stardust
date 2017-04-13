@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.Common.Controls.SpinningProgress
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress
 {
     public partial class SpinningProgressControl  
     { 

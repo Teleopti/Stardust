@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.SmartParts.Forecasting
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 {
     partial class NavigationControl
     {

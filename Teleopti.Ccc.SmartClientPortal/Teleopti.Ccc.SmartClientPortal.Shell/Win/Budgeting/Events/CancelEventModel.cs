@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Teleopti.Ccc.WinCode.Budgeting;
 
-namespace Teleopti.Ccc.Win.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting.Events
 {
 	public class CancelEventModel : ICancelEventModel
 	{

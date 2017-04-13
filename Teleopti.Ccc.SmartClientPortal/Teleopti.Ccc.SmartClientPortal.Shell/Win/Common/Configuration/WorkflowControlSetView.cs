@@ -1,6 +1,4 @@
-﻿using Syncfusion.Windows.Forms;
-using Syncfusion.Windows.Forms.Grid;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,6 +6,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms;
+using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -17,18 +17,17 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateTimePeriodVisualizer;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common.Configuration.Columns;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class WorkflowControlSetView : BaseUserControl, ISettingPage, IWorkflowControlSetView

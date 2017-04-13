@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
 {
 	public class EditablePeriodTimeOverrideSchedulePeriodColumn<T> : ColumnBase<T>
 	{

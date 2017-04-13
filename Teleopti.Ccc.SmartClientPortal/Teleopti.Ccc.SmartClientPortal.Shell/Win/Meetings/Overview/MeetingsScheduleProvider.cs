@@ -12,14 +12,13 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Meetings.Overview
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 {
     public class MeetingsScheduleProvider : ScheduleDataProvider
     {

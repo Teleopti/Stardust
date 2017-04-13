@@ -14,7 +14,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 using Clipboard = System.Windows.Clipboard;
 using Rectangle = System.Drawing.Rectangle;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     /// <summary>
     /// Helper for syncfusion grid

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Teleopti.Ccc.Domain.Helper;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public class BackgroundWorkerWrapper : ISchedulingProgress
 	{

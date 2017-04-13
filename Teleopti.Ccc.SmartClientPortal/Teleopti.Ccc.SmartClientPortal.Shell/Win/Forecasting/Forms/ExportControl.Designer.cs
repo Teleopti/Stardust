@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
 	partial class ExportControl
 	{

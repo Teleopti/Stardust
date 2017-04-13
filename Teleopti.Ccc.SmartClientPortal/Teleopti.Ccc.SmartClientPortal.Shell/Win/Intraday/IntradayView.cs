@@ -19,21 +19,22 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Common.Controls.Chart;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.Win.ExceptionHandling;
-using Teleopti.Ccc.Win.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 using Cursors = System.Windows.Forms.Cursors;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
+using ToolStripItemClickedEventArgs = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs;
 
-namespace Teleopti.Ccc.Win.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class IntradayView : BaseRibbonForm, IIntradayView
@@ -306,7 +307,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			_intradayViewContent.Refresh();
 		}
 
-		private void teleoptiToolStripGalleryViewsItemClicked(object sender, Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
+		private void teleoptiToolStripGalleryViewsItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			if (e.ClickedItem == null) return;
 			if (e.ClickedItem.Tag as bool? == true) return;
@@ -316,7 +317,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			_intradayViewContent.SelectChartView(((IntradaySetting)e.ClickedItem.Tag).Name);
 		}
 
-		private void setupGalleryItem(Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
+		private void setupGalleryItem(ToolStripItemClickedEventArgs e)
 		{
 			var item = new TupleItem(e.ClickedItem.Text, e.ClickedItem.Tag);
 

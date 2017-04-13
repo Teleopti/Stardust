@@ -1,7 +1,7 @@
-﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Messaging.Views.FollowUpDialogueMessageView"
+﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging.Views.FollowUpDialogueMessageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls">
+    xmlns:controls="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="35"/>

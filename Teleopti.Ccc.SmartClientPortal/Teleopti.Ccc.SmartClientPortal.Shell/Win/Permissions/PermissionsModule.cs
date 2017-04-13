@@ -2,7 +2,7 @@ using Autofac;
 using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Ccc.WinCode.Permissions.Commands;
 
-namespace Teleopti.Ccc.Win.Permissions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Permissions
 {
     public class PermissionsModule : Module
     {

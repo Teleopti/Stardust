@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Syncfusion.Windows.Forms.Grid;
-using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 	public class PeoplePeriodDomainFinder : IDomainFinder
 	{

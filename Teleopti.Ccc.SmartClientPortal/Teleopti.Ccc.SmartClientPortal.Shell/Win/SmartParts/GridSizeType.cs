@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Win.SmartParts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
 {
 
     /// <summary>

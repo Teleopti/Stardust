@@ -1,5 +1,5 @@
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 {
 	partial class MultisiteChildSkills
 	{

@@ -4,12 +4,12 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main.LogonScreens;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Main.LogonScreens;
 using Teleopti.Ccc.WinCode.Main;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
 	public partial class LogonView : MetroForm, ILogonView
 	{

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common;
-
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Optimization
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {
     public partial class ShiftsPreferencesPanel : BaseUserControl, IDataExchange
     {

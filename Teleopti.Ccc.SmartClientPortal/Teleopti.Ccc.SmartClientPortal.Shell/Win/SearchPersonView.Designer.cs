@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win
 {
     partial class SearchPersonView
     {

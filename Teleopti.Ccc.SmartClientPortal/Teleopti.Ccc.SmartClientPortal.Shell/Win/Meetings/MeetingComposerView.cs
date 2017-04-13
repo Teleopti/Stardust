@@ -6,15 +6,14 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Events;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
 	public partial class MeetingComposerView : BaseRibbonForm, IMeetingComposerView, INotifyComposerMeetingChanged
 	{

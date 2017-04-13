@@ -17,7 +17,7 @@ using Syncfusion.Styles;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction
 {
     /// <summary>
     /// Summary description for CommentMouseController.

@@ -4,7 +4,7 @@ using System.Windows.Data;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters
 {
     /// <summary>
     /// Converter to return null if DateTime value is DateTime.Min

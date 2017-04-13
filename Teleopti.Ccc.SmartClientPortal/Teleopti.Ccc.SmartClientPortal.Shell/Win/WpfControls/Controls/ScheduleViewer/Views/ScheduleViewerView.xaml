@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Views.ScheduleViewerView"
+﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Views.ScheduleViewerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode"
-			 xmlns:Models="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Models"
-			 xmlns:views="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Views">
+			 xmlns:Models="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Models"
+			 xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Views">
     <UserControl.Resources>
         <ResourceDictionary>
 

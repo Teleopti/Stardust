@@ -20,10 +20,9 @@ using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using ViewType = Teleopti.Ccc.Win.PeopleAdmin.Views.ViewType;
+using ViewType = Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views.ViewType;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
 	public class WorksheetStateHolder : IDisposable
 	{

@@ -1,10 +1,9 @@
 ﻿using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.AtomicValidators
 {
 	internal class DailyStandardDeviationValidator : IAtomicValidator
 	{

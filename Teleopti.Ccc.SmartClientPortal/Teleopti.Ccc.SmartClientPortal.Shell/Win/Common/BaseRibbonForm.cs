@@ -3,11 +3,11 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 
 	public class BaseRibbonForm : RibbonForm, ILocalized, IViewBase, IHelpForm

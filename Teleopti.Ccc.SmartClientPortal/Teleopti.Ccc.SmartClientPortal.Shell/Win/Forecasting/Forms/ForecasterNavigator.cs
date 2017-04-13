@@ -23,14 +23,14 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.Win.ExceptionHandling;
-using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
-using Teleopti.Ccc.Win.Main;
-using Teleopti.Ccc.Win.SmartParts;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting;
@@ -39,11 +39,10 @@ using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Ccc.WinCode.Forecasting.SkillPages;
 using Teleopti.Ccc.WinCode.Forecasting.WorkloadPages;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
-using Wizard = Teleopti.Ccc.Win.Common.PropertyPageAndWizard.Wizard;
+using Wizard = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard.Wizard;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
 	public partial class ForecasterNavigator : AbstractNavigator
 	{

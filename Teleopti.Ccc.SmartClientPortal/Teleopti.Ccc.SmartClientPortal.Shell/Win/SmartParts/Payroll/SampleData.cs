@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.SmartParts.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll
 {
     public static class SampleData
     {

@@ -1,8 +1,8 @@
-﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Views.ScheduleViewerScheduleDayViewDetailed"
+﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Views.ScheduleViewerScheduleDayViewDetailed"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters"
-    xmlns:controls="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls">
+    xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
+    xmlns:controls="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls">
     <UserControl.Resources>
         <converters:ColorConverter x:Key="ColorConverter"/>
     </UserControl.Resources>

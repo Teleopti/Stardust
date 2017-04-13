@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Win.Common.Controls.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns
 {
     public class SelectedItemChangeEventArgs<TData, TItem> : SelectedItemChangeBaseEventArgs<TItem>
     {

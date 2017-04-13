@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Layers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers
 {
     /// <summary>
     /// For showing a LayerViewModelCollection in a simple time-based way

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
 	partial class LogonView
 	{

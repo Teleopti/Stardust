@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls
 {
     /// <summary>
     /// A time picker control which has same functionality as Outlook's

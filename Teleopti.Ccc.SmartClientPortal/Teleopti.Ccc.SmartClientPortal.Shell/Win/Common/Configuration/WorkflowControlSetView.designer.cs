@@ -1,8 +1,9 @@
-﻿using System;
-using System.Windows.Forms;
-using Teleopti.Ccc.Win.Common.Controls;
+﻿using System.Windows.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateTimePeriodVisualizer;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	partial class WorkflowControlSetView
 	{
@@ -67,25 +68,25 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tabControlAdvArea = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageBasic = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelBasic = new System.Windows.Forms.TableLayoutPanel();
-			this.twoListSelectorAbsencesForReport = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
+			this.twoListSelectorAbsencesForReport = new TwoListSelector();
 			this.panel9 = new System.Windows.Forms.Panel();
 			this.labelAllowedAbsencesForReport = new System.Windows.Forms.Label();
-			this.twoListSelectorAbsences = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
+			this.twoListSelectorAbsences = new TwoListSelector();
 			this.panel8 = new System.Windows.Forms.Panel();
 			this.labelAbsencesAvailableForExtendedPreference = new System.Windows.Forms.Label();
 			this.tableLayoutPanelStudentAvailability = new System.Windows.Forms.TableLayoutPanel();
 			this.labelStudentAvailabilityPeriod = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
-			this.dateSelectionFromToStudentAvailability = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
-			this.dateSelectionFromToIsOpenStudentAvailability = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
-			this.twoListSelectorCategories = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
+			this.dateSelectionFromToStudentAvailability = new DateSelectionFromTo();
+			this.dateSelectionFromToIsOpenStudentAvailability = new DateSelectionFromTo();
+			this.twoListSelectorCategories = new TwoListSelector();
 			this.panelVisualizationButtons = new System.Windows.Forms.Panel();
 			this.buttonZoomOut = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonZoomIn = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonPanLeft = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonPanRight = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.twoListSelectorDayOffs = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
-			this.dateOnlyPeriodsVisualizer1 = new Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer.DateOnlyPeriodsVisualizer();
+			this.twoListSelectorDayOffs = new TwoListSelector();
+			this.dateOnlyPeriodsVisualizer1 = new DateOnlyPeriodsVisualizer();
 			this.panel4 = new System.Windows.Forms.Panel();
 			this.labelShiftCategoriesAvailableForExtendedPreference = new System.Windows.Forms.Label();
 			this.panel3 = new System.Windows.Forms.Panel();
@@ -97,14 +98,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelBasic = new System.Windows.Forms.Label();
 			this.tableLayoutPanelBasicSchedule = new System.Windows.Forms.TableLayoutPanel();
 			this.labelWriteProtect = new System.Windows.Forms.Label();
-			this.integerTextBoxWriteProtect = new Teleopti.Ccc.Win.Common.Controls.NullableIntegerTextBox();
+			this.integerTextBoxWriteProtect = new NullableIntegerTextBox();
 			this.labelPublishSchedules = new System.Windows.Forms.Label();
 			this.dateTimePickerAdvPublishedTo = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
 			this.tableLayoutPanelOpenPreference = new System.Windows.Forms.TableLayoutPanel();
 			this.labelPreferencePeriod = new System.Windows.Forms.Label();
 			this.labelIsOpen = new System.Windows.Forms.Label();
-			this.dateSelectionFromToPreferencePeriod = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
-			this.dateSelectionFromToIsOpen = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
+			this.dateSelectionFromToPreferencePeriod = new DateSelectionFromTo();
+			this.dateSelectionFromToIsOpen = new DateSelectionFromTo();
 			this.panelOpenPreference = new System.Windows.Forms.Panel();
 			this.labelOpenPreference = new System.Windows.Forms.Label();
 			this.panel6 = new System.Windows.Forms.Panel();
@@ -116,7 +117,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tabPageAdvAbsenceRequests = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelAbsenceRequestPeriods = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelAbsenceRequestExpiration = new System.Windows.Forms.TableLayoutPanel();
-			this.txtAbsenceRequestExpiredThreshold = new Teleopti.Ccc.Win.Common.Controls.NullableIntegerTextBox();
+			this.txtAbsenceRequestExpiredThreshold = new NullableIntegerTextBox();
 			this.labelAbsenceRequestExpriedThreshold = new System.Windows.Forms.Label();
 			this.tableLayoutPanelWaitlist = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxEnableAbsenceRequestWaitlisting = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
@@ -144,7 +145,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.buttonAdvPreviousProjectionPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvNextProjectionPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanelAbsenceRequestCancellation = new System.Windows.Forms.TableLayoutPanel();
-			this.txtAbsenceRequestCancellationThreshold = new Teleopti.Ccc.Win.Common.Controls.NullableIntegerTextBox();
+			this.txtAbsenceRequestCancellationThreshold = new NullableIntegerTextBox();
 			this.labelAbsenceRequestCancellationThreshold = new System.Windows.Forms.Label();
 			this.tabPageAdvShiftTradeRequest = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelShiftTrade = new System.Windows.Forms.TableLayoutPanel();
@@ -154,12 +155,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelOpenForShiftTrade = new System.Windows.Forms.Label();
 			this.panelTolerance = new System.Windows.Forms.Panel();
 			this.labelTolerance = new System.Windows.Forms.Label();
-			this.minMaxIntegerTextBoxControl1 = new Teleopti.Ccc.Win.Common.Controls.MinMaxIntegerTextBoxControl();
-			this.twoListSelectorMatchingSkills = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
+			this.minMaxIntegerTextBoxControl1 = new MinMaxIntegerTextBoxControl();
+			this.twoListSelectorMatchingSkills = new TwoListSelector();
 			this.panelMatchingSkills = new System.Windows.Forms.Panel();
 			this.labelMatchingSkills = new System.Windows.Forms.Label();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.timeSpanTextBox1 = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.timeSpanTextBox1 = new TimeSpanTextBox();
 			this.labelTolerancePosNeg = new System.Windows.Forms.Label();
 			this.labelHMm = new System.Windows.Forms.Label();
 			this.checkBoxAdvAutoGrant = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
@@ -2346,8 +2347,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private Label labelOpenPreference;
 		private Label labelPreferencePeriod;
 		private Label labelIsOpen;
-		private Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo dateSelectionFromToPreferencePeriod;
-		private Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo dateSelectionFromToIsOpen;
+		private DateSelectionFromTo dateSelectionFromToPreferencePeriod;
+		private DateSelectionFromTo dateSelectionFromToIsOpen;
 		private ErrorProvider errorProvider1;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvShiftTradeRequest;
 		private TableLayoutPanel tableLayoutPanelShiftTrade;
@@ -2356,7 +2357,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private Panel panelTolerance;
 		private Label labelTolerance;
 		private MinMaxIntegerTextBoxControl minMaxIntegerTextBoxControl1;
-		private Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer.DateOnlyPeriodsVisualizer dateOnlyPeriodsVisualizer1;
+		private DateOnlyPeriodsVisualizer dateOnlyPeriodsVisualizer1;
 		private Panel panelVisualizationButtons;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonPanRight;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonZoomIn;

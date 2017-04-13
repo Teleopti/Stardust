@@ -12,10 +12,8 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Settings;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	public partial class ScenarioPage : BaseUserControl, ISettingPage
 	{

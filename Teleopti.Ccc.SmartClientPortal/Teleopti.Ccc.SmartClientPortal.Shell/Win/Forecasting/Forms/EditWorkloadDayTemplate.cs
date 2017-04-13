@@ -11,14 +11,14 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages;
-using Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadDayTemplatesPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
 	public partial class EditWorkloadDayTemplate : BaseDialogForm
 	{
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				uow.Merge(_workload);
 				changes = uow.PersistAll();
 			}
-			Main.EntityEventAggregator.TriggerEntitiesNeedRefresh(this, changes);
+			EntityEventAggregator.TriggerEntitiesNeedRefresh(this, changes);
 			var forecaster = Owner as Forecaster;
 			if (forecaster != null) forecaster.RefreshTabs();
 

@@ -4,11 +4,10 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Payroll.Overtime
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Overtime
 {
     /// <summary>
     /// Facilitates adding new definition sets

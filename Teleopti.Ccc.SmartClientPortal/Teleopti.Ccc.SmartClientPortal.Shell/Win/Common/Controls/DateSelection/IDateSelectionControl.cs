@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {
     public interface IDateSelectionControl
     {

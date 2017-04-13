@@ -12,9 +12,8 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.SmartParts.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 {
     public class SmartPartModel : ISmartPartModel
     {

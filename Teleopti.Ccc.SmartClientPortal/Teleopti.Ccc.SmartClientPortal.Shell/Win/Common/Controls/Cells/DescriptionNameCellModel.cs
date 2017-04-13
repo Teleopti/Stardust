@@ -2,9 +2,8 @@
 using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Cells
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {
     [Serializable]
     public class DescriptionNameCellModel : GridTextBoxCellModel

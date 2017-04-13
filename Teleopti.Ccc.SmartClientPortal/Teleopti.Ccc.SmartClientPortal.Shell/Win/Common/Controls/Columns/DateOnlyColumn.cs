@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Win.Common.Configuration.Columns;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns
 {
     public class DateOnlyColumn<T> : SFGridColumnBase<T>
     {

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPages
 {
     partial class WorkloadQueues
     {

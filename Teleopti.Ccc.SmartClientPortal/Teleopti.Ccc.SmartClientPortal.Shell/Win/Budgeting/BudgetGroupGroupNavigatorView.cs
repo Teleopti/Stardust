@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows.Forms;
 using System.Linq;
+using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win.Budgeting.Events;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Budgeting;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
@@ -21,11 +21,9 @@ using Teleopti.Ccc.WinCode.Budgeting.Views;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Wizard = Teleopti.Ccc.Win.Common.PropertyPageAndWizard.Wizard;
+using Wizard = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard.Wizard;
 
-namespace Teleopti.Ccc.Win.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	//ARGHH... To much code in this thing.... Own presenter for Tree?
 	//I might create my own datasource binding for the tree

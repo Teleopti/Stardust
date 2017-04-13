@@ -9,14 +9,14 @@ using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.Forecasting.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Chart
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart
 {
     public class GridChartManager:IDisposable
     {

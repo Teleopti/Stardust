@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	public partial class GamificationSettingRuleWithDifferentThresholdControl : BaseUserControl
 	{

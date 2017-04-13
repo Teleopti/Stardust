@@ -1,7 +1,7 @@
-﻿using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidators;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.SelftestValidators
 {
 	internal class SelftestFailValidator : RootValidator
 	{

@@ -10,19 +10,19 @@ using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Grouping.Commands;
 using Teleopti.Ccc.WinCode.Grouping.Events;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 
-namespace Teleopti.Ccc.Win.Grouping
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {
 	public partial class PersonSelectorView : BaseUserControl, IPersonSelectorView
 	{

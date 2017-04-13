@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction
 {
     partial class CellComment
     {

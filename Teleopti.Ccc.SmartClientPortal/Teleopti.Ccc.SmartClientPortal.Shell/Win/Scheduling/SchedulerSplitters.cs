@@ -9,16 +9,16 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
-using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
-using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
-using Teleopti.Ccc.Win.WpfControls.Controls.Requests.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Views;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
     public partial class SchedulerSplitters : BaseUserControl
     {
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			OnValidationAlertsAgentDoubleClick(e);
 		}
 
-		public WpfControls.Common.Interop.MultipleHostControl MultipleHostControl3
+		public MultipleHostControl MultipleHostControl3
         {
             get { return multipleHostControl1; }
         }

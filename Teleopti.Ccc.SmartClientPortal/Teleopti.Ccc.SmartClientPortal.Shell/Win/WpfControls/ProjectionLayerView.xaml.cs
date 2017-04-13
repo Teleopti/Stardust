@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Teleopti.Ccc.Win.WpfControls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls
 {
     /// <summary>
     /// Interaction logic for ProjectionLayerView.xaml

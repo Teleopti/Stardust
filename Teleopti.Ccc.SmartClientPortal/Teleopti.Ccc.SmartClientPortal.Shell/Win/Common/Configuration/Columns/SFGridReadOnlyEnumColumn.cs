@@ -2,7 +2,7 @@
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.Common.Configuration.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
 {
     public class SFGridReadOnlyEnumColumn<T> : SFGridColumnBase<T>
     {

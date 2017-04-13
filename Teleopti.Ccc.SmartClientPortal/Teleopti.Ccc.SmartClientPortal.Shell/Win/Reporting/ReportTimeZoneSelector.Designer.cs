@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Reporting
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
     partial class ReportTimeZoneSelector
     {

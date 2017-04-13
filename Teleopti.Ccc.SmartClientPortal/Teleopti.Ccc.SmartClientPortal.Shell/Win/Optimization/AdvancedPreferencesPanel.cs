@@ -1,8 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
-namespace Teleopti.Ccc.Win.Optimization
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {
     public partial class AdvancedPreferencesPanel : BaseUserControl, IDataExchange
     {

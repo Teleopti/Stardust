@@ -10,29 +10,26 @@ using System.Windows.Forms;
 using Autofac;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Payroll;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.Win.Main;
-using Teleopti.Ccc.Win.SmartParts;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 {
 	public partial class PayrollExportNavigator : AbstractNavigator
 	{

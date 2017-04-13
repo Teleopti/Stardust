@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.Win.Common;
 
-
-namespace Teleopti.Ccc.Win.Reporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
     public partial class ReportDateFromToSelector : BaseUserControl
     {

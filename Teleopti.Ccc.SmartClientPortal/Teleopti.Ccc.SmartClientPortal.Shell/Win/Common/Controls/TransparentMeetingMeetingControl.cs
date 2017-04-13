@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
 	public partial class TransparentMeetingMeetingControl : UserControl, ITransparentMeetingControlView
 	{

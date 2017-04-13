@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Ccc.Win.Grouping
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {
     /// <summary>
     /// This class contains the constants needed for the grouping module

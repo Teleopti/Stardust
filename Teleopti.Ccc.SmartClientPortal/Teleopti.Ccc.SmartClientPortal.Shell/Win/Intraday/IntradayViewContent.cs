@@ -14,16 +14,16 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.Chart;
-using Teleopti.Ccc.Win.ExceptionHandling;
-using Teleopti.Ccc.Win.Scheduling;
-using Teleopti.Ccc.Win.Scheduling.SkillResult;
-using Teleopti.Ccc.Win.WpfControls.Common.Interop;
-using Teleopti.Ccc.Win.WpfControls.Controls.Editor;
-using Teleopti.Ccc.Win.WpfControls.Controls.Intraday;
-using Teleopti.Ccc.Win.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
@@ -36,7 +36,7 @@ using Teleopti.Interfaces.Domain;
 using Cursors = System.Windows.Forms.Cursors;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 
-namespace Teleopti.Ccc.Win.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class IntradayViewContent : BaseUserControl

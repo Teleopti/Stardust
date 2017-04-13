@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.Scheduling.Overtime;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using System.Linq;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class OvertimePreferencesDialog : BaseDialogForm, IOvertimePreferencesDialog
 	{

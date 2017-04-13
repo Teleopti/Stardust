@@ -1,8 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Sikuli.Helpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 {
 	public class SchedulerTestData
 	{

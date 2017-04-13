@@ -1,6 +1,6 @@
-﻿using System.Drawing;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	partial class FilterOvertimeAvailabilityView
     {
@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.labelMatch = new System.Windows.Forms.Label();
 			this.checkBoxAdvNextDay = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.outlookTimePickerTo = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerTo = new OutlookTimePicker();
 			this.labelTo = new System.Windows.Forms.Label();
-			this.outlookTimePickerFrom = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerFrom = new OutlookTimePicker();
 			this.labelFrom = new System.Windows.Forms.Label();
 			this.radioButtonAll = new System.Windows.Forms.RadioButton();
 			this.radioButtonPart = new System.Windows.Forms.RadioButton();
@@ -465,9 +465,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvNextDay;
-		private Common.Controls.OutlookTimePicker outlookTimePickerTo;
+		private OutlookTimePicker outlookTimePickerTo;
 		private System.Windows.Forms.Label labelTo;
-		private Common.Controls.OutlookTimePicker outlookTimePickerFrom;
+		private OutlookTimePicker outlookTimePickerFrom;
 		private System.Windows.Forms.Label labelFrom;
 		private System.Windows.Forms.ErrorProvider errorProvider1;
 		private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv datePicker;

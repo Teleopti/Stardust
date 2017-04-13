@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Win.Common.Configuration.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
 {
     public class SFGridColumnGridHelperEventArgs<T> : EventArgs
     {

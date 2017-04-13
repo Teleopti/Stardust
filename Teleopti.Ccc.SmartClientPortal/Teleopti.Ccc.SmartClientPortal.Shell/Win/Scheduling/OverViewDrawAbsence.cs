@@ -2,7 +2,7 @@
 using System.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public class OverviewDrawAbsence
 	{

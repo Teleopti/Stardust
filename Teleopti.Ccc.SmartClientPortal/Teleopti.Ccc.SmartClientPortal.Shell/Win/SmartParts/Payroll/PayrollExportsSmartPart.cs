@@ -18,10 +18,8 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.PayrollFormatter;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.SmartParts.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll
 {
     public partial class PayrollExportsSmartPart : ExtendedSmartPartBase, WinCode.Common.IObservable<IPayrollResult>
     {

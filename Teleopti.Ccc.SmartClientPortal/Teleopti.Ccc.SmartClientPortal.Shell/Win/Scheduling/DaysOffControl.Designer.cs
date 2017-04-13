@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
     partial class DaysOffControl
     {
@@ -37,9 +39,9 @@
             this.autoLabelFlexibility = new Syncfusion.Windows.Forms.Tools.AutoLabel();
             this.autoLabelAnchor = new Syncfusion.Windows.Forms.Tools.AutoLabel();
             this.autoLabelTargetLength = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-            this.timeSpanTextBoxTargetLength = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-            this.timeSpanTextBoxFlexibility = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-            this.timeSpanTextBoxAnchor = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+            this.timeSpanTextBoxTargetLength = new TimeSpanTextBox();
+            this.timeSpanTextBoxFlexibility = new TimeSpanTextBox();
+            this.timeSpanTextBoxAnchor = new TimeSpanTextBox();
             this.tableLayoutPanelControlContainer = new System.Windows.Forms.TableLayoutPanel();
             this.autoLabelInfoAboutChanges = new Syncfusion.Windows.Forms.Tools.AutoLabel();
             this.autoLabelChangeInfo = new Syncfusion.Windows.Forms.Tools.AutoLabel();
@@ -354,10 +356,10 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader2;
         private System.Windows.Forms.Label labelSubHeader2;
         private System.Windows.Forms.ToolTip toolTip1;
-        private Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox timeSpanTextBoxAnchor;
-        private Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox timeSpanTextBoxTargetLength;
+        private TimeSpanTextBox timeSpanTextBoxAnchor;
+        private TimeSpanTextBox timeSpanTextBoxTargetLength;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelFlexibility;
-        private Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox timeSpanTextBoxFlexibility;
+        private TimeSpanTextBox timeSpanTextBoxFlexibility;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelShortNamecaption;
 		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtShortName;
 		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtPayrollCode;

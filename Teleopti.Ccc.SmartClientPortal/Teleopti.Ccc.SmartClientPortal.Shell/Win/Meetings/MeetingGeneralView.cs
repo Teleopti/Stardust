@@ -4,13 +4,13 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
 	public partial class MeetingGeneralView : BaseUserControl, IMeetingGeneralView
 	{

@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Cells
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {
     [Serializable]
     public class IgnoreCellModel : GridStaticCellModel

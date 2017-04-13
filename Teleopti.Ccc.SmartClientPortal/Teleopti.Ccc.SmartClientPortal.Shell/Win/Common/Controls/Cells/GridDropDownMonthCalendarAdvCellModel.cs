@@ -11,7 +11,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Cells
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {
 	[Serializable]
 	public class GridDropDownMonthCalendarAdvCellModel : GridDropDownCellModel

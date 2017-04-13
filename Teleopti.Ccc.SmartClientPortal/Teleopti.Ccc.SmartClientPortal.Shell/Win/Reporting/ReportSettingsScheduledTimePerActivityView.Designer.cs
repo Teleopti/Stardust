@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Reporting
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
     partial class ReportSettingsScheduledTimePerActivityView
     {
@@ -34,11 +36,11 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.reportScenarioSelector1 = new Teleopti.Ccc.Win.Reporting.ReportScenarioSelector();
-            this.reportAgentSelector1 = new Teleopti.Ccc.Win.Reporting.ReportAgentSelector();
-            this.reportTimeZoneSelector1 = new Teleopti.Ccc.Win.Reporting.ReportTimeZoneSelector();
-            this.twoListSelector1 = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
-            this.reportDateFromToSelector1 = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
+            this.reportScenarioSelector1 = new ReportScenarioSelector();
+            this.reportAgentSelector1 = new ReportAgentSelector();
+            this.reportTimeZoneSelector1 = new ReportTimeZoneSelector();
+            this.twoListSelector1 = new TwoListSelector();
+            this.reportDateFromToSelector1 = new ReportDateFromToSelector();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -168,7 +170,7 @@
         private ReportScenarioSelector reportScenarioSelector1;
         private ReportAgentSelector reportAgentSelector1;
         private ReportTimeZoneSelector reportTimeZoneSelector1;
-        private Teleopti.Ccc.Win.Common.Controls.TwoListSelector twoListSelector1;
+        private TwoListSelector twoListSelector1;
         private ReportDateFromToSelector reportDateFromToSelector1;
 
     }

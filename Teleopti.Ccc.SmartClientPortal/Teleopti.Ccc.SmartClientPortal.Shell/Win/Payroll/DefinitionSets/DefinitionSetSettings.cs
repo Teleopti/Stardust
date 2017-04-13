@@ -6,15 +6,14 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common.Configuration;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {
 	public partial class DefinitionSetSettings: PayrollBaseUserControl, IExplorerView , ISettingPage
 	{

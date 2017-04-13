@@ -6,7 +6,7 @@ using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Ccc.WinCode.Common.Models;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Models
 {
     public class ScheduleViewerViewModel : DataModel
     {

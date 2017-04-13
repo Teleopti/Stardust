@@ -4,9 +4,8 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 	public partial class HandleBusinessRuleResponse : BaseDialogForm, IHandleBusinessRuleResponse
 	{

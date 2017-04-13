@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Teleopti.Ccc.WinCode.Converters.DateTimeConverter;
 
-namespace Teleopti.Ccc.Win.WpfControls.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters
 {
     public class DateTimeToHourConverter:DateTimeBaseConverter
     {

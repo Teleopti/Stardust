@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Reporting
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
     partial class SchedulerReportsViewer
     {
@@ -33,7 +33,7 @@
         private void InitializeComponent()
         {
 			this.reportViewerControl1 = new ReportViewerControl();
-			this.reportSettings1 = new Teleopti.Ccc.Win.Reporting.ReportSettingsHostView();
+			this.reportSettings1 = new ReportSettingsHostView();
 			this.SuspendLayout();
 			// 
 			// reportViewerControl1

@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.QuickForecast
 {
 	partial class SelectHistoricalDateRangeForTemplates
 	{
@@ -32,7 +34,7 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxSmoothing = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.label2 = new System.Windows.Forms.Label();
-			this.TemplatesDatesFromTo = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
+			this.TemplatesDatesFromTo = new ReportDateFromToSelector();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxSmoothing)).BeginInit();
 			this.SuspendLayout();
@@ -106,7 +108,7 @@
 
 		#endregion
 
-		private Reporting.ReportDateFromToSelector TemplatesDatesFromTo;
+		private ReportDateFromToSelector TemplatesDatesFromTo;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label label2;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv  comboBoxSmoothing;

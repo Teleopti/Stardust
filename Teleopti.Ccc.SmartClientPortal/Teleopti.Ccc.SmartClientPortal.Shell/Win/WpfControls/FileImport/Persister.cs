@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.FileImport;
 
-namespace Teleopti.Ccc.Win.WpfControls.FileImport
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport
 {
     public static class Persister
     {

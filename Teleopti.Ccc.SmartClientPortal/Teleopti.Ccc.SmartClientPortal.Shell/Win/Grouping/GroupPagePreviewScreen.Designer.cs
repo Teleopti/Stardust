@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Grouping
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {
     partial class GroupPagePreviewScreen
     {
@@ -48,7 +48,7 @@
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
 			this.splitContainerAdvMain = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
-			this.findPersonsView1 = new Teleopti.Ccc.Win.Grouping.FindPersonsView();
+			this.findPersonsView1 = new FindPersonsView();
 			this.tableLayoutPanelGroups = new System.Windows.Forms.TableLayoutPanel();
 			this.treeViewAdvPreviewTree = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();

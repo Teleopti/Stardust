@@ -2,7 +2,7 @@
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Win
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win
 {
 	public class Localizer : ILocalizationProvider
 	{

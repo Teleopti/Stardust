@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 
-namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 {
 	public partial class ScheduleReportDialogGraphicalView : BaseDialogForm, IScheduleReportDialogGraphicalView
 	{

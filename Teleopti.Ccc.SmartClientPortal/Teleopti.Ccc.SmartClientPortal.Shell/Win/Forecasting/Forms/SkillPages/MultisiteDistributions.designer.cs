@@ -1,6 +1,4 @@
-using Syncfusion.Windows.Forms.Grid;
-
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 {
 	partial class MultisiteDistributions
 	{
@@ -39,7 +37,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle3 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			this.tableLayoutPanelDistributionsRtl = new System.Windows.Forms.TableLayoutPanel();
 			this.lblSubSkillsDistribution = new System.Windows.Forms.Label();
-			this.gridSubSkills = new Teleopti.Ccc.Win.Forecasting.Forms.MultisiteDistributionGrid();
+			this.gridSubSkills = new MultisiteDistributionGrid();
 			this.tableLayoutPanelDistributionsRtl.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridSubSkills)).BeginInit();
 			this.SuspendLayout();

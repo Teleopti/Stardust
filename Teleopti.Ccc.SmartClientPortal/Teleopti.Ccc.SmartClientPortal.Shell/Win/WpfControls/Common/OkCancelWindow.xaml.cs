@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using Syncfusion.Windows.Shared;
 
-namespace Teleopti.Ccc.Win.WpfControls.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common
 {
     /// <summary>
     /// Interaction logic for OkCancelWindow.xaml

@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {
     partial class VisualizeView
     {
@@ -42,7 +44,7 @@
         {
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.labelMultiplicatorVisualizer = new System.Windows.Forms.Label();
-            this.dateNavigateControlThinLayout1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateNavigateControlThinLayout();
+            this.dateNavigateControlThinLayout1 = new DateNavigateControlThinLayout();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.gcProjection = new Syncfusion.Windows.Forms.Grid.GridControl();
             this.tableLayoutPanel4.SuspendLayout();
@@ -150,7 +152,7 @@
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Label labelMultiplicatorVisualizer;
-        private Teleopti.Ccc.Win.Common.Controls.DateSelection.DateNavigateControlThinLayout dateNavigateControlThinLayout1;
+        private DateNavigateControlThinLayout dateNavigateControlThinLayout1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private Syncfusion.Windows.Forms.Grid.GridControl gcProjection;
     }

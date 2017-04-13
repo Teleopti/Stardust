@@ -2,10 +2,8 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	public class BudgetDayReassociator
 	{

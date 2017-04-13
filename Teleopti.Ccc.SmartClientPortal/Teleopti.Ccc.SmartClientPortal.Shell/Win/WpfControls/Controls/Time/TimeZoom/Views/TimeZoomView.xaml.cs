@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using Teleopti.Ccc.WinCode.Common.Time;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Time.TimeZoom.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.TimeZoom.Views
 {
     /// <summary>
     /// Interaction logic for TimeZoomView.xaml

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Common;
-using System.Collections.ObjectModel;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns
 {
     /// <summary>
     /// T is the class and L is the type of the items in the drop down

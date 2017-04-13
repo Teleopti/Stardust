@@ -18,23 +18,23 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Configuration;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.Win.PeopleAdmin.Controls;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.Win.PeopleAdmin.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
-using GridConstructor = Teleopti.Ccc.Win.PeopleAdmin.Views.GridConstructor;
-using ViewType = Teleopti.Ccc.Win.PeopleAdmin.Views.ViewType;
+using GridConstructor = Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views.GridConstructor;
+using ViewType = Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views.ViewType;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
 {
     public partial class PeopleWorksheet : BaseRibbonForm
     {

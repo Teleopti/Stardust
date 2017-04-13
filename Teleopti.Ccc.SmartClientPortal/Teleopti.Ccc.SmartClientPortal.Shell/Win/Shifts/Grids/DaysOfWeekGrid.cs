@@ -5,15 +5,15 @@ using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
 using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Events;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Shifts.Grids
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts.Grids
 {
     public class DaysOfWeekGrid : GridViewBase<IDaysOfWeekPresenter, IDaysOfWeekViewModel>
     {

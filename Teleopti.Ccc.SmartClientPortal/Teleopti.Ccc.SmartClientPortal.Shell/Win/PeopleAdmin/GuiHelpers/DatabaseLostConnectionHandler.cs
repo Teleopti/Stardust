@@ -1,7 +1,7 @@
 ﻿using System;
-using Teleopti.Ccc.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
     public static class DatabaseLostConnectionHandler
     {

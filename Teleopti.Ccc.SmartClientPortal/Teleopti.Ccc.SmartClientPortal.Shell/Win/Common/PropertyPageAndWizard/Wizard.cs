@@ -1,14 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 {
 	public partial class Wizard : BaseDialogForm
 	{
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 				if (updatesMade != null)
 				{
 					Close();
-					Main.EntityEventAggregator.TriggerEntitiesNeedRefresh(this, updatesMade);
+					EntityEventAggregator.TriggerEntitiesNeedRefresh(this, updatesMade);
 					DialogResult = DialogResult.OK;
 				}
 			});

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Teleopti.Ccc.Win.SmartParts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
 {
     public partial class ExtendedSmartPartBase : SmartPartBase, IExtendedSmartPartBase
     {

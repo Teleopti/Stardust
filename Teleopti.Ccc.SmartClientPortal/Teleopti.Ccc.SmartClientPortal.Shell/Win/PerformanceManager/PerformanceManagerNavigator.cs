@@ -4,11 +4,10 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Main;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PerformanceManager
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager
 {
     public partial class PerformanceManagerNavigator : AbstractNavigator
     {

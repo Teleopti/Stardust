@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.WinCode.Common;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Rows;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Rows
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 {
     public class SkillDataGridRow : GridRow
     {

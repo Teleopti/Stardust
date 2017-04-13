@@ -1,8 +1,7 @@
 ﻿using Microsoft.Practices.Composite.Presentation.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Budgeting.Events
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting.Events
 {
 	public class ChangeCustomEfficiencyShrinkage : CompositePresentationEvent<ICustomEfficiencyShrinkage>
 	{

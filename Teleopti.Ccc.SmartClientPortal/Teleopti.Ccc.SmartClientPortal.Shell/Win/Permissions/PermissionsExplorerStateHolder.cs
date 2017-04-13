@@ -10,9 +10,8 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Permissions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Permissions
 {
     /// <summary>
     /// Permissions State Holder to hold Permissions Explorer instance data 

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Permissions
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Permissions
 {
     partial class PermissionViewer
     {

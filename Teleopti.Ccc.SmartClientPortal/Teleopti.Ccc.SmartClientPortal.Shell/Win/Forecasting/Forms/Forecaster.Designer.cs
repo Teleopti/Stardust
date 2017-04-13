@@ -1,5 +1,7 @@
-﻿using Teleopti.Ccc.Win.Main;
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.ToolStripGallery;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
     partial class Forecaster
     {
@@ -46,7 +48,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabPage1 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tabControlAdvMultisiteSkill = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvMultisiteSkill = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
 			this.backStageView = new Syncfusion.Windows.Forms.BackStageView(this.components);
 			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
 			this.backStageButtonSave = new Syncfusion.Windows.Forms.BackStageButton();
@@ -74,21 +76,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonPrintPreview = new System.Windows.Forms.ToolStripButton();
 			this.toolStripTabItemSkill = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.teleoptiToolStripSkill = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
-			this.teleoptiToolStripGallerySkill = new Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.TeleoptiToolStripGallery();
+			this.teleoptiToolStripGallerySkill = new TeleoptiToolStripGallery();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripBtnCreateSkillTemplate = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonResetSkillTemplates = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonLongtermSkillTemplates = new System.Windows.Forms.ToolStripButton();
 			this.toolStripTabItemWorkload = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.teleoptiToolStripWorkload = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
-			this.teleoptiToolStripGalleryWorkload = new Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.TeleoptiToolStripGallery();
+			this.teleoptiToolStripGalleryWorkload = new TeleoptiToolStripGallery();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButtonCreateNewTemplate = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonResetWorkloadTemplates = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonLongtermWorkloadTemplates = new System.Windows.Forms.ToolStripButton();
 			this.toolStripTabItemMultisite = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.teleoptiToolStripMultisiteSkill = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
-			this.teleoptiToolStripGalleryMultisiteSkill = new Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.TeleoptiToolStripGallery();
+			this.teleoptiToolStripGalleryMultisiteSkill = new TeleoptiToolStripGallery();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripBtnCreateMultisiteTemplate = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonResetMultisiteSkillTemplates = new System.Windows.Forms.ToolStripButton();
@@ -874,7 +876,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripGallerySkill.ShowToolTip = true;
 			this.teleoptiToolStripGallerySkill.Size = new System.Drawing.Size(519, 60);
 			this.teleoptiToolStripGallerySkill.Text = "yy";
-			this.teleoptiToolStripGallerySkill.ItemClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs>(this.teleoptiToolStripGallerySkillItemClicked);
+			this.teleoptiToolStripGallerySkill.ItemClicked += new System.EventHandler<ToolStripItemClickedEventArgs>(this.teleoptiToolStripGallerySkillItemClicked);
 			this.teleoptiToolStripGallerySkill.GalleryItemClicked += new Syncfusion.Windows.Forms.Tools.ToolStripGalleryItemEventHandler(this.teleoptiToolStripGallerySkillGalleryItemClicked);
 			// 
 			// toolStripSeparator2
@@ -993,7 +995,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripGalleryWorkload.ShowToolTip = true;
 			this.teleoptiToolStripGalleryWorkload.Size = new System.Drawing.Size(519, 60);
 			this.teleoptiToolStripGalleryWorkload.Text = "yy";
-			this.teleoptiToolStripGalleryWorkload.ItemClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs>(this.teleoptiToolStripGalleryWorkloadItemClicked);
+			this.teleoptiToolStripGalleryWorkload.ItemClicked += new System.EventHandler<ToolStripItemClickedEventArgs>(this.teleoptiToolStripGalleryWorkloadItemClicked);
 			this.teleoptiToolStripGalleryWorkload.GalleryItemClicked += new Syncfusion.Windows.Forms.Tools.ToolStripGalleryItemEventHandler(this.teleoptiToolStripGalleryWorkloadGalleryItemClicked);
 			// 
 			// toolStripSeparator1
@@ -1112,7 +1114,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripGalleryMultisiteSkill.ShowToolTip = true;
 			this.teleoptiToolStripGalleryMultisiteSkill.Size = new System.Drawing.Size(519, 60);
 			this.teleoptiToolStripGalleryMultisiteSkill.Text = "yy";
-			this.teleoptiToolStripGalleryMultisiteSkill.ItemClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs>(this.teleoptiToolStripGalleryMultisiteSkillItemClicked);
+			this.teleoptiToolStripGalleryMultisiteSkill.ItemClicked += new System.EventHandler<ToolStripItemClickedEventArgs>(this.teleoptiToolStripGalleryMultisiteSkillItemClicked);
 			this.teleoptiToolStripGalleryMultisiteSkill.GalleryItemClicked += new Syncfusion.Windows.Forms.Tools.ToolStripGalleryItemEventHandler(this.teleoptiToolStripGalleryMultisiteSkillGalleryItemClicked);
 			// 
 			// toolStripSeparator4
@@ -1403,7 +1405,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainer2;
         private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlWorkloads;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPage1;
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+        private RibbonControlAdvFixed ribbonControlAdv1;
         private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemHome;
         private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemSkill;
         private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemWorkload;
@@ -1432,15 +1434,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private System.Windows.Forms.ToolStripButton toolStripButtonIncreaseDecimals;
         private System.Windows.Forms.ToolStripButton toolStripButtonDecreaseDecimals;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx teleoptiToolStripSkill;
-        private Common.Controls.ToolStripGallery.TeleoptiToolStripGallery teleoptiToolStripGallerySkill;
+        private TeleoptiToolStripGallery teleoptiToolStripGallerySkill;
         private System.Windows.Forms.ToolStripButton toolStripBtnCreateSkillTemplate;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx teleoptiToolStripWorkload;
-        private Common.Controls.ToolStripGallery.TeleoptiToolStripGallery teleoptiToolStripGalleryWorkload;
+        private TeleoptiToolStripGallery teleoptiToolStripGalleryWorkload;
         private System.Windows.Forms.ToolStripButton toolStripButtonCreateNewTemplate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx teleoptiToolStripMultisiteSkill;
-        private Common.Controls.ToolStripGallery.TeleoptiToolStripGallery teleoptiToolStripGalleryMultisiteSkill;
+        private TeleoptiToolStripGallery teleoptiToolStripGalleryMultisiteSkill;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton toolStripBtnCreateMultisiteTemplate;
         private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemChart;

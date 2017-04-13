@@ -1,13 +1,12 @@
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using System;
 using System.Diagnostics;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPages
 {
     public partial class WorkloadGeneral : BaseUserControl, IPropertyPage
     {

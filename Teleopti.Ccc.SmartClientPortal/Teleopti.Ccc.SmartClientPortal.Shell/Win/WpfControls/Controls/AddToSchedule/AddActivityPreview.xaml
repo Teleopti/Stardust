@@ -1,8 +1,8 @@
-﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.AddToSchedule.AddActivityPreview"
+﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.AddToSchedule.AddActivityPreview"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode"
-			 xmlns:dateTimePeriodControl="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.DateTimePeriodControl"
+			 xmlns:dateTimePeriodControl="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl"
 			 Commands:CreateCommandBinding.Target="{Binding}">
     <UserControl.Resources>
         <ResourceDictionary>

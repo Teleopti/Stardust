@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.Grouping
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {
     public partial class NameDialog : BaseDialogForm
     {

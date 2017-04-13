@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 {
 	public class RolesGridView : GridViewBase
 	{

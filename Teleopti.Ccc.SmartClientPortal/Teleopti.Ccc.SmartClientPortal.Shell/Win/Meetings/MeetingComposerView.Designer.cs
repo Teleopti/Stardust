@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Meetings
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
 	partial class MeetingComposerView
 	{
@@ -41,7 +43,7 @@
 			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
 			this.statusStripEx1 = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
 			this.toolStripMenuItemPasteNew = new System.Windows.Forms.ToolStripMenuItem();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
 			this.toolStripTabItemMeeting = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripEx2 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonMainSave = new System.Windows.Forms.ToolStripButton();
@@ -541,7 +543,7 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
 		private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripEx1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPasteNew;
-		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+		private RibbonControlAdvFixed ribbonControlAdv1;
 		private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemMeeting;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx2;
 		private System.Windows.Forms.ToolStripButton toolStripButtonMainSave;

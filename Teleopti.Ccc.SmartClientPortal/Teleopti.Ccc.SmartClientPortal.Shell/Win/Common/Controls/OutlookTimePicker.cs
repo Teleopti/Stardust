@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
-using System.ComponentModel;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
     /// <summary>
     /// A time picker control which has same functionality as Outlook's

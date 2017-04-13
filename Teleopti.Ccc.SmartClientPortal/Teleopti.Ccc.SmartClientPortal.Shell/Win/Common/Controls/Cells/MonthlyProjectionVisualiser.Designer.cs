@@ -1,7 +1,4 @@
-﻿using System.Drawing;
-using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.Win.Common.Controls.Cells
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {
     partial class MonthlyProjectionVisualiser
     {

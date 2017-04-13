@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
-namespace Teleopti.Ccc.Win.Permissions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Permissions
 {
     /// <summary>
     /// Adapter for ApplicationRole class

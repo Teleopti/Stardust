@@ -2,10 +2,9 @@
 using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
-namespace Teleopti.Ccc.Win.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
 	public partial class ShiftGenerationStatus : BaseDialogForm 
 	{

@@ -2,11 +2,11 @@
 using System.Data.SqlClient;
 using log4net;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
 
-namespace Teleopti.Ccc.Win.ExceptionHandling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling
 {
 	public partial class SimpleExceptionHandlerView : BaseDialogForm, ISimpleExceptionHandlerView
 	{

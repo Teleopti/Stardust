@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Models;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer
 {
     /// <summary>
     /// Interaction logic for ScheduleViewer.xaml

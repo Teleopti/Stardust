@@ -1,7 +1,7 @@
 ﻿using System;
-using Teleopti.Ccc.Win.WpfControls.Controls.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday;
 
-namespace Teleopti.Ccc.Win.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 {
 	partial class IntradayViewContent
 	{

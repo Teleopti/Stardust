@@ -13,10 +13,10 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.Win.Scheduling.SkillResult;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Meetings;
@@ -24,7 +24,7 @@ using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
 	public partial class MeetingImpactView : BaseUserControl, IMeetingImpactView
 	{

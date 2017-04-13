@@ -1,6 +1,6 @@
-﻿using Teleopti.Ccc.Win.Forecasting.Forms;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Chart
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart
 {
 	partial class GridRowInChartSettingButtons
 	{
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
 			this.buttonAdvRightAxis = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-			this.pickColorControl1 = new Teleopti.Ccc.Win.Forecasting.Forms.PickColorControl();
+			this.pickColorControl1 = new PickColorControl();
 			this.SuspendLayout();
 			// 
 			// buttonAdvLine

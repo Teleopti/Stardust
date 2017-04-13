@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.SystemSetting;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     [Serializable]
     public class VirtualSkillSetting : SettingValue

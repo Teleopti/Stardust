@@ -8,11 +8,11 @@ using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.PreferenceCellPainters;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.PreferenceCellPainters;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 
-namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 {
 	[Serializable]
 	public class AgentRestrictionsDetailViewCellModel : GridStaticCellModel, IAgentRestrictionsDetailViewCellModel

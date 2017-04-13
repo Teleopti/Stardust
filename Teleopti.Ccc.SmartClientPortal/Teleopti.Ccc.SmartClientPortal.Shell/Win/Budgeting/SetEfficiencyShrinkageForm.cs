@@ -2,12 +2,12 @@
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 using Teleopti.Interfaces.Domain;
 using Size = System.Drawing.Size;
 
-namespace Teleopti.Ccc.Win.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
     public partial class SetEfficiencyShrinkageForm : BaseDialogForm
     {

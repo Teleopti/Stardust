@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
 	public static class IntegerExtensions
 	{

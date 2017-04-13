@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	partial class AgentStudentAvailabilityView
 	{
@@ -32,9 +34,9 @@
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxAdvNextDay = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.outlookTimePickerTo = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerTo = new OutlookTimePicker();
 			this.labelTo = new System.Windows.Forms.Label();
-			this.outlookTimePickerFrom = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerFrom = new OutlookTimePicker();
 			this.labelFrom = new System.Windows.Forms.Label();
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -217,8 +219,8 @@
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOk;
 		private System.Windows.Forms.Label labelFrom;
 		private System.Windows.Forms.Label labelTo;
-		private Common.Controls.OutlookTimePicker outlookTimePickerTo;
-		private Common.Controls.OutlookTimePicker outlookTimePickerFrom;
+		private OutlookTimePicker outlookTimePickerTo;
+		private OutlookTimePicker outlookTimePickerFrom;
 		private System.Windows.Forms.ErrorProvider errorProvider1;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvNextDay;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;

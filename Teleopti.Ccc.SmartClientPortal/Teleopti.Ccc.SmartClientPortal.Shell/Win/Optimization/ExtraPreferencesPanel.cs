@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Optimization
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {
 	public partial class ExtraPreferencesPanel : BaseUserControl, IDataExchange
     {

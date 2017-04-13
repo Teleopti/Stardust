@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using Teleopti.Ccc.Infrastructure.Util;
-using Teleopti.Ccc.Win.Sikuli.Helpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidators
 {
 	internal class MemoryUsageValidator : RootValidator
 	{

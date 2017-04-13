@@ -1,7 +1,6 @@
-﻿
-using Syncfusion.Windows.Forms.Tools;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 {
 	partial class SkillEmailDistributions
 	{
@@ -39,10 +38,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.tableLayoutPanelMainRtl = new System.Windows.Forms.TableLayoutPanel();
 			this.labelShrinkage = new System.Windows.Forms.Label();
 			this.labelHandledWithin = new System.Windows.Forms.Label();
-			this.percentTextBox1 = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
+			this.percentTextBox1 = new TeleoptiPercentTextBox();
 			this.labelEfficiencyPercentage = new System.Windows.Forms.Label();
-			this.efficiencyPercentTextBox1 = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
-			this.maskedTimeSpanTextBox1 = new Teleopti.Ccc.Win.Common.Controls.MaskedTimeSpanTextBox();
+			this.efficiencyPercentTextBox1 = new TeleoptiPercentTextBox();
+			this.maskedTimeSpanTextBox1 = new MaskedTimeSpanTextBox();
 			((System.ComponentModel.ISupportInitialize)(this.integerTextBoxMaximumAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.integerTextBoxMinimumAgents)).BeginInit();
 			this.tableLayoutPanelMainRtl.SuspendLayout();
@@ -246,9 +245,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMoreOptionsRtl;
 		private System.Windows.Forms.Label labelShrinkage;
 		private System.Windows.Forms.Label labelHandledWithin;
-		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBox1;
+		private TeleoptiPercentTextBox percentTextBox1;
 		private System.Windows.Forms.Label labelEfficiencyPercentage;
-		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox efficiencyPercentTextBox1;
-		private Common.Controls.MaskedTimeSpanTextBox maskedTimeSpanTextBox1;
+		private TeleoptiPercentTextBox efficiencyPercentTextBox1;
+		private MaskedTimeSpanTextBox maskedTimeSpanTextBox1;
 	}
 }

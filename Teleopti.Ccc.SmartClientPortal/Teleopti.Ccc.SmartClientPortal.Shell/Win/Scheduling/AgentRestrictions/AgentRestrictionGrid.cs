@@ -9,14 +9,13 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
-using Teleopti.Interfaces.Domain;
 using IContainer = System.ComponentModel.IContainer;
 
-namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 {
 	public partial class AgentRestrictionGrid : GridControl, IAgentRestrictionsView, IHelpContext
 	{

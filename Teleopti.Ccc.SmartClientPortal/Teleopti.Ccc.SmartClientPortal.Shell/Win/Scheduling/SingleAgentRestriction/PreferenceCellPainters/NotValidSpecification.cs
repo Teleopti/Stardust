@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 
-namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.PreferenceCellPainters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.PreferenceCellPainters
 {
     public class NotValidSpecification
     {

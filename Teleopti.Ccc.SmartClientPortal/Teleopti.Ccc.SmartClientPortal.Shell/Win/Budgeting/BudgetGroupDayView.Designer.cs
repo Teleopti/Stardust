@@ -1,6 +1,6 @@
-﻿using Teleopti.Ccc.Win.Common.Controls;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	partial class BudgetGroupDayView
 	{
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripMenuItemLoadStaffEmployed = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemModifySelection = new System.Windows.Forms.ToolStripMenuItem();
-			this.gridControlDayView = new Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl();
+			this.gridControlDayView = new TeleoptiGridControl();
 			this.budgetGroupDayViewMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlDayView)).BeginInit();
 			this.SuspendLayout();

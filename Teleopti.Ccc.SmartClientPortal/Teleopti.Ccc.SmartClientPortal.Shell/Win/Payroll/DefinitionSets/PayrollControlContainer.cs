@@ -7,7 +7,7 @@ using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 
 #endregion
 
-namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {
     public partial class PayrollControlContainer : UserControl, IContainedControl
     {

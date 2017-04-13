@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public enum SkillResultViewSetting
 	{

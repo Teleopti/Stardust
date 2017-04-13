@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
     /// <summary>
     /// there is 4 events associated with this control,

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Meetings.Overview
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 {
     partial class CalendarAndTextPanel
     {

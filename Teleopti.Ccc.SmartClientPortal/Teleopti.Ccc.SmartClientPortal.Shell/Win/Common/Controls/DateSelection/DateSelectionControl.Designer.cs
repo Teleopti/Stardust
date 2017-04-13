@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {
 	partial class DateSelectionControl : BaseUserControl
 	{
@@ -32,11 +32,11 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DateSelectionControl));
 			this.tabControlAdvDateSelection = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvRolling = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.dateSelectionRolling1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionRolling();
+			this.dateSelectionRolling1 = new DateSelectionRolling();
 			this.tabPageAdvFromTo = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.dateSelectionFromTo1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
+			this.dateSelectionFromTo1 = new DateSelectionFromTo();
 			this.tabPageAdvCalendar = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.dateSelectionCalendar1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionCalendar();
+			this.dateSelectionCalendar1 = new DateSelectionCalendar();
 			this.imageListTabs = new System.Windows.Forms.ImageList(this.components);
 			this.designTimeTabTypeLoader = new Syncfusion.Reflection.TypeLoader(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAdvDateSelection)).BeginInit();
@@ -94,7 +94,7 @@
 			this.dateSelectionRolling1.ShowApplyButton = false;
 			this.dateSelectionRolling1.Size = new System.Drawing.Size(196, 72);
 			this.dateSelectionRolling1.TabIndex = 0;
-			this.dateSelectionRolling1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionRolling1DateRangeChanged);
+			this.dateSelectionRolling1.DateRangeChanged += new System.EventHandler<DateRangeChangedEventArgs>(this.dateSelectionRolling1DateRangeChanged);
 			// 
 			// tabPageAdvFromTo
 			// 
@@ -130,7 +130,7 @@
 			this.dateSelectionFromTo1.Size = new System.Drawing.Size(196, 359);
 			this.dateSelectionFromTo1.TabIndex = 0;
 			this.dateSelectionFromTo1.TodayButtonText = "xxToday";
-			this.dateSelectionFromTo1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionFromTo1DateRangeChanged);
+			this.dateSelectionFromTo1.DateRangeChanged += new System.EventHandler<DateRangeChangedEventArgs>(this.dateSelectionFromTo1DateRangeChanged);
 			this.dateSelectionFromTo1.ButtonClickedNoValidation += new System.EventHandler(this.dateSelectionFromTo1ButtonClickedNoValidation);
 			// 
 			// tabPageAdvCalendar
@@ -158,7 +158,7 @@
 			this.dateSelectionCalendar1.ShowApplyButton = false;
 			this.dateSelectionCalendar1.Size = new System.Drawing.Size(196, 206);
 			this.dateSelectionCalendar1.TabIndex = 0;
-			this.dateSelectionCalendar1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionCalendar1DateRangeChanged);
+			this.dateSelectionCalendar1.DateRangeChanged += new System.EventHandler<DateRangeChangedEventArgs>(this.dateSelectionCalendar1DateRangeChanged);
 			// 
 			// imageListTabs
 			// 

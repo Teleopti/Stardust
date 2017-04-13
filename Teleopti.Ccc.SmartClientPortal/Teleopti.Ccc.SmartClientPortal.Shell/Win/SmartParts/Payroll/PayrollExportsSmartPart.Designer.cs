@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.SmartParts.Payroll
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll
 {
     partial class PayrollExportsSmartPart
     {

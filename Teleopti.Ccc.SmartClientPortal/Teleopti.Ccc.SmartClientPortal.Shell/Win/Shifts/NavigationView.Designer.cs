@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Ccc.Win.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
     partial class NavigationView
     {

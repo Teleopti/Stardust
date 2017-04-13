@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Budgeting
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	partial class BudgetGroupMonthView
 	{
@@ -35,7 +37,7 @@
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle1 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle2 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
-			this.gridControlMonthView = new Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl();
+			this.gridControlMonthView = new TeleoptiGridControl();
 			this.budgetGroupMonthViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemAddShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUpdateShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
@@ -276,6 +278,6 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemModifySelection;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdateShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdateEfficiencyShrinkageRow;
-		private Common.Controls.TeleoptiGridControl gridControlMonthView;
+		private TeleoptiGridControl gridControlMonthView;
 	}
 }

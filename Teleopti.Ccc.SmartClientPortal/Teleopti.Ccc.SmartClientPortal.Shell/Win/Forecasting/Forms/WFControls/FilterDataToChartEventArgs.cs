@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 {
 	public class FilterDataToChartEventArgs : EventArgs
 	{

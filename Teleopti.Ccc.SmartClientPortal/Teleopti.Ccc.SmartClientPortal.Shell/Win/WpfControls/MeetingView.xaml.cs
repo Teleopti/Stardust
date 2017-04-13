@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.WpfControls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls
 {
     /// <summary>
     /// Interaction logic for MeetingView.xaml

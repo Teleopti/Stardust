@@ -1,7 +1,4 @@
-﻿using System.Drawing;
-using Syncfusion.Drawing;
-
-namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {
 	partial class DateNavigateControl
 	{

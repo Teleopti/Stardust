@@ -6,16 +6,14 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Win.Budgeting.Events;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.WinCode.Budgeting.Views;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Size = System.Drawing.Size;
 
-namespace Teleopti.Ccc.Win.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	public partial class AddShrinkageForm : BaseDialogForm, IAddShrinkageForm
 	{

@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Common.Configuration
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	partial class GamificationSettingRuleWithRatioConvertorControl
 	{
@@ -37,7 +39,7 @@
 			this.label12 = new System.Windows.Forms.Label();
 			this.checkBoxUseBadgeForAHT = new System.Windows.Forms.CheckBox();
 			this.labelSetBadgeThresholdForAHT = new System.Windows.Forms.Label();
-			this.timeSpanTextBoxThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.timeSpanTextBoxThresholdForAHT = new TimeSpanTextBox();
 			this.checkBoxUseBadgeForAdherence = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();

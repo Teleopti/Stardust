@@ -4,7 +4,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Intraday;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
     public class ManageAlarmSituationView : ViewBase<ManageAlarmSituationPresenter>, IDisposable, IManageAlarmSituationView
     {

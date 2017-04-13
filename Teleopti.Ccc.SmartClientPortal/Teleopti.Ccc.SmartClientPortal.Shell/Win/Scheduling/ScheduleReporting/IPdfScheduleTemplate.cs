@@ -1,6 +1,6 @@
 using Syncfusion.Pdf.Graphics;
 
-namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 {
     public interface IPdfScheduleTemplate
     {

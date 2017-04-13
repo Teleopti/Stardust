@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.SmartParts.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 {
     [SmartPart]
     public partial class DetailedSmartPart : SmartPartBase, IDrawingBehavior, ILocalized

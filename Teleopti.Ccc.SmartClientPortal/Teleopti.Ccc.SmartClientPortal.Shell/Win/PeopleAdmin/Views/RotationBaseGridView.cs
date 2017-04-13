@@ -1,26 +1,24 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Configuration;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
-using System.Collections.Generic;
-using Autofac;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 {
 	public class
 		RotationBaseGridView<TAdapterParent, TAdapterChild, TBaseType, TScheduleType> : DropDownGridViewBase
@@ -353,14 +351,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				selectedEntity = new SelectedEntity<IAggregateRoot>
 					(PeopleWorksheet.StateHolder.RotationStateHolder.GetCurrentEntity(Grid, GridInCellColumnIndex) as
 					 IRotation,
-					 Common.Configuration.ViewType.Rotation);
+					 SmartClientPortal.Shell.Win.Common.Configuration.ViewType.Rotation);
 			}
 			if (_viewType == ViewType.PersonAvailabilityView)
 			{
 				selectedEntity = new SelectedEntity<IAggregateRoot>(
 					PeopleWorksheet.StateHolder.RotationStateHolder.GetCurrentEntity(Grid, GridInCellColumnIndex) as
 					IAvailabilityRotation,
-					Common.Configuration.ViewType.Availability);
+					SmartClientPortal.Shell.Win.Common.Configuration.ViewType.Availability);
 			}
 
 			if (selectedEntity != null)

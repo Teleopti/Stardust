@@ -6,14 +6,14 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.Win.Forecasting.Forms.WFControls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 {
 	public partial class WorkflowSeasonView : BaseUserControl
 	{

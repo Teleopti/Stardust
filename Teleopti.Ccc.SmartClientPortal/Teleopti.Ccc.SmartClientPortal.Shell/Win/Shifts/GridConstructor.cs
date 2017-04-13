@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Shifts.Grids;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts.Grids;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 
-namespace Teleopti.Ccc.Win.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
     public class GridConstructor : Component
     {

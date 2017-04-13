@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 {
     partial class SeasonVolumeGridControl
     {

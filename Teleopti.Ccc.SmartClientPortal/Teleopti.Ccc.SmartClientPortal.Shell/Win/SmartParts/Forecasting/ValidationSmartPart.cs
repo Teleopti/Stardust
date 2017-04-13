@@ -11,7 +11,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.SmartParts.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 {
     [SmartPart]
     public partial class ValidationSmartPart : SmartPartBase, IDrawingBehavior, ILocalized

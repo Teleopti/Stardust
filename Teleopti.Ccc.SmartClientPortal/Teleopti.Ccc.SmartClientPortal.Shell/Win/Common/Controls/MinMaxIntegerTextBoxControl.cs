@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
     /// <summary>
     /// Control with integer

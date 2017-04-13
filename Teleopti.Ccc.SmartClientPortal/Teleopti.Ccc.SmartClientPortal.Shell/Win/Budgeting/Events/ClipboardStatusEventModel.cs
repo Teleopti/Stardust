@@ -1,7 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting.Events
 {
 	public class ClipboardStatusEventModel
 	{

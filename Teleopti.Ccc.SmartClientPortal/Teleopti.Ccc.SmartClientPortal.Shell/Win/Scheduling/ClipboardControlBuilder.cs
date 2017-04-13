@@ -1,10 +1,9 @@
 ﻿using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public class ClipboardControlBuilder
 	{

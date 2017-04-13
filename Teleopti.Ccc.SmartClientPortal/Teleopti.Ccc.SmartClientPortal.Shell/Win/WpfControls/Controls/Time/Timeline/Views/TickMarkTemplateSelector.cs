@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using Teleopti.Ccc.WinCode.Common.Time.Timeline;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Time.Timeline.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline.Views
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
     class TickMarkTemplateSelector : DataTemplateSelector

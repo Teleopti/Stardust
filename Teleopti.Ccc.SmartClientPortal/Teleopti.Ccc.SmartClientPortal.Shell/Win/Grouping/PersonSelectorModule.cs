@@ -9,7 +9,7 @@ using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
 using Teleopti.Ccc.WinCode.Scheduling;
 
-namespace Teleopti.Ccc.Win.Grouping
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {
 	public class PersonSelectorModule : Module
 	{

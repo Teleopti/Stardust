@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Forecasting;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.JobHistory
 {
 	public partial class JobHistoryDetailedView : BaseRibbonForm, IJobHistoryView
 	{

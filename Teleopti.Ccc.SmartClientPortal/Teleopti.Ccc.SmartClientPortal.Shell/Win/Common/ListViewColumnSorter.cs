@@ -2,8 +2,7 @@
 using System.Threading;
 using System.Windows.Forms;
 
-
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     /// <summary>
     /// This class is an implementation of the 'IComparer' interface.

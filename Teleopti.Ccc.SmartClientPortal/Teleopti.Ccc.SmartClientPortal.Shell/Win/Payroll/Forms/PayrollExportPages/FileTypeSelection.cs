@@ -6,12 +6,11 @@ using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Forms.PayrollExportPages
 {
 	public partial class FileTypeSelection : BaseUserControl, IPropertyPage
 	{

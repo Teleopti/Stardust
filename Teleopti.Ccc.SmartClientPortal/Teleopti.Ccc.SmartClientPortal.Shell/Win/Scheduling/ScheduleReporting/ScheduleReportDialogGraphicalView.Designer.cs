@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 {
 	partial class ScheduleReportDialogGraphicalView
 	{

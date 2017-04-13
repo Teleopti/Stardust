@@ -6,16 +6,15 @@ using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
-using Teleopti.Ccc.Win.Forecasting.Forms.JobHistory;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ImportForecast;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.JobHistory;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
 {
     public class ForecasterModule : Module
     {

@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Backlog
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Backlog
 {
 	public partial class AddCampaign : Form
 	{

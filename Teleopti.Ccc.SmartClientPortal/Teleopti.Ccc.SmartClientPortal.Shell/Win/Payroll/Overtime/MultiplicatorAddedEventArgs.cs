@@ -1,8 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Payroll.Overtime
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Overtime
 {
     /// <summary>
     /// Custom event arg for the DefinitionSetAddedEventArgs event occurs

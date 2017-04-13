@@ -1,6 +1,4 @@
-﻿using Syncfusion.Windows.Forms.Tools.Enums;
-
-namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 {
     partial class PeopleNavigator
     {

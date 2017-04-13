@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals
 {
 	partial class ResourceCalculationAnalyzerView
 	{

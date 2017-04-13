@@ -1,8 +1,8 @@
 ﻿<!--Uses A DateTimePeriodViewModel as DataContext-->
-<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.DateTimePeriodControl.EditableDateTimePeriodPreview"
+<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl.EditableDateTimePeriodPreview"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:dateTimePeriodControl="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.DateTimePeriodControl"
+    xmlns:dateTimePeriodControl="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl"
     Height="67">
     <UserControl.Resources>
         <ResourceDictionary>

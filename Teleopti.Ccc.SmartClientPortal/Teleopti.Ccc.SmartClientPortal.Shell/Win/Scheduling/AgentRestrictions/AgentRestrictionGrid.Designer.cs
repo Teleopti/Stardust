@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 {
 	partial class AgentRestrictionGrid
 	{

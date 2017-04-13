@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Intraday.Views.RealTimeScheduleView"
+﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Views.RealTimeScheduleView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:userTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
@@ -9,9 +9,9 @@
 			 d:DesignWidth="1448"
     xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
     xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode"
-    xmlns:converters1="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters"
-    xmlns:timeline="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Time.Timeline"
-    xmlns:layers="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Layers">
+    xmlns:converters1="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
+    xmlns:timeline="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline"
+    xmlns:layers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers">
 
 	<UserControl.Resources>
 		<ResourceDictionary>

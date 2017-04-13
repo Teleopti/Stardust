@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
     [Browsable(true), Category("Teleopti Controls")]
     public partial class Office2007OutlookTimeDurationPicker : Syncfusion.Windows.Forms.Tools.ComboBoxAdv

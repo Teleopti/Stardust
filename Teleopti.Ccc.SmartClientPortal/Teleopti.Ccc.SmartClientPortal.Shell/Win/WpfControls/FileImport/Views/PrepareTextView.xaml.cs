@@ -1,7 +1,7 @@
 using System.Windows.Controls;
-using Teleopti.Ccc.Win.WpfControls.FileImport.ViewModels;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport.ViewModels;
 
-namespace Teleopti.Ccc.Win.WpfControls.FileImport.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport.Views
 {
     /// <summary>
     /// Interaction logic for PrepareTextView.xaml

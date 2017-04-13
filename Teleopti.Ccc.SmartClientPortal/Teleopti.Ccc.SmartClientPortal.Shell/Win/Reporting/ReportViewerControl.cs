@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Microsoft.Reporting.WinForms;
 using Microsoft.Win32;
 
-namespace Teleopti.Ccc.Win.Reporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	//Presenter
 	public partial class ReportViewerControl : UserControl

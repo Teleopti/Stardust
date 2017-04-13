@@ -4,13 +4,12 @@ using System.Drawing.Drawing2D;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.PreferenceCellPainters;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.PreferenceCellPainters;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 {
 	public class AgentRestrictionsSchedulePainter : PreferenceCellPainterBase
 	{

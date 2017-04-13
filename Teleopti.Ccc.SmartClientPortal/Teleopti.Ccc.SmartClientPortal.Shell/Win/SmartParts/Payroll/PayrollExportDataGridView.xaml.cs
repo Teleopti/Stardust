@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.SmartParts.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll
 {
     /// <summary>
     /// Interaction logic for PayrollExportDataGridView.xaml

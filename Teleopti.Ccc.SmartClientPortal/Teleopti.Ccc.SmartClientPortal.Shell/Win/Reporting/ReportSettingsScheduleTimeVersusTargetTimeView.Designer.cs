@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Reporting
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	partial class ReportSettingsScheduleTimeVersusTargetTimeView
 	{
@@ -32,9 +32,9 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportSettingsScheduleTimeVersusTargetTimeView));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.reportDateFromToSelector1 = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
-            this.reportScenarioSelector1 = new Teleopti.Ccc.Win.Reporting.ReportScenarioSelector();
-            this.reportAgentSelector1 = new Teleopti.Ccc.Win.Reporting.ReportAgentSelector();
+            this.reportDateFromToSelector1 = new ReportDateFromToSelector();
+            this.reportScenarioSelector1 = new ReportScenarioSelector();
+            this.reportAgentSelector1 = new ReportAgentSelector();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
             this.tableLayoutPanel1.SuspendLayout();

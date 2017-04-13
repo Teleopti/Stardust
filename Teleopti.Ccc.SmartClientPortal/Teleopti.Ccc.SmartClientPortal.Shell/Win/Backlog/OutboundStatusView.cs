@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Teleopti.Ccc.Domain.Backlog;
 
-namespace Teleopti.Ccc.Win.Backlog
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Backlog
 {
 	public partial class OutboundStatusView : Form
 	{

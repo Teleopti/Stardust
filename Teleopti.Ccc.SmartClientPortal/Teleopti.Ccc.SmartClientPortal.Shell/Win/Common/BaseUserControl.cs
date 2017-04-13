@@ -1,9 +1,9 @@
-﻿using System.Windows.Forms;
+﻿using System.Globalization;
+using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
-using System.Globalization;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     /// <summary>
     /// Base user control for use in Raptor project.

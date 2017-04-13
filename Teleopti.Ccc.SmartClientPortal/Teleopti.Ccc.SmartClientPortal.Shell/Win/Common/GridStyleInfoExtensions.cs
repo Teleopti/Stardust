@@ -1,7 +1,7 @@
 using System.Reflection;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     public static class GridStyleInfoExtensions
     {

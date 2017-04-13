@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Syncfusion.Styles;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Tooltip
 {
     public class GridExcelTipStyleProperties : GridStyleInfoCustomProperties
     {
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
         {
             style.ResetValue(ExcelTipTextProperty);
         }
-        [EditorBrowsableAttribute(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeExcelTipText()
         {
             return style.HasValue(ExcelTipTextProperty);

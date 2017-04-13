@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Scheduling;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.WinCode.Scheduling;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class RequestReplyStatusChangeDialog : BaseDialogForm
 	{

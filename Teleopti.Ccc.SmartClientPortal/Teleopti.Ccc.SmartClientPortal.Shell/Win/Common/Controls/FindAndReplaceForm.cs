@@ -6,7 +6,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
 	public partial class FindAndReplaceForm : BaseDialogForm
 	{

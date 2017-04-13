@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Globalization;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
-namespace Teleopti.Ccc.Win.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	public partial class PromptDoubleBox : BaseDialogForm
 	{

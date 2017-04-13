@@ -4,7 +4,7 @@ using System.ComponentModel;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
     [Browsable(true), Category("Teleopti Controls")]
     public partial class Office2007OutlookTimePicker : Syncfusion.Windows.Forms.Tools.ComboBoxAdv

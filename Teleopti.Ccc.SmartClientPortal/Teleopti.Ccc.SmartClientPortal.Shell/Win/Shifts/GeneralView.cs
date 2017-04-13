@@ -11,7 +11,7 @@ using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.WinCode.Shifts.Views;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
     /// <summary>
     /// General view

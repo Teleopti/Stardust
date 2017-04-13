@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 
-namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {
     /// <summary>
     /// Custom event arg for the DefinitionSetAddedEventArgs event occurs

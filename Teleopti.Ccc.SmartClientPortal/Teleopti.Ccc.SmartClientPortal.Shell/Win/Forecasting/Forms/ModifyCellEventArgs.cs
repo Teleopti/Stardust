@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
     public class ModifyCellEventArgs : EventArgs
     {

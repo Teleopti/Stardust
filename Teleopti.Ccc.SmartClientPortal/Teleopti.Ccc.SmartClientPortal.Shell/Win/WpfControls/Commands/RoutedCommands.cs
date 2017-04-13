@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace Teleopti.Ccc.Win.WpfControls.Commands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Commands
 {
 	public static class RoutedCommands
 	{

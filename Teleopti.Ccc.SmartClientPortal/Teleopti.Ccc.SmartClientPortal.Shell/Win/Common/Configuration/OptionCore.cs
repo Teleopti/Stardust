@@ -1,8 +1,8 @@
-﻿using Autofac;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -11,15 +11,13 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Payroll.DefinitionSets;
-using Teleopti.Ccc.Win.Payroll.Overtime;
-using Teleopti.Ccc.Win.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Overtime;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Common.Configuration.Rta;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	public sealed class OptionCore : IDisposable
 	{

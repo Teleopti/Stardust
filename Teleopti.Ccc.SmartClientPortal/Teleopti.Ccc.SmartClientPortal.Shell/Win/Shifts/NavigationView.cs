@@ -8,15 +8,14 @@ using Microsoft.Practices.Composite.Events;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Payroll.DefinitionSets;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Events;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.WinCode.Shifts.Views;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
 	public partial class NavigationView : BaseUserControl, INavigationView
 	{

@@ -1,7 +1,6 @@
-﻿using System.Windows.Forms;
-using DateSelectionControl=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionControl;
+﻿using DateSelectionControl=Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection.DateSelectionControl;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
 	partial class OpenScenarioForPeriod
 	{
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
             this.checkBoxAdvShrinkage = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
             this.checkBoxAdvCalculation = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
             this.checkBoxAdvValidation = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-            this.dateSelectionControl1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionControl();
+            this.dateSelectionControl1 = new DateSelectionControl();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panelSelection.SuspendLayout();

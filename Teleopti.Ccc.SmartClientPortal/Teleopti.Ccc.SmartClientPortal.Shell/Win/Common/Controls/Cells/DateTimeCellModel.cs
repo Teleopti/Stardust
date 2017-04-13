@@ -1,13 +1,13 @@
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Windows.Forms;
+using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Syncfusion.Drawing;
-using System.Windows.Forms;
-using System.Drawing;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Cells
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {
     [Serializable]
 	[System.ComponentModel.DesignerCategory("Code")]

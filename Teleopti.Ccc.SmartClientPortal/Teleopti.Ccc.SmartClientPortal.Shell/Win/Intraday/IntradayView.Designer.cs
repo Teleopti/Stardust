@@ -1,4 +1,7 @@
-namespace Teleopti.Ccc.Win.Intraday
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.ToolStripGallery;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 {
     partial class IntradayView
     {
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.statusStripExLastUpdate = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
 			this.toolStripStatusLabelLastUpdate = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusStripButtonServerUnavailable = new Syncfusion.Windows.Forms.Tools.StatusStripButton();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
 			this.toolStripTabItemHome = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonMainSave = new System.Windows.Forms.ToolStripButton();
@@ -75,7 +78,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripExLayouts = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.contextMenuStripExViews = new Syncfusion.Windows.Forms.Tools.ContextMenuStripEx();
 			this.toolStripMenuItemRemove = new System.Windows.Forms.ToolStripMenuItem();
-			this.teleoptiToolStripGalleryViews = new Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.TeleoptiToolStripGallery();
+			this.teleoptiToolStripGalleryViews = new TeleoptiToolStripGallery();
 			this.imageListLayouts = new System.Windows.Forms.ImageList(this.components);
 			this.toolStripButtonNewView = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonResetLayout = new System.Windows.Forms.ToolStripButton();
@@ -519,14 +522,14 @@ namespace Teleopti.Ccc.Win.Intraday
 
         #endregion
 
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+        private RibbonControlAdvFixed ribbonControlAdv1;
         private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemHome;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExDatePicker;
         private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemChart;
 		  private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExGridRowInChartButtons;
         private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItem1;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExLayouts;
-        private Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.TeleoptiToolStripGallery teleoptiToolStripGalleryViews;
+        private TeleoptiToolStripGallery teleoptiToolStripGalleryViews;
         private Syncfusion.Windows.Forms.Tools.ContextMenuStripEx contextMenuStripExViews;
         private System.Windows.Forms.ToolStripButton toolStripButtonNewView;
 		  private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRemove;

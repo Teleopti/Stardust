@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 
-namespace Teleopti.Ccc.Win.SmartParts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
 {
     /// <summary>
     /// Represents a class that holds environmental information of smart part framework.

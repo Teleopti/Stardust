@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Configuration.Columns;
-using System.Collections.ObjectModel;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Cursors=System.Windows.Forms.Cursors;
 using KeyEventArgs=System.Windows.Forms.KeyEventArgs;
 
-namespace Teleopti.Ccc.Win.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
 	public partial class AddressBookView : BaseDialogForm, IAddressBookView
 	{

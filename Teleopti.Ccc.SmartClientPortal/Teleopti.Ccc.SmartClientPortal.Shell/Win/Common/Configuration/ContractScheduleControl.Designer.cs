@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows.Forms;
-using Syncfusion.Windows.Forms.Grid;
+﻿using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
     partial class ContractScheduleControl
     {

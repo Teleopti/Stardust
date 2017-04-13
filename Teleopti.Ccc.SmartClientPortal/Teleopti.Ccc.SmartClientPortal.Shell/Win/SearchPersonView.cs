@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces.Domain;
-using System.Collections;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win
 {
 	public partial class SearchPersonView : BaseUserControl, ISearchPersonView
 	{

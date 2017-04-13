@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ImportForecast
 {
 	 partial class ImportForecastView
 	 {

@@ -3,7 +3,7 @@ using System.Drawing;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.SmartParts.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 {
     public interface IDrawSmartPart
     {

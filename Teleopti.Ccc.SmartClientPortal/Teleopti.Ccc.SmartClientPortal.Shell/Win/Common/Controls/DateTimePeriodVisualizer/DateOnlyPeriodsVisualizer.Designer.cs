@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateTimePeriodVisualizer
 {
     partial class DateOnlyPeriodsVisualizer
     {
@@ -33,7 +33,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.gradientLabelTextTemplate = new Syncfusion.Windows.Forms.Tools.GradientLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.gradientLabelColumnHeader = new Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer.DateOnlyPeriodVisualizerHeader();
+            this.gradientLabelColumnHeader = new DateOnlyPeriodVisualizerHeader();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 

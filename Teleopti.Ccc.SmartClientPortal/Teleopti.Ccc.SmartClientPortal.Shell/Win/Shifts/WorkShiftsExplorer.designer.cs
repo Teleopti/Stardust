@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 
-namespace Teleopti.Ccc.Win.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
 	partial class WorkShiftsExplorer
 	{
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.splitContainerAdvVertical = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
 			this.splitContainerAdvHorizontal = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
 			this.toolStripTabHome = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripExFile = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
@@ -688,7 +689,7 @@ namespace Teleopti.Ccc.Win.Shifts
 		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator2;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButton3;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButton4;
-		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+		private RibbonControlAdvFixed ribbonControlAdv1;
 		private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdvVertical;
 		private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdvHorizontal;
 		private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabHome;

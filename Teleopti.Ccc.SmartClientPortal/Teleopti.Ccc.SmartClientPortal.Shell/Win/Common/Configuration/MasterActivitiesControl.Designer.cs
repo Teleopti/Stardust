@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Common.Configuration
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
     partial class MasterActivitiesControl
     {
@@ -47,7 +49,7 @@
             this.buttonDelete = new Syncfusion.Windows.Forms.ButtonAdv();
             this.buttonAdd = new Syncfusion.Windows.Forms.ButtonAdv();
             this.labelSubHeader1 = new System.Windows.Forms.Label();
-            this.twoListSelector1 = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
+            this.twoListSelector1 = new TwoListSelector();
             this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
             this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
             this.labelHeader = new System.Windows.Forms.Label();

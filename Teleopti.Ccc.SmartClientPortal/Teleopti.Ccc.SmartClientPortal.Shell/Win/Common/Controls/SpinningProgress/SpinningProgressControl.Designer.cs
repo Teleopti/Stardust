@@ -1,12 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
-
-namespace Teleopti.Ccc.Win.Common.Controls.SpinningProgress
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress
 {
     partial class SpinningProgressControl : System.Windows.Forms.UserControl 
     { 

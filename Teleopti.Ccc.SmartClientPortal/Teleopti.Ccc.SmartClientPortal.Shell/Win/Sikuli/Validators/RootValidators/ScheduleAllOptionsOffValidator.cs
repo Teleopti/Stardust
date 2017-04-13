@@ -1,7 +1,7 @@
-﻿using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.AtomicValidators;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidators
 {
 	internal class ScheduleAllOptionsOffValidator : SchedulerRootValidator
 	{

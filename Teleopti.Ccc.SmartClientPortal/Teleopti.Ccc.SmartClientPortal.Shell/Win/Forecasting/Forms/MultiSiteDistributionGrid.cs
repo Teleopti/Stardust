@@ -1,6 +1,6 @@
 ﻿using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
     public class MultisiteDistributionGrid : GridControl
     {

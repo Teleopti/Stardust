@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Point=System.Drawing.Point;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     public partial class TimedWarningDialog : BaseDialogForm
     {

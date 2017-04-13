@@ -2,12 +2,12 @@
 using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Reporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	public partial class ReportSettingsHostView : BaseUserControl, IReportSettingsHostView
 	{

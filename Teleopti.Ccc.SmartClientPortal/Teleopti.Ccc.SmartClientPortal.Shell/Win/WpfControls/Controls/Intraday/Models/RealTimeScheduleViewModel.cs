@@ -6,7 +6,7 @@ using Teleopti.Ccc.WinCode.Common.Time.Timeline;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Intraday.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Models
 {
     public class RealTimeScheduleViewModel:DependencyObject, INotifyPropertyChanged
     {

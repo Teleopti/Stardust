@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     /// <summary>
     /// Represents a SortingModes (Ascending | Descending)

@@ -1,7 +1,7 @@
 ﻿
 using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Ccc.Win.SmartParts.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 {
     public interface IDrawingBehavior
     {

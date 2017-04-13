@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 {
 	partial class ShiftPerDateControl
 	{

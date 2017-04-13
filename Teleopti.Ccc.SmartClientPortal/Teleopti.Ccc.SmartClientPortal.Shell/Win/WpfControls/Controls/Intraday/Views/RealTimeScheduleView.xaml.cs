@@ -6,15 +6,15 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win.WpfControls.Controls.Intraday.Models;
-using Teleopti.Ccc.Win.WpfControls.Controls.Layers;
-using Teleopti.Ccc.Win.WpfControls.Controls.Time.Timeline;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Converters;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Intraday.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Views
 {
 	/// <summary>
 	/// Interaction logic for IntradayLayerView.xaml

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Backlog
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Backlog
 {
 	partial class OutboundStatusView
 	{

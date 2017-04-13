@@ -1,8 +1,8 @@
-﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Common.Interop.MultipleHostControl"
+﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop.MultipleHostControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:WincodeInterop="clr-namespace:Teleopti.Ccc.WinCode.Common.Interop;assembly=Teleopti.Ccc.WinCode"
-    xmlns:interop="clr-namespace:Teleopti.Ccc.Win.WpfControls.Common.Interop">
+    xmlns:interop="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop">
     <UserControl.Resources>
         <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>

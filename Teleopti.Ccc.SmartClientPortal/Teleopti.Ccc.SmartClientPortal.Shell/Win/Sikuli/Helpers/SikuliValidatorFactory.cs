@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidators;
 
-namespace Teleopti.Ccc.Win.Sikuli.Helpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 {
 	internal static class SikuliValidatorFactory
 	{

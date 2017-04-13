@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.AgentInfo;
 
-namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals
 {
 	public partial class PersonsThatChangedPersonSkillsDuringPeriodFinderView : Form
 	{

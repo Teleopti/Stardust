@@ -5,11 +5,11 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     /// <summary>
     /// Base user control with unit of work for use in Raptor project.
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Win.Common
                 runSql.PersistAll();
             }
 
-            Main.EntityEventAggregator.TriggerEntitiesNeedRefresh(ParentForm, updatesMade);
+            EntityEventAggregator.TriggerEntitiesNeedRefresh(ParentForm, updatesMade);
         }
         /// <summary>
         /// Disposes the local uows.

@@ -1,8 +1,8 @@
 ﻿using System.Windows.Forms;
-using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Win.SmartParts;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
     partial class ForecasterNavigator
     {
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 if (components != null)
                     components.Dispose();
                 SmartPartInvoker.ClearAllSmartParts();
-                Main.EntityEventAggregator.EntitiesNeedsRefresh -= entitiesNeedsRefresh;
+                EntityEventAggregator.EntitiesNeedsRefresh -= entitiesNeedsRefresh;
             }
             base.Dispose(disposing);
         }

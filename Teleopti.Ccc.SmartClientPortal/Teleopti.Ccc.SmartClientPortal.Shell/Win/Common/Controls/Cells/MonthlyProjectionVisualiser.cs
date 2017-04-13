@@ -9,7 +9,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Cells
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {
     public partial class MonthlyProjectionVisualiser : UserControl
     {

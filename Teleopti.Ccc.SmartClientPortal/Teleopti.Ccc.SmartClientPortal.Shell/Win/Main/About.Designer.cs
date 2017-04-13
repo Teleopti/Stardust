@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Main
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
 	partial class About
 	{
@@ -29,7 +31,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
 			this.textBoxAbout = new System.Windows.Forms.TextBox();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -388,7 +390,7 @@
 
 		#endregion
 
-		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+		private RibbonControlAdvFixed ribbonControlAdv1;
 		private System.Windows.Forms.TextBox textBoxAbout;
 		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;
 		private System.Windows.Forms.Label labelProductVersion;

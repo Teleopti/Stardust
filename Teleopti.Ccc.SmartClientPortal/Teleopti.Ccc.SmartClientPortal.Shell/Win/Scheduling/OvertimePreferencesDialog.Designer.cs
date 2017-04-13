@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	partial class OvertimePreferencesDialog
 	{
@@ -39,9 +41,9 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.comboBoxAdvActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.label5 = new System.Windows.Forms.Label();
-			this.fromToTimeDurationPicker1 = new Teleopti.Ccc.Win.Common.Controls.FromToTimeDurationPicker();
+			this.fromToTimeDurationPicker1 = new FromToTimeDurationPicker();
 			this.labelSpecifiedPeriod = new System.Windows.Forms.Label();
-			this.fromToTimePickerSpecifiedPeriod = new Teleopti.Ccc.Win.Common.Controls.FromToTimePicker();
+			this.fromToTimePickerSpecifiedPeriod = new FromToTimePicker();
 			this.label7 = new System.Windows.Forms.Label();
 			this.comboBoxAdvTag = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.comboBoxAdvOvertimeType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
@@ -534,13 +536,13 @@
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvActivity;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvTag;
 		private System.Windows.Forms.Label label5;
-		private Common.Controls.FromToTimeDurationPicker fromToTimeDurationPicker1;
+		private FromToTimeDurationPicker fromToTimeDurationPicker1;
 		  private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAllowBreakingNightlyRest;
 		  private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAllowBreakingWeeklyRest;
 		  private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAllowBreakingMaxTimePerWeek;
 		  private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxOnAvailableAgentsOnly;
 		  private System.Windows.Forms.Label labelSpecifiedPeriod;
-		  private Common.Controls.FromToTimePicker fromToTimePickerSpecifiedPeriod;
+		  private FromToTimePicker fromToTimePickerSpecifiedPeriod;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxShiftBags;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label3;

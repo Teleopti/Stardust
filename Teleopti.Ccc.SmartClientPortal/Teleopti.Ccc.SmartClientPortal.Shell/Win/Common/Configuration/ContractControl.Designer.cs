@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
     partial class ContractControl
     {
@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkBoxAdjustTimeBankWithSeasonality = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.autoLabelAdjustTimeBankWithPartTimePercentage = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabelAdjustTimeBankWithSeasonality = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.timeSpanTextBoxPlanningMax = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.timeSpanTextBoxPlanningMin = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.timeSpanTextBoxPlanningMax = new TimeSpanTextBox();
+			this.timeSpanTextBoxPlanningMin = new TimeSpanTextBox();
 			this.labelTimeBankMax = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.labelTimeBankMin = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel7 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
@@ -67,26 +67,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel10 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel8 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel4 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.textBoxExtMaxTimePerWeek = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.textBoxExtNightlyRestTime = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.textBoxExtWeeklyRestTime = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.textBoxExMinTimeSchedulePeriod = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.textBoxExtMaxTimePerWeek = new TimeSpanTextBox();
+			this.textBoxExtNightlyRestTime = new TimeSpanTextBox();
+			this.textBoxExtWeeklyRestTime = new TimeSpanTextBox();
+			this.textBoxExMinTimeSchedulePeriod = new TimeSpanTextBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.timeSpanTextBoxNegativeTolerance = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.timeSpanTextBoxPositiveTolerance = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.timeSpanTextBoxNegativeTolerance = new TimeSpanTextBox();
+			this.timeSpanTextBoxPositiveTolerance = new TimeSpanTextBox();
 			this.autoLabel9 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.autoLabel12 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.numericUpDownNegativeDayOff = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
 			this.numericUpDownPositiveDayOff = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-			this.textBoxExtAvgWorkTimePerDay = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.textBoxExtAvgWorkTimePerDay = new TimeSpanTextBox();
 			this.AutoLabelFullDayAbsence = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
 			this.radioButtonFromSchedule = new System.Windows.Forms.RadioButton();
 			this.radioButtonFromContract = new System.Windows.Forms.RadioButton();
 			this.autoLabel13 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.textBoxExtMinTimePerWeek = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.textBoxExtMinTimePerWeek = new TimeSpanTextBox();
 			this.tableLayoutPanelSubHeader3 = new System.Windows.Forms.TableLayoutPanel();
 			this.labelSubHeader3 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
@@ -1100,17 +1100,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
         private System.Windows.Forms.CheckedListBox checkedListBoxMultiplicatorDefenitionSets;
         private Syncfusion.Windows.Forms.Tools.AutoLabel labelConnectedMultiplicatorDefinitionSets;
-        private Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox textBoxExtAvgWorkTimePerDay;
-        private Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox textBoxExtMaxTimePerWeek;
-        private Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox textBoxExtNightlyRestTime;
-        private Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox textBoxExtWeeklyRestTime;
+        private TimeSpanTextBox textBoxExtAvgWorkTimePerDay;
+        private TimeSpanTextBox textBoxExtMaxTimePerWeek;
+        private TimeSpanTextBox textBoxExtNightlyRestTime;
+        private TimeSpanTextBox textBoxExtWeeklyRestTime;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelInfoAboutChanges;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelChangeInfo;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel6;
-        private Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox timeSpanTextBoxPositiveTolerance;
+        private TimeSpanTextBox timeSpanTextBoxPositiveTolerance;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel3;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel7;
-        private Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox textBoxExMinTimeSchedulePeriod;
+        private TimeSpanTextBox textBoxExMinTimeSchedulePeriod;
         private Controls.TimeSpanTextBox timeSpanTextBoxPlanningMax;
         private Controls.TimeSpanTextBox timeSpanTextBoxPlanningMin;
         private Syncfusion.Windows.Forms.Tools.AutoLabel labelTimeBankMax;

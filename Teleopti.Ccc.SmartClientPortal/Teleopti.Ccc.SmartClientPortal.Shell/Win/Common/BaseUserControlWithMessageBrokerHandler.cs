@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     public class BaseUserControlWithMessageBrokerHandler : BaseUserControl, ILocalized, IHelpContext
     {

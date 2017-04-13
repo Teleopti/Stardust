@@ -1,7 +1,7 @@
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
 	public static class DateTimePickerExtensions
 	{

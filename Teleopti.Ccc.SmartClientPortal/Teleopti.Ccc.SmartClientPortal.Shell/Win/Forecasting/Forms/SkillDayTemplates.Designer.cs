@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
     partial class SkillDayTemplates
     {
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
 			this.tabControlAdvWeekDays = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvDay0 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tabPageAdvDay1 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
@@ -333,7 +335,7 @@
 
         #endregion
 
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+        private RibbonControlAdvFixed ribbonControlAdv1;
         private Syncfusion.Windows.Forms.ButtonAdv btnFinish;
         private Syncfusion.Windows.Forms.ButtonAdv btnForward;
         private Syncfusion.Windows.Forms.ButtonAdv btnBack;

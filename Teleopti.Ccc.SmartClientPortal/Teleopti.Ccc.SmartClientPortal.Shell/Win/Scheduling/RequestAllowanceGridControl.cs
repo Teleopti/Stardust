@@ -1,7 +1,7 @@
 ﻿using System;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
     public partial class RequestAllowanceGridControl : GridControl
     {

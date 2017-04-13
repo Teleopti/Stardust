@@ -4,7 +4,7 @@ using System.Globalization;
 using Teleopti.Interfaces.Domain;
 using HorizontalAlignment=System.Windows.Forms.HorizontalAlignment;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
     public partial class TimeSpanTextBox : BaseUserControl
     {

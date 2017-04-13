@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Grouping
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {
 	public class FindPersonsPresenter
 	{

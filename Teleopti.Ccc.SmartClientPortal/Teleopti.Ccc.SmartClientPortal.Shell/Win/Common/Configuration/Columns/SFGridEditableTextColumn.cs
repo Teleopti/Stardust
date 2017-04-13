@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.Common.Configuration.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
 {
 	public class SFGridEditableTextColumn<T> : SFGridColumnBase<T>
 	{

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 	public partial class PromptTextBox : BaseDialogForm
 	{

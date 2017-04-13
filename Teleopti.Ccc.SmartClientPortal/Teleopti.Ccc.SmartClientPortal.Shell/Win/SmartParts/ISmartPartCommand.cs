@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Win.SmartParts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
 {
     /// <summary>
     /// Defines the functionality of a Smart Part Command.

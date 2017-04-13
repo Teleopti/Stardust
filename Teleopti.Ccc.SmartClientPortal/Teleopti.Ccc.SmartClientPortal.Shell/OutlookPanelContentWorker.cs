@@ -3,16 +3,16 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Win.Budgeting;
-using Teleopti.Ccc.Win.Forecasting.Forms;
-using Teleopti.Ccc.Win.Intraday;
-using Teleopti.Ccc.Win.Main;
-using Teleopti.Ccc.Win.Matrix;
-using Teleopti.Ccc.Win.Payroll;
-using Teleopti.Ccc.Win.PeopleAdmin.Controls;
-using Teleopti.Ccc.Win.PerformanceManager;
-using Teleopti.Ccc.Win.Scheduling;
-using Teleopti.Ccc.Win.Shifts;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Matrix;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts;
 using Teleopti.Ccc.WinCode.Grouping;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell

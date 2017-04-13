@@ -1,6 +1,6 @@
 ﻿using UserControl=System.Windows.Controls.UserControl;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.AddToSchedule
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.AddToSchedule
 {
     /// <summary>
     /// Interaction logic for AddAbsencePreview.xaml

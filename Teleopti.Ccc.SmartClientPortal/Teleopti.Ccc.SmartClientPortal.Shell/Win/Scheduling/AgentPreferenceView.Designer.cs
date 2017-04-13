@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	partial class AgentPreferenceView
 	{
@@ -35,26 +37,26 @@
 			this.comboBoxAdvActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
-			this.outlookTimePickerActivityEndMin = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
-			this.outlookTimePickerActivityEndMax = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerActivityEndMin = new OutlookTimePicker();
+			this.outlookTimePickerActivityEndMax = new OutlookTimePicker();
 			this.label9 = new System.Windows.Forms.Label();
-			this.outlookTimePickerActivityLengthMin = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
-			this.outlookTimePickerActivityLengthMax = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerActivityLengthMin = new OutlookTimePicker();
+			this.outlookTimePickerActivityLengthMax = new OutlookTimePicker();
 			this.label10 = new System.Windows.Forms.Label();
-			this.outlookTimePickerActivityStartMin = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
-			this.outlookTimePickerActivityStartMax = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerActivityStartMin = new OutlookTimePicker();
+			this.outlookTimePickerActivityStartMax = new OutlookTimePicker();
 			this.tabPageAdvExtended = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelExtended = new System.Windows.Forms.TableLayoutPanel();
 			this.label5 = new System.Windows.Forms.Label();
-			this.outlookTimePickerContractShiftCategoryMin = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
-			this.outlookTimePickerContractShiftCategoryMax = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerContractShiftCategoryMin = new OutlookTimePicker();
+			this.outlookTimePickerContractShiftCategoryMax = new OutlookTimePicker();
 			this.label6 = new System.Windows.Forms.Label();
-			this.outlookTimePickerShiftCategoryStartMin = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
-			this.outlookTimePickerShiftCategoryStartMax = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerShiftCategoryStartMin = new OutlookTimePicker();
+			this.outlookTimePickerShiftCategoryStartMax = new OutlookTimePicker();
 			this.label7 = new System.Windows.Forms.Label();
-			this.outlookTimePickerShiftCategoryEndMin = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerShiftCategoryEndMin = new OutlookTimePicker();
 			this.checkBoxAdvShiftCategoryNextDayMin = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.outlookTimePickerShiftCategoryEndMax = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
+			this.outlookTimePickerShiftCategoryEndMax = new OutlookTimePicker();
 			this.checkBoxAdvShiftCategoryNextDayMax = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -821,24 +823,24 @@
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label7;
-		private Common.Controls.OutlookTimePicker outlookTimePickerContractShiftCategoryMin;
-		private Common.Controls.OutlookTimePicker outlookTimePickerContractShiftCategoryMax;
-		private Common.Controls.OutlookTimePicker outlookTimePickerShiftCategoryStartMin;
-		private Common.Controls.OutlookTimePicker outlookTimePickerShiftCategoryStartMax;
-		private Common.Controls.OutlookTimePicker outlookTimePickerShiftCategoryEndMin;
-		private Common.Controls.OutlookTimePicker outlookTimePickerShiftCategoryEndMax;
+		private OutlookTimePicker outlookTimePickerContractShiftCategoryMin;
+		private OutlookTimePicker outlookTimePickerContractShiftCategoryMax;
+		private OutlookTimePicker outlookTimePickerShiftCategoryStartMin;
+		private OutlookTimePicker outlookTimePickerShiftCategoryStartMax;
+		private OutlookTimePicker outlookTimePickerShiftCategoryEndMin;
+		private OutlookTimePicker outlookTimePickerShiftCategoryEndMax;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelActivity;
 		private System.Windows.Forms.Label label8;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvActivity;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.Label label11;
-		private Common.Controls.OutlookTimePicker outlookTimePickerActivityLengthMin;
-		private Common.Controls.OutlookTimePicker outlookTimePickerActivityLengthMax;
-		private Common.Controls.OutlookTimePicker outlookTimePickerActivityStartMin;
-		private Common.Controls.OutlookTimePicker outlookTimePickerActivityStartMax;
-		private Common.Controls.OutlookTimePicker outlookTimePickerActivityEndMin;
-		private Common.Controls.OutlookTimePicker outlookTimePickerActivityEndMax;
+		private OutlookTimePicker outlookTimePickerActivityLengthMin;
+		private OutlookTimePicker outlookTimePickerActivityLengthMax;
+		private OutlookTimePicker outlookTimePickerActivityStartMin;
+		private OutlookTimePicker outlookTimePickerActivityStartMax;
+		private OutlookTimePicker outlookTimePickerActivityEndMin;
+		private OutlookTimePicker outlookTimePickerActivityEndMax;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvShiftCategoryNextDayMax;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvShiftCategoryNextDayMin;
 		private System.Windows.Forms.ErrorProvider errorProviderExtended;

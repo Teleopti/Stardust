@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     public partial class BaseDialogForm : MetroForm, ILocalized, IHelpForm
     {

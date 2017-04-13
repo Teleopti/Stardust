@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Win.GridBinding
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.GridBinding
 {
 	public class ModelDictionaryProperty<T, TItemType> : IModelProperty<T>
 	{

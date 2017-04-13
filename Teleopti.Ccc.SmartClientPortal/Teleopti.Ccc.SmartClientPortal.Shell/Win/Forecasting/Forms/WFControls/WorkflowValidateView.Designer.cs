@@ -1,9 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using DateSelectionFromTo=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using DateSelectionFromTo=Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection.DateSelectionFromTo;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 {
 	partial class WorkflowValidateView
 	{
@@ -42,8 +41,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.xpTaskBarBoxSelectPeriod = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
 			this.gradientPanelSelectPeriod = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.buttonAdvCancelLoad = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.dateSelectionFromToHistorical = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
-			this.dateSelectionFromToTarget = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
+			this.dateSelectionFromToHistorical = new DateSelectionFromTo();
+			this.dateSelectionFromToTarget = new DateSelectionFromTo();
 			this.xpTaskBarBoxDeviations = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
 			this.gradientPanelDeviations = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.percentTextBoxDeviationAfterTaskTime = new Syncfusion.Windows.Forms.Tools.PercentTextBox();
 			this.xpTaskBarBoxSpecialEvents = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
 			this.gradientPanelSpecialEvents = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-			this.outlierBoxControl = new Teleopti.Ccc.Win.Common.Controls.OutlierBox();
+			this.outlierBoxControl = new OutlierBox();
 			this.splitContainerAdv2 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.backgroundWorkerStatistics = new System.ComponentModel.BackgroundWorker();
@@ -481,7 +480,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxSpecialEvents;
 		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelSpecialEvents;
-		private Common.Controls.OutlierBox outlierBoxControl;
+		private OutlierBox outlierBoxControl;
 		private System.ComponentModel.BackgroundWorker backgroundWorkerStatistics;
 		private System.ComponentModel.BackgroundWorker backgroundWorkerValidationPeriod;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancelLoad;

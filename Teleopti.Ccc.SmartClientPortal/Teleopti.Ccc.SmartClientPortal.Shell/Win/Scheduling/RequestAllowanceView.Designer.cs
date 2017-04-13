@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.Windows.Forms;
-
-namespace Teleopti.Ccc.Win.Scheduling
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
     partial class RequestAllowanceView
     {
@@ -51,7 +48,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.radioButtonFullAllowance = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.radioButtonShrinkedAllowance = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.comboBoxAdvBudgetGroup = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.requestAllowanceGridControl = new Teleopti.Ccc.Win.Scheduling.RequestAllowanceGridControl();
+			this.requestAllowanceGridControl = new RequestAllowanceGridControl();
 			this.tableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonFullAllowance)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonShrinkedAllowance)).BeginInit();

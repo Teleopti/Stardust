@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Drawing;
-using Teleopti.Ccc.Win.Forecasting.Forms.WFControls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Rows;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Rows
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 {
 	class TaskOwnerDayFilterGridRow : GridRow
 	{

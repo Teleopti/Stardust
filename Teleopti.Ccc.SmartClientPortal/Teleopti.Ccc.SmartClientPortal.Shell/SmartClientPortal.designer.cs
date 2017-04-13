@@ -24,7 +24,8 @@
 using System.Windows.Forms;
 using EO.WebBrowser;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Win.SmartParts;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.webControlDataProtection = new EO.WebBrowser.WinForm.WebControl();
 			this.wfmWebView = new EO.WebBrowser.WebView();
 			this.gridWorkspace = new GridWorkspace();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
 			this.backStageViewMain = new Syncfusion.Windows.Forms.BackStageView(this.components);
 			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
 			this.backStageButtonOptions = new Syncfusion.Windows.Forms.BackStageButton();
@@ -604,7 +605,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainer;
 		
 		private GridWorkspace gridWorkspace;
-		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+		private RibbonControlAdvFixed ribbonControlAdv1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCurrentDatabase;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSpring;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRoger65;

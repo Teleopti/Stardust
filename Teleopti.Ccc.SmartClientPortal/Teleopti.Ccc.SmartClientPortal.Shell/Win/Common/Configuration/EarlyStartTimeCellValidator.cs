@@ -1,8 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Settings;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	public class EarlyStartTimeCellValidator<T> : TimeLimitCellValidatorBase<T>
 		where T : ScheduleRestrictionBaseView

@@ -1,9 +1,9 @@
-﻿<syncfusion:ChromelessWindow x:Class="Teleopti.Ccc.Win.WpfControls.Common.OkCancelWindow"
+﻿<syncfusion:ChromelessWindow x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.OkCancelWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
 							 xmlns:syncfusion="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.Wpf"
-							 xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters"
+							 xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
 							 Title="{Binding Path=Title}" WindowStyle="ToolWindow" ShowIcon="False" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="NoResize" >
     
     <syncfusion:ChromelessWindow.Resources>

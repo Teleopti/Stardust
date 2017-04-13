@@ -1,5 +1,7 @@
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 {
 	partial class SkillThresholds
 	{
@@ -32,12 +34,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SkillThresholds));
 			this.labelSeriousUnderstaffing = new System.Windows.Forms.Label();
 			this.tableLayoutPanelForRtl = new System.Windows.Forms.TableLayoutPanel();
-			this.percentTextBoxOverstaffing = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
+			this.percentTextBoxOverstaffing = new TeleoptiPercentTextBox();
 			this.labelOverstaffing = new System.Windows.Forms.Label();
 			this.labelUnderstaffing = new System.Windows.Forms.Label();
-			this.percentTextBoxSeriousUnderstaffing = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
-			this.percentTextBoxUnderstaffing = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
-			this.percentTextBoxUnderstaffingFor = new Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox();
+			this.percentTextBoxSeriousUnderstaffing = new TeleoptiPercentTextBox();
+			this.percentTextBoxUnderstaffing = new TeleoptiPercentTextBox();
+			this.percentTextBoxUnderstaffingFor = new TeleoptiPercentTextBox();
 			this.labelFor = new System.Windows.Forms.Label();
 			this.tableLayoutPanelForRtl.SuspendLayout();
 			this.SuspendLayout();
@@ -137,11 +139,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 		private System.Windows.Forms.Label labelSeriousUnderstaffing;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelForRtl;
 		private System.Windows.Forms.Label labelUnderstaffing;
-		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxSeriousUnderstaffing;
-		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxUnderstaffing;
-		private Common.Controls.TeleoptiPercentTextBox percentTextBoxUnderstaffingFor;
+		private TeleoptiPercentTextBox percentTextBoxSeriousUnderstaffing;
+		private TeleoptiPercentTextBox percentTextBoxUnderstaffing;
+		private TeleoptiPercentTextBox percentTextBoxUnderstaffingFor;
 		private System.Windows.Forms.Label labelFor;
-		private Common.Controls.TeleoptiPercentTextBox percentTextBoxOverstaffing;
+		private TeleoptiPercentTextBox percentTextBoxOverstaffing;
 		private System.Windows.Forms.Label labelOverstaffing;
 	}
 }

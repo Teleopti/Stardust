@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Main
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
     partial class ApplyProductActivationKey
     {
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
 			this.buttonAdvApply = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonBrowse = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -223,7 +225,7 @@
 
         #endregion
 
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+        private RibbonControlAdvFixed ribbonControlAdv1;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvApply;
         private Syncfusion.Windows.Forms.ButtonAdv buttonBrowse;

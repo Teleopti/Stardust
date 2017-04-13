@@ -8,14 +8,14 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
 using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Interfaces.Domain;
 using VisualPayloadInfo = Teleopti.Ccc.WinCode.Shifts.VisualPayloadInfo;
 
-namespace Teleopti.Ccc.Win.Shifts.Grids
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts.Grids
 {
 	public class VisualizeGrid : GridViewBase<IVisualizePresenter, ReadOnlyCollection<VisualPayloadInfo>>
 	{

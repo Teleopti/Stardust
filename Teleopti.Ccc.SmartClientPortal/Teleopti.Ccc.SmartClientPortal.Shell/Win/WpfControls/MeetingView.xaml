@@ -1,8 +1,8 @@
-﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.MeetingView"
+﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.MeetingView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters"
-			 xmlns:wpfControls="clr-namespace:Teleopti.Ccc.Win.WpfControls">
+			 xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
+			 xmlns:wpfControls="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls">
    
     <UserControl.Resources>
         <ResourceDictionary>

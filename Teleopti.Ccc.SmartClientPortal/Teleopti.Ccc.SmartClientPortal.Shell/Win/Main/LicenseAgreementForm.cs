@@ -1,7 +1,7 @@
-﻿using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
 	public partial class LicenseAgreementForm : BaseDialogForm
 	{

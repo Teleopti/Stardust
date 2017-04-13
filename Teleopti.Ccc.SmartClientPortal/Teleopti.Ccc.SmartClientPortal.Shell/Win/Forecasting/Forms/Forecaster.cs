@@ -6,12 +6,11 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using log4net;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
@@ -22,24 +21,25 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Configuration;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Common.Controls.Chart;
-using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.Win.Common.Controls.ToolStripGallery;
-using Teleopti.Ccc.Win.ExceptionHandling;
-using Teleopti.Ccc.Win.Main;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.ToolStripGallery;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
+using ToolStripItemClickedEventArgs = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
 
 	public partial class Forecaster : BaseRibbonForm, IFinishWorkload
@@ -1673,21 +1673,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			GridChartManager.SetChartToolTip(e.Region, _chartControl);
 		}
 
-		private void teleoptiToolStripGallerySkillItemClicked(object sender, Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
+		private void teleoptiToolStripGallerySkillItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			if (e.ClickedItem == null) return;
 			if (e.ClickedItem.Tag as bool? == true) return;
 			setupGalleryItem(e.ContextMenuStrip, e.ClickedItem.Text, TemplateTarget.Skill);
 		}
 
-		private void teleoptiToolStripGalleryWorkloadItemClicked(object sender, Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
+		private void teleoptiToolStripGalleryWorkloadItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			if (e.ClickedItem == null) return;
 			if (e.ClickedItem.Tag as bool? == true) return;
 			setupGalleryItem(e.ContextMenuStrip, e.ClickedItem.Text, TemplateTarget.Workload);
 		}
 
-		private void teleoptiToolStripGalleryMultisiteSkillItemClicked(object sender, Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
+		private void teleoptiToolStripGalleryMultisiteSkillItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			if (e.ClickedItem == null) return;
 			if (e.ClickedItem.Tag as bool? == true) return;

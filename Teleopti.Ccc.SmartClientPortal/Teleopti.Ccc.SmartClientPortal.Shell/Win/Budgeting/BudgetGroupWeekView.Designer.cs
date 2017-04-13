@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Budgeting
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	partial class BudgetGroupWeekView
 	{
@@ -33,7 +35,7 @@
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			this.gridControlWeekView = new Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl();
+			this.gridControlWeekView = new TeleoptiGridControl();
 			this.budgetGroupWeekViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemAddShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUpdateShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
@@ -259,6 +261,6 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemModifySelection;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdateShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdateEfficiencyShrinkageRow;
-		private Common.Controls.TeleoptiGridControl gridControlWeekView;
+		private TeleoptiGridControl gridControlWeekView;
 	}
 }

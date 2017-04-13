@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Common.Configuration
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	partial class GamificationSettingRuleWithDifferentThresholdControl
 	{
@@ -46,9 +48,9 @@
 			this.labelSetBadgeSilverThresholdForAdherence = new System.Windows.Forms.Label();
 			this.label14 = new System.Windows.Forms.Label();
 			this.doubleTextBoxBronzeThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
-			this.timeSpanTextBoxGoldThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.timeSpanTextBoxSilverThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.timeSpanTextBoxBronzeThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.timeSpanTextBoxGoldThresholdForAHT = new TimeSpanTextBox();
+			this.timeSpanTextBoxSilverThresholdForAHT = new TimeSpanTextBox();
+			this.timeSpanTextBoxBronzeThresholdForAHT = new TimeSpanTextBox();
 			this.doubleTextBoxSilverThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
 			this.numericUpDownGoldThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDownSilverThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();

@@ -1,10 +1,10 @@
 using System;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals
 {
     public class ResourceGridCutPasteHandler : BaseCutPasteHandler
     {

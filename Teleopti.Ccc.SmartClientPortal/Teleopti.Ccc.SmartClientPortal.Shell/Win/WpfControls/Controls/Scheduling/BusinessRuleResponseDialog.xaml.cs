@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Windows;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.WpfControls.Common.Interop;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop;
 using Teleopti.Ccc.WinCode.Scheduling;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Scheduling
 {
     /// <summary>
     /// Interaction logic for BusinessRuleResponseWindow.xaml

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public class OverviewDrawMainShift
 	{

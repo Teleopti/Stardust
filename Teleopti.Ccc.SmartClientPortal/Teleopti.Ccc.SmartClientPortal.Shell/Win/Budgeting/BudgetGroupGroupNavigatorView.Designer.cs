@@ -1,6 +1,4 @@
-﻿using Syncfusion.Windows.Forms.Tools;
-
-namespace Teleopti.Ccc.Win.Budgeting
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
     partial class BudgetGroupGroupNavigatorView
     {

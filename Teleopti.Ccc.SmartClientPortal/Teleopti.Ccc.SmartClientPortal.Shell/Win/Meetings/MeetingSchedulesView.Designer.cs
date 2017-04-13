@@ -1,6 +1,6 @@
-﻿using Syncfusion.Windows.Forms.Grid;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
 	partial class MeetingSchedulesView
 	{
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.autoLabelEndTime = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.dateTimePickerAdvStartDate = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
 			this.dateTimePickerAdvEndDate = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
-			this.outlookTimePickerStartTime = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
-			this.outlookTimePickerEndTime = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.outlookTimePickerStartTime = new Office2007OutlookTimePicker(this.components);
+			this.outlookTimePickerEndTime = new Office2007OutlookTimePicker(this.components);
 			this.tableLayoutPanelCalendar = new System.Windows.Forms.TableLayoutPanel();
 			this.monthCalendarAdvDateSelection = new Syncfusion.Windows.Forms.Tools.MonthCalendarAdv();
 			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.autoLabelEndSpan = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabelStartSpan = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.office2007OutlookTimePickerStartSpan = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
-			this.office2007OutlookTimePickerEndSpan = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.office2007OutlookTimePickerStartSpan = new Office2007OutlookTimePicker(this.components);
+			this.office2007OutlookTimePickerEndSpan = new Office2007OutlookTimePicker(this.components);
 			this.tableLayoutPanelMain.SuspendLayout();
 			this.tableLayoutPanelGrid.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlSchedules)).BeginInit();
@@ -650,16 +650,16 @@ namespace Teleopti.Ccc.Win.Meetings
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelEndTime;
 		private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvStartDate;
 		private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvEndDate;
-		private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker outlookTimePickerStartTime;
-		private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker outlookTimePickerEndTime;
+		private Office2007OutlookTimePicker outlookTimePickerStartTime;
+		private Office2007OutlookTimePicker outlookTimePickerEndTime;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelCalendar;
 		private Syncfusion.Windows.Forms.Tools.MonthCalendarAdv monthCalendarAdvDateSelection;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel2;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelEndSpan;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelStartSpan;
-		private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker office2007OutlookTimePickerStartSpan;
-		private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker office2007OutlookTimePickerEndSpan;
+		private Office2007OutlookTimePicker office2007OutlookTimePickerStartSpan;
+		private Office2007OutlookTimePicker office2007OutlookTimePickerEndSpan;
 
 	}
 }

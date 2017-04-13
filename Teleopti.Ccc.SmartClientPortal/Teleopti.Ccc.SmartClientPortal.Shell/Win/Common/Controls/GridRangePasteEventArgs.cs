@@ -1,7 +1,7 @@
 ﻿using System;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
     public class GridRangePasteEventArgs : EventArgs
     {

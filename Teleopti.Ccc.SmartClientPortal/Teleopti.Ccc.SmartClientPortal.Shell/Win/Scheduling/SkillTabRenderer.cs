@@ -2,7 +2,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public class SkillTabRenderer : TabRendererMetro
 	{

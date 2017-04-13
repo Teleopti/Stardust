@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
 {
     public class GridInCellColumn<T> : ColumnBase<T>
     {

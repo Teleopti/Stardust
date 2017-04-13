@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
     partial class MeetingRecurrenceView
     {
@@ -36,10 +35,10 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.groupBoxAppointmentTime = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.outlookTimePickerEnd = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.outlookTimePickerEnd = new Office2007OutlookTimePicker(this.components);
 			this.labelStart = new System.Windows.Forms.Label();
 			this.labelEnd = new System.Windows.Forms.Label();
-			this.outlookTimePickerStart = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.outlookTimePickerStart = new Office2007OutlookTimePicker(this.components);
 			this.groupBoxRecurrencePattern = new System.Windows.Forms.GroupBox();
 			this.splitContainerAdv1 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -644,8 +643,8 @@ namespace Teleopti.Ccc.Win.Meetings
         private System.Windows.Forms.Label labelRangeStart;
         private System.Windows.Forms.Label labelEndBy;
         private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvStart;
-        private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker outlookTimePickerStart;
-        private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker outlookTimePickerEnd;
+        private Office2007OutlookTimePicker outlookTimePickerStart;
+        private Office2007OutlookTimePicker outlookTimePickerEnd;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvRemove;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;

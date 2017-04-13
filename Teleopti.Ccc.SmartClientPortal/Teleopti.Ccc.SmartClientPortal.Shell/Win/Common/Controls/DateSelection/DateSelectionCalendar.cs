@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {
 	public partial class DateSelectionCalendar : IDateSelectionControl
 	{

@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace Teleopti.Ccc.Win.Common.Controls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
 	[ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
 	public class MetroToolStripProgressBar : ToolStripControlHost

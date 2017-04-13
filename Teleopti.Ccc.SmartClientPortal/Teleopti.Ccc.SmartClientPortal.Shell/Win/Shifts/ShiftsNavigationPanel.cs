@@ -1,11 +1,11 @@
 ﻿using System.Windows.Forms;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.ExceptionHandling;
 
-namespace Teleopti.Ccc.Win.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
-    public partial class ShiftsNavigationPanel : Common.BaseUserControl
+    public partial class ShiftsNavigationPanel : SmartClientPortal.Shell.Win.Common.BaseUserControl
     {
         private readonly ShiftsModule.IShiftsExplorerFactory _shiftsExplorerFactory;
 	    private Form _mainWindow;

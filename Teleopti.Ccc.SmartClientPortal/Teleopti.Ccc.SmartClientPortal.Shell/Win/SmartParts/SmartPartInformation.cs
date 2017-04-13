@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Win.SmartParts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
 {
     /// <summary>
     /// Represents a Property object that hold s the information about Smart

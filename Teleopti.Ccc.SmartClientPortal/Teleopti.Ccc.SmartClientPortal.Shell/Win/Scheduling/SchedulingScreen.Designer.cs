@@ -1,9 +1,10 @@
-﻿using System;
-using System.Windows.Forms;
-using Teleopti.Ccc.Win.WpfControls.Controls.Notes;
+﻿using System.Windows.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
     partial class SchedulingScreen
     {
@@ -67,9 +68,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup3 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulingScreen));
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.toolStripSpinningProgressControl1 = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
+			this.toolStripSpinningProgressControl1 = new ToolStripSpinningProgressControl();
 			this.toolStripStatusLabelStatus = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStripProgressBar1 = new Teleopti.Ccc.Win.Common.Controls.MetroToolStripProgressBar();
+			this.toolStripProgressBar1 = new MetroToolStripProgressBar();
 			this.toolStripStatusLabelNumberOfAgents = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripSplitButtonTimeZone = new System.Windows.Forms.ToolStripSplitButton();
 			this.toolStripStatusLabelScheduleTag = new System.Windows.Forms.ToolStripStatusLabel();
@@ -173,7 +174,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ToolStripMenuItemOccupancyAdjustment = new System.Windows.Forms.ToolStripMenuItem();
 			this.agentSkillAnalyzerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.backgroundWorkerLoadData = new System.ComponentModel.BackgroundWorker();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
 			this.backStageView = new Syncfusion.Windows.Forms.BackStageView(this.components);
 			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
 			this.backStageButtonMainMenuSave = new Syncfusion.Windows.Forms.BackStageButton();
@@ -323,7 +324,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemRestrictionCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRestrictionPaste = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRestrictionDelete = new System.Windows.Forms.ToolStripMenuItem();
-			this.schedulerSplitters1 = new Teleopti.Ccc.Win.Scheduling.SchedulerSplitters();
+			this.schedulerSplitters1 = new SchedulerSplitters();
 			this.contextMenuStripRequests = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.ToolStripMenuItemViewDetails = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemFindMatching2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -3514,8 +3515,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripButton btnFilter;
 		private System.Windows.Forms.ToolStripButton btnRightLeft;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelStatus;
-		private Teleopti.Ccc.Win.Common.Controls.MetroToolStripProgressBar toolStripProgressBar1;
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+		private MetroToolStripProgressBar toolStripProgressBar1;
+        private RibbonControlAdvFixed ribbonControlAdv1;
         private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemHome;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCut;
@@ -3593,7 +3594,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private NotesEditor notesEditor;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddOverTime;
         private System.Windows.Forms.ImageList imageListSkillTypeIcons;
-        private Teleopti.Ccc.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl toolStripSpinningProgressControl1;
+        private ToolStripSpinningProgressControl toolStripSpinningProgressControl1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemWriteProtectSchedule;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemWriteProtectSchedule2;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;

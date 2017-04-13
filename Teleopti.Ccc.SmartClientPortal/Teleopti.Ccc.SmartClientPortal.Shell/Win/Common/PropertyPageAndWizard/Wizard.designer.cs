@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 {
     partial class Wizard
     {

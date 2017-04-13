@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Reporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	public partial class ReportPersonsSelectionView : BaseRibbonForm, IReportPersonsSelectionView
 	{

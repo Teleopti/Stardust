@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 {
 	partial class SelectDateAndScenario
 	{
@@ -30,7 +32,7 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectDateAndScenario));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.reportDateFromToSelector1 = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
+			this.reportDateFromToSelector1 = new ReportDateFromToSelector();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxScenario = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.labelScenario = new System.Windows.Forms.Label();
@@ -124,7 +126,7 @@
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private Reporting.ReportDateFromToSelector reportDateFromToSelector1;
+		private ReportDateFromToSelector reportDateFromToSelector1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxScenario;
 		private System.Windows.Forms.Label labelScenario;

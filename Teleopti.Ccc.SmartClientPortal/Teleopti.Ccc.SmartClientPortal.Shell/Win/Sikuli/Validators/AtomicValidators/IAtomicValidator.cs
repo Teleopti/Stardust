@@ -1,6 +1,6 @@
-﻿using Teleopti.Ccc.Win.Sikuli.Helpers;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.AtomicValidators
 {
 	/// <summary>
 	/// One step sub-validator.

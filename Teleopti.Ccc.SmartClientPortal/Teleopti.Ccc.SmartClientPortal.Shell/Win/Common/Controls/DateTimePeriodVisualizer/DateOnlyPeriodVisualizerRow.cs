@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateTimePeriodVisualizer
 {
     public class DateOnlyPeriodVisualizerRow
     {

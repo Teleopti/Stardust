@@ -1,9 +1,8 @@
 using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Chart
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart
 {
     /// <summary>
     /// the eventargs that contains all the intel of the line in chart

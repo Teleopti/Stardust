@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.WinCode.Common;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns
 {
     public class DropDownTypeColumn<T, TComboItemType> : ColumnBase<T>
     {

@@ -1,11 +1,11 @@
 ﻿<!--    Uses a DateTimeViewModel as DataContext-->
 
-<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.DateTimePeriodControl.EditableStartDateView"
+<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl.EditableStartDateView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode"
 			 xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
-			 xmlns:common="clr-namespace:Teleopti.Ccc.Win.WpfControls.Common">
+			 xmlns:common="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common">
     <UserControl.Resources>
         <ResourceDictionary>
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.GridBinding
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.GridBinding
 {
 	public class GridRowSection<T>
 	{

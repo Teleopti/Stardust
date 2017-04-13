@@ -2,9 +2,9 @@
 using System.Drawing;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
 	public partial class PickColorControl : BaseUserControl
 	{

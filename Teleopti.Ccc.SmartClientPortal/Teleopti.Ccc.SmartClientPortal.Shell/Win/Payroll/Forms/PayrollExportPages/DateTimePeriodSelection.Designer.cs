@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Forms.PayrollExportPages
 {
     partial class DateTimePeriodSelection
     {
@@ -28,7 +30,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dateSelectionControlPeriod = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionControl();
+            this.dateSelectionControlPeriod = new DateSelectionControl();
             this.SuspendLayout();
             // 
             // dateSelectionControlPeriod
@@ -60,7 +62,7 @@
 
         #endregion
 
-        private Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionControl dateSelectionControlPeriod;
+        private DateSelectionControl dateSelectionControlPeriod;
 
     }
 }

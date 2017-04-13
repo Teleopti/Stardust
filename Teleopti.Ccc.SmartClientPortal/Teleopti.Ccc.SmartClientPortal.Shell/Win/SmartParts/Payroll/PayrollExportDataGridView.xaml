@@ -1,5 +1,5 @@
 ﻿<!--PayrollExportSmartPartViewModel-->
-    <UserControl x:Class="Teleopti.Ccc.Win.SmartParts.Payroll.PayrollExportDataGridView"
+    <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll.PayrollExportDataGridView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,15 +7,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500" 
              d:DataContext="{x:Static payroll:SampleData.PayrollResults}"
-             xmlns:Payroll="clr-namespace:Teleopti.Ccc.Win.SmartParts.Payroll" 
-             xmlns:Payroll1="clr-namespace:Teleopti.Ccc.Domain.Payroll;assembly=Teleopti.Ccc.Domain" 
+				 xmlns:Payroll1="clr-namespace:Teleopti.Ccc.Domain.Payroll;assembly=Teleopti.Ccc.Domain" 
              xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode"
              xmlns:PayrollExportSmartPart="clr-namespace:Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;assembly=Teleopti.Ccc.WinCode" 
 				 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode" xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts" xmlns:Domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Interfaces" Background="White" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
                  xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
-                 xmlns:payroll="clr-namespace:Teleopti.Ccc.Win.SmartParts.Payroll"
-                 xmlns:domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Ccc.Domain"
+				 xmlns:domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Ccc.Domain"
                  xmlns:domain1="clr-namespace:Teleopti.Ccc.Domain.InterfaceLegacy.Domain;assembly=Teleopti.Ccc.Domain"
+                 xmlns:payroll="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll"
                  GuiHelpers:HelpProvider.HelpString="PayrollExort+Prepare" Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
@@ -33,24 +32,24 @@
         </Style>
         
         <DataTemplate x:Key="payrollExport" DataType="{x:Type Payroll1:PayrollExport}">
-            <Payroll:PayrollExportView DataContext="{Binding}"/>
+            <payroll:PayrollExportView DataContext="{Binding}"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type PayrollExportSmartPart:StatusDone}">
-            <Payroll:StatusDoneView />
+            <payroll:StatusDoneView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type PayrollExportSmartPart:StatusError}">
-            <Payroll:StatusErrorView />
+            <payroll:StatusErrorView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type PayrollExportSmartPart:StatusWorking}">
-            <Payroll:StatusWorkingView />
+            <payroll:StatusWorkingView />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type domain1:JobResultProgress}">
-            <Payroll:ProgressView DataContext="{Binding}" />
+            <payroll:ProgressView DataContext="{Binding}" />
         </DataTemplate>
 
         <DataTemplate x:Key="payrollResultView">
-            <Payroll:PayrollResultView DataContext="{Binding}"/>
+            <payroll:PayrollResultView DataContext="{Binding}"/>
         </DataTemplate>
         <DateTimeConverter:DateTimeToLocalConverter x:Key="dateTimeToLocalConverter"/>
             </ResourceDictionary>

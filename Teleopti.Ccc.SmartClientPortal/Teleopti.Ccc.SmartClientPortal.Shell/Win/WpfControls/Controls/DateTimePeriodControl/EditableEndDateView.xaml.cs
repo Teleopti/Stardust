@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.DateTimePeriodControl
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl
 {
     /// <summary>
     /// Interaction logic for EditableDateView.xaml

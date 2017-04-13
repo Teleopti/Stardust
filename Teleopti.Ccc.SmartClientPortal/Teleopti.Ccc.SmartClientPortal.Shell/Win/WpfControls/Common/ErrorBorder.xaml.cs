@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.WpfControls.Common
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common
 {
     /// <summary>
     /// Interaction logic for ErrorBorder.xaml

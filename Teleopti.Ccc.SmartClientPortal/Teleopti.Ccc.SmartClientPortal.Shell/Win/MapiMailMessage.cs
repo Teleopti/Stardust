@@ -5,9 +5,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Teleopti.Interfaces;
 
-namespace Teleopti.Ccc.Win
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win
 {
     /// <summary>
     /// Represents an email message to be sent through MAPI.

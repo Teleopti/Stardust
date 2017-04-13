@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.UserTexts;
-
-namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 {
     partial class FileExportFinished
     {

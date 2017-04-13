@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
     partial class MeetingGeneralView
     {
@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.autoLabel3 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel4 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.dateTimePickerAdvEndDate = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
-			this.outlookTimePickerStartTime = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
-			this.outlookTimePickerEndTime = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.outlookTimePickerStartTime = new Office2007OutlookTimePicker(this.components);
+			this.outlookTimePickerEndTime = new Office2007OutlookTimePicker(this.components);
 			this.tableLayoutPanelTopMain = new System.Windows.Forms.TableLayoutPanel();
 			this.textBoxExtLocation = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
@@ -623,7 +623,7 @@ namespace Teleopti.Ccc.Win.Meetings
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel4;
         private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvEndDate;
         private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtDescription;
-        private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker outlookTimePickerStartTime;
-        private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker outlookTimePickerEndTime;
+        private Office2007OutlookTimePicker outlookTimePickerStartTime;
+        private Office2007OutlookTimePicker outlookTimePickerEndTime;
     }
 }

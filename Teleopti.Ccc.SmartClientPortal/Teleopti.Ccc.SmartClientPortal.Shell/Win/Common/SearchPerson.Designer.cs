@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Common
+﻿using Teleopti.Ccc.Win;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 	partial class SearchPerson
 	{
@@ -31,7 +33,7 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.button1 = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.searchPersonView1 = new Teleopti.Ccc.Win.SearchPersonView();
+			this.searchPersonView1 = new SearchPersonView();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();

@@ -1,6 +1,6 @@
-﻿using Teleopti.Ccc.Win.Common.Controls;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
-namespace Teleopti.Ccc.Win.Payroll.Overtime
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Overtime
 {
     partial class ManageMultiplicatorForm
     {
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
 			this.textBoxShortName = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textBoxMultiplicatorValue = new Teleopti.Ccc.Win.Common.Controls.NumericTextBox();
+			this.textBoxMultiplicatorValue = new NumericTextBox();
 			this.textBoxExportCode = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();

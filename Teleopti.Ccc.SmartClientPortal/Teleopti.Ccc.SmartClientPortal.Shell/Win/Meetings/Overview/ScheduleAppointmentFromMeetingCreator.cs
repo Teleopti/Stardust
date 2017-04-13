@@ -3,9 +3,8 @@ using Syncfusion.Schedule;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Meetings.Overview
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 {
     public interface IScheduleAppointmentFromMeetingCreator
     {

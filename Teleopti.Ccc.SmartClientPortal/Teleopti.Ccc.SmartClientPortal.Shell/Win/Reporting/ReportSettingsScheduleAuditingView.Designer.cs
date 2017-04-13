@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Reporting
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	partial class ReportSettingsScheduleAuditingView
 	{
@@ -34,10 +34,10 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.reportDateFromToSelectorChangePeriod = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
-            this.reportDateFromToSelectorSchedulePeriod = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
-            this.reportPersonSelector1 = new Teleopti.Ccc.Win.Reporting.ReportPersonSelector();
-            this.reportUserSelectorAuditingView1 = new Teleopti.Ccc.Win.Reporting.ReportUserSelectorAuditingView();
+            this.reportDateFromToSelectorChangePeriod = new ReportDateFromToSelector();
+            this.reportDateFromToSelectorSchedulePeriod = new ReportDateFromToSelector();
+            this.reportPersonSelector1 = new ReportPersonSelector();
+            this.reportUserSelectorAuditingView1 = new ReportUserSelectorAuditingView();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();

@@ -2,10 +2,11 @@
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Win;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     public abstract class ViewBase<TPresenter> : IViewBase
     {

@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.QuickForecast
 {
     partial class SelectTargetDatesAndScenario
     {
@@ -32,7 +34,7 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboBoxScenario = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.TargetFromTo = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
+			this.TargetFromTo = new ReportDateFromToSelector();
 			this.labelScenario = new System.Windows.Forms.Label();
 			this.checkBoxUseDayOfMonth = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -145,7 +147,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private Reporting.ReportDateFromToSelector TargetFromTo;
+		private ReportDateFromToSelector TargetFromTo;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxScenario;
         private System.Windows.Forms.Label labelScenario;
 		private System.Windows.Forms.Label label1;

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Common
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     public enum HelpType
     {

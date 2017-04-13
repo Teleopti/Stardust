@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-
-namespace Teleopti.Ccc.Win.Intraday.Reforecast
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday.Reforecast
 {
     partial class SelectWorkload
     {

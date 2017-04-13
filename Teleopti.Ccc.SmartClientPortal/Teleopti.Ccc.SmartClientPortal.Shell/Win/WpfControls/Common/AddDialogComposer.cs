@@ -1,8 +1,8 @@
 ﻿using System;
-using Teleopti.Ccc.Win.WpfControls.Common.Interop;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop;
 using Teleopti.Ccc.WinCode.Common;
 
-namespace Teleopti.Ccc.Win.WpfControls.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common
 {
 
     /// <summary>

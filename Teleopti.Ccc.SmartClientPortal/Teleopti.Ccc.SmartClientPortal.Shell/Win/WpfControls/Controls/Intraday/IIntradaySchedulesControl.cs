@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Intraday;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday
 {
     public interface IIntradaySchedulesControl
     {

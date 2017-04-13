@@ -3,7 +3,7 @@ using System.Windows;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.ScheduleViewer.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Models
 {
     public class ScheduleRangeViewModel : DependencyObject
     {

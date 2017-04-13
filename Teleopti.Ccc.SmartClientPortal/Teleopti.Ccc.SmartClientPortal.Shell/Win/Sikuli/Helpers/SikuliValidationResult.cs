@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Teleopti.Ccc.Win.Sikuli.Helpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 {
 	public class SikuliValidationResult
 	{

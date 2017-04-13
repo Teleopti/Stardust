@@ -4,20 +4,19 @@ using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Win.Budgeting;
-using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
-using Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast;
-using Teleopti.Ccc.Win.Forecasting.Forms.SkillPages;
-using Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages;
-using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.QuickForecast;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Forms.PayrollExportPages;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
 using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 
 	public static class PropertyPagesHelper

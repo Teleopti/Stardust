@@ -3,21 +3,20 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.Win.Budgeting;
-using Teleopti.Ccc.Win.Forecasting.Forms;
-using Teleopti.Ccc.Win.Intraday;
-using Teleopti.Ccc.Win.Matrix;
-using Teleopti.Ccc.Win.Payroll;
-using Teleopti.Ccc.Win.PeopleAdmin.Controls;
-using Teleopti.Ccc.Win.PerformanceManager;
-using Teleopti.Ccc.Win.Scheduling;
-using Teleopti.Ccc.Win.Shifts;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Matrix;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Matrix;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
     public class NavigationModule : Module
     {

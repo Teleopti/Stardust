@@ -1,9 +1,9 @@
 ﻿using System.Windows.Forms;
-using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
-using Teleopti.Ccc.Win.Sikuli.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidators;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Views;
 
-namespace Teleopti.Ccc.Win.Sikuli
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli
 {
 	public static class SikuliHelper
 	{

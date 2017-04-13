@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Intraday;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday
 {
     /// <summary>
     /// Interaction logic for StaffingEffectView.xaml

@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Optimization
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {
 	partial class ShiftsPreferencesPanel
 	{
@@ -50,9 +52,9 @@
 			this.checkBoxKeepEndTimes = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxKeepActivityLength = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.label2 = new System.Windows.Forms.Label();
-			this.twoListSelectorActivities = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
+			this.twoListSelectorActivities = new TwoListSelector();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.fromToTimePicker1 = new Teleopti.Ccc.Win.Common.Controls.FromToTimePicker();
+			this.fromToTimePicker1 = new FromToTimePicker();
 			this.checkBoxBetween = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			((System.ComponentModel.ISupportInitialize)(this.checkBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBox2)).BeginInit();
@@ -373,9 +375,9 @@
 		private Syncfusion.Windows.Forms.Tools.NumericUpDownExt numericUpDownKeepShifts;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepStartTimes;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepEndTimes;
-		private Common.Controls.FromToTimePicker fromToTimePicker1;
+		private FromToTimePicker fromToTimePicker1;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxBetween;
-		private Common.Controls.TwoListSelector twoListSelectorActivities;
+		private TwoListSelector twoListSelectorActivities;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepActivityLength;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvActivity;
 		private System.Windows.Forms.Label label2;

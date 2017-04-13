@@ -4,30 +4,28 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Interfaces.Infrastructure;
 using log4net;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Budgeting.Events;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Configuration;
-using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.WinCode.Budgeting.Views;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Events;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 using ViewType = Teleopti.Ccc.WinCode.Budgeting.ViewType;
 
-namespace Teleopti.Ccc.Win.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	public partial class BudgetGroupMainView : BaseRibbonForm, IBudgetGroupMainView
 	{

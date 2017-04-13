@@ -1,8 +1,8 @@
-﻿using Teleopti.Ccc.Win.WpfControls.Controls.Editor;
-using Teleopti.Ccc.Win.WpfControls.Controls.Notes;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WinCode.Common.Interop;
 
-namespace Teleopti.Ccc.Win.WpfControls.Common.Interop
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop
 {
     /// <summary>
     /// Interaction logic for MultipleHostControl.xaml

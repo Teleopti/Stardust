@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
-namespace Teleopti.Ccc.Win.WpfControls.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common
 {
     
        

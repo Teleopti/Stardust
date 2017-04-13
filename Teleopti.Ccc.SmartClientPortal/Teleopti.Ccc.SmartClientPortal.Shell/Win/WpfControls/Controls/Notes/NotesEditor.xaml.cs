@@ -5,7 +5,7 @@ using System.Windows.Input;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WinCode.Scheduling;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Notes
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes
 {
     /// <summary>
     /// Interaction logic for NotesEditor.xaml

@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Messaging;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Messaging
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging
 {
     /// <summary>
     /// Sending and followup for Pushmessages

@@ -9,7 +9,7 @@ using Teleopti.Ccc.WinCode.Converters.DateTimeConverter;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.AddToSchedule
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.AddToSchedule
 {
     /// <summary>
     /// Interaction logic for AddAbsence.xaml

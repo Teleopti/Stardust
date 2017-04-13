@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday
 {
     public partial class SimpleLayerView
     {

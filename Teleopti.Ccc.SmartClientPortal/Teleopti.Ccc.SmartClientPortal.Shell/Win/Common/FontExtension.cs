@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Common
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     /// <summary>
     /// Contains all the extension methods which belongs to Font.

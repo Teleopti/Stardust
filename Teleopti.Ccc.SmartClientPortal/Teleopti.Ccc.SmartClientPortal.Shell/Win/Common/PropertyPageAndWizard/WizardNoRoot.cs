@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 
-namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 {
 
 	public partial class WizardNoRoot<T> : BaseDialogForm where T : class

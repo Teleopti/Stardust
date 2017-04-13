@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Reporting
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
     partial class ReportSettingsHostView
     {
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.reportHeader1 = new Teleopti.Ccc.Win.Reporting.ReportHeader();
+            this.reportHeader1 = new ReportHeader();
             this.panelSettingsContainer = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Win.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
     /// <summary>
     /// Represents the participant selection event argument of the address book.

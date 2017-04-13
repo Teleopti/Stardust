@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Scheduling
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
     partial class ExportToScenarioResultView
     {
@@ -52,7 +54,7 @@
 			this.panel4 = new System.Windows.Forms.Panel();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.spinningProgressControl1 = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.SpinningProgressControl();
+			this.spinningProgressControl1 = new SpinningProgressControl();
 			this.groupBoxInfo.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.groupBoxWarnings.SuspendLayout();
@@ -392,6 +394,6 @@
 		  private System.Windows.Forms.Panel panel1;
 		  private System.Windows.Forms.Panel panel4;
 		  private System.Windows.Forms.Panel panel2;
-		  private Common.Controls.SpinningProgress.SpinningProgressControl spinningProgressControl1;
+		  private SpinningProgressControl spinningProgressControl1;
     }
 }

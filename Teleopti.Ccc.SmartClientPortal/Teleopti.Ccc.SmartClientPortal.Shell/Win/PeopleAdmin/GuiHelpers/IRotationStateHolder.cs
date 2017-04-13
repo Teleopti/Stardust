@@ -1,6 +1,6 @@
 ﻿using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
     public interface IRotationStateHolder
     {

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using Syncfusion.Drawing;
 
-namespace Teleopti.Ccc.Win.GridBinding
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.GridBinding
 {
 	public class GridColors
 	{

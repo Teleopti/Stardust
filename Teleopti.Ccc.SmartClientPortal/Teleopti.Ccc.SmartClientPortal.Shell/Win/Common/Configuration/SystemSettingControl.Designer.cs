@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Common.Configuration
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
     partial class SystemSettingControl
     {
@@ -43,8 +45,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.labelActivityAlertSeconds = new System.Windows.Forms.Label();
             this.numericUpDownAsmSetting = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
-            this.tsTextBoxFullDayAbsenceRequestStart = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-            this.tsTextBoxFullDayAbsenceRequestEnd = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+            this.tsTextBoxFullDayAbsenceRequestStart = new TimeSpanTextBox();
+            this.tsTextBoxFullDayAbsenceRequestEnd = new TimeSpanTextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.numericUpDownNotificationDurationTime = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
             this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();

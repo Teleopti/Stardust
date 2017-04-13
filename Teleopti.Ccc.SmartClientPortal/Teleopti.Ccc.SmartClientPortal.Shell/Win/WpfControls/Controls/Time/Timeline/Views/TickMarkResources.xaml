@@ -1,7 +1,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:Models="clr-namespace:Teleopti.Ccc.WinCode.Common.Time.Timeline;assembly=Teleopti.Ccc.WinCode"
-					xmlns:views="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Time.Timeline.Views">
+					xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline.Views">
    
     <DataTemplate DataType="{x:Type Models:TickMarkViewModel}" x:Key="Short">
         <views:ShortTickMarkView DataContext="{Binding}"/>

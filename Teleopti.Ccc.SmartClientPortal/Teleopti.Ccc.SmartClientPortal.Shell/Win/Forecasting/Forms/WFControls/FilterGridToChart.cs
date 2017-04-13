@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
-using System.Globalization;
-using System.Threading;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls;
-using System.ComponentModel;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
-namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 {
     public partial class FilterGridToChart : BaseUserControl
     {

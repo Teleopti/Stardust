@@ -1,10 +1,10 @@
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win.Common.Configuration.Columns;
 using System.Globalization;
-using Teleopti.Ccc.WinCode.Settings;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WinCode.Settings;
 
-namespace Teleopti.Ccc.Win.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
     public abstract class TimeLimitCellValidatorBase<T> : SFGridCellValidatorBase<T>
         where T : ScheduleRestrictionBaseView

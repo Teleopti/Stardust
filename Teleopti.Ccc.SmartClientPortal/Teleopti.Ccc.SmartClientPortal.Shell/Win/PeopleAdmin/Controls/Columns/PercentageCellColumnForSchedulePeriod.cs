@@ -1,12 +1,12 @@
-﻿using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.Common.Controls.Columns;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
+﻿using System.Collections.ObjectModel;
+using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common;
-using System.Collections.ObjectModel;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
 {
     public class PercentageCellColumnForSchedulePeriod<T> : ColumnBase<T>
     {

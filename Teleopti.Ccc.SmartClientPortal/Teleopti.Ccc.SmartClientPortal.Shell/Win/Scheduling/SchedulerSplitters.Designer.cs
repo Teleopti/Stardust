@@ -1,8 +1,10 @@
-﻿using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
-using Teleopti.Ccc.Win.WpfControls.Common.Interop;
-using Teleopti.Ccc.Win.WpfControls.Controls.Requests.Views;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Views;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
     partial class SchedulerSplitters
     {
@@ -59,15 +61,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle7 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle8 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle2 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
-			this.lessIntellegentSplitContainerAdvMain = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
-			this.lessIntellegentSplitContainerAdvResultGraph = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
+			this.lessIntellegentSplitContainerAdvMain = new TeleoptiLessIntelligentSplitContainer();
+			this.lessIntellegentSplitContainerAdvResultGraph = new TeleoptiLessIntelligentSplitContainer();
 			this.chartControlSkillData = new Syncfusion.Windows.Forms.Chart.ChartControl();
 			this.tabSkillData = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.PinnedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPageAdv1 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.teleoptiLessIntelligentSplitContainerLessIntelligent1 = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
-			this.teleoptiLessIntellegentSplitContainerView = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
+			this.teleoptiLessIntelligentSplitContainerLessIntelligent1 = new TeleoptiLessIntelligentSplitContainer();
+			this.teleoptiLessIntellegentSplitContainerView = new TeleoptiLessIntelligentSplitContainer();
 			this.tableLayoutPanelRestrictionSummery = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelRestrictionButtons = new System.Windows.Forms.TableLayoutPanel();
 			this.chbAvailability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.chbPreferences = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.chbStudenAvailability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.chbSchedules = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.agentRestrictionGrid1 = new Teleopti.Ccc.Win.Scheduling.AgentRestrictions.AgentRestrictionGrid(this.components);
+			this.agentRestrictionGrid1 = new AgentRestrictionGrid(this.components);
 			this.grid = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.elementHostRequests = new System.Windows.Forms.Integration.ElementHost();
 			this.handlePersonRequestView1 = new HandlePersonRequestView();
@@ -84,10 +86,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tabInfoPanels = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvAgentInfo = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tabPageAdvShiftCategoryDistribution = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.shiftCategoryDistributionControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.ShiftCategoryDistributionControl();
+			this.shiftCategoryDistributionControl1 = new ShiftCategoryDistributionControl();
 			this.tabPageAdvValidationAlerts = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.validationAlertsView1 = new Teleopti.Ccc.Win.Scheduling.ValidationAlertsView();
-			this.lessIntellegentSplitContainerAdvMainContainer = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
+			this.validationAlertsView1 = new ValidationAlertsView();
+			this.lessIntellegentSplitContainerAdvMainContainer = new TeleoptiLessIntelligentSplitContainer();
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMain)).BeginInit();
 			this.lessIntellegentSplitContainerAdvMain.Panel1.SuspendLayout();
 			this.lessIntellegentSplitContainerAdvMain.Panel2.SuspendLayout();
@@ -802,16 +804,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #endregion
 
-        private Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer lessIntellegentSplitContainerAdvMain;
-        private Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer lessIntellegentSplitContainerAdvMainContainer;
-        private Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer lessIntellegentSplitContainerAdvResultGraph;
+        private TeleoptiLessIntelligentSplitContainer lessIntellegentSplitContainerAdvMain;
+        private TeleoptiLessIntelligentSplitContainer lessIntellegentSplitContainerAdvMainContainer;
+        private TeleoptiLessIntelligentSplitContainer lessIntellegentSplitContainerAdvResultGraph;
         private Syncfusion.Windows.Forms.Chart.ChartControl chartControlSkillData;
         private Syncfusion.Windows.Forms.Tools.TabControlAdv tabSkillData;
         private Syncfusion.Windows.Forms.Tools.TabControlAdv tabInfoPanels;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv1;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvAgentInfo;
-        private Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer teleoptiLessIntelligentSplitContainerLessIntelligent1;
-        private Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer teleoptiLessIntellegentSplitContainerView;
+        private TeleoptiLessIntelligentSplitContainer teleoptiLessIntelligentSplitContainerLessIntelligent1;
+        private TeleoptiLessIntelligentSplitContainer teleoptiLessIntellegentSplitContainerView;
         private Syncfusion.Windows.Forms.Grid.GridControl grid;
         private System.Windows.Forms.Integration.ElementHost elementHostRequests;
         private HandlePersonRequestView handlePersonRequestView1;

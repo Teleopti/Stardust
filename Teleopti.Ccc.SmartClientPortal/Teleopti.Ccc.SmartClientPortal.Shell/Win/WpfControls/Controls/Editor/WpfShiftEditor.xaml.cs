@@ -18,7 +18,7 @@ using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.WpfControls.Controls.Editor
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor
 {
     /// <summary>
     /// Interaction logic for WpfShiftEditor.xaml

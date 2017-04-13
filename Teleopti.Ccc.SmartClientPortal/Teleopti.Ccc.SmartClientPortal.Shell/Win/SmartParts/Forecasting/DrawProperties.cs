@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Teleopti.Ccc.Win.SmartParts.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 {
     public class DrawProperties : IDrawProperties
     {

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.PerformanceManager
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager
 {
     partial class PerformanceManagerNavigator
     {

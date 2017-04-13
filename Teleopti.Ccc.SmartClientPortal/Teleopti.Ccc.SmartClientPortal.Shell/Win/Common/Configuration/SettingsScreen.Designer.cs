@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Win.Common.Configuration
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	partial class SettingsScreen
 	{

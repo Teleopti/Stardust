@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Teleopti.Ccc.Win.WpfControls.Controls.Notes.NotesEditor"
+﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes.NotesEditor"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode"
@@ -7,8 +7,8 @@
     GuiHelpers:HelpProvider.HelpString="SchedulingScreen+NotesEditor" 
     HorizontalAlignment="Stretch"
     mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:notes="clr-namespace:Teleopti.Ccc.Win.WpfControls.Controls.Notes"
-			 xmlns:converters="clr-namespace:Teleopti.Ccc.Win.WpfControls.Converters"
+			 xmlns:notes="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes"
+			 xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
 			 d:DesignWidth="1090"
 			 x:Name="notesEditor">
     <UserControl.Resources>

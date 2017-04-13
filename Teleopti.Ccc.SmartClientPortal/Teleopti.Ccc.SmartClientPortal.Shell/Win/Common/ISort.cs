@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 #endregion
 
-namespace Teleopti.Ccc.Win.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
     /// <summary>
     /// Defines the functionality of a ISort<T>

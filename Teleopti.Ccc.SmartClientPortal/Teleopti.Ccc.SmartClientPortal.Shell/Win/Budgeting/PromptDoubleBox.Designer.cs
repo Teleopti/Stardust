@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Budgeting
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	partial class PromptDoubleBox
 	{
@@ -31,7 +33,7 @@
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanelFields = new System.Windows.Forms.TableLayoutPanel();
 			this.labelName = new System.Windows.Forms.Label();
-			this.numericTextBox1 = new Teleopti.Ccc.Win.Common.Controls.NumericTextBox();
+			this.numericTextBox1 = new NumericTextBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonAdvSave = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -174,7 +176,7 @@
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
 		private System.Windows.Forms.Label labelName;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFields;
-		private Common.Controls.NumericTextBox numericTextBox1;
+		private NumericTextBox numericTextBox1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 	}
 }
