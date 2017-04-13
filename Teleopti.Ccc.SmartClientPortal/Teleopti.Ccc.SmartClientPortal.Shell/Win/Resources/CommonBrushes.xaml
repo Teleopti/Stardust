@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <!-- For now, it just gets all the brushes from CCC, brushes that are common Avaya/CCC can be placed here and removed from parent, ore overidden here
+             Also, this logic should  be moved to Themes and swapped at runtime-->
+        <ResourceDictionary Source="CCCBrushes.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+    <!--Brushes that are the same in both styles
+    RaptorStandardMeetingGradientBrush  Usage:  ??
+    IntradayBorderBrush                 Usage: Borders in the Intraday grid
+    
+    -->
+    <LinearGradientBrush x:Key="RaptorStandardMeetingGradientBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+        <GradientStop Color="#FFFFFAD9" Offset="0"/>
+        <GradientStop Color="#FFFFDE80" Offset="1"/>
+        <GradientStop Color="#FFFFD96F" Offset="0.591"/>
+        <GradientStop Color="#FFFFDF84" Offset="0.492"/>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="IntradayBorderBrush" Color="#FF97B0CD"/>
+       
+
+</ResourceDictionary>
