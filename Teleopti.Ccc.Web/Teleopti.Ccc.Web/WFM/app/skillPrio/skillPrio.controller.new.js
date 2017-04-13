@@ -229,7 +229,7 @@
 			query.$promise.then(function () {
 				vm.isModified = false;
 				NoticeService.success('All changes are saved', 5000, true);
-				vm.skills = allData;
+				getSkills();
 			});
 		}
 
