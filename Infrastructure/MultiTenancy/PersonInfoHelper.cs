@@ -30,5 +30,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfoModel.ApplicationLogonName, personInfoModel.Password, _currentHashFunction);
 			return personInfo;
 		}
+
+		public Tenant GetCurrentTenant()
+		{
+			return _findTenant.Find(_currentDataSource.CurrentName());
+		}
 	}
 }

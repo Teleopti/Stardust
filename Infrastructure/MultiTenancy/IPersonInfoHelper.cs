@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 	public interface IPersonInfoHelper
 	{
 		PersonInfo Create(IPersonInfoModel personInfoModel);
+		Tenant GetCurrentTenant();
 	}
 }

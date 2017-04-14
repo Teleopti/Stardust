@@ -9,19 +9,17 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 	{
 		private readonly IPersonInfoHelper _infoMapper;
 		private readonly IPersistPersonInfo _persister;
-		private readonly IDeletePersonInfo _deleter;
 
 
-		public PersonInfoCreator(IPersonInfoHelper infoMapper, IPersistPersonInfo persister, IDeletePersonInfo deleter)
+		public PersonInfoCreator(IPersonInfoHelper infoMapper, IPersistPersonInfo persister)
 		{
 			_infoMapper = infoMapper;
 			_persister = persister;
-			_deleter = deleter;
 		}
 
 		public void RollbackPersistedTenantUsers(Guid personId)
 		{
-			_deleter.Delete(personId);
+			_persister.RollBackPersonInfo(personId, _infoMapper.GetCurrentTenant().Name);
 		}
 
 

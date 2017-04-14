@@ -58,5 +58,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 				session.Merge(personInfo);
 			}
 		}
+
+		public void RollBackPersonInfo(Guid personInfoId, string tenantName)
+		{
+			var session = _currentTenantSession.CurrentSession();
+			var personInfo = session.Get<PersonInfo>(personInfoId);
+			if (personInfo != null && personInfo.Tenant.Name == tenantName)
+			{
+				session.Delete(personInfo);
+			}
+		}
 	}
 }

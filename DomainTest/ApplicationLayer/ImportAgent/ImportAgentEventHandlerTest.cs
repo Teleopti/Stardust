@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public FakeCurrentDatasource CurrentDatasource;
 		public FakeTenants FindTenantByName;
-		public DeletePersonInfoFake DeletePersonInfo;
+		public PersistPersonInfoFake PersonInfoPersister;
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 
@@ -64,7 +64,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
-			system.UseTestDouble<DeletePersonInfoFake>().For<IDeletePersonInfo>();
 			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
 			system.UseTestDouble<FakeTenants>().For<IFindTenantByName>();
 
@@ -318,7 +317,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 				JobResultId = jobResult.Id.Value
 			});
 
-			DeletePersonInfo.WasDeleted.Count().Should().Be(1);
+			PersonInfoPersister.RollBacked.Should().Be(true);
 		}
 
 		private IJobResult fakeJobResult()
