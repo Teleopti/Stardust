@@ -17,7 +17,7 @@ module.exports = function(grunt) {
             web: {
                 options: {
                     site: 'Teleopti.Ccc.Web-Site',
-                    openUrl: 'http://localhost:52858/TeleoptiWFM/Web/WFM/#/',
+                    openUrl: 'http://localhost:52858/TeleoptiWFM/Web/',
                     open: true,
                     verbose: true
                 }
