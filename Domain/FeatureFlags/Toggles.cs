@@ -39,6 +39,7 @@
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_ViewIntradayStaffingProbability_41608,
 		MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913,
+		MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880,
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
 		MyTimeWeb_PreferencePerformanceForMultipleUsers_43322,
 

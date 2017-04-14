@@ -160,6 +160,7 @@ MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747 = true
 MyTimeWeb_ShowContractTime_41462 = true
 MyTimeWeb_ViewIntradayStaffingProbability_41608 = RC #Do not release yet, need more accurate numbers first.
 MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = RC #Do not release yet, need more accurate numbers first.
+MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 = DEV
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
 MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = RC
 
