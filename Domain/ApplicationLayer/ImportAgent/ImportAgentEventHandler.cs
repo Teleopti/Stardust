@@ -10,6 +10,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
+using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
@@ -18,28 +19,47 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	{
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IFileProcessor _fileProcessor;
+		private readonly ITenantUserPersister _tenantUserPersister;
+		private static bool _hasException = false;
 		public ImportAgentEventHandler(
 			IJobResultRepository jobResultRepository,
-			IFileProcessor fileProcessor
-		 )
+			IFileProcessor fileProcessor, ITenantUserPersister tenantUserPersister)
 		{
 			_jobResultRepository = jobResultRepository;
 			_fileProcessor = fileProcessor;
+			_tenantUserPersister = tenantUserPersister;
 		}
 
 		[AsSystem]
 		[TenantScope]
-		[UnitOfWork]
 		public virtual void Handle(ImportAgentEvent @event)
 		{
 			if (IfNeedRejectJob(@event))
 			{
 				return;
 			}
-			HandleJob(@event);
+			try
+			{
+				HandleJob(@event);
+			}
+			catch (Exception e)
+			{
+				SaveJobResultDetail(@event, e);
+				_tenantUserPersister.RollbackAllPersistedTenantUsers();
+			}
+			
+
 		}
 
-		protected bool IfNeedRejectJob(ImportAgentEvent @event)
+		[UnitOfWork]
+		protected virtual void SaveJobResultDetail(ImportAgentEvent @event, Exception ex)
+		{
+			var jobResult = getJobResult(@event);
+			saveJobResultDetail(jobResult, ex.Message, DetailLevel.Error, ex);
+		}
+
+		[UnitOfWork]
+		protected virtual bool IfNeedRejectJob(ImportAgentEvent @event)
 		{
 			var jobResult = getJobResult(@event);
 			var version = jobResult.Version;
@@ -51,45 +71,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			jobResult.SetVersion(++currentVersion);
 			return false;
 		}
-		
-		protected void HandleJob(ImportAgentEvent @event)
+
+		[UnitOfWork]
+		protected virtual void HandleJob(ImportAgentEvent @event)
 		{
 			var defaults = @event.Defaults;
 			var jobResult = getJobResult(@event);
 			var owner = jobResult.Owner;
-			try
+
+			JobResultArtifact inputFile;
+			var errorMsg = validateJobInputArtifact(jobResult, out inputFile);
+			if (!errorMsg.IsNullOrEmpty())
 			{
-
-				JobResultArtifact inputFile;
-				var errorMsg = validateJobInputArtifact(jobResult, out inputFile);
-				if (!errorMsg.IsNullOrEmpty())
-				{
-					saveJobResultDetail(jobResult, errorMsg, DetailLevel.Error);
-					return;
-				}
-				var fileData = new FileData
-				{
-					Data = inputFile.Content,
-					FileName = inputFile.Name
-				};
-				var processResult = _fileProcessor.Process(fileData, owner.PermissionInformation.DefaultTimeZone(), defaults);
-				if (!processResult.ErrorMessages.IsNullOrEmpty())
-				{
-					saveJobResultDetail(jobResult, string.Join(", ", processResult.ErrorMessages), DetailLevel.Error);
-					return;
-				}
-				
-				saveJobArtifacts(jobResult, inputFile, processResult);
-				saveJobResultDetail(jobResult,
-					processResult.GetSummaryMessage(),
-					processResult.DetailLevel);
-
+				saveJobResultDetail(jobResult, errorMsg, DetailLevel.Error);
+				return;
 			}
-			catch (Exception ex)
+			var fileData = new FileData
 			{
-				saveJobResultDetail(jobResult, ex.Message, DetailLevel.Error, ex);
-
+				Data = inputFile.Content,
+				FileName = inputFile.Name
+			};
+			var processResult = _fileProcessor.Process(fileData, owner.PermissionInformation.DefaultTimeZone(), defaults);
+			if (!processResult.ErrorMessages.IsNullOrEmpty())
+			{
+				saveJobResultDetail(jobResult, string.Join(", ", processResult.ErrorMessages), DetailLevel.Error);
+				return;
 			}
+
+			saveJobArtifacts(jobResult, inputFile, processResult);
+			saveJobResultDetail(jobResult,
+				processResult.GetSummaryMessage(),
+				processResult.DetailLevel);
+
 		}
 
 		private string validateJobInputArtifact(IJobResult jobResult, out JobResultArtifact inputFile)
@@ -115,6 +128,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		private void saveJobArtifacts(IJobResult jobResult, JobResultArtifact inputArtifact, AgentFileProcessResult processResult)
 		{
+			if (_hasException) throw new Exception(); //only for test
+
 			string fileName = inputArtifact.FileName;
 			string fileType = inputArtifact.FileType;
 			var isXlsx = fileType.Equals("xlsx", StringComparison.OrdinalIgnoreCase);
@@ -152,5 +167,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			result.FinishedOk = true;
 		}
 
+		public static void HasException()
+		{
+			_hasException = true;
+		}
+		public static void ResetException()
+		{
+			_hasException = false;
+		}
 	}
 }
