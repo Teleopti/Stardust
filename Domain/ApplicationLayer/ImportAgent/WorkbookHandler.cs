@@ -28,16 +28,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			for (var i = 0; i < _agentFileTemplate.ColumnHeaders.Length; i++)
 			{
 				var pro = _agentFileTemplate.ColumnHeaders[i];
-				var expectedColumnName = pro.GetCustomAttribute<DescriptionAttribute>()?.Description ?? pro.Name;
+				var dispalyColumnName = _agentFileTemplate.GetColumnDisplayName(pro.Name);
 				if (i >= columnNames.Length)
 				{
-					errorMessages.Add(expectedColumnName);
+					errorMessages.Add(dispalyColumnName);
 					continue;
 				}
 				var columnName = columnNames[i];
-				if (string.Compare(columnName, expectedColumnName, true, CultureInfo.CurrentCulture) != 0)
+				if (!(string.Compare(columnName, dispalyColumnName, true, CultureInfo.CurrentCulture) == 0
+					|| string.Compare(columnName, pro.Name, true, CultureInfo.CurrentCulture) == 0)
+					)
 				{
-					errorMessages.Add(expectedColumnName);
+					errorMessages.Add(dispalyColumnName);
 				}
 			}
 

@@ -15713,7 +15713,7 @@ Do you want to participate?</value>
     <comment>No input in an import agent job</comment>
   </data>
   <data name="ColumnCanNotBeEmpty" xml:space="preserve">
-    <value>Column {0} cannot be empty</value>
+    <value>Column '{0}' cannot be empty</value>
     <comment>Column Firstname cannot be empty</comment>
   </data>
   <data name="ANewImportJobHasBeenCreatedFor" xml:space="preserve">

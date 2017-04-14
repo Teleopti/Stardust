@@ -218,7 +218,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.StartDate), agentInfo.StartDate.ToShortDateString()));
 					return feedback;
 				}
-				feedback.ErrorMessages.Add(getMessage(Resources.ColumnCanNotBeEmpty, nameof(RawAgent.StartDate)));
 			}
 			else
 			{
@@ -485,7 +484,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				{
 					agent.Roles.AddRange(_defaultValues.Roles);
 					feedback.WarningMessages.Add(getMessage(Resources.ImportAgentsColumnFixedWithFallbackValue, nameof(RawAgent.Role),
-						_defaultValues.Roles, (role) => role.Name));
+						_defaultValues.Roles, (role) => role.DescriptionText));
 					return feedback;
 				}
 			}
@@ -617,7 +616,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			if (column.GetValue(agent) == getDefaultValue(column.PropertyType) && !hasDefaultValue)
 			{
 				var feedback = new Feedback();
-				feedback.ErrorMessages.Add(getMessage(Resources.ColumnCanNotBeEmpty, _agentFileTemplate.GetColumnDisplayName(column.Name)));
+				feedback.ErrorMessages.Add(getMessage(Resources.ColumnCanNotBeEmpty, column.Name));
 				return feedback;
 			}
 			return null;

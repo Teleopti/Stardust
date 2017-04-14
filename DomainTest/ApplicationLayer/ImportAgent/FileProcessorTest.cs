@@ -299,7 +299,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(sheet, TimeZoneInfo.Utc);
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Feedback.ErrorMessages.Contains(string.Format(Resources.ColumnCanNotBeEmpty, nameof(RawAgent.SchedulePeriodLength))).Should().Be.True();
+			var errorMessage = string.Format(Resources.ColumnCanNotBeEmpty,
+				_agentFileTemplate.GetColumnDisplayName(nameof(RawAgent.SchedulePeriodLength)));
+
+			result.First().Feedback.ErrorMessages.Contains(errorMessage).Should().Be.True();
 		}
 
 		[Test]
@@ -442,7 +445,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			row.CreateCell(15).SetCellValue(4);
 
 			var result = Target.ProcessSheet(sheet, TimeZoneInfo.Utc);
-			var externalLogonProName = nameof(RawAgent.ExternalLogon);
+			var externalLogonProName = _agentFileTemplate.GetColumnDisplayName(nameof(RawAgent.ExternalLogon));
 			result.Count.Should().Be.EqualTo(1);
 			var errForExtLogon =
 				result.First().Feedback.ErrorMessages.Where(r => r.Contains(externalLogonProName)).Single();
@@ -729,7 +732,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Role), defaultEntity.Name));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Role), defaultEntity.DescriptionText));
 			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
 		}
 
@@ -750,7 +753,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var result = Target.ProcessSheet(workbook.GetSheetAt(0), TimeZoneInfo.Utc, new ImportAgentDefaults { RoleIds = defaultValue });
 
 			result.Single().Feedback.ErrorMessages.Should().Be.Empty();
-			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Role), defaultEntity.Name));
+			result.Single().Feedback.WarningMessages.Single().Should().Be(getWarningMessage(nameof(RawAgent.Role), defaultEntity.DescriptionText));
 			result.Single().Agent.Roles.Single().Should().Be.EqualTo(defaultEntity);
 		}
 

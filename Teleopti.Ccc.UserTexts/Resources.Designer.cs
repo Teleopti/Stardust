@@ -6165,7 +6165,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Column {0} cannot be empty.
+        ///   Looks up a localized string similar to Column &apos;{0}&apos; cannot be empty.
         /// </summary>
         public static string ColumnCanNotBeEmpty {
             get {
