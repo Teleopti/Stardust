@@ -37,13 +37,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				if (agentResult.Feedback.ErrorMessages.Any() || agentData == null) continue;
 
 				var person = persistPerson(agentData, timezone);
-				var errorMessages = _tenantUserPersister.Persist(new PersonInfoModel
+				var personInfo = new PersonInfoModel
 				{
 					ApplicationLogonName = agentData.ApplicationUserId.IsNullOrEmpty() ? null : agentData.ApplicationUserId,
 					Identity = agentData.WindowsUser.IsNullOrEmpty() ? null : agentData.WindowsUser,
 					Password = agentData.Password.IsNullOrEmpty() ? null : agentData.Password,
 					PersonId = person.Id.GetValueOrDefault()
-				});
+				};
+				var errorMessages = _tenantUserPersister.Persist(personInfo);
 
 				if (errorMessages.Any())
 				{
