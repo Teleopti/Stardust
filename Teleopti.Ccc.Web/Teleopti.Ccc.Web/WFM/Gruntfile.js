@@ -14,15 +14,10 @@ module.exports = function(grunt) {
             options: {
                 config: '../../../.vs/config/applicationhost.config'
             },
-            authBridge: {
-                options: {
-                    site: 'teleopti.ccc.web.authenticationBridge'
-                }
-            },
             web: {
                 options: {
-                    site: 'teleopti.ccc.web',
-                    openUrl: 'http://localhost:52858',
+                    site: 'Teleopti.Ccc.Web-Site',
+                    openUrl: 'http://localhost:52858/TeleoptiWFM/Web/WFM/#/',
                     open: true,
                     verbose: true
                 }
@@ -431,7 +426,7 @@ module.exports = function(grunt) {
     grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
     grunt.registerTask('devDist', ['ngtemplates', 'sass','imageEmbed', 'concat:distModules', 'concat:devJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'copy:devCss', 'newer:copy', 'generateIndexDev']);
     grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-    grunt.registerTask('nova', ['devDist', 'iisexpress:authBridge', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
+    grunt.registerTask('nova', ['devDist', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('build', ['msbuild:build']); // build the solution
     grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
     grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
