@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
@@ -9,27 +7,18 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 	{
 		private readonly IPersonInfoHelper _infoMapper;
 		private readonly IPersistPersonInfo _persister;
-		private readonly IDeletePersonInfo _deleter;
 
-
-		public PersonInfoCreator(IPersonInfoHelper infoMapper, IPersistPersonInfo persister, IDeletePersonInfo deleter)
+		public PersonInfoCreator(IPersonInfoHelper infoMapper, IPersistPersonInfo persister)
 		{
 			_infoMapper = infoMapper;
 			_persister = persister;
-			_deleter = deleter;
 		}
 
-		public void RollbackPersistedTenantUsers(Guid personId)
+		
+		public void CreateAndPersistPersonInfo(IPersonInfoModel personInfo)
 		{
-			_deleter.Delete(personId);
+			_persister.Persist(_infoMapper.Create(personInfo));
 		}
 
-
-		public Guid CreateAndPersistPersonInfo(IPersonInfoModel personInfo)
-		{
-			var tenantUser = _infoMapper.Create(personInfo);
-			_persister.Persist(tenantUser);
-			return tenantUser.Id;
-		}
 	}
 }

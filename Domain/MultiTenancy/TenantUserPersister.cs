@@ -9,13 +9,11 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 	public interface ITenantUserPersister
 	{
 		List<string> Persist(IPersonInfoModel tenantUserData);
-		void RollbackAllPersistedTenantUsers();
 	}
 
 	public class TenantUserPersister : ITenantUserPersister
 	{
 		private readonly IPersonInfoCreator _creator;
-		private readonly IList<Guid> _persistedTenantUserIds = new List<Guid>();
 
 		public TenantUserPersister(IPersonInfoCreator creator)
 		{
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 
 			try
 			{
-				_persistedTenantUserIds.Add(PersistInternal(tenantUserData));
+				PersistInternal(tenantUserData);
 			}
 			catch (PasswordStrengthException)
 			{
@@ -50,18 +48,9 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 		}
 	
 		[TenantUnitOfWork]
-		protected virtual Guid PersistInternal(IPersonInfoModel personInfo)
+		protected virtual void PersistInternal(IPersonInfoModel personInfo)
 		{
-			return _creator.CreateAndPersistPersonInfo(personInfo);
-		}
-
-		[TenantUnitOfWork]
-		public virtual void RollbackAllPersistedTenantUsers()
-		{
-			foreach (var personId in _persistedTenantUserIds)
-			{
-				_creator.RollbackPersistedTenantUsers(personId);
-			}
+			_creator.CreateAndPersistPersonInfo(personInfo);
 		}
 	}
 }
