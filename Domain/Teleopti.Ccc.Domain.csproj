@@ -140,6 +140,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\FileProcessor.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\IImportAgentDataProvider.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\IImportAgentFileValidator.cs" />
+    <Compile Include="ApplicationLayer\ImportAgent\IImportAgentJobService.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentDataProvider.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentDefaults.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentEventHandler.cs" />
