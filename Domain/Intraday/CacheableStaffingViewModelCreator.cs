@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
@@ -20,25 +22,52 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_intervalLengthFetcher = intervalLengthFetcher;
 		}
 
-		public IntradayStaffingViewModel Load(Guid skillId, bool useShrinkage)
+		public IList<IntradayStaffingViewModel> Load(Guid skillId, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage)
 		{
-			var cacheKey = getCacheKey(skillId, useShrinkage);
-			var intradyStaffingViewModelCache = loadDataFromCache(cacheKey);
-			if (intradyStaffingViewModelCache != null)
-				return intradyStaffingViewModelCache;
+			var intradayStaffingViewModels = new List<IntradayStaffingViewModel>();
+			var days = dateOnlyPeriod.DayCollection();
+			var notCachedDays = new List<DateOnly>();
+			foreach (var day in days)
+			{
+				var cacheKey = getCacheKey(skillId, day, useShrinkage);
+				var intradayStaffingViewModel = loadDataFromCache(cacheKey);
+				if (intradayStaffingViewModel != null)
+				{
+					intradayStaffingViewModels.Add(intradayStaffingViewModel);
+				}
+				else
+				{
+					notCachedDays.Add(day);
+				}
+			}
 
-			var intradyStaffingViewModel = _staffingViewModelCreator.Load(new[] {skillId}, null, useShrinkage);
-			logIntradayStaffingViewModel(skillId, useShrinkage, intradyStaffingViewModel);
-			if (!existsStaffingData(intradyStaffingViewModel))
-				return intradyStaffingViewModel;
+			if (!notCachedDays.Any())
+				return intradayStaffingViewModels;
 
-			cacheData(cacheKey, intradyStaffingViewModel);
-			return intradyStaffingViewModel;
+			var loadedIntradayStaffingViewModels = _staffingViewModelCreator.Load(new[] { skillId }
+			, new DateOnlyPeriod(notCachedDays.First(), notCachedDays.Last()), useShrinkage);
+
+			foreach (var intradayStaffingViewModel in loadedIntradayStaffingViewModels)
+			{
+				logIntradayStaffingViewModel(skillId, useShrinkage, intradayStaffingViewModel);
+				if (intradayStaffingViewModel.DataSeries == null)
+					continue;
+
+				intradayStaffingViewModels.Add(intradayStaffingViewModel);
+
+				if (!existsStaffingData(intradayStaffingViewModel))
+					continue;
+
+				var cacheKey = getCacheKey(skillId, intradayStaffingViewModel.DataSeries.Date, useShrinkage);
+				cacheData(cacheKey, intradayStaffingViewModel);
+			}
+
+			return intradayStaffingViewModels;
 		}
 
 		private static void cacheData(string cacheKey, IntradayStaffingViewModel intradyStaffingViewModel)
 		{
-			var cachePolicy = new CacheItemPolicy {SlidingExpiration = new TimeSpan(0, 10, 0)};
+			var cachePolicy = new CacheItemPolicy { SlidingExpiration = new TimeSpan(0, 10, 0) };
 			MemoryCache.Default.Set(cacheKey, intradyStaffingViewModel, cachePolicy);
 		}
 
@@ -48,12 +77,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return intradyStaffingViewModelCache;
 		}
 
-		private string getCacheKey(Guid skillId, bool useShrinkage)
+		private string getCacheKey(Guid skillId, DateOnly date, bool useShrinkage)
 		{
-			return $"{skillId}_{useShrinkage}_{_intervalLengthFetcher.IntervalLength}";
+			return $"{skillId}_{date.ToShortDateString()}_{useShrinkage}_{_intervalLengthFetcher.IntervalLength}";
 		}
 
-		private bool existsStaffingData(IntradayStaffingViewModel intradyStaffingViewModel)
+		private static bool existsStaffingData(IntradayStaffingViewModel intradyStaffingViewModel)
 		{
 			if (!intradyStaffingViewModel.StaffingHasData)
 				return false;
@@ -71,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return true;
 		}
 
-		private void logIntradayStaffingViewModel(Guid skillId, bool useShrinkage,
+		private static void logIntradayStaffingViewModel(Guid skillId, bool useShrinkage,
 			IntradayStaffingViewModel intradayStaffingViewModel)
 		{
 			if (intradayStaffingViewModel.DataSeries?.Time == null)
@@ -79,9 +108,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 				logger.Warn($"no data for {skillId}");
 				return;
 			}
-				
+
 			var stringBuilder = new StringBuilder();
-			stringBuilder.AppendLine($"Skill:{skillId}, useShrinkage:{useShrinkage}");
+			stringBuilder.AppendLine($"Skill:{skillId}, useShrinkage:{useShrinkage}, date:{intradayStaffingViewModel.DataSeries.Date}");
 			for (int i = 0; i < intradayStaffingViewModel.DataSeries.Time.Length; i++)
 			{
 				stringBuilder.Append($"[{intradayStaffingViewModel.DataSeries.Time[i]},");
@@ -100,6 +129,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 	public interface ICacheableStaffingViewModelCreator
 	{
-		IntradayStaffingViewModel Load(Guid skillId, bool useShrinkage);
+		IList<IntradayStaffingViewModel> Load(Guid skillId, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage);
 	}
 }
