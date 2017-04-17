@@ -155,18 +155,19 @@
         <sites>
             <site name="Teleopti.Ccc.Web" id="1">
                 <application path="/" applicationPool="Clr4IntegratedAppPool">
-                    <virtualDirectory path="/" physicalPath="c:\temp\AdminClient\Teleopti.Ccc.Web\Teleopti.Ccc.Web\" />
+                    <virtualDirectory path="/" physicalPath="c:\temp\AdminClient\" />
+                </application>
+                <application path="/TeleoptiWFM/Web" applicationPool="Clr4IntegratedAppPool">
+                    <virtualDirectory path="/" physicalPath="c:\temp\AdminClient\Teleopti.Ccc.Web\Teleopti.Ccc.Web" />
+                </application>
+                <application path="/TeleoptiWFM" applicationPool="Clr4IntegratedAppPool">
+                    <virtualDirectory path="/" physicalPath="c:\temp\AdminClient\Teleopti.Ccc.Startpage" />
+                </application>
+                <application path="/TeleoptiWFM/AuthenticationBridge" applicationPool="Clr4IntegratedAppPool">
+                    <virtualDirectory path="/" physicalPath="c:\temp\AdminClient\Teleopti.Ccc.Web.AuthenticationBridge" />
                 </application>
                 <bindings>
                     <binding protocol="http" bindingInformation="*:52858:localhost" />
-                </bindings>
-            </site>
-            <site name="Teleopti.Ccc.Web.AuthenticationBridge" id="2">
-                <application path="/" applicationPool="Clr4IntegratedAppPool">
-                    <virtualDirectory path="/" physicalPath="c:\temp\AdminClient\Teleopti.Ccc.Web.AuthenticationBridge\" />
-                </application>
-                <bindings>
-                    <binding protocol="http" bindingInformation="*:52857:localhost" />
                 </bindings>
             </site>
             <site name="Teleopti.Ccc.Web.WindowsIdentityProvider" id="3">
@@ -1068,26 +1069,6 @@
             </security>
         </system.webServer>
     </location>
-    <location path="Teleopti.Ccc.Startpage">
-        <system.webServer>
-            <security>
-                <authentication>
-                    <anonymousAuthentication enabled="true" />
-                    <windowsAuthentication enabled="true" />
-                </authentication>
-            </security>
-        </system.webServer>
-    </location>
-    <location path="Teleopti.Ccc.Web.AuthenticationBridge">
-        <system.webServer>
-            <security>
-                <authentication>
-                    <anonymousAuthentication enabled="true" />
-                    <windowsAuthentication enabled="true" />
-                </authentication>
-            </security>
-        </system.webServer>
-    </location>
     <location path="Teleopti.Ccc.Web.WindowsIdentityProvider">
         <system.webServer>
             <security>
@@ -1109,18 +1090,8 @@
         </system.webServer>
     </location>
     <location path="Teleopti.Ccc.Web">
-        <system.webServer>
-            <security>
-                <authentication>
-                    <anonymousAuthentication enabled="true" />
-                    <windowsAuthentication enabled="false" />
-                </authentication>
-            </security>
-        </system.webServer>
-    </location>
-    <location path="Teleopti.Analytics.PM.PMServiceHost">
-        <system.webServer>
-            <security>
+		<system.webServer>        
+			<security>
                 <authentication>
                     <anonymousAuthentication enabled="true" />
                     <windowsAuthentication enabled="true" />
@@ -1128,7 +1099,7 @@
             </security>
         </system.webServer>
     </location>
-    <location path="Teleopti.Ccc.Startpage(1)">
+    <location path="Teleopti.Analytics.PM.PMServiceHost">
         <system.webServer>
             <security>
                 <authentication>
