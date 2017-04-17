@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 Feature: ActivityActions
 	As a team leader
 	I want to modify agent's activities
@@ -8,6 +7,10 @@ Background:
 	Given I am american
 	And there is a site named 'The site'
 	And there is a team named 'Team green' on 'The site'
+	And I have a person period with
+	| Field      | Value      |
+	| Start date | 2016-01-01 |
+	| Team       | Team green |
 	And I have a role with
 	| Field                         | Value          |
 	| Name                          | Wfm Team Green |
@@ -56,6 +59,7 @@ Scenario: Should be able to add activity
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddActivity' in team schedule
@@ -81,6 +85,7 @@ Scenario: Should see enabled add personal activity button
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	Then I should see 'AddPersonalActivity' menu is enabled
@@ -96,6 +101,7 @@ Scenario: Should be able to add personal activity
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddPersonalActivity' in team schedule
@@ -123,6 +129,7 @@ Scenario: Should see disabled remove activity button when no activity is selecte
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I open menu in team schedule
 	Then I should see 'RemoveActivity' menu item is disabled
 
@@ -140,6 +147,7 @@ Scenario: Should be able to remove single activity
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I selected activity 'Lunch'
 	And I apply remove activity
 	Then I should see a successful notice
@@ -197,6 +205,7 @@ Scenario: Should be able to move activity
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I selected activity 'Lunch'
 	And I move activity to '2016-10-10 14:00' with next day being 'false'
 	Then I should see a successful notice
@@ -212,6 +221,7 @@ Scenario: Should be able to move basic activity
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I selected activity 'Phone'
 	And I move activity to '2016-10-10 10:00' with next day being 'false'
 	Then I should see a successful notice
