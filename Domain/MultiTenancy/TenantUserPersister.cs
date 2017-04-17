@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 			}
 			catch (Exception exception)
 			{
-				errorMessages.Add(string.Format(Resources.InternalErrorXMsg, exception.Message));
+				errorMessages.Add(string.Format(Resources.InternalErrorMsg, exception.Message));
 			}
 
 			return errorMessages;
