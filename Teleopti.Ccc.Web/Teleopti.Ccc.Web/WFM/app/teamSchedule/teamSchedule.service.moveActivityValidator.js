@@ -24,6 +24,10 @@
 				}
 				var normalizedScheduleVm = belongsToDateDecider.normalizePersonScheduleVm(personSchedule, currentTimezone);
 				var belongsToDate = belongsToDateDecider.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleVm);
+				if (!belongsToDate) {
+					invalidPeople.push({ PersonId: personId, Name: personSchedule.Name });
+					continue;
+				}
 				var shiftsForBelongsToDate = personSchedule.Shifts.filter(function(shift) {
 					return shift.Date === belongsToDate;
 				});

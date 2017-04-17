@@ -88,10 +88,12 @@
 					var shiftStart = moment(shift.ProjectionTimeRange.Start);
 					var shiftEnd = moment(shift.ProjectionTimeRange.End);
 					var index = dates.indexOf(shift.Date);
-					result[index].shiftRange = {
-						startTime: shiftStart,
-						endTime: shiftEnd
-					};
+					if (index >= 0) {
+						result[index].shiftRange = {
+							startTime: shiftStart,
+							endTime: shiftEnd
+						};
+					}
 				});
 			}
 
