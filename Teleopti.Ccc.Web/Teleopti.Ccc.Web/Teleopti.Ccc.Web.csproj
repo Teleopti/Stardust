@@ -1485,6 +1485,7 @@
     <Content Include="WFM\app\requests\requests-footer.directive.js" />
     <Content Include="WFM\app\requests\requests-footer.directive.spec.js" />
     <Content Include="WFM\app\requests\requests-synchronize-header-height.directive.js" />
+    <Content Include="WFM\app\requests\requests-fix-bug43683-for-uigrid.js" />
     <Content Include="WFM\app\resourceplanner\organization-tree-node.html" />
     <Content Include="WFM\app\resourceplanner\planningperiods-overview.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.hierarchy.service.js" />
