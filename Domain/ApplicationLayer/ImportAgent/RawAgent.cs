@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public string Firstname { get; set; }
 		[Order(1)]
 		public string Lastname { get; set; }
-		[Order(2), Description("Window user")]
+		[Order(2), Description("Windows user")]
 		public string WindowsUser { get; set; }
 		[Order(3), Description("Application user")]
 		public string ApplicationUserId { get; set; }
