@@ -13598,7 +13598,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Failed imported count:</comment>
   </data>
   <data name="InternalErrorMsg" xml:space="preserve">
-    <value>some internal error happens.</value>
+    <value>An internal error has occurred.</value>
     <comment>unknown error in importing user.</comment>
   </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">

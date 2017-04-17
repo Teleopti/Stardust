@@ -13846,7 +13846,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to some internal error happens..
+        ///   Looks up a localized string similar to An internal error has occurred..
         /// </summary>
         public static string InternalErrorMsg {
             get {
