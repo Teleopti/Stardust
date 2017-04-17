@@ -11,6 +11,7 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 {
@@ -135,12 +136,37 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.SetScopeValues(".add-activity .activity-time-range", timeRange);
 		}
 
+		[When(@"I set a new absence as")]
+		public void WhenISetANewAbsenceAs(Table table)
+		{
+			var values = table.CreateInstance<AddAbsenceForm>();
+			var startTime = $"new Date('{values.StartTime}')";
+			var endTime = $"new Date('{values.EndTime}')";
+			var timeRangeStr = $"{{startTime:{startTime}, endTime:{endTime}}}";
+			var selectedDate = $"function(){{return '{values.SelectedDate}';}}";
+			var selectedId = idForAbsence(values.Absence).ToString();
+			var timeRange = new Dictionary<string, string>
+					{
+						{"vm.selectedDate", selectedDate},
+						{"vm.timeRange", timeRangeStr},
+						{"vm.selectedAbsenceId", $"'{selectedId}'" },
+						{"vm.isFullDayAbsence", $"{(values.FullDay ? "true" : "false")}"}
+					};
+			Browser.Interactions.SetScopeValues(".add-absence", timeRange);
+		}
+
 		[Then(@"I should be able to apply my new activity")]
 		public void ThenIShouldBeAbleToApplyMyNewActivity()
 		{
 			Browser.Interactions.AssertScopeValue("#applyActivity", "newActivityForm.$valid", true);
 			Browser.Interactions.AssertScopeValue("#applyActivity", "vm.anyValidAgent()", true);
 			Browser.Interactions.AssertExists("#applyActivity.wfm-btn-primary");
+		}
+
+		[Then(@"I should be able to apply my new absence")]
+		public void ThenIShouldBeAbleToApplyMyNewAbsence()
+		{
+			Browser.Interactions.AssertExists("#applyAbsence:not([disabled])");
 		}
 
 		[Then(@"I should see the add activity time starts '(.*)' and ends '(.*)'")]
@@ -411,12 +437,39 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input:checked");
 		}
 
+		[Given(@"'(.*)' is in Hawaii time zone")]
+		public void GivenIsInHawaiiTimeZone(string person)
+		{
+			DataMaker.Person(person).Apply(new HawaiiTimeZone());
+		}
+
+		[When(@"I click button to search for schedules")]
+		public void WhenIClickButtonToSearchForSchedules()
+		{
+			Browser.Interactions.Click(".search-icon");
+		}
+
+		[When(@"I apply the new absence")]
+		public void WhenIApplyTheNewAbsence()
+		{
+			Browser.Interactions.Click("#applyAbsence");
+		}
+
 		private static Guid idForActivity(string activityName)
 		{
 			var activityId = (from a in DataMaker.Data().UserDatasOfType<ActivityConfigurable>()
 							  let activity = a.Activity
 							  where activity.Name.Equals(activityName)
 							  select activity.Id.GetValueOrDefault()).First();
+			return activityId;
+		}
+
+		private static Guid idForAbsence(string absenceName)
+		{
+			var activityId = (from a in DataMaker.Data().UserDatasOfType<AbsenceConfigurable>()
+					  let absence = a.Absence
+					  where absence.Name.Equals(absenceName)
+					  select absence.Id.GetValueOrDefault()).First();
 			return activityId;
 		}
 	}
@@ -428,5 +481,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
 		public bool IsNextDay { get; set; }
+	}
+
+	public class AddAbsenceForm
+	{
+		public string Absence { get; set; }
+		public string SelectedDate { get; set; }
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
+		public bool FullDay { get; set; }
 	}
 }

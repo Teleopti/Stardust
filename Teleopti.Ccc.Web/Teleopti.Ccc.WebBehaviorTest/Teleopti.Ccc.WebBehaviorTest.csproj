@@ -1030,6 +1030,11 @@
     </Compile>
     <Compile Include="Wfm\Seat Management\SeatPlanReportStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatPlanStepDefinitions.cs" />
+    <Compile Include="Wfm\TeamSchedule\AddAbsence.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddAbsence.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\TeamSchedule\CommandCheck.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1559,6 +1564,10 @@
     <None Include="Wfm\Seat Management\SeatPlanReport.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SeatPlanReport.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\TeamSchedule\AddAbsence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AddAbsence.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\TeamSchedule\CommandCheck.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
