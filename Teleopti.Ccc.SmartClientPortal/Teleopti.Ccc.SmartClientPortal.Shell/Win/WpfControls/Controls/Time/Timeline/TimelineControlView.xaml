@@ -6,7 +6,8 @@
     xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
     xmlns:Editor="clr-namespace:Teleopti.Ccc.WinCode.Scheduling.Editor;assembly=Teleopti.Ccc.WinCode"
     xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline.Views"
-    xmlns:controls="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls">
+    xmlns:controls="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls"
+    xmlns:timeline="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -71,7 +72,7 @@
                         </controls:AnalogPresenter.DataContext>
                     </controls:AnalogPresenter>
 
-                    <TextBlock Grid.Column="2" Text="{Binding ElapsedTime, RelativeSource={RelativeSource FindAncestor, AncestorType=Timeline:TimelineControlView}, StringFormat=t,Converter={StaticResource TimeSpanToStringConverter}}" FontWeight="Bold"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Opacity="0.8"/>
+                    <TextBlock Grid.Column="2" Text="{Binding ElapsedTime, RelativeSource={RelativeSource FindAncestor, AncestorType=timeline:TimelineControlView}, StringFormat=t,Converter={StaticResource TimeSpanToStringConverter}}" FontWeight="Bold"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Opacity="0.8"/>
                 
                     <controls:AnalogPresenter  Grid.Column="3" VerticalAlignment="Stretch" Height="30" Width="30" >
                         <controls:AnalogPresenter.DataContext>
