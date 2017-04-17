@@ -216,6 +216,7 @@
 		};
 
 		vm.loadSchedules = function () {
+			closeAllCommandSidenav();
 			vm.isLoading = true;
 			var preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
 			if (vm.searchEnabled) {
