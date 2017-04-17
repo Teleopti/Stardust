@@ -13846,11 +13846,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to some internal error happens:{0};.
+        ///   Looks up a localized string similar to some internal error happens..
         /// </summary>
-        public static string InternalErrorXMsg {
+        public static string InternalErrorMsg {
             get {
-                return ResourceManager.GetString("InternalErrorXMsg", resourceCulture);
+                return ResourceManager.GetString("InternalErrorMsg", resourceCulture);
             }
         }
         
