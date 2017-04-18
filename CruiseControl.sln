@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.3
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -216,6 +216,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Staffing.PerformanceTest", "Teleopti.Ccc.Staffing.PerformanceTest\Teleopti.Ccc.Staffing.PerformanceTest.csproj", "{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Test", "Teleopti.Wfm.Test\Teleopti.Wfm.Test.csproj", "{096E69DA-1F3B-4E43-848D-FA5D92281394}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Win", "Win\Teleopti.Ccc.Win.csproj", "{26C57CBE-E75F-42C9-9747-8016AEB305F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.WinCode", "Teleopti.Ccc.WinCode\Teleopti.Ccc.WinCode.csproj", "{3B495E4B-1803-413C-9480-40C8EFCCBA45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1189,6 +1193,38 @@ Global
 		{096E69DA-1F3B-4E43-848D-FA5D92281394}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{096E69DA-1F3B-4E43-848D-FA5D92281394}.Release|x86.ActiveCfg = Release|Any CPU
 		{096E69DA-1F3B-4E43-848D-FA5D92281394}.Release|x86.Build.0 = Release|Any CPU
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Debug|.NET.Build.0 = Debug|Any CPU
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Debug|x86.ActiveCfg = Debug|x86
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Debug|x86.Build.0 = Debug|x86
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Release|.NET.ActiveCfg = Release|Any CPU
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Release|.NET.Build.0 = Release|Any CPU
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Release|Mixed Platforms.Build.0 = Release|x86
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Release|x86.ActiveCfg = Release|x86
+		{26C57CBE-E75F-42C9-9747-8016AEB305F2}.Release|x86.Build.0 = Release|x86
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Debug|.NET.Build.0 = Debug|Any CPU
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Debug|x86.ActiveCfg = Debug|x86
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Debug|x86.Build.0 = Debug|x86
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|.NET.ActiveCfg = Release|Any CPU
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|.NET.Build.0 = Release|Any CPU
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|Mixed Platforms.Build.0 = Release|x86
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|x86.ActiveCfg = Release|x86
+		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1232,8 +1268,8 @@ Global
 		{096E69DA-1F3B-4E43-848D-FA5D92281394} = {FEFF4A24-4851-4A21-BF0F-68A36655E0E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1

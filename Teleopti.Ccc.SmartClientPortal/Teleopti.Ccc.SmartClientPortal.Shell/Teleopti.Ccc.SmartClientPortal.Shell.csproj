@@ -348,7 +348,6 @@
     <Compile Include="WinCode\Budgeting\BudgetGroupWizardPage.cs" />
     <Compile Include="WinCode\Budgeting\BudgetNavigatorDataService.cs" />
     <Compile Include="WinCode\Budgeting\BudgetPermissionService.cs" />
-    <Compile Include="WinCode\Budgeting\BudgetSettings.cs" />
     <Compile Include="WinCode\Budgeting\BudgetSettingsProvider.cs" />
     <Compile Include="WinCode\Budgeting\ClosedBudgetDayResolver.cs" />
     <Compile Include="WinCode\Budgeting\IBudgetGroupMainViewFactory.cs" />
@@ -409,11 +408,8 @@
     <Compile Include="WinCode\Budgeting\Views\IBudgetGroupTabView.cs" />
     <Compile Include="WinCode\Budgeting\Views\IBudgetGroupWeekView.cs" />
     <Compile Include="WinCode\Budgeting\Views\IEditShrinkageForm.cs" />
-    <Compile Include="WinCode\Budgeting\ViewType.cs" />
     <Compile Include="WinCode\Common\AbsenceLayerViewModel.cs" />
     <Compile Include="WinCode\Common\Chart\ChartManager.cs" />
-    <Compile Include="WinCode\Common\Chart\ChartSeriesSetting.cs" />
-    <Compile Include="WinCode\Common\Chart\ChartSettings.cs" />
     <Compile Include="WinCode\Common\Chart\ChartSettingsManager.cs" />
     <Compile Include="WinCode\Common\Chart\LabelModel.cs" />
     <Compile Include="WinCode\Common\ClipBoard\Clip.cs" />
@@ -541,7 +537,6 @@
     <Compile Include="WinCode\Common\IObservable.cs" />
     <Compile Include="WinCode\Common\IOpenPeriodMode.cs" />
     <Compile Include="WinCode\Common\IPeopleLoader.cs" />
-    <Compile Include="WinCode\Common\IPortalSettings.cs" />
     <Compile Include="WinCode\Common\IScheduleContractTimeCalculator.cs" />
     <Compile Include="WinCode\Common\IScheduleTargetTimeCalculator.cs" />
     <Compile Include="WinCode\Common\ISchedulingResultLoader.cs" />
@@ -656,15 +651,11 @@
     <Compile Include="WinCode\Forecasting\CopyToSkillPresenter.cs" />
     <Compile Include="WinCode\Forecasting\ExportPages\ChildSkillMappingModel.cs" />
     <Compile Include="WinCode\Forecasting\ExportPages\DestinationSkillModel.cs" />
-    <Compile Include="WinCode\Forecasting\ExportPages\ExportAcrossBusinessUnitsSettings.cs" />
     <Compile Include="WinCode\Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProvider.cs" />
-    <Compile Include="WinCode\Forecasting\ExportPages\ExportForecastToFileSettings.cs" />
     <Compile Include="WinCode\Forecasting\ExportPages\ExportForecastToFileSettingsProvider.cs" />
     <Compile Include="WinCode\Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModel.cs" />
     <Compile Include="WinCode\Forecasting\ExportPages\ExportSkillWizardPages.cs" />
-    <Compile Include="WinCode\Forecasting\ExportPages\IExportAcrossBusinessUnitsSettings.cs" />
     <Compile Include="WinCode\Forecasting\ExportPages\IExportAcrossBusinessUnitsSettingsProvider.cs" />
-    <Compile Include="WinCode\Forecasting\ExportPages\IExportForecastToFileSettings.cs" />
     <Compile Include="WinCode\Forecasting\ExportPages\IExportForecastToFileSettingsProvider.cs" />
     <Compile Include="WinCode\Forecasting\ExportPages\MultisiteSkillModel.cs" />
     <Compile Include="WinCode\Forecasting\ExportPages\MultisiteSkillSelectionModel.cs" />
@@ -944,7 +935,6 @@
     <Compile Include="WinCode\PeopleAdmin\PeopleNavigatorPresenter.cs" />
     <Compile Include="WinCode\PeopleAdmin\PeopleSaved.cs" />
     <Compile Include="WinCode\PeopleAdmin\PersonFinderPresenter.cs" />
-    <Compile Include="WinCode\PeopleAdmin\PersonFinderSettings.cs" />
     <Compile Include="WinCode\PeopleAdmin\PersonSkillStringParser.cs" />
     <Compile Include="WinCode\PeopleAdmin\RoleCollectionParser.cs" />
     <Compile Include="WinCode\PeopleAdmin\RoleDisplay.cs" />
@@ -981,10 +971,7 @@
     <Compile Include="WinCode\Presentation\ReportUserSelectorAuditingModel.cs" />
     <Compile Include="WinCode\Presentation\ReportUserSelectorAuditingPresenter.cs" />
     <Compile Include="WinCode\Presentation\ShiftCategoryLimitationViewPresenter.cs" />
-    <Compile Include="WinCode\Reporting\ReportSettingsScheduleAuditing.cs" />
-    <Compile Include="WinCode\Reporting\ReportSettingsScheduledTimePerActivity.cs" />
     <Compile Include="WinCode\Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
-    <Compile Include="WinCode\Reporting\ReportSettingsScheduledTimeVersusTarget.cs" />
     <Compile Include="WinCode\Reporting\ReportSettingsScheduleTimeVersusTargetTimeModel.cs" />
     <Compile Include="WinCode\Scheduling\AbsenceMerger.cs" />
     <Compile Include="WinCode\Scheduling\AddAbsenceCommand.cs" />
@@ -1121,7 +1108,6 @@
     <Compile Include="WinCode\Scheduling\ISchedulePresenterBase.cs" />
     <Compile Include="WinCode\Scheduling\IScheduleViewBase.cs" />
     <Compile Include="WinCode\Scheduling\ISchedulingScreenPersister.cs" />
-    <Compile Include="WinCode\Scheduling\ISchedulingScreenSettings.cs" />
     <Compile Include="WinCode\Scheduling\IViewModelIsValid.cs" />
     <Compile Include="WinCode\Scheduling\MultiplicatorsetForPasteSpecialFilter.cs" />
     <Compile Include="WinCode\Scheduling\NotesEditorViewModel.cs" />
@@ -1186,7 +1172,6 @@
     <Compile Include="WinCode\Scheduling\ScheduleReporting\PdfFontManager.cs" />
     <Compile Include="WinCode\Scheduling\ScheduleReporting\ScheduledTimePerActivityModel.cs" />
     <Compile Include="WinCode\Scheduling\ScheduleReporting\ScheduledTimeVersusTargetTimeReportData.cs" />
-    <Compile Include="WinCode\Scheduling\ScheduleReporting\ScheduleReportDetail.cs" />
     <Compile Include="WinCode\Scheduling\ScheduleReporting\ScheduleReportDialogGraphicalModel.cs" />
     <Compile Include="WinCode\Scheduling\ScheduleReporting\ScheduleReportDialogGraphicalPresenter.cs" />
     <Compile Include="WinCode\Scheduling\ScheduleReporting\ScheduleReportDrawHeader.cs" />
@@ -1885,7 +1870,6 @@
       <DependentUpon>FromToTimePicker.cs</DependentUpon>
     </Compile>
     <Compile Include="Win\Common\Controls\GridRangePasteEventArgs.cs" />
-    <Compile Include="Win\Common\Controls\IntegerExtensions.cs" />
     <Compile Include="Win\Common\Controls\IntervalLengthItem.cs" />
     <Compile Include="Win\Common\Controls\MaskedTimeSpanTextBox.cs">
       <SubType>UserControl</SubType>
@@ -1926,7 +1910,6 @@
     <Compile Include="Win\Common\Controls\OpenScenarioForPeriod.Designer.cs">
       <DependentUpon>OpenScenarioForPeriod.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win\Common\Controls\OpenScenarioForPeriodSetting.cs" />
     <Compile Include="Win\Common\Controls\OutlierBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2133,8 +2116,6 @@
     </Compile>
     <Compile Include="Win\Common\TreeViewAdvExtension.cs" />
     <Compile Include="Win\Common\ViewBase.cs" />
-    <Compile Include="Win\Common\VirtualSkill.cs" />
-    <Compile Include="Win\Common\VirtualSkillSetting.cs" />
     <Compile Include="Win\ExceptionHandling\ExceptionHandlerView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2148,7 +2129,6 @@
       <DependentUpon>SimpleExceptionHandlerView.cs</DependentUpon>
     </Compile>
     <Compile Include="Win\Forecasting\ForecasterModule.cs" />
-    <Compile Include="Win\Forecasting\ForecasterSettings.cs" />
     <Compile Include="Win\Forecasting\Forms\AbstractDetailView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2518,7 +2498,6 @@
     <Compile Include="Win\Forecasting\Forms\WFControls\WorkloadDayFilterGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Win\Forecasting\Forms\WorkingInterval.cs" />
     <Compile Include="Win\Forecasting\Forms\WorkingIntervalChangedEventArgs.cs" />
     <Compile Include="Win\Forecasting\Forms\WorkloadDayTemplatesPages\WorkloadDayTemplatesDetailView.cs">
       <SubType>UserControl</SubType>
@@ -2635,9 +2614,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Win\Intraday\IntradayScheduleView.cs" />
-    <Compile Include="Win\Intraday\IntradaySetting.cs" />
     <Compile Include="Win\Intraday\IntradaySettingManager.cs" />
-    <Compile Include="Win\Intraday\IntradaySettingsPresenter.cs" />
     <Compile Include="Win\Intraday\IntradayView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2735,7 +2712,6 @@
     <Compile Include="Win\Main\MainModule.cs" />
     <Compile Include="Win\Main\NavigationModule.cs" />
     <Compile Include="Win\Main\NavigationPanelProvider.cs" />
-    <Compile Include="Win\Main\PortalSettings.cs" />
     <Compile Include="Win\Main\PortalSettingsProvider.cs" />
     <Compile Include="Win\Main\PreLogonScreen.cs">
       <SubType>Form</SubType>
@@ -3404,7 +3380,6 @@
     <Compile Include="Win\Scheduling\ScheduleReporting\ScheduleReportDialogGraphicalView.Designer.cs">
       <DependentUpon>ScheduleReportDialogGraphicalView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win\Scheduling\ScheduleReporting\ScheduleReportDialogSettings.cs" />
     <Compile Include="Win\Scheduling\ScheduleReporting\ScheduleToPdfManager.cs" />
     <Compile Include="Win\Scheduling\SchedulerMeetingHelper.cs" />
     <Compile Include="Win\Scheduling\SchedulerMessageBrokerHandler.cs" />
@@ -3471,7 +3446,6 @@
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\ShovelingAnalyzerView.Designer.cs">
       <DependentUpon>ShovelingAnalyzerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win\Scheduling\SchedulingScreenSettings.cs" />
     <Compile Include="Win\Scheduling\SchedulingServiceModule.cs" />
     <Compile Include="Win\Scheduling\SchedulingSessionPreferences\ResourceOptimizerDayOffPreferencesPanel.cs">
       <SubType>UserControl</SubType>
@@ -5598,6 +5572,10 @@
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Win\Teleopti.Ccc.Win.csproj">
+      <Project>{26c57cbe-e75f-42c9-9747-8016aeb305f2}</Project>
+      <Name>Teleopti.Ccc.Win</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
