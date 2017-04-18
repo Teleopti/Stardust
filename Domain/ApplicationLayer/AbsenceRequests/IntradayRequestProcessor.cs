@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
@@ -91,8 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 
 				var deltaResourcesForAgent = new List<SkillCombinationResource>();
-				var earliestProjectionStartDateTime = DateTime.MaxValue;
-				var latestProjectionEndDateTime = DateTime.MinValue;
+				var shiftPeriodList = new List<DateTimePeriod>(); 
 				foreach (var day in scheduleDays)
 				{
 					var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
@@ -103,14 +103,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						continue;
 					}
 
-					if (projection.OriginalProjectionPeriod.Value.StartDateTime < earliestProjectionStartDateTime)
-					{
-						earliestProjectionStartDateTime = projection.OriginalProjectionPeriod.Value.StartDateTime;
-					}
-					if (projection.OriginalProjectionPeriod.Value.EndDateTime > latestProjectionEndDateTime)
-					{
-						latestProjectionEndDateTime = projection.OriginalProjectionPeriod.Value.EndDateTime;
-					}
+					shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime, projection.OriginalProjectionPeriod.Value.EndDateTime));
 
 					deltaResourcesForAgent.AddRange(
 						from layer in layers let skillCombination = _personSkillProvider.SkillsOnPersonDate(personRequest.Person, dateOnlyPeriod.StartDate)
@@ -124,8 +117,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				{
 					var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
 					var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList(), useShrinkage);
-					
-					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervals.Where(x => x.StartDateTime >= earliestProjectionStartDateTime && x.StartDateTime < latestProjectionEndDateTime));
+					var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
+					foreach (var projectionPeriod in shiftPeriodList)
+					{
+						skillStaffingIntervalsToValidate.AddRange(skillStaffingIntervals.Where(x => x.StartDateTime >= projectionPeriod.StartDateTime && x.StartDateTime < projectionPeriod.EndDateTime));
+					}
+					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervalsToValidate);
 					if (validatedRequest.IsValid)
 					{
 						if (!autoGrant) return;

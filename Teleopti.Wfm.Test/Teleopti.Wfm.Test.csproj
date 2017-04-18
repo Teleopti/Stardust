@@ -64,8 +64,9 @@
     <Compile Include="SetUpCascadingShifts.cs" />
     <Compile Include="MultiSkilledGoldSilverBronzeAgentSameDayTest.cs" />
     <Compile Include="MultiSkilledGoldSilverBronzeAgentBulkTest.cs" />
+    <Compile Include="SingleSkilledAgentOvertimeTest.cs" />
     <Compile Include="SingleSkilledBronzeAgentActivityCasesBulkTest.cs" />
-    <Compile Include="SingleSkilledBronzeAgentActivityCasesSameDayShiftOpenHourTest.cs" />
+    <Compile Include="SingleSkilledBronzeAgentSameDayShiftOpenHourCasesTest.cs" />
     <Compile Include="SingleSkilledBronzeAgentFullDayBulkTest.cs" />
     <Compile Include="SingleSkilledBronzeAgentActivityCasesSameDayTest.cs" />
     <Compile Include="SingleSkilledBronzeAgentSkillOpenHoursTest.cs" />

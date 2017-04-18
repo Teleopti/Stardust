@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -19,7 +20,7 @@ namespace Teleopti.Wfm.Test
 {
 	[UnitOfWorkTest]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
-	public class SingleSkilledBronzeAgentActivityCasesSameDayShiftOpenHourTest : SetUpCascadingShifts
+	public class SingleSkilledBronzeAgentSameDayShiftOpenHourCasesTest : SetUpCascadingShifts
 	{
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public IBusinessUnitRepository BusinessUnitRepository;
@@ -31,7 +32,6 @@ namespace Teleopti.Wfm.Test
 		public IAbsenceRequestIntradayFilter AbsenceRequestIntradayFilter;
 		public IPersonRequestRepository PersonRequestRepository;
 		
-
 		[SetUp]
 		public void Setup()
 		{
@@ -179,11 +179,12 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldDenyIfAppliedWithinShiftAndEndsAfterShiftIfUnderstaffed()
 		{
+			//shift 13 to 15
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
-			var requestStart = hourNow.AddHours(8);
+			var requestStart = hourNow.AddHours(14);
 			SetUpRelevantStuffWithCascading();
 			SetUpHighDemandSkillDays();
 
@@ -214,6 +215,55 @@ namespace Teleopti.Wfm.Test
 			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PATwoShiftSpawn");
 
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(20).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldApproveIfRequestSpawnsOverMidnightShiftsWhenOverstaffed()
+		{
+			var now = new DateTime(2017, 04, 06, 9, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			var requestStart = now.AddHours(1);
+			SetUpRelevantStuffWithCascading();
+			SetUpLowDemandSkillDays();
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "TwoMidnightO");
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(8).Utc()));
+			var personRequest = new PersonRequest(person, absenceRequest);
+			PersonRequestRepository.Add(personRequest);
+			uow.PersistAll();
+			AbsenceRequestIntradayFilter.Process(personRequest);
+			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
+			req.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldApproveIfRequestSpawnsOverMidnightShiftsWhenUnderstaffed()
+		{
+			var now = new DateTime(2017, 04, 06, 9, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
+			var requestStart = now.AddHours(1);
+			SetUpRelevantStuffWithCascading();
+			SetUpBronzeSkillDaysWithListWhichWontWorkWithOpenHours(20,
+				new List<Tuple<int, double>>()
+				{
+					Tuple.Create(10, (double) 0.1),
+					Tuple.Create(17, (double) 0.1)
+				});
+
+			var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
+			var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "TwoMidnightU");
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart.Utc(), requestStart.AddHours(8).Utc()));
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();

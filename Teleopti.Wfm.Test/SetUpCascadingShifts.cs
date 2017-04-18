@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -68,6 +69,40 @@ namespace Teleopti.Wfm.Test
 				HourDemand = hourDemands
 			};
 
+			Data.Apply(skillDayGoldToday);
+			Data.Apply(skillDaySilverToday);
+			Data.Apply(skillDayBronzeToday);
+
+			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(Now.UtcDateTime().Date.AddDays(-1), Now.UtcDateTime().Date.AddDays(2)));
+		}
+
+		public void SetUpBronzeSkillDaysWithListWhichWontWorkWithOpenHours(double defaultDemand, List<Tuple<int, double>> hourDemands)
+		{
+			var skillDayGoldToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
+				Scenario = "Scenario",
+				Skill = "GoldSkill",
+				DefaultDemand = defaultDemand,
+				Shrinkage = 0.2,
+			};
+			var skillDaySilverToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
+				Scenario = "Scenario",
+				Skill = "SilverSkill",
+				DefaultDemand = defaultDemand,
+				Shrinkage = 0.2,
+			};
+			var skillDayBronzeToday = new SkillDayConfigurable
+			{
+				DateOnly = new DateOnly(Now.UtcDateTime().Date),
+				Scenario = "Scenario",
+				Skill = "BronzeSkill",
+				DefaultDemand = defaultDemand,
+				Shrinkage = 0.2,
+				HourDemandList = hourDemands
+			};
 			Data.Apply(skillDayGoldToday);
 			Data.Apply(skillDaySilverToday);
 			Data.Apply(skillDayBronzeToday);
@@ -563,6 +598,8 @@ namespace Teleopti.Wfm.Test
 
 			personSetupForSkillOpenhours(contract, contractSchedule, partTimePercentage, team, privateCustomerSkill, wfcs, shiftStart, shiftCategory, activity, scenario, businessCustomerSkill);
 
+			personSetupForOvertime(contract, contractSchedule, partTimePercentage, team, bronzeSkill, wfcs, shiftStart, shiftCategory, activity, scenario);
+
 			var personPeriodBronzeWithNonSkill = new PersonPeriodConfigurable
 			{
 				Contract = contract.Name,
@@ -764,6 +801,33 @@ namespace Teleopti.Wfm.Test
 			AddShift(personAllSkillsOvertime.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario, multiplicatorDefinitionSet.MultiplicatorDefinitionSet, true);
 		}
 
+	    private void personSetupForOvertime(ContractConfigurable contract, ContractScheduleConfigurable contractSchedule, PartTimePercentageConfigurable partTimePercentage, TeamConfigurable team, SkillConfigurable bronzeSkill, WorkflowControlSetConfigurable wfcs, DateTime shiftStart, ShiftCategoryConfigurable shiftCategory, ActivityConfigurable activity, ScenarioConfigurable scenario)
+	    {
+			var personPeriodOvertime = new PersonPeriodConfigurable
+			{
+				Contract = contract.Name,
+				ContractSchedule = contractSchedule.Name,
+				PartTimePercentage = partTimePercentage.Name,
+				StartDate = new DateTime(1980, 01, 01),
+				Team = team.Name,
+				Skill = bronzeSkill.Name,
+				WorkflowControlSet = wfcs.Name
+			};
+
+	        var multiplicatorDefinitionSetConfigurable = new MultiplicatorDefinitionSetConfigurable()
+	        {
+				Name = "overtimeAgentMS"
+	        };
+			Data.Apply(multiplicatorDefinitionSetConfigurable);
+
+			var personOvertime = new PersonConfigurable
+			{
+				Name = "overtimeAgent"
+			};
+			Data.Person(personOvertime.Name).Apply(personPeriodOvertime);
+			AddShift(personOvertime.Name, shiftStart.Date, 9, 1, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario, multiplicatorDefinitionSetConfigurable.MultiplicatorDefinitionSet, true);
+		}
+
 	    private static void personSetupForShiftHours(ContractConfigurable contract,ContractScheduleConfigurable contractSchedule, PartTimePercentageConfigurable partTimePercentage,
 	        TeamConfigurable team, SkillConfigurable bronzeSkill, WorkflowControlSetConfigurable wfcs, DateTime shiftStart,ShiftCategoryConfigurable shiftCategory, ActivityConfigurable activity, ScenarioConfigurable scenario)
 	    {
@@ -816,7 +880,7 @@ namespace Teleopti.Wfm.Test
 				Name = "PAWSEASU"
 			};
 			Data.Person(personAbsenceWithinShiftEndsAfterShiftUndertsaffed.Name).Apply(personPeriodBronzeOpenHours);
-			AddShift(personAbsenceWithinShiftEndsAfterShiftUndertsaffed.Name, shiftStart.Date, 5, 4, shiftCategory.ShiftCategory, activity.Activity,
+			AddShift(personAbsenceWithinShiftEndsAfterShiftUndertsaffed.Name, shiftStart.Date, 13, 2, shiftCategory.ShiftCategory, activity.Activity,
 				scenario.Scenario);
 
 			var personAbsenceAcrossTwoShifts = new PersonConfigurable
@@ -826,6 +890,22 @@ namespace Teleopti.Wfm.Test
 			Data.Person(personAbsenceAcrossTwoShifts.Name).Apply(personPeriodBronzeOpenHours);
 			AddShift(personAbsenceAcrossTwoShifts.Name, shiftStart.Date, 15, 1, shiftCategory.ShiftCategory, activity.Activity,scenario.Scenario);
 			AddShift(personAbsenceAcrossTwoShifts.Name, shiftStart.AddDays(1).Date, 9, 1, shiftCategory.ShiftCategory, activity.Activity,scenario.Scenario);
+
+			var personTwoMidnightO = new PersonConfigurable
+			{
+				Name = "TwoMidnightO"
+			};
+			Data.Person(personTwoMidnightO.Name).Apply(personPeriodBronzeOpenHours);
+			AddShift(personTwoMidnightO.Name, shiftStart.Date.AddDays(-1), 23, 12, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			AddShift(personTwoMidnightO.Name, shiftStart.Date, 17, 20, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+
+			var personTwoMidnightU = new PersonConfigurable
+			{
+				Name = "TwoMidnightU"
+			};
+			Data.Person(personTwoMidnightU.Name).Apply(personPeriodBronzeOpenHours);
+			AddShift(personTwoMidnightU.Name, shiftStart.AddDays(-1).Date, 23, 12, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
+			AddShift(personTwoMidnightU.Name, shiftStart.Date, 17, 20, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario);
 		}
 
 		private static void personSetupForSkillOpenhours(ContractConfigurable contract, ContractScheduleConfigurable contractSchedule, PartTimePercentageConfigurable partTimePercentage,
