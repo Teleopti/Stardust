@@ -193,6 +193,7 @@ $(document).ready(function () {
 		equal(vm.showProbabilityOptionsForm(), false);
 	});
 
+	/*
 	test("Should show probability data for multiple upcoming days when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on", function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
@@ -281,4 +282,5 @@ $(document).ready(function () {
 		equal(vm.dayViewModels()[1].probabilities()[0].styleJson.left != '', true);
 		equal(vm.dayViewModels()[1].probabilities()[0].styleJson.width != '', true);
 	});
+	*/
 });
