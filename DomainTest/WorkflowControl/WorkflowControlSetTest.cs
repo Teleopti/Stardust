@@ -381,6 +381,29 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		}
 
 		[Test]
+		public void ShouldReturnTrueWhenAnyAbsenceValidatorIsInRange()
+		{
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TimeZoneInfo.Utc));
+			var period = new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1));
+			_target.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				OpenForRequestsPeriod = period,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				Period = period,
+				StaffingThresholdValidator = new BudgetGroupAllowanceValidator()
+			});
+			_target.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				OpenForRequestsPeriod = period,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				Period = period,
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			});
+
+			Assert.IsTrue(_target.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(TimeZoneInfo.Utc));
+		}
+
+		[Test]
 		public void ShouldReturnFalseWhenAbsenceValidatorIsOutOfRange()
 		{
 			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TimeZoneInfo.Utc));

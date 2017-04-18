@@ -150,12 +150,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual IWorkflowControlSet NoneEntityClone()
 		{
-			var clone = EntityCloneInternal(p => p.NoneEntityClone());
+			var clone = entityCloneInternal(p => p.NoneEntityClone());
 			clone.SetId(null);
 			return clone;
 		}
 
-		private IWorkflowControlSet EntityCloneInternal(Func<IAbsenceRequestOpenPeriod, IAbsenceRequestOpenPeriod> periodCreator)
+		private IWorkflowControlSet entityCloneInternal(Func<IAbsenceRequestOpenPeriod, IAbsenceRequestOpenPeriod> periodCreator)
 		{
 			var clone = (WorkflowControlSet)MemberwiseClone();
 			clone._absenceRequestOpenPeriods = new List<IAbsenceRequestOpenPeriod>();
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual IWorkflowControlSet EntityClone()
 		{
-			return EntityCloneInternal(p => p.EntityClone());
+			return entityCloneInternal(p => p.EntityClone());
 		}
 
 		public virtual DateTime? SchedulePublishedToDate
@@ -387,15 +387,14 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public virtual bool IsAbsenceRequestValidatorEnabled<T>(TimeZoneInfo timeZone)
 			where T : IAbsenceRequestValidator
 		{
+			var expectedValidatorType = typeof(T);
 			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, timeZone));
-			var currentAbsenceOpenPeriod =
-				AbsenceRequestOpenPeriods.FirstOrDefault(
-					p => p.OpenForRequestsPeriod.Contains(today)
-						 && p.GetPeriod(today).Contains(today)
-						 && p.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest)
-					);
-			var checkStaffingValidator = currentAbsenceOpenPeriod?.StaffingThresholdValidator;
-			return checkStaffingValidator != null && checkStaffingValidator.GetType() == typeof(T);
+			var validOpenPeriods = AbsenceRequestOpenPeriods.Where(
+				p => p.OpenForRequestsPeriod.Contains(today) && p.GetPeriod(today).Contains(today)
+					 && p.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest));
+
+			return validOpenPeriods.Any(p =>
+				p.StaffingThresholdValidator != null && p.StaffingThresholdValidator.GetType() == expectedValidatorType);
 		}
 
 		private IAbsenceRequestOpenPeriod getMergedOpenPeriods(IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)
@@ -403,7 +402,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var extractor = GetExtractorForAbsence(absenceRequest.Absence);
 			extractor.ViewpointDate = ServiceLocatorForEntity.Now.LocalDateOnly();
 
-			var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod, absenceRequest.Person.PermissionInformation.Culture(), absenceRequest.Person.PermissionInformation.UICulture());
+			var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod,
+				absenceRequest.Person.PermissionInformation.Culture(), absenceRequest.Person.PermissionInformation.UICulture());
 			return new AbsenceRequestOpenPeriodMerger().Merge(openPeriods);
 		}
 	}
