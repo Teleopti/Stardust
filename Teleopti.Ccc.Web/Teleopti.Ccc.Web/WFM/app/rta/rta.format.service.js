@@ -30,12 +30,12 @@
 			return momentTime.format('HH:mm');
 		};
 
-		function formatDuration(duration) {
-			if (duration === null) {
+		function formatDuration(seconds) {
+			if (seconds === null) {
 				return "";
 			}
-			var durationInSeconds = moment.duration(duration, 'seconds');
-			return (Math.floor(durationInSeconds.asHours()) + moment(durationInSeconds.asMilliseconds()).format(':mm:ss'));
+			var duration = moment.duration(seconds, 'seconds');
+			return Math.floor(duration.asHours()) + moment.utc(seconds*1000).format(":mm:ss");
 		};
 
 		function formatToSeconds(duration) {
