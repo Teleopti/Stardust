@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			else if (toggleManager.IsEnabled(Toggles.Wfm_SkillPriorityRoutingGUI_39885))
 			{
 				var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
-				var url = $"{wfmPath}WFM/#/skillprio/v2";
+				var url = $"{wfmPath}WFM/#/skillprio";
 				if (url.IsAnUrl())
 					Process.Start(url);
 			}
