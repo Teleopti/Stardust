@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var useShrinkageValidator = isShrinkageValidatorEnabled();
 			var skillStaffingDatas = getSkillStaffingData(period, useShrinkageValidator);
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
-				skill => new IntervalHasOverstaffing(skill);
+				skill => new IntervalHasSeriousUnderstaffing(skill);
 			return calcuateIntervalPossibilitiesForMultipleDays(skillStaffingDatas, getStaffingSpecification, scheduleDictionary);
 		}
 
@@ -150,9 +150,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 					if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffingData.Time[i]))
 						continue;
-
-					var isSatisfied = staffingSpecification.IsSatisfiedBy(staffingInterval);
-					var possibility = isSatisfied ? fairPossibility : goodPossibility;
+					
+				    var possibility = getPossibility(staffingInterval, staffingSpecification);
 					var key = skillStaffingData.Time[i];
 					if (intervalPossibilities.ContainsKey(key))
 					{
@@ -166,6 +165,21 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			}
 			return intervalPossibilities;
 		}
+
+	    private static int getPossibility(SkillStaffingInterval staffingInterval, ISpecification<IValidatePeriod> staffingSpecification)
+	    {
+			var isSatisfied = staffingSpecification.IsSatisfiedBy(staffingInterval);
+			int possibility;
+			if (staffingSpecification.GetType() == typeof(IntervalHasSeriousUnderstaffing))
+			{
+				possibility = isSatisfied ? goodPossibility : fairPossibility;
+			}
+			else
+			{
+				possibility = isSatisfied ? fairPossibility : goodPossibility;
+			}
+	        return possibility;
+	    }
 
 		private static IDictionary<DateOnly, IDictionary<DateTime, int>> calcuateIntervalPossibilitiesForMultipleDays(
 			IEnumerable<skillStaffingData> skillStaffingDatas,

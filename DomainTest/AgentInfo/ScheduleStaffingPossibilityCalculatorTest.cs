@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			var activity2 = createActivity();
 			var personSkill2 = createPersonSkill(activity2);
-			setPersonSkill(personSkill2, new double?[] { 10d, 10d }, new double?[] { 11d, 12d });
+			setPersonSkill(personSkill2, new double?[] { 10d, 10d }, new double?[] { 6d, 12d });
 
 			var personPeriod = createPersonPeriod(personSkill1, personSkill2);
 			person.AddPersonPeriod(personPeriod);
@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		[Test]
 		public void ShouldGetGoodPossibilitiesForOvertimeWhenNotOverstaffing()
 		{
-			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 11d, 11d });
+			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 6d, 6d });
 			var possibilities = Target.CalcuateIntradayOvertimeIntervalPossibilities();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(1, possibilities.Values.ElementAt(0));
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		[Test]
 		public void ShouldGetFairAndGoodPossibilitiesForOvertime()
 		{
-			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 12d, 11d });
+			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 7d, 6d });
 			var possibilities = Target.CalcuateIntradayOvertimeIntervalPossibilities();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.Values.ElementAt(0));
