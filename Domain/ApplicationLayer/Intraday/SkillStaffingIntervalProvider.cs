@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -60,9 +62,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 									  new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
 																							 s => (IResourceCalculationPeriod)s)));
 			var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
+			//var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
+		    var dateOnlyPeriod = ExtractSkillForecastIntervals.GetLongestPeriod(skills, period);
 
-			using (getContext(combinationResources, skills, false))
+            using (getContext(combinationResources, skills, false))
 			{
 				_resourceCalculation.ResourceCalculate(dateOnlyPeriod, resCalcData, () => getContext(combinationResources, skills, true));
 			}
@@ -150,8 +153,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 
 		public IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period, bool useShrinkage)
 		{
-			var returnList = new List<SkillStaffingInterval>();
-			var skillDays =  _skillDayRepository.FindReadOnlyRange(period.ToDateOnlyPeriod(TimeZoneInfo.Utc), skills, _currentScenario.Current());
+			var returnList = new HashSet<SkillStaffingInterval>();
+			var skillDays =  _skillDayRepository.FindReadOnlyRange(GetLongestPeriod(skills, period), skills, _currentScenario.Current());
 			foreach (var skillDay in skillDays)
 			{
 				if (useShrinkage)
@@ -161,11 +164,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 						skillStaffPeriod.Payload.UseShrinkage = true;
 					}
 				}
-				returnList.AddRange(getSkillStaffingIntervals(skillDay));
+				getSkillStaffingIntervals(skillDay).ForEach(i => returnList.Add(i));
 			}
 			return returnList.Where(x => period.Contains(x.StartDateTime));
 		}
 
+	    public static DateOnlyPeriod GetLongestPeriod(IList<ISkill> skills, DateTimePeriod period)
+	    {
+	        var returnPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.Date), new DateOnly(period.EndDateTime.Date));
+	        foreach (var skill in skills)
+	        {
+	            var temp = period.ToDateOnlyPeriod(skill.TimeZone);
+                if(temp.StartDate < returnPeriod.StartDate)
+                    returnPeriod = new DateOnlyPeriod(temp.StartDate, returnPeriod.EndDate);
+                if (temp.EndDate > returnPeriod.EndDate)
+                    returnPeriod = new DateOnlyPeriod(returnPeriod.StartDate, temp.EndDate);
+            }
+            return returnPeriod;
+	    }
 		private IEnumerable<SkillStaffingInterval> getSkillStaffingIntervals(ISkillDay skillDay)
 		{
 			var skillStaffPeriods = skillDay.SkillStaffPeriodCollection;
