@@ -81,8 +81,9 @@ module.exports = function(grunt) {
 
         cssmin: {
             options: {
-                shorthandCompacting: false,
-                roundingPrecision: -1
+                mergeIntoShorthands: false,
+                roundingPrecision: -1,
+                level:1
             },
             target: {
                 files: {
@@ -432,7 +433,7 @@ module.exports = function(grunt) {
     grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
     grunt.registerTask('eslint-beta', ['eslint']);
     grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
-    grunt.registerTask('dist', ['ngtemplates', 'sass','imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex', 'clean:dist', 'cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
+    grunt.registerTask('dist', ['ngtemplates', 'sass','imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist','copy:extras', 'generateIndex', 'clean:dist', 'cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
 
     // for desktop client
     grunt.registerTask('buildForDesktop', ['copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:dist']);
