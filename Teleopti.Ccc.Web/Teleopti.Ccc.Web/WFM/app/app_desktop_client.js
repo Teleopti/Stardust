@@ -80,11 +80,11 @@ wfm.config([
 		})();
 
 		function refreshContext(event, next, toParams) {
-			currentUserInfo.initContext().then(function () {
+			currentUserInfo.initContext().then(function (data) {
 				$rootScope.isAuthenticated = true;
-				$translate.fallbackLanguage('en');
-
-				$state.go(next, toParams);
+				$translate.use(data.Language).then(function () {
+					$state.go(next, toParams);
+				});
 
 				$rootScope.$on('$localeChangeSuccess', function () {
 					if ($locale.id === 'zh-cn')
