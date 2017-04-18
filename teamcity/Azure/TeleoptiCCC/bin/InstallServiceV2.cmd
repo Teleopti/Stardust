@@ -6,4 +6,4 @@ SET DIRECTORY=%DIRECTORY:~0,-1%
 powershell set-executionpolicy unrestricted
 ::execute
 powershell . .\InstallService.ps1  >nul
-exit %ERRORLEVEL%
+exit /b 0
