@@ -21,7 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		teamcity\NUnit\UnitTests-Debug.nunit = teamcity\NUnit\UnitTests-Debug.nunit
 		teamcity\NUnit\UnitTests-Release.nunit = teamcity\NUnit\UnitTests-Release.nunit
 		BuildArtifacts\Web.Administration.Web.config = BuildArtifacts\Web.Administration.Web.config
-		BuildArtifacts\Web.AuthenticationBridge.Web.config = BuildArtifacts\Web.AuthenticationBridge.Web.config
 		BuildArtifacts\Web.Root.Web.config = BuildArtifacts\Web.Root.Web.config
 		BuildArtifacts\Web.Start.Web.config = BuildArtifacts\Web.Start.Web.config
 	EndProjectSection
