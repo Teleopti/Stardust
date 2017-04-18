@@ -11,5 +11,8 @@
 	this.onOptionSelected = function (opValue) {
 		this.checkedProbability(opValue);
 		weekViewModelParent.OnProbabilityOptionSelectCallback(parseInt(this.checkedProbability()));
-	}
+	};
+	this.absenceProbabilityEnabled = ko.computed(function() {
+		return weekViewModelParent.absenceProbabilityEnabled();
+	});
 }

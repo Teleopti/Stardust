@@ -1,4 +1,45 @@
-﻿.weekview-mobile .header {
+﻿.weekview-mobile .mobile-weekview-nav ul.navbar-teleopti{
+	margin: 0;
+	display: inline-block;
+}
+.weekview-mobile .mobile-weekview-nav {
+	display: flex;
+}
+@media(max-width: 500px){
+	.weekview-mobile .mobile-weekview-nav {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.weekview-mobile .mobile-weekview-nav ul.navbar-teleopti > li{
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+.weekview-mobile .weekview-mobile-nav-input-group{
+	max-width: 329px;
+	flex-grow: 1;
+}
+.weekview-mobile .mobile-weekview-nav .action-menu-container{
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.weekview-mobile .mobile-weekview-nav .action-menu-container > a.btn{
+	margin: 0;
+	padding: 10px;
+	display: flex;
+}
+.weekview-mobile .mobile-weekview-nav .action-menu-container .absence-probability-label,
+.weekview-mobile .mobile-weekview-nav .action-menu-container .overtime-probability-label {
+	box-shadow: 0 0 1px 2px #888;
+	color:black;
+}
+.weekview-mobile .mobile-weekview-nav .action-menu-container i {
+	width: 20px;
+	height: 20px;
+}
+.weekview-mobile .header {
 	padding: 2px;
 }
 .weekview-mobile .weekday {
@@ -26,7 +67,7 @@
 	padding: 0;
 	text-align: center;
 }
-.weekview-mobile {
+.weekview-mobile > .container{
 	padding-top: 15px;
 }
 .mobile-view-day {
@@ -160,7 +201,6 @@
 	margin-left: 10px;
 }
 .absence-probability-label {
-	margin: auto 5px;
 	padding: 0;
 	display: inline-block;
 	height: 20px;
@@ -175,7 +215,6 @@
 	content: 'A';
 }
 .overtime-probability-label {
-	margin: auto 5px;
 	padding: 0;
 	display: inline-block;
 	height: 20px;

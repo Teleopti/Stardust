@@ -6,23 +6,19 @@
 		high: 1
 	};
 
-	var lowProbabilityClass = "probability-low";
-	var highProbabilityClass = "probability-high";
-	var expiredProbabilityClass = "probability-expired";
-
 	var startOfToday = moment(rawProbabilityCellData.startTimeMoment).startOf("day");
 
 	function generateCssClass() {
 		var cssClass = "";
 		if (rawProbabilityCellData.possibility === probabilityLevel.low)
-			cssClass = lowProbabilityClass;
+			cssClass = constants.probabilityClass.lowProbabilityClass;
 		else if (rawProbabilityCellData.possibility === probabilityLevel.high)
-			cssClass = highProbabilityClass;
+			cssClass = constants.probabilityClass.highProbabilityClass;
 
 		if (parent.userNowInMinute() < rawProbabilityCellData.endTimeInMinutes) {
 			return cssClass;
 		} else {
-			return cssClass + " " + expiredProbabilityClass;
+			return cssClass + " " + constants.probabilityClass.expiredProbabilityClass;
 		}
 	}
 

@@ -84,4 +84,171 @@ $(document).ready(function () {
 		equal(timelines[0].minutes, timelineStart * 60 - 15);
 		equal(timelines[timelines.length - 1].minutes, timelineEnd * 60 + 45);
 	});
+
+	test("Should show the staffing probability for today", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return false;
+		};
+		
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+
+		vm.readData({
+			PeriodSelection: [{ Display: null }],
+			Days: [
+			{
+				FixedDate: moment().format('YYYY-MM-DD')
+			}],
+			ViewPossibilityPermission: true
+		});
+
+		equal(vm.dayViewModels()[0].showProbabilityOptions(), true);
+	});
+
+	test("Should not show probability option model if it is not current day when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is off", function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return false;
+		};
+
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+
+		vm.readData({
+			PeriodSelection: [{
+				Display: null
+			}],
+			Days: [{
+					FixedDate: moment().format('YYYY-MM-DD')
+				},
+				{
+					FixedDate: moment().add('day', 1).format('YYYY-MM-DD')
+				}],
+			Possibilities: [],
+			ViewPossibilityPermission: true
+		});
+
+		vm.toggleProbabilityOptionsPanel();
+		equal(vm.dayViewModels()[0].showProbabilityOptions(), true);
+		equal(vm.requestViewModel() != null, true);
+		equal(vm.dayViewModels()[0].isModelVisible(), true);
+
+		vm.toggleProbabilityOptionsPanel();
+		equal(vm.requestViewModel() == null, true);
+		equal(vm.dayViewModels()[1].showProbabilityOptions(), false);
+		equal(vm.dayViewModels()[1].isModelVisible(), false);
+	});
+
+	test("Should show the staffing probability for up to 14 upcoming days", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+		};
+
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+
+		vm.readData({
+			PeriodSelection: [{ Display: null }],
+			Days: [{
+					FixedDate: moment().format('YYYY-MM-DD')
+				},
+				{
+					FixedDate: moment().add('day',1).format('YYYY-MM-DD')
+				}],
+			Possibilities: [],
+			ViewPossibilityPermission: true
+		});
+
+		equal(vm.dayViewModels()[0].showProbabilityOptions(), false);
+		equal(vm.dayViewModels()[1].showProbabilityOptions(), false);
+		equal(vm.showProbabilityOptions(), true);
+	});
+
+	test("Should show probability data for multiple upcoming days when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on", function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+		};
+		var fakeData = {
+			PeriodSelection: [{
+				Display: null
+			}],
+			Days: [{
+					FixedDate: moment().format('YYYY-MM-DD'),
+					Periods: [{
+						"Title": "Phone",
+						"TimeSpan": "09:30 - 16:45",
+						"StartTime": moment().add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						"EndTime": moment().add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						"Summary": "7:15",
+						"StyleClassName": "color_80FF80",
+						"Meeting": null,
+						"StartPositionPercentage": 0.1896551724137931034482758621,
+						"EndPositionPercentage": 1,
+						"Color": "128,255,128",
+						"IsOvertime": false
+					}]
+				},
+				{
+					FixedDate: moment().add('day', 1).format('YYYY-MM-DD'),
+					Periods: [{
+						"Title": "Phone",
+						"TimeSpan": "09:30 - 16:45",
+						"StartTime": moment().add('day', 1).add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						"EndTime": moment().add('day', 1).add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						"Summary": "7:15",
+						"StyleClassName": "color_80FF80",
+						"Meeting": null,
+						"StartPositionPercentage": 0.1896551724137931034482758621,
+						"EndPositionPercentage": 1,
+						"Color": "128,255,128",
+						"IsOvertime": false
+					}]
+				}],
+			Possibilities: [
+				{
+					Date: moment().format('YYYY-MM-DD'),
+					StartTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
+					EndTime: moment().add('hour', 16).format('YYYY-MM-DDTHH:mm:ss'),
+					Possibility: 0
+				}, {
+					Date: moment().add('day', 1).format('YYYY-MM-DD'),
+					StartTime: moment().add('day', 1).format('YYYY-MM-DDTHH:mm:ss'),
+					EndTime: moment().add('day', 1).add('hour', 16).format('YYYY-MM-DDTHH:mm:ss'),
+					Possibility: 1
+				}
+			],
+			ViewPossibilityPermission: true,
+			TimeLine:[{Time: "06:45:00", TimeLineDisplay: "06:45", PositionPercentage: 0, TimeFixedFormat: null},
+					  {Time: "16:45:00", TimeLineDisplay: "16:45", PositionPercentage: 1, TimeFixedFormat: null}]
+		};
+
+		var fakeUserText = {
+			probabilityForAbsence: '@Resources.ProbabilityToGetAbsenceColon',
+			probabilityForOvertime: '@Resources.ProbabilityToGetOvertimeColon',
+			hideStaffingInfo: '@Resources.HideStaffingInfo',
+			showAbsenceProbability: '@Resources.ShowAbsenceProbability',
+			showOvertimeProbability: '@Resources.ShowOvertimeProbability'
+		};
+
+		var vm;
+		var fakeReloadData = function(){
+			vm.readData(fakeData);
+		};
+
+		vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, fakeReloadData);
+		vm.toggleProbabilityOptionsPanel();
+		vm.OnProbabilityOptionSelectCallback(Teleopti.MyTimeWeb.Schedule.Constants.probabilityType.overtime);
+
+		equal(vm.dayViewModels()[0].probabilities().length, 1);
+		equal(vm.dayViewModels()[0].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Schedule.Constants.probabilityClass.lowProbabilityClass);
+		equal(vm.dayViewModels()[0].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForOvertime) > -1, true);
+		equal(vm.dayViewModels()[0].probabilities()[0].styleJson.left != '', true);
+		equal(vm.dayViewModels()[0].probabilities()[0].styleJson.width != '', true);
+
+		equal(vm.dayViewModels()[1].probabilities().length, 1);
+		equal(vm.dayViewModels()[1].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Schedule.Constants.probabilityClass.highProbabilityClass);
+		equal(vm.dayViewModels()[1].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForOvertime) > -1, true);
+		equal(vm.dayViewModels()[1].probabilities()[0].styleJson.left != '', true);
+		equal(vm.dayViewModels()[1].probabilities()[0].styleJson.width != '', true);
+	});
 });

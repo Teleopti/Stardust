@@ -32,7 +32,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		probabilityType: {
 			none: 0,
 			absence: 1,
-			overtime: 2
+			overtime: 2,
+		},
+		probabilityClass: {
+			lowProbabilityClass: "probability-low",
+			highProbabilityClass: "probability-high",
+			expiredProbabilityClass: "probability-expired"
 		},
 
 		layoutDirection: {

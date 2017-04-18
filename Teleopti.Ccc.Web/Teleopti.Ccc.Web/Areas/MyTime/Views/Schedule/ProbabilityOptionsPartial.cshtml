@@ -1,12 +1,12 @@
 @using Teleopti.Ccc.UserTexts
 
-<!-- ko if: $parents[1].showProbabilityOptions() -->
+
 <div class="probability-radios-group"> 
 	<label class="radio pointer" data-bind="click:function(d,e){onOptionSelected(noneOption());}">
 		<input type="radio"  name="probabilityRadios" aria-label="@Resources.HideStaffingInfo" data-bind="value: noneOption, checked: checkedProbability" />
 		<span>@Resources.HideStaffingInfo</span>
 	</label>
-	<!-- ko if: $parents[2].absenceProbabilityEnabled() -->
+	<!-- ko if: absenceProbabilityEnabled() -->
 	<label class="radio pointer" data-bind="click:function(d,e){onOptionSelected(absenceOption());}">
 		<input type="radio" name="probabilityRadios" aria-label="@Resources.ShowAbsenceProbability" data-bind="value: absenceOption, checked: checkedProbability"/>
 		<span>@Resources.ShowAbsenceProbability</span>
@@ -19,4 +19,3 @@
 		<span class="overtime-probability-label"></span>
 	</label>
 </div>
-<!-- /ko -->
