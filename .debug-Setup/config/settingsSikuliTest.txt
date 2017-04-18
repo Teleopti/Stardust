@@ -21,12 +21,12 @@ $(SDK_SSL_MEX_BINDING)|mexHttpBinding
 $(MATRIX_WEB_SITE_URL)|http://localhost:52500
 $(LocalWiki)|http://localhost/TeleoptiWFM/LocalWiki/
 $(URL_WINDOWS_IDENTITY_PROVIDER)|http://localhost:52859/
-$(WEB_BROKER_FOR_WEB)|http://localhost:52858/TeleoptiWFM/Web
-$(WEB_BROKER)|http://localhost:52858/TeleoptiWFM/Web/
+$(WEB_BROKER_FOR_WEB)|http://localhost:52858
+$(WEB_BROKER)|http://localhost:52858/
 $(WEB_BROKER_BACKPLANE)|
 $(STARDUST)|http://localhost/
 $(WEB_DEPLOY)|false
-$(URL)|http://localhost:52858/TeleoptiWFM/Web/
+$(URL)|http://localhost:52858/
 $(SIGNALR_BACKPLANE_TYPE)|sqlserver
 $(SIGNALR_BACKPLANE_PREFIX)|
 <compilation debug="false"|<compilation debug="true"
