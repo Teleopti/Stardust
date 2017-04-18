@@ -76,6 +76,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		var date = self.selectedDate();
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" +
 			Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD")));
+		//Hide AgentScheduleMessenger on mobile and show it on desktop #40179
 		$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").show();
 		$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").show();
 	};
