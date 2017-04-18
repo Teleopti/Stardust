@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -48,28 +47,68 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var timeZoneTime = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), timeZone);
 			var date = new DateOnly(timeZoneTime);
 
-			var schedule = getCurrentSchedules(date, timeZone, person);
+			var schedule = getScheduleLayers(date, person);
 			var startTime = TimeZoneInfo.ConvertTimeToUtc(timeZoneTime.Date, timeZone);
 			var endTime = startTime.AddDays(1);
 			if (schedule.Any())
 			{
-				startTime = schedule.Min(x => x.StartDateTime).AddHours(-1);
-				endTime = schedule.Max(x => x.EndDateTime).AddHours(1);
+				startTime = schedule.Min(x => x.Period.StartDateTime).AddHours(-1);
+				endTime = schedule.Max(x => x.Period.EndDateTime).AddHours(1);
 			}
 			startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
 			endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
+			
+			var userNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
+			return new HistoricalAdherenceViewModel
+			{
+				Now = userNow.ToString("yyyy-MM-ddTHH:mm:ss"),
+				PersonId = personId,
+				AgentName = person?.Name.ToString(),
+				Schedules = buildSchedules(schedule),
+				Changes = buildChanges(personId, startTime, endTime),
+				OutOfAdherences = buildOutOfAdherences(personId, startTime, endTime)
+			};
+		}
 
-			var historicalAdherence = _adherences.Read(personId, startTime, endTime);
-			var first = historicalAdherence.FirstOrDefault();
+		private IEnumerable<AgentOutOfAdherenceViewModel> buildOutOfAdherences(Guid personId, DateTime startTime, DateTime endTime)
+		{
+			var data = _adherences.Read(personId, startTime, endTime);
+			var first = data.FirstOrDefault();
 			if (first?.Adherence != HistoricalAdherenceReadModelAdherence.Out)
 			{
-				historicalAdherence = new[] {_adherences.ReadLastBefore(personId, first?.Timestamp ?? _now.UtcDateTime())}
-					.Concat(historicalAdherence)
+				data = new[] { _adherences.ReadLastBefore(personId, first?.Timestamp ?? _now.UtcDateTime()) }
+					.Concat(data)
 					.Where(x => x != null)
 					.ToArray();
 			}
-			var outOfAdherences = buildViewModel(historicalAdherence.EmptyIfNull());
 
+			var seed = Enumerable.Empty<AgentOutOfAdherenceViewModel>();
+			return data.Aggregate(seed, (x, model) =>
+				{
+					if (model.Adherence == HistoricalAdherenceReadModelAdherence.Out)
+					{
+						if (x.IsEmpty(y => y.EndTime == null))
+							x = x
+								.Append(new AgentOutOfAdherenceViewModel
+								{
+									StartTime = formatForUser(model.Timestamp)
+								})
+								.ToArray();
+					}
+					else
+					{
+						var existing = x.FirstOrDefault(y => y.EndTime == null);
+						if (existing != null)
+							existing.EndTime = formatForUser(model.Timestamp);
+					}
+
+					return x;
+				})
+				.ToArray();
+		}
+
+		private IEnumerable<HistoricalChangeViewModel> buildChanges(Guid personId, DateTime startTime, DateTime endTime)
+		{
 			var changes = _changes.Read(personId, startTime, endTime)
 				.Select(x => new HistoricalChangeViewModel
 				{
@@ -83,24 +122,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					AdherenceColor = colorForAdherence(x.Adherence)
 				})
 				.ToArray();
-
-			var userNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			return new HistoricalAdherenceViewModel
-			{
-				PersonId = personId,
-				AgentName = person?.Name.ToString(),
-				Schedules = schedule,
-				Now = userNow.ToString("yyyy-MM-ddTHH:mm:ss"),
-				Changes = changes,
-				OutOfAdherences = outOfAdherences
-			};
+			return changes;
 		}
 
-		private IEnumerable<internalHistoricalAdherenceActivityViewModel> getCurrentSchedules(DateOnly date, TimeZoneInfo timeZone, IPerson person)
+		private IEnumerable<IVisualLayer> getScheduleLayers(DateOnly date, IPerson person)
 		{
 			var scenario = _scenario.Current();
 			if (scenario == null || person == null)
-				return Enumerable.Empty<internalHistoricalAdherenceActivityViewModel>();
+				return Enumerable.Empty<IVisualLayer>();
 
 			var period = new DateOnlyPeriod(date.AddDays(-2), date.AddDays(2));
 
@@ -111,9 +140,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				scenario);
 
 			return (
-				from scheduleDay in schedules[person].ScheduledDayCollection(period)
-				from layer in scheduleDay.ProjectionService().CreateProjection()
-				where layer.Period.ToDateOnlyPeriod(timeZone).Contains(date)
+					from scheduleDay in schedules[person].ScheduledDayCollection(period)
+					where scheduleDay.DateOnlyAsPeriod.DateOnly == date
+					from layer in scheduleDay.ProjectionService().CreateProjection()
+					select layer)
+				.ToArray();
+		}
+
+		private IEnumerable<internalHistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
+		{
+			return (
+				from layer in layers
 				select new internalHistoricalAdherenceActivityViewModel
 				{
 					Name = layer.DisplayDescription().Name,
@@ -168,32 +205,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			}
 		}
 
-		private IEnumerable<AgentOutOfAdherenceViewModel> buildViewModel(IEnumerable<HistoricalAdherenceReadModel> data)
-		{
-			var seed = Enumerable.Empty<AgentOutOfAdherenceViewModel>();
-			return data.Aggregate(seed, (x, model) =>
-				{
-					if (model.Adherence == HistoricalAdherenceReadModelAdherence.Out)
-					{
-						if (x.IsEmpty(y => y.EndTime == null))
-							x = x
-								.Append(new AgentOutOfAdherenceViewModel
-								{
-									StartTime = formatForUser(model.Timestamp)
-								})
-								.ToArray();
-					}
-					else
-					{
-						var existing = x.FirstOrDefault(y => y.EndTime == null);
-						if (existing != null)
-							existing.EndTime = formatForUser(model.Timestamp);
-					}
-
-					return x;
-				})
-				.ToArray();
-		}
 
 		private string formatForUser(DateTime time)
 		{

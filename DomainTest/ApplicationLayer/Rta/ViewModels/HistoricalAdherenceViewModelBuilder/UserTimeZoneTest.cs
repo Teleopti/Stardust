@@ -3,31 +3,31 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder
 {
 	[DomainTest]
 	[TestFixture]
 	[Toggle(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
-	public class HistoricalAdherenceViewModelBuilderUserTimeZoneTest : ISetup
+	public class UserTimeZoneTest : ISetup
 	{
-		public HistoricalAdherenceViewModelBuilder Target;
+		public Domain.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
-		public FakeHistoricalAdherenceReadModelPersister ReadModel;
+		public FakeHistoricalAdherenceReadModelPersister Adherences;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
+		public FakeHistoricalChangeReadModelPersister Changes;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -44,18 +44,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Database
 				.WithAgent(person, "name");
 
-			var historicalData = Target.Build(person);
+			var data = Target.Build(person);
 
-			historicalData.Now.Should().Be("2016-10-10T17:00:00");
+			data.Now.Should().Be("2016-10-10T17:00:00");
 		}
 
 		[Test]
-		public void ShouldGetHistoricalDataForAgentWhenUserInStockholm()
+		public void ShouldGetAdherenceDataForAgentWhenUserInStockholm()
 		{
 			TimeZone.IsSweden();
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
-			ReadModel.Has(person, new[]
+			Adherences.Has(person, new[]
 				{
 					new HistoricalOutOfAdherenceReadModel
 					{
@@ -64,10 +64,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					}
 				});
 
-			var historicalData = Target.Build(person);
+			var data = Target.Build(person);
 
-			historicalData.OutOfAdherences.Single().StartTime.Should().Be("2016-10-10T08:05:00");
-			historicalData.OutOfAdherences.Single().EndTime.Should().Be("2016-10-10T08:15:00");
+			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-10T08:05:00");
+			data.OutOfAdherences.Single().EndTime.Should().Be("2016-10-10T08:15:00");
 		}
 
 		[Test]
@@ -82,11 +82,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithActivity(null, ColorTranslator.FromHtml("#80FF80"))
 				.WithAssignedActivity("2016-10-11 07:00", "2016-10-11 15:00");
 
-			var historicalData = Target.Build(person);
+			var data = Target.Build(person);
 
-			historicalData.Schedules.Single().Color.Should().Be("#80FF80");
-			historicalData.Schedules.Single().StartTime.Should().Be("2016-10-11T09:00:00");
-			historicalData.Schedules.Single().EndTime.Should().Be("2016-10-11T17:00:00");
+			data.Schedules.Single().Color.Should().Be("#80FF80");
+			data.Schedules.Single().StartTime.Should().Be("2016-10-11T09:00:00");
+			data.Schedules.Single().EndTime.Should().Be("2016-10-11T17:00:00");
 		}
 
 		[Test]
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-10-12 12:00");
 			var person = Guid.NewGuid();
 			Database.WithAgent(person, "nicklas");
-			ReadModel.Has(person, new[]
+			Adherences.Has(person, new[]
 			{
 				new HistoricalOutOfAdherenceReadModel
 				{
@@ -110,5 +110,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-12T16:00:00");
 		}
 
+		[Test]
+		public void ShouldGetChangeDataWhenUserInStockholm()
+		{
+			TimeZone.IsSweden();
+			Now.Is("2017-04-18 08:20");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person, "nicklas")
+				.WithAssignment(person, "2017-04-18")
+				.WithActivity(null, ColorTranslator.FromHtml("#80FF80"))
+				.WithAssignedActivity("2017-04-18 08:00", "2017-04-18 09:00"); ;
+			Changes.Persist( new HistoricalChangeReadModel
+			{
+				PersonId = person,
+				BelongsToDate = "2017-04-18".Date(),
+				Timestamp = "2017-04-18 08:20".Utc(),
+			});
+
+			var data = Target.Build(person);
+
+			data.Changes.Single().Should().Not.Be.Null();
+		}
 	}
 }

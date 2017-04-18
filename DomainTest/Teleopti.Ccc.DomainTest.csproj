@@ -216,7 +216,9 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ExcludePhoneStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\InAlarmTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ViewModelBuilderTest2.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalChangeViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\AdherencesTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\ScheduleTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTargetTimeSpecificationTests.cs" />
     <Compile Include="Common\EnumExtensionsTest.cs" />
     <Compile Include="Common\PersonLeavingTest.cs" />
@@ -268,8 +270,8 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftAbsenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForSiteViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForTeamsOnSiteViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilderUserTimeZoneTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\BuildTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\AgentStateValuesTest.cs" />
