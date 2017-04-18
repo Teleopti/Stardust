@@ -83,21 +83,11 @@
     <Compile Include="IntradaySettingsPresenter.cs" />
     <Compile Include="OpenScenarioForPeriodSetting.cs" />
     <Compile Include="PortalSettings.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="ScheduleReportDialogSettings.cs" />
     <Compile Include="SchedulingScreenSettings.cs" />
     <Compile Include="VirtualSkill.cs" />
     <Compile Include="VirtualSkillSetting.cs" />
     <Compile Include="WorkingInterval.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -141,6 +131,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
