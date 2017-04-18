@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Forecasting.SkillPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.SkillPages

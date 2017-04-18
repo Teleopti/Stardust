@@ -10,10 +10,10 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets;
-using Teleopti.Ccc.WinCode.Shifts;
-using Teleopti.Ccc.WinCode.Shifts.Events;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Ccc.WinCode.Shifts.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {

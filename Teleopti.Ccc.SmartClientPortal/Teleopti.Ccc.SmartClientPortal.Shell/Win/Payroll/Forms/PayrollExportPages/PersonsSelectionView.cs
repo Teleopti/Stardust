@@ -9,9 +9,9 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.PayrollExportPages;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Forms.PayrollExportPages
 {

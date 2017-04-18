@@ -4,11 +4,11 @@ using System.Windows.Forms;
 using Autofac;
 using Autofac.Core;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.WinCode.Shifts;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Ccc.WinCode.Shifts.Models;
-using Teleopti.Ccc.WinCode.Shifts.Presenters;
-using Teleopti.Ccc.WinCode.Shifts.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
 using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts

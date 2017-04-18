@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Scheduling.Requests
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
 {
     /// <summary>
     /// Notifies when a PersonRequestViewModel IsSelected

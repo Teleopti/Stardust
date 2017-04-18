@@ -1,11 +1,10 @@
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Ccc.WinCode.Scheduling.Editor;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
 
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     /// <summary>
     /// Baseclass for viewmodels that can be moved  vertically

@@ -2,8 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:userTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
-    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
-             guiHelpers:HelpProvider.HelpString="Schedule+gridRequests" Loaded="UserControl_Loaded">
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+    guiHelpers:HelpProvider.HelpString="Schedule+gridRequests" Loaded="UserControl_Loaded">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

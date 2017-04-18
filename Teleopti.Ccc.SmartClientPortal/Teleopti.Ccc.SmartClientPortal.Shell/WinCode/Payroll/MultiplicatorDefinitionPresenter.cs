@@ -7,12 +7,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Payroll.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
 {
     public class MultiplicatorDefinitionPresenter : CommonViewHolder<IMultiplicatorDefinitionViewModel>, IMultiplicatorDefinitionPresenter
     {

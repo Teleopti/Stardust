@@ -13,7 +13,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 {
 	public class LogonPresenter : ILogonPresenter
 	{

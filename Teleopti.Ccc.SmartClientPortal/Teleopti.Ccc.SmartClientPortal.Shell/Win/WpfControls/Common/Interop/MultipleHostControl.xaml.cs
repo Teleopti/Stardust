@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes;
-using Teleopti.Ccc.WinCode.Common.Interop;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Interop;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop
 {

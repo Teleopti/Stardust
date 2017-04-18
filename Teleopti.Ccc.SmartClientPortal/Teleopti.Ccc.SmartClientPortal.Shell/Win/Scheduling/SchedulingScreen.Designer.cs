@@ -2,7 +2,7 @@
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes;
-using Teleopti.Ccc.WinCode.Scheduling.Editor;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {

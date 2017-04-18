@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Scheduling.Editor
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor
 {
     /// <summary>
     /// Target for ShiftEditorSettings

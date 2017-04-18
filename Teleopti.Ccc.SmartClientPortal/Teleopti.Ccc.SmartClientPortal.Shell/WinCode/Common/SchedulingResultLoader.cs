@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.WinCode.Intraday;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     public class SchedulingResultLoader : ISchedulingResultLoader
     {

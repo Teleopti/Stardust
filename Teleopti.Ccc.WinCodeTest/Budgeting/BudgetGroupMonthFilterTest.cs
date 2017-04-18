@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Budgeting;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting

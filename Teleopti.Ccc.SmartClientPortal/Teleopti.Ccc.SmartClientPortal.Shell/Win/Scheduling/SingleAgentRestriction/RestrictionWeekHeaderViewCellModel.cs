@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.SmartClientPortal.Shell.Properties;
-using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction

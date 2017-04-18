@@ -9,8 +9,8 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 {

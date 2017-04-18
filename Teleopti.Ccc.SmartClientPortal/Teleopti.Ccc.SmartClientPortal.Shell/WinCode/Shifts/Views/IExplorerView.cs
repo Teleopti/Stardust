@@ -1,10 +1,10 @@
 ﻿using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views
 {
     public interface IExplorerView : IViewBase
     {

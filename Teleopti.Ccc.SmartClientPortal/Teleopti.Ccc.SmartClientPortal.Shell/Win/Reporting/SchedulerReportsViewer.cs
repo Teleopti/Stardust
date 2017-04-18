@@ -23,10 +23,10 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Presentation;
-using Teleopti.Ccc.WinCode.Reporting;
-using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting

@@ -2,9 +2,9 @@ using System.IO;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting.Import;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Presenters;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
-using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 {

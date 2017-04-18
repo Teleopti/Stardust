@@ -1,8 +1,7 @@
 ﻿using System.Windows.Input;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Common.Commands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands
 {
     /// <summary>
     /// CommandModel that executes with a UnitOfWork

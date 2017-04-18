@@ -7,11 +7,11 @@ using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common.Collections;
-using Teleopti.Ccc.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Requests
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
 {
 	/// <summary>
 	/// ViewModel for handling requests, holds a collection of RequestsViewModels

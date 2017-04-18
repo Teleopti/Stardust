@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 
-namespace Teleopti.Ccc.WinCode.Common.Time
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time
 {
     public class TimeZoomItemViewModel : DependencyObject, ITimeZoomItemViewModel
     {

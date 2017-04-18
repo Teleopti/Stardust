@@ -5,8 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Pdf;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting

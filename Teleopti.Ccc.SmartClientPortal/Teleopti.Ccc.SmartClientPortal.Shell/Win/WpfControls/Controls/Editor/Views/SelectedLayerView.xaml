@@ -1,13 +1,13 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor.Views.SelectedLayerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
-    xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers">
+    xmlns:dateTimeConverter="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter"
+    xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands"
+    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers">
 	<UserControl.Resources>
-		<DateTimeConverter:DateTimeToLocalStringConverter x:Key="dateTimeToLocalStringConverter"/>
-		<DateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</DateTimeConverter:DateTimeParseMode>
-        <DateTimeConverter:DateTimeParseMode x:Key="DateMode">Date</DateTimeConverter:DateTimeParseMode>
+		<dateTimeConverter:DateTimeToLocalStringConverter x:Key="dateTimeToLocalStringConverter"/>
+		<dateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</dateTimeConverter:DateTimeParseMode>
+        <dateTimeConverter:DateTimeParseMode x:Key="DateMode">Date</dateTimeConverter:DateTimeParseMode>
 
         <Style TargetType="ComboBox" x:Key="BasicComboBox">
             <Setter Property="ItemContainerStyle">
@@ -20,7 +20,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-	<Grid Commands:CreateCommandBinding.CommandModel="{Binding Path=UpdateLayerCommand}">
+	<Grid commands:CreateCommandBinding.CommandModel="{Binding Path=UpdateLayerCommand}">
 		<Grid.RowDefinitions>
 			<RowDefinition />
 			<RowDefinition />

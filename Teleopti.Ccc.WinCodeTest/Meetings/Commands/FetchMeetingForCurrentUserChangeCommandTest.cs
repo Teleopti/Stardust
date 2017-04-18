@@ -1,8 +1,8 @@
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.WinCode.Meetings.Commands;
-using Teleopti.Ccc.WinCode.Meetings.Interfaces;
-using Teleopti.Ccc.WinCode.Meetings.Overview;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 {

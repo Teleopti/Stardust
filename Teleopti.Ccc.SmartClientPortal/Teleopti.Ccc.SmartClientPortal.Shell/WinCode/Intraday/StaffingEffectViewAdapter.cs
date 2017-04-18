@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace Teleopti.Ccc.WinCode.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 {
     public class StaffingEffectViewAdapter : INotifyPropertyChanged
     {

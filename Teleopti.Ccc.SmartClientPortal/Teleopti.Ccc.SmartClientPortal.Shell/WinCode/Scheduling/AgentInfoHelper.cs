@@ -9,10 +9,10 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
 	public class AgentInfoHelper
 	{

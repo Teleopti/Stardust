@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 
-namespace Teleopti.Ccc.WinCode.Common.Messaging
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging
 {
     public interface IFollowUpPushMessageViewModel
     {

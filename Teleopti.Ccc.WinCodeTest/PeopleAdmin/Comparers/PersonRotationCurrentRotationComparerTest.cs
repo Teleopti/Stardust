@@ -4,8 +4,8 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Comparers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 
 #endregion

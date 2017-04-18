@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.WinCode.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 {
 	public interface ILoginInitializer
 	{

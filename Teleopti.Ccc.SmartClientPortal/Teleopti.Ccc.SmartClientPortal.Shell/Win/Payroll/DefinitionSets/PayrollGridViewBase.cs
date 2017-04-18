@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
-using Teleopti.Ccc.WinCode.Payroll.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {

@@ -4,9 +4,8 @@ using System.Windows;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters
 {
     public class PersonNameConverter : IValueConverter
     {

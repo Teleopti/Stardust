@@ -2,11 +2,9 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.SkillPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
 {
     /// <summary>
     /// Page manager class for skill properties

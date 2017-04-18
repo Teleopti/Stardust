@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin
 {
     public class Culture
     {

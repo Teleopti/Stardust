@@ -51,11 +51,9 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts;
-using Teleopti.Ccc.Win;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 using Timer = System.Windows.Forms.Timer;
 

@@ -6,7 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.WinCode.Scheduling.Requests;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests

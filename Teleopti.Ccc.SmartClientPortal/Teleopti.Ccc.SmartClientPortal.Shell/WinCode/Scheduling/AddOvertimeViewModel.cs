@@ -5,9 +5,8 @@ using System.ComponentModel;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Time;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
     public class AddOvertimeViewModel : AddLayerViewModel<IActivity>, IAddOvertimeViewModel
     {

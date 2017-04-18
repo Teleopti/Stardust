@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 {
     public interface IMeetingParticipantPermittedChecker
     {

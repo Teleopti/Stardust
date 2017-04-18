@@ -5,6 +5,7 @@
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
     xmlns:intraday="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday"
+    xmlns:common="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common"
     Loaded="Reload_Clicked">
     <UserControl.Resources>
         <converters:ColorConverter x:Key="ColorConverter"/>
@@ -43,7 +44,7 @@
             </Setter>
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             <Setter Property="VerticalContentAlignment" Value="Stretch" />
-            <Setter Property="Common:DateTimePeriodPanel.DateTimePeriod">
+            <Setter Property="common:DateTimePeriodPanel.DateTimePeriod">
                 <Setter.Value>
                     <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
                 </Setter.Value>
@@ -88,7 +89,7 @@
                                          ItemContainerStyle="{StaticResource ListBoxTimeItem}">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Common:DateTimePeriodPanel  IsItemsHost="True" Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}"/>
+                        <common:DateTimePeriodPanel  IsItemsHost="True" common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}"/>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
             </ListView>

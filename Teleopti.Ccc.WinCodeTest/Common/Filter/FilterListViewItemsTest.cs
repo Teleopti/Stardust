@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.WinCode.Common.Filter;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Filter
 {

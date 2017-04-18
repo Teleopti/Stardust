@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Main

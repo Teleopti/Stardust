@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport.Views.PrepareTextView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
-    GuiHelpers:VisualTreeTranslator.Translate="true"
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+    guiHelpers:VisualTreeTranslator.Translate="true"
     FocusManager.FocusedElement="{Binding ElementName=combo}">
     <UserControl.Resources>
         <Style TargetType="{x:Type ComboBox}">
@@ -47,7 +47,7 @@
                           ItemsSource="{Binding Path=EncodingCollection}"   
                           IsSynchronizedWithCurrentItem="True"
                           SelectionChanged="combo_SelectionChanged"
-                          GuiHelpers:VisualTreeTranslator.Translate="False"/>
+                          guiHelpers:VisualTreeTranslator.Translate="False"/>
                 
                
 
@@ -56,7 +56,7 @@
                           DisplayMemberPath="DisplayName" 
                           ItemsSource="{Binding Path=TimeZoneCollection}"
                           IsSynchronizedWithCurrentItem="True"
-                          GuiHelpers:VisualTreeTranslator.Translate="False"/>
+                          guiHelpers:VisualTreeTranslator.Translate="False"/>
                
 
                 <Label Grid.Row="2" >xxDelimiter</Label>
@@ -66,7 +66,7 @@
                           ItemsSource="{Binding Path=SeparatorCollection}"   
                           SelectedIndex="0" 
                           SelectionChanged="separator_SelectionChanged" 
-                          GuiHelpers:VisualTreeTranslator.Translate="False"/>
+                          guiHelpers:VisualTreeTranslator.Translate="False"/>
             </Grid>
         </GroupBox>
 
@@ -76,7 +76,7 @@
             </GroupBox.Header>
                <TextBox  HorizontalContentAlignment="Left" VerticalContentAlignment="Top" 
                          Text ="{Binding Path=PreviewText, Mode=OneWay}" 
-                         GuiHelpers:VisualTreeTranslator.Translate="False"></TextBox>
+                         guiHelpers:VisualTreeTranslator.Translate="False"></TextBox>
         </GroupBox>
 
     </Grid>

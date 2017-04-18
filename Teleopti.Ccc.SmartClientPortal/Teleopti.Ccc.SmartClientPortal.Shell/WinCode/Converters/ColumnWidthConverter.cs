@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace Teleopti.Ccc.WinCode.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters
 {
     /// <summary>
     /// Top header to sub header width converter.

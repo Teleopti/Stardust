@@ -1,15 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
-using System.Windows.Input;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using System.ComponentModel;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
     public class NotesEditorViewModel : INotesEditorViewModel, INotesAltered, IPublicNotesAltered, INotifyPropertyChanged
     {

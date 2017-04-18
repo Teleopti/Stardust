@@ -1,7 +1,7 @@
-﻿using Teleopti.Ccc.WinCode.Budgeting.Presenters;
-using Teleopti.Ccc.WinCode.Common;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
-namespace Teleopti.Ccc.WinCode.Budgeting.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models
 {
     public class BudgetGroupNavigatorModel
     {

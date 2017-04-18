@@ -1,8 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Presenters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
 {
     public class NavigationPresenter : BasePresenter, INavigationPresenter
     {

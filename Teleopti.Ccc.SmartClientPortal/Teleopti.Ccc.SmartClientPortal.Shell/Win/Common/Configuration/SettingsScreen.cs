@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration

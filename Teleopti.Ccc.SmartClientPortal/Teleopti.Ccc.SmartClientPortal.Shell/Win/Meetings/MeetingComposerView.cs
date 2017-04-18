@@ -8,9 +8,9 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Meetings;
-using Teleopti.Ccc.WinCode.Meetings.Events;
-using Teleopti.Ccc.WinCode.Meetings.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings

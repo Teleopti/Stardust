@@ -5,10 +5,10 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Budgeting.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Budgeting.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models
 {
 	public class BudgetGroupDistributedDetailModel : BaseModel, ILockable
 	{

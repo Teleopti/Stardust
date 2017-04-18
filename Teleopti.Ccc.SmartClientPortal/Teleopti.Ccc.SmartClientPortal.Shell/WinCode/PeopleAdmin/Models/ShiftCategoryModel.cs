@@ -1,11 +1,10 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Interfaces.Domain;
-using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 {
     /// <summary>
     /// The adapter to convert the <see cref="ShiftCategory"/> to the format that neeeds to be displayed

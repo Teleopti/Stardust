@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.WinCode.Budgeting;
-using Teleopti.Ccc.WinCode.Budgeting.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting
 {

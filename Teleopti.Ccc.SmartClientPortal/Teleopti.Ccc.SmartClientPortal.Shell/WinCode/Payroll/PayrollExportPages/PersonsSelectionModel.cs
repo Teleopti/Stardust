@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.PayrollExportPages
 {
     public class PersonsSelectionModel
     {

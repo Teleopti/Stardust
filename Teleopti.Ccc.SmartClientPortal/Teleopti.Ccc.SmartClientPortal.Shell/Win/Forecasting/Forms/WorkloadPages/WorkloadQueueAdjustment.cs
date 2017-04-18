@@ -3,9 +3,9 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.WinCode.Forecasting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPages

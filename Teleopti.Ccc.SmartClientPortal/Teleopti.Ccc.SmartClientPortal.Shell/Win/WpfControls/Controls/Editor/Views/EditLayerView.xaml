@@ -2,11 +2,11 @@
     <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor.Views.EditLayerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-				 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
-    xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter"
-    xmlns:Editor="clr-namespace:Teleopti.Ccc.WinCode.Scheduling.Editor"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
-    xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters">
+				 xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
+				 xmlns:dateTimeConverter="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter"
+				 xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands"
+				 xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+				 xmlns:Editor="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<!--<ResourceDictionary.MergedDictionaries>
@@ -14,10 +14,10 @@
 				<ResourceDictionary Source="..\..\..\Resources\CommonStyles.xaml"/>
 			</ResourceDictionary.MergedDictionaries>-->
 			<converters:ColorConverter x:Key="colorConverter"/>
-		<DateTimeConverter:DateTimeToLocalStringConverter x:Key="startDateTimeToLocalStringConverter"/>
-		<DateTimeConverter:DateTimeToLocalStringConverter x:Key="endDateTimeToLocalStringConverter"/>
-		<DateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</DateTimeConverter:DateTimeParseMode>
-		<DateTimeConverter:DateTimeParseMode x:Key="DateMode">Date</DateTimeConverter:DateTimeParseMode>
+		<dateTimeConverter:DateTimeToLocalStringConverter x:Key="startDateTimeToLocalStringConverter"/>
+		<dateTimeConverter:DateTimeToLocalStringConverter x:Key="endDateTimeToLocalStringConverter"/>
+		<dateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</dateTimeConverter:DateTimeParseMode>
+		<dateTimeConverter:DateTimeParseMode x:Key="DateMode">Date</dateTimeConverter:DateTimeParseMode>
 
 			<Style TargetType="ComboBox" x:Key="BasicComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
                 <Setter Property="ItemContainerStyle">
@@ -33,7 +33,7 @@
 	</UserControl.Resources>
     
 	
-	<Grid Commands:CreateCommandBinding.CommandModel="{Binding Path=UpdateLayerCommand}"
+	<Grid commands:CreateCommandBinding.CommandModel="{Binding Path=UpdateLayerCommand}"
 		  Background="{Binding Path=Layer.DisplayColor, Converter={StaticResource colorConverter}, TargetNullValue=White, FallbackValue=White}">
 		<Grid.RowDefinitions>
 			<RowDefinition />
@@ -141,19 +141,19 @@
 				Grid.Row="3" 
 				Content="xxUpdate"/>
 
-		<Button Commands:CreateCommandBinding.CommandModel="{Binding Path=Layer.DeleteCommand}"
+		<Button commands:CreateCommandBinding.CommandModel="{Binding Path=Layer.DeleteCommand}"
 				Command="{x:Static Editor:ShiftEditorRoutedCommands.Delete}" 
 				Grid.Row="3" 
 				Grid.Column="1"/>
 
 
 		<Button Command="{Binding Path=Layer.MoveUpCommand.Command}" 
-				Commands:CreateCommandBinding.CommandModel="{Binding Path=Layer.MoveUpCommand}"
+				commands:CreateCommandBinding.CommandModel="{Binding Path=Layer.MoveUpCommand}"
 				Grid.Row="4" 
 				Content="xxMoveUp"/>
 
 		<Button Command="{Binding Path=Layer.MoveDownCommand.Command}"
-				Commands:CreateCommandBinding.CommandModel="{Binding Path=Layer.MoveDownCommand}"
+				commands:CreateCommandBinding.CommandModel="{Binding Path=Layer.MoveDownCommand}"
 				Grid.Row="4"  
 				Grid.Column="1"
 				Content="xxMoveDown"/>

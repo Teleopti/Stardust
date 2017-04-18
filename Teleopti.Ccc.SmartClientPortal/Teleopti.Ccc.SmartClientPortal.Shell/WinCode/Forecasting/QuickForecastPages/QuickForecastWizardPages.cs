@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.QuickForecastPages
 {
 	public class QuickForecastWizardPages : AbstractWizardPagesNoRoot<QuickForecastModel>
 	{

@@ -1,6 +1,6 @@
-﻿using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 
-namespace Teleopti.Ccc.WinCode.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 {
     public class ReforecastWizardPages : AbstractWizardPagesNoRoot<ReforecastModelCollection>
     {

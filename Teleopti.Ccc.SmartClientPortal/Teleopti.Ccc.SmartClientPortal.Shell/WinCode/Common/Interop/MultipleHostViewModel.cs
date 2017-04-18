@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Data;
 
-namespace Teleopti.Ccc.WinCode.Common.Interop
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Interop
 {
     /// <summary>
     /// Class for hosting multiple objects in winform with description

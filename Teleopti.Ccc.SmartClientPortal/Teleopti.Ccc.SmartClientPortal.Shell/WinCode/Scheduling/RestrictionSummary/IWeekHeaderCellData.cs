@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary
 {
     public interface IWeekHeaderCellData
     {

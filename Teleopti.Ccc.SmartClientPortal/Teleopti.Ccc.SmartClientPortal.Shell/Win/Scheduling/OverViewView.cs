@@ -4,8 +4,8 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.WinCode.Common.Clipboard;
-using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {

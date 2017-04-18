@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.WinCode.Shifts;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
 
 namespace Teleopti.Ccc.WinCodeTest.Shifts
 {

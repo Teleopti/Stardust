@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {

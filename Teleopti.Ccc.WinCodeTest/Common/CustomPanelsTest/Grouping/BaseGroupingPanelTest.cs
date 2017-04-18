@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.CustomPanels.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.CustomPanels.Grouping;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.CustomPanelsTest.Grouping
 {

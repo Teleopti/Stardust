@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Common;
 using Rhino.Mocks;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {

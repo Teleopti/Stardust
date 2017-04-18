@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.Time;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time;
 using Teleopti.Ccc.WinCodeTest.Helpers;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Time

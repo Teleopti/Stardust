@@ -1,4 +1,4 @@
-﻿using Teleopti.Ccc.WinCode.Common.Models;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Models;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Models
 {

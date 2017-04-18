@@ -24,10 +24,10 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Grouping.Events;
-using Teleopti.Ccc.WinCode.PeopleAdmin;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls

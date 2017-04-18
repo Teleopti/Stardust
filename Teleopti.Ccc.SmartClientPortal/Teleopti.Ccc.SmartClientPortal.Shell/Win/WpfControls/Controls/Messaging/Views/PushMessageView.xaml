@@ -1,18 +1,19 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging.Views.PushMessageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers" HorizontalAlignment="Stretch">
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+    HorizontalAlignment="Stretch">
 
     <StackPanel>
         
            
         <GroupBox Header="xxTitle">
-            <TextBox Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}" GuiHelpers:VisualTreeTranslator.Translate="false"/>
+            <TextBox Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}" guiHelpers:VisualTreeTranslator.Translate="false"/>
         </GroupBox>
         <GroupBox Header="xxMessage">
             <TextBox  Text="{Binding Path=Message, UpdateSourceTrigger=PropertyChanged}" 
                 MinLines="10" 
-                GuiHelpers:VisualTreeTranslator.Translate="false"
+                guiHelpers:VisualTreeTranslator.Translate="false"
                 TextWrapping="Wrap"
                 AcceptsReturn="True"
                 VerticalScrollBarVisibility="Visible"

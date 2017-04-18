@@ -2,7 +2,7 @@
 using System.Drawing;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
 {
     public class VisualPayloadInfo
     {

@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.SystemSetting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main

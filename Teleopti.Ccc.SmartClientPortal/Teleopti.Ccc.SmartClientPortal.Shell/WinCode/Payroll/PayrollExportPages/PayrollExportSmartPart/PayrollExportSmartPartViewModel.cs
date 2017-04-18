@@ -6,14 +6,13 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 
-namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart
 {
     public class PayrollExportSmartPartViewModel : IDisposable
     {
-        private Teleopti.Ccc.WinCode.Common.IObservable<IPayrollResult> _observer;
+        private SmartClientPortal.Shell.WinCode.Common.IObservable<IPayrollResult> _observer;
         private CollectionViewSource _payrollResults;
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart
             SaveAs = new SaveSelectedAsCommand(this);
         }
 
-		public PayrollExportSmartPartViewModel(Teleopti.Ccc.WinCode.Common.IObservable<IPayrollResult> observer)
+		public PayrollExportSmartPartViewModel(SmartClientPortal.Shell.WinCode.Common.IObservable<IPayrollResult> observer)
             : this()
         {
             _observer = observer;

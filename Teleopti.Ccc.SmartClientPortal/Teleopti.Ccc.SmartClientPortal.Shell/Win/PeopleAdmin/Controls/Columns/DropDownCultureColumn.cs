@@ -4,8 +4,9 @@ using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.PeopleAdmin;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
 {

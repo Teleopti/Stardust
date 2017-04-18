@@ -4,11 +4,10 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
     public class HandleBusinessRules
     {

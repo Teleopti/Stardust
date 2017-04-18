@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 {
     public interface IRotationModel<TRotationType, TRotationBaseType>
     {

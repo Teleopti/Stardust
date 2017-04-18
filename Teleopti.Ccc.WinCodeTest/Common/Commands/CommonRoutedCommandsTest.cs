@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 {

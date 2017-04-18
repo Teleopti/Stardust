@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Specification;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Requests
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
 {
     public class ShowOnlyPersonRequestViewModelSpecification : Specification<PersonRequestViewModel>
     {

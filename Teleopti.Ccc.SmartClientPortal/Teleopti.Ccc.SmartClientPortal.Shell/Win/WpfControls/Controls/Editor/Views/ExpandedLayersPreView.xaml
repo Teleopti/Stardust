@@ -6,11 +6,11 @@
 <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor.Views.ExpandedLayersPreview"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
 			 xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
 			 xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
 			 xmlns:layers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers"
-			 Commands:CreateCommandBinding.Command="{Binding Path=ToggleEditModeCommand}">
+			 xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands"
+			 commands:CreateCommandBinding.Command="{Binding Path=ToggleEditModeCommand}">
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:VisibilityConverter x:Key="visibilityConverter"/>

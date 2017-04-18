@@ -5,12 +5,11 @@ using System.Windows;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.Collections;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Editor
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor
 {
     /// <summary>
     /// Model for editing a LayerViewModel

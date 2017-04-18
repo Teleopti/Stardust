@@ -3,11 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 				 xmlns:Common="clr-namespace:Teleopti.Ccc.WinCode.Common"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
-    xmlns:Editor="clr-namespace:Teleopti.Ccc.WinCode.Scheduling.Editor"
-    xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline.Views"
+				 xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline.Views"
     xmlns:controls="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls"
-    xmlns:timeline="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline">
+    xmlns:timeline="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline"
+    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+    xmlns:common="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common"
+    xmlns:Editor="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -146,7 +147,7 @@
             </ListBox.Style>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
-                    <Setter Property="Common:DateTimePeriodPanel.DateTimePeriod" Value="{Binding Path=Period}"/>
+                    <Setter Property="common:DateTimePeriodPanel.DateTimePeriod" Value="{Binding Path=Period}"/>
                     <Setter Property="Control.Margin" Value="0"/>
                     <Setter Property="Control.Padding" Value="0"/>
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -158,8 +159,8 @@
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Common:DateTimePeriodPanel  IsItemsHost="True" 
-                                                Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}">
+                    <common:DateTimePeriodPanel  IsItemsHost="True" 
+                                                common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}">
                         <Panel.Style>
                             <Style TargetType="Panel">
                                 <Style.Triggers>
@@ -169,7 +170,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Panel.Style>
-                    </Common:DateTimePeriodPanel>
+                    </common:DateTimePeriodPanel>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
 
@@ -191,7 +192,7 @@
             </ItemsControl.Style>
             <ItemsControl.ItemContainerStyle>
                 <Style>
-                    <Setter Property="Common:DateTimePeriodPanel.DateTimePeriod" Value="{Binding Path=Period}"/>
+                    <Setter Property="common:DateTimePeriodPanel.DateTimePeriod" Value="{Binding Path=Period}"/>
                     <Setter Property="Control.Margin" Value="0"/>
                     <Setter Property="Control.Padding" Value="0"/>
                     <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
@@ -202,8 +203,8 @@
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Common:DateTimePeriodPanel  IsItemsHost="True" 
-                                                Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}"
+                    <common:DateTimePeriodPanel  IsItemsHost="True" 
+                                                common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}"
                                                 >
                         <Panel.Style>
                             <Style TargetType="Panel">
@@ -215,16 +216,16 @@
                             </Style>
                         </Panel.Style>
 
-                    </Common:DateTimePeriodPanel>
+                    </common:DateTimePeriodPanel>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
         </ItemsControl>
 
         <!--HoverPeriod & SelectedPeriod -->
-        <Common:DateTimePeriodPanel  VerticalAlignment="Stretch" 
+        <common:DateTimePeriodPanel  VerticalAlignment="Stretch" 
                                     HorizontalAlignment="Stretch" 
-                                    Common:DateTimePeriodPanel.DateTimePeriod="{Binding Period}"
+                                    common:DateTimePeriodPanel.DateTimePeriod="{Binding Period}"
                                     Grid.ColumnSpan="2"
                                     Opacity="0.8"
 									  Grid.Row="1"
@@ -240,7 +241,7 @@
           
             <ContentControl Content="{Binding Path=HoverTime}" 
                             ContentTemplate="{StaticResource HoverTemplate}"
-                            Common:DateTimePeriodPanel.DateTimePeriod="{Binding HoverPeriod}" 
+                            common:DateTimePeriodPanel.DateTimePeriod="{Binding HoverPeriod}" 
                             >
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">
@@ -254,7 +255,7 @@
             </ContentControl>
             <ContentControl Content="{Binding Path=SelectedPeriod}"
                             ContentTemplate="{StaticResource SelectedPeriodTemplate}"
-                            Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=SelectedPeriod}"
+                            common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=SelectedPeriod}"
                             HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">
@@ -269,7 +270,7 @@
            
 
 
-        </Common:DateTimePeriodPanel>
+        </common:DateTimePeriodPanel>
 
 		
 		<!--Date-->
@@ -301,7 +302,7 @@
 			</ListBox.Style>
 			<ListBox.ItemContainerStyle>
 				<Style TargetType="ListBoxItem">
-					<Setter Property="Common:DateTimePeriodPanel.DateTimePeriod" Value="{Binding}"/>
+					<Setter Property="common:DateTimePeriodPanel.DateTimePeriod" Value="{Binding}"/>
 					<Setter Property="Control.Margin" Value="0"/>
 					<Setter Property="Control.Padding" Value="0"/>
 					<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -314,8 +315,8 @@
 
 			<ListBox.ItemsPanel>
 				<ItemsPanelTemplate>
-					<Common:DateTimePeriodPanel  IsItemsHost="True" 
-                                                Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}">
+					<common:DateTimePeriodPanel  IsItemsHost="True" 
+                                                common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}">
 						<Panel.Style>
 							<Style TargetType="Panel">
 								<Style.Triggers>
@@ -325,14 +326,14 @@
 								</Style.Triggers>
 							</Style>
 						</Panel.Style>
-					</Common:DateTimePeriodPanel>
+					</common:DateTimePeriodPanel>
 				</ItemsPanelTemplate>
 			</ListBox.ItemsPanel>
 
 		</ListBox>
 		
 		<!-- Nowperiod-->
-		<Common:DateTimePeriodPanel  Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}" 
+		<common:DateTimePeriodPanel  common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}" 
 									 HorizontalAlignment="Stretch" 
 									 VerticalAlignment="Stretch"
 									 Grid.ColumnSpan="2"
@@ -352,13 +353,13 @@
 			
 			<Border HorizontalAlignment="Stretch" 
 					VerticalAlignment="Stretch"
-					Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=NowPeriod}"
+					common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=NowPeriod}"
 					Background="Transparent"
 					BorderBrush="Red"
 					BorderThickness="0,0,1,0"
 					>
 				
 			</Border>
-		</Common:DateTimePeriodPanel>
+		</common:DateTimePeriodPanel>
 	</Grid>
 </UserControl>

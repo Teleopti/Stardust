@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common;
 
-namespace Teleopti.Ccc.WinCode.Settings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
 {
     public class ContractScheduleWeekAdapter
     {

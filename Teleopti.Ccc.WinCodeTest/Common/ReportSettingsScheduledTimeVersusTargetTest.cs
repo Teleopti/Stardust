@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Common

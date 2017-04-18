@@ -14,13 +14,14 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.WinCode.Budgeting;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
-using Teleopti.Ccc.WinCode.Budgeting.Presenters;
-using Teleopti.Ccc.WinCode.Budgeting.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.WinCode.Events;
 using Wizard = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard.Wizard;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting

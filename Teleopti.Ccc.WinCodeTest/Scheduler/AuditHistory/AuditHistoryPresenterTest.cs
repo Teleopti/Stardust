@@ -7,7 +7,7 @@ using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.WinCode.Scheduling.AuditHistory;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Presenters
 {
     public interface ISaveImportForecastFileCommand
     {

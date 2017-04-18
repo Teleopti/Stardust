@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers
 {
     /// <summary>
     /// Represents an 'object - displayed text' item in ListBoxes on Gui

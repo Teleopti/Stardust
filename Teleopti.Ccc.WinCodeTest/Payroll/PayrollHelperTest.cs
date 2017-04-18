@@ -1,13 +1,13 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.WinCode.Payroll;
-using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces;
 
 namespace Teleopti.Ccc.WinCodeTest.Payroll
 {

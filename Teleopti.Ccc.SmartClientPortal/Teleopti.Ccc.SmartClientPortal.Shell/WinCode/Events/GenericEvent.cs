@@ -1,7 +1,6 @@
 ﻿using Microsoft.Practices.Composite.Presentation.Events;
 
-
-namespace Teleopti.Ccc.WinCode.Events
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events
 {
     public class GenericEvent<TValue> : CompositePresentationEvent<EventParameters<TValue>> { }
 

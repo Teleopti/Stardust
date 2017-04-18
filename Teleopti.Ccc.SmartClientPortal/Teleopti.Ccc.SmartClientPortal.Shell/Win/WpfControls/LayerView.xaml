@@ -3,9 +3,9 @@
     <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.LayerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-				 xmlns:Layers="clr-namespace:Teleopti.Ccc.WinCode.Converters.Layers"
 				 xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
 				 xmlns:wpfControls="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls"
+				 xmlns:layers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.Layers"
 				 Height="Auto" 
     Width="Auto"  
     ToolTipService.InitialShowDelay="500"
@@ -19,7 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
         
             <converters:ColorConverter x:Key="ColorConverter"/>
-        <Layers:IsMoveAllLayerConverter ValueIfFalse="0" x:Key="isMoveAllLayerConverter"/>
+        <layers:IsMoveAllLayerConverter ValueIfFalse="0" x:Key="isMoveAllLayerConverter"/>
         
 
         <!--Template for tooltip-->

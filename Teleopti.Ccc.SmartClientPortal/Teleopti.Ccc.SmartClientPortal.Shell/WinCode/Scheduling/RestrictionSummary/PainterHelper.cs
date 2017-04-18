@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary
 {
     public class PainterHelper
     {

@@ -2,10 +2,9 @@
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.WinCode.Budgeting.Views;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
 
-namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 {
     public class BudgetGroupTabPresenter
     {

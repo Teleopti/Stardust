@@ -8,7 +8,7 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline
 {
     /// <summary>
     /// Model for timeline

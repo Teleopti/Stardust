@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Settings;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 
 #endregion

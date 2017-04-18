@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
 using System.Drawing;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Panels
 {

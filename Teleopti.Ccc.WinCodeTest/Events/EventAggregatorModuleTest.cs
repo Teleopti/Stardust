@@ -1,7 +1,7 @@
 using Autofac;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 
 namespace Teleopti.Ccc.WinCodeTest.Events
 {

@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers
 {
     public class ApplicationTextHelper
     {

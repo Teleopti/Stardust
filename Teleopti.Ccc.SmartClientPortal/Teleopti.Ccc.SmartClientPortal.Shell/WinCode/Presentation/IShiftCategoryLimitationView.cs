@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Presentation
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation
 {
     public interface IShiftCategoryLimitationView
     {

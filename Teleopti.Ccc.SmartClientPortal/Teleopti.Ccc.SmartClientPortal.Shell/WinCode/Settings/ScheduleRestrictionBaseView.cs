@@ -1,12 +1,11 @@
 using System;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.WinCode.Settings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
 {
 	public abstract class ScheduleRestrictionBaseView
 	{

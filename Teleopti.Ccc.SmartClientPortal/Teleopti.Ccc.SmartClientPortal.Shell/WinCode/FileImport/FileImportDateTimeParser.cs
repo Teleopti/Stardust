@@ -2,7 +2,7 @@
 using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.FileImport
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport
 {
 
     public class FileImportDateTimeParser : IFileImportDateTimeParser

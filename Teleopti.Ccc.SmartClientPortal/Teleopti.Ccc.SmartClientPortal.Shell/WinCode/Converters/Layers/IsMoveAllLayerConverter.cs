@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Teleopti.Ccc.WinCode.Converters.Layers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.Layers
 {
     [ValueConversion(typeof(bool), typeof(double))]
     public class IsMoveAllLayerConverter:IValueConverter

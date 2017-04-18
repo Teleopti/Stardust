@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Ccc.WinCode.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 
 namespace Teleopti.Ccc.WinCodeTest.Intraday
 {

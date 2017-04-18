@@ -3,10 +3,10 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
-using Teleopti.Ccc.WinCode.Budgeting.Presenters;
-using Teleopti.Ccc.WinCode.Budgeting.Views;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting

@@ -4,7 +4,7 @@
 
 #endregion
 
-namespace Teleopti.Ccc.WinCode.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts
 {
     /// <summary>
     /// Move direction enumeration for the combined grid

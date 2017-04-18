@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Teleopti.Ccc.WinCode.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters
 {
     public class IsNullConverter : IValueConverter
     {

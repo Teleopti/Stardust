@@ -6,8 +6,8 @@ using System.Text;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 {

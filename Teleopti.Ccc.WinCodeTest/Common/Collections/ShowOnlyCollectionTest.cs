@@ -1,6 +1,6 @@
 ﻿using System.Windows.Data;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.Collections;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Collections
 {

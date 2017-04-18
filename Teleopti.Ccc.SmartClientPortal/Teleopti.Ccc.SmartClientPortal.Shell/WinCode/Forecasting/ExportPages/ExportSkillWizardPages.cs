@@ -1,7 +1,7 @@
-﻿using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages
 {
     public class ExportSkillWizardPages : AbstractWizardPagesNoRoot<ExportSkillModel>
     {

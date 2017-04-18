@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
 {

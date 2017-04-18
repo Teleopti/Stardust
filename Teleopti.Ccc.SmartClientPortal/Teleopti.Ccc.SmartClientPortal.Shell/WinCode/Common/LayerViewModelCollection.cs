@@ -8,10 +8,10 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.WinCode.Common.Collections;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     /// <summary>
     /// Holds a collection of LayerViewModels that are created from a schedulepart or a projection

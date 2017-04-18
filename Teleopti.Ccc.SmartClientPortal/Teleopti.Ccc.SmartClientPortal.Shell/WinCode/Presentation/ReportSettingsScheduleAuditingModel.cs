@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
-using Teleopti.Interfaces.Domain;
 using System.Linq;
+using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Presentation
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation
 {
     public class ReportSettingsScheduleAuditingModel
     {

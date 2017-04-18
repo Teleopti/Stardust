@@ -1,9 +1,9 @@
 using System.IO;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Import;
-using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Models;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Presenters
 {
     public class ValidateImportForecastFileCommand : IValidateImportForecastFileCommand
     {

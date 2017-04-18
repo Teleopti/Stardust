@@ -5,11 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.Time;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Ccc.WinCode.Common.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Models;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
     public class AddLayerViewModel<T> : DataModel, IAddLayerViewModel<T> where T : class
     {

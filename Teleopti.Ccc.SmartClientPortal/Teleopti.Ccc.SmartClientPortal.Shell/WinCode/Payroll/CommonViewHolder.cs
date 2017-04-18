@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.WinCode.Payroll.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces;
 
-namespace Teleopti.Ccc.WinCode.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
 {
     public abstract class CommonViewHolder<T> : ICommon<T>
     {

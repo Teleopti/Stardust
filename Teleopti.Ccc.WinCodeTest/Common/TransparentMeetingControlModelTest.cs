@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using NUnit.Framework;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.WinCodeTest.Common

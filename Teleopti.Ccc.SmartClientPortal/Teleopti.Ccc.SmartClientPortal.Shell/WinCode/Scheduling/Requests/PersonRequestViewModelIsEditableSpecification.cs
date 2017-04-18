@@ -1,8 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Requests
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
 {
     /// <summary>
     /// The definition if someone should be able to change the status of the personrequest

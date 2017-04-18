@@ -23,11 +23,12 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ServiceBus;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.PayrollExportPages;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.WinCode.Common.ServiceBus;
-using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 {

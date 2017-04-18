@@ -9,9 +9,9 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Converters;
-using Teleopti.Ccc.WinCode.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Views

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces
 {
     public interface ICommon<T>
     {

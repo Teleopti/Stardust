@@ -8,11 +8,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ImportForecast;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.JobHistory;
-using Teleopti.Ccc.WinCode.Common.ServiceBus;
-using Teleopti.Ccc.WinCode.Forecasting;
-using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
-using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters;
-using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ServiceBus;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Views;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
 {

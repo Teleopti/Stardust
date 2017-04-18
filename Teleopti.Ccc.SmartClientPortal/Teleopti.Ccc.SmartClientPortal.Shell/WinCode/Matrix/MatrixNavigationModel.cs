@@ -7,9 +7,8 @@ using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Matrix
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 {
 	public interface IMatrixNavigationModel
 	{

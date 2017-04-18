@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Teleopti.Ccc.WinCode.Common.CustomPanels.Grouping
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.CustomPanels.Grouping
 {
     public abstract class BaseGroupingPanel : Panel
     {

@@ -10,11 +10,11 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.QuickForecast;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPages;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Forms.PayrollExportPages;
-using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
-using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
-using Teleopti.Ccc.WinCode.Intraday;
-using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.QuickForecastPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.PayrollExportPages;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {

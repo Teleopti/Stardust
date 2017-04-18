@@ -1,6 +1,6 @@
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin
 {
     public interface IScheduleNavigator : INavigationPanel
     {

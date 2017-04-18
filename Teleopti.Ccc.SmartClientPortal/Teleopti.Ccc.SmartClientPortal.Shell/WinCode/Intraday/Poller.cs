@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 
-namespace Teleopti.Ccc.WinCode.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 {
 	public interface IPoller : IDisposable
 	{

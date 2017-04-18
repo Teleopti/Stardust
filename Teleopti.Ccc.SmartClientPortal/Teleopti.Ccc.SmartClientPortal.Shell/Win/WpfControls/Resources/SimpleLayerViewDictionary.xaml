@@ -3,7 +3,8 @@
     xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common"
 					xmlns:domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Interfaces"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
-                    xmlns:intraday="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday">
+                    xmlns:intraday="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday"
+                    xmlns:common1="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common">
     <!-- Use a list box to get data binding and selection DateTimePeriodPanel -->
     <!-- Override the default style of ListBoxItem -->
     <!-- TODO: Henrik 20090203 This is some sort of Aero copy, if we want to use central resources, this must be refactored-->
@@ -39,7 +40,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <!-- Data binding for DateTimePeriodPanel -->
-        <Setter Property="common:DateTimePeriodPanel.DateTimePeriod">
+        <Setter Property="common1:DateTimePeriodPanel.DateTimePeriod">
             <Setter.Value>
                 <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
             </Setter.Value>
@@ -123,7 +124,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <!-- Data binding for DateTimePeriodPanel -->
-        <Setter Property="common:DateTimePeriodPanel.DateTimePeriod">
+        <Setter Property="common1:DateTimePeriodPanel.DateTimePeriod">
             <Setter.Value>
                 <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
             </Setter.Value>

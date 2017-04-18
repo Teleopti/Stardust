@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.WinCode.Settings;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 
 namespace Teleopti.Ccc.WinCodeTest.Settings
 {

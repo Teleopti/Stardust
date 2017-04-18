@@ -1,14 +1,12 @@
-
-
 using System;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Meetings.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 {
  
     public interface IMeetingImpactTransparentWindowHandler

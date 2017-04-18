@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Chart
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart
 {
     /// <summary>
     /// This class is for getting the chartsettings for each row

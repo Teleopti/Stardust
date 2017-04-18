@@ -1,9 +1,8 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages
 {
     public class ExportForecastToFileSettingsProvider : IExportForecastToFileSettingsProvider
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Teleopti.Ccc.WinCode.FileImport
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport
 {
     [Serializable]
     public class FileImportException : Exception

@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common"
     xmlns:layers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers"
+    xmlns:common1="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common"
     ItemsSource="{Binding}">
 
 	<!-- Set the container to be able to place the items in the correct in time-->
@@ -11,7 +12,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
 			<Setter Property="VerticalContentAlignment" Value="Stretch" />
 			<!-- Data binding for DateTimePeriodPanel -->
-			<Setter Property="common:DateTimePeriodPanel.DateTimePeriod">
+			<Setter Property="common1:DateTimePeriodPanel.DateTimePeriod">
 				<Setter.Value>
                     <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
 				</Setter.Value>
@@ -22,8 +23,8 @@
 	<!--The layoutpanel (just a DateTimePeriodpanel bound to the controls Period-property-->
 	<ItemsControl.ItemsPanel>
 		<ItemsPanelTemplate>
-			<common:DateTimePeriodPanel 
-				common:DateTimePeriodPanel.DateTimePeriod="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type ItemsControl}}, Path=Period}"
+			<common1:DateTimePeriodPanel 
+				common1:DateTimePeriodPanel.DateTimePeriod="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type ItemsControl}}, Path=Period}"
 				IsItemsHost="True"
 				Background="Transparent"/>
 		</ItemsPanelTemplate>

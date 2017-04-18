@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Meetings.Overview;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
 {

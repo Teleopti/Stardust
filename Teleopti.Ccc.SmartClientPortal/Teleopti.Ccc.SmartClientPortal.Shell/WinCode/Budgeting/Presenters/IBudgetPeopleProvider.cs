@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 {
 	public interface IBudgetPeopleProvider
 	{

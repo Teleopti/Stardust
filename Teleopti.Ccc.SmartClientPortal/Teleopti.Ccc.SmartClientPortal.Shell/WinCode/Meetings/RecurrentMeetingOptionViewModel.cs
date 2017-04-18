@@ -1,9 +1,8 @@
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 {
     public abstract class RecurrentMeetingOptionViewModel : INotifyPropertyChanged
     {

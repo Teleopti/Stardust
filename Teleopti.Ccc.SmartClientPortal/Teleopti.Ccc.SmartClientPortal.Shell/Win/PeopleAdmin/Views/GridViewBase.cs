@@ -10,8 +10,8 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.WinCode.Common.Clipboard;
-using Teleopti.Ccc.WinCode.Presentation;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 {

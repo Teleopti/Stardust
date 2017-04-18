@@ -7,13 +7,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.WinCode.Shifts.Events;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Ccc.WinCode.Shifts.Views;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Presenters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
 {
     public class ExplorerPresenter : IExplorerPresenter
     {

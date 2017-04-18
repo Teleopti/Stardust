@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll
 {

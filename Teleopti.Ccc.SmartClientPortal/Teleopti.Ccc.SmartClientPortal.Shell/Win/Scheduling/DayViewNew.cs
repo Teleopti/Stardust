@@ -8,9 +8,9 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Common.Clipboard;
-using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.Panels;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling

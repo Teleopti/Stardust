@@ -2,9 +2,8 @@
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Win;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {

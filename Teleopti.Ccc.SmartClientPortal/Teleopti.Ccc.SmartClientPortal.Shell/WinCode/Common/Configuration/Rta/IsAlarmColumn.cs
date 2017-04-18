@@ -3,9 +3,8 @@ using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Configuration.Rta
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.Rta
 {
 	public class IsAlarmColumn : IAlarmControlPresenterDecorator
 	{

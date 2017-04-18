@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Requests
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
 {
     public class BudgetAbsenceAllowanceDetailModel
     {

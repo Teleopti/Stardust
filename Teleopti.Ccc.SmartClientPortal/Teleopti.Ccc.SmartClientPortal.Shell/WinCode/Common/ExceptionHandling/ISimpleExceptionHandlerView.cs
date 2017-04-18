@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling
 {
     public interface ISimpleExceptionHandlerView
     {

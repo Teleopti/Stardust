@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces
 {
     public interface IActivityPresenter : ICommon<IActivityViewModel>, 
                                           IPresenterBase

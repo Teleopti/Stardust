@@ -1,5 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday
 {

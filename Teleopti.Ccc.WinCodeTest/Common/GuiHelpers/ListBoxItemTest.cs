@@ -1,6 +1,6 @@
 using System;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.GuiHelpers
 {

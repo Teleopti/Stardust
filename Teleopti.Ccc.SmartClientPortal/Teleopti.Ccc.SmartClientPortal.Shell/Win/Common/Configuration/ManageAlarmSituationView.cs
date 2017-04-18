@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.WinCode.Common.Configuration;
-using Teleopti.Ccc.WinCode.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {

@@ -4,9 +4,9 @@ using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.Requests;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {

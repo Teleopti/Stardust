@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Main
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 {
 	public class WebUrlHolder
 	{

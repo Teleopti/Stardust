@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.WinCode.FileImport
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport
 {
     /// <summary>
     /// 

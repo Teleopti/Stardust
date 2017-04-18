@@ -1,9 +1,9 @@
 ﻿#region Imports
 
 using System.Collections.Generic;
-using Teleopti.Ccc.WinCode.Payroll;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Ccc.WinCode.Shifts.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
 
 #endregion
 

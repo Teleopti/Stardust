@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Requests
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
 {
 	public abstract class SortComparer : IComparer
 	{

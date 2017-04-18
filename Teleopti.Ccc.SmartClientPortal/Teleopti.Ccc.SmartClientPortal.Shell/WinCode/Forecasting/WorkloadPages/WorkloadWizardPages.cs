@@ -1,14 +1,12 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.WorkloadPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.WorkloadPages
 {
     /// <summary>
     /// Page manager class for workload wizard pages

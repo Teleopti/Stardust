@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Persisters.Requests;
 using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
-using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler

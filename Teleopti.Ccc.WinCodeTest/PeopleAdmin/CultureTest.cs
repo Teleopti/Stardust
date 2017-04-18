@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.PeopleAdmin;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 {

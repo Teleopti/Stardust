@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Data;
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
-namespace Teleopti.Ccc.WinCode.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters
 {
     public class ConverterComparer : IComparer
     {

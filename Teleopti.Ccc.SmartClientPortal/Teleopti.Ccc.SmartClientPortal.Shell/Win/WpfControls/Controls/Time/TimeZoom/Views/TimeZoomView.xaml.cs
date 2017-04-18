@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
-using Teleopti.Ccc.WinCode.Common.Time;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.TimeZoom.Views
 {

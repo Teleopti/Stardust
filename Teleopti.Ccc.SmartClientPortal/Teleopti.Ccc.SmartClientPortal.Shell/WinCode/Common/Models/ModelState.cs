@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Common.Models
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Models
 {
     public enum ModelState
     {

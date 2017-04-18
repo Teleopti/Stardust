@@ -1,10 +1,10 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Grouping.Commands;
 
 namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 {

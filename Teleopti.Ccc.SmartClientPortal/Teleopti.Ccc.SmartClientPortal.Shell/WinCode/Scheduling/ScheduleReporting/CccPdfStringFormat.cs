@@ -1,6 +1,6 @@
 ﻿using Syncfusion.Pdf.Graphics;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting
 {
     public class CccPdfStringFormat
     {

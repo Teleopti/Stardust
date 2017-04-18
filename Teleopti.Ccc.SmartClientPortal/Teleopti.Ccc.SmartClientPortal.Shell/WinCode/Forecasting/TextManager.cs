@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
 {
 	/// <summary>
 	/// Handles word replacement for non Telephony skills

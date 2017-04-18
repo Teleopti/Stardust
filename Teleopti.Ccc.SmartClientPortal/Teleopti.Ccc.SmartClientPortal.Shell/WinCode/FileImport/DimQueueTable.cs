@@ -4,7 +4,7 @@ using System.Data;
 using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.WinCode.FileImport
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport
 {
     public sealed class DimQueueTable
     {

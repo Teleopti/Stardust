@@ -1,10 +1,9 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.WinCode.Settings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
 {
     /// <summary>
     /// Represents an enhanced view of restrictions during a rotation day.

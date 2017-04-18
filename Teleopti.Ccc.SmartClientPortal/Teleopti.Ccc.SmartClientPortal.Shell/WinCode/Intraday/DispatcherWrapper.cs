@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Threading;
 
-namespace Teleopti.Ccc.WinCode.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 {
     public interface IDispatcherWrapper
     {

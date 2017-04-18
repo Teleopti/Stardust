@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 
-namespace Teleopti.Ccc.WinCode.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts
 {
     public struct VisualPayloadInfo : IValidate
     {

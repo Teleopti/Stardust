@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.QuickForecastPages;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.QuickForecast
 {

@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Models;
 using Teleopti.Ccc.WinCodeTest.Helpers;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Models

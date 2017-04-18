@@ -15,9 +15,9 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.WinCode.Shifts;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Ccc.WinCode.Shifts.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts

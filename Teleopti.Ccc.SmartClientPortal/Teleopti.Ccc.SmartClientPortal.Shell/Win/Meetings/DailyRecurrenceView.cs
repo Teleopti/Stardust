@@ -1,6 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Meetings;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {

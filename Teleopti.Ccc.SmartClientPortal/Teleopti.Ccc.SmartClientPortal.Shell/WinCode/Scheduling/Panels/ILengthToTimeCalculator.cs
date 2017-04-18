@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Panels
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels
 {
     public interface ILengthToTimeCalculator
     {

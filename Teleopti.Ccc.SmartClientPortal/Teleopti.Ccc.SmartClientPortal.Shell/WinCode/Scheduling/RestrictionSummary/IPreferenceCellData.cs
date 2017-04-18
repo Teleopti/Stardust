@@ -3,7 +3,7 @@ using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary
 {
     public interface IPreferenceCellData 
     {

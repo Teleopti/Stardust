@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Common.Collections
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections
 {
     /// <summary>
     /// Reversed from FilteredCollection

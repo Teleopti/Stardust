@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 {
 	public class PersonGeneralModel : GridViewModelBase<IPerson>, IOptionalColumnView
 	{

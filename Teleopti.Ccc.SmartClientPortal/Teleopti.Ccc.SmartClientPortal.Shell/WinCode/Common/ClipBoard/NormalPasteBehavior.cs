@@ -1,11 +1,11 @@
-﻿using Syncfusion.Windows.Forms.Grid;
+﻿using System;
+using System.Collections.Generic;
+using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
-using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Clipboard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
 {
     /// <summary>
     /// PasteBehavior explains via PasteOption the pastebehavior in the grid. 

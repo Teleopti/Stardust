@@ -3,8 +3,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 {

@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.SkillResult
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 {
 	public interface ISkillMonthGridControl
 	{

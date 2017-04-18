@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common.Messaging;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging
 {

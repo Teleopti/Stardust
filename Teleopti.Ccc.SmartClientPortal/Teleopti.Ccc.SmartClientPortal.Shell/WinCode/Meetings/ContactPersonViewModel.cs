@@ -1,14 +1,14 @@
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
-using System.Collections.Generic;
-using System.Globalization;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.WinCode.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 {
     /// <summary>
     /// Represents a .

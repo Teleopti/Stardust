@@ -1,14 +1,14 @@
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.WinCode.Grouping.Commands;
-using Teleopti.Ccc.WinCode.Grouping.Events;
-using Teleopti.Ccc.WinCode.Intraday;
-using Teleopti.Ccc.WinCode.Meetings.Commands;
-using Teleopti.Ccc.WinCode.Meetings.Events;
-using Teleopti.Ccc.WinCode.PeopleAdmin;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
-using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {

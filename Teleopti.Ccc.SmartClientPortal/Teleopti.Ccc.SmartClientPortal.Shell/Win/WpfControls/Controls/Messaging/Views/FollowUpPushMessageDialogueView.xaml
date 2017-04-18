@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging.Views.FollowUpPushMessageDialogueView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
 			 xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
 			 xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging.Views"
+			 xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands"
 			 HorizontalAlignment="Stretch" 
     HorizontalContentAlignment="Stretch">
     <UserControl.Resources>
@@ -91,7 +91,7 @@
                               Background="Transparent"/>
 
                     <Button Grid.Column="0" Grid.Row="1"
-                            Commands:CreateCommandBinding.CommandModel="{Binding Path=SendReply}" 
+                            commands:CreateCommandBinding.CommandModel="{Binding Path=SendReply}" 
                             Command="{Binding Path=SendReply.Command}" />
 
                     <TextBox Grid.Row="1" Grid.Column="1" 

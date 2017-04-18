@@ -2,8 +2,8 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting
 {

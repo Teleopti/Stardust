@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Grouping
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping
 {
     public interface IFindPersonsModel
     {

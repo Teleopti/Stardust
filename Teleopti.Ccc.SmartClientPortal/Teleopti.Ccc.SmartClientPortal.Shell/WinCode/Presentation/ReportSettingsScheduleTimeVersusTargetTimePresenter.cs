@@ -1,6 +1,6 @@
-﻿using Teleopti.Ccc.WinCode.Reporting;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 
-namespace Teleopti.Ccc.WinCode.Presentation
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation
 {
 	public class ReportSettingsScheduleTimeVersusTargetTimePresenter
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers
 {
     public static class GuiSettings
     {

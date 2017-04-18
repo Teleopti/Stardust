@@ -1,9 +1,8 @@
-﻿using Syncfusion.Pdf.Graphics;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Globalization;
+using Syncfusion.Pdf.Graphics;
 
-
-namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting
 {
     public static class PdfFontManager
     {

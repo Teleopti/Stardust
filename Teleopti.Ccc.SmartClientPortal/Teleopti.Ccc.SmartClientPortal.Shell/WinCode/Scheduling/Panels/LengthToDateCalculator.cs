@@ -1,8 +1,8 @@
 ﻿using System;
-using Teleopti.Interfaces.Domain;
 using System.Drawing;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Panels
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels
 {
     public class LengthToDateCalculator
     {

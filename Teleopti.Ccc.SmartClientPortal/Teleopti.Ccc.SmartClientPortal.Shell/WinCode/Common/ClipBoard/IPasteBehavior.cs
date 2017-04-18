@@ -1,7 +1,7 @@
-﻿using Syncfusion.Windows.Forms.Grid;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.WinCode.Common.Clipboard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
 {
     /// <summary>
     /// Interface for PasteBehavior

@@ -5,9 +5,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
 	public class SeniorityControlPresenter
 	{

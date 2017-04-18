@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace Teleopti.Ccc.WinCode.Common.Commands.CommandBehaviors
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands.CommandBehaviors
 {
     /// <summary>
     /// Generates delegates according to the specified signature on runtime

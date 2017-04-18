@@ -1,7 +1,7 @@
 ﻿using System;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 
-namespace Teleopti.Ccc.WinCode.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts
 {
     /// <summary>
     /// 

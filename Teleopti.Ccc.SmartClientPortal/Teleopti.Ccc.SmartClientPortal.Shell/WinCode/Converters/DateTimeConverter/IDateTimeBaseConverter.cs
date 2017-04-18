@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace Teleopti.Ccc.WinCode.Converters.DateTimeConverter
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter
 {
     /// <summary>
     /// For DateTimeConverting, for handling visual TimeZones

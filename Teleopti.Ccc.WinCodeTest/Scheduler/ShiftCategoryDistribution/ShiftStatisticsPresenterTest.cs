@@ -2,9 +2,9 @@
 using NUnit.Framework;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution

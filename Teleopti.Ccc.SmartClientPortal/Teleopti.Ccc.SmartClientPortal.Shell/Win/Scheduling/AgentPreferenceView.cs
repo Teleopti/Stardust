@@ -7,8 +7,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {

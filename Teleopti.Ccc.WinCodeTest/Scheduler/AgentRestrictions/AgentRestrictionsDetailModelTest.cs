@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestrictions;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 {

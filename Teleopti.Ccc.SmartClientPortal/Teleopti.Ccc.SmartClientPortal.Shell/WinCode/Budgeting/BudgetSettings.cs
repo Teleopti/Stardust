@@ -1,9 +1,8 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 {
     public interface IBudgetSettings : ISettingValue
     {

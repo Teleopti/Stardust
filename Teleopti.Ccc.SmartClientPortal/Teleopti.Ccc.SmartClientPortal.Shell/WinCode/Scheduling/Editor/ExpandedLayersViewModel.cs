@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Editor
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor
 {
     /// <summary>
     /// Viewmodel for an area of the LayerViewModelCollection

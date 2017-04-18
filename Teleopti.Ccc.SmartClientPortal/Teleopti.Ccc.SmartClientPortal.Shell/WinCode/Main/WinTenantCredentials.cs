@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 
-namespace Teleopti.Ccc.WinCode.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 {
 	public class WinTenantCredentials : ICurrentTenantCredentials
 	{

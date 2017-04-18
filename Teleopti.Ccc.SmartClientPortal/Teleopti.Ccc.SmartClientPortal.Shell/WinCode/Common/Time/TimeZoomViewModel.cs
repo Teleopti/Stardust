@@ -4,11 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Ccc.WinCode.Scheduling.Panels;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Time
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time
 {
     public class TimeZoomViewModel : DependencyObject, ITimeZoomViewModel
     {

@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.WinCode.Common.Commands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands
 {
     public abstract class ApplicationCommandModel:CommandModel
     {

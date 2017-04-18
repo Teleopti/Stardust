@@ -1,9 +1,8 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Clipboard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
 {
     public class ClipboardSpecialPresenter
     {

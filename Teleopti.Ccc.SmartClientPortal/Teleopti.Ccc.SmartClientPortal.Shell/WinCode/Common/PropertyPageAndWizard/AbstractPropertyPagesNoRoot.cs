@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard
 {
 	public abstract class AbstractPropertyPagesNoRoot<T> : IAbstractPropertyPagesNoRoot<T>, IDisposable
 	{

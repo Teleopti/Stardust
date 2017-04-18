@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
 {
     public enum AuditHistoryDirection
     {

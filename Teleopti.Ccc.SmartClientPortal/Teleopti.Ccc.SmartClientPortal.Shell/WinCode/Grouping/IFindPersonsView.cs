@@ -1,7 +1,7 @@
 ﻿using System;
 using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Ccc.WinCode.Grouping
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping
 {
     public interface IFindPersonsView
     {

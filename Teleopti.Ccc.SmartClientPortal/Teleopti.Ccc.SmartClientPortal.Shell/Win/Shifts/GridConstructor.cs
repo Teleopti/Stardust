@@ -4,9 +4,9 @@ using System.ComponentModel;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts.Grids;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Shifts;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {

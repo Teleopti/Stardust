@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Payroll.Interfaces;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces;
 
-namespace Teleopti.Ccc.WinCode.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
 {
     public class DefinitionSetPresenter : CommonViewHolder<IDefinitionSetViewModel>, IDefinitionSetPresenter
     {

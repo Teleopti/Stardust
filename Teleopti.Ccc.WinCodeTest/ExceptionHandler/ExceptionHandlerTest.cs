@@ -15,10 +15,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
 

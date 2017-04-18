@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
-using Teleopti.Ccc.WinCode.Budgeting.Presenters;
-using Teleopti.Ccc.WinCode.Budgeting.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting

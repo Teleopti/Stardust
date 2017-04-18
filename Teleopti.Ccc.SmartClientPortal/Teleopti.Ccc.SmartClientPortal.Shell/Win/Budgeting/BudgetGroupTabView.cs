@@ -10,10 +10,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Budgeting;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
-using Teleopti.Ccc.WinCode.Budgeting.Presenters;
-using Teleopti.Ccc.WinCode.Budgeting.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {

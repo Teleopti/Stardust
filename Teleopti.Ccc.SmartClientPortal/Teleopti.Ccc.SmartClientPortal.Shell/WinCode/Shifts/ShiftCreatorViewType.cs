@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Shifts
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts
 {
     public enum ShiftCreatorViewType
     {

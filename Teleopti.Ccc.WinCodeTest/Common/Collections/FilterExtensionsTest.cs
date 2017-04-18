@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Data;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.WinCode.Common.Collections;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Collections
 {

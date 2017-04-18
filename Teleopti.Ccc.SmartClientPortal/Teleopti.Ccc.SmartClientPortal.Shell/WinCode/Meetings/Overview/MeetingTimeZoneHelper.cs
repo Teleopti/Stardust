@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.WinCode.Meetings.Overview
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
 {
 
     /// <summary>

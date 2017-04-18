@@ -8,18 +8,16 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Ccc.WinCode.Grouping.Commands;
-using Teleopti.Ccc.WinCode.Grouping.Events;
-using Teleopti.Ccc.WinCode.PeopleAdmin;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Grouping
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping
 {
 	public interface IPersonSelectorPresenter : IDisposable
 	{

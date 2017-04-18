@@ -6,7 +6,7 @@ using System.Xml.Linq;
 using Rhino.ServiceBus.Internal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Common.ServiceBus
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ServiceBus
 {
 	public class DateOnlyPeriodSerializer : ICustomElementSerializer
 	{

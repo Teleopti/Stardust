@@ -1,6 +1,7 @@
 using Autofac;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Scheduling.Requests;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {

@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Models
 {
     public class ActivityTimeLimiterViewModel : BaseModel<ActivityTimeLimiter>, 
                                                 IActivityTimeLimiterViewModel

@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.WinCode.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Grouping

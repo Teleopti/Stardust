@@ -4,9 +4,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Editor
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor
 {
     /// <summary>
     /// Settings for ShiftEditor

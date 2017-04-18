@@ -12,10 +12,9 @@ using Rhino.ServiceBus.SqlQueues.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Win.Common.ServiceBus;
-using Teleopti.Ccc.WinCode.Autofac;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Autofac;
 
-namespace Teleopti.Ccc.WinCode.Common.ServiceBus
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ServiceBus
 {
 	public class ServiceBusSender : IServiceBusSender
 	{

@@ -1,6 +1,6 @@
 using Autofac;
-using Teleopti.Ccc.WinCode.Permissions;
-using Teleopti.Ccc.WinCode.Permissions.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Permissions;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Permissions.Commands;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Permissions
 {

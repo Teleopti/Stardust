@@ -1,5 +1,5 @@
-﻿using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
 {

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.PeopleAdmin;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin

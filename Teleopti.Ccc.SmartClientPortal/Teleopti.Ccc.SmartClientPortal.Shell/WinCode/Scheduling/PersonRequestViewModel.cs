@@ -7,12 +7,12 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
     /// <summary>
     /// Adapter for the request view in scheduler

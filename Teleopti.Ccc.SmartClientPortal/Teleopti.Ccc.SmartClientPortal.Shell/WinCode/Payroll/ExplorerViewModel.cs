@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Payroll.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
 {
     public class ExplorerViewModel : IExplorerViewModel
     {

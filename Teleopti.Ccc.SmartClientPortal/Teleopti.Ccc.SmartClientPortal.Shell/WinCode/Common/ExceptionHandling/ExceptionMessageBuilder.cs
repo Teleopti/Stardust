@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
-namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling
 {
 	public class ExceptionMessageBuilder
 	{

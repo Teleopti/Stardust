@@ -1,7 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces
 {
     public interface IExplorerView
     {

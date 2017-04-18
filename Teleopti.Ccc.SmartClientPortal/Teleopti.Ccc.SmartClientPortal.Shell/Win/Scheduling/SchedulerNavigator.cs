@@ -26,13 +26,14 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.Cascading;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Forecasting.Cascading;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Grouping.Events;
-using Teleopti.Ccc.WinCode.Meetings.Events;
-using Teleopti.Ccc.WinCode.PeopleAdmin;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling

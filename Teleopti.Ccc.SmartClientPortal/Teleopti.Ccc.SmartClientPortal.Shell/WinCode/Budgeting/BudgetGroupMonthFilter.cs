@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 {
 	public class BudgetGroupMonthFilter
 	{

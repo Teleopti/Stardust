@@ -6,14 +6,14 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Payroll;
-using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Payroll.PayrollExportSmartPart
 {
     [TestFixture]
-    public class PayrollExportSmartPartViewModelTest : Teleopti.Ccc.WinCode.Common.IObservable<IPayrollResult>, IDisposable
+    public class PayrollExportSmartPartViewModelTest : SmartClientPortal.Shell.WinCode.Common.IObservable<IPayrollResult>, IDisposable
     {
         private PayrollExportSmartPartViewModel _target;
         private IPayrollResult _resultToSave; //Called by IObservable

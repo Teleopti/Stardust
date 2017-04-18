@@ -7,10 +7,10 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.WinCode.Meetings.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 {
 	public class MeetingViewModel : INotifyPropertyChanged, IMeetingViewModel
 	{

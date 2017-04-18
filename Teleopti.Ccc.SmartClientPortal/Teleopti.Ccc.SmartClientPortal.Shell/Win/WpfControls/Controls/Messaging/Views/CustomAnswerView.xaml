@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging.Views.CustomAnswerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
-    GuiHelpers:HelpProvider.HelpString="PeopleWorksheet+MessagesCustom">
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+    xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands"
+    guiHelpers:HelpProvider.HelpString="PeopleWorksheet+MessagesCustom">
     <UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -30,7 +30,7 @@
 									VerticalAlignment="Center"
 									Height="40"
 									Width="68"
-									Commands:CreateCommandBinding.CommandModel="{Binding SendMessageCommand}" 
+									commands:CreateCommandBinding.CommandModel="{Binding SendMessageCommand}" 
 									Command="{Binding SendMessageCommand.Command}" />
 
 
@@ -57,7 +57,7 @@
 					<ColumnDefinition />
 				</Grid.ColumnDefinitions>
 
-				<Button Commands:CreateCommandBinding.CommandModel="{Binding Path=RemoveReplyOptionCommand}" 
+				<Button commands:CreateCommandBinding.CommandModel="{Binding Path=RemoveReplyOptionCommand}" 
 							Command="{Binding Path=RemoveReplyOptionCommand.Command}"
 							Grid.Row="0" 
 							Grid.Column="0"
@@ -94,7 +94,7 @@
 
 				<Button Grid.Row="1" Grid.Column="0"
 											Margin="5,5,5,5"
-											Commands:CreateCommandBinding.CommandModel="{Binding Path=AddReplyOptionCommand.EditCommandModel}" 
+											commands:CreateCommandBinding.CommandModel="{Binding Path=AddReplyOptionCommand.EditCommandModel}" 
 											Command="{Binding Path=AddReplyOptionCommand.EditCommandModel.Command}"
 											HorizontalAlignment="Stretch"
 											Visibility="{Binding Path=AddReplyOptionCommand.EditMode, 
@@ -116,14 +116,14 @@
 					
 					<Button 
 						Margin="5,5,5,5"
-						Commands:CreateCommandBinding.CommandModel="{Binding Path=AddReplyOptionCommand}" 
+						commands:CreateCommandBinding.CommandModel="{Binding Path=AddReplyOptionCommand}" 
 						Command="{Binding Path=AddReplyOptionCommand.Command}"
 						/>
 						
 						
 						<Button 
 						Margin="5,5,5,5"
-						Commands:CreateCommandBinding.CommandModel="{Binding Path=AddReplyOptionCommand.CancelEditCommandModel}" 
+						commands:CreateCommandBinding.CommandModel="{Binding Path=AddReplyOptionCommand.CancelEditCommandModel}" 
 						Command="{Binding Path=AddReplyOptionCommand.CancelEditCommandModel.Command}"
 						/>
 					

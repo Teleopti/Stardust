@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.Filter;
-using Teleopti.Ccc.WinCode.Common.Messaging;
-using Teleopti.Ccc.WinCode.Common.Messaging.Filters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging.Filters;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Messaging.Filter
 {

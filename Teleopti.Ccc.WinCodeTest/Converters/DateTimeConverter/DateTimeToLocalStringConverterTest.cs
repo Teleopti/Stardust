@@ -2,7 +2,7 @@
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.WinCode.Converters.DateTimeConverter;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter;
 
 namespace Teleopti.Ccc.WinCodeTest.Converters.DateTimeConverter
 {

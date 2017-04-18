@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters
 {
     /// <summary>
     /// DateTimePeriod rounded to seconds

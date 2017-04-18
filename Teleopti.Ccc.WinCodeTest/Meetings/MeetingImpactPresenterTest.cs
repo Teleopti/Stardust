@@ -9,8 +9,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.WinCode.Meetings;
-using Teleopti.Ccc.WinCode.Meetings.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

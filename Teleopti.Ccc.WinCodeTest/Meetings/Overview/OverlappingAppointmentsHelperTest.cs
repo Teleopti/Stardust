@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Meetings.Overview;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
 {

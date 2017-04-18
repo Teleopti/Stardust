@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 
-namespace Teleopti.Ccc.WinCode.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 {
     public class OnEventStatisticMessageCommand : IMessageHandlerCommand
     {

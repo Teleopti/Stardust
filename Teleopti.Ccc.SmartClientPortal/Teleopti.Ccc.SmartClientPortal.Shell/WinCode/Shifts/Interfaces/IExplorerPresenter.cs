@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
-using Teleopti.Ccc.WinCode.Shifts.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces
 {
     public interface IExplorerPresenter
     {

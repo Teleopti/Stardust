@@ -1,10 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common.Filter;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter;
 
-namespace Teleopti.Ccc.WinCode.Common.Collections
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections
 {
     /// <summary>
     /// Extensionmethods for ObservableCollection for filtering

@@ -1,9 +1,8 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Grouping.Commands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
 {
     public interface IRenameGroupPageCommand : IExecutableCommand, ICanExecute {}
 

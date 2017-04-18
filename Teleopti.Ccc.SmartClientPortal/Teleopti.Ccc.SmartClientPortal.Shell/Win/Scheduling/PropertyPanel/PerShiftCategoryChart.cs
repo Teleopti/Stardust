@@ -1,7 +1,7 @@
 ﻿using System.Drawing.Text;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 {

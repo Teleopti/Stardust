@@ -1,6 +1,6 @@
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.WinCode.Common.Rows
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
 {
     public interface IGridRow
     {

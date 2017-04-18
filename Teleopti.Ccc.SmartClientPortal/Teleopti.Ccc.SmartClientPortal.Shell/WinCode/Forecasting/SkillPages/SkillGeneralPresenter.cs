@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.SkillPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
 {
 	public interface ISkillGeneralView
 	{

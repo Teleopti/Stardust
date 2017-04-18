@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 
-namespace Teleopti.Ccc.WinCode.Budgeting.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views
 {
 	public interface IBudgetGroupDayView
 	{

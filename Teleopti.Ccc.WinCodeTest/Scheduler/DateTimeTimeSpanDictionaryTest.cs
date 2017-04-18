@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {

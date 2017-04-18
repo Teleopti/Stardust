@@ -13,12 +13,13 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Grouping.Commands;
-using Teleopti.Ccc.WinCode.Grouping.Events;
 using Teleopti.Interfaces.Domain;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 

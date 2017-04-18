@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin
 {
     public class PersonFinderPresenter
     {

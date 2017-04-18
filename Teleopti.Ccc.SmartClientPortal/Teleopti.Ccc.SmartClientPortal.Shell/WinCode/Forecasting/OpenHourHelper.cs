@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
 {
     /// <summary>
     /// Helper for OpenHour handling

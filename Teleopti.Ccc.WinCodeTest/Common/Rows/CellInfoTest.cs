@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.WinCode.Common.Rows;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Rows
 {

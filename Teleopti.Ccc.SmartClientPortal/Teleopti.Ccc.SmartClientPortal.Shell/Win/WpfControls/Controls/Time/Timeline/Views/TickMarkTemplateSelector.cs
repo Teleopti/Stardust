@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Teleopti.Ccc.WinCode.Common.Time.Timeline;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline.Views
 {

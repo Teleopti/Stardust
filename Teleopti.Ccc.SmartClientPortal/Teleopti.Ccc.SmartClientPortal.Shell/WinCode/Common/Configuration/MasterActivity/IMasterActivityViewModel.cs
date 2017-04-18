@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.WinCode.Common.Configuration.MasterActivity
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.MasterActivity
 {
     public interface IMasterActivityViewModel
     {

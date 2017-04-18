@@ -1,11 +1,11 @@
-using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Settings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
 {
 	public static class PageHelper
 	{

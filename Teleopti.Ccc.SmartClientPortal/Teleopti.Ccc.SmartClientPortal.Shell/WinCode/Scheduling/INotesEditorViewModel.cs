@@ -1,9 +1,8 @@
-﻿using Teleopti.Interfaces.Domain;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
     public interface INotesEditorViewModel
     {

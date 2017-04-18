@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Ccc.WinCode.Presentation
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation
 {
     public class ReportSettingsScheduleAuditingPresenter
     {

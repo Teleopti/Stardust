@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows.Data;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.WinCode.Converters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters;
 
 namespace Teleopti.Ccc.WinCodeTest.Converters
 {

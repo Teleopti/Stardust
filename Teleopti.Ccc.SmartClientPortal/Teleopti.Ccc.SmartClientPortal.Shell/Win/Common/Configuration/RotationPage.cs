@@ -20,8 +20,8 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Settings;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Rotation = Teleopti.Ccc.Domain.Scheduling.Restriction.Rotation;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration

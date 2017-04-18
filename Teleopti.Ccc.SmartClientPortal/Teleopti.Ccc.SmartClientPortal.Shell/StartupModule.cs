@@ -7,7 +7,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
-using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {

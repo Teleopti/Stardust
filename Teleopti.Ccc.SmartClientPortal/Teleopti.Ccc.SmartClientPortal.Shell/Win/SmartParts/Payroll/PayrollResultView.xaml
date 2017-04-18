@@ -2,23 +2,23 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:payroll="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll"
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+    xmlns:dateTimeConverter="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter"
     mc:Ignorable="d" 
     d:DesignHeight="200" d:DesignWidth="400"
              
     d:DataContext="{x:Static payroll:SampleData.PayrollResults}"
-    GuiHelpers:HelpProvider.HelpString="PayrollExort+Prepare" Loaded="UserControl_Loaded">
+    guiHelpers:HelpProvider.HelpString="PayrollExort+Prepare" Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
             <ResourceDictionary Source="..\..\Resources\Common.xaml"/>
         </ResourceDictionary.MergedDictionaries>
 
-            <DateTimeConverter:DateTimeToLocalConverter x:Key="dateTimeToLocalConverter"/>
+            <dateTimeConverter:DateTimeToLocalConverter x:Key="dateTimeToLocalConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>

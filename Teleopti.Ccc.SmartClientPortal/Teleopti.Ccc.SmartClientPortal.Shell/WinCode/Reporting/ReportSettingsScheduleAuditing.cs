@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Reporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting
 {
      [Serializable]
     public class ReportSettingsScheduleAuditing :SettingValue

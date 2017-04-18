@@ -1,8 +1,8 @@
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.WinCode.Meetings.Overview;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview;
 
-namespace Teleopti.Ccc.WinCode.Meetings.Commands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
 {
     public interface ICanModifyMeeting
     {

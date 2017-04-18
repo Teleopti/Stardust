@@ -1,7 +1,7 @@
-﻿using Teleopti.Interfaces.Domain;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Time
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time
 {
     public interface ITimeZoomViewModel:INotifyPropertyChanged
     {

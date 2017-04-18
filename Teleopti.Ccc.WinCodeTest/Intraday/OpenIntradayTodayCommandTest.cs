@@ -2,8 +2,8 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 
 namespace Teleopti.Ccc.WinCodeTest.Intraday
 {

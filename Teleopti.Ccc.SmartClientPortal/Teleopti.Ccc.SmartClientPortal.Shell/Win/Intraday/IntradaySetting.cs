@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Ccc.WinCode.Common.Chart;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 {

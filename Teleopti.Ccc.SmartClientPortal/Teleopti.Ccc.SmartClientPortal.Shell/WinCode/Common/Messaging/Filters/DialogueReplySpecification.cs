@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Specification;
 
-namespace Teleopti.Ccc.WinCode.Common.Messaging.Filters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging.Filters
 {
     public class DialogueReplySpecification : Specification<IFollowUpMessageDialogueViewModel>
     {

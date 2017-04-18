@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
-using Teleopti.Ccc.WinCode.FileImport;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport.ViewModels
 {

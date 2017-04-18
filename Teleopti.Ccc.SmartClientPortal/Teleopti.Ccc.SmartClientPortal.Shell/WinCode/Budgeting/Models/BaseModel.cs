@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Teleopti.Ccc.WinCode.Budgeting.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models
 {
     public abstract class BaseModel : INotifyPropertyChanged
     {

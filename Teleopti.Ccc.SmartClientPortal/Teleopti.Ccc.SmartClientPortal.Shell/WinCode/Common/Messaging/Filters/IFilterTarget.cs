@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Common.Messaging.Filters
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging.Filters
 {
     /// <summary>
     /// For handling filtering

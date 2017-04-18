@@ -2,12 +2,10 @@
 using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling
 {
     public class ExceptionHandlerModel
     {

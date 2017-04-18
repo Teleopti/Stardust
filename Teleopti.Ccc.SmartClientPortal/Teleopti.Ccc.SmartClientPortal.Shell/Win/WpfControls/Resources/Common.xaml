@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
-					xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters"
-					xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters">
+					xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
+					xmlns:converters1="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters">
 
     <!-- Resources , sets the fallback to aero -->
     <ResourceDictionary.MergedDictionaries>
@@ -15,7 +15,7 @@
 	</ResourceDictionary.MergedDictionaries>
 
     <converters:ColorConverterSoft x:Key="colorConverter"/>
-    <Converters:IsNullConverter x:Key="isNullConverter"/>
+    <converters1:IsNullConverter x:Key="isNullConverter"/>
     <converters:StringToColorConverter x:Key="stringToColorConverter"/>
 
     <Style TargetType="Control" x:Key="HeaderStyle">

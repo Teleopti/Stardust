@@ -1,6 +1,6 @@
 ﻿using System.Windows.Data;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.Interop;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Interop;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Interop
 {

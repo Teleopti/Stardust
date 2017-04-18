@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.Clipboard;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 {

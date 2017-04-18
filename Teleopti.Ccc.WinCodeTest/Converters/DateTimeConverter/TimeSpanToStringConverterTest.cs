@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Converters.DateTimeConverter;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter;
 
 namespace Teleopti.Ccc.WinCodeTest.Converters.DateTimeConverter
 {

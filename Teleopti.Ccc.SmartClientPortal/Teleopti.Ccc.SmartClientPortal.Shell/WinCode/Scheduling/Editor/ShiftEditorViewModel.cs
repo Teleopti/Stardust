@@ -10,13 +10,13 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Ccc.WinCode.Common.Time.Timeline;
-using Teleopti.Ccc.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Editor
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor
 {
     public class ShiftEditorViewModel : IShiftEditor, IShiftEditorSettingsTarget ,INotifyPropertyChanged
     {

@@ -5,12 +5,10 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.WinCode.Permissions.Commands;
-using Teleopti.Ccc.WinCode.Permissions.Events;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Permissions.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Permissions.Events;
 
-namespace Teleopti.Ccc.WinCode.Permissions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Permissions
 {
     public interface IPermissionViewerRolesPresenter
     {

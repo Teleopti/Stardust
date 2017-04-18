@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces
 {
     public interface IMultiplicatorDefinitionPresenter : ICommon<IMultiplicatorDefinitionViewModel>, IPresenterBase
     {

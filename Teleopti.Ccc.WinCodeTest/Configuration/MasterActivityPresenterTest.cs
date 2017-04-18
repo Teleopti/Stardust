@@ -6,7 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.WinCode.Common.Configuration.MasterActivity;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.MasterActivity;
 using Teleopti.Interfaces.Domain;
 
 

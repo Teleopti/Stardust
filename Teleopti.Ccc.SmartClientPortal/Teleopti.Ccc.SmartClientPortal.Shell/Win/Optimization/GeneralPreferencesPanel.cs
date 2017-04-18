@@ -4,7 +4,7 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {

@@ -8,11 +8,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Common.Messaging
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging
 {
     public class FollowUpMessageDialogueViewModel:DependencyObject, IFollowUpMessageDialogueViewModel
     {

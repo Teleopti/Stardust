@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
     public interface IChangePasswordView
     {

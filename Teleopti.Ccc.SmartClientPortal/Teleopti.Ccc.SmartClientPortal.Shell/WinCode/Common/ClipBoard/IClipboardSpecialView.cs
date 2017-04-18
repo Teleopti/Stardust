@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Common.Clipboard
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
 {
     public interface IClipboardSpecialView
     {

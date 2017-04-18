@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces
 {
     /// <summary>
     /// Functionality which will common to all the views in payroll module is

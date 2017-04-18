@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.WinCode.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts
 {
     public class GridClassType
     {

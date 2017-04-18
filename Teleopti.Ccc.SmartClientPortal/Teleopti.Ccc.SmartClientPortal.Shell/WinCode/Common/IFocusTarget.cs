@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     /// <summary>
     /// Interface for items that needs to get the focused set

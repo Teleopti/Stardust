@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Common.Configuration;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
 {

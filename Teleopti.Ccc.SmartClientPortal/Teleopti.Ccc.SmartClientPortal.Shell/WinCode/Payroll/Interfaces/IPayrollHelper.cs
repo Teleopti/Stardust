@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces
 {
     /// <summary>
     /// A helper class to wrap up commonly used functions

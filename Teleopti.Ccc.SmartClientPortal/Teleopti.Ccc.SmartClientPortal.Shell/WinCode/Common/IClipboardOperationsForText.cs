@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Common
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     /// <summary>
     /// Uses the Clipboard object to perform clipborad operations with text data.

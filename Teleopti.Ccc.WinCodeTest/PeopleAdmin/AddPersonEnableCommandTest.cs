@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 {

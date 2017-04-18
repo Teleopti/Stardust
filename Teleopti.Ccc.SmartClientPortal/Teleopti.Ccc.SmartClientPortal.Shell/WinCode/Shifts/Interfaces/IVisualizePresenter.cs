@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces
 {
     public interface IVisualizePresenter : ICommon<ReadOnlyCollection<VisualPayloadInfo>>, IPresenterBase
     {

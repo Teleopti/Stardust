@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.WinCode.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
 {
     public class JobHistoryPresenter
     {

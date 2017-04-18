@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Teleopti.Ccc.WinCode.Common.Commands.CommandBehaviors
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands.CommandBehaviors
 {
     /// <summary>
     /// For handling commands on Expander-events

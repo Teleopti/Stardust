@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Requests
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
 {
     public interface IRequestAllowanceView
     {

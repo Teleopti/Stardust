@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Converters.DateTimeConverter
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter
 {
     /// <summary>
     /// Responsible for deciding what part of the datetime to rebuild and for parsing the supplied text

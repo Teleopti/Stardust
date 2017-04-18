@@ -5,12 +5,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.WinCode.Meetings.Interfaces;
-using Teleopti.Ccc.WinCode.Meetings.Overview;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Meetings.Commands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
 {
     public interface IAddMeetingCommand : IExecutableCommand, ICanExecute
     {

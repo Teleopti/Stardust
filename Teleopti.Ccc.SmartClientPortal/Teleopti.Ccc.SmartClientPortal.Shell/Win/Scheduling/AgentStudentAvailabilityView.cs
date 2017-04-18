@@ -2,8 +2,8 @@
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {

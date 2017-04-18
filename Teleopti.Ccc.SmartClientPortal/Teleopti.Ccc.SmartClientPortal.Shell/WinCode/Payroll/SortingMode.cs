@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Ccc.WinCode.Payroll
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
 {
     /// <summary>
     /// 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.WinCode.Budgeting.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
 
-namespace Teleopti.Ccc.WinCode.Budgeting.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models
 {
 	public class BudgetGroupDayModel
 	{

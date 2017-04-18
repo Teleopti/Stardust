@@ -6,7 +6,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.WinCode.Common.Chart;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 {

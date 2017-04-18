@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces
 {
 	 public interface IMeetingDetailView
 	 {

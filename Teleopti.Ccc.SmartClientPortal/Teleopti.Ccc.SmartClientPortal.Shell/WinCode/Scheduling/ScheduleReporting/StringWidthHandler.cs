@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.Helper;
-using System.Linq;
 
-
-
-namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting
 {
     public class StringWidthHandler
     {

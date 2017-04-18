@@ -4,9 +4,10 @@ using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {

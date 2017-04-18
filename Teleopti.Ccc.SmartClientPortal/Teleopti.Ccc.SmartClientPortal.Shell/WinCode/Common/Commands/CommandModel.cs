@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
 
-namespace Teleopti.Ccc.WinCode.Common.Commands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands
 {
     /// <summary>
     /// Class for Holding a RoutedCommand and defines it owns logic for

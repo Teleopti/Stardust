@@ -2,7 +2,7 @@
 using System.Windows;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.WinCode.Converters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters;
 
 namespace Teleopti.Ccc.WinCodeTest.Converters
 {

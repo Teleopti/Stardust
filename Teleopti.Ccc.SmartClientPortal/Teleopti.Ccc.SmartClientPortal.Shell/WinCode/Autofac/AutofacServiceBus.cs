@@ -16,7 +16,7 @@ using Rhino.ServiceBus.LoadBalancer;
 using Rhino.ServiceBus.MessageModules;
 using Module = Autofac.Module;
 
-namespace Teleopti.Ccc.WinCode.Autofac
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Autofac
 {
 	public static class Extensions
 	{

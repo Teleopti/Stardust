@@ -10,13 +10,13 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Ccc.WinCodeTest.Helpers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {

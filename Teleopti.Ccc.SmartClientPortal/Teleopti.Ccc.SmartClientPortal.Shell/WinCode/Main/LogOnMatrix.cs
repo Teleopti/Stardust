@@ -6,9 +6,8 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 {
     public interface ILogonMatrix
     {

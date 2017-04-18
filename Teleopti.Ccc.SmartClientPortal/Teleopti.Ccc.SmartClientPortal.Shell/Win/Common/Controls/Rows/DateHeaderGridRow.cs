@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.WinCode.Common.Rows;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows

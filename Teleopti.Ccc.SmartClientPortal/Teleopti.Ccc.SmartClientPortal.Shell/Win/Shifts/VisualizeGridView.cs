@@ -3,9 +3,9 @@ using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.WinCode.Shifts;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Ccc.WinCode.Shifts.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {

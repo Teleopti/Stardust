@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.ComponentModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 {
     public class AgentStateViewAdapter : INotifyPropertyChanged
     {

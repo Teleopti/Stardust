@@ -14,8 +14,8 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Overtime;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
-using Teleopti.Ccc.WinCode.Common.Configuration;
-using Teleopti.Ccc.WinCode.Common.Configuration.Rta;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.Rta;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {

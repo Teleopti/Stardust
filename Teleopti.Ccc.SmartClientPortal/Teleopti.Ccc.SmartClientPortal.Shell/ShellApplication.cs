@@ -51,14 +51,11 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Permissions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Application = System.Windows.Forms.Application;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell

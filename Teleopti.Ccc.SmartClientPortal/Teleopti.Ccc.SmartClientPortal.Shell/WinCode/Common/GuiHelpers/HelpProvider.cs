@@ -4,9 +4,9 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.WinCode.Common.Interop;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Interop;
 
-namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers
 {
     /// <summary>
     /// Provides help for F1

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.WinCode.Common.Filter
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter
 {
     public class FilterListViewItems
     {

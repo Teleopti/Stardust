@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager
 {

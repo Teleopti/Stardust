@@ -6,14 +6,14 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Shifts;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Ccc.WinCode.Shifts.Models;
-using Teleopti.Ccc.WinCode.Shifts.Presenters;
-using Teleopti.Ccc.WinCode.Shifts.Views;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
 
 namespace Teleopti.Ccc.WinCodeTest.Shifts
 {

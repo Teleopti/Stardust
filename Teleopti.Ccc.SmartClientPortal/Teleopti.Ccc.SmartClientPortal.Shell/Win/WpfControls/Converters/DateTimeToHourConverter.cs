@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Teleopti.Ccc.WinCode.Converters.DateTimeConverter;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters
 {

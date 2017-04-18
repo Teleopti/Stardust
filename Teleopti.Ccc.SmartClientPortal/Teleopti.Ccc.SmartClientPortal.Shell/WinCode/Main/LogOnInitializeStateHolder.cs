@@ -7,7 +7,7 @@ using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 
-namespace Teleopti.Ccc.WinCode.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 {
 	public static class LogonInitializeStateHolder
 	{

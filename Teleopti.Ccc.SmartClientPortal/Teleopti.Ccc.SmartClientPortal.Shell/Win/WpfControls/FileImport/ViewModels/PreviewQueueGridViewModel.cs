@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Teleopti.Ccc.WinCode.FileImport;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport.ViewModels
 {

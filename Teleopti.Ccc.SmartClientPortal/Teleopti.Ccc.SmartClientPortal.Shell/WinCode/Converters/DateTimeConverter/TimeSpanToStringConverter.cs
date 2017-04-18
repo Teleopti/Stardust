@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Windows;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Converters.DateTimeConverter
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter
 {
     public class TimeSpanToStringConverter : IValueConverter
     {

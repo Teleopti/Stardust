@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Data;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Ccc.WinCode.Common.Filter;
-using Teleopti.Ccc.WinCode.Common.Messaging.Filters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging.Filters;
 
-namespace Teleopti.Ccc.WinCode.Common.Messaging
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging
 {
     /// <summary>
     /// Viewmodel for replyoptions. 

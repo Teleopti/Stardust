@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard
 {
     public interface IAbstractPropertyPagesNoRoot<T>
     {

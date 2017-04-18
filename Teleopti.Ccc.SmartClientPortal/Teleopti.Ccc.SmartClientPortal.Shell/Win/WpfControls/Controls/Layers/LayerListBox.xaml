@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common"
     xmlns:intraday="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday"
+    xmlns:common1="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common"
     ItemsSource="{Binding}"
 	ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 	ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -42,7 +43,7 @@
 			<Setter Property="HorizontalContentAlignment" Value="Stretch" />
 			<Setter Property="VerticalContentAlignment" Value="Stretch" />
 			<!-- Data binding for DateTimePeriodPanel -->
-			<Setter Property="common:DateTimePeriodPanel.DateTimePeriod">
+			<Setter Property="common1:DateTimePeriodPanel.DateTimePeriod">
 				<Setter.Value>
                     <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
 				</Setter.Value>
@@ -53,8 +54,8 @@
 	<!--The layoutpanel (just a DateTimePeriodpanel bound to the controls Period-property-->
 	<ListBox.ItemsPanel>
 		<ItemsPanelTemplate>
-			<common:DateTimePeriodPanel 
-				common:DateTimePeriodPanel.DateTimePeriod="{Binding ElementName=Main, Path=Period}"
+			<common1:DateTimePeriodPanel 
+				common1:DateTimePeriodPanel.DateTimePeriod="{Binding ElementName=Main, Path=Period}"
 				Overlap="{Binding ElementName=Main, Path=Offset}"
 				IsItemsHost="True"
 				Background="Transparent"/>

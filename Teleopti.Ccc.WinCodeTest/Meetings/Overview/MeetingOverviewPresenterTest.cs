@@ -3,10 +3,10 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.WinCode.Meetings.Commands;
-using Teleopti.Ccc.WinCode.Meetings.Events;
-using Teleopti.Ccc.WinCode.Meetings.Interfaces;
-using Teleopti.Ccc.WinCode.Meetings.Overview;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview

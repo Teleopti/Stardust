@@ -1,10 +1,9 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Ccc.WinCode.Shifts.Models;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Models;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Presenters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
 {
     public class GeneralTemplatePresenter : BasePresenter<IGeneralTemplateViewModel>, 
                                             IGeneralTemplatePresenter

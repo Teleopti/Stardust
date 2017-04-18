@@ -4,9 +4,8 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Chart
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart
 {
     [Serializable]
     public class ChartSettings : SettingValue

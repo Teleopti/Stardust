@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
 
-namespace Teleopti.Ccc.WinCode.Common.Collections
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections
 {
     /// <summary>
     /// Collection that filters on Type

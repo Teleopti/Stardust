@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport.Views.PreviewQueueGrid"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
     MinHeight="300" MinWidth="300"
     FocusManager.FocusedElement="{Binding ElementName=lv}">
     
@@ -19,7 +19,7 @@
     
     
     
-    <Grid GuiHelpers:VisualTreeTranslator.Translate="False">
+    <Grid guiHelpers:VisualTreeTranslator.Translate="False">
         <ListView Name="lv" x:FieldModifier="private" ItemsSource="{Binding Path=ImportPreview}" ItemTemplate="{StaticResource dt}" Margin="2,0,-2,0">
             <ListView.View>
                 <GridView>

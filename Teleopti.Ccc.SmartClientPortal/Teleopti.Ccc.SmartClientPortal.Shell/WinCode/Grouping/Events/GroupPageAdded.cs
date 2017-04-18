@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Practices.Composite.Presentation.Events;
 
-namespace Teleopti.Ccc.WinCode.Grouping.Events
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events
 {
     public class GroupPageAdded : CompositePresentationEvent<EventGroupPage>
     {

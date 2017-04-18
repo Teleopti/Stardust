@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using Teleopti.Ccc.WinCode.Budgeting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting.Events
 {

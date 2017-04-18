@@ -9,9 +9,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard
 {
     /// <summary>
     /// Abstract base class for dialogues showing properties in several different views
@@ -253,7 +252,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
         /// <summary>
         /// Triggers the name changed.
         /// </summary>
-        /// <param name="eventArgs">The <see cref="Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard.WizardNameChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="eventArgs">The <see cref="WizardNameChangedEventArgs"/> instance containing the event data.</param>
         /// <remarks>
         /// Created by: robink
         /// Created date: 2008-01-14

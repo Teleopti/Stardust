@@ -6,17 +6,18 @@
 				 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 				 xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
 				 xmlns:layers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers"
+				 xmlns:common="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common"
 				 HorizontalAlignment="Stretch" 
                  VerticalAlignment="Stretch"
                  HorizontalContentAlignment="Stretch" 
                  VerticalContentAlignment="Stretch" >
     <UserControl.Resources>
         <converters:ReversedVisibilityConverter x:Key="visibilityConverter"/>
-        <DataTemplate x:Key="groupBackground" DataType="Common:LayerGroupViewModel">
+        <DataTemplate x:Key="groupBackground" DataType="common:LayerGroupViewModel">
             <layers:LayerGroupBackgroundView/>
         </DataTemplate>
 
-        <DataTemplate x:Key="groupForground" DataType="Common:LayerGroupViewModel">
+        <DataTemplate x:Key="groupForground" DataType="common:LayerGroupViewModel">
             <layers:LayerGroupForegroundView/>
         </DataTemplate>
         
@@ -33,7 +34,7 @@
                     <Style.Setters>
                         <Setter Property="ContentControl.HorizontalContentAlignment" Value="Stretch" />
                         <Setter Property="ContentControl.VerticalContentAlignment" Value="Stretch" />
-                        <Setter Property="Common:DateTimePeriodPanel.DateTimePeriod" >
+                        <Setter Property="common:DateTimePeriodPanel.DateTimePeriod" >
                             <Setter.Value>
                                 <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period"/>
                             </Setter.Value>
@@ -43,10 +44,10 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Common:DateTimePeriodPanel IsItemsHost="True" 
+                    <common:DateTimePeriodPanel IsItemsHost="True" 
                                                 Overlap="1"
                                                 Background="Transparent">
-                    </Common:DateTimePeriodPanel>
+                    </common:DateTimePeriodPanel>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

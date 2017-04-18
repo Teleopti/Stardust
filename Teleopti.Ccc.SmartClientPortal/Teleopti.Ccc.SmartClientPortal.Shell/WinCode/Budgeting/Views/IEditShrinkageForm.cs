@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Budgeting.Views
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views
 {
     public interface IEditShrinkageForm
     {

@@ -4,10 +4,8 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.Cascading
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_CascadingSkillsGUI_40018)]
 	public class CascadingSkillPresenter

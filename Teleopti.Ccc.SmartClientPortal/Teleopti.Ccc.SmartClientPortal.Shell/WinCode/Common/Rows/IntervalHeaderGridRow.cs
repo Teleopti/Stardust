@@ -4,7 +4,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Rows
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
 {
     public class IntervalHeaderGridRow:IGridRow
     {

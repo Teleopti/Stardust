@@ -2,9 +2,9 @@ using NUnit.Framework;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.WinCode.Settings;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 
 namespace Teleopti.Ccc.WinCodeTest.Settings
 {

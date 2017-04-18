@@ -6,7 +6,7 @@ using Syncfusion.Windows.Forms.Grid;
 
 #endregion
 
-namespace Teleopti.Ccc.WinCode.Common.Clipboard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
 {
 
     /// <summary>

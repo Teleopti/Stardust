@@ -1,9 +1,8 @@
 using System;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
     public interface IPersonRequestViewModel:INotifyPropertyChanged
     {

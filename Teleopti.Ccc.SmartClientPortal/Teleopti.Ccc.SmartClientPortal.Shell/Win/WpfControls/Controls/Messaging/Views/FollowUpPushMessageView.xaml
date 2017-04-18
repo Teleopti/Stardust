@@ -1,10 +1,10 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging.Views.FollowUpPushMessageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
-			 xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
 			 xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging.Views"
-			 GuiHelpers:HelpProvider.HelpString="PeopleWorksheet+MessagesFollowUp">
+			 xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+			 xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands"
+			 guiHelpers:HelpProvider.HelpString="PeopleWorksheet+MessagesFollowUp">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -49,7 +49,7 @@
 						<StackPanel Orientation="Horizontal" 
 										Grid.Column="0" 
 										Margin="10,0,0,0"  
-										Commands:CreateCommandBinding.ExecuteCommandModel="{Binding Path=LoadDialogues}">
+										commands:CreateCommandBinding.ExecuteCommandModel="{Binding Path=LoadDialogues}">
 							<TextBlock Text="("/>
 							<TextBlock Text="{Binding Path=Dialogues.Count}"/>
 							<TextBlock Text=") "/>
@@ -102,7 +102,7 @@
 				</Expander.Content>
 			</Expander>
 				<Button Style="{StaticResource DeleteButtonStyle}"
-									Commands:CreateCommandBinding.Command="{Binding Path=Delete}"
+									commands:CreateCommandBinding.Command="{Binding Path=Delete}"
 									Command="{Binding Path=Delete.Command}" 
 									Grid.Column="2"
 									HorizontalAlignment="Right"

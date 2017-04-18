@@ -10,14 +10,13 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Shifts.Events;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Shifts
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts
 {
     public class ShiftsDataHelper : IDataHelper
     {

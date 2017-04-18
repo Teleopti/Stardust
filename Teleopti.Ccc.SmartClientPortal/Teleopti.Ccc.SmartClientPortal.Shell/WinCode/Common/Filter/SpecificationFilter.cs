@@ -3,7 +3,7 @@ using System.Windows.Data;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Filter
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter
 {
     /// <summary>
     /// Filter for applying specifications on a observablecollection of T

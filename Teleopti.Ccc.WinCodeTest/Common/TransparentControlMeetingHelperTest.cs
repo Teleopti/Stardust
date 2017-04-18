@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 

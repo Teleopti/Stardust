@@ -12,9 +12,10 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Matrix;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {

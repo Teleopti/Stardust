@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Converters.DateTimeConverter
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter
 {
     /// <summary>
     /// BaseClass for DateTimeConverting, for handling TimeZones

@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 
-namespace Teleopti.Ccc.WinCode.FileImport
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport
 {
     public class ImportFileDoCollection : Collection<ImportFileDo>
     {

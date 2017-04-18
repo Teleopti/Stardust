@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Rhino.Mocks;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -17,6 +16,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {

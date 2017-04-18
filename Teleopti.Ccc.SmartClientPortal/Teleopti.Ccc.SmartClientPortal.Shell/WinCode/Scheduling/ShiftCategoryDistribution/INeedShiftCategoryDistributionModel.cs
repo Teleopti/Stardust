@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution
 {
 	public interface INeedShiftCategoryDistributionModel
 	{

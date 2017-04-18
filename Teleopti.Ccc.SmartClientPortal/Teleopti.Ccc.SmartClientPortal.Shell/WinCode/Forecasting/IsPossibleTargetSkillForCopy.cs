@@ -1,8 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
 {
     public class IsPossibleTargetSkillForCopy : Specification<ISkill>
     {

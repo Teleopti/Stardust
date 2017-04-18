@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Tracking
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Tracking
 {
     public class DefaultTracker : Tracker
     {

@@ -2,9 +2,8 @@ using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Settings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
 {
     /// <summary>
     /// Represents the adapter for the absence.

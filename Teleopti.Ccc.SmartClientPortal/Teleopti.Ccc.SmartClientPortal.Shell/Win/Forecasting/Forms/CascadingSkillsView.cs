@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Forecasting.Cascading;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.Cascading;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.WinCode.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
 {
     public interface IJobHistoryView
     {

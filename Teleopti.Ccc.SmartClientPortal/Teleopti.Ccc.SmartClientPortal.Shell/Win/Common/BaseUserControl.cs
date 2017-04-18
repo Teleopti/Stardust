@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common

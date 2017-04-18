@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Rows
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
 {
     /// <summary>
     /// RowManager used by Scheduler to be able to set timeZoneInfo

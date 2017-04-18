@@ -5,8 +5,8 @@ using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.WinCode.Permissions;
-using Teleopti.Ccc.WinCode.Permissions.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Permissions;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Permissions.Commands;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands

@@ -2,8 +2,8 @@
 using System.Globalization;
 using NUnit.Framework;
 using Syncfusion.Pdf.Graphics;
-using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using System.Linq;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 {

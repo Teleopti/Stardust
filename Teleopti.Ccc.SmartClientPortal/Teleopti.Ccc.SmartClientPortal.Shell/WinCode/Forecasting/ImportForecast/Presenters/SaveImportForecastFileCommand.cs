@@ -2,10 +2,9 @@ using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Models;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Presenters
 {
     public class SaveImportForecastFileCommand : ISaveImportForecastFileCommand
     {

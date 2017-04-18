@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard
 {
     /// <summary>
     /// Abstract base class for wizard managers

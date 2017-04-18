@@ -2,7 +2,7 @@
 using System.Globalization;
 using Syncfusion.Windows.Forms.Chart;
 
-namespace Teleopti.Ccc.WinCode.Common.Chart
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart
 {
 	public class ChartManager
 	{

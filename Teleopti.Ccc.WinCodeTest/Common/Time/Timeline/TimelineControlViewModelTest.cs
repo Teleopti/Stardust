@@ -2,8 +2,9 @@
 using System.Threading;
 using System.Windows.Threading;
 using NUnit.Framework;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.Time.Timeline;
 using Teleopti.Ccc.WinCodeTest.Helpers;
 using Teleopti.Interfaces.Domain;
 

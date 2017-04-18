@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Drawing;
-using Syncfusion.Drawing;
-using System.Windows.Forms;
 using System.Globalization;
+using System.Windows.Forms;
+using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers
 {
 	public class ColorHelper
 	{

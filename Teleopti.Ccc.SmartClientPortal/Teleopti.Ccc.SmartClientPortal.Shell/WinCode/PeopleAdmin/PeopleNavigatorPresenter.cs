@@ -1,10 +1,10 @@
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Grouping.Commands;
-using Teleopti.Ccc.WinCode.Grouping.Events;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin
 {
     public interface IPeopleNavigatorPresenter
     {

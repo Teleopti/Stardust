@@ -3,11 +3,11 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using System.Globalization;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 
 namespace Teleopti.Ccc.WinCodeTest.Settings
 {

@@ -1,8 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 {
     public interface IBudgetSettingsProvider
     {

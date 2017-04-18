@@ -2,8 +2,8 @@
 using System.Windows;
 using System.Windows.Input;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Ccc.WinCode.Common.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Models

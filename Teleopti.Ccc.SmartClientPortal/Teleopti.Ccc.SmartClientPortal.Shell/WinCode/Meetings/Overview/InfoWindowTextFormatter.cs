@@ -8,10 +8,8 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Meetings.Overview
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
 {
     public interface IInfoWindowTextFormatter
     {

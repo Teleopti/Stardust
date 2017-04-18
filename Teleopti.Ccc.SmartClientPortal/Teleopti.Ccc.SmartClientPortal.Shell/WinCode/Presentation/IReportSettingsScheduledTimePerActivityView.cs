@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Reporting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Presentation
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation
 {
     public interface IReportSettingsScheduledTimePerActivityView
     {

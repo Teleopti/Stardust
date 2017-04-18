@@ -1,8 +1,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin.Commands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
 	public interface ISendInstantMessageEnableCommand : ICanExecute

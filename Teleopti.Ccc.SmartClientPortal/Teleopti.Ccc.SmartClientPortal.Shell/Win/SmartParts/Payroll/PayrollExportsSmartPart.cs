@@ -17,7 +17,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.PayrollFormatter;
-using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll
 {

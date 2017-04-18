@@ -6,6 +6,7 @@
 ///CreateCommandBinding.Target={Binding}
 ///This will set up all the CommandModels on the viewmodel 
 ///more info below.....
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,7 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Teleopti.Ccc.WinCode.Common.Commands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands
 {
     
     public static class CreateCommandBinding

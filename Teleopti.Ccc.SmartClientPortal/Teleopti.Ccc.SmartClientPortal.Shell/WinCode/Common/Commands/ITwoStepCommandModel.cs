@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Teleopti.Ccc.WinCode.Common.Commands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands
 {
     /// <summary>
     /// Command that uses two steps.

@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-
-using Teleopti.Ccc.WinCode.Converters.Layers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.Layers;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Converters.Layers

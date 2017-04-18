@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Ccc.WinCodeTest.Helpers;
 using Teleopti.Interfaces.Domain;

@@ -5,12 +5,12 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.Time;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Ccc.WinCode.Common.Time;
-using DateTimePeriod = Teleopti.Interfaces.Domain.DateTimePeriod;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time;
 using Teleopti.Interfaces.Domain;
+using DateTimePeriod = Teleopti.Interfaces.Domain.DateTimePeriod;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
 
     /// <summary>

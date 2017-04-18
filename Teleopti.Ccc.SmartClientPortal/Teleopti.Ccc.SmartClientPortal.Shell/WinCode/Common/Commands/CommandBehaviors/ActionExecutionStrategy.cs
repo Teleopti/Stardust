@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Common.Commands.CommandBehaviors
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands.CommandBehaviors
 {
     /// <summary>
     /// executes a delegate

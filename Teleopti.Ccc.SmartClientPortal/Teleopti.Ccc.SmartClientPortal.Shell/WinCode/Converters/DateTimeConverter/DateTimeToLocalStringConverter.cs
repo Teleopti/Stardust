@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Converters.DateTimeConverter
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter
 {
     /// <summary>
     /// Converter for converting a string to utc datetime (and back)

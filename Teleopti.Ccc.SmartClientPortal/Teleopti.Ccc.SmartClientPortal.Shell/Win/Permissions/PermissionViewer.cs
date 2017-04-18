@@ -4,10 +4,10 @@ using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Permissions;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Permissions.Events;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Permissions;
-using Teleopti.Ccc.WinCode.Permissions.Events;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Permissions
 {

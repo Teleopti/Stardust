@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 
-namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces
 {
     public interface IMultiplicatorDefinitionViewModel : IGridViewBaseModel, IViewModel<MultiplicatorDefinition>
     {

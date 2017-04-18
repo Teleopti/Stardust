@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Win;
-
-namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
 	partial class SearchPerson
 	{

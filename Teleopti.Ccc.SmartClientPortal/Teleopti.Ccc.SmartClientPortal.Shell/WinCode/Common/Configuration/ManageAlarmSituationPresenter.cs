@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Intraday;
-using Teleopti.Ccc.WinCode.Settings;
-using Teleopti.Interfaces.Domain;
-using System.Collections.Specialized;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
+using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.WinCode.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
 	public class ManageAlarmSituationPresenter : IDisposable
 	{

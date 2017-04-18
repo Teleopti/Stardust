@@ -1,8 +1,8 @@
 ﻿
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Rhino.Mocks;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 {

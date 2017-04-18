@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging.Views.StandardAnswerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
-    GuiHelpers:HelpProvider.HelpString="PeopleWorksheet+MessagesStandard">
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+    xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands"
+    guiHelpers:HelpProvider.HelpString="PeopleWorksheet+MessagesStandard">
     <UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -26,7 +26,7 @@
 									VerticalAlignment="Center"
 									Height="40"
 									Width="68"
-									Commands:CreateCommandBinding.CommandModel="{Binding SendMessageCommand}" 
+									commands:CreateCommandBinding.CommandModel="{Binding SendMessageCommand}" 
 									Command="{Binding SendMessageCommand.Command}" />
 
 			</GroupBox>

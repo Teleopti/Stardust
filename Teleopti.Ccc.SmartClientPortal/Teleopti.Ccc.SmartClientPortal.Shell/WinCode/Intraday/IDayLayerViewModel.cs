@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Intraday
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 {
     public interface IDayLayerViewModel : INotifyPropertyChanged
     {

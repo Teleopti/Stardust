@@ -2,7 +2,7 @@ using System;
 using Microsoft.Practices.Composite.Presentation.Events;
 using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Ccc.WinCode.Grouping.Events
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events
 {
     public class GroupPageNodeCheckedChange : CompositePresentationEvent<GroupPageNodeCheckData>
     {

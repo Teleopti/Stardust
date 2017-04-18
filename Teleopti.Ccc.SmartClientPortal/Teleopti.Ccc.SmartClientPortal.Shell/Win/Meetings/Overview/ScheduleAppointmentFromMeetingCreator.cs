@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Syncfusion.Schedule;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Meetings.Overview;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 {

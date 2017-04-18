@@ -13,7 +13,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts;
-using Teleopti.Ccc.WinCode.Grouping;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {

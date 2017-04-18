@@ -5,9 +5,8 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Main
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 {
     public interface ILogonLicenseChecker
     {

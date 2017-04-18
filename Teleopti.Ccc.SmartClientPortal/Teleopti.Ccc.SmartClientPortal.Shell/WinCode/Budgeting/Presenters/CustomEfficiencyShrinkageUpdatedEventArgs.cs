@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 {
     public class CustomEfficiencyShrinkageUpdatedEventArgs : EventArgs
     {

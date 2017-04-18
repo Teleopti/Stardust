@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Views.ScheduleViewerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
 			 xmlns:Models="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Models"
-			 xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Views">
+			 xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.ScheduleViewer.Views"
+			 xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands">
     <UserControl.Resources>
         <ResourceDictionary>
 
@@ -26,9 +26,9 @@
             <TextBlock Text="   Ribbon?? " FontSize="8"/>
             <GroupBox Header="xxViews">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="View1" Command="{Binding Path=ToggleShowSchedules.Command}" Commands:CreateCommandBinding.CommandModel="{Binding Path=ToggleShowSchedules}"/>
-                    <Button Content="View1" Command="{Binding Path=ToggleShowDays.Command}" Commands:CreateCommandBinding.CommandModel="{Binding Path=ToggleShowDays}"/>
-                    <Button Content="View1" Command="{Binding Path=ToggleShowDetails.Command}" Commands:CreateCommandBinding.CommandModel="{Binding Path=ToggleShowDetails}"/>
+                    <Button Content="View1" Command="{Binding Path=ToggleShowSchedules.Command}" commands:CreateCommandBinding.CommandModel="{Binding Path=ToggleShowSchedules}"/>
+                    <Button Content="View1" Command="{Binding Path=ToggleShowDays.Command}" commands:CreateCommandBinding.CommandModel="{Binding Path=ToggleShowDays}"/>
+                    <Button Content="View1" Command="{Binding Path=ToggleShowDetails.Command}" commands:CreateCommandBinding.CommandModel="{Binding Path=ToggleShowDetails}"/>
                    
                 </StackPanel>
             </GroupBox>

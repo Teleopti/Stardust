@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.WinCode.Presentation;
-using Teleopti.Ccc.WinCode.Reporting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Ccc.WinCodeTest.Common;
 
 namespace Teleopti.Ccc.WinCodeTest.Presentation

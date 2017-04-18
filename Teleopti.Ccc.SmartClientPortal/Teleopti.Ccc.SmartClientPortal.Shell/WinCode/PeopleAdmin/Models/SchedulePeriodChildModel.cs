@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 {
     /// <summary>
     /// Schedule period child adapter.

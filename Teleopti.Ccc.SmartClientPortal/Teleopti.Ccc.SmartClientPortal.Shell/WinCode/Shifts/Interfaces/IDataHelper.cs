@@ -6,9 +6,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces
 {
     public interface IDataHelper
     {

@@ -4,13 +4,11 @@ using System.Windows.Input;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Ccc.WinCode.Common.Filter;
-using Teleopti.Ccc.WinCode.Common.Messaging.Filters;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging.Filters;
 
-namespace Teleopti.Ccc.WinCode.Common.Messaging
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging
 {
 	/// <summary>
 	/// Responsible for loading and presenting Conversations (Headers)

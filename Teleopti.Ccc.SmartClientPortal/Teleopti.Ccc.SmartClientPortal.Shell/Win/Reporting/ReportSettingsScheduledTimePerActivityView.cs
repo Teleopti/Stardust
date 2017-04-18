@@ -18,9 +18,9 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Presentation;
-using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Interfaces.Domain;
 
 //Problem to open ScheduleReportViewer in design mode -> remove ReportDateFromToSelector control from this control.

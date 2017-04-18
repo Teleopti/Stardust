@@ -1,11 +1,11 @@
 using System;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 
 namespace Teleopti.Ccc.WinCodeTest.Settings
 {

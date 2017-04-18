@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.WinCode.FileImport;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.FileImport
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.WinCode.Forecasting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
 {
     public interface IJobResultProvider
     {

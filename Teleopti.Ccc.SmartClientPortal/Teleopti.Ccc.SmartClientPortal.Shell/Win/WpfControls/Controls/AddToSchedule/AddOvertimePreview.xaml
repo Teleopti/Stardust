@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.AddToSchedule.AddOvertimePreview"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
-             xmlns:dateTimePeriodControl="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl"
-             Commands:CreateCommandBinding.Target="{Binding}">
+			 xmlns:dateTimePeriodControl="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl"
+			 xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands"
+			 commands:CreateCommandBinding.Target="{Binding}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

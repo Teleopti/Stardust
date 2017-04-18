@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.TimeZoom.Views.TimeZoomView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands">
+    xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -28,17 +28,17 @@
 			<TextBlock Text="{Binding Path=Period.EndDateTime,StringFormat=d}" Grid.Column="2"/>
 
 
-			<Button Commands:CreateCommandBinding.CommandModel="{Binding Path=ZoomInCommand}" Command="{Binding Path=ZoomInCommand.Command}"
+			<Button commands:CreateCommandBinding.CommandModel="{Binding Path=ZoomInCommand}" Command="{Binding Path=ZoomInCommand.Command}"
 					Content="-" 
 					Grid.Row="1"
 					Grid.Column="0"/>
-			<Button Commands:CreateCommandBinding.CommandModel="{Binding Path=ScrollToNowCommand}" Command="{Binding Path=ScrollToNowCommand.Command}"
+			<Button commands:CreateCommandBinding.CommandModel="{Binding Path=ScrollToNowCommand}" Command="{Binding Path=ScrollToNowCommand.Command}"
 					Grid.Row="1"
 					Grid.Column="1"/>
-			<Button Commands:CreateCommandBinding.CommandModel="{Binding Path=ZoomOutCommand}" Command="{Binding Path=ZoomOutCommand.Command}"
+			<Button commands:CreateCommandBinding.CommandModel="{Binding Path=ZoomOutCommand}" Command="{Binding Path=ZoomOutCommand.Command}"
 					Grid.Row="1"
 					Grid.Column="2"/>
-			<Button Commands:CreateCommandBinding.CommandModel="{Binding Path=ScrollToDateTimeCommand}" Command="{Binding Path=ScrollToDateTimeCommand.Command}"
+			<Button commands:CreateCommandBinding.CommandModel="{Binding Path=ScrollToDateTimeCommand}" Command="{Binding Path=ScrollToDateTimeCommand.Command}"
 					Grid.Row="2"
 					Grid.Column="0"/>
 			<ItemsControl ItemsSource="{Binding Path=ZoomLevels}" 

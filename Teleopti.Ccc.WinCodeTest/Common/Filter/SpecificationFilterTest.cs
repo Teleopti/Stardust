@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.WinCode.Common.Filter;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Filter
 {

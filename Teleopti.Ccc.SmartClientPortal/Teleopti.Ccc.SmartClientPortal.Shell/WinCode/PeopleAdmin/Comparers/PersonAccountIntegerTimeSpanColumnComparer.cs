@@ -3,12 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 
 #endregion
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin.Comparers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Comparers
 {
     /// <summary>
     /// Represents the integer column comparer of the person account view.

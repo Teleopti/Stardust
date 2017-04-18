@@ -1,10 +1,10 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Models
 {
     public class AbsolutePositionViewModel : ActivityViewModel<ActivityNormalExtender>
     {

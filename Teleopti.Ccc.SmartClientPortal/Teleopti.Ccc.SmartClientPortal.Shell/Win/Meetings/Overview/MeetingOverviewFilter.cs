@@ -6,10 +6,10 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Grouping.Events;
-using Teleopti.Ccc.WinCode.Meetings.Events;
-using Teleopti.Ccc.WinCode.Meetings.Overview;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Events;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 {

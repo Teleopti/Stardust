@@ -4,10 +4,10 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Scheduling.AuditHistory;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 {

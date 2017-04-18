@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common.Commands;
 using System.Collections.Generic;
 using System.Threading;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 {

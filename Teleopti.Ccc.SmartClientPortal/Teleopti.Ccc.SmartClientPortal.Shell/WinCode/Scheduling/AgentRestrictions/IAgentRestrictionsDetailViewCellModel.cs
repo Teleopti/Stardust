@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestrictions
 {
 	public interface IAgentRestrictionsDetailViewCellModel
 	{

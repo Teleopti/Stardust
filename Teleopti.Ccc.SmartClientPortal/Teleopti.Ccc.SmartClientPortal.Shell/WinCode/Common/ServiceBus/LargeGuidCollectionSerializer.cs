@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Xml.Linq;
 using Rhino.ServiceBus.Internal;
 
-namespace Teleopti.Ccc.Win.Common.ServiceBus
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ServiceBus
 {
 	public class LargeGuidCollectionSerializer : ICustomElementSerializer
 	{

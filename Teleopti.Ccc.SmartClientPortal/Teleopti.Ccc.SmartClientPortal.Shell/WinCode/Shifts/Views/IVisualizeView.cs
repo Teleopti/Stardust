@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Shifts.Views
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views
 {
     public interface IVisualizeView
     {

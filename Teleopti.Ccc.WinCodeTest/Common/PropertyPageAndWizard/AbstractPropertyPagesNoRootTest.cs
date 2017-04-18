@@ -2,8 +2,8 @@
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Rhino.Mocks.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
 {

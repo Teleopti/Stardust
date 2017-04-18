@@ -7,14 +7,15 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500" 
              d:DataContext="{x:Static payroll:SampleData.PayrollResults}"
-				 xmlns:Payroll1="clr-namespace:Teleopti.Ccc.Domain.Payroll;assembly=Teleopti.Ccc.Domain" 
-             xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter"
-             xmlns:PayrollExportSmartPart="clr-namespace:Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart" 
-				 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands" xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts" xmlns:Domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Interfaces" Background="White" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-                 xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
-                 xmlns:domain1="clr-namespace:Teleopti.Ccc.Domain.InterfaceLegacy.Domain;assembly=Teleopti.Ccc.Domain"
+				 xmlns:Payroll1="clr-namespace:Teleopti.Ccc.Domain.Payroll;assembly=Teleopti.Ccc.Domain"
+				 xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts" xmlns:Domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Interfaces" Background="White" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+				 xmlns:domain1="clr-namespace:Teleopti.Ccc.Domain.InterfaceLegacy.Domain;assembly=Teleopti.Ccc.Domain"
                  xmlns:payroll="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll"
-                 GuiHelpers:HelpProvider.HelpString="PayrollExort+Prepare" Loaded="UserControl_Loaded">
+                 xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+                 xmlns:dateTimeConverter="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter"
+                 xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands"
+                 xmlns:PayrollExportSmartPart="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart"
+                 guiHelpers:HelpProvider.HelpString="PayrollExort+Prepare" Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -50,13 +51,13 @@
         <DataTemplate x:Key="payrollResultView">
             <payroll:PayrollResultView DataContext="{Binding}"/>
         </DataTemplate>
-        <DateTimeConverter:DateTimeToLocalConverter x:Key="dateTimeToLocalConverter"/>
+        <dateTimeConverter:DateTimeToLocalConverter x:Key="dateTimeToLocalConverter"/>
             </ResourceDictionary>
     </UserControl.Resources>
 
     <UserControl.ContextMenu>
         <ContextMenu>
-            <MenuItem Commands:CreateCommandBinding.Command="{Binding Path=SaveAs}"
+            <MenuItem commands:CreateCommandBinding.Command="{Binding Path=SaveAs}"
                     Command="{Binding SaveAs.Command}"
                     Header="{Binding SaveAs.Text}"
                     />
@@ -96,7 +97,7 @@
         <Border Grid.Row="1" Padding="3" Style="{StaticResource detailedInfo}">
             <Grid>
             <ContentPresenter Content="{Binding Path=SelectedItem, ElementName=exports}"  ContentTemplate="{StaticResource payrollResultView}" Width="Auto" />
-                <Button Commands:CreateCommandBinding.Command="{Binding Path=SaveAs}"
+                <Button commands:CreateCommandBinding.Command="{Binding Path=SaveAs}"
                 Grid.Column="1"
                 Command="{Binding SaveAs.Command}"
                 Content="{Binding SaveAs.Text}"

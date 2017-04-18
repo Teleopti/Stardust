@@ -3,8 +3,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.GuiHelpers
 {

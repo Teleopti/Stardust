@@ -6,9 +6,8 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Persisters.Requests;
 using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
 	public class SchedulingScreenPersister : ISchedulingScreenPersister
 	{

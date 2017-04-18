@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace Teleopti.Ccc.WinCode.FileImport
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport
 {
     public class ImportFileDo
     {

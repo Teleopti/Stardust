@@ -1,6 +1,6 @@
 ﻿using System;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestrictions;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 {

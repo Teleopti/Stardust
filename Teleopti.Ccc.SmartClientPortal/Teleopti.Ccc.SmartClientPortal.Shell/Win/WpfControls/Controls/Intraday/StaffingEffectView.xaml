@@ -2,10 +2,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
-    xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters"
-             xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
-           xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.StaffingEffectView"
-           GuiHelpers:HelpProvider.HelpString="IntradayView+IntradayStaffingEffect"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+	xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters"
+	mc:Ignorable="d" x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.StaffingEffectView"
+           guiHelpers:HelpProvider.HelpString="IntradayView+IntradayStaffingEffect"
     Height="Auto" Width="Auto" Loaded="UserControl_Loaded" d:DesignWidth="143" d:DesignHeight="142">
 
 	<UserControl.Resources>
@@ -17,8 +18,8 @@
 			</ResourceDictionary.MergedDictionaries>
 
 			<!-- Converters -->
-			<Converters:PersonNameConverter x:Key="personNameConverter"/>
-			<Converters:TimeSpanRoundingConverter x:Key="timeSpanRoundingConverter"/>
+			<converters:PersonNameConverter x:Key="personNameConverter"/>
+			<converters:TimeSpanRoundingConverter x:Key="timeSpanRoundingConverter"/>
 
 			<Style TargetType="{x:Type Control}" BasedOn="{StaticResource HeaderStyle}" x:Key="RtaPinnedHeaderStyle"/>
 		</ResourceDictionary>

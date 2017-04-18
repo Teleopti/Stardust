@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Teleopti.Ccc.WinCode.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters
 {
     [ValueConversion(typeof(TimeSpan), typeof(double), ParameterType = typeof(string))]
     public class TimeSpanConverter:IValueConverter

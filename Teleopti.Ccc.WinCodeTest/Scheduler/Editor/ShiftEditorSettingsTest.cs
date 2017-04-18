@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Scheduling.Editor;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 {

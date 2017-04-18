@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     /// <summary>
     /// Interface for all forms and user controls that should have translations

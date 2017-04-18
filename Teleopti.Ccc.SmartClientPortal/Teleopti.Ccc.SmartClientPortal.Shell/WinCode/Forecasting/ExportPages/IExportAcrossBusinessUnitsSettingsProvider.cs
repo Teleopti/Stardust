@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages
 {
     public interface IExportAcrossBusinessUnitsSettingsProvider
     {

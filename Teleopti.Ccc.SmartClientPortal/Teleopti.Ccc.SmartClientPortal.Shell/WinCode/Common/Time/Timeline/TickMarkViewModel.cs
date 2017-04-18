@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline
 {
     public class TickMarkViewModel : FrameworkElement, INotifyPropertyChanged
     {

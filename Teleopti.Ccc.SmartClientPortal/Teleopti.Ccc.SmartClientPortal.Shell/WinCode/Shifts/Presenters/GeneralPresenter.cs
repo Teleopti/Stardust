@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.WinCode.Shifts.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 
-namespace Teleopti.Ccc.WinCode.Shifts.Presenters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
 {
     public class GeneralPresenter : BasePresenter, IGeneralPresenter
     {

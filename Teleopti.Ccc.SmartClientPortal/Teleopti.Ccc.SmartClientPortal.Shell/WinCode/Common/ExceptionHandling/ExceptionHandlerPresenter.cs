@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling
 {
     public class ExceptionHandlerPresenter
     {

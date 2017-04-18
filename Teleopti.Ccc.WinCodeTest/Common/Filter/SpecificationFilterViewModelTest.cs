@@ -2,7 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.WinCode.Common.Filter;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Ccc.WinCodeTest.Helpers;
 

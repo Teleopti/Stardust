@@ -1,9 +1,9 @@
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 {
     public class PersonAvailabilityModelBase : IRotationModel<IPersonAvailability, IAvailabilityRotation>
     {

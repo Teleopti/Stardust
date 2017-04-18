@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main.LogonScreens
 {

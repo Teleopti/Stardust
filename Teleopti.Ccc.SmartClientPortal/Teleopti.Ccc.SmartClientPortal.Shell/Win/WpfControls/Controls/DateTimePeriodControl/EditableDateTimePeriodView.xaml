@@ -2,10 +2,10 @@
 <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl.EditableDateTimePeriodView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
-    xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
+			 xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
     xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
     xmlns:dateTimePeriodControl="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl"
+    xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands"
     Height="64" Width="Auto">
     <UserControl.Resources>
         <converters:VisibilityConverter x:Key="visibilityConverter"/>
@@ -22,16 +22,16 @@
     </UserControl.Resources>
         <StackPanel TextBox.LostFocus="TextBox_LostFocus" >
 
-    <Grid Commands:CreateCommandBinding.Target="{Binding}">
+    <Grid commands:CreateCommandBinding.Target="{Binding}">
             <Grid.ContextMenu>
                 <ContextMenu Style="{StaticResource BasicContextMenu}">
-                    <MenuItem Command="{x:Static Commands:CommonRoutedCommands.ToggleAutoUpdate}"/>
-                    <MenuItem Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalLater}"/>
-                    <MenuItem Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalEarlier}"/>
-                    <MenuItem Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalLater}"/>
-                    <MenuItem Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalEarlier}"/>
-                    <MenuItem Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalLater}"/>
-                    <MenuItem Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalEarlier}"/>
+                    <MenuItem Command="{x:Static commands:CommonRoutedCommands.ToggleAutoUpdate}"/>
+                    <MenuItem Command="{x:Static commands:CommonRoutedCommands.MovePeriodOneIntervalLater}"/>
+                    <MenuItem Command="{x:Static commands:CommonRoutedCommands.MoveStartOneIntervalEarlier}"/>
+                    <MenuItem Command="{x:Static commands:CommonRoutedCommands.MoveStartOneIntervalLater}"/>
+                    <MenuItem Command="{x:Static commands:CommonRoutedCommands.MoveEndOneIntervalEarlier}"/>
+                    <MenuItem Command="{x:Static commands:CommonRoutedCommands.MoveEndOneIntervalLater}"/>
+                    <MenuItem Command="{x:Static commands:CommonRoutedCommands.MovePeriodOneIntervalEarlier}"/>
                     </ContextMenu>
             </Grid.ContextMenu>
 

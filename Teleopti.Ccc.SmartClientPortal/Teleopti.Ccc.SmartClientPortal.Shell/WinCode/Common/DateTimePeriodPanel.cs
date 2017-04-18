@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.WinCode.Common.CustomPanels.Grouping;
-using Teleopti.Ccc.WinCode.Scheduling.Panels;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.CustomPanels.Grouping;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     public class DateTimePeriodPanel : BaseGroupingPanel
     {

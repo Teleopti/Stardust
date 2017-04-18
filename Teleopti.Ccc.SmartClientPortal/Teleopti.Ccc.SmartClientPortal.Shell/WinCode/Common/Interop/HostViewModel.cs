@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Teleopti.Ccc.WinCode.Common.Interop
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Interop
 {
     /// <summary>
     /// Used for hosting multiple wpf usercontrols in winform with description/header

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Common.Commands.CommandBehaviors
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands.CommandBehaviors
 {
     /// <summary>
     /// Defines the interface for a strategy of execution for the CommandBehaviorBinding

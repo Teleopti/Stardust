@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.ResourceCalculation;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
     public class RestrictionSchedulingOptions: SchedulingOptions
     {

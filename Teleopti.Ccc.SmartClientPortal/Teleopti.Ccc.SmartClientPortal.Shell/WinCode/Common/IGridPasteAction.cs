@@ -1,7 +1,7 @@
 ﻿using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.WinCode.Common.Clipboard;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     public interface IGridPasteAction<T>
     {

@@ -1,7 +1,7 @@
-﻿using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Specification;
+﻿using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     public class OpenPeriodSpecification : Specification<DateOnlyPeriod>
     {

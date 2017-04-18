@@ -1,6 +1,6 @@
 using Microsoft.Practices.Composite.Events;
 
-namespace Teleopti.Ccc.WinCode.Events
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events
 {
     public interface IEventAggregatorLocator
     {

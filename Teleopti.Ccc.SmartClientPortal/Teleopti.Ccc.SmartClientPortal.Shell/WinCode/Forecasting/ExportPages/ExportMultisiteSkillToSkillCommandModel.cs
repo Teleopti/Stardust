@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages
 {
 	public class ExportSkillModel : IDisposable
 	{

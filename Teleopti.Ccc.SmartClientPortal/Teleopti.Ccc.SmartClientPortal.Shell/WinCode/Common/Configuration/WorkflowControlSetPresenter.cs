@@ -12,9 +12,8 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Common.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
 	public class WorkflowControlSetPresenter
 	{

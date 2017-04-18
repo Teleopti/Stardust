@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
-namespace Teleopti.Ccc.WinCode.Converters
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters
 {
 	public interface ICustomSorter : IComparer
 	{

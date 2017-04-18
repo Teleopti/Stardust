@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.WinCode.Scheduling.AuditHistory;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 {

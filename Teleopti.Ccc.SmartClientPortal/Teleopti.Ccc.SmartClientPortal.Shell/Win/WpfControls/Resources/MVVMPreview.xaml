@@ -1,15 +1,16 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Models="clr-namespace:Teleopti.Ccc.WinCode.Common.Models"
 					xmlns:Common="clr-namespace:Teleopti.Ccc.WinCode.Common"
-					xmlns:Editor="clr-namespace:Teleopti.Ccc.WinCode.Scheduling.Editor"
-    xmlns:Timeline="clr-namespace:Teleopti.Ccc.WinCode.Common.Time.Timeline"
-					xmlns:Scheduling="clr-namespace:Teleopti.Ccc.WinCode.Scheduling"
 					xmlns:timeline="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline"
 					xmlns:views="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor.Views"
 					xmlns:wpfControls="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls"
 					xmlns:layers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers"
-					xmlns:addToSchedule="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.AddToSchedule">
+					xmlns:addToSchedule="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.AddToSchedule"
+					xmlns:Models="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Models"
+					xmlns:Timeline="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline"
+					xmlns:common="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common"
+					xmlns:Editor="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor"
+					xmlns:Scheduling="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling">
     
     <!--<Style TargetType="Control">
         <Style.Setters>
@@ -50,11 +51,11 @@
     </DataTemplate>
 
     
-    <DataTemplate DataType="{x:Type Common:LayerViewModel}">
+    <DataTemplate DataType="{x:Type common:LayerViewModel}">
         <wpfControls:LayerView/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type Common:LayerGroupViewModel}">
+    <DataTemplate DataType="{x:Type common:LayerGroupViewModel}">
         <layers:LayerGroupPreview/>
     </DataTemplate>
     

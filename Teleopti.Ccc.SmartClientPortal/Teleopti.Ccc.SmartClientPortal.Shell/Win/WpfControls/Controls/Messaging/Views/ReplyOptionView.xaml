@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Messaging.Views.ReplyOptionView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands"
-    xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters">
+			 xmlns:converters="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters"
+			 xmlns:commands="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -75,7 +75,7 @@
         </Grid>
         <ToggleButton IsChecked="{Binding Path=FilterIsActive, Mode=OneWay}" 
                           Grid.Row="1" Grid.Column="0"
-                          Commands:CreateCommandBinding.CommandModel="{Binding Path=FilterCommand}" 
+                          commands:CreateCommandBinding.CommandModel="{Binding Path=FilterCommand}" 
                           Command="{Binding Path=FilterCommand.Command}">
         </ToggleButton>
     </Grid>

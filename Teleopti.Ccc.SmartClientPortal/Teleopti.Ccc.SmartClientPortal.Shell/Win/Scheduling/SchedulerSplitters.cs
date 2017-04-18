@@ -15,8 +15,8 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Views;
-using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {

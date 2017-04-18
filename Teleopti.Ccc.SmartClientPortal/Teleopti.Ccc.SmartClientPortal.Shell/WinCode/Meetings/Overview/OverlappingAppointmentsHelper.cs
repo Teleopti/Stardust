@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Teleopti.Ccc.WinCode.Meetings.Overview
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
 {
 	public interface IOverlappingAppointmentsHelper
 	{

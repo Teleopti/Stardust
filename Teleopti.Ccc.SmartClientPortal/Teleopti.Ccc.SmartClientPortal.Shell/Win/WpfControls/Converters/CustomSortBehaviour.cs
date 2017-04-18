@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Teleopti.Ccc.WinCode.Converters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Converters
 {

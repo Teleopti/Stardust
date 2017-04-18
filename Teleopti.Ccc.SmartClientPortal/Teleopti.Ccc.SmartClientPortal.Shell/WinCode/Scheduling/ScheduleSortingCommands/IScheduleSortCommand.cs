@@ -1,6 +1,6 @@
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCommands
 {
     public interface IScheduleSortCommand
     {

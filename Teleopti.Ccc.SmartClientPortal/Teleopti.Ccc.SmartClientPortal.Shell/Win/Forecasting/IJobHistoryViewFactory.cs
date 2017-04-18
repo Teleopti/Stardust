@@ -1,4 +1,4 @@
-﻿using Teleopti.Ccc.WinCode.Forecasting;
+﻿using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
 {

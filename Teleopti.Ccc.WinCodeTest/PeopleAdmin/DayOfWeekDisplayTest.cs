@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.WinCode.PeopleAdmin;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 {

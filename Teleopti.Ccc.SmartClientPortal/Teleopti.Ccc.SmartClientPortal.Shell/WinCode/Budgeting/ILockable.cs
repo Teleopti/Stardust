@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.WinCode.Budgeting
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 {
     public interface ILockable
     {

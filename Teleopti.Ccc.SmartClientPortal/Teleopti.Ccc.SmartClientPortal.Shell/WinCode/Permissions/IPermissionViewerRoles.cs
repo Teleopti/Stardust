@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 
-namespace Teleopti.Ccc.WinCode.Permissions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Permissions
 {
     public interface IPermissionViewerRoles
     {

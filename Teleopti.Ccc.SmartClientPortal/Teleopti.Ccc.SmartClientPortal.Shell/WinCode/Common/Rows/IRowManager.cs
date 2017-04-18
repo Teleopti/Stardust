@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.Rows
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
 {
     /// <summary>
     /// Non-generic interface for row manager

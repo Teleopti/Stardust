@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.FileImport;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport;
 
 namespace Teleopti.Ccc.WinCodeTest.FileImport
 {

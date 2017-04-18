@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.WinCode.Meetings.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Meetings
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 {
     public class AddressBookPresenter
     {

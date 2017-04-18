@@ -1,7 +1,7 @@
 ﻿using System;
-using Teleopti.Ccc.WinCode.Budgeting.Presenters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
 
-namespace Teleopti.Ccc.WinCode.Budgeting
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 {
 	public class BudgetDaysUpdater : IDisposable
 	{

@@ -1,12 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard
 {
     /// <summary>
     /// Interface for handling of several pages within a dialogue
@@ -162,7 +161,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
         /// <summary>
         /// Triggers the [name changed] event.
         /// </summary>
-        /// <param name="eventArgs">The <see cref="Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard.WizardNameChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="eventArgs">The <see cref="WizardNameChangedEventArgs"/> instance containing the event data.</param>
         /// <remarks>
         /// Created by: robink
         /// Created date: 2008-01-15

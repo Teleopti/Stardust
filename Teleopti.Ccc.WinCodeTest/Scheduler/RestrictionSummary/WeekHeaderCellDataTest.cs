@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
 {

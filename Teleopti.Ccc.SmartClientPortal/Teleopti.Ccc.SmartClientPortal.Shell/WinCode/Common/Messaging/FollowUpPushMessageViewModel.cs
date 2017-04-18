@@ -7,12 +7,10 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Ccc.WinCode.Common.Messaging.Filters;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging.Filters;
 
-namespace Teleopti.Ccc.WinCode.Common.Messaging
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging
 {
 	/// <summary>
 	/// showing a  conversation in a grid/listbox etc

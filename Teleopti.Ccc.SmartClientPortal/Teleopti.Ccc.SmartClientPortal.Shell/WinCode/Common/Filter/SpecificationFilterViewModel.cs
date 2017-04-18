@@ -4,10 +4,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.WinCode.Common.Commands;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 
-namespace Teleopti.Ccc.WinCode.Common.Filter
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter
 {
     public abstract class SpecificationFilterViewModelBase : DependencyObject,INotifyPropertyChanged
     {

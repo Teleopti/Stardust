@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     /// <summary>
     /// Used by DialogComposer to handle interaction between Code and Gui

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.WinCode.Common.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Models;
 
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     public abstract class LayerGroupViewModel:DataModel
     {

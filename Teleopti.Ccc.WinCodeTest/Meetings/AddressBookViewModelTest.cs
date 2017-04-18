@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Meetings;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
 {

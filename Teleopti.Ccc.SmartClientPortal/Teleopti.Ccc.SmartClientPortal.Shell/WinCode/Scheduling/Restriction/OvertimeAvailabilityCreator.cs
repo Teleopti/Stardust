@@ -1,9 +1,8 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Restriction
 {
     public interface IOvertimeAvailabilityCreator
     {

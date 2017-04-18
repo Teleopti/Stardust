@@ -2,10 +2,10 @@
 <UserControl x:Class="Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.DateTimePeriodControl.EditableStartTimeOfDayView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers"
-    xmlns:dateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter" 
-    xmlns:system="clr-namespace:System;assembly=mscorlib" 
-    TextBox.GotKeyboardFocus="textBoxGotKeyboardFocus" Height="22" Width="70">
+			 xmlns:system="clr-namespace:System;assembly=mscorlib"
+			 xmlns:dateTimeConverter="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter"
+			 xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
+			 TextBox.GotKeyboardFocus="textBoxGotKeyboardFocus" Height="22" Width="70">
         
     <UserControl.Resources>
         <ResourceDictionary>

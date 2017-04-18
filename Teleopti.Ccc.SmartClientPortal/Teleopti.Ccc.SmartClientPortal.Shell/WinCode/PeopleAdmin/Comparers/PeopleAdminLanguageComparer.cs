@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 
-
-namespace Teleopti.Ccc.WinCode.PeopleAdmin.Comparers
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Comparers
 {
 	/// <summary>
 	/// Compares the time zone data.

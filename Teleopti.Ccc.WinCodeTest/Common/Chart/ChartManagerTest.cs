@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using NUnit.Framework;
 using Syncfusion.Windows.Forms.Chart;
-using Teleopti.Ccc.WinCode.Common.Chart;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Chart
 {

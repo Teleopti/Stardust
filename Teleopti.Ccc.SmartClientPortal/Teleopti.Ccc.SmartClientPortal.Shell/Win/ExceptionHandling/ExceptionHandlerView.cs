@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling
 {

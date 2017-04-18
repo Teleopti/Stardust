@@ -3,8 +3,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Syncfusion.Drawing;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.GuiHelpers
 {

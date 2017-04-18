@@ -1,7 +1,7 @@
 ﻿using System;
-using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestrictions
 {
 	public class AgentRestrictionsPreferencePainterDecider
 	{

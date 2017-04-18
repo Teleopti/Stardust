@@ -3,6 +3,7 @@
      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Common="clr-namespace:Teleopti.Ccc.WinCode.Common"
+    xmlns:common="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common"
     x:Name="main" x:FieldModifier="private">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -13,6 +14,6 @@
     </UserControl.Resources>
 
     <Grid>
-        <ItemsControl ItemsSource="{Binding Path=Layers.Groups}" Grid.Row="1"  Common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}" />
+        <ItemsControl ItemsSource="{Binding Path=Layers.Groups}" Grid.Row="1"  common:DateTimePeriodPanel.DateTimePeriod="{Binding Path=Period}" />
     </Grid>
 </UserControl>

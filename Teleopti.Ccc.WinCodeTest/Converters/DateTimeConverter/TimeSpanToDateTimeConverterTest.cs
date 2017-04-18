@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Converters.DateTimeConverter;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter;
 
 namespace Teleopti.Ccc.WinCodeTest.Converters.DateTimeConverter
 {
