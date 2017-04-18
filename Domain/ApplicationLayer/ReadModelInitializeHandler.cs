@@ -82,9 +82,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForPersonScheduleDay>(@event));
 				}
 				messages.ForEach(m => _eventPublisher.Publish(m));
-
-				// #43841 keep the lock for 5 extra minutes, to avoid duplicate event.
-				Thread.Sleep(TimeSpan.FromMinutes(5));
 			});
 		}
 
