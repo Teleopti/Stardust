@@ -92,16 +92,17 @@ $(document).ready(function () {
 		};
 		
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
-
-		vm.readData({
+		var fakeData = {
 			PeriodSelection: [{ Display: null }],
+			BaseUtcOffsetInMinutes: 60,
 			Days: [
 			{
-				FixedDate: moment().format('YYYY-MM-DD')
+				FixedDate: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD')
 			}],
 			ViewPossibilityPermission: true
-		});
+		};
 
+		vm.readData(fakeData);
 		equal(vm.dayViewModels()[0].showProbabilityOptions(), true);
 	});
 
@@ -111,28 +112,31 @@ $(document).ready(function () {
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return false;
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
-
-		vm.readData({
+		var fakeData = {
 			PeriodSelection: [{
 				Display: null
 			}],
+			BaseUtcOffsetInMinutes: 60,
 			Days: [{
-					FixedDate: moment().format('YYYY-MM-DD')
+					FixedDate: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD')
 				},
 				{
-					FixedDate: moment().add('day', 1).format('YYYY-MM-DD')
+					FixedDate: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).add('day', 1).format('YYYY-MM-DD')
 				}],
 			Possibilities: [],
 			ViewPossibilityPermission: true
-		});
+		};
 
-		vm.toggleProbabilityOptionsPanel();
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+		vm.readData(fakeData);
+
+		var fakeFixedDateObj = {fixedDate: function(){return fakeData.Days[0].FixedDate}};
+		vm.toggleProbabilityOptionsPanel(fakeFixedDateObj);
 		equal(vm.dayViewModels()[0].showProbabilityOptions(), true);
 		equal(vm.requestViewModel() != null, true);
 		equal(vm.dayViewModels()[0].isModelVisible(), true);
 
-		vm.toggleProbabilityOptionsPanel();
+		vm.toggleProbabilityOptionsPanel(fakeFixedDateObj);
 		equal(vm.requestViewModel() == null, true);
 		equal(vm.dayViewModels()[1].showProbabilityOptions(), false);
 		equal(vm.dayViewModels()[1].isModelVisible(), false);
@@ -148,11 +152,12 @@ $(document).ready(function () {
 
 		vm.readData({
 			PeriodSelection: [{ Display: null }],
+			BaseUtcOffsetInMinutes: 60,
 			Days: [{
-					FixedDate: moment().format('YYYY-MM-DD')
+					FixedDate: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD')
 				},
 				{
-					FixedDate: moment().add('day',1).format('YYYY-MM-DD')
+					FixedDate: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).add('day',1).format('YYYY-MM-DD')
 				}],
 			Possibilities: [],
 			ViewPossibilityPermission: true
@@ -169,31 +174,37 @@ $(document).ready(function () {
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
-
-		vm.readData({
+		var fakeData = {
 			PeriodSelection: [{ Display: null }],
+			BaseUtcOffsetInMinutes: 60,
 			Days: [{
-					FixedDate: moment().format('YYYY-MM-DD')
+					FixedDate: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD')
 				},
 				{
-					FixedDate: moment().add('day',1).format('YYYY-MM-DD')
+					FixedDate: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).add('day',1).format('YYYY-MM-DD')
 				}],
 			Possibilities: [],
 			ViewPossibilityPermission: true
-		});
+		};
+
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+		vm.readData(fakeData);
+
+		var fakeFixedDateObj = {fixedDate: function(){return fakeData.Days[0].FixedDate}};
 
 		equal(vm.dayViewModels()[0].showProbabilityOptions(), false);
 		equal(vm.dayViewModels()[1].showProbabilityOptions(), false);
 		equal(vm.showProbabilityOptionsToggleIcon(), true);
 		equal(vm.showProbabilityOptionsForm(), false);
-		vm.toggleProbabilityOptionsPanel();
+
+		vm.toggleProbabilityOptionsPanel(fakeFixedDateObj);
 		equal(vm.showProbabilityOptionsForm(), true);
-		vm.toggleProbabilityOptionsPanel();
+
+		vm.toggleProbabilityOptionsPanel(fakeFixedDateObj);
 		equal(vm.showProbabilityOptionsForm(), false);
 	});
 
-	/*
+	
 	test("Should show probability data for multiple upcoming days when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on", function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
@@ -203,13 +214,14 @@ $(document).ready(function () {
 			PeriodSelection: [{
 				Display: null
 			}],
+			BaseUtcOffsetInMinutes: 60,
 			Days: [{
-					FixedDate: moment().format('YYYY-MM-DD'),
+					FixedDate: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD'),
 					Periods: [{
 						"Title": "Phone",
 						"TimeSpan": "09:30 - 16:45",
-						"StartTime": moment().add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						"EndTime": moment().add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						"StartTime": moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						"EndTime": moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
 						"Summary": "7:15",
 						"StyleClassName": "color_80FF80",
 						"Meeting": null,
@@ -220,12 +232,12 @@ $(document).ready(function () {
 					}]
 				},
 				{
-					FixedDate: moment().add('day', 1).format('YYYY-MM-DD'),
+					FixedDate: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).add('day', 1).format('YYYY-MM-DD'),
 					Periods: [{
 						"Title": "Phone",
 						"TimeSpan": "09:30 - 16:45",
-						"StartTime": moment().add('day', 1).add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						"EndTime": moment().add('day', 1).add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						"StartTime": moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('day', 1).add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						"EndTime": moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('day', 1).add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
 						"Summary": "7:15",
 						"StyleClassName": "color_80FF80",
 						"Meeting": null,
@@ -237,14 +249,14 @@ $(document).ready(function () {
 				}],
 			Possibilities: [
 				{
-					Date: moment().format('YYYY-MM-DD'),
-					StartTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
-					EndTime: moment().add('hour', 16).format('YYYY-MM-DDTHH:mm:ss'),
+					Date: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD'),
+					StartTime: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').format('YYYY-MM-DDTHH:mm:ss'),
+					EndTime: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('hour', 16).format('YYYY-MM-DDTHH:mm:ss'),
 					Possibility: 0
 				}, {
-					Date: moment().add('day', 1).format('YYYY-MM-DD'),
-					StartTime: moment().add('day', 1).format('YYYY-MM-DDTHH:mm:ss'),
-					EndTime: moment().add('day', 1).add('hour', 16).format('YYYY-MM-DDTHH:mm:ss'),
+					Date: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).add('day', 1).format('YYYY-MM-DD'),
+					StartTime: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('day', 1).format('YYYY-MM-DDTHH:mm:ss'),
+					EndTime: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('day', 1).add('hour', 16).format('YYYY-MM-DDTHH:mm:ss'),
 					Possibility: 1
 				}
 			],
@@ -266,8 +278,10 @@ $(document).ready(function () {
 			vm.readData(fakeData);
 		};
 
+		var fakeFixedDateObj = {fixedDate: function(){return fakeData.Days[0].FixedDate}};
+
 		vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, fakeReloadData);
-		vm.toggleProbabilityOptionsPanel();
+		vm.toggleProbabilityOptionsPanel(fakeFixedDateObj);
 		vm.OnProbabilityOptionSelectCallback(Teleopti.MyTimeWeb.Schedule.Constants.probabilityType.overtime);
 
 		equal(vm.dayViewModels()[0].probabilities().length, 1);
@@ -282,5 +296,4 @@ $(document).ready(function () {
 		equal(vm.dayViewModels()[1].probabilities()[0].styleJson.left != '', true);
 		equal(vm.dayViewModels()[1].probabilities()[0].styleJson.width != '', true);
 	});
-	*/
 });
