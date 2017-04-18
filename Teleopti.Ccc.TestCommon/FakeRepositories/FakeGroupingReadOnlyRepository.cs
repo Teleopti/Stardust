@@ -86,6 +86,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_details = _details.Concat(new[] {model}).ToArray();
 			return this;
 		}
+
+		public IEnumerable<ReadOnlyGroupDetail> DetailsForPeople(IEnumerable<Guid> peopleIdCollection)
+		{
+			return _details;
+		}
 	}
 
 }

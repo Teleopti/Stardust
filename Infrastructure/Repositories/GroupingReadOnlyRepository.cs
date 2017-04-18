@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -122,6 +123,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetResultTransformer(Transformers.AliasToBean(typeof (ReadOnlyGroupDetail)))
 				.SetReadOnly(true)
 				.List<ReadOnlyGroupDetail>();
+		}
+
+		public IEnumerable<ReadOnlyGroupDetail> DetailsForPeople(IEnumerable<Guid> peopleIdCollection)
+		{
+			const string sql =
+				"SELECT PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId "
+				+ "FROM ReadModel.groupingreadonly "
+				+ "WHERE businessunitid=:businessUnitId "
+				+ "AND PageId IN (:pageId) "
+				+ "AND PersonId IN (:personIdCollection)";
+			var result = new List<ReadOnlyGroupDetail>();
+			foreach (var people in peopleIdCollection.Batch(1500))
+			{
+				result.AddRange(_currentUnitOfWork.Session().CreateSQLQuery(sql)
+					.SetGuid("businessUnitId", getBusinessUnitId())
+					.SetGuid("pageId", Group.PageMainId)
+					.SetParameterList("personIdCollection", people.ToArray())
+					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
+					.SetReadOnly(true)
+					.List<ReadOnlyGroupDetail>());
+			}
+			return result;
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)

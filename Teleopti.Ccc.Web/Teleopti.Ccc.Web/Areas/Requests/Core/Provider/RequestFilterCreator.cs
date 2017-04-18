@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,16 +24,18 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IApplicationRoleRepository _applicationRoleRepository;
 		private readonly IToggleManager _toggleManager;
-		private readonly IPersonRepository _personRepository;
+		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
+		private readonly IPermissionProvider _permissionProvider;
 
 
-		public RequestFilterCreator(IPeopleSearchProvider peopleSearchProvider, IUserTimeZone userTimeZone, IApplicationRoleRepository applicationRoleRepository, IToggleManager toggleManager, IPersonRepository personRepository)
+		public RequestFilterCreator(IPeopleSearchProvider peopleSearchProvider, IUserTimeZone userTimeZone, IApplicationRoleRepository applicationRoleRepository, IToggleManager toggleManager, IGroupingReadOnlyRepository groupingReadOnlyRepository, IPermissionProvider permissionProvider)
 		{
 			_peopleSearchProvider = peopleSearchProvider;
 			_userTimeZone = userTimeZone;
 			_applicationRoleRepository = applicationRoleRepository;
 			_toggleManager = toggleManager;
-			_personRepository = personRepository;
+			_groupingReadOnlyRepository = groupingReadOnlyRepository;
+			_permissionProvider = permissionProvider;
 		}
 
 		public RequestFilter Create(AllRequestsFormData input, IEnumerable<RequestType> requestTypes)
@@ -57,8 +60,14 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 					filter.Persons = new List<IPerson>();
 				else
 				{
-					var matchedPersons = _personRepository.FindPeople(targetIds);
-					filter.Persons = _peopleSearchProvider.GetPermittedPersonList(matchedPersons, input.StartDate, DefinedRaptorApplicationFunctionPaths.WebRequests).ToList();
+					var matchedPersons = _groupingReadOnlyRepository.DetailsForPeople(targetIds);
+					filter.Persons = matchedPersons.Where(p => _permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.WebRequests,input.StartDate,p)).Select(
+						p =>
+						{
+							var person = new Person();
+							person.SetId(p.PersonId);
+							return person;
+						}).ToList();
 				}
 			}
 			else if(input.AgentSearchTerm.Any())

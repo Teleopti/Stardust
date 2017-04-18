@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         void UpdateGroupingReadModelData(ICollection<Guid> inputIds);
 		IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage, DateOnlyPeriod queryDateRange);
 		IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnlyPeriod queryRange);
+		IEnumerable<ReadOnlyGroupDetail> DetailsForPeople(IEnumerable<Guid> peopleIdCollection);
 	}
 
 	public class ReadOnlyGroupDetail : IPersonAuthorization

@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IUserCulture UserCulture;
 		public IApplicationRoleRepository ApplicationRoleRepository;
 		public FakePersonRepository PersonRepository;
+		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 
 		private List<IPerson> people;
 		private readonly IAbsence absence = AbsenceFactory.CreateAbsence("absence1").WithId();
@@ -480,7 +481,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			return personRequests.ToList();
 		}
 
-		private IEnumerable<IPersonRequest> setUpRequests(ITeam team)
+		private void setUpRequests(ITeam team)
 		{
 			var textRequest1 = new TextRequest(new DateTimePeriod(2015, 10, 1, 2015, 10, 6));
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
@@ -499,6 +500,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				p.AddPersonPeriod(personPeriod);
 				((FakePeopleSearchProvider)PeopleSearchProvider).Add(p);
 				PersonRepository.Add(p);
+
+				GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail
+				{
+					BusinessUnitId = Guid.Empty,
+					PersonId = p.Id.GetValueOrDefault(),
+					TeamId = team.Id.GetValueOrDefault(),
+					SiteId = team.Site.Id.GetValueOrDefault()
+				});
 			});
 
 			var personRequests = new[]
@@ -509,8 +518,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			};
 
 			PersonRequestRepository.AddRange(personRequests);
-
-			return personRequests.ToList();
 		}
 
 		private static void setupStateHolderProxy()

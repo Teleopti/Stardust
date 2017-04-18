@@ -166,6 +166,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldFindDetailFromPersonId()
+		{
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+			PersistAndRemoveFromUnitOfWork(team.Site);
+			PersistAndRemoveFromUnitOfWork(team);
+
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
+												personContract,
+												team);
+			personToTest.AddPersonPeriod(personPeriod);
+
+			PersistAndRemoveFromUnitOfWork(personContract.Contract);
+			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
+			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
+			PersistAndRemoveFromUnitOfWork(personToTest);
+
+			_target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+
+			var items = _target.DetailsForPeople(new [] { personToTest.Id.GetValueOrDefault()});
+			items.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
         public void ShouldCallUpdateReadModelWithoutCrash()
         {
             _target.UpdateGroupingReadModel(new[] { Guid.NewGuid() });
