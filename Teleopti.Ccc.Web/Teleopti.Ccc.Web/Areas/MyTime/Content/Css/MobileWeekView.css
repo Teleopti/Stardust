@@ -35,6 +35,9 @@
 	box-shadow: 0 0 1px 2px #888;
 	color:black;
 }
+.weekview-mobile .container.probability-option-container .well{
+	margin-bottom: 0;
+}
 .weekview-mobile .mobile-weekview-nav .action-menu-container i {
 	width: 20px;
 	height: 20px;

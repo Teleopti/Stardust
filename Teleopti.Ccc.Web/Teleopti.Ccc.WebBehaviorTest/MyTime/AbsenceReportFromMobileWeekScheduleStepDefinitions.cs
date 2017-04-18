@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the add absence report form for '(.*)'")]
 		public void ThenIShouldNotSeeTheAddAbsenceReportFormFor(string date)
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery(getAddAbsenceReportFormSelector(date));
+			Browser.Interactions.AssertNotExistsUsingJQuery(".weekview-mobile", getAddAbsenceReportFormSelector(date));
 		}
 
 		private string getAddAbsenceReportButtonSelector(string date)

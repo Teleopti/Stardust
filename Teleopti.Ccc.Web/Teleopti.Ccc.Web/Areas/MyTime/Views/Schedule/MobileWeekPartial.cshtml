@@ -80,7 +80,7 @@
 	</div>
 
 	<!-- ko if: staffingProbabilityOnMobileEnabled && staffingProbabilityForMultipleDaysEnabled-->
-	<div class="container">
+	<div class="container probability-option-container">
 		<!-- ko with: requestViewModel -->
 		<div data-bind="with: model">
 			<div class="well well-sm clearfix">
@@ -114,7 +114,7 @@
 						</p>
 						<!-- /ko -->
 					</div>
-					<!-- ko if: hasOvertimeAvailability-->
+					<!-- ko if: hasOvertimeAvailability()-->
 					<div class="overtime-availability-content col-xs-6 col-sm-6">
 						<p>
 							<strong>@Resources.OvertimeAvailability</strong>
@@ -152,7 +152,7 @@
 						<!-- /ko -->
 					</div>
 				</div>
-				<!-- ko if: showStaffingProbabilityBar-->
+				<!-- ko if: showStaffingProbabilityBar() -->
 				<div class="probability-horizontal-bar">
 					<!--ko foreach: probabilities-->
 					<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
@@ -162,7 +162,7 @@
 
 				<div class="mobile-bottom-bar">
 					<ul class="nav nav-pills navbar-weekview">
-						<!-- ko if: !staffingProbabilityOnMobileEnabled -->
+						<!-- ko if: !staffingProbabilityOnMobileEnabled() -->
 						<li data-bind="if: overtimeAvailabilityPermission, css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
 							<a href="#" class="overtime-availability-add" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
 						</li>
@@ -172,7 +172,7 @@
 						</li>
 						<!-- /ko -->
 
-						<!-- ko if: staffingProbabilityOnMobileEnabled -->
+						<!-- ko if: staffingProbabilityOnMobileEnabled() -->
 						<li class="display-none" data-bind="if: overtimeAvailabilityPermission, css: {'active display-block': $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'overtime' && formattedFixedDate() === $parent.formattedRequestDate() }">
 							<a class="overtime-availability-add">@Resources.OvertimeAvailability</a>
 						</li>
@@ -185,12 +185,12 @@
 									<i class="glyphicon glyphicon-plus"></i>
 								</a>
 								<ul class="dropdown-menu action-menus">
-									<!-- ko if: overtimeAvailabilityPermission -->
+									<!-- ko if: overtimeAvailabilityPermission() -->
 									<li>
 										<a href="#" data-bind="click: $parent.showAddOvertimeAvailabilityForm">@Resources.OvertimeAvailability</a>
 									</li>
 									<!-- /ko -->
-									<!-- ko if: isPermittedToReportAbsence -->
+									<!-- ko if: isPermittedToReportAbsence() -->
 									<li>
 										<a href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData">@Resources.AbsenceReport</a>
 									</li>
