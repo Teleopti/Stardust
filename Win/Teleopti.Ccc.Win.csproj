@@ -77,17 +77,17 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ForecasterSettings.cs" />
+    <Compile Include="Forecasting\ForecasterSettings.cs" />
     <Compile Include="IntegerExtensions.cs" />
-    <Compile Include="IntradaySetting.cs" />
-    <Compile Include="IntradaySettingsPresenter.cs" />
-    <Compile Include="OpenScenarioForPeriodSetting.cs" />
-    <Compile Include="PortalSettings.cs" />
-    <Compile Include="ScheduleReportDialogSettings.cs" />
-    <Compile Include="SchedulingScreenSettings.cs" />
-    <Compile Include="VirtualSkill.cs" />
-    <Compile Include="VirtualSkillSetting.cs" />
-    <Compile Include="WorkingInterval.cs" />
+    <Compile Include="Intraday\IntradaySetting.cs" />
+    <Compile Include="Intraday\IntradaySettingsPresenter.cs" />
+    <Compile Include="Common\Controls\OpenScenarioForPeriodSetting.cs" />
+    <Compile Include="Main\PortalSettings.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDialogSettings.cs" />
+    <Compile Include="Scheduling\SchedulingScreenSettings.cs" />
+    <Compile Include="Common\VirtualSkill.cs" />
+    <Compile Include="Common\VirtualSkillSetting.cs" />
+    <Compile Include="Forecasting\Forms\WorkingInterval.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

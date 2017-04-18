@@ -79,21 +79,21 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="BudgetSettings.cs" />
-    <Compile Include="ChartSeriesSetting.cs" />
-    <Compile Include="ChartSettings.cs" />
-    <Compile Include="ExportAcrossBusinessUnitsSettings.cs" />
-    <Compile Include="ExportForecastToFileSettings.cs" />
-    <Compile Include="IExportAcrossBusinessUnitsSettings.cs" />
-    <Compile Include="IExportForecastToFileSettings.cs" />
-    <Compile Include="IPortalSettings.cs" />
-    <Compile Include="ISchedulingScreenSettings.cs" />
-    <Compile Include="PersonFinderSettings.cs" />
-    <Compile Include="ReportSettingsScheduleAuditing.cs" />
-    <Compile Include="ReportSettingsScheduledTimePerActivity.cs" />
-    <Compile Include="ReportSettingsScheduledTimeVersusTarget.cs" />
-    <Compile Include="ScheduleReportDetail.cs" />
-    <Compile Include="SchedulerSortCommandSetting.cs" />
+    <Compile Include="Budgeting\BudgetSettings.cs" />
+    <Compile Include="Common\Chart\ChartSeriesSetting.cs" />
+    <Compile Include="Common\Chart\ChartSettings.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettings.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportForecastToFileSettings.cs" />
+    <Compile Include="Forecasting\ExportPages\IExportAcrossBusinessUnitsSettings.cs" />
+    <Compile Include="Forecasting\ExportPages\IExportForecastToFileSettings.cs" />
+    <Compile Include="Common\IPortalSettings.cs" />
+    <Compile Include="Scheduling\ISchedulingScreenSettings.cs" />
+    <Compile Include="PeopleAdmin\PersonFinderSettings.cs" />
+    <Compile Include="Reporting\ReportSettingsScheduleAuditing.cs" />
+    <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
+    <Compile Include="Reporting\ReportSettingsScheduledTimeVersusTarget.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDetail.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\SchedulerSortCommandSetting.cs" />
     <Compile Include="ViewType.cs" />
   </ItemGroup>
   <ItemGroup>
