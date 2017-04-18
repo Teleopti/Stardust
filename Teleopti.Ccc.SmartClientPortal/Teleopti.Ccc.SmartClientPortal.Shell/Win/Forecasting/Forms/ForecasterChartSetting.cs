@@ -3,7 +3,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart;
+using Teleopti.Ccc.Win.Forecasting.Forms;
+using Teleopti.Ccc.WinCode.Common.Chart;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {

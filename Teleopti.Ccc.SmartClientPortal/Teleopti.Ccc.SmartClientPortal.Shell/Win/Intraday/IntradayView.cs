@@ -29,6 +29,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Intraday;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Cursors = System.Windows.Forms.Cursors;

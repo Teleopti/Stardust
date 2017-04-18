@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
+namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
     /// <summary>
     /// Enum containing the different intervals to work with.

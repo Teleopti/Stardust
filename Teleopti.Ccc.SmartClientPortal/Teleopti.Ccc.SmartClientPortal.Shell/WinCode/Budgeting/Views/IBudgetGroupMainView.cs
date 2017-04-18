@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.WinCode.Budgeting;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views
 {

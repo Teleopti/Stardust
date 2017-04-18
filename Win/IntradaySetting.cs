@@ -1,7 +1,7 @@
 using System;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart;
+using Teleopti.Ccc.WinCode.Common.Chart;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
+namespace Teleopti.Ccc.Win.Intraday
 {
     [Serializable]
     public class IntradaySetting

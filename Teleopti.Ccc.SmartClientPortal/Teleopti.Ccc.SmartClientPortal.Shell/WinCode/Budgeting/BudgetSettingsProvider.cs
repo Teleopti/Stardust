@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.WinCode.Budgeting;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 {

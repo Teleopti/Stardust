@@ -5,7 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart
+namespace Teleopti.Ccc.WinCode.Common.Chart
 {
     [Serializable]
     public class ChartSettings : SettingValue

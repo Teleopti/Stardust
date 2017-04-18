@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.SystemSetting;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
+namespace Teleopti.Ccc.Win.Common.Controls
 {
     [Serializable]
     public class OpenScenarioForPeriodSetting : SettingValue

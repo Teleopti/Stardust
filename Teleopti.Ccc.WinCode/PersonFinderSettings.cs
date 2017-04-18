@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.SystemSetting;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin
+namespace Teleopti.Ccc.WinCode.PeopleAdmin
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue"), Serializable]
     public enum RowsPerPage

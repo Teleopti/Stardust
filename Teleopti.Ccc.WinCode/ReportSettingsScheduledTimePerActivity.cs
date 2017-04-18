@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.SystemSetting;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting
+namespace Teleopti.Ccc.WinCode.Reporting
 {
     [Serializable]
     public class ReportSettingsScheduledTimePerActivity : SettingValue

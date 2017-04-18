@@ -1515,7 +1515,6 @@
     <Compile Include="Staffing\IPersonForOvertimeProvider.cs" />
     <Compile Include="SystemSetting\GlobalSetting\DataProtectionResponse.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NotificationDurationTime.cs" />
-    <Compile Include="SystemSetting\TypeConverter.cs" />
     <Compile Include="UndoRedo\UndoRedoState.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSystemSettings.cs" />
     <Compile Include="UndoRedo\UndoRedoWithScheduleCallbackContainer.cs" />

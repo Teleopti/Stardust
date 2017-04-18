@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.SystemSetting;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCommands;
+using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
+namespace Teleopti.Ccc.Win.Scheduling
 {
 	public enum SkillResultViewSetting
 	{

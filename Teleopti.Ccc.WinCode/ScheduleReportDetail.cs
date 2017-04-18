@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting
+namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 {
     /// <summary>
     /// Detail level for schedule report and export

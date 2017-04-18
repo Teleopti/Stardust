@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
+namespace Teleopti.Ccc.WinCode.Budgeting
 {
     [Serializable]
     public enum ViewType

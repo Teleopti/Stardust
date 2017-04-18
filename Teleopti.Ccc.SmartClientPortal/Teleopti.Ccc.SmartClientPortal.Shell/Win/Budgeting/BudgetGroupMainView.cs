@@ -23,7 +23,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
-using ViewType = Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.ViewType;
+using ViewType = Teleopti.Ccc.WinCode.Budgeting.ViewType;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {

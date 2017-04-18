@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
+﻿namespace Teleopti.Ccc.WinCode.Common
 {
     public interface IPortalSettings
     {

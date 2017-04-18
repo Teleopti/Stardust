@@ -2,7 +2,7 @@
 using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart
+namespace Teleopti.Ccc.WinCode.Common.Chart
 {
     /// <summary>
     /// Settings for one chart series

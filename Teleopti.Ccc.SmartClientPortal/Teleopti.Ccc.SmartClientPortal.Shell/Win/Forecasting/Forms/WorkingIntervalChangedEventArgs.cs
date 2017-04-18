@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms

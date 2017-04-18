@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages;
+using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages

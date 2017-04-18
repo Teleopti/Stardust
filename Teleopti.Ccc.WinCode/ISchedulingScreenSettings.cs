@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
+namespace Teleopti.Ccc.WinCode.Scheduling
 {
     public interface ISchedulingScreenSettings
     {

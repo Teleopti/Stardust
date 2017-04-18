@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
+namespace Teleopti.Ccc.WinCode.Budgeting
 {
     public interface IBudgetSettings : ISettingValue
     {

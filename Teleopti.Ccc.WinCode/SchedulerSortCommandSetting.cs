@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCommands
+namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands
 {
 	[Serializable]
 	public enum SchedulerSortCommandSetting

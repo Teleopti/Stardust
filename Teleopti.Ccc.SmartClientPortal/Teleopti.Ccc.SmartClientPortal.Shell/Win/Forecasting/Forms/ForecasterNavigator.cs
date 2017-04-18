@@ -38,6 +38,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.QuickForecastPage
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.WorkloadPages;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;

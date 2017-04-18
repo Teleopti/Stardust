@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
+using Teleopti.Ccc.WinCode.Reporting;
 
 namespace Teleopti.Ccc.WinCodeTest.Presentation
 {
