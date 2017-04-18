@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using log4net;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -15,20 +11,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public class AbsenceRequestIntradayFilter : IAbsenceRequestIntradayFilter
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AbsenceRequestIntradayFilter));
-
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly INow _now;
-		private readonly IConfigReader _configReader;
 		private readonly IIntradayRequestProcessor _intradayRequestProcessor;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 
-		public AbsenceRequestIntradayFilter(IConfigReader configReader,
-											IIntradayRequestProcessor intradayRequestProcessor,
+		public AbsenceRequestIntradayFilter(IIntradayRequestProcessor intradayRequestProcessor,
 											IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, INow now,
 											IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
 		{
-			_configReader = configReader;
 			_intradayRequestProcessor = intradayRequestProcessor;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_now = now;
