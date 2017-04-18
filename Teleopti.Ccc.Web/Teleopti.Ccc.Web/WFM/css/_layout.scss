@@ -146,6 +146,11 @@ md-tooltip{
 
 //expander grid - move to styleguide
 
+md-card, .wfm-card-title{
+	background-color: $white!important;
+	color: $text-color-standard;
+}
+
 .block{
 	display: block!important;
 }
