@@ -1,6 +1,5 @@
 ﻿@WFM
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveAbsence_36705')
-@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 Feature: Remove Planned Absence
 	As a team leader
 	I need to remove or shorten absences for multiple reasons.
@@ -28,6 +27,10 @@ Background:
 		| Illness  | Blue     |
 	And there is a shift bag named 'A shift bag' with rule set 'A rule set'
 	And there is a skill named 'A skill' with activity 'Phone'
+	And I have a person period with
+	| Field      | Value      |
+	| Start date | 2016-01-01 |
+	| Team       | Team green |
 	And I have a role with
 		| Field                         | Value      |
 		| Access to team                | Team green |
@@ -84,6 +87,7 @@ Scenario: Could delete absences for an agent
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'John'
+	And I click button to search for schedules
 	Then I should see schedule with absence 'Vacation' for 'John Smith' displayed
 	When I selected agent 'John Smith'
 	And I open menu in team schedule
@@ -100,6 +104,7 @@ Scenario: Absence deletion should only be enabled when when absence selected
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'John'
+	And I click button to search for schedules
 	And I should see schedule with absence 'Vacation' for 'John Smith' displayed
 	And I open menu in team schedule
 	Then I should see 'RemoveAbsence' menu item is disabled
@@ -110,6 +115,7 @@ Scenario: Full day absence should be able to delete
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'
 	And I open menu in team schedule
@@ -130,6 +136,7 @@ Scenario: Could delete absences for multiple agents
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'green'
+	And I click button to search for schedules
 	Then I should see schedule with absence 'Vacation' for 'John Smith' displayed
 	When I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'

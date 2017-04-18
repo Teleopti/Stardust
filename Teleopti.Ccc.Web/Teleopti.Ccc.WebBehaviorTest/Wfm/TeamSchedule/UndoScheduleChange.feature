@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 @OnlyRunIfEnabled('WfmTeamSchedule_RevertToPreviousSchedule_39002')
 Feature: Undo Schedule Change
 	As a team leader
@@ -9,6 +8,10 @@ Background:
 Given I am american
 	And there is a site named 'The site'
 	And there is a team named 'Team green' on 'The site'
+	And I have a person period with
+	| Field      | Value      |
+	| Start date | 2016-01-01 |
+	| Team       | Team green |
 	And I have a role with
 	| Field                         | Value          |
 	| Name                          | Wfm Team Green |
@@ -47,6 +50,7 @@ Scenario: Should be able to see enable menu
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green'
 	And I set schedule date to '2016-10-10'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	Then I should see 'Undo' menu is enabled
@@ -57,6 +61,7 @@ Scenario: Should be able to undo schedule change
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green'
 	And I set schedule date to '2016-10-10'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddActivity' in team schedule

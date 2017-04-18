@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 @RunOnlyIfEnabled('WfmTeamSchedule_SwapShifts_36231')
 Feature: SwapShiftsForTwoAgents
 	As a team leader
@@ -9,6 +8,10 @@ Background:
 	Given I am american
 	And there is a site named 'The site'
 	And there is a team named 'Team green' on 'The site'
+	And I have a person period with
+	| Field      | Value      |
+	| Start date | 2016-01-01 |
+	| Team       | Team green |
 	And I have a role with
 	| Field                         | Value          |
 	| Name                          | Wfm Team Green |
@@ -73,6 +76,7 @@ Scenario: Can swap shifts when selected 2 agents' schedule
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'
 	And I open menu in team schedule
@@ -94,6 +98,7 @@ Scenario: Could not do shift swap when no permission
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green'
 	And I set schedule date to '2016-10-10'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'
 	And I open menu in team schedule
@@ -105,6 +110,7 @@ Scenario: Schedule with full day absence is not allowed to swap
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'
 	And I open menu in team schedule
@@ -126,6 +132,7 @@ Scenario: Schedule with overnight shift from yesterday is not allowed to swap
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'	
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'
 	And I open menu in team schedule

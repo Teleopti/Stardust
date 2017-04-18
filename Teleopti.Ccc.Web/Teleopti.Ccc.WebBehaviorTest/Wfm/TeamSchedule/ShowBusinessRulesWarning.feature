@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 @OnlyRunIfEnabled('WfmTeamSchedule_ShowNightlyRestWarning_39619')
 Feature: Show business rules warning
 	As a team leader
@@ -9,6 +8,10 @@ Background:
 	Given there is a site named 'The site'
 	And there is a team named 'Team green' on 'The site'
 	And I am american
+	And I have a person period with
+	| Field      | Value      |
+	| Start date | 2016-01-01 |
+	| Team       | Team green |
 	And I have a role with
 	| Field                         | Value          |
 	| Name                          | Wfm Team Green |
@@ -50,6 +53,7 @@ Scenario: Should be able to see business rule warnings
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I switch on show warnings toggle
 	Then I should see business rule warning
 
@@ -58,6 +62,7 @@ Scenario: Should see no warnings if the validation rule type is not set to be vi
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I switch on show warnings toggle
 	And I open teamschedule setting panel
 	And I choose not to view 'NewNightlyRestRuleName' validation result
@@ -68,6 +73,7 @@ Scenario: Should see the warnings if the validation rule type is set to be viewa
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
 	And I switch on show warnings toggle
 	And I open teamschedule setting panel
 	And I choose to view 'NewNightlyRestRuleName' validation result
