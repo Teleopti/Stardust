@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 @OnlyRunIfEnabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Feature: CommandCheck
 	There should be command check after user have add activity over NOT ALLOW MEETING activities
@@ -8,6 +7,10 @@ Background:
 	Given I am american
 	And there is a site named 'The site'
 	And there is a team named 'Team green' on 'The site'
+	And I have a person period with
+	| Field      | Value      |
+	| Start date | 2016-01-01 |
+	| Team       | Team green |
 	And I have a role with
 		| Field                         | Value          |
 		| Name                          | Wfm Team Green |
@@ -63,6 +66,7 @@ Scenario: Should show command check after adding activity on top of NOT ALLOW ME
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'John'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddActivity' in team schedule
@@ -82,6 +86,7 @@ Scenario: Should show command check after adding person activity on top of NOT A
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'John'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddPersonalActivity' in team schedule
@@ -100,6 +105,7 @@ Scenario: Should show command check after moving activity on top of NOT ALLOW ME
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'John'
+	And I click button to search for schedules
 	And I selected activity 'Training'
 	And I move activity to '2016-10-10 12:00' with next day being 'false'
 	Then I should be able to see command check
