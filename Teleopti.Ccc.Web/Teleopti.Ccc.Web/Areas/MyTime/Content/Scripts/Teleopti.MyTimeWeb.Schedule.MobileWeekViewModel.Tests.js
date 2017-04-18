@@ -160,7 +160,37 @@ $(document).ready(function () {
 
 		equal(vm.dayViewModels()[0].showProbabilityOptions(), false);
 		equal(vm.dayViewModels()[1].showProbabilityOptions(), false);
-		equal(vm.showProbabilityOptions(), true);
+		equal(vm.showProbabilityOptionsToggleIcon(), true);
+	});
+
+	test("Should toggle the global staffing probability option form after clicking the toggle icon when 'MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880'", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+		};
+
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+
+		vm.readData({
+			PeriodSelection: [{ Display: null }],
+			Days: [{
+					FixedDate: moment().format('YYYY-MM-DD')
+				},
+				{
+					FixedDate: moment().add('day',1).format('YYYY-MM-DD')
+				}],
+			Possibilities: [],
+			ViewPossibilityPermission: true
+		});
+
+		equal(vm.dayViewModels()[0].showProbabilityOptions(), false);
+		equal(vm.dayViewModels()[1].showProbabilityOptions(), false);
+		equal(vm.showProbabilityOptionsToggleIcon(), true);
+		equal(vm.showProbabilityOptionsForm(), false);
+		vm.toggleProbabilityOptionsPanel();
+		equal(vm.showProbabilityOptionsForm(), true);
+		vm.toggleProbabilityOptionsPanel();
+		equal(vm.showProbabilityOptionsForm(), false);
 	});
 
 	test("Should show probability data for multiple upcoming days when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on", function() {

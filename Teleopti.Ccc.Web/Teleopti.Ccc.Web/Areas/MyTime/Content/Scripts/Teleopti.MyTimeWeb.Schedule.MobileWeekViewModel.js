@@ -138,28 +138,35 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		CancelAddingNewRequest: function () { self.CancelAddingNewRequest(); }
 	};
 
-	self.probabilityOptionModel = {
+	var probabilityOptionModel = {
 		model: new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self),
 		type: function () { return "probabilityOptions" },
 		OnProbabilityOptionSelectCallback: function (selectedOptionValue) { self.OnProbabilityOptionSelectCallback(selectedOptionValue); }
 	};
 
 	self.toggleProbabilityOptionsPanel = function (data) {
-		self.probabilityOptionModel.model = new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self);
+		probabilityOptionModel.model = new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self);
 		if(data && data.fixedDate)
 			self.initialRequestDay(data.fixedDate());
 		else
 			self.initialRequestDay();
 
-		if (self.requestViewModel() && self.requestViewModel().type() === self.probabilityOptionModel.type()) {
+		if (self.requestViewModel() && self.requestViewModel().type() === probabilityOptionModel.type()) {
 			self.requestViewModel(undefined);
 		} else {
-			self.requestViewModel(self.probabilityOptionModel);
+			self.requestViewModel(probabilityOptionModel);
 		}
 	};
 
-	self.showProbabilityOptions = ko.computed(function() {
-		return self.staffingProbabilityOnMobileEnabled() && self.staffingProbabilityForMultipleDaysEnabled();
+	self.showProbabilityOptionsToggleIcon = ko.computed(function(){
+		return self.staffingProbabilityOnMobileEnabled() && self.staffingProbabilityForMultipleDaysEnabled()
+	});
+
+	self.showProbabilityOptionsForm = ko.computed(function() {
+		return self.showProbabilityOptionsToggleIcon() 
+			&& self.requestViewModel() != undefined
+			&& self.requestViewModel() != undefined
+			&& self.requestViewModel().type() === probabilityOptionModel.type();
 	});
 
 	self.OnProbabilityOptionSelectCallback = function (selectedOptionValue) {

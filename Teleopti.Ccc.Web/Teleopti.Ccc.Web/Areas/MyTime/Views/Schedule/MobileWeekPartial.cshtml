@@ -61,7 +61,7 @@
 					
 				</li>
 			</ul>
-			<!-- ko if: staffingProbabilityOnMobileEnabled && staffingProbabilityForMultipleDaysEnabled-->
+			<!-- ko if: showProbabilityOptionsToggleIcon-->
 			<div class="action-menu-container">
 				<a class="btn btn-default" data-bind="click: toggleProbabilityOptionsPanel">
 					<!-- ko ifnot: showingAbsenceProbability() || showingOvertimeProbability() -->
@@ -79,7 +79,7 @@
 		</div>
 	</div>
 
-	<!-- ko if: staffingProbabilityOnMobileEnabled && staffingProbabilityForMultipleDaysEnabled-->
+	<!-- ko if: showProbabilityOptionsForm -->
 	<div class="container probability-option-container">
 		<!-- ko with: requestViewModel -->
 		<div data-bind="with: model">
