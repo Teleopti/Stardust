@@ -17,14 +17,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		private readonly IResourceOptimizationHelperExtended _optimizationHelperExtended;
 		private readonly DateOnly _selectedDate;
 		private readonly TimeSpan? _selectedTime;
+		private readonly bool _useShrinkage;
 
-		public ResourceCalculationAnalyzerModel(ISchedulerStateHolder stateHolder, ILifetimeScope container, IResourceOptimizationHelperExtended optimizationHelperExtended, DateOnly selectedDate, TimeSpan? selectedTime)
+		public ResourceCalculationAnalyzerModel(ISchedulerStateHolder stateHolder, ILifetimeScope container, IResourceOptimizationHelperExtended optimizationHelperExtended, DateOnly selectedDate, TimeSpan? selectedTime, bool useShrinkage)
 		{
 			_stateHolder = stateHolder;
 			_container = container;
 			_optimizationHelperExtended = optimizationHelperExtended;
 			_selectedDate = selectedDate;
 			_selectedTime = selectedTime;
+			_useShrinkage = useShrinkage;
 		}
 
 		public DateOnly SelectedDate
@@ -82,6 +84,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			foreach (var skillStaffperiod in skillStaffperiods)
 			{
 				var modelResult = result[skillStaffperiod.SkillDay.Skill];
+				modelResult.Forecasted = skillStaffperiod.FStaff;
 				modelResult.PrimaryPercent = new Percent(skillStaffperiod.RelativeDifferenceForDisplayOnly);
 				modelResult.PrimaryResources = skillStaffperiod.CalculatedResource;
 			}
@@ -107,6 +110,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 				var modelResult = result[skillStaffperiod.SkillDay.Skill];
 				modelResult.ShoveledPercent = new Percent(skillStaffperiod.RelativeDifferenceForDisplayOnly);
 				modelResult.ShoveledResources = skillStaffperiod.CalculatedResource;
+				modelResult.Esl = _useShrinkage
+					? skillStaffperiod.EstimatedServiceLevelShrinkage
+					: skillStaffperiod.EstimatedServiceLevel;
 			}
 
 			return result;
@@ -118,6 +124,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			public double ShoveledResources { get; set; }
 			public Percent PrimaryPercent { get; set; }
 			public double PrimaryResources { get; set; }
+			public Percent Esl { get; set; }
+			public double Forecasted { get; set; }
 		}
 	}
 

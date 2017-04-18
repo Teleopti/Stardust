@@ -30,11 +30,13 @@
 		{
 			this.listView1 = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
 			this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
 			this.button1 = new System.Windows.Forms.Button();
@@ -55,14 +57,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
+            this.columnHeader7,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
             this.columnHeader5,
-            this.columnHeader6});
+            this.columnHeader6,
+            this.columnHeader8});
 			this.listView1.Location = new System.Drawing.Point(0, 28);
 			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(938, 487);
+			this.listView1.Size = new System.Drawing.Size(1173, 487);
 			this.listView1.TabIndex = 0;
 			this.listView1.UseCompatibleStateImageBehavior = false;
 			this.listView1.View = System.Windows.Forms.View.Details;
@@ -71,6 +75,11 @@
 			// 
 			this.columnHeader1.Text = "Skill";
 			this.columnHeader1.Width = 200;
+			// 
+			// columnHeader7
+			// 
+			this.columnHeader7.Text = "Forecasted";
+			this.columnHeader7.Width = 96;
 			// 
 			// columnHeader2
 			// 
@@ -97,11 +106,15 @@
 			this.columnHeader6.Text = "Gain/Loss";
 			this.columnHeader6.Width = 80;
 			// 
+			// columnHeader8
+			// 
+			this.columnHeader8.Text = "ESL%";
+			// 
 			// dateTimePicker1
 			// 
 			this.dateTimePicker1.CustomFormat = "HH:mm";
 			this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dateTimePicker1.Location = new System.Drawing.Point(389, 169);
+			this.dateTimePicker1.Location = new System.Drawing.Point(517, 181);
 			this.dateTimePicker1.Name = "dateTimePicker1";
 			this.dateTimePicker1.ShowUpDown = true;
 			this.dateTimePicker1.Size = new System.Drawing.Size(85, 20);
@@ -110,14 +123,14 @@
 			// dateTimePicker2
 			// 
 			this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePicker2.Location = new System.Drawing.Point(389, 143);
+			this.dateTimePicker2.Location = new System.Drawing.Point(517, 155);
 			this.dateTimePicker2.Name = "dateTimePicker2";
 			this.dateTimePicker2.Size = new System.Drawing.Size(85, 20);
 			this.dateTimePicker2.TabIndex = 2;
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(418, 196);
+			this.button1.Location = new System.Drawing.Point(546, 208);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(56, 23);
 			this.button1.TabIndex = 3;
@@ -131,7 +144,7 @@
             this.toolStripLabel1});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(938, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(1173, 25);
 			this.toolStrip1.TabIndex = 5;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -155,7 +168,7 @@
             this.toolStripProgressBar1});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 518);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(938, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(1173, 22);
 			this.statusStrip1.TabIndex = 6;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -177,7 +190,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(938, 540);
+			this.ClientSize = new System.Drawing.Size(1173, 540);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.button1);
@@ -214,5 +227,7 @@
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+		private System.Windows.Forms.ColumnHeader columnHeader7;
+		private System.Windows.Forms.ColumnHeader columnHeader8;
 	}
 }

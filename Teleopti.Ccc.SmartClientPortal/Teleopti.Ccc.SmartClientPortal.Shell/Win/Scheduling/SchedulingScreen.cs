@@ -4352,7 +4352,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				selectedTime = _skillIntradayGridControl.Presenter.SelectedIntervalTime();
 			}
-			var model = new ResourceCalculationAnalyzerModel(_schedulerState, _container, _optimizationHelperExtended, selectedDate, selectedTime);
+			var model = new ResourceCalculationAnalyzerModel(_schedulerState, _container, _optimizationHelperExtended, selectedDate, selectedTime, _shrinkage);
 			using (var resourceChanges = new ResourceCalculationAnalyzerView(model))
 			{
 				resourceChanges.ShowDialog(this);

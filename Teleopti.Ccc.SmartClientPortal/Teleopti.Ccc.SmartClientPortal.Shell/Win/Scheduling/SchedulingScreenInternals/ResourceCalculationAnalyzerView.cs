@@ -26,10 +26,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			_model = model;
 			_columnWidths.Add(0, header);
 			_columnWidths.Add(1, narrow);
-			_columnWidths.Add(2, wide);
-			_columnWidths.Add(3, narrow);
-			_columnWidths.Add(4, wide);
-			_columnWidths.Add(5, narrow);
+			_columnWidths.Add(2, narrow);
+			_columnWidths.Add(3, wide);
+			_columnWidths.Add(4, narrow);
+			_columnWidths.Add(5, wide);
+			_columnWidths.Add(6, narrow);
+			_columnWidths.Add(7, narrow);
 		}
 
 		private void resetColumnWiths()
@@ -92,10 +94,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 				var groupKey = (pair.Key.CascadingIndex ?? -1).ToString();
 				var item = new ListViewItem(pair.Key.Name);
 				item.Group = listView1.Groups[groupKey];
+				item.SubItems.Add(Math.Round(pair.Value.Forecasted, 2).ToString());
 				item.SubItems.Add(Math.Round(pair.Value.PrimaryResources, 2).ToString());
-				item.SubItems.Add(Math.Round(pair.Value.PrimaryPercent.ValueAsPercent(), 2) + "%");
+				item.SubItems.Add(Math.Round(pair.Value.PrimaryPercent.ValueAsPercent(), 1) + "%");
 				item.SubItems.Add(Math.Round(pair.Value.ShoveledResources, 2).ToString());
-				item.SubItems.Add(Math.Round(pair.Value.ShoveledPercent.ValueAsPercent(), 2) + "%");
+				item.SubItems.Add(Math.Round(pair.Value.ShoveledPercent.ValueAsPercent(), 1) + "%");
 				var shoveledGainLoss = pair.Value.ShoveledResources - pair.Value.PrimaryResources;
 				shoveledGainLossSummary += shoveledGainLoss;
 				item.SubItems.Add(Math.Round(shoveledGainLoss, 2).ToString());
@@ -103,11 +106,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 					item.ForeColor = Color.Blue;
 				if (shoveledGainLoss < -0.00001)
 					item.ForeColor = Color.Red;
+				item.SubItems.Add(Math.Round(pair.Value.Esl.ValueAsPercent(), 0) + "%");
 				listView1.Items.Add(item);
 			}
 
 			var item1 = new ListViewItem("Totals");
 			item1.Group = listView1.Groups["summary"];
+			item1.SubItems.Add("");
 			item1.SubItems.Add("");
 			item1.SubItems.Add("");
 			item1.SubItems.Add("");
