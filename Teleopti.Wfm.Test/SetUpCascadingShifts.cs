@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Test
@@ -76,7 +72,8 @@ namespace Teleopti.Wfm.Test
 			UpdateStaffingLevelReadModel.Update(new DateTimePeriod(Now.UtcDateTime().Date.AddDays(-1), Now.UtcDateTime().Date.AddDays(2)));
 		}
 
-		public void SetUpBronzeSkillDaysWithListWhichWontWorkWithOpenHours(double defaultDemand, List<Tuple<int, double>> hourDemands)
+		//we know its not an idea name so dont complain
+		public void SetUpSkillDaysWithDemandListWhichWontWorkWithOpenHours(double defaultDemand, List<Tuple<int, double>> hourDemands)
 		{
 			var skillDayGoldToday = new SkillDayConfigurable
 			{

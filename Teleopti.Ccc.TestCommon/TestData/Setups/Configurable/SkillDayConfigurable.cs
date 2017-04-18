@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var scenario = scenarioRepository.LoadAll().Single(x => x.Description.Name == Scenario);
 
 			var defaultDemandTimespan = TimeSpan.FromMinutes(DefaultDemand * skill.DefaultResolution * (TimeSpan.FromHours(1).Ticks/TimeSpan.FromMinutes(skill.DefaultResolution).Ticks));
-
-		    if (!HourDemandList.Any())
+			ISkillDay skillDay;
+			if (!HourDemandList.Any())
 		    {
 		        if (HourDemand == null)
 		        {
@@ -49,13 +49,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		        var hourDemandTimespan =
 		            TimeSpan.FromMinutes(HourDemand.Item2 * skill.DefaultResolution *
 		                                 (TimeSpan.FromHours(1).Ticks / TimeSpan.FromMinutes(skill.DefaultResolution).Ticks));
-		        ISkillDay skillDay;
 		        skillDay = !OpenHours.HasValue
 		            ? skill.CreateSkillDayWithDemandPerHour(scenario, DateOnly, defaultDemandTimespan,new Tuple<int, TimeSpan>(HourDemand.Item1, hourDemandTimespan))
 		            : skill.CreateSkillDayWithDemandPerHour(scenario, DateOnly, defaultDemandTimespan,new Tuple<int, TimeSpan>(HourDemand.Item1, hourDemandTimespan), OpenHours.Value);
-		        skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(Shrinkage));
-		        var skillDayRepository = new SkillDayRepository(currentUnitOfWork);
-		        skillDayRepository.Add(skillDay);
+		        
 		    }
 		    else
 		    {
@@ -66,16 +63,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 					 TimeSpan.FromMinutes(hourDemad.Item2 * skill.DefaultResolution * (TimeSpan.FromHours(1).Ticks / TimeSpan.FromMinutes(skill.DefaultResolution).Ticks));
 		            newDemadListToPass.Add(new Tuple<int, TimeSpan>(hourDemad.Item1, hourDemandTimespan));
 		        }
-				
-				ISkillDay skillDay;
-		        skillDay =  skill.CreateSkillDayWithDemandPerHour(scenario, DateOnly, defaultDemandTimespan, newDemadListToPass);
-				skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(Shrinkage));
-				var skillDayRepository = new SkillDayRepository(currentUnitOfWork);
-				skillDayRepository.Add(skillDay);
+				skillDay =  skill.CreateSkillDayWithDemandPerHour(scenario, DateOnly, defaultDemandTimespan, newDemadListToPass);
 			}
-			
 
-		    
+			skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(Shrinkage));
+			var skillDayRepository = new SkillDayRepository(currentUnitOfWork);
+			skillDayRepository.Add(skillDay);
+
 		}
 	}
 }

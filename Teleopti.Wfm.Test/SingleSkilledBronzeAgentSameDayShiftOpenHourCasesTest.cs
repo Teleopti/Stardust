@@ -253,7 +253,7 @@ namespace Teleopti.Wfm.Test
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var requestStart = now.AddHours(1);
 			SetUpRelevantStuffWithCascading();
-			SetUpBronzeSkillDaysWithListWhichWontWorkWithOpenHours(20,
+			SetUpSkillDaysWithDemandListWhichWontWorkWithOpenHours(20,
 				new List<Tuple<int, double>>()
 				{
 					Tuple.Create(10, (double) 0.1),

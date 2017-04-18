@@ -11,20 +11,7 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public static ISkillDay CreateSkillDayWithDemandPerHour(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan defaultDemand, Tuple<int, TimeSpan> specificHourDemand)
 		{
-			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, skill.TimeZone);
-			var skillDataPeriods = Enumerable.Range(0, 24).Select(hour =>
-			{
-				var period = new DateTimePeriod(dateTime.AddHours(hour), dateTime.AddHours(hour + 1));
-				var demand = specificHourDemand.Item1 == hour
-					? specificHourDemand.Item2
-					: defaultDemand;
-				return new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(), period)
-				{
-					ManualAgents = demand.TotalHours
-				};
-			}).ToArray();
-
-			return setupSkillDay(skill, scenario, dateOnly, skillDataPeriods);
+		    return CreateSkillDayWithDemandPerHour(skill, scenario, dateOnly, defaultDemand,new List<Tuple<int, TimeSpan>>() {specificHourDemand});
 		}
 
 		public static ISkillDay CreateSkillDayWithDemandPerHour(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan defaultDemand, List<Tuple<int, TimeSpan>> specificHourDemand)
