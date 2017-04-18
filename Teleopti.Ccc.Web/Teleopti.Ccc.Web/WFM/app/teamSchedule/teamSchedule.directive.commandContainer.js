@@ -49,11 +49,11 @@
 					vm.setReady(true);
 				});
 			} else {
-				var checkedPersonIdList = personSelectionSvc.getCheckedPersonIds();
-				if (checkedPersonIdList.length === 0) {
+				var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
+				if (selectedPersonIds.length === 0) {
 					vm.setReady(true);
 				} else {
-					teamScheduleSvc.getSchedules(vm.date, checkedPersonIdList).then(function(data) {
+					teamScheduleSvc.getSchedules(vm.date, selectedPersonIds).then(function(data) {
 						vm.scheduleManagementSvc.resetSchedules(data.Schedules, moment(vm.date), vm.timezone);
 						vm.setReady(true);
 					});
