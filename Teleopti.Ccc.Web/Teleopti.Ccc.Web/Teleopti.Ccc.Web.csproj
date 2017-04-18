@@ -1380,7 +1380,6 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\PeriodSelectionViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\PeriodViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ScheduleViewModelTestDataFactory.cs" />
     <Compile Include="Core\Startup\ApplicationStartModule.cs" />
     <Compile Include="Core\IoC\ContainerConfiguration.cs" />
     <Compile Include="Core\Startup\RegisterModelBindersTask.cs" />

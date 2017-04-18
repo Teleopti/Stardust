@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
@@ -13,12 +12,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	{
 		private readonly IScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		public StaffingPossibilityViewModelFactory(
-			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, IIntervalLengthFetcher intervalLengthFetcher)
+			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, IIntervalLengthFetcher intervalLengthFetcher, ILoggedOnUser loggedOnUser)
 		{
 			_scheduleStaffingPossibilityCalculator = scheduleStaffingPossibilityCalculator;
 			_intervalLengthFetcher = intervalLengthFetcher;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public IEnumerable<PeriodStaffingPossibilityViewModel> CreateIntradayPeriodStaffingPossibilityViewModels(
@@ -51,5 +52,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				});
 			return possibilities.OrderBy(x => x.StartTime);
 		}
+
+		//private DateOnlyPeriod getCurrentWeekPeriod(DateOnly date)
+		//{
+		//	//DateHelper.GetWeekPeriod(date);
+		//}
 	}
 }

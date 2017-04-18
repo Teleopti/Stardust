@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<FakeShiftTradeLightValidator>().For<IShiftTradeLightValidator>();
 			system.UseTestDouble<FakePersonContractProvider>().For<FakePersonContractProvider>();
 			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
+			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();

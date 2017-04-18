@@ -13,6 +13,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility
 
 	public class PeriodStaffingPossibilityViewModel
 	{
+		public DateOnly Date { get; set; }
+
 		public DateTime StartTime { get; set; }
 
 		public DateTime EndTime { get; set; }

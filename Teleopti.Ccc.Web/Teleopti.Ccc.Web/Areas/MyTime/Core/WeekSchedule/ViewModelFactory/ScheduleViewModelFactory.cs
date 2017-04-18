@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
@@ -16,10 +17,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly IMonthScheduleDomainDataProvider _monthScheduleDomainDataProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IStaffingPossibilityViewModelFactory _staffingPossibilityViewModelFactory;
+		private readonly INow _now;
 
 		public ScheduleViewModelFactory(MonthScheduleViewModelMapper monthMapper, WeekScheduleViewModelMapper weekMapper, IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider,
 			IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider, ILoggedOnUser loggedOnUser,
-			IStaffingPossibilityViewModelFactory staffingPossibilityViewModelFactory)
+			IStaffingPossibilityViewModelFactory staffingPossibilityViewModelFactory, INow now)
 		{
 			_monthMapper = monthMapper;
 			_weekMapper = weekMapper;
@@ -27,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			_monthScheduleDomainDataProvider = monthScheduleDomainDataProvider;
 			_loggedOnUser = loggedOnUser;
 			_staffingPossibilityViewModelFactory = staffingPossibilityViewModelFactory;
+			_now = now;
 		}
 
 		public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
@@ -102,7 +105,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		private TimePeriod? getIntradaySiteOpenHourPeriod()
 		{
-			var siteOpenHour = _loggedOnUser.CurrentUser().SiteOpenHour(DateOnly.Today);
+			var siteOpenHour = _loggedOnUser.CurrentUser().SiteOpenHour(_now.LocalDateOnly());
 			if (siteOpenHour == null || siteOpenHour.IsClosed)
 			{
 				return null;

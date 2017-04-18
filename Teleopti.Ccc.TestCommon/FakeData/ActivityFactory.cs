@@ -11,8 +11,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static IActivity CreateActivity(string name,
                                               Color color)
         {
-            IActivity ret = new Activity(name);
-            ret.SetId(Guid.NewGuid());
+            var ret = new Activity(name).WithId();
             ret.DisplayColor = color;
             return ret;
         }

@@ -463,9 +463,7 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapperTest.cs" />
     <Compile Include="Core\IoC\MyTimeWebTestAttribute.cs" />
-    <Compile Include="Core\WeekSchedule\Mapping\ScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\WeekScheduleDomainDataProviderTest.cs" />
-    <Compile Include="Core\WeekSchedule\Mapping\WeekScheduleViewModelMappingTest.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
     <Compile Include="Areas\Anywhere\GroupScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\GroupScheduleViewModelMapperTest.cs" />
@@ -532,7 +530,6 @@
     <Compile Include="Core\Startup\MessageBrokerTaskTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\PersonPersisterTest.cs" />
-    <Compile Include="Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractorTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\TeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionForMTWProviderTest.cs" />
@@ -639,13 +636,7 @@
     <Compile Include="Core\IoC\ContainerConfigurationTest.cs" />
     <Compile Include="Core\IoC\WebAppModuleTest.cs" />
     <Compile Include="Core\WeekSchedule\ScheduleHtmlHelperTest.cs" />
-    <Compile Include="Core\WeekSchedule\ViewModelFactory\PeriodSelectionViewModelFactoryTest.cs" />
-    <Compile Include="Core\WeekSchedule\ViewModelFactory\HeaderViewModelFactoryTest.cs" />
-    <Compile Include="Core\WeekSchedule\DayViewModelTest.cs" />
-    <Compile Include="Core\WeekSchedule\ViewModelFactory\PeriodViewModelFactoryTest.cs" />
     <Compile Include="Core\Common\DataProvider\DefaultScenarioScheduleProviderTest.cs" />
-    <Compile Include="Core\WeekSchedule\ViewModelFactory\ScheduleViewModelFactoryTest.cs" />
-    <Compile Include="Core\WeekSchedule\ViewModelFactory\ScheduleViewModelTestDataFactoryTest.cs" />
     <Compile Include="Core\Startup\BootStrapperTest.cs" />
     <Compile Include="Core\Startup\RegisterGlobalFiltersTaskTest.cs" />
     <Compile Include="Core\Startup\RegisterRoutesTaskTest.cs" />
