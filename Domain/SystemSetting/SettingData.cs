@@ -60,6 +60,9 @@ namespace Teleopti.Ccc.Domain.SystemSetting
 
         private T deserializeAndSetParent<T>(IFormatter formatter) where T : class, ISettingValue
         {
+			//temp hack - remove if we get rid of "type dependency" in db
+			formatter.Binder = new TypeConverter();
+			//
             using(MemoryStream stream = new MemoryStream(serializedValue))
             {
                 object tempObj = formatter.Deserialize(stream);
