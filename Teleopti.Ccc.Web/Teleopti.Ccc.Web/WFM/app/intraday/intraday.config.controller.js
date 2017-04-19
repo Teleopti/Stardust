@@ -25,7 +25,6 @@
 				}
 
 				$scope.saveSkillArea = function (form) {
-					console.log(form);
 					if (form.$invalid) {
 							return
 					}

@@ -110,7 +110,6 @@
 				var query = getSkillAreaStaffingByDate(area.Id, vm.selectedDate, vm.useShrinkage);
 			}
 			query.$promise.then(function (result) {
-				console.log(vm.selectedSkill, vm.selectedArea, vm.useShrinkage);
 				staffingData.time = [];
 				staffingData.scheduledStaffing = [];
 				staffingData.forcastedStaffing = [];

@@ -221,7 +221,6 @@
         };
 
         function getAdherenceForTeamsBySkills(data) {
-            console.log("service");
             return $resource('../api/Teams/InAlarmCountForSkills', {}, {
                 query: {
                     method: 'GET',

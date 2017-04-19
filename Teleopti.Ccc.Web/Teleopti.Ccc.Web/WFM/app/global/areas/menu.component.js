@@ -68,7 +68,6 @@ function MenuController() {
 
 	ctrl.closeMenuOnPhones = function () {
 		ctrl.open = false;
-		console.log(ctrl.open);
 	}
 
 }

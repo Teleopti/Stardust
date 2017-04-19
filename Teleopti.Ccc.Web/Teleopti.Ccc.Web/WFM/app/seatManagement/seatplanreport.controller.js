@@ -34,9 +34,6 @@
 		};
 
 		vm.showAllAgents = function () {
-
-			console.log(!vm.showOnlyUnseatedAgents);
-
 			return !vm.showOnlyUnseatedAgents;
 		};
 
