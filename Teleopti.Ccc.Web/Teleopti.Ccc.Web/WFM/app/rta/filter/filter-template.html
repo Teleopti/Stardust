@@ -68,7 +68,7 @@
 								</div>
 		</div>
 		<div class="panel">
-			<div ng-repeat="site in vm.sites | filter:vm.searchTerm | orderBy:'Name':false:vm.sortByLocaleLanguage" class="rta-option-group">
+			<div ng-repeat="site in vm.sites | filter:vm.searchTerm" class="rta-option-group">
 				<!--Site Container-->
 				<div class="wfm-checkbox">
 					<span ng-click="vm.expandSite(site)" class="rta-options-prepend"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
@@ -81,7 +81,7 @@
 		<!--End of Site Container-->
 
 		<!--Team container-->
-		<div style="margin-left: 50px" class="wfm-checkbox" ng-show="site.isExpanded" ng-repeat="team in site.Teams | orderBy:'Name':false:vm.sortByLocaleLanguage">
+		<div style="margin-left: 50px" class="wfm-checkbox" ng-show="site.isExpanded" ng-repeat="team in site.Teams">
 			<label>
 												<input type="checkbox" ng-click="team.toggle()" ng-checked="team.isChecked" value="{{team.Id}}">
 												<span class="wfm-checkbox-toggle"></span>
