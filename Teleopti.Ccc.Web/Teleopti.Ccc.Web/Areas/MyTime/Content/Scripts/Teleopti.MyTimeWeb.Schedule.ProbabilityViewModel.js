@@ -1,5 +1,5 @@
 ﻿Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel = function (rawProbabilityCellData, probabilityType, boundaries, userTexts, parent, layoutDirection, hideProbabilityEarlierThanNow) {
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	var probabilityLevel = {
 		low: 0,

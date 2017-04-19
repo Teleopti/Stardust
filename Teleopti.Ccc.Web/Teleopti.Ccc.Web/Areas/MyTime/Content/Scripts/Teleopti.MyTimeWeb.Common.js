@@ -13,14 +13,35 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Common = (function ($) {
+	var _settings = {},
+		_userData = null,
+		_userDataCallQueue = [],
+		_userDataFetchInProgress = false,
+		toggleCache = {},
+		constants = {
+			scheduleHeight: 668, // Same value as height of class "weekview-day-schedule"
+			pixelToDisplayAll: 38,
+			pixelToDisplayTitle: 16,
 
-	
-	var _settings = {};
-	var _userData = null;
-	var _userDataCallQueue = [];
-	var _userDataFetchInProgress = false;
+			timelineMarginInMinutes: 15, // Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.WeekScheduleDomainDataProvider.getMinMaxTime()
+			totalMinutesOfOneDay: 1440, //: 24 * 60, Total minutes of a day
 
-	var toggleCache = {};
+			probabilityType: {
+				none: 0,
+				absence: 1,
+				overtime: 2,
+			},
+			probabilityClass: {
+				lowProbabilityClass: "probability-low",
+				highProbabilityClass: "probability-high",
+				expiredProbabilityClass: "probability-expired"
+			},
+
+			layoutDirection: {
+				vertical: 0,
+				horizontal: 1
+			}
+		};
 
 	function isToggleEnabled(toggleName) {
 		var result = false;
@@ -380,6 +401,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		IsHostAMobile: function () {
 			return (/Mobile/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent));
 		},
+		Constants: constants,
 		SubscribeToMessageBroker: _subscribeToMessageBroker,
 		GetUserData: _getUserData,
 		IsToggleEnabled: isToggleEnabled

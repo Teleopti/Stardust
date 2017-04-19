@@ -1,5 +1,5 @@
 ﻿Teleopti.MyTimeWeb.Schedule.ProbabilityModels = (function ($) {
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	var getContinousPeriods = function (baseDate, periods) {
 		if (!periods || periods.length === 0) return [];

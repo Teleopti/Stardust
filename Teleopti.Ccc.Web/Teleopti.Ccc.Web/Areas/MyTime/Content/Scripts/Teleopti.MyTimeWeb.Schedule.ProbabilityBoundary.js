@@ -1,6 +1,8 @@
-﻿Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (scheduleDay, timelines, probabilityType,
+﻿/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js"/>
+
+Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (scheduleDay, timelines, probabilityType,
 	probabilities, intradayOpenPeriod) {
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	var shiftStartMinutes = -1;
 	var shiftEndMinutes = constants.totalMinutesOfOneDay + 1;

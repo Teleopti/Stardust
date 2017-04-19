@@ -1,4 +1,5 @@
-﻿/// <reference path="Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
+﻿/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="~/Areas/MyTime/Content/Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
 /// <reference path="~/Content/Scripts/qunit.js" />
 
 $(document).ready(function () {
@@ -221,7 +222,7 @@ $(document).ready(function () {
 						"Title": "Phone",
 						"TimeSpan": "09:30 - 16:45",
 						"StartTime": moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						"EndTime": moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						"EndTime": moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 						"Summary": "7:15",
 						"StyleClassName": "color_80FF80",
 						"Meeting": null,
@@ -237,7 +238,7 @@ $(document).ready(function () {
 						"Title": "Phone",
 						"TimeSpan": "09:30 - 16:45",
 						"StartTime": moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('day', 1).add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						"EndTime": moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('day', 1).add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						"EndTime": moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('day', 1).add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 						"Summary": "7:15",
 						"StyleClassName": "color_80FF80",
 						"Meeting": null,
@@ -251,12 +252,12 @@ $(document).ready(function () {
 				{
 					Date: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD'),
 					StartTime: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').format('YYYY-MM-DDTHH:mm:ss'),
-					EndTime: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('hour', 16).format('YYYY-MM-DDTHH:mm:ss'),
+					EndTime: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 					Possibility: 0
 				}, {
 					Date: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).add('day', 1).format('YYYY-MM-DD'),
 					StartTime: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('day', 1).format('YYYY-MM-DDTHH:mm:ss'),
-					EndTime: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('day', 1).add('hour', 16).format('YYYY-MM-DDTHH:mm:ss'),
+					EndTime: moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).startOf('day').add('day', 1).add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 					Possibility: 1
 				}
 			],
@@ -282,16 +283,16 @@ $(document).ready(function () {
 
 		vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, fakeReloadData);
 		vm.toggleProbabilityOptionsPanel(fakeFixedDateObj);
-		vm.OnProbabilityOptionSelectCallback(Teleopti.MyTimeWeb.Schedule.Constants.probabilityType.overtime);
+		vm.OnProbabilityOptionSelectCallback(Teleopti.MyTimeWeb.Common.Constants.probabilityType.overtime);
 
 		equal(vm.dayViewModels()[0].probabilities().length, 1);
-		equal(vm.dayViewModels()[0].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Schedule.Constants.probabilityClass.lowProbabilityClass);
+		equal(vm.dayViewModels()[0].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass);
 		equal(vm.dayViewModels()[0].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForOvertime) > -1, true);
 		equal(vm.dayViewModels()[0].probabilities()[0].styleJson.left != '', true);
 		equal(vm.dayViewModels()[0].probabilities()[0].styleJson.width != '', true);
 
 		equal(vm.dayViewModels()[1].probabilities().length, 1);
-		equal(vm.dayViewModels()[1].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Schedule.Constants.probabilityClass.highProbabilityClass);
+		equal(vm.dayViewModels()[1].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.highProbabilityClass);
 		equal(vm.dayViewModels()[1].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForOvertime) > -1, true);
 		equal(vm.dayViewModels()[1].probabilities()[0].styleJson.left != '', true);
 		equal(vm.dayViewModels()[1].probabilities()[0].styleJson.width != '', true);

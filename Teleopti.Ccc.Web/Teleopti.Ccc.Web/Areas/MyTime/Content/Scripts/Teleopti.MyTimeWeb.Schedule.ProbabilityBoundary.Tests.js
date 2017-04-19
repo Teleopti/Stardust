@@ -1,12 +1,13 @@
 ﻿/// <reference path="~/Content/Scripts/qunit.js" />
 /// <reference path="~/Content/moment/moment.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js" />
 
 $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary");
 
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	var yearAndMonth = "2017-02-";
 	var dayForToday = 23;

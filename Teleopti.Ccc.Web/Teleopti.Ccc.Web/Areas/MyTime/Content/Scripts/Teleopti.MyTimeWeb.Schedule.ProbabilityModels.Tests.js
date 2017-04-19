@@ -1,5 +1,7 @@
-﻿/// <reference path="Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
-/// <reference path="~/Content/Scripts/qunit.js" />
+﻿/// <reference path="~/Content/Scripts/qunit.js" />
+/// <reference path="~/Content/moment/moment.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
+/// <reference path="Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
 
 $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.ProbabilityModels");
@@ -8,7 +10,7 @@ $(document).ready(function () {
 		low: 0,
 		high: 1
 	};
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 	var yesterday = "2017-03-09";
 	var baseDate = "2017-03-10";
 	var tomorrow = "2017-03-11";

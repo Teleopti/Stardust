@@ -1,5 +1,6 @@
 ﻿/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
 /// <reference path="~/Content/jalaali-calendar-datepicker/moment-jalaali.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js" />
@@ -8,7 +9,7 @@
 Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabilities, parent) {
 	var self = this;
 
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	self.fixedDate = ko.observable(scheduleDay.FixedDate);
 	self.formattedFixedDate = ko.computed(function () {
@@ -207,7 +208,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, userTexts, parent) {
 	var self = this;
 
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	self.title = ko.observable(layer.Title);
 	self.hasMeeting = ko.computed(function () {

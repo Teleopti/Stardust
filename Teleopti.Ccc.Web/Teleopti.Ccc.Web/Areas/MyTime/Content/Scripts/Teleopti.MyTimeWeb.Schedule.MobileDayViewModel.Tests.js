@@ -1,5 +1,7 @@
-﻿/// <reference path="Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
-/// <reference path="~/Content/Scripts/qunit.js" />
+﻿/// <reference path="~/Content/Scripts/qunit.js" />
+/// <reference path="~/Content/moment/moment.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel.js" />
 
 $(document).ready(function () {
@@ -7,7 +9,7 @@ $(document).ready(function () {
 
 	Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	var createTimeline = function (timelineStartHour, timelineEndHour) {
 		var timelinePoints = [];

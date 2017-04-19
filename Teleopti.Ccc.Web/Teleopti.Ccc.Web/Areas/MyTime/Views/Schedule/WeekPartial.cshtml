@@ -70,31 +70,31 @@
             <li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
             <li class="col-xs-12 col-sm-4 active"><a href="#" id="week-schedule-week" data-bind="click: week">@Resources.Week</a></li>
             <li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-month" data-bind="click: month, visible: !Teleopti.MyTimeWeb.Common.UseJalaaliCalendar">@Resources.Month</a></li>
-            <li class="col-xs-12 col-sm-4 pull-right" data-bind="visible: staffingProbabilityEnabled() && isCurrentWeek">
-                <div class="input-group pull-right" style="width: 200px; margin-left: 50px;">
+            <li class="col-xs-12 col-sm-4 weekview-probability-toggle" data-bind="visible: staffingProbabilityEnabled() && isCurrentWeek">
+                <div class="input-group pull-right">
                     <div class="btn-group" role="group" aria-describedby="basic-addon1" id="probabilityDropdownMenu">
                         <a class="btn btn-default dropdown-toggle" id="dropdown-probability-type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <i class="glyphicon" data-bind="css: {'glyphicon-eye-open': probabilityType() > 0, 'glyphicon-eye-close': probabilityType() === 0}"></i>
                             <span data-bind="text: probabilityLabel()"></span>
                             <span class="caret"></span>
                         </a>
-	                    <ul class="dropdown-menu">
-		                    <li>
-			                    <a href="#" data-bind="click: function (data, event) { switchProbabilityType(0); }">
-				                    @Resources.HideStaffingInfo
-			                    </a>
-		                    </li>
-		                    <li data-bind="visible: absenceProbabilityEnabled()">
-			                    <a href="#" data-bind="click: function (data, event) { switchProbabilityType(1); }">
-				                    @Resources.ShowAbsenceProbability
-			                    </a>
-		                    </li>
-		                    <li>
-			                    <a href="#" data-bind="click: function (data, event) { switchProbabilityType(2); }">
-				                    @Resources.ShowOvertimeProbability
-			                    </a>
-		                    </li>
-	                    </ul>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(0); }">
+                                    @Resources.HideStaffingInfo
+                                </a>
+                            </li>
+                            <li data-bind="visible: absenceProbabilityEnabled()">
+                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(1); }">
+                                    @Resources.ShowAbsenceProbability
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(2); }">
+                                    @Resources.ShowOvertimeProbability
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </li>

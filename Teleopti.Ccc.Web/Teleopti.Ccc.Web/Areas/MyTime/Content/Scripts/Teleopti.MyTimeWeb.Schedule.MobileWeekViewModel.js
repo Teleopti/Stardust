@@ -20,7 +20,7 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === "undefined") {
 Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, reloadData) {
 	var self = this;
 
-	var probabilityType = Teleopti.MyTimeWeb.Schedule.Constants.probabilityType;
+	var probabilityType = Teleopti.MyTimeWeb.Common.Constants.probabilityType;
 
 	self.userTexts = userTexts;
 	self.dayViewModels = ko.observableArray();
@@ -246,29 +246,36 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		});
 		self.timeLines = ko.observableArray(timelines);
 
-		self.intradayOpenPeriod = data.SiteOpenHourIntradayPeriod != null ?
+		self.intradayOpenPeriod = data.SiteOpenHourIntradayPeriod &&
 			{
 				"startTime": data.SiteOpenHourIntradayPeriod.StartTime,
 				"endTime": data.SiteOpenHourIntradayPeriod.EndTime
-			} :
-			null;
+			};
 
 		self.absenceReportPermission(hasAbsenceReportPermission);
 		self.overtimeAvailabilityPermission(hasOvertimeAvailabilityPermission);
 
-		var dayViewModels = [];
-		if (data.Days != undefined && data.Days.length > 0) {
+		var dayViewModels = [], rawProbabilities = [];
+		if(Array.isArray(data.Days) && data.Days.length > 0) {
 			dayViewModels = data.Days.map(function(scheduleDay) {
-				var rawProbabilies = [];
-				if (self.staffingProbabilityForMultipleDaysEnabled()) {
-					rawProbabilies = data.Possibilities.filter(function(p) {
-						return p.Date == scheduleDay.FixedDate;
-					});
-				} else {
-					rawProbabilies = scheduleDay.FixedDate === self.formatedCurrentUserDate() ? data.Possibilities : [];
+				if(Array.isArray(data.Possibilities) && data.Possibilities.length > 0) {
+					if (self.staffingProbabilityForMultipleDaysEnabled()) {
+						rawProbabilities = data.Possibilities.filter(function(p) {
+							return p.Date == scheduleDay.FixedDate;
+						});
+					} else {
+						if(scheduleDay.FixedDate == self.formatedCurrentUserDate())
+							rawProbabilities = data.Possibilities;
+						//Jianfeng todo: Re-enable this after the probability date is correct from json
+						// rawProbabilities = data.Possibilities.filter(function(p) {
+						// 	if(p.Date)
+						// 		return p.Date == self.formatedCurrentUserDate();
+						// 	else 
+						// 		return true;
+						// });
+					}
 				}
-
-				return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, rawProbabilies,
+				return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, rawProbabilities,
 					hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self);
 			});
 		}
@@ -283,7 +290,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProbabilities,
 	absenceReportPermission, overtimeAvailabilityPermission, parent) {
 	var self = this;
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	self.summaryName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Title : null);
 	self.summaryTimeSpan = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.TimeSpan : null);
@@ -360,7 +367,7 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 		//use a public toggle when staffingProbabilityForMultipleDays is enabled
 		if(parent.staffingProbabilityForMultipleDaysEnabled())
 			return false;
-		//show probability toggle of today 
+		//show probability toggle of today
 		return self.isToday();
 	});
 

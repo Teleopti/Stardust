@@ -1,5 +1,5 @@
 ﻿Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel = function (selectedOptionValue, weekViewModelParent) {
-	var probabilityType = Teleopti.MyTimeWeb.Schedule.Constants.probabilityType;
+	var probabilityType = Teleopti.MyTimeWeb.Common.Constants.probabilityType;
 
 	this.Template = "probability-options-template";
 	this.noneOption = ko.observable(probabilityType.none);

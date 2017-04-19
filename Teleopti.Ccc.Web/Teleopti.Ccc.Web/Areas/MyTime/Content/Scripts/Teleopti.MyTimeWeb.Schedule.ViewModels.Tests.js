@@ -6,7 +6,7 @@
 $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.DayViewModel");
 
-	var constants = Teleopti.MyTimeWeb.Schedule.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 	var expiredProbabilityCssClass = "probability-expired";
 
 	var createTimeline = function (timelineStartHour, timelineEndHour) {
@@ -36,7 +36,7 @@ $(document).ready(function () {
 		}
 
 		return timelinePoints;
-	}
+	};
 
 	var createRawProbabilities = function () {
 		var result = [];
@@ -50,7 +50,7 @@ $(document).ready(function () {
 		}
 
 		return result;
-	}
+	};
 
 	var createWeekViewmodel = function (probabilityType, timelineStartHour, timelineEndHour, intradayOpenPeriod) {
 		return {
@@ -100,7 +100,7 @@ $(document).ready(function () {
 				"IsOvertime": false
 			}
 		];
-	}
+	};
 
 	var createCrossDayPeriods = function () {
 		return [
@@ -157,7 +157,7 @@ $(document).ready(function () {
 				"IsOvertime": false
 			}
 		];
-	}
+	};
 
 	var createNightShiftPeriods = function () {
 		return [{
@@ -245,7 +245,7 @@ $(document).ready(function () {
 			"Color": "128,255,128",
 			"IsOvertime": false
 		}];
-	}
+	};
 
 	var createRawDaySchedule = function (isDayoff, isFullDayAbsence, periods) {
 		return {

@@ -59,6 +59,10 @@
 	overflow: hidden;
 }
 
+.weekview-probability-toggle{
+	margin-left: 20px;
+}
+
 .overtime {
 	padding-top: 30px;
 }
