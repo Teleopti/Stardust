@@ -27,23 +27,36 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		return self.ErrorMessage() !== undefined && self.ErrorMessage() !== '';
 	});
 
+	self.IsPostingData = ko.observable(false);
+
 	this.SetOvertimeAvailability = function () {
+		if (self.IsPostingData()) { return;}
+		self.IsPostingData(true);
+
 		ajax.Ajax({
 			url: "Schedule/OvertimeAvailability",
 			dataType: "json",
-			data: { Date: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.DateFrom()), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.EndTimeNextDay() },
-			type: 'POST',
-			success: function (data, textStatus, jqXHR) {
-				displayOvertimeAvailability(data);
+			data: {
+				Date: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.DateFrom()),
+				StartTime: self.StartTime(),
+				EndTime: self.EndTime(),
+				EndTimeNextDay: self.EndTimeNextDay()
 			},
-			error: function (jqXHR, textStatus, errorThrown) {
-			if (jqXHR.status == 400) {
-				var data = $.parseJSON(jqXHR.responseText);
-				self.ErrorMessage(data.Errors.join('</br>'));
-				return;
+			type: 'POST',
+			success: function(data, textStatus, jqXHR) {
+				displayOvertimeAvailability(data);
+				self.IsPostingData(false);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					self.ErrorMessage(data.Errors.join('</br>'));
+					self.IsPostingData(false);
+					return;
+				}
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+				self.IsPostingData(false);
 			}
-			Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-		}
 		});
 	};
 	

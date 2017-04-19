@@ -117,6 +117,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	};
 
 	self.IsEditable = ko.observable(true);
+	self.IsPostingData = ko.observable(false);
 	self.EndTimeNextDay = ko.observable(false);
 	self.startTimeInternal = ko.observable();
 	self.endTimeInternal = ko.observable();
@@ -187,7 +188,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.SaveEnabled = ko.computed(function () {
-		return (self.IsValid() && self.IsEditable());
+		return self.IsValid() && self.IsEditable() && !self.IsPostingData();
 	});
 
 	self.ColumnSizings = ko.computed(function () {
@@ -200,6 +201,12 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.SaveShiftExchangeOffer = function () {
+		if (self.IsPostingData()) {
+			return;
+		}
+
+		self.IsPostingData(true);
+
 		ajax.Ajax({
 			url: "ShiftExchange/NewOffer",
 			dataType: "json",
@@ -215,14 +222,17 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 			type: 'POST',
 			success: function(data, textStatus, jqXHR) {
 				doneCallback(data);
+				self.IsPostingData(false);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
+				if (jqXHR.status === 400) {
 					var data = $.parseJSON(jqXHR.responseText);
 					self.ErrorMessage(data.Errors.join('</br>'));
+					self.IsPostingData(false);
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+				self.IsPostingData(false);
 			}
 		});
 	};

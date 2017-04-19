@@ -17,6 +17,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		weekStart = data.WeekStart;
 	});
 
+	self.IsPostingData = ko.observable(false);
+
 	var RequestDetailParentViewModel = function() {
 		var self = this;
 		self.requestViewModel = ko.observable();
@@ -114,6 +116,12 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _addRequest(model, successCallback) {
+		if (self.IsPostingData()) {
+			return;
+		}
+
+		self.IsPostingData(true);
+
 		var formData = _getFormData(model);
 		ajax.Ajax({
 			url: formData.Url,
@@ -127,6 +135,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 				model.Message("");
 				if (successCallback != undefined)
 					successCallback(data);
+					self.IsPostingData(false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
@@ -136,19 +145,18 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+				self.IsPostingData(false);
 			}
 		});
 	}
 
 	function _setRequest(data) {
-		
 		if (data.TypeEnum == 2) {
 			parentViewModel.createShiftTradeRequestViewModel(data.Id);
 			parentViewModel.requestViewModel().Initialize(data);
 			parentViewModel.requestViewModel().loadSwapDetails();
 
-		}
-		else if (data.TypeEnum == 3) {
+		} else if (data.TypeEnum == 3) {
 			parentViewModel.createShiftExchangeOfferViewModel(data);
 		} else {
 			var model = parentViewModel.createRequestViewModel();
@@ -161,8 +169,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			if (data.TypeEnum == 1) {
 				parentViewModel.addAbsenceRequestDetail(model);
 			}
-
-
 		}
 	}
 
