@@ -4,16 +4,18 @@
 				   md-on-close="$ctrl.onPickerClose()"
 				   md-on-open="$ctrl.onPickerOpen()"
 				   md-selected-text="$ctrl.formatSelectedDisplayName()"
-				   data-md-container-class="organization-picker"
+				   data-md-container-class="organization-picker-menu"
 				   multiple>
 			<md-select-header class="picker-select-header">
 				<input ng-model="$ctrl.searchTerm" type="search" placeholder="{{'SearchAnOrganization' | translate}}" class="picker-searchbox md-text" ng-keydown="$event.stopPropagation()" ng-change="$ctrl.searchOrganization()">
 			</md-select-header>
 			<md-optgroup ng-repeat="site in $ctrl.groupList | filter: $ctrl.searchTerm">
-				<div class="group-header pointer">
+				<div class="group-header pointer"
+					ng-class="{'partial-selected':$ctrl.partialTeamsSelected(site),'site-checked': site.isChecked }">
 					<md-checkbox ng-model="site.isChecked" ng-change="$ctrl.updateSiteCheck(site)"
-								 ng-disabled="site.teams.length == 0"
-								 ng-class="{'partial-selected':$ctrl.partialTeamsSelected(site),'site-checked': site.isChecked }">{{site.name}}</md-checkbox>
+								 ng-disabled="site.teams.length == 0">
+								{{site.name}}
+					</md-checkbox>
 					<span class="dropdown-icon" ng-hide="site.teams.length == 0" ng-click="$ctrl.showTeamListOfSite(site, $event)">
 						<i class="mdi" ng-class="site.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
 					</span>
