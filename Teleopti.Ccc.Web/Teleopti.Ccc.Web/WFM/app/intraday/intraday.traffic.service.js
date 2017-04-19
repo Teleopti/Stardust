@@ -160,8 +160,8 @@
 									AHT: '#FB8C00'
 								},
 								names: {
-									Forecasted_calls: $translate.instant('ForecastedCalls') + ' ←',
-									Calls: $translate.instant('Calls') + ' ←',
+									Forecasted_calls: $translate.instant('ForecastedVolume') + ' ←',
+									Calls: $translate.instant('Volume') + ' ←',
 									Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime') + ' →',
 									AHT: $translate.instant('AverageHandlingTime') + ' →'
 								},
@@ -188,7 +188,7 @@
 								},
 								y: {
 									label: {
-										text: $translate.instant('Calls'),
+										text: $translate.instant('Volume'),
 										position: 'outer-middle'
 									},
 									tick: {
