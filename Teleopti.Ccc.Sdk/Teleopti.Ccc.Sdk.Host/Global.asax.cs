@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					container.Resolve<IDataSourceForTenant>().MakeSureDataSourceCreated(dsConf.Name,
 						dsConf.DataSourceConfiguration.ApplicationConnectionString,
 						dsConf.DataSourceConfiguration.AnalyticsConnectionString,
-						dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
+						dsConf.DataSourceConfiguration.ApplicationConfig);
 				});
 			}
 			tenantUnitOfWorkManager.Dispose();

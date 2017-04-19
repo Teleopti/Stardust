@@ -78,9 +78,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 				.SetString("name", tenant.Name)
 				.UniqueResult<Tenant>();
 
-			result.DataSourceConfiguration.ApplicationNHibernateConfig
+			result.DataSourceConfiguration.ApplicationConfig
 				.Should()
-				.Have.SameValuesAs(tenant.DataSourceConfiguration.ApplicationNHibernateConfig);
+				.Have.SameValuesAs(tenant.DataSourceConfiguration.ApplicationConfig);
 		}
 
 		[Test]
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 				.CreateQuery("select t from Tenant t where t.Name=:name")
 				.SetString("name", tenant.Name)
 				.UniqueResult<Tenant>();
-			result.DataSourceConfiguration.ApplicationNHibernateConfig.Single(cfg => cfg.Key == Environment.CommandTimeout).Value
+			result.DataSourceConfiguration.ApplicationConfig.Single(cfg => cfg.Key == Environment.CommandTimeout).Value
 				.Should().Be.EqualTo("60");
 		}
 
@@ -121,9 +121,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var key = RandomName.Make();
 			var value = RandomName.Make();
 			tenant.DataSourceConfiguration.SetNHibernateConfig(key, value);
-			tenant.DataSourceConfiguration.ApplicationNHibernateConfig[key] = RandomName.Make();
+			tenant.DataSourceConfiguration.ApplicationConfig[key] = RandomName.Make();
 
-			tenant.DataSourceConfiguration.ApplicationNHibernateConfig[key]
+			tenant.DataSourceConfiguration.ApplicationConfig[key]
 				.Should().Be.EqualTo(value);
 		}
 

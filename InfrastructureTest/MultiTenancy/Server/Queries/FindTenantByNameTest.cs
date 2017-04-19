@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			{
 				loaded = Target.Find(name);
 			}
-			loaded.DataSourceConfiguration.ApplicationNHibernateConfig[key]
+			loaded.DataSourceConfiguration.ApplicationConfig[key]
 				.Should().Not.Be.Null();
 		}
 	}

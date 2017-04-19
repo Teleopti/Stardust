@@ -14,7 +14,7 @@
 			<property name="ApplicationConnectionString" />
 			<property name="AnalyticsConnectionString" />
 			<property name="AggregationConnectionString" />
-			<map name="ApplicationNHibernateConfig" table="TenantApplicationNhibernateConfig" access="field.camelcase-underscore">
+			<map name="ApplicationConfig" table="TenantApplicationConfig" access="field.camelcase-underscore">
 				<key column="TenantId"/>
 				<index column="ConfigKey" type="string"/>
 				<element column="ConfigValue" />
@@ -30,7 +30,7 @@ select t from Tenant t
 	</query>
 	<query name="findByName">
 		select t from Tenant t
-		join fetch t.DataSourceConfiguration.ApplicationNHibernateConfig
+		join fetch t.DataSourceConfiguration.ApplicationConfig
 		where t.Name=:name
 	</query>
 	

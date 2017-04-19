@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			return new DataSourceConfiguration(
 				Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2),
 				Encryption.EncryptStringToBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2),
-				dataSourceConfig.ApplicationNHibernateConfig.Keys.ToDictionary(key => key, key =>
-						Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationNHibernateConfig[key], EncryptionConstants.Image1, EncryptionConstants.Image2)));
+				dataSourceConfig.ApplicationConfig.Keys.ToDictionary(key => key, key =>
+						Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationConfig[key], EncryptionConstants.Image1, EncryptionConstants.Image2)));
 		}
 	}
 }

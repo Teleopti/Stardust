@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			dataSourceConfig = target.EncryptConfig(dataSourceConfig);
 
 			dataSourceConfig.AnalyticsConnectionString.Should().Be.EqualTo(encryptedThree);
-			dataSourceConfig.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo(encryptedOne);
-			dataSourceConfig.ApplicationNHibernateConfig["key2"].Should().Be.EqualTo(encryptedTwo);
+			dataSourceConfig.ApplicationConfig["key1"].Should().Be.EqualTo(encryptedOne);
+			dataSourceConfig.ApplicationConfig["key2"].Should().Be.EqualTo(encryptedTwo);
 			dataSourceConfig.ApplicationConnectionString.Should().Be.EqualTo(enctyptedAppConnstring);
 		}
 	}

@@ -68,7 +68,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				AggregationDatabase = builderAgg.InitialCatalog,
 				Server = builder.DataSource,
 				Version = _checkDatabaseVersions.GetVersions(tenant.DataSourceConfiguration.ApplicationConnectionString),
-				CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout]),
+				CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationConfig[Environment.CommandTimeout]),
 				Active = tenant.Active
 			});
 		}

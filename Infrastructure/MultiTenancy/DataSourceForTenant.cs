@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 				MakeSureDataSourceCreated(notYetParsedTenant.Name,
 					notYetParsedTenant.DataSourceConfiguration.ApplicationConnectionString,
 					notYetParsedTenant.DataSourceConfiguration.AnalyticsConnectionString,
-					notYetParsedTenant.DataSourceConfiguration.ApplicationNHibernateConfig);
+					notYetParsedTenant.DataSourceConfiguration.ApplicationConfig);
 			}
 			return findTenant(tenantName);
 		}
