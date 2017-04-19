@@ -1,63 +1,114 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.WebTest.TestHelper;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	public class AgentGroupControllerTest
+	[DomainTest]
+	public class AgentGroupControllerTest : ISetup
 	{
-		[Test]
-		public void ShouldCallPersister()
+		public AgentGroupController Target;
+		public FakeAgentGroupRepository AgentGroupRepository;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			var model = new AgentGroupModel();
-			var persister = MockRepository.GenerateMock<IAgentGroupModelPersister>();
-			var target = new AgentGroupController(persister, null);
+			system.AddService<AgentGroupController>();
+		}
 
-			target.Create(model);
+		[Test]
+		public void ShouldCreateAgentGroup()
+		{
+			var model = new AgentGroupModel
+			{
+				Name = "TestAgentGroup"
+			};
 
-			persister.AssertWasCalled(x => x.Persist(model));
+			Target.Create(model);
+
+			var agentGroup = AgentGroupRepository.LoadAll().Single();
+			agentGroup.Name.Should().Be.EqualTo(model.Name);
+		}
+
+		[Test]
+		public void ShouldUpdateAgentGroup()
+		{
+			var agentGroupId = Guid.NewGuid();
+			AgentGroupRepository.Has(new AgentGroup("TestAgentGroup").WithId(agentGroupId));
+
+			var model = new AgentGroupModel
+			{
+				Name = "UpdatedAgentGroup",
+				Id = agentGroupId
+			};
+
+			Target.Create(model);
+
+			var agentGroup = AgentGroupRepository.LoadAll().Single();
+			agentGroup.Name.Should().Be.EqualTo(model.Name);
 		}
 
 		[Test]
 		public void ShouldFetchAll()
 		{
-			var model = new List<AgentGroupModel>();
-			var fetchModel = MockRepository.GenerateMock<IFetchAgentGroupModel>();
-			fetchModel.Expect(x => x.FetchAll()).Return(model);
-			var target = new AgentGroupController(null, fetchModel);
-			target.List().Result<IEnumerable<AgentGroupModel>>()
-				.Should().Be.SameInstanceAs(model);
+			var agentGroup1 = new AgentGroup("AgentGroup 1").WithId();
+			var agentGroup2 = new AgentGroup("AgentGroup 2").WithId();
+			AgentGroupRepository
+				.Has(agentGroup1)
+				.Has(agentGroup2);
+			var result = Target.List().Result<IEnumerable<AgentGroupModel>>().ToList();
+
+			result.SingleOrDefault(x => x.Id == agentGroup1.Id.GetValueOrDefault()).Should().Not.Be.Null();
+			result.SingleOrDefault(x => x.Id == agentGroup2.Id.GetValueOrDefault()).Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldFetchOne()
 		{
-			var id = Guid.NewGuid();
-			var model = new AgentGroupModel();
+			var agentGroup = new AgentGroup("AgentGroup 1").WithId();
+			AgentGroupRepository
+				.Has(agentGroup);
+			var result = Target.Get(agentGroup.Id.GetValueOrDefault()).Result<AgentGroupModel>();
 
-			var fetchModel = MockRepository.GenerateMock<IFetchAgentGroupModel>();
-			fetchModel.Expect(x => x.Fetch(id)).Return(model);
-			var target = new AgentGroupController(null, fetchModel);
-			target.Get(id).Result<AgentGroupModel>()
-				.Should().Be.SameInstanceAs(model);
+			result.Id.Should().Be.EqualTo(agentGroup.Id.GetValueOrDefault());
+			result.Name.Should().Be.EqualTo(agentGroup.Name);
 		}
 
 		[Test]
-		public void ShouldCallPersisterToRemove()
+		public void ShouldRemoveAgentGroup()
 		{
-			var persister = MockRepository.GenerateMock<IAgentGroupModelPersister>();
-			var target = new AgentGroupController(persister, null);
+			var agentGroupId = Guid.NewGuid();
+			AgentGroupRepository
+				.Has(new AgentGroup("AgentGroup 1").WithId(agentGroupId));
 
-			var agentGroupdId = Guid.NewGuid();
-			target.DeleteAgentGroup(agentGroupdId);
+			Target.DeleteAgentGroup(agentGroupId);
 
-			persister.AssertWasCalled(x => x.Delete(agentGroupdId));
+			var result =(AgentGroup) AgentGroupRepository.Get(agentGroupId);
+			result.IsDeleted.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldRemoveLatestPlanningPeriodForAgent()
+		{
+			var agentGroup = new AgentGroup()
+				.WithId();
+			AgentGroupRepository.Has(agentGroup);
+			PlanningPeriodRepository.Has(new DateOnly(2017, 04, 19), 1, agentGroup);
+
+			Target.DeleteLastPeriod(agentGroup.Id.GetValueOrDefault());
+
+			var planningPeriods = PlanningPeriodRepository.LoadForAgentGroup(agentGroup).ToList();
+			planningPeriods.Should().Be.Empty();
 		}
 	}
 }

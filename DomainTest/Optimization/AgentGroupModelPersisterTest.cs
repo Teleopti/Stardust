@@ -14,6 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakeContractRepository ContractRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeDayOffRulesRepository DayOffRulesRepository;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public IAgentGroupModelPersister Target;
 
 		[Test]
@@ -270,6 +272,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
 			dayOffRules.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldRemoveLastPeriodBasedOnRange()
+		{
+			var agentGroup = new AgentGroup()
+				.WithId();
+			AgentGroupRepository.Add(agentGroup);
+			PlanningPeriodRepository.Has(new DateOnly(2017, 04, 19), 1, agentGroup);
+			PlanningPeriodRepository.Has(new DateOnly(2017, 04, 26), 1, agentGroup);
+
+			Target.DeleteLastPeriod(agentGroup.Id.GetValueOrDefault());
+
+			var planningPeriods = PlanningPeriodRepository.LoadForAgentGroup(agentGroup).ToList();
+			planningPeriods.SingleOrDefault().Should().Not.Be.Null();
+			planningPeriods.Single().Range.StartDate.Should().Be.EqualTo(new DateOnly(2017, 04, 19));
+
 		}
 	}
 }

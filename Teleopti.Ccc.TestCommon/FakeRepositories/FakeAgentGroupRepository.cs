@@ -35,5 +35,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _agentGroups;
 		}
+
+		public FakeAgentGroupRepository Has(IAgentGroup root)
+		{
+			_agentGroups.Add(root);
+			return this;
+		}
 	}
 }

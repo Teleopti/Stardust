@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IPlanningPeriod entity)
 		{
-			throw new NotImplementedException();
+			_planningPeriods.Remove(entity);
 		}
 
 		public IPlanningPeriod Get(Guid id)

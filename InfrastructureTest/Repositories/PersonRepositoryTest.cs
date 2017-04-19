@@ -1990,11 +1990,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private static void verifyPermissionInfoIsLazy(bool expected, IPerson userRetOk)
 		{
 			Assert.AreEqual(expected,
-				(LazyLoadingManager.IsInitialized(
+				LazyLoadingManager.IsInitialized(
 					userRetOk.PermissionInformation.ApplicationRoleCollection)
-				 &&
-				 LazyLoadingManager.IsInitialized(
-					userRetOk.PermissionInformation.ApplicationRoleCollection[0].ApplicationFunctionCollection)));
+				&&
+				LazyLoadingManager.IsInitialized(
+					userRetOk.PermissionInformation.ApplicationRoleCollection[0].ApplicationFunctionCollection));
 		}
 
 		private IPersonContract createPersonContract(IBusinessUnit otherBusinessUnit = null)

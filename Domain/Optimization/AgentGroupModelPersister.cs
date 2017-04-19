@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -9,12 +10,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IAgentGroupRepository _agentGroupRepository;
 		private readonly IDayOffRulesRepository _dayOffRulesRepository;
 		private readonly FilterMapper _filterMapper;
+		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
-		public AgentGroupModelPersister(IAgentGroupRepository agentGroupRepository, FilterMapper filterMapper, IDayOffRulesRepository dayOffRulesRepository)
+		public AgentGroupModelPersister(IAgentGroupRepository agentGroupRepository, FilterMapper filterMapper, IDayOffRulesRepository dayOffRulesRepository, IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_agentGroupRepository = agentGroupRepository;
 			_filterMapper = filterMapper;
 			_dayOffRulesRepository = dayOffRulesRepository;
+			_planningPeriodRepository = planningPeriodRepository;
 		}
 
 		public void Persist(AgentGroupModel agentGroupModel)
@@ -31,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var agentGroup = _agentGroupRepository.Get(agentGroupModel.Id);
 				setProperties(agentGroup, agentGroupModel);
 			}
-
 		}
 
 		private void setProperties(IAgentGroup agentGroup, AgentGroupModel agentGroupModel)
@@ -45,12 +47,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
-		public void Delete(Guid id)
+		public void Delete(Guid agentGroupId)
 		{
-			var agentGroup = _agentGroupRepository.Get(id);
+			var agentGroup = _agentGroupRepository.Get(agentGroupId);
 			if (agentGroup == null) return;
 			_dayOffRulesRepository.RemoveForAgentGroup(agentGroup);
 			_agentGroupRepository.Remove(agentGroup);
+		}
+
+		public void DeleteLastPeriod(Guid agentGroupId)
+		{
+			var agentGroup = _agentGroupRepository.Get(agentGroupId);
+			if (agentGroup == null) return;
+			var planningPeriods = _planningPeriodRepository.LoadForAgentGroup(agentGroup).ToList();
+			var periodToDelete = planningPeriods.OrderBy(x => x.Range.StartDate).LastOrDefault();
+			if (periodToDelete != null)
+				_planningPeriodRepository.Remove(periodToDelete);
 		}
 	}
 }
