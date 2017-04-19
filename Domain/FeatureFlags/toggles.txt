@@ -235,6 +235,7 @@ StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388 = true # don't 
 Staffing_ReadModel_Update14Days_43840 = RC # don't enable without StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388
 
 QRCodeForMobileApps_42695 = RC
+ConfigQRCodeURLForMobileApps_43224 = DEV
 
 ETL_SpeedUpNightlyDayOff_38213 = true
 WFM_ImproveIntradaySkillArea_37291 = DEV

@@ -196,6 +196,7 @@
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 
 		QRCodeForMobileApps_42695,
+		ConfigQRCodeURLForMobileApps_43224,
 
 		ETL_EventbasedDate_39562,
 		ReadModel_ToHangfire_39147,
