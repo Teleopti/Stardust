@@ -235,6 +235,9 @@
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
     <Compile Include="Intraday\ISupportedSkillsInIntradayProvider.cs" />
     <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />
+    <Compile Include="Intraday\ForecastedStaffingToDataSeries.cs" />
+    <Compile Include="Intraday\IStaffingViewModelCreator.cs" />
+    <Compile Include="Intraday\ScheduledStaffingToDataSeries.cs" />
     <Compile Include="MultiTenancy\DuplicateApplicationLogonNameException.cs" />
     <Compile Include="MultiTenancy\DuplicateIdentityException.cs" />
     <Compile Include="MultiTenancy\PasswordStrengthException.cs" />
@@ -1258,7 +1261,6 @@
     <Compile Include="Infrastructure\Events\CleanFailedQueue.cs" />
     <Compile Include="Infrastructure\IIndexMaintenanceRepository.cs" />
     <Compile Include="Infrastructure\IndexMaintenanceStardustHandler.cs" />
-    <Compile Include="Intraday\CacheableStaffingViewModelCreator.cs" />
     <Compile Include="Intraday\EslInterval.cs" />
     <Compile Include="Intraday\EstimatedServiceLevelProvider.cs" />
     <Compile Include="Intraday\ForecastedCallsModel.cs" />

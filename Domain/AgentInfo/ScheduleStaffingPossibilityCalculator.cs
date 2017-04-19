@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
@@ -17,36 +18,43 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	{
 		private const int goodPossibility = 1;
 		private const int fairPossibility = 0;
-		private const int staffingDataAvailableDays = 13;
-
 		private readonly INow _now;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly ICacheableStaffingViewModelCreator _staffingViewModelCreator;
+		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IUserTimeZone _timeZone;
+		private readonly ISkillDayRepository _skillDayRepository;
+		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 
 		public ScheduleStaffingPossibilityCalculator(INow now, ILoggedOnUser loggedOnUser,
-			ICacheableStaffingViewModelCreator staffingViewModelCreator, IScheduleStorage scheduleStorage,
-			ICurrentScenario scenarioRepository, IUserTimeZone timeZone)
+			ScheduledStaffingProvider scheduledStaffingProvider, ForecastedStaffingProvider forecastedStaffingProvider, IScheduleStorage scheduleStorage,
+			ICurrentScenario scenarioRepository, IUserTimeZone timeZone, ISkillDayRepository skillDayRepository)
 		{
 			_now = now;
 			_loggedOnUser = loggedOnUser;
-			_staffingViewModelCreator = staffingViewModelCreator;
+			_scheduledStaffingProvider = scheduledStaffingProvider;
+			_forecastedStaffingProvider = forecastedStaffingProvider;
 			_scheduleStorage = scheduleStorage;
 			_scenarioRepository = scenarioRepository;
 			_timeZone = timeZone;
+			_skillDayRepository = skillDayRepository;
 		}
 
-		public IDictionary<DateTime, int> CalcuateIntradayAbsenceIntervalPossibilities()
+		public IDictionary<DateTime, int> CalculateIntradayAbsenceIntervalPossibilities()
 		{
-			var possibilities = CalcuateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod());
+			var possibilities = CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod());
 			return possibilities.Any() ? possibilities.First().Value : new Dictionary<DateTime, int>();
 		}
 
-		public IDictionary<DateOnly, IDictionary<DateTime, int>> CalcuateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
+		public IDictionary<DateOnly, IDictionary<DateTime, int>> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
 		{
-			var scheduleDictionary = getScheduleDictionary(period);
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
+				new[] { _loggedOnUser.CurrentUser() },
+				new ScheduleDictionaryLoadOptions(false, false),
+				period,
+				_scenarioRepository.Current());
 			var useShrinkageValidator = isShrinkageValidatorEnabled();
 			var skillStaffingDatas = getSkillStaffingData(period, useShrinkageValidator);
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
@@ -54,15 +62,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return calcuateIntervalPossibilitiesForMultipleDays(skillStaffingDatas, getStaffingSpecification, scheduleDictionary);
 		}
 
-		public IDictionary<DateTime, int> CalcuateIntradayOvertimeIntervalPossibilities()
+		public IDictionary<DateTime, int> CalculateIntradayOvertimeIntervalPossibilities()
 		{
-			var possibilities = CalcuateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod());
+			var possibilities = CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod());
 			return possibilities.Any() ? possibilities.First().Value : new Dictionary<DateTime, int>();
 		}
 
-		public IDictionary<DateOnly, IDictionary<DateTime, int>> CalcuateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
+		public IDictionary<DateOnly, IDictionary<DateTime, int>> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
 		{
-			var scheduleDictionary = getScheduleDictionary(period);
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
+				new[] { _loggedOnUser.CurrentUser() },
+				new ScheduleDictionaryLoadOptions(false, false),
+				period,
+				_scenarioRepository.Current());
 			var useShrinkageValidator = isShrinkageValidatorEnabled();
 			var skillStaffingDatas = getSkillStaffingData(period, useShrinkageValidator);
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
@@ -75,58 +87,55 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var personSkills = getPersonSkills(period);
 
 			var skillStaffingList = new List<skillStaffingData>();
-			var staffingDataAvailablePeriod = getStaffingDataAvailablePeriod();
+			if (!personSkills.Any()) return skillStaffingList;
+
+			var resolution = personSkills.Min(s => s.Skill.DefaultResolution);
 			foreach (var skill in personSkills)
 			{
-				var intradayStaffingModels =
-					_staffingViewModelCreator.Load(skill.Skill.Id.GetValueOrDefault(), staffingDataAvailablePeriod, useShrinkage)
-						.Where(x => period.Contains(x.DataSeries.Date))
-						.Select(x => new skillStaffingData
-						{
-							Date = x.DataSeries.Date,
-							Skill = skill.Skill,
-							Time = x.DataSeries?.Time,
-							ForecastedStaffing = x.DataSeries?.ForecastedStaffing,
-							ScheduledStaffing = x.DataSeries?.ScheduledStaffing
-						});
+				var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), new[] {skill.Skill},
+					_scenarioRepository.Current());
+				var staffings =
+					period.DayCollection()
+						.Select(
+							p =>
+								new
+								{
+									Date = p,
+									Staffing = _scheduledStaffingProvider.StaffingPerSkill(new[] {skill.Skill}, resolution, p, useShrinkage).ToLookup(x => x.StartDateTime),
+									Forecasted =
+									_forecastedStaffingProvider.StaffingPerSkill(new[] {skill.Skill}, skillDays, resolution, p, useShrinkage).ToLookup(x => x.StartTime)
+								});
+				var intradayStaffingModels = from s in staffings
+					let p = s.Date
+					let times = s.Staffing.Select(t => t.Key).Union(s.Forecasted.Select(t => t.Key)).Distinct().OrderBy(t => t).ToArray()
+					let staffingSeries = times.Select(t => s.Staffing[t].FirstOrDefault())
+					let forecastingSeries = times.Select(t => s.Forecasted[t].FirstOrDefault())
+					select new skillStaffingData
+					{
+						Date = p,
+						Skill = skill.Skill,
+						Time = times,
+						ForecastedStaffing = forecastingSeries.Select(t => t?.Agents).ToArray(),
+						ScheduledStaffing = staffingSeries.Select(t => t.StartDateTime == new DateTime() ? null : (double?)t.StaffingLevel).ToArray()
+					};
 
 				skillStaffingList.AddRange(intradayStaffingModels);
 			}
 
 			return skillStaffingList;
 		}
-
-		private DateOnlyPeriod getStaffingDataAvailablePeriod()
-		{
-			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			var today = new DateOnly(usersNow);
-			return new DateOnlyPeriod(today, today.AddDays(staffingDataAvailableDays));
-		}
-
+		
 		private IEnumerable<IPersonSkill> getPersonSkills(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var personPeriod = person.PersonPeriodCollection.Where(x => x.Period.Contains(period)).ToList();
+			var personPeriod = person.PersonPeriods(period).ToArray();
 			if (!personPeriod.Any())
 				return new IPersonSkill[] { };
 
-			var personSkills = personPeriod.SelectMany(p => p.PersonSkillCollection).ToList();
+			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p)).ToArray();
 			return !personSkills.Any() ? new IPersonSkill[] { } : personSkills.Distinct();
 		}
-
-		private IScheduleDictionary getScheduleDictionary(DateOnlyPeriod period)
-		{
-			var defaultScenario = _scenarioRepository.Current();
-
-			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-				new[] { _loggedOnUser.CurrentUser() },
-				new ScheduleDictionaryLoadOptions(false, false),
-				period,
-				defaultScenario);
-
-			return dictionary;
-		}
-
+		
 		private static Dictionary<DateTime, int> calcuateIntervalPossibilities(IEnumerable<skillStaffingData> skillStaffingDatas,
 		Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification, IScheduleDictionary scheduleDictionary)
 		{

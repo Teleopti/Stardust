@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IUserTimeZone _timeZone;
 		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 
-
 		public ScheduledStaffingProvider(INow now, 
 			IUserTimeZone timeZone, 
 			ISkillStaffingIntervalProvider skillStaffingIntervalProvider)
@@ -23,59 +22,28 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_timeZone = timeZone;
 			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 		}
-
+		
 		public IList<SkillStaffingIntervalLightModel> StaffingPerSkill(IList<ISkill> skills, int minutesPerInterval, DateOnly? dateOnly = null, bool useShrinkage = false)
 		{
 			var skillIdArray = skills.Select(x => x.Id.Value).ToArray();
-			var startTimeLocal = dateOnly?.Date ?? TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;
+			var sourceTimeZone = _timeZone.TimeZone();
+			var startTimeLocal = dateOnly?.Date ?? TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), sourceTimeZone).Date;
 			var endTimeLocal = startTimeLocal.AddDays(1);
 
-			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(startTimeLocal, _timeZone.TimeZone()),
-				TimeZoneHelper.ConvertToUtc(endTimeLocal, _timeZone.TimeZone()));
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(startTimeLocal, sourceTimeZone),
+				TimeZoneHelper.ConvertToUtc(endTimeLocal, sourceTimeZone));
 			var scheduledStaffing = _skillStaffingIntervalProvider.StaffingForSkills(skillIdArray, period, TimeSpan.FromMinutes(minutesPerInterval), useShrinkage);
 
 			return scheduledStaffing
-				.Select(x => new SkillStaffingIntervalLightModel()
+				.Select(x => new SkillStaffingIntervalLightModel
 				{
 					Id = x.Id,
-					StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, _timeZone.TimeZone()),
-					EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, _timeZone.TimeZone()),
+					StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, sourceTimeZone),
+					EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, sourceTimeZone),
 					StaffingLevel = x.StaffingLevel
 				})
 				.OrderBy(o => o.StartDateTime)
 				.ToList();
-		}
-
-		public double?[] DataSeries(IList<SkillStaffingIntervalLightModel> scheduledStaffing, DateTime[] timeSeries)
-		{
-			if (!scheduledStaffing.Any())
-				return new double?[] {};
-
-			var staffingIntervals = scheduledStaffing
-				.GroupBy(x => x.StartDateTime)
-				.Select(s => new StaffingStartInterval
-				{
-					StartTime = s.Key,
-					StaffingLevel = s.Sum(a => a.StaffingLevel)
-				})
-				.ToList();
-
-			if (timeSeries.Length == staffingIntervals.Count)
-				return staffingIntervals.Select(x => (double?)x.StaffingLevel).ToArray();
-
-			List<double?> scheduledStaffingList = new List<double?>();
-			foreach (var intervalStart in timeSeries)
-			{
-				var scheduledStaffingInterval = staffingIntervals.FirstOrDefault(x => x.StartTime == intervalStart);
-				scheduledStaffingList.Add(scheduledStaffingInterval?.StaffingLevel);
-			}
-			return scheduledStaffingList.ToArray();
-		}
-
-		private class StaffingStartInterval
-		{
-			public DateTime StartTime { get; set; }
-			public double StaffingLevel { get; set; }
 		}
 	}
 }

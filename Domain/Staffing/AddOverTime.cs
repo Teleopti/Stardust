@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class AddOverTime : IAddOverTime
 	{
-		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly CalculateOvertimeSuggestionProvider _calculateOvertimeSuggestionProvider;
@@ -23,12 +23,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 
-		public AddOverTime(ScheduledStaffingProvider scheduledStaffingProvider,
+		public AddOverTime(ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 						   INow now, IUserTimeZone timeZone, CalculateOvertimeSuggestionProvider calculateOvertimeSuggestionProvider, 
 						   IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ICommandDispatcher commandDispatcher, 
 						   ISkillCombinationResourceRepository skillCombinationResourceRepository)
 		{
-			_scheduledStaffingProvider = scheduledStaffingProvider;
+			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
 			_now = now;
 			_timeZone = timeZone;
 			_calculateOvertimeSuggestionProvider = calculateOvertimeSuggestionProvider;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 																			 }).ToList();
 			return new OverTimeSuggestionResultModel
 			{
-				SuggestedStaffingWithOverTime = _scheduledStaffingProvider.DataSeries(overTimescheduledStaffingPerSkill, overTimeSuggestionModel.TimeSerie),
+				SuggestedStaffingWithOverTime = _scheduledStaffingToDataSeries.DataSeries(overTimescheduledStaffingPerSkill, overTimeSuggestionModel.TimeSerie),
 				OverTimeModels = overTimeStaffingSuggestion.OverTimeModels
 			};
 		}

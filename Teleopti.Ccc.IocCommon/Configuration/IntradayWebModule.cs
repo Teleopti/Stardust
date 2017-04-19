@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Intraday;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 
@@ -22,12 +21,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<StaffingViewModelCreator>().As<IStaffingViewModelCreator>().SingleInstance();
-			builder.RegisterType<CacheableStaffingViewModelCreator>().As<ICacheableStaffingViewModelCreator>().SingleInstance();
 			builder.RegisterType<ForecastedCallsProvider>().SingleInstance();
 			builder.RegisterType<RequiredStaffingProvider>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingProvider>().SingleInstance();
+			builder.RegisterType<ScheduledStaffingToDataSeries>().SingleInstance();
 			builder.RegisterType<TimeSeriesProvider>().SingleInstance();
 			builder.RegisterType<ForecastedStaffingProvider>().SingleInstance();
+			builder.RegisterType<ForecastedStaffingToDataSeries>().SingleInstance();
 			builder.RegisterType<ReforecastedStaffingProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.Wfm_Intraday_SupportSkillTypeWebChat_42591))
 				builder.RegisterType<SupportedSkillsInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();

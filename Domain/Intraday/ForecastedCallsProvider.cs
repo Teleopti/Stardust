@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				callsPerSkill.Add(skill.Id.Value, getForecastedCalls(mergedTaskPeriodList, skill));
 			}
 			
-			return new ForecastedCallsModel()
+			return new ForecastedCallsModel
 			{
 				CallsPerSkill = callsPerSkill,
 				SkillDayStatsRange = skillStatsRange

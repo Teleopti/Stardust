@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		private readonly Guid businessUnitId = new Guid("1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B");
 		private readonly DateTime baseDate = new DateTime(2016, 03, 16, 07, 00, 00, DateTimeKind.Utc);
 
-		private ScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
+		//private ScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
 
 		public MutableNow Now;
 		public FakeConfigReader ConfigReader;
@@ -58,12 +58,16 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public ICurrentScenario CurrentScenario;
 		public IIntervalLengthFetcher IntervalLengthFetcher;
 		public IUserTimeZone UserTimeZone;
+		public ScheduleStaffingPossibilityCalculator Target;
+		public FakeLoggedOnUser LoggedOnUser;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			var fakeIntervalLengthFetcher = new FakeIntervalLengthFetcher();
 			fakeIntervalLengthFetcher.Has(15);
 			system.UseTestDouble(fakeIntervalLengthFetcher).For<IIntervalLengthFetcher>();
+			system.UseTestDouble<ScheduleStaffingPossibilityCalculator>().For<IScheduleStaffingPossibilityCalculator>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 
 		[Test]
@@ -72,8 +76,9 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			intial();
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
-			updateStaffingLevel(period);
+			//updateStaffingLevel(period);
 			var personIds = loadPersonIds();
+			//var personIds = new[] { new Guid("0b4390a8-2128-4550-8d03-a14100f34ea1") };
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
@@ -125,12 +130,12 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			var people = PersonRepository.FindPeople(personIds);
 			foreach (var person in people)
 			{
-				var currentUser = new FakeLoggedOnUser(person);
-				var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator,
-					IntervalLengthFetcher);
-				_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
-					cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario, UserTimeZone);
-				var possibilities = _scheduleStaffingPossibilityCalculator.CalcuateIntradayAbsenceIntervalPossibilities();
+				LoggedOnUser.IsPerson(person);
+				//var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator,
+				//	IntervalLengthFetcher);
+				//_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
+				//	cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario, UserTimeZone);
+				var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
 				if (!possibilities.Any())
 				{
 					Console.WriteLine($"{person.Id.GetValueOrDefault()} no data");
@@ -148,12 +153,12 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			var people = PersonRepository.FindPeople(personIds);
 			foreach (var person in people)
 			{
-				var currentUser = new FakeLoggedOnUser(person);
-				var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator,
-					IntervalLengthFetcher);
-				_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
-					cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario, UserTimeZone);
-				var possibilities = _scheduleStaffingPossibilityCalculator.CalcuateIntradayAbsenceIntervalPossibilities(datePeriod);
+				LoggedOnUser.IsPerson(person);
+				//var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator,
+				//	IntervalLengthFetcher);
+				//_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
+				//	cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario, UserTimeZone);
+				var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(datePeriod);
 				if (!possibilities.Any())
 				{
 					Console.WriteLine($"{person.Id.GetValueOrDefault()} no data");

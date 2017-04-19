@@ -6,12 +6,12 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface IScheduleStaffingPossibilityCalculator
 	{
-		IDictionary<DateTime, int> CalcuateIntradayAbsenceIntervalPossibilities();
+		IDictionary<DateTime, int> CalculateIntradayAbsenceIntervalPossibilities();
 
-		IDictionary<DateOnly, IDictionary<DateTime, int>> CalcuateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period);
+		IDictionary<DateOnly, IDictionary<DateTime, int>> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period);
 
-		IDictionary<DateTime, int> CalcuateIntradayOvertimeIntervalPossibilities();
+		IDictionary<DateTime, int> CalculateIntradayOvertimeIntervalPossibilities();
 
-		IDictionary<DateOnly, IDictionary<DateTime, int>> CalcuateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period);
+		IDictionary<DateOnly, IDictionary<DateTime, int>> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period);
 	}
 }

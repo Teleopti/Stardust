@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				case StaffingPossiblityType.Absence:
 					return
 						createPeriodStaffingPossibilityViewModels(
-							_scheduleStaffingPossibilityCalculator.CalcuateIntradayAbsenceIntervalPossibilities());
+							_scheduleStaffingPossibilityCalculator.CalculateIntradayAbsenceIntervalPossibilities());
 				case StaffingPossiblityType.Overtime:
 					return
 						createPeriodStaffingPossibilityViewModels(
-							_scheduleStaffingPossibilityCalculator.CalcuateIntradayOvertimeIntervalPossibilities());
+							_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities());
 			}
 			return new PeriodStaffingPossibilityViewModel[] { };
 		}

@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
@@ -20,8 +19,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
 		private readonly TimeSeriesProvider _timeSeriesProvider;
 		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
+		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
 		private readonly ReforecastedStaffingProvider _reforecastedStaffingProvider;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
@@ -35,8 +36,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 			ISkillDayRepository skillDayRepository,
 			IScenarioRepository scenarioRepository,
 			ScheduledStaffingProvider scheduledStaffingProvider,
+			ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 			TimeSeriesProvider timeSeriesProvider,
 			ForecastedStaffingProvider forecastedStaffingProvider,
+			ForecastedStaffingToDataSeries forecastedStaffingToDataSeries,
 			ReforecastedStaffingProvider reforecastedStaffingProvider,
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider
 			)
@@ -50,8 +53,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillDayRepository = skillDayRepository;
 			_scenarioRepository = scenarioRepository;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
+			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
 			_timeSeriesProvider = timeSeriesProvider;
 			_forecastedStaffingProvider = forecastedStaffingProvider;
+			_forecastedStaffingToDataSeries = forecastedStaffingToDataSeries;
 			_reforecastedStaffingProvider = reforecastedStaffingProvider;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
@@ -61,23 +66,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
 
-			DateOnly userDateOnly;
-			if (dateOnly == null)
-			{
-				var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-				userDateOnly = new DateOnly(usersNow);
-			}
-			else
-			{
-				userDateOnly = dateOnly.Value;
-			}
+			var userDateOnly = dateOnly ?? new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()));
 			
 
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			if (!skills.Any())
 				return new IntradayStaffingViewModel();
-			var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(userDateOnly.AddDays(-1), userDateOnly.AddDays(1)),skills, scenario);
+			var skillDays = _skillDayRepository.FindReadOnlyRange(userDateOnly.ToDateOnlyPeriod().Inflate(1),skills, scenario);
 			
 			var actualCallsPerSkillInterval = _intradayQueueStatisticsLoader.LoadActualCallPerSkillInterval(skills, _timeZone.TimeZone(), userDateOnly);
 			var latestStatsTime = getLastestStatsTime(actualCallsPerSkillInterval);
@@ -107,10 +103,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					Date = userDateOnly,
 					Time = timeSeries,
-					ForecastedStaffing = _forecastedStaffingProvider.DataSeries(forecastedStaffing,timeSeries),
+					ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing,timeSeries),
 					UpdatedForecastedStaffing = updatedForecastedSeries,
 					ActualStaffing = _requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, timeSeries),
-					ScheduledStaffing = _scheduledStaffingProvider.DataSeries(scheduledStaffingPerSkill, timeSeries)
+					ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, timeSeries)
 				},
 				StaffingHasData = forecastedStaffing.Any()
 			};
@@ -125,11 +121,5 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			return actualCallsPerSkillInterval.Any() ? (DateTime?)actualCallsPerSkillInterval.Max(d => d.StartTime) : null;
 		}
-	}
-
-	public interface IStaffingViewModelCreator
-	{
-		IntradayStaffingViewModel Load(Guid[] skillIdList, DateOnly? dateOnly = null, bool useShrinkage = false);
-		IEnumerable<IntradayStaffingViewModel> Load(Guid[] skillIdList, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage = false);
 	}
 }
