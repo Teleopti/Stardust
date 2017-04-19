@@ -11955,6 +11955,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forecasted volume.
+        /// </summary>
+        public static string ForecastedVolume {
+            get {
+                return ResourceManager.GetString("ForecastedVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forecaster will be closed..
         /// </summary>
         public static string ForecasterWillBeClosedDot {
@@ -34365,6 +34374,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Visualisation {
             get {
                 return ResourceManager.GetString("Visualisation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volume.
+        /// </summary>
+        public static string Volume {
+            get {
+                return ResourceManager.GetString("Volume", resourceCulture);
             }
         }
         

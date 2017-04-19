@@ -15751,4 +15751,12 @@ Do you want to participate?</value>
     <value>Dynamic Group Page*:</value>
     <comment>Dynamic Group Page*:</comment>
   </data>
+  <data name="ForecastedVolume" xml:space="preserve">
+    <value>Forecasted volume</value>
+    <comment>number of forecasted calls/emails/chats</comment>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volume</value>
+    <comment>number of calls/emails/chats</comment>
+  </data>
 </root>
