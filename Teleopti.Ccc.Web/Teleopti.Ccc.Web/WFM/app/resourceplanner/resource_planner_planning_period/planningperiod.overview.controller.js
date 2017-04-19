@@ -4,7 +4,7 @@
   angular
     .module('wfm.resourceplanner')
     .controller('planningPeriodOverviewController', Controller)
-    .directive('planingPeriods', planingPeriodsDirective);
+    .directive('planningPeriods', planingPeriodsDirective);
 
   Controller.$inject = ['$stateParams', '$state', 'planningPeriodService', 'Toggle', 'NoticeService', '$translate', '$interval', '$scope', 'ResourcePlannerReportSrvc'];
 
