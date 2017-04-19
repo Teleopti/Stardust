@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
@@ -67,13 +67,23 @@
 			params: {
 				groupId: ''
 			}
-		}).state('resourceplanner.oneagentroup', {
+		}).state('resourceplanner.oneagentgroup', {
 			url: '/agentgroup/:groupId/detail',
-			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroup.detail.html',
-			controller: 'agentGroupsDetailController as vm',
+			templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
+			controller: 'planningPeriodOverviewController as vm',
 			params: {
 				groupId: ''
 			}
+		}).state('resourceplanner.dayoffrulesOverview', {
+			params: {
+				filterId: {},
+				periodId: {},
+				isDefault: {},
+				groupId: undefined
+			},
+			url: '/agentgroup/:groupId/dayoffrules/',
+			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
+			controller: 'dayoffRuleOverviewController as vm'
 		}).state('resourceplanner.dayoffrules', {
 			params: {
 				filterId: {},
@@ -87,4 +97,3 @@
 		});
 	}
 })();
-

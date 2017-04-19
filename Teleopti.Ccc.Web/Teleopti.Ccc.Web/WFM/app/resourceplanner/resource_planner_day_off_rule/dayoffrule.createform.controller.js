@@ -209,7 +209,7 @@
 
         function returnFromCreate() {
             if ($stateParams.groupId) {
-                $state.go('resourceplanner.oneagentroup',
+                $state.go('resourceplanner.dayoffrulesOverview',
                     {
                         groupId: $stateParams.groupId
                     });

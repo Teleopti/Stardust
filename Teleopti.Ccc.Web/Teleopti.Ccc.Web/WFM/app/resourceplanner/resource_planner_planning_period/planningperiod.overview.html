@@ -1,31 +1,22 @@
-<div class="panel material-depth-1">
+<div class="view-header with-fab with-desc">
+	<div class="view-title">
+		<h1><i class="mdi mdi-calendar"></i> Schedule Agent Group "{{vm.agentGroup.Name}}"</h1>
+		<p ng-show="vm.selectedPp == null">Select planning period to work with</p>
+		<p ng-show="vm.selectedPp">Selected planning period: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</p>
+	</div>
+	<div>
+		<p class="pp-status" ng-if="vm.isDisable() && vm.totalAgents > 0">{{vm.status}}</p>
+	</div>
+</div>
+<div class="panel material-depth-1 pp-fix" ng-if="vm.show">
 	<div class="con-row">
-		<div class="con-flex pp-panel">
-			<span ng-show="vm.selectedPp == null"><i class="mdi mdi-information-outline"></i> Select a planning period</span>
-			<span ng-show="vm.selectedPp">Selected Period: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
-			<span class="pp-status" ng-show="vm.isDisable() && vm.totalAgents > 0">{{vm.status}}</span>
-		</div>
-		<div class="con-flex" ng-if="vm.show == false;">
-			<button class="pull-right wfm-btn wfm-btn-invis-primary" ng-click="vm.show =!vm.show">Switch planning period</button>
-		</div>
-		<div class="con-flex" ng-if="vm.show">
-			<button class="pull-right wfm-btn wfm-btn-invis-primary" ng-click="vm.show =!vm.show">Hide planning period selection</button>
+		<div class="con-flex">
+			<button class="wfm-btn wfm-btn-default " ng-click="vm.startNextPlanningPeriod()">Create next planning period</button>
 		</div>
 	</div>
-	<div ng-show="vm.isDisable() && vm.totalAgents > 0" class="test-schedule-is-running">
-		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-	</div>
-	<div class="con-row" ng-if="vm.show">
+	<div class="con-row">
 		<div class="con-flex">
 			<div class="wfm-grid">
-				<div class="grid-card">
-					<div class="list-content">
-						<div class="pp-inner-card" ng-click="vm.startNextPlanningPeriod()">
-							<i class="card-context mdi mdi-plus"></i>
-							<span>Create next planning period</span>
-						</div>
-					</div>
-				</div>
 				<div class="grid-card" ng-repeat="p in vm.planningPeriods | orderBy: '-EndDate'">
 					<div class="list-content" ng-class="{'pp-scheduled':p.State == 'Scheduled'}">
 						<div class="pp-inner-card" ng-click="vm.selectPp(p);">
@@ -39,8 +30,21 @@
 		</div>
 	</div>
 </div>
-<div class="panel material-depth-1" ng-show="vm.selectedPp">
+<div class="panel material-depth-1 pp-fix" ng-show="vm.selectedPp && !vm.show">
+	<div ng-show="vm.isDisable() && vm.totalAgents > 0" class="test-schedule-is-running">
+		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+	</div>
 	<div class="wfm-slide-tabs tabbed-panel">
+		<div class="head-actions panel-menu">
+			<div tabindex=0 class="context-menu card-context">
+				<i class="mdi mdi-dots-vertical"></i>
+				<span class="context-menu-left">
+					<ul class="wfm-list">
+						<li ng-click="vm.show = true">Switch planning period</li>
+					</ul>
+				</span>
+			</div>
+		</div>
 		<md-content class="md-padding">
 			<md-tabs md-dynamic-height md-border-bottom>
 				<md-tab label="Overview">
@@ -54,10 +58,13 @@
 						</div>
 						<div class="con-row">
 							<div class="con-flex result-container">
-								<span class="pp-agentnumber"> 
+								<span class="pp-agentnumber" ng-show="vm.dayNodes"> 
 									{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}
 								</span>
-								<div class="legends" ng-show="vm.dayNodes.length > 0">
+								<span class="pp-agentnumber" ng-hide="vm.dayNodes"> 
+									{{vm.scheduledAgents}}/{{vm.totalAgents}} agents have been scheduled
+								</span>
+								<div class="legends" ng-show="vm.dayNodes">
 									<span>
 										<div class="legend critUnderstaffed"></div>
 										{{'CriticalUnderstaffingColon' | translate}}
@@ -75,7 +82,7 @@
 										{{'Closed'|translate}}
 									</span>
 								</div>
-								<div class="grid-scroll-wrap" ng-show="vm.dayNodes.length > 0">
+								<div class="grid-scroll-wrap" ng-show="vm.dayNodes.length">
 									<table ng-hide="dates.length > 0" class="overview">
 										<col width="20px" />
 										<tr ng-repeat="(index, subnode) in vm.dayNodes | limitTo:1 ">
@@ -88,8 +95,7 @@
 											<td class="long" ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend}">
 												<div class="resourceplanner-box" ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
 													<md-tooltip>
-														{{node.Date | amDateFormat:"L"}} - {{subnode.SkillName}}<br/>
-														{{'RelativeDifference' | translate}}: {{node.parseDif}}%
+														{{node.Date | amDateFormat:"L"}} - {{subnode.SkillName}}<br/> {{'RelativeDifference' | translate}}: {{node.parseDif}}%
 													</md-tooltip>
 												</div>
 											</td>
@@ -97,6 +103,9 @@
 									</table>
 								</div>
 								<div ng-show="vm.dayNodes.length == 0">
+									<span><i class="mdi mdi-information-outline"></i> This planning period has no valid schedule result.</span><br/>
+								</div>
+								<div ng-show="vm.dayNodes == undefined">
 									<span><i class="mdi mdi-information-outline"></i> This planning period has no previous schedule result.</span><br/>
 									<span ng-show="vm.totalAgents == 0"><i class="mdi mdi-information-outline"></i> There are no agents that can be scheduled in this agent group.</span>
 								</div>
@@ -162,7 +171,16 @@
 				<md-tab label="Dayoff Rules">
 					<md-content class="md-padding">
 						<div class="con-row">
-							<div dayoff-rules></div>
+							<div dayoff-rules is-disable="vm.isDisableDo"></div>
+						</div>
+					</md-content>
+				</md-tab>
+				<md-tab label="Info">
+					<md-content class="md-padding">
+						<div class="con-row">
+							<div class="con-flex">
+								<div agentgroup-Detail agent-group="vm.agentGroup"></div>
+							</div>
 						</div>
 					</md-content>
 				</md-tab>

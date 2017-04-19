@@ -23,7 +23,7 @@
     vm.planningPeriods = [];
     vm.preValidation = [];
     vm.scheduleIssues = [];
-    vm.dayNodes = [];
+    vm.dayNodes = undefined;
     vm.gridOptions = {};
     vm.totalAgents = null;
     vm.scheduledAgents = 0;
@@ -34,11 +34,11 @@
     vm.intraOptimize = intraOptimize;
     vm.publishSchedule = publishSchedule;
     vm.isDisable = isDisable;
+    vm.isDisableDo = true;
 
     checkToggle();
     destroyCheckState();
     getPlanningPeriod(agentGroupId);
-    getStorePpFromlocal();
     selectPp(vm.selectedPp);
 
     function checkToggle() {
@@ -75,13 +75,6 @@
       destroyCheckState();
     });
 
-    function getStorePpFromlocal() {
-      var pp = sessionStorage.getItem('selectedPp') ? JSON.parse(sessionStorage.getItem('selectedPp')) : null;
-      if (pp && pp.AgentGroupId === agentGroupId) {
-        vm.selectedPp = pp;
-      }
-    }
-
     function getPlanningPeriod(id) {
       if (id) {
         var query = planningPeriodService.getPlanningPeriodsForAgentGroup({ agentGroupId: id });
@@ -105,13 +98,11 @@
         vm.show = false;
         vm.selectedPp = {};
         vm.selectedPp = pp;
-        sessionStorage.clear();
-        sessionStorage.setItem('selectedPp', JSON.stringify(pp));
         destroyCheckState();
         checkState(vm.selectedPp);
         getTotalAgents(vm.selectedPp);
-        loadLastResult(vm.selectedPp);
         getPrevalidationByPpId(vm.selectedPp);
+        loadLastResult(vm.selectedPp);
         return vm.selectedPp;
       }
     }
@@ -153,7 +144,7 @@
             if (result.Successful) {
               if (vm.schedulingPerformed === true) {
                 vm.schedulingPerformed = false;
-                loadLastResult(pp);
+                loadLastResult(pp);  
               }
             } else if (result.Failed) {
               vm.schedulingPerformed = false;
@@ -226,7 +217,7 @@
       });
     };
 
-    function getTotalAgents (pp) {
+    function getTotalAgents(pp) {
       planningPeriodService.getNumberOfAgents({ id: pp.Id, startDate: pp.StartDate, endDate: pp.EndDate })
         .$promise.then(function (data) {
           vm.totalAgents = data.TotalAgents ? data.TotalAgents : 0;
@@ -234,7 +225,7 @@
     }
 
     function loadLastResult(pp) {
-      vm.dayNodes = [];
+      vm.dayNodes = undefined;
       vm.scheduleIssues = [];
       vm.scheduledAgents = 0;
       planningPeriodService.lastJobResult({ id: pp.Id })
@@ -242,6 +233,7 @@
           if (data.OptimizationResult) {
             initResult(data.OptimizationResult, data.ScheduleResult, pp);
             vm.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults ? data.ScheduleResult.BusinessRulesValidationResults : [];
+            getTotalValidationErrorsNumber(vm.preValidation, vm.scheduleIssues);
           }
         });
     }
@@ -249,7 +241,7 @@
     function initResult(interResult, result, pp) {
       if (pp != undefined) {
         vm.scheduledAgents = result.ScheduledAgentsCount ? result.ScheduledAgentsCount : 0;
-        vm.dayNodes = interResult.SkillResultList ? interResult.SkillResultList : [];
+        vm.dayNodes = interResult.SkillResultList ? interResult.SkillResultList : undefined;
         parseRelativeDifference(vm.dayNodes);
         parseWeekends(vm.dayNodes);
         displayGrid();
@@ -288,7 +280,9 @@
   function planingPeriodsDirective() {
     var directive = {
       restrict: 'EA',
-      scope: {},
+      scope: {
+        selectedPp: '='
+      },
       templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
       controller: 'planningPeriodOverviewController as vm',
       bindToController: true

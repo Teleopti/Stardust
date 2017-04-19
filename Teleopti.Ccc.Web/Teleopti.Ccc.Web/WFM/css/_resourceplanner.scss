@@ -330,10 +330,17 @@ background-color: #cacaca;
 	pointer-events: none;
 }
 
+.ag-menu {
+	margin-top: -6px;
+}
 //need to clean up later
 
 .pp-inner-card {
 		padding: 4px;
+	}
+
+		.pp-fix {
+		margin-top: 10px;
 	}
 	
 	.pp-panel {
