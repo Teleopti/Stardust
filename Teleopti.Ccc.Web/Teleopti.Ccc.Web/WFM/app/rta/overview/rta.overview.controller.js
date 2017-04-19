@@ -83,6 +83,7 @@
 				if (toggleService.RTA_SnappierDisplayOfOverview_43568) {
 					vm.snappierToggleOn = true;
 					rtaService.getSkillAreas().then(function (skillAreas) {
+						vm.hasPermission = true;
 						vm.skillAreas = skillAreas.SkillAreas;
 						getSitesOrTeams2();
 					});
@@ -90,6 +91,7 @@
 				else {
 					vm.snappierToggleOn = false;
 					rtaService.getSkillAreas().then(function (skillAreas) {
+						vm.hasPermission = true;
 						vm.skillAreas = skillAreas.SkillAreas;
 						getSitesOrTeams();
 					});
