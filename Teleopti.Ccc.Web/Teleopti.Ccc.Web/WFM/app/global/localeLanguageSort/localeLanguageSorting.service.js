@@ -16,13 +16,13 @@
 		/////////////////////
 
 		function sort(a, b) {
-			if ((a == null || !angular.isDefined(a.value)) && (b == null || !angular.isDefined(b.value)))
+			if (a == null && b == null)
 				return 0;
-			if (a == null || !angular.isDefined(a.value))
+			if (a == null)
 				return -1;
-			if (b == null || !angular.isDefined(b.value))
+			if (b == null)
 				return 1;
-			return a.value.localeCompare(b.value, CurrentUserInfo.CurrentUserInfo().Language);
+			return a.localeCompare(b, CurrentUserInfo.CurrentUserInfo().Language);
 		}
 	};
 })();
