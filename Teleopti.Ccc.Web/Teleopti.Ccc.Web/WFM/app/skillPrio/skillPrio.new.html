@@ -2,25 +2,13 @@
 	<div class="view-header with-desc">
 		<div class="view-title">
 			<h1><i class="mdi mdi-account"></i>Skill Priorities</h1>
-			<p>Define chains of prioritized skills per activity</p>
-			<div class="wfm-chip-wrap" ng-if="vm.isModified">
-				<span class="wfm-chip">
-			<span class="chip-handle chip-warning">
-			<i class="mdi mdi-alert"></i>
-			</span>
-				<span class="chip-text">You have unsaved changes. 
-					<button class="wfm-btn wfm-btn-primary btn-sm sp-btn-sm" ng-click = "vm.save()">Save</button> 
-					your changes or 
-					<button class="wfm-btn wfm-btn-primary btn-sm sp-btn-sm" ng-click = "vm.cancelChanges()">Cancel</button> 
-					all changes.</span>
-				</span>
-			</div>
+			<p>Define chains of prioritized skills per activity by dragging and dropping</p>
 		</div>
 		<div class="fab-wrapper">
 			<button ng-click="vm.save()" class="wfm-fab grow-out material-depth-1">
-      <i class="mdi mdi-content-save"></i>
-      <md-tooltip>Save Changes</md-tooltip>
-    </button>
+				<i class="mdi mdi-content-save"></i>
+				<md-tooltip>Save Changes</md-tooltip>
+			</button>
 		</div>
 	</div>
 	<div class="con-row selectActivityInput">
@@ -29,71 +17,96 @@
 				<div class="con-row">
 					<div class="con-flex">
 						<md-autocomplete ng-disabled="vm.isModified" id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="vm.selectedActivity"
-						 md-select-on-match="true" md-search-text="searchActivityText" md-selected-item-change="vm.selectActivity(vm.selectedActivity)"
-						 md-items="activity in vm.queryActivities(searchActivityText)" md-item-text="activity.ActivityName" md-min-length="0"
-						 placeholder="Select Activity">
-							<md-item-template>
-								<span md-highlight-text="searchActivityText" md-highlight-flags="^i">{{activity.ActivityName}}</span>
-							</md-item-template>
-							<md-not-found>
-								{{'RepViewerNoMoreMatches'|translate}}
-							</md-not-found>
-						</md-autocomplete>
-					</div>
+						md-select-on-match="true" md-search-text="searchActivityText" md-selected-item-change="vm.selectActivity(vm.selectedActivity)"
+						md-items="activity in vm.queryActivities(searchActivityText)" md-item-text="activity.ActivityName" md-min-length="0"
+						placeholder="Select Activity">
+						<md-item-template>
+							<span md-highlight-text="searchActivityText" md-highlight-flags="^i">{{activity.ActivityName}}</span>
+						</md-item-template>
+						<md-not-found>
+							{{'RepViewerNoMoreMatches'|translate}}
+						</md-not-found>
+					</md-autocomplete>
+					<md-tooltip ng-if="vm.isModified">
+						Save or discard changes before swapping skill
+					</md-tooltip>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="con-row">
-		<div class="con-flex">
-			<div class="panel material-depth-1">
-				<div class="sub-header">
-					<label for="filter">
-					 <i class="mdi mdi-filter-outline inline-flex">
-					   <input type="text" id="filter" ng-model="skillFilter" placeholder="filter skills...">
-					   <md-tooltip>Filter</md-tooltip>
-					 </i>
+</div>
+<div class="con-row">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="sub-header animate-show" ng-show="vm.isModified">
+				<h2 class="text-warning">
+					<i class="mdi mdi-alert"></i>
+					You have unsaved changes
+					<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click='confirmModal1=true' name="button">Discard</button>
+				</h2>
+			</div>
+			<div class="con-row">
+				<div class="con-flex">
+					<label for="filter" class="input-icon">
+						<i class="mdi mdi-filter-outline">
+							<input type="text" id="filter" ng-model="skillFilter" placeholder="filter skills...">
+							<md-tooltip>Filter</md-tooltip>
+						</i>
 					</label>
-					<div class="head-actions panel-menu">
-						<i class="mdi mdi-checkbox-blank-circle skillPrio"></i> <span>Most Important</span>
-						<div tabindex=0 class="context-menu card-context">
-							<i class="mdi mdi-information-outline"></i>
-							<md-tooltip class="skillPrio">
-								Drag and drop skill to create or sort chains of prioritized skills<br>
-							</md-tooltip>
-						</div>
-					</div>
 				</div>
-				<div class="con-row">
-					<div class="con-flex" ng-hide="vm.cascadeList[0].Skills.length === 0">
-						<ol parent-id="0" ng-model="vm.cascadeList" source="vm.unsortedList" class="unsortedList-container" droppable="vm.optionDrop">
-							<li node-id="{{$index}}" ng-repeat="Skill in vm.cascadeList[0].Skills" ng-show="!skillFilter || ([Skill.SkillName]| filter:skillFilter).length"
-							 class="drag-handle horizontal-list drop-card-1 material-depth-1" draggable>
-								{{Skill.SkillName}}
-							</li>
-						</ol>
-					</div>
-					<div class="con-flex" ng-show="vm.cascadeList.length >= 2" ng-class="{'skill-group-divider':vm.unsortedList.length > 0}">
-						<div ng-repeat="sortedRow in vm.cascadeList" ng-if="$index >= 1" class="skill-divider">
-							<ol parent-id="{{$parent.$index}}" ng-model="sortedRow.Skills" source="vm.cascadeList" class="cascadeList-container" droppable="vm.optionDrop">
-								{{sortedRow.Priority}}
-								<li node-id="{{$index}}" ng-repeat="Skill in sortedRow.Skills" ng-show="!skillFilter || ([Skill.SkillName]| filter:skillFilter).length"
-								 class="drag-handle horizontal-list drop-card material-depth-1 drop-card-{{$parent.$index}}" draggable>
-									{{Skill.SkillName}}
-									<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill, $parent.$index)" class="mdi mdi-close drag-handle-delete">
-										<md-tooltip>Move skill to unsorted list</md-tooltip>
-									</i>
-								</li>
-							</ol>
-						</div>
-					</div>
+				<div class="con-flex"></div>
+				<div class="con-flex line-right">
+					<i class="mdi mdi-checkbox-blank-circle skillPrio"></i> <span>Most Important</span>
 				</div>
-				<div class="con-row" ng-show="vm.cascadeList.length === 0">
-					<div class="con-flex">
-						No skills for selected activity.
-					</div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex" ng-hide="vm.cascadeList[0].Skills.length === 0">
+					<ol parent-id="0" ng-model="vm.cascadeList" source="vm.unsortedList" class="unsortedList-container" droppable="vm.optionDrop">
+						<li node-id="{{$index}}" ng-repeat="Skill in vm.cascadeList[0].Skills" ng-show="!skillFilter || ([Skill.SkillName]| filter:skillFilter).length"
+						class="drag-handle horizontal-list drop-card-1 material-depth-1" draggable>
+						{{Skill.SkillName}}
+					</li>
+				</ol>
+			</div>
+			<div class="con-flex" ng-show="vm.cascadeList.length >= 2" ng-class="{'skill-group-divider':vm.unsortedList.length > 0}">
+				<div ng-repeat="sortedRow in vm.cascadeList" ng-if="$index >= 1" class="skill-divider">
+					<ol parent-id="{{$parent.$index}}" ng-model="sortedRow.Skills" source="vm.cascadeList" class="cascadeList-container" droppable="vm.optionDrop">
+						{{sortedRow.Priority}}
+						<li node-id="{{$index}}" ng-repeat="Skill in sortedRow.Skills" ng-show="!skillFilter || ([Skill.SkillName]| filter:skillFilter).length"
+						class="drag-handle horizontal-list drop-card material-depth-1 drop-card-{{$parent.$index}}" draggable>
+						{{Skill.SkillName}}
+						<i data-nodrag ng-click="vm.moveBackToUnsort(sortedRow.Skills, Skill, $parent.$index)" class="mdi mdi-close drag-handle-delete">
+							<md-tooltip>Move skill to unsorted list</md-tooltip>
+						</i>
+					</li>
+				</ol>
+			</div>
+		</div>
+	</div>
+	<div class="con-row" ng-show="vm.cascadeList.length === 0">
+		<div class="con-flex">
+			No skills for selected activity.
+		</div>
+	</div>
+</div>
+</div>
+</div>
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="confirmModal1">
+		<div class="modalbg">
+			<div class="dialog-mini material-depth-1">
+				<div class="modal-inner-content">
+					<h3>{{'AreYouSure'|translate}}</h3>
+					{{'YourChangesWillBeDiscarded'|translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="confirmModal1=false" class="wfm-btn wfm-btn-invis-default">{{'No'|translate}}</button>
+						<button ng-click="confirmModal1=false;vm.cancelChanges()" class="wfm-btn wfm-btn-invis-primary">{{'Yes'|translate}}</button>
+					</aside>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
 </div>
