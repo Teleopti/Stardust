@@ -257,6 +257,7 @@
     <Compile Include="Hangfire\IgnoreNHibernateErrorsInHangfireWorkers.cs" />
     <Compile Include="Hangfire\AutomaticRetryAttribute.cs" />
     <Compile Include="Hangfire\AttemptsFromArgumentAttribute.cs" />
+    <Compile Include="Hangfire\IgnoreRetryWarningsFromSpecifiedPrimaryKeys.cs" />
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
     <Compile Include="MultiTenancy\IPersonInfoHelper.cs" />
