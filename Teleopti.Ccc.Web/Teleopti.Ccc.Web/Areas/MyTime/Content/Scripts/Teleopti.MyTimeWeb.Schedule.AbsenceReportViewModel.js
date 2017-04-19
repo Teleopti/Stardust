@@ -1,10 +1,10 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
+/// <reference path="~/Content/moment/moment.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
-/// <reference path="~/Content/moment/moment.js" />
 
-Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function AbsenceReportViewModel(ajax, reloadSchedule) {
+Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function(ajax, reloadSchedule) {
 	var self = this;
 	
 	this.Template = "add-absence-report-detail-template";
@@ -21,37 +21,43 @@ Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function AbsenceReportViewM
 		return date.format(self.DateFormat());
 	});
 
-	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
+	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') === 'true');
 
 	this.ErrorMessage = ko.observable('');
 	
 	this.ShowError = ko.computed(function () {
 		return self.ErrorMessage() !== undefined && self.ErrorMessage() !== '';
 	});
-	
-	this.SaveAbsenceReport = function () {
 
-		
+	self.IsPostingData = ko.observable(false);
+
+	this.SaveAbsenceReport = function () {
+		if (self.IsPostingData()) { return; }
+
+		self.IsPostingData(true);
 
 		ajax.Ajax({
 			url: "Schedule/ReportAbsence",
 			dataType: "json",
-
-			
-			data: { Date: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.DateFrom()), AbsenceId: self.AbsenceId() },
+			data: {
+				Date: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.DateFrom()),
+				AbsenceId: self.AbsenceId()
+			},
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
 				reloadSchedule(data);
+				self.IsPostingData(false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
+				if (jqXHR.status === 400) {
 					var data = $.parseJSON(jqXHR.responseText);
 					self.ErrorMessage(data.Errors.join('</br>'));
+					self.IsPostingData(false);
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+				self.IsPostingData(false);
 			}
 		});
-		
 	};
 };
