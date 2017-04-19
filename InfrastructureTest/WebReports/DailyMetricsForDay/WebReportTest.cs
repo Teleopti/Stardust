@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
         protected int AcdLoginId;
         protected int ScenarioId;
         protected SpecificDate TheDate;
+	    protected SpecificDate Yesterday;
+	    protected SpecificDate Tomorrow;
 
         protected override void SetupForRepositoryTest()
         {
@@ -42,10 +44,15 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
                 Date = new DateOnly(2014, 2, 7),
                 DateId = 1
             };
-            var yesterDay = new SpecificDate
+            Yesterday = new SpecificDate
             {
                 Date = new DateOnly(2014, 2, 6),
                 DateId = 0
+            };
+            Tomorrow = new SpecificDate
+            {
+                Date = new DateOnly(2014, 2, 8),
+                DateId = 2
             };
             var intervals = new QuarterOfAnHourInterval();
             var datasource = new ExistingDatasources(timeZones);
@@ -62,17 +69,19 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
             ScenarioId = 12;
 
             var agent = new Person(_loggedOnUser, datasource, PersonId, new DateTime(2010, 1, 1),
-						 AnalyticsDate.Eternity.DateDate, yesterDay.DateId, TheDate.DateId, 0, _currentBusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+						 AnalyticsDate.Eternity.DateDate, Yesterday.DateId, Tomorrow.DateId, 0, _currentBusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
             var scenario = Scenario.DefaultScenarioFor(ScenarioId, _currentBusinessUnit.Id.Value);
 
 			_analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
             _analyticsDataFactory.Setup(timeZones);
-			_analyticsDataFactory.Setup(yesterDay);
+			_analyticsDataFactory.Setup(Yesterday);
 			_analyticsDataFactory.Setup(TheDate);
+			_analyticsDataFactory.Setup(Tomorrow);
             _analyticsDataFactory.Setup(intervals);
             _analyticsDataFactory.Setup(datasource);
             _analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(TheDate, intervals, timeZones, datasource));
-            _analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(yesterDay, intervals, timeZones, datasource));
+            _analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(Yesterday, intervals, timeZones, datasource));
+            _analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(Tomorrow, intervals, timeZones, datasource));
             _analyticsDataFactory.Setup(agent);
             _analyticsDataFactory.Setup(new FillBridgeAcdLoginPersonFromData(agent, AcdLoginId));
             _analyticsDataFactory.Setup(scenario);

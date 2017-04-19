@@ -32,6 +32,7 @@ exec mart.report_data_agent_schedule_adherence @date_from='2013-02-04 00:00:00',
 --				2012-04-16 Bug 18933
 --				2012-09-06 Added new functionality for report Adherence Per Agent. Parameter @date_to only used by Adherence Per Agent.
 --				2013-01-15 Added statistics based on shiftstart_date to get the entire shift started during the selected period.
+--				2017-04-19 #43787 - make adherence only consider schedule date instead of shift start date. --Hongli & Chundan
 -- Description:	Used by reports Adherence per Agent and Adherence per Date.
 -- =============================================
 
@@ -413,8 +414,8 @@ SELECT
 	contract_time_s
 FROM #fact_schedule_deviation_raw fsd
 INNER JOIN #bridge_time_zone b
-	ON	fsd.shift_startinterval_id= b.interval_id
-	AND fsd.shift_startdate_id=b.date_id --NEW 20130111
+	ON	fsd.interval_id= b.interval_id
+	AND fsd.date_id=b.date_id --NEW 20130111
 
 --Get all fact_schedule-data for the day in question.
 --Note: local date e.g. incl. time zone
@@ -455,8 +456,8 @@ FROM #fact_schedule_raw fs
 --INNER JOIN #person_id a
 --	ON fs.person_id = a.person_id
 INNER JOIN #bridge_time_zone b
-	ON	fs.shift_startinterval_id= b.interval_id
-	AND fs.shift_startdate_id= b.date_id
+	ON	fs.interval_id= b.interval_id
+	AND fs.schedule_date_id= b.date_id
 	Where fs.person_id in(SELECT person_id FROM  #person_id)
 GROUP BY fs.shift_startdate_local_id,fs.shift_startdate_id,fs.shift_startinterval_id,fs.schedule_date_id,fs.person_id,fs.interval_id
 
@@ -547,8 +548,8 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval,shift_interva
 		AND fsd.interval_id=fs.interval_id
 		AND fsd.shift_startdate_local_id=fs.shift_startdate_local_id
 	INNER JOIN #bridge_time_zone b1
-		ON	fs.shift_startinterval_id= b1.interval_id
-		AND fs.shift_startdate_id=b1.date_id
+		ON	fs.interval_id= b1.interval_id
+		AND fs.schedule_date_id=b1.date_id
 	INNER JOIN bridge_time_zone b2 WITH (NOLOCK)
 		ON	fs.interval_id= b2.interval_id
 		AND fs.schedule_date_id= b2.date_id
@@ -601,8 +602,8 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval, shift_interv
 	INNER JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=p.person_id
 	INNER JOIN #bridge_time_zone b1
-		ON	fsd.shift_startinterval_id= b1.interval_id
-		AND fsd.shift_startdate_id=b1.date_id
+		ON	fsd.interval_id= b1.interval_id
+		AND fsd.date_id=b1.date_id
 	INNER JOIN bridge_time_zone b2 WITH (NOLOCK)
 		ON	fsd.interval_id= b2.interval_id
 		AND fsd.date_id= b2.date_id
