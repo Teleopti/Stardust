@@ -233,6 +233,8 @@
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
+    <Compile Include="Intraday\ISupportedSkillsInIntradayProvider.cs" />
+    <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />
     <Compile Include="MultiTenancy\DuplicateApplicationLogonNameException.cs" />
     <Compile Include="MultiTenancy\DuplicateIdentityException.cs" />
     <Compile Include="MultiTenancy\PasswordStrengthException.cs" />
@@ -1281,7 +1283,7 @@
     <Compile Include="Intraday\SkillDayStatsRange.cs" />
     <Compile Include="Intraday\StaffingDataSeries.cs" />
     <Compile Include="Intraday\StaffingIntervalModel.cs" />
-    <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />
+    <Compile Include="Intraday\SupportedLimitedSkillsInIntradayProvider.cs" />
     <Compile Include="Intraday\TaskPeriodsProvider.cs" />
     <Compile Include="Intraday\TimeSeriesProvider.cs" />
     <Compile Include="Islands\ClientModel\IslandModel.cs" />

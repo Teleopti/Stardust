@@ -239,3 +239,4 @@ ConfigQRCodeURLForMobileApps_43224 = DEV
 
 ETL_SpeedUpNightlyDayOff_38213 = true
 WFM_ImproveIntradaySkillArea_37291 = DEV
+Wfm_Intraday_SupportSkillTypeWebChat_42591 = RC

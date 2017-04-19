@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly TimeSeriesProvider _timeSeriesProvider;
 		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly ReforecastedStaffingProvider _reforecastedStaffingProvider;
-		private readonly SupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
+		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
 		public StaffingViewModelCreator(
 			INow now,
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			TimeSeriesProvider timeSeriesProvider,
 			ForecastedStaffingProvider forecastedStaffingProvider,
 			ReforecastedStaffingProvider reforecastedStaffingProvider,
-			SupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider
+			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider
 			)
 		{
 			_now = now;

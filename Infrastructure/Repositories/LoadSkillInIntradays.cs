@@ -1,24 +1,21 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class LoadSkillInIntradays : ILoadAllSkillInIntradays
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
-		public LoadSkillInIntradays(ICurrentUnitOfWork currentUnitOfWork)
+		public LoadSkillInIntradays(ICurrentUnitOfWork currentUnitOfWork, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
+			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
 
 		public IEnumerable<SkillInIntraday> Skills()
@@ -31,17 +28,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Id = skill.Id.Value,
 					Name = skill.Name,
 					IsDeleted = ((Skill) skill).IsDeleted,
-					DoDisplayData = checkDisplay(skill)
-				})
+					DoDisplayData = _supportedSkillsInIntradayProvider.CheckSupportedSkill(skill),
+					SkillType = skill.SkillType.Description.Name
+			})
 				.OrderBy(s => s.Name)
 				.ToList();
-		}
-
-		private bool checkDisplay(ISkill skill)
-		{
-			var isMultisiteSkill = skill.GetType() == typeof(MultisiteSkill);
-
-			return !isMultisiteSkill && skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture);
 		}
 	}
 }

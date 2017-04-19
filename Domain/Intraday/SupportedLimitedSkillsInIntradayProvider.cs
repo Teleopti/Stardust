@@ -6,11 +6,11 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class SupportedSkillsInIntradayProvider : ISupportedSkillsInIntradayProvider
+	public class SupportedLimitedSkillsInIntradayProvider : ISupportedSkillsInIntradayProvider
 	{
 		private readonly ISkillRepository _skillRepository;
 
-		public SupportedSkillsInIntradayProvider(ISkillRepository skillRepository)
+		public SupportedLimitedSkillsInIntradayProvider(ISkillRepository skillRepository)
 		{
 			_skillRepository = skillRepository;
 		}
@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var isMultisiteSkill = skill.GetType() == typeof(MultisiteSkill);
 
 			return !isMultisiteSkill &&
-				   (skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture) ||
-				   skill.SkillType.Description.Name.Equals("SkillTypeChat", StringComparison.InvariantCulture));
+				   skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture);
 		}
 	}
 }

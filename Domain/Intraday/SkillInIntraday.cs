@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private Guid _id;
 		private bool _isDeleted;
 		private bool _doDisplayData;
+		private string _skillType;
 
 		public virtual string Name
 		{
@@ -31,6 +32,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			get { return _doDisplayData; }
 			set { _doDisplayData = value; }
+		}
+
+		public virtual string SkillType
+		{
+			get { return _skillType; }
+			set { _skillType = value; }
 		}
 	}
 }

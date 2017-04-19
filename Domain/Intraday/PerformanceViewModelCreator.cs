@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IncomingTrafficViewModelCreator _incomingTrafficViewModelCreator;
-		private readonly SupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
+		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly EstimatedServiceLevelProvider _estimatedServiceLevelProvider;
 
 		public PerformanceViewModelCreator(INow now,
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			IScenarioRepository scenarioRepository,
 			IIntervalLengthFetcher intervalLengthFetcher,
 			IncomingTrafficViewModelCreator incomingTrafficViewModelCreator,
-			SupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
+			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
 			EstimatedServiceLevelProvider estimatedServiceLevelProvider)
 		{
 			_now = now;

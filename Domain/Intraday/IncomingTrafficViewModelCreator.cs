@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly INow _now;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly SupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
+		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
-		public IncomingTrafficViewModelCreator(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone, SupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
+		public IncomingTrafficViewModelCreator(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
 		{
 			_intradayMonitorDataLoader = intradayMonitorDataLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;

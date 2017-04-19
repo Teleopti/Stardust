@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override SkillArea CreateAggregateWithCorrectBusinessUnit()
 		{
-			var skills = new LoadSkillInIntradays(CurrUnitOfWork).Skills();
+			var skills = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null)).Skills();
 
 			return new SkillArea
 			{
