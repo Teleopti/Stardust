@@ -192,7 +192,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var result = _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery(
-					@"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource + ISNULL(SUM(d.DeltaResource), 0) as Resource, c.SkillId from 
+					@"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, 
+(CASE WHEN (r.Resource + ISNULL(SUM(d.DeltaResource), 0)) <= 0 THEN 0 ELSE r.Resource + ISNULL(SUM(d.DeltaResource), 0) END) as Resource, c.SkillId from 
 [ReadModel].[SkillCombinationResource] r INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = r.SkillCombinationId 
 LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId = r.SkillCombinationId AND d.StartDateTime = r.StartDateTime AND d.EndDateTime = r.EndDateTime
  WHERE r.StartDateTime < :endDateTime AND r.EndDateTime > :startDateTime AND r.BusinessUnit = :bu GROUP BY r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource, c.SkillId")
