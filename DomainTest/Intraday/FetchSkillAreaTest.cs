@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
 				{
-					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false }
+					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false, SkillType = "InBoundPhone"}
 				}
 			}.WithId();
 
@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			mappedSkill.Id.Should().Be.EqualTo(skill.Id);
 			mappedSkill.Name.Should().Be.EqualTo(skill.Name);
 			mappedSkill.IsDeleted.Should().Be.EqualTo(skill.IsDeleted);
+			mappedSkill.SkillType.Should().Be.EqualTo(skill.SkillType);
 		}
 
 		[Test]

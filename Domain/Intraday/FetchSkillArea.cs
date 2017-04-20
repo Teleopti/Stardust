@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					Id = skill.Id,
 					Name = skill.Name,
-					IsDeleted = skill.IsDeleted
+					IsDeleted = skill.IsDeleted,
+					SkillType = skill.SkillType
 				}).ToArray()
 			}).ToArray();
 		}
