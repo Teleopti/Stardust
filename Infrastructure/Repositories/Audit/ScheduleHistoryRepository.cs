@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		private static DateTimePeriod convertFromDateOnly(IPerson agent, DateOnly date)
 		{
-			return date.ToDateOnlyPeriod().ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone());
+			return date.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone());
 		}
 
 		private ISession session()

@@ -64,10 +64,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
             _pageRows = getPageRows(pageRevisions);
         }
 
-        public int CurrentPage
-        {
-            get { return _currentPage; }
-        }
+        public int CurrentPage => _currentPage;
 
         public int NumberOfPages
         {
@@ -78,18 +75,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
             }
         }
 
-        public string HeaderText
-        {
-            get
-            {
-                return _currentScheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToShortDateString() + " - " + _currentScheduleDay.Person.Name;
-            }
-        }
+        public string HeaderText => _currentScheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToShortDateString() + " - " + _currentScheduleDay.Person.Name;
 
-        public IList<RevisionDisplayRow> PageRows
-        {
-            get { return _pageRows; }
-        }
+        public IList<RevisionDisplayRow> PageRows => _pageRows;
 
         private IEnumerable<IRevision> revisionsForPage(int pageNumber)
         {
@@ -153,9 +141,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
         }
 
 
-        public IScheduleDay CurrentScheduleDay
-        {
-            get { return _currentScheduleDay; }
-        }
+        public IScheduleDay CurrentScheduleDay => _currentScheduleDay;
     }
 }

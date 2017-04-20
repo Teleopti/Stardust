@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Common;
+﻿using System;
+using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.TestCommon
@@ -17,9 +19,11 @@ namespace Teleopti.Ccc.TestCommon
 			return _businessUnit;
 		}
 
-		public void OnThisThreadUse(IBusinessUnit businessUnit)
+		public IDisposable OnThisThreadUse(IBusinessUnit businessUnit)
 		{
+		    var current = _businessUnit;
 			_businessUnit = businessUnit;
+			return new GenericDisposable(()=> { _businessUnit = current; });
 		}
 	}
 }

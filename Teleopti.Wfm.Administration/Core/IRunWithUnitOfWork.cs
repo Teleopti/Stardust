@@ -54,9 +54,8 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public void WithBusinessUnitScope(IDataSource dataSource, IBusinessUnit businessUnit, Action<ICurrentUnitOfWork> action)
 		{
-			_businessUnitScope.OnThisThreadUse(businessUnit);
-			WithGlobalScope(dataSource, action);
-			_businessUnitScope.OnThisThreadUse(null);
+			using (_businessUnitScope.OnThisThreadUse(businessUnit))
+				WithGlobalScope(dataSource, action);
 		}
 	}
 }

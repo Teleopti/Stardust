@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -45,9 +46,10 @@ namespace Teleopti.Ccc.Domain.Common
 			return identity?.BusinessUnit;
 		}
 
-		public void OnThisThreadUse(IBusinessUnit businessUnit)
+		public IDisposable OnThisThreadUse(IBusinessUnit businessUnit)
 		{
 			_threadBusinessUnit.Value = businessUnit;
+			return new GenericDisposable(()=> { _threadBusinessUnit.Value = null; });
 		}
 
 		private IBusinessUnit businessUnitForRequest()

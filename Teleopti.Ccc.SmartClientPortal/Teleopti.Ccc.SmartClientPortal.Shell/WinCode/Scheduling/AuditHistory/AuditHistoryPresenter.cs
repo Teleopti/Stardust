@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using log4net;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -31,17 +32,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
         private readonly IAuditHistoryView _view;
         private const int Colcount = 1;
         private const int ChangedByColWidth = 200;
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(AuditHistoryPresenter));
 
         public AuditHistoryPresenter(IAuditHistoryView view, IAuditHistoryModel model)
         {
-            if(view == null) throw new ArgumentNullException("view");
-            if(model == null) throw new ArgumentNullException("model");
+            if(view == null) throw new ArgumentNullException(nameof(view));
+            if(model == null) throw new ArgumentNullException(nameof(model));
 
             _view = view;
             Model = model;
         }
 
-        public IAuditHistoryModel Model { get; private set; }
+        public IAuditHistoryModel Model { get; }
 
        
         public void GridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
@@ -141,10 +143,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
         {
             if (DataSourceException(e))
             {
+				Logger.Warn("A data source related issue occured",e.Error);
                 Close();
             }
             else
             {
+                if (e.Error != null)
+                {
+                    Logger.Error("Error while initiating schedule history view",e.Error);
+                }
                 RefreshView();
             }
         }
