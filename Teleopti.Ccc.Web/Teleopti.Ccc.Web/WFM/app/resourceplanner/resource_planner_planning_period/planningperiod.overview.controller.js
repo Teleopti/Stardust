@@ -34,6 +34,7 @@
     vm.intraOptimize = intraOptimize;
     vm.publishSchedule = publishSchedule;
     vm.isDisable = isDisable;
+    vm.deleteLastPp = deleteLastPp;
     vm.isDisableDo = true;
 
     checkToggle();
@@ -144,7 +145,7 @@
             if (result.Successful) {
               if (vm.schedulingPerformed === true) {
                 vm.schedulingPerformed = false;
-                loadLastResult(pp);  
+                loadLastResult(pp);
               }
             } else if (result.Failed) {
               vm.schedulingPerformed = false;
@@ -254,6 +255,18 @@
 
     function parseWeekends(period) {
       ResourcePlannerReportSrvc.parseWeek(period);
+    }
+
+    function deleteLastPp(id) {
+      if (id) {
+        vm.planningPeriods = [];
+        var deletePlanningPeriod = planningPeriodService.deleteLastPlanningPeriod({ agentGroupId: id });
+        return deletePlanningPeriod.$promise.then(function (data) {
+          vm.planningPeriods = data;
+          return vm.planningPeriods;
+        });
+
+      }
     }
 
     function displayGrid() {

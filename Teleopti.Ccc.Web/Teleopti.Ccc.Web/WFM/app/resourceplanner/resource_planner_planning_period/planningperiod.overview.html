@@ -18,11 +18,24 @@
 		<div class="con-flex">
 			<div class="wfm-grid">
 				<div class="grid-card" ng-repeat="p in vm.planningPeriods | orderBy: '-EndDate'">
-					<div class="list-content" ng-class="{'pp-scheduled':p.State == 'Scheduled'}">
-						<div class="pp-inner-card" ng-click="vm.selectPp(p);">
-							<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="card-context mdi mdi-calendar-check"></i>
-							<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="card-context mdi mdi-calendar-remove"></i>
-							<span>{{p.StartDate | amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}</span>
+					<div class="list-content panel" ng-class="{'pp-scheduled':p.State == 'Scheduled'}">
+						<div class="sub-header">
+							<div class="con-flex x3 pp-inner-card" ng-click="vm.selectPp(p)">
+								<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="card-context mdi mdi-calendar-check"></i>
+								<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="card-context mdi mdi-calendar-remove"></i>
+								<span>{{p.StartDate | amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}</span>
+							</div>
+							<div class="con-flex head-actions panel-menu ag-menu" ng-show="$first">
+								<div tabindex=0 class="context-menu card-context">
+									<i class="mdi mdi-dots-vertical"></i>
+									<div class="context-menu-left">
+										<ul class="wfm-list">
+											<!--<li ng-click=""><i class="mdi mdi-pencil"></i>Edit planning period</li>-->
+											<li ng-hide="vm.planningPeriods.length == 1" ng-click="vm.deleteLastPp(vm.agentGroup.Id)"><i class="mdi mdi-close"></i>Delete planning period</li>
+										</ul>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
