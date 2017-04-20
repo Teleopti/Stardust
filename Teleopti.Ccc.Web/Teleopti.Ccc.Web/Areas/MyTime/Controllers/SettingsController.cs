@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_nameFormatSettingsPersisterAndProvider.Persist(new NameFormatSettings { NameFormatId = nameFormatId });
 		}
 
-		[UnitOfWork, HttpGet]
+		[TenantUnitOfWork, HttpGet]
 		public virtual JsonResult MobileQRCodeUrl()
 		{
 			var url = _currentTenant.Current().GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl);
