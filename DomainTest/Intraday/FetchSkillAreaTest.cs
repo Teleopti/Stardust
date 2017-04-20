@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 	{
 		public FetchSkillArea Target;
 		public FakeSkillAreaRepository SkillAreaRepository;
+		public FakeLoadAllSkillInIntradays LoadAllSkillInIntradays;
 
 
 		[Test]
@@ -36,7 +37,39 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
 				{
-					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false, SkillType = "InBoundPhone"}
+					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false}
+				}
+			}.WithId();
+
+			SkillAreaRepository.Has(existingSkillArea);
+
+			var skillInIntraday = new SkillInIntraday() {Id = existingSkillArea.Skills.First().Id, DoDisplayData = true, SkillType = "InboundPhone"};
+			LoadAllSkillInIntradays.Has(skillInIntraday);
+
+			var result = Target.GetAll().Single();
+
+			result.Should().Be.OfType<SkillAreaViewModel>();
+			result.Id.Should().Be.EqualTo(existingSkillArea.Id);
+			result.Name.Should().Be.EqualTo(existingSkillArea.Name);
+			result.Skills.Count().Should().Be.EqualTo(1);
+			var skill = existingSkillArea.Skills.First();
+			var mappedSkill = result.Skills.First();
+			mappedSkill.Id.Should().Be.EqualTo(skill.Id);
+			mappedSkill.Name.Should().Be.EqualTo(skill.Name);
+			mappedSkill.IsDeleted.Should().Be.EqualTo(skill.IsDeleted);
+			mappedSkill.SkillType.Should().Be.EqualTo(skillInIntraday.SkillType);
+			mappedSkill.DoDisplayData.Should().Be.EqualTo(skillInIntraday.DoDisplayData);
+		}
+
+		[Test]
+		public void ShouldIncludeDeletedSkillInSkillArea()
+		{
+			var existingSkillArea = new SkillArea
+			{
+				Name = RandomName.Make(),
+				Skills = new List<SkillInIntraday>
+				{
+					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true}
 				}
 			}.WithId();
 
@@ -53,7 +86,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			mappedSkill.Id.Should().Be.EqualTo(skill.Id);
 			mappedSkill.Name.Should().Be.EqualTo(skill.Name);
 			mappedSkill.IsDeleted.Should().Be.EqualTo(skill.IsDeleted);
-			mappedSkill.SkillType.Should().Be.EqualTo(skill.SkillType);
+			mappedSkill.SkillType.Should().Be.EqualTo(null);
+			mappedSkill.DoDisplayData.Should().Be.EqualTo(false);
 		}
 
 		[Test]
