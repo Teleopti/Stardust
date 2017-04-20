@@ -12,7 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 {
-
 	public class SkillStaffingIntervalProvider : ISkillStaffingIntervalProvider
 	{
 		private readonly SplitSkillStaffInterval _splitSkillStaffInterval;

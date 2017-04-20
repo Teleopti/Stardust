@@ -153,6 +153,8 @@
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderTest.cs" />
     <Compile Include="AgentInfo\AgentGroupStaffLoaderTest.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriodsTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorWithSkillDaysTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplateTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersisterTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\FileProcessorTest.cs" />
