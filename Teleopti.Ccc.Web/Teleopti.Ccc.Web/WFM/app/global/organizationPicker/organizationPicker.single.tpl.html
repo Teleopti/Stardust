@@ -8,7 +8,7 @@
 		<input ng-model="$ctrl.searchTerm" type="search" placeholder="{{'SearchAnOrganization' | translate}}" class="picker-searchbox md-text" ng-keydown="$ctrl.onSearchOrganization($event)">
 	</md-select-header>
 	<md-optgroup ng-repeat="site in $ctrl.groupList | filter: $ctrl.searchTerm">
-		<div class="group-header pointer" ng-class="{'partial-selected':$ctrl.hasTeamsSelected(site)}">
+		<div class="group-header pointer" ng-class="{'site-checked':$ctrl.hasTeamsSelected(site)}">
 			<div class="title" style="margin-left: 10px; padding: 5px 0;">{{site.name}}</div>
 			<span class="dropdown-icon" ng-hide="site.teams.length == 0" ng-click="$ctrl.showTeamListOfSite(site, $event)">
 				<i class="mdi" ng-class="site.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
