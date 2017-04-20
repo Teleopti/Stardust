@@ -12,11 +12,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
+		private readonly IExceptionRethrower _rethrower;
 
-		public InSyncEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor)
+		public InSyncEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor, IExceptionRethrower rethrower)
 		{
 			_resolver = resolver;
 			_processor = processor;
+			_rethrower = rethrower;
 		}
 
 		public void Publish(params IEvent[] events)
@@ -34,31 +36,34 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				)
 				.ForEach(x =>
 				{
-					onAnotherThread(() => retry(x.handlerType, x.@event, x.attempts));
+					retry(x.handlerType, x.@event, x.attempts);
 				});
 		}
 
 		private void retry(Type handlerType, IEvent @event, int attempts)
 		{
-			while (attempts --> 0)
+			Exception ex = null;
+			var thread = new Thread(() =>
 			{
-				try
+				while (attempts --> 0)
 				{
-					_processor.Process(@event, handlerType);
-					return;
+					try
+					{
+						_processor.Process(@event, handlerType);
+						ex = null;
+						return;
+					}
+					catch (Exception e)
+					{
+						ex = e;
+					}
 				}
-				catch
-				{
-					// ignored
-				}
-			}
-		}
-
-		private static void onAnotherThread(Action action)
-		{
-			var thread = new Thread(action.Invoke);
+			});
 			thread.Start();
 			thread.Join();
+
+			if (ex != null)
+				_rethrower.Rethrow(ex);
 		}
 	}
 }

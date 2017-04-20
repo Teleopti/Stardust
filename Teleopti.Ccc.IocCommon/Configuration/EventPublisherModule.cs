@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StardustEventPublisher>().SingleInstance();
 
 			builder.RegisterType<MultiEventPublisher>().As<IEventPublisher>().SingleInstance();
+			builder.RegisterType<ExceptionLogger>().As<IExceptionRethrower>().SingleInstance();
 
 			builder.RegisterType<CurrentEventPublisher>()
 				.As<ICurrentEventPublisher>()
@@ -58,6 +59,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.Register(c => c.Resolve<MultiEventPublisherServiceBusAsSync>()).As<IEventPublisher>().SingleInstance();
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
+				builder.RegisterType<ExceptionRethrower>().As<IExceptionRethrower>().SingleInstance();
 			}
 
 			if (_configuration.Args().AllEventPublishingsAsSync)

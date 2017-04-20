@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldRetry()
 		{
-			Handler.FailOnce = true;
+			Handler.Fails(1, new EventPublisherException());
 			Publisher.Publish(new TestEvent());
 			
 			Handler.Succeeded.Should().Be.True();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldTry5Times()
 		{
-			Handler.Fails = true;
+			Handler.Fails(5, new EventPublisherException());
 			Publisher.Publish(new Test5AttemptsEvent());
 
 			Handler.Attempts.Should().Be(5);
@@ -66,10 +66,20 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldTry3TimesByDefault()
 		{
-			Handler.Fails = true;
+			Handler.Fails(3, new EventPublisherException());
 			Publisher.Publish(new TestEvent());
 
 			Handler.Attempts.Should().Be(3);
+		}
+
+		[Test]
+		public void ShouldRethrowException()
+		{
+			Handler.Fails(10, new EventPublisherException());
+			Assert.Throws<EventPublisherException>(() =>
+			{
+				Publisher.Publish(new TestEvent());
+			});
 		}
 
 		public class TestEvent : IEvent
@@ -82,10 +92,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		public class TestHandler : IHandleEvent<TestEvent>, IHandleEvent<Test5AttemptsEvent>, IRunInSync
 		{
+			private int _fails;
+			private Exception _exception;
+
 			public int ThreadId;
 			public bool Succeeded;
-			public bool FailOnce;
-			public bool Fails;
 			public int Attempts;
 
 			public void Handle(TestEvent @event)
@@ -103,18 +114,24 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			{
 				Attempts += 1;
 
-				if (FailOnce)
+				if (_fails - Attempts > 0)
 				{
-					FailOnce = false;
-					throw new Exception();
+					throw _exception;
 				}
-				if (Fails)
-					throw new Exception();
 
 				ThreadId = Thread.CurrentThread.ManagedThreadId;
 				Succeeded = true;
 			}
 
+			public void Fails(int amountOfFails, Exception exception)
+			{
+				_fails = amountOfFails;
+				_exception = exception;
+			}
+		}
+
+		public class EventPublisherException : Exception
+		{
 		}
 	}
 }
