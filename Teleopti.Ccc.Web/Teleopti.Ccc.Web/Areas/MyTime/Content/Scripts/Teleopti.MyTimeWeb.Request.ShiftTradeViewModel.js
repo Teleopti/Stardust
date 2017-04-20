@@ -22,7 +22,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.possibleTradeSchedulesRaw = [];
 	self.agentChoosed = ko.observable(null);
 	self.isSendEnabled = ko.observable(true);
-	self.IsLoading = ko.observable(false);
+    self.IsLoading = ko.observable(false); 
+    self.IsLoadingWhenChangingDate = ko.observable(false);
 	self.errorMessage = ko.observable();
 	self.isReadyLoaded = ko.observable(false);
 	self.requestedDateInternal = ko.observable(moment().startOf('day').add('days', -1));
@@ -488,8 +489,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				scheduleReloaded = true;
 			},
 			complete: function () {
-				self.IsLoading(false);
-				self.isReadyLoaded(true);
+                self.IsLoading(false);
+                self.IsLoadingWhenChangingDate(false);
+                self.isReadyLoaded(true);
 				self.dateChanged(false);
 				if (self.refocusToNameSearch !== null) {
 					self.refocusToNameSearch();
@@ -544,7 +546,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		 if(!self.nextDateValid()){
             return false;
 		 }else{  
-			 return !self.IsLoading();
+             return !self.IsLoadingWhenChangingDate();
 		 }
 	});
 
@@ -552,7 +554,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		  if(!self.previousDateValid()){
             return false;
 		 }else{  
-			 return !self.IsLoading();
+              return !self.IsLoadingWhenChangingDate();
 		 }
 	});
 
@@ -964,11 +966,13 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		}
 	};
 
-	self.nextDate = function () {
+    self.nextDate = function () {
+        self.IsLoadingWhenChangingDate(true);
 		self.changeRequestedDate(1);
 	};
 
-	self.previousDate = function () {
+    self.previousDate = function () {
+        self.IsLoadingWhenChangingDate(true);
 		self.changeRequestedDate(-1);
 	};
 
