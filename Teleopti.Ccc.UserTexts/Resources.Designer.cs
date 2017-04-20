@@ -772,6 +772,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actual volume.
+        /// </summary>
+        public static string ActualVolume {
+            get {
+                return ResourceManager.GetString("ActualVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ACW.
         /// </summary>
         public static string ACW {
@@ -2429,7 +2438,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;FindNext.
+        ///   Looks up a localized string similar to &amp;Find Next.
         /// </summary>
         public static string AmpersandFindNext {
             get {
@@ -11798,6 +11807,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ForecastedAverageHandleTime {
             get {
                 return ResourceManager.GetString("ForecastedAverageHandleTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forecasted avreage handling time.
+        /// </summary>
+        public static string ForecastedAverageHandlingTime {
+            get {
+                return ResourceManager.GetString("ForecastedAverageHandlingTime", resourceCulture);
             }
         }
         
@@ -32209,7 +32227,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time started.
+        ///   Looks up a localized string similar to Start time.
         /// </summary>
         public static string TimeStarted {
             get {

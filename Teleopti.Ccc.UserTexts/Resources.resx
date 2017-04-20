@@ -15764,4 +15764,12 @@ Do you want to participate?</value>
     <value>Exceeds the maximum upload file size</value>
     <comment>Message in Import Agents when the selected file is larger than expected</comment>
   </data>
+  <data name="ActualVolume" xml:space="preserve">
+    <value>Actual volume</value>
+    <comment>used in web intraday chart</comment>
+  </data>
+  <data name="ForecastedAverageHandlingTime" xml:space="preserve">
+    <value>Forecasted avreage handling time</value>
+    <comment>43982 used in web intraday chart</comment>
+  </data>
 </root>
