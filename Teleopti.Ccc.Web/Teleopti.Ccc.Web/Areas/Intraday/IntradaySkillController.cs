@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 				{
 					x.Id,
 					x.Name,
-					x.DoDisplayData
+					x.DoDisplayData,
+					x.SkillType
 				})
 				.ToArray());
 		}
