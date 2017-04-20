@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		public Tuple<TimeSpan?, int?> GetTargets(IScheduleRange range, DateOnlyPeriod visiblePeriod)
 		{
-			var targetTime = TimeSpan.Zero;
+			TimeSpan? targetTime = null;
 			var targetDaysOff = 0;
 			var person = range.Person;
 			var schedulePeriods = extractVirtualPeriods(person, visiblePeriod);
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (calculator == null)
 					return new Tuple<TimeSpan?, int?>(null, null);
 
-				targetTime = targetTime.Add(calculator.PeriodTarget(true));
+				targetTime = (targetTime ?? TimeSpan.Zero).Add(calculator.PeriodTarget(true));
 				targetDaysOff += virtualSchedulePeriod.DaysOff();
 			}
 			return new Tuple<TimeSpan?, int?>(targetTime, targetDaysOff);
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private static IEnumerable<IVirtualSchedulePeriod> extractVirtualPeriods(IPerson person, DateOnlyPeriod period)
 		{
 			if (person == null)
-				throw new ArgumentNullException("person");
+				throw new ArgumentNullException(nameof(person));
 
 			var virtualPeriods = new HashSet<IVirtualSchedulePeriod>();
 			foreach (var dateOnly in period.DayCollection())
