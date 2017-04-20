@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Schema
 			var exceptions = new[]
 			{
 				"dbo.ApplicationRolesForSeat",
-				"dbo.OutboundCampaignWorkingHours",
-				"Stardust.PerformanceTest"
+				"dbo.OutboundCampaignWorkingHours"
 			};
 			var tables = ApplicationDatabase.Get(uow => uow.Current().FetchSession()
 				.CreateSQLQuery(@"
