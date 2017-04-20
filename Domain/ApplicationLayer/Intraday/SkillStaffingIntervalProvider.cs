@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 
 		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources, bool useShrinkage)
 		{
-			var skills = _skillRepository.LoadAllSkills().ToList();
+			var skills = _skillRepository.LoadAll().ToList();
 
 			var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, period, useShrinkage).ToList();
 			skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
