@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -295,6 +294,32 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			var planningPeriods = PlanningPeriodRepository.LoadForAgentGroup(agentGroup).ToList();
 			planningPeriods.SingleOrDefault()?.Id.Should().Be.EqualTo(result.Content.SingleOrDefault()?.Id);
+		}
+
+		[Test]
+		public void ShouldChangeLastPeriodAndCreateNewPeriodsWithDefaultRanges()
+		{
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			var agentGroupId = Guid.NewGuid();
+			var agentGroup = new AgentGroup()
+				.WithId(agentGroupId);
+			AgentGroupRepository.Has(agentGroup);
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
+
+			var firstPeriod = PlanningPeriodRepository.Has(new DateOnly(2017, 04, 19), 1, agentGroup);
+			var periodStart = new DateOnly(2017, 04, 26);
+			var changedPeriod = PlanningPeriodRepository.Has(periodStart, 1, agentGroup);
+
+			Target.ChangeLastPeriod(agentGroupId, periodStart.Date + TimeSpan.FromDays(14));
+
+			Target.Request = new HttpRequestMessage();
+			var lastPeriod = (CreatedNegotiatedContentResult<PlanningPeriodModel>) Target.GetNextPlanningPeriod(agentGroupId);
+
+			var periods = PlanningPeriodRepository.LoadForAgentGroup(agentGroup).OrderBy(period => period.Range.StartDate);
+
+			periods.First(period => period.Id == firstPeriod.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 25));
+			periods.First(period => period.Id == changedPeriod.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 09));
+			periods.First(period => period.Id == lastPeriod.Content.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 16));
 		}
 
 		private static List<AggregatedSchedulePeriod> suggestions()
