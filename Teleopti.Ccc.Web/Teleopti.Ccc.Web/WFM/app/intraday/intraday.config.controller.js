@@ -45,6 +45,25 @@
 					});
 				};
 
+				$scope.setDynamicIcon = function (skill) {
+					if (!skill.DoDisplayData) {
+						return "mdi mdi-alert";
+					}
+
+					if (skill.SkillType === 'SkillTypeChat') {
+						return "mdi mdi-message-text-outline";
+					}
+					else if (skill.SkillType === 'SkillTypeEmail') {
+						return "mdi mdi-email-outline";
+					}
+					else if (skill.SkillType === 'SkillTypeEmail') {
+						return "mdi mdi-email-outline";
+					}
+					else if (skill.SkillType === 'SkillTypeInboundTelephony') {
+						return "mdi mdi-phone";
+					}
+				}
+
 				var notifySkillAreaCreation = function () {
 						NoticeService.success($translate.instant('Created') + ' ' + $scope.skillAreaName, 5000, false);
 				};

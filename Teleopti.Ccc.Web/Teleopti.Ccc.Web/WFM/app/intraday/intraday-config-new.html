@@ -63,10 +63,10 @@
 						<div class="wfm-chip-wrap" ng-click="skill.isSelected=!skill.isSelected" ng-hide="(selectedFilter==true && !skill.isSelected) || (supportedFilter==false && !skill.DoDisplayData)" ng-repeat="skill in skills | filter:areaFilter as filtered">
 							<span class="wfm-chip">
 								<span class="chip-handle chip-warning" ng-if="!skill.DoDisplayData && !skill.isSelected">
-									<i class="mdi mdi-alert"></i>
+									<i ng-class="setDynamicIcon(skill)"></i>
 								</span>
 								<span class="chip-handle" ng-if="skill.DoDisplayData && !skill.isSelected">
-									<i class="mdi mdi-phone"></i>
+									<i ng-class="setDynamicIcon(skill)"></i>
 								</span>
 								<span class="chip-handle chip-success" ng-if="skill.isSelected">
 									<i class="mdi mdi-check"></i>

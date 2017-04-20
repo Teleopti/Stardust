@@ -35,11 +35,9 @@
 						md-min-length="0"
 						placeholder="{{'SelectSkill'|translate}}">
 						<md-item-template>
-							<i class="mdi mdi-phone" ng-if="skill.DoDisplayData"></i>
-							<i class="mdi mdi-alert" ng-if="!skill.DoDisplayData"></i>
+							<i ng-class="setDynamicIcon(skill)"></i>
 							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 							<md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
-							<md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
 						</md-item-template>
 						<md-not-found>
 							{{'NoSkillFound'|translate}}
@@ -113,7 +111,7 @@
 					<div class="wfm-chip-wrap" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name" ng-class="{'chip-disabled':!skill.DoDisplayData}">
 						<span class="wfm-chip" ng-click="openSkillFromArea(skill)">
 							<span class="chip-handle" ng-class="{'chip-warning':!skill.DoDisplayData}">
-								<i class="mdi" ng-class="{'mdi-phone':skill.DoDisplayData, 'mdi-alert':!skill.DoDisplayData}"></i>
+								<i ng-class="setDynamicIcon(skill)"></i>
 							</span>
 							<md-tooltip>
 								<span ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</span>
