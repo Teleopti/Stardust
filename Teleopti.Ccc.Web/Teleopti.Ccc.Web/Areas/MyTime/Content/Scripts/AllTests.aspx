@@ -5,6 +5,12 @@
 		<title>All Tests</title>
 		
 		<link rel="stylesheet" href="../../../../Content/Scripts/qunit.css" type="text/css" media="screen" />
+		<style>
+			#qunit-tests li li.fail {
+				word-break: break-all;
+				white-space: pre-wrap;
+			}
+		</style>
 		<script type="text/javascript" src="../../../../Content/jquery/jquery-1.12.4.js"></script>
 		<script type="text/javascript" src="../../../../Content/jqueryui/jquery-ui-1.10.2.custom.js"></script>
 		<script type="text/javascript" src="../../../../Content/Scripts/qunit.js"></script>
