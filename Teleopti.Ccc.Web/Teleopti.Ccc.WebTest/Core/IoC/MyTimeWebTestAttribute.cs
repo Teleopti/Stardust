@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
+			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
 			system.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
 			system.UseTestDouble<CurrentTenantFake>().For<ICurrentTenant>();
