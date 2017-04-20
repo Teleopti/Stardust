@@ -540,6 +540,22 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		return self.requestedDateInternal().diff(self.openPeriodStartDate()) > 0;
 	});
 
+	self.nextDateEnable = ko.computed(function () {
+		 if(!self.nextDateValid()){
+            return false;
+		 }else{  
+			 return !self.IsLoading();
+		 }
+	});
+
+	self.previousDateEnable = ko.computed(function () {
+		  if(!self.previousDateValid()){
+            return false;
+		 }else{  
+			 return !self.IsLoading();
+		 }
+	});
+
 	self.prepareLoad = function () {
 		self.possibleTradeSchedulesRaw = [];
 		self.selectedPageIndex(1);
