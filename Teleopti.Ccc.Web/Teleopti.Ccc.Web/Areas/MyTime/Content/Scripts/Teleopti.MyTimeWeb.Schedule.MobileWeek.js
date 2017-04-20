@@ -6,6 +6,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="~/Content/moment/moment.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.MobileDayViewModel.js" />
 
 if (typeof (Teleopti) === "undefined") {
 	Teleopti = {};

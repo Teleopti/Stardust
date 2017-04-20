@@ -30,7 +30,7 @@ $(document).ready(function() {
 		Days: [{
 				FixedDate: basedDate,
 				Header: {
-					Title: 'Some Day',
+					Title: 'Today',
 					Date: basedDate,
 					DayDescription: '',
 					DayNumber: '18'
@@ -42,8 +42,8 @@ $(document).ready(function() {
 					Title: 'Early',
 					TimeSpan: '09:30 - 16:45',
 					StartTime: moment(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-					EndTime: moment(basedDate).startOf('day').add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-					Summary: '8:7',
+					EndTime: moment(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+					Summary: '7:15',
 					StyleClassName: 'color_80FF80',
 					Meeting: null,
 					StartPositionPercentage: 0.0,
@@ -65,7 +65,7 @@ $(document).ready(function() {
 					'Title': 'Phone',
 					'TimeSpan': '09:30 - 16:45',
 					'StartTime': moment(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-					'EndTime': moment(basedDate).startOf('day').add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+					'EndTime': moment(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 					'Summary': '7:15',
 					'StyleClassName': 'color_80FF80',
 					'Meeting': null,
@@ -78,7 +78,7 @@ $(document).ready(function() {
 			{
 				FixedDate: moment(basedDate).add('day', 1).format('YYYY-MM-DD'),
 				Header: {
-					Title: 'Some Day',
+					Title: 'Tomorrow',
 					Date: moment(basedDate).add('day', 1).format('YYYY-MM-DD'),
 					DayDescription: '',
 					DayNumber: '18'
@@ -90,8 +90,8 @@ $(document).ready(function() {
 					Title: 'Early',
 					TimeSpan: '09:30 - 16:45',
 					StartTime: moment(basedDate).add('day', 1).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-					EndTime: moment(basedDate).add('day', 1).startOf('day').add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-					Summary: '8:7',
+					EndTime: moment(basedDate).add('day', 1).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+					Summary: '7:15',
 					StyleClassName: 'color_80FF80',
 					Meeting: null,
 					StartPositionPercentage: 0.0,
@@ -113,7 +113,7 @@ $(document).ready(function() {
 					'Title': 'Phone',
 					'TimeSpan': '09:30 - 16:45',
 					'StartTime': moment(basedDate).startOf('day').add('day', 1).add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-					'EndTime': moment(basedDate).startOf('day').add('day', 1).add('hour', 16).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+					'EndTime': moment(basedDate).startOf('day').add('day', 1).add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 					'Summary': '7:15',
 					'StyleClassName': 'color_80FF80',
 					'Meeting': null,
@@ -127,13 +127,13 @@ $(document).ready(function() {
 		Possibilities: [
 			{
 				Date: basedDate,
-				StartTime: moment(basedDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss'),
-				EndTime: moment(basedDate).startOf('day').add('hour', 16).format('YYYY-MM-DDTHH:mm:ss'),
+				StartTime: moment(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+				EndTime: moment(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 				Possibility: 0
 			}, {
 				Date: moment(basedDate).add('day', 1).format('YYYY-MM-DD'),
-				StartTime: moment(basedDate).add('day', 1).startOf('day').add('day', 1).format('YYYY-MM-DDTHH:mm:ss'),
-				EndTime: moment(basedDate).add('day', 1).startOf('day').add('day', 1).add('hour', 16).format('YYYY-MM-DDTHH:mm:ss'),
+				StartTime: moment(basedDate).add('day', 1).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+				EndTime: moment(basedDate).add('day', 1).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 				Possibility: 1
 			}
 		],
