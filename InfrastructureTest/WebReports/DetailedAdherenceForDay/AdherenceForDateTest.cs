@@ -22,33 +22,15 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 			analyticsDataFactory.Setup(new FactSchedule(PersonId, TheDate.DateId, TheDate.DateId, 0, scheduledReadyTimeTwoMinutes, 2, ScenarioId));
 			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, TheDate.DateId, 1, PersonId, 0, 0, deviationScheduleReadyOneSeconds, 0, true));
 			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, TheDate.DateId, 2, PersonId, 0, 0, deviationScheduleReadyTwoSeconds, 0, true));
-
-			analyticsDataFactory.Setup(new FactSchedule(PersonId, TheDate.DateId, Tomorrow.DateId, 0, scheduledReadyTimeOneMinutes, 1, ScenarioId));
-			analyticsDataFactory.Setup(new FactSchedule(PersonId, TheDate.DateId, Tomorrow.DateId, 0, scheduledReadyTimeTwoMinutes, 2, ScenarioId));
-			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, Tomorrow.DateId, 1, PersonId, 0, 0, deviationScheduleReadyOneSeconds, 0, true));
-			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, Tomorrow.DateId, 2, PersonId, 0, 0, deviationScheduleReadyTwoSeconds, 0, true));
-
-
 		}
 
 		[Test]
 		public void ShouldReturnAdherenceForDate()
 		{
-
 			Target(
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
 					new DetailedAdherenceForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
 				.Execute(TheDate.Date).Last()
-				.Adherence.Should().Be.EqualTo(0.333);
-		}
-
-		[Test]
-		public void ShouldReturnAdherenceDataWhenTheDayOnlyHasOvernightShiftFromPreviousDay()
-		{
-			Target(
-				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
-					new DetailedAdherenceForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
-				.Execute(Tomorrow.Date).Last()
 				.Adherence.Should().Be.EqualTo(0.333);
 		}
 	}
