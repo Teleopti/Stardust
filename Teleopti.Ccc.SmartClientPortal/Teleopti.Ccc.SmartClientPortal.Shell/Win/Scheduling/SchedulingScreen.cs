@@ -2312,11 +2312,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					disableButtonsIfTeamLeaderMode();
 					_scheduleView.Presenter.UpdateFromEditor();
-					if (_showEditor)
-					{
-						updateShiftEditor();
-						RunActionWithDelay(updateShiftEditor, 50);
-					}
+					updateShiftEditor();
+					RunActionWithDelay(updateShiftEditor, 50);
 					var currentCell = _scheduleView.ViewGrid.CurrentCell;
 					var selectedCols = _scheduleView.ViewGrid.Model.Selections.Ranges.ActiveRange.Width;
 					if (!(_scheduleView is AgentRestrictionsDetailView) && currentCell.RowIndex == 0 && selectedCols == 1 &&
@@ -2376,6 +2373,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                                                       _schedulerState.FilteredCombinedAgentsDictionary.Count + " " +
                                                       LanguageResourceHelper.Translate("XXLoadedColon") +
                                                       " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
+
+				if (!_showEditor)
+					return;
 
                 notesEditor.LoadNote(null);
 
@@ -6235,8 +6235,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripButtonShowEditor.Checked = !toolStripButtonShowEditor.Checked;
 			SplitterManager.ShowEditor = toolStripButtonShowEditor.Checked;
 			_showEditor = toolStripButtonShowEditor.Checked;
-			if (_showEditor)
-				updateShiftEditor();
+			updateShiftEditor();
 		}
 
 		private DateTime _lastclickLabels;
