@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 		public string Tenant { get; set; }
 		public DataSourceConfig DataSourceConfiguration { get; set; }
 		public string TenantPassword { get; set; }
+		public IDictionary<string, string> ApplicationConfig { get; set; }
 	}
 
 	public class DataSourceConfig
 	{
 		public string AnalyticsConnectionString { get; set; }
 		public string ApplicationConnectionString { get; set; }
-		public IDictionary<string, string> ApplicationNHibernateConfig { get; set; }
 	}
 }

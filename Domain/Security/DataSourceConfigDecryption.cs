@@ -15,11 +15,7 @@ namespace Teleopti.Ccc.Domain.Security
 						EncryptionConstants.Image2),
 				AnalyticsConnectionString =
 					Encryption.EncryptStringToBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1,
-						EncryptionConstants.Image2),
-				ApplicationNHibernateConfig =
-					dataSourceConfig.ApplicationNHibernateConfig.Keys.ToDictionary(key => key,
-						key =>Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationNHibernateConfig[key], EncryptionConstants.Image1,
-								EncryptionConstants.Image2))
+						EncryptionConstants.Image2)
 			};
 		}
 
@@ -28,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Security
 			return new DataSourceConfig
 			{
 				AnalyticsConnectionString = Encryption.DecryptStringFromBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2),
-				ApplicationNHibernateConfig = dataSourceConfig.ApplicationNHibernateConfig.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2),
 				ApplicationConnectionString = Encryption.DecryptStringFromBase64(dataSourceConfig.ApplicationConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2)
 			};
 		}

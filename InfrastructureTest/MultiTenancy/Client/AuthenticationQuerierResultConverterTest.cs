@@ -15,7 +15,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
@@ -48,8 +47,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 				{
 					Tenant = tenantName,
 					Success = true,
-					DataSourceConfiguration = nhibDecryption.EncryptConfigJustForTest(new DataSourceConfig {AnalyticsConnectionString = analyticsdb, ApplicationNHibernateConfig = appdb, ApplicationConnectionString = appConnString})
-				});
+					DataSourceConfiguration = nhibDecryption.EncryptConfigJustForTest(new DataSourceConfig {AnalyticsConnectionString = analyticsdb, ApplicationConnectionString = appConnString}),
+					ApplicationConfig = appdb
+			});
 			result.Success.Should().Be.True();
 			dataSourceForTenant.AssertWasCalled(x => x.MakeSureDataSourceCreated(tenantName, appConnString, analyticsdb, appdb));
 		}
@@ -181,8 +181,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			return new DataSourceConfigDecryption().EncryptConfigJustForTest(new DataSourceConfig
 			{
-				AnalyticsConnectionString = RandomName.Make(),
-				ApplicationNHibernateConfig = new Dictionary<string, string>()
+				AnalyticsConnectionString = RandomName.Make()
 			});
 		}
 	}

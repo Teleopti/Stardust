@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			
 			var dataSourceForTenant = _dataSourceForTenant();
 			var decryptedConfig = _dataSourceDecryption.DecryptConfig(tenantServerResult.DataSourceConfiguration);
-			dataSourceForTenant.MakeSureDataSourceCreated(tenantServerResult.Tenant, decryptedConfig.ApplicationConnectionString, decryptedConfig.AnalyticsConnectionString, decryptedConfig.ApplicationNHibernateConfig);
+			dataSourceForTenant.MakeSureDataSourceCreated(tenantServerResult.Tenant, decryptedConfig.ApplicationConnectionString, decryptedConfig.AnalyticsConnectionString, tenantServerResult.ApplicationConfig);
 			var dataSource = dataSourceForTenant.Tenant(tenantServerResult.Tenant);
 			var person = _loadUser.LoadFullPersonInSeperateTransaction(dataSource.Application, tenantServerResult.PersonId);
 			if (person.IsTerminated())
