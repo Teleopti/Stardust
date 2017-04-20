@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		{
 			var team = new Team { Site = new Site("site") };
 			var agentGroup = new AgentGroup("Europe").AddFilter(new TeamFilter(team));
-			PlanningPeriodRepository.Has(DateOnly.Today, 1, agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, 1, agentGroup);
 
-			Target.Execute(Guid.NewGuid(), true);
+			Target.Execute(planningPeriod.Id.GetValueOrDefault(), true);
 
 			JobResultRepository.LoadAll().Should().Be.Empty();
 		}
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, 1, agentGroup);
 
-			Target.Execute(Guid.NewGuid(), true);
+			Target.Execute(planningPeriod.Id.GetValueOrDefault(), true);
 
 			var jobResult = JobResultRepository.LoadAll().Single();
 			jobResult.JobCategory.Should().Be.EqualTo(JobCategory.WebIntradayOptimiztion);

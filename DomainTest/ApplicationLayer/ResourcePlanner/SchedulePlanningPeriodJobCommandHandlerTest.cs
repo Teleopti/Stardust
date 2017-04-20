@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			PlanningPeriodRepository.Add(planningPeriod);
 			var schedulePlanningPeriodCommand = new SchedulePlanningPeriodCommand
 			{
-				PlanningPeriodId = Guid.NewGuid(),
+				PlanningPeriodId = planningPeriod.Id.GetValueOrDefault(),
 				RunAsynchronously = true
 			};
 			planningPeriod.JobResults.Count.Should().Be.EqualTo(0);
