@@ -1,6 +1,5 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -10,17 +9,20 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly ServiceBusEventPublisher _serviceBusPublisher;
 		private readonly StardustEventPublisher _stardustEventPublisher;
 		private readonly RunInSyncInFatClientProcessEventPublisher _runInSyncInFatClientProcessEventPublisher;
+		private readonly InSyncEventPublisher _inSyncEventPublisher;
 
 		public MultiEventPublisher(
 			HangfireEventPublisher hangfirePublisher, 
 			ServiceBusEventPublisher serviceBusPublisher,
 			StardustEventPublisher stardustEventPublisher,
-			RunInSyncInFatClientProcessEventPublisher runInSyncInFatClientProcessEventPublisher)
+			RunInSyncInFatClientProcessEventPublisher runInSyncInFatClientProcessEventPublisher, 
+			InSyncEventPublisher inSyncEventPublisher)
 		{
 			_hangfirePublisher = hangfirePublisher;
 			_serviceBusPublisher = serviceBusPublisher;
 			_stardustEventPublisher = stardustEventPublisher;
 			_runInSyncInFatClientProcessEventPublisher = runInSyncInFatClientProcessEventPublisher;
+			_inSyncEventPublisher = inSyncEventPublisher;
 		}
 
 		public void Publish(params IEvent[] events)
@@ -28,6 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_hangfirePublisher.Publish(events);
 			_serviceBusPublisher.Publish(events);
 			_stardustEventPublisher.Publish(events);
+			_inSyncEventPublisher.Publish(events);
 			_runInSyncInFatClientProcessEventPublisher.Publish(events);
 		}
 	}

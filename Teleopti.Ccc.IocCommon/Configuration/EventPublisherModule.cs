@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<HangfireEventPublisher>().SingleInstance();
 			builder.RegisterType<RunInSyncInFatClientProcessEventPublisher>().SingleInstance();
+			builder.RegisterType<InSyncEventPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().SingleInstance();
 			builder.RegisterType<SyncAllEventPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusAsSyncEventPublisher>().SingleInstance().ApplyAspects();

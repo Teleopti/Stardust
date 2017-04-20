@@ -43,5 +43,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				)
 				?.Invoke(_resolve.Resolve(handler), new[] {@event}) as string;
 		}
+
+		public int AttemptsFor(Type handlerType, IEvent @event)
+		{
+			return AttemptsFor(GetAttemptsAttribute(handlerType, @event));
+		}
+
+		public int AttemptsFor(AttemptsAttribute attemptsAttribute)
+		{
+			return attemptsAttribute?.Attempts ?? 3;
+		}
+
+		public AttemptsAttribute GetAttemptsAttribute(Type handlerType, IEvent @event)
+		{
+			return HandleMethodFor(handlerType, @event)
+				.GetCustomAttributes(typeof(AttemptsAttribute), true)
+				.Cast<AttemptsAttribute>()
+				.SingleOrDefault();
+		}
 	}
 }

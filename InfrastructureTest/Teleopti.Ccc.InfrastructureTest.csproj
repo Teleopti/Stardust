@@ -172,6 +172,7 @@
     <Compile Include="ApplicationLayer\Events\HangfireQueueSelectionEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireRecurringEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\Events\MultiEventPublishingTest.cs" />
+    <Compile Include="ApplicationLayer\Events\RunInSyncEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\RunInSyncInFatClientProcessEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationPublisherCheckSumPersisterTest.cs" />

@@ -81,9 +81,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			return handlerTypes.Select(handlerType =>
 			{
 				var method = _resolver.HandleMethodFor(handlerType, @event);
-				var attemptsAttribute = method
-					.GetCustomAttributes(typeof(AttemptsAttribute), true).Cast<AttemptsAttribute>()
-					.SingleOrDefault();
+				var attemptsAttribute = _resolver.GetAttemptsAttribute(handlerType, @event);
 				var allowedFailuresAttribute = method
 					.GetCustomAttributes(typeof(AllowFailuresAttribute), true).Cast<AllowFailuresAttribute>()
 					.SingleOrDefault();
@@ -96,7 +94,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 						Event = @event,
 						HandlerTypeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}",
 						QueueName = _resolver.QueueTo(handlerType, @event),
-						Attempts = attemptsAttribute?.Attempts ?? 3,
+						Attempts = _resolver.AttemptsFor(attemptsAttribute),
 						AllowFailures = allowedFailuresAttribute?.Failures ?? 0
 					},
 					AttemptsAttribute = attemptsAttribute,

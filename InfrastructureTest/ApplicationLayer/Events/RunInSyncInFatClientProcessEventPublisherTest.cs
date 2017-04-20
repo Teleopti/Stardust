@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	public class RunInSyncInFatClientProcessEventPublisherTest : ISetup
 	{
 		public RunInSyncInFatClientProcessEventPublisher Target;
-		public TestEventHandler TestEventHandler;
-		public TestEventHandler2 TestEventHandler2;
-		public IncorrectTestEventHandler IncorrectTestEventHandler;
+		public TestEventHandler Handler;
+		public TestEventHandler2 Handler2;
+		public IncorrectTestEventHandler IncorrectHandler;
 
 		[Test]
 		public void ShouldCreateNewScope()
@@ -60,46 +60,48 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			system.AddService<TestEventHandler2>(true);
 			system.AddService<IncorrectTestEventHandler>(true);
 		}
-	}
 
-	public class TestEventHandler : IHandleEvent<TestEvent>, IRunInSyncInFatClientProcess
-	{
-		public void Handle(TestEvent @event)
-		{
-			@event.WasHandledBy(this);
-		}
-	}
 
-	public class TestEventHandler2 : IHandleEvent<TestEvent>, IRunInSyncInFatClientProcess
-	{
-		public void Handle(TestEvent @event)
+		public class TestEventHandler : IHandleEvent<TestEvent>, IRunInSyncInFatClientProcess
 		{
-			@event.WasHandledBy(this);
+			public void Handle(TestEvent @event)
+			{
+				@event.WasHandledBy(this);
+			}
 		}
-	}
+
+		public class TestEventHandler2 : IHandleEvent<TestEvent>, IRunInSyncInFatClientProcess
+		{
+			public void Handle(TestEvent @event)
+			{
+				@event.WasHandledBy(this);
+			}
+		}
 
 #pragma warning disable 618
-	public class IncorrectTestEventHandler : IHandleEvent<TestEvent>, IRunOnHangfire, IRunOnServiceBus, IRunOnStardust
+		public class IncorrectTestEventHandler : IHandleEvent<TestEvent>, IRunOnHangfire, IRunOnServiceBus, IRunOnStardust
 #pragma warning restore 618
-	{
-		public void Handle(TestEvent @event)
 		{
-			@event.WasHandledBy(this);
+			public void Handle(TestEvent @event)
+			{
+				@event.WasHandledBy(this);
+			}
+		}
+
+		public class TestEvent : IEvent
+		{
+			private readonly ConcurrentBag<IHandleEvent<TestEvent>> handledBy = new ConcurrentBag<IHandleEvent<TestEvent>>();
+
+			public void WasHandledBy(IHandleEvent<TestEvent> eventHandler)
+			{
+				handledBy.Add(eventHandler);
+			}
+
+			public IEnumerable<IHandleEvent<TestEvent>> HandleByEventHandlers()
+			{
+				return handledBy;
+			}
 		}
 	}
 
-	public class TestEvent : IEvent
-	{
-		private readonly ConcurrentBag<IHandleEvent<TestEvent>> handledBy = new ConcurrentBag<IHandleEvent<TestEvent>>();
-
-		public void WasHandledBy(IHandleEvent<TestEvent> eventHandler)
-		{
-			handledBy.Add(eventHandler);
-		}
-
-		public IEnumerable<IHandleEvent<TestEvent>> HandleByEventHandlers()
-		{
-			return handledBy;
-		}
-	}
 }

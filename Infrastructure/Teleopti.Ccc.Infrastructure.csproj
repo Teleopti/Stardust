@@ -191,6 +191,7 @@
     <Compile Include="ApplicationLayer\HangfireAsSyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\InSyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\MultiEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />
     <Compile Include="ApplicationLayer\MessagePopulatingServiceBusSender.cs" />
