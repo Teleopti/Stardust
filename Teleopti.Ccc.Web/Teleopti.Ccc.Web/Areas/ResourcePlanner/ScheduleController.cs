@@ -1,9 +1,12 @@
 using System;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebSchedules)]
 	public class ScheduleController : ApiController
 	{
 		private readonly SchedulePlanningPeriodCommandHandler _schedulePlanningPeriodCommandHandler;
