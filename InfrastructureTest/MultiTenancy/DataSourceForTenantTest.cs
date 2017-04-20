@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 				x =>
 					x.Create(existingTenant.Name, existingTenant.DataSourceConfiguration.ApplicationConnectionString,
 						existingTenant.DataSourceConfiguration.AnalyticsConnectionString,
-						existingTenant.DataSourceConfiguration.ApplicationConfig)).Return(createdDataSource);
+						existingTenant.ApplicationConfig)).Return(createdDataSource);
 
 			var target = new DataSourceForTenant(dataSourcesFactory, new SetNoLicenseActivator(), findTenantByName);
 

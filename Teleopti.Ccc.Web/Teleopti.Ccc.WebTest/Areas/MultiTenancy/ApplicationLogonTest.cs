@@ -86,8 +86,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			res.PersonId.Should().Be.EqualTo(personInfo.Id);
 			res.DataSourceConfiguration.AnalyticsConnectionString.Should().Be.EqualTo(encryptedDataSourceConfiguration.AnalyticsConnectionString);
 			res.DataSourceConfiguration.ApplicationConnectionString.Should().Be.EqualTo(encryptedDataSourceConfiguration.ApplicationConnectionString);
-			res.DataSourceConfiguration.ApplicationConfig.Single().Value
-				.Should().Be.EqualTo(encryptedDataSourceConfiguration.ApplicationConfig[tenant.DataSourceConfiguration.ApplicationConfig.Single().Key]);
+			res.ApplicationConfig.Single().Value
+				.Should().Be.EqualTo(tenant.ApplicationConfig[tenant.ApplicationConfig.Single().Key]);
 			res.TenantPassword.Should().Be.EqualTo(personInfo.TenantPassword);
 		}
 

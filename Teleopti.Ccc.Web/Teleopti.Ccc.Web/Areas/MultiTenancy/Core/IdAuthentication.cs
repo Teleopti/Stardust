@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 				PersonId = foundUser.Id,
 				Tenant = foundUser.Tenant.Name,
 				DataSourceConfiguration = _dataSourceConfigurationEncryption.EncryptConfig(foundUser.Tenant.DataSourceConfiguration),
+				ApplicationConfig = foundUser.Tenant.ApplicationConfig,
 				TenantPassword = foundUser.TenantPassword
 			};
 		}

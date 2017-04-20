@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.TestCommon.Web
         {
             return virtualPath;
         }
+
+	    public override bool TrySkipIisCustomErrors { get; set; }
     }
 
     public class FakeHttpCachePolicy : HttpCachePolicyBase

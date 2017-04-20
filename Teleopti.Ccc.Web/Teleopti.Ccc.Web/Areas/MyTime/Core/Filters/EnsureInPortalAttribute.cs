@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Filters
 			var controllerName = filterContext.RouteData.Values["controller"];
 			var actionName = filterContext.RouteData.Values["Action"];
 
-			filterContext.Result = new RedirectResult(string.Format("~/MyTime#{0}/{1}", controllerName, actionName));
+			filterContext.Result = new RedirectResult($"~/MyTime#{controllerName}/{actionName}");
 
 			base.OnActionExecuting(filterContext);
 		}

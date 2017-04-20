@@ -41,8 +41,8 @@ namespace Teleopti.Wfm.Administration.Core
 					//var analBuilder = new SqlConnectionStringBuilder(appBuilder.ConnectionString) { InitialCatalog = model.AnalyticsDatabase };
 					//oldTenant.DataSourceConfiguration.SetApplicationConnectionString(appBuilder.ConnectionString);
 					//oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analBuilder.ConnectionString);
-					oldTenant.DataSourceConfiguration.SetApplicationConfig(Environment.CommandTimeout, model.CommandTimeout.ToString());
-					oldTenant.DataSourceConfiguration.SetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString(), model.MobileQRCodeUrl);
+					oldTenant.SetApplicationConfig(Environment.CommandTimeout, model.CommandTimeout.ToString());
+					oldTenant.SetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString(), model.MobileQRCodeUrl);
 					oldTenant.Active = model.Active;
 					_currentTenantSession.CurrentSession().Save(oldTenant);
 				}

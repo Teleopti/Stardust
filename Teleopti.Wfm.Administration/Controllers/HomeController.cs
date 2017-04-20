@@ -69,8 +69,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 				AggregationDatabase = builderAgg.InitialCatalog,
 				Server = builder.DataSource,
 				Version = _checkDatabaseVersions.GetVersions(tenant.DataSourceConfiguration.ApplicationConnectionString),
-				CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationConfig[Environment.CommandTimeout]),
-				MobileQRCodeUrl = tenant.DataSourceConfiguration.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl),
+				CommandTimeout = int.Parse(tenant.ApplicationConfig[Environment.CommandTimeout]),
+				MobileQRCodeUrl = tenant.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl),
 				Active = tenant.Active
 			});
 		}

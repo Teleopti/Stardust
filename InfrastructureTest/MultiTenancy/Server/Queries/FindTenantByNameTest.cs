@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant(name);
-				tenant.DataSourceConfiguration.SetApplicationConfig(key, RandomName.Make());
+				tenant.SetApplicationConfig(key, RandomName.Make());
 				Persist.Persist(tenant);
 			}
 			using(TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				loaded = Target.Find(name);
 			}
-			loaded.DataSourceConfiguration.ApplicationConfig[key]
+			loaded.ApplicationConfig[key]
 				.Should().Not.Be.Null();
 		}
 	}

@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
@@ -13,7 +15,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -25,17 +26,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ISettingsPersisterAndProvider<CalendarLinkSettings> _calendarLinkSettingsPersisterAndProvider;
 		private readonly ICalendarLinkViewModelFactory _calendarLinkViewModelFactory;
 		private readonly IChangePersonPassword _changePersonPassword;
+		private readonly ICurrentHttpContext _httpContext;
+		private readonly ICurrentTenant _currentTenant;
 		private readonly ISettingsViewModelFactory _settingsViewModelFactory;
-		private readonly ISettingsPersisterAndProvider<NameFormatSettings>_nameFormatSettingsPersisterAndProvider;
+		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettingsPersisterAndProvider;
 
 		public SettingsController(ILoggedOnUser loggedOnUser,
-		                          IPersonPersister personPersister,
-		                          ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory,
+								  IPersonPersister personPersister,
+								  ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory,
 										  ISettingsViewModelFactory settingsViewModelFactory,
 										  ISettingsPersisterAndProvider<CalendarLinkSettings> calendarLinkSettingsPersisterAndProvider,
 											ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettingsPersisterAndProvider,
 											ICalendarLinkViewModelFactory calendarLinkViewModelFactory,
-											IChangePersonPassword changePersonPassword)
+											IChangePersonPassword changePersonPassword,
+											ICurrentHttpContext httpContext,
+											ICurrentTenant currentTenant)
 		{
 			_loggedOnUser = loggedOnUser;
 			_personPersister = personPersister;
@@ -45,6 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_nameFormatSettingsPersisterAndProvider = nameFormatSettingsPersisterAndProvider;
 			_calendarLinkViewModelFactory = calendarLinkViewModelFactory;
 			_changePersonPassword = changePersonPassword;
+			_httpContext = httpContext;
+			_currentTenant = currentTenant;
 		}
 
 		[EnsureInPortal]
@@ -106,8 +113,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				{
 					ret.IsAuthenticationSuccessful = true;
 				}
-				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 400;
+				_httpContext.Current().Response.TrySkipIisCustomErrors = true;
+				_httpContext.Current().Response.StatusCode = 400;
 			}
 			return Json(ret);
 		}
@@ -117,7 +124,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShareCalendar)]
 		public virtual JsonResult SetCalendarLinkStatus(bool isActive)
 		{
-			var settings = _calendarLinkSettingsPersisterAndProvider.Persist(new CalendarLinkSettings {IsActive = isActive});
+			var settings = _calendarLinkSettingsPersisterAndProvider.Persist(new CalendarLinkSettings { IsActive = isActive });
 			return Json(_calendarLinkViewModelFactory.CreateViewModel(settings, "SetCalendarLinkStatus"));
 		}
 
@@ -128,7 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			var settings = _calendarLinkSettingsPersisterAndProvider.Get();
 			return Json(_calendarLinkViewModelFactory.CreateViewModel(settings, "CalendarLinkStatus"),
-			            JsonRequestBehavior.AllowGet);
+						JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]
@@ -136,6 +143,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual void UpdateNameFormat(int nameFormatId)
 		{
 			_nameFormatSettingsPersisterAndProvider.Persist(new NameFormatSettings { NameFormatId = nameFormatId });
+		}
+
+		[UnitOfWork, HttpGet]
+		public virtual JsonResult MobileQRCodeUrl()
+		{
+			var url = _currentTenant.Current().GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl);
+			return Json(url, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

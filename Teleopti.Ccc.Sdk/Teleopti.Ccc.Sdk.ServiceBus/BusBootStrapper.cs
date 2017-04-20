@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 						loadAllTenants.Tenants().ForEach(dsConf => dataSourceForTenant().MakeSureDataSourceCreated(dsConf.Name,
 							dsConf.DataSourceConfiguration.ApplicationConnectionString,
 							dsConf.DataSourceConfiguration.AnalyticsConnectionString,
-							dsConf.DataSourceConfiguration.ApplicationConfig));
+							dsConf.ApplicationConfig));
 
 					}
 					//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void ShouldPersistApplicationNhibernateConfig()
 		{
 			var tenant = new Tenant(RandomName.Make());
-			tenant.DataSourceConfiguration.SetApplicationConfig(RandomName.Make(), RandomName.Make());
+			tenant.SetApplicationConfig(RandomName.Make(), RandomName.Make());
 			target.Persist(tenant);
 			tenantUnitOfWorkManager.CurrentSession().Flush();
 			tenantUnitOfWorkManager.CurrentSession().Clear();
@@ -78,9 +78,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 				.SetString("name", tenant.Name)
 				.UniqueResult<Tenant>();
 
-			result.DataSourceConfiguration.ApplicationConfig
+			result.ApplicationConfig
 				.Should()
-				.Have.SameValuesAs(tenant.DataSourceConfiguration.ApplicationConfig);
+				.Have.SameValuesAs(tenant.ApplicationConfig);
 		}
 
 		[Test]
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 				.CreateQuery("select t from Tenant t where t.Name=:name")
 				.SetString("name", tenant.Name)
 				.UniqueResult<Tenant>();
-			result.DataSourceConfiguration.ApplicationConfig.Single(cfg => cfg.Key == Environment.CommandTimeout).Value
+			result.ApplicationConfig.Single(cfg => cfg.Key == Environment.CommandTimeout).Value
 				.Should().Be.EqualTo("60");
 		}
 
@@ -120,10 +120,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var tenant = new Tenant(RandomName.Make());
 			var key = RandomName.Make();
 			var value = RandomName.Make();
-			tenant.DataSourceConfiguration.SetApplicationConfig(key, value);
-			tenant.DataSourceConfiguration.ApplicationConfig[key] = RandomName.Make();
+			tenant.SetApplicationConfig(key, value);
+			tenant.ApplicationConfig[key] = RandomName.Make();
 
-			tenant.DataSourceConfiguration.ApplicationConfig[key]
+			tenant.ApplicationConfig[key]
 				.Should().Be.EqualTo(value);
 		}
 

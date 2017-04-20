@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public ISettingData PersistSettingValue(string entityName, ISettingValue value)
 		{
 			storage[entityName] = value;
+			value.SetOwner(new PersonalSettingData(entityName,null));
 			return value.BelongsTo;
 		}
 

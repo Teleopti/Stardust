@@ -99,7 +99,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				var loadedTenant = Tenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
 				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Contain("Initial Catalog=Northwind");
 				loadedTenant.DataSourceConfiguration.AnalyticsConnectionString.Should().Contain("Initial Catalog=Northwind");
-				loadedTenant.DataSourceConfiguration.ApplicationConfig[Environment.CommandTimeout].Should().Be.EqualTo("180");
+				loadedTenant.ApplicationConfig[Environment.CommandTimeout].Should().Be.EqualTo("180");
 				loadedTenant.Active.Should().Be.False();
 			}
 		}
@@ -130,7 +130,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var loadedTenant = Tenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
-				loadedTenant.DataSourceConfiguration.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl).Should().Be.EqualTo(QRCodeUrl);
+				loadedTenant.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl).Should().Be.EqualTo(QRCodeUrl);
 			}
 		}
 

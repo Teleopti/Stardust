@@ -14,12 +14,12 @@
 			<property name="ApplicationConnectionString" />
 			<property name="AnalyticsConnectionString" />
 			<property name="AggregationConnectionString" />
-			<map name="ApplicationConfig" table="TenantApplicationConfig" access="field.camelcase-underscore">
-				<key column="TenantId"/>
-				<index column="ConfigKey" type="string"/>
-				<element column="ConfigValue" />
-			</map>
 		</component>
+		<map name="ApplicationConfig" table="TenantApplicationConfig" access="field.camelcase-underscore">
+			<key column="TenantId"/>
+			<index column="ConfigKey" type="string"/>
+			<element column="ConfigValue" />
+		</map>
     <property name="Active" />
 	</class>
 
@@ -30,7 +30,7 @@ select t from Tenant t
 	</query>
 	<query name="findByName">
 		select t from Tenant t
-		join fetch t.DataSourceConfiguration.ApplicationConfig
+		join fetch t.ApplicationConfig
 		where t.Name=:name
 	</query>
 	
