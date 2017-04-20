@@ -15744,8 +15744,9 @@ Do you want to participate?</value>
     <value>Invalid parameters</value>
     <comment>Error message when handle command with invalid parameters</comment>
   </data>
-  <data name="MaximumNumberOfAgentRowsReach" xml:space="preserve">
-    <value>Maximum number of agent rows ({0}) reached.</value>
+  <data name="NumberOfRowsExceedsTheMaximum" xml:space="preserve">
+    <value>Number of rows exceeds the maximum ({0}). </value>
+    <comment>When there are too many rows in an Import Agents file</comment>
   </data>
   <data name="DynamicGroupPageColon" xml:space="preserve">
     <value>Dynamic Group Page*:</value>

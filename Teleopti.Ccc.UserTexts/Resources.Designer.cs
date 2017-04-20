@@ -16034,15 +16034,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum number of agent rows {0} reach..
-        /// </summary>
-        public static string MaximumNumberOfAgentRowsReach {
-            get {
-                return ResourceManager.GetString("MaximumNumberOfAgentRowsReach", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Maximum number of report rows reached.
         /// </summary>
         public static string MaximumNumberOfReportRowsReached {
@@ -19903,6 +19894,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NumberOfMembers {
             get {
                 return ResourceManager.GetString("NumberOfMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of rows exceeds the maximum ({0}). .
+        /// </summary>
+        public static string NumberOfRowsExceedsTheMaximum {
+            get {
+                return ResourceManager.GetString("NumberOfRowsExceedsTheMaximum", resourceCulture);
             }
         }
         
