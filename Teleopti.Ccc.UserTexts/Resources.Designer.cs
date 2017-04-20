@@ -10532,6 +10532,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exceeds the maximum upload file size.
+        /// </summary>
+        public static string ExceedsMaximumUploadFileSize {
+            get {
+                return ResourceManager.GetString("ExceedsMaximumUploadFileSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Excluded.
         /// </summary>
         public static string Excluded {

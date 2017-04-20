@@ -15759,4 +15759,8 @@ Do you want to participate?</value>
     <value>Volume</value>
     <comment>number of calls/emails/chats</comment>
   </data>
+  <data name="ExceedsMaximumUploadFileSize" xml:space="preserve">
+    <value>Exceeds the maximum upload file size</value>
+    <comment>Message in Import Agents when the selected file is larger than expected</comment>
+  </data>
 </root>

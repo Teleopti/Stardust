@@ -350,7 +350,7 @@ wfm-import-agents {
 		}
 	}
         .droparea {
-                height: 65px;
+                min-height: 65px;
                 margin: 0 5px;
                 padding: .6em;
                 background: rgba(0, 0, 0, .06);

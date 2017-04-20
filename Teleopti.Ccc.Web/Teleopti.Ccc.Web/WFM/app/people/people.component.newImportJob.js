@@ -12,6 +12,7 @@
 	Ctrl.prototype.started = false;
 	Ctrl.prototype.fetchingFieldOptions = true;
 	Ctrl.prototype.setFallbacks = false;
+	Ctrl.prototype.fileSizeLimit = 2097152;
 
 	Ctrl.prototype.$onInit = function () {
 		this.parent.optionsPromise
@@ -32,7 +33,7 @@
 	};
 
 	Ctrl.prototype.invalidFile = function () {
-		return !(!!this.file) || this.file.size > 2097152;
+		return !(!!this.file) || this.file.size > this.fileSizeLimit;
 	};
 
 	Ctrl.prototype.createImportJob = function () {
