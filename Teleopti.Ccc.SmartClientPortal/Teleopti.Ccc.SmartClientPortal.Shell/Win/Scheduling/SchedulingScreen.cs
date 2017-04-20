@@ -3659,6 +3659,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData), true);
 				}
+
+				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXInitializingTreeDots"));
+				foreach (var skillDay in SchedulerState.SchedulingResultState.AllSkillDays())
+				{
+					foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+					{
+						skillStaffPeriod.CalculateEstimatedServiceLevel();
+					}
+				}
 			}
 
 			if (e.Cancel)
@@ -3680,21 +3689,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			SchedulerState.SchedulingResultState.Schedules.ModifiedPersonAccounts.Clear();
 			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXInitializingTreeDots"));
-			backgroundWorkerLoadData.ReportProgress(1);
 
 			foreach (var tag in _schedulerState.CommonStateHolder.ActiveScheduleTags)
 			{
 				if (tag.Id != _currentSchedulingScreenSettings.DefaultScheduleTag) continue;
 				_defaultScheduleTag = tag;
 				break;
-			}
-
-			foreach (var skillDay in SchedulerState.SchedulingResultState.AllSkillDays())
-			{
-				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
-				{
-					skillStaffPeriod.CalculateEstimatedServiceLevel();
-				}
 			}
 
 			var agentsDictionary = _schedulerState.FilteredCombinedAgentsDictionary;
