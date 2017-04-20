@@ -9,14 +9,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[InfrastructureTest]
-	public class RunInProcessEventPublisherTest : ISetup
+	public class RunInSyncInFatClientProcessEventPublisherTest : ISetup
 	{
-		public RunInProcessEventPublisher Target;
+		public RunInSyncInFatClientProcessEventPublisher Target;
 		public TestEventHandler TestEventHandler;
 		public TestEventHandler2 TestEventHandler2;
 		public IncorrectTestEventHandler IncorrectTestEventHandler;
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 	}
 
-	public class TestEventHandler : IHandleEvent<TestEvent>, IRunInProcess
+	public class TestEventHandler : IHandleEvent<TestEvent>, IRunInSyncInFatClientProcess
 	{
 		public void Handle(TestEvent @event)
 		{
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 	}
 
-	public class TestEventHandler2 : IHandleEvent<TestEvent>, IRunInProcess
+	public class TestEventHandler2 : IHandleEvent<TestEvent>, IRunInSyncInFatClientProcess
 	{
 		public void Handle(TestEvent @event)
 		{

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 	}
 
-	public interface IRunInProcess
+	public interface IRunInSyncInFatClientProcess
 	{
 	}
 }

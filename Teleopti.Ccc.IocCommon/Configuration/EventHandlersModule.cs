@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                         var runOnServiceBus = typeof(IRunOnServiceBus).IsAssignableFrom(t);
 #pragma warning restore 618
                         var runOnStardust = typeof(IRunOnStardust).IsAssignableFrom(t);
-                        var runInProcess = typeof(IRunInProcess).IsAssignableFrom(t);
+                        var runInProcess = typeof(IRunInSyncInFatClientProcess).IsAssignableFrom(t);
                         if (!(runOnHangfire ^ runOnServiceBus ^ runOnStardust ^ runInProcess))
                             throw new Exception($"All events handlers need to implement IRunOnHangfire or IRunOnServiceBus or IRunOnStardust or IRunInProcess. {t.Name} does not.");
                     }
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	                select i)
                 .AsSelf()
                 .SingleInstance()
-                .Except<IntradayOptimizationEventRunInProcessHandler>(ct =>
+                .Except<IntradayOptimizationEventRunInSyncInFatClientProcessHandler>(ct =>
                 {
 					ct.As<IHandleEvent<OptimizationWasOrdered>>()
 						.AsSelf()

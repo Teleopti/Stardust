@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 #pragma warning restore 618
 					.Concat(Resolver.HandlerTypesFor<IRunOnHangfire>(x))
 					.Concat(Resolver.HandlerTypesFor<IRunOnStardust>(x))
-					.Concat(Resolver.HandlerTypesFor<IRunInProcess>(x))
+					.Concat(Resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(x))
 					;
 				handlerTypes.ForEach(t =>
 				{

@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
+	[UseEventPublisher(typeof(RunInSyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[Toggle(Toggles.ResourcePlanner_IntradayNoDailyValueCheck_42767)]
 	public class IntradayOptimizationStandardDeviationTest

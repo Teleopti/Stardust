@@ -8,9 +8,9 @@ using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimizationEventRunInProcessHandler: IntradayOptimizationEventBaseHandler, IRunInProcess, IHandleEvent<OptimizationWasOrdered>
+	public class IntradayOptimizationEventRunInSyncInFatClientProcessHandler: IntradayOptimizationEventBaseHandler, IRunInSyncInFatClientProcess, IHandleEvent<OptimizationWasOrdered>
 	{
-		public IntradayOptimizationEventRunInProcessHandler(IntradayOptimization intradayOptimization,
+		public IntradayOptimizationEventRunInSyncInFatClientProcessHandler(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager,
 			IFillStateHolderWithMaxSeatSkills fillStateHolderWithMaxSeatSkills)

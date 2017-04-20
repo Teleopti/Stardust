@@ -7,12 +7,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class RunInProcessEventPublisher : IEventPublisher
+	public class RunInSyncInFatClientProcessEventPublisher : IEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
 
-		public RunInProcessEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor)
+		public RunInSyncInFatClientProcessEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor)
 		{
 			_resolver = resolver;
 			_processor = processor;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			Task.WaitAll((
 				from @event in events
-				from handlerType in _resolver.HandlerTypesFor<IRunInProcess>(@event)
+				from handlerType in _resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event)
 				select Task.Run(() =>
 					_processor.Process(@event, handlerType)
 					))

@@ -1566,7 +1566,7 @@
     <Compile Include="ApplicationLayer\Events\ScheduleOnNode.cs" />
     <Compile Include="ApplicationLayer\Events\StardustHealthCheckEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantHourTickEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\IRunOnHangfire.cs" />
+    <Compile Include="ApplicationLayer\Events\IRunOnInterfaces.cs" />
     <Compile Include="ApplicationLayer\Events\ICommandIdentifier.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />

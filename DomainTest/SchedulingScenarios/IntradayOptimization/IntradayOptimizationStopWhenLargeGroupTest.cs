@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
+	[UseEventPublisher(typeof(RunInSyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	public class IntradayOptimizationStopWhenLargeGroupTest : ISetup
 	{

@@ -173,7 +173,7 @@
     <Compile Include="ApplicationLayer\Events\HangfireRecurringEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\Events\MultiEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyConcurrencyTest.cs" />
-    <Compile Include="ApplicationLayer\Events\RunInProcessEventPublisherTest.cs" />
+    <Compile Include="ApplicationLayer\Events\RunInSyncInFatClientProcessEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationPublisherCheckSumPersisterTest.cs" />
     <Compile Include="ApplicationLayer\PersonScheduleDayReadModel\PersonScheduleDayReadModelUpdaterConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleDayReadModel\ScheduleDayReadModelUpdaterHangfireConcurrencyTest.cs" />
