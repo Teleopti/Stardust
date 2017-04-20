@@ -2,12 +2,15 @@
 using NHibernate.Cfg;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Administration.Controllers;
+using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
@@ -51,14 +54,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfCommandTimeoutIsZero()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
-			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-			{
-				var tenant = new Tenant("Old One");
-				tenant.DataSourceConfiguration.SetAnalyticsConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
-				tenant.DataSourceConfiguration.SetApplicationConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
-				CurrentTenantSession.CurrentSession().Save(tenant);
-			}
+			SetupTenant();
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var model = new UpdateTenantModel
@@ -80,14 +76,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldOnlyUpdateExistingTenantActiveAndTimeout()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
-			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-			{
-				var tenant = new Tenant("Old One");
-				tenant.DataSourceConfiguration.SetAnalyticsConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
-				tenant.DataSourceConfiguration.SetApplicationConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
-				CurrentTenantSession.CurrentSession().Save(tenant);
-			}
+			SetupTenant();
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var model = new UpdateTenantModel
@@ -100,6 +89,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 					AnalyticsDatabase = "Southwind",
 					AppDatabase = "Southwind",
 					CommandTimeout = 180,
+					MobileQRCodeUrl = string.Empty,
 					Active = false
 				};
 				Target.Save(model);
@@ -113,5 +103,48 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				loadedTenant.Active.Should().Be.False();
 			}
 		}
+
+		[Test]
+		public void ShouldSaveMobileQRCodeUrlToApplicationConfig()
+		{
+			var QRCodeUrl = "http://localhost:8089/WFM";
+			SetupTenant();
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var model = new UpdateTenantModel
+				{
+					NewName = "Old One",
+					OriginalName = "Old One",
+					Server = "(local)",
+					UserName = "ola",
+					Password = "password",
+					AnalyticsDatabase = "Southwind",
+					AppDatabase = "Southwind",
+					CommandTimeout = 180,
+					Active = false,
+					MobileQRCodeUrl = QRCodeUrl
+				};
+				Target.Save(model);
+			}
+
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var loadedTenant = Tenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
+				loadedTenant.DataSourceConfiguration.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl).Should().Be.EqualTo(QRCodeUrl);
+			}
+		}
+
+		protected void SetupTenant()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var tenant = new Tenant("Old One");
+				tenant.DataSourceConfiguration.SetAnalyticsConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
+				tenant.DataSourceConfiguration.SetApplicationConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
+				CurrentTenantSession.CurrentSession().Save(tenant);
+			}
+		}
+
 	}
 }

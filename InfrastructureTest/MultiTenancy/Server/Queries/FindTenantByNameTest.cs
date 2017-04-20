@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant(name);
-				tenant.DataSourceConfiguration.SetNHibernateConfig(key, RandomName.Make());
+				tenant.DataSourceConfiguration.SetApplicationConfig(key, RandomName.Make());
 				Persist.Persist(tenant);
 			}
 			using(TenantUnitOfWork.EnsureUnitOfWorkIsStarted())

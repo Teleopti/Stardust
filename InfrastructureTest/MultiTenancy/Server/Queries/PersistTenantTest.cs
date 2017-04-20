@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void ShouldPersistApplicationNhibernateConfig()
 		{
 			var tenant = new Tenant(RandomName.Make());
-			tenant.DataSourceConfiguration.SetNHibernateConfig(RandomName.Make(), RandomName.Make());
+			tenant.DataSourceConfiguration.SetApplicationConfig(RandomName.Make(), RandomName.Make());
 			target.Persist(tenant);
 			tenantUnitOfWorkManager.CurrentSession().Flush();
 			tenantUnitOfWorkManager.CurrentSession().Clear();
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var tenant = new Tenant(RandomName.Make());
 			var key = RandomName.Make();
 			var value = RandomName.Make();
-			tenant.DataSourceConfiguration.SetNHibernateConfig(key, value);
+			tenant.DataSourceConfiguration.SetApplicationConfig(key, value);
 			tenant.DataSourceConfiguration.ApplicationConfig[key] = RandomName.Make();
 
 			tenant.DataSourceConfiguration.ApplicationConfig[key]

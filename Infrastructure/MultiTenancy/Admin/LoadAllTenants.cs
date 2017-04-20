@@ -19,5 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 				.GetNamedQuery("loadAllTenants")
 				.List<Tenant>();
 		}
+
+
 	}
 }

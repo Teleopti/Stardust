@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
@@ -69,6 +70,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Server = builder.DataSource,
 				Version = _checkDatabaseVersions.GetVersions(tenant.DataSourceConfiguration.ApplicationConnectionString),
 				CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationConfig[Environment.CommandTimeout]),
+				MobileQRCodeUrl = tenant.DataSourceConfiguration.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl),
 				Active = tenant.Active
 			});
 		}

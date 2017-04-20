@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using NHibernate.Cfg;
+using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			_applicationConfig = new Dictionary<string, string> { { Environment.CommandTimeout, "60" } };
 		}
 
-		public DataSourceConfiguration(string applicationConnectionString, 
+		public DataSourceConfiguration(string applicationConnectionString,
 										string analyticsConnectionString,
 										IDictionary<string, string> applicationConfig)
 		{
@@ -32,6 +33,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual IDictionary<string, string> ApplicationConfig
 		{
 			get { return new Dictionary<string, string>(_applicationConfig); }
+		}
+
+		public virtual string GetApplicationConfig(TenantApplicationConfigKey key)
+		{
+			if (!this.ApplicationConfig.ContainsKey(key.ToString()))
+			{
+				return string.Empty;
+			}
+			return ApplicationConfig[key.ToString()];
 		}
 
 		public virtual void SetApplicationConnectionString(string applicationConnectionString)
@@ -51,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			new SqlConnectionStringBuilder(aggregationConnectionString);
 			AggregationConnectionString = aggregationConnectionString;
 		}
-		public void SetNHibernateConfig(string key, string value)
+		public void SetApplicationConfig(string key, string value)
 		{
 			_applicationConfig[key] = value;
 		}

@@ -242,6 +242,7 @@
     <Compile Include="MultiTenancy\DuplicateIdentityException.cs" />
     <Compile Include="MultiTenancy\PasswordStrengthException.cs" />
     <Compile Include="MultiTenancy\PersonInfoModel.cs" />
+    <Compile Include="MultiTenancy\TenantApplicationConfigKey.cs" />
     <Compile Include="MultiTenancy\TenantUserPersister.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />

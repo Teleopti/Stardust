@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Linq;
+using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Models;
@@ -39,8 +41,9 @@ namespace Teleopti.Wfm.Administration.Core
 					//var analBuilder = new SqlConnectionStringBuilder(appBuilder.ConnectionString) { InitialCatalog = model.AnalyticsDatabase };
 					//oldTenant.DataSourceConfiguration.SetApplicationConnectionString(appBuilder.ConnectionString);
 					//oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analBuilder.ConnectionString);
-					oldTenant.DataSourceConfiguration.SetNHibernateConfig(Environment.CommandTimeout, model.CommandTimeout.ToString());
-				    oldTenant.Active = model.Active;
+					oldTenant.DataSourceConfiguration.SetApplicationConfig(Environment.CommandTimeout, model.CommandTimeout.ToString());
+					oldTenant.DataSourceConfiguration.SetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString(), model.MobileQRCodeUrl);
+					oldTenant.Active = model.Active;
 					_currentTenantSession.CurrentSession().Save(oldTenant);
 				}
 			}
