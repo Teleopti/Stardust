@@ -5516,15 +5516,15 @@
     <None Include="Resources\Shifts_small.png" />
     <None Include="Resources\Teleopti-WFM-main_small.png" />
     <None Include="Win\Forecasting\Forms\Forecaster.cd" />
-    <EmbeddedResource Include="Win\Reports\report_auditing.rdlc">
+    <EmbeddedResource Include="Reports\report_auditing.rdlc">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Win\Reports\report_schedule_time_vs_target.rdlc">
+    <EmbeddedResource Include="Reports\report_schedule_time_vs_target.rdlc">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Win\Reports\report_scheduled_time_per_activity.rdlc">
+    <EmbeddedResource Include="Reports\report_scheduled_time_per_activity.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <None Include="Win\Scheduling\ScheduleViewMVP.cd" />
