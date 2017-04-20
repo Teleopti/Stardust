@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		public WithUnitOfWork WithUnitOfWork;
 		public IBusinessUnitRepository BusinessUnits;
 		public HangfireClientStarter HangfireClientStarter;
+		public HangfireUtilities Hangfire;
 
 		protected override void BeforeTest()
 		{
@@ -71,6 +72,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			base.AfterTest();
 
 			Impersonate?.EndImpersonation();
+
+			Hangfire.WaitForQueue();
 		}
 	}
 }
