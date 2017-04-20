@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 
 		public IEnumerable<MissingForecastModel> GetMissingForecast(ICollection<IPerson> people, DateOnlyPeriod range)
 		{
-			var missingForecasts = GetMissingForecast(range);
+			var missingForecasts = GetMissingForecast(range).ToList();
 			var skills = new HashSet<ISkill>();
 			foreach (var periods in people.Select(person => person.PersonPeriods(range)))
 				foreach (var period in periods)

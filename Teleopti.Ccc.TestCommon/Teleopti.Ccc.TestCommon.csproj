@@ -232,7 +232,6 @@
     <Compile Include="FakeRepositories\FakeExtendedPreferenceTemplateRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalLogOnRepository.cs" />
     <Compile Include="FakeRepositories\FakeFavoriteSearchRepository.cs" />
-    <Compile Include="FakeRepositories\FakeFixedStaffLoader.cs" />
     <Compile Include="FakeRepositories\FakeGroupPageRepository.cs" />
     <Compile Include="FakeRepositories\FakeJobResultRepository.cs" />
     <Compile Include="FakeRepositories\FakeKpiRepository.cs" />

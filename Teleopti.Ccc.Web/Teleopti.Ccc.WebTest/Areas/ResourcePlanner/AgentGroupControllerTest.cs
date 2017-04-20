@@ -10,7 +10,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.WebTest.TestHelper;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
@@ -95,20 +94,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			var result =(AgentGroup) AgentGroupRepository.Get(agentGroupId);
 			result.IsDeleted.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldRemoveLatestPlanningPeriodForAgent()
-		{
-			var agentGroup = new AgentGroup()
-				.WithId();
-			AgentGroupRepository.Has(agentGroup);
-			PlanningPeriodRepository.Has(new DateOnly(2017, 04, 19), 1, agentGroup);
-
-			Target.DeleteLastPeriod(agentGroup.Id.GetValueOrDefault());
-
-			var planningPeriods = PlanningPeriodRepository.LoadForAgentGroup(agentGroup).ToList();
-			planningPeriods.Should().Be.Empty();
 		}
 	}
 }

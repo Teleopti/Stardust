@@ -7,9 +7,13 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -17,7 +21,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
@@ -28,10 +31,11 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		//break this test in to multiple
 		public PlanningPeriodController Target;
 		public MutableNow Now;
-		public FakeMissingForecastProvider MissingForecastProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeAgentGroupRepository AgentGroupRepository;
-		public FakeFixedStaffLoader FixedStaffLoader;
+		public FakeScenarioRepository ScenarioRepository;
+		public FakeExistingForecastRepository ExistingForecastRepository;
+		public FakePersonRepository PersonRepository;
 
 		[Test]
 		public void ShouldReturnDefaultPlanningPeriodForAgentGroupIfNotCreated()
@@ -75,8 +79,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldSaveDefaultPlanningPeriodIfNoPeriodExists()
 		{
-			Target.GetAllPlanningPeriods();
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
+			var periods = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods();
+			
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(periods.Content.First().Id);
 			result.Content.Id.Should().Not.Be.EqualTo(Guid.Empty);
 			PlanningPeriodRepository.AddExecuted.Should().Be.True();
 		}
@@ -85,8 +90,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldSaveNewDefaultPlanningPeriodIfPreviousStarted()
 		{
 			Now.Is(new DateTime(2015, 4, 1));
-			Target.GetAllPlanningPeriods();
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
+			var periods = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods();
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(periods.Content.First().Id);
 			result.Content.Id.Should().Not.Be.EqualTo(Guid.Empty);
 			result.Content.StartDate.Should().Be.EqualTo(new DateTime(2015, 5, 1));
 
@@ -96,24 +101,48 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnEmptyIfForecastIsAvailable()
 		{
-			MissingForecastProvider.MissingForecast = new MissingForecastModel[] {};
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			var skill = SkillFactory.CreateSkill("Direct Sales", new SkillTypePhone(new Description("Phone"), ForecastSource.InboundTelephony), 15).WithId();
+			var agentGroup = new AgentGroup().WithId().AddFilter(new SkillFilter(skill));
+			AgentGroupRepository.Has(agentGroup);
+			var personPeriodStart = new DateOnly(2015, 5, 10);
+			var planningPeriod = PlanningPeriodRepository.Has(personPeriodStart, 1, agentGroup);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(personPeriodStart, new[] { skill }).WithName(new Name("Tester", "Testersson")).WithId();
+			person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(personPeriodStart));
+			person.Period(personPeriodStart).RuleSetBag = new RuleSetBag();
+			PersonRepository.Has(person);
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
+
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(planningPeriod.Id.GetValueOrDefault());
+
 			result.Content.ValidationResult.InvalidResources.Should().Be.Empty();
 		}
 
-		[Test, Ignore("Look over this test - part of 42784")]
+		[Test]
 		public void ShouldReturnMissingForecastWhenIncompleteForecasting()
 		{
-			MissingForecastProvider.MissingForecast = new[]
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			var skill = SkillFactory.CreateSkill("Direct Sales", new SkillTypePhone(new Description("Phone"), ForecastSource.InboundTelephony), 15).WithId();
+			var agentGroup = new AgentGroup().WithId().AddFilter(new SkillFilter(skill));
+			AgentGroupRepository.Has(agentGroup);
+			var personPeriodStart = new DateOnly(2015, 5, 10);
+			var planningPeriod = PlanningPeriodRepository.Has(personPeriodStart, 1, agentGroup);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(personPeriodStart, new[] { skill }).WithName(new Name("Tester", "Testersson")).WithId();
+			person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(personPeriodStart));
+			person.Period(personPeriodStart).RuleSetBag = new RuleSetBag();
+			PersonRepository.Has(person);
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>
 			{
-				new MissingForecastModel
+				new SkillMissingForecast
 				{
-					SkillName = "Direct Sales",
-					MissingRanges =
-						new[] {new MissingForecastRange {StartDate = new DateTime(2015, 5, 10), EndDate = new DateTime(2015, 5, 16)}}
+					Periods = new[]{new DateOnlyPeriod(new DateOnly(2015, 4, 1), new DateOnly(2015, 4, 30)) },
+					SkillName = skill.Name,
+					SkillId = skill.Id.GetValueOrDefault()
 				}
 			};
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
+
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(planningPeriod.Id.GetValueOrDefault());
+
 			result.Content.ValidationResult.InvalidResources.Should().Not.Be.Empty();
 		}
 
@@ -132,14 +161,15 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldOnlyGetFuturePlanningPeriodSuggestions()
 		{
 			Now.Is(new DateTime(2015, 05, 22));
+			var planningPeriodId = Guid.NewGuid();
 			PlanningPeriodRepository.CustomData(
-				new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())),
+				new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())).WithId(planningPeriodId),
 				new PlanningPeriodSuggestions(Now, suggestions()));
 
 
 			var result =
 				(OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)
-					Target.GetPlanningPeriodSuggestion(Guid.NewGuid());
+					Target.GetPlanningPeriodSuggestion(planningPeriodId);
 			result.Content.Where(x => x.StartDate < Now.LocalDateTime()).ToList().Should().Be.Empty();
 		}
 
@@ -147,12 +177,14 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldPublishSchedules()
 		{
 			Now.Is(new DateTime(2015, 4, 1));
-			PlanningPeriodRepository.CustomData(new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())),
+			var planningPeriodId = Guid.NewGuid();
+			PlanningPeriodRepository.CustomData(new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())).WithId(planningPeriodId),
 				new PlanningPeriodSuggestions(Now, suggestions()));
 			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2010, 1, 1));
-			FixedStaffLoader.SetPeople(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1)));
+			PersonRepository.Has(person);
 
-			var result = (OkResult)Target.Publish(Guid.NewGuid());
+			var result = (OkResult)Target.Publish(planningPeriodId);
 			result.Should().Not.Be.Null();
 
 			person.WorkflowControlSet.SchedulePublishedToDate.Value.Should().Be.GreaterThan(Now.UtcDateTime());
@@ -203,6 +235,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnNextPlanningPeriod()
 		{
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
 			Now.Is(new DateTime(2015, 05, 23));
 			PlanningPeriodRepository.Add( new PlanningPeriod(new PlanningPeriodSuggestions(Now,new List<AggregatedSchedulePeriod>())));
 
@@ -214,6 +248,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnNextPlanningPeriodForAgentGroup()
 		{
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
 			var agentGroupId = Guid.NewGuid();
 			var agentGroup = new AgentGroup().WithId(agentGroupId);
 			AgentGroupRepository.Add(agentGroup);
@@ -231,31 +267,10 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnIndicationIfNextPlanningPeriodExists()
 		{
-			Now.Is(new DateTime(2015, 05, 23));
-			var currentPlanningPeriodId = Guid.NewGuid();
-			var nextPlanningPeriodId = Guid.NewGuid();
+			var currentPeriod = PlanningPeriodRepository.Has(new DateOnly(2015, 06, 01), 2);
+			PlanningPeriodRepository.Has(new DateOnly(2015, 06, 15), 2);
 
-			var aggSchedulePeriod = new AggregatedSchedulePeriod
-			{
-				Number = 2,
-				Culture = 1053,
-				DateFrom = new DateTime(2015, 05, 04),
-				PeriodType = SchedulePeriodType.Week,
-				Priority = 10
-			};
-			var suggestion = new PlanningPeriodSuggestions(Now, new List<AggregatedSchedulePeriod>
-			{
-				aggSchedulePeriod
-			});
-			
-			PlanningPeriodRepository.Add(new FakePlanningPeriod(currentPlanningPeriodId, new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14))));
-			PlanningPeriodRepository.Add(new FakePlanningPeriod(nextPlanningPeriodId, new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28))));
-			PlanningPeriodRepository.CustomData(
-				new PlanningPeriod(new PlanningPeriodSuggestions(Now,
-					new List<AggregatedSchedulePeriod> { aggSchedulePeriod })), suggestion
-				);
-
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(currentPlanningPeriodId);
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(currentPeriod.Id.GetValueOrDefault());
 			result.Content.HasNextPlanningPeriod.Should().Be(true);
 		}
 
@@ -265,6 +280,21 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			Now.Is(new DateTime(2015, 4, 1));
 			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
 			result.Content.State.Should().Be("New");
+		}
+
+		[Test]
+		public void ShouldRemoveLatestPlanningPeriodForAgent()
+		{
+			var agentGroup = new AgentGroup()
+				.WithId();
+			AgentGroupRepository.Has(agentGroup);
+			PlanningPeriodRepository.Has(new DateOnly(2017, 04, 19), 1, agentGroup);
+			PlanningPeriodRepository.Has(new DateOnly(2017, 04, 26), 1, agentGroup);
+
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.DeleteLastPeriod(agentGroup.Id.GetValueOrDefault());
+
+			var planningPeriods = PlanningPeriodRepository.LoadForAgentGroup(agentGroup).ToList();
+			planningPeriods.SingleOrDefault()?.Id.Should().Be.EqualTo(result.Content.SingleOrDefault()?.Id);
 		}
 
 		private static List<AggregatedSchedulePeriod> suggestions()
@@ -305,9 +335,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			//These out of process-fakes, put it in DomainTestAttribute
 			system.AddService<PlanningPeriodController>();
 			system.AddModule(new ResourcePlannerModule());
-			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
-
-			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
 		}
 	}
 }

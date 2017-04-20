@@ -54,15 +54,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffRulesRepository.RemoveForAgentGroup(agentGroup);
 			_agentGroupRepository.Remove(agentGroup);
 		}
-
-		public void DeleteLastPeriod(Guid agentGroupId)
-		{
-			var agentGroup = _agentGroupRepository.Get(agentGroupId);
-			if (agentGroup == null) return;
-			var planningPeriods = _planningPeriodRepository.LoadForAgentGroup(agentGroup).ToList();
-			var periodToDelete = planningPeriods.OrderBy(x => x.Range.StartDate).LastOrDefault();
-			if (periodToDelete != null)
-				_planningPeriodRepository.Remove(periodToDelete);
-		}
 	}
 }

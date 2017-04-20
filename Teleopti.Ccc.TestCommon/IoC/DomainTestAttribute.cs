@@ -135,6 +135,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<FakePlanningPeriodRepository>().For<IPlanningPeriodRepository>();
+			system.UseTestDouble<FakeExistingForecastRepository>().For<IExistingForecastRepository>();
 			system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();

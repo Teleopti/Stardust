@@ -6,6 +6,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		void Persist(AgentGroupModel agentGroupModel);
 		void Delete(Guid agentGroupId);
-		void DeleteLastPeriod(Guid agentGroupId);
 	}
 }

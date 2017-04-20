@@ -44,12 +44,5 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_agentGroupModelPersister.Delete(id);
 			return Ok();
 		}
-
-		[UnitOfWork, HttpDelete, Route("api/resourceplanner/agentgroup/{id}/lastperiod")]
-		public virtual IHttpActionResult DeleteLastPeriod(Guid id)
-		{
-			_agentGroupModelPersister.DeleteLastPeriod(id);
-			return Ok();
-		}
 	}
 }

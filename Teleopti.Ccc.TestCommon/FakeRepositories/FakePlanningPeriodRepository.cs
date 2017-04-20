@@ -7,9 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -63,7 +61,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPlanningPeriod Get(Guid id)
 		{
-			return _planningPeriods.FirstOrDefault();
+			return _planningPeriods.FirstOrDefault(planningPeriod => planningPeriod.Id == id);
 		}
 
 		public IList<IPlanningPeriod> LoadAll()
@@ -76,12 +74,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (!_planningPeriods.Any())
 				return new PlanningPeriod(new PlanningPeriodSuggestions(_now, new AggregatedSchedulePeriod[] {}));
 			//TODO: fix this!
-			return _planningPeriods.FirstOrDefault();
-		}
-
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
+			return _planningPeriods.FirstOrDefault(planningPeriod => planningPeriod.Id == id);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
@@ -95,13 +88,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IPlanningPeriod> LoadForAgentGroup(IAgentGroup agentGroup)
 		{
-			return _planningPeriods.Where(x => x.AgentGroup.Id == agentGroup.Id).ToList();
+			return _planningPeriods.Where(x => x.AgentGroup?.Id == agentGroup.Id).ToList();
 		}
 
-		public void CustomData(PlanningPeriod planinnPeriod, PlanningPeriodSuggestions planningPeriodSuggestions)
+		public void CustomData(PlanningPeriod planningPeriod, PlanningPeriodSuggestions planningPeriodSuggestions)
 		{
-			if (planinnPeriod != null)
-				_planningPeriods.Add(planinnPeriod);
+			if (planningPeriod != null)
+				_planningPeriods.Add(planningPeriod);
 			_planningPeriodSuggestions = planningPeriodSuggestions;
 		}
 	}
