@@ -47,9 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AddOverTimePerformanceTest.cs" />
     <Compile Include="PerformanceTestWithOneTimeSetup.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceCalculate3DaysTest.cs" />
     <Compile Include="StaffingPerformanceTestAttribute.cs" />
     <Compile Include="UpdateReadModelPerformanceTestAttribute.cs" />
@@ -88,6 +90,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
