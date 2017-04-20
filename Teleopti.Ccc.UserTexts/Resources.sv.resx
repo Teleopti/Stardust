@@ -14407,4 +14407,40 @@ Vill du registrera dig?</value>
   <data name="AvailableAsGroupPageColon" xml:space="preserve">
     <value>Tillgänglig som gruppering:*</value>
   </data>
+  <data name="ColumnCanNotBeEmpty" xml:space="preserve">
+    <value>Kolumnen {0} får inte vara tom</value>
+  </data>
+  <data name="ANewImportJobHasBeenCreatedFor" xml:space="preserve">
+    <value>Ett nytt importjobb har skapats för '{0}'</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForFullSuccess" xml:space="preserve">
+    <value>{0} importerade. Alla lyckades.</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForNonfullSuccess" xml:space="preserve">
+    <value>{0} importerade, {1} misslyckades.</value>
+  </data>
+  <data name="ImportJob" xml:space="preserve">
+    <value>Importjobb</value>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>Pågående</value>
+  </data>
+  <data name="TimeStarted" xml:space="preserve">
+    <value>Starttid</value>
+  </data>
+  <data name="InvalidParameters" xml:space="preserve">
+    <value>Ogiltiga parametrar</value>
+  </data>
+  <data name="DynamicGroupPageColon" xml:space="preserve">
+    <value>Dynamisk gruppering*:</value>
+  </data>
+  <data name="ForecastedVolume" xml:space="preserve">
+    <value>Prognostiserad volym</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volym</value>
+  </data>
+  <data name="MaximumNumberOfAgentRowsReach" xml:space="preserve">
+    <value>Max antal agentrader ({0}) nått. </value>
+  </data>
 </root>

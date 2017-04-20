@@ -4650,7 +4650,7 @@ Workload</value>
     <comment>Manage workload Ribbon button</comment>
   </data>
   <data name="AmpersandFindNext" xml:space="preserve">
-    <value>&amp;FindNext</value>
+    <value>&amp;Find Next</value>
     <comment>Find next</comment>
   </data>
   <data name="AmpersandReplace" xml:space="preserve">
@@ -15737,7 +15737,7 @@ Do you want to participate?</value>
     <comment>Status of an import agents job</comment>
   </data>
   <data name="TimeStarted" xml:space="preserve">
-    <value>Time started</value>
+    <value>Start time</value>
     <comment>Header of times when an import agents job started</comment>
   </data>
   <data name="InvalidParameters" xml:space="preserve">
@@ -15745,7 +15745,7 @@ Do you want to participate?</value>
     <comment>Error message when handle command with invalid parameters</comment>
   </data>
   <data name="MaximumNumberOfAgentRowsReach" xml:space="preserve">
-    <value>Maximum number of agent rows {0} reach.</value>
+    <value>Maximum number of agent rows ({0}) reached.</value>
   </data>
   <data name="DynamicGroupPageColon" xml:space="preserve">
     <value>Dynamic Group Page*:</value>
