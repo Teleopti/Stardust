@@ -255,24 +255,22 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		self.absenceReportPermission(hasAbsenceReportPermission);
 		self.overtimeAvailabilityPermission(hasOvertimeAvailabilityPermission);
 
-		var dayViewModels = [], rawProbabilities = [];
+		var dayViewModels = [];
 		if(Array.isArray(data.Days) && data.Days.length > 0) {
 			dayViewModels = data.Days.map(function(scheduleDay) {
+				var rawProbabilities = [];
 				if(Array.isArray(data.Possibilities) && data.Possibilities.length > 0) {
 					if (self.staffingProbabilityForMultipleDaysEnabled()) {
 						rawProbabilities = data.Possibilities.filter(function(p) {
 							return p.Date == scheduleDay.FixedDate;
 						});
-					} else {
-						if(scheduleDay.FixedDate == self.formatedCurrentUserDate())
-							rawProbabilities = data.Possibilities;
-						//Jianfeng todo: Re-enable this after the probability date is correct from json
-						// rawProbabilities = data.Possibilities.filter(function(p) {
-						// 	if(p.Date)
-						// 		return p.Date == self.formatedCurrentUserDate();
-						// 	else 
-						// 		return true;
-						// });
+					} else if(scheduleDay.FixedDate == self.formatedCurrentUserDate()){
+						rawProbabilities = data.Possibilities.filter(function(p) {
+							if(p.Date)
+								return p.Date == self.formatedCurrentUserDate();
+							else 
+								return true;
+						});
 					}
 				}
 				return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, rawProbabilities,

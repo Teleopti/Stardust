@@ -480,26 +480,22 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.timeLines(timelines);
 
-		var days = [], rawProbabilities = [], 
-			currentUserDate = getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format("YYYY-MM-DD");
-
+		var days = [], currentUserDate = getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format("YYYY-MM-DD");
 		if(Array.isArray(data.Days) && data.Days.length > 0) {
 			days = ko.utils.arrayMap(data.Days, function (scheduleDay) {
+				var rawProbabilities = [];
 				if(Array.isArray(data.Possibilities) && data.Possibilities.length > 0) {
 					if(self.staffingProbabilityForMultipleDaysEnabled()) {
 						rawProbabilities = data.Possibilities.filter(function(p) {
 							return p.Date == scheduleDay.FixedDate;
 						});
-					} else {
-						if(scheduleDay.FixedDate == currentUserDate)
-							rawProbabilities = data.Possibilities;
-						//Jianfeng todo: Re-enable this after the probability date is correct from json
-						// rawProbabilities = data.Possibilities.filter(function(p) {
-						// 	if(p.Date)
-						// 		return p.Date == currentUserDate;
-						// 	else 
-						// 		return true;
-						// });
+					} else if(scheduleDay.FixedDate == currentUserDate){
+						rawProbabilities = data.Possibilities.filter(function(p) {
+							if(p.Date)
+								return p.Date == currentUserDate;
+							else 
+								return true;
+						});
 					}
 				}
 				return new Teleopti.MyTimeWeb.Schedule.DayViewModel(scheduleDay, rawProbabilities, self);
