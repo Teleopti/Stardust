@@ -44,13 +44,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
 
-		public IDictionary<DateTime, int> CalculateIntradayAbsenceIntervalPossibilities()
+		public CalculatedPossibilityModel CalculateIntradayAbsenceIntervalPossibilities()
 		{
-			var possibilities = CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod());
-			return possibilities.Any() ? possibilities.First().Value : new Dictionary<DateTime, int>();
+			return CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).FirstOrDefault();
 		}
 
-		public IDictionary<DateOnly, IDictionary<DateTime, int>> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
+		public IList<CalculatedPossibilityModel> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
 		{
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				new[] { _loggedOnUser.CurrentUser() },
@@ -61,16 +60,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skillStaffingDatas = getSkillStaffingData(period, useShrinkageValidator);
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
 				skill => new IntervalHasUnderstaffing(skill);
-			return calcuateIntervalPossibilitiesForMultipleDays(skillStaffingDatas, getStaffingSpecification, scheduleDictionary);
+			return calcuateIntervalPossibilitiesForMultipleDays(skillStaffingDatas.FirstOrDefault()?.Resolution ?? 15, skillStaffingDatas, getStaffingSpecification, scheduleDictionary);
 		}
 
-		public IDictionary<DateTime, int> CalculateIntradayOvertimeIntervalPossibilities()
+		public CalculatedPossibilityModel CalculateIntradayOvertimeIntervalPossibilities()
 		{
-			var possibilities = CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod());
-			return possibilities.Any() ? possibilities.First().Value : new Dictionary<DateTime, int>();
+			return CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).FirstOrDefault();
+
 		}
 
-		public IDictionary<DateOnly, IDictionary<DateTime, int>> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
+		public IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
 		{
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				new[] { _loggedOnUser.CurrentUser() },
@@ -81,7 +80,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skillStaffingDatas = getSkillStaffingData(period, useShrinkageValidator);
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
 				skill => new IntervalHasSeriousUnderstaffing(skill);
-			return calcuateIntervalPossibilitiesForMultipleDays(skillStaffingDatas, getStaffingSpecification, scheduleDictionary);
+			return calcuateIntervalPossibilitiesForMultipleDays(skillStaffingDatas.FirstOrDefault()?.Resolution ?? 15, skillStaffingDatas, getStaffingSpecification, scheduleDictionary);
 		}
 
 		private IEnumerable<skillStaffingData> getSkillStaffingData(DateOnlyPeriod period, bool useShrinkage)
@@ -92,10 +91,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			if (!personSkills.Any()) return skillStaffingList;
 
 			var resolution = personSkills.Min(s => s.Skill.DefaultResolution);
+
+			var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), personSkills.Select(s => s.Skill),
+				_scenarioRepository.Current()).ToLookup(s => s.Skill);
 			foreach (var skill in personSkills)
 			{
-				var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), new[] {skill.Skill},
-					_scenarioRepository.Current());
 				var staffings =
 					period.DayCollection()
 						.Select(
@@ -105,20 +105,22 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 									Date = p,
 									Staffing = _scheduledStaffingProvider.StaffingPerSkill(new[] {skill.Skill}, resolution, p, useShrinkage).ToLookup(x => x.StartDateTime),
 									Forecasted =
-									_forecastedStaffingProvider.StaffingPerSkill(new[] {skill.Skill}, skillDays, resolution, p, useShrinkage).ToLookup(x => x.StartTime)
+									_forecastedStaffingProvider.StaffingPerSkill(new[] {skill.Skill}, skillDays[skill.Skill].ToArray(), resolution, p, useShrinkage).ToLookup(x => x.StartTime)
 								});
 				var intradayStaffingModels = from s in staffings
 					let p = s.Date
-					let times = s.Staffing.Select(t => t.Key).Union(s.Forecasted.Select(t => t.Key)).Distinct().OrderBy(t => t).ToArray()
-					let staffingSeries = times.Select(t => s.Staffing[t].FirstOrDefault())
-					let forecastingSeries = times.Select(t => s.Forecasted[t].FirstOrDefault())
+					let times =
+					s.Staffing.Select(t => t.Key).Union(s.Forecasted.Select(t => t.Key)).Distinct().OrderBy(t => t).ToArray()
+					from t in times
+					let staffing = s.Staffing[t].FirstOrDefault()
 					select new skillStaffingData
 					{
+						Resolution = resolution,
 						Date = p,
 						Skill = skill.Skill,
-						Time = times,
-						ForecastedStaffing = forecastingSeries.Select(t => t?.Agents).ToArray(),
-						ScheduledStaffing = staffingSeries.Select(t => t.StartDateTime == new DateTime() ? null : (double?)t.StaffingLevel).ToArray()
+						Time = t,
+						ForecastedStaffing = s.Forecasted[t].FirstOrDefault()?.Agents,
+						ScheduledStaffing = staffing.StartDateTime == new DateTime() ? null : (double?) staffing.StaffingLevel
 					};
 
 				skillStaffingList.AddRange(intradayStaffingModels);
@@ -140,7 +142,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return !personSkills.Any() ? new IPersonSkill[] {} : personSkills.Distinct();
 		}
 
-		private static Dictionary<DateTime, int> calcuateIntervalPossibilities(IEnumerable<skillStaffingData> skillStaffingDatas,
+		private static Dictionary<DateTime, int> calculateIntervalPossibilities(IEnumerable<skillStaffingData> skillStaffingDatas,
 		Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification, IScheduleDictionary scheduleDictionary)
 		{
 			var intervalPossibilities = new Dictionary<DateTime, int>();
@@ -150,22 +152,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 					continue;
 
 				var staffingSpecification = getStaffingSpecification(skillStaffingData.Skill);
-
-				for (var i = 0; i < skillStaffingData.Time?.Length; i++)
-				{
-					if (!staffingDataHasValue(skillStaffingData, i)) continue;
-
-					var staffingInterval = new SkillStaffingInterval
-					{
-						CalculatedResource = skillStaffingData.ScheduledStaffing[i].Value,
-						FStaff = skillStaffingData.ForecastedStaffing[i].Value
-					};
-
-					if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffingData.Time[i]))
+				
+					if (!staffingDataHasValue(skillStaffingData)) continue;
+					
+					if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffingData.Time))
 						continue;
 					
-				    var possibility = getPossibility(staffingInterval, staffingSpecification);
-					var key = skillStaffingData.Time[i];
+				    var possibility = getPossibility(skillStaffingData, staffingSpecification);
+					var key = skillStaffingData.Time;
 					if (intervalPossibilities.ContainsKey(key))
 					{
 						intervalPossibilities[key] = possibility;
@@ -174,13 +168,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 					{
 						intervalPossibilities.Add(key, possibility);
 					}
-				}
 			}
 			return intervalPossibilities;
 		}
 
-	    private static int getPossibility(SkillStaffingInterval staffingInterval, ISpecification<IValidatePeriod> staffingSpecification)
+	    private static int getPossibility(skillStaffingData skillStaffingData, ISpecification<IValidatePeriod> staffingSpecification)
 	    {
+		    var staffingInterval = new SkillStaffingInterval
+		    {
+			    CalculatedResource = skillStaffingData.ScheduledStaffing.Value,
+			    FStaff = skillStaffingData.ForecastedStaffing.Value
+		    };
 			var isSatisfied = staffingSpecification.IsSatisfiedBy(staffingInterval);
 			int possibility;
 			if (staffingSpecification.GetType() == typeof(IntervalHasSeriousUnderstaffing))
@@ -194,18 +192,22 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	        return possibility;
 	    }
 
-		private static IDictionary<DateOnly, IDictionary<DateTime, int>> calcuateIntervalPossibilitiesForMultipleDays(
+		private static IList<CalculatedPossibilityModel> calcuateIntervalPossibilitiesForMultipleDays(int resolution,
 			IEnumerable<skillStaffingData> skillStaffingDatas,
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification, IScheduleDictionary scheduleDictionary)
 		{
-			var intervalPossibilitiesDictionary = new Dictionary<DateOnly, IDictionary<DateTime, int>>();
+			var calculatedPossibilityModels = new List<CalculatedPossibilityModel>();
 			var skillStaffingDataGroups = skillStaffingDatas.GroupBy(s => s.Date);
 			foreach (var skillStaffingDataGroup in skillStaffingDataGroups)
 			{
-				intervalPossibilitiesDictionary.Add(skillStaffingDataGroup.Key,
-					calcuateIntervalPossibilities(skillStaffingDataGroup, getStaffingSpecification, scheduleDictionary));
+				calculatedPossibilityModels.Add(new CalculatedPossibilityModel
+				{
+					Date = skillStaffingDataGroup.Key,
+					IntervalPossibilies = calculateIntervalPossibilities(skillStaffingDataGroup, getStaffingSpecification, scheduleDictionary),
+					Resolution = resolution
+				});
 			}
-			return intervalPossibilitiesDictionary;
+			return calculatedPossibilityModels;
 		}
 
 		private static bool isSkillScheduled(IScheduleDictionary scheduleDictionary, DateOnly date, ISkill skill)
@@ -236,12 +238,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return intervalPossibilities.TryGetValue(time, out possibility) && possibility == fairPossibility;
 		}
 
-		private static bool staffingDataHasValue(skillStaffingData skillStaffingData, int i)
+		private static bool staffingDataHasValue(skillStaffingData skillStaffingData)
 		{
-			var isScheduledStaffingDataAvailable = skillStaffingData.ScheduledStaffing.Length > i &&
-												   skillStaffingData.ScheduledStaffing[i].HasValue;
-			var isForecastedStaffingDataAvailable = skillStaffingData.ForecastedStaffing.Length > i &&
-													skillStaffingData.ForecastedStaffing[i].HasValue;
+			var isScheduledStaffingDataAvailable = skillStaffingData.ScheduledStaffing.HasValue;
+			var isForecastedStaffingDataAvailable = skillStaffingData.ForecastedStaffing.HasValue;
 			return isScheduledStaffingDataAvailable && isForecastedStaffingDataAvailable;
 		}
 
@@ -255,9 +255,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			public DateOnly Date { get; set; }
 			public ISkill Skill { get; set; }
-			public DateTime[] Time { get; set; }
-			public double?[] ForecastedStaffing { get; set; }
-			public double?[] ScheduledStaffing { get; set; }
+			public DateTime Time { get; set; }
+			public double? ForecastedStaffing { get; set; }
+			public double? ScheduledStaffing { get; set; }
+			public int Resolution { get; set; }
 		}
 	}
 }

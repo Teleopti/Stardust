@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
@@ -11,21 +12,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	public class StaffingPossibilityViewModelFactory : IStaffingPossibilityViewModelFactory
 	{
 		private readonly IScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
-		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly INow _now;
 
 		public StaffingPossibilityViewModelFactory(
-			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, IIntervalLengthFetcher intervalLengthFetcher, ILoggedOnUser loggedOnUser)
+			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, ILoggedOnUser loggedOnUser, INow now)
 		{
 			_scheduleStaffingPossibilityCalculator = scheduleStaffingPossibilityCalculator;
-			_intervalLengthFetcher = intervalLengthFetcher;
 			_loggedOnUser = loggedOnUser;
+			_now = now;
 		}
 
 		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
 			StaffingPossiblityType staffingPossiblityType)
 		{
-			var period = getCurrentWeekPeriod(startDate);
+			var period = getAvailablePeriod(startDate);
 			switch (staffingPossiblityType)
 			{
 				case StaffingPossiblityType.Absence:
@@ -41,28 +42,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		}
 
 		private IEnumerable<PeriodStaffingPossibilityViewModel> createPeriodStaffingPossibilityViewModels(
-			IDictionary<DateOnly, IDictionary<DateTime, int>> intervalPossibilityDictionary)
+			IEnumerable<CalculatedPossibilityModel> calculatedPossibilityModels)
 		{
-			var intervalLengthInMinutes = _intervalLengthFetcher.IntervalLength;
 			var periodStaffingPossibilityViewModels = new List<PeriodStaffingPossibilityViewModel>();
-			foreach (var intervalPossibilityItem in intervalPossibilityDictionary)
+			foreach (var calculatedPossibilityModel in calculatedPossibilityModels)
 			{
-				periodStaffingPossibilityViewModels.AddRange(intervalPossibilityItem.Value
+				periodStaffingPossibilityViewModels.AddRange(calculatedPossibilityModel.IntervalPossibilies
 					.Select(p => new PeriodStaffingPossibilityViewModel
 					{
-						Date = intervalPossibilityItem.Key,
+						Date = calculatedPossibilityModel.Date,
 						StartTime = p.Key,
-						EndTime = p.Key.AddMinutes(intervalLengthInMinutes),
+						EndTime = p.Key.AddMinutes(calculatedPossibilityModel.Resolution),
 						Possibility = p.Value
 					}).OrderBy(x => x.StartTime));
 			}
 			return periodStaffingPossibilityViewModels;
 		}
 
-		private DateOnlyPeriod getCurrentWeekPeriod(DateOnly date)
+		private DateOnlyPeriod getAvailablePeriod(DateOnly date)
 		{
-			var lastDateInWeek = DateHelper.GetLastDateInWeek(date.Date, _loggedOnUser.CurrentUser().PermissionInformation.UICulture());
-			return new DateOnlyPeriod(date, new DateOnly(lastDateInWeek));
+			var culture = _loggedOnUser.CurrentUser().PermissionInformation.UICulture();
+			var period = DateHelper.GetWeekPeriod(date, culture);
+			//if (period.StartDate > new DateOnly(_now.LocalDa))
+			//{
+				
+			//}
+			//var lastDateInWeek = DateHelper.GetLastDateInWeek(date.Date,
+			//	_loggedOnUser.CurrentUser().PermissionInformation.UICulture());
+			//return new DateOnlyPeriod(date, new DateOnly(lastDateInWeek));
+			return period;
 		}
 	}
 }
