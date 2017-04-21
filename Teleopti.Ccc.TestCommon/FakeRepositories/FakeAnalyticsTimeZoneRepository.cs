@@ -15,7 +15,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public AnalyticsTimeZone Get(string timeZoneCode)
 		{
-			return timeZones.FirstOrDefault(x => x.TimeZoneCode == timeZoneCode);
+			var analyticsTimeZone = timeZones.FirstOrDefault(x => x.TimeZoneCode == timeZoneCode);
+			if (analyticsTimeZone == null)
+			{
+				analyticsTimeZone = new AnalyticsTimeZone
+				{
+					TimeZoneCode = timeZoneCode,
+					TimeZoneId = timeZones.Max(t => t.TimeZoneId) + 1 
+				};
+				timeZones.Add(analyticsTimeZone);
+			}
+			return analyticsTimeZone;
 		}
 
 		public IList<AnalyticsTimeZone> GetAll()

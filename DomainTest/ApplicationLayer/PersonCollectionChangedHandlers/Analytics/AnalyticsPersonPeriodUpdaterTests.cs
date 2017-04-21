@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public AnalyticsPersonPeriodUpdater Target;
 		public IAnalyticsPersonPeriodRepository PersonPeriodRepository;
 		public FakeAnalyticsSkillRepository AnalyticsSkillRepository;
-		public IPersonRepository PersonRepository;
+		public FakePersonRepository PersonRepository;
 		public IAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
 		public IAnalyticsTeamRepository AnalyticsTeamRepository;
 
@@ -448,6 +448,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+		}
+
+		[Test]
+		public void ShouldCreateNewTimeZoneForPersonWithoutPeriod()
+		{
+			const string easternStandardTime = "Eastern Standard Time";
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
+			var person = PersonFactory.CreatePerson(TimeZoneInfo.FindSystemTimeZoneById(easternStandardTime)).WithId(testPerson1Id);
+			PersonRepository.Has(person);
+
+			Target.Handle(new PersonCollectionChangedEvent
+			{
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
+			});
+
+			var analyticsTimeZone = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == easternStandardTime);
+			analyticsTimeZone.Should().Not.Be.Null();
 		}
 
 		private static PersonPeriod newTestPersonPeriod(DateTime startDate, Guid? id = null)

@@ -25,13 +25,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
 		private readonly IPersonPeriodFilter _personPeriodFilter;
 		private readonly IPersonPeriodTransformer _personPeriodTransformer;
+		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 
 		public AnalyticsPersonPeriodUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
 			IEventPopulatingPublisher eventPublisher,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
 			IPersonPeriodFilter personPeriodFilter,
-			IPersonPeriodTransformer personPeriodTransformer)
+			IPersonPeriodTransformer personPeriodTransformer, 
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_currentAnalyticsUnitOfWork = currentAnalyticsUnitOfWork;
 			_personPeriodFilter = personPeriodFilter;
 			_personPeriodTransformer = personPeriodTransformer;
+			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
 
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
@@ -56,17 +59,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			foreach (var personCodeGuid in @event.PersonIdCollection)
 			{
 				// Check if person does exists => if not it is deleted and handled by other handle-method
-				if (!persons.Any(a => a.Id.Equals(personCodeGuid)))
+				var person = persons.FirstOrDefault(a => a.Id == personCodeGuid);
+				if (person == null)
 				{
 					logger.Debug($"Person '{personCodeGuid}' was not found in application.");
 					continue;
 				}
-
-				var person = persons.First(a => a.Id.Equals(personCodeGuid));
-
 				var personPeriodsInAnalytics = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
-
-				foreach (var personPeriod in _personPeriodFilter.GetFiltered(person.PersonPeriodCollection))
+				var personPeriods = _personPeriodFilter.GetFiltered(person.PersonPeriodCollection).ToList();
+				if (!personPeriods.Any())
+				{
+					// Make sure the timezone is added even though there are no periods #43986
+					_analyticsTimeZoneRepository.Get(person.PermissionInformation.DefaultTimeZone().Id);
+				}
+				foreach (var personPeriod in personPeriods)
 				{
 					// Check if person period already exists in database
 					var existingPeriod = personPeriodsInAnalytics.FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.GetValueOrDefault()));
