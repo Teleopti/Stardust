@@ -208,6 +208,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return false;
 		}
 
+		[RemoveMeWithToggle("Maybe (?) remove IPeriodValueCalculator param", Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
 		private IEnumerable<ITeamInfo> runOneOptimizationRoundWithFreeDaysOff(IPeriodValueCalculator periodValueCalculatorForAllSkills, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, 
 																			List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, 
 																			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, 
@@ -242,70 +243,69 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var movedDaysOff = _affectedDayOffs.Execute(matrix.Item1, dayOffOptimizationPreference, originalArray, resultingArray);
 				if (movedDaysOff != null)
 				{
-					if (!optimizationPreferences.Advanced.UseTweakedValues &&
-							optimizationPreferences.Extra.IsClassic() &&
-							!_dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference).IsBetter)
+					if (!optimizationPreferences.Advanced.UseTweakedValues && optimizationPreferences.Extra.IsClassic())
 					{
+						var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference);
+						previousPeriodValue = predictorResult.CurrentValue;
+						if (!predictorResult.IsBetter)
+						{
+							allFailed[matrix.Item2] = false;
+							matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
+							matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
+							continue;
+						}
+					}
+
+					var resCalcState = new UndoRedoContainer();
+					var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
+					if (optimizationPreferences.Extra.IsClassic())
+					{
+						currentPeriodValue = new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1));
+
+						//TODO: hack -> always do this
+						resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
+					}
+					var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
+						resourceCalculateDelayer,
+						schedulingResultStateHolder,
+						dayOffOptimizationPreferenceProvider,
+						currentPeriodValue,
+						previousPeriodValue,
+						movedDaysOff);
+
+					if (success)
+					{
+						previousPeriodValue = currentPeriodValue.Value;
 						allFailed[matrix.Item2] = false;
-						matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
-						matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
 					}
 					else
 					{
-						var resCalcState = new UndoRedoContainer();
-						var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 						if (optimizationPreferences.Extra.IsClassic())
 						{
 							//TODO: hack -> always do this
-							resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
-
-							var personalSkillsDataExtractor = _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix.Item1, optimizationPreferences.Advanced, schedulingResultStateHolder);
-							var localPeriodValueCalculator = _optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
-							currentPeriodValue = new Lazy<double>(() => localPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization));
-							previousPeriodValue = localPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
-						}
-						var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
-							resourceCalculateDelayer,
-							schedulingResultStateHolder,
-							dayOffOptimizationPreferenceProvider,
-							currentPeriodValue,
-							previousPeriodValue,
-							movedDaysOff);
-
-						if (success)
-						{
-							previousPeriodValue = currentPeriodValue.Value;
-							allFailed[matrix.Item2] = false;
+							resCalcState.UndoAll();
+							rollbackService.RollbackMinimumChecks();
 						}
 						else
 						{
-							if (optimizationPreferences.Extra.IsClassic())
-							{
-								//TODO: hack -> always do this
-								resCalcState.UndoAll();
-								rollbackService.RollbackMinimumChecks();
-							}
-							else
-							{
-								_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-							}
-
-							if (!optimizationPreferences.Advanced.UseTweakedValues)
-							{
-								if (!optimizationPreferences.Extra.IsClassic()) //removing this if makes boolingdb lot slower...
-								{
-									allFailed[matrix.Item2] = false;
-								}
-								matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
-								matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
-							}
+							_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 						}
 
-						if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, previousPeriodValue, optimizationPreferences.Advanced.RefreshScreenInterval))
+						if (!optimizationPreferences.Advanced.UseTweakedValues)
 						{
-							cancelAction();
-							return null;
+							if (!optimizationPreferences.Extra.IsClassic()) //removing this if makes bookingdb lot slower...
+							{
+								allFailed[matrix.Item2] = false;
+							}
+							matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
+							matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
 						}
+					}
+
+					if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, previousPeriodValue, optimizationPreferences.Advanced.RefreshScreenInterval))
+					{
+						cancelAction();
+						return null;
 					}
 				}
 			}

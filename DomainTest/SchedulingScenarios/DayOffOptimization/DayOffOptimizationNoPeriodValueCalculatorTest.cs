@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[TestFixture(false)]
 	[TestFixture(true)]
 	[DomainTest]
-	[Ignore("#43689")]
 	public class DayOffOptimizationNoPeriodValueCalculatorTest : DayOffOptimizationScenario
 	{
 		public IScheduleOptimization Target;
