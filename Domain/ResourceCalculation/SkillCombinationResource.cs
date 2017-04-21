@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public DateTime EndDateTime { get; set; }
 		public double Resource { get; set; }
 		public IEnumerable<Guid> SkillCombination { get; set; }
+		private DateTimePeriod? _period;
 
 		public TimeSpan GetTimeSpan()
 		{
@@ -18,7 +19,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public DateTimePeriod Period()
 		{
-			return new DateTimePeriod(StartDateTime, EndDateTime);
+			if (!_period.HasValue)
+			_period =  new DateTimePeriod(StartDateTime, EndDateTime);
+
+			return _period.Value;
 		}
 	}
 }

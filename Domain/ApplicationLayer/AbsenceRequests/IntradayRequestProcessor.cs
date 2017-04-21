@@ -24,8 +24,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
-		private readonly ISkillTypeRepository _skillTypeRepository;
-		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly SkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 												 ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
 												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 												 ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, 
-												 IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ISkillStaffingIntervalProvider skillStaffingIntervalProvider, IActivityRepository activityRepository, ISkillTypeRepository skillTypeRepository)
+												 IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ISkillStaffingIntervalProvider skillStaffingIntervalProvider)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -46,8 +44,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
-			_activityRepository = activityRepository;
-			_skillTypeRepository = skillTypeRepository;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
@@ -71,15 +67,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
 					return;
 				}
+
+				var allSkills = _skillRepository.LoadAll();
 				var loadSchedulesPeriodToCoverForMidnightShifts = personRequest.Request.Period.ChangeStartTime(TimeSpan.FromDays(-1));
 				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
 
 				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone());
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
-				_skillTypeRepository.LoadAll();
-				_activityRepository.LoadAll();
-				var allSkills = _skillRepository.LoadAll();
+				
 
 				var skillIds = new HashSet<Guid>();
 				foreach (var skillCombinationResource in combinationResources)

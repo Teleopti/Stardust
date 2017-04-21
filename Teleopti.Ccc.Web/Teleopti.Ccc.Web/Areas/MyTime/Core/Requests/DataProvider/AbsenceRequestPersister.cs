@@ -2,6 +2,7 @@ using System;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -16,6 +17,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly IAbsenceRequestIntradayFilter _absenceRequestIntradayFilter;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
+		private readonly IActivityRepository _activityRepository;
+		private readonly ISkillTypeRepository _skillTypeRepository;
+		private readonly IDisableDeletedFilter _disableDeletedFilter;
 		private readonly IToggleManager _toggleManager;
 		private readonly AbsenceRequestFormMapper _mapper;
 		private readonly RequestsViewModelMapper _requestsMapper;
@@ -23,7 +27,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository,
 									   IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator, 
 									   IPersonRequestCheckAuthorization personRequestCheckAuthorization, 
-									   IAbsenceRequestIntradayFilter absenceRequestIntradayFilter, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IToggleManager toggleManager, AbsenceRequestFormMapper mapper, RequestsViewModelMapper requestsMapper)
+									   IAbsenceRequestIntradayFilter absenceRequestIntradayFilter, 
+									   IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, 
+									   IToggleManager toggleManager, AbsenceRequestFormMapper mapper, 
+									   RequestsViewModelMapper requestsMapper, IActivityRepository activityRepository, 
+									   ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter)
 		{
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestSynchronousValidator = absenceRequestSynchronousValidator;
@@ -33,6 +41,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_toggleManager = toggleManager;
 			_mapper = mapper;
 			_requestsMapper = requestsMapper;
+			_activityRepository = activityRepository;
+			_skillTypeRepository = skillTypeRepository;
+			_disableDeletedFilter = disableDeletedFilter;
 		}
 
 		public RequestViewModel Persist(AbsenceRequestForm form)
@@ -62,6 +73,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			else
 			{
 				personRequest = _mapper.Map(form);
+				using (_disableDeletedFilter.Disable())
+				{
+					_skillTypeRepository.LoadAll();
+					_activityRepository.LoadAll();
+				}
+				
 				checkAndProcessDeny(personRequest);
 				_personRequestRepository.Add(personRequest);
 
