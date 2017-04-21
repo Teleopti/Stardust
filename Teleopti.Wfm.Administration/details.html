@@ -9,26 +9,39 @@
 			</p>
 		</div>
 		<div class="col-md-12">
-		    <div class="col-md-6">
-
-		  	<div class="importCaption">Version: <span class="detail"> {{detailsVm.Version.ImportAppVersion}}</span></div>
-		        <div class="importCaption">Tenant name:<span class="detail"> {{detailsVm.Tenant}}</span></div>
-		        <div class="importCaption">Server:<span class="detail"> {{detailsVm.Server}}</span></div>
-		        <div class="importCaption">Application database:<span class="detail"> {{detailsVm.AppDatabase}}</span></div>
-		        <div class="importCaption">Analytics database:<span class="detail"> {{detailsVm.AnalyticsDatabase}}</span></div>
-		        <div class="importCaption">Aggregation database:<span class="detail"> {{detailsVm.AggregationDatabase}}</span></div>
-		        <div>
-		            <div class="importCaption">Command timeout</div>
-		            <input class="form-control" type="number" min="30" max="600" required ng-model="detailsVm.CommandTimeout" placeholder="Command timeout">
-
-		        </div>
-                <div class="importCaption">Active: <input type="checkbox" ng-model="detailsVm.Active"></div>
-		        <div style="margin-top: 30px">
-		            <button class="btn btn-primary btn-default" ng-click="detailsVm.save()">Save</button>
-		            <div style="float: right" ng-show="detailsVm.AllowDelete">
-		                <md-button class="md-button md-raised md-primary btn-danger" ng-click="detailsVm.showConfirm()"><md-icon md-svg-src="Content/images/ic_delete_black_24px.svg"></md-icon> Delete this Tenant</md-button>
-		            </div>
-		        </div>
+			<div class="col-md-6">
+				<form name="form">
+					<div class="importCaption">Version: <span class="detail"> {{detailsVm.Version.ImportAppVersion}}</span></div>
+					<div class="importCaption">Tenant name:<span class="detail"> {{detailsVm.Tenant}}</span></div>
+					<div class="importCaption">Server:<span class="detail"> {{detailsVm.Server}}</span></div>
+					<div class="importCaption">Application database:<span class="detail"> {{detailsVm.AppDatabase}}</span></div>
+					<div class="importCaption">Analytics database:<span class="detail"> {{detailsVm.AnalyticsDatabase}}</span></div>
+					<div class="importCaption">Aggregation database:<span class="detail"> {{detailsVm.AggregationDatabase}}</span></div>
+					
+					<div class="form-group">
+						<label class="importCaption" for="commandtimeout">Command timeout</label>
+						<input class="form-control" id="commandtimeout" type="number" min="30" max="600" required ng-model="detailsVm.CommandTimeout" placeholder="Command timeout">
+					</div>
+					
+					<div class="form-group" ng-class="{'has-error': !form.qrcodeurl.$valid}">
+						<label class="importCaption" for="qrcodeurl">QR-Code URL for mobile apps</label>
+						<input name="qrcodeurl" id="qrcodeurl" type="url" class="form-control" ng-model="detailsVm.MobileQRCodeUrl" />
+						<span ng-if="!form.qrcodeurl.$valid" class="help-block text-danger">Enter a valid URL or leave blank</span>
+					</div>
+					
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" ng-model="detailsVm.Active">
+							<span class="importCaption">Active</span>
+						</label>
+					</div>
+				</form>
+			<div style="margin-top: 30px">
+				<button class="btn btn-primary btn-default" ng-disabled="!form.$valid" ng-click="detailsVm.save()">Save</button>
+				<div style="float: right" ng-show="detailsVm.AllowDelete">
+				<md-button class="md-button md-raised md-primary btn-danger" ng-click="detailsVm.showConfirm()"><md-icon md-svg-src="Content/images/ic_delete_black_24px.svg"></md-icon> Delete this Tenant</md-button>
+				</div>
+			</div>
 
 		        <a style="margin-top: 30px" class="btn btn-success " href="#addSuperUser/{{detailsVm.Tenant}}">Add a new super user &raquo;</a>
 		        <br/>

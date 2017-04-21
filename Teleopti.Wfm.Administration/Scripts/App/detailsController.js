@@ -70,7 +70,8 @@
 					vm.AggregationDatabase = data.AggregationDatabase;
 					vm.Version = data.Version;
 					vm.CommandTimeout = data.CommandTimeout;
-			        vm.Active = data.Active;
+					vm.Active = data.Active;
+					vm.MobileQRCodeUrl = data.MobileQRCodeUrl;
 					//vm.CheckAppDb();
 					//vm.CheckAnalDb();
 					vm.CheckDelete();
@@ -257,7 +258,8 @@
 						Password: vm.Password,
 						UseIntegratedSecurity : vm.UseIntegratedSecurity,
 						CommandTimeout: vm.CommandTimeout,
-                        Active : vm.Active
+						Active: vm.Active,
+						MobileQRCodeUrl: vm.MobileQRCodeUrl
 					}, tokenHeaderService.getHeaders())
 						.success(function (data) {
 							if (data.Success === false) {
