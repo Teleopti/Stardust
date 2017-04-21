@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setup();
 			var result = Target.FetchData(null, StaffingPossiblityType.Absence).Possibilities;
-			result.Count(r => r.Date >= Now.LocalDateOnly()).Should().Be.EqualTo(6);
+			result.Count().Should().Be.EqualTo(6);
 		}
 
 		[Test, SetCulture("en-US")]
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setup();
 			var result = Target.FetchData(Now.LocalDateOnly().AddWeeks(1), StaffingPossiblityType.Absence).Possibilities;
-			result.Count(r => r.Date >= Now.LocalDateOnly()).Should().Be.EqualTo(14);
+			result.Count().Should().Be.EqualTo(14);
 		}
 
 		[Test, SetCulture("en-US")]
@@ -73,8 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setup();
 			var result = Target.FetchData(Now.LocalDateOnly().AddDays(-1), StaffingPossiblityType.Absence).Possibilities.ToList();
-			result.Count().Should().Be.EqualTo(6);
-			result.Count(r => r.Date >= Now.LocalDateOnly()).Should().Be.EqualTo(6);
+			result.Count.Should().Be.EqualTo(6);
 		}
 
 		[Test, SetCulture("en-US")]
