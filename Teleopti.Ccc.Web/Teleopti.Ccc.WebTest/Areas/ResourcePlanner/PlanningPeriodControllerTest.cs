@@ -173,6 +173,37 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
+		public void ShouldGetPlanningPeriodSuggestionsForAgentGroup()
+		{
+			Now.Is(new DateTime(2015, 4, 1));
+			var agentGroup = new AgentGroup().WithId(Guid.NewGuid());
+			AgentGroupRepository.Has(agentGroup);
+			PlanningPeriodRepository.CustomData(null, new PlanningPeriodSuggestions(Now, suggestions()));
+			var result =
+				(OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)
+					Target.GetPlanningPeriodSuggestionsForAgentGroup(agentGroup.Id.GetValueOrDefault());
+			result.Content.Count().Should().Be.EqualTo(12);
+		}
+
+		[Test]
+		public void ShouldOnlyGetFuturePlanningPeriodSuggestionsForAgentGroup()
+		{
+			Now.Is(new DateTime(2015, 05, 22));
+			var agentGroup = new AgentGroup().WithId(Guid.NewGuid());
+			AgentGroupRepository.Has(agentGroup);
+			var planningPeriodId = Guid.NewGuid();
+			PlanningPeriodRepository.CustomData(
+				new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())).WithId(planningPeriodId),
+				new PlanningPeriodSuggestions(Now, suggestions()));
+
+
+			var result =
+				(OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)
+					Target.GetPlanningPeriodSuggestionsForAgentGroup(agentGroup.Id.GetValueOrDefault());
+			result.Content.Where(x => x.StartDate < Now.LocalDateTime()).ToList().Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldPublishSchedules()
 		{
 			Now.Is(new DateTime(2015, 4, 1));

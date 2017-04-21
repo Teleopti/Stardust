@@ -177,6 +177,24 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			}));
 		}
 
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/suggestions/{agentGroupId}")]
+		public virtual IHttpActionResult GetPlanningPeriodSuggestionsForAgentGroup(Guid agentGroupId)
+		{
+			var agentGroup = _agentGroupRepository.Get(agentGroupId);
+			if (agentGroup == null)
+				return BadRequest($"Invalid {nameof(agentGroupId)}");
+			var suggestion = _planningPeriodRepository.Suggestions(_now);
+			var planningPeriod = new PlanningPeriod(suggestion, agentGroup);
+			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
+			return Ok(result.Select(r => new SuggestedPlanningPeriodRangeModel
+			{
+				PeriodType = r.PeriodType.ToString(),
+				StartDate = r.Range.StartDate.Date,
+				EndDate = r.Range.EndDate.Date,
+				Number = r.Number
+			}));
+		}
+
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}/countagents")]
 		public virtual IHttpActionResult GetAgentCount(Guid planningPeriodId, DateTime startDate, DateTime endDate)
 		{
