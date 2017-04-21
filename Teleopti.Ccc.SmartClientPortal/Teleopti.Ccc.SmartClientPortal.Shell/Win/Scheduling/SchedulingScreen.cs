@@ -2826,7 +2826,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (_scheduleView != null)
 			{
-				var negativeOrderIndex = haveNegativeOrderIndex();
 				_scheduleView.Presenter.UpdateFromEditor();
 				if (_currentZoomLevel == ZoomLevel.RestrictionView)
 					schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
@@ -2835,32 +2834,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> {e.SchedulePart});
 
 				updateShiftEditor();
-
-				if (negativeOrderIndex)
-				{
-					_forceClose = true;
-					Close();
-				}
 			}
-		}
-
-		[RemoveMeWithToggle("Remove this method when toggle is removed. Just a temp check to haunt bug #39062", Toggles.ResourcePlanner_NegativeOrderIndex_39062)]
-		private bool haveNegativeOrderIndex()
-		{
-			if (!_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_NegativeOrderIndex_39062))
-				return false;
-			if (_scheduleView.Presenter.LastUnsavedSchedulePart == null)
-				return false;
-
-			if (!_scheduleView.Presenter.LastUnsavedSchedulePart.PersonAssignment(true).ShiftLayers.Any(shiftLayer => ((ShiftLayer) shiftLayer).OrderIndex < 0))
-				return false;
-			var exception = new Exception("ShiftLayer has negative OrderIndex" + Environment.NewLine + "Scheduler have to close. You may start Scheduler again and continue working.");
-			using (var view = new SimpleExceptionHandlerView(exception, "Negative OrderIndex", exception.Message))
-			{
-				view.ShowDialog();
-			}
-
-			return true;
 		}
 
 		private void backgroundWorkerDeleteRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
