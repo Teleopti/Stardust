@@ -20,7 +20,7 @@ properties {
 	$InternalFileShare = "\\hebe\Installation\msi\$env:CccVersion"
 
 	$AzureDependencies = "\\a380\T-Files\RnD\MSI_Dependencies\ccc7_azure"
-	$AzurePackagePath = "$WorkingDir\TeleoptiWFM.cspkg"
+	$AzurePackagePath_Medium = "$WorkingDir\TeleoptiWFM_Medium.cspkg"
 	$AzurePackagePath_Large = "$WorkingDir\TeleoptiWFM_Large.cspkg"
 	
 	$IndexMSBuildFile = "$WorkingDir\StartPage\index.html"
@@ -63,16 +63,16 @@ task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
 	workflow parallelAzurePackaging {
 		param(
 		$CSPackEXE,
-		$AzurePackagePath,
+		$AzurePackagePath_Medium,
 		$AzurePackagePath_Large,
 		$WorkingDir
 			)
 		parallel {
 			#Create Azure pkg
-			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition.csdef" `
+			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition_Medium.csdef" `
 			  "/role:TeleoptiCCC;$Using:WorkingDir\TeleoptiCCC" `
 			  "/rolePropertiesFile:TeleoptiCCC;$Using:WorkingDir\teamcity\Azure\AzureRoleProperties.txt" `
-			  "/out:$Using:AzurePackagePath"}
+			  "/out:$Using:AzurePackagePath_Medium"}
 			
 			#Create Azure Large pkg
 			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition_Large.csdef" `
@@ -82,7 +82,7 @@ task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
 		}
 	}
 	
-	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath $AzurePackagePath -AzurePackagePath_Large $AzurePackagePath_Large -WorkingDir $WorkingDir
+	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath_Medium $AzurePackagePath_Medium -AzurePackagePath_Large $AzurePackagePath_Large -WorkingDir $WorkingDir
 	
 	Write-Output "##teamcity[blockClosed name='<CreateAzurePkg>']"
 }
@@ -92,7 +92,7 @@ task PostReq -depends Init, PreReq, CreateAzurePkg -description "PostReq steps" 
 	Write-Output "##teamcity[blockOpened name='<PostReq>']"
 	
 	Copy-Item -Path "$WorkingDir\teamcity\Azure\Customer\" -Destination "$ToBeArtifacted" -Recurse -Force -ErrorAction Stop
-	Copy-Item -Path "$AzurePackagePath" -Destination "$ToBeArtifacted\Azure-$env:CccVersion.cspkg" -Force -ErrorAction Stop
+	Copy-Item -Path "$AzurePackagePath_Medium" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-Medium.cspkg" -Force -ErrorAction Stop
 	Copy-Item -Path "$AzurePackagePath_Large" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-Large.cspkg" -Force -ErrorAction Stop
 	
 	Write-Output "##teamcity[blockClosed name='<PostReq>']"
