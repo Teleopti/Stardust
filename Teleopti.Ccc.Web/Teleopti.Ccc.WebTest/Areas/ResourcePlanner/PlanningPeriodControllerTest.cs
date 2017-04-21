@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public FakePersonRepository PersonRepository;
 
 		[Test]
-		public void ShouldReturnDefaultPlanningPeriodForAgentGroupIfNotCreated()
+		public void ShouldNotCreateDefaultPlanningPeriodForAgentGroupIfNonExists()
 		{
 			var agentGroupId = Guid.NewGuid();
 			var agentGroup = new AgentGroup("test group");
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			AgentGroupRepository.Add(agentGroup);
 
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(agentGroupId);
-			result.Content.Count.Should().Be.EqualTo(1);
+			result.Content.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]

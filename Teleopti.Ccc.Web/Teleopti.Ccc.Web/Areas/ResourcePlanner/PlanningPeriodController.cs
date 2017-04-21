@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (agentGroup == null)
 				return BadRequest("Invalid agentGroupId");
 			var allPlanningPeriods = _planningPeriodRepository.LoadForAgentGroup(agentGroup).ToList();
-			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, true, agentGroup);
+			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, false, agentGroup);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
