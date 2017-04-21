@@ -58,15 +58,15 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
-			Assert.AreEqual(0, possibilities.IntervalPossibilies.Count);
+			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod());
+			Assert.AreEqual(0, possibilities.Count);
 		}
 
 		[Test]
 		public void ShouldGetPossibilities()
 		{
 			setupTestDataForOneSkill();
-			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 		}
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 			Assert.AreEqual(1, possibilities.IntervalPossibilies.ElementAt(0).Value);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(1).Value);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator =
 				new StaffingThresholdWithShrinkageValidator();
 			person.WorkflowControlSet = workflowControlSet;
-			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 		}
 
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		public void ShouldGetPossibilitiesWhenSomeStaffingDataIsNotAvailable()
 		{
 			setupTestDataForOneSkill(new double?[] { 10d }, new double?[] { 11d, 11d });
-			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(1, possibilities.IntervalPossibilies.Count);
 		}
 
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		{
 			setupTestDataForOneSkill();
 			ScheduleStorage.Clear();
-			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 		}
 
@@ -146,15 +146,15 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		{
 			setupTestDataForOneSkill();
 			SkillRepository.LoadAllSkills().First().SkillType.Description = new Description("NotSupportedSkillType");
-			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities();
-			Assert.AreEqual(0, possibilities.IntervalPossibilies.Count);
+			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod());
+			Assert.AreEqual(0, possibilities.Count);
 		}
 
 		[Test]
 		public void ShouldGetFairPossibilitiesForAbsenceWhenUnderstaffing()
 		{
 			setupTestDataForOneSkill();
-			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(0).Value);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(1).Value);
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		public void ShouldGetGoodPossibilitiesForAbsenceWhenNotUnderstaffing()
 		{
 			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 11d, 11d });
-			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 			Assert.AreEqual(1, possibilities.IntervalPossibilies.ElementAt(0).Value);
 			Assert.AreEqual(1, possibilities.IntervalPossibilies.ElementAt(1).Value);
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		public void ShouldGetFairAndGoodPossibilitiesForAbsence()
 		{
 			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 8d, 11d });
-			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(0).Value);
 			Assert.AreEqual(1, possibilities.IntervalPossibilies.ElementAt(1).Value);
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(0).Value);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(1).Value);
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffing()
 		{
 			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 12d, 12d });
-			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(0).Value);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(1).Value);
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		public void ShouldGetGoodPossibilitiesForOvertimeWhenNotOverstaffing()
 		{
 			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 6d, 6d });
-			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 			Assert.AreEqual(1, possibilities.IntervalPossibilies.ElementAt(0).Value);
 			Assert.AreEqual(1, possibilities.IntervalPossibilies.ElementAt(1).Value);
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		public void ShouldGetFairAndGoodPossibilitiesForOvertime()
 		{
 			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 7d, 6d });
-			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(0).Value);
 			Assert.AreEqual(1, possibilities.IntervalPossibilies.ElementAt(1).Value);
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(0).Value);
 			Assert.AreEqual(0, possibilities.IntervalPossibilies.ElementAt(1).Value);
@@ -269,8 +269,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, CurrentScenario.Current(),
 				new DateOnly(_today), new DayOffTemplate());
 			ScheduleStorage.Set(new List<IScheduleData> { assignment });
-			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities();
+			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).First();
 			Assert.AreEqual(2, possibilities.IntervalPossibilies.Count);
+		}
+
+		private DateOnlyPeriod getTodayDateOnlyPeriod()
+		{
+			var usersNow = TimeZoneHelper.ConvertFromUtc(Now.UtcDateTime(), TimeZoneInfo.Utc);
+			return new DateOnly(usersNow).ToDateOnlyPeriod();
 		}
 
 		private void setupTestDataForOneSkill(double?[] forecastedStaffing = null, double?[] scheduledStaffing = null, bool useShrinkage = false)

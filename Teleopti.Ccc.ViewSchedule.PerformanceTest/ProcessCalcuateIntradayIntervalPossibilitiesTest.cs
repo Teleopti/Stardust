@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			intial();
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
-			//updateStaffingLevel(period);
+			updateStaffingLevel(period);
 			var personIds = loadPersonIds();
 			//var personIds = new[] { new Guid("0b4390a8-2128-4550-8d03-a14100f34ea1") };
 			WithUnitOfWork.Do(() =>
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(14));
 			updateStaffingLevel(period);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
-			var personIds = new[] { new Guid("0b4390a8-2128-4550-8d03-a14100f34ea1") };
+			var personIds = loadPersonIds();
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
@@ -135,14 +135,20 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 				//	IntervalLengthFetcher);
 				//_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
 				//	cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario, UserTimeZone);
-				var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
-				if (!possibilities.IntervalPossibilies.Any())
+				var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod());
+				if (!possibilities.Any())
 				{
 					Console.WriteLine($"{person.Id.GetValueOrDefault()} no data");
 				}
 			}
 			stopwatch.Stop();
 			return stopwatch.ElapsedMilliseconds;
+		}
+
+		private DateOnlyPeriod getTodayDateOnlyPeriod()
+		{
+			var usersNow = TimeZoneHelper.ConvertFromUtc(Now.UtcDateTime(), TimeZoneInfo.Utc);
+			return new DateOnly(usersNow).ToDateOnlyPeriod();
 		}
 
 		private long calcuatePossibilitiesByPeriod(Guid[] personIds, DateOnlyPeriod datePeriod)

@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	{
 		private const int goodPossibility = 1;
 		private const int fairPossibility = 0;
-		private readonly INow _now;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
@@ -29,11 +28,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
-		public ScheduleStaffingPossibilityCalculator(INow now, ILoggedOnUser loggedOnUser,
+		public ScheduleStaffingPossibilityCalculator(ILoggedOnUser loggedOnUser,
 			ScheduledStaffingProvider scheduledStaffingProvider, ForecastedStaffingProvider forecastedStaffingProvider, IScheduleStorage scheduleStorage,
 			ICurrentScenario scenarioRepository, IUserTimeZone timeZone, ISkillDayRepository skillDayRepository, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
 		{
-			_now = now;
 			_loggedOnUser = loggedOnUser;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_forecastedStaffingProvider = forecastedStaffingProvider;
@@ -42,11 +40,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_timeZone = timeZone;
 			_skillDayRepository = skillDayRepository;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
-		}
-
-		public CalculatedPossibilityModel CalculateIntradayAbsenceIntervalPossibilities()
-		{
-			return CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).FirstOrDefault() ?? new CalculatedPossibilityModel();
 		}
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
@@ -61,12 +54,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification =
 				skill => new IntervalHasUnderstaffing(skill);
 			return calcuateIntervalPossibilitiesForMultipleDays(skillStaffingDatas.FirstOrDefault()?.Resolution ?? 15, skillStaffingDatas, getStaffingSpecification, scheduleDictionary);
-		}
-
-		public CalculatedPossibilityModel CalculateIntradayOvertimeIntervalPossibilities()
-		{
-			return CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).FirstOrDefault() ?? new CalculatedPossibilityModel();
-
 		}
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
@@ -243,12 +230,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var isScheduledStaffingDataAvailable = skillStaffingData.ScheduledStaffing.HasValue;
 			var isForecastedStaffingDataAvailable = skillStaffingData.ForecastedStaffing.HasValue;
 			return isScheduledStaffingDataAvailable && isForecastedStaffingDataAvailable;
-		}
-
-		private DateOnlyPeriod getTodayDateOnlyPeriod()
-		{
-			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			return new DateOnly(usersNow).ToDateOnlyPeriod();
 		}
 
 		private class skillStaffingData
