@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				_feedback.SendProgress($"An unexpected exception happened.");
 				SaveJobResultDetail(@event, e);
 				_tenantUserPersister.RollbackAllPersistedTenantUsers();
-				throw;
+				//throw;
 			}
 			
 
