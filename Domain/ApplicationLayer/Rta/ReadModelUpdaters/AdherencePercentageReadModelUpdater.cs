@@ -2,33 +2,42 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	public class AdherencePercentageReadModelUpdater :
-		IRunOnHangfire,
+	[EnabledBy(Toggles.RTA_NoHangfireExperiment_43924)]
+	public class AdherencePercentageReadModelUpdaterInSync : AdherencePercentageReadModelUpdaterImpl, IRunInSync
+	{
+		public AdherencePercentageReadModelUpdaterInSync(IAdherencePercentageReadModelPersister persister) : base(persister)
+		{
+		}
+	}
+
+	[DisabledBy(Toggles.RTA_NoHangfireExperiment_43924)]
+	public class AdherencePercentageReadModelUpdater : AdherencePercentageReadModelUpdaterImpl, IRunOnHangfire
+	{
+		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister) : base(persister)
+		{
+		}
+	}
+
+	public abstract class AdherencePercentageReadModelUpdaterImpl :
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonNeutralAdherenceEvent>,
 		IHandleEvent<PersonShiftStartEvent>,
 		IHandleEvent<PersonShiftEndEvent>,
-		IHandleEvent<PersonDeletedEvent>,
-		IInitializeble
+		IHandleEvent<PersonDeletedEvent>
 	{
 		private readonly IAdherencePercentageReadModelPersister _persister;
 
-		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister)
+		protected AdherencePercentageReadModelUpdaterImpl(IAdherencePercentageReadModelPersister persister)
 		{
 			_persister = persister;
 		}
-
-		[ReadModelUnitOfWork]
-		public virtual bool Initialized()
-		{
-			return _persister.HasData();
-		}
-
+		
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonShiftStartEvent @event)
 		{

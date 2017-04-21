@@ -28,7 +28,6 @@ using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
-using Teleopti.Ccc.Infrastructure.Intraday;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.Infrastructure.Rta.Persisters;
@@ -67,9 +66,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                         var runOnServiceBus = typeof(IRunOnServiceBus).IsAssignableFrom(t);
 #pragma warning restore 618
                         var runOnStardust = typeof(IRunOnStardust).IsAssignableFrom(t);
-                        var runInProcess = typeof(IRunInSyncInFatClientProcess).IsAssignableFrom(t);
-                        if (!(runOnHangfire ^ runOnServiceBus ^ runOnStardust ^ runInProcess))
-                            throw new Exception($"All events handlers need to implement IRunOnHangfire or IRunOnServiceBus or IRunOnStardust or IRunInProcess. {t.Name} does not.");
+	                    var runInSync = typeof(IRunInSync).IsAssignableFrom(t);
+                        var runInSyncInFatClientProcess = typeof(IRunInSyncInFatClientProcess).IsAssignableFrom(t);
+                        if (!(runOnHangfire ^ runOnServiceBus ^ runOnStardust ^ runInSync ^ runInSyncInFatClientProcess))
+                            throw new Exception($"All event handlers need to implement an IRunOn* interface. {t.Name} does not.");
                     }
 
                     return hasHandleInterfaces;
@@ -79,8 +79,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	                let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)
 	                let eventType = isHandler ? i.GetMethods().Single().GetParameters().Single().ParameterType : null
 	                let isHandleMethodEnabled = isHandler && t.GetMethod("Handle", new[] { eventType }).MethodEnabledByToggle(_config)
-	                let isInitializable = i == typeof(IInitializeble)
-	                where (isHandler && isHandleMethodEnabled) || isInitializable
+	                where (isHandler && isHandleMethodEnabled)
 	                select i)
                 .AsSelf()
                 .SingleInstance()

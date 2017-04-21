@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -8,8 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	[EnabledBy(Toggles.TestToggle)]
 	public class HandlerEnabledByTestToggle : 
 		IHandleEvent<TestToggleEvent>,
-		IRunOnHangfire,
-		IInitializeble
+		IRunOnHangfire
 	{
 		public void Handle(TestToggleEvent @event)
 		{
@@ -17,11 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void DeleteAll()
 		{
-		}
-
-		public bool Initialized()
-		{
-			return true;
 		}
 	}
 
@@ -33,8 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	public class HandlerEnabledByTestToggle_WithMethodEnabledByTestToggle2 : 
 		IHandleEvent<TestToggleEvent>,
 		IHandleEvent<TestToggle2Event>,
-		IRunOnHangfire,
-		IInitializeble
+		IRunOnHangfire
 	{
 		public void Handle(TestToggleEvent @event)
 		{
@@ -48,11 +40,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		public void DeleteAll()
 		{
 		}
-
-		public bool Initialized()
-		{
-			return true;
-		}
 	}
 
 	public class TestToggle2Event : IEvent
@@ -62,8 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	[DisabledBy(Toggles.TestToggle)]
 	public class HandlerDisabledByTestToggle :
 		IHandleEvent<TestToggleEvent>,
-		IRunOnHangfire,
-		IInitializeble
+		IRunOnHangfire
 	{
 		public void Handle(TestToggleEvent @event)
 		{
@@ -72,18 +58,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		public void DeleteAll()
 		{
 		}
-
-		public bool Initialized()
-		{
-			return true;
-		}
 	}
 
 	
 	public class HandlerMethodDisabledByTestToggle :
 		IHandleEvent<TestToggleEvent>,
-		IRunOnHangfire,
-		IInitializeble
+		IRunOnHangfire
 	{
 		[DisabledBy(Toggles.TestToggle)]
 		public void Handle(TestToggleEvent @event)
@@ -92,11 +72,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void DeleteAll()
 		{
-		}
-
-		public bool Initialized()
-		{
-			return true;
 		}
 	}
 }
