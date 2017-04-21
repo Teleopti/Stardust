@@ -28,7 +28,8 @@
 		{
 			nextPlanningPeriod: { method: 'POST', params: { agentGroupId: "@agentGroupId" }, url: agentGroupBaseUrl + '/nextplanningperiod' },
 			getPlanningPeriods: { method: 'GET', params: { agentGroupId: "@agentGroupId" }, isArray: true, url: agentGroupBaseUrl + '/planningperiods' },
-			deleteLastPlanningPeriod: { method: 'DELETE', params: { agentGroupId: "@agentGroupId" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' }
+			deleteLastPlanningPeriod: { method: 'DELETE', params: { agentGroupId: "@agentGroupId" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' },
+			changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { agentGroupId: "@agentGroupId", endDate:"@endDate" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' }
 		});
 
 		var deprecatedPlanningperiod = $resource('../api/resourceplanner/nextplanningperiod', {}, {
@@ -40,6 +41,7 @@
 			getPlanningPeriodsForAgentGroup: agentGroup.getPlanningPeriods,
 			nextPlanningPeriod: agentGroup.nextPlanningPeriod,
 			deleteLastPlanningPeriod: agentGroup.deleteLastPlanningPeriod,
+			changeEndDateForLastPlanningPeriod: agentGroup.changeEndDateForLastPlanningPeriod,
 			// PlanningPeriods
 			getPlanningPeriod: planningPeriod.get,
 			getPlanningPeriods: planningPeriod.query,

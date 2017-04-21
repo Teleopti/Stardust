@@ -349,8 +349,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var periods = PlanningPeriodRepository.LoadForAgentGroup(agentGroup).OrderBy(period => period.Range.StartDate);
 
 			periods.First(period => period.Id == firstPeriod.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 25));
-			periods.First(period => period.Id == changedPeriod.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 09));
-			periods.First(period => period.Id == lastPeriod.Content.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 16));
+			periods.First(period => period.Id == changedPeriod.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 10));
+			periods.First(period => period.Id == lastPeriod.Content.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 17));
 		}
 
 		private static List<AggregatedSchedulePeriod> suggestions()

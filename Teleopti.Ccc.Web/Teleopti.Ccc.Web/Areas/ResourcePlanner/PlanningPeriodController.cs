@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var periodToChange = planningPeriods.OrderBy(x => x.Range.StartDate).LastOrDefault();
 			if (periodToChange != null)
 			{
-				var periodDays = (int)(endDate - periodToChange.Range.StartDate.Date).TotalDays;
+				var periodDays = (int)(endDate - periodToChange.Range.StartDate.Date).TotalDays+1;
 				if (periodDays <= 0)
 					return BadRequest($"Invalid {nameof(endDate)}");
 				periodToChange.ChangeRange(new SchedulePeriodForRangeCalculation

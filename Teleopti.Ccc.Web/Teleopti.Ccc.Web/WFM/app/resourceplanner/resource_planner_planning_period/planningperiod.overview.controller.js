@@ -25,6 +25,8 @@
     vm.scheduleIssues = [];
     vm.dayNodes = undefined;
     vm.gridOptions = {};
+    vm.lastPp = undefined;
+    vm.originLastPp = undefined;
     vm.totalAgents = null;
     vm.scheduledAgents = 0;
     vm.totalValidationNumbers = 0;
@@ -35,7 +37,10 @@
     vm.publishSchedule = publishSchedule;
     vm.isDisable = isDisable;
     vm.deleteLastPp = deleteLastPp;
+    vm.getLastPp = getLastPp;
     vm.isDisableDo = true;
+    vm.isEnddateChanged = isEnddateChanged;
+    vm.changeEndDate = changeEndDate;
 
     checkToggle();
     destroyCheckState();
@@ -267,6 +272,42 @@
         });
 
       }
+    }
+
+    function getLastPp(p) {
+      vm.originLastPp = angular.copy(p);
+      vm.lastPp = {
+        startDate: moment(p.StartDate).toDate(),
+        endDate: moment(p.EndDate).toDate()
+      };
+
+      var elementResult = document.getElementsByClassName('date-range-start-date');
+      elementResult[0].classList.add("pp-startDate-picker"); //css think mores
+
+      return vm.lastPp;
+    }
+
+    function isEnddateChanged() {
+      if (vm.lastPp !== undefined && vm.originLastPp !== undefined) {
+        var origin = moment(vm.originLastPp.EndDate).toDate();
+        var diff = moment(origin).diff(vm.lastPp.endDate, 'days');
+        if (diff == 0) {
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
+    }
+
+    function changeEndDate(){
+      var newEndDate = moment(vm.lastPp.endDate).format('YYYY-MM-DD');
+      vm.planningPeriods = [];
+        var changeEndDateForLastPlanningPeriod = planningPeriodService.changeEndDateForLastPlanningPeriod({ agentGroupId: agentGroupId, endDate: newEndDate});
+        return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
+          vm.planningPeriods = data;
+          return vm.planningPeriods;
+        });
     }
 
     function displayGrid() {
