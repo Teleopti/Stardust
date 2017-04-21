@@ -154,13 +154,18 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	};
 
 	self.generateQRCode = function () {
+		var defaultUrl = window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl + Teleopti.MyTimeWeb.AjaxSettings.defaultNavigation;
 		if (self.customMobileAppBaseUrl()) {
 			ajax.Ajax({
 				url: "Settings/MobileQRCodeUrl",
 				contentType: 'application/json; charset=utf-8',
 				type: "GET",
 				success: function (data, textStatus, jqXHR) {
-					self.myTimeWebBaseUrl(data);
+					if (data == '') {
+						self.myTimeWebBaseUrl(defaultUrl);
+					} else {
+						self.myTimeWebBaseUrl(data);
+					}
 					drawQrcode();
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
@@ -169,7 +174,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 				}
 			});
 		} else {
-			self.myTimeWebBaseUrl(window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl + Teleopti.MyTimeWeb.AjaxSettings.defaultNavigation);
+			self.myTimeWebBaseUrl(defaultUrl);
 			drawQrcode();
 		}
 	};
