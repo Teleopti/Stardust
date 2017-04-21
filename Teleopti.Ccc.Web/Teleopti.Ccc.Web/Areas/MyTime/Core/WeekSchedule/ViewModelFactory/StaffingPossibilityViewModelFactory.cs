@@ -22,40 +22,47 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public IEnumerable<PeriodStaffingPossibilityViewModel> CreateIntradayPeriodStaffingPossibilityViewModels(
+		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
 			StaffingPossiblityType staffingPossiblityType)
 		{
+			var period = getCurrentWeekPeriod(startDate);
 			switch (staffingPossiblityType)
 			{
 				case StaffingPossiblityType.Absence:
 					return
 						createPeriodStaffingPossibilityViewModels(
-							_scheduleStaffingPossibilityCalculator.CalculateIntradayAbsenceIntervalPossibilities());
+							_scheduleStaffingPossibilityCalculator.CalculateIntradayAbsenceIntervalPossibilities(period));
 				case StaffingPossiblityType.Overtime:
 					return
 						createPeriodStaffingPossibilityViewModels(
-							_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities());
+							_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period));
 			}
 			return new PeriodStaffingPossibilityViewModel[] { };
 		}
 
 		private IEnumerable<PeriodStaffingPossibilityViewModel> createPeriodStaffingPossibilityViewModels(
-			IDictionary<DateTime, int> intervalPossibilities)
+			IDictionary<DateOnly, IDictionary<DateTime, int>> intervalPossibilityDictionary)
 		{
 			var intervalLengthInMinutes = _intervalLengthFetcher.IntervalLength;
-			var possibilities =
-				intervalPossibilities.Select(intervalPossibility => new PeriodStaffingPossibilityViewModel
-				{
-					StartTime = intervalPossibility.Key,
-					EndTime = intervalPossibility.Key.AddMinutes(intervalLengthInMinutes),
-					Possibility = intervalPossibility.Value
-				});
-			return possibilities.OrderBy(x => x.StartTime);
+			var periodStaffingPossibilityViewModels = new List<PeriodStaffingPossibilityViewModel>();
+			foreach (var intervalPossibilityItem in intervalPossibilityDictionary)
+			{
+				periodStaffingPossibilityViewModels.AddRange(intervalPossibilityItem.Value
+					.Select(p => new PeriodStaffingPossibilityViewModel
+					{
+						Date = intervalPossibilityItem.Key,
+						StartTime = p.Key,
+						EndTime = p.Key.AddMinutes(intervalLengthInMinutes),
+						Possibility = p.Value
+					}).OrderBy(x => x.StartTime));
+			}
+			return periodStaffingPossibilityViewModels;
 		}
 
-		//private DateOnlyPeriod getCurrentWeekPeriod(DateOnly date)
-		//{
-		//	//DateHelper.GetWeekPeriod(date);
-		//}
+		private DateOnlyPeriod getCurrentWeekPeriod(DateOnly date)
+		{
+			var lastDateInWeek = DateHelper.GetLastDateInWeek(date.Date, _loggedOnUser.CurrentUser().PermissionInformation.UICulture());
+			return new DateOnlyPeriod(date, new DateOnly(lastDateInWeek));
+		}
 	}
 }

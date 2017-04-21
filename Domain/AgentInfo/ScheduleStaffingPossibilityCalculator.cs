@@ -27,10 +27,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly IUserTimeZone _timeZone;
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
+		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
 		public ScheduleStaffingPossibilityCalculator(INow now, ILoggedOnUser loggedOnUser,
 			ScheduledStaffingProvider scheduledStaffingProvider, ForecastedStaffingProvider forecastedStaffingProvider, IScheduleStorage scheduleStorage,
-			ICurrentScenario scenarioRepository, IUserTimeZone timeZone, ISkillDayRepository skillDayRepository)
+			ICurrentScenario scenarioRepository, IUserTimeZone timeZone, ISkillDayRepository skillDayRepository, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
 		{
 			_now = now;
 			_loggedOnUser = loggedOnUser;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_scenarioRepository = scenarioRepository;
 			_timeZone = timeZone;
 			_skillDayRepository = skillDayRepository;
+			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
 
 		public IDictionary<DateTime, int> CalculateIntradayAbsenceIntervalPossibilities()
@@ -84,7 +86,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private IEnumerable<skillStaffingData> getSkillStaffingData(DateOnlyPeriod period, bool useShrinkage)
 		{
-			var personSkills = getPersonSkills(period);
+			var personSkills = getSupportedPersonSkills(period);
 
 			var skillStaffingList = new List<skillStaffingData>();
 			if (!personSkills.Any()) return skillStaffingList;
@@ -124,18 +126,20 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 			return skillStaffingList;
 		}
-		
-		private IEnumerable<IPersonSkill> getPersonSkills(DateOnlyPeriod period)
+
+		private IEnumerable<IPersonSkill> getSupportedPersonSkills(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
 			var personPeriod = person.PersonPeriods(period).ToArray();
 			if (!personPeriod.Any())
-				return new IPersonSkill[] { };
+				return new IPersonSkill[] {};
 
-			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p)).ToArray();
-			return !personSkills.Any() ? new IPersonSkill[] { } : personSkills.Distinct();
+			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p))
+				.Where(p => _supportedSkillsInIntradayProvider.CheckSupportedSkill(p.Skill)).ToArray();
+
+			return !personSkills.Any() ? new IPersonSkill[] {} : personSkills.Distinct();
 		}
-		
+
 		private static Dictionary<DateTime, int> calcuateIntervalPossibilities(IEnumerable<skillStaffingData> skillStaffingDatas,
 		Func<ISkill, ISpecification<IValidatePeriod>> getStaffingSpecification, IScheduleDictionary scheduleDictionary)
 		{

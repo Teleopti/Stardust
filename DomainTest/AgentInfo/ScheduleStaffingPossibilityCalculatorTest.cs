@@ -41,9 +41,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			var staffingViewModelCreator = MockRepository.GenerateMock<IStaffingViewModelCreator>();
-			system.UseTestDouble(staffingViewModelCreator).For<IStaffingViewModelCreator>();
-
 			system.UseTestDouble(new MutableNow(_today)).For<INow>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<IScheduleStorage>();
@@ -73,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.AreEqual(2, possibilities.Count);
 		}
 
-		[Test, Ignore("not prepare for it yet")]
+		[Test]
 		public void ShouldGetPossibilitiesForDays()
 		{
 			setupTestDataForOneSkill();
@@ -143,6 +140,15 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			ScheduleStorage.Clear();
 			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities();
 			Assert.AreEqual(2, possibilities.Count);
+		}
+
+		[Test]
+		public void ShouldNotGetPossibilitiesForNotSupportedSkill()
+		{
+			setupTestDataForOneSkill();
+			SkillRepository.LoadAllSkills().First().SkillType.Description = new Description("NotSupportedSkillType");
+			var possibilities = Target.CalculateIntradayOvertimeIntervalPossibilities();
+			Assert.AreEqual(0, possibilities.Count);
 		}
 
 		[Test]
@@ -281,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		private void setPersonSkill(IPersonSkill personSkill, double?[] forecastedStaffing, double?[] scheduledStaffing)
 		{
 			personSkill.Skill.StaffingThresholds = createStaffingThresholds();
-			setupIntradayStaffingViewModelForSkill(getAvailablePeriod(), personSkill.Skill, forecastedStaffing,
+			setupIntradayStaffingForSkill(getAvailablePeriod(), personSkill.Skill, forecastedStaffing,
 				scheduledStaffing);
 		}
 
@@ -292,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			var personPeriod = createPersonPeriod(personSkill);
 			person.AddPersonPeriod(personPeriod);
 			personSkill.Skill.StaffingThresholds = createStaffingThresholds();
-			setupIntradayStaffingViewModelForSkill(getAvailablePeriod(), personSkill.Skill, forecastedStaffing,
+			setupIntradayStaffingForSkill(getAvailablePeriod(), personSkill.Skill, forecastedStaffing,
 				scheduledStaffing);
 		}
 
@@ -303,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			return period;
 		}
 
-		private StaffingThresholds createStaffingThresholds()
+		private static StaffingThresholds createStaffingThresholds()
 		{
 			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
 		}
@@ -313,7 +319,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			var skill = SkillFactory.CreateSkill("test1").WithId();
 			skill.SkillType.Description = new Description("SkillTypeInboundTelephony");
 			skill.Activity = activity;
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(21,45,22,15));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(21, 45, 22, 15));
 			SkillRepository.Has(skill);
 
 			var personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
@@ -339,79 +345,51 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			return activity;
 		}
 
-		private void setupIntradayStaffingViewModelForSkill(DateOnlyPeriod period, ISkill skill, double?[] forecastedStaffing,
-			double?[] scheduledStaffing)
+		private void setupIntradayStaffingForSkill(DateOnlyPeriod period, ISkill skill, double?[] forecastedStaffings,
+			double?[] scheduledStaffings)
 		{
-			var startDate = _today.AddHours(8);
-			var interval1 = startDate.AddMinutes(15);
-			var interval2 = startDate.AddMinutes(30);
-
-			CombinationRepository.AddSkillCombinationResource(new DateTime(),
-				new[]
-				{
-					new SkillCombinationResource
-					{
-						StartDateTime = interval1,
-						EndDateTime = interval2,
-						Resource = scheduledStaffing[0].Value,
-						SkillCombination = new[] {skill.Id.Value}
-					}
-				});
-
-			if (scheduledStaffing.Length > 1)
+			period.DayCollection().ToList().ForEach(day =>
 			{
-				CombinationRepository.AddSkillCombinationResource(new DateTime(),
-					new[]
-					{
-						new SkillCombinationResource
+				var utcDate = TimeZoneHelper.ConvertToUtc(day.Date,
+						LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone())
+					.Add(_today.TimeOfDay);
+				var intervals = new[] { utcDate.AddHours(8).AddMinutes(15), utcDate.AddHours(8).AddMinutes(30) };
+				for (var i = 0; i < scheduledStaffings.Length; i++)
+				{
+					CombinationRepository.AddSkillCombinationResource(new DateTime(),
+						new[]
 						{
-							StartDateTime = interval2,
-							EndDateTime = interval2.AddMinutes(15),
-							Resource = scheduledStaffing[1].Value,
-							SkillCombination = new[] {skill.Id.Value}
-						}
-					});
-			}
-
-			var skillStaffingIntervals = new List<SkillStaffingInterval>
-			{
-				new SkillStaffingInterval
-				{
-					StartDateTime = interval1,
-					EndDateTime = interval1.AddMinutes(15),
-					FStaff = forecastedStaffing[0].Value,
-					SkillId = skill.Id.GetValueOrDefault()
+							new SkillCombinationResource
+							{
+								StartDateTime = intervals[i],
+								EndDateTime = intervals[i].AddMinutes(15),
+								Resource = scheduledStaffings[i].Value,
+								SkillCombination = new[] {skill.Id.Value}
+							}
+						});
 				}
-			};
 
-			if (forecastedStaffing.Length > 1)
-			{
-				skillStaffingIntervals.Add(new SkillStaffingInterval
+				var skillStaffingIntervals = new List<SkillStaffingInterval>();
+				var timePeriodTuples = new List<Tuple<TimePeriod, double>>();
+				for (var i = 0; i < forecastedStaffings.Length; i++)
 				{
-					StartDateTime = interval2,
-					EndDateTime = interval2.AddMinutes(15),
-					FStaff = forecastedStaffing[1].Value,
-					SkillId = skill.Id.GetValueOrDefault()
-				});
-			}
+					skillStaffingIntervals.Add(new SkillStaffingInterval
+					{
+						StartDateTime = intervals[i],
+						EndDateTime = intervals[i].AddMinutes(15),
+						FStaff = forecastedStaffings[i].Value,
+						SkillId = skill.Id.GetValueOrDefault()
+					});
+					timePeriodTuples.Add(new Tuple<TimePeriod, double>(
+						new TimePeriod(intervals[i].TimeOfDay, intervals[i].TimeOfDay.Add(TimeSpan.FromMinutes(15))),
+						forecastedStaffings[i].Value));
+				}
 
-			var timePeriodTuples = new List<Tuple<TimePeriod, double>>
-			{
-				new Tuple<TimePeriod, double>(
-					new TimePeriod(interval1.TimeOfDay, interval1.TimeOfDay.Add(TimeSpan.FromMinutes(15))),
-					forecastedStaffing[0].Value),
-			};
-
-			if (forecastedStaffing.Length > 1)
-			{
-				timePeriodTuples.Add(new Tuple<TimePeriod, double>(
-					new TimePeriod(interval2.TimeOfDay, interval2.TimeOfDay.Add(TimeSpan.FromMinutes(15))),
-					forecastedStaffing[1].Value));
-			}
-
-			ScheduleForecastSkillReadModelRepository.Persist(skillStaffingIntervals, new DateTime());
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(CurrentScenario.Current(), period.StartDate, 0,
-				timePeriodTuples.ToArray()));
+				ScheduleForecastSkillReadModelRepository.Persist(skillStaffingIntervals, new DateTime());
+				SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(CurrentScenario.Current(), day, 0,
+					timePeriodTuples.ToArray()));
+			});
+			
 		}
 
 		private void createAssignment(IPerson person, params IActivity[] activities)
