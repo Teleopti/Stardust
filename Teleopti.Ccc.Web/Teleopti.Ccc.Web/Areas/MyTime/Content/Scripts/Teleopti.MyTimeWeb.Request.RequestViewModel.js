@@ -13,6 +13,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstD
 	self.IsUpdate = ko.observable(false);
 
 	self.IsLoadingPersonalAccount = ko.observable(true);
+	self.IsPostingData = ko.observable(false);
 
 	var urlDate = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash.replace(/\//g, "-");
 	if (urlDate && urlDate.indexOf("/") >= 0) {
@@ -204,8 +205,13 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstD
 
 	self.AddRequestCallback = undefined;
 
+	self.AddRequestErrorCallback = function () {
+		self.IsPostingData(false);
+	};
+
 	self.AddRequest = function () {
-		addRequestMethod(self, self.AddRequestCallback);
+		self.IsPostingData(true);
+		addRequestMethod(self, self.AddRequestCallback, self.AddRequestErrorCallback);
 	};
 
 	function _setDefaultDates() {

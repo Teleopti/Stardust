@@ -77,7 +77,10 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _prepareForAddingRequest() {
 		_hideOthers();
 		var model = parentViewModel.createRequestViewModel();
-		model.AddRequestCallback = _addItemAtTop;
+		model.AddRequestCallback = function(data) {
+			_addItemAtTop(data);
+			model.IsPostingData(false);
+		};
 		model.DateFormat(_datePickerFormat());
 		parentViewModel.requestViewModel(model);
 	}
@@ -115,7 +118,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		}
 	}
 
-	function _addRequest(model, successCallback) {
+	function _addRequest(model, successCallback, errorCallback) {
 		if (self.IsPostingData()) {
 			return;
 		}
@@ -133,19 +136,30 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 				model.IsNewInProgress(false);
 				model.Subject("");
 				model.Message("");
-				if (successCallback != undefined)
+
+				self.IsPostingData(false);
+
+				if (successCallback != undefined) {
 					successCallback(data);
-					self.IsPostingData(false);
+				}
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
+				if (jqXHR.status === 400) {
 					var data = $.parseJSON(jqXHR.responseText);
 					model.ErrorMessage(data.Errors.join('</br>'));
 					model.ShowError(true);
+
+					if (errorCallback != undefined) {
+						errorCallback(jqXHR, textStatus, errorThrown);
+					}
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+
 				self.IsPostingData(false);
+				if (errorCallback != undefined) {
+					errorCallback(jqXHR, textStatus, errorThrown);
+				}
 			}
 		});
 	}
@@ -229,8 +243,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		HideNewTextOrAbsenceRequestView: function() {
 			parentViewModel.requestViewModel(null);
 		},
-		AddTextOrAbsenceRequest: function (model, successCallback) {
-			_addRequest(model, successCallback);
+		AddTextOrAbsenceRequest: function (model, successCallback, errorCallback) {
+			_addRequest(model, successCallback, errorCallback);
 		},
 		PrepareForViewModel: function(object) {
 			_prepareForViewModel(object);
