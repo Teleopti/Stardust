@@ -740,7 +740,6 @@
     <Compile Include="WinCode\Main\LogonPresenter.cs" />
     <Compile Include="WinCode\Main\WebUrlHolder.cs" />
     <Compile Include="WinCode\Main\WinTenantCredentials.cs" />
-    <Compile Include="WinCode\Matrix\MatrixNavigationModel.cs" />
     <Compile Include="WinCode\Matrix\MatrixNavigationPresenter.cs" />
     <Compile Include="WinCode\Meetings\AddressBookPresenter.cs" />
     <Compile Include="WinCode\Meetings\AddressBookViewModel.cs" />

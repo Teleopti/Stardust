@@ -399,7 +399,6 @@
     <Compile Include="Main\LogonLicenseCheckerTest.cs" />
     <Compile Include="Main\LogonMatrixTest.cs" />
     <Compile Include="Main\LogonPresenterTest.cs" />
-    <Compile Include="Matrix\MatrixNavigationModelTest.cs" />
     <Compile Include="Matrix\MatrixNavigationPresenterTest.cs" />
     <Compile Include="Meetings\AddressBookPresenterTest.cs" />
     <Compile Include="Meetings\AddressBookViewModelTest.cs" />

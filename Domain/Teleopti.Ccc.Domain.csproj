@@ -251,6 +251,8 @@
     <Compile Include="Optimization\TeamBlock\DayOffOptimizerStandard.cs" />
     <Compile Include="Optimization\TeamBlock\DayOffOptimizerUseTeamSameDaysOff.cs" />
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
+    <Compile Include="Reports\IReportNavigationModel.cs" />
+    <Compile Include="Reports\ReportNavigationModel.cs" />
     <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />

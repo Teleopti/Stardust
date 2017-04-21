@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
@@ -42,11 +43,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 
 	public class MatrixNavigationPresenter : IMatrixNavigationPresenter
 	{
-		private readonly IMatrixNavigationModel _model;
+		private readonly IReportNavigationModel _model;
 		private readonly IMatrixNavigationView _view;
 		private readonly IReportUrl _reportUrlConstructor;
 
-		public MatrixNavigationPresenter(IMatrixNavigationModel model, IMatrixNavigationView view,
+		public MatrixNavigationPresenter(IReportNavigationModel model, IMatrixNavigationView view,
 			IReportUrl reportUrlConstructor)
 		{
 			_model = model;
@@ -70,10 +71,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 		public void Initialize()
 		{
 			_view.SetColor();
-			var matrixFunctionGroups = _model.GroupedPermittedMatrixFunctions;
-			var orphanMatrixFunctions = _model.OrphanPermittedMatrixFunctions;
+			var matrixFunctionGroups = _model.PermittedCategorizedReportFunctions;
+			var orphanMatrixFunctions = _model.PermittedCustomReportFunctions;
 			var tree = CreateTree(matrixFunctionGroups, orphanMatrixFunctions);
-			var treeRealTime = CreateTree(_model.PermittedOnlineReportFunctions);
+			var treeRealTime = CreateTree(_model.PermittedRealTimeReportFunctions);
 
 			_view.CreateAndAddTreeNodes(treeRealTime, tree);
 		}

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 
 	    protected override void Load(ContainerBuilder builder)
 		 {
-			 builder.RegisterType<MatrixNavigationModel>().As<IMatrixNavigationModel>();
+			 builder.RegisterType<ReportNavigationModel>().As<IReportNavigationModel>();
 
 
 		    builder.Register(c => new ReportUrlConstructor(_config.Args().ReportServer, c.Resolve<IConfigReader>()))

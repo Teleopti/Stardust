@@ -3,19 +3,17 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCodeTest.Matrix
+namespace Teleopti.Ccc.DomainTest.Reports
 {
 	[TestFixture]
-	public class MatrixNavigationModelTest
+	public class ReportNavigationModelTest
 	{
-		private MatrixNavigationModel _target;
+		private ReportNavigationModel _target;
 		private MockRepository _mocks;
 		private ILicenseActivator _licenseActivator;
 
@@ -23,29 +21,28 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_target = new MatrixNavigationModel();
+			_target = new ReportNavigationModel();
 			_licenseActivator = _mocks.DynamicMock<ILicenseActivator>();
 			DefinedLicenseDataFactory.SetLicenseActivator("for test", _licenseActivator);
 		}
 
 		[Test]
-		public void ShouldProvidePermittedMatrixFunctions()
+		public void ShouldProvidePermittedReportFunctions()
 		{
 			var authorization = _mocks.StrictMock<IAuthorization>();
-			var expectedMatrixFunctions = new List<IApplicationFunction>();
-			IEnumerable<IApplicationFunction> actualMatrixFunctions;
+			IEnumerable<IApplicationFunction> actualReportFunctions;
 			using (_mocks.Record())
 			{
-				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(expectedMatrixFunctions);
+				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(new List<IApplicationFunction>());
 			}
 			using (_mocks.Playback())
 			{
 				using (CurrentAuthorization.ThreadlyUse(authorization))
 				{
-					actualMatrixFunctions = _target.PermittedMatrixFunctions;
+					actualReportFunctions = _target.PermittedReportFunctions;
 				}
 			}
-			Assert.That(actualMatrixFunctions, Is.Empty);
+			Assert.That(actualReportFunctions, Is.Empty);
 		}
 
 		[Test]
@@ -62,61 +59,60 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			{
 				using (CurrentAuthorization.ThreadlyUse(authorization))
 				{
-					acctualFunctions = _target.PermittedOnlineReportFunctions;
+					acctualFunctions = _target.PermittedRealTimeReportFunctions;
 				}
 			}
 			Assert.AreEqual(expectedFunctions, acctualFunctions);
 		}
 
 		[Test]
-		public void ShouldProvideGroupedPermittedMatrixFunctions()
+		public void ShouldProvideGroupedPermittedReportFunctions()
 		{
 			var authorization = _mocks.StrictMock<IAuthorization>();
-			var matrixFunctions = new List<IApplicationFunction>
+			var reportFunctions = new List<IApplicationFunction>
 												  {
 														new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54", ForeignSource = DefinedForeignSourceNames.SourceMatrix},
 														new ApplicationFunction {ForeignId = "AnIdNotMappedToAGroup", ForeignSource = DefinedForeignSourceNames.SourceMatrix}
 												  };
-			IEnumerable<IMatrixFunctionGroup> actualMatrixFunctionGroups;
 			using (_mocks.Record())
 			{
-				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
+				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(reportFunctions).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
 				using (CurrentAuthorization.ThreadlyUse(authorization))
 				{
-					actualMatrixFunctionGroups = _target.GroupedPermittedMatrixFunctions;
-					Assert.That(actualMatrixFunctionGroups.Count(), Is.EqualTo(1));
-					Assert.That(actualMatrixFunctionGroups.ElementAt(0).ApplicationFunctions.Single(),
-									Is.SameAs(matrixFunctions.First()));
+					IEnumerable<IMatrixFunctionGroup> actualReportFunctionGroups = _target.PermittedCategorizedReportFunctions.ToList();
+
+					Assert.That(actualReportFunctionGroups.Count(), Is.EqualTo(1));
+					Assert.That(actualReportFunctionGroups.ElementAt(0).ApplicationFunctions.Single(),
+									Is.SameAs(reportFunctions.First()));
 				}
 			}
 		}
 
 		[Test]
-		public void ShouldProvideOrphanPermittedMatrixFunctions()
+		public void ShouldProvidePermittedCustomReportFunctions()
 		{
 
 			var authorization = _mocks.StrictMock<IAuthorization>();
-			var matrixFunctions = new List<IApplicationFunction>
+			var reportFunctions = new List<IApplicationFunction>
 												  {
 														new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54", ForeignSource = DefinedForeignSourceNames.SourceMatrix},
 														new ApplicationFunction {ForeignId = "AnIdNotMappedToAGroup", ForeignSource = DefinedForeignSourceNames.SourceMatrix}
 												  };
-			IEnumerable<IApplicationFunction> orphanMatrixFunctions;
 			using (_mocks.Record())
 			{
-				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
+				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(reportFunctions).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
 				using (CurrentAuthorization.ThreadlyUse(authorization))
 				{
-					orphanMatrixFunctions = _target.OrphanPermittedMatrixFunctions;
+					var customReportFunctions = _target.PermittedCustomReportFunctions.ToList();
 
-					Assert.That(orphanMatrixFunctions.Count(), Is.EqualTo(1));
-					Assert.That(orphanMatrixFunctions.Single(), Is.SameAs(matrixFunctions.ElementAt(1)));
+					Assert.That(customReportFunctions.Count(), Is.EqualTo(1));
+					Assert.That(customReportFunctions.Single(), Is.SameAs(reportFunctions.ElementAt(1)));
 				}
 			}
 		}

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 	{
 		private MatrixNavigationPresenter _target;
 		private MockRepository _mocks;
-		private IMatrixNavigationModel _model;
+		private IReportNavigationModel _model;
 		private IMatrixNavigationView _view;
 		private IReportUrl _urlConstructor;
 
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_model = MockRepository.GenerateMock<IMatrixNavigationModel>();
+			_model = MockRepository.GenerateMock<IReportNavigationModel>();
 			_view = MockRepository.GenerateMock<IMatrixNavigationView>();
 			_urlConstructor = MockRepository.GenerateMock<IReportUrl>();
 			_target = new MatrixNavigationPresenter(_model, _view, _urlConstructor);
@@ -50,9 +51,9 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			var orphanMatrixGroups = new List<IApplicationFunction>();
 			var onlineReportsFunctions = new List<IApplicationFunction>();
 	
-			_model.Stub(x => x.GroupedPermittedMatrixFunctions).Return(groupedMatrixGroups);
-			_model.Stub(x => x.OrphanPermittedMatrixFunctions).Return(orphanMatrixGroups);
-			_model.Stub(x => x.PermittedOnlineReportFunctions).Return(onlineReportsFunctions);
+			_model.Stub(x => x.PermittedCategorizedReportFunctions).Return(groupedMatrixGroups);
+			_model.Stub(x => x.PermittedCustomReportFunctions).Return(orphanMatrixGroups);
+			_model.Stub(x => x.PermittedRealTimeReportFunctions).Return(onlineReportsFunctions);
 			_view.Stub(x => x.SetColor()).IgnoreArguments();
 			_view.Stub(x => x.CreateAndAddTreeNodes(null, null)).IgnoreArguments();
 	

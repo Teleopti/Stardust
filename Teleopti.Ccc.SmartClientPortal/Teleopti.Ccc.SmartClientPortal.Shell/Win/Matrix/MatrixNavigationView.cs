@@ -9,6 +9,7 @@ using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Matrix
 		private readonly IComponentContext _componentContext;
 		private readonly MatrixNavigationPresenter _presenter;
 
-		public MatrixNavigationView(IMatrixNavigationModel model, IComponentContext componentContext, IReportUrl reportUrlConstructor)
+		public MatrixNavigationView(IReportNavigationModel model, IComponentContext componentContext, IReportUrl reportUrlConstructor)
 		{
 			_componentContext = componentContext;
 			InitializeComponent();

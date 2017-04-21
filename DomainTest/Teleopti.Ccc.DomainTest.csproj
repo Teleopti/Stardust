@@ -358,6 +358,7 @@
     <Compile Include="Logon\Permissions\AvailablePersonAuthorizationTest.cs" />
     <Compile Include="Optimization\FetchAgentGroupModelTest.cs" />
     <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />
+    <Compile Include="Reports\ReportNavigationModelTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingReadModelForecastTest.cs" />
     <Compile Include="SchedulingScenarios\ContractWithMaximumTolerance.cs" />

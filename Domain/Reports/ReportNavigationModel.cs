@@ -8,22 +8,14 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
+namespace Teleopti.Ccc.Domain.Reports
 {
-	public interface IMatrixNavigationModel
-	{
-		IEnumerable<IMatrixFunctionGroup> GroupedPermittedMatrixFunctions { get; }
-		IEnumerable<IApplicationFunction> OrphanPermittedMatrixFunctions { get; }
-		IEnumerable<IApplicationFunction> PermittedOnlineReportFunctions { get; }
-		IEnumerable<IApplicationFunction> PermittedMatrixFunctions { get; }
-	}
-
-	public class MatrixNavigationModel : IMatrixNavigationModel
+	public class ReportNavigationModel : IReportNavigationModel
 	{
 
 		private IEnumerable<IMatrixFunctionGroup> _matrixFunctionGroups;
 
-		public IEnumerable<IApplicationFunction> PermittedMatrixFunctions
+		public IEnumerable<IApplicationFunction> PermittedReportFunctions
 		{
 			get
 			{
@@ -34,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 			}
 		}
 
-		public IEnumerable<IApplicationFunction> PermittedOnlineReportFunctions
+		public IEnumerable<IApplicationFunction> PermittedRealTimeReportFunctions
 		{
 			get
 			{
@@ -131,7 +123,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 					 "F7937D02-FA54-4679-AF70-D9798E1690D5"};
 		}
 
-		public IEnumerable<IMatrixFunctionGroup> GroupedPermittedMatrixFunctions
+		public IEnumerable<IMatrixFunctionGroup> PermittedCategorizedReportFunctions
 		{
 			get
 			{
@@ -144,7 +136,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 												{
 													 LocalizedDescription = Resources.ScheduleAnalysis,
 													 ApplicationFunctions =
-														  (from a in PermittedMatrixFunctions
+														  (from a in PermittedReportFunctions
 															where analysisReports().Contains(a.ForeignId.ToUpper())
 															select a).ToList()
 												},
@@ -152,7 +144,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 												{
 													 LocalizedDescription = Resources.Preferences,
 													 ApplicationFunctions =
-														  from a in PermittedMatrixFunctions
+														  from a in PermittedReportFunctions
 														  where preferencesReports().Contains(a.ForeignId.ToUpper())
 														  select a
 												},
@@ -160,7 +152,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 												{
 													 LocalizedDescription = Resources.EmployeeInformation,
 													 ApplicationFunctions =
-														  from a in PermittedMatrixFunctions
+														  from a in PermittedReportFunctions
 														  where EmployeeReports().Contains(a.ForeignId.ToUpper())
 														  select a
 												},
@@ -168,7 +160,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 												{
 													 LocalizedDescription = Resources.AgentPerformance,
 													 ApplicationFunctions =
-														  from a in PermittedMatrixFunctions
+														  from a in PermittedReportFunctions
 														  where agentReports().Contains(a.ForeignId.ToUpper())
 														  select a
 												},
@@ -176,7 +168,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 												{
 													 LocalizedDescription = Resources.ForecastingPerformance,
 													 ApplicationFunctions =
-														  from a in PermittedMatrixFunctions
+														  from a in PermittedReportFunctions
 														  where forecastReports().Contains(a.ForeignId.ToUpper())
 														  select a
 												},
@@ -184,7 +176,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 												{
 													 LocalizedDescription = Resources.ServiceLevelAnalysis,
 													 ApplicationFunctions =
-														  from a in PermittedMatrixFunctions
+														  from a in PermittedReportFunctions
 														  where serviceLevelReports().Contains(a.ForeignId.ToUpper())
 														  select a
 												},
@@ -193,7 +185,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 												{
 													 LocalizedDescription = Resources.Improve,
 													 ApplicationFunctions =
-														  from a in PermittedMatrixFunctions
+														  from a in PermittedReportFunctions
 														  where new[] {"7F918C26-4044-4F6B-B0AE-7D27625D052E"}.Contains(a.ForeignId.ToUpper())
 														  select a
 												}
@@ -204,15 +196,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 			}
 		}
 
-		public IEnumerable<IApplicationFunction> OrphanPermittedMatrixFunctions
+		public IEnumerable<IApplicationFunction> PermittedCustomReportFunctions
 		{
 			get
 			{
 				var groupedMatrixFunctionForeignIds =
-					(from g in GroupedPermittedMatrixFunctions
+					(from g in PermittedCategorizedReportFunctions
 					 from f in g.ApplicationFunctions
 					 select f.ForeignId).ToList();
-				return from f in PermittedMatrixFunctions
+				return from f in PermittedReportFunctions
 						 where groupedMatrixFunctionForeignIds.Contains(f.ForeignId) == false
 						 select f;
 			}
