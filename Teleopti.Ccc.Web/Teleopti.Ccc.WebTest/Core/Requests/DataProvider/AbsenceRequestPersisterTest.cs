@@ -12,10 +12,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -82,9 +84,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble<RequestsViewModelMapper>().For<RequestsViewModelMapper>();
 			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
+			system.UseTestDouble<FakeDisableDeletedFilter>().For<IDisableDeletedFilter>();
+			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
+			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 		}
 
-		[Test]
+
+        [Test]
 		public void ShouldAddRequest()
 		{
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
