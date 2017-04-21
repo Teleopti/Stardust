@@ -49,10 +49,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 			{
 				var resources = skillGroupsWithSameIndex.Sum(x => x.RemainingResources);
 				dic.Add(skillGroupsWithSameIndex.First().PrimarySkills.First(), resources);
-				return new ShovelResourcesState(_addResourceToSubSkillsProvider.Fetch(true), dic, new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval));
+				return new ShovelResourcesState(_addResourceToSubSkillsProvider.Fetch(true), dic, new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval), 0.001);
 			}
 
-			return new ShovelResourcesState(_addResourceToSubSkillsProvider.Fetch(false), dic, new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval));
+			return new ShovelResourcesState(_addResourceToSubSkillsProvider.Fetch(false), dic, new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval), 0.1);
 		}
 	}
 }
