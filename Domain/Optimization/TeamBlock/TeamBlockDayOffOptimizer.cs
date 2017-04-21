@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public class TeamBlockDayOffOptimizerService
+	public class TeamBlockDayOffOptimizer
 	{
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private readonly TeamBlockDaysOffSameDaysOffLockSyncronizer _teamBlockDaysOffSameDaysOffLockSyncronizer;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly DayOffOptimizerStandard _dayOffOptimizerStandard;
 		private readonly DayOffOptimizerUseTeamSameDaysOff _dayOffOptimizerUseTeamSameDaysOff;
 
-		public TeamBlockDayOffOptimizerService(
+		public TeamBlockDayOffOptimizer(
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
 			TeamBlockDaysOffSameDaysOffLockSyncronizer teamBlockDaysOffSameDaysOffLockSyncronizer,
 			Func<ISchedulerStateHolder> schedulerStateHolder,

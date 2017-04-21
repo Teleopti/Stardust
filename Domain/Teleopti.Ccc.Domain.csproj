@@ -2309,7 +2309,7 @@
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\DayValueUnlockedIndexSorter.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeDescisionMaker.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeOptimizer.cs" />
-    <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizer.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />

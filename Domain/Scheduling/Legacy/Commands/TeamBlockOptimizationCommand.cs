@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
-		private readonly TeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
+		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktopTeamBlock;
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
 			IOptimizerHelperHelper optimizerHelper,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-			TeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
+			TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_intraIntervalOptimizationCommand = intraIntervalOptimizationCommand;
 			_optimizerHelper = optimizerHelper;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
-			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
+			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_dayOffOptimizationDesktopTeamBlock = dayOffOptimizationDesktopTeamBlock;
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
 
-			_teamBlockDayOffOptimizerService.OptimizeDaysOff(
+			_teamBlockDayOffOptimizer.OptimizeDaysOff(
 				allMatrixes,
 				selectedPeriod,
 				selectedPersons,

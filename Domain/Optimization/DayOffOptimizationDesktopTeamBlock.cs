@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffOptimizationDesktopTeamBlock : IDayOffOptimizationDesktop
 	{
 		private readonly IResourceCalculation _resourceOptimizationHelper;
-		private readonly TeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
+		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 
 		public DayOffOptimizationDesktopTeamBlock(IResourceCalculation resourceOptimizationHelper,
-								TeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
+								TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 								Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 								IMatrixListFactory matrixListFactory,
 								IOptimizerHelperHelper optimizerHelperHelper,
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 								Func<IScheduleDayChangeCallback> scheduleDayChangeCallback)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
+			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_matrixListFactory = matrixListFactory;
 			_optimizerHelperHelper = optimizerHelperHelper;
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder(), _userTimeZone);
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(stateHolder.AllPermittedPersons, stateHolder.Schedules, groupPageLight);
 
-				_teamBlockDayOffOptimizerService.OptimizeDaysOff(matrixList,
+				_teamBlockDayOffOptimizer.OptimizeDaysOff(matrixList,
 					selectedPeriod,
 					selectedPersons,
 					optimizationPreferences,

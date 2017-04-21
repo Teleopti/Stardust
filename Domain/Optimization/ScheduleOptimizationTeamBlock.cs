@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
-		private readonly TeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
+		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IUserTimeZone _userTimeZone;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizerHelperHelper optimizerHelperHelper,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult,
-			TeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
+			TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			IResourceCalculation resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IUserTimeZone userTimeZone,
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationResult = optimizationResult;
-			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
+			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_userTimeZone = userTimeZone;
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true, period.Inflate(1)))
 			{
 				_resourceCalculation.ResourceCalculate(period.Inflate(1), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, false));
-				_teamBlockDayOffOptimizerService.OptimizeDaysOff(
+				_teamBlockDayOffOptimizer.OptimizeDaysOff(
 					matrixListForDayOffOptimization, period,
 					schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(),
 					optimizationPreferences,
