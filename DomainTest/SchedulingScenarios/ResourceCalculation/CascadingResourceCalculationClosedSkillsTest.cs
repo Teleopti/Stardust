@@ -220,5 +220,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			subskillDay.SkillStaffPeriodCollection.Last().CalculatedResource
 				.Should().Be.EqualTo(2);
 		}
+
+
+		[Test]
+		[Ignore("Bug #43976")]
+		public void ShouldNotLooseResourcesWhenDemandOnSubSkillIsCloseToResources()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var primarySkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsClosed();
+			var subskill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(9, 10);
+			var primarySkillDay = primarySkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var subskillDay = subskill.CreateSkillDayWithDemand(scenario, dateOnly, 0.91); //fails when close to 1
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subskill);
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(9, 10));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { primarySkillDay, subskillDay }, false, false));
+
+			subskillDay.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(1);
+		}
 	}
 }
