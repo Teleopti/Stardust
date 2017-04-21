@@ -387,4 +387,35 @@ $(document).ready(function () {
 		equal(weekViewModel.dayViewModels()[1].probabilities()[0].styleJson.left != '', true);
 		equal(weekViewModel.dayViewModels()[1].probabilities()[0].styleJson.width != '', true);
 	});
+
+	test("should not show probability toggle if current week doesn't intercept with 14 upcoming days period even when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on ", function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+		};
+
+		var weekViewModel;
+		var fakeData = getFakeData();
+		var fakeReloadData = function(){
+			weekViewModel.readData(fakeData);
+		};
+
+		var fakeFixedDateObj = {fixedDate: function(){return fakeData.Days[0].FixedDate}};
+		weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, fakeReloadData);
+		weekViewModel.readData(fakeData);
+		weekViewModel.toggleProbabilityOptionsPanel(fakeFixedDateObj);
+		weekViewModel.selectedProbabilityOptionValue(constants.probabilityType.absence);
+		equal(weekViewModel.showProbabilityOptionsToggleIcon(), true);
+
+		fakeData.Days[0].FixedDate = moment(basedDate).add('day', 15).format('YYYY-MM-DD');
+		fakeData.Days[0].Periods[0].StartTime = moment(fakeData.Days[0].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
+		fakeData.Days[0].Periods[0].EndTime = moment(fakeData.Days[0].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
+
+		fakeData.Days[0].FixedDate = moment(basedDate).add('day', 16).format('YYYY-MM-DD');
+		fakeData.Days[1].Periods[0].StartTime = moment(fakeData.Days[1].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
+		fakeData.Days[1].Periods[0].EndTime = moment(fakeData.Days[1].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
+
+		weekViewModel.readData(fakeData);
+		equal(weekViewModel.showProbabilityOptionsToggleIcon(), false);
+	});
 });

@@ -228,18 +228,18 @@ $(document).ready(function() {
 
 		vm.initializeData(getFakeData());
 		equal(vm.days().length, 2);
-		equal(vm.days()[0].probabilities.length, 1);
-		equal(vm.days()[0].probabilities[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass);
-		equal(vm.days()[0].probabilities[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
-		equal(vm.days()[0].probabilities[0].styleJson.left != '', true);
-		equal(vm.days()[0].probabilities[0].styleJson.width != '', true);
+		equal(vm.days()[0].probabilities().length, 1);
+		equal(vm.days()[0].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass);
+		equal(vm.days()[0].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
+		equal(vm.days()[0].probabilities()[0].styleJson.left != '', true);
+		equal(vm.days()[0].probabilities()[0].styleJson.width != '', true);
 
-		equal(vm.days()[1].probabilities.length, 1);
-		equal(vm.days()[1].probabilities.length, 1);
-		equal(vm.days()[1].probabilities[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.highProbabilityClass);
-		equal(vm.days()[1].probabilities[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
-		equal(vm.days()[1].probabilities[0].styleJson.left != '', true);
-		equal(vm.days()[1].probabilities[0].styleJson.width != '', true);
+		equal(vm.days()[1].probabilities().length, 1);
+		equal(vm.days()[1].probabilities().length, 1);
+		equal(vm.days()[1].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.highProbabilityClass);
+		equal(vm.days()[1].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
+		equal(vm.days()[1].probabilities()[0].styleJson.left != '', true);
+		equal(vm.days()[1].probabilities()[0].styleJson.width != '', true);
 	});
 
 	test("should apply single day probabilities to week view model when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is off ", function() {
@@ -255,11 +255,35 @@ $(document).ready(function() {
 
 		vm.initializeData(fakeData);
 		equal(vm.days().length, 2);
-		equal(vm.days()[0].probabilities.length, 1);
-		equal(vm.days()[0].probabilities[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass);
-		equal(vm.days()[0].probabilities[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
-		equal(vm.days()[0].probabilities[0].styleJson.left != '', true);
-		equal(vm.days()[0].probabilities[0].styleJson.width != '', true);
-		equal(vm.days()[1].probabilities.length, 0);
+		equal(vm.days()[0].probabilities().length, 1);
+		equal(vm.days()[0].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass);
+		equal(vm.days()[0].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
+		equal(vm.days()[0].probabilities()[0].styleJson.left != '', true);
+		equal(vm.days()[0].probabilities()[0].styleJson.width != '', true);
+		equal(vm.days()[1].probabilities().length, 0);
+	});
+
+	test("should not show probability toggle if current week doesn't intercept with 14 upcoming days period even when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on ", function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+		};
+
+		var fakeData = getFakeData();
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		vm.probabilityType(constants.probabilityType.absence);
+		vm.initializeData(fakeData);
+		equal(vm.showProbabilityToggle(), true);
+
+		fakeData.Days[0].FixedDate = moment(basedDate).add('day', 15).format('YYYY-MM-DD');
+		fakeData.Days[0].Periods[0].StartTime = moment(fakeData.Days[0].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
+		fakeData.Days[0].Periods[0].EndTime = moment(fakeData.Days[0].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
+
+		fakeData.Days[0].FixedDate = moment(basedDate).add('day', 15).format('YYYY-MM-DD');
+		fakeData.Days[1].Periods[0].StartTime = moment(fakeData.Days[1].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
+		fakeData.Days[1].Periods[0].EndTime = moment(fakeData.Days[1].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
+
+		vm.initializeData(fakeData);
+		equal(vm.showProbabilityToggle(), false);
 	});
 });

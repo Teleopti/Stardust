@@ -13,18 +13,16 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 
 	self.fixedDate = ko.observable(scheduleDay.FixedDate);
 	self.formattedFixedDate = ko.computed(function () {
-		return moment(self.fixedDate()).format("l");
+		return moment(self.fixedDate()).format("YYYY-MM-DD");
 	});
 	self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime()).startOf("day"));
 	self.formatedCurrentUserDate = ko.computed(function () {
-		return moment(self.currentUserDate()).format("l");
+		return moment(self.currentUserDate()).format("YYYY-MM-DD");
 	});
 
 	self.date = ko.observable(scheduleDay.Date);
 	self.userNowInMinute = ko.observable(-1);
 	self.state = ko.observable(scheduleDay.State);
-
-	self.staffingProbabilityEnabled = ko.observable(parent.staffingProbabilityEnabled());
 
 	var dayDescription = "";
 	var dayNumberDisplay = "";
@@ -71,6 +69,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 	self.probabilityText = ko.observable(scheduleDay.ProbabilityText);
 	self.mergeIdenticalProbabilityIntervals = false;
 	self.hideProbabilityEarlierThanNow = true;
+	self.probabilities = ko.observableArray();
 
 	self.holidayChanceText = ko.computed(function () {
 		var probabilityText = self.probabilityText();
@@ -144,7 +143,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 	});
 
 	self.colorForDaySummary = ko.computed(function () {
-		return parent.styles()[self.summaryStyleClassName()];
+		return parent.styles() && parent.styles()[self.summaryStyleClassName()];
 	});
 
 	self.textColor = ko.computed(function () {
@@ -182,11 +181,13 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 	};
 
 	self.showProbabilityBar = ko.computed(function () {
+		if(parent.staffingProbabilityForMultipleDaysEnabled())
+			return  (moment(self.fixedDate()) >= moment(self.formatedCurrentUserDate())) && (moment(self.fixedDate()) < moment(self.formatedCurrentUserDate()).add('day', constants.maximumDaysDisplayingProbability));
 		return self.formattedFixedDate() === self.formatedCurrentUserDate();
 	});
 
-	if (self.staffingProbabilityEnabled()) {
-		self.probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
+	if (self.showProbabilityBar()) {
+		self.probabilities(Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
 		{
 			probabilityType: parent.probabilityType(),
 			layoutDirection: constants.layoutDirection.vertical,
@@ -195,9 +196,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 			mergeIntervals: self.mergeIdenticalProbabilityIntervals,
 			hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
 			userTexts: parent.userTexts
-		});
-	} else {
-		self.probabilities = [];
+		}));
 	}
 
 	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {

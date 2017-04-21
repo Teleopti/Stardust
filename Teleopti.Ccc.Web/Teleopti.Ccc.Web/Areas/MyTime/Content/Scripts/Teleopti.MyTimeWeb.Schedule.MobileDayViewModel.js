@@ -82,6 +82,9 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 	self.staffingProbabilityOnMobileEnabled = ko.observable(parent.staffingProbabilityOnMobileEnabled());
 
 	self.showStaffingProbabilityBar = ko.computed(function() {
+		if(parent.staffingProbabilityForMultipleDaysEnabled())
+			return  (moment(self.fixedDate()) >= moment(parent.formatedCurrentUserDate())) && (moment(self.fixedDate()) < moment(parent.formatedCurrentUserDate()).add('day', constants.maximumDaysDisplayingProbability));
+
 		return self.staffingProbabilityOnMobileEnabled() &&
 			(parent.showingAbsenceProbability() || parent.showingOvertimeProbability()) &&
 			(parent.staffingProbabilityForMultipleDaysEnabled() || self.isToday());

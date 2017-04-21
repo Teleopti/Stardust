@@ -161,6 +161,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.staffingProbabilityEnabled = ko.observable();
 		self.staffingProbabilityForMultipleDaysEnabled = ko.observable();
 		self.absenceProbabilityEnabled = ko.observable();
+		self.showProbabilityToggle = ko.observable();
 
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
@@ -424,6 +425,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function initializeWeekViewModel(data) {
 		var self = this;
+		var currentUserDate = getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format("YYYY-MM-DD");
+		self.isCurrentWeek(data.IsCurrentWeek);
+
 		if(data.RequestPermission){
 			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
 			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
@@ -444,8 +448,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.probabilityType(constants.probabilityType.none);
 		}
 
+		if(self.staffingProbabilityForMultipleDaysEnabled()){
+			var interceptWith14Days = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(currentUserDate)) && (moment(data.Days[0].FixedDate) <= moment(currentUserDate).add('day', constants.maximumDaysDisplayingProbability));
+			self.showProbabilityToggle(interceptWith14Days);
+		}else{
+			self.showProbabilityToggle(self.staffingProbabilityEnabled() && self.isCurrentWeek());
+		}
+
 		self.asmPermission(data.AsmPermission);
-		self.isCurrentWeek(data.IsCurrentWeek);
 		self.displayDate(Teleopti.MyTimeWeb.Common.FormatDatePeriod(
 			moment(data.CurrentWeekStartDate),
 			moment(data.CurrentWeekEndDate)));
@@ -480,7 +490,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.timeLines(timelines);
 
-		var days = [], currentUserDate = getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format("YYYY-MM-DD");
+		var days = [];
 		if(Array.isArray(data.Days) && data.Days.length > 0) {
 			days = ko.utils.arrayMap(data.Days, function (scheduleDay) {
 				var rawProbabilities = [];

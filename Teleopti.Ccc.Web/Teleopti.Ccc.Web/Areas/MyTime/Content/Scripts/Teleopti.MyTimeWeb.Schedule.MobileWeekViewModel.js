@@ -20,7 +20,8 @@ if (typeof Teleopti.MyTimeWeb.Schedule === "undefined") {
 Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, reloadData) {
 	var self = this;
 
-	var probabilityType = Teleopti.MyTimeWeb.Common.Constants.probabilityType;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
+	var probabilityType = constants.probabilityType;
 
 	self.userTexts = userTexts;
 	self.dayViewModels = ko.observableArray();
@@ -55,6 +56,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 
 	self.staffingProbabilityOnMobileEnabled = ko.observable(false);
 	self.staffingProbabilityForMultipleDaysEnabled = ko.observable(false);
+	self.showProbabilityOptionsToggleIcon = ko.observable(false);
 
 	self.maxDate = ko.observable();
 	self.minDate = ko.observable();
@@ -163,10 +165,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		}
 	};
 
-	self.showProbabilityOptionsToggleIcon = ko.computed(function(){
-		return self.staffingProbabilityOnMobileEnabled() && self.staffingProbabilityForMultipleDaysEnabled()
-	});
-
 	self.showProbabilityOptionsForm = ko.computed(function() {
 		return self.showProbabilityOptionsToggleIcon() 
 			&& self.requestViewModel() != undefined
@@ -216,6 +214,10 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 			self.selectedProbabilityOptionValue(probabilityType.none);
 			self.showingAbsenceProbability(false);
 			self.showingOvertimeProbability(false);
+		}
+		if(self.staffingProbabilityOnMobileEnabled() && self.staffingProbabilityForMultipleDaysEnabled()){
+			var interceptWith14Days = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(self.formatedCurrentUserDate())) && (moment(data.Days[0].FixedDate) <= moment(self.formatedCurrentUserDate()).add('day', constants.maximumDaysDisplayingProbability));
+			self.showProbabilityOptionsToggleIcon(interceptWith14Days);
 		}
 	}
 
