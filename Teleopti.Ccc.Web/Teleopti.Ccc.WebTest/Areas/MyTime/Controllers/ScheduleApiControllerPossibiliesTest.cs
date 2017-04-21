@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -25,8 +26,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
-	[MyTimeWebTest, Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+	[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
+	[MyTimeWebTest]
 	public class ScheduleApiControllerPossibiliesTest : ISetup
 	{
 		public ScheduleApiController Target;

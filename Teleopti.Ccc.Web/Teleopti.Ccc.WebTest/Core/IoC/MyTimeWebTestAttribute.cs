@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			system.UseTestDouble<FakeShiftTradeLightValidator>().For<IShiftTradeLightValidator>();
 			system.UseTestDouble<FakePersonContractProvider>().For<FakePersonContractProvider>();
-			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
