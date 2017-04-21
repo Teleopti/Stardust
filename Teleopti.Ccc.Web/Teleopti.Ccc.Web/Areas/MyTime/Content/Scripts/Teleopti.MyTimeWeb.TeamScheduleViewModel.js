@@ -1,5 +1,9 @@
+/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+
 Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	var self = this;
+
+	self.toggle = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826');
 
 	self.isTeamScheduleNoReadModelEnable = ko.observable(false);
 

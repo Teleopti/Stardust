@@ -21,6 +21,8 @@ Teleopti.MyTimeWeb.Request = (function ($) {
     function RequestNavigationViewModel() {
         var self = this;
 
+		self.toggle = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826')
+
         self.addTextRequestActive = ko.observable(false);
         self.addAbsenceRequestActive = ko.observable(false);
         self.addShiftTradeRequestActive = ko.observable(false);
@@ -73,7 +75,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
     function _initNavigationViewModel() {
     	requestNavigationViewModel = new RequestNavigationViewModel();
-		ko.applyBindings(requestNavigationViewModel, $('div.navbar.subnavbar')[0]);
+		ko.applyBindings(requestNavigationViewModel, $('div.navbar-container')[0]);
 	}
 
 	return {

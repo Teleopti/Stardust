@@ -7,11 +7,11 @@
 	const int scheduleWidth = 695;
 	var left = Html.HtmlStyleLeft();
 }
-
-<div class="navbar navbar-teleopti subnavbar">
+<div class="team-schedule-wrapper">
+	<div data-bind="ifnot: toggle">
+<div class="navbar purest-green navbar-teleopti subnavbar" tabindex="0">
 	<div class="container">
-		<ul class="nav navbar-nav navbar-teleopti row submenu">
-
+		<ul class="nav navbar-nav navbar-teleopti row submenu ts-menu">
 			@if (Model.ShiftTradePermisssion)
 			{
 				<li class="col-xs-12 col-sm-3">
@@ -30,6 +30,32 @@
 				</li>
 			}
 		</ul>
+	</div>
+</div>
+</div>
+<div data-bind="if: toggle">
+<div class="navbar navbar-teleopti fab subnavbar" tabindex="0">
+	<div class="container" >
+		<ul class="nav navbar-nav navbar-teleopti row submenu ts-menu">
+			@if (Model.ShiftTradePermisssion)
+			{
+				<li class="col-xs-12 col-sm-3">
+					<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+				</li>
+			}
+
+			@if (Model.ShiftTradeBulletinBoardPermission)
+			{
+				<li class="col-xs-12 col-sm-3">
+					<a class="initialize-shift-trade-bulletin-board" href="#" data-bind="click: initializeShiftTradeBulletinBoard"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+				</li>
+
+				<li class="col-xs-12 col-sm-3">
+					<a class="initialize-post-shift-for-trade" href="#" data-bind="click: initializePostShiftForTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+				</li>
+			}
+		</ul>
+	</div>
 	</div>
 </div>
 
@@ -307,4 +333,5 @@
 		</div>
 		<div id="existsWhenLoadingFinishes" data-bind="ifnot: isLoading"></div>
 	</div>
+</div>
 </div>
