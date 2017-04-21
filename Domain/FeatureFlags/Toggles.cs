@@ -162,7 +162,6 @@
 		ResourcePlanner_CascadingSkillsGUI_40018,
 		ResourcePlanner_MaxSeatsNew_40939,
 		ResourcePlanner_HideSkillPrioSliders_41312,
-		ResourcePlanner_IntradayNoDailyValueCheck_42767,
 		ResourcePlanner_LoadingLessSchedules_42639,
 		ResourcePlanner_TeamBlockPeriod_42836,
 		ResourcePlanner_MasterActivity_42795,

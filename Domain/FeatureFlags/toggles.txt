@@ -173,7 +173,6 @@ WfmGlobalLayout_personalOptions_37114 = true
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = RC
 ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI until we have a proper UI
 ResourcePlanner_MaxSeatsNew_40939 = true
-ResourcePlanner_IntradayNoDailyValueCheck_42767 = true
 ResourcePlanner_LoadingLessSchedules_42639 = true
 ResourcePlanner_TeamBlockPeriod_42836 = RC
 ResourcePlanner_MasterActivity_42795 = RC

@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class IntradayOptimizeOneday : IIntradayOptimizeOneday
 	{
-		private readonly IScheduleResultDailyValueCalculator _dailyValueCalculator;
 		private readonly IScheduleService _scheduleService;
 		private readonly IOptimizationPreferences _optimizerPreferences;
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
@@ -27,8 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public IntradayOptimizeOneday(IScheduleResultDailyValueCalculator dailyValueCalculator,
-			IScheduleService scheduleService,
+		public IntradayOptimizeOneday(IScheduleService scheduleService,
 			IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculation resourceOptimizationHelper,
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IUserTimeZone userTimeZone)
 		{
-			_dailyValueCalculator = dailyValueCalculator;
 			_scheduleService = scheduleService;
 			_optimizerPreferences = optimizerPreferences;
 			_rollbackService = rollbackService;
@@ -67,12 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (daysOverMax())
 				return false;
 
-			double? oldPeriodValue = CalculatePeriodValue(dateOnly);
-
 			var lastOverLimitCounts = _optimizationLimits.OverLimitsCounts(_matrix);
-
-			if (!oldPeriodValue.HasValue)
-				return false;
 
 			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
@@ -101,22 +93,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return true;
 			}
 
-			// Step: Check that there are no white spots
-
-			double newValidatedPeriodValue = double.MaxValue;
-			double? newPeriodValue = CalculatePeriodValue(dateOnly);
-			if (newPeriodValue.HasValue)
-				newValidatedPeriodValue = newPeriodValue.Value;
-
-			var isPeriodBetter = IsPeriodBetter(newValidatedPeriodValue, oldPeriodValue);
-			if (!isPeriodBetter)
-			{
-				_rollbackService.Rollback();
-				undoResCalcChanges.UndoAll();
-				lockDay(dateOnly);
-				return true;
-			}
-
 			if (_optimizationLimits.HasOverLimitExceeded(lastOverLimitCounts, _matrix) || daysOverMax())
 			{
 				_rollbackService.Rollback();
@@ -129,16 +105,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			lockDay(dateOnly);
 
 			return true;
-		}
-
-		protected virtual bool IsPeriodBetter(double newValidatedPeriodValue, double? oldPeriodValue)
-		{
-			return newValidatedPeriodValue < oldPeriodValue;
-		}
-
-		protected virtual double? CalculatePeriodValue(DateOnly scheduleDay)
-		{
-			return _dailyValueCalculator.DayValue(scheduleDay);
 		}
 
 		private void lockDay(DateOnly day)

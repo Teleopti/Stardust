@@ -1334,8 +1334,6 @@
     <Compile Include="Optimization\IAgentGroupRepository.cs" />
     <Compile Include="Optimization\IIntradayOptimizerCreator.cs" />
     <Compile Include="Optimization\IFetchAgentGroupModel.cs" />
-    <Compile Include="Optimization\IntradayOptimizeOnedayNoPeriodValueCheck.cs" />
-    <Compile Include="Optimization\IntradayOptimizerCreatorNoPeriodValueCheck.cs" />
     <Compile Include="Optimization\SetMainShiftOptimizeActivitySpecificationForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\RemoveScheduleDayProsBasedOnShiftCategoryLimitation.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRetryRemoveShiftCategoryBackToLegalService.cs" />
