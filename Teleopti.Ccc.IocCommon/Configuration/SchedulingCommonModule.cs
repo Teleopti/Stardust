@@ -309,6 +309,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockOptimizationLimits>().As<ITeamBlockOptimizationLimits>().SingleInstance();
 			builder.RegisterType<RestrictionOverLimitValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockDayOffOptimizerService>().InstancePerLifetimeScope();
+			builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
+			builder.RegisterType<DayOffOptimizerUseTeamSameDaysOff>().InstancePerLifetimeScope();
 			builder.RegisterType<AffectedDayOffs>().SingleInstance();
 			builder.RegisterType<DayOffOptimizerPreMoveResultPredictor>().InstancePerLifetimeScope();
 

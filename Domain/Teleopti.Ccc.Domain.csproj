@@ -246,6 +246,8 @@
     <Compile Include="MultiTenancy\TenantApplicationConfigKey.cs" />
     <Compile Include="MultiTenancy\TenantUserPersister.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
+    <Compile Include="Optimization\TeamBlock\DayOffOptimizerStandard.cs" />
+    <Compile Include="Optimization\TeamBlock\DayOffOptimizerUseTeamSameDaysOff.cs" />
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
     <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
