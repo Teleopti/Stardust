@@ -63,13 +63,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		{
 			var culture = _loggedOnUser.CurrentUser().PermissionInformation.UICulture();
 			var period = DateHelper.GetWeekPeriod(date, culture);
-			//if (period.StartDate > new DateOnly(_now.LocalDa))
-			//{
-				
-			//}
-			//var lastDateInWeek = DateHelper.GetLastDateInWeek(date.Date,
-			//	_loggedOnUser.CurrentUser().PermissionInformation.UICulture());
-			//return new DateOnlyPeriod(date, new DateOnly(lastDateInWeek));
 			return period;
 		}
 	}

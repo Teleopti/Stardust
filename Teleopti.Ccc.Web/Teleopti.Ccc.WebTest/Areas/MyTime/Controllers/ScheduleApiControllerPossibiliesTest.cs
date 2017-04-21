@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
-		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -50,11 +49,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 			system.UseTestDouble<FakeScheduleForecastSkillReadModelRepository>().For<IScheduleForecastSkillReadModelRepository>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble<FakeIntervalLengthFetcher>().For<IIntervalLengthFetcher>();
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnPossibiliesForCurrentWeek()
 		{
 			setup();
@@ -62,17 +60,37 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Count(r => r.Date >= Now.LocalDateOnly()).Should().Be.EqualTo(6);
 		}
 
+		[Test, SetCulture("en-US")]
+		public void ShouldReturnPossibiliesForNextWeek()
+		{
+			setup();
+			var result = Target.FetchData(Now.LocalDateOnly().AddWeeks(1), StaffingPossiblityType.Absence).Possibilities;
+			result.Count(r => r.Date >= Now.LocalDateOnly()).Should().Be.EqualTo(14);
+		}
+
+		[Test, SetCulture("en-US")]
+		public void ShouldNotReturnPossibiliesForPastDays()
+		{
+			setup();
+			var result = Target.FetchData(Now.LocalDateOnly().AddDays(-1), StaffingPossiblityType.Absence).Possibilities.ToList();
+			result.Count().Should().Be.EqualTo(6);
+			result.Count(r => r.Date >= Now.LocalDateOnly()).Should().Be.EqualTo(6);
+		}
+
+		[Test, SetCulture("en-US")]
+		public void ShouldNotReturnPossibiliesForFarFutureDays()
+		{
+			setup();
+			var result = Target.FetchData(Now.LocalDateOnly().AddWeeks(3), StaffingPossiblityType.Absence).Possibilities;
+			result.Count().Should().Be.EqualTo(0);
+		}
+
 		private void setup()
 		{
-			setupIntervalLength();
 			setupSiteOpenHour();
 			setupTestDataForOneSkill();
 		}
 
-		private void setupIntervalLength()
-		{
-			IntervalLengthFetcher.Has(15);
-		}
 
 		private void setupSiteOpenHour()
 		{

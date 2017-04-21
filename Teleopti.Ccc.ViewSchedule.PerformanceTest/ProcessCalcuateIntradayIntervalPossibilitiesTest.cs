@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 				//_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
 				//	cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario, UserTimeZone);
 				var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities();
-				if (!possibilities.Any())
+				if (!possibilities.IntervalPossibilies.Any())
 				{
 					Console.WriteLine($"{person.Id.GetValueOrDefault()} no data");
 				}
