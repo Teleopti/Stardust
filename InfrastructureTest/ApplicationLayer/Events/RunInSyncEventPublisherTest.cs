@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -26,6 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new TestEvent());
 
+			Handler.Attempts.Should().Be(1);
 			Handler.Succeeded.Should().Be.True();
 		}
 
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new TestEvent());
 
-			Handler.ThreadId.Should().Not.Be(Thread.CurrentThread.ManagedThreadId);
+			Handler.ThreadIds.Single().Should().Not.Be(Thread.CurrentThread.ManagedThreadId);
 		}
 
 		[Test]
@@ -73,6 +76,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
+		public void ShouldRunEachAttemptOnANewThread()
+		{
+			Handler.Fails(10, new EventPublisherException());
+
+			Publisher.Publish(new TestEvent());
+
+			Handler.ThreadIds.Distinct().Should().Have.SameSequenceAs(Handler.ThreadIds);
+		}
+
+		[Test]
 		[Setting("BehaviorTestServer", false)]
 		public void ShouldLogExceptionsInProduction()
 		{
@@ -96,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			});
 			exception.InnerExceptions.Count.Should().Be(Handler.Attempts);
 		}
-
+		
 		public class TestEvent : IEvent
 		{
 		}
@@ -110,9 +123,15 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			private int _fails;
 			private Exception _exception;
 
-			public int ThreadId;
+			public List<int> ThreadIds = new List<int>();
 			public bool Succeeded;
 			public int Attempts;
+
+			public void Fails(int amountOfFails, Exception exception)
+			{
+				_fails = amountOfFails;
+				_exception = exception;
+			}
 
 			public void Handle(TestEvent @event)
 			{
@@ -128,21 +147,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			private void handle()
 			{
 				Attempts += 1;
+				ThreadIds.Add(Thread.CurrentThread.ManagedThreadId);
 
 				if (_fails - Attempts > 0)
-				{
 					throw _exception;
-				}
 
-				ThreadId = Thread.CurrentThread.ManagedThreadId;
 				Succeeded = true;
 			}
 
-			public void Fails(int amountOfFails, Exception exception)
-			{
-				_fails = amountOfFails;
-				_exception = exception;
-			}
 		}
 
 		public class EventPublisherException : Exception

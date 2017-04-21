@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using System.Threading;
-using Castle.Components.DictionaryAdapter;
 using Castle.Core.Internal;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -47,24 +44,27 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private void retry(Type handlerType, IEvent @event, int attempts)
 		{
 			var exceptions = new List<Exception>();
-			var thread = new Thread(() =>
+
+			while (attempts --> 0)
 			{
-				while (attempts --> 0)
+				var thread = new Thread(() =>
 				{
 					try
 					{
 						_processor.Process(@event, handlerType);
 						exceptions.Clear();
-						return;
 					}
 					catch (Exception e)
 					{
 						exceptions.Add(e);
 					}
-				}
-			});
-			thread.Start();
-			thread.Join();
+				});
+				thread.Start();
+				thread.Join();
+
+				if (exceptions.Count == 0)
+					return;
+			}
 
 			if (exceptions.Count > 0)
 				_exceptionHandler.Handle(new AggregateException(exceptions));

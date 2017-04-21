@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.ExceptionServices;
 using log4net;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
