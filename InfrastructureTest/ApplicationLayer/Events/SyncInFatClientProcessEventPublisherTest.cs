@@ -13,7 +13,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[InfrastructureTest]
-	public class RunInSyncInFatClientProcessEventPublisherTest : ISetup
+	public class SyncInFatClientProcessEventPublisherTest : ISetup
 	{
 		public SyncInFatClientProcessEventPublisher Target;
 		public TestEventHandler Handler;

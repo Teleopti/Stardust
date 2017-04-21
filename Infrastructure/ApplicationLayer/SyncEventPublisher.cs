@@ -5,7 +5,9 @@ using System.Threading;
 using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using AggregateException = System.AggregateException;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -13,12 +15,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
+		private readonly ICurrentDataSource _dataSource;
 		private readonly ISyncEventPublisherExceptionHandler _exceptionHandler;
 
-		public SyncEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor, ISyncEventPublisherExceptionHandler exceptionHandler)
+		public SyncEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor, ICurrentDataSource dataSource, ISyncEventPublisherExceptionHandler exceptionHandler)
 		{
 			_resolver = resolver;
 			_processor = processor;
+			_dataSource = dataSource;
 			_exceptionHandler = exceptionHandler;
 		}
 
@@ -43,6 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		private void retry(Type handlerType, IEvent @event, int attempts)
 		{
+			var tenant = _dataSource.CurrentName();
 			var exceptions = new List<Exception>();
 
 			while (attempts --> 0)
@@ -51,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				{
 					try
 					{
-						_processor.Process(@event, handlerType);
+						_processor.Process(tenant, @event, handlerType);
 						exceptions.Clear();
 					}
 					catch (Exception e)

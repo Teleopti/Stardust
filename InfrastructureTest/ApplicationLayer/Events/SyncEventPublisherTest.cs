@@ -6,20 +6,27 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using AggregateException = System.AggregateException;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[InfrastructureTest]
-	public class RunInSyncEventPublisherTest : ISetup
+	public class SyncEventPublisherTest : ISetup
 	{
 		public IEventPublisher Publisher;
 		public TestHandler Handler;
+		public IDataSourceScope DataSource;
+		public FakeDataSourceForTenant DataSources;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 			system.AddService<TestHandler>();
 		}
 
@@ -109,7 +116,18 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			});
 			exception.InnerExceptions.Count.Should().Be(Handler.Attempts);
 		}
-		
+
+		[Test]
+		public void ShouldHaveCurrentDataSource()
+		{
+			DataSources.Has(new FakeDataSource("datasource"));
+
+			using (DataSource.OnThisThreadUse("datasource"))
+				Publisher.Publish(new TestEvent());
+
+			Handler.DataSource.Should().Be("datasource");
+		}
+
 		public class TestEvent : IEvent
 		{
 		}
@@ -120,12 +138,19 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		public class TestHandler : IHandleEvent<TestEvent>, IHandleEvent<Test5AttemptsEvent>, IRunInSync
 		{
+			private readonly ICurrentDataSource _dataSource;
 			private int _fails;
 			private Exception _exception;
 
 			public List<int> ThreadIds = new List<int>();
 			public bool Succeeded;
 			public int Attempts;
+			public string DataSource;
+
+			public TestHandler(ICurrentDataSource dataSource)
+			{
+				_dataSource = dataSource;
+			}
 
 			public void Fails(int amountOfFails, Exception exception)
 			{
@@ -148,6 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			{
 				Attempts += 1;
 				ThreadIds.Add(Thread.CurrentThread.ManagedThreadId);
+				DataSource = _dataSource.CurrentName();
 
 				if (_fails - Attempts > 0)
 					throw _exception;
