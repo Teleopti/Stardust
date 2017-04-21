@@ -125,23 +125,14 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		}
 	}
 
-<<<<<<< dest
 	function _addRequest(model, successCallback, errorCallback) {
-=======
-	function _addRequest(model, successCallback) {
 
-<<<<<<< dest
->>>>>>> source
-=======
-
->>>>>>> source
 		if (self.IsPostingData()) {
 			return;
 		}
 
 		self.IsPostingData(true);
 
-		console.log('HEEEEEj ', model)
 		Teleopti.MyTimeWeb.Request.List.HideRequests(false);	
 		var formData = _getFormData(model);
 		ajax.Ajax({
