@@ -42,6 +42,7 @@
 		MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880,
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
 		MyTimeWeb_PreferencePerformanceForMultipleUsers_43322,
+		MyTimeWeb_DayScheduleForStartPage_43446,
 
 		Backlog_Module_23980,
 
