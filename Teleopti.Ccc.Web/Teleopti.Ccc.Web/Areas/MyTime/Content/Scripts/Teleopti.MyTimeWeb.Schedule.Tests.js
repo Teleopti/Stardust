@@ -37,7 +37,7 @@ $(document).ready(function() {
 						DayNumber: '18'
 					},
 					Note: {
-						Message: ''
+						Message: 'Note 1'
 					},
 					Summary: {
 						Title: 'Early',
@@ -85,7 +85,7 @@ $(document).ready(function() {
 						DayNumber: '18'
 					},
 					Note: {
-						Message: ''
+						Message: 'Note2'
 					},
 					Summary: {
 						Title: 'Early',
@@ -140,6 +140,16 @@ $(document).ready(function() {
 			],
 			CheckStaffingByIntraday: true,
 			ViewPossibilityPermission: true,
+			RequestPermission: {
+				AbsenceReportPermission: true,
+				AbsenceRequestPermission: true,
+				OvertimeAvailabilityPermission: true,
+				PersonAccountPermission: true,
+				ShiftExchangePermission: true,
+				ShiftTradeBulletinBoardPermission: true,
+				ShiftTradeRequestPermission: false,
+				TextRequestPermission: true,
+			},
 			TimeLine: [{
 					Time: "06:45:00",
 					TimeLineDisplay: "06:45",
@@ -152,8 +162,59 @@ $(document).ready(function() {
 					PositionPercentage: 1,
 					TimeFixedFormat: null
 				}]
-			};
+		};
 	}
+
+	test("should read absence report permission", function() {
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		vm.initializeData(getFakeData());
+
+		equal(vm.absenceReportPermission(), true);
+	});
+
+	test("should read scheduled days", function() {
+		var fakeData = getFakeData();
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+
+		vm.initializeData(fakeData);
+		equal(vm.days().length, 2);
+		equal(vm.days()[0].headerTitle(), fakeData.Days[0].Header.Title);
+		equal(vm.days()[0].headerDayDescription(), fakeData.Days[0].Header.DayDescription);
+		equal(vm.days()[0].summary(), fakeData.Days[0].Summary.Summary);
+		equal(vm.days()[0].summary(), fakeData.Days[0].Summary.Summary);
+		equal(vm.days()[0].summaryTitle(), fakeData.Days[0].Summary.Title);
+		equal(vm.days()[0].summaryTimeSpan(), fakeData.Days[0].Summary.TimeSpan);
+		equal(vm.days()[0].summaryStyleClassName(), fakeData.Days[0].Summary.StyleClassName);
+		equal(vm.days()[0].hasShift, true);
+		equal(vm.days()[0].noteMessage().indexOf(fakeData.Days[0].Note.Message) > -1, true);
+		equal(vm.days()[0].seatBookings(), fakeData.Days[0].SeatBookings);
+	});
+
+	test("should read timelines", function() {
+		var fakeData = getFakeData();
+		//9:30 ~ 17:00 makes 9 timeline points
+		fakeData.TimeLine = [{
+			Time: "09:15:00",
+			TimeLineDisplay: "09:15",
+			TimeFixedFormat: null
+		}];
+		for (var i = 10; i <= 17; i++) {
+			fakeData.TimeLine.push({
+				Time: i + ":00:00",
+				TimeLineDisplay: i + ":00",
+				TimeFixedFormat: null
+			});
+		}
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+
+		vm.initializeData(fakeData);
+
+		var timelines = vm.timeLines();
+		equal(timelines.length, 9);
+		equal(timelines[0].minutes, 9.5 * 60 - 15); //9:30 => 9:15
+		equal(timelines[timelines.length - 1].minutes, 16.75 * 60 + 15); //16:45 => 17:00
+	});
+
 
 	test("should apply multiple day probabilities to week view model when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on ", function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {

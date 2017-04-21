@@ -639,7 +639,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);
 		},
-		Constants: constants,
 		GetCurrentUserDateTime: getCurrentUserDateTime
 	};
 })(jQuery);
