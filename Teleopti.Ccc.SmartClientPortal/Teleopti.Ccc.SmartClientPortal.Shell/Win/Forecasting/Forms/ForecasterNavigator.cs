@@ -38,8 +38,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.QuickForecastPage
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.WorkloadPages;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Main;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 using Wizard = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard.Wizard;
@@ -54,12 +52,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private readonly IImportForecastViewFactory _importForecastViewFactory;
 		private readonly IToggleManager _toggleManager;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
-		private readonly IMessagePopulatingServiceBusSender _messageSender;
 		private readonly IEventPublisher _publisher;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private const string assembly = "Teleopti.Ccc.Win";
-		private const string classPrefix = "Teleopti.Ccc.Win.SmartParts.Forecasting";
+		private const string classPrefix = "Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting";
 		private const string detailed = ".DetailedSmartPart";
 		private const string validation = ".ValidationSmartPart";
 		private const string budget = ".BudgetsSmartPart";
@@ -90,7 +86,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			if (!DesignMode)
 			{
 				SetTexts();
-				EntityEventAggregator.EntitiesNeedsRefresh += entitiesNeedsRefresh;				
+				EntityEventAggregator.EntitiesNeedsRefresh += entitiesNeedsRefresh;
 			}
 		}
 
@@ -107,13 +103,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			_hidePriorityToggle = _toggleManager.IsEnabled(Toggles.ResourcePlanner_HideSkillPrioSliders_41312);
 		}
 
-		public ForecasterNavigator(PortalSettings portalSettings,
-			IRepositoryFactory repositoryFactory,
+		public ForecasterNavigator(IRepositoryFactory repositoryFactory,
 			IUnitOfWorkFactory unitOfWorkFactory,
 			IJobHistoryViewFactory jobHistoryViewFactory,
 			IImportForecastViewFactory importForecastViewFactory,
 			IToggleManager toggleManager,
-			IMessagePopulatingServiceBusSender messageSender,
 			IEventPublisher publisher,
 			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider)
 			: this(statisticHelper, businessRuleConfigProvider)
@@ -121,7 +115,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			_jobHistoryViewFactory = jobHistoryViewFactory;
 			_importForecastViewFactory = importForecastViewFactory;
 			_toggleManager = toggleManager;
-			_messageSender = messageSender;
 			_repositoryFactory = repositoryFactory;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_publisher = publisher;
@@ -623,12 +616,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 		#region treeViewSkills
 
-		private static void loadSmartPart(Guid skill, int smartPartId, string smartPartHeaderTitle,
+		private void loadSmartPart(Guid skill, int smartPartId, string smartPartHeaderTitle,
 			string smartPartName, int row, int col)
 		{
 			var smartPartInfo = new SmartPartInformation
 			{
-				ContainingAssembly = assembly,
+				ContainingAssembly = GetType().Assembly.FullName,
 				SmartPartName = smartPartName,
 				SmartPartHeaderTitle = smartPartHeaderTitle,
 				GridColumn = col,

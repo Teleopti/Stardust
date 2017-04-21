@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
@@ -29,7 +28,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.PayrollExportPages;
 using Teleopti.Ccc.Win.Main;
-using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 {
@@ -39,22 +37,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 		private readonly PortalSettings _portalSettings;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private const string Assembly = "Teleopti.Ccc.Win";
+		//private const string Assembly = "Teleopti.Ccc.Win";
 		private const string PayrollExports = ".PayrollExportsSmartPart";
-		private const string ClassPrefix = "Teleopti.Ccc.Win.SmartParts.Payroll";
+		private const string ClassPrefix = "Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll";
 		private static BackgroundWorker _payrollBackgroundWorker;
 		private readonly IComponentContext _componentContext;
 		private readonly IPayrollResultRepository _payrollResultRepository;
-		private readonly IToggleManager _toggleManager;
 		private readonly IStardustSender _stardustSender;
-		private readonly MessagePopulatingServiceBusSender _messageSender;
 
 
 		public PayrollExportNavigator(PortalSettings portalSettings, IRepositoryFactory repositoryFactory,
 			IUnitOfWorkFactory unitOfWorkFactory,
 			IComponentContext componentContext, 
 			IPayrollResultRepository payrollResultRepository,
-			IToggleManager toggleManager,
 			IStardustSender stardustSender)
 		{
 			InitializeComponent();
@@ -83,12 +78,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 			_componentContext = componentContext;
 			
 			_payrollResultRepository = payrollResultRepository;
-			_toggleManager = toggleManager;
 			_stardustSender = stardustSender;
-			var serviceBusSender = new ServiceBusSender();
-			var populator = EventInfrastructureInfoPopulator.Make();
-			_messageSender = new MessagePopulatingServiceBusSender(serviceBusSender, populator);
-			
 		}
 
 		private void setColors()
@@ -271,10 +261,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 			treeViewMain.Nodes[treeViewMain.Nodes[0].Index].ForeColor = Color.Black;
 		}
 
-		private static void LoadSmartPart(Guid payrollExport, int smartPartId, string smartPartHeaderTitle, string smartPartName, int row, int col)
+		private void LoadSmartPart(Guid payrollExport, int smartPartId, string smartPartHeaderTitle, string smartPartName, int row, int col)
 		{
 			var smartPartInfo = new SmartPartInformation();
-			smartPartInfo.ContainingAssembly = Assembly;
+			smartPartInfo.ContainingAssembly = GetType().Assembly.FullName;
 			smartPartInfo.SmartPartName = smartPartName;
 			smartPartInfo.SmartPartHeaderTitle = smartPartHeaderTitle;
 			smartPartInfo.GridColumn = col;
