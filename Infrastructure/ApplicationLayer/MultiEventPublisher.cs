@@ -8,21 +8,22 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly HangfireEventPublisher _hangfirePublisher;
 		private readonly ServiceBusEventPublisher _serviceBusPublisher;
 		private readonly StardustEventPublisher _stardustEventPublisher;
-		private readonly RunInSyncInFatClientProcessEventPublisher _runInSyncInFatClientProcessEventPublisher;
-		private readonly InSyncEventPublisher _inSyncEventPublisher;
+		private readonly SyncInFatClientProcessEventPublisher _syncInFatClientProcessEventPublisher;
+		private readonly SyncEventPublisher _syncEventPublisher;
 
 		public MultiEventPublisher(
-			HangfireEventPublisher hangfirePublisher, 
+			HangfireEventPublisher hangfirePublisher,
 			ServiceBusEventPublisher serviceBusPublisher,
 			StardustEventPublisher stardustEventPublisher,
-			RunInSyncInFatClientProcessEventPublisher runInSyncInFatClientProcessEventPublisher, 
-			InSyncEventPublisher inSyncEventPublisher)
+			SyncEventPublisher syncEventPublisher,
+			SyncInFatClientProcessEventPublisher syncInFatClientProcessEventPublisher
+		)
 		{
 			_hangfirePublisher = hangfirePublisher;
 			_serviceBusPublisher = serviceBusPublisher;
 			_stardustEventPublisher = stardustEventPublisher;
-			_runInSyncInFatClientProcessEventPublisher = runInSyncInFatClientProcessEventPublisher;
-			_inSyncEventPublisher = inSyncEventPublisher;
+			_syncEventPublisher = syncEventPublisher;
+			_syncInFatClientProcessEventPublisher = syncInFatClientProcessEventPublisher;
 		}
 
 		public void Publish(params IEvent[] events)
@@ -30,8 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_hangfirePublisher.Publish(events);
 			_serviceBusPublisher.Publish(events);
 			_stardustEventPublisher.Publish(events);
-			_inSyncEventPublisher.Publish(events);
-			_runInSyncInFatClientProcessEventPublisher.Publish(events);
+			_syncEventPublisher.Publish(events);
+			_syncInFatClientProcessEventPublisher.Publish(events);
 		}
 	}
 }

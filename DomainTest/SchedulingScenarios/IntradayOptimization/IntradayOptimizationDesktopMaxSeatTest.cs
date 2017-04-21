@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	[UseEventPublisher(typeof(RunInSyncInFatClientProcessEventPublisher))]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	public class IntradayOptimizationDesktopMaxSeatTest : IConfigureToggleManager, ISetup
 	{

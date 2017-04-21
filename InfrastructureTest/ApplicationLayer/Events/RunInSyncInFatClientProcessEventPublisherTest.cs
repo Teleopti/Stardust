@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	[InfrastructureTest]
 	public class RunInSyncInFatClientProcessEventPublisherTest : ISetup
 	{
-		public RunInSyncInFatClientProcessEventPublisher Target;
+		public SyncInFatClientProcessEventPublisher Target;
 		public TestEventHandler Handler;
 		public TestEventHandler2 Handler2;
 		public IncorrectTestEventHandler IncorrectHandler;

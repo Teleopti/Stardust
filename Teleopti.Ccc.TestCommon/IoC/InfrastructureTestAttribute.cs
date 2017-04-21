@@ -84,8 +84,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>(); // just adds one hook to the list
 			system.UseTestDouble<TestConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
-			system.UseTestDouble<ExceptionRethrower>().For<IExceptionRethrower>();
-
 
 			// fake for now. if real repo needs to be included in the scope....
 			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();

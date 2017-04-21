@@ -6,12 +6,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class RunInSyncInFatClientProcessEventPublisher : IEventPublisher
+	public class SyncInFatClientProcessEventPublisher : IEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
 
-		public RunInSyncInFatClientProcessEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor)
+		public SyncInFatClientProcessEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor)
 		{
 			_resolver = resolver;
 			_processor = processor;

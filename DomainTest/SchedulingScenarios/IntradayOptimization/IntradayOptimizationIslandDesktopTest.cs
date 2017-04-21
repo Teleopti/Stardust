@@ -29,7 +29,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	[UseEventPublisher(typeof(RunInSyncInFatClientProcessEventPublisher))]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	public class IntradayOptimizationIslandDesktopTest : ISetup
 	{

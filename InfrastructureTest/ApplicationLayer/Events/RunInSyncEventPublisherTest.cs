@@ -73,13 +73,28 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		public void ShouldRethrowException()
+		[Setting("BehaviorTestServer", false)]
+		public void ShouldLogExceptionsInProduction()
 		{
 			Handler.Fails(10, new EventPublisherException());
-			Assert.Throws<EventPublisherException>(() =>
+
+			Assert.DoesNotThrow(() =>
 			{
 				Publisher.Publish(new TestEvent());
 			});
+		}
+
+		[Test]
+		[Setting("BehaviorTestServer", true)]
+		public void ShouldRethrowAllExceptionsWhenTesting()
+		{
+			Handler.Fails(10, new EventPublisherException());
+
+			var exception = Assert.Throws<AggregateException>(() =>
+			{
+				Publisher.Publish(new TestEvent());
+			});
+			exception.InnerExceptions.Count.Should().Be(Handler.Attempts);
 		}
 
 		public class TestEvent : IEvent
