@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public IEnumerable<ITeamInfo> Execute(IPeriodValueCalculator periodValueCalculatorForAllSkills,
 			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
-			List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions,
+			IEnumerable<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder, Action cancelAction,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress schedulingProgress)
@@ -81,10 +81,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var teamInfosToRemove = new HashSet<ITeamInfo>();
 			double previousPeriodValue =
 				periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-			var totalLiveTeamInfos = remainingInfoList.Count;
+			var totalLiveTeamInfos = remainingInfoList.Count();
 			var currentTeamInfoCounter = 0;
 			var cancelMe = false;
-			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
+			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count(), true))
 			{
 				currentTeamInfoCounter++;
 

@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		[RemoveMeWithToggle("Maybe (?) remove IPeriodValueCalculator param", Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
 		public IEnumerable<ITeamInfo> Execute(IPeriodValueCalculator periodValueCalculatorForAllSkills, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
-			List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons,
+			IEnumerable<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IEnumerable<IPerson> selectedPersons,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			Action cancelAction,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress schedulingProgress)
