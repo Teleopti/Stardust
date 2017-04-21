@@ -99,7 +99,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistr
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Scheduling;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Interfaces.Domain;
 
@@ -506,7 +505,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			setupContextMenuSkillGrid();
 			setupToolbarButtonsChartViews();
 			contextMenuViews.Opened += contextMenuViewsOpened;
-			setHeaderText(loadingPeriod.StartDate, loadingPeriod.EndDate, null, null);
+			setHeaderText(loadingPeriod.StartDate, loadingPeriod.EndDate);
 			setLoadingOptions();
 			setShowRibbonTexts();
 			setMenuItemsHardToLeftToRight();
@@ -547,25 +546,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripButtonValidation.Checked = _validation;
 		}
 
-		[RemoveMeWithToggle("Remove inside !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadingLessSchedules_42639) ", Toggles.ResourcePlanner_LoadingLessSchedules_42639)]
-		private void setHeaderText(DateOnly start, DateOnly end, DateOnly? outerStart, DateOnly? outerEnd)
+		private void setHeaderText(DateOnly start, DateOnly end)
 		{
 			var currentCultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var startDate = start.Date.ToString("d", currentCultureInfo);
 			var endDate = end.Date.ToString("d", currentCultureInfo);
-
-			if (!_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadingLessSchedules_42639))
-			{
-				if (outerStart.HasValue && outerEnd.HasValue)
-				{
-					if (start.AddDays(-7) != outerStart || end.AddDays(14) != outerEnd)
-					{
-						startDate = start.Date.ToString("d", currentCultureInfo) + "-" + end.Date.ToString("d", currentCultureInfo);
-						endDate = "(" + outerStart.Value.Date.ToString("d", currentCultureInfo) + "-" +
-								  outerEnd.Value.Date.ToString("d", currentCultureInfo) + ")";
-					}
-				}
-			}
 
 			Text = string.Format(currentCultureInfo, Resources.TeleoptiCCCColonModuleColonFromToDateScenarioColon, Resources.Schedules, startDate, endDate, _scenario.Description.Name);
 		}
@@ -2535,8 +2520,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 													  LanguageResourceHelper.Translate("XXLoadedColon") +
 													  " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
 			toolStripStatusLabelNumberOfAgents.Visible = true;
-			var loadedPeriod = _schedulerState.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-			setHeaderText(_schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate, _schedulerState.RequestedPeriod.DateOnlyPeriod.EndDate, loadedPeriod.StartDate, loadedPeriod.EndDate);
+			setHeaderText(_schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate, _schedulerState.RequestedPeriod.DateOnlyPeriod.EndDate);
 			
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _loadRequsts)
 			{

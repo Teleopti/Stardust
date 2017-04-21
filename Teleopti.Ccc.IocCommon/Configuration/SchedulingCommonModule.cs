@@ -74,20 +74,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			if(_configuration.Toggle(Toggles.ResourcePlanner_LoadingLessSchedules_42639))
-			{
-				builder.RegisterType<FindSchedulesForPersons>()
-					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
-					.As<IFindSchedulesForPersons>()
-					.SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<ScheduleStorage>()
-					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory),typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
-					.As<IFindSchedulesForPersons>()
-					.SingleInstance();
-			}
+			builder.RegisterType<FindSchedulesForPersons>()
+				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
+				.As<IFindSchedulesForPersons>()
+				.SingleInstance();
 
 			builder.RegisterType<ScheduleStorage>()
 				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
