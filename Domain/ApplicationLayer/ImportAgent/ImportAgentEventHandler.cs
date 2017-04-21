@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.MultiTenancy;
 
@@ -21,13 +22,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private readonly IFileProcessor _fileProcessor;
 		private readonly ITenantUserPersister _tenantUserPersister;
 		private static bool _hasException = false;
+		private readonly IStardustJobFeedback _feedback;
 		public ImportAgentEventHandler(
 			IJobResultRepository jobResultRepository,
-			IFileProcessor fileProcessor, ITenantUserPersister tenantUserPersister)
+			IFileProcessor fileProcessor, ITenantUserPersister tenantUserPersister, IStardustJobFeedback feedback)
 		{
 			_jobResultRepository = jobResultRepository;
 			_fileProcessor = fileProcessor;
 			_tenantUserPersister = tenantUserPersister;
+			_feedback = feedback;
 		}
 
 		[AsSystem]
@@ -44,8 +47,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 			catch (Exception e)
 			{
+				_feedback.SendProgress($"An unexpected exception happened.");
 				SaveJobResultDetail(@event, e);
 				_tenantUserPersister.RollbackAllPersistedTenantUsers();
+				throw;
 			}
 			
 
@@ -81,6 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 			JobResultArtifact inputFile;
 			var errorMsg = validateJobInputArtifact(jobResult, out inputFile);
+			_feedback.SendProgress($"Done input artifact validation!");
 			if (!errorMsg.IsNullOrEmpty())
 			{
 				saveJobResultDetail(jobResult, errorMsg, DetailLevel.Error);
@@ -92,6 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				FileName = inputFile.Name
 			};
 			var processResult = _fileProcessor.Process(fileData, owner.PermissionInformation.DefaultTimeZone(), defaults);
+			_feedback.SendProgress($"Done input artifact process!");
 			if (!processResult.ErrorMessages.IsNullOrEmpty())
 			{
 				saveJobResultDetail(jobResult, string.Join(", ", processResult.ErrorMessages), DetailLevel.Error);
@@ -153,7 +160,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					$"{fileName}_warning.{fileType}",
 					warningFile.ToArray()));
 			}
-
+			_feedback.SendProgress($"Done job artifact preparation!");
 
 		}
 		private IJobResult getJobResult(ImportAgentEvent @event)
@@ -165,6 +172,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var detail = new JobResultDetail(level, message, DateTime.UtcNow, exception);
 			result.AddDetail(detail);
 			result.FinishedOk = true;
+
+			_feedback.SendProgress($"Done with adding job process detail, detail level:{level}, message:{detail.Message}.");
 		}
 
 		public static void HasException()
