@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public CalculatedPossibilityModel CalculateIntradayAbsenceIntervalPossibilities()
 		{
-			return CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).FirstOrDefault();
+			return CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod()).FirstOrDefault() ?? new CalculatedPossibilityModel();
 		}
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public CalculatedPossibilityModel CalculateIntradayOvertimeIntervalPossibilities()
 		{
-			return CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).FirstOrDefault();
+			return CalculateIntradayOvertimeIntervalPossibilities(getTodayDateOnlyPeriod()).FirstOrDefault() ?? new CalculatedPossibilityModel();
 
 		}
 

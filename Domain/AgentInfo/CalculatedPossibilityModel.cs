@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	{
 		public DateOnly Date { get; set; }
 
-		public IDictionary<DateTime, int> IntervalPossibilies {get;set;}
+		public IDictionary<DateTime, int> IntervalPossibilies { get; set; } = new Dictionary<DateTime, int>();
 
 		public int Resolution { get; set; } = 15;
 	}
