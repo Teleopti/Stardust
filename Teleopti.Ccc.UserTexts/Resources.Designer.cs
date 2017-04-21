@@ -727,6 +727,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actual average handling time.
+        /// </summary>
+        public static string ActualAverageHandlingTime {
+            get {
+                return ResourceManager.GetString("ActualAverageHandlingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual Employees.
         /// </summary>
         public static string ActualEmployees {
@@ -11820,7 +11829,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forecasted avreage handling time.
+        ///   Looks up a localized string similar to Forecasted average handling time.
         /// </summary>
         public static string ForecastedAverageHandlingTime {
             get {

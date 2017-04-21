@@ -15769,11 +15769,15 @@ Do you want to participate?</value>
     <comment>used in web intraday chart</comment>
   </data>
   <data name="ForecastedAverageHandlingTime" xml:space="preserve">
-    <value>Forecasted avreage handling time</value>
+    <value>Forecasted average handling time</value>
     <comment>43982 used in web intraday chart</comment>
   </data>
   <data name="ErrorOccurredWhenGeneratingQrcode" xml:space="preserve">
     <value>An error has occurred when generating QR-Code</value>
     <comment>Error message when failing to generate QR-Code for mobile apps</comment>
+  </data>
+  <data name="ActualAverageHandlingTime" xml:space="preserve">
+    <value>Actual average handling time</value>
+    <comment>used in web intraday chart</comment>
   </data>
 </root>

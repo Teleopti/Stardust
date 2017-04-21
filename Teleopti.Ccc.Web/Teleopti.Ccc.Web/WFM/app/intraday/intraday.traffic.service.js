@@ -163,7 +163,7 @@
 									Forecasted_calls: $translate.instant('ForecastedVolume') + ' ←',
 									Calls: $translate.instant('ActualVolume') + ' ←',
 									Forecasted_AHT: $translate.instant('ForecastedAverageHandlingTime') + ' →',
-									AHT: $translate.instant('AverageHandlingTime') + ' →'
+									AHT: $translate.instant('ActualAverageHandlingTime') + ' →'
 								},
 								axes: {
 									Forecasted_AHT: 'y2',
