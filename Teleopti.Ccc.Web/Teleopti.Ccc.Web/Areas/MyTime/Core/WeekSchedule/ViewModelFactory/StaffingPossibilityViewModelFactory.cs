@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
 using Teleopti.Interfaces.Domain;
 
@@ -14,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly IScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly INow _now;
+		private readonly int _maxAvailableDays = 13;
 
 		public StaffingPossibilityViewModelFactory(
 			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, ILoggedOnUser loggedOnUser, INow now)
@@ -27,18 +27,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			StaffingPossiblityType staffingPossiblityType)
 		{
 			var period = getAvailablePeriod(startDate);
+			if (!period.HasValue) return new PeriodStaffingPossibilityViewModel[] {};
 			switch (staffingPossiblityType)
 			{
 				case StaffingPossiblityType.Absence:
 					return
 						createPeriodStaffingPossibilityViewModels(
-							_scheduleStaffingPossibilityCalculator.CalculateIntradayAbsenceIntervalPossibilities(period));
+							_scheduleStaffingPossibilityCalculator.CalculateIntradayAbsenceIntervalPossibilities(period.Value));
 				case StaffingPossiblityType.Overtime:
 					return
 						createPeriodStaffingPossibilityViewModels(
-							_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period));
+							_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period.Value));
 			}
-			return new PeriodStaffingPossibilityViewModel[] { };
+			return new PeriodStaffingPossibilityViewModel[] {};
 		}
 
 		private IEnumerable<PeriodStaffingPossibilityViewModel> createPeriodStaffingPossibilityViewModels(
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				periodStaffingPossibilityViewModels.AddRange(calculatedPossibilityModel.IntervalPossibilies
 					.Select(p => new PeriodStaffingPossibilityViewModel
 					{
-						Date = calculatedPossibilityModel.Date,
+						Date = calculatedPossibilityModel.Date.ToFixedClientDateOnlyFormat(),
 						StartTime = p.Key,
 						EndTime = p.Key.AddMinutes(calculatedPossibilityModel.Resolution),
 						Possibility = p.Value
@@ -59,11 +60,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return periodStaffingPossibilityViewModels;
 		}
 
-		private DateOnlyPeriod getAvailablePeriod(DateOnly date)
+		private DateOnlyPeriod? getAvailablePeriod(DateOnly date)
 		{
 			var culture = _loggedOnUser.CurrentUser().PermissionInformation.UICulture();
-			var period = DateHelper.GetWeekPeriod(date, culture);
-			return period;
+			var weekPeriod = DateHelper.GetWeekPeriod(date, culture);
+			var today = _now.LocalDateOnly();
+			var maxEndDate = today.AddDays(_maxAvailableDays);
+			var availablePeriod = new DateOnlyPeriod(today, maxEndDate);
+			return availablePeriod.Intersection(weekPeriod);
 		}
 	}
 }
