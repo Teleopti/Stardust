@@ -1,6 +1,6 @@
 Param (
 
-    [Parameter(Mandatory=$True)][string]$Server
+    [Parameter(Mandatory=$True)][string]$Server = $env:servername
 
     )
 
