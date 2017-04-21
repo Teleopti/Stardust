@@ -228,7 +228,8 @@
 		ETL_SpeedUpNightlyDayOff_38213,
 		WfmPermission_RelaseRefactor_43587,
 		WFM_ImproveIntradaySkillArea_37291,
-		Wfm_Intraday_SupportSkillTypeWebChat_42591
+		Wfm_Intraday_SupportSkillTypeWebChat_42591,
+		WFM_ReportHierarchy_43002
 		// ReSharper restore InconsistentNaming
 	}
 }
