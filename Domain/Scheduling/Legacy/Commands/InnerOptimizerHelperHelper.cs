@@ -11,11 +11,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
+		private readonly IPeriodValueCalculatorProvider _periodValueCalculatorProvider;
 
-		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
+		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor, 
+						IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
+						IPeriodValueCalculatorProvider periodValueCalculatorProvider)
 		{
 			_restrictionExtractor = restrictionExtractor;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
+			_periodValueCalculatorProvider = periodValueCalculatorProvider;
 		}
 
 		public void LockDaysForDayOffOptimization(IEnumerable<IScheduleMatrixPro> matrixList, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
@@ -66,8 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public IPeriodValueCalculator CreatePeriodValueCalculator(IAdvancedPreferences advancedPreferences,
 			IScheduleResultDataExtractor dataExtractor)
 		{
-			IPeriodValueCalculatorProvider calculatorProvider = new PeriodValueCalculatorProvider();
-			return calculatorProvider.CreatePeriodValueCalculator(advancedPreferences, dataExtractor);
+			return _periodValueCalculatorProvider.CreatePeriodValueCalculator(advancedPreferences, dataExtractor);
 		}
 
 		public IScheduleResultDataExtractor CreateAllSkillsDataExtractor(
