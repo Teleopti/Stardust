@@ -6,12 +6,10 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class DatabaseTasks
 	{
 		private readonly ExecuteSql _usingMaster;
-		private readonly ExecuteSql _usingDatabase;
 
-		public DatabaseTasks(ExecuteSql usingMaster, ExecuteSql usingDatabase)
+		public DatabaseTasks(ExecuteSql usingMaster)
 		{
 			_usingMaster = usingMaster;
-			_usingDatabase = usingDatabase;
 		}
 
 		public bool Exists(string databaseName)
@@ -50,17 +48,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void Create(string databaseName)
 		{
-			_usingMaster.ExecuteTransactionlessNonQuery(string.Format("CREATE DATABASE [{0}]", databaseName), 300);
-		}
-
-		public void SetOnline(string databaseName)
-		{
-			_usingMaster.ExecuteTransactionlessNonQuery(string.Format("ALTER DATABASE [{0}] SET ONLINE", databaseName), 300);
-		}
-
-		public void SetOffline(string databaseName)
-		{
-			_usingMaster.ExecuteTransactionlessNonQuery(string.Format("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", databaseName), 300);
+			_usingMaster.ExecuteTransactionlessNonQuery($"CREATE DATABASE [{databaseName}]", 300);
 		}
 	}
 }

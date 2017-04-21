@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 
 namespace Teleopti.Ccc.DBManager.Library
@@ -10,12 +9,14 @@ namespace Teleopti.Ccc.DBManager.Library
 	{
 		private readonly ExecuteSql _usingDatabase;
 		private readonly ExecuteSql _usingMaster;
+		private readonly Offline _offline;
 
 		public BackupByFileCopy(ExecuteSql usingDatabase, ExecuteSql usingMaster, string databaseName)
 		{
 			DatabaseName = databaseName;
 			_usingDatabase = usingDatabase;
 			_usingMaster = usingMaster;
+			_offline = new Offline(_usingMaster, DatabaseName);
 		}
 
 		public string DatabaseName { get; }
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				using (var command = conn.CreateCommand())
 				{
-					command.CommandText = string.Format("select * from sys.sysfiles");
+					command.CommandText = "select * from sys.sysfiles";
 					using (var reader = command.ExecuteReader())
 					{
 						backup.Files = (from r in reader.Cast<IDataRecord>()
@@ -37,12 +38,12 @@ namespace Teleopti.Ccc.DBManager.Library
 					}
 				}
 			});
-			using (offlineScope())
+			using (_offline.OfflineScope())
 			{
 				backup.Files.ForEach(f =>
 				{
 					f.Backup = f.Source + "." + name;
-					var command = string.Format(@"COPY ""{0}"" ""{1}""", f.Source, f.Backup);
+					var command = $@"COPY ""{f.Source}"" ""{f.Backup}""";
 					var result = executeShellCommandOnServer(command);
 					if (!result.Contains("1 file(s) copied."))
 						throw new Exception();
@@ -53,24 +54,15 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public bool TryRestore(Backup backup)
 		{
-			using (offlineScope())
+			using (_offline.OfflineScope())
 			{
 				return backup.Files.All(f =>
 				{
-					var command = string.Format(@"COPY ""{0}"" ""{1}""", f.Backup, f.Source);
+					var command = $@"COPY ""{f.Backup}"" ""{f.Source}""";
 					var result = executeShellCommandOnServer(command);
 					return result.Contains("1 file(s) copied.");
 				});
 			}
-		}
-
-		private IDisposable offlineScope()
-		{
-			SqlConnection.ClearAllPools();
-
-			var state = new DatabaseTasks(_usingMaster, _usingDatabase);
-			state.SetOffline(DatabaseName);
-			return new GenericDisposable(()=>state.SetOnline(DatabaseName));
 		}
 
 		private string executeShellCommandOnServer(string command)

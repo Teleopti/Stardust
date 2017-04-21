@@ -115,6 +115,7 @@
     <Compile Include="LoginHelper.cs" />
     <Compile Include="NotExecutableScriptException.cs" />
     <Compile Include="NullLog.cs" />
+    <Compile Include="Offline.cs" />
     <Compile Include="PermissionsHelper.cs" />
     <Compile Include="SchemaVersionInformation.cs" />
     <Compile Include="ScriptPathExtensions.cs" />

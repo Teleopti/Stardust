@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 
 				//Does the db exist?
-				var databaseExists = new DatabaseTasks(masterExecuteSql, null);
+				var databaseExists = new DatabaseTasks(masterExecuteSql);
 				if (databaseExists.Exists(commandLineArgument.DatabaseName))
 				{
 					//Try create or re-create login

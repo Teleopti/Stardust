@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
 {

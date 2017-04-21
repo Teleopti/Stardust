@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.Win32;
@@ -10,11 +8,13 @@ namespace Teleopti.Ccc.DBManager.Library
 	{
 		private readonly string _databaseName;
 		private readonly ExecuteSql _usingMaster;
+		private readonly Offline _offline;
 
 		public BackupBySql(ExecuteSql usingMaster, string databaseName)
 		{
 			_usingMaster = usingMaster;
 			_databaseName = databaseName;
+			_offline = new Offline(_usingMaster, _databaseName);
 		}
 
 		public void Backup(string path, string name)
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			var target = Path.Combine(path, fileName);
 			var localTarget = Path.Combine(sqlBackupPath(), fileName);
 
-			var sql = string.Format(@"BACKUP DATABASE {0} TO DISK = '{1}' WITH FORMAT", _databaseName, localTarget);
+			var sql = $@"BACKUP DATABASE {_databaseName} TO DISK = '{localTarget}' WITH FORMAT";
 			_usingMaster.Execute(sql);
 
 			File.Copy(localTarget, target, true);
@@ -32,6 +32,11 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public bool TryRestore(string path, string name)
 		{
+			// disconnect stuff
+			using (_offline.OfflineScope())
+			{
+			}
+
 			var fileName = name + ".bak";
 			var source = Path.Combine(path, fileName);
 			if (!File.Exists(source))
@@ -39,7 +44,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			var localSource = Path.Combine(sqlBackupPath(), fileName);
 			File.Copy(source, localSource, true);
 
-			var tasks = new DatabaseTasks(_usingMaster, null);
+			var tasks = new DatabaseTasks(_usingMaster);
 			tasks.Drop(_databaseName);
 			_usingMaster.Execute($@"RESTORE DATABASE {_databaseName} FROM DISK = '{localSource}' WITH REPLACE");
 

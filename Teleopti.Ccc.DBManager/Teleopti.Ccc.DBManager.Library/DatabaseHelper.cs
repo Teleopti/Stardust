@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public DatabaseTasks Tasks()
 		{
-			return new DatabaseTasks(_usingMaster, _usingDatabase);
+			return new DatabaseTasks(_usingMaster);
 		}
 	}
 }
