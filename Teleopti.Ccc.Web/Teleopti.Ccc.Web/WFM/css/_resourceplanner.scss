@@ -330,8 +330,8 @@ background-color: #cacaca;
 	pointer-events: none;
 }
 
-.ag-menu {
-	margin-top: -6px;
+.ag-pp {
+	margin: 3px;
 }
 //need to clean up later
 
@@ -438,4 +438,36 @@ background-color: #cacaca;
 		padding: 6px;
 		background-color: #FFA726;
 		border-radius: 3px;
+	}
+
+		.pp-datepicker {
+		margin: auto;
+	}
+	
+	.pp-modal>.modal-box .modalbg .dialog {
+		max-height: 90%;
+		overflow-y: auto!important;
+	}
+	
+	@media (min-width: 768px) and (max-width: 1199px) {
+		.pp-modal>.modal-box .dialog,
+		.modal-box .dialog-mini {
+			width: 80%;
+		}
+	}
+	
+	@media (min-width: 1200px) {
+		.pp-modal>.modal-box .dialog,
+		.modal-box .dialog-mini {
+			width: 60%;
+		}
+	}
+	
+	.pp-modal>.modal-box .modal-inner-content {
+		max-height: 80%;
+	}
+	
+	.pp-startDate-picker,
+	.pp-startDate-picker button {
+		pointer-events: none;
 	}

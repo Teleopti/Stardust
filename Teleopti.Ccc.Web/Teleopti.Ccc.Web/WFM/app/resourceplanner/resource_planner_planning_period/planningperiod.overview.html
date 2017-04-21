@@ -19,13 +19,15 @@
 			<div class="wfm-grid">
 				<div class="grid-card" ng-repeat="p in vm.planningPeriods | orderBy: '-EndDate'">
 					<div class="list-content panel" ng-class="{'pp-scheduled':p.State == 'Scheduled'}">
-						<div class="sub-header">
+						<div class="ag-pp">
 							<div class="con-flex x3 pp-inner-card" ng-click="vm.selectPp(p)">
-								<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="card-context mdi mdi-calendar-check"></i>
-								<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="card-context mdi mdi-calendar-remove"></i>
-								<span>{{p.StartDate | amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}</span>
+								<span>
+									<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-calendar-check"></i>
+									<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="mdi mdi-calendar-remove"></i>
+									{{p.StartDate | amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}
+								</span>
 							</div>
-							<div class="con-flex head-actions panel-menu ag-menu" ng-show="$first">
+							<div class="con-flex head-actions panel-menu" ng-show="$first">
 								<div tabindex=0 class="context-menu card-context">
 									<i class="mdi mdi-dots-vertical"></i>
 									<div class="context-menu-left">
@@ -44,7 +46,7 @@
 	</div>
 </div>
 <div class="con-row">
-	<div class="con-flex">
+	<div class="con-flex pp-modal">
 		<div ng-cloak class="modal-box">
 			<div ng-cloak ng-show="vm.confirmModal1">
 				<div class="modalbg">
@@ -58,13 +60,14 @@
 								</label>
 							</div>
 							<div class="con-row">
-								<date-range-picker ng-model="vm.lastPp"></date-range-picker>
+								<date-range-picker class="pp-datepicker" ng-model="vm.lastPp"></date-range-picker>
 							</div>
 						</div>
 						<div class="modal-actions">
 							<aside>
 								<button ng-click="vm.confirmModal1=false" class="wfm-btn wfm-btn-invis-default">Cancel</button>
-								<button ng-click="vm.confirmModal1=false; vm.changeEndDate();" class="wfm-btn wfm-btn-invis-primary">Apply</button>
+								<button ng-class="{'wfm-btn-invis-primary':vm.isEnddateChanged(), 'wfm-btn-invis-disabled': !vm.isEnddateChanged()}" ng-click="vm.confirmModal1=false; vm.changeEndDate();"
+								 class="wfm-btn ">Apply</button>
 							</aside>
 						</div>
 					</div>
@@ -231,12 +234,3 @@
 		</md-content>
 	</div>
 </div>
-
-<style>
-	.pp-startDate-picker {
-		pointer-events: none;
-	}
-	/*.pp-startDate-picker, .pp-startDate-picker > uib-daypicker > button {
-		cursor: not-allowed!important;
-	}*/
-</style>
