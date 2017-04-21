@@ -65,6 +65,12 @@
 		<!-- ko if: isQRCodeForMobileAppsEnabled()-->
 		<div class="col-xs-12 col-sm-6 qrcode-container">
 			<label>@Resources.TeleoptiMobileApp</label>
+
+			<!-- ko if: customMobileAppBaseUrlError() -->
+			<p>@Resources.ErrorOccurredWhenGeneratingQrcode</p>
+			<!-- /ko -->
+
+			<!-- ko if: !customMobileAppBaseUrlError() -->
 			<div id="#QRCodePlaceHolder"></div>
 
 			<h5>@Resources.UseTeleoptiMobileAppToScanThisQRCode 
@@ -78,6 +84,7 @@
 				</a>
 				)</span>
 				</h5>
+			<!-- /ko -->
 		</div>
 		<!-- /ko -->
 	</div>

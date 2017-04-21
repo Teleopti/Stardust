@@ -5,6 +5,8 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	
 	self.isSetAgentDescriptionEnabled = ko.observable(false);
 	self.isQRCodeForMobileAppsEnabled = ko.observable(false);
+	self.customMobileAppBaseUrl = ko.observable(false);
+	self.customMobileAppBaseUrlError = ko.observable(false);
 	self.myTimeWebBaseUrl = ko.observable();
 	self.androidAppLink = ko.observable("https://play.google.com/store/apps/details?id=com.teleopti.mobile");
 	self.iOSAppLink = ko.observable("https://itunes.apple.com/us/app/teleopti-wfm-mytime/id1196833421#");
@@ -148,12 +150,32 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	self.featureCheck = function () {
 		self.isSetAgentDescriptionEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("Settings_SetAgentDescription_23257"));
 		self.isQRCodeForMobileAppsEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("QRCodeForMobileApps_42695") && self.hasPermissionToViewQRCode());
+		self.customMobileAppBaseUrl(self.hasPermissionToViewQRCode() && Teleopti.MyTimeWeb.Common.IsToggleEnabled("ConfigQRCodeURLForMobileApps_43224"));
 	};
 
-	self.generateQRCode = function() {
-		self.myTimeWebBaseUrl(window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl + Teleopti.MyTimeWeb.AjaxSettings.defaultNavigation);
+	self.generateQRCode = function () {
+		if (self.customMobileAppBaseUrl()) {
+			ajax.Ajax({
+				url: "Settings/MobileQRCodeUrl",
+				contentType: 'application/json; charset=utf-8',
+				type: "GET",
+				success: function (data, textStatus, jqXHR) {
+					self.myTimeWebBaseUrl(data);
+					drawQrcode();
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+					self.customMobileAppBaseUrlError(true);
+				}
+			});
+		} else {
+			self.myTimeWebBaseUrl(window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl + Teleopti.MyTimeWeb.AjaxSettings.defaultNavigation);
+			drawQrcode();
+		}
+	};
 
-		if (self.myTimeWebBaseUrl().length > 0) {
+	function drawQrcode() {
+		if (self.myTimeWebBaseUrl() && self.myTimeWebBaseUrl().length > 0) {
 			var typeNumber = 7;
 			var errorCorrectionLevel = 'M';
 			var qr = qrcode(typeNumber, errorCorrectionLevel);
@@ -163,7 +185,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 			self.generateAppLinkQRCode();
 			self.setupMouseEnterLeaveEventForAppsQRCode();
 		}
-	};
+	}
 
 	self.generateAppLinkQRCode = function(){
 		var typeNumber = 7;

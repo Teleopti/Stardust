@@ -10478,6 +10478,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error has occurred when generating QR-Code.
+        /// </summary>
+        public static string ErrorOccurredWhenGeneratingQrcode {
+            get {
+                return ResourceManager.GetString("ErrorOccurredWhenGeneratingQrcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Errors.
         /// </summary>
         public static string Errors {

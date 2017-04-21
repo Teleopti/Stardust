@@ -15772,4 +15772,8 @@ Do you want to participate?</value>
     <value>Forecasted avreage handling time</value>
     <comment>43982 used in web intraday chart</comment>
   </data>
+  <data name="ErrorOccurredWhenGeneratingQrcode" xml:space="preserve">
+    <value>An error has occurred when generating QR-Code</value>
+    <comment>Error message when failing to generate QR-Code for mobile apps</comment>
+  </data>
 </root>
