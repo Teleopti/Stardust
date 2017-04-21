@@ -247,8 +247,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							!_dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference).IsBetter)
 					{
 						allFailed[matrix.Item2] = false;
-						lockDaysInMatrixes(movedDaysOff.AddedDaysOff, matrix.Item2);
-						lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, matrix.Item2);
+						matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
+						matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
 					}
 					else
 					{
@@ -296,8 +296,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 								{
 									allFailed[matrix.Item2] = false;
 								}
-								lockDaysInMatrixes(movedDaysOff.AddedDaysOff, matrix.Item2);
-								lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, matrix.Item2);
+								matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
+								matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
 							}
 						}
 
@@ -420,8 +420,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!flexibleDayOffvalidator.Validate(teamInfo, schedulingResultStateHolder))
 				{
 					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-					lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-					lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+					teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+					teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
 					return false;
 				}
 			}
@@ -433,8 +433,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			if (isMaxSeatRuleViolated || !_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-				lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+				teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
 
 				return checkPeriodValue(currentPeriodValue, previousPeriodValue);
 			}
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			if (!_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamInfo))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
+				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
 				return true;
 			}
 
@@ -455,8 +455,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
 					{
 						_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-						lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-						lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+						teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+						teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
 					}
 				}
 			}
@@ -527,8 +527,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!flexibleDayOffvalidator.Validate(teamInfo, schedulingResultStateHolder))
 				{
 					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-					lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-					lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+					teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+					teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
 					checkPeriodValue = true;
 					return false;
 				}
@@ -540,8 +540,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			if (isMaxSeatRuleViolated || !_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-				lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+				teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
 				checkPeriodValue = true;
 				return true;
 			}
@@ -549,7 +549,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			if (!_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamInfo))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
+				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
 				checkPeriodValue = false;
 				return true;
 			}
@@ -561,25 +561,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
 				{
 					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-					lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-					lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+					teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+					teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
 				}
 			}
 
 			checkPeriodValue = true;
 			return true;
-		}
-
-
-		private static void lockDaysInMatrixes(IEnumerable<DateOnly> datesToLock , ITeamInfo teamInfo)
-		{
-			foreach (var dateOnly in datesToLock)
-			{
-				foreach (var scheduleMatrixPro in teamInfo.MatrixesForGroupAndDate(dateOnly))
-				{
-					scheduleMatrixPro.LockDay(dateOnly);
-				}
-			}
 		}
 
 		private bool reScheduleAllMovedDaysOff(ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
