@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 			system.UseTestDouble<FakeScheduleForecastSkillReadModelRepository>().For<IScheduleForecastSkillReadModelRepository>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			system.UseTestDouble<SkillStaffingDataLoader>().For<ISkillStaffingDataLoader>();
 		}
 
 		[Test]
