@@ -25,6 +25,7 @@
 ## If you want to be explicit, you can add this line during development
 # MyFeature = DEV
 ## This will be exactly the same as not specifying MyFeature at all in this file
+#
 ############################################################################
 
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
