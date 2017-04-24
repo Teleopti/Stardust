@@ -114,7 +114,7 @@
 								<i ng-class="setDynamicIcon(skill)"></i>
 							</span>
 							<md-tooltip>
-								<span ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</span>
+								<span ng-if="skill.DoDisplayData">{{skill.SkillType | translate}}</span>
 								<span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
 							</md-tooltip>
 							<span class="chip-text">{{skill.Name}}</span>
