@@ -40,6 +40,92 @@ namespace Teleopti.Ccc.Domain.Reports
 			}
 		}
 
+		public IEnumerable<IMatrixFunctionGroup> PermittedCategorizedReportFunctions
+		{
+			get
+			{
+				if (_matrixFunctionGroups == null)
+				{
+					_matrixFunctionGroups =
+						new List<IMatrixFunctionGroup>
+						{
+							new MatrixFunctionGroup
+							{
+								LocalizedDescription = Resources.ScheduleAnalysis,
+								ApplicationFunctions =
+								(from a in PermittedReportFunctions
+									where analysisReports().Contains(a.ForeignId.ToUpper())
+									select a).ToList()
+							},
+							new MatrixFunctionGroup
+							{
+								LocalizedDescription = Resources.Preferences,
+								ApplicationFunctions =
+									from a in PermittedReportFunctions
+									where preferencesReports().Contains(a.ForeignId.ToUpper())
+									select a
+							},
+							new MatrixFunctionGroup
+							{
+								LocalizedDescription = Resources.EmployeeInformation,
+								ApplicationFunctions =
+									from a in PermittedReportFunctions
+									where EmployeeReports().Contains(a.ForeignId.ToUpper())
+									select a
+							},
+							new MatrixFunctionGroup
+							{
+								LocalizedDescription = Resources.AgentPerformance,
+								ApplicationFunctions =
+									from a in PermittedReportFunctions
+									where agentReports().Contains(a.ForeignId.ToUpper())
+									select a
+							},
+							new MatrixFunctionGroup
+							{
+								LocalizedDescription = Resources.ForecastingPerformance,
+								ApplicationFunctions =
+									from a in PermittedReportFunctions
+									where forecastReports().Contains(a.ForeignId.ToUpper())
+									select a
+							},
+							new MatrixFunctionGroup
+							{
+								LocalizedDescription = Resources.ServiceLevelAnalysis,
+								ApplicationFunctions =
+									from a in PermittedReportFunctions
+									where serviceLevelReports().Contains(a.ForeignId.ToUpper())
+									select a
+							},
+							new MatrixFunctionGroup
+							{
+								LocalizedDescription = Resources.Improve,
+								ApplicationFunctions =
+									from a in PermittedReportFunctions
+									where new[] {"7F918C26-4044-4F6B-B0AE-7D27625D052E"}.Contains(a.ForeignId.ToUpper())
+									select a
+							}
+						};
+					_matrixFunctionGroups = from g in _matrixFunctionGroups where g.ApplicationFunctions.Any() select g;
+				}
+				return _matrixFunctionGroups;
+			}
+		}
+
+		public IEnumerable<IApplicationFunction> PermittedCustomReportFunctions
+		{
+			get
+			{
+				var groupedMatrixFunctionForeignIds =
+				(from g in PermittedCategorizedReportFunctions
+					from f in g.ApplicationFunctions
+					select f.ForeignId).ToList();
+				return from f in PermittedReportFunctions
+					where groupedMatrixFunctionForeignIds.Contains(f.ForeignId) == false
+					select f;
+			}
+		}
+
 		private class IsOnlineReportFunctionSpecification : Specification<IApplicationFunction>
 		{
 			private readonly string[] _onlineReportForeignIdList;
@@ -49,13 +135,11 @@ namespace Teleopti.Ccc.Domain.Reports
 				_onlineReportForeignIdList = new[] { "0055", "0059", "0064" };
 			}
 
-
 			public override bool IsSatisfiedBy(IApplicationFunction obj)
 			{
 				return _onlineReportForeignIdList.Contains(obj.ForeignId);
 			}
 		}
-
 		private static IEnumerable<string> analysisReports()
 		{
 			// old "21", "18", "17", "19", "26", "29"
@@ -121,93 +205,6 @@ namespace Teleopti.Ccc.Domain.Reports
 					 "C232D751-AEC5-4FD7-A274-7C56B99E8DEC",
 					 "AE758403-C16B-40B0-B6B2-E8F6043B6E04",
 					 "F7937D02-FA54-4679-AF70-D9798E1690D5"};
-		}
-
-		public IEnumerable<IMatrixFunctionGroup> PermittedCategorizedReportFunctions
-		{
-			get
-			{
-				if (_matrixFunctionGroups == null)
-				{
-					_matrixFunctionGroups =
-						 new List<IMatrixFunctionGroup>
-									 {
-										  new MatrixFunctionGroup
-												{
-													 LocalizedDescription = Resources.ScheduleAnalysis,
-													 ApplicationFunctions =
-														  (from a in PermittedReportFunctions
-															where analysisReports().Contains(a.ForeignId.ToUpper())
-															select a).ToList()
-												},
-										  new MatrixFunctionGroup
-												{
-													 LocalizedDescription = Resources.Preferences,
-													 ApplicationFunctions =
-														  from a in PermittedReportFunctions
-														  where preferencesReports().Contains(a.ForeignId.ToUpper())
-														  select a
-												},
-										  new MatrixFunctionGroup
-												{
-													 LocalizedDescription = Resources.EmployeeInformation,
-													 ApplicationFunctions =
-														  from a in PermittedReportFunctions
-														  where EmployeeReports().Contains(a.ForeignId.ToUpper())
-														  select a
-												},
-										  new MatrixFunctionGroup
-												{
-													 LocalizedDescription = Resources.AgentPerformance,
-													 ApplicationFunctions =
-														  from a in PermittedReportFunctions
-														  where agentReports().Contains(a.ForeignId.ToUpper())
-														  select a
-												},
-										  new MatrixFunctionGroup
-												{
-													 LocalizedDescription = Resources.ForecastingPerformance,
-													 ApplicationFunctions =
-														  from a in PermittedReportFunctions
-														  where forecastReports().Contains(a.ForeignId.ToUpper())
-														  select a
-												},
-										  new MatrixFunctionGroup
-												{
-													 LocalizedDescription = Resources.ServiceLevelAnalysis,
-													 ApplicationFunctions =
-														  from a in PermittedReportFunctions
-														  where serviceLevelReports().Contains(a.ForeignId.ToUpper())
-														  select a
-												},
-										  
-										  new MatrixFunctionGroup
-												{
-													 LocalizedDescription = Resources.Improve,
-													 ApplicationFunctions =
-														  from a in PermittedReportFunctions
-														  where new[] {"7F918C26-4044-4F6B-B0AE-7D27625D052E"}.Contains(a.ForeignId.ToUpper())
-														  select a
-												}
-									 };
-					_matrixFunctionGroups = from g in _matrixFunctionGroups where g.ApplicationFunctions.Any() select g;
-				}
-				return _matrixFunctionGroups;
-			}
-		}
-
-		public IEnumerable<IApplicationFunction> PermittedCustomReportFunctions
-		{
-			get
-			{
-				var groupedMatrixFunctionForeignIds =
-					(from g in PermittedCategorizedReportFunctions
-					 from f in g.ApplicationFunctions
-					 select f.ForeignId).ToList();
-				return from f in PermittedReportFunctions
-						 where groupedMatrixFunctionForeignIds.Contains(f.ForeignId) == false
-						 select f;
-			}
 		}
 	}
 

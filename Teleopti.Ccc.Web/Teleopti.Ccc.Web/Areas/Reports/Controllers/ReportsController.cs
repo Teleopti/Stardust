@@ -21,5 +21,11 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 			return _reportNavigationProvider.GetNavigationItems();
 		}
 
+		[UnitOfWork, HttpGet, Route("api/Reports/NavigationsCategorized")]
+		public virtual IList<CategorizedReportItem> GetCategorizedReportNavigations()
+		{
+			return _reportNavigationProvider.GetCategorizedNavigationsItems();
+		}
+
 	}
 }

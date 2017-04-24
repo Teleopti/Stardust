@@ -5,14 +5,15 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.Reports.Core;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Web.Areas.Reports.Models;
 
 namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 {
@@ -23,6 +24,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 		private IReportUrl _reportUrl;
 		private ConfigurablePermissions _authorizor;
 		private IReportNavigationProvider target;
+		private ReportNavigationModel _reportNavigationModel;
+		private MockRepository _mocks;
 
 		[SetUp]
 		public void SetUp()
@@ -30,7 +33,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 			_reportUrl = new FakeReportUrl();
 			_reportProvider = new FakeReportProvider();
 			_authorizor = new ConfigurablePermissions();
-			target = new ReportNavigationProvider(_reportProvider, _reportUrl, _authorizor, new TrueToggleManager());
+			_reportNavigationModel = new ReportNavigationModel();
+			_mocks = new MockRepository();
+
+			target = new ReportNavigationProvider(_reportProvider, _reportUrl, _authorizor, new TrueToggleManager(), _reportNavigationModel);
 		}
 
 		[Test]
@@ -95,6 +101,40 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 			var result = target.GetNavigationItems();
 
 			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldGetCategorizedReportItems()
+		{
+			var auth = _mocks.StrictMock<IAuthorization>();
+
+			var analysisReport = MockRepository.GenerateMock<IApplicationFunction>();
+			analysisReport.Stub(x => x.ForeignId).Return("132E3AF2-3557-4EA7-813E-05CD4869D5DB");
+			analysisReport.Stub(x => x.ForeignSource).Return(DefinedForeignSourceNames.SourceMatrix);
+			
+
+			using (_mocks.Record())
+			{
+				Expect.Call(auth.GrantedFunctions())
+					.IgnoreArguments()
+					.Return(new List<IApplicationFunction>()
+					{
+						analysisReport
+					}).Repeat.Any();
+			}
+
+			IList<CategorizedReportItem> result;
+
+			using (_mocks.Playback())
+			{
+				using (CurrentAuthorization.ThreadlyUse(auth))
+				{
+					result = target.GetCategorizedNavigationsItems();
+				}
+			}
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().Category.Should().Be.EqualTo(Resources.ScheduleAnalysis);
 		}
 	}
 
