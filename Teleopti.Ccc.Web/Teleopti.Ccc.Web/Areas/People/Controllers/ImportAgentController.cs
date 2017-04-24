@@ -13,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.People.Core;
 using System.Web.Http.Results;
 using System;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Core;
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			}
 			return _importAgentJobService.CreateJob(fileData, defaults);
 		}
-		[Route("UploadAgent"), HttpPost]
+		[Route("UploadAgent"), HttpPost, RemoveMeWithToggle(Toggles.Wfm_People_ImportAndCreateAgentFromFile_42528)]
 		public async Task<HttpResponseMessage> UploadAgent()
 		{
 			if (!Request.Content.IsMimeMultipartContent())
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return ProcessInternal(provider.Contents);
 		}
 
-		[UnitOfWork]
+		[UnitOfWork, RemoveMeWithToggle(Toggles.Wfm_People_ImportAndCreateAgentFromFile_42528)]
 		protected virtual HttpResponseMessage ProcessInternal(IEnumerable<HttpContent> contents)
 		{
 			var formData = _multipartHttpContentExtractor.ExtractFormModel<ImportAgentDefaults>(contents);
