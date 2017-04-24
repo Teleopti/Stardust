@@ -73,7 +73,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		;
 
 		if (location.hash.length <= 1) {
-			location.replace("#" + (_isMobile() ? "Schedule/MobileWeek" : _settings.defaultNavigation));
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446")){
+			location.replace("#" + (_isMobile() ? "Schedule/MobileDay" : _settings.defaultNavigation));
+		} else {
+				location.replace("#" + (_isMobile() ? "Schedule/MobileWeek" : _settings.defaultNavigation));
+			} 
 		}
 
 		var asmWindow;
