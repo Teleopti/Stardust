@@ -55,6 +55,7 @@
 				} else {
 					teamScheduleSvc.getSchedules(vm.date, selectedPersonIds).then(function(data) {
 						vm.scheduleManagementSvc.resetSchedules(data.Schedules, moment(vm.date), vm.timezone);
+						personSelectionSvc.syncProjectionSelection(vm.scheduleManagementSvc.schedules());
 						vm.setReady(true);
 					});
 				}

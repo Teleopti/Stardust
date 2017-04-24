@@ -455,6 +455,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click("#applyAbsence");
 		}
 
+		[Then(@"I should see the start time to move to is '(.*)'")]
+		public void ThenIShouldSeeTheStartTimeToMoveToIs(string expected)
+		{
+			var moveToTime = "vm.getMoveToStartTimeStr()";
+			Browser.Interactions.AssertScopeValue("move-activity", moveToTime, expected, true);
+		}
+
+
 		private static Guid idForActivity(string activityName)
 		{
 			var activityId = (from a in DataMaker.Data().UserDatasOfType<ActivityConfigurable>()

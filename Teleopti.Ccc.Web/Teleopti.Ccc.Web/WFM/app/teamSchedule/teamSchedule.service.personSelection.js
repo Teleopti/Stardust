@@ -272,6 +272,8 @@
 			}
 			return ret;
 		};
+
+		svc.syncProjectionSelection = syncProjectionSelection;
 	}
 
 	function SelectedAbsence(absenceId, date) {
@@ -351,5 +353,36 @@
 			activities.splice(index, 1);
 			index = lookUpIndex(activities, targetSelectedActivity);
 		}
+	}
+
+	function syncProjectionSelection(personSchedules) {
+		var personInfo = this.personInfo
+		personSchedules.forEach(function (sched) {
+			if (!sched.Shifts) {
+				return;
+			}
+			sched.Shifts.forEach(function (shift) {
+				shift.Projections.forEach(function (proj) {
+					if (!proj.ShiftLayerIds) {
+						return;
+					}
+					proj.ShiftLayerIds.forEach(function (id) {
+						if (!personInfo[sched.PersonId]) {
+							return;
+						}
+						var selected = false;
+						for (var i = 0; i < personInfo[sched.PersonId].SelectedActivities.length; i++) {
+							if (personInfo[sched.PersonId].SelectedActivities[i].shiftLayerId === id) {
+								selected = true;
+								break;
+							}
+						}
+						if (selected) {
+							proj.Selected = true;
+						}
+					});
+				});
+			});
+		}, this);
 	}
 })(angular);

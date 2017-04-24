@@ -225,3 +225,20 @@ Scenario: Should be able to move basic activity
 	And I selected activity 'Phone'
 	And I move activity to '2016-10-10 10:00' with next day being 'false'
 	Then I should see a successful notice
+
+@OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
+Scenario: The default new start time should be one hour later than the original start time
+	Given 'John Smith' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| StartTime      | 2016-10-10 09:00 |
+	| EndTime        | 2016-10-10 17:00 |
+	When I view wfm team schedules
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'Team green'
+	And I click button to search for schedules
+	And I selected activity 'Phone'
+	And I open menu in team schedule
+	And I click menu item 'MoveActivity' in team schedule
+	Then I should see the start time to move to is '2016-10-10T10:00'
