@@ -1,7 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Aop.Core;
+﻿using Teleopti.Ccc.Domain.Aop.Core;
 
-namespace Teleopti.Ccc.Domain.Common.TimeLogger
+namespace Teleopti.Ccc.Domain.Aop
 {
 	public sealed class TestLogAttribute : AspectAttribute
 	{

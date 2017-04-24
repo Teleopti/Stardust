@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Ccc.Domain.Common.TimeLogger;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 

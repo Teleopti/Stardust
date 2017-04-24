@@ -1,4 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Common.TimeLogger;
+﻿using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 {

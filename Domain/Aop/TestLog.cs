@@ -11,6 +11,11 @@ namespace Teleopti.Ccc.Domain.Aop
 			_log = logManager.GetLogger("Teleopti.TestLog");
 		}
 
+		public bool IsEnabled()
+		{
+			return _log.IsDebugEnabled;
+		}
+
 		public void Debug(string message)
 		{
 			_log.Debug(message);

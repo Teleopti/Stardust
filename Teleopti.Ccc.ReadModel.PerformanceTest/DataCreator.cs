@@ -1,4 +1,4 @@
-using Teleopti.Ccc.Domain.Common.TimeLogger;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.ReadModel.PerformanceTest

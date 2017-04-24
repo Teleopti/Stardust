@@ -7,7 +7,7 @@ using Hangfire;
 using Hangfire.Server;
 using Hangfire.Storage;
 using Hangfire.Storage.Monitoring;
-using Teleopti.Ccc.Domain.Common.TimeLogger;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 

@@ -19,12 +19,16 @@ namespace Teleopti.Ccc.Domain.Aop
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
+			if (!_log.IsEnabled())
+				return;
 			_log.Debug(_builder.BuildInvocationStart(invocation));
 			_stopwatch.Start();
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
+			if (!_log.IsEnabled())
+				return;
 			_stopwatch.Stop();
 			_log.Debug(_builder.BuildInvocationEnd(exception, invocation, _stopwatch.Elapsed));
 		}
