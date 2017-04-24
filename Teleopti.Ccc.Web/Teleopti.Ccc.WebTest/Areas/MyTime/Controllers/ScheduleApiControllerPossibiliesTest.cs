@@ -8,18 +8,18 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -57,23 +57,37 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetCulture("en-US")]
 		public void ShouldReturnPossibiliesForCurrentWeek()
 		{
-			setup();
-			var result = Target.FetchData(null, StaffingPossiblityType.Absence).Possibilities;
-			result.Count().Should().Be.EqualTo(6);
+			setupSiteOpenHour();
+			setupTestDataForOneSkill();
+			var result = Target.FetchData(null, StaffingPossiblityType.Absence).Possibilities.ToList();
+			result.Count.Should().Be.EqualTo(6);
+			new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(2)).DayCollection().ToList().ForEach(day =>
+			{
+				Assert.AreEqual(2, result.Count(d => d.Date == day.ToFixedClientDateOnlyFormat()));
+			});
 		}
 
 		[Test, SetCulture("en-US")]
 		public void ShouldReturnPossibiliesForNextWeek()
 		{
-			setup();
-			var result = Target.FetchData(Now.LocalDateOnly().AddWeeks(1), StaffingPossiblityType.Absence).Possibilities;
-			result.Count().Should().Be.EqualTo(14);
+			setupSiteOpenHour();
+			setupTestDataForOneSkill();
+			var result = Target.FetchData(Now.LocalDateOnly().AddWeeks(1), StaffingPossiblityType.Absence).Possibilities.ToList();
+			result.Count.Should().Be.EqualTo(14);
+			DateHelper.GetWeekPeriod(Now.LocalDateOnly().AddWeeks(1), User.CurrentUser().PermissionInformation.UICulture())
+				.DayCollection()
+				.ToList()
+				.ForEach(day =>
+				{
+					Assert.AreEqual(2, result.Count(d => d.Date == day.ToFixedClientDateOnlyFormat()), day.ToShortDateString());
+				});
 		}
 
 		[Test, SetCulture("en-US")]
 		public void ShouldNotReturnPossibiliesForPastDays()
 		{
-			setup();
+			setupSiteOpenHour();
+			setupTestDataForOneSkill();
 			var result = Target.FetchData(Now.LocalDateOnly().AddDays(-1), StaffingPossiblityType.Absence).Possibilities.ToList();
 			result.Count.Should().Be.EqualTo(6);
 		}
@@ -81,17 +95,234 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetCulture("en-US")]
 		public void ShouldNotReturnPossibiliesForFarFutureDays()
 		{
-			setup();
+			setupSiteOpenHour();
+			setupTestDataForOneSkill();
 			var result = Target.FetchData(Now.LocalDateOnly().AddWeeks(3), StaffingPossiblityType.Absence).Possibilities;
 			result.Count().Should().Be.EqualTo(0);
 		}
 
-		private void setup()
+		[Test]
+		public void ShouldReturnEmptyPossibilities()
+		{
+			var possibilities = Target.FetchData(null).Possibilities.ToList();
+			Assert.AreEqual(0, possibilities.Count);
+		}
+
+		[Test]
+		public void ShouldGetPossibilitiesOnlyForSkillsInSchedule()
+		{
+			setupSiteOpenHour();
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var personSkill1 = createPersonSkill(activity1);
+			setPersonSkill(personSkill1, new double?[] { 10d, 10d }, new double?[] { 12d, 11d });
+
+			var activity2 = createActivity();
+			var personSkill2 = createPersonSkill(activity2);
+			setPersonSkill(personSkill2, new double?[] { 10d, 10d }, new double?[] { 6d, 12d });
+
+			var personPeriod = createPersonPeriod(personSkill1, personSkill2);
+			person.AddPersonPeriod(personPeriod);
+
+			createAssignment(person, activity2);
+
+			var possibilities =
+				Target.FetchData(null, StaffingPossiblityType.Overtime)
+					.Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldGetPossibilitiesWhenUsingShrinkageValidator()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill(useShrinkage: true);
+			var person = User.CurrentUser();
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new PendingAbsenceRequest(),
+				false);
+			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator =
+				new StaffingThresholdWithShrinkageValidator();
+			person.WorkflowControlSet = workflowControlSet;
+			var possibilities =
+				Target.FetchData(null, StaffingPossiblityType.Absence)
+					.Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+		}
+
+		[Test]
+		public void ShouldGetPossibilitiesWhenSomeStaffingDataIsNotAvailable()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill(new double?[] {10d}, new double?[] {11d, 11d});
+			var possibilities =
+				Target.FetchData(null, StaffingPossiblityType.Absence)
+					.Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(1, possibilities.Count);
+		}
+
+		[Test]
+		public void ShouldGetPossibilitiesWithoutIntradaySchedule()
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill();
+			ScheduleData.Clear();
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Overtime).Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
 		}
 
+
+		[Test]
+		public void ShouldNotGetPossibilitiesForNotSupportedSkill()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill();
+			SkillRepository.LoadAllSkills().First().SkillType.Description = new Description("NotSupportedSkillType");
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Overtime).Possibilities.ToList();
+			Assert.AreEqual(0, possibilities.Count);
+		}
+
+		[Test]
+		public void ShouldGetFairPossibilitiesForAbsenceWhenUnderstaffing()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill();
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Absence).Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldGetGoodPossibilitiesForAbsenceWhenNotUnderstaffing()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 11d, 11d });
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Absence).Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldGetFairAndGoodPossibilitiesForAbsence()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 8d, 11d });
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Absence).Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+				.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldGetFairPossibilitiesForAbsenceWhenOneOfSkillIsUnderstaffing()
+		{
+			setupSiteOpenHour();
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var personSkill1 = createPersonSkill(activity1);
+			setPersonSkill(personSkill1, new double?[] { 10d, 10d }, new double?[] { 8d, 11d });
+
+			var activity2 = createActivity();
+			var personSkill2 = createPersonSkill(activity2);
+			setPersonSkill(personSkill2, new double?[] { 10d, 10d }, new double?[] { 11d, 8d });
+
+			var personPeriod = createPersonPeriod(personSkill1, personSkill2);
+			person.AddPersonPeriod(personPeriod);
+
+			createAssignment(person, activity1, activity2);
+
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Absence).Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+				.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffing()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 12d, 12d });
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Overtime).Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+				.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldGetGoodPossibilitiesForOvertimeWhenNotOverstaffing()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 6d, 6d });
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Overtime).Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+			.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldGetFairAndGoodPossibilitiesForOvertime()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 7d, 6d });
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Overtime).Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+			.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldGetFairPossibilitiesForOvertimeWhenOneOfSkillIsOverstaffing()
+		{
+			setupSiteOpenHour();
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var personSkill1 = createPersonSkill(activity1);
+			setPersonSkill(personSkill1, new double?[] { 10d, 10d }, new double?[] { 12d, 11d });
+
+			var activity2 = createActivity();
+			var personSkill2 = createPersonSkill(activity2);
+			setPersonSkill(personSkill2, new double?[] { 10d, 10d }, new double?[] { 11d, 12d });
+
+			var personPeriod = createPersonPeriod(personSkill1, personSkill2);
+			person.AddPersonPeriod(personPeriod);
+
+			createAssignment(person, activity1, activity2);
+
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Overtime).Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+			.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldGetPossibilitiesForOvertimeWithDayOff()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill();
+			ScheduleData.Clear();
+			var person = User.CurrentUser();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(),
+				Now.LocalDateOnly(), new DayOffTemplate());
+			ScheduleData.Set(new List<IScheduleData> { assignment });
+			var possibilities = Target.FetchData(null, StaffingPossiblityType.Overtime).Possibilities.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
+			.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+		}
 
 		private void setupSiteOpenHour()
 		{
@@ -125,6 +356,26 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personSkill.Skill.StaffingThresholds = createStaffingThresholds();
 			setupIntradayStaffingForSkill(getAvailablePeriod(), personSkill.Skill, forecastedStaffing,
 				scheduledStaffing);
+		}
+
+		private void setPersonSkill(IPersonSkill personSkill, double?[] forecastedStaffing, double?[] scheduledStaffing)
+		{
+			addPersonSkillsToPersonPeriod(User.CurrentUser(), personSkill);
+			personSkill.Skill.StaffingThresholds = createStaffingThresholds();
+			setupIntradayStaffingForSkill(getAvailablePeriod(), personSkill.Skill, forecastedStaffing,
+				scheduledStaffing);
+		}
+
+		private PersonPeriod createPersonPeriod(params IPersonSkill[] personSkills)
+		{
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var team = TeamFactory.CreateSimpleTeam();
+			var personPeriod = new PersonPeriod(Now.LocalDateOnly(), personContract, team);
+			foreach (var personSkill in personSkills)
+			{
+				personPeriod.AddPersonSkill(personSkill);
+			}
+			return personPeriod;
 		}
 
 		private DateOnlyPeriod getAvailablePeriod()

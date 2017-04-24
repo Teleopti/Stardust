@@ -167,7 +167,6 @@
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftExchangeOfferTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecificationTest.cs" />
-    <Compile Include="AgentInfo\ScheduleStaffingPossibilityCalculatorTest.cs" />
     <Compile Include="Aop\LogInfoAspectTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestStrategyProcessorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestQueueStrategyHandlerTest.cs" />
