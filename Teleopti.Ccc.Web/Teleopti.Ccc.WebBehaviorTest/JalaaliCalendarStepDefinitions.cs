@@ -1,5 +1,6 @@
 ﻿using System;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -17,9 +18,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-            Browser.Interactions.Click(".request-list-filter>label");
-            Browser.Interactions.Click(".request-body");
 			
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#sel1", "All Requests");
+			Browser.Interactions.Click(".request-body");
+
 		}
 
 		[When (@"I open the date picker")]

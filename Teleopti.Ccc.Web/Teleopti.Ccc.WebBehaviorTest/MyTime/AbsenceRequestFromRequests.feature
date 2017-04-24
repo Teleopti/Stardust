@@ -149,7 +149,7 @@ And I have an absence with
 | EndTime   | 2014-01-04 23:59 |
 And I am viewing requests
 When I click to add a new absence request
-And I input absence request values with "Vacation" from "2014-12-28" to "2015-01-02"
+And I input absence request values with "Vacation" from "2014-12-28" to "2015-10-11"
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 

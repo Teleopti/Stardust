@@ -242,7 +242,7 @@ And I have an absence with
 And I view my week schedule for date '2014-10-03'
 When I click on the day summary for date '2014-10-03'
 And I click to add a new absence request
-And I input absence request values with "Vacation" from "2014-12-28" to "2015-01-02"
+And I input absence request values with "Vacation" from "2014-12-28" to "2015-10-22"
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 

@@ -21,14 +21,15 @@ Background:
 	| Field      | Value      |
 	| Start date | 2015-05-01 |
 	
-
+@OnlyRunIfEnabled('MyTimeWeb_MobileResponsive_43826')
 Scenario: Open Jalaali Date Picker
 	Given I am an agent
 	And the time is '2015-05-17 08:00'
 	And I am editing an existing Text Request
 	When I open the date picker
 	Then I should see a jalaali date picker with date '1394/02/27', 'اردیبهشت'
-
+	
+@OnlyRunIfEnabled('MyTimeWeb_MobileResponsive_43826')
 Scenario: Check Number of Days in Month
 	Given I am an agent
 	And the time is '2015-05-17 08:00'
@@ -36,6 +37,7 @@ Scenario: Check Number of Days in Month
 	When I open the date picker
 	Then I should see a jalaali date picker with 31 days
 	
+@OnlyRunIfEnabled('MyTimeWeb_MobileResponsive_43826')
 Scenario: Open Jalaali Time Picker
 	Given I am an agent
 	And the time is '2015-05-17 02:15'
