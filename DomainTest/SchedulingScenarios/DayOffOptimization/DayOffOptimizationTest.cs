@@ -616,5 +616,46 @@ Not really sure we need to make this green. If this is ignored in X weeks -> sim
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).DayOff()
 				.Should().Not.Be.Null();
 		}
+
+		[Test]
+		[Ignore("#43689")]
+		public void ShouldMoveDayOffToDayWithLessDemand_NightlyRestGetsBrokenDuringOptimization()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			schedulePeriod.SetDaysOff(1);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var contract = new Contract("8 hours nightly rest")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(8), TimeSpan.FromHours(100), TimeSpan.FromHours(8), TimeSpan.FromHours(4))
+			};
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 7, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				5,
+				1,
+				5,
+				5,
+				5,
+				25,
+				5)
+			);
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory,
+				new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(16, 0, 24, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
+				.SetDayOff(new DayOffTemplate());
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
+				.DayOff().Should().Be.Null();
+			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate) //tuesday
+				.DayOff().Should().Not.Be.Null();
+		}
+
 	}
 }
