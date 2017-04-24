@@ -3042,9 +3042,6 @@
   <data name="NoChartDataRowsEnabled" xml:space="preserve">
     <value>Aucun diagramme de données validé</value>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filtrer équipes</value>
-  </data>
   <data name="ManageMultisiteDistributions" xml:space="preserve">
     <value>Gérer distribution multisite</value>
   </data>
@@ -9991,9 +9988,6 @@ Ces options sont actives:
   <data name="CreateNewRole" xml:space="preserve">
     <value>Créer un nouveau rôle</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Filtre données...</value>
-  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Duplicata</value>
   </data>
@@ -10005,12 +9999,6 @@ Ces options sont actives:
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Objets désactivés</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Filtre permissions...</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Filtre rôle...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Objets activés</value>
@@ -10251,9 +10239,6 @@ Ces options sont actives:
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>agents</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Filtrer les emplacements</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Statut de chargement sur le plan de postes.</value>
@@ -10799,9 +10784,6 @@ Aidez-nous à améliorer votre expérience en envoyant un rapport d'erreur.</val
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
     <value>Fuseau horaire de la demande</value>
   </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Filtrer rôles</value>
-  </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>Dimensions invalides! S'attend à une image plus petite que 2000x4000</value>
   </data>
@@ -11222,9 +11204,6 @@ Version majeure: {4}
 Le schéma de clé d'activation produit est "{2}".
 Ces options sont activées:
 {3}</value>
-  </data>
-  <data name="FilterReports" xml:space="preserve">
-    <value>Filtrer les rapports</value>
   </data>
   <data name="AbandonedRate" xml:space="preserve">
     <value>Taux d'abandon</value>

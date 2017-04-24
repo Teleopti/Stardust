@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
     <value>Poissaolo</value>
@@ -4359,10 +4359,6 @@ tilit</value>
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>Syötä julkaisupäivämäärät kullekin tiimille</value>
     <comment>Enter Publishing Dates for each Team</comment>
-  </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Lajittele tiimit</value>
-    <comment>Filter Teams</comment>
   </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Työvuorojen julkaisupäivä</value>
@@ -11707,9 +11703,6 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
   <data name="CreateNewRole" xml:space="preserve">
     <value>Luo uusi rooli</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Lajittele tiedot...</value>
-  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Kaksinkertaista</value>
   </data>
@@ -11721,12 +11714,6 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Estetyt kohteet</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Lajittele oikeudet...</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Lajittele roolit</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Sallitut kohteet</value>
@@ -11904,9 +11891,6 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>agentit</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Lajittele sijainnit</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Lataa Istuinpaikkasuunnitelmatilannetta</value>
@@ -12776,9 +12760,6 @@ Seuraavat ominaisuudet ovat aktivoitu:
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
     <value>Näytä aika pyynnön aikavyöhykkeessä</value>
   </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Lajittele roolit</value>
-  </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>Väärä mittasuhde! Kuvan on oltava 2000x4000</value>
   </data>
@@ -13063,9 +13044,6 @@ Seuraavat ominaisuudet ovat aktivoitu:
   </data>
   <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
     <value>Useita aktiviteetteja ei voi siirtää valituilta henkilöiltä</value>
-  </data>
-  <data name="FilterReports" xml:space="preserve">
-    <value>Lajittele raportit</value>
   </data>
   <data name="AbandonedRate" xml:space="preserve">
     <value>Menetysaste</value>

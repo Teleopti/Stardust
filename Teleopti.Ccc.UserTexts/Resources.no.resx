@@ -3307,9 +3307,6 @@ Dato</value>
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>Sett inn publiseringsdato for hvert team</value>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filtrer teams</value>
-  </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Planlegg publiseringsdatoer</value>
   </data>
@@ -10070,9 +10067,6 @@ Reduser kompleksiteten til å bruke disse skiftene.</value>
   <data name="CreateNewRole" xml:space="preserve">
     <value>Opprett en ny rolle</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Datafilter...</value>
-  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Dubliser</value>
   </data>
@@ -10084,12 +10078,6 @@ Reduser kompleksiteten til å bruke disse skiftene.</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Deaktiverte elementer</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Tillatelses filter ...</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Rolle filter...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Aktiver elementer</value>
@@ -10270,9 +10258,6 @@ Reduser kompleksiteten til å bruke disse skiftene.</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>agenter</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Filtrer lokasjoner</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Laster plassplan Status</value>
@@ -10806,9 +10791,6 @@ Sjekk din internettforbindelse eller kontakt administratoren.</value>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
     <value>Vis tid i forespurt tidssone</value>
   </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Filter roller</value>
-  </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>Ugyldige mål! Forventer et bilde med mindre enn 2000x4000.</value>
   </data>
@@ -11217,9 +11199,6 @@ Hoved versjon {4}
 Produktaktiveringsnøkkel skjema er "{2}".
 Disse alternativene er aktivert:
 {3}</value>
-  </data>
-  <data name="FilterReports" xml:space="preserve">
-    <value>Filtrer rapporter</value>
   </data>
   <data name="AbandonedRate" xml:space="preserve">
     <value>Avbrutt rente</value>

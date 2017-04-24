@@ -4372,10 +4372,6 @@ Periods</comment>
     <value>Ввести даты публикации для каждой группы</value>
     <comment>Enter Publishing Dates for each Team</comment>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Фильтр групп</value>
-    <comment>Filter Teams</comment>
-  </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Даты публикации расписания работы</value>
     <comment>Schedule Publishing Dates</comment>
@@ -11628,9 +11624,6 @@ Teleopti R&amp;D</value>
   <data name="CreateNewRole" xml:space="preserve">
     <value>Создать новую роль</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Фильтр данных...</value>
-  </data>
   <data name="ManagePermissions" xml:space="preserve">
     <value>Управление правами доступа</value>
   </data>
@@ -11639,12 +11632,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Отключенные параметры</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Фильтр по правам доступа...</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Фильтр по ролям...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Включенные параметры</value>
@@ -11834,9 +11821,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>операторы</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Фильтр локаций</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Загрузка статуса плана рабочих мест</value>
@@ -12543,9 +12527,6 @@ Teleopti R&amp;D</value>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
     <value>Часовой пояс запроса</value>
   </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Фильтр ролей</value>
-  </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>Неверные размеры! Предполагается изображение меньше, чем 2000х4000.</value>
   </data>
@@ -12906,9 +12887,6 @@ Teleopti R&amp;D</value>
 Схема ключа "{2}".
 Активированы следующие опции:
 {3}</value>
-  </data>
-  <data name="FilterReports" xml:space="preserve">
-    <value>Фильтр</value>
   </data>
   <data name="AbandonedRate" xml:space="preserve">
     <value>Потерянные звонки</value>

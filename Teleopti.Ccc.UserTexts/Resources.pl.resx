@@ -3333,9 +3333,6 @@
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>Podaj daty publikacji dla każdego zespołu</value>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filtruj zespoły</value>
-  </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Daty publikacji planu</value>
   </data>
@@ -10075,9 +10072,6 @@ Te opcje są aktywowane:
   <data name="CreateNewRole" xml:space="preserve">
     <value>Tworzenie nowej roli</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Filtr danych ...</value>
-  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Duplikat</value>
   </data>
@@ -10086,12 +10080,6 @@ Te opcje są aktywowane:
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Pozycje wyłączone</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Filtr uprawnień ...</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Filtr ról ...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Pozycje włączone</value>
@@ -10221,9 +10209,6 @@ Te opcje są aktywowane:
   </data>
   <data name="SeatPlanStatusOK" xml:space="preserve">
     <value>Wszyscy wybrani agenci zostali przydzieleni do miejsc</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Filtruj Lokalizacje</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Status Ładowania Planu Stanowisk</value>
@@ -10827,9 +10812,6 @@ Pomóż nam ulepszyć swoje doświadczenie poprzez wysłanie raportu o błędzie
   </data>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
     <value>Strefa Czasowa żądania</value>
-  </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Filtr Ról</value>
   </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>Nieprawidłowe wymiary! Spodziewając obraz mniejszy niż 2000x4000.</value>

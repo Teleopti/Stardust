@@ -4062,10 +4062,6 @@ Ersätt</value>
     <value>Ange publiceringsdatum för varje team</value>
     <comment>Enter Publishing Dates for each Team</comment>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filtrera team</value>
-    <comment>Filter Teams</comment>
-  </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Schemapubliceringsdatum</value>
     <comment>Schedule Publishing Dates</comment>
@@ -12180,9 +12176,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="CreateNewRole" xml:space="preserve">
     <value>Skapa ny roll</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Datafilter...</value>
-  </data>
   <data name="ManagePermissions" xml:space="preserve">
     <value>Hantera rättigheter</value>
   </data>
@@ -12191,12 +12184,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Inaktiverade objekt</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Rättighetsfilter...</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Rollfilter...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Aktiverade objekt</value>
@@ -12443,9 +12430,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="TargetDayOffNotFulfilledMessage" xml:space="preserve">
     <value>Målet {0} fridagar har inte uppfyllts</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Filtrera lokaler</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Laddar status för sittplatsplaneringen</value>
@@ -12946,9 +12930,6 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
     <value>Förfrågans tidszon:</value>
   </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Filtrera roller</value>
-  </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>Ogiltig storlek! Bilden måste vara mindre än 2000x4000.</value>
   </data>
@@ -13414,9 +13395,6 @@ Huvudversion: {4}
 Produktaktiveringsnyckeln gäller "{2}".
 Dessa val är aktiverade:
 {3}</value>
-  </data>
-  <data name="FilterReports" xml:space="preserve">
-    <value>Filtrera rapporter</value>
   </data>
   <data name="AbandonedRate" xml:space="preserve">
     <value>Andel tappade</value>

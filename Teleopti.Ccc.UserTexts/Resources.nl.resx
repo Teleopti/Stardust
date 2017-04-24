@@ -4693,9 +4693,6 @@ Accounts</value>
   <data name="ChangedBy" xml:space="preserve">
     <value>Gewijzigd door</value>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filter Teams</value>
-  </data>
   <data name="ManageMultisiteDistributions" xml:space="preserve">
     <value>Beheer multisite distributies</value>
   </data>

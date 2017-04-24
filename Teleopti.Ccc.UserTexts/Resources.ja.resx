@@ -2854,9 +2854,6 @@
   <data name="ChangedBy" xml:space="preserve">
     <value>変更者</value>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>チームのフィルター</value>
-  </data>
   <data name="ListOfValues" xml:space="preserve">
     <value>ルールセットリスト</value>
   </data>

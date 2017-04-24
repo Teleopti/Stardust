@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FairnessOrientation" xml:space="preserve">
     <value>Orientación de Equidad</value>
@@ -3267,9 +3267,6 @@ Opcionales</value>
   </data>
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>Introducir Fechas de Publicación para cada Equipo</value>
-  </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filtro Equipos</value>
   </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Fechas de Publicación de la Planificación</value>
@@ -9569,9 +9566,6 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
   <data name="CreateNewRole" xml:space="preserve">
     <value>Crear un nuevo rol</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Filtro de datos...</value>
-  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Duplicar</value>
   </data>
@@ -9580,12 +9574,6 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
   </data>
   <data name="ManagePermissionsIntro" xml:space="preserve">
     <value>Aquí puedes definir quiénes tienen acceso a partes específicas de la aplicación</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Filtro de permisos...</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Filtro de roles...</value>
   </data>
   <data name="AdherenceCannotBeEmpty" xml:space="preserve">
     <value>Adherencia no puede estar vacía</value>
@@ -9863,9 +9851,6 @@ Detalles del error:
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>agentes</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Filtrar ubicaciones</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Cargar Status del Plan de Puestos</value>

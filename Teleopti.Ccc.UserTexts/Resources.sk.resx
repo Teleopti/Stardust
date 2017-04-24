@@ -4377,10 +4377,6 @@ Sloupce</value>
     <value>Vložit data vydání pro každý tým</value>
     <comment>Enter Publishing Dates for each Team</comment>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filtrovat týmy</value>
-    <comment>Filter Teams</comment>
-  </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Plánovat data vydání</value>
     <comment>Schedule Publishing Dates</comment>

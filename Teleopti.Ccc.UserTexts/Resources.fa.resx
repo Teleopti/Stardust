@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
     <value>مرخصی</value>
@@ -2549,9 +2549,6 @@
   </data>
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>تاریخهای نشر را برای هر تیم وارد کنید</value>
-  </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>فیلتر کردن تیم ها</value>
   </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>زمانبندی تاریخهای نشر</value>
@@ -9881,9 +9878,6 @@ Teleopti R&amp;D</value>
   <data name="CreateNewRole" xml:space="preserve">
     <value>ایجاد نقش جدید</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>فیلتر داده...</value>
-  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>تکراری</value>
   </data>
@@ -9895,12 +9889,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>موارد غیرفعال</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>فیلتر مجوزها...</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>فیلتر نقشها...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>موارد فعال</value>
@@ -10081,9 +10069,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>پاسخگو</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>فیلتر مکانها</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>در حال بارگذاری</value>
@@ -10745,9 +10730,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
     <value>منطقه زمانی درخواست کننده</value>
-  </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>فیلتر کردن نقشها</value>
   </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>اندازه تصویر معتبر نیست. اندازه باید کمتر از 2000 در 4000 باشد</value>

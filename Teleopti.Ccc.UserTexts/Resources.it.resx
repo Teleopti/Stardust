@@ -3083,9 +3083,6 @@ Teleopti R&amp;D</value>
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>Inserisci le date di pubblicazione oer ogni Team</value>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filtro Team</value>
-  </data>
   <data name="ManageMultisiteDistributions" xml:space="preserve">
     <value>Gestione distribuzione multi-sito</value>
   </data>

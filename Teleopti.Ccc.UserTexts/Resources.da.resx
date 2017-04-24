@@ -4348,10 +4348,6 @@ Konti</value>
     <value>Indtast Publiceringsdatoer for hvert Team</value>
     <comment>Enter Publishing Dates for each Team</comment>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filtrer Teams</value>
-    <comment>Filter Teams</comment>
-  </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Publiceringsdatoer for Planer</value>
     <comment>Schedule Publishing Dates</comment>

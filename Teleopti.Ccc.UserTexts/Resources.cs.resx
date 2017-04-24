@@ -4377,10 +4377,6 @@ Sloupce</value>
     <value>Vložit data vydání pro každý tým</value>
     <comment>Enter Publishing Dates for each Team</comment>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filtrovat týmy</value>
-    <comment>Filter Teams</comment>
-  </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Plánovat data vydání</value>
     <comment>Schedule Publishing Dates</comment>
@@ -11297,9 +11293,6 @@ zkrácených úvazků</value>
   <data name="CreateNewRole" xml:space="preserve">
     <value>Vytvořit novou roli</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Datový filtr...</value>
-  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Kopie</value>
   </data>
@@ -11342,17 +11335,11 @@ zkrácených úvazků</value>
   <data name="SaveToSpace" xml:space="preserve">
     <value>Uložit do</value>
   </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Filtr oprávnění...</value>
-  </data>
   <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
     <value>Uložit prognóza do jiného scénáře</value>
   </data>
   <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
     <value>Vložte podrobnosti ke kategoriím směn</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Filtr rolí...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Povolené položky</value>
@@ -11718,9 +11705,6 @@ Detaily chyby:
   </data>
   <data name="SeatPlanStatusOK" xml:space="preserve">
     <value>Všichni vybraní agenti si přidělili míst</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Filtr umístění</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Nahrávám stav plánu míst</value>
@@ -12566,9 +12550,6 @@ Zkontrolujte připojení k internetu nebo se obraťte na správce.</value>
   </data>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
     <value>Časové pásmo žádosti</value>
-  </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Filtr rolí</value>
   </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>Neplatné rozměry. Očekává se obrázek menší než 2000x4000.</value>

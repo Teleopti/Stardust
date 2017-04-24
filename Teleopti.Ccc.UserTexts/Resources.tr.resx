@@ -3231,9 +3231,6 @@
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>Her bir takım için Yayınlanma Tarihi Gir</value>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Takımları Filtrele</value>
-  </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Yayınlanma Tarihlerini Vardiyala</value>
   </data>
@@ -9818,9 +9815,6 @@ Aktif opsiyonlar: {4}</value>
   <data name="CreateNewRole" xml:space="preserve">
     <value>Yeni rol</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Veri filtreleme</value>
-  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Kopyala</value>
   </data>
@@ -9835,12 +9829,6 @@ Aktif opsiyonlar: {4}</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Devre dışı bırakılmış öğeler</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Yetki filtresi</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Rol filtresi</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Etkin öğeler</value>
@@ -10090,9 +10078,6 @@ Aktif opsiyonlar: {4}</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>temsilciler</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Konum Filtrele</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Oturma Düzeni Yükleniyor</value>
@@ -10450,9 +10435,6 @@ Aktif opsiyonlar: {4}</value>
   </data>
   <data name="TotalAcwCaret" xml:space="preserve">
     <value>Toplam Çağrı Sonrası</value>
-  </data>
-  <data name="FilterReports" xml:space="preserve">
-    <value>Rapor Filtreleme</value>
   </data>
   <data name="AbandonedRate" xml:space="preserve">
     <value>Bırakılan çağrı oranı</value>
@@ -10898,9 +10880,6 @@ Lütfen İnternet bağlantınızı kontrol edip tekrar deneyin.</value>
   </data>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
     <value>İstek zaman dilimindeki saati göster.</value>
-  </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Rol filtresi</value>
   </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>Geçersiz boyut. Resim en fazla 2000x4000 boyutunda olabilir.</value>

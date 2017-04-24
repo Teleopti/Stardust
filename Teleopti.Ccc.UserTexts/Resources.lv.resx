@@ -3310,9 +3310,6 @@ Aizvietot</value>
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>Ievadiet publicēšanas datumu katrai nodaļai</value>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filtrēt Nodaļas</value>
-  </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Grafika Publicēšanas Datumi</value>
   </data>
@@ -6930,23 +6927,11 @@ If this validation error still occurs you must verify that your password follows
   <data name="FilterOnOpenHours" xml:space="preserve">
     <value>Filtrs atvērtajām stundām</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Datu filtrs...</value>
-  </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Atspējotie priekšmeti</value>
   </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Atļauju filtrs...</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Lomu filtrs...</value>
-  </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Iespējotie priekšmeti</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Filtrēt Atrašanās Vietas</value>
   </data>
   <data name="SelectedFiltersColon" xml:space="preserve">
     <value>Atlasītie Filtri:</value>
@@ -6963,9 +6948,6 @@ If this validation error still occurs you must verify that your password follows
   <data name="createNewRuleset" xml:space="preserve">
     <value>Izveidot jaunu noteikumu kopu</value>
   </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Filtrēt Lomas</value>
-  </data>
   <data name="DayOffRules" xml:space="preserve">
     <value>Brīvdienas Noteikumi</value>
   </data>
@@ -6977,9 +6959,6 @@ If this validation error still occurs you must verify that your password follows
   </data>
   <data name="ToggleLowLightFilter" xml:space="preserve">
     <value>Pārslēgt zemās gaismas filtru</value>
-  </data>
-  <data name="FilterReports" xml:space="preserve">
-    <value>Filtrēt ziņojumus</value>
   </data>
   <data name="DateRange" xml:space="preserve">
     <value>Datumu Diapazons</value>

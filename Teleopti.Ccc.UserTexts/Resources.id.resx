@@ -1458,9 +1458,6 @@
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>Masukkan Tanggal Pengumuman untuk setiap Tim</value>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Penyaringan Tim</value>
-  </data>
   <data name="ManageMultisiteDistributions" xml:space="preserve">
     <value>Mengatur distribusi multisite</value>
   </data>

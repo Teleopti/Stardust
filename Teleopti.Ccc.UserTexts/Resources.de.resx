@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AbandonedCalls" xml:space="preserve">
     <value>abgebrochene Anrufe</value>
@@ -2270,10 +2270,6 @@ Ausnahme</value>
   <data name="Filters" xml:space="preserve">
     <value>Filter</value>
     <comment>Filters</comment>
-  </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>Filter Teams</value>
-    <comment>Filter Teams</comment>
   </data>
   <data name="FinAmpersandd" xml:space="preserve">
     <value>Fin&amp;d</value>
@@ -11640,9 +11636,6 @@ Folgende Optionen und Module sind aktiviert:
   <data name="CreateNewRole" xml:space="preserve">
     <value>Neue Rolle erstellen</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>Datenfilter</value>
-  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Verdoppeln</value>
   </data>
@@ -11654,12 +11647,6 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Deaktivierte Daten</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>Filter der Berchtigungen</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>Rollenfilter</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Aktivierte Punkte</value>
@@ -11831,9 +11818,6 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>Mitarbeiter</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>Einheitsfilter</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Der Status für den Sitzplatzplan wird geladen</value>
@@ -12272,9 +12256,6 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="ProcessWaitlist" xml:space="preserve">
     <value>Warteliste bearbeiten</value>
-  </data>
-  <data name="FilterReports" xml:space="preserve">
-    <value>Berichte filtern</value>
   </data>
   <data name="ShiftLengthExceed36Hours" xml:space="preserve">
     <value>Die Schichtlänge überschreitet 36 Stunden</value>
@@ -12758,9 +12739,6 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="PreviewTheNewRequestsModule" xml:space="preserve">
     <value>Probieren Sie das neue Anfragenmodul!</value>
-  </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Rollen filtern</value>
   </data>
   <data name="SelectACategory" xml:space="preserve">
     <value>Kategorie wählen</value>

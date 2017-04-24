@@ -1891,10 +1891,6 @@
     <value>篩選</value>
     <comment>Filters</comment>
   </data>
-  <data name="FilterTeams" xml:space="preserve">
-    <value>篩選小組</value>
-    <comment>Filter Teams</comment>
-  </data>
   <data name="FinAmpersandd" xml:space="preserve">
     <value>查找(&amp;D)</value>
     <comment>Find</comment>
@@ -11364,9 +11360,6 @@ Teleopti R&amp;D</value>
   <data name="CreateNewRole" xml:space="preserve">
     <value>創建新的角色</value>
   </data>
-  <data name="DataFilterThreeDots" xml:space="preserve">
-    <value>數據篩選器...</value>
-  </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
     <value>親，您獲得了一枚銀色徽章！您在{1:yyyy-MM-dd}的應答量超過了{0}。繼續加油哦～</value>
   </data>
@@ -11417,12 +11410,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>禁用項目</value>
-  </data>
-  <data name="PermissionsFilterThreeDots" xml:space="preserve">
-    <value>許可權篩選器...</value>
-  </data>
-  <data name="RoleFilterThreeDots" xml:space="preserve">
-    <value>角色篩選器...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>啟用項目</value>
@@ -11732,9 +11719,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>座席代表</value>
-  </data>
-  <data name="FilterLocations" xml:space="preserve">
-    <value>篩選地點</value>
   </data>
   <data name="SeatPlanReport" xml:space="preserve">
     <value>排座報表</value>
@@ -12340,9 +12324,6 @@ Teleopti R&amp;D</value>
   <data name="AddAbsenceTotalResult" xml:space="preserve">
     <value>已成功添加 {0} 個缺勤。 {1} 個缺勤無法被添加。</value>
   </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>篩選角色</value>
-  </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>無效的尺寸！要求圖像小於2000x4000。</value>
   </data>
@@ -12707,9 +12688,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="FailedMessageForUndoSchedule" xml:space="preserve">
     <value>撤銷選定座席代表的班表變更失敗</value>
-  </data>
-  <data name="FilterReports" xml:space="preserve">
-    <value>篩選報表</value>
   </data>
   <data name="FirstComeFirstServed" xml:space="preserve">
     <value>先到先得</value>
