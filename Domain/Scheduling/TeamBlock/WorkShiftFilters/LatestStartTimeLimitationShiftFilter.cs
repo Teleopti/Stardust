@@ -8,17 +8,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface ILatestStartTimeLimitationShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTime latestStart, IWorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, DateTime latestStart, IWorkShiftFinderResult finderResult);
 	}
 
 	public class LatestStartTimeLimitationShiftFilter : ILatestStartTimeLimitationShiftFilter
 	{
-        public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTime latestStart, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, DateTime latestStart, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList.Count == 0) return shiftList;
 			int cntBefore = shiftList.Count;
 
-			IList<IShiftProjectionCache> workShiftsWithinPeriod =
+			IList<ShiftProjectionCache> workShiftsWithinPeriod =
 				shiftList.Select(s => new { Period = s.MainShiftProjection.Period(), s })
 					.Where(s => s.Period.HasValue && s.Period.Value.StartDateTime <= latestStart)
 					.Select(s => s.s)

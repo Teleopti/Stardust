@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class SchedulingOptions : ISchedulingOptions
     {
 		private readonly IList<IShiftCategory> _notAllowedShiftCategories = new List<IShiftCategory>();
-		private readonly IList<IShiftProjectionCache> _notAllowedShiftProjectionCaches = new List<IShiftProjectionCache>(); 
+		private readonly IList<ShiftProjectionCache> _notAllowedShiftProjectionCaches = new List<ShiftProjectionCache>(); 
 
 		private bool _usePreferencesMustHaveOnly;
 		private bool _considerShortBreaks = true;
@@ -113,12 +113,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     		set { _mainShiftOptimizeActivitySpecification = value; }
     	}
 
-	    public void AddNotAllowedShiftProjectionCache(IShiftProjectionCache shiftProjectionCache)
+	    public void AddNotAllowedShiftProjectionCache(ShiftProjectionCache shiftProjectionCache)
 	    {
 		    _notAllowedShiftProjectionCaches.Add(shiftProjectionCache);
 	    }
 
-	    public IList<IShiftProjectionCache> NotAllowedShiftProjectionCaches
+	    public IList<ShiftProjectionCache> NotAllowedShiftProjectionCaches
 	    {
 			get { return _notAllowedShiftProjectionCaches; }
 	    }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Interfaces.Domain;
 
@@ -19,11 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			_isAnySkillOpen = isAnySkillOpen;
 		}
 
-		public virtual IShiftProjectionCache SelectShiftProjectionCache(IGroupPersonSkillAggregator groupPersonSkillAggregator, DateOnly datePointer, IList<IShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays,
+		public virtual ShiftProjectionCache SelectShiftProjectionCache(IGroupPersonSkillAggregator groupPersonSkillAggregator, DateOnly datePointer, IList<ShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays,
 			ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person)
 		{
 			var bestShiftValue = valueForShiftNotToUse;
-			IShiftProjectionCache ret = null;
+			ShiftProjectionCache ret = null;
 
 			var skillDays = allSkillDays.Where(x => x.CurrentDate == datePointer || x.CurrentDate == datePointer.AddDays(-1) || x.CurrentDate == datePointer.AddDays(1)).ToArray();
 			var hasNonMaxSeatSkills = skillDays.Any(x => !(x.Skill is MaxSeatSkill));
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			return ret;
 		}
 
-		private double thisShiftsValue(IPerson person, IEnumerable<ISkillDay> maxSeatSkillDays, IShiftProjectionCache shift, 
+		private double thisShiftsValue(IPerson person, IEnumerable<ISkillDay> maxSeatSkillDays, ShiftProjectionCache shift, 
 			bool hasNonMaxSeatSkills, IEnumerable<ISkillDay> skillDays, double bestShiftValue)
 		{
 			var thisShiftsPeak = 0d;

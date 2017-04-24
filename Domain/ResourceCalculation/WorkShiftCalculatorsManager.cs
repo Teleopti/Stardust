@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public interface IWorkShiftCalculatorsManager
 	{
 		IList<IWorkShiftCalculationResultHolder> RunCalculators(IPerson person,
-			IList<IShiftProjectionCache> shiftProjectionCaches,
+			IList<ShiftProjectionCache> shiftProjectionCaches,
 			IWorkShiftCalculatorSkillStaffPeriodData dataHolders,
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods,
 			ISchedulingOptions schedulingOptions);
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		public IList<IWorkShiftCalculationResultHolder> RunCalculators(IPerson person,
-				IList<IShiftProjectionCache> shiftProjectionCaches,
+				IList<ShiftProjectionCache> shiftProjectionCaches,
 				IWorkShiftCalculatorSkillStaffPeriodData dataHolders,
 				IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods,
 				ISchedulingOptions schedulingOptions)
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var v = new
 				{
 					shiftProjection,
-					shiftValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.WorkShiftCalculatableLayers,
+					shiftValue = _workShiftCalculator.CalculateShiftValue(((IWorkShiftCalculatableProjection)shiftProjection).WorkShiftCalculatableLayers,
 						dataHolders,
 						schedulingOptions.WorkShiftLengthHintOption,
 						schedulingOptions.UseMinimumPersons,

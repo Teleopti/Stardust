@@ -1,10 +1,11 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public interface IEqualWorkShiftValueDecider
 	{
-		IShiftProjectionCache Decide(IShiftProjectionCache cache1, IShiftProjectionCache cache2);
+		ShiftProjectionCache Decide(ShiftProjectionCache cache1, ShiftProjectionCache cache2);
 	}
 
 	public class EqualWorkShiftValueDecider : IEqualWorkShiftValueDecider
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			_trueFalseRandomizer = trueFalseRandomizer;
 		}
 
-		public IShiftProjectionCache Decide(IShiftProjectionCache cache1, IShiftProjectionCache cache2)
+		public ShiftProjectionCache Decide(ShiftProjectionCache cache1, ShiftProjectionCache cache2)
 		{
 			return _trueFalseRandomizer.Randomize() ? cache1 : cache2;
 		}

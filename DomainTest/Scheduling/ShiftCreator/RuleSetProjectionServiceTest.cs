@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var shiftCreatorService = MockRepository.GenerateMock<IShiftCreatorService>();
 			var target = new RuleSetProjectionService(shiftCreatorService);
 			var workShift = WorkShiftFactory.CreateWithLunch(new TimePeriod(9, 0, 16, 0), new TimePeriod(11, 0, 12, 0));
-			shiftCreatorService.Stub(x => x.Generate(null,null)).Return(new List<IWorkShift>(new[] { workShift }));
+			shiftCreatorService.Stub(x => x.Generate(null,null)).Return(new List<WorkShiftCollection> { new WorkShiftCollection(null) { workShift } });
 
 			var result = target.ProjectionCollection(null,null);
 
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var shiftCreatorService = MockRepository.GenerateMock<IShiftCreatorService>();
 			var target = new RuleSetProjectionService(shiftCreatorService);
 			var workShift = WorkShiftFactory.CreateWithLunch(new TimePeriod(9, 0, 16, 0), new TimePeriod(11, 0, 12, 0));
-			shiftCreatorService.Stub(x => x.Generate(null,null)).Return(new List<IWorkShift>(new[] {workShift}));
+			shiftCreatorService.Stub(x => x.Generate(null,null)).Return(new List<WorkShiftCollection>{new WorkShiftCollection(null) {workShift}});
 
 			var result = target.ProjectionCollection(null,null);
 

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -656,7 +655,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			builder.RegisterType<PersonalShiftAndMeetingFilter>().As<IPersonalShiftAndMeetingFilter>();
 			builder.RegisterType<PersonalShiftMeetingTimeChecker>().As<IPersonalShiftMeetingTimeChecker>().SingleInstance();
-			builder.RegisterType<DisallowedShiftProjectionCashesFilter>().As<IDisallowedShiftProjectionCashesFilter>().SingleInstance();
+			builder.RegisterType<DisallowedShiftProjectionCachesFilter>().As<IDisallowedShiftProjectionCachesFilter>().SingleInstance();
 
 			builder.RegisterType<OutboundSkillCreator>().As<IOutboundSkillCreator>().SingleInstance();
 			builder.RegisterType<SkillTypeProvider>().As<ISkillTypeProvider>().SingleInstance();

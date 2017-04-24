@@ -5,14 +5,14 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
-	public interface IDisallowedShiftProjectionCashesFilter
+	public interface IDisallowedShiftProjectionCachesFilter
 	{
-		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> notAllowedShiftProjectionCaches, IList<IShiftProjectionCache> shiftProjectionCaches, IWorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> notAllowedShiftProjectionCaches, IList<ShiftProjectionCache> shiftProjectionCaches, IWorkShiftFinderResult finderResult);
 	}
 
-	public class DisallowedShiftProjectionCashesFilter : IDisallowedShiftProjectionCashesFilter
+	public class DisallowedShiftProjectionCachesFilter : IDisallowedShiftProjectionCachesFilter
 	{
-		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> notAllowedShiftProjectionCaches, IList<IShiftProjectionCache> shiftProjectionCaches, IWorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> notAllowedShiftProjectionCaches, IList<ShiftProjectionCache> shiftProjectionCaches, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftProjectionCaches == null) return null;
 			if (finderResult == null) return null;

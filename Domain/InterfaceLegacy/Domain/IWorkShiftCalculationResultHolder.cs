@@ -1,4 +1,5 @@
 ﻿
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -17,6 +18,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Gets or sets the shift projection.
         /// </summary>
         /// <value>The shift projection.</value>
-        IShiftProjectionCache ShiftProjection { get; set; }
+        ShiftProjectionCache ShiftProjection { get; set; }
     }
 }

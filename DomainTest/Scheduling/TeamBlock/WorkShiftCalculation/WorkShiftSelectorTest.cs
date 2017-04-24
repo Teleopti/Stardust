@@ -16,9 +16,9 @@
 //		private MockRepository _mocks;
 //		private IWorkShiftSelector _target;
 //		private IWorkShiftValueCalculator _workShiftValueCalculator;
-//		private IList<IShiftProjectionCache> _shiftProjectionCaches;
-//		private IShiftProjectionCache _shiftProjectionCache1;
-//		private IShiftProjectionCache _shiftProjectionCache2;
+//		private IList<ShiftProjectionCache> _shiftProjectionCaches;
+//		private ShiftProjectionCache _shiftProjectionCache1;
+//		private ShiftProjectionCache _shiftProjectionCache2;
 //		private IDictionary<DateTime, ISkillIntervalData> _skillIntervalDatas;
 //		private IActivity _activity;
 //		private IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> _skillIntervalDataForActivity;
@@ -33,9 +33,9 @@
 //			_workShiftValueCalculator = _mocks.StrictMock<IWorkShiftValueCalculator>();
 //			 _equalWorkShiftValueDecider = _mocks.StrictMock<IEqualWorkShiftValueDecider>();
 //				_target = new WorkShiftSelector(_workShiftValueCalculator, _equalWorkShiftValueDecider);
-//			_shiftProjectionCache1 = _mocks.StrictMock<IShiftProjectionCache>();
-//			_shiftProjectionCache2 = _mocks.StrictMock<IShiftProjectionCache>();
-//			_shiftProjectionCaches = new List<IShiftProjectionCache> {_shiftProjectionCache1};
+//			_shiftProjectionCache1 = _mocks.StrictMock<ShiftProjectionCache>();
+//			_shiftProjectionCache2 = _mocks.StrictMock<ShiftProjectionCache>();
+//			_shiftProjectionCaches = new List<ShiftProjectionCache> {_shiftProjectionCache1};
 //			_skillIntervalDatas = new Dictionary<DateTime, ISkillIntervalData>();
 //			_activity = new Activity("hej");
 //			_skillIntervalDataForActivity = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
@@ -58,7 +58,7 @@
 //																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc )).Return(7);
 //			}
 
-//			IShiftProjectionCache result;
+//			ShiftProjectionCache result;
 
 //			using (_mocks.Playback())
 //			{
@@ -71,7 +71,7 @@
 //		[Test]
 //		public void ShouldCallEqualWorkShiftValueDeciderIfTwoShiftsHasTheSameValue()
 //		{
-//			_shiftProjectionCaches = new List<IShiftProjectionCache> { _shiftProjectionCache2, _shiftProjectionCache2 };
+//			_shiftProjectionCaches = new List<ShiftProjectionCache> { _shiftProjectionCache2, _shiftProjectionCache2 };
 
 //			using (_mocks.Record())
 //			{
@@ -87,7 +87,7 @@
 //						.Return(_shiftProjectionCache2);
 //			}
 
-//			IShiftProjectionCache result;
+//			ShiftProjectionCache result;
 
 //			using (_mocks.Playback())
 //			{
@@ -100,7 +100,7 @@
 //		[Test]
 //		public void ShouldReturnCacheWithHighestValue()
 //		{
-//			_shiftProjectionCaches = new List<IShiftProjectionCache> { _shiftProjectionCache1, _shiftProjectionCache2, _shiftProjectionCache1 };
+//			_shiftProjectionCaches = new List<ShiftProjectionCache> { _shiftProjectionCache1, _shiftProjectionCache2, _shiftProjectionCache1 };
 
 //			using (_mocks.Record())
 //			{
@@ -117,7 +117,7 @@
 //																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
 //			}
 
-//			IShiftProjectionCache result;
+//			ShiftProjectionCache result;
 
 //			using (_mocks.Playback())
 //			{
@@ -144,7 +144,7 @@
 //																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(3);
 //			}
 
-//			IShiftProjectionCache result;
+//			ShiftProjectionCache result;
 
 //			using (_mocks.Playback())
 //			{
@@ -171,7 +171,7 @@
 //																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(null);
 //			}
 
-//			IShiftProjectionCache result;
+//			ShiftProjectionCache result;
 
 //			using (_mocks.Playback())
 //			{

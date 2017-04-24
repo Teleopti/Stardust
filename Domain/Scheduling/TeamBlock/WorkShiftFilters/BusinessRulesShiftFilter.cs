@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_longestPeriodForAssignmentCalculator = longestPeriodForAssignmentCalculator;
 		}
 
-		public IList<IShiftProjectionCache> Filter(IScheduleDictionary schedules, IPerson person, IList<IShiftProjectionCache> shiftList,
+		public IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, IPerson person, IList<ShiftProjectionCache> shiftList,
 		                                           DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
 		{
 			if (person == null) return null;
@@ -44,12 +44,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			return _validDateTimePeriodShiftFilter.Filter(shiftList, returnPeriod.Value, finderResult);
 		}
 
-		private static IList<IShiftProjectionCache> filterResults(IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+		private static IList<ShiftProjectionCache> filterResults(IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
 		{
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(UserTexts.Resources.CannotFindAValidPeriodAccordingToTheBusinessRules,
 				                          shiftList.Count, 0));
-			return new List<IShiftProjectionCache>();
+			return new List<ShiftProjectionCache>();
 		}
 	}
 }

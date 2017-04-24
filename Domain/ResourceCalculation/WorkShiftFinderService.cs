@@ -100,7 +100,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
         private IWorkShiftCalculationResultHolder findHighestValueMainShift(
-            IList<IShiftProjectionCache> shiftProjectionCaches,
+<<<<<<< local
+            IList<ShiftProjectionCache> shiftProjectionCaches,
+=======
+            DateOnly dateOnly,  
+            IList<ShiftProjectionCache> shiftProjectionCaches,
+>>>>>>> other
 			IWorkShiftCalculatorSkillStaffPeriodData dataHolders, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,
@@ -183,7 +188,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
 		private IWorkShiftCalculationResultHolder findBestShift(IEffectiveRestriction effectiveRestriction,
-            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult workShiftFinderResult, IList<IShiftProjectionCache> shiftList)
+            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult workShiftFinderResult, IList<ShiftProjectionCache> shiftList)
         {
 			using (PerformanceOutput.ForOperation("Filtering shifts before calculating"))
 			{

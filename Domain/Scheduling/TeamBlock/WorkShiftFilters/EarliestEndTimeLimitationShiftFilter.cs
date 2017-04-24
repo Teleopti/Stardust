@@ -8,18 +8,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IEarliestEndTimeLimitationShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTime earliestEnd, IWorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, DateTime earliestEnd, IWorkShiftFinderResult finderResult);
 	}
 
 	public class EarliestEndTimeLimitationShiftFilter : IEarliestEndTimeLimitationShiftFilter
 	{
-        public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTime earliestEnd, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, DateTime earliestEnd, IWorkShiftFinderResult finderResult)
         {
 	        if (shiftList == null) return null;
 			if (finderResult == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
 			int cntBefore = shiftList.Count;
-	        IList<IShiftProjectionCache> workShiftsWithinPeriod =
+	        IList<ShiftProjectionCache> workShiftsWithinPeriod =
 		        shiftList.Select(s => new {Period = s.MainShiftProjection.Period(), s})
 			        .Where(s => s.Period.HasValue && s.Period.Value.EndDateTime >= earliestEnd)
 			        .Select(s => s.s)

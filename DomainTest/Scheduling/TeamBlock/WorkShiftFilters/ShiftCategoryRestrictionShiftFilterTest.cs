@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void CanFilterOnCategoryWithEmptyList()
 		{
 			var category = ShiftCategoryFactory.CreateShiftCategory("dv");
-			var ret = _target.Filter(category, new List<IShiftProjectionCache>(), _finderResult);
+			var ret = _target.Filter(category, new List<ShiftProjectionCache>(), _finderResult);
 			Assert.IsNotNull(ret);
 		}
 
@@ -69,18 +69,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var workShift2 = _mocks.StrictMock<IWorkShift>();
 			var workShift3 = _mocks.StrictMock<IWorkShift>();
 
-			var cache1 = _mocks.StrictMock<IShiftProjectionCache>();
-			var cache2 = _mocks.StrictMock<IShiftProjectionCache>();
-			var cache3 = _mocks.StrictMock<IShiftProjectionCache>();
+			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
+			var cache1 = new ShiftProjectionCache(workShift1,personalShiftMeetingTimeChecker);
+			var cache2 = new ShiftProjectionCache(workShift2,personalShiftMeetingTimeChecker);
+			var cache3 = new ShiftProjectionCache(workShift3,personalShiftMeetingTimeChecker);
 
-			IList<IShiftProjectionCache> caches = new List<IShiftProjectionCache> { cache1, cache2, cache3 };
+			IList<ShiftProjectionCache> caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
 			IWorkShiftFinderResult finderResult = new WorkShiftFinderResultForTest();
 			using (_mocks.Record())
 			{
-				Expect.Call(cache1.TheWorkShift).Return(workShift1).Repeat.AtLeastOnce();
-				Expect.Call(cache2.TheWorkShift).Return(workShift2).Repeat.AtLeastOnce();
-				Expect.Call(cache3.TheWorkShift).Return(workShift3).Repeat.AtLeastOnce();
-
 				Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
 				Expect.Call(workShift2.ShiftCategory).Return(shiftCategory2).Repeat.AtLeastOnce();
 				Expect.Call(workShift3.ShiftCategory).Return(shiftCategory2).Repeat.AtLeastOnce();
@@ -97,10 +94,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 		}
 
-		private IList<IShiftProjectionCache> getCashes()
+		private IList<ShiftProjectionCache> getCashes()
 		{
 			var tmpList = getWorkShifts();
-			var retList = new List<IShiftProjectionCache>();
+			var retList = new List<ShiftProjectionCache>();
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{

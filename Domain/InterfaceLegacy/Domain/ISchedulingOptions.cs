@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -315,8 +316,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
 		  bool UseBlock { get; set; }
 
-	    void AddNotAllowedShiftProjectionCache(IShiftProjectionCache shiftProjectionCache);
-		IList<IShiftProjectionCache> NotAllowedShiftProjectionCaches { get; }
+	    void AddNotAllowedShiftProjectionCache(ShiftProjectionCache shiftProjectionCache);
+		IList<ShiftProjectionCache> NotAllowedShiftProjectionCaches { get; }
 	    IRuleSetBag FixedShiftBag { get; set; }
 	    void ClearNotAllowedShiftProjectionCaches();
 		IMultiplicatorDefinitionSet OvertimeType { get; set; }

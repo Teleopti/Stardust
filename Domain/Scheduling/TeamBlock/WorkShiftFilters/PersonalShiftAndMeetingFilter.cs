@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IPersonalShiftAndMeetingFilter
 	{
-		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult);
 	}
 
 	public class PersonalShiftAndMeetingFilter : IPersonalShiftAndMeetingFilter
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_schedulerStateHolder = schedulerStateHolder;
 		}
 
-		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList.Count == 0)
 				return shiftList;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			var meetings = schedulePart.PersonMeetingCollection();
 			var personalAssignment = schedulePart.PersonAssignment();
 			int cntBefore = shiftList.Count;
-			IList<IShiftProjectionCache> workShiftsWithinPeriod =
+			IList<ShiftProjectionCache> workShiftsWithinPeriod =
 				shiftList.Select(s => new {s, Period = s.MainShiftProjection.Period()})
 					.Where(
 						s =>

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -29,7 +31,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		private DateOnlyPeriod _blockPeriod;
 		private TeamBlockInfo _teamBlockInfo;
 		private SchedulingOptions _schedulingOptions;
-		private IShiftProjectionCache _shift;
+		private ShiftProjectionCache _shift;
+		private WorkShift _workShift;
 
 		[SetUp]
 		public void Setup()
@@ -47,12 +50,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro1, _scheduleMatrixPro2 };
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
 			ITeamInfo teamInfo = new TeamInfo(_group, groupMatrixes);
-			_blockPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
+			_blockPeriod = _dateOnly.ToDateOnlyPeriod();
 			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(_blockPeriod));
 			_schedulingOptions = new SchedulingOptions();
 			_schedulingOptions.TeamSameShiftCategory = false;
 			_schedulingOptions.BlockSameShiftCategory = false;
-			_shift = _mocks.StrictMock<IShiftProjectionCache>();
+			_workShift = new WorkShift(new ShiftCategory("Test"));
+			_shift = new ShiftProjectionCache(_workShift, new PersonalShiftMeetingTimeChecker());
+			_shift.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly,TimeZoneInfo.Utc));
 		}
 
 
@@ -217,14 +222,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var expectedResult = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(10)),
 										 new EndTimeLimitation(TimeSpan.FromHours(16), TimeSpan.FromHours(16)),
 										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			var shiftCat = ShiftCategoryFactory.CreateShiftCategory("cat");
-			expectedResult.ShiftCategory = shiftCat;
-			var workShift = _mocks.StrictMock<IWorkShift>();
+			expectedResult.ShiftCategory = _workShift.ShiftCategory;
 			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_schedulingOptions.UseTeam = true;
 			_schedulingOptions.TeamSameStartTime = true;
 			_schedulingOptions.TeamSameEndTime = true;
 			_schedulingOptions.TeamSameShiftCategory = true;
+
+			_workShift.LayerCollection.Add(new WorkShiftActivityLayer(new Activity("Phone"),
+				_dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc)
+					.ChangeStartTime(TimeSpan.FromHours(10))
+					.ChangeEndTime(TimeSpan.FromHours(-8))));
 			
 			using (_mocks.Record())
 			{
@@ -233,12 +241,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 					  .Return(effectiveRestriction);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();
-				
-				Expect.Call(_shift.WorkShiftStartTime).Return(TimeSpan.FromHours(10));
-				Expect.Call(_shift.WorkShiftEndTime).Return(TimeSpan.FromHours(16));
-				Expect.Call(_shift.TheWorkShift).Return(workShift);
-				Expect.Call(workShift.ShiftCategory).Return(shiftCat);
-				
 			}
 
 			using (_mocks.Playback())

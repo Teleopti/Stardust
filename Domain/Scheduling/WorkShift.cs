@@ -10,20 +10,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class WorkShift : IWorkShift
 	{
-		private readonly IShiftCategory _shiftCategory;
-        private IVisualLayerCollection _visualLayerCollection;
+		private IVisualLayerCollection _visualLayerCollection;
 		private IList<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
 
         public WorkShift(IShiftCategory category)
-        {
-            InParameter.NotNull(nameof(category), category);
-            _shiftCategory = category;
+		{
+			InParameter.NotNull(nameof(category), category);
+			ShiftCategory = category;
+			Activities = new Guid[0];
         }
-
-        protected WorkShift() 
-        {
-        }
-
+		
 		public virtual ILayerCollection<IActivity> LayerCollection => new LayerCollection<IActivity>(this, _layerCollection);
 
 	    public virtual IProjectionService ProjectionService()
@@ -63,9 +59,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    public static DateTime BaseDate { get; } = DateTime.SpecifyKind(new DateTime(1800, 1, 1), DateTimeKind.Utc);
 		public static DateOnly BaseDateOnly { get; } = new DateOnly(BaseDate);
 
-		public IShiftCategory ShiftCategory => _shiftCategory;
+		public Guid[] Activities { get; private set; }
 
-	    public TimePeriod? ToTimePeriod()
+		public IShiftCategory ShiftCategory { get; }
+
+		public TimePeriod? ToTimePeriod()
        {
            var period = Projection.Period();
 
@@ -81,10 +79,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             if (!(layer is WorkShiftActivityLayer))
                 throw new ArgumentException("Only WorkShiftActivityLayers can be added to a WorkShift");
-            _visualLayerCollection = null;
+	        _visualLayerCollection = null;
+
+	        if (layer.Payload.RequiresSkill)
+	        {
+		        var activityId = layer.Payload.Id.GetValueOrDefault();
+		        if (Activities.IndexOf(activityId) == -1)
+		        {
+			        Activities = Activities.Append(activityId).ToArray();
+		        }
+	        }
         }
 
-        public IVisualLayerCollection Projection => _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection());
+		public IVisualLayerCollection Projection => _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection());
 
 	    public IEditableShift ToEditorShift(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, TimeZoneInfo localTimeZone)
         {

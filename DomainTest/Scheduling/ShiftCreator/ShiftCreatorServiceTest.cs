@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
@@ -40,11 +41,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
             WorkShift ws1 = new WorkShift(new ShiftCategory("sdf"));
             WorkShift ws2 = new WorkShift(new ShiftCategory("sdf2"));
-            IList<IWorkShift> templateGen1Return = new List<IWorkShift>();
-            templateGen1Return.Add(ws1);
-            IList<IWorkShift> templateGen2Return = new List<IWorkShift>();
-            templateGen2Return.Add(ws2);
-			var callback = new WorkShiftAddStopperCallback();
+	        var templateGen1Return = new WorkShiftCollection(null) {ws1};
+	        var templateGen2Return = new WorkShiftCollection(null) {ws2};
+	        var callback = new WorkShiftAddStopperCallback();
             using(mocks.Record())
             {
                 Expect.Call(ruleSet.TemplateGenerator)
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             }
             using(mocks.Playback())
             {     
-                IList<IWorkShift> ret = target.Generate(ruleSet, callback);
+                var ret = target.Generate(ruleSet, callback).SelectMany(x => x).ToList();
                 Assert.AreEqual(2, ret.Count);
                 Assert.IsTrue(ret.Contains(ws1));
                 Assert.IsTrue(ret.Contains(ws2));

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IValidDateTimePeriodShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult);
 	}
 
 	public class ValidDateTimePeriodShiftFilter : IValidDateTimePeriodShiftFilter
@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_userCulture = userCulture;
 		}
 
-		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
 			if (finderResult == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
 			var cntBefore = shiftList.Count;
-			IList<IShiftProjectionCache> workShiftsWithinPeriod =
+			IList<ShiftProjectionCache> workShiftsWithinPeriod =
 				shiftList.Select(s => new {s, OuterPeriod = s.TheMainShift.LayerCollection.OuterPeriod()})
 					.Where(s => s.OuterPeriod.HasValue && validPeriod.Contains(s.OuterPeriod.Value))
 					.Select(s => s.s)

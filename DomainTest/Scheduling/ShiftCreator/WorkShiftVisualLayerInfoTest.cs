@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
     [TestFixture]
     public class WorkShiftVisualLayerInfoTest
     {
-        private IWorkShiftVisualLayerInfo _target;
+        private WorkShiftVisualLayerInfo _target;
         private IWorkShift _workShift;
         private IVisualLayerCollection _layerCollection;
         private MockRepository _mocks;

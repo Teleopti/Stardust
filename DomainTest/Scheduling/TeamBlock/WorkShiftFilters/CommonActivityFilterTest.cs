@@ -55,14 +55,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var result = _target.Filter(null, _schedulingOptions, restriction);
 			Assert.IsNull(result);
 
-			result = _target.Filter(new List<IShiftProjectionCache>(), _schedulingOptions, restriction);
+			result = _target.Filter(new List<ShiftProjectionCache>(), _schedulingOptions, restriction);
 			Assert.That(result.Count, Is.EqualTo(0));
 
-			result = _target.Filter(new List<IShiftProjectionCache>(), _schedulingOptions, null);
+			result = _target.Filter(new List<ShiftProjectionCache>(), _schedulingOptions, null);
 			Assert.That(result.Count, Is.EqualTo(0));
 
 			_schedulingOptions.TeamSameActivity = true;
-			result = _target.Filter(new List<IShiftProjectionCache> { shift }, _schedulingOptions, restriction);
+			result = _target.Filter(new List<ShiftProjectionCache> { shift }, _schedulingOptions, restriction);
 			Assert.That(result.Count, Is.EqualTo(1));
 		}
 
@@ -100,10 +100,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				};
 		}
 
-		private IList<IShiftProjectionCache> getCashes()
+		private IList<ShiftProjectionCache> getCashes()
 		{
 			var tmpList = getWorkShifts();
-			var retList = new List<IShiftProjectionCache>();
+			var retList = new List<ShiftProjectionCache>();
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{

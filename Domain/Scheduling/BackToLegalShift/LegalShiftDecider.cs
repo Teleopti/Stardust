@@ -1,11 +1,12 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 {
 	public interface ILegalShiftDecider
 	{
-		bool IsLegalShift(IRuleSetBag rulesetBag, IShiftProjectionCache currentShiftProjectionCache, IScheduleDay scheduleDay);
+		bool IsLegalShift(IRuleSetBag rulesetBag, ShiftProjectionCache currentShiftProjectionCache, IScheduleDay scheduleDay);
 	}
 
 	public class LegalShiftDecider : ILegalShiftDecider
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			_scheduleDayEquator = scheduleDayEquator;
 		}
 
-		public bool IsLegalShift(IRuleSetBag rulesetBag, IShiftProjectionCache currentShiftProjectionCache, IScheduleDay scheduleDay)
+		public bool IsLegalShift(IRuleSetBag rulesetBag, ShiftProjectionCache currentShiftProjectionCache, IScheduleDay scheduleDay)
 		{
 			var personAssignment = scheduleDay.PersonAssignment(true);
 			foreach (var personalShiftLayer in personAssignment.PersonalActivities())

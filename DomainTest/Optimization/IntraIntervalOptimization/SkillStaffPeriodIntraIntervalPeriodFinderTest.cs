@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.DomainTest.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -14,53 +17,36 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 	[TestFixture]
 	public class SkillStaffPeriodIntraIntervalPeriodFinderTest
 	{
-		private SkillStaffPeriodIntraIntervalPeriodFinder _target;
-		private DateTimePeriod _skillStaffPeriod;
-		private DateTimePeriod _activityPeriod;
-		private DateTime _start;
-		private DateTime _end;
-		private MockRepository _mock;
-		private IShiftProjectionCache _shiftProjectionCache;
-		private ISkill _skill;
-		private IVisualLayerCollection _visualLayerCollection;
-		private IPerson _person;
-		private IVisualLayer _visualLayer1;
-		private IVisualLayer _visualLayer2;
-		private IActivity _activity;
-
-		[SetUp]
-		public void SetUp()
-		{
-			_target = new SkillStaffPeriodIntraIntervalPeriodFinder();
-			_start = new DateTime(2014, 1, 1, 10, 0, 0,DateTimeKind.Utc);
-			_end = new DateTime(2014, 1, 1, 10, 30, 0, DateTimeKind.Utc);
-			_skillStaffPeriod = new DateTimePeriod(_start, _end);
-			_activityPeriod = new DateTimePeriod(_start.AddMinutes(10), _end.AddMinutes(10));
-			_mock = new MockRepository();
-			_shiftProjectionCache = _mock.StrictMock<IShiftProjectionCache>();
-			_activity = ActivityFactory.CreateActivity("activity");
-			_skill = SkillFactory.CreateSkill("skill");
-			_skill.Activity = _activity;
-			_person = PersonFactory.CreatePerson("person");
-			_visualLayer1 = new VisualLayer(_activity, _activityPeriod,_activity,_person);
-			_visualLayer2 = new VisualLayer(_activity, _activityPeriod.MovePeriod(TimeSpan.FromHours(1)), _activity, _person);
-			_visualLayerCollection = new VisualLayerCollection(_person, new List<IVisualLayer> {_visualLayer1, _visualLayer2}, new ProjectionPayloadMerger());
-		}
-
 		[Test]
 		public void ShouldFind()
 		{
-			using (_mock.Record())
-			{
-				Expect.Call(_shiftProjectionCache.MainShiftProjection).Return(_visualLayerCollection);
-			}
+			var target = new SkillStaffPeriodIntraIntervalPeriodFinder();
+			var start = new DateTime(2014, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2014, 1, 1, 10, 30, 0, DateTimeKind.Utc);
+			var skillStaffPeriod = new DateTimePeriod(start, end);
+			var activityPeriod = new DateTimePeriod(start.AddMinutes(10), end.AddMinutes(10));
+			var workShift = MockRepository.GenerateMock<IWorkShift>();
+			var editorShift = MockRepository.GenerateMock<IEditableShift>();
+			var projectionService = MockRepository.GenerateMock<IProjectionService>();
+			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
+			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2014,1,1), TimeZoneInfo.Utc);
+			shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+			var activity = ActivityFactory.CreateActivity("activity");
+			var skill = SkillFactory.CreateSkill("skill");
+			skill.Activity = activity;
+			var person = PersonFactory.CreatePerson("person");
+			var visualLayer1 = new VisualLayer(activity, activityPeriod, activity, person);
+			var visualLayer2 = new VisualLayer(activity, activityPeriod.MovePeriod(TimeSpan.FromHours(1)), activity, person);
+			var visualLayerCollection = new VisualLayerCollection(person, new List<IVisualLayer> {visualLayer1, visualLayer2},
+				new ProjectionPayloadMerger());
 
-			using (_mock.Playback())
-			{
-				var result = _target.Find(_skillStaffPeriod, _shiftProjectionCache, _skill);
-				Assert.AreEqual(1, result.Count);
-				Assert.AreEqual(_activityPeriod, result[0]);
-			}	
+			workShift.Stub(x => x.ToEditorShift(dateOnlyAsDateTimePeriod,TimeZoneInfo.Utc)).Return(editorShift);
+			editorShift.Stub(x => x.ProjectionService()).Return(projectionService);
+			projectionService.Stub(x => x.CreateProjection()).Return(visualLayerCollection);
+
+			var result = target.Find(skillStaffPeriod, shiftProjectionCache, skill);
+			Assert.AreEqual(1, result.Count);
+			Assert.AreEqual(activityPeriod, result[0]);
 		}
 	}
 }

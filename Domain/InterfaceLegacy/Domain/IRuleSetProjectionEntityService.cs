@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -21,6 +22,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    /// Created by: rogerkr
 	    /// Created date: 2010-02-15
 	    /// </remarks>
-	    IEnumerable<IWorkShiftVisualLayerInfo> ProjectionCollection(IWorkShiftRuleSet ruleSet, IWorkShiftAddCallback callback);
+	    IEnumerable<WorkShiftVisualLayerInfo> ProjectionCollection(IWorkShiftRuleSet ruleSet, IWorkShiftAddCallback callback);
     }
 }

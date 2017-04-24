@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.DomainTest.ResourceCalculation;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void CanFilterOnNotAllowedCategoriesWithEmptyList()
 		{
 			IShiftCategory shiftCategory1 = new ShiftCategory("allowed");
-			var ret = _target.Filter(new List<IShiftCategory> { shiftCategory1 }, new List<IShiftProjectionCache>(), new WorkShiftFinderResultForTest());
+			var ret = _target.Filter(new List<IShiftCategory> { shiftCategory1 }, new List<ShiftProjectionCache>(), new WorkShiftFinderResultForTest());
 			Assert.IsNotNull(ret);
 		}
 
@@ -40,23 +41,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var workShift2 = _mocks.StrictMock<IWorkShift>();
 			var workShift3 = _mocks.StrictMock<IWorkShift>();
 
-			var cache1 = _mocks.StrictMock<IShiftProjectionCache>();
-			var cache2 = _mocks.StrictMock<IShiftProjectionCache>();
-			var cache3 = _mocks.StrictMock<IShiftProjectionCache>();
+			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
+			var cache1 = new ShiftProjectionCache(workShift1,personalShiftMeetingTimeChecker);
+			var cache2 = new ShiftProjectionCache(workShift2, personalShiftMeetingTimeChecker);
+			var cache3 = new ShiftProjectionCache(workShift3, personalShiftMeetingTimeChecker);
 
-			IList<IShiftProjectionCache> caches = new List<IShiftProjectionCache> { cache1, cache2, cache3 };
+			IList<ShiftProjectionCache> caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
 			IList<IShiftCategory> categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
 			IWorkShiftFinderResult finderResult = new WorkShiftFinderResultForTest();
 			using (_mocks.Record())
 			{
-				Expect.Call(cache1.TheWorkShift).Return(workShift1).Repeat.AtLeastOnce();
-				Expect.Call(cache2.TheWorkShift).Return(workShift2).Repeat.AtLeastOnce();
-				Expect.Call(cache3.TheWorkShift).Return(workShift3).Repeat.AtLeastOnce();
-
 				Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
 				Expect.Call(workShift2.ShiftCategory).Return(shiftCategory2).Repeat.AtLeastOnce();
 				Expect.Call(workShift3.ShiftCategory).Return(shiftCategory3).Repeat.AtLeastOnce();
-
 			}
 
 			using (_mocks.Playback())
@@ -77,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var result = _target.Filter(new List<IShiftCategory>(), null, finderResult);
 			Assert.IsNull(result);
 			
-			result = _target.Filter(new List<IShiftCategory>(), new List<IShiftProjectionCache>(), null);
+			result = _target.Filter(new List<IShiftCategory>(), new List<ShiftProjectionCache>(), null);
 			Assert.IsNull(result);
 		}
 	}

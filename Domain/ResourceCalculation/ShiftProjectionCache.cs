@@ -7,24 +7,23 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ShiftProjectionCache : IShiftProjectionCache
-    {
-        private Lazy<IEditableShift> _mainShift;
+	public class ShiftProjectionCache : IWorkShiftCalculatableProjection
+	{
+		private Lazy<IEditableShift> _mainShift;
         private readonly IWorkShift _workShift;
 	    private Lazy<IVisualLayerCollection> _mainshiftProjection;
     	private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 	    private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
 	    private readonly Lazy<IVisualLayerCollection> _workShiftProjection;
-
-	    protected ShiftProjectionCache()
-        { }
-
-        public ShiftProjectionCache(IWorkShift workShift, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
-        { 
-            _workShift = workShift;
+		
+        public ShiftProjectionCache(IWorkShift workShift, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker) : this()
+        {
+	        _workShift = workShift;
 	        _workShiftProjection = new Lazy<IVisualLayerCollection>(()=>_workShift.ProjectionService().CreateProjection());
         	_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
         }
+
+		protected ShiftProjectionCache() { }
 
         public void SetDate(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
         {
@@ -38,8 +37,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IEditableShift TheMainShift => _mainShift.Value;
 
 	    public IWorkShift TheWorkShift => _workShift;
-
-	    public TimeSpan WorkShiftProjectionContractTime => _workShiftProjection.Value.ContractTime();
+		
+		public TimeSpan WorkShiftProjectionContractTime => _workShiftProjection.Value.ContractTime();
 
 	    public TimeSpan WorkShiftProjectionWorkTime => _workShiftProjection.Value.WorkTime();
 
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    public IVisualLayerCollection MainShiftProjection => _mainshiftProjection.Value;
 
-	    IEnumerable<IWorkShiftCalculatableLayer> IWorkShiftCalculatableProjection.WorkShiftCalculatableLayers => new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection);
+	    public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection);
 
 	    public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, IPersonAssignment personAssignment)
         {

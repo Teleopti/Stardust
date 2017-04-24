@@ -12,16 +12,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _shiftCreatorService = shiftCreatorService;
         }
 
-	    public IEnumerable<IWorkShiftVisualLayerInfo> ProjectionCollection(IWorkShiftRuleSet ruleSet, IWorkShiftAddCallback callback)
+	    public IEnumerable<WorkShiftVisualLayerInfo> ProjectionCollection(IWorkShiftRuleSet ruleSet, IWorkShiftAddCallback callback)
 	    {
-			var retList = new List<IWorkShiftVisualLayerInfo>();
+			var retList = new List<WorkShiftVisualLayerInfo>();
 
 			var workShifts = _shiftCreatorService.Generate(ruleSet,callback);
 			foreach (var workShift in workShifts)
 			{
-				if (callback != null && callback.IsCanceled)
-					break;
-				retList.Add(new WorkShiftVisualLayerInfo(workShift, workShift.Projection));
+				foreach (var w in workShift)
+				{
+					if (callback != null && callback.IsCanceled)
+						break;
+					retList.Add(new WorkShiftVisualLayerInfo(w, w.Projection));
+				}
 			}
 
 			return retList;

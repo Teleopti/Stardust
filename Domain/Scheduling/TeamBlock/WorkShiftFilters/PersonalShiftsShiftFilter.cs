@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IPersonalShiftsShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IPerson person, IList<IShiftProjectionCache> shiftList,IWorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IPerson person, IList<ShiftProjectionCache> shiftList,IWorkShiftFinderResult finderResult);
 	}
 	
 	public class PersonalShiftsShiftFilter : IPersonalShiftsShiftFilter
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 		}
 
-		public IList<IShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IPerson person, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IPerson person, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
 			if (shiftList.Count == 0) return shiftList;

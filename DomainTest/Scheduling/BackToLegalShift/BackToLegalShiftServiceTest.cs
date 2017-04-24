@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 		private ITeamInfo _teamInfo;
 		private IPerson _person;
 		private IBlockInfo _blockInfo;
-		private IShiftProjectionCache _shiftProjectionCache;
+		private ShiftProjectionCache _shiftProjectionCache;
 		private IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
 		private IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private IScheduleMatrixPro _scheduleMatrixPro;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			_person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly());
 			_person.Period(_dateOnly).RuleSetBag = new RuleSetBag();
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly));
-			_shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
+			_shiftProjectionCache = _mocks.StrictMock<ShiftProjectionCache>();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();

@@ -5,6 +5,8 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 {
@@ -12,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 	public class ShiftLengthDeciderTest
 	{
 		private IShiftLengthDecider _target;
-		private MockRepository _mocks;
 		private IDesiredShiftLengthCalculator _desiredShiftLengthCalculator;
 		private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private IScheduleMatrixPro _matrix;
@@ -21,99 +22,101 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_desiredShiftLengthCalculator = _mocks.StrictMock<IDesiredShiftLengthCalculator>();
+			_desiredShiftLengthCalculator = MockRepository.GenerateMock<IDesiredShiftLengthCalculator>();
 			_target = new ShiftLengthDecider(_desiredShiftLengthCalculator);
-			_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
-			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
+			_workShiftMinMaxCalculator = MockRepository.GenerateMock<IWorkShiftMinMaxCalculator>();
+			_matrix = MockRepository.GenerateMock<IScheduleMatrixPro>();
 			_schedulingOptions = new SchedulingOptions();
 		}
 
 		[Test]
 		public void ShouldNotFilterListIfNotUsingAverageShiftLengthAndNotUsingTeamBlockSameShift()
 		{
-			IShiftProjectionCache c1 = _mocks.StrictMock<IShiftProjectionCache>();
-			IShiftProjectionCache c2 = _mocks.StrictMock<IShiftProjectionCache>();
-			IShiftProjectionCache c3 = _mocks.StrictMock<IShiftProjectionCache>();
-			IList<IShiftProjectionCache> shiftList = new List<IShiftProjectionCache> { c1, c2, c3 };
+			var workShift = new WorkShift(new ShiftCategory("test"));
+			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
+			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c2 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+
+			IList<ShiftProjectionCache> shiftList = new List<ShiftProjectionCache> { c1, c2, c3 };
 			_schedulingOptions.UseAverageShiftLengths = false;
 
-			IList<IShiftProjectionCache> result;
-			result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
+			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
 			Assert.AreEqual(3, result.Count);
 		}
 
 		[Test]
 		public void ShouldNotFilterListIfNotWorkShiftLengthHintOptionAverageWorkTimeAndNotUsingTeamBlockSameShift()
 		{
-			IShiftProjectionCache c1 = _mocks.StrictMock<IShiftProjectionCache>();
-			IShiftProjectionCache c2 = _mocks.StrictMock<IShiftProjectionCache>();
-			IShiftProjectionCache c3 = _mocks.StrictMock<IShiftProjectionCache>();
-			IList<IShiftProjectionCache> shiftList = new List<IShiftProjectionCache> { c1, c2, c3 };
+			var workShift = new WorkShift(new ShiftCategory("test"));
+			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
+			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c2 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			IList<ShiftProjectionCache> shiftList = new List<ShiftProjectionCache> { c1, c2, c3 };
 			_schedulingOptions.UseAverageShiftLengths = false;
 
-			IList<IShiftProjectionCache> result;
-			result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
+			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
 			Assert.AreEqual(3, result.Count);
 		}
 
 		[Test]
 		public void ShouldReturnFilteredListAccordingToNearestShiftLength1()
 		{
+			var shiftCategory = new ShiftCategory("test");
+			var activity = new Activity("Phone") {InContractTime = true};
 
-			IShiftProjectionCache c1 = _mocks.StrictMock<IShiftProjectionCache>();
-			IShiftProjectionCache c2 = _mocks.StrictMock<IShiftProjectionCache>();
-			IShiftProjectionCache c3 = _mocks.StrictMock<IShiftProjectionCache>();
-			IList<IShiftProjectionCache> shiftList = new List<IShiftProjectionCache> {c1, c2, c3};
+			var workShift = new WorkShift(shiftCategory);
+			workShift.LayerCollection.Add(new WorkShiftActivityLayer(activity,
+				new DateTimePeriod(WorkShift.BaseDate.AddHours(8), WorkShift.BaseDate.AddHours(15.5))));
+
+			var longWorkShift = new WorkShift(shiftCategory);
+			longWorkShift.LayerCollection.Add(new WorkShiftActivityLayer(activity,
+				new DateTimePeriod(WorkShift.BaseDate.AddHours(8), WorkShift.BaseDate.AddHours(15.75))));
+
+			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
+
+			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c2 = new ShiftProjectionCache(longWorkShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			IList<ShiftProjectionCache> shiftList = new List<ShiftProjectionCache> {c1, c2, c3};
 			_schedulingOptions.UseAverageShiftLengths = false;
 			//should filter becouse we are using teamblock and same shift
 			_schedulingOptions.UseBlock = true;
 			_schedulingOptions.BlockSameShift = true;
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_desiredShiftLengthCalculator.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(
-					new TimeSpan(7, 36, 0));
-				Expect.Call(c1.WorkShiftProjectionContractTime).Return(TimeSpan.FromHours(7.5)).Repeat.AtLeastOnce();
-				Expect.Call(c2.WorkShiftProjectionContractTime).Return(TimeSpan.FromHours(7.75)).Repeat.AtLeastOnce();
-				Expect.Call(c3.WorkShiftProjectionContractTime).Return(TimeSpan.FromHours(7.5)).Repeat.AtLeastOnce();
-			}
-
-			IList<IShiftProjectionCache> result;
-
-			using (_mocks.Playback())
-			{
-				result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
-			}
+			_desiredShiftLengthCalculator.Stub(x => x.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions))
+				.Return(new TimeSpan(7, 36, 0));
 			
+			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
 			Assert.AreEqual(2, result.Count);
 		}
 
 		[Test]
 		public void ShouldReturnFilteredListAccordingToNearestShiftLength2()
 		{
+			var shiftCategory = new ShiftCategory("test");
+			var activity = new Activity("Phone") { InContractTime = true };
 
-			IShiftProjectionCache c1 = _mocks.StrictMock<IShiftProjectionCache>();
-			IShiftProjectionCache c2 = _mocks.StrictMock<IShiftProjectionCache>();
-			IShiftProjectionCache c3 = _mocks.StrictMock<IShiftProjectionCache>();
-			IList<IShiftProjectionCache> shiftList = new List<IShiftProjectionCache> { c1, c2, c3 };
+			var workShift = new WorkShift(shiftCategory);
+			workShift.LayerCollection.Add(new WorkShiftActivityLayer(activity,
+				new DateTimePeriod(WorkShift.BaseDate.AddHours(8), WorkShift.BaseDate.AddHours(15.5))));
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_desiredShiftLengthCalculator.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(
-					new TimeSpan(8, 0, 0));
-				Expect.Call(c1.WorkShiftProjectionContractTime).Return(TimeSpan.FromHours(7.5)).Repeat.AtLeastOnce();
-				Expect.Call(c2.WorkShiftProjectionContractTime).Return(TimeSpan.FromHours(7.75)).Repeat.AtLeastOnce();
-				Expect.Call(c3.WorkShiftProjectionContractTime).Return(TimeSpan.FromHours(7.5)).Repeat.AtLeastOnce();
-			}
+			var longWorkShift = new WorkShift(shiftCategory);
+			longWorkShift.LayerCollection.Add(new WorkShiftActivityLayer(activity,
+				new DateTimePeriod(WorkShift.BaseDate.AddHours(8), WorkShift.BaseDate.AddHours(15.75))));
 
-			IList<IShiftProjectionCache> result;
+			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
 
-			using (_mocks.Playback())
-			{
-				result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
-			}
+			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c2 = new ShiftProjectionCache(longWorkShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			IList<ShiftProjectionCache> shiftList = new List<ShiftProjectionCache> { c1, c2, c3 };
 
+			_desiredShiftLengthCalculator.Stub(x => x.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(new TimeSpan(8, 0, 0));
+		
+			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
+			
 			Assert.AreEqual(1, result.Count);
 			Assert.AreSame(c2, result[0]);
 		}

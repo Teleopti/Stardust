@@ -1,12 +1,13 @@
 ﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IFirstShiftInTeamBlockFinder
 	{
-		IShiftProjectionCache FindFirst(ITeamBlockInfo teamBlockInfo, IPerson person, DateOnly dateForProjection, IScheduleDictionary scheduleDictionary);
+		ShiftProjectionCache FindFirst(ITeamBlockInfo teamBlockInfo, IPerson person, DateOnly dateForProjection, IScheduleDictionary scheduleDictionary);
 	}
 
 	public class FirstShiftInTeamBlockFinder : IFirstShiftInTeamBlockFinder
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
 		}
 
-		public IShiftProjectionCache FindFirst(ITeamBlockInfo teamBlockInfo, IPerson person, DateOnly dateForProjection, IScheduleDictionary scheduleDictionary)
+		public ShiftProjectionCache FindFirst(ITeamBlockInfo teamBlockInfo, IPerson person, DateOnly dateForProjection, IScheduleDictionary scheduleDictionary)
 		{
 			foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 			{
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var scheduleDay = scheduleDictionary[groupMember].ScheduledDay(dateOnly);
 					if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
 					{
-						IShiftProjectionCache foundRoleModel =
+						ShiftProjectionCache foundRoleModel =
 							_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(scheduleDay.GetEditorShift(),
 								new DateOnlyAsDateTimePeriod(dateForProjection, person.PermissionInformation.DefaultTimeZone()));
 						return foundRoleModel;

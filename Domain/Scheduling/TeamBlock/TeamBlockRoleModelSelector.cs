@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_firstShiftInTeamBlockFinder = firstShiftInTeamBlockFinder;
 		}
 
-		public IShiftProjectionCache Select(IScheduleDictionary schedules,
+		public ShiftProjectionCache Select(IScheduleDictionary schedules,
 																	IEnumerable<ISkillDay> allSkillDays, 
 																	IWorkShiftSelector workShiftSelector, 
 																	ITeamBlockInfo teamBlockInfo, 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (effectiveRestriction == null)
 				return null;
 
-			IShiftProjectionCache foundShiftProjectionCache = _firstShiftInTeamBlockFinder.FindFirst(teamBlockInfo, person, datePointer, schedules);
+			ShiftProjectionCache foundShiftProjectionCache = _firstShiftInTeamBlockFinder.FindFirst(teamBlockInfo, person, datePointer, schedules);
 			if (foundShiftProjectionCache != null &&
 			    !schedulingOptions.NotAllowedShiftCategories.Contains(foundShiftProjectionCache.TheMainShift.ShiftCategory))
 				return foundShiftProjectionCache;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return roleModel;
 		}
 
-		private IShiftProjectionCache filterAndSelect(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions, IGroupPersonSkillAggregator groupPersonSkillAggregator)
+		private ShiftProjectionCache filterAndSelect(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlock.Check(allSkillDays, teamBlockInfo, groupPersonSkillAggregator);
 			var shifts = _workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, schedules, datePointer, teamBlockInfo, effectiveRestriction,

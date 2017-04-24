@@ -1,6 +1,8 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
@@ -8,11 +10,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	[TestFixture]
 	public class EqualWorkShiftValueDeciderTest
 	{
-
 		private MockRepository _mocks;
 		private IEqualWorkShiftValueDecider _target;
-		private IShiftProjectionCache _cache1;
-		private IShiftProjectionCache _cache2;
+		private ShiftProjectionCache _cache1;
+		private ShiftProjectionCache _cache2;
 		private ITrueFalseRandomizer _randomizer;
 
 		[SetUp]
@@ -21,8 +22,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_mocks = new MockRepository();
 			_randomizer = _mocks.StrictMock<ITrueFalseRandomizer>();
 			_target = new EqualWorkShiftValueDecider(_randomizer);
-			_cache1 = _mocks.StrictMock<IShiftProjectionCache>();
-			_cache2 = _mocks.StrictMock<IShiftProjectionCache>();
+			_cache1 = new ShiftProjectionCache(new WorkShift(new ShiftCategory("test1")), new PersonalShiftMeetingTimeChecker());
+			_cache2 = new ShiftProjectionCache(new WorkShift(new ShiftCategory("test2")), new PersonalShiftMeetingTimeChecker());
 
 		}
 
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_randomizer.Randomize()).IgnoreArguments().Return(true);
 			}
 
-			IShiftProjectionCache result;
+			ShiftProjectionCache result;
 
 			using (_mocks.Playback())
 			{
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_randomizer.Randomize()).IgnoreArguments().Return(false);
 			}
 
-			IShiftProjectionCache result;
+			ShiftProjectionCache result;
 
 			using (_mocks.Playback())
 			{

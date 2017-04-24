@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         IVisualLayerCollection Projection { get; }
 
-        /// <summary>
+	    Guid[] Activities { get; }
+
+	    /// <summary>
         /// Convert this instance to a main shift
         /// </summary>
         /// <returns></returns>

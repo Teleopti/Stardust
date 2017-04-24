@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldFilterAccordingToContractTime()
 		{
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
 
 			var minMaxcontractTime = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
 			using (_mocks.Record())
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldFilterIfOneMinMaximumIsNull()
 		{
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
 
 			var minMaxcontractTime1 = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
 			using (_mocks.Record())
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				IList<IShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions,
+				IList<ShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions,
 					new WorkShiftFinderResultForTest());
 
 				retShifts.Should().Contain(c1);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldFilterIfOneMinMaximumIsZero()
 		{
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
 
 			var minMaxcontractTime1 = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
 			var minMaxZero = new MinMax<TimeSpan>(new TimeSpan(0,0,0 ), new TimeSpan(0, 0, 0));
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				IList<IShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions,
+				IList<ShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions,
 					new WorkShiftFinderResultForTest());
 
 				retShifts.Should().Contain(c1);
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldMergeMinMax()
 		{
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
 
 			var minMaxcontractTime1 = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
 			var minMaxcontractTime2 = new MinMax<TimeSpan>(new TimeSpan(6, 0, 0), new TimeSpan(7, 30, 0));
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldNotFilterIfNoMinMaxRestricted()
 		{
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
 
 			using (_mocks.Record())
 			{
@@ -249,12 +249,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnly = new DateOnly(2013, 3, 1);
 			var result = _target.Filter(dateOnly, _allMatrixes, null, _scheduleOptions, new WorkShiftFinderResultForTest());
 			Assert.IsNull(result);
-			result = _target.Filter(dateOnly, _allMatrixes, new List<IShiftProjectionCache>(), _scheduleOptions, null);
+			result = _target.Filter(dateOnly, _allMatrixes, new List<ShiftProjectionCache>(), _scheduleOptions, null);
 			Assert.IsNull(result);
-			result = _target.Filter(dateOnly, null, new List<IShiftProjectionCache>(), _scheduleOptions,
+			result = _target.Filter(dateOnly, null, new List<ShiftProjectionCache>(), _scheduleOptions,
 				new WorkShiftFinderResultForTest());
 			Assert.IsNull(result);
-			result = _target.Filter(dateOnly, _allMatrixes, new List<IShiftProjectionCache>(), _scheduleOptions,
+			result = _target.Filter(dateOnly, _allMatrixes, new List<ShiftProjectionCache>(), _scheduleOptions,
 				new WorkShiftFinderResultForTest());
 			Assert.That(result.Count, Is.EqualTo(0));
 		}

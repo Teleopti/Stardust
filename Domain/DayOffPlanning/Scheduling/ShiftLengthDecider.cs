@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			_desiredShiftLengthCalculator = desiredShiftLengthCalculator;
 		}
 
-		public IList<IShiftProjectionCache> FilterList(IList<IShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+		public IList<ShiftProjectionCache> FilterList(IList<ShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
 			if (shiftList == null) return null;
 			bool usingTeamBlockAndSameShift = schedulingOptions.UseBlock && schedulingOptions.BlockSameShift;
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 				resultingList.RemoveAt(selectedIndex);
 			}
 
-			return new List<IShiftProjectionCache>();
+			return new List<ShiftProjectionCache>();
 		}
 	}
 }

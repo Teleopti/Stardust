@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		public IWorkShiftCalculationResultHolder GetShiftProjectionCachesSortedByBestIntraIntervalFit(IList<IWorkShiftCalculationResultHolder> workShiftCalculationResults, IList<ISkillStaffPeriod> issues, ISkill skill, double limit)
 		{
 			var bestValue = Double.MaxValue;
-			IShiftProjectionCache bestShiftProjectionCache = null;
+			ShiftProjectionCache bestShiftProjectionCache = null;
 
 			foreach (var workShiftCalculationResultHolder in workShiftCalculationResults)
 			{

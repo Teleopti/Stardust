@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())
 			{
-				IEnumerable<IWorkShiftVisualLayerInfo> proj;
+				IEnumerable<WorkShiftVisualLayerInfo> proj;
 				IRuleSetProjectionEntityService projSvc;
 				using (var inner1 = container.BeginLifetimeScope())
 				{

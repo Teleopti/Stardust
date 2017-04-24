@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IContractTimeShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList,
-		                                                    IList<IShiftProjectionCache> shiftList,
+		IList<ShiftProjectionCache> Filter(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList,
+		                                                    IList<ShiftProjectionCache> shiftList,
 		                                                    ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
 	}
 	
@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_userCulture = userCulture;
 		}
 		
-		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList,
-		                                           IList<IShiftProjectionCache> shiftList,
+		public IList<ShiftProjectionCache> Filter(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList,
+		                                           IList<ShiftProjectionCache> shiftList,
 		                                           ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (shiftList.Count == 0) return shiftList;
 			if (schedulingOptions.AllowBreakContractTime) return shiftList;
 			
-			IList<IShiftProjectionCache> workShifts = new List<IShiftProjectionCache>();
+			IList<ShiftProjectionCache> workShifts = new List<ShiftProjectionCache>();
 			MinMax<TimeSpan>? allowedMinMax = null;
 			
 		    foreach (var matrix in matrixList)

@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers(datePointer)).ToList();
 			if (selectedTeamMembers.IsEmpty())
 				return true;
-			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
+			ShiftProjectionCache roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
 				schedulingOptions, shiftNudgeDirective.EffectiveRestriction, groupPersonSkillAggregator);
 
 			var cancelMe = false;
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return success;
 		}
 
-		private bool tryScheduleBlock(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules, ShiftNudgeDirective shiftNudgeDirective, INewBusinessRuleCollection businessRules, Action cancelAction)
+		private bool tryScheduleBlock(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules, ShiftNudgeDirective shiftNudgeDirective, INewBusinessRuleCollection businessRules, Action cancelAction)
 		{
 			var lastIndex = selectedBlockDays.Count - 1;
 			IEffectiveRestriction shiftNudgeRestriction = new EffectiveRestriction();

@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
 				new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(8, 0, 0)),
 				null, null, null, new List<IActivityRestriction>());
-			var result = _target.Filter(new List<IShiftProjectionCache>(), effectiveRestriction);
+			var result = _target.Filter(new List<ShiftProjectionCache>(), effectiveRestriction);
 			Assert.That(result.Count, Is.EqualTo(0));
 
 			result = _target.Filter(getCashes(), effectiveRestriction);
@@ -107,10 +107,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Assert.IsNull(result);
 		}
 
-		private IList<IShiftProjectionCache> getCashes()
+		private IList<ShiftProjectionCache> getCashes()
 		{
 			var tmpList = getWorkShifts();
-			var retList = new List<IShiftProjectionCache>();
+			var retList = new List<ShiftProjectionCache>();
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{

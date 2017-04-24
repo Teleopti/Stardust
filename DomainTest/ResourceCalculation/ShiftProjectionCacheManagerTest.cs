@@ -150,8 +150,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var workShift = WorkShiftFactory.CreateWorkShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
 				_activity, _category);
-			IWorkShiftVisualLayerInfo info1 = new WorkShiftVisualLayerInfo(workShift, null);
-			var infos = new List<IWorkShiftVisualLayerInfo> {info1};
+			WorkShiftVisualLayerInfo info1 = new WorkShiftVisualLayerInfo(workShift, null);
+			var infos = new List<WorkShiftVisualLayerInfo> {info1};
 			var callback = MockRepository.GenerateMock<IWorkShiftAddCallback>();
 
 			_activityChecker.Stub(x => x.ContainsDeletedActivity(validWorkShiftRuleSet)).Return(false);
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             return new List<IWorkShift> {_workShift1, _workShift2, _workShift3};
         }
 
-        private IList<IWorkShiftVisualLayerInfo> getWorkShiftsInfo()
+        private IList<WorkShiftVisualLayerInfo> getWorkShiftsInfo()
         {
             _workShift1 = WorkShiftFactory.CreateWorkShift(new TimeSpan(7, 0, 0), new TimeSpan(15, 0, 0),
                                                           _activity, _category);
@@ -205,10 +205,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _workShift3 = WorkShiftFactory.CreateWorkShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
                                                                       _activity, _category);
 
-            IWorkShiftVisualLayerInfo info1 = new WorkShiftVisualLayerInfo(_workShift1, null);
-            IWorkShiftVisualLayerInfo info2 = new WorkShiftVisualLayerInfo(_workShift2, null);
-            IWorkShiftVisualLayerInfo info3 = new WorkShiftVisualLayerInfo(_workShift3, null);
-            return new List<IWorkShiftVisualLayerInfo> { info1, info2, info3 };
+            WorkShiftVisualLayerInfo info1 = new WorkShiftVisualLayerInfo(_workShift1, null);
+            WorkShiftVisualLayerInfo info2 = new WorkShiftVisualLayerInfo(_workShift2, null);
+            WorkShiftVisualLayerInfo info3 = new WorkShiftVisualLayerInfo(_workShift3, null);
+            return new List<WorkShiftVisualLayerInfo> { info1, info2, info3 };
         }    
     }   
 }

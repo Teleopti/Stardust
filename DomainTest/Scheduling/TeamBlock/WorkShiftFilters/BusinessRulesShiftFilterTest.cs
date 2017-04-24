@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			                                       _longestPeriodForAssignmentCalculator);
 		}
 		
-		private IList<IShiftProjectionCache> getCashes()
+		private IList<ShiftProjectionCache> getCashes()
 		{
 			var tmpList = getWorkShifts();
-			var retList = new List<IShiftProjectionCache>();
+			var retList = new List<ShiftProjectionCache>();
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			result = _target.Filter(schedules, person1, shiftList, _dateOnly, null);
 			Assert.IsNull(result);
 
-			result = _target.Filter(schedules, person1, new List<IShiftProjectionCache>(), _dateOnly, finderResult);
+			result = _target.Filter(schedules, person1, new List<ShiftProjectionCache>(), _dateOnly, finderResult);
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 

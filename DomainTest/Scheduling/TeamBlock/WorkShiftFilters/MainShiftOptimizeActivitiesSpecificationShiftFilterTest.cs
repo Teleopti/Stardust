@@ -47,17 +47,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(new List<IShiftProjectionCache>(), new Domain.Specification.All<IEditableShift>());
+			var result = _target.Filter(new List<ShiftProjectionCache>(), new Domain.Specification.All<IEditableShift>());
 			Assert.That(result.Count, Is.EqualTo(0));
 
 			result = _target.Filter(null, new Domain.Specification.All<IEditableShift>());
 			Assert.IsNull(result);
 		}
 
-		private IList<IShiftProjectionCache> getCashes()
+		private IList<ShiftProjectionCache> getCashes()
 		{
 			var tmpList = getWorkShifts();
-			var retList = new List<IShiftProjectionCache>();
+			var retList = new List<ShiftProjectionCache>();
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{

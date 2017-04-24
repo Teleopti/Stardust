@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic,
 			PeriodValueCalculationParameters periodValueCalculationParameters, TimeZoneInfo timeZoneInfo)
 		{
-			if (mainShiftLayers == null) throw new ArgumentNullException("mainShiftLayers");
+			if (mainShiftLayers == null) throw new ArgumentNullException(nameof(mainShiftLayers));
 			if (skillIntervalDataDic == null)
 				return null;
 

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
         private MockRepository _mock;
         private ITeamScheduling _target;
-        private IShiftProjectionCache _shiftProjectionCache;
+        private ShiftProjectionCache _shiftProjectionCache;
         private IScheduleMatrixPro _matrix;
         private Group _group;
         private IResourceCalculateDelayer _resourceCalculateDelayer;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         public void Setup()
         {
             _mock = new MockRepository();
-			_shiftProjectionCache = _mock.StrictMock<IShiftProjectionCache>();
+			_shiftProjectionCache = _mock.StrictMock<ShiftProjectionCache>();
             _matrix = _mock.StrictMock<IScheduleMatrixPro>();
 
 			_person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);

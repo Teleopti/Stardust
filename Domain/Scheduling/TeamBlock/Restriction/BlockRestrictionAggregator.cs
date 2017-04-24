@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
 	public interface IBlockRestrictionAggregator
 	{
-		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel, DateOnly dateOnly);
+		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, ShiftProjectionCache roleModel, DateOnly dateOnly);
 	}
 	public class BlockRestrictionAggregator : IBlockRestrictionAggregator
 	{
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
-		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel, DateOnly dateOnly)
+		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, ShiftProjectionCache roleModel, DateOnly dateOnly)
 		{
 			var scheduleDictionary = schedules;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();

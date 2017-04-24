@@ -83,17 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             Assert.AreEqual(DateTime.SpecifyKind(new DateTime(1800,1,1), DateTimeKind.Utc), WorkShift.BaseDate);
         }
-
-
-        /// <summary>
-        /// Protected constructor works.
-        /// </summary>
-        [Test]
-        public void ProtectedConstructorWorks()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));
-        }
-
+		
         [Test]
         public void CannotAddNothingButWorkShiftActivityLayer()
         {
@@ -333,8 +323,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
         internal class workShiftInTest : WorkShift
         {
-            IProjectionService _projSvc;
-            public workShiftInTest(IProjectionService projSvc) 
+	        readonly IProjectionService _projSvc;
+
+            public workShiftInTest(IProjectionService projSvc) : base(new ShiftCategory("test"))
             {
                 _projSvc = projSvc;
             }

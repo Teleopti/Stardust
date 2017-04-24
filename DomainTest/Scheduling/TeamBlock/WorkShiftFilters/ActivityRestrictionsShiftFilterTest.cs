@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			IList<IWorkShift> listOfWorkShifts = new List<IWorkShift> { ws1, ws2 };
 
 			var timeZoneInfo = TimeZoneInfo.Utc;
-			var casheList = new List<IShiftProjectionCache>();
+			var casheList = new List<ShiftProjectionCache>();
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, timeZoneInfo);
 			foreach (IWorkShift shift in listOfWorkShifts)
 			{
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var casheList = new List<IShiftProjectionCache>();
+			var casheList = new List<ShiftProjectionCache>();
 			IList<IActivityRestriction> activityRestrictions = new List<IActivityRestriction>();
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 																				  new EndTimeLimitation(),

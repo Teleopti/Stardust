@@ -14,15 +14,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
     /// </remarks>
     public abstract class ActivityNormalExtender : ActivityExtender, IActivityNormalExtender
     {
-
-		#region Fields (1) 
-
         private TimePeriodWithSegment _activityPositionWithSegment;
-
-		#endregion Fields 
-
-		#region Constructors (2) 
-
+		
         /// <summary>
         /// Initializes a new instance of the <see cref="ActivityNormalExtender"/> class.
         /// </summary>
@@ -49,11 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         /// Created date: 2008-03-28
         /// </remarks>
         protected ActivityNormalExtender(){}
-
-		#endregion Constructors 
-
-		#region Properties (1) 
-
+		
         /// <summary>
         /// Gets or sets the activity position with segment.
         /// </summary>
@@ -67,14 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             get { return _activityPositionWithSegment; }
             set { _activityPositionWithSegment = value; }
         }
-
-		#endregion Properties 
-
-		#region Methods (5) 
-
-
-		// Public Methods (2) 
-
+		
         /// <summary>
         /// Gets the possible length of the activity.
         /// </summary>
@@ -108,11 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                 return createReturnWorkShifts(shift, projPeriod.Value, actPeriod.Value);
             return new List<IWorkShift>();
         }
-
-
-
-		// Protected Methods (1) 
-
+		
         /// <summary>
         /// The period available to place the layer in.
         /// </summary>
@@ -123,11 +101,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         /// Created date: 2008-03-05
         /// </remarks>
         protected abstract DateTimePeriod? PossiblePeriodForActivity(DateTimePeriod templateProjectionPeriod);
-
-
-
-		// Private Methods (2) 
-
+		
         private IWorkShift createNewShift(IWorkShift template, DateTime layerStartTime, DateTime layerEndTime)
         {
             IWorkShift newShift = (WorkShift)template.Clone();
@@ -160,9 +134,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             }
             return retColl;
         }
-
-
-		#endregion Methods 
-
     }
 }

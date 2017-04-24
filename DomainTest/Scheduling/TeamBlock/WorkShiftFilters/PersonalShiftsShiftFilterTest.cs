@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17))));
 			var c1 = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
 			c1.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
-			var shifts = new List<IShiftProjectionCache> {c1};
+			var shifts = new List<ShiftProjectionCache> {c1};
 
 			using (_mocks.Record())
 			{
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17))));
 			var c1 = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
 			c1.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
-			var shifts = new List<IShiftProjectionCache> { c1 };
+			var shifts = new List<ShiftProjectionCache> { c1 };
 			
 			using (_mocks.Record())
 			{
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			var schedules = MockRepository.GenerateMock<IScheduleDictionary>();
 			schedules.Expect(x => x[_person].ScheduledDay(_dateOnly)).Return(_part);
-			var shiftsList = _target.Filter(schedules, _dateOnly, _person, new List<IShiftProjectionCache>(), _finderResult);
+			var shiftsList = _target.Filter(schedules, _dateOnly, _person, new List<ShiftProjectionCache>(), _finderResult);
 			Assert.That(shiftsList.Count, Is.EqualTo(0));
 			
 			shiftsList = _target.Filter(schedules, _dateOnly, _person, null, _finderResult);
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			phone.AllowOverwrite = true;
 			phone.InWorkTime = true;
 
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
 			var c1 = new ShiftProjectionCache(new WorkShift(ShiftCategoryFactory.CreateShiftCategory()), _personalShiftMeetingTimeChecker);
 			shifts.Add(c1);
 			var schedules = MockRepository.GenerateMock<IScheduleDictionary>();

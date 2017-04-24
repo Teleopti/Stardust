@@ -162,37 +162,35 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc),
 											 new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc));
 
+			var origMeeting = _mocks.DynamicMock<IMeeting>();
 			var meeting = _mocks.StrictMock<IPersonMeeting>();
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-
-			var currentDate = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
+			
 			var phone = ActivityFactory.CreateActivity("phone");
 			phone.AllowOverwrite = true;
 			phone.InWorkTime = true;
-			var phoneLayer = new List<IVisualLayer>
-                                 {
-                                     new VisualLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17)),
-                                                     phone, null)
-                                 };
-			var layerCollection1 = new VisualLayerCollection(null, phoneLayer, new ProjectionPayloadMerger());
 
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
-			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
-			shifts.Add(c1);
+			var workShift = new WorkShift(new ShiftCategory("Day"));
+			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone,
+				new DateTimePeriod(WorkShift.BaseDate.AddHours(8), WorkShift.BaseDate.AddHours(17))));
 
+			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
+			shiftProjectionCache.SetDate(new DateOnlyAsDateTimePeriod(new DateOnly(2009,2,2), TimeZoneInfo.Utc));
+			var shifts = new []{shiftProjectionCache };
+			
 			using (_mocks.Record())
 			{
 				Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
 				Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 				Expect.Call(_personAssignment.PersonalActivities()).Return(new[]
 	                {
-		                new PersonalShiftLayer(new Activity("d"), period)
+		                new PersonalShiftLayer(new Activity("d"){InWorkTime = true}, period)
 	                }).Repeat.AtLeastOnce();
+				Expect.Call(_personAssignment.Period).Return(period.MaximumPeriod(period2)).Repeat.AtLeastOnce();
 				Expect.Call(meeting.Period).Return(period2).Repeat.AtLeastOnce();
-				Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
-				Expect.Call(c1.PersonalShiftsAndMeetingsAreInWorkTime(new ReadOnlyCollection<IPersonMeeting>(meetings),
-																	  _personAssignment)).Return(true);
+				Expect.Call(meeting.BelongsToMeeting).Return(origMeeting).Repeat.AtLeastOnce();
+				Expect.Call(origMeeting.Activity).Return(phone).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
@@ -227,8 +225,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
                                  };
 			var layerCollection1 = new VisualLayerCollection(null, phoneLayer, new ProjectionPayloadMerger());
 
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
-			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
+			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
+			var c1 = _mocks.StrictMock<ShiftProjectionCache>();
 			shifts.Add(c1);
 
 			using (_mocks.Record())

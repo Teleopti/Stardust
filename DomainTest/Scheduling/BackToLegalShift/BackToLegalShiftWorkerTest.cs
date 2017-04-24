@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 		private ITeamBlockSingleDayScheduler _teamBlockSingleDayScheduler;
 		private ITeamBlockInfo _teamBlockInfo;
 		private ISchedulingOptions _schedulingOptions;
-		private IShiftProjectionCache _roleModelShift;
+		private ShiftProjectionCache _roleModelShift;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			_target = new BackToLegalShiftWorker(_teamBlockClearer, _safeRollBackAndResourceCalculation, _teamBlockSingleDayScheduler, null);
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_schedulingOptions = new SchedulingOptions();
-			_roleModelShift = _mocks.StrictMock<IShiftProjectionCache>();
+			_roleModelShift = _mocks.StrictMock<ShiftProjectionCache>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_schedulingResultStateHolder = _mocks.Stub<ISchedulingResultStateHolder>();

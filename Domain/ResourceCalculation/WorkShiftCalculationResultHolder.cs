@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public  class WorkShiftCalculationResult : IWorkShiftCalculationResultHolder
     {
         public double Value { get; set; }
-		public IShiftProjectionCache ShiftProjection { get; set; }
-	    public IWorkShiftCalculatableProjection WorkShiftCalculatableProjection { get { return ShiftProjection; } }
+		public ShiftProjectionCache ShiftProjection { get; set; }
+	    public IWorkShiftCalculatableProjection WorkShiftCalculatableProjection => ShiftProjection;
     }
 
 	public class WorkShiftCalculationResultComparer : IComparer<IWorkShiftCalculationResultHolder>

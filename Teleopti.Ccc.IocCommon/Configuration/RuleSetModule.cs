@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			_perLifetimeScope = perLifetimeScope;
 			if (configuration == null)
-				throw new ArgumentException("MbCacheModule required", "configuration");
+				throw new ArgumentException("MbCacheModule required", nameof(configuration));
 			_configuration = configuration;
 		}
 

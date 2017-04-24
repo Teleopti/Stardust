@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     {
         private ISchedulingOptions _target;
 	    private MockRepository _mock;
-	    private IShiftProjectionCache _shiftProjectionCache;
+	    private ShiftProjectionCache _shiftProjectionCache;
 
         [SetUp]
         public void Setup()
         {
             _target = new SchedulingOptions();
 			_mock = new MockRepository();
-	        _shiftProjectionCache = _mock.StrictMock<IShiftProjectionCache>();
+	        _shiftProjectionCache = _mock.StrictMock<ShiftProjectionCache>();
         }
 
         [Test]

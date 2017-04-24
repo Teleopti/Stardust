@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -14,12 +15,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
     /// </remarks>
     public class CreateWorkShiftsFromTemplate : ICreateWorkShiftsFromTemplate
     {
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public IList<IWorkShift> Generate(IWorkShift shiftTemplate, IList<IWorkShiftExtender> extenders, IList<IWorkShiftLimiter> limiters,
+		public WorkShiftCollection Generate(IWorkShift shiftTemplate, IList<IWorkShiftExtender> extenders, IList<IWorkShiftLimiter> limiters,
 	                                         IWorkShiftAddCallback callback)
 	    {
 			if (tryJumpOutEarly(limiters, shiftTemplate, extenders))
-				return new List<IWorkShift>();
+				return new WorkShiftCollection(callback);
 
 			var workingList = new WorkShiftCollection(callback) { shiftTemplate };
 			foreach (var extender in extenders)

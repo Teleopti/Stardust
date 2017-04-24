@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface ITeamScheduling
     {
 	    bool ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
-		    IShiftProjectionCache shiftProjectionCache,
+		    ShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, INewBusinessRuleCollection businessRules, ISchedulingOptions schedulingOptions, 
 				Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    }
 
 	    public bool ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
-		    IShiftProjectionCache shiftProjectionCache,
+		    ShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, INewBusinessRuleCollection businessRules, ISchedulingOptions schedulingOptions,
 				Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
 
-		private void assignShiftProjection(IShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, ISchedulingOptions schedulingOptions)
+		private void assignShiftProjection(ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, ISchedulingOptions schedulingOptions)
         {
 			shiftProjectionCache.SetDate(destinationScheduleDay.DateOnlyAsPeriod);
 

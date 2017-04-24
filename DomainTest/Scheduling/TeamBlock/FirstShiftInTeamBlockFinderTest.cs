@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockInfo _teamBlockInfo;
 		private IPerson _person;
 		private IScheduleDictionary _schedules;
-		private IShiftProjectionCache _shiftProjectionCache;
+		private ShiftProjectionCache _shiftProjectionCache;
 		private IBlockInfo _blockInfo;
 		private IList<IPerson> _groupMembers;
 		private ITeamInfo _teamInfo;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_person = PersonFactory.CreatePerson();
 			_schedules = _mocks.StrictMock<IScheduleDictionary>();
-			_shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
+			_shiftProjectionCache = _mocks.StrictMock<ShiftProjectionCache>();
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(2014,9,3,2014,9,3));
 			_groupMembers = new List<IPerson>{_person};
 			_teamInfo = _mocks.StrictMock<ITeamInfo>();

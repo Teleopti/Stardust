@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_sameOpenHoursInTeamBlock.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator)).Return(true);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, _schedules, _dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false, _skillDays))
-					  .Return(new List<IShiftProjectionCache>());
+					  .Return(new List<ShiftProjectionCache>());
 			}
 			using (_mocks.Playback())
 			{
@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 														new EndTimeLimitation(),
 														new WorkTimeLimitation(), null, null, null,
 														new List<IActivityRestriction>());
-			var shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
-			var shifts = new List<IShiftProjectionCache> { shiftProjectionCache };
+			var shiftProjectionCache = _mocks.StrictMock<ShiftProjectionCache>();
+			var shifts = new List<ShiftProjectionCache> { shiftProjectionCache };
 			using (_mocks.Record())
 			{
 				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedules))

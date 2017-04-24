@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -7,12 +8,12 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
 	public interface ISkillStaffPeriodIntraIntervalPeriodFinder
 	{
-		IList<DateTimePeriod> Find(DateTimePeriod skillStaffPeriod, IShiftProjectionCache shiftProjectionCache, ISkill skill);
+		IList<DateTimePeriod> Find(DateTimePeriod skillStaffPeriod, ShiftProjectionCache shiftProjectionCache, ISkill skill);
 	}
 
 	public class SkillStaffPeriodIntraIntervalPeriodFinder : ISkillStaffPeriodIntraIntervalPeriodFinder
 	{
-		public IList<DateTimePeriod> Find(DateTimePeriod skillStaffPeriod, IShiftProjectionCache shiftProjectionCache, ISkill skill)
+		public IList<DateTimePeriod> Find(DateTimePeriod skillStaffPeriod, ShiftProjectionCache shiftProjectionCache, ISkill skill)
 		{
 			var result = new List<DateTimePeriod>();
 			var visualLayers = shiftProjectionCache.MainShiftProjection;

@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
                                                ShiftCategoryFactory.CreateShiftCategory("Test"));
         }
 
-        private IList<IWorkShift> CreateWorkShiftList()
+        private IList<WorkShiftCollection> CreateWorkShiftList()
         {
             IActivity breakActivity = ActivityFactory.CreateActivity("lunch");
             DateTimePeriod breakPeriod = new DateTimePeriod(new DateTime(1800, 1, 1, 4, 0, 0, DateTimeKind.Utc), new DateTime(1800, 1, 1, 5, 0, 0, DateTimeKind.Utc));
@@ -172,11 +172,9 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             ws1.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod));
             WorkShift ws2 = CreateWorkShift(TimeSpan.FromHours(1), TimeSpan.FromHours(9), _activity, _category);
             ws2.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod));
-            IList<IWorkShift> listOfWorkShifts = new List<IWorkShift>();
-            listOfWorkShifts.Add(ws1);
-            listOfWorkShifts.Add(ws2);
+	        var listOfWorkShifts = new WorkShiftCollection(null, new Guid[0]) {ws1, ws2};
 
-            return listOfWorkShifts;
+	        return new List<WorkShiftCollection> {listOfWorkShifts};
         }
 
         private static WorkShift CreateWorkShift(TimeSpan start, TimeSpan end, IActivity activity, IShiftCategory category)

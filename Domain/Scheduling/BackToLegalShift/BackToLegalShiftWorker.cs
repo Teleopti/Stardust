@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 	public interface IBackToLegalShiftWorker
 	{
 		bool ReSchedule(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-			IShiftProjectionCache roleModelShift,
+			ShiftProjectionCache roleModelShift,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder);
 	}
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		}
 
 		public bool ReSchedule(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-			IShiftProjectionCache roleModelShift,
+			ShiftProjectionCache roleModelShift,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{

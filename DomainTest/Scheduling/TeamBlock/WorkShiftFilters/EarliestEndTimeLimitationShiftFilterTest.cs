@@ -55,14 +55,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			result = _target.Filter(null, new DateTime(), new WorkShiftFinderResultForTest());
 			Assert.IsNull(result);
 
-			result = _target.Filter(new List<IShiftProjectionCache>(),new DateTime(), new WorkShiftFinderResultForTest());
+			result = _target.Filter(new List<ShiftProjectionCache>(),new DateTime(), new WorkShiftFinderResultForTest());
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 
-		private IList<IShiftProjectionCache> getCashes()
+		private IList<ShiftProjectionCache> getCashes()
 		{
 			var tmpList = getWorkShifts();
-			var retList = new List<IShiftProjectionCache>();
+			var retList = new List<ShiftProjectionCache>();
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IWorkTimeLimitationShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult);
 	}
 
 	public class WorkTimeLimitationShiftFilter : IWorkTimeLimitationShiftFilter
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_userCulture = userCulture;
 		}
 
-		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
 			if (restriction == null) return null;

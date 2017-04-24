@@ -38,11 +38,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             ws1.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod));
             IWorkShift ws2 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(1), TimeSpan.FromHours(9), testActivity);
             ws2.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod));
-            IList<IWorkShift> listOfWorkShifts = new List<IWorkShift>();
-            listOfWorkShifts.Add(ws1);
-            listOfWorkShifts.Add(ws2);
+	        var listOfWorkShifts = new List<WorkShiftCollection> {new WorkShiftCollection(null) {ws1, ws2}};
 
-            var target = new RuleSetProjectionEntityService(shiftCreatorService);
+	        var target = new RuleSetProjectionEntityService(shiftCreatorService);
             WorkShiftRuleSet workShiftRuleSet = new WorkShiftRuleSet(mocks.StrictMock<IWorkShiftTemplateGenerator>());
 
             Expect.Call(shiftCreatorService.Generate(workShiftRuleSet, _callback)).Return(listOfWorkShifts);

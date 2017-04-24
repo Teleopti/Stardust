@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -25,24 +26,34 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var options = new SchedulingOptions();
 			var target = new WorkShiftCalculatorsManager(workShiftCalculator, nonBlendWorkShiftCalculator);
 
-			var cache1 = MockRepository.GenerateMock<IShiftProjectionCache>();
-			var cache2 = MockRepository.GenerateMock<IShiftProjectionCache>();
+			var day = new DateOnlyAsDateTimePeriod(new DateOnly(2001,1,1), TimeZoneInfo.Utc);
+			var editableShift1 = MockRepository.GenerateMock<IEditableShift>();
+			var editableShift2 = MockRepository.GenerateMock<IEditableShift>();
+			var projectionService1 = MockRepository.GenerateMock<IProjectionService>();
+			var projectionService2 = MockRepository.GenerateMock<IProjectionService>();
+			var workShift1 = MockRepository.GenerateMock<IWorkShift>();
+			var workShift2 = MockRepository.GenerateMock<IWorkShift>();
+			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
+			var cache1 = new ShiftProjectionCache(workShift1,personalShiftMeetingTimeChecker);
+			var cache2 = new ShiftProjectionCache(workShift2,personalShiftMeetingTimeChecker);
+			cache1.SetDate(day);
+			cache2.SetDate(day);
 			var proj1v = new VisualLayerCollection(person, new IVisualLayer[] { }, new ProjectionIntersectingPeriodMerger());
 			var proj2v = new VisualLayerCollection(person, new IVisualLayer[] { }, new ProjectionIntersectingPeriodMerger());
-			var proj1 = new WorkShiftCalculatableVisualLayerCollection(proj1v);
-			var proj2 = new WorkShiftCalculatableVisualLayerCollection(proj2v);
-			var caches = new List<IShiftProjectionCache> { cache1, cache2 };
+			var caches = new List<ShiftProjectionCache> { cache1, cache2 };
 			var dataHolders = MockRepository.GenerateMock<IWorkShiftCalculatorSkillStaffPeriodData>();
 			var nonBlendSkillPeriods = MockRepository.GenerateMock<IDictionary<ISkill, ISkillStaffPeriodDictionary>>();
 
-			cache1.Stub(x => x.WorkShiftCalculatableLayers).Return(proj1);
-			cache2.Stub(x => x.WorkShiftCalculatableLayers).Return(proj2);
-			workShiftCalculator.Stub(x => x.CalculateShiftValue(proj1, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(double.MinValue);
-			workShiftCalculator.Stub(x => x.CalculateShiftValue(proj2, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(5);
+			workShift1.Stub(x => x.ToEditorShift(day, TimeZoneInfo.Utc)).Return(editableShift1);
+			workShift2.Stub(x => x.ToEditorShift(day, TimeZoneInfo.Utc)).Return(editableShift2);
+			editableShift1.Stub(x => x.ProjectionService()).Return(projectionService1);
+			editableShift2.Stub(x => x.ProjectionService()).Return(projectionService2);
+			projectionService1.Stub(x => x.CreateProjection()).Return(proj1v);
+			projectionService2.Stub(x => x.CreateProjection()).Return(proj2v);
+			workShiftCalculator.Stub(x => x.CalculateShiftValue(cache1.WorkShiftCalculatableLayers, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(double.MinValue);
+			workShiftCalculator.Stub(x => x.CalculateShiftValue(cache2.WorkShiftCalculatableLayers, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(5);
 
-			nonBlendSkillPeriods.Stub(x => x.Count).Return(5).Repeat.Any();
-			cache1.Stub(x => x.MainShiftProjection).Return(proj1v);
-			cache2.Stub(x => x.MainShiftProjection).Return(proj2v);
+			nonBlendSkillPeriods.Stub(x => x.Count).Return(5);
 			nonBlendWorkShiftCalculator.Stub(x => x.CalculateShiftValue(person, proj1v, nonBlendSkillPeriods, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
 			nonBlendWorkShiftCalculator.Stub(x => x.CalculateShiftValue(person, proj2v, nonBlendSkillPeriods, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
 

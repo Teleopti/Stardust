@@ -1,26 +1,18 @@
+using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 {
-    public class WorkShiftVisualLayerInfo : IWorkShiftVisualLayerInfo
+    public class WorkShiftVisualLayerInfo
     {
-        private readonly IWorkShift _workShift;
-        private readonly IVisualLayerCollection _visualLayerCollection;
-
-        public WorkShiftVisualLayerInfo(IWorkShift workShift, IVisualLayerCollection visualLayerCollection)
+	    public WorkShiftVisualLayerInfo(IWorkShift workShift, IVisualLayerCollection visualLayerCollection)
         {
-            _workShift = workShift;
-            _visualLayerCollection = visualLayerCollection;
+            WorkShift = workShift;
+            VisualLayerCollection = visualLayerCollection;
         }
 
-        public IWorkShift WorkShift
-        {
-            get { return _workShift; }
-        }
+        public IWorkShift WorkShift { get; }
 
-        public IVisualLayerCollection VisualLayerCollection
-        {
-            get { return _visualLayerCollection; }
-        }
+	    public IVisualLayerCollection VisualLayerCollection { get; }
     }
 }

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		private ITeamBlockInfo _teamBlockInfo;
 		private DateOnly _dateOnly;
 		private IPerson _person;
-		private IShiftProjectionCache _shift;
+		private ShiftProjectionCache _shift;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IScheduleDictionary _scheduleDictionary;
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_teamBlockRestrictionAggregator = _mocks.StrictMock<ITeamBlockRestrictionAggregator>();
 			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
 			_person = PersonFactory.CreatePerson("Bill");
-			_shift = _mocks.StrictMock<IShiftProjectionCache>();
+			_shift = _mocks.StrictMock<ShiftProjectionCache>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_target = new ProposedRestrictionAggregator(_teamRestrictionAggregator, _blockRestrictionAggregator,
 														_teamBlockRestrictionAggregator, _teamBlockSchedulingOptions,

@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IWorkShift> listOfWorkShifts = new List<IWorkShift> { ws1, ws2 };
 
             var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            var casheList = new List<IShiftProjectionCache>();
+            var casheList = new List<ShiftProjectionCache>();
             foreach (IWorkShift shift in listOfWorkShifts)
             {
                 var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
@@ -230,14 +230,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void CanFilterOnRestrictionTimeLimitsWithEmptyList()
         {
-            var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _timeZoneInfo, new List<IShiftProjectionCache>(), _effectiveRestriction, _finderResult);
+            var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _timeZoneInfo, new List<ShiftProjectionCache>(), _effectiveRestriction, _finderResult);
             Assert.IsNotNull(ret);
         }
 
         [Test]
         public void CanFilterOnRestrictionMinMaxWorkTimeWithEmptyList()
         {
-            var ret = _target.FilterOnRestrictionMinMaxWorkTime(new List<IShiftProjectionCache>(), _effectiveRestriction, _finderResult);
+            var ret = _target.FilterOnRestrictionMinMaxWorkTime(new List<ShiftProjectionCache>(), _effectiveRestriction, _finderResult);
             Assert.IsNotNull(ret);
         }
         [Test]
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void CanFilterOnCategoryWithEmptyList()
         {
-            var ret = _target.FilterOnShiftCategory(_category, new List<IShiftProjectionCache>(), _finderResult);
+            var ret = _target.FilterOnShiftCategory(_category, new List<ShiftProjectionCache>(), _finderResult);
             Assert.IsNotNull(ret);
         }
 
@@ -269,14 +269,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void CanFilterOnNotAllowedCategoriesWithEmptyList()
         {
-            var ret = _target.FilterOnNotAllowedShiftCategories(new List<IShiftCategory> { _category }, new List<IShiftProjectionCache>(), _finderResult);
+            var ret = _target.FilterOnNotAllowedShiftCategories(new List<IShiftCategory> { _category }, new List<ShiftProjectionCache>(), _finderResult);
             Assert.IsNotNull(ret);
         }
 
         [Test]
         public void CanFilterOnRestrictionMinMaxWorkTime()
         {
-            IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+            IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
             _workShift1 = _mocks.StrictMock<IWorkShift>();
             _workShift2 = _mocks.StrictMock<IWorkShift>();
 
@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(lc2.ContractTime()).Return(new TimeSpan(10, 0, 0));
             }
 
-            IList<IShiftProjectionCache> retShifts;
+            IList<ShiftProjectionCache> retShifts;
             ShiftProjectionCache c1;
             ShiftProjectionCache c2;
 
@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void CanFilterOnContractTime()
         {
-            IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+            IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
             _workShift1 = _mocks.StrictMock<IWorkShift>();
             _workShift2 = _mocks.StrictMock<IWorkShift>();
             var ps1 = _mocks.StrictMock<IProjectionService>();
@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(lc2.ContractTime()).Return(new TimeSpan(10, 0, 0));
             }
 
-            IList<IShiftProjectionCache> retShifts;
+            IList<ShiftProjectionCache> retShifts;
             ShiftProjectionCache c1;
             ShiftProjectionCache c2;
 
@@ -369,18 +369,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var workShift2 = _mocks.StrictMock<IWorkShift>();
             var workShift3 = _mocks.StrictMock<IWorkShift>();
 
-            var cache1 = _mocks.StrictMock<IShiftProjectionCache>();
-            var cache2 = _mocks.StrictMock<IShiftProjectionCache>();
-            var cache3 = _mocks.StrictMock<IShiftProjectionCache>();
-
-            IList<IShiftProjectionCache> caches = new List<IShiftProjectionCache> { cache1, cache2, cache3 };
+	        var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
+	        var cache1 = new ShiftProjectionCache(workShift1,personalShiftMeetingTimeChecker);
+	        var cache2 = new ShiftProjectionCache(workShift2,personalShiftMeetingTimeChecker);
+	        var cache3 = new ShiftProjectionCache(workShift3,personalShiftMeetingTimeChecker);
+            
+            IList<ShiftProjectionCache> caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
             IWorkShiftFinderResult finderResult = new WorkShiftFinderResultForTest();
             using (_mocks.Record())
             {
-                Expect.Call(cache1.TheWorkShift).Return(workShift1).Repeat.AtLeastOnce();
-                Expect.Call(cache2.TheWorkShift).Return(workShift2).Repeat.AtLeastOnce();
-                Expect.Call(cache3.TheWorkShift).Return(workShift3).Repeat.AtLeastOnce();
-
                 Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
                 Expect.Call(workShift2.ShiftCategory).Return(shiftCategory2).Repeat.AtLeastOnce();
                 Expect.Call(workShift3.ShiftCategory).Return(shiftCategory2).Repeat.AtLeastOnce();
@@ -408,23 +405,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var workShift2 = _mocks.StrictMock<IWorkShift>();
             var workShift3 = _mocks.StrictMock<IWorkShift>();
 
-            var cache1 = _mocks.StrictMock<IShiftProjectionCache>();
-            var cache2 = _mocks.StrictMock<IShiftProjectionCache>();
-            var cache3 = _mocks.StrictMock<IShiftProjectionCache>();
+	        var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
+	        var cache1 = new ShiftProjectionCache(workShift1,personalShiftMeetingTimeChecker);
+	        var cache2 = new ShiftProjectionCache(workShift2,personalShiftMeetingTimeChecker);
+	        var cache3 = new ShiftProjectionCache(workShift3,personalShiftMeetingTimeChecker);
 
-            IList<IShiftProjectionCache> caches = new List<IShiftProjectionCache> { cache1, cache2, cache3 };
-            IList<IShiftCategory> categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
-            IWorkShiftFinderResult finderResult = new WorkShiftFinderResultForTest();
+            var caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
+            var categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
+            var finderResult = new WorkShiftFinderResultForTest();
             using (_mocks.Record())
             {
-                Expect.Call(cache1.TheWorkShift).Return(workShift1).Repeat.AtLeastOnce();
-                Expect.Call(cache2.TheWorkShift).Return(workShift2).Repeat.AtLeastOnce();
-                Expect.Call(cache3.TheWorkShift).Return(workShift3).Repeat.AtLeastOnce();
-
                 Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
                 Expect.Call(workShift2.ShiftCategory).Return(shiftCategory2).Repeat.AtLeastOnce();
                 Expect.Call(workShift3.ShiftCategory).Return(shiftCategory3).Repeat.AtLeastOnce();
-
             }
 
             using (_mocks.Playback())
@@ -495,7 +488,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyFilterOnStartAndEndTime()
         {
             var scheduleDayPeriod = new DateTimePeriod(2009, 1, 1, 2009, 1, 2);
-            IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+            IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
             _workShift1 = _mocks.StrictMock<IWorkShift>();
             _workShift2 = _mocks.StrictMock<IWorkShift>();
 			var mainshift1 = _mocks.StrictMock<IEditableShift>();
@@ -518,7 +511,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             }
 
-            IList<IShiftProjectionCache> retShifts;
+            IList<ShiftProjectionCache> retShifts;
             ShiftProjectionCache c1;
             ShiftProjectionCache c2;
 
@@ -561,10 +554,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
         }
 
-        private IList<IShiftProjectionCache> GetCashes()
+        private IList<ShiftProjectionCache> GetCashes()
         {
             var tmpList = GetWorkShifts();
-            var retList = new List<IShiftProjectionCache>();
+            var retList = new List<ShiftProjectionCache>();
 
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)

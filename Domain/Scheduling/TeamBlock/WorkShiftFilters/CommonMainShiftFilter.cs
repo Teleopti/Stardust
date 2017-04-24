@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
@@ -14,14 +15,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_scheduleDayEquator = scheduleDayEquator;
 		}
 
-		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IEffectiveRestriction effectiveRestriction)
+		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, IEffectiveRestriction effectiveRestriction)
 		{
 			if (shiftList == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
 			if (effectiveRestriction.CommonMainShift != null)
 			{
 				var shift = shiftList.FirstOrDefault(x => _scheduleDayEquator.MainShiftBasicEquals(x.TheMainShift, effectiveRestriction.CommonMainShift));
-				return shift != null ? new List<IShiftProjectionCache> { shift } : null;
+				return shift != null ? new List<ShiftProjectionCache> { shift } : null;
 			}
 			return shiftList;
 		}

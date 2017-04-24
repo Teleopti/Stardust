@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void CanFilterOnRestrictionMinMaxWorkTimeWithEmptyList()
 		{
-			var ret = _target.Filter(new List<IShiftProjectionCache>(), _effectiveRestriction, _finderResult);
+			var ret = _target.Filter(new List<ShiftProjectionCache>(), _effectiveRestriction, _finderResult);
 			Assert.IsNotNull(ret);
 		}
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void CanFilterOnRestrictionMinMaxWorkTime()
 		{
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
 			_workShift1 = _mocks.StrictMock<IWorkShift>();
 			_workShift2 = _mocks.StrictMock<IWorkShift>();
 			var ps1 = _mocks.StrictMock<IProjectionService>();
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(lc2.WorkTime()).Return(new TimeSpan(10, 0, 0));
 			}
 
-			IList<IShiftProjectionCache> retShifts;
+			IList<ShiftProjectionCache> retShifts;
 			ShiftProjectionCache c1;
 			ShiftProjectionCache c2;
 
@@ -121,17 +121,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var result = _target.Filter(null, _effectiveRestriction, new WorkShiftFinderResultForTest());
 			Assert.IsNull(result);
 
-			result = _target.Filter(new List<IShiftProjectionCache>(), null, new WorkShiftFinderResultForTest());
+			result = _target.Filter(new List<ShiftProjectionCache>(), null, new WorkShiftFinderResultForTest());
 			Assert.IsNull(result);
 
-			result = _target.Filter(new List<IShiftProjectionCache>(), _effectiveRestriction, null);
+			result = _target.Filter(new List<ShiftProjectionCache>(), _effectiveRestriction, null);
 			Assert.IsNull(result);
 		}
 
-		private IList<IShiftProjectionCache> getCashes()
+		private IList<ShiftProjectionCache> getCashes()
 		{
 			var tmpList = getWorkShifts();
-			var retList = new List<IShiftProjectionCache>();
+			var retList = new List<ShiftProjectionCache>();
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{

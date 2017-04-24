@@ -257,6 +257,7 @@
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoExtensions.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftProjectionCachesFilter.cs" />
     <Compile Include="Security\Principal\IUpdatedBySystemUser.cs" />
     <Compile Include="Security\Principal\UpdatedBySystemUser.cs" />
     <Compile Include="Staffing\SendUpdateStaffingReadModelHandler.cs" />
@@ -800,7 +801,6 @@
     <Compile Include="InterfaceLegacy\Domain\IShiftExchangeOffer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftFromMasterActivityService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftLengthDecider.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IShiftProjectionCache.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftProjectionCacheManager.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftProjectionCasheFilter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeApproveService.cs" />
@@ -904,7 +904,6 @@
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftMinMaxCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftRuleSet.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftTemplateGenerator.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IWorkShiftVisualLayerInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftWeekMinMaxCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftWorkTime.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkTimeMinMax.cs" />
@@ -2972,7 +2971,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\CommonMainShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ContractTimeShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftCategoriesShiftFilter.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftProjectionCashesFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\EarliestEndTimeLimitationShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\EffectiveRestrictionShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\LatestStartTimeLimitationShiftFilter.cs" />

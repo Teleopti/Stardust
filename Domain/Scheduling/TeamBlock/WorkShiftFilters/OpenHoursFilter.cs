@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_isAnySkillOpen = isAnySkillOpen;
 		}
 
-		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays, IPerson person, DateOnly datePointer)
+		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays, IPerson person, DateOnly datePointer)
 		{
 			var skillDays = allSkillDays.Where(x => x.CurrentDate == datePointer || x.CurrentDate == datePointer.AddDays(-1) || x.CurrentDate == datePointer.AddDays(1));
 

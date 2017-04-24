@@ -141,12 +141,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                                          IDictionary<TimePeriod, int> noOfLayersPutOnPeriod)
         {
             IWorkShift retShift = (IWorkShift) oldShift.Clone();
-            foreach (TimePeriod period in noOfLayersPutOnPeriod.Keys)
+            foreach (var period in noOfLayersPutOnPeriod)
             {
-                TimeSpan contractSegment = calculateOptimalStartTime(activityLength, noOfLayersPutOnPeriod, period);
+                TimeSpan contractSegment = calculateOptimalStartTime(activityLength, noOfLayersPutOnPeriod, period.Key);
 
-                TimeSpan startTime = period.StartTime;
-                for (int i = 0; i < noOfLayersPutOnPeriod[period]; i++)
+                TimeSpan startTime = period.Key.StartTime;
+                for (int i = 0; i < period.Value; i++)
                 {
                     startTime = startTime.Add(contractSegment);
                     TimeSpan correctedStartTime = closestSegment(startTime);

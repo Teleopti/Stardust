@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				}
 			}
 
-			var samplesAfter = samplesBefore.Select((t, i) => t + samplesToAdd[i]).ToList();
+			var samplesAfter = samplesBefore.Select((t, i) => t + samplesToAdd[i]).ToArray();
 
 			foreach (var i in samplesAfter)
 			{

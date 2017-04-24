@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="matrix">The matrix.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <returns></returns>
-		IList<IShiftProjectionCache> FilterList(IList<IShiftProjectionCache> shiftList,
+		IList<ShiftProjectionCache> FilterList(IList<ShiftProjectionCache> shiftList,
 		                                        IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 		                                        IScheduleMatrixPro matrix, 
 		                                        ISchedulingOptions schedulingOptions);

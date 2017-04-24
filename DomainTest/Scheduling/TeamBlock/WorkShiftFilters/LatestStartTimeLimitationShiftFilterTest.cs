@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.DomainTest.ResourceCalculation;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -16,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	[TestFixture]
 	public class LatestStartTimeLimitationShiftFilterTest
 	{
-		private MockRepository _mocks;
 		private DateOnly _dateOnly;
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
@@ -27,14 +27,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2013, 3, 1);
-			_activity = ActivityFactory.CreateActivity("sd");
-			_activity.SetId(Guid.NewGuid());
-			_category = ShiftCategoryFactory.CreateShiftCategory("dv");
-			_category.SetId(Guid.NewGuid());
-			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
+			_activity = ActivityFactory.CreateActivity("sd").WithId();
+			_category = ShiftCategoryFactory.CreateShiftCategory("dv").WithId();
+			_timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+			_personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
 			_target = new LatestStartTimeLimitationShiftFilter();
 		}
 
@@ -49,14 +46,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(new List<IShiftProjectionCache>(), new DateTime(), new WorkShiftFinderResultForTest());
+			var result = _target.Filter(new List<ShiftProjectionCache>(), new DateTime(), new WorkShiftFinderResultForTest());
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 
-		private IList<IShiftProjectionCache> getCashes()
+		private IList<ShiftProjectionCache> getCashes()
 		{
 			var tmpList = getWorkShifts();
-			var retList = new List<IShiftProjectionCache>();
+			var retList = new List<ShiftProjectionCache>();
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
@@ -70,15 +67,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
         [Test]
         public void TestIfEmptyListIsReturnedForNullMainShiftProjection()
         {
-            var cache1 = _mocks.StrictMock<IShiftProjectionCache>();
-            var shiftList = new List<IShiftProjectionCache> {cache1};
-            IVisualLayerCollection visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
-            using (_mocks.Record())
-            {
-                Expect.Call(cache1.MainShiftProjection).Return(visualLayerCollection);
-                Expect.Call(visualLayerCollection.Period()).Return(null);
-            }
-
+            var cache1 = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Day")), new PersonalShiftMeetingTimeChecker());
+			cache1.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly,_timeZoneInfo));
+            var shiftList = new List<ShiftProjectionCache> {cache1};
+            
             var earlistEnd = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);
             var result = _target.Filter(shiftList, earlistEnd, new WorkShiftFinderResultForTest());
             Assert.AreEqual(result.Count ,0);

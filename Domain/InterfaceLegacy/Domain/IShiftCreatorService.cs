@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -21,6 +22,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    /// Created by: henrika
 	    /// Created date: 2008-05-14
 	    /// </remarks>
-	    IList<IWorkShift> Generate(IWorkShiftRuleSet ruleSet, IWorkShiftAddCallback callback);
+	    IList<WorkShiftCollection> Generate(IWorkShiftRuleSet ruleSet, IWorkShiftAddCallback callback);
     }
 }

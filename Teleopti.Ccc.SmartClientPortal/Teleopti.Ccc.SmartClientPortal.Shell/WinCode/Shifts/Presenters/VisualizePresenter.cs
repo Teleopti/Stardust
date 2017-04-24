@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
         {
             if (rowIndex < 1) return;
 			var callback = new WorkShiftAddCallback();
-            var list = new List<IWorkShiftVisualLayerInfo>();
+            var list = new List<WorkShiftVisualLayerInfo>();
             foreach (IWorkShiftRuleSet ruleSet in Explorer.Model.FilteredRuleSetCollection)
             {
 				var layers = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, callback);
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
 				ShiftInClip.Data = list[rowIndex - 1].WorkShift.EntityClone();
         }
 
-        private IList<ReadOnlyCollection<VisualPayloadInfo>> getVisualLayers(IEnumerable<IWorkShiftVisualLayerInfo> projections)
+        private IList<ReadOnlyCollection<VisualPayloadInfo>> getVisualLayers(IEnumerable<WorkShiftVisualLayerInfo> projections)
         {
             IList<ReadOnlyCollection<VisualPayloadInfo>>  mainCollection = new List<ReadOnlyCollection<VisualPayloadInfo>>();
                 

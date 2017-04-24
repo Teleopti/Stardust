@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface IShiftProjectionCacheManager
 	{
-		IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod,
+		IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod,
 																						IEnumerable<IWorkShiftRuleSet> ruleSets, bool forRestrictionsOnly, bool checkExcluded);
 
-		IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod,
+		IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod,
 																										IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded);
 
-		IShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod);
+		ShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod);
 	}
 }

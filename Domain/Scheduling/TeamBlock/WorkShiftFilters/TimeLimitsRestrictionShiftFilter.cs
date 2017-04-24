@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface ITimeLimitsRestrictionShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<IShiftProjectionCache> shiftList,
+		IList<ShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<ShiftProjectionCache> shiftList,
 															IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult);
 	}
 
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_earliestEndTimeLimitationShiftFilter = earliestEndTimeLimitationShiftFilter;
 		}
 
-		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<IShiftProjectionCache> shiftList,
+		public IList<ShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<ShiftProjectionCache> shiftList,
 																  IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
 		{
 			if (person == null) return null;

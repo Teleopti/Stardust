@@ -12,11 +12,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         {
             _shiftGenerator = shiftGenerator;
         }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IList<IWorkShift> Generate(IWorkShiftRuleSet ruleSet, IWorkShiftAddCallback callback)
+		
+		public IList<WorkShiftCollection> Generate(IWorkShiftRuleSet ruleSet, IWorkShiftAddCallback callback)
 	    {
-			var retColl = new List<IWorkShift>();
+			var retColl = new List<WorkShiftCollection>();
 			using (PerformanceOutput.ForOperation("Generating workshifts for " + ruleSet.Description.Name))
 			{
 				var templates = ruleSet.TemplateGenerator.Generate();
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 				{
 					if (callback != null && callback.IsCanceled)
 						break;
-					retColl.AddRange(_shiftGenerator.Generate(template, ruleSet.ExtenderCollection,
+					retColl.Add(_shiftGenerator.Generate(template, ruleSet.ExtenderCollection,
 															  ruleSet.LimiterCollection, callback));
 				}
 			}
