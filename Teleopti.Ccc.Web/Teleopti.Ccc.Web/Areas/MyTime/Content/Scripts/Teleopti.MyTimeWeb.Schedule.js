@@ -43,7 +43,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function _fetchData(dataHandler) {
 		var selectedDate = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 		ajax.Ajax({
-			url: "../api/Schedule/FetchData",
+			url: "../api/Schedule/FetchWeekData",
 			dataType: "json",
 			type: "GET",
 			data: {

@@ -28,7 +28,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 
 	var fetchData = function () {
 		ajax.Ajax({
-			url: "../api/Schedule/FetchData",
+			url: "../api/Schedule/FetchWeekData",
 			dataType: "json",
 			type: "GET",
 			data: {
