@@ -1,0 +1,67 @@
+<div class="view-header">
+  <div class="view-title">
+    <h1><i class="mdi mdi-chart-bar"></i> {{'Reports'|translate}}</h1>
+  </div>
+</div>
+
+<div class="con-row">
+  <div class="con-flex">
+    <div class="panel material-depth-1">
+      <div class="con-row">
+        <div class="con-flex">
+          <label for="filter" class="input-icon">
+            <i class="mdi mdi-filter-outline">
+              <input type="text" ng-model="reportFilter" id="filter" placeholder="{{'FilterReports'|translate}}">
+              <md-tooltip>Filter</md-tooltip>
+            </i>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<wfm-card-list>
+  <!-- custom -->
+  <wfm-card ng-repeat="report in reports.customTypes | filter:reportFilter" "report.childNodes.length>0">
+    <card-header>
+      <b>{{report.Type}}</b>
+    </card-header>
+    <card-body class="panel">
+      <ul class="wfm-list">
+        <a href="{{rep.Url}}" style="text-decoration:none;" ng-repeat="rep in report.childNodes | filter:reportFilter" target="_blank">
+          <li>{{rep.Name}}</li>
+        </a>
+      </ul>
+    </card-body>
+  </wfm-card>
+
+<!-- all reports -->
+  <wfm-card ng-repeat="report in reports.reports | filter:reportFilter" >
+    <card-header>
+      <b>{{report.Type}}</b>
+    </card-header>
+    <card-body class="panel">
+
+      <ul class="wfm-list">
+        <a href="{{rep.Url}}" style="text-decoration:none;" ng-repeat="rep in report.childNodes | filter:reportFilter" target="_blank">
+          <li>{{rep.Name}}</li>
+        </a>
+      </ul>
+    </card-body>
+  </wfm-card>
+
+<!-- custom -->
+  <wfm-card ng-repeat="report in reports.customTypes | filter:reportFilter" ng-if="report.childNodes.length<1">
+    <card-header>
+      <b>{{report.Type}}</b>
+    </card-header>
+    <card-body class="panel">
+      <ul class="wfm-list">
+        <a href="{{rep.Url}}" style="text-decoration:none;" ng-repeat="rep in report.childNodes | filter:reportFilter" target="_blank">
+          <li>{{rep.Name}}</li>
+        </a>
+      </ul>
+    </card-body>
+  </wfm-card>
+</wfm-card-list>

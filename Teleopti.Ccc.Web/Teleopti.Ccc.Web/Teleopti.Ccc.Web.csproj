@@ -1479,6 +1479,9 @@
     <Content Include="WFM\app\permissions\refact\permissions.data.service.spec.js" />
     <Content Include="WFM\app\permissions\refact\permissions.filter.r.js" />
     <Content Include="WFM\app\permissions\refact\permissions.filter.r.spec.js" />
+    <Content Include="WFM\app\reports\html\reports.overview.html" />
+    <Content Include="WFM\app\reports\reports.overview.controller.js" />
+    <Content Include="WFM\app\reports\reports.overview.controller.spec.js" />
     <Content Include="WFM\app\requests\html\requests-budget-allowance.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-footer.tpl.html" />
     <Content Include="WFM\app\requests\requests-budget-allowance.directive.js" />
