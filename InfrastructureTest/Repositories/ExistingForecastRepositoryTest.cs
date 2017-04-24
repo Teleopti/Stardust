@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		/// <summary>
 		/// Runs every test. Implemented by repository's concrete implementation.
 		/// </summary>
-		private void ConcreteSetup()
+		private void concreteSetup()
 		{
 			_skill = SkillFactory.CreateSkill("dummy", _skillType, 15);
-			
+
 			_skill.Activity = _activity;
 
-			TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
 			_skill.TimeZone = timeZoneInfo;
 			PersistAndRemoveFromUnitOfWork(_skill);
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_date = timeZoneInfo.SafeConvertTimeToUtc(new DateTime(2015, 5, 8, 2, 0, 0));
 		}
 
-		private void CreateBasicStuff()
+		private void createBasicStuff()
 		{
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
 			PersistAndRemoveFromUnitOfWork(_scenario);
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		/// Should be a "full detailed" aggregate
 		/// </summary>
 		/// <returns></returns>
-		private ISkillDay CreateSkillDay(IList<IWorkloadDay> workloads)
+		private ISkillDay createSkillDay(IList<IWorkloadDay> workloads)
 		{
 			IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
 			skillDataPeriods.Add(
@@ -71,35 +71,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					  skillDataPeriods[0].SkillPersonData,
 					  skillDataPeriods[0].Period.MovePeriod(TimeSpan.FromHours(12))));
 
-			SkillDay skillDay = new SkillDay(new DateOnly(_date), _skill, _scenario,
-				 workloads, skillDataPeriods);
+			var skillDay = new SkillDay(new DateOnly(_date), _skill, _scenario, workloads, skillDataPeriods);
 
 			_date = _date.AddDays(1);
 
 			return skillDay;
 		}
 
-		private WorkloadDay CreateWorkload()
+		private IWorkloadDay createWorkload()
 		{
-			IList<TimePeriod> openHourPeriods = new List<TimePeriod>();
-			openHourPeriods.Add(new TimePeriod("12:30-17:30"));
-
-			WorkloadDay workloadDay = new WorkloadDay();
-			workloadDay.Create(new DateOnly(_date), _workload, openHourPeriods);
+			var workloadDay = new WorkloadDay();
+			workloadDay.Create(new DateOnly(_date), _workload, new List<TimePeriod> { new TimePeriod("12:30-17:30") });
 			workloadDay.Tasks = 7 * 20;
 			workloadDay.AverageTaskTime = TimeSpan.FromSeconds(22);
 			workloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(233);
 			return workloadDay;
 		}
-	
 
 		[Test]
 		public void ShouldReturnExistingForecast()
 		{
-			CreateBasicStuff();
-			ConcreteSetup();
-			var day1 = CreateSkillDay(new[] { CreateWorkload ()});
-			var day2 = CreateSkillDay(new[] { CreateWorkload() });
+			createBasicStuff();
+			concreteSetup();
+			var day1 = createSkillDay(new[] { createWorkload() });
+			var day2 = createSkillDay(new[] { createWorkload() });
 
 			PersistAndRemoveFromUnitOfWork(day1);
 			PersistAndRemoveFromUnitOfWork(day2);
@@ -107,20 +102,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new ExistingForecastRepository(new ThisUnitOfWork(UnitOfWork));
 
 			var range = new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31);
-			var result =  target.ExistingForecastForAllSkills(range, _scenario );
-			result.Count().Should().Be(1);
+			var result = target.ExistingForecastForAllSkills(range, _scenario).ToList();
+			result.Count.Should().Be(1);
 			result.First().Periods.Count().Should().Be(1);
-			result.First().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 9));
+			result.First().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 08, 2015, 05, 09));
 		}
 
 		[Test]
 		public void ShouldReturnExistingForecastOnTwoSkills()
 		{
-			CreateBasicStuff();
-			ConcreteSetup();
-			var day1 = CreateSkillDay(new[] { CreateWorkload() });
-			ConcreteSetup();
-			var day2 = CreateSkillDay(new[] { CreateWorkload() });
+			createBasicStuff();
+			concreteSetup();
+			var day1 = createSkillDay(new[] { createWorkload() });
+			concreteSetup();
+			var day2 = createSkillDay(new[] { createWorkload() });
 
 			PersistAndRemoveFromUnitOfWork(day1);
 			PersistAndRemoveFromUnitOfWork(day2);
@@ -128,22 +123,48 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new ExistingForecastRepository(new ThisUnitOfWork(UnitOfWork));
 
 			var range = new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31);
-			var result = target.ExistingForecastForAllSkills(range, _scenario);
-			result.Count().Should().Be(2);
+			var result = target.ExistingForecastForAllSkills(range, _scenario).ToList();
+			result.Count.Should().Be(2);
 			result.First().Periods.Count().Should().Be(1);
-			result.First().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 8));
+			result.First().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 08, 2015, 05, 08));
 
 			result.Last().Periods.Count().Should().Be(1);
-			result.Last().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 8));
+			result.Last().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 08, 2015, 05, 08));
+		}
+
+		[Test]
+		public void ShouldReturnExistingForecastOnTwoSkillsAndDifferentLengths()
+		{
+			createBasicStuff();
+			concreteSetup();
+			var day1 = createSkillDay(new[] { createWorkload() });
+			concreteSetup();
+			var day2 = createSkillDay(new[] { createWorkload() });
+			var day3 = createSkillDay(new[] { createWorkload() });
+
+			PersistAndRemoveFromUnitOfWork(day1);
+			PersistAndRemoveFromUnitOfWork(day2);
+			PersistAndRemoveFromUnitOfWork(day3);
+
+			var target = new ExistingForecastRepository(new ThisUnitOfWork(UnitOfWork));
+
+			var range = new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31);
+			var result = target.ExistingForecastForAllSkills(range, _scenario).ToList();
+			result.Count.Should().Be(2);
+			result.First(x => x.SkillId == day1.Skill.Id).Periods.Count().Should().Be(1);
+			result.First(x => x.SkillId == day1.Skill.Id).Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 08, 2015, 05, 08));
+
+			result.Last(x => x.SkillId == day2.Skill.Id).Periods.Count().Should().Be(1);
+			result.Last(x => x.SkillId == day2.Skill.Id).Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 08, 2015, 05, 09));
 		}
 
 		[Test]
 		public void ShouldReturnExistingForecastForMultipleWorkloads()
 		{
-			CreateBasicStuff();
-			ConcreteSetup();
-			var day1 = CreateSkillDay(new[] { CreateWorkload(), CreateWorkload() });
-			var day2 = CreateSkillDay(new[] { CreateWorkload() });
+			createBasicStuff();
+			concreteSetup();
+			var day1 = createSkillDay(new[] { createWorkload(), createWorkload() });
+			var day2 = createSkillDay(new[] { createWorkload() });
 
 			PersistAndRemoveFromUnitOfWork(day1);
 			PersistAndRemoveFromUnitOfWork(day2);
@@ -151,26 +172,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new ExistingForecastRepository(new ThisUnitOfWork(UnitOfWork));
 
 			var range = new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31);
-			var result = target.ExistingForecastForAllSkills(range, _scenario);
-			result.Count().Should().Be(1);
+			var result = target.ExistingForecastForAllSkills(range, _scenario).ToList();
+			result.Count.Should().Be(1);
 			result.First().Periods.Count().Should().Be(1);
-			result.First().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 8, 2015, 05, 9));
+			result.First().Periods.First().Should().Be(new DateOnlyPeriod(2015, 05, 08, 2015, 05, 09));
 		}
 
 		[Test]
 		public void ShouldReturnSkillWithNoForecast()
 		{
-			CreateBasicStuff();
-			ConcreteSetup();
-			var day1 = CreateSkillDay(new[] { CreateWorkload() });
+			createBasicStuff();
+			concreteSetup();
+			var day1 = createSkillDay(new[] { createWorkload() });
 
 			PersistAndRemoveFromUnitOfWork(day1);
 
 			var target = new ExistingForecastRepository(new ThisUnitOfWork(UnitOfWork));
 
 			var range = new DateOnlyPeriod(2015, 06, 01, 2015, 06, 30);
-			var result = target.ExistingForecastForAllSkills(range, _scenario);
-			result.Count().Should().Be(1);
+			var result = target.ExistingForecastForAllSkills(range, _scenario).ToList();
+			result.Count.Should().Be(1);
 			result.First().Periods.Should().Be.Empty();
 		}
 	}
