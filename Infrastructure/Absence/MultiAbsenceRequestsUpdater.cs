@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 			catch (Exception exp)
 			{
-				_feedback.SendProgress("The bulk for absence requests failed! " + exp.Message + exp.StackTrace);
+				_feedback.SendProgress("The bulk for absence requests failed! " + exp);
 				logger.Error("The bulk for absence requests failed! ", exp);
 				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 				catch (Exception exp)
 				{
-					_feedback.SendProgress($"Absence Request failed! {personRequest.Id.GetValueOrDefault()}" + exp.Message + exp.StackTrace);
+					_feedback.SendProgress($"Absence Request failed! {personRequest.Id.GetValueOrDefault()}" + exp);
 					logger.Error($"Absence Request failed! {personRequest.Id.GetValueOrDefault()}", exp);
 					throw;
 				}
