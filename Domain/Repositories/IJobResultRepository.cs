@@ -9,5 +9,8 @@ namespace Teleopti.Ccc.Domain.Repositories
         ICollection<IJobResult> LoadHistoryWithPaging(PagingDetail pagingDetail, params string[] jobCategories);
 	    void AddDetailAndCheckSuccess(Guid jobResultId, IJobResultDetail detail, int expectedSuccessful);
 	    IJobResult FindWithNoLock(Guid jobResultId);
+
+	    IList<IJobResult> LoadAllWithNoLock();
+
     }
 }

@@ -67,6 +67,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		protected virtual bool IfNeedRejectJob(ImportAgentEvent @event)
 		{
 			var jobResult = getJobResult(@event);
+			if (jobResult == null)
+			{
+				_feedback.SendProgress("Can not found the job.");
+				return true;
+			}
 			var version = jobResult.Version;
 			if (version.GetValueOrDefault() > 1)
 			{
@@ -85,6 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var owner = jobResult.Owner;
 
 			JobResultArtifact inputFile;
+			_feedback.SendProgress($"Start to do input artifact validation!");
 			var errorMsg = validateJobInputArtifact(jobResult, out inputFile);
 			_feedback.SendProgress($"Done input artifact validation!");
 			if (!errorMsg.IsNullOrEmpty())
@@ -97,6 +103,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				Data = inputFile.Content,
 				FileName = inputFile.Name
 			};
+			_feedback.SendProgress($"Start to process artifact!");
 			var processResult = _fileProcessor.Process(fileData, owner.PermissionInformation.DefaultTimeZone(), defaults);
 			_feedback.SendProgress($"Done input artifact process!");
 			if (!processResult.ErrorMessages.IsNullOrEmpty())
@@ -135,6 +142,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		private void saveJobArtifacts(IJobResult jobResult, JobResultArtifact inputArtifact, AgentFileProcessResult processResult)
 		{
+			_feedback.SendProgress($"Start to do job artifact preparation!");
 			if (_hasException) throw new Exception(); //only for test
 
 			string fileName = inputArtifact.FileName;

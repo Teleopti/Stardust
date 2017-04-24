@@ -67,6 +67,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return Get(jobResultId);
 		}
+
+		public IList<IJobResult> LoadAllWithNoLock()
+		{
+			return LoadAll();
+		}
 	}
 
 	public class FakeJobResultRepositoryForCurrentBusinessUnit : FakeJobResultRepository

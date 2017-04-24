@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 
 			this.HasError = this.JobResult.HasError()
-							&& this.FailedArtifact == null;
+							&& this.FailedCount == 0;
 
 			this.HasException = !(this.ResultDetail?.ExceptionMessage.IsNullOrEmpty() ?? true)
 								|| !(this.ResultDetail?.InnerExceptionMessage.IsNullOrEmpty() ?? true);

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		public IList<ImportAgentJobResultDetail> GetJobsForCurrentBusinessUnit()
 		{
-			var resultList = _jobResultRepository.LoadAll()
+			var resultList = _jobResultRepository.LoadAllWithNoLock()
 				.Where(r=>r.JobCategory == JobCategory.WebImportAgent)
 				.OrderByDescending(r => r.Timestamp)
 				.ToList();

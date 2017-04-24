@@ -53,5 +53,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 			return Session.Load<IJobResult>(jobResultId, LockMode.None);
 		}
+
+		public IList<IJobResult> LoadAllWithNoLock()
+		{
+			return Session.CreateCriteria(typeof(IJobResult)).SetLockMode(LockMode.None).List<IJobResult>();
+		}
+
+
 	}
 }
