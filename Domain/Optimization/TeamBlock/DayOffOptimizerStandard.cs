@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 		private readonly AffectedDayOffs _affectedDayOffs;
 		private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
+		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
 
 		public DayOffOptimizerStandard(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -56,7 +57,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder,
 			AffectedDayOffs affectedDayOffs,
-			IShiftCategoryLimitationChecker shiftCategoryLimitationChecker)
+			IShiftCategoryLimitationChecker shiftCategoryLimitationChecker,
+			INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
 			_affectedDayOffs = affectedDayOffs;
 			_shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
+			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
 		}
 
 		[RemoveMeWithToggle("Maybe (?) remove IPeriodValueCalculator param", Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
@@ -199,7 +202,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, matrix.Person);
 
 			var personToSetShiftCategoryLimitationFor = optimizationPreferences.Extra.IsClassic() ? matrix.Person : null;
-			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, personToSetShiftCategoryLimitationFor))
+			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, personToSetShiftCategoryLimitationFor, matrix, optimizationPreferences))
 			{
 				return false;
 			}
@@ -282,8 +285,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IPerson personToSetShiftCategoryLimitationFor)
+			IPerson personToSetShiftCategoryLimitationFor,
+			IScheduleMatrixPro matrix,
+			IOptimizationPreferences optimizationPreferences)
 		{
+			var nightRestWhiteSpotSolver = _nightRestWhiteSpotSolverServiceFactory.Create(true); //keep some behavoir as in classic
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
 				if (personToSetShiftCategoryLimitationFor != null)
@@ -296,8 +302,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
-				if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
-					return false;
+				if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
+					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(),
+					schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(),
+					NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
+				{
+					if (optimizationPreferences.Extra.IsClassic())
+					{
+						if (!nightRestWhiteSpotSolver.Resolve(matrix, schedulingOptions, rollbackService))
+							return false;
+					}
+					else
+					{
+						return false;
+					}
+				}
 			}
 
 			return true;

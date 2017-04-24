@@ -91,6 +91,16 @@ namespace Teleopti.Ccc.Domain.Optimization
         public IVirtualSchedulePeriod SchedulePeriod { get; }
 
 	    public IScheduleRange ActiveScheduleRange { get; }
+	    public bool IsFullyScheduled()
+	    {
+		    foreach (var scheduleDayPro in EffectivePeriodDays)
+		    {
+			    if (!scheduleDayPro.DaySchedulePart().IsScheduled())
+				    return false;
+		    }
+
+		    return true;
+		}
 
 	    /// <summary>
         /// Creates the schedule days.

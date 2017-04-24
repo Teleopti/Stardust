@@ -50,13 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool IsFullyScheduled()
         {
-            foreach (IScheduleDayPro scheduleDayPro in _matrix.EffectivePeriodDays)
-            {
-                if (!scheduleDayPro.DaySchedulePart().IsScheduled())
-                    return false;
-            }
-
-            return true;
+	        return _matrix.IsFullyScheduled();
         }
 
 

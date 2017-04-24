@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <value>The active schedule range.</value>
         IScheduleRange ActiveScheduleRange { get; }
-    	
+
+	    bool IsFullyScheduled();
     }
 }

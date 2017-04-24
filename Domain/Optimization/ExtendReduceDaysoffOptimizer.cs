@@ -223,13 +223,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				if (!schedulingResult)
 				{
-					int iterations = 0;
-					while (_nightRestWhiteSpotSolverService.Resolve(_matrix, schedulingOptions, _rollbackService) && iterations < 10)
-					{
-						iterations++;
-					}
-
-					if (originalStateContainer.IsFullyScheduled())
+					if (_nightRestWhiteSpotSolverService.Resolve(_matrix, schedulingOptions, _rollbackService))
 						return true;
 
 					IList<DateOnly> toResourceCalculate = _rollbackService.ModificationCollection.Select(scheduleDay => scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();

@@ -194,11 +194,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					backgroundWorker.ReportProgress(0, progressChangeEvent);
 					foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
 					{
-						var iterations = 0;
-						while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService) && iterations < 10)
-						{
-							iterations++;
-						}
+						nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService);
 					}
 				}
 
