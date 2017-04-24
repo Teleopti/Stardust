@@ -46,10 +46,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), personSkills.Select(s => s.Skill),
 				_scenarioRepository.Current()).ToList();
 
-			var intradayStaffingModels = createSkillStaffingDatas(period, personSkills.Select(s => s.Skill).ToList(), resolution, useShrinkage, skillDays);
+			var skillStaffingDatas = createSkillStaffingDatas(period, personSkills.Select(s => s.Skill).ToList(), resolution, useShrinkage, skillDays);
 
-			skillStaffingList.AddRange(intradayStaffingModels);
-
+			skillStaffingList.AddRange(skillStaffingDatas);
 
 			return skillStaffingList;
 		}
@@ -73,6 +72,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 									resolution, day,
 									useShrinkage).ToLookup(x => new {x.StartTime, x.SkillId})
 							});
+
 			var skillStaffingDatas = from dayStaffingData in dayStaffingDatas
 				let date = dayStaffingData.Date
 				let times =
@@ -97,6 +97,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 						: null,
 					ForecastedStaffing = forecasteds.Any() ? forecasteds.Sum(forecasted => forecasted?.Agents) : null
 				};
+
 			return skillStaffingDatas.ToList();
 		}
 

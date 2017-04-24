@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		}
 
 		[Test]
-		public void ShouldProcessMultipleCalculationAbsencePossibilities1000()
+		public void ShouldProcessCalculationOfAbsencePossibilitiesIntradayForMultipleAgents()
 		{
 			intial();
 			var now = Now.UtcDateTime();
@@ -98,10 +98,11 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		{
 			intial();
 			var now = Now.UtcDateTime();
-			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(14));
+			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(13));
 			updateStaffingLevel(period);
-			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
+			var dateOnlyPeriod = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(13));
 			var personIds = loadPersonIds();
+			//var personIds = new[] { new Guid("0b4390a8-2128-4550-8d03-a14100f34ea1") };
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
@@ -130,15 +131,11 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			var people = PersonRepository.FindPeople(personIds);
 			foreach (var person in people)
 			{
-				LoggedOnUser.IsPerson(person);
-				//var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator,
-				//	IntervalLengthFetcher);
-				//_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
-				//	cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario, UserTimeZone);
+				LoggedOnUser.SetFakeLoggedOnUser(person);
 				var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod());
 				if (!possibilities.Any())
 				{
-					Console.WriteLine($"{person.Id.GetValueOrDefault()} no data");
+					Console.WriteLine($"{person.Id.GetValueOrDefault()} has data");
 				}
 			}
 			stopwatch.Stop();
@@ -159,11 +156,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			var people = PersonRepository.FindPeople(personIds);
 			foreach (var person in people)
 			{
-				LoggedOnUser.IsPerson(person);
-				//var cacheableStaffingViewModelCreator = new CacheableStaffingViewModelCreator(StaffingViewModelCreator,
-				//	IntervalLengthFetcher);
-				//_scheduleStaffingPossibilityCalculator = new ScheduleStaffingPossibilityCalculator(Now, currentUser,
-				//	cacheableStaffingViewModelCreator, ScheduleStorage, CurrentScenario, UserTimeZone);
+				LoggedOnUser.SetFakeLoggedOnUser(person);
 				var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(datePeriod);
 				if (!possibilities.Any())
 				{
