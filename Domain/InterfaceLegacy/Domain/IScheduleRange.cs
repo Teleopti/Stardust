@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -149,5 +150,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    bool IsEmpty();
 
 	    void Reassociate(IUnitOfWork unitOfWork);
+
+	    TargetScheduleSummary CalculatedTargetTimeSummary(DateOnlyPeriod periodToCheck);
+
     }
 }

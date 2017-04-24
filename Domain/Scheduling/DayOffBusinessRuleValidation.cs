@@ -7,11 +7,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		public bool Validate(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
 		{
-			if (!(scheduleRange.CalculatedTargetScheduleDaysOff(periodToCheck).HasValue))
+			var summary = scheduleRange.CalculatedTargetTimeSummary(periodToCheck);
+			if (!summary.TargetDaysOff.HasValue)
 				return false;
 
-			var calculatedTargetScheduleDaysOff = scheduleRange.CalculatedTargetScheduleDaysOff(periodToCheck);
-			return calculatedTargetScheduleDaysOff != null && (calculatedTargetScheduleDaysOff.Value == scheduleRange.CalculatedScheduleDaysOffOnPeriod(periodToCheck));
+			var scheduledDaysOff = scheduleRange.CalculatedScheduleDaysOffOnPeriod(periodToCheck);
+			return summary.TargetDaysOff.Value - summary.NegativeTargetDaysOffTolerance <= scheduledDaysOff &&
+				summary.TargetDaysOff.Value + summary.PositiveTargetDaysOffTolerance >= scheduledDaysOff;
 		}
 	}
 }

@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private readonly IPersistableScheduleDataPermissionChecker _permissionChecker;
 		private IList<IScheduleData> _scheduleObjectsWithNoPermissions;
 		private ScheduleRange _snapshot;
+		private TargetScheduleSummary _targetScheduleSummary;
 		private TimeSpan? _calculatedContractTimeHolder;
-		private TimeSpan? _calculatedTargetTimeHolder;
-		private int? _calculatedTargetScheduleDaysOff;
 		private int? _calculatedScheduleDaysOff;
 		private readonly Lazy<IEnumerable<DateOnlyPeriod>> _availablePeriods;
 		private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
+
 
 		public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters, IPersistableScheduleDataPermissionChecker permissionChecker)
 			: base(owner, parameters)
@@ -164,15 +164,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			AddRange(_permissionChecker.GetPermittedData(part.PersistableScheduleDataCollection()));
 
 			_calculatedContractTimeHolder = null;
-			_calculatedTargetTimeHolder = null;
-			_calculatedTargetScheduleDaysOff = null;
+			_targetScheduleSummary = null;
 			_calculatedScheduleDaysOff = null;
 			_shiftCategoryFairnessHolder = null;
 		}
 
 		public TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck)
 		{
-
 			if (!_calculatedContractTimeHolder.HasValue)
 			{
 				var timeAndDaysOffTuple = new CurrentScheduleSummaryCalculator().GetCurrent(this, periodToCheck);
@@ -185,19 +183,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck)
 		{
-			if (!_calculatedTargetTimeHolder.HasValue)
+			if (_targetScheduleSummary?.TargetTime == null)
 			{
-				var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
-				_calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
-				_calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
+				_targetScheduleSummary = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
 			}
 
-			return _calculatedTargetTimeHolder;
+			return _targetScheduleSummary.TargetTime;
+		}
+
+		public TargetScheduleSummary CalculatedTargetTimeSummary(DateOnlyPeriod periodToCheck)
+		{
+			return _targetScheduleSummary ?? new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
 		}
 
 		public int CalculatedScheduleDaysOffOnPeriod(DateOnlyPeriod periodToCheck)
 		{
-
 			if (!_calculatedScheduleDaysOff.HasValue)
 			{
 				var timeAndDaysOffTuple = new CurrentScheduleSummaryCalculator().GetCurrent(this, periodToCheck);
@@ -210,14 +210,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck)
 		{
-			if (!_calculatedTargetScheduleDaysOff.HasValue)
+			if (_targetScheduleSummary?.TargetDaysOff == null)
 			{
-				var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
-				_calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
-				_calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
+				_targetScheduleSummary = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
 			}
 
-			return _calculatedTargetScheduleDaysOff;
+			return _targetScheduleSummary.TargetDaysOff;
 		}
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
@@ -276,10 +274,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var myVersion = find(databaseVersion);
 				var databaseVersionEntity = databaseVersion as IEntity;
 				if (databaseVersionEntity != null)
-					((IEntity) myVersion).SetId(databaseVersionEntity.Id);
+					((IEntity)myVersion).SetId(databaseVersionEntity.Id);
 				var databaseVersionVersioned = databaseVersion as IVersioned;
 				if (databaseVersionVersioned != null)
-					((IVersioned) myVersion).SetVersion(databaseVersionVersioned.Version.Value);
+					((IVersioned)myVersion).SetVersion(databaseVersionVersioned.Version.Value);
 			}
 		}
 
@@ -324,7 +322,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var casted = scheduleData as IPersistableScheduleData;
 				if (casted != null && casted.Id == id)
 				{
-					var current = ((IPersistableScheduleData) find(casted));
+					var current = ((IPersistableScheduleData)find(casted));
 					Snapshot.Remove(casted);
 					if (current != null)
 					{
@@ -355,7 +353,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public DateTimePeriod VisiblePeriodMinusFourWeeksPeriod()
 		{
-			return ((ISchedule) this).Owner.Period.VisiblePeriodMinusFourWeeksPeriod();
+			return ((ISchedule)this).Owner.Period.VisiblePeriodMinusFourWeeksPeriod();
 		}
 
 		public IShiftCategoryFairnessHolder CachedShiftCategoryFairness()
@@ -374,13 +372,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			_calculatedContractTimeHolder = null;
 			_calculatedScheduleDaysOff = null;
-			_calculatedTargetTimeHolder = null;
+			_targetScheduleSummary = null;
 		}
 
-						public bool IsEmpty()
-			{
-				return !PersistableScheduleDataInternalCollection().Any();
-			}
+		public bool IsEmpty()
+		{
+			return !PersistableScheduleDataInternalCollection().Any();
+		}
 
 		public void Reassociate(IUnitOfWork unitOfWork)
 		{

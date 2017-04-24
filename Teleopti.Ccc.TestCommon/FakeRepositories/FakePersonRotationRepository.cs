@@ -11,51 +11,52 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonRotationRepository : IPersonRotationRepository
 	{
+		public IList<IPersonRotation> _storage = new List<IPersonRotation>(); 
+
 		public void Add(IPersonRotation root)
 		{
-			throw new NotImplementedException();
+			_storage.Add(root);
 		}
 
 		public void Remove(IPersonRotation root)
 		{
-			throw new NotImplementedException();
+			_storage.Remove(root);
 		}
 
 		public IPersonRotation Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _storage.FirstOrDefault(r => r.Id == id);
 		}
 
 		public IList<IPersonRotation> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _storage;
 		}
 
 		public IPersonRotation Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return _storage.FirstOrDefault(r => r.Id == id);
 		}
 
 		public long CountAllEntities()
 		{
-			throw new NotImplementedException();
+			return _storage.Count;
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IPersonRotation> Find(IPerson person)
 		{
-			throw new NotImplementedException();
+			return _storage.Where(r => r.Person == person).ToList();
 		}
 
 		public IList<IPersonRotation> Find(IList<IPerson> persons)
 		{
-			throw new NotImplementedException();
+			return _storage.Where(r => persons.Contains(r.Person)).ToList();
 		}
 
 		public IEnumerable<IPersonRotation> LoadPersonRotationsWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
 		{
-			//impl when needed
-			return Enumerable.Empty<IPersonRotation>();
+			return _storage.Where(r => persons.Contains(r.Person) && r.StartDate == startDate).ToList();
 		}
 	}
 }

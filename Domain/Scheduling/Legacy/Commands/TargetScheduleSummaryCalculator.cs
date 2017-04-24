@@ -9,10 +9,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class TargetScheduleSummaryCalculator
 	{
-		public Tuple<TimeSpan?, int?> GetTargets(IScheduleRange range, DateOnlyPeriod visiblePeriod)
+		public TargetScheduleSummary GetTargets(IScheduleRange range, DateOnlyPeriod visiblePeriod)
 		{
-			TimeSpan? targetTime = null;
-			var targetDaysOff = 0;
+			var result = new TargetScheduleSummary();
 			var person = range.Person;
 			var schedulePeriods = extractVirtualPeriods(person, visiblePeriod);
 			foreach (var virtualSchedulePeriod in schedulePeriods)
@@ -23,14 +22,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IScheduleMatrixPro matrix = new ScheduleMatrixPro(range, fullWeekOuterWeekPeriodCreator, virtualSchedulePeriod);
 				ISchedulePeriodTargetCalculatorFactory schedulePeriodTargetCalculatorFactory =
 					new NewSchedulePeriodTargetCalculatorFactory(matrix);
-				ISchedulePeriodTargetCalculator calculator = schedulePeriodTargetCalculatorFactory.CreatePeriodTargetCalculator();
+				var calculator = schedulePeriodTargetCalculatorFactory.CreatePeriodTargetCalculator();
 				if (calculator == null)
-					return new Tuple<TimeSpan?, int?>(null, null);
+					return new TargetScheduleSummary();
 
-				targetTime = (targetTime ?? TimeSpan.Zero).Add(calculator.PeriodTarget(true));
-				targetDaysOff += virtualSchedulePeriod.DaysOff();
+				result.TargetTime = (result.TargetTime ?? TimeSpan.Zero).Add(calculator.PeriodTarget(true));
+				result.TargetDaysOff = (result.TargetDaysOff ?? 0) + virtualSchedulePeriod.DaysOff();
+
+				result.NegativeTargetTimeTolerance += virtualSchedulePeriod.Contract.NegativePeriodWorkTimeTolerance;
+				result.PositiveTargetTimeTolerance += virtualSchedulePeriod.Contract.PositivePeriodWorkTimeTolerance;
+				result.NegativeTargetDaysOffTolerance += virtualSchedulePeriod.Contract.NegativeDayOffTolerance;
+				result.PositiveTargetDaysOffTolerance += virtualSchedulePeriod.Contract.PositiveDayOffTolerance;
 			}
-			return new Tuple<TimeSpan?, int?>(targetTime, targetDaysOff);
+			return result;
 		}
 
 		private static IEnumerable<IVirtualSchedulePeriod> extractVirtualPeriods(IPerson person, DateOnlyPeriod period)
@@ -45,5 +49,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 			return virtualPeriods;
 		}
+	}
+
+	public class TargetScheduleSummary
+	{
+		public TimeSpan? TargetTime { get; set; }
+		public int? TargetDaysOff { get; set; }
+		public TimeSpan NegativeTargetTimeTolerance { get; set; }
+		public TimeSpan PositiveTargetTimeTolerance { get; set; }
+		public int PositiveTargetDaysOffTolerance { get; set; }
+		public int NegativeTargetDaysOffTolerance { get; set; }
 	}
 }

@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -82,6 +83,11 @@ namespace Teleopti.Ccc.TestCommon
 		public TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck)
 		{
 			return TimeSpan.FromHours(8);
+		}
+
+		public TargetScheduleSummary CalculatedTargetTimeSummary(DateOnlyPeriod periodToCheck)
+		{
+			return new TargetScheduleSummary{TargetDaysOff = CalculatedTargetScheduleDaysOff(periodToCheck), TargetTime = CalculatedTargetTimeHolder(periodToCheck) };
 		}
 		public int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck)
 		{

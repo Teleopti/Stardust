@@ -99,20 +99,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private static int successfulScheduledAgents(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, DateOnlyPeriod periodToCheck)
 		{
-			return
-				schedules.Count(
-					x =>
-					{
-						var calculatedTargetTime = x.Value.CalculatedTargetTimeHolder(periodToCheck);
-						return calculatedTargetTime.HasValue && x.Value.CalculatedContractTimeHolderOnPeriod(periodToCheck) == calculatedTargetTime;
-					});
+			return schedules.Count(x => isAgentScheduled(x.Value, periodToCheck));
 		}
 
 		private static bool isAgentScheduled(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
 		{
-			var targetTime = scheduleRange.CalculatedTargetTimeHolder(periodToCheck);
-			return targetTime.HasValue &&
-				(targetTime.Value == scheduleRange.CalculatedContractTimeHolderOnPeriod(periodToCheck));
+			var summary = scheduleRange.CalculatedTargetTimeSummary(periodToCheck);
+			var scheduledTime = scheduleRange.CalculatedContractTimeHolderOnPeriod(periodToCheck);
+			return summary.TargetTime.HasValue && 
+				summary.TargetTime.Value - summary.NegativeTargetTimeTolerance <= scheduledTime &&
+				summary.TargetTime.Value + summary.PositiveTargetTimeTolerance >= scheduledTime;
 		}
 
 		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(
