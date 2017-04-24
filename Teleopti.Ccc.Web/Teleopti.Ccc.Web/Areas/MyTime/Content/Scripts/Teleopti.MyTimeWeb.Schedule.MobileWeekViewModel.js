@@ -57,6 +57,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.staffingProbabilityOnMobileEnabled = ko.observable(false);
 	self.staffingProbabilityForMultipleDaysEnabled = ko.observable(false);
 	self.showProbabilityOptionsToggleIcon = ko.observable(false);
+	self.mergeIdenticalProbabilityIntervals = true;
+	self.hideProbabilityEarlierThanNow = false;
+	self.loadingProbabilityData = ko.observable(false);
 
 	self.maxDate = ko.observable();
 	self.minDate = ko.observable();
@@ -145,6 +148,19 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		CancelAddingNewRequest: function () { self.CancelAddingNewRequest(); }
 	};
 
+	self.showAddOvertimeAvailabilityForm = function (data) {
+		if (self.overtimeAvailabilityPermission() !== true) {
+			return;
+		}
+		self.initialRequestDay(data.fixedDate());
+		self.requestViewModel(addOvertimeModel);
+		_fillFormData(data);
+	};
+
+	self.CancelAddingNewRequest = function () {
+		self.requestViewModel(undefined);
+	};
+
 	var probabilityOptionModel = {
 		model: new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self),
 		type: function () { return "probabilityOptions" },
@@ -182,23 +198,59 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		self.showingAbsenceProbability(self.selectedProbabilityOptionValue() === probabilityType.absence);
 		self.showingOvertimeProbability(self.selectedProbabilityOptionValue() === probabilityType.overtime);
 
-		if (self.showingAbsenceProbability() || self.showingOvertimeProbability())
-			self.reloadSchedule();
-
 		self.requestViewModel(undefined);
-	};
-
-	self.showAddOvertimeAvailabilityForm = function (data) {
-		if (self.overtimeAvailabilityPermission() !== true) {
+		if(self.selectedProbabilityOptionValue() == constants.probabilityType.none){
+			self.dayViewModels().forEach(function(d){
+				d.probabilities([]);
+			});
+			self.loadingProbabilityData(false);
 			return;
 		}
-		self.initialRequestDay(data.fixedDate());
-		self.requestViewModel(addOvertimeModel);
-		_fillFormData(data);
+		self.fetchProbabilityData();
 	};
 
-	self.CancelAddingNewRequest = function () {
-		self.requestViewModel(undefined);
+	self.fetchProbabilityData = function() {
+		self.loadingProbabilityData(true);
+		ajax.Ajax({
+			url: "../api/ScheduleStaffingPossibility",
+			dataType: "json",
+			type: "GET",
+			data: {
+				date: self.selectedDate().format('YYYY-MM-DD'),
+				staffingPossiblityType: self.selectedProbabilityOptionValue()
+			},
+			success: function (data) {
+				self.updateProbabilityData(data);
+			}
+		});
+	};
+
+	self.updateProbabilityData = function(data){
+		if(!self.staffingProbabilityOnMobileEnabled()) return;
+
+		var options = {
+			probabilityType: self.selectedProbabilityOptionValue(),
+			layoutDirection: constants.layoutDirection.horizontal,
+			timelines: self.timeLines(),
+			intradayOpenPeriod: self.intradayOpenPeriod,
+			mergeSameIntervals: self.mergeIdenticalProbabilityIntervals,
+			hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
+			userTexts: self.userTexts
+		};
+		if(self.staffingProbabilityForMultipleDaysEnabled()) {
+			self.dayViewModels().forEach(function(day){
+				var rawProbabilities = data.filter(function(d){return d.Date == day.fixedDate();});
+				day.probabilities(Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbabilities, day, options));
+			});
+		}else{
+			self.dayViewModels().forEach(function(day){
+				if(day.fixedDate() == self.formatedCurrentUserDate()){
+					var rawProbabilities = data.filter(function(d){return d.Date == day.fixedDate();});
+					day.probabilities(Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbabilities, day, options));
+				}
+			});
+		}
+		self.loadingProbabilityData(false);
 	};
 
 	function setStaffingProbabilityToggleStates(data){
@@ -216,7 +268,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 			self.showingOvertimeProbability(false);
 		}
 		if(self.staffingProbabilityOnMobileEnabled() && self.staffingProbabilityForMultipleDaysEnabled()){
-			var interceptWith14Days = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(self.formatedCurrentUserDate())) && (moment(data.Days[0].FixedDate) <= moment(self.formatedCurrentUserDate()).add('day', constants.maximumDaysDisplayingProbability));
+			var interceptWith14Days = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(self.formatedCurrentUserDate())) && (moment(data.Days[0].FixedDate) < moment(self.formatedCurrentUserDate()).add('day', constants.maximumDaysDisplayingProbability));
 			self.showProbabilityOptionsToggleIcon(interceptWith14Days);
 		}
 	}
@@ -260,23 +312,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		var dayViewModels = [];
 		if(Array.isArray(data.Days) && data.Days.length > 0) {
 			dayViewModels = data.Days.map(function(scheduleDay) {
-				var rawProbabilities = [];
-				if(Array.isArray(data.Possibilities) && data.Possibilities.length > 0) {
-					if (self.staffingProbabilityForMultipleDaysEnabled()) {
-						rawProbabilities = data.Possibilities.filter(function(p) {
-							return p.Date == scheduleDay.FixedDate;
-						});
-					} else if(scheduleDay.FixedDate == self.formatedCurrentUserDate()){
-						rawProbabilities = data.Possibilities.filter(function(p) {
-							if(p.Date)
-								return p.Date == self.formatedCurrentUserDate();
-							else 
-								return true;
-						});
-					}
-				}
-				return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, rawProbabilities,
-					hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self);
+				return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self);
 			});
 		}
 
@@ -284,5 +320,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		self.minDate(moment(data.Days[0].FixedDate).add("day", -1));
 		self.maxDate(moment(data.Days[data.Days.length - 1].FixedDate).add("day", 1));
 		self.displayDate(data.PeriodSelection.Display);
+		if(self.selectedProbabilityOptionValue() == constants.probabilityType.absence || self.selectedProbabilityOptionValue() == constants.probabilityType.overtime)
+			self.fetchProbabilityData();
 	};
 };

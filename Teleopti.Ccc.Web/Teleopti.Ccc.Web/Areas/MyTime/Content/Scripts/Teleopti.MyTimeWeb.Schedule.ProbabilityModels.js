@@ -74,7 +74,7 @@
 		};
 	}
 
-	var createProbabilityModels = function (scheduleDay, rawProbabilities, dayViewModel, options) {
+	var createProbabilityModels = function (rawProbabilities, dayViewModel, options) {
 		if (rawProbabilities == undefined || rawProbabilities.length === 0) {
 			return [];
 		}
@@ -82,18 +82,18 @@
 		// If today is full day absence or dayoff, Then hide absence probabilities
 		if (options.probabilityType === constants.probabilityType.none
 			|| (options.probabilityType === constants.probabilityType.absence
-			&& (scheduleDay.IsFullDayAbsence || scheduleDay.IsDayOff))) {
+			&& (dayViewModel.isFullDayAbsence || dayViewModel.isDayOff))) {
 			return [];
 		}
 
 		var continousPeriods = [];
-		var date = moment(scheduleDay.FixedDate);
+		var date = moment(dayViewModel.fixedDate());
 
 		if (options.probabilityType === constants.probabilityType.absence) {
-			continousPeriods = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(date, scheduleDay.Periods);
+			continousPeriods = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(date, dayViewModel.periods);
 		}
 
-		var boundaries = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, options.timelines,
+		var boundaries = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, options.timelines,
 			options.probabilityType, rawProbabilities, options.intradayOpenPeriod);
 
 		var probabilityModels = [], filteredRawProbabilities = [], cellDataList = [];
@@ -119,7 +119,6 @@
 		}
 
 		var i, j, probabilityModel, listLength = cellDataList.length;
-
 		for (i = 0; i < listLength; i = j) {
 			j = i + 1;
 			if (options.mergeSameIntervals) {

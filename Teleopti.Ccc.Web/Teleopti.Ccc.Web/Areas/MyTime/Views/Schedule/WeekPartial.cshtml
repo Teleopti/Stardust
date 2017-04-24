@@ -74,23 +74,25 @@
                 <div class="input-group pull-right">
                     <div class="btn-group" role="group" aria-describedby="basic-addon1" id="probabilityDropdownMenu">
                         <a class="btn btn-default dropdown-toggle" id="dropdown-probability-type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <i class="glyphicon" data-bind="css: {'glyphicon-eye-open': probabilityType() > 0, 'glyphicon-eye-close': probabilityType() === 0}"></i>
+                            <i class="glyphicon" data-bind="css: {'glyphicon-eye-open': selectedProbabilityType() > probabilityTypes().none, 'glyphicon-eye-close': selectedProbabilityType() === probabilityTypes().none}"></i>
                             <span data-bind="text: probabilityLabel()"></span>
                             <span class="caret"></span>
+
+                            <img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." data-bind="visible: loadingProbabilityData">
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(0); }">
+                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(probabilityTypes().none); }">
                                     @Resources.HideStaffingInfo
                                 </a>
                             </li>
                             <li data-bind="visible: absenceProbabilityEnabled()">
-                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(1); }">
+                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(probabilityTypes().absence); }">
                                     @Resources.ShowAbsenceProbability
                                 </a>
                             </li>
                             <li>
-                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(2); }">
+                                <a href="#" data-bind="click: function (data, event) { switchProbabilityType(probabilityTypes().overtime); }">
                                     @Resources.ShowOvertimeProbability
                                 </a>
                             </li>
@@ -214,7 +216,7 @@
                             <!-- /ko -->
                             <!-- /ko -->
                         </div>
-                        <!-- ko if: showProbabilityBar() -->
+                        <!-- ko if: showStaffingProbabilityBar -->
                             <div class="probability-vertical-bar ">
                                 <!--ko foreach: probabilities-->
                                 <div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>

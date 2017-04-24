@@ -64,13 +64,16 @@
 			<!-- ko if: showProbabilityOptionsToggleIcon-->
 			<div class="action-menu-container">
 				<a class="btn btn-default" data-bind="click: toggleProbabilityOptionsPanel">
-					<!-- ko ifnot: showingAbsenceProbability() || showingOvertimeProbability() -->
+					<!-- ko if: loadingProbabilityData() -->
+					<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="...">
+					<!-- /ko -->
+					<!-- ko ifnot: showingAbsenceProbability() || showingOvertimeProbability() || loadingProbabilityData() -->
 					<i class="glyphicon glyphicon-eye-close"></i>
 					<!-- /ko -->
-					<!-- ko if: showingAbsenceProbability() -->
+					<!-- ko if: showingAbsenceProbability() && !loadingProbabilityData()-->
 					<span class="absence-probability-label"></span>
 					<!-- /ko -->
-					<!-- ko if: showingOvertimeProbability() -->
+					<!-- ko if: showingOvertimeProbability() && !loadingProbabilityData() -->
 					<span class="overtime-probability-label"></span>
 					<!-- /ko -->
 				</a>
@@ -152,7 +155,7 @@
 						<!-- /ko -->
 					</div>
 				</div>
-				<!-- ko if: showStaffingProbabilityBar() -->
+				<!-- ko if: showStaffingProbabilityBar() && probabilities().length > 0-->
 				<div class="probability-horizontal-bar">
 					<!--ko foreach: probabilities-->
 					<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
@@ -198,7 +201,7 @@
 								</ul>
 							</div>
 						</li>
-						<li class="pull-right" data-bind="if: showProbabilityOptions">
+						<li class="pull-right" data-bind="if: showProbabilityToggleIcon">
 							<a data-bind="click: $parent.toggleProbabilityOptionsPanel, css: {'btn btn-default probability-icon': !$parent.showingAbsenceProbability() && !$parent.showingOvertimeProbability(), 'background-transparent pointer': $parent.showingAbsenceProbability() || $parent.showingOvertimeProbability()}">
 								<i class="glyphicon glyphicon-eye-close" data-bind="visible: !($parent.showingAbsenceProbability() || $parent.showingOvertimeProbability())"></i>
 								<span class="absence-probability-label" data-bind="visible: $parent.showingAbsenceProbability"></span>

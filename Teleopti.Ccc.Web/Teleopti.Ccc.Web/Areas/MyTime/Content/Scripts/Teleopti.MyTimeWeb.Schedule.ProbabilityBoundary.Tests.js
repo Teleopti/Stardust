@@ -42,12 +42,12 @@ $(document).ready(function () {
 		];
 	}
 
-	var createScheduleDay = function (isFullDayAbsence, isDayOff, periods) {
+	var createMockDayViewModel = function (isFullDayAbsence, isDayOff, periods) {
 		return {
-			FixedDate: baseDate,
+			fixedDate: function() {return baseDate;},
 			IsFullDayAbsence: isFullDayAbsence,
 			IsDayOff: isDayOff,
-			Periods: periods
+			periods: periods
 		};
 	}
 
@@ -81,9 +81,9 @@ $(document).ready(function () {
 	}
 
 	test("Calculate absence probability boundaries for dayoff", function () {
-		var scheduleDay = createScheduleDay(false, true, []);
+		var dayViewModel = createMockDayViewModel(false, true, []);
 		var timelines = createTimelines(0, 24);
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, timelines,
 			constants.probabilityType.absence, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
@@ -92,9 +92,9 @@ $(document).ready(function () {
 	});
 
 	test("Calculate absence probability boundaries for full day absence", function () {
-		var scheduleDay = createScheduleDay(true, false, []);
+		var dayViewModel = createMockDayViewModel(true, false, []);
 		var timelines = createTimelines(0, 24);
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, timelines,
 			constants.probabilityType.absence, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
@@ -103,9 +103,9 @@ $(document).ready(function () {
 	});
 
 	test("Calculate overtime probability boundaries for dayoff", function () {
-		var scheduleDay = createScheduleDay(false, true, []);
+		var dayViewModel = createMockDayViewModel(false, true, []);
 		var timelines = createTimelines(0, 24);
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, timelines,
 			constants.probabilityType.overtime, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
@@ -114,9 +114,9 @@ $(document).ready(function () {
 	});
 
 	test("Calculate overtime probability boundaries for full day absence", function () {
-		var scheduleDay = createScheduleDay(true, false, []);
+		var dayViewModel = createMockDayViewModel(true, false, []);
 		var timelines = createTimelines(0, 24);
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, timelines,
 			constants.probabilityType.overtime, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
@@ -125,9 +125,9 @@ $(document).ready(function () {
 	});
 
 	test("Calculate absence probability boundaries for normal day", function () {
-		var scheduleDay = createScheduleDay(false, false, createPeriods());
+		var dayViewModel = createMockDayViewModel(false, false, createPeriods());
 		var timelines = createTimelines(0, 24);
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, timelines,
 			constants.probabilityType.absence, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
@@ -137,7 +137,7 @@ $(document).ready(function () {
 
 	// Should show overtime probability in intersection of timeline, open hour period and probility start / end
 	test("Calculate overtime probability boundaries for normal day", function () {
-		var scheduleDay = createScheduleDay(false, false, createPeriods());
+		var dayViewModel = createMockDayViewModel(false, false, createPeriods());
 
 		var timelineStartHour = 6;
 		var timelineEndHour = 19;
@@ -151,7 +151,7 @@ $(document).ready(function () {
 			startTime: "07:00:00",
 			endTime: "16:00:00"
 		};
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, timelines,
 			constants.probabilityType.overtime, [], openHourPeriod);
 
 		equal(vm.lengthPercentagePerMinute, 1 / timelineLengthInMinutes);
@@ -162,9 +162,9 @@ $(document).ready(function () {
 	});
 
 	test("Calculate absence probability boundaries for cross day schedule end today", function () {
-		var scheduleDay = createScheduleDay(false, false, createCrossDayPeriodsEndAtToday());
+		var dayViewModel = createMockDayViewModel(false, false, createCrossDayPeriodsEndAtToday());
 		var timelines = createTimelines(0, 24);
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, timelines,
 			constants.probabilityType.absence, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
@@ -173,9 +173,9 @@ $(document).ready(function () {
 	});
 
 	test("Calculate absence probability boundaries for cross day schedule will end tomorrow", function () {
-		var scheduleDay = createScheduleDay(false, false, createCrossDayPeriodsEndAtTomorrow());
+		var dayViewModel = createMockDayViewModel(false, false, createCrossDayPeriodsEndAtTomorrow());
 		var timelines = createTimelines(0, 24);
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, timelines,
 			constants.probabilityType.absence, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
@@ -184,9 +184,9 @@ $(document).ready(function () {
 	});
 
 	test("Calculate overtime probability boundaries for cross day schedule end today", function () {
-		var scheduleDay = createScheduleDay(false, false, createCrossDayPeriodsEndAtToday());
+		var dayViewModel = createMockDayViewModel(false, false, createCrossDayPeriodsEndAtToday());
 		var timelines = createTimelines(0, 24);
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, timelines,
 			constants.probabilityType.overtime, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);
@@ -195,9 +195,9 @@ $(document).ready(function () {
 	});
 
 	test("Calculate overtime probability boundaries for cross day schedule will end tomorrow", function () {
-		var scheduleDay = createScheduleDay(false, false, createCrossDayPeriodsEndAtTomorrow());
+		var dayViewModel = createMockDayViewModel(false, false, createCrossDayPeriodsEndAtTomorrow());
 		var timelines = createTimelines(0, 24);
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(scheduleDay, timelines,
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, timelines,
 			constants.probabilityType.overtime, [], undefined);
 
 		equal(vm.lengthPercentagePerMinute, 1 / constants.totalMinutesOfOneDay);

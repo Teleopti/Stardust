@@ -6,7 +6,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityModels.js" />
 
-Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabilities, parent) {
+Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 	var self = this;
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
@@ -23,6 +23,9 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 	self.date = ko.observable(scheduleDay.Date);
 	self.userNowInMinute = ko.observable(-1);
 	self.state = ko.observable(scheduleDay.State);
+	self.isFullDayAbsence = scheduleDay.IsFullDayAbsence;
+	self.isDayOff = scheduleDay.IsDayOff;
+	self.periods = scheduleDay.Periods;
 
 	var dayDescription = "";
 	var dayNumberDisplay = "";
@@ -67,8 +70,6 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 	self.overtimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty);
 	self.probabilityClass = ko.observable(scheduleDay.ProbabilityClass);
 	self.probabilityText = ko.observable(scheduleDay.ProbabilityText);
-	self.mergeIdenticalProbabilityIntervals = false;
-	self.hideProbabilityEarlierThanNow = true;
 	self.probabilities = ko.observableArray();
 
 	self.holidayChanceText = ko.computed(function () {
@@ -180,24 +181,12 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, rawProbabiliti
 		}
 	};
 
-	self.showProbabilityBar = ko.computed(function () {
+	self.showStaffingProbabilityBar = ko.computed(function () {
 		if(parent.staffingProbabilityForMultipleDaysEnabled())
 			return  (moment(self.fixedDate()) >= moment(self.formatedCurrentUserDate())) && (moment(self.fixedDate()) < moment(self.formatedCurrentUserDate()).add('day', constants.maximumDaysDisplayingProbability));
+
 		return self.formattedFixedDate() === self.formatedCurrentUserDate();
 	});
-
-	if (self.showProbabilityBar()) {
-		self.probabilities(Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbabilities, self,
-		{
-			probabilityType: parent.probabilityType(),
-			layoutDirection: constants.layoutDirection.vertical,
-			timelines: parent.timeLines(),
-			intradayOpenPeriod: parent.intradayOpenPeriod,
-			mergeIntervals: self.mergeIdenticalProbabilityIntervals,
-			hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
-			userTexts: parent.userTexts
-		}));
-	}
 
 	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {
 		return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, parent.userTexts, self);

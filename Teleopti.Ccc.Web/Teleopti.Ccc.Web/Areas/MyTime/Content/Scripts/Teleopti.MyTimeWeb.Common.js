@@ -25,7 +25,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 			timelineMarginInMinutes: 15, // Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.WeekScheduleDomainDataProvider.getMinMaxTime()
 			totalMinutesOfOneDay: 1440, //: 24 * 60, Total minutes of a day
-			maximumDaysDisplayingProbability: 13,
+			maximumDaysDisplayingProbability: 14,
+			probabilityIntervalLengthInMinute: 15,
 			probabilityType: {
 				none: 0,
 				absence: 1,
@@ -36,7 +37,6 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 				highProbabilityClass: "probability-high",
 				expiredProbabilityClass: "probability-expired"
 			},
-
 			layoutDirection: {
 				vertical: 0,
 				horizontal: 1

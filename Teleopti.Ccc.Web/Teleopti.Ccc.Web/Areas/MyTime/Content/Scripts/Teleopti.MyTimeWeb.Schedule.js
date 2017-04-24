@@ -48,7 +48,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			type: "GET",
 			data: {
 				date: selectedDate,
-				staffingPossiblityType: vm.probabilityType()
 			},
 			success: function (data) {
 				_bindData(data);
@@ -162,6 +161,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.staffingProbabilityForMultipleDaysEnabled = ko.observable();
 		self.absenceProbabilityEnabled = ko.observable();
 		self.showProbabilityToggle = ko.observable();
+		self.loadingProbabilityData = ko.observable(false);
 
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
@@ -216,18 +216,73 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			userTexts.showOvertimeProbability
 		];
 
-		self.probabilityType = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().probability);
+		self.selectedProbabilityType = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().probability);
+		self.probabilityTypes = ko.observable(constants.probabilityType);
 		self.probabilityLabel = function () {
-			var selectedProbabilityType = validProbabilitiesTypes[self.probabilityType()];
+			var selectedProbabilityType = validProbabilitiesTypes[self.selectedProbabilityType()];
 			if (!selectedProbabilityType) {
 				return userTexts.staffingInfo;
 			}
 			return selectedProbabilityType;
 		};
+		self.mergeIdenticalProbabilityIntervals = false;
+		self.hideProbabilityEarlierThanNow = true;
 
 		self.switchProbabilityType = function (probabilityType) {
-			self.probabilityType(probabilityType);
-			_fetchData();
+			self.selectedProbabilityType(probabilityType);
+			if(self.selectedProbabilityType() == constants.probabilityType.none){
+				self.days().forEach(function(d){
+					d.probabilities([]);
+				});
+				self.loadingProbabilityData(false);
+				return;
+			}
+
+			self.fetchProbabilityData();
+		};
+
+		self.fetchProbabilityData = function() {
+			self.loadingProbabilityData(true);
+			ajax.Ajax({
+				url: "../api/ScheduleStaffingPossibility",
+				dataType: "json",
+				type: "GET",
+				data: {
+					date: self.selectedDate().format('YYYY-MM-DD'),
+					staffingPossiblityType: self.selectedProbabilityType()
+				},
+				success: function (data) {
+					self.updateProbabilityData(data);
+				}
+			});
+		};
+
+		self.updateProbabilityData = function(data){
+			if(!self.staffingProbabilityEnabled()) return;
+
+			var options = {
+				probabilityType: self.selectedProbabilityType(),
+				layoutDirection: constants.layoutDirection.vertical,
+				timelines: self.timeLines(),
+				intradayOpenPeriod: self.intradayOpenPeriod,
+				mergeSameIntervals: self.mergeIdenticalProbabilityIntervals,
+				hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
+				userTexts: self.userTexts
+			};
+			if(self.staffingProbabilityForMultipleDaysEnabled()) {
+				self.days().forEach(function(day){
+					var rawProbabilities = data.filter(function(d){return d.Date == day.fixedDate();});
+					day.probabilities(Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbabilities, day, options));
+				});
+			}else{
+				self.days().forEach(function(day){
+					if(day.fixedDate() == getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format("YYYY-MM-DD")){
+						var rawProbabilities = data.filter(function(d){return d.Date == day.fixedDate();});
+						day.probabilities(Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbabilities, day, options));
+					}
+				});
+			}
+			self.loadingProbabilityData(false);
 		};
 
 		self.previousWeek = function () {
@@ -255,8 +310,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		function getUrlPartForProbability() {
-			return (self.staffingProbabilityEnabled() && self.probabilityType() !== constants.probabilityType.none && self.probabilityType())
-				? "/Probability/" + self.probabilityType()
+			return (self.staffingProbabilityEnabled() && self.selectedProbabilityType() !== constants.probabilityType.none && self.selectedProbabilityType())
+				? "/Probability/" + self.selectedProbabilityType()
 				: "";
 		}
 
@@ -444,12 +499,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880"));
 
 		self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled());
-		if (!self.absenceProbabilityEnabled() && self.probabilityType() === constants.probabilityType.absence) {
-			self.probabilityType(constants.probabilityType.none);
+		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityType() === constants.probabilityType.absence) {
+			self.selectedProbabilityType(constants.probabilityType.none);
 		}
 
 		if(self.staffingProbabilityForMultipleDaysEnabled()){
-			var interceptWith14Days = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(currentUserDate)) && (moment(data.Days[0].FixedDate) <= moment(currentUserDate).add('day', constants.maximumDaysDisplayingProbability));
+			var interceptWith14Days = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(currentUserDate)) && (moment(data.Days[0].FixedDate) < moment(currentUserDate).add('day', constants.maximumDaysDisplayingProbability));
 			self.showProbabilityToggle(interceptWith14Days);
 		}else{
 			self.showProbabilityToggle(self.staffingProbabilityEnabled() && self.isCurrentWeek());
@@ -493,25 +548,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var days = [];
 		if(Array.isArray(data.Days) && data.Days.length > 0) {
 			days = ko.utils.arrayMap(data.Days, function (scheduleDay) {
-				var rawProbabilities = [];
-				if(Array.isArray(data.Possibilities) && data.Possibilities.length > 0) {
-					if(self.staffingProbabilityForMultipleDaysEnabled()) {
-						rawProbabilities = data.Possibilities.filter(function(p) {
-							return p.Date == scheduleDay.FixedDate;
-						});
-					} else if(scheduleDay.FixedDate == currentUserDate){
-						rawProbabilities = data.Possibilities.filter(function(p) {
-							if(p.Date)
-								return p.Date == currentUserDate;
-							else 
-								return true;
-						});
-					}
-				}
-				return new Teleopti.MyTimeWeb.Schedule.DayViewModel(scheduleDay, rawProbabilities, self);
+				return new Teleopti.MyTimeWeb.Schedule.DayViewModel(scheduleDay, self);
 			});
 		}
 		self.days(days);
+		if(self.selectedProbabilityType() == constants.probabilityType.absence || self.selectedProbabilityType() == constants.probabilityType.overtime)
+			self.fetchProbabilityData();
 	}
 
 	function _setTimeIndicator(theDate) {

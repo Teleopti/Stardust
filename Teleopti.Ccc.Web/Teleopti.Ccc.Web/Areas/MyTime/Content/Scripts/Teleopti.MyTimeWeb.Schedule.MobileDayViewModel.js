@@ -13,8 +13,7 @@ if (typeof Teleopti.MyTimeWeb.Schedule === "undefined") {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProbabilities,
-	absenceReportPermission, overtimeAvailabilityPermission, parent) {
+Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceReportPermission, overtimeAvailabilityPermission, parent) {
 	var self = this;
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
@@ -33,6 +32,10 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 
 	self.weekDayHeaderTitle = ko.observable(scheduleDay.Header ? scheduleDay.Header.Title : null);
 	self.summaryStyleClassName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.StyleClassName : null);
+	self.isFullDayAbsence = scheduleDay.IsFullDayAbsence;
+	self.isDayOff = scheduleDay.IsDayOff;
+	self.periods = scheduleDay.Periods;
+	self.probabilities = ko.observableArray();
 	self.isDayoff = function () {
 		return scheduleDay.IsDayOff;
 	};
@@ -85,12 +88,10 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 		if(parent.staffingProbabilityForMultipleDaysEnabled())
 			return  (moment(self.fixedDate()) >= moment(parent.formatedCurrentUserDate())) && (moment(self.fixedDate()) < moment(parent.formatedCurrentUserDate()).add('day', constants.maximumDaysDisplayingProbability));
 
-		return self.staffingProbabilityOnMobileEnabled() &&
-			(parent.showingAbsenceProbability() || parent.showingOvertimeProbability()) &&
-			(parent.staffingProbabilityForMultipleDaysEnabled() || self.isToday());
+		return self.formattedFixedDate() == parent.formatedCurrentUserDate();
 	});
 
-	self.showProbabilityOptions = ko.computed(function () {
+	self.showProbabilityToggleIcon = ko.computed(function () {
 		//use a public toggle when staffingProbabilityForMultipleDays is enabled
 		if(parent.staffingProbabilityForMultipleDaysEnabled())
 			return false;
@@ -108,23 +109,6 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, rawProba
 	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {
 		return new MobileWeekLayerViewModel(item, parent.userTexts);
 	});
-
-	var probabilities = [];
-	if(self.staffingProbabilityOnMobileEnabled()){
-		probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay,
-			rawProbabilities,
-			self,
-			{
-				probabilityType: parent.selectedProbabilityOptionValue(),
-				layoutDirection: constants.layoutDirection.horizontal,
-				timelines: parent.timeLines(),
-				intradayOpenPeriod: parent.intradayOpenPeriod,
-				mergeSameIntervals: self.mergeIdenticalProbabilityIntervals,
-				hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
-				userTexts: parent.userTexts
-			});
-	}
-	self.probabilities = ko.observableArray(probabilities);
 };
 
 var MobileWeekLayerViewModel = function (layer, userTexts) {

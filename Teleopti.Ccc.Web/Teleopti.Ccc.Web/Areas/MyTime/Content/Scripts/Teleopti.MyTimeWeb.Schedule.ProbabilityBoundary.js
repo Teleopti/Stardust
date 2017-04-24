@@ -1,6 +1,6 @@
 ﻿/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js"/>
 
-Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (scheduleDay, timelines, probabilityType,
+Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (dayViewModel, timelines, probabilityType,
 	probabilities, intradayOpenPeriod) {
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
@@ -27,11 +27,11 @@ Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (scheduleDay, timelin
 
 	var lengthPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
 
-	var momentDate = moment(scheduleDay.FixedDate);
+	var momentDate = moment(dayViewModel.fixedDate());
 
-	if (scheduleDay.Periods.length > 0) {
-		var firstPeriod = scheduleDay.Periods[0];
-		var lastPeriod = scheduleDay.Periods[scheduleDay.Periods.length - 1];
+	if (dayViewModel.periods.length > 0) {
+		var firstPeriod = dayViewModel.periods[0];
+		var lastPeriod = dayViewModel.periods[dayViewModel.periods.length - 1];
 
 		shiftStartMinutes = moment(firstPeriod.StartTime).diff(momentDate) / (60 * 1000);
 		if (shiftStartMinutes < 0) {
