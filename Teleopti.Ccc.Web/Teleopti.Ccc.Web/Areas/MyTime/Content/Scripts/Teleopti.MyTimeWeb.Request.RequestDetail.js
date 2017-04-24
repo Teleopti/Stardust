@@ -13,16 +13,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var parentViewModel = null;
 	var defaultDateTimes = null;
 	var weekStart = 3;
-	Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
+	Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
 		weekStart = data.WeekStart;
 	});
 
 	self.IsPostingData = ko.observable(false);
 
-
-
-	var RequestDetailParentViewModel = function () {
-
+	var RequestDetailParentViewModel = function() {
 		var self = this;
 		self.requestViewModel = ko.observable();
 
@@ -39,7 +36,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			});
 			return vm;
 		};
-
+		
 		self.createShiftTradeRequestViewModel = function (id) {
 			var shiftTradeRequestDetailViewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax);
 			shiftTradeRequestDetailViewModel.loadIsEditMessageEnabled();
@@ -58,7 +55,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		};
 
 		self.CancelAddingNewRequest = function () {
-			Teleopti.MyTimeWeb.Request.List.HideRequests(false);	
 			self.requestViewModel(null);
 			Teleopti.MyTimeWeb.Request.ResetToolbarActiveButtons();
 		};
@@ -68,7 +64,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
 		parentViewModel.CancelAddingNewRequest();
 	}
-
+	
 	function _datePickerFormat() {
 		return Teleopti.MyTimeWeb.Common.DateFormat;
 	}
@@ -90,19 +86,16 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _addTextRequestClick() {
-		Teleopti.MyTimeWeb.Request.List.HideRequests(true);	
 		_prepareForAddingRequest();
 		parentViewModel.requestViewModel().AddTextRequest(true);
 	}
 
 	function _addAbsenceRequestClick() {
-		Teleopti.MyTimeWeb.Request.List.HideRequests(true);	
 		_prepareForAddingRequest();
 		parentViewModel.requestViewModel().AddAbsenceRequest(true);
 	}
 
 	function _addPostShiftForTradeClick(date) {
-		Teleopti.MyTimeWeb.Request.List.HideRequests(true);	
 		_hideOthers();
 		var defaultTime = { defaultStartTime: defaultDateTimes.defaultStartTime, defaultEndTime: defaultDateTimes.defaultEndTime };
 		var model = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _addItemAtTop).Create(defaultTime);
@@ -125,24 +118,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		}
 	}
 
-<<<<<<< dest
 	function _addRequest(model, successCallback, errorCallback) {
-=======
-	function _addRequest(model, successCallback) {
-
-<<<<<<< dest
->>>>>>> source
-=======
-
->>>>>>> source
 		if (self.IsPostingData()) {
 			return;
 		}
 
 		self.IsPostingData(true);
 
-		console.log('HEEEEEj ', model)
-		Teleopti.MyTimeWeb.Request.List.HideRequests(false);	
 		var formData = _getFormData(model);
 		ajax.Ajax({
 			url: formData.Url,
@@ -183,7 +165,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _setRequest(data) {
-
 		if (data.TypeEnum == 2) {
 			parentViewModel.createShiftTradeRequestViewModel(data.Id);
 			parentViewModel.requestViewModel().Initialize(data);
@@ -212,13 +193,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			parentViewModel.requestViewModel().IsEditable(true);
 		}
 	}
-
+	
 	function _getFormData(model) {
 		var absenceId = model.AbsenceId();
 		if (absenceId == undefined) {
 			absenceId = null;
 		}
-
+		
 		return {
 			Url: model.TypeEnum() == 0 ? "Requests/TextRequest" : "Requests/AbsenceRequest",
 			Subject: model.Subject(),
@@ -233,13 +214,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			EntityId: model.EntityId()
 		};
 	}
-
+	
 	function _prepareForViewModel(object) {
 		defaultDateTimes = object;
 	}
 
 	return {
-		Init: function () {
+		Init: function() {
 			parentViewModel = new RequestDetailParentViewModel();
 			_databindModel(parentViewModel);
 		},
@@ -259,13 +240,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		AddPostShiftForTradeClick: function (date) {
 			_addPostShiftForTradeClick(date);
 		},
-		HideNewTextOrAbsenceRequestView: function () {
+		HideNewTextOrAbsenceRequestView: function() {
 			parentViewModel.requestViewModel(null);
 		},
 		AddTextOrAbsenceRequest: function (model, successCallback, errorCallback) {
 			_addRequest(model, successCallback, errorCallback);
 		},
-		PrepareForViewModel: function (object) {
+		PrepareForViewModel: function(object) {
 			_prepareForViewModel(object);
 		}
 	};

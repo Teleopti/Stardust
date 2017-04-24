@@ -34,7 +34,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.IsSelected = ko.observable(false);
 		self.IsLoading = ko.observable(false);
 		self.CanDelete = ko.observable(true);
-		self.CanCancel = ko.observable(true);
+		self.CanCancel= ko.observable(true);
 		self.IsEditable = ko.observable(false);
 		self.IsDeletePending = ko.observable(false);
 		self.IsCancelPending = ko.observable(false);
@@ -57,24 +57,24 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			return (self.RequestTypeEnum() === 2);
 		};
 
-		self.GetDateDisplay = function () {
+		self.GetDateDisplay = function() {
 			if (!(self.StartDateTime() && self.EndDateTime())) {
 				return null;
 			}
 
-			if (self.IsSingleDay() && (self.IsShiftTradeRequest() || self.IsFullDay())) {
+			if (self.IsSingleDay() && (self.IsShiftTradeRequest() || self.IsFullDay()) ) {
 				return Teleopti.MyTimeWeb.Common.FormatDate(self.StartDateTime());
 			}
 
 			var showTimes = !self.IsShiftTradeRequest() && !self.IsFullDay();
-			return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.StartDateTime(), self.EndDateTime(), showTimes);
+			return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.StartDateTime(), self.EndDateTime(), showTimes );
 		};
 
 		self.Dates = ko.computed(function () {
 			return self.GetDateDisplay();
 		});
 
-		self.ShowDetails = function () {
+		self.ShowDetails = function ( ) {
 			if (self.IsSelected()) {
 				self.IsSelected(false);
 				return;
@@ -119,7 +119,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	function RequestPageViewModel(readyForInteraction, completelyLoaded) {
 		var self = this;
-		
+
 		self.Ready = readyForInteraction;
 		self.Completed = completelyLoaded;
 		self.IsUpdate = ko.computed(function () {
@@ -135,37 +135,28 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.MoreToLoad = ko.observable(false);
 
 		self.isLoadingRequests = ko.observable(true);
-		self.hideRequestsOnPhone = ko.observable(false);
-		self.filters = [
-			{ name: 'Current Requests', show: "true" },
-			{ name: 'All Requests', show: "false" }
-		];
-		self.sorters = [
-			{name: 'SortByStartDate', show: "false"},
-			{name: 'SortByUpdateDate', show: "true"}
-		]
-		self.newFilterToggle = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826');
-		self.ShowRequests = function (data) {
-			ko.utils.arrayForEach(data, function (item) {
-				ko.utils.arrayForEach(self.Requests(), function (request) {
-					if (item !== undefined && request.Id() === item.Id) {
-						var index = data.indexOf(item);
-						if (index !== -1) {
-							delete data[index];
-						}
-					}
-				});
-			});
 
-			ko.utils.arrayForEach(data, function (item) {
-				var vm = new RequestItemViewModel(self);
-				vm.Initialize(item, false);
-				self.Requests.push(vm);
-			});
+		self.ShowRequests = function (data) {
+		    ko.utils.arrayForEach(data, function (item) {
+		        ko.utils.arrayForEach(self.Requests(), function (request) {
+		            if (item !== undefined && request.Id() === item.Id) {
+		                var index = data.indexOf(item);
+		                if (index !== -1) {
+		                    delete data[index];
+		                }
+		            }
+		        });
+		    });
+
+		    ko.utils.arrayForEach(data, function(item) {
+		        var vm = new RequestItemViewModel(self);
+		        vm.Initialize(item, false);
+		        self.Requests.push(vm);
+		    });
 		};
 
 		self.ColumnRequests = ko.computed(function () {
-			var list = ko.utils.arrayFilter(self.Requests(), function (request) {
+		    var list = ko.utils.arrayFilter(self.Requests(), function (request) {
 				return request.isValid();
 			});
 			var result = [];
@@ -189,7 +180,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			});
 		}, null, 'cancel_request');
 
-		self.clearAllPromptsFromOtherRequestItemViewModels = function (requestItemViewModel) {
+		self.clearAllPromptsFromOtherRequestItemViewModels = function(requestItemViewModel) {
 			ko.utils.arrayForEach(self.Requests(), function (request) {
 				if (request !== requestItemViewModel) {
 					request.IsCancelPending(false);
@@ -298,22 +289,22 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 		self.hideOldRequests = ko.observable("true");
 		self.hideOldRequests.subscribe(function () {
-			self.Requests([]);
-			self.pages = 0;
-			self.LoadPage();
+		    self.Requests([]);
+		    self.pages = 0;
+	        self.LoadPage();
 		});
 
 		self.IsSortByUpdateDate = ko.observable("true");
-		self.IsSortByUpdateDate.subscribe(function () {
+		self.IsSortByUpdateDate.subscribe(function() {
 			self.Requests([]);
 			self.pages = 0;
 			self.LoadPage();
 		});
 
 		self.pages = 0;
-
+        
 		self.LoadPage = function () {
-			var skip = self.pages * 20;
+		    var skip = self.pages * 20;
 			var take = 20;
 			ajax.Ajax({
 				url: "Requests/Requests",
@@ -326,13 +317,13 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					IsSortByUpdateDate: self.IsSortByUpdateDate()
 				},
 				beforeSend: function () {
-					self.isLoadingRequests(true);
+				    self.isLoadingRequests(true);
 				},
 				success: function (data) {
 					self.MoreToLoad(data.length === take);
 					self.ShowRequests(data);
 					if (data.length !== 0) {
-						self.pages++;
+					    self.pages++;
 					}
 				},
 				complete: function () {
@@ -391,7 +382,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	ko.utils.extend(RequestItemViewModel.prototype, {
 		Initialize: function (data, isProcessing) {
-			if (data == undefined) return;
 			if (data.Text !== null) {
 				var textSegs = data.Text.split("\n");
 			}
@@ -449,8 +439,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	});
 
 	function _initScrollPaging() {
-		pageViewModel.LoadPage();
-		$(window).scroll(_loadAPageIfRequired);
+	    pageViewModel.LoadPage();
+	    $(window).scroll(_loadAPageIfRequired);
 	}
 
 	function _loadAPageIfRequired() {
@@ -458,14 +448,14 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			return;
 		}
 
-		var jqWindow = $(window);
+	    var jqWindow = $(window);
 		var jqDocument = $(window.document);
 		if (_isAtBottom(jqDocument, jqWindow)) {
-			$(window).off("scroll");
-			pageViewModel.LoadPage();
-			setTimeout(function () {
-				$(window).scroll(_loadAPageIfRequired);
-			}, 100);
+		    $(window).off("scroll");
+		    pageViewModel.LoadPage();
+		    setTimeout(function () {
+		        $(window).scroll(_loadAPageIfRequired);
+		    }, 100);
 		}
 	}
 
@@ -497,15 +487,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		AddItemAtTop: function (request, isProcessing) {
 			pageViewModel.AddRequest(request, isProcessing);
 		},
-		GetRequestItemViewModel: function () {
+		GetRequestItemViewModel: function() {
 			return new RequestItemViewModel(null);
 		},
 		Dispose: function () {
 			_unbind();
-		},
-		HideRequests: function (show) {
-			pageViewModel.hideRequestsOnPhone(show);
 		}
-
 	};
 })(jQuery);

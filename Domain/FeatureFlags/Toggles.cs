@@ -227,8 +227,7 @@
 		WfmPermission_RelaseRefactor_43587,
 		WFM_ImproveIntradaySkillArea_37291,
 		Wfm_Intraday_SupportSkillTypeWebChat_42591,
-		WFM_ReportHierarchy_43002,
-		MyTimeWeb_MobileResponsive_43826
+		WFM_ReportHierarchy_43002
 		// ReSharper restore InconsistentNaming
 	}
 }

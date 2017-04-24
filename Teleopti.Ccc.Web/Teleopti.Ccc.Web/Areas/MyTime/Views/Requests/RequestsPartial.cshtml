@@ -3,13 +3,13 @@
 @model RequestsViewModel
 @{
 	Layout = null;
-
 }
 
 <script>
 	$(function() {
 		Teleopti.MyTimeWeb.Request.RequestDetail.PrepareForViewModel(Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
 	});
+
 </script>
 
 
@@ -41,84 +41,45 @@
 	@Html.Partial("../Schedule/AddShiftExchangeOfferPartial")
 </script>
 
-<div class="requests-wrapper">
 <input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat" />
-	<div class="navbar-container" >
-		<div class="with-fab" data-bind="if: toggle">
-			<div class="navbar navbar-teleopti fab subnavbar" tabindex="0">
-				<div class="container">
-					<ul class="nav navbar-nav navbar-teleopti row submenu" >
-						@if (Model.RequestPermission.TextRequestPermission)
-						{
-							<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-							</li>
-						}
-						@if (Model.RequestPermission.AbsenceRequestPermission)
-						{
-							<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-							</li>
-						}
-						@if (Model.RequestPermission.ShiftTradeRequestPermission)
-						{
-							<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-							</li>
-						}
 
-						@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
-						{
-							<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
-								<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-							</li>
+<div class="navbar navbar-teleopti subnavbar">
+	<div class="container">
+		<ul class="nav navbar-nav navbar-teleopti row submenu">
+			@if (Model.RequestPermission.TextRequestPermission)
+			{
+				<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
+					<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+				</li>
+			}
+			@if (Model.RequestPermission.AbsenceRequestPermission)
+			{
+				<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
+					<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+				</li>
+			}
+			@if (Model.RequestPermission.ShiftTradeRequestPermission)
+			{
+				<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
+					<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+				</li>
+			}
 
-							<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
-								<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
-							</li>
-						}
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="no-fab" data-bind="ifnot: toggle">
-			<div class="navbar navbar-teleopti purest-green subnavbar" tabindex="0">
-				<div class="container">
-					<ul class="nav navbar-nav navbar-teleopti row submenu" >
-						@if (Model.RequestPermission.TextRequestPermission)
-						{
-							<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-							</li>
-						}
-						@if (Model.RequestPermission.AbsenceRequestPermission)
-						{
-							<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-							</li>
-						}
-						@if (Model.RequestPermission.ShiftTradeRequestPermission)
-						{
-							<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-							</li>
-						}
+			@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
+			{
+				<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
+					<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+				</li>
 
-						@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
-						{
-							<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
-								<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-							</li>
+				<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
+					<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+				</li>
+			}
 
-							<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
-								<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
-							</li>
-						}
-					</ul>
-				</div>
-			</div>
-		</div>
+		</ul>
 	</div>
+</div>
+
 
 <div class="container pagebody">
 
@@ -133,76 +94,27 @@
 				</div>
 			</div>
 		</div>
-
-		<div id="Requests-data-binding-area" data-bind="css: { 'hide-requests-on-phone': hideRequestsOnPhone}">
+		<div id="Requests-data-binding-area">
 			<div class="row">
-				
-				<!-- <div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
+				<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
 		        <label class="btn btn-primary">
 		            <input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="false"/> @Resources.AllRequests
 		        </label>
 		        <label class="btn btn-primary">
 		            <input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="true"/> @Resources.CurrentRequests
 		        </label>
-		    </div> -->
-
+		    </div>
+				
 				<!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_SortRequestList_40711') -->
-				<!-- <div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
+				<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
 					<label class="btn btn-primary">
 						<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="false" /> @Resources.SortByStartDate
 					</label>
 					<label class="btn btn-primary">
 						<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="true" /> @Resources.SortByUpdateDate
 					</label>
-				</div> -->
-				 <!--/ko -->
-
-  
-
-			<div class="row">
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
-					<div class="old-filter" data-bind="ifnot: newFilterToggle">			
-						<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_SortRequestList_40711'), 
-						if: !Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), visible: !isLoadingRequests()">
-							<label class="btn btn-primary">
-								<input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="false"/> @Resources.AllRequests
-							</label>
-							<label class="btn btn-primary">
-								<input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="true"/> @Resources.CurrentRequests
-							</label>
-						</div> 
-					</div>
-					<div class="new-filter" data-bind="if: newFilterToggle">
-						<div class="form-group" data-bind="visible: !isLoadingRequests()">
-							<select class="form-control" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), options: filters, optionsText: 'name',
-								optionsValue: 'show', value: hideOldRequests" id="sel1">
-							</select>
-						</div>	
-					</div>
 				</div>
-				<span data-bind="ifnot: newFilterToggle"/><br/><br/><br/></span>
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
-					<div class="old-filter" data-bind="ifnot: newFilterToggle">
-						<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
-								<label class="btn btn-primary">
-								<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="false" /> @Resources.SortByStartDate
-							</label>
-							<label class="btn btn-primary">
-								<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="true" /> @Resources.SortByUpdateDate
-							</label>
-						</div>
-					</div>
-						<div class="form-group">
-					<div class="new-filter" data-bind="if: newFilterToggle">
-							<select class="form-control" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), 
-							visible: !isLoadingRequests(), options: sorters, optionsText: 'name',
-								optionsValue: 'show', value: IsSortByUpdateDate"id="sel1">
-							</select>
-						</div>
-					</div>
-				</div>
-			</div>
-
+				<!-- /ko -->
 			</div>
 
             <div class="alert alert-info" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
@@ -296,5 +208,4 @@
 			</div>
 		</div>
 	</div>
-</div>
 </div>
