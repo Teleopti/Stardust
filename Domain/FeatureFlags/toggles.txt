@@ -47,7 +47,7 @@ RTA_FasterAgentsView_42039 = true
 RTA_MonitorAgentsInPermittedOrganizationOnly_40660 = false
 RTA_SolidProofWhenManagingAgentAdherence_39351 = RC
 RTA_SnappierDisplayOfOverview_43568 = RC
-RTA_NoHangfireExperiment_43924 = RC
+RTA_NoHangfireExperiment_43924 = false
 
 WfmPermission_ReplaceOldPermission_34671 = true
 WfmPermission_RelaseRefactor_43587 = RC
