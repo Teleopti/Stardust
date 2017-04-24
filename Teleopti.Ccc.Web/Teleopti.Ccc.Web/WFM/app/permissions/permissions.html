@@ -5,7 +5,6 @@
 			<p translate>ManagePermissionsIntro</p>
 		</div>
 	</div>
-
 	<div class="con-row flex-element-fill">
 		<div class="con-flex roles">
 			<div class="panel material-depth-1">
@@ -22,10 +21,9 @@
 				</form>
 				<form ng-submit="reset()" class="full-padding">
 					<label for="filterRoles" class="input-prepend">
-						<i class="mdi mdi-filter-outline">
-							<md-tooltip>{{'FilterRoles'|translate}}</md-tooltip>
-						</i>
-						<input type="text" id="filterRoles" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="{{'RoleFilterThreeDots' | translate}}" />
+						<i class="mdi mdi-filter-outline"></i>
+						<input type="text" id="filterRoles" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="{{'FilterRoles' | translate}}" />
+						<md-tooltip>{{'FilterRoles'|translate}}</md-tooltip>
 					</label>
 				</form>
 				<div class="search-role-results">

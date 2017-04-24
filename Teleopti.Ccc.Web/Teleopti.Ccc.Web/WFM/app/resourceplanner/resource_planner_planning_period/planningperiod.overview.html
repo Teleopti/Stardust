@@ -73,10 +73,10 @@
 						</div>
 						<div class="con-row">
 							<div class="con-flex result-container">
-								<span class="pp-agentnumber" ng-show="vm.dayNodes"> 
+								<span class="pp-agentnumber" ng-show="vm.dayNodes">
 									{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}
 								</span>
-								<span class="pp-agentnumber" ng-hide="vm.dayNodes"> 
+								<span class="pp-agentnumber" ng-hide="vm.dayNodes">
 									{{vm.scheduledAgents}}/{{vm.totalAgents}} agents have been scheduled
 								</span>
 								<div class="legends" ng-show="vm.dayNodes">
@@ -160,10 +160,9 @@
 											<div class="con-row">
 												<div class="con-flex ">
 													<label for="filter" class="input-icon">
-														<i class="mdi mdi-filter-outline">
-															<input type="text" id="filter" ng-model="vm.validationFilter" placeholder="filter validation issues...">
-															<md-tooltip>filter validation issues</md-tooltip>
-														</i>
+														<i class="mdi mdi-filter-outline"></i>
+														<input type="text" id="filter" ng-model="vm.validationFilter" placeholder="Filter validation issues">
+														<md-tooltip>Filter validation issues</md-tooltip>
 													</label>
 												</div>
 												<div class="con-flex"></div>
@@ -202,10 +201,9 @@
 											<div class="con-row">
 												<div class="con-flex ">
 													<label for="filter" class="input-icon">
-														<i class="mdi mdi-filter-outline">
-															<input type="text" id="filter" ng-model="vm.scheduleIssuesFilter" placeholder="filter validation issues...">
-															<md-tooltip>filter validation issues</md-tooltip>
-														</i>
+														<i class="mdi mdi-filter-outline"></i>
+														<input type="text" id="filter" ng-model="vm.scheduleIssuesFilter" placeholder="Filter validation issues">
+														<md-tooltip>Filter validation issues</md-tooltip>
 													</label>
 												</div>
 												<div class="con-flex"></div>

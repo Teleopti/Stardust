@@ -7609,7 +7609,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data filter....
+        ///   Looks up a localized string similar to Filter sites / teams.
         /// </summary>
         public static string DataFilterThreeDots {
             get {
@@ -11369,7 +11369,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter Locations.
+        ///   Looks up a localized string similar to Filter locations.
         /// </summary>
         public static string FilterLocations {
             get {
@@ -11531,11 +11531,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter Roles.
+        ///   Looks up a localized string similar to Filter roles.
         /// </summary>
         public static string FilterRoles {
             get {
                 return ResourceManager.GetString("FilterRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter agent names / sites / teams / rules / states / current activites.
+        /// </summary>
+        public static string FilterRtaFull {
+            get {
+                return ResourceManager.GetString("FilterRtaFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter agent names / states /....
+        /// </summary>
+        public static string FilterRtaShort {
+            get {
+                return ResourceManager.GetString("FilterRtaShort", resourceCulture);
             }
         }
         
@@ -11549,7 +11567,25 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter Teams.
+        ///   Looks up a localized string similar to Filter sites.
+        /// </summary>
+        public static string FilterSites {
+            get {
+                return ResourceManager.GetString("FilterSites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter skills.
+        /// </summary>
+        public static string FilterSkills {
+            get {
+                return ResourceManager.GetString("FilterSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter teams.
         /// </summary>
         public static string FilterTeams {
             get {
@@ -21970,7 +22006,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Permissions filter....
+        ///   Looks up a localized string similar to Filter functions.
         /// </summary>
         public static string PermissionsFilterThreeDots {
             get {
@@ -25671,7 +25707,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Role filter....
+        ///   Looks up a localized string similar to Filter roles.
         /// </summary>
         public static string RoleFilterThreeDots {
             get {

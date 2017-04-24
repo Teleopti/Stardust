@@ -38,11 +38,10 @@
 	<div class="con-row" ng-class="{'rta-agents-filter-wrapper': vm.agents.length >= vm.maxNumberOfAgents}">
 		<div class="con-flex">
 			<label for="filter-agents" class="input-icon">
-			<i class="mdi mdi-filter-outline">
-				<input type="text" id="filter-agents" ng-change="vm.filterData()" ng-model="vm.filterText" placeholder="{{'Filter'|translate}}...">
-					<md-tooltip>{{'Filter'|translate}}</md-tooltip>
-			</i>
-		</label>
+				<i class="mdi mdi-filter-outline"></i>
+				<input type="text" id="filter-agents" ng-change="vm.filterData()" ng-model="vm.filterText" placeholder="{{'FilterRtaShort'|translate}}">
+				<md-tooltip>{{'FilterRtaFull'|translate}}</md-tooltip>
+			</label>
 		</div>
 		<div class="con-flex split-3-1"></div>
 		<div class="con-flex">

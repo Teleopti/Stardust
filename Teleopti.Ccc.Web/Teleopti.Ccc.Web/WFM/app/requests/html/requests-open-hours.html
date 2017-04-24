@@ -4,10 +4,9 @@
 		<div class="con-row m-h-400">
 			<div class="con-flex">
 				<label for="siteName" class="input-prepend">
-					<i class="mdi mdi-filter-outline">
-						<md-tooltip>Filter sites</md-tooltip>
-					</i>
-					<input type="text" id="siteNameFilter" placeholder="Filter sites" ng-model="siteFilter.Name" />
+					<i class="mdi mdi-filter-outline"></i>
+					<input type="text" id="siteNameFilter" placeholder="{{'FilterSites' | translate}}" ng-model="siteFilter.Name" />
+					<md-tooltip>{{'FilterSites' | translate}}</md-tooltip>
 				</label>
 				<div class="m-h-400 auto">
 					<div ng-repeat="site in requestsSiteOpenHours.sites | filter:siteFilter">

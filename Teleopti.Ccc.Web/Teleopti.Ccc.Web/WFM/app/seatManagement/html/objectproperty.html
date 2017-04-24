@@ -5,7 +5,6 @@
 		color: #fff;
 	}
 </style>
-
 <md-content layout-padding>
 	<div ng-show="vm.seats.length === 1">
 		{{'SeatNumber' | translate}}
@@ -14,14 +13,11 @@
 	<div ng-show="vm.seats.length !== 1">
 		{{'MultipleSeatsSelected' | translate}}
 	</div>
-
 	<label for="inputId" class="input-prepend">
-		<i class="mdi mdi-filter-outline">
-			<md-tooltip>{{"FilterRoles" | translate}}</md-tooltip>
-		</i>
+		<i class="mdi mdi-filter-outline"></i>
 		<input type="text" id="inputId" placeholder="{{'FilterRoles' | translate}}" name="roleFilter" ng-model="roleFilter.DescriptionText" />
+		<md-tooltip>{{"FilterRoles" | translate}}</md-tooltip>
 	</label>
-
 	<div class="seat-roles">
 		<div class="wfm-checkbox" ng-repeat="role in vm.roles | filter: roleFilter | orderBy:'Name'">
 			<input type="checkbox" id="{{role.Id}}" ng-model="role.Selected" ng-change="vm.selectedStatusChanged(role)" seat-role-indeterminate="vm.rolesStatus(role)" />
