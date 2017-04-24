@@ -51,18 +51,17 @@ namespace Teleopti.Ccc.TestCommon.PerformanceTest
 		public PerformanceTest()
 		{
 		}
-
-		public IDisposable Measure(string spreadsheetId, string sheetName)
+		
+		public void Measure(string spreadsheetId, string sheetName, Action action)
 		{
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
 			var startTime = DateTime.Now;
 
-			return new GenericDisposable(() =>
-			{
-				stopwatch.Stop();
-				appendResult(startTime, stopwatch.Elapsed, spreadsheetId, sheetName);
-			});
+			action.Invoke();
+
+			stopwatch.Stop();
+			appendResult(startTime, stopwatch.Elapsed, spreadsheetId, sheetName);
 		}
 
 		private static void appendResult(DateTime startTime, TimeSpan elapsed, string spreadsheetId, string sheetName)
@@ -129,6 +128,5 @@ namespace Teleopti.Ccc.TestCommon.PerformanceTest
 			public string client_email { get; set; }
 			public string private_key { get; set; }
 		}
-
 	}
 }

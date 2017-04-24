@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		[Test]
 		public void MeasurePerformance()
 		{
-			using (PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "SendSmallBatchesTest"))
+			PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "SendSmallBatchesTest", () =>
 			{
 				States.SendAllAsSmallBatches();
-			}
+			});
 		}
 	}
 }
