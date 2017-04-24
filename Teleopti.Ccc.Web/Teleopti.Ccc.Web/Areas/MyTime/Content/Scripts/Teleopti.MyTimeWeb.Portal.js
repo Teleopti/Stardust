@@ -219,15 +219,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	        	_loadContent(hashInfo);
 	        });
 
-		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')', 'i'),
-			function (view, action) {
-				var hashInfo = _parseHash('#' + view + '/' + action);
-				_invokeDisposeCallback(currentViewId);
-				_adjustTabs(hashInfo);
-				_loadContent(hashInfo);
-			}
-		);
-
 		crossroads.addRoute(new RegExp('^(.*)$', 'i'),
 	        function (hash) {
 	        	var hashInfo = _parseHash('#' + hash);
