@@ -214,16 +214,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool UseTeam { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [not break max staffing].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [not break max staffing]; otherwise, <c>false</c>.
-        /// </value>
-        bool DoNotBreakMaxStaffing { get; set; }
-
-		MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }	  
-
-        /// <summary>
         /// Gets or sets a value indicating whether to consider short breaks.
         /// </summary>
         /// <value><c>true</c> if [consider short breaks]; otherwise, <c>false</c>.</value>

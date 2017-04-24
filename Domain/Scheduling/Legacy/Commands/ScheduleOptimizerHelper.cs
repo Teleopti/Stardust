@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
 		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
-		private readonly IMaxSeatOptimization _maxSeatOptimization;
+		private readonly MaxSeatOptimization _maxSeatOptimization;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 
 		public ScheduleOptimizerHelper(IMatrixListFactory matrixListFactory,
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IScheduleDayEquator scheduleDayEquator,
 				ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
 				IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
-				IMaxSeatOptimization maxSeatOptimization,
+				MaxSeatOptimization maxSeatOptimization,
 				IWeeklyRestSolverCommand weeklyRestSolverCommand)
 		{
 			_matrixListFactory = matrixListFactory;

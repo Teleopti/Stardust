@@ -26,12 +26,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class IntradayOptimizationReduceUnnecessaryCallsTest : ISetup
 	{
 		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
+		public InitMaxSeatForStateHolder InitMaxSeatForStateHolder;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public WorkShiftSelectorTrackWhatSkillDays WorkShiftSelector;
 

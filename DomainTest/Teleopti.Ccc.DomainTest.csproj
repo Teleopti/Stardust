@@ -361,6 +361,7 @@
     <Compile Include="Reports\ReportNavigationModelTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingReadModelForecastTest.cs" />
+    <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
     <Compile Include="SchedulingScenarios\ContractWithMaximumTolerance.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationFakeDecisionMakerTest.cs" />
@@ -485,7 +486,6 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopMaxSeatTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\ShiftCategoryLimitationTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\TeamBlockSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\TrackIntradayOptimizationCallback.cs" />
@@ -505,7 +505,6 @@
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverTest.cs" />
     <Compile Include="Scheduling\SchedulerStateHolder_LoadSchedulesTest.cs" />
     <Compile Include="Scheduling\FindSchedulesForPersonsTest.cs" />
-    <Compile Include="Scheduling\SeatLimitations\MaxSeatSkillCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Bug39939.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDeciderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduleCommandTest.cs" />
@@ -926,7 +925,6 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
-    <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager28317Test.cs" />
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\FullIntervalFinderTest.cs" />
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\IntraIntervalFinderTest.cs" />
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\SkillActivityCountCollectorTest.cs" />
@@ -1004,7 +1002,6 @@
     <Compile Include="Scheduling\TeamBlock\DayOff\SplitSchedulePeriodToWeekPeriodTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\TeamMemberTerminationOnBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockDayOffsInPeriodValidatorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptionsTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelectorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameEndTimeTeamSpecificationTest.cs" />
@@ -1213,7 +1210,6 @@
     <Compile Include="ResourceCalculation\SkillStaffPeriodStatisticsForSkillIntradayTest.cs" />
     <Compile Include="ResourceCalculation\SwapServiceTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderResultTest.cs" />
-    <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffOutsideScheduleExceptionTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteOptionTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteSchedulePartServiceTest.cs" />
@@ -1283,12 +1279,8 @@
     <Compile Include="Scheduling\ScheduleTagging\ScheduleDayTagExtractorTest.cs" />
     <Compile Include="Scheduling\ScheduleTagging\ScheduleTagSetterTest.cs" />
     <Compile Include="Scheduling\ScheduleTagging\ScheduleTagTest.cs" />
-    <Compile Include="Scheduling\SeatLimitations\CreatePersonalSkillsFromMaxSeatSitesTest.cs" />
-    <Compile Include="Scheduling\SeatLimitations\CreateSkillsFromMaxSeatSitesTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\MaxSeatSitesExtractorTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\OccupiedSeatCalculatorTest.cs" />
-    <Compile Include="Scheduling\SeatLimitations\SeatLimitationWorkShiftCalculator2Test.cs" />
-    <Compile Include="Scheduling\SeatLimitations\SeatImpactOnPeriodForProjectionTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\SeatLimitationWorkShiftCalculatorTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\PersonMeetingByDateSorterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionEntityServiceTest.cs" />
@@ -1327,12 +1319,6 @@
     <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidatedTeamBlockInfoExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidSampleDayPickerFromTeamBlockTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\ExtractIntervalsVoilatingMaxSeatTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatBoostingFactorCalculatorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatsCalculationForTeamBlockTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\IsMaxSeatsReachedOnSkillStaffPeriodSpecificationTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatSkillAggregatorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatsSpecificationDictionaryExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftLengthValueCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftPeriodValueCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftSelectorTest.cs" />

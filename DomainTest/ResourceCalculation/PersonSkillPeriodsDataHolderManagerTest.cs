@@ -56,51 +56,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	    }
 
 	    [Test]
-	    public void ShouldReturnEmptyPersonMaxSeatSkillSkillStaffPeriodsWhenMaxSeatIsNull()
-	    {
-		    var dateOnly = new DateOnly(2009, 2, 2);
-		    var team = TeamFactory.CreateTeam("Team 1", "Paris");
-		    team.Site.MaxSeatSkill = null;
-		    _person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, team);
-		    _person.AddSkill(new PersonSkill(SkillFactory.CreateSkill("Test"), new Percent(1)), _person.Period(dateOnly));
-
-		    _schedulePeriod.Stub(x => x.Person).Return(_person);
-
-		    var personSkillDay = new PersonSkillDayCreator(new PersonalSkillsProvider()).Create(dateOnly, _schedulePeriod);
-		    var ret = _target.GetPersonMaxSeatSkillSkillStaffPeriods(personSkillDay);
-		    Assert.IsNotNull(ret);
-	    }
-
-	    [Test]
-	    public void CanGetPersonMaxSeatSkillSkillStaffPeriods()
-	    {
-		    var dateOnly = new DateOnly(2009, 2, 2);
-		    var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time");
-		    var skill = SkillFactory.CreateSiteSkill("siteSkill");
-		    var skills = new List<ISkill> {skill};
-		    var team = TeamFactory.CreateTeam("Team 1", "Paris");
-		    team.Site.MaxSeatSkill = skill;
-
-		    _person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, team);
-		    _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
-
-		    var personPeriod = _person.Period(dateOnly);
-		    personPeriod.SetMaxSeatSkill(skill);
-		    personPeriod.Team = team;
-
-		    _schedulePeriod.Stub(x => x.Person).Return(_person);
-		    _schedulingResultStateHolder.Stub(x => x.SkillStaffPeriodHolder).Return(_skillStafPeriodHolder);
-		    _skillStafPeriodHolder.Stub(x => x.SkillStaffPeriodDictionary(skills, new DateTimePeriod()))
-			    .Return(new Dictionary<ISkill, ISkillStaffPeriodDictionary>())
-			    .IgnoreArguments();
-
-		    var personSkillDay = new PersonSkillDayCreator(new PersonalSkillsProvider()).Create(dateOnly, _schedulePeriod);
-		    var ret = _target.GetPersonMaxSeatSkillSkillStaffPeriods(personSkillDay);
-		    
-			Assert.IsNotNull(ret);
-	    }
-
-	    [Test]
 	    public void CanGetPersonNonBlendSkillSkillStaffPeriods()
 	    {
 		    var dateOnly = new DateOnly(2009, 2, 2);

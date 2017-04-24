@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool _useMinStaff = true;
 		private bool _useMaxStaff = true;
 		private bool _useAverageShiftLengths = true;
-		private MaxSeatsFeatureOptions _maxSeatsFeatureOptions;
 		private Guid? _shiftCategoryId;
 		private int _refreshRate;
 		private int _calculationFrequenzy;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			schedulingOptions.UseMinimumPersons = _useMinStaff;
 			schedulingOptions.UseMaximumPersons = _useMaxStaff;
-			schedulingOptions.UserOptionMaxSeatsFeature = _maxSeatsFeatureOptions;
 			schedulingOptions.UseAverageShiftLengths = _useAverageShiftLengths;
 			schedulingOptions.RefreshRate = _refreshRate < 1? 10: _refreshRate;
 			schedulingOptions.ResourceCalculateFrequency = _calculationFrequenzy < 1? 1 : _calculationFrequenzy;
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_useMinStaff = schedulingOptions.UseMinimumPersons;
 			_useMaxStaff = schedulingOptions.UseMaximumPersons;
-			_maxSeatsFeatureOptions = schedulingOptions.UserOptionMaxSeatsFeature;
 			_useAverageShiftLengths = schedulingOptions.UseAverageShiftLengths;
 			_refreshRate = schedulingOptions.RefreshRate;
 			_calculationFrequenzy = schedulingOptions.ResourceCalculateFrequency;

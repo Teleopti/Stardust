@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
@@ -20,18 +19,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	{
 		private readonly IWorkShiftPeriodValueCalculator _workShiftPeriodValueCalculator;
 		private readonly IWorkShiftLengthValueCalculator _workShiftLengthValueCalculator;
-		private readonly IMaxSeatsCalculationForTeamBlock _maxSeatsCalculationForTeamBlock;
 
 		public WorkShiftValueCalculator(IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator,
-			IWorkShiftLengthValueCalculator workShiftLengthValueCalculator,
-			IMaxSeatsCalculationForTeamBlock maxSeatsCalculationForTeamBlock)
+			IWorkShiftLengthValueCalculator workShiftLengthValueCalculator)
 		{
 			_workShiftPeriodValueCalculator = workShiftPeriodValueCalculator;
 			_workShiftLengthValueCalculator = workShiftLengthValueCalculator;
-			_maxSeatsCalculationForTeamBlock = maxSeatsCalculationForTeamBlock;
 		}
 
-		[RemoveMeWithToggle("Most part of while clause below can be removed when toggle is removed - HasMaxSeatSkill always false", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity,
 			IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic,
 			PeriodValueCalculationParameters periodValueCalculationParameters, TimeZoneInfo timeZoneInfo)
@@ -80,29 +75,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				{
 					var valueForThisPeriod = _workShiftPeriodValueCalculator.PeriodValue(currentStaffPeriod, currentResourceInMinutes,
 						periodValueCalculationParameters.UseMinimumPersons, periodValueCalculationParameters.UseMaximumPersons);
-					if (periodValueCalculationParameters.HasMaxSeatSkill
-					    && periodValueCalculationParameters.MaxSeatsFeatureOption != MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
-					{
-						IntervalLevelMaxSeatInfo maxSeatReached;
-						var maxSeatsPerIntervalDictionary = periodValueCalculationParameters.MaxSeatInfoPerInterval;
-						if (!maxSeatsPerIntervalDictionary.TryGetValue(currentSkillStaffPeriodKey, out maxSeatReached))
-						{
-							if (activity.RequiresSeat)
-								return null;
-							return 0;
-						}
-						var maxSeatsCorrection = _maxSeatsCalculationForTeamBlock.PeriodValue(valueForThisPeriod,
-							periodValueCalculationParameters.MaxSeatsFeatureOption, maxSeatReached.IsMaxSeatReached, activity.RequiresSeat, maxSeatReached.MaxSeatBoostingFactor);
-
-						if (maxSeatsCorrection == null)
-							return null;
-						periodValue += maxSeatsCorrection.Value;
-					}
-					else
-					{
-						periodValue += valueForThisPeriod;
-					}
-
+					periodValue += valueForThisPeriod;
+					
 					resourceInMinutes += currentResourceInMinutes;
 
 					currentSkillStaffPeriodKey = currentSkillStaffPeriodKey.AddMinutes(resolution.Value);

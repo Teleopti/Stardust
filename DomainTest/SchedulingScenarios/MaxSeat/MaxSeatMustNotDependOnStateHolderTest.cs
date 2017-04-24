@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
@@ -26,7 +25,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class MaxSeatMustNotDependOnStateHolderTest : ISetup
 	{
 		public MaxSeatOptimization Target;

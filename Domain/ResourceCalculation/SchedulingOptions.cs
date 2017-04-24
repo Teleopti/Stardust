@@ -44,10 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool BlockSameStartTime { get; set; }
 		public bool BlockSameShift { get; set; }
         public bool UseBlock { get; set; }
-
-        public bool DoNotBreakMaxStaffing { get; set; }
         public int RefreshRate { get; set; }
-		  public MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }
         public bool UseSameDayOffs { get; set; }
         public IScheduleTag TagToUseOnScheduling { get; set; }
     	public int ResourceCalculateFrequency { get; set; }

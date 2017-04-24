@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
-		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -44,7 +42,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
-			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -61,7 +58,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
-			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -100,7 +96,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						resourceCalculateDelayer,
 						schedulingResultStateHolder,
 						dayOffOptimizationPreference,
-						dayOffOptimizationPreferenceProvider,
 						out checkPeriodValue);
 					var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 					success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
@@ -130,7 +125,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return teamInfosToRemove;
 		}
 
-		[RemoveMeWithToggle("maxseat check can be removed with toggle", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private bool runOneTeam(IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix,
@@ -138,7 +132,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IDaysOffPreferences daysOffPreferences,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			out bool checkPeriodValue)
 		{
 			var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter, matrix);
@@ -175,18 +168,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					checkPeriodValue = true;
 					return false;
 				}
-			}
-
-			var isMaxSeatRuleViolated = movedDaysOff.AddedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions, teamInfo, schedulingResultStateHolder.SkillDays)) ||
-										movedDaysOff.AddedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x.AddDays(1), schedulingOptions, teamInfo, schedulingResultStateHolder.SkillDays));
-
-			if (isMaxSeatRuleViolated || !_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
-			{
-				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
-				teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
-				checkPeriodValue = true;
-				return true;
 			}
 
 			if (!_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamInfo))

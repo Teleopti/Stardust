@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -91,13 +92,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     	///</summary>
     	IBudgetGroup BudgetGroup { get; set; }
 
-		/// <summary>
-		/// Gets the person max seat skill collection.
-		/// </summary>
-		/// <value>The person max seat skill collection.</value>
-		ISkill MaxSeatSkill { get; }
+		MaxSeatSkill MaxSeatSkill { get; }
 
-	    void SetMaxSeatSkill(ISkill maxSeatSkill);
+	    void SetMaxSeatSkill(MaxSeatSkill maxSeatSkill);
 
 				/// <summary>
 				/// Gets the person non blend skill collection.

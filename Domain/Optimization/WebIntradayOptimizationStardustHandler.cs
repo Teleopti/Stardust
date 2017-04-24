@@ -7,24 +7,20 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class WebIntradayOptimizationStardustHandler : IntradayOptimizationEventBaseHandler, IRunOnStardust,
-		IHandleEvent<WebIntradayOptimizationStardustEvent>
+	public class WebIntradayOptimizationStardustHandler : IntradayOptimizationEventBaseHandler, IRunOnStardust, IHandleEvent<WebIntradayOptimizationStardustEvent>
 	{
 		private readonly IJobResultRepository _jobResultRepository;
 
 		public WebIntradayOptimizationStardustHandler(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager,
-			IFillStateHolderWithMaxSeatSkills fillStateHolderWithMaxSeatSkills, IJobResultRepository jobResultRepository)
-			: base(
-				intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult,
-				gridlockManager, fillStateHolderWithMaxSeatSkills)
+			IJobResultRepository jobResultRepository)
+			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult, gridlockManager)
 		{
 			_jobResultRepository = jobResultRepository;
 		}

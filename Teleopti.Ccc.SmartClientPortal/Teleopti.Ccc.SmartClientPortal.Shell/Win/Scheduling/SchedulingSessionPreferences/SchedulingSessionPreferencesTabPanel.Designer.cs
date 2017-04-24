@@ -78,10 +78,8 @@
 			this.numericUpDownResourceCalculateEvery = new System.Windows.Forms.NumericUpDown();
 			this.labelResourceCalculateEveryColon = new System.Windows.Forms.Label();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-			this.checkBoxUseMaxSeats = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxUseMaximumPersons = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxUseMinimumPersons = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxDoNotBreakMaxSeats = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxUseAverageShiftLengths = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			((System.ComponentModel.ISupportInitialize)(this.tabControl1)).BeginInit();
 			this.tabControl1.SuspendLayout();
@@ -124,10 +122,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).BeginInit();
 			this.tableLayoutPanel6.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseMaxSeats)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseMaximumPersons)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseMinimumPersons)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxDoNotBreakMaxSeats)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseAverageShiftLengths)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -910,10 +906,8 @@
 			this.tableLayoutPanel6.ColumnCount = 2;
 			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.Controls.Add(this.checkBoxUseMaxSeats, 0, 2);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxUseMaximumPersons, 0, 1);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxUseMinimumPersons, 0, 0);
-			this.tableLayoutPanel6.Controls.Add(this.checkBoxDoNotBreakMaxSeats, 1, 3);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxUseAverageShiftLengths, 0, 4);
 			this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 23);
@@ -927,23 +921,6 @@
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanel6.Size = new System.Drawing.Size(498, 180);
 			this.tableLayoutPanel6.TabIndex = 17;
-			// 
-			// checkBoxUseMaxSeats
-			// 
-			this.checkBoxUseMaxSeats.BeforeTouchSize = new System.Drawing.Size(485, 23);
-			this.tableLayoutPanel6.SetColumnSpan(this.checkBoxUseMaxSeats, 2);
-			this.checkBoxUseMaxSeats.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.checkBoxUseMaxSeats.DrawFocusRectangle = false;
-			this.checkBoxUseMaxSeats.Location = new System.Drawing.Point(10, 61);
-			this.checkBoxUseMaxSeats.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBoxUseMaxSeats.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxUseMaxSeats.Name = "checkBoxUseMaxSeats";
-			this.checkBoxUseMaxSeats.Size = new System.Drawing.Size(485, 23);
-			this.checkBoxUseMaxSeats.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxUseMaxSeats.TabIndex = 53;
-			this.checkBoxUseMaxSeats.Text = "xxUseMaxSeats";
-			this.checkBoxUseMaxSeats.ThemesEnabled = false;
-			this.checkBoxUseMaxSeats.CheckedChanged += new System.EventHandler(this.checkBoxUseMaxSeatsCheckedChanged);
 			// 
 			// checkBoxUseMaximumPersons
 			// 
@@ -976,21 +953,6 @@
 			this.checkBoxUseMinimumPersons.TabIndex = 51;
 			this.checkBoxUseMinimumPersons.Text = "xxUseMinStaffing";
 			this.checkBoxUseMinimumPersons.ThemesEnabled = false;
-			// 
-			// checkBoxDoNotBreakMaxSeats
-			// 
-			this.checkBoxDoNotBreakMaxSeats.BeforeTouchSize = new System.Drawing.Size(456, 23);
-			this.checkBoxDoNotBreakMaxSeats.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.checkBoxDoNotBreakMaxSeats.DrawFocusRectangle = false;
-			this.checkBoxDoNotBreakMaxSeats.Location = new System.Drawing.Point(39, 90);
-			this.checkBoxDoNotBreakMaxSeats.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBoxDoNotBreakMaxSeats.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxDoNotBreakMaxSeats.Name = "checkBoxDoNotBreakMaxSeats";
-			this.checkBoxDoNotBreakMaxSeats.Size = new System.Drawing.Size(456, 23);
-			this.checkBoxDoNotBreakMaxSeats.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxDoNotBreakMaxSeats.TabIndex = 54;
-			this.checkBoxDoNotBreakMaxSeats.Text = "xxDoNotBreakMaxSeats";
-			this.checkBoxDoNotBreakMaxSeats.ThemesEnabled = false;
 			// 
 			// checkBoxUseAverageShiftLengths
 			// 
@@ -1062,10 +1024,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).EndInit();
 			this.tableLayoutPanel6.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseMaxSeats)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseMaximumPersons)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseMinimumPersons)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxDoNotBreakMaxSeats)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseAverageShiftLengths)).EndInit();
 			this.ResumeLayout(false);
 
@@ -1099,10 +1059,8 @@
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxTeamSameEndTime;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxUseMaxSeats;
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxUseMaximumPersons;
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxUseMinimumPersons;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxDoNotBreakMaxSeats;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxUseShiftCategory;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvShiftCategory;

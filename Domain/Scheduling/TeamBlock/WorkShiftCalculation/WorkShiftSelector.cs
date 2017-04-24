@@ -28,20 +28,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		private readonly IWorkShiftValueCalculator _workShiftValueCalculator;
 		private readonly IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
-		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
-		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 
 		public WorkShiftSelector(IWorkShiftValueCalculator workShiftValueCalculator, 
 												IEqualWorkShiftValueDecider equalWorkShiftValueDecider,
-												IActivityIntervalDataCreator activityIntervalDataCreator,
-												IMaxSeatSkillAggregator maxSeatSkillAggregator,
-												IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals)
+												IActivityIntervalDataCreator activityIntervalDataCreator)
 		{
 			_workShiftValueCalculator = workShiftValueCalculator;
 			_equalWorkShiftValueDecider = equalWorkShiftValueDecider;
 			_activityIntervalDataCreator = activityIntervalDataCreator;
-			_maxSeatSkillAggregator = maxSeatSkillAggregator;
-			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
 		}
 
 
@@ -49,12 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			 ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person)
 		{
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(groupPersonSkillAggregator, teamBlockInfo, datePointer, allSkillDays, forRoleModel);
-			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer, allSkillDays, TimeZoneGuard.Instance.CurrentTimeZone(), true);
-			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer, datePointer));
-			var hasMaxSeatSkill = maxSeatSkills.Any();
-			var parameters = new PeriodValueCalculationParameters(schedulingOptions
-					.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
-				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
+				var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,schedulingOptions.UseMaximumPersons);
 
 			double? bestShiftValue = null;
 			IShiftProjectionCache bestShift = null;

@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				IPersonSkill pSkill = new PersonSkill(skill, new Percent(1));
 				if (skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
 				{
-					pPeriod.SetMaxSeatSkill(skill);
+					throw new NotSupportedException();
 				}
 				else if (skill.SkillType.ForecastSource == ForecastSource.NonBlendSkill)
 				{

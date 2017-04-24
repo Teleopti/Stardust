@@ -9,7 +9,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
@@ -19,7 +18,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class MaxSeatOptimizationTeamTest
 	{
 		public MaxSeatOptimization Target;

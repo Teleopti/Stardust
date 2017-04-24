@@ -49,9 +49,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			Assert.IsNull(_target.ManualAgents);
 			_target.ManualAgents = _manualAgents;
 			Assert.AreEqual(150d, _target.ManualAgents);
-			Assert.AreEqual(0, _target.MaxSeats);
-        	_target.MaxSeats = 5;
-			Assert.AreEqual(5, _target.MaxSeats);
         }
 
         /// <summary>

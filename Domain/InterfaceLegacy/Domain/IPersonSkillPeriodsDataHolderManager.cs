@@ -16,13 +16,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> GetPersonSkillPeriodsDataHolderDictionary(PersonSkillDay personSkillDay);
 
 	    /// <summary>
-	    /// Gets the person MaxSeatSkill SkillStaffPeriods.
-	    /// </summary>
-	    /// <param name="personSkillDay"></param>
-	    /// <returns></returns>
-	    IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonMaxSeatSkillSkillStaffPeriods(PersonSkillDay personSkillDay);
-
-	    /// <summary>
 	    /// Gets the person NonBlendSkill SkillStaffPeriods.
 	    /// </summary>
 	    /// <param name="personSkillDay"></param>

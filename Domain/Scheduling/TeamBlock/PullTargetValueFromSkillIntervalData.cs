@@ -1,61 +1,27 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class PullTargetValueFromSkillIntervalData
 	{
-		private const int punishingNumber = 1000;
-
-		public double GetTargetValue(IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic,
-			TargetValueOptions targetValueCalculation, IDictionary<DateTime, IntervalLevelMaxSeatInfo> aggregatedMaxSeatIntervals)
+		public double GetTargetValue(IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic, TargetValueOptions targetValueCalculation)
 		{
 			if (targetValueCalculation == TargetValueOptions.RootMeanSquare)
 			{
-				var aggregatedValues = new List<Double>();
-				foreach (var interval in skillIntervalDataDic)
-				{
-					IntervalLevelMaxSeatInfo value;
-					if (aggregatedMaxSeatIntervals.TryGetValue(interval.Key, out value))
-					{
-						if (value.IsMaxSeatReached)
-						{
-							aggregatedValues.Add(interval.Value.AbsoluteDifference +
-							                     (punishingNumber*value.MaxSeatBoostingFactor));
-							continue;
-						}
-					}
-					aggregatedValues.Add(interval.Value.AbsoluteDifference);
-				}
+				var aggregatedValues = skillIntervalDataDic.Select(interval => interval.Value.AbsoluteDifference);
 				return Calculation.Variances.RMS(aggregatedValues);
 			}
 			else
 			{
-				var aggregatedValues = new List<Double>();
-				foreach (var interval in skillIntervalDataDic)
-				{
-					IntervalLevelMaxSeatInfo value;
-					if (aggregatedMaxSeatIntervals.TryGetValue(interval.Key, out value))
-					{
-						if (value.IsMaxSeatReached)
-						{
-							aggregatedValues.Add(interval.Value.RelativeDifferenceBoosted() +
-							                     (punishingNumber*value.MaxSeatBoostingFactor));
-							continue;
-						}
-					}
-					aggregatedValues.Add(interval.Value.RelativeDifferenceBoosted());
-				}
-				if (targetValueCalculation == TargetValueOptions.StandardDeviation)
-					return Calculation.Variances.StandardDeviation(aggregatedValues);
-				return Calculation.Variances.Teleopti(aggregatedValues);
+				var aggregatedValues = skillIntervalDataDic.Select(interval => interval.Value.RelativeDifferenceBoosted());
+				return targetValueCalculation == TargetValueOptions.StandardDeviation ? 
+					Calculation.Variances.StandardDeviation(aggregatedValues) : 
+					Calculation.Variances.Teleopti(aggregatedValues);
 			}
-
 		}
-
-
 	}
 }

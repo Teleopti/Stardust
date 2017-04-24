@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -25,24 +24,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationDesktopMaxSeatTest : IConfigureToggleManager, ISetup
+	public class IntradayOptimizationDesktopMaxSeatTest : ISetup
 	{
-		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		private readonly bool _resourcePlannerMaxSeatsNew40939;
 		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
-
-		public IntradayOptimizationDesktopMaxSeatTest(bool resourcePlannerMaxSeatsNew40939)
-		{
-			_resourcePlannerMaxSeatsNew40939 = resourcePlannerMaxSeatsNew40939;
-		}
 
 		[TestCase(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, teamBlockStyle.TeamHierarchy, ExpectedResult = true)]
 		[TestCase(MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, teamBlockStyle.TeamHierarchy, ExpectedResult = false)]
@@ -100,7 +88,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 					break;
 			}
 
-			InitMaxSeatForStateHolder.Execute(15);
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
 
 			var wasGivenNewShift = stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9);
@@ -113,12 +100,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			TeamNonHierarchy,
 			Block,
 			Classic
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if (_resourcePlannerMaxSeatsNew40939)
-				toggleManager.Enable(Toggles.ResourcePlanner_MaxSeatsNew_40939);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

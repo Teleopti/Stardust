@@ -10,9 +10,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
@@ -45,10 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private ILocateMissingIntervalsIfMidNightBreak _locateMissingIntervalsIfMidNightBreak;
 		private IFilterOutIntervalsAfterMidNight _filterOutIntervalsAfterMidNight;
 		private List<DateOnly> _extendedDateOnlyList;
-		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
-		private IExtractIntervalsViolatingMaxSeat _extractIntervalsViolatingMaxSeat;
 		private PullTargetValueFromSkillIntervalData _pullTargetValueFromSkillIntervalData;
-		private ISkill _maxSeatSkill;
 		private ISkillIntervalData _skillIntervalData1;
 		private ISkillIntervalData _skillIntervalData2;
 
@@ -73,22 +68,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
 			_skillList = new List<ISkill> {_baseLineData.SampleSkill};
 			_skillDay1 = _mock.StrictMock<ISkillDay>();
-			_maxSeatSkillAggregator = _mock.StrictMock<IMaxSeatSkillAggregator>();
-			_extractIntervalsViolatingMaxSeat = _mock.StrictMock<IExtractIntervalsViolatingMaxSeat>();
 			_pullTargetValueFromSkillIntervalData = new PullTargetValueFromSkillIntervalData();
 			_skillStaffPeriod1 = _mock.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriodList = new List<ISkillStaffPeriod>();
 			_skillStaffPeriodList.Add(_skillStaffPeriod1);
 			_skillStaffPeriodCollecion = new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriodList);
 			_period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
-			_maxSeatSkill = SkillFactory.CreateSkill("maxSeatSkill");
 			_target = new DailyTargetValueCalculatorForTeamBlock(_resolutionProvider, _intervalDataDivider,
 				_intervalDataAggregator,
 				_dayIntervalDataCalculator,
 				_skillStaffPeriodToSkillIntervalDataMapper,
 				()=>_schedulingResultStateHolder,
 				_groupPersonSkillAggregator, _locateMissingIntervalsIfMidNightBreak, _filterOutIntervalsAfterMidNight,
-				_maxSeatSkillAggregator, _extractIntervalsViolatingMaxSeat, _pullTargetValueFromSkillIntervalData);
+				_pullTargetValueFromSkillIntervalData);
 
 			_extendedDateOnlyList = new List<DateOnly> {DateOnly.Today, DateOnly.Today.AddDays(1)};
 			_skillIntervalData1 = new SkillIntervalData(_period, 5, 3, 3, 0, 0);
@@ -123,8 +115,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_intervalDataDivider.SplitSkillIntervalData(new List<ISkillIntervalData> {skillIntervalData1}, 15)).Return(new List<ISkillIntervalData> {skillIntervalData1});
 				
 				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
-				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamInfo.GroupMembers.ToList(), _dateOnlyPeriod)).Return(new HashSet<ISkill>());
-
 			}
 			Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.0);
 		}
@@ -158,8 +148,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 				Expect.Call(_intervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>{skillIntervalList})).IgnoreArguments().Return(skillIntervalList);
 				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
-				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamInfo.GroupMembers.ToList(), _dateOnlyPeriod)).Return(new HashSet<ISkill>());
-
 			}
 			Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
 		}
@@ -194,8 +182,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_intervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>{skillIntervalList})).IgnoreArguments().Return(skillIntervalList);
 
 				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
-				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamInfo.GroupMembers.ToList(), _dateOnlyPeriod)).Return(new HashSet<ISkill>());
-
 			}
 			Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
 		}
@@ -220,8 +206,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			using (_mock.Record())
 			{
-				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo).Repeat.Twice();
-				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo).Repeat.Any();
+				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Any();
 				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_teamInfo.GroupMembers.ToList(), _dateOnlyPeriod)).Return(_skillList);
 				Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList())).Return(15);
 
@@ -234,8 +220,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_intervalDataDivider.SplitSkillIntervalData(skillIntervalList, 15)).Return(skillIntervalList);
 
 				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
-				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamInfo.GroupMembers.ToList(), _dateOnlyPeriod)).Return(new HashSet<ISkill>());
-
 			}
 			using (_mock.Playback())
 			{
@@ -260,13 +244,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_advancePrefrences.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
-			IDictionary<DateTime, IntervalLevelMaxSeatInfo> punishedList = new Dictionary<DateTime, IntervalLevelMaxSeatInfo>();
-			punishedList.Add( _period.StartDateTime,new IntervalLevelMaxSeatInfo(false,1) );
-			punishedList.Add(_period.MovePeriod(TimeSpan.FromMinutes(30)).StartDateTime, new IntervalLevelMaxSeatInfo(false, 1));
 			using (_mock.Record())
 			{
-				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo).Repeat.Twice();
-				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo).Repeat.Any();
+				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Any();
 				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_teamInfo.GroupMembers.ToList(), _dateOnlyPeriod)).Return(_skillList);
 				Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList())).Return(15);
 
@@ -279,9 +260,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_intervalDataDivider.SplitSkillIntervalData(skillIntervalList, 15)).Return(skillIntervalList);
 
 				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
-				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamInfo.GroupMembers.ToList(), _dateOnlyPeriod)).Return(new HashSet<ISkill>{_maxSeatSkill});
-				Expect.Call(_extractIntervalsViolatingMaxSeat.IdentifyIntervalsWithBrokenMaxSeats(_teamBlockInfo,_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone,_dateOnlyPeriod.StartDate)).Return(punishedList);
-
 			}
 			using (_mock.Playback())
 			{

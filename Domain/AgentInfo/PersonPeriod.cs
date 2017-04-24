@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private IPersonContract _personContract;
 		private ITeam _team;
 		private ISet<IPersonSkill> _personSkillCollection;
-		private ISkill _maxSeatSkill;
+		private MaxSeatSkill _maxSeatSkill;
 		private ISet<IExternalLogOn> _externalLogOnCollection;
 		private DateOnly _startDate;
 		private IRuleSetBag _ruleSetBag;
@@ -151,14 +151,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_externalLogOnCollection.Remove(externalLogOn);
 		}
 
-		[RemoveMeWithToggle("Change return parameter to MaxSeatSkill", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		public virtual ISkill MaxSeatSkill => _maxSeatSkill;
+		public virtual MaxSeatSkill MaxSeatSkill => _maxSeatSkill;
 
-		[RemoveMeWithToggle("Change inparameter to MaxSeatSkill", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		public virtual void SetMaxSeatSkill(ISkill maxSeatSkill)
+		public virtual void SetMaxSeatSkill(MaxSeatSkill maxSeatSkill)
 		{
-			if(maxSeatSkill!=null && maxSeatSkill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
-				throw new ArgumentOutOfRangeException(nameof(maxSeatSkill), "The SkillType.ForecastSource of the Skill on the PersonSkill must be MaxSeatSkill");
 			_maxSeatSkill = maxSeatSkill;
 		}
 

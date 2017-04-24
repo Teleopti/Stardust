@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -18,21 +17,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-	public interface IMaxSeatOptimization
-	{
-		void Optimize(ISchedulingProgress backgroundWorker, DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences, IMaxSeatCallback maxSeatCallback);
-	}
-
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-	public class MaxSeatOptimizationDoNothing : IMaxSeatOptimization
-	{
-		public void Optimize(ISchedulingProgress backgroundWorker, DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences, IMaxSeatCallback maxSeatCallback)
-		{
-		}
-	}
-
-	public class MaxSeatOptimization : IMaxSeatOptimization
+	public class MaxSeatOptimization
 	{
 		private readonly MaxSeatSkillDataFactory _maxSeatSkillDataFactory;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;

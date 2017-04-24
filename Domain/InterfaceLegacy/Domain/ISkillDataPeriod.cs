@@ -137,11 +137,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Gets or sets the manually inputed agents
         ///</summary>
         double? ManualAgents { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max seats.
-        /// </summary>
-        /// <value>The max seats.</value>
-        int MaxSeats { get; set; }
     }
 }

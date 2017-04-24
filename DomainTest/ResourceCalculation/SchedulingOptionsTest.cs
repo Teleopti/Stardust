@@ -62,8 +62,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target.UsePreferencesMustHaveOnly = false;
             _target.UsePreferences = true;
             Assert.IsFalse(_target.UsePreferencesMustHaveOnly);
-	        _target.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
-	        Assert.AreEqual(MaxSeatsFeatureOptions.ConsiderMaxSeats, _target.UserOptionMaxSeatsFeature);
 	        _target.UseTeam = true;
             Assert.IsTrue(_target.UseTeam);
             Assert.IsFalse(_target.UseSameDayOffs);

@@ -103,7 +103,6 @@ namespace Teleopti.Ccc.Domain.Helper
                         skillStaffPeriod.Payload.Shrinkage = skillDataPeriod.Shrinkage;
                         skillStaffPeriod.Payload.Efficiency = skillDataPeriod.Efficiency;
                         skillStaffPeriod.Payload.ManualAgents = skillDataPeriod.ManualAgents;
-						skillStaffPeriod.Payload.MaxSeats = skillDataPeriod.MaxSeats;
                         skillStaffPeriod.Payload.SkillPersonData = skillDataPeriod.SkillPersonData;
                         skillStaffPeriod.IsAvailable = true;
                     }

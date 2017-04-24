@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -38,23 +37,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly ITeamBlockClearer _teamBlockClearer;
-		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
-		private readonly RestrictionOverLimitValidator _teamBlockOptimizationLimits;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
 			ITeamBlockScheduler teamBlockScheduler,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
-			RestrictionOverLimitValidator teamBlockOptimizationLimits,
 			ITeamBlockClearer teamBlockClearer,
-			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
@@ -66,14 +61,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
 			_teamBlockClearer = teamBlockClearer;
-			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 			_teamTeamBlockSteadyStateValidator = teamTeamBlockSteadyStateValidator;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_teamBlockGenerator = teamBlockGenerator;
-			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -125,7 +118,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return new CancelSignal();
 		}
 
-		[RemoveMeWithToggle("maxseat check can be removed with toggle", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions,
 			IList<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
@@ -169,19 +161,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " +
 					                 teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName, optimizationPreferences.Advanced.RefreshScreenInterval, cancelAction));
-					teamBlockToRemove.Add(teamBlockInfo);
-					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
-					if (progressResult.ShouldCancel)
-					{
-						cancelAction();
-						break;
-					}
-					continue;
-				}
-
-				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions, teamBlockInfo.TeamInfo, skillDays) || !_teamBlockOptimizationLimits.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences))
-				{
-					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName, optimizationPreferences.Advanced.RefreshScreenInterval, cancelAction));
 					teamBlockToRemove.Add(teamBlockInfo);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 					if (progressResult.ShouldCancel)

@@ -5,7 +5,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -13,12 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-	public interface IMaxSeatSkillDay
-	{
-		void OpenAllSkillStaffPeriods();
-	}
-
     /// <summary>
     /// Used to represent skill data
     /// </summary>
@@ -26,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// Created by: micke
     /// Created date: 18.12.2007
     /// </remarks>
-	public class SkillDay : VersionedAggregateRootWithBusinessUnit, ISkillDay, IMaxSeatSkillDay, IPeriodized, IAggregateRootWithEvents
+	public class SkillDay : VersionedAggregateRootWithBusinessUnit, ISkillDay, IPeriodized, IAggregateRootWithEvents
     {
         private DateOnly _currentDate;
         private ISkill _skill;
@@ -333,7 +326,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 newSkillDataPeriod.Shrinkage = templateSkillDataPeriod.Shrinkage;
                 newSkillDataPeriod.Efficiency = templateSkillDataPeriod.Efficiency;
                 newSkillDataPeriod.ManualAgents = templateSkillDataPeriod.ManualAgents;
-				newSkillDataPeriod.MaxSeats = templateSkillDataPeriod.MaxSeats;
             }
 
             verifyAndAttachWorkloadDays(new List<IWorkloadDay>());
@@ -570,8 +562,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                         newSkillDataPeriod.Shrinkage = skillDataPeriod.Shrinkage;
                         newSkillDataPeriod.Efficiency = skillDataPeriod.Efficiency;
                         newSkillDataPeriod.ManualAgents = skillDataPeriod.ManualAgents;
-						newSkillDataPeriod.MaxSeats = skillDataPeriod.MaxSeats;
-
                         newSkillDataPeriod.SetParent(this);
                         _skillDataPeriodCollection.Add(newSkillDataPeriod);
                     }
@@ -1541,16 +1531,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	        return new ReadOnlyCollection<ISkillStaffPeriodView>(views);
         }
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		void IMaxSeatSkillDay.OpenAllSkillStaffPeriods()
-    	{
-    		foreach (var skillStaffPeriod in _skillStaffPeriodCollection)
-    		{
-    			skillStaffPeriod.IsAvailable = true;
-				skillStaffPeriod.Payload.MaxSeats = _skillDataPeriodCollection.First().MaxSeats;
-    		}
-    	}
 
 		public virtual void OpenAllSkillStaffPeriods(int maxSeats)
 		{

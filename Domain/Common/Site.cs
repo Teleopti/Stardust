@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
@@ -20,8 +19,6 @@ namespace Teleopti.Ccc.Domain.Common
         private Description _description;
         private bool _isDeleted;
     	private int? _maxSeats;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		private ISkill _maxSeatSkill;
 		private IList<ISiteOpenHour> _openHourCollection;
 
 		/// <summary>
@@ -42,13 +39,6 @@ namespace Teleopti.Ccc.Domain.Common
         {
             _description = new Description(name);
         }
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		public virtual ISkill MaxSeatSkill
-		{
-			get { return _maxSeatSkill; }
-			set { _maxSeatSkill = value; }
-		}
 
     	/// <summary>
         /// Gets or sets the descrition of the site.

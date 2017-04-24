@@ -279,7 +279,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                         newSkillDataPeriod.Shrinkage = skillDataPeriod.Shrinkage;
                         newSkillDataPeriod.ManualAgents = skillDataPeriod.ManualAgents;
                         newSkillDataPeriod.Efficiency = skillDataPeriod.Efficiency;
-						newSkillDataPeriod.MaxSeats = skillDataPeriod.MaxSeats;
                         newSkillDataPeriod.SetParent(this);
                         _templateSkillDataPeriodCollection.Add(newSkillDataPeriod);
                     }

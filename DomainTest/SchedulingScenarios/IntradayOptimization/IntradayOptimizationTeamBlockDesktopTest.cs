@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -27,20 +25,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class IntradayOptimizationTeamBlockDesktopTest : IConfigureToggleManager, ISetup
+	public class IntradayOptimizationTeamBlockDesktopTest : ISetup
 	{
-		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		private readonly bool _resourcePlannerMaxSeatsNew40939;
 		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-
-		public IntradayOptimizationTeamBlockDesktopTest(bool resourcePlannerMaxSeatsNew40939)
-		{
-			_resourcePlannerMaxSeatsNew40939 = resourcePlannerMaxSeatsNew40939;
-		}
 
 		[Test]
 		public void ShouldNotCrashWhenUsingKeepExistingDaysOff()
@@ -78,8 +67,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldMarkDayToBeRecalculated()
 		{
-			if(!_resourcePlannerMaxSeatsNew40939)
-				Assert.Ignore("Only interesting when MaxSeats toggle is on");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
@@ -112,8 +99,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotMarkDayThatIsNotChangedToBeRecalculated()
 		{
-			if (!_resourcePlannerMaxSeatsNew40939)
-				Assert.Ignore("Only interesting when MaxSeats toggle is on");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
@@ -146,8 +131,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldMarkDayToBeRecalculatedWhenDoNotBreak()
 		{
-			if (!_resourcePlannerMaxSeatsNew40939)
-				Assert.Ignore("Only interesting when MaxSeats toggle is on");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
@@ -180,8 +163,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotMarkDayToBeRecalculatedWhenDoNotBreak()
 		{
-			if (!_resourcePlannerMaxSeatsNew40939)
-				Assert.Ignore("Only interesting when MaxSeats toggle is on");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
@@ -207,13 +188,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			stateHolder.DaysToRecalculate
 				.Should().Be.Empty();
-		}
-
-		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if(_resourcePlannerMaxSeatsNew40939)
-				toggleManager.Enable(Toggles.ResourcePlanner_MaxSeatsNew_40939);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

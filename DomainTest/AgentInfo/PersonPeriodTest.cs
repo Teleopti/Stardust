@@ -335,20 +335,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.AreSame(budgetGroup, _target.BudgetGroup);
 		}
 
-		[Test]
-		public void ShouldThrowIfForecastSourceIsNotMaxSeatSkill()
-		{
-			var mocks = new MockRepository();
-			var skill = mocks.DynamicMock<ISkill>();
-			var skillType = mocks.DynamicMock<ISkillType>();
-
-			Expect.Call(skill.SkillType).Return(skillType);
-			Expect.Call(skillType.ForecastSource).Return(ForecastSource.OutboundTelephony);
-			mocks.ReplayAll();
-			Assert.Throws<ArgumentOutOfRangeException>(() => _target.SetMaxSeatSkill(skill));
-			mocks.VerifyAll();
-		}
-
         [Test]
         public void ShouldThrowIfForecastSourceIsNotNonBlendSkill()
         {

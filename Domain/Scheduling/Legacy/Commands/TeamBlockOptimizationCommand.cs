@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockClearer _teamBlockCleaner;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
-		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private ISchedulingProgress _backgroundWorker;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
@@ -45,9 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktopTeamBlock;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private readonly IWorkShiftSelector _workShiftSelector;
-		private readonly IMaxSeatOptimization _maxSeatOptimization;
+		private readonly MaxSeatOptimization _maxSeatOptimization;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -56,7 +54,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
-			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 			IMatrixListFactory matrixListFactory,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
@@ -73,9 +70,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			RestrictionOverLimitValidator restrictionOverLimitValidator, 
 			IWorkShiftSelector workShiftSelector,
-			IMaxSeatOptimization maxSeatOptimization,
+			MaxSeatOptimization maxSeatOptimization,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
@@ -84,7 +80,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
-			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
 			_matrixListFactory = matrixListFactory;
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
@@ -102,7 +97,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_dayOffOptimizationDesktopTeamBlock = dayOffOptimizationDesktopTeamBlock;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 			_workShiftSelector = workShiftSelector;
 			_maxSeatOptimization = maxSeatOptimization;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
@@ -271,9 +265,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_schedulingOptionsCreator,
 					_safeRollbackAndResourceCalculation,
 					_teamBlockIntradayDecisionMaker,
-					_restrictionOverLimitValidator,
 					_teamBlockCleaner,
-					_teamBlockMaxSeatChecker,
 					_dailyTargetValueCalculatorForTeamBlock,
 					_teamBlockSteadyStateValidator,
 					_teamBlockShiftCategoryLimitationValidator,

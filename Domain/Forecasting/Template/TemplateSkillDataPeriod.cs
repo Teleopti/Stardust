@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -16,8 +15,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         private double? _manualAgents;
         private Percent _shrinkage = new Percent(0);
         private Percent _efficiency = new Percent(1);
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-        private int _maxSeats;
 
         protected TemplateSkillDataPeriod()
         {
@@ -40,8 +37,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
                                                           	{
                                                           		Shrinkage = list[0].Shrinkage,
                                                           		Efficiency = list[0].Efficiency,
-                                                          		ManualAgents = list[0].ManualAgents,
-																MaxSeats = list[0].MaxSeats
+                                                          		ManualAgents = list[0].ManualAgents
                                                           	};
         	newSkillDataPeriod.SetParent(parent);
             return newSkillDataPeriod;
@@ -288,13 +284,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
                     OnChangeSkillData();
                 }
             }
-        }
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		public virtual int MaxSeats
-        {
-            get { return _maxSeats; }
-            set { _maxSeats = value; }
         }
 
         private void OnChangeSkillData()

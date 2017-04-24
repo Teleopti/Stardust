@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿using Teleopti.Ccc.Domain.FeatureFlags;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Defines selectable types of skill types
@@ -29,9 +31,7 @@
         /// Facsimile
         /// </summary>
         Facsimile,
-		/// <summary>
-		/// Skill for seat limitation
-		/// </summary>
+
 		MaxSeatSkill,
 
         /// <summary>

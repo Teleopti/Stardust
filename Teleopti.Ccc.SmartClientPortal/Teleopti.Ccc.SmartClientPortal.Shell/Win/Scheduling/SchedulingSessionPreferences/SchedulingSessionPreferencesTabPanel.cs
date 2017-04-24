@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionPreferences
 {
@@ -98,11 +97,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			set { pnlShiftCategory.Visible = value; }
 		}
 
-		public void HideMaxSeat(bool hide)
-		{
-			checkBoxDoNotBreakMaxSeats.Visible = !hide;
-			checkBoxUseMaxSeats.Visible = !hide;
-		}
 
 		public bool UseGroupSchedulingCommonStart
 		{
@@ -231,8 +225,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 				_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
 			_schedulingOptions.UseTeam = _localSchedulingOptions.UseTeam;
 			_schedulingOptions.GroupOnGroupPageForTeamBlockPer = _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer;
-			_schedulingOptions.DoNotBreakMaxStaffing = _localSchedulingOptions.DoNotBreakMaxStaffing;
-		    _schedulingOptions.UserOptionMaxSeatsFeature = _localSchedulingOptions.UserOptionMaxSeatsFeature;
 			_schedulingOptions.UseSameDayOffs = _localSchedulingOptions.UseSameDayOffs;
 			_schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
 			_schedulingOptions.ResourceCalculateFrequency = _localSchedulingOptions.ResourceCalculateFrequency;
@@ -270,13 +262,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			else
 				_localSchedulingOptions.ShiftCategory = null;
 			_localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
-			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
-			 if(checkBoxUseMaxSeats.Checked && checkBoxDoNotBreakMaxSeats.Checked) 
-		    _localSchedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
-			 else if (checkBoxUseMaxSeats.Checked)
-				 _localSchedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
-			 else if (!checkBoxUseMaxSeats.Checked)
-				 _localSchedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
 			_localSchedulingOptions.TagToUseOnScheduling = (IScheduleTag) comboBoxAdvTag.SelectedItem;
 			_localSchedulingOptions.ResourceCalculateFrequency = (int) numericUpDownResourceCalculateEvery.Value;
 			_localSchedulingOptions.ShowTroubleshot = checkBoxShowTroubleShot.Checked;
@@ -318,22 +303,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 
 			checkBoxUseShiftCategory.Checked = _localSchedulingOptions.ShiftCategory != null;
 
-			checkBoxDoNotBreakMaxSeats.Checked = _localSchedulingOptions.DoNotBreakMaxStaffing;
-		    if (_localSchedulingOptions.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
-		    {
-			    checkBoxUseMaxSeats.Checked = true;
-			    checkBoxDoNotBreakMaxSeats.Enabled = true;
-			    checkBoxDoNotBreakMaxSeats.Checked = true;
-		    }else if (_localSchedulingOptions.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeats)
-		    {
-			    checkBoxUseMaxSeats.Checked = true;
-				 checkBoxDoNotBreakMaxSeats.Enabled = true;
-		    }else if (_localSchedulingOptions.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
-		    {
-			    checkBoxUseMaxSeats.Checked = false;
-				 checkBoxDoNotBreakMaxSeats.Enabled = false;
-				 checkBoxDoNotBreakMaxSeats.Checked = false;
-		    }
 			numericUpDownResourceCalculateEvery.Value = _localSchedulingOptions.ResourceCalculateFrequency;
 			checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleshot;
 
@@ -457,13 +426,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private bool isTeamSelected()
 		{
 			return ((GroupPageLight) comboBoxTeamGroupPage.SelectedValue).Type != GroupPageType.SingleAgent;
-		}
-
-		private void checkBoxUseMaxSeatsCheckedChanged(object sender, EventArgs e)
-		{
-			if (!checkBoxUseMaxSeats.Checked)
-				checkBoxDoNotBreakMaxSeats.Checked = false;
-			checkBoxDoNotBreakMaxSeats.Enabled = checkBoxUseMaxSeats.Checked;
 		}
 
 		private void tabControl1SelectedIndexChanged(object sender, EventArgs e)

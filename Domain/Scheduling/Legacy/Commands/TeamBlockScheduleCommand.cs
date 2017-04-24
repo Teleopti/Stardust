@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly Func<IWorkShiftMinMaxCalculator> _workShiftMinMaxCalculator;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
-		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private ISchedulingProgress _backgroundWorker;
 		private int _scheduledCount;
 		private ISchedulingOptions _schedulingOptions;
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
-			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			ITeamMatrixChecker teamMatrixChecker,
@@ -66,7 +64,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
-			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_teamBlockScheduler = teamBlockScheduler;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
@@ -160,7 +157,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockScheduler,
 					_safeRollbackAndResourceCalculation,
 					_workShiftMinMaxCalculator(),
-					_teamBlockMaxSeatChecker,
 					validatedTeamBlockExtractor,
 					_teamMatrixChecker,
 					_workShiftSelector,

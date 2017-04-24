@@ -26,28 +26,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		private readonly IActivity _phoneActivity = new Activity("phone") {RequiresSkill = true, RequiresSeat = true};
 		private ISkillIntervalData _data;
 		private IDictionary<DateTime, ISkillIntervalData> _dic;
-		private IMaxSeatsCalculationForTeamBlock _maxSeatsCalculationForTeamBlock;
 		private PeriodValueCalculationParameters _periodValueCalculationParameters;
-		private IDictionary<DateTime, IntervalLevelMaxSeatInfo> _maxSeatsPerIntervalDictionary;
 
 		[SetUp]
 		public void Setup()
 		{
 			_workShiftPeriodValueCalculator = MockRepository.GenerateMock<IWorkShiftPeriodValueCalculator>();
 			_workShiftLengthValueCalculator = MockRepository.GenerateMock<IWorkShiftLengthValueCalculator>();
-			_maxSeatsCalculationForTeamBlock = MockRepository.GenerateMock<IMaxSeatsCalculationForTeamBlock>();
-			_target = new WorkShiftValueCalculator(_workShiftPeriodValueCalculator, _workShiftLengthValueCalculator,
-				_maxSeatsCalculationForTeamBlock);
+			_target = new WorkShiftValueCalculator(_workShiftPeriodValueCalculator, _workShiftLengthValueCalculator);
 
 			_period1 = new DateTimePeriod(_start, _end);
 			_data = new SkillIntervalData(_period1, 5, -5, 0, null, null);
 			_dic = new Dictionary<DateTime, ISkillIntervalData> {{_start, _data}};
-			_maxSeatsPerIntervalDictionary = new Dictionary<DateTime, IntervalLevelMaxSeatInfo>
-			{
-				{_start, new IntervalLevelMaxSeatInfo(false, 1)}
-			};
-			_periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, false, _maxSeatsPerIntervalDictionary);
+			_periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,false, false);
 		}
 
 		[Test]
@@ -88,14 +79,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		{
 			var period2 = new DateTimePeriod(_start.AddMinutes(5), _end.AddMinutes(-5));
 			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
-			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
+			var periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,false, false);
 
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(_data, 20, false, false)).Return(50);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(50, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[_start].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[_start].MaxSeatBoostingFactor)).Return(50);
 			_workShiftLengthValueCalculator.Stub(x => x.CalculateShiftValueForPeriod(50, 20,
 				WorkShiftLengthHintOption.AverageWorkTime))
 				.Return(50);
@@ -110,14 +96,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		{
 			var period2 = new DateTimePeriod(_start, _end);
 			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
-			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
+			var periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,false, false);
 
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(_data, 30, false, false)).Return(50);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(50, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[_start].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[_start].MaxSeatBoostingFactor)).Return(50);
 			_workShiftLengthValueCalculator.Stub(x => x.CalculateShiftValueForPeriod(50, 30,
 				WorkShiftLengthHintOption.AverageWorkTime))
 				.Return(50);
@@ -133,22 +114,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			var period2 = new DateTimePeriod(new DateTime(2015, 10, 25, 0, 15, 0, DateTimeKind.Utc),
 				new DateTime(2015, 10, 25, 1, 0, 0, DateTimeKind.Utc));
 			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
-			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
+			var periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,false, false);
 			var localLayerTimeStart = new DateTime(2015, 10, 25, 2, 15, 0, DateTimeKind.Utc);
 
 			_data = new SkillIntervalData(new DateTimePeriod(localLayerTimeStart, localLayerTimeStart.AddMinutes(15)), 5, -5, 0,
 				null, null);
 			_dic.Clear();
 			_dic.Add(localLayerTimeStart, _data);
-			_maxSeatsPerIntervalDictionary.Clear();
-			_maxSeatsPerIntervalDictionary.Add(localLayerTimeStart, new IntervalLevelMaxSeatInfo(false, 1));
 
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(_data, 15, false, false)).Return(50);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(50, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[localLayerTimeStart].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[localLayerTimeStart].MaxSeatBoostingFactor)).Return(50);
 
 			double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 				_dic, periodValueCalculationParameters, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
@@ -171,14 +145,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		{
 			var period2 = new DateTimePeriod(_start.AddMinutes(5), _end.AddMinutes(5));
 			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
-			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
+			var periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,false, false);
 
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(_data, 25, false, false)).Return(50);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(50, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[_start].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[_start].MaxSeatBoostingFactor)).Return(50);
 
 			double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 				_dic, periodValueCalculationParameters, TimeZoneInfo.Utc);
@@ -190,9 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		{
 			var period1 = new DateTimePeriod(_start.AddMinutes(1), _end.AddMinutes(-28));
 			var period2 = new DateTimePeriod(_start.AddMinutes(27), _end.AddMinutes(-1));
-			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
+			var periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,false, false);
 			var visualLayerCollection = new[]
 			{
 				new MainShiftLayer(_phoneActivity, period1),
@@ -200,13 +167,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			}.CreateProjection();
 
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(_data, 1, false, false)).Return(5);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(5, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[_start].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[_start].MaxSeatBoostingFactor)).Return(5);
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(_data, 2, false, false)).Return(7);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(7, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[_start].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[_start].MaxSeatBoostingFactor)).Return(7);
+
 			_workShiftLengthValueCalculator.Stub(x => x.CalculateShiftValueForPeriod(12, 3,
 				WorkShiftLengthHintOption.AverageWorkTime))
 				.Return(50);
@@ -219,27 +181,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		[Test]
 		public void ShouldHandleLayerStartingInOneIntervalAndEndingInAnother()
 		{
-			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
+			var periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,false, false);
 			var period1 = new DateTimePeriod(_start.AddMinutes(30), _end.AddMinutes(30));
 			var data2 = new SkillIntervalData(period1, 5, -5, 0, null, null);
 			_dic.Add(period1.StartDateTime, data2);
-			_maxSeatsPerIntervalDictionary.Clear();
-			_maxSeatsPerIntervalDictionary.Add(_period1.StartDateTime, new IntervalLevelMaxSeatInfo(false, 1));
-			_maxSeatsPerIntervalDictionary.Add(_period1.StartDateTime.AddMinutes(30), new IntervalLevelMaxSeatInfo(false, 1));
 
 			var period2 = new DateTimePeriod(_start.AddMinutes(15), _end.AddMinutes(20));
 			var visualLayerCollection = new MainShiftLayer(_phoneActivity, period2).CreateProjection();
 
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(_data, 15, false, false)).Return(50);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(50, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[_period1.StartDateTime].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[_start].MaxSeatBoostingFactor)).Return(50);
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(data2, 20, false, false)).Return(50);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(50, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[_period1.StartDateTime].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[_start].MaxSeatBoostingFactor)).Return(50);
 			_workShiftLengthValueCalculator.Stub(x => x.CalculateShiftValueForPeriod(100, 35,
 				WorkShiftLengthHintOption.AverageWorkTime))
 				.Return(100);
@@ -257,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			var period1 = new DateTimePeriod(_start.AddMinutes(10), _end.AddMinutes(-10));
 			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
 				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
+				false, false);
 			var visualLayerCollection = new[]
 			{
 				new MainShiftLayer(otherActivity, period2),
@@ -265,9 +216,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			}.CreateProjection();
 
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(_data, 10, false, false)).Return(50);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(50, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[_start].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[_start].MaxSeatBoostingFactor)).Return(50);
 			_workShiftLengthValueCalculator.Stub(x => x.CalculateShiftValueForPeriod(50, 10,
 				WorkShiftLengthHintOption.AverageWorkTime))
 				.Return(100);
@@ -316,9 +264,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			var end = new DateTime(2009, 02, 03, 0, 0, 0, DateTimeKind.Utc);
 			var period1 = new DateTimePeriod(start, end);
 			var period2 = new DateTimePeriod(start.AddHours(1), end.AddHours(1));
-			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
+			var periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,false, false);
 			var visualLayerCollection = new[]
 			{
 				new MainShiftLayer(_phoneActivity, period1),
@@ -330,128 +276,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			_dic.Clear();
 			_dic.Add(start, data1);
 			_dic.Add(start.AddHours(1), data2);
-			_maxSeatsPerIntervalDictionary.Clear();
-			_maxSeatsPerIntervalDictionary.Add(start, new IntervalLevelMaxSeatInfo(false, 1));
-			_maxSeatsPerIntervalDictionary.Add(start.AddHours(1), new IntervalLevelMaxSeatInfo(false, 1));
 
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(data1, 60, false, false)).Return(5);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(5, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[start].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[start].MaxSeatBoostingFactor)).Return(5);
 			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(data2, 60, false, false)).Return(7);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(7, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[start.AddHours(1)].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[start].MaxSeatBoostingFactor)).Return(7);
-			_workShiftLengthValueCalculator.Stub(x => x.CalculateShiftValueForPeriod(12, 120,
-				WorkShiftLengthHintOption.AverageWorkTime))
-				.Return(50);
-
-			double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
-				_dic, periodValueCalculationParameters, TimeZoneInfo.Utc);
-			Assert.AreEqual(50, result);
-		}
-
-		[Test]
-		public void ShouldReturnNullIMaxSeatsCaculatorReturnsNull()
-		{
-			var start = new DateTime(2009, 02, 02, 23, 0, 0, DateTimeKind.Utc);
-			var end = new DateTime(2009, 02, 03, 0, 0, 0, DateTimeKind.Utc);
-			var period1 = new DateTimePeriod(start, end);
-			var period2 = new DateTimePeriod(start.AddHours(1), end.AddHours(1));
-			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
-			var visualLayerCollection = new[]
-			{
-				new MainShiftLayer(_phoneActivity, period1),
-				new MainShiftLayer(_phoneActivity, period2)
-			}.CreateProjection();
-
-			var data1 = new SkillIntervalData(period1, 5, -5, 0, null, null);
-			var data2 = new SkillIntervalData(period2, 5, -5, 0, null, null);
-			_dic.Clear();
-			_dic.Add(start, data1);
-			_dic.Add(start.AddHours(1), data2);
-			_maxSeatsPerIntervalDictionary.Clear();
-			_maxSeatsPerIntervalDictionary.Add(start, new IntervalLevelMaxSeatInfo(false, 1));
-			_maxSeatsPerIntervalDictionary.Add(start.AddHours(1), new IntervalLevelMaxSeatInfo(false, 1));
-
-			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(data1, 60, false, false)).Return(5);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(5, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[start].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[start].MaxSeatBoostingFactor)).Return(null);
-
-			double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
-				_dic, periodValueCalculationParameters, TimeZoneInfo.Utc);
-			Assert.IsNull(result);
-		}
-
-		[Test]
-		public void RerurnSamePeriodValueIfAllIntervalHasNotReachedMaxSeats()
-		{
-			var start = new DateTime(2009, 02, 02, 23, 0, 0, DateTimeKind.Utc);
-			var end = new DateTime(2009, 02, 03, 0, 0, 0, DateTimeKind.Utc);
-			var period1 = new DateTimePeriod(start, end);
-			var period2 = new DateTimePeriod(start.AddHours(1), end.AddHours(1));
-			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
-			var visualLayerCollection = new[]
-			{
-				new MainShiftLayer(_phoneActivity, period1),
-				new MainShiftLayer(_phoneActivity, period2)
-			}.CreateProjection();
-
-			var data1 = new SkillIntervalData(period1, 5, -5, 0, null, null);
-			var data2 = new SkillIntervalData(period2, 5, -5, 0, null, null);
-			_dic.Clear();
-			_dic.Add(start, data1);
-			_dic.Add(start.AddHours(1), data2);
-			_maxSeatsPerIntervalDictionary.Clear();
-			_maxSeatsPerIntervalDictionary.Add(start, new IntervalLevelMaxSeatInfo(false, 1));
-			_maxSeatsPerIntervalDictionary.Add(start.AddHours(1), new IntervalLevelMaxSeatInfo(false, 1));
-
-			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(data1, 60, false, false)).Return(5);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(5, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[start].IsMaxSeatReached, true,
-				_maxSeatsPerIntervalDictionary[start].MaxSeatBoostingFactor)).Return(null);
-
-			double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
-				_dic, periodValueCalculationParameters, TimeZoneInfo.Utc);
-			Assert.IsNull(result);
-		}
-
-		[Test]
-		public void RerurnNullIfAllIntervalAnyReachedMaxSeats()
-		{
-			var start = new DateTime(2009, 02, 02, 23, 0, 0, DateTimeKind.Utc);
-			var end = new DateTime(2009, 02, 03, 0, 0, 0, DateTimeKind.Utc);
-			var period1 = new DateTimePeriod(start, end);
-			var period2 = new DateTimePeriod(start.AddHours(1), end.AddHours(1));
-			var periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				WorkShiftLengthHintOption.AverageWorkTime,
-				false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, _maxSeatsPerIntervalDictionary);
-			var visualLayerCollection = new[]
-			{
-				new MainShiftLayer(_phoneActivity, period1),
-				new MainShiftLayer(_phoneActivity, period2)
-			}.CreateProjection();
-
-			var data1 = new SkillIntervalData(period1, 5, -5, 0, null, null);
-			var data2 = new SkillIntervalData(period2, 5, -5, 0, null, null);
-			_dic.Clear();
-			_dic.Add(start, data1);
-			_dic.Add(start.AddHours(1), data2);
-			_maxSeatsPerIntervalDictionary.Clear();
-			_maxSeatsPerIntervalDictionary.Add(start, new IntervalLevelMaxSeatInfo(true, 1));
-			_maxSeatsPerIntervalDictionary.Add(start.AddHours(1), new IntervalLevelMaxSeatInfo(true, 1));
-
-			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(data1, 60, false, false)).Return(5);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(5, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[start].IsMaxSeatReached, true, 1)).Return(5);
-			_workShiftPeriodValueCalculator.Stub(x => x.PeriodValue(data2, 60, false, false)).Return(7);
-			_maxSeatsCalculationForTeamBlock.Stub(x => x.PeriodValue(7, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-				_maxSeatsPerIntervalDictionary[start.AddHours(1)].IsMaxSeatReached, true, 1)).Return(7);
 			_workShiftLengthValueCalculator.Stub(x => x.CalculateShiftValueForPeriod(12, 120,
 				WorkShiftLengthHintOption.AverageWorkTime))
 				.Return(50);

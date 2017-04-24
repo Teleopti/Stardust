@@ -160,7 +160,6 @@
 
 		ResourcePlanner_TeamBlockDayOffForIndividuals_37998,
 		ResourcePlanner_CascadingSkillsGUI_40018,
-		ResourcePlanner_MaxSeatsNew_40939,
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_TeamBlockPeriod_42836,
 		ResourcePlanner_MasterActivity_42795,

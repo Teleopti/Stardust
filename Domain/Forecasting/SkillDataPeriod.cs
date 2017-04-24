@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -23,8 +22,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private double? _manualAgents;
 		private Percent _shrinkage = new Percent(0);
 		private Percent _efficiency = new Percent(1);
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		private int _maxSeats;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SkillDataPeriod"/> class.
@@ -295,13 +292,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		public virtual int MaxSeats
-		{
-			get { return _maxSeats; }
-			set { _maxSeats = value; }
-		}
-
 		private void OnChangeSkillData()
 		{
 			ISkillDay parent = SkillDataParent();
@@ -370,7 +360,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			newSkillDataPeriod.Shrinkage = list[0].Shrinkage;
 			newSkillDataPeriod.Efficiency = list[0].Efficiency;
 			newSkillDataPeriod.ManualAgents = list[0].ManualAgents;
-			newSkillDataPeriod.MaxSeats = list[0].MaxSeats;
 			newSkillDataPeriod.SetParent(parent);
 			return newSkillDataPeriod;
 		}

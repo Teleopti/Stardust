@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -12,11 +11,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public IntradayOptimizationEventRunInSyncInFatClientProcessHandler(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
-			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager,
-			IFillStateHolderWithMaxSeatSkills fillStateHolderWithMaxSeatSkills)
-			: base(
-				intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult,
-				gridlockManager, fillStateHolderWithMaxSeatSkills)
+			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager)
+			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult,gridlockManager)
 		{
 		}
 

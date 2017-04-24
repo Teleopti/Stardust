@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 	    private readonly ISchedulingOptions _schedulingOptions;
 	    private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
-        private readonly ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
         private readonly IValidatedTeamBlockInfoExtractor  _validatedTeamBlockExtractor;
 	    private readonly ITeamMatrixChecker _teamMatrixChecker;
 	    private readonly IWorkShiftSelector _workShiftSelector;
@@ -42,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    public TeamBlockSchedulingService
 		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,
 			    ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-			    IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, ITeamBlockMaxSeatChecker teamBlockMaxSeat,
+			    IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			    IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor,
 			ITeamMatrixChecker teamMatrixChecker,
 			IWorkShiftSelector workShiftSelector,
@@ -52,7 +50,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    _teamBlockScheduler = teamBlockScheduler;
 		    _safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 		    _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
-		    _teamBlockMaxSeat = teamBlockMaxSeat;
 		    _validatedTeamBlockExtractor = validatedTeamBlockExtractor;
 		    _teamMatrixChecker = teamMatrixChecker;
 		    _workShiftSelector = workShiftSelector;
@@ -134,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	                                                          schedulePartModifyAndRollbackService,
 	                                                         resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
 		            verifyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
-		                                     dateOnlySkipList, teamBlockInfo, isCancelled, schedulingResultStateHolder.SkillDays);
+		                                     dateOnlySkipList, teamBlockInfo, isCancelled);
 				else
 				{
 					var progressResult = onDayScheduledFailed(new SchedulingServiceFailedEventArgs(()=>cancel=true));
@@ -145,11 +142,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             }
         }
 
-		[RemoveMeWithToggle("maxseat check can be removed with toggle", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private void verifyScheduledTeamBlock(IList<IPerson> selectedPersons,
                                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                              DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo, Func<bool> isCancelled,
-																							IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
+                                              DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo, Func<bool> isCancelled)
         {
 	        var dayCollection = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
 	        foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(datePointer))
@@ -165,15 +160,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     break;
                 }
             }
-	        foreach (var dateOnly in dayCollection)
-			  {
-				  if (!_teamBlockMaxSeat.CheckMaxSeat(dateOnly, _schedulingOptions, teamBlockInfo.TeamInfo, skillDays))
-				  {
-					  executeRollback(schedulePartModifyAndRollbackService);
-					  dateOnlySkipList.AddRange(dayCollection);
-					  break;
-				  }   
-	        }
         }
         
 

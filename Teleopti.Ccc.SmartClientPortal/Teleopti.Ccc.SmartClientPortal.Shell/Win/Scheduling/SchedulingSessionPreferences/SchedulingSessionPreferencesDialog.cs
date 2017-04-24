@@ -28,13 +28,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
 		private readonly string _settingValue;
 		private readonly IEnumerable<IActivity> _availableActivity;
-		private readonly bool _hideMaxSeat;
 		private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
 		private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
 		private SchedulingOptionsDayOffPlannerPersonalSettings _defaultDayOffPlannerSettings;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public SchedulingSessionPreferencesDialog(
 			ISchedulingOptions schedulingOptions, 
 			IDaysOffPreferences daysOffPreferences, 
@@ -43,8 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			ISchedulerGroupPagesProvider groupPagesProvider,
 			IEnumerable<IScheduleTag> scheduleTags, 
 			string settingValue, 
-			IEnumerable<IActivity> availableActivity,
-			bool hideMaxSeat)
+			IEnumerable<IActivity> availableActivity)
 			: this()
 		{
 			_schedulingOptions = schedulingOptions;
@@ -61,7 +58,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			_scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
 			_settingValue = settingValue;
 			_availableActivity = availableActivity;
-			_hideMaxSeat = hideMaxSeat;
 		}
 
 		private IEnumerable<IScheduleTag> addKeepOriginalScheduleTag(IEnumerable<IScheduleTag> scheduleTags)
@@ -172,10 +168,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			}
 
 			ActiveControl = schedulingSessionPreferencesTabPanel1;
-
-		
-			schedulingSessionPreferencesTabPanel1.HideMaxSeat(_hideMaxSeat);
-			
 		}
 
 		private void addToHelpContext()

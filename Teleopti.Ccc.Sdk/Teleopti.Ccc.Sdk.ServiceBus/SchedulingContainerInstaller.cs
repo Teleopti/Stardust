@@ -2,11 +2,8 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -14,7 +11,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     {
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>();
 			builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>().As<INonBlendSkillImpactOnPeriodForProjection>();
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();		
 			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();

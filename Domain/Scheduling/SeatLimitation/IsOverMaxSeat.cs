@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					var maxSeats = ((MaxSeatSkill)skillDay.Skill).MaxSeats;
 
 					if (skillDay.SkillStaffPeriodCollection.Any(skillStaffPeriod => visualLayer.Period.Intersect(skillStaffPeriod.Period) &&
-																																					_usedSeats.Fetch(skillStaffPeriod) - maxSeats > 0))
+								_usedSeats.Fetch(skillStaffPeriod) - maxSeats > 0))
 					{
 						return true;
 					}

@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			schedulingOptions.UseMinimumPersons = optimizationPreferences.Advanced.UseMinimumStaffing;
 			schedulingOptions.UseMaximumPersons = optimizationPreferences.Advanced.UseMaximumStaffing;
-			schedulingOptions.UserOptionMaxSeatsFeature = optimizationPreferences.Advanced.UserOptionMaxSeatsFeature;
 			schedulingOptions.UseAverageShiftLengths = optimizationPreferences.Advanced.UseAverageShiftLengths;
 
 			// extra properties

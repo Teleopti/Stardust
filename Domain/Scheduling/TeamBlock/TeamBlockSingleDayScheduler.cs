@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
-		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
-		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
 		private readonly IWorkShiftSelectorForIntraInterval _workSelectorForIntraInterval;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
@@ -43,8 +41,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IWorkShiftFilterService workShiftFilterService,
 			ITeamScheduling teamScheduling,
 			IActivityIntervalDataCreator activityIntervalDataCreator,
-			IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals,
-			IMaxSeatSkillAggregator maxSeatSkillAggregator,
 			IWorkShiftSelectorForIntraInterval workSelectorForIntraInterval,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
@@ -53,8 +49,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_workShiftFilterService = workShiftFilterService;
 			_teamScheduling = teamScheduling;
 			_activityIntervalDataCreator = activityIntervalDataCreator;
-			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
-			_maxSeatSkillAggregator = maxSeatSkillAggregator;
 			_workSelectorForIntraInterval = workSelectorForIntraInterval;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
@@ -94,16 +88,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(_groupPersonSkillAggregator, teamBlockSingleDayInfo, day, allSkillDays, false);
-			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, allSkillDays, TimeZoneGuard.Instance.CurrentTimeZone(), true);
-			
 
-			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
-				new DateOnlyPeriod(day, day));
-			bool hasMaxSeatSkill = maxSeatSkills.Any();
 
-			var parameters = new PeriodValueCalculationParameters(schedulingOptions
-				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
-				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
+			var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons, schedulingOptions.UseMaximumPersons);
 
 			resultList = _workSelectorForIntraInterval.SelectAllShiftProjectionCaches(shifts, activityInternalData,
 				parameters, TimeZoneGuard.Instance.CurrentTimeZone());

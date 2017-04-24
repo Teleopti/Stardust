@@ -10,12 +10,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
                                 IBelongsToBusinessUnit
     {
 		/// <summary>
-		/// Gets or sets the max seat skill.
-		/// </summary>
-		/// <value>The max seat skill.</value>
-		ISkill MaxSeatSkill { get; set; }
-
-		/// <summary>
         /// Gets or sets the descrition of the site.
         /// </summary>
         /// <value>The site.</value>
