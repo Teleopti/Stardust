@@ -45,37 +45,6 @@
 		</div>
 	</div>
 </div>
-<div class="con-row">
-	<div class="con-flex pp-modal">
-		<div ng-cloak class="modal-box">
-			<div ng-cloak ng-show="vm.confirmModal1">
-				<div class="modalbg">
-					<div class="dialog material-depth-1">
-						<div class="modal-inner-content">
-							<h3>Edit Planning Period: {{vm.originLastPp.StartDate | amDateFormat:"L"}} - {{vm.originLastPp.EndDate | amDateFormat:"L"}}</h3>
-							<div class="con-row">
-								<label ng-if="!vm.isEnddateChanged()"><i class="mdi mdi-information-outline"></i> Select a new end date for this planning period.</label>
-								<label ng-if="vm.isEnddateChanged()" class="text-warning">
-									<i class="mdi mdi-alert"></i> You are going to change the end date of this planning period from {{vm.originLastPp.EndDate | amDateFormat:"L"}} to {{vm.lastPp.endDate | amDateFormat:"L"}}
-								</label>
-							</div>
-							<div class="con-row">
-								<date-range-picker class="pp-datepicker" ng-model="vm.lastPp"></date-range-picker>
-							</div>
-						</div>
-						<div class="modal-actions">
-							<aside>
-								<button ng-click="vm.confirmModal1=false" class="wfm-btn wfm-btn-invis-default">Cancel</button>
-								<button ng-class="{'wfm-btn-invis-primary':vm.isEnddateChanged(), 'wfm-btn-invis-disabled': !vm.isEnddateChanged()}" ng-click="vm.confirmModal1=false; vm.changeEndDate();"
-								 class="wfm-btn ">Apply</button>
-							</aside>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 <div class="panel material-depth-1 pp-fix" ng-show="vm.selectedPp && !vm.show">
 	<div ng-show="vm.isDisable() && vm.totalAgents > 0" class="test-schedule-is-running">
 		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
@@ -170,48 +139,98 @@
 								<span><i class="mdi mdi-information-outline"></i>There are no validation issues for this planning period!</span>
 							</div>
 						</div>
-						<div class="con-row" ng-show="vm.preValidation.length > 0">
-							<div class="con-flex">
-								<span>Pre-scheduling validation issues</span>
-								<table class="wfm-table">
-									<thead>
-										<tr>
-											<th>Issue</th>
-											<th>Description</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="msg in vm.preValidation">
-											<td>{{msg.ResourceType}}: {{msg.ResourceName}}</td>
-											<td>
-												<div ng-repeat="item in msg.ValidationErrors">{{item}}</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<div class="con-row" ng-show="vm.scheduleIssues.length > 0">
-							<div class="con-flex">
-								<span>Issues during last scheduling</span>
-								<table class="wfm-table">
-									<thead>
-										<tr>
-											<th>Issue</th>
-											<th>Description</th>
-											<!--<th>Issues-Type</th>-->
-										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="msg in vm.scheduleIssues">
-											<td>Agent: {{msg.Name}}</td>
-											<td>{{msg.Message}}</td>
-											<!--<td>{{msg.BusinessRuleCategoryText}}</td>-->
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
+						<wfm-card-list multi-select>
+							<wfm-card ng-show="vm.preValidation.length > 0" ng-click="vm.validationFilter = ''">
+								<card-header tabindex="-1">
+									<div tabindex="0">
+										<span><i class="mdi"></i>
+											Pre-scheduling validation issues
+											<div tabindex=0 class="context-menu card-context">
+												<i ng-click="vm.getPrevalidationByPpId(vm.selectedPp)" class="mdi mdi-refresh"></i>
+												<md-tooltip>Refresh Pre-scheduling Validation issues</md-tooltip>
+											</div>
+										</span>
+										<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
+										<span class="pull-right">{{vm.preValidation.length}} issues</span>
+									</div>
+								</card-header>
+								<card-body class="panel">
+									<div class="con-row demo-outline">
+										<div class="con-flex">
+											<div class="con-row">
+												<div class="con-flex ">
+													<label for="filter" class="input-icon">
+														<i class="mdi mdi-filter-outline">
+															<input type="text" id="filter" ng-model="vm.validationFilter" placeholder="filter validation issues...">
+															<md-tooltip>filter validation issues</md-tooltip>
+														</i>
+													</label>
+												</div>
+												<div class="con-flex"></div>
+											</div>
+											<table class="wfm-table">
+												<thead>
+													<tr>
+														<th>Issue</th>
+														<th>Description</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="msg in vm.preValidation | filter: vm.validationFilter">
+														<td>{{msg.ResourceType}}: {{msg.ResourceName}}</td>
+														<td>
+															<div ng-repeat="item in msg.ValidationErrors">{{item}}</div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</card-body>
+							</wfm-card>
+							<wfm-card ng-show="vm.scheduleIssues.length > 0">
+								<card-header tabindex="-1" ng-click="vm.scheduleIssuesFilter = ''">
+									<div tabindex="0">
+										<span><i class="mdi"></i>Issues during last scheduling</span>
+										<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
+										<span class="pull-right">{{vm.scheduleIssues.length}} issues</span>
+									</div>
+								</card-header>
+								<card-body class="panel">
+									<div class="con-row demo-outline">
+										<div class="con-flex">
+											<div class="con-row">
+												<div class="con-flex ">
+													<label for="filter" class="input-icon">
+														<i class="mdi mdi-filter-outline">
+															<input type="text" id="filter" ng-model="vm.scheduleIssuesFilter" placeholder="filter validation issues...">
+															<md-tooltip>filter validation issues</md-tooltip>
+														</i>
+													</label>
+												</div>
+												<div class="con-flex"></div>
+											</div>
+											<table class="wfm-table">
+												<thead>
+													<tr>
+														<th>Issue</th>
+														<th>Description</th>
+														<!--<th>Issues-Type</th>-->
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="msg in vm.scheduleIssues | filter: vm.scheduleIssuesFilter">
+														<td>Agent: {{msg.Name}}</td>
+														<td>{{msg.Message}}</td>
+														<!--<td>{{msg.BusinessRuleCategoryText}}</td>-->
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</card-body>
+							</wfm-card>
+						</wfm-card-list>
 					</md-tab-body>
 				</md-tab>
 				<md-tab label="Dayoff Rules">
@@ -234,3 +253,38 @@
 		</md-content>
 	</div>
 </div>
+<div class="con-row">
+	<div class="con-flex pp-modal">
+		<div ng-cloak class="modal-box">
+			<div ng-cloak ng-show="vm.confirmModal1">
+				<div class="modalbg">
+					<div class="dialog material-depth-1">
+						<div class="modal-inner-content">
+							<h3>Edit Planning Period: {{vm.originLastPp.StartDate | amDateFormat:"L"}} - {{vm.originLastPp.EndDate | amDateFormat:"L"}}</h3>
+							<div class="con-row">
+								<label ng-if="!vm.isEnddateChanged()"><i class="mdi mdi-information-outline"></i> Select a new end date for this planning period.</label>
+								<label ng-if="vm.isEnddateChanged()" class="text-warning">
+									<i class="mdi mdi-alert"></i> You are going to change the end date of this planning period from {{vm.originLastPp.EndDate | amDateFormat:"L"}} to {{vm.lastPp.endDate | amDateFormat:"L"}}
+								</label>
+							</div>
+							<div class="con-row">
+								<date-range-picker class="pp-datepicker" ng-model="vm.lastPp"></date-range-picker>
+							</div>
+						</div>
+						<div class="modal-actions">
+							<aside>
+								<button ng-click="vm.confirmModal1=false" class="wfm-btn wfm-btn-invis-default">Cancel</button>
+								<button ng-class="{'wfm-btn-invis-primary':vm.isEnddateChanged(), 'wfm-btn-invis-disabled': !vm.isEnddateChanged()}" ng-click="vm.confirmModal1=false; vm.changeEndDate();"
+								 class="wfm-btn ">Apply</button>
+							</aside>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+</style>

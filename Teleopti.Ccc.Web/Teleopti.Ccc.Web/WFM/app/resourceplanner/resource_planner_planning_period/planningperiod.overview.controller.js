@@ -38,6 +38,7 @@
     vm.isDisable = isDisable;
     vm.deleteLastPp = deleteLastPp;
     vm.getLastPp = getLastPp;
+    vm.getPrevalidationByPpId = getPrevalidationByPpId;
     vm.isDisableDo = true;
     vm.isEnddateChanged = isEnddateChanged;
     vm.changeEndDate = changeEndDate;
@@ -118,6 +119,7 @@
       return planningPeriod.$promise.then(function (data) {
         vm.preValidation = data.ValidationResult.InvalidResources;
         getTotalValidationErrorsNumber(vm.preValidation, vm.scheduleIssues);
+        console.log('get pp',data);
         return vm.preValidation;
       });
     }
