@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EventInfrastructureInfoPopulator>().As<IEventInfrastructureInfoPopulator>().SingleInstance();
 			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
 
-			builder.RegisterType<HangfireEventPublisher>().SingleInstance();
+			builder.RegisterType<HangfireEventPublisher>().SingleInstance().ApplyAspects();
 			builder.RegisterType<SyncInFatClientProcessEventPublisher>().SingleInstance();
 			builder.RegisterType<SyncEventPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().SingleInstance();

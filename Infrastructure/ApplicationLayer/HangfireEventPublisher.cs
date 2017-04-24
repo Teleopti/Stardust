@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Util;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_dataSource = dataSource;
 		}
 
-		public void Publish(params IEvent[] events)
+		[TestLog]
+		public virtual void Publish(params IEvent[] events)
 		{
 			events.SelectMany(jobsFor).ForEach(x => _client.Enqueue(x.Job));
 		}
