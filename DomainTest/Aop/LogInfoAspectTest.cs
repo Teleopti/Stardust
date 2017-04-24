@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<Service>();
-			var fakeLogger = new LogSpy();
-			system.UseTestDouble(fakeLogger).For<ILog>();
-			system.UseTestDouble(new FakeLogManager(fakeLogger)).For<ILogManager>();
+			var log = new LogSpy();
+			system.UseTestDouble(log).For<ILog>();
+			system.UseTestDouble(new FakeLogManager(log)).For<ILogManager>();
 		}
 
 		public LogSpy Logger;

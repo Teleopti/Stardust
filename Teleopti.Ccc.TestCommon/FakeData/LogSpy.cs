@@ -15,11 +15,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public ILogger Logger { get; private set; }
+
 		public string InfoMessage { get; private set; }
-		public IList<string> DebugMessages { get; private set; }
-		public IList<string> ErrorMessages { get; private set; }
-		public IList<string>WarningMessages { get; private set; }
+		public IList<string> DebugMessages { get; }
+		public IList<string> ErrorMessages { get; }
+		public IList<string>WarningMessages { get; }
 		public string LastLoggerName { get; set; }
+
+		public bool IsDebugEnabled => true;
+		public bool IsInfoEnabled => true;
+		public bool IsWarnEnabled => true;
+		public bool IsErrorEnabled => true;
+		public bool IsFatalEnabled => true;
 
 		public void Debug(object message)
 		{
@@ -189,10 +196,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 		}
 
-		public bool IsDebugEnabled { get; private set; }
-		public bool IsInfoEnabled { get { return true; } }
-		public bool IsWarnEnabled { get; private set; }
-		public bool IsErrorEnabled { get; private set; }
-		public bool IsFatalEnabled { get; private set; }
 	}
 }
