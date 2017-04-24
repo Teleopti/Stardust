@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return skillStaffingList;
 		}
 
-		private IList<SkillStaffingData> createSkillStaffingDatas(DateOnlyPeriod period, IList<ISkill> skills, int resolution, bool useShrinkage,
+		private IList<SkillStaffingData> createSkillStaffingDatas(DateOnlyPeriod period, IList<ISkill> skills, int resolution,
+			bool useShrinkage,
 			IList<ISkillDay> skillDays)
 		{
 			var dayStaffingDatas =
@@ -66,26 +67,35 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 								Date = day,
 								Scheduled =
 								_scheduledStaffingProvider.StaffingPerSkill(skills, resolution, day, useShrinkage)
-									.ToLookup(x => new { x.StartDateTime, x.Id}),
+									.ToLookup(x => new {x.StartDateTime, x.Id}),
 								Forecasted =
-								_forecastedStaffingProvider.StaffingPerSkill(skills, skillDays.Where(s=>s.CurrentDate == day).ToArray(), resolution, day,
+								_forecastedStaffingProvider.StaffingPerSkill(skills, skillDays.Where(s => s.CurrentDate == day).ToArray(),
+									resolution, day,
 									useShrinkage).ToLookup(x => new {x.StartTime, x.SkillId})
 							});
 			var skillStaffingDatas = from dayStaffingData in dayStaffingDatas
-				let p = dayStaffingData.Date
+				let date = dayStaffingData.Date
 				let times =
-				dayStaffingData.Scheduled.Select(t => t.Key.StartDateTime).Union(dayStaffingData.Forecasted.Select(t => t.Key.StartTime)).Distinct().OrderBy(t => t).ToArray()
-				from t in times
+				dayStaffingData.Scheduled.Select(t => t.Key.StartDateTime)
+					.Union(dayStaffingData.Forecasted.Select(t => t.Key.StartTime))
+					.Distinct()
+					.OrderBy(t => t)
+					.ToArray()
+				from time in times
 				from skill in skills
-				let scheduled = dayStaffingData.Scheduled[new {StartDateTime = t, Id = skill.Id.GetValueOrDefault()}].FirstOrDefault()
+				let scheduleds = dayStaffingData.Scheduled[new {StartDateTime = time, Id = skill.Id.GetValueOrDefault()}]
+				let forecasteds =
+				dayStaffingData.Forecasted[new {StartTime = time, SkillId = skill.Id.GetValueOrDefault()}]
 				select new SkillStaffingData
 				{
 					Resolution = resolution,
-					Date = p,
+					Date = date,
 					Skill = skill,
-					Time = t,
-					ForecastedStaffing = dayStaffingData.Forecasted[new { StartTime = t, SkillId = skill.Id.GetValueOrDefault() }].FirstOrDefault()?.Agents,
-					ScheduledStaffing = scheduled.StartDateTime == new DateTime() ? null : (double?)scheduled.StaffingLevel
+					Time = time,
+					ScheduledStaffing = scheduleds.Any()
+						? scheduleds.Sum(scheduled => scheduled.StartDateTime == new DateTime() ? null : (double?) scheduled.StaffingLevel)
+						: null,
+					ForecastedStaffing = forecasteds.Any() ? forecasteds.Sum(forecasted => forecasted?.Agents) : null
 				};
 			return skillStaffingDatas.ToList();
 		}
