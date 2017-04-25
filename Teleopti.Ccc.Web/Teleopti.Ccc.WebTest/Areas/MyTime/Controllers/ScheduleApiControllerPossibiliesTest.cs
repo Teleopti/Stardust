@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupTestDataForOneSkill();
 			var result = Target.FetchWeekData(Now.LocalDateOnly().AddWeeks(1), StaffingPossiblityType.Absence).Possibilities.ToList();
 			result.Count.Should().Be.EqualTo(14);
-			DateHelper.GetWeekPeriod(Now.LocalDateOnly().AddWeeks(1), User.CurrentUser().PermissionInformation.UICulture())
+			DateHelper.GetWeekPeriod(Now.LocalDateOnly().AddWeeks(1), CultureInfo.CurrentCulture)
 				.DayCollection()
 				.ToList()
 				.ForEach(day =>
