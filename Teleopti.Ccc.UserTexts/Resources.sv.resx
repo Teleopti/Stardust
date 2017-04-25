@@ -14421,4 +14421,61 @@ Vill du registrera dig?</value>
   <data name="MaximumNumberOfAgentRowsReach" xml:space="preserve">
     <value>Max antal agentrader ({0}) nått. </value>
   </data>
+  <data name="FilterTeams" xml:space="preserve">
+    <value>Filtrera team</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Web</value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>Filtrera enhet/team</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Filtrera funktioner</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Filtrera roller</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>Filtrera lokaler</value>
+  </data>
+  <data name="InternalErrorMsg" xml:space="preserve">
+    <value>Ett internt fel har uppstått.</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Filtrera roller</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>Filtrera rapporter</value>
+  </data>
+  <data name="NumberOfRowsExceedsTheMaximum" xml:space="preserve">
+    <value>Antalet rader överskrider maxantalet ({0}).</value>
+  </data>
+  <data name="ExceedsMaximumUploadFileSize" xml:space="preserve">
+    <value>Överskrider den maximala uppladdningsstorleken. </value>
+  </data>
+  <data name="ActualVolume" xml:space="preserve">
+    <value>Verklig volym</value>
+  </data>
+  <data name="ForecastedAverageHandlingTime" xml:space="preserve">
+    <value>Prognostiserad genomsnittlig behandlingstid</value>
+  </data>
+  <data name="ErrorOccurredWhenGeneratingQrcode" xml:space="preserve">
+    <value>Ett fel har uppstått vid skapandet av QR-koden</value>
+  </data>
+  <data name="ActualAverageHandlingTime" xml:space="preserve">
+    <value>Verklig genomsnittlig behandlingstid</value>
+  </data>
+  <data name="FilterRtaFull" xml:space="preserve">
+    <value>Filtrera agentnamn / enheter / team / status / aktuella aktiviteter</value>
+  </data>
+  <data name="FilterRtaShort" xml:space="preserve">
+    <value>Filtrera agentnamn / status / ...</value>
+  </data>
+  <data name="FilterSites" xml:space="preserve">
+    <value>Filtrera enheter</value>
+  </data>
+  <data name="FilterSkills" xml:space="preserve">
+    <value>Filtrera kompetenser</value>
+  </data>
 </root>
