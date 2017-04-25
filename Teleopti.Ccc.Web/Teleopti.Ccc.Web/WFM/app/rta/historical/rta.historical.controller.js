@@ -101,6 +101,7 @@
 		function buildDiamonds(shiftInfo, data) {
 			return data.Changes.map(function(change, i) {
 				change.Offset = calculateWidth(shiftInfo.timeWindowStart, change.Time, shiftInfo.timeWindowSeconds);
+				change.RuleColor = !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor;
 				change.Color = change.RuleColor;
 				change.click = function() {
 					highlightThis(change);
