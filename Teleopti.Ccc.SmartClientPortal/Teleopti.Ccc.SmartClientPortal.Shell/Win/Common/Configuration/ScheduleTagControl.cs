@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (_scheduleTags == null)
 			{
 				_scheduleTags = new List<IScheduleTag>();
-				_scheduleTags.AddRange(Repository.LoadAll());
+				_scheduleTags.AddRange(Repository.FindAllScheduleTags());
 			}
 
 			if (_scheduleTags.IsEmpty())
