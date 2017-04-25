@@ -79,7 +79,8 @@
 		var directive = {
 			restrict: 'EA',
 			scope: {
-				isDisable: '='
+				isDisable: '=',
+				agentGroup: '='
 			},
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
 			controller: 'dayoffRuleOverviewController as vm',

@@ -30,7 +30,8 @@
     vm.originLastPp = undefined;
     vm.totalAgents = null;
     vm.scheduledAgents = 0;
-    vm.totalValidationNumbers = 0;
+    vm.totalPreValNum = 0;
+    vm.totalValNum = 0;
     vm.selectPp = selectPp;
     vm.launchSchedule = launchSchedule;
     vm.startNextPlanningPeriod = startNextPlanningPeriod;
@@ -46,7 +47,7 @@
 
     checkToggle();
     destroyCheckState();
-    getPlanningPeriod(agentGroupId);
+    getPlanningPeriod();
     selectPp(vm.selectedPp);
 
     function checkToggle() {
@@ -83,9 +84,8 @@
       destroyCheckState();
     });
 
-    function getPlanningPeriod(id) {
-      if (id) {
-        var query = planningPeriodService.getPlanningPeriodsForAgentGroup({ agentGroupId: id });
+    function getPlanningPeriod() {
+        var query = planningPeriodService.getPlanningPeriodsForAgentGroup({ agentGroupId: agentGroupId });
         return query.$promise.then(function (data) {
           vm.planningPeriods = data;
           if (vm.planningPeriods.length == 0) {
@@ -93,7 +93,6 @@
           }
           return vm.planningPeriods;
         });
-      }
     }
 
     function startNextPlanningPeriod() {
@@ -127,17 +126,18 @@
       });
     }
 
-    function getTotalValidationErrorsNumber(pre, after) {
-      vm.totalValidationNumbers = 0;
+    function getTotalValidationErrorsNumber(pre, after) {  
+      vm.totalValNum = 0;
+      vm.totalPreValNum = 0;
       if (pre.length > 0) {
         angular.forEach(pre, function (item) {
-          vm.totalValidationNumbers += item.ValidationErrors.length;
+          vm.totalPreValNum += item.ValidationErrors.length;
         });
       }
       if (after.length > 0) {
-        vm.totalValidationNumbers += vm.scheduleIssues.length;
+        vm.totalValNum += vm.scheduleIssues.length;
       }
-      return vm.totalValidationNumbers;
+      return vm.totalValNum += vm.totalPreValNum;
     }
 
     function launchSchedule(pp) {
@@ -273,16 +273,13 @@
       ResourcePlannerReportSrvc.parseWeek(period);
     }
 
-    function deleteLastPp(id) {
-      if (id) {
+    function deleteLastPp() {
         vm.planningPeriods = [];
-        var deletePlanningPeriod = planningPeriodService.deleteLastPlanningPeriod({ agentGroupId: id });
+        var deletePlanningPeriod = planningPeriodService.deleteLastPlanningPeriod({ agentGroupId: agentGroupId });
         return deletePlanningPeriod.$promise.then(function (data) {
           vm.planningPeriods = data;
           return vm.planningPeriods;
         });
-
-      }
     }
 
     function getLastPp(p) {
