@@ -25,6 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_now = now;
 		}
 
+		[UnitOfWork, Route("api/Schedule/FetchDayData"), HttpGet]
+		public virtual DayScheduleViewModel FetchDayData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date, StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None)
+		{
+			var showForDate = date ?? _now.LocalDateOnly();
+			return _scheduleViewModelFactory.CreateDayViewModel(showForDate, staffingPossiblityType);
+		}
+
 		[UnitOfWork, Route("api/Schedule/FetchWeekData"), HttpGet]
 		public virtual WeekScheduleViewModel FetchWeekData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date, StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None)
 		{

@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Common.Time;
+﻿using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
@@ -46,6 +48,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var weekScheduleViewModel = _weekMapper.Map(domainData);
 			setPossibilities(date, staffingPossiblityType, weekScheduleViewModel);
 			return weekScheduleViewModel;
+		}
+
+		// TODO-xinfli: Temporary implement for front-end debug only
+		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
+		{
+			var domainData = _weekScheduleDomainDataProvider.Get(date);
+			domainData.SiteOpenHourIntradayPeriod = getIntradaySiteOpenHourPeriod();
+			adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, domainData);
+			var weekScheduleViewModel = _weekMapper.Map(domainData);
+			setPossibilities(date, staffingPossiblityType, weekScheduleViewModel);
+			return new DayScheduleViewModel
+			{
+				Date = date,
+				Schedule = weekScheduleViewModel.Days.SingleOrDefault(d=>d.Date == date.Date.ToShortDateString()),
+				RequestPermission = weekScheduleViewModel.RequestPermission,
+				TimeLineCulture = weekScheduleViewModel.TimeLineCulture,
+				TimeLine = weekScheduleViewModel.TimeLine,
+				AsmPermission = weekScheduleViewModel.AsmPermission,
+				ViewPossibilityPermission = weekScheduleViewModel.ViewPossibilityPermission,
+				IsToday = date.Date == DateTime.Now.Date,
+				DatePickerFormat = weekScheduleViewModel.DatePickerFormat,
+				DaylightSavingTimeAdjustment = weekScheduleViewModel.DaylightSavingTimeAdjustment,
+				BaseUtcOffsetInMinutes = weekScheduleViewModel.BaseUtcOffsetInMinutes,
+				CheckStaffingByIntraday = weekScheduleViewModel.CheckStaffingByIntraday,
+				Possibilities = weekScheduleViewModel.Possibilities,
+				SiteOpenHourIntradayPeriod = weekScheduleViewModel.SiteOpenHourIntradayPeriod
+			};
 		}
 
 		private void adjustScheduleMinMaxTimeBySiteOpenHour(StaffingPossiblityType staffingPossiblityType,

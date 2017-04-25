@@ -9,6 +9,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 {
+	public class DayScheduleViewModel
+	{
+		public DateOnly Date { get; set; }
+		public DayViewModel Schedule { get; set; }
+		public string TimeLineCulture { get; set; }
+		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
+		public bool IsToday { get; set; }
+		public string DatePickerFormat { get; set; }
+		public DaylightSavingsTimeAdjustmentViewModel DaylightSavingTimeAdjustment { get; set; }
+		public double BaseUtcOffsetInMinutes { get; set; }
+		public bool CheckStaffingByIntraday { get; set; }
+		public IEnumerable<PeriodStaffingPossibilityViewModel> Possibilities { get; set; }
+		public TimePeriod? SiteOpenHourIntradayPeriod { get; set; }
+		public RequestPermission RequestPermission { get; set; }
+		public bool AsmPermission { get; set; }
+		public bool ViewPossibilityPermission { get; set; }
+	}
+
 	public class WeekScheduleViewModel
 	{
 		public PeriodSelectionViewModel PeriodSelection { get; set; }
