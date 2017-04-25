@@ -26,7 +26,6 @@ Teleopti.MyTimeWeb.Schedule.MobileDay = (function ($) {
 	var userTexts;
 
     var fetchData = function () {
-        console.log("date: ", Teleopti.MyTimeWeb.Portal.ParseHash().dateHash);
 		ajax.Ajax({
             url: "../api/Schedule/FetchDayData",
 			dataType: "json",
