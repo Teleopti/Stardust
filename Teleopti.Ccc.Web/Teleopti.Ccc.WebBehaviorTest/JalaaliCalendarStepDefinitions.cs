@@ -1,6 +1,7 @@
 ﻿using System;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 			
-			Browser.Interactions.SelectOptionByTextUsingJQuery("#sel1", "All Requests");
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#sel1", Resources.AllRequests);
 			Browser.Interactions.Click(".request-body");
 
 		}
