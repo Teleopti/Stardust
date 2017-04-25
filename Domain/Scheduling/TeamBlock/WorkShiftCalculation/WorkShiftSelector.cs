@@ -46,13 +46,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,schedulingOptions.UseMaximumPersons);
 
 			double? bestShiftValue = null;
-			Tuple<TimeSpan, TimeSpan, Guid[]> bestShiftCategory = null;
-			
-			var categorizedShifts = shifts
-				.ToLookup(s => new Tuple<TimeSpan, TimeSpan, Guid[]>(s.WorkShiftStartTime, s.WorkShiftEndTime, s.TheWorkShift.Activities));
+			ShiftProjectionCache bestShift = null;
+
 			var shiftsWithValue =
-				categorizedShifts
-					.Select(s => new {s, value = valueForShift(activityInternalData, s.FirstOrDefault(), parameters, timeZoneInfo)})
+				shifts
+					.Select(s => new { s, value = valueForShift(activityInternalData, s, parameters, timeZoneInfo) })
 					.Where(s => s.value.HasValue);
 
 			if (schedulingOptions.SkipNegativeShiftValues)
@@ -65,40 +63,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				if (!bestShiftValue.HasValue)
 				{
 					bestShiftValue = item.value.Value;
-					bestShiftCategory = item.s.Key;
+					bestShift = item.s;
 				}
 				else
 				{
+					if (item.value.Value == bestShiftValue)
+					{
+						bestShiftValue = item.value.Value;
+						bestShift = _equalWorkShiftValueDecider.Decide(bestShift, item.s);
+					}
+
 					if (item.value.Value > bestShiftValue)
 					{
 						bestShiftValue = item.value.Value;
-						bestShiftCategory = item.s.Key;
-					}
-				}
-			}
-
-			ShiftProjectionCache bestShift = null;
-			bestShiftValue = null;
-			foreach (var item in categorizedShifts[bestShiftCategory])
-			{
-				var value = valueForShift(activityInternalData, item, parameters, timeZoneInfo);
-				if (!bestShiftValue.HasValue)
-				{
-					bestShiftValue = value;
-					bestShift = item;
-				}
-				else
-				{
-					if (value == bestShiftValue)
-					{
-						bestShiftValue = value;
-						bestShift = _equalWorkShiftValueDecider.Decide(bestShift, item);
-					}
-
-					if (value > bestShiftValue)
-					{
-						bestShiftValue = value;
-						bestShift = item;
+						bestShift = item.s;
 					}
 				}
 			}
