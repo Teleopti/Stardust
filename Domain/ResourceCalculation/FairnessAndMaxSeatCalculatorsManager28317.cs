@@ -16,22 +16,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 var shiftProjection = thisShiftValue.ShiftProjection;
 	            var shiftValue = thisShiftValue.Value;
 
-				//REMOVE THIS BLOCK WITH MAXSEAT TOGGLE
-				if (shiftValue > highestShiftValue && schedulingOptions.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
-                {
-                    var seatVal =
-                        _seatLimitationWorkShiftCalculator.CalculateShiftValue(person,
-                                                                               shiftProjection.MainShiftProjection,
-                                                                               maxSeatSkillPeriods,
-																			   schedulingOptions.UserOptionMaxSeatsFeature);
-                    if (!seatVal.HasValue)
-                        continue;
-
-                    shiftValue += seatVal.Value;
-                }
-				////////////////////////////////////////
->>>>>>> other
-
                 if (shiftValue > highestShiftValue)
                 {
                     var workShiftFinderResultHolder = new WorkShiftCalculationResult { ShiftProjection = shiftProjection, Value = shiftValue };

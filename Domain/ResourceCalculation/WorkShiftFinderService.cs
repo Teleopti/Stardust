@@ -100,12 +100,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
         private IWorkShiftCalculationResultHolder findHighestValueMainShift(
-<<<<<<< local
             IList<ShiftProjectionCache> shiftProjectionCaches,
-=======
-            DateOnly dateOnly,  
-            IList<ShiftProjectionCache> shiftProjectionCaches,
->>>>>>> other
 			IWorkShiftCalculatorSkillStaffPeriodData dataHolders, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,
@@ -235,7 +230,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					if (shiftList.Count == 0)
 						return null;
 				}
-
 			}
 
 			IWorkShiftCalculationResultHolder result;

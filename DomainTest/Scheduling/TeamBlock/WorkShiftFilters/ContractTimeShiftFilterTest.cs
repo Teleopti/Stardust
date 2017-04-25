@@ -29,8 +29,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private DateOnly _dateOnly;
 		private IWorkShift _workShift1;
 		private IWorkShift _workShift2;
-		private IProjectionService _ps1;
-		private IProjectionService _ps2;
 		private IVisualLayerCollection _lc1;
 		private IVisualLayerCollection _lc2;
 
@@ -49,8 +47,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_workShift1 = _mocks.StrictMock<IWorkShift>();
 			_workShift2 = _mocks.StrictMock<IWorkShift>();
-			_ps1 = _mocks.StrictMock<IProjectionService>();
-			_ps2 = _mocks.StrictMock<IProjectionService>();
 			_lc1 = _mocks.StrictMock<IVisualLayerCollection>();
 			_lc2 = _mocks.StrictMock<IVisualLayerCollection>();
 		}
@@ -91,10 +87,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 		private void commonExpectCalls()
 		{
-			Expect.Call(_workShift1.ProjectionService()).Return(_ps1);
-			Expect.Call(_workShift2.ProjectionService()).Return(_ps2);
-			Expect.Call(_ps1.CreateProjection()).Return(_lc1);
-			Expect.Call(_ps2.CreateProjection()).Return(_lc2);
+			Expect.Call(_workShift1.Projection).Return(_lc1);
+			Expect.Call(_workShift2.Projection).Return(_lc2);
 			Expect.Call(_lc1.ContractTime()).Return(new TimeSpan(7, 0, 0));
 			Expect.Call(_lc2.ContractTime()).Return(new TimeSpan(10, 0, 0));
 		}

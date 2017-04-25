@@ -79,17 +79,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
 			_workShift1 = _mocks.StrictMock<IWorkShift>();
 			_workShift2 = _mocks.StrictMock<IWorkShift>();
-			var ps1 = _mocks.StrictMock<IProjectionService>();
-			var ps2 = _mocks.StrictMock<IProjectionService>();
 			var lc1 = _mocks.StrictMock<IVisualLayerCollection>();
 			var lc2 = _mocks.StrictMock<IVisualLayerCollection>();
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShift1.ProjectionService()).Return(ps1);
-				Expect.Call(_workShift2.ProjectionService()).Return(ps2);
-				Expect.Call(ps1.CreateProjection()).Return(lc1);
-				Expect.Call(ps2.CreateProjection()).Return(lc2);
+				Expect.Call(_workShift1.Projection).Return(lc1);
+				Expect.Call(_workShift2.Projection).Return(lc2);
 
 				Expect.Call(lc1.WorkTime()).Return(new TimeSpan(7, 0, 0));
 				Expect.Call(lc2.WorkTime()).Return(new TimeSpan(10, 0, 0));

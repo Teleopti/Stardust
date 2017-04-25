@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -37,12 +38,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
         private List<IList<IScheduleMatrixPro>> _groupMatrixList;
 	    private IPerson _person;
+	    private IWorkShift _workShift;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
-			_shiftProjectionCache = _mock.StrictMock<ShiftProjectionCache>();
+	        _workShift = _mock.StrictMock<IWorkShift>();
+			_shiftProjectionCache = new ShiftProjectionCache(_workShift, new PersonalShiftMeetingTimeChecker());
             _matrix = _mock.StrictMock<IScheduleMatrixPro>();
 
 			_person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);
@@ -66,7 +69,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ShouldSchedulePerDayAndPerson()
         {
-	        var rules = NewBusinessRuleCollection.Minimum();
+			var projection = _mock.StrictMock<IVisualLayerCollection>();
+			var rules = NewBusinessRuleCollection.Minimum();
 
 						using (_mock.Record())
             {
@@ -76,12 +80,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	            Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
 	            Expect.Call(_matrix.UnlockedDays).Return(new [] {_scheduleDayPro});
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call( () => _shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod));
-	            Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
+	            Expect.Call(_workShift.Projection).Return(projection);
+	            Expect.Call(projection.Period()).Return(new DateTimePeriod());
+	            Expect.Call(_workShift.ToEditorShift(_dateOnlyAsDateTimePeriod,_dateOnlyAsDateTimePeriod.TimeZone())).Return(_mainShift);
 	            Expect.Call(() => _scheduleDay.AddMainShift(_mainShift));
 	            Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay, rules));
 	            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
-	            Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
 	            _resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(), false);
 
 	            Expect.Call(_scheduleDay.PersonAssignment()).Return(null);
@@ -90,7 +94,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mock.Playback())
             {
-	            _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache,
+	            _shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod);
+
+				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache,
 		            _schedulePartModifyAndRollbackService,
 		            _resourceCalculateDelayer, false, rules, new SchedulingOptions(), null);
             }
@@ -122,8 +128,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 	    [Test]
 	    public void ShouldNotScheduleIfMainShiftPeriodNotContainsPersonalShift()
-	    {
-		    var personAssignment = _mock.StrictMock<IPersonAssignment>();
+		{
+			var projection = _mock.StrictMock<IVisualLayerCollection>();
+			var personAssignment = _mock.StrictMock<IPersonAssignment>();
 		    var personalShiftLayer = new PersonalShiftLayer(new Activity("_"), _dateOnlyAsDateTimePeriod.Period().MovePeriod(TimeSpan.FromHours(1)));
 		    var personalActivities = new List<PersonalShiftLayer> {personalShiftLayer};
 
@@ -135,11 +142,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			    Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
 			    Expect.Call(_matrix.UnlockedDays).Return(new [] {_scheduleDayPro});
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call(() => _shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod));
-			    Expect.Call(_shiftProjectionCache.MainShiftProjection).Return(_mainShift.ProjectionService().CreateProjection());
-
-			    Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
-			    Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
+				Expect.Call(_workShift.Projection).Return(projection);
+				Expect.Call(projection.Period()).Return(new DateTimePeriod());
+				Expect.Call(_workShift.ToEditorShift(_dateOnlyAsDateTimePeriod, _dateOnlyAsDateTimePeriod.TimeZone())).Return(_mainShift);
+				
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 			    _resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(), false);
 
 			    Expect.Call(_scheduleDay.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
@@ -147,14 +154,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    }
 
 		    using (_mock.Playback())
-		    {
-			    _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.Minimum(), new SchedulingOptions(), null);
+			{
+				_shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod);
+				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.Minimum(), new SchedulingOptions(), null);
 		    }
 	    }
 
 		[Test]
 		public void ShouldNotScheduleIfMainShiftPeriodNotContainsPersonalMeeting()
 		{
+			var projection = _mock.StrictMock<IVisualLayerCollection>();
 			var personMeeting = _mock.StrictMock<IPersonMeeting>();
 			var meetings = new List<IPersonMeeting> {personMeeting};
 
@@ -166,11 +175,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_matrix.UnlockedDays).Return(new [] { _scheduleDayPro });
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call(() => _shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod));
-				Expect.Call(_shiftProjectionCache.MainShiftProjection).Return(_mainShift.ProjectionService().CreateProjection());
+				Expect.Call(_workShift.Projection).Return(projection);
+				Expect.Call(projection.Period()).Return(new DateTimePeriod());
+				Expect.Call(_workShift.ToEditorShift(_dateOnlyAsDateTimePeriod, _dateOnlyAsDateTimePeriod.TimeZone())).Return(_mainShift);
 
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
-				Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
 				_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(), false);
 
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(null);
@@ -180,6 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mock.Playback())
 			{
+				_shiftProjectionCache.SetDate(_dateOnlyAsDateTimePeriod);
 				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.Minimum(), new SchedulingOptions(), null);
 			}
 		}

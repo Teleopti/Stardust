@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				ISchedulingOptions schedulingOptions)
 		{
 			var shouldCalculateNonBlendValue = nonBlendSkillPeriods.Count > 0;
-
 			var allValues = shiftProjectionCaches.AsParallel().Select(shiftProjection =>
 			{
 				var v = new

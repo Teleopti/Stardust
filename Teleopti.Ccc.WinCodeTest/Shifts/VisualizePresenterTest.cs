@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             ws1.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod));
             WorkShift ws2 = CreateWorkShift(TimeSpan.FromHours(1), TimeSpan.FromHours(9), _activity, _category);
             ws2.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod));
-	        var listOfWorkShifts = new WorkShiftCollection(null, new Guid[0]) {ws1, ws2};
+	        var listOfWorkShifts = new WorkShiftCollection(null) {ws1, ws2};
 
 	        return new List<WorkShiftCollection> {listOfWorkShifts};
         }

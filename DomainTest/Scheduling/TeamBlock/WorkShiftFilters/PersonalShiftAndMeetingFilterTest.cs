@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -213,21 +212,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var meeting = _mocks.StrictMock<IPersonMeeting>();
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-
-			var currentDate = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
+			
 			var phone = ActivityFactory.CreateActivity("phone");
 			phone.AllowOverwrite = true;
 			phone.InWorkTime = true;
-			var phoneLayer = new List<IVisualLayer>
-                                 {
-                                     new VisualLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17)),
-                                                     phone, null)
-                                 };
-			var layerCollection1 = new VisualLayerCollection(null, phoneLayer, new ProjectionPayloadMerger());
+			
+			var workShift = new WorkShift(new ShiftCategory("Day"));
+			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone,
+				new DateTimePeriod(WorkShift.BaseDate.AddHours(8), WorkShift.BaseDate.AddHours(17))));
 
-			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
-			var c1 = _mocks.StrictMock<ShiftProjectionCache>();
-			shifts.Add(c1);
+			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
+			shiftProjectionCache.SetDate(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), TimeZoneInfo.Utc));
+			var shifts = new[] { shiftProjectionCache };
 
 			using (_mocks.Record())
 			{
@@ -238,7 +234,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		                new PersonalShiftLayer(new Activity("d"), period)
 	                }).Repeat.AtLeastOnce();
 				Expect.Call(meeting.Period).Return(period2).Repeat.AtLeastOnce();
-				Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())

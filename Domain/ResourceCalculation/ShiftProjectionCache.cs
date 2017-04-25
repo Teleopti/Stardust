@@ -14,12 +14,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private Lazy<IVisualLayerCollection> _mainshiftProjection;
     	private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 	    private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
-	    private readonly Lazy<IVisualLayerCollection> _workShiftProjection;
 		
         public ShiftProjectionCache(IWorkShift workShift, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker) : this()
         {
 	        _workShift = workShift;
-	        _workShiftProjection = new Lazy<IVisualLayerCollection>(()=>_workShift.ProjectionService().CreateProjection());
         	_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
         }
 
@@ -38,11 +36,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    public IWorkShift TheWorkShift => _workShift;
 		
-		public TimeSpan WorkShiftProjectionContractTime => _workShiftProjection.Value.ContractTime();
+		public TimeSpan WorkShiftProjectionContractTime => _workShift.Projection.ContractTime();
 
-	    public TimeSpan WorkShiftProjectionWorkTime => _workShiftProjection.Value.WorkTime();
+	    public TimeSpan WorkShiftProjectionWorkTime => _workShift.Projection.WorkTime();
 
-	    public DateTimePeriod WorkShiftProjectionPeriod => _workShiftProjection.Value.Period().Value;
+	    public DateTimePeriod WorkShiftProjectionPeriod => _workShift.Projection.Period().Value;
 
 	    public IVisualLayerCollection MainShiftProjection => _mainshiftProjection.Value;
 
