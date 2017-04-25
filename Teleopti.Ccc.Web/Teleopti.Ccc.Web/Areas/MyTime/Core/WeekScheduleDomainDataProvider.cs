@@ -28,11 +28,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		private readonly IAbsenceRequestProbabilityProvider _absenceRequestProbabilityProvider;
 		private readonly IUserCulture _culture;
 
-		public WeekScheduleDomainDataProvider(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider,
+		public WeekScheduleDomainDataProvider(IScheduleProvider scheduleProvider,
+			IProjectionProvider projectionProvider,
 			IPersonRequestProvider personRequestProvider,
 			ISeatOccupancyProvider seatBookingProvider,
-			IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now,
-			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider, IUserCulture culture)
+			IUserTimeZone userTimeZone,
+			IPermissionProvider permissionProvider,
+			INow now,
+			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider,
+			IUserCulture culture)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
@@ -51,6 +55,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			public IVisualLayerCollection Projection { get; set; }
 		}
 
+		public DayScheduleDomainData GetDaySchedule(DateOnly date)
+		{
+			var period = new DateOnlyPeriod(date, date);
+			var periodSchedule = getScheduleDomainData(date, period);
+			return new DayScheduleDomainData
+			{
+				Date = date,
+				ScheduleDay = periodSchedule.Days.Single(d => d.Date == date),
+				ColorSource = periodSchedule.ColorSource,
+				MinMaxTime = periodSchedule.MinMaxTime,
+				AsmPermission = periodSchedule.AsmPermission,
+				TextRequestPermission = periodSchedule.TextRequestPermission,
+				OvertimeAvailabilityPermission = periodSchedule.OvertimeAvailabilityPermission,
+				AbsenceRequestPermission = periodSchedule.AbsenceRequestPermission,
+				AbsenceReportPermission = periodSchedule.AbsenceReportPermission,
+				ShiftExchangePermission = periodSchedule.ShiftExchangePermission,
+				ShiftTradeBulletinBoardPermission = periodSchedule.ShiftTradeBulletinBoardPermission,
+				PersonAccountPermission = periodSchedule.PersonAccountPermission,
+				ViewPossibilityPermission = periodSchedule.ViewPossibilityPermission,
+				IsCurrentDay = date == _now.LocalDateOnly()
+			};
+		}
+
 		public WeekScheduleDomainData GetWeekSchedule(DateOnly date)
 		{
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(date, _culture.GetCulture().DateTimeFormat.FirstDayOfWeek);
@@ -61,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		private WeekScheduleDomainData getScheduleDomainData(DateOnly date, DateOnlyPeriod period)
 		{
 			var periodStartDate = period.StartDate;
-			var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), periodStartDate.AddDays(6));
+			var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
 			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay).ToList();
 			var personRequests = _personRequestProvider.RetrieveRequestsForLoggedOnUser(period);
 			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(period);
@@ -194,24 +221,41 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				var endTime = schedulePeriods.Value.TimePeriod(userTimeZone).EndTime;
 				var localEndDate = new DateOnly(schedulePeriods.Value.EndDateTimeLocal(userTimeZone).Date);
 				if (endTime.Days > startTime.Days && endTime > TimeSpan.FromDays(1) && period.Contains(localEndDate))
+				{
 					earlyStart = TimeSpan.Zero;
+				}
 				else if (scheduleDay.DateOnlyAsPeriod.DateOnly != periodStartDate.AddDays(-1))
+				{
 					earlyStart = startTime;
+				}
 			}
 
 			var overtimeAvailabilityCollection = scheduleDay.OvertimeAvailablityCollection();
 			if (overtimeAvailabilityCollection == null)
+			{
 				return earlyStart;
+			}
+
 			var overtimeAvailability = overtimeAvailabilityCollection.FirstOrDefault();
 			if (overtimeAvailability == null)
+			{
 				return earlyStart;
+			}
+
 			var earlyStartOvertimeAvailability = new TimeSpan(23, 59, 59);
 			var overtimeAvailabilityStart = overtimeAvailability.StartTime.Value;
 			var overtimeAvailabilityEnd = overtimeAvailability.EndTime.Value;
-			if ((overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days && overtimeAvailabilityEnd > TimeSpan.FromDays(1) ) && period.Contains(scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(1)))
+			if (overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days &&
+				overtimeAvailabilityEnd > TimeSpan.FromDays(1) &&
+				period.Contains(scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(1)))
+			{
 				earlyStartOvertimeAvailability = TimeSpan.Zero;
+			}
 			else if (scheduleDay.DateOnlyAsPeriod.DateOnly != periodStartDate.AddDays(-1))
+			{
 				earlyStartOvertimeAvailability = overtimeAvailabilityStart;
+			}
+
 			return earlyStart < earlyStartOvertimeAvailability ? earlyStart : earlyStartOvertimeAvailability;
 		}
 
@@ -242,10 +286,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 
 			var overtimeAvailabilityCollection = scheduleDay.OvertimeAvailablityCollection();
 			if (overtimeAvailabilityCollection == null)
+			{
 				return lateEnd;
+			}
+
 			var overtimeAvailability = overtimeAvailabilityCollection.FirstOrDefault();
 			if (overtimeAvailability == null)
+			{
 				return lateEnd;
+			}
 
 			var lateEndOvertimeAvailability = TimeSpan.Zero;
 			var overtimeAvailabilityStart = overtimeAvailability.StartTime.Value;
@@ -268,22 +317,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			return lateEnd > lateEndOvertimeAvailability ? lateEnd : lateEndOvertimeAvailability;
 		}
 
-		private TimePeriod getMinMaxTime(Dictionary<DateOnly, ScheduleDaysAndProjection> scheduleDaysAndProjections, DateOnlyPeriod period)
+		private TimePeriod getMinMaxTime(Dictionary<DateOnly, ScheduleDaysAndProjection> scheduleDaysAndProjections,
+			DateOnlyPeriod period)
 		{
-			var periodStartDate = period.StartDate;
 			var earliest = scheduleDaysAndProjections.Min(x => minFunction(x.Value, period));
-			var latest = scheduleDaysAndProjections.Max(x => maxfunction(x.Value, periodStartDate));
-
-			var margin = TimeSpan.FromMinutes(timelineMarginInMinute);
+			var latest = scheduleDaysAndProjections.Max(x => maxfunction(x.Value, period.StartDate));
 			var early = earliest;
 			var late = latest;
-
 			if (early > late)
 			{
 				early = latest;
 				late = earliest;
 			}
 
+			var margin = TimeSpan.FromMinutes(timelineMarginInMinute);
 			early = early.Ticks > TimeSpan.Zero.Add(margin).Ticks ? early.Subtract(margin) : TimeSpan.Zero;
 			late = late.Ticks < new TimeSpan(23, 59, 59).Subtract(margin).Ticks ? late.Add(margin) : new TimeSpan(23, 59, 59);
 

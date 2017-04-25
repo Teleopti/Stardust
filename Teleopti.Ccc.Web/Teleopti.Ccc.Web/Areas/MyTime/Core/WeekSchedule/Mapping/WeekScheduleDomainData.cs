@@ -4,10 +4,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 {
-	public class WeekScheduleDomainData
+	public class BaseScheduleDomainData
 	{
 		public DateOnly Date { get; set; }
-		public IEnumerable<WeekScheduleDayDomainData> Days { get; set; }
 		public IScheduleColorSource ColorSource { get; set; }
 		public TimePeriod MinMaxTime { get; set; }
 		public bool AsmPermission { get; set; }
@@ -18,8 +17,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		public bool ShiftExchangePermission { get; set; }
 		public bool PersonAccountPermission { get; set; }
 		public bool ViewPossibilityPermission { get; set; }
-		public bool IsCurrentWeek { get; set; }
 		public bool ShiftTradeBulletinBoardPermission { get; set; }
 		public TimePeriod? SiteOpenHourIntradayPeriod { get; set; }
+	}
+
+	public class DayScheduleDomainData : BaseScheduleDomainData
+	{
+		public WeekScheduleDayDomainData ScheduleDay { get; set; }
+		public bool IsCurrentDay { get; set; }
+	}
+
+	public class WeekScheduleDomainData: BaseScheduleDomainData
+	{
+		public IEnumerable<WeekScheduleDayDomainData> Days { get; set; }
+		public bool IsCurrentWeek { get; set; }
 	}
 }
