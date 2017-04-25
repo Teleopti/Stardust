@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
         [Test, Ignore("Talk to Robin")]
         public void ShouldNotExecuteIfCanceled()
         {
-            IList<IMatrixData> matrixData1List = new List<IMatrixData>() { _matrixData1 };
+            IList<IMatrixData> matrixData1List = new List<IMatrixData> { _matrixData1 };
 
             DateOnly? today = DateOnly.Today;
             _target.DayScheduled += _target_DayScheduled;

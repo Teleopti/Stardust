@@ -78,9 +78,10 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		{
 			var cancel = false;
 			var screenRefreshRate = optimizationPreferences?.Advanced.RefreshScreenInterval ?? schedulingOptions.RefreshRate;
+			var matrixByPerson = allPersonMatrixList.ToLookup(m => m.Person);
 			foreach (var person in selectedPersons)
 			{
-				var personMatrixes = allPersonMatrixList.Where(s => s.Person == person && s.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue).ToList();
+				var personMatrixes = matrixByPerson[person].Where(s => s.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue).ToArray();
 				
 				foreach (var personMatrix in personMatrixes)
 				{

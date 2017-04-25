@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -43,29 +42,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<IWorkShiftRuleSet> ruleSets,
 		    bool forRestrictionsOnly, bool checkExcluded)
 	    {
-			var shiftProjectionCaches = new List<ShiftProjectionCache>();
-		    ruleSets.ForEach(ruleSet =>
+		    var shiftProjectionCaches = ruleSets.Where(ruleSet =>
 		    {
 			    if (checkExcluded && !ruleSet.IsValidDate(dateOnlyAsDateTimePeriod.DateOnly))
-				    return;
+				    return false;
 
 			    if (_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet))
-				    return;
+				    return false;
 
 			    if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedShiftCategory(ruleSet))
-				    return;
+				    return false;
 
-			    var ruleSetList = getShiftsForRuleSet(ruleSet);
-			    if (ruleSetList == null)
-				    return;
+			    return true;
+		    }).SelectMany(getShiftsForRuleSet).ToArray();
 
-			    foreach (var projectionCache in ruleSetList)
-			    {
-				    shiftProjectionCaches.Add(projectionCache);
-				    projectionCache.SetDate(dateOnlyAsDateTimePeriod);
-			    }
-		    });
-
+		    foreach (var shiftProjectionCache in shiftProjectionCaches)
+		    {
+			    shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+		    }
+			
 			return shiftProjectionCaches;
 		}
 

@@ -163,6 +163,7 @@
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_TeamBlockPeriod_42836,
 		ResourcePlanner_MasterActivity_42795,
+		ResourcePlanner_CategorizeShiftSelection_xx,
 
 		Wfm_DisplayOnlineHelp_39402,
 

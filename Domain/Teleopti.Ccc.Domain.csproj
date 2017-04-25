@@ -253,6 +253,7 @@
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
     <Compile Include="Reports\IReportNavigationModel.cs" />
     <Compile Include="Reports\ReportNavigationModel.cs" />
+    <Compile Include="ResourceCalculation\WorkShiftCategorizeFinderService.cs" />
     <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />

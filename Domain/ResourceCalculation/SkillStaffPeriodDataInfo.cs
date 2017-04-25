@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class SkillStaffPeriodDataInfo : ISkillStaffPeriodDataHolder
     {
         private readonly DateTimePeriod _period;
-        private readonly IPeriodDistribution _periodDistribution;
-        private double _originalDemandInMinutes;
+	    private double _originalDemandInMinutes;
 
         public SkillStaffPeriodDataInfo(int originalDemandInMinutes, int assignedResourceInMinutes, DateTimePeriod period, int minimumPersons, int maximumPersons, double absoluteDifferenceScheduledHeadsAndMinMaxHeads, IPeriodDistribution periodDistribution)
             : this(originalDemandInMinutes, assignedResourceInMinutes, period, minimumPersons, maximumPersons, absoluteDifferenceScheduledHeadsAndMinMaxHeads, periodDistribution, new Percent(.5),1)
@@ -26,7 +25,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             MaximumPersons = maximumPersons;
             _period = period;
             AbsoluteDifferenceScheduledHeadsAndMinMaxHeads = absoluteDifferenceScheduledHeadsAndMinMaxHeads;
-            _periodDistribution = periodDistribution;
+            PeriodDistribution = periodDistribution;
+	        ElapsedTimeMinutes = _period.ElapsedTime().TotalMinutes;
 
 			TweakedCurrentDemand = SkillStaffPeriodCalculator.GetTweakedCurrentDemand(originalDemandInMinutes, assignedResourceInMinutes, overstaffingFactor.Value, priorityValue);
         }
@@ -65,13 +65,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    public DateTime PeriodStartDateTime => _period.StartDateTime;
 	    public DateTime PeriodEndDateTime => _period.EndDateTime;
+		public double ElapsedTimeMinutes { get; }
 
 	    public double PeriodValue(int currentResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons)
         {
             if (currentResourceInMinutes == 0)
                 return 0;
 
-            double partOfResolution = currentResourceInMinutes/Period.ElapsedTime().TotalMinutes;
+            double partOfResolution = currentResourceInMinutes/ElapsedTimeMinutes;
             
             double calculatedValue = SkillStaffPeriodCalculator.CalculateWorkShiftPeriodValue(OriginalDemandInMinutes*partOfResolution,
                                                                    TweakedCurrentDemand*partOfResolution,
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return calculatedValue;
         }
 
-        public IPeriodDistribution PeriodDistribution => _periodDistribution;
+        public IPeriodDistribution PeriodDistribution { get; }
 
 	    public bool CanCalculateDeviations()
 	    {

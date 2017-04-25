@@ -410,6 +410,7 @@
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTest.cs" />
     <Compile Include="SchedulingScenarios\PeriodValueCalculatorProviderThatReturnsCalculatorThatReturnsWrongValue.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationClosedSkillsTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingWithCategorizedShiftSelectionResultTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingResultTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />
