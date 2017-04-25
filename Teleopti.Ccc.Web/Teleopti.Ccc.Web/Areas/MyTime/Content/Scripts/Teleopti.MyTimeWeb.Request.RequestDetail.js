@@ -59,6 +59,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		self.CancelAddingNewRequest = function () {
 			Teleopti.MyTimeWeb.Request.List.HideRequests(false);	
+			Teleopti.MyTimeWeb.Request.ShowFab(true);
+
 			self.requestViewModel(null);
 			Teleopti.MyTimeWeb.Request.ResetToolbarActiveButtons();
 		};
@@ -134,6 +136,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		self.IsPostingData(true);
 
 		 Teleopti.MyTimeWeb.Request.List.HideRequests(false);	
+		 Teleopti.MyTimeWeb.Request.ShowFab(true);
 		var formData = _getFormData(model);
 		ajax.Ajax({
 			url: formData.Url,
