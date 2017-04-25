@@ -1,0 +1,13 @@
+﻿.dayview-mobile .mobile-dayview-nav ul.navbar-teleopti {
+	margin: 0;
+	display: inline-block;
+}
+
+.dayview-mobile .mobile-dayview-nav {
+	display: flex;
+}
+
+.dayview-mobile .dayview-mobile-nav-input-group {
+	max-width: 329px;
+	flex-grow: 1;
+}

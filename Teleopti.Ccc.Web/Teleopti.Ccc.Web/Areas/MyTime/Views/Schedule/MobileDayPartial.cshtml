@@ -2,4 +2,32 @@
 @{
 	Layout = null;
 }
-<span>hello mobile day</span>
+
+
+<div class="dayview-mobile">
+	<div class="navbar navbar-teleopti subnavbar">
+		<div class="container mobile-dayview-nav">
+			<ul class="nav navbar-nav navbar-teleopti row submenu">
+				<li class="col-xs-12 col-sm-3">
+					<div class="input-group dayview-mobile-nav-input-group">
+						<span class="input-group-btn">
+							<button class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</button>
+						</span>
+						<input class="form-control text-center date-input-style" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
+						<span class="input-group-btn">
+							<button class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button">
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</button>
+						</span>
+					</div>
+
+				</li>
+			</ul>
+
+		</div>
+	</div>
+
+
+</div>
