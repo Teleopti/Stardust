@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -65,8 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		private DateOnlyPeriod? getAvailablePeriod(DateOnly date)
 		{
-			var culture = _loggedOnUser.CurrentUser().PermissionInformation.UICulture();
-			var weekPeriod = DateHelper.GetWeekPeriod(date, culture);
+			var weekPeriod = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
 			var today = _now.LocalDateOnly();
 			var maxEndDate = today;
 			if (_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880))
