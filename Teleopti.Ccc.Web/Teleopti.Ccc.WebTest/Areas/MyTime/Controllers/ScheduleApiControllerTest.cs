@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMap()
 		{
-			var viewModel = Target.FetchData(null);
+			var viewModel = Target.FetchWeekData(null);
 
 			viewModel.Should().Not.Be.Null();
 		}
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-29 08:00".Utc(), "2015-03-29 17:00".Utc()));
 			ScheduleData.Set(new IScheduleData[] { personAssignment });
 
-			var viewModel = Target.FetchData(date);
+			var viewModel = Target.FetchWeekData(date);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("07:45");
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("17:15");
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-28 07:45".Utc(), "2015-03-28 17:00".Utc()));
 			ScheduleData.Set(new IScheduleData[] { personAssignment });
 
-			var viewModel = Target.FetchData(date);
+			var viewModel = Target.FetchWeekData(date);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("08:30");
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("18:15");
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-29 07:45".Utc(), "2015-03-29 17:00".Utc()));
 			ScheduleData.Set(new IScheduleData[] { personAssignment });
 
-			var viewModel = Target.FetchData(date);
+			var viewModel = Target.FetchWeekData(date);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("09:30");
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("19:15");
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-03-29 00:00".Utc(), "2015-03-29 04:00".Utc()));
 			ScheduleData.Set(new IScheduleData[] { personAssignment1, personAssignment2 });
 
-			var viewModel = Target.FetchData(date);
+			var viewModel = Target.FetchWeekData(date);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("00:45");
 			viewModel.TimeLine.ElementAt(1).TimeLineDisplay.Should().Be("01:00");
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-10-25 00:00".Utc(), "2015-10-25 04:00".Utc()));
 			ScheduleData.Set(new IScheduleData[] { personAssignment1, personAssignment2 });
 
-			var viewModel = Target.FetchData(date);
+			var viewModel = Target.FetchWeekData(date);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("01:45");
 			viewModel.TimeLine.ElementAt(1).TimeLineDisplay.Should().Be("02:00");
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			User.CurrentUser().PermissionInformation.SetCulture(Culture.GetCulture());
 			Now.Is("2015-03-29 10:00");
 
-			var viewModel = Target.FetchData(null);
+			var viewModel = Target.FetchWeekData(null);
 			viewModel.BaseUtcOffsetInMinutes.Should().Be(-10 * 60);
 		}
 
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			User.CurrentUser().PermissionInformation.SetCulture(Culture.GetCulture());
 			Now.Is("2015-03-29 10:00");
 
-			var viewModel = Target.FetchData(null);
+			var viewModel = Target.FetchWeekData(null);
 
 			viewModel.DaylightSavingTimeAdjustment.Should().Not.Be.Null();
 			viewModel.DaylightSavingTimeAdjustment.StartDateTime.Should().Be(new DateTime(2015, 3, 29, 1, 0, 0, DateTimeKind.Utc));
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			User.CurrentUser().PermissionInformation.SetCulture(Culture.GetCulture());
 			Now.Is("2015-03-29 10:00");
 
-			var viewModel = Target.FetchData(null);
+			var viewModel = Target.FetchWeekData(null);
 			Assert.IsNull(viewModel.DaylightSavingTimeAdjustment);
 		}
 
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Culture.IsSwedish();
 			TimeZone.IsSweden();
 			var date = new DateOnly(2015, 07, 06);
-			var viewModel = Target.FetchData(date);
+			var viewModel = Target.FetchWeekData(date);
 
 			Assert.AreEqual("2015-07-06", viewModel.CurrentWeekStartDate);
 			Assert.AreEqual("2015-07-12", viewModel.CurrentWeekEndDate);
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldCreateModelForWeekScheduleWithSevenDays()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			result.Days.Count().Should().Be.EqualTo(7);
 		}
 
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetCulture("sv-SE")]
 		public void ShouldMapPeriodSelectionForWeek()
 		{
-			var result = Target.FetchData(null).PeriodSelection;
+			var result = Target.FetchWeekData(null).PeriodSelection;
 
 			result.Date.Should().Be.EqualTo(new DateOnly(2014, 12, 18).ToFixedClientDateOnlyFormat());
 			result.Display.Should().Be.EqualTo("2014-12-15 - 2014-12-21");
@@ -415,7 +415,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 
 			var layerDetails = result.Days.First().Periods.Single();
 			layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
@@ -438,7 +438,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			var layerDetails = result.Days.First().Periods.Single();
 			layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
 			layerDetails.Summary.Should().Be.EqualTo("8:00");
@@ -463,7 +463,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current()
 				, new AbsenceLayer(new Absence { Description = new Description("Holiday", "HO"), DisplayColor = Color.Red }, period)));
 
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 
 			var layerDetails = result.Days.First().Periods.Single();
 			layerDetails.StyleClassName.Should().Be.EqualTo("color_FF0000");
@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 
 			var layerDetails = result.Days.First().Periods.Single();
 			layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
@@ -524,7 +524,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 
 			var layerDetails = result.Days.First().Periods.Last();
 			layerDetails.StyleClassName.Should().Be.EqualTo("color_008000");
@@ -547,7 +547,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), new DateOnly(2014, 12, 15), start, end);
 			ScheduleData.Add(overtimeAvailability);
 
-			var result = Target.FetchData(null).Days.First().Periods.Single() as OvertimeAvailabilityPeriodViewModel;
+			var result = Target.FetchWeekData(null).Days.First().Periods.Single() as OvertimeAvailabilityPeriodViewModel;
 			result.Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
 			result.TimeSpan.Should()
 				.Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " +
@@ -566,7 +566,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), new DateOnly(2014, 12, 15), start, end);
 			ScheduleData.Add(overtimeAvailability);
 
-			var result = Target.FetchData(null).Days.First().Periods.Single() as OvertimeAvailabilityPeriodViewModel;
+			var result = Target.FetchWeekData(null).Days.First().Periods.Single() as OvertimeAvailabilityPeriodViewModel;
 			result.Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
 			result.TimeSpan.Should()
 				.Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " +
@@ -585,7 +585,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), new DateOnly(2014, 12, 14), start, end);
 			ScheduleData.Add(overtimeAvailability);
 
-			var result = Target.FetchData(null).Days.First().Periods.Single() as OvertimeAvailabilityPeriodViewModel;
+			var result = Target.FetchWeekData(null).Days.First().Periods.Single() as OvertimeAvailabilityPeriodViewModel;
 
 			result.Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
 			result.TimeSpan.Should()
@@ -605,7 +605,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), new DateOnly(2014, 12, 14), start, end);
 			ScheduleData.Add(overtimeAvailability);
 
-			var result = Target.FetchData(null).Days.First().Periods;
+			var result = Target.FetchWeekData(null).Days.First().Periods;
 
 			result.Should().Be.Empty();
 		}
@@ -613,7 +613,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetCulture("sv-SE")]
 		public void ShouldMapDayOfWeekNumber()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 
 			result.Days.First().DayOfWeekNumber.Should().Be.EqualTo((int)new DateOnly(2014, 12, 15).DayOfWeek);
 		}
@@ -621,7 +621,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapAvailability()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 
 			result.Days.First().Availability.Should().Be.EqualTo(false);
 		}
@@ -630,7 +630,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetCulture("sv-SE")]
 		public void ShouldMapStateToday()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 
 			result.Days.ElementAt(3).State.Should().Be.EqualTo(SpecialDateState.Today);
 		}
@@ -639,7 +639,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetCulture("sv-SE")]
 		public void ShouldMapNoSpecialState()
 		{
-			var result = Target.FetchData(Now.LocalDateOnly().AddDays(-2));
+			var result = Target.FetchWeekData(Now.LocalDateOnly().AddDays(-2));
 
 			result.Days.First().State.Should().Be.EqualTo((SpecialDateState)0);
 		}
@@ -649,7 +649,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapDayHeader()
 		{
 			var date = Now.LocalDateOnly().AddDays(-2);
-			var result = Target.FetchData(date).Days.ElementAt(1);
+			var result = Target.FetchWeekData(date).Days.ElementAt(1);
 
 			result.Header.Date.Should().Be.EqualTo(date.ToShortDateString());
 			result.Header.Title.Should().Be.EqualTo("tisdag");
@@ -661,7 +661,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapDayHeaderWithMontNameForFirstDayOfWeek()
 		{
 			var date = Now.LocalDateOnly().AddDays(-2);
-			var result = Target.FetchData(date).Days.First();
+			var result = Target.FetchWeekData(date).Days.First();
 
 			result.Header.DayDescription.Should().Be.EqualTo("december");
 		}
@@ -669,7 +669,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
 		public void ShouldMapDayHeaderWithMontNameForFirstDayOfMonth()
 		{
-			var result = Target.FetchData(new DateOnly(2014, 12, 29)).Days.ElementAt(3);
+			var result = Target.FetchWeekData(new DateOnly(2014, 12, 29)).Days.ElementAt(3);
 
 			result.Header.DayDescription.Should().Be.EqualTo("januari");
 		}
@@ -679,7 +679,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			ScheduleData.Add(new PublicNote(User.CurrentUser(), Now.LocalDateOnly(), Scenario.Current(), "TestNote"));
 
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 
 			result.Days.ElementAt(3).Note.Message.Should().Be.EqualTo("TestNote");
 		}
@@ -691,7 +691,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), Now.LocalDateOnly(), new TimeSpan(1, 1, 1), new TimeSpan(1, 2, 2, 2));
 			ScheduleData.Add(overtimeAvailability);
 
-			var result = Target.FetchData(null).Days.ElementAt(3);
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.StartTime.Value, CultureInfo.GetCultureInfo("sv-SE")));
 			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.EndTime.Value, CultureInfo.GetCultureInfo("sv-SE")));
 			result.OvertimeAvailabililty.EndTimeNextDay.Should().Be.EqualTo(true);
@@ -703,7 +703,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			ScheduleData.Add(new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly()));
 
-			var result = Target.FetchData(null).Days.ElementAt(3);
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
 			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
 			result.OvertimeAvailabililty.DefaultEndTimeNextDay.Should().Be.EqualTo(false);
@@ -716,7 +716,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetDayOff(new DayOffTemplate(new Description("Day off", "DO")), true);
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null).Days.ElementAt(3);
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
 			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
 			result.OvertimeAvailabililty.DefaultEndTimeNextDay.Should().Be.EqualTo(false);
@@ -731,7 +731,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null).Days.ElementAt(3);
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			var timeZone = User.CurrentUser().PermissionInformation.DefaultTimeZone();
 			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(dateTimePeriod.TimePeriod(timeZone).EndTime, CultureInfo.CurrentCulture));
 			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(dateTimePeriod.TimePeriod(timeZone).EndTime.Add(TimeSpan.FromHours(1)), CultureInfo.CurrentCulture));
@@ -745,7 +745,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			PersonRequestRepository.Add(textRequest);
 			PersonRequestRepository.Add(textRequest);
 
-			var result = Target.FetchData(null).Days.ElementAt(3);
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.TextRequestCount.Should().Be.EqualTo(2);
 		}
 
@@ -755,7 +755,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null).Days.ElementAt(3);
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.Summary.Should().Not.Be.Null();
 		}
 
@@ -766,7 +766,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetDayOff(new DayOffTemplate(new Description("Day off", "DO")), true);
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null).Days.ElementAt(3);
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.Summary.Title.Should().Be.EqualTo("Day off");
 			result.Summary.StyleClassName.Should().Contain(StyleClasses.DayOff);
 			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
@@ -782,7 +782,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetShiftCategory(shiftCategory);
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null).Days.ElementAt(3);
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.Summary.TimeSpan.Should().Be.EqualTo(period.TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
 			result.Summary.Title.Should().Be.EqualTo(shiftCategory.Description.Name);
 			result.Summary.StyleClassName.Should().Be.EqualTo(shiftCategory.DisplayColor.ToStyleClass());
@@ -799,7 +799,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.AddPersonalActivity(new Activity("b") { InWorkTime = true }, period.MovePeriod(TimeSpan.FromHours(-2)));
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null).Days.ElementAt(3);
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.Summary.TimeSpan.Should()
 				.Be.EqualTo(period.TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
 		}
@@ -823,7 +823,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			highPriority.Layer.Payload.Priority = 2;
 			ScheduleData.Add(highPriority);
 
-			var result = Target.FetchData(null).Days.First();
+			var result = Target.FetchWeekData(null).Days.First();
 			result.Summary.Title.Should().Be.EqualTo(absenceToDisplay.Layer.Payload.Description.Name);
 			result.Summary.StyleClassName.Should().Be.EqualTo(absenceToDisplay.Layer.Payload.DisplayColor.ToStyleClass());
 			result.Summary.Summary.Should().Be.EqualTo(TimeHelper.GetLongHourMinuteTimeString(TimeSpan.FromHours(9), CultureInfo.CurrentUICulture));
@@ -839,7 +839,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetShiftCategory(new ShiftCategory("sc") { DisplayColor = Color.Red });
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 
 			result.Styles.Select(s => s.Name)
 				.Should().Have.SameValuesAs(Color.Blue.ToStyleClass(), Color.Red.ToStyleClass());
@@ -860,7 +860,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					new DateTimePeriod(2014, 12, 15, 8, 2014, 12, 15, 17)));
 			ScheduleData.Add(absence);
 
-			var result = Target.FetchData(null).Days.First();
+			var result = Target.FetchWeekData(null).Days.First();
 
 			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
@@ -868,7 +868,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapTextRequestPermission()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
 		}
@@ -883,7 +883,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetShiftCategory(new ShiftCategory("sc") { DisplayColor = Color.Red });
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			result.TimeLine.Count().Should().Be.EqualTo(11);
 			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(30);
@@ -896,28 +896,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetCulture("sv-SE")]
 		public void ShouldMapTimeLineCulture()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			result.TimeLineCulture.Should().Be.EqualTo("sv-SE");
 		}
 
 		[Test]
 		public void ShouldMapAsmPermission()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			result.AsmPermission.Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldMapViewPossibilityPermission()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			result.ViewPossibilityPermission.Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldMapAbsenceRequestPermission()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
 		}
 
@@ -925,7 +925,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapOvertimeAvailabilityPermission()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			result.RequestPermission.OvertimeAvailabilityPermission.Should().Be.True();
 		}
 
@@ -933,7 +933,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapIsCurrentWeek()
 		{
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			result.IsCurrentWeek.Should().Be.True();
 		}
 
@@ -952,7 +952,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team));
 
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			result.SiteOpenHourIntradayPeriod.Equals(timePeriod).Should().Be.True();
 		}
 
@@ -962,7 +962,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			Culture.IsSwedish();
 
-			var result = Target.FetchData(null);
+			var result = Target.FetchWeekData(null);
 			var expectedFormat = User.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 			result.DatePickerFormat.Should().Be.EqualTo(expectedFormat);
 		}
@@ -988,7 +988,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null, StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
 			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(17);
@@ -1015,7 +1015,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null, StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
 			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(18);
@@ -1044,7 +1044,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null, StaffingPossiblityType.Absence);
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Absence);
 			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(9);
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
@@ -1061,7 +1061,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchData(null, StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
 			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(9);
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
@@ -1072,14 +1072,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotGetPossibilitiesWhenNotShowingIntradaySchedule()
 		{
-			var result = Target.FetchData(Now.LocalDateOnly().AddDays(10), StaffingPossiblityType.Absence);
+			var result = Target.FetchWeekData(Now.LocalDateOnly().AddDays(10), StaffingPossiblityType.Absence);
 			Assert.AreEqual(0, result.Possibilities.Count());
 		}
 
 		[Test]
 		public void ShouldReportNoNoteWhenNull()
 		{
-			var result = Target.FetchData(null).Days.First();
+			var result = Target.FetchWeekData(null).Days.First();
 			result.HasNote.Should().Be.False();
 		}
 	}
