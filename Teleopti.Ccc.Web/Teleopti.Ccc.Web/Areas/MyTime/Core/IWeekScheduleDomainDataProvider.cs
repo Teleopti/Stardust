@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 {
 	public interface IWeekScheduleDomainDataProvider
 	{
-		WeekScheduleDomainData Get(DateOnly date);
+		WeekScheduleDomainData GetWeekSchedule(DateOnly date);
 	}
 }

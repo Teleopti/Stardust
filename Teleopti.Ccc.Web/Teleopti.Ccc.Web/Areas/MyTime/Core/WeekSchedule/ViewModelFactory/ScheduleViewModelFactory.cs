@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public WeekScheduleViewModel CreateWeekViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
 		{
-			var domainData = _weekScheduleDomainDataProvider.Get(date);
+			var domainData = _weekScheduleDomainDataProvider.GetWeekSchedule(date);
 			domainData.SiteOpenHourIntradayPeriod = getIntradaySiteOpenHourPeriod();
 			adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, domainData);
 			var weekScheduleViewModel = _weekMapper.Map(domainData);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		// TODO-xinfli: Temporary implement for front-end debug only
 		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
 		{
-			var domainData = _weekScheduleDomainDataProvider.Get(date);
+			var domainData = _weekScheduleDomainDataProvider.GetWeekSchedule(date);
 			domainData.SiteOpenHourIntradayPeriod = getIntradaySiteOpenHourPeriod();
 			adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, domainData);
 			var weekScheduleViewModel = _weekMapper.Map(domainData);
