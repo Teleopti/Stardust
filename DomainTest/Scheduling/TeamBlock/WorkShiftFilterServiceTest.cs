@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private readonly TimeZoneInfo _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
 		
 		private IWorkShiftFilterService _target;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private IScheduleMatrixPro _matrix;
 		private IPerson _person;
 		private IActivity _activity;

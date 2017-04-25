@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
             listViewRestrictions.Items.Add(item);
 			createAndAddItem(listViewRestrictions, "", "", 0);
 
-			ISchedulingOptions schedulingOptions = new SchedulingOptions
+			SchedulingOptions schedulingOptions = new SchedulingOptions
                                                        {
                                                            UseAvailability = true,
                                                            UsePreferences = true,
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 
         private void handleShiftCategoryLimitations(IPerson person, DateOnly date)
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions
+            SchedulingOptions schedulingOptions = new SchedulingOptions
             {
                 UseAvailability = true,
                 UsePreferences = true,
@@ -671,7 +671,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 			personNameItem.Font = personNameItem.Font.ChangeToBold();
 			listViewSchedulePeriod.Items.Add(personNameItem);
 
-			ISchedulingOptions schedulingOptions = new SchedulingOptions
+			SchedulingOptions schedulingOptions = new SchedulingOptions
 			{
 				UseAvailability = true,
 				UsePreferences = true,

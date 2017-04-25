@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		//only one usage of this, try to remove
         public bool SchedulePersonOnDay(
 			IScheduleDay schedulePart, 
-			ISchedulingOptions schedulingOptions, 
+			SchedulingOptions schedulingOptions, 
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulePartModifyAndRollbackService rollbackService)
         {
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public bool SchedulePersonOnDay(
 			IScheduleDay schedulePart,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulePartModifyAndRollbackService rollbackService)
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		
         private bool schedulePersonOnDay(
             IScheduleDay schedulePart,
-            ISchedulingOptions schedulingOptions,
+            SchedulingOptions schedulingOptions,
             IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IPerson person,

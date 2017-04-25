@@ -10,14 +10,13 @@ using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class SchedulingOptions : ISchedulingOptions
+    public class SchedulingOptions
     {
 		private readonly IList<IShiftCategory> _notAllowedShiftCategories = new List<IShiftCategory>();
 		private readonly IList<ShiftProjectionCache> _notAllowedShiftProjectionCaches = new List<ShiftProjectionCache>(); 
 
 		private bool _usePreferencesMustHaveOnly;
-		private bool _considerShortBreaks = true;
-        private bool _useRotations;
+	    private bool _useRotations;
         private bool _rotationDaysOnly;
         private WorkShiftLengthHintOption _workShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
         private bool _useAvailability;
@@ -118,10 +117,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    _notAllowedShiftProjectionCaches.Add(shiftProjectionCache);
 	    }
 
-	    public IList<ShiftProjectionCache> NotAllowedShiftProjectionCaches
-	    {
-			get { return _notAllowedShiftProjectionCaches; }
-	    }
+	    public IList<ShiftProjectionCache> NotAllowedShiftProjectionCaches => _notAllowedShiftProjectionCaches;
 
 	    public IRuleSetBag FixedShiftBag { get; set; }
 
@@ -243,32 +239,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             get { return _workShiftLengthHintOption; }
             set { _workShiftLengthHintOption = value; }
         }
+		
+        public IList<IShiftCategory> NotAllowedShiftCategories => _notAllowedShiftCategories;
 
-        
-        public IList<IShiftCategory> NotAllowedShiftCategories
-        {
-            get { return _notAllowedShiftCategories; }
-        }
-
-        public bool ConsiderShortBreaks
-        {
-            get { return _considerShortBreaks; }
-            set { _considerShortBreaks = value; }
-        }
+	    public bool ConsiderShortBreaks { get; set; } = true;
 
 	    public bool ScheduleOnDayOffs { get; set; }
 
 	    public bool AllowBreakContractTime { get; set; }
 
 	    public bool SkipNegativeShiftValues { get; set; }
+	    public bool IsOptimization { get; set; }
 
-	    #region ICloneable Members
-
-        public object Clone()
+	    public object Clone()
         {
             return MemberwiseClone();
         }
-
-        #endregion
     }
 }

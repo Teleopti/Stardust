@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		IScheduleDayData this[DateOnly key] { get; }
 		IScheduleMatrixPro Matrix { get; }
 		ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection { get; }
-		void Store(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
+		void Store(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions);
 	    bool TryGetValue(DateOnly key, out IScheduleDayData value);
 		int TargetDaysOff { get; }
 	}
@@ -27,10 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			_scheduleDayDataMapper = scheduleDayDataMapper;
 		}
 
-		public IScheduleDayData this[DateOnly key]
-		{
-			get { return ScheduleDayDataDictionary[key]; }
-		}
+		public IScheduleDayData this[DateOnly key] => ScheduleDayDataDictionary[key];
 
 		public bool TryGetValue(DateOnly key, out IScheduleDayData value)
 		{
@@ -39,18 +37,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 		public int TargetDaysOff { get; protected set; }
 
-		public IScheduleMatrixPro Matrix
-		{
-			get { return _matrix; }
-		}
+		public IScheduleMatrixPro Matrix => _matrix;
 
-		public ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection
-		{
-			get { return new ReadOnlyCollection<IScheduleDayData>(new List<IScheduleDayData>(ScheduleDayDataDictionary.Values)); }
-		}
+		public ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection => new ReadOnlyCollection<IScheduleDayData>(new List<IScheduleDayData>(ScheduleDayDataDictionary.Values));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public virtual void Store(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+		public virtual void Store(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
 		{
 			_matrix = matrix;
 			TargetDaysOff = _matrix.SchedulePeriod.DaysOff();

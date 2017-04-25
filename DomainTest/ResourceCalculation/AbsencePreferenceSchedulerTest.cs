@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	{
 		private MockRepository _mocks;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private ISchedulingOptions _options;
+		private SchedulingOptions _options;
 		private ISchedulePartModifyAndRollbackService _rollBackService;
 		private AbsencePreferenceScheduler _target;
 	    private IScheduleMatrixPro _scheduleMatrixPro;

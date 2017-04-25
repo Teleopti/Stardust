@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
         private IMatrixDataListCreator _matrixDataListCreator;
         private IScheduleMatrixPro _matrix1;
         private IList<IScheduleMatrixPro> _matrixList;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private IList<IMatrixData> _matrixDataList;
         private IMatrixData _matrixData1;
         private IMatrixData _matrixData2;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions)
+		public IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation, SchedulingOptions schedulingOptions)
         {
             if(shiftCategoryLimitation.Weekly)
             {
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IList<IScheduleDayPro> ExecutePeriod(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions)
+		public IList<IScheduleDayPro> ExecutePeriod(IShiftCategoryLimitation shiftCategoryLimitation, SchedulingOptions schedulingOptions)
         {
             IList<IScheduleDayPro> result = new List<IScheduleDayPro>();
             while (IsShiftCategoryOverPeriodLimit(shiftCategoryLimitation))
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IList<IScheduleDayPro> ExecuteWeeks(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions)
+		public IList<IScheduleDayPro> ExecuteWeeks(IShiftCategoryLimitation shiftCategoryLimitation, SchedulingOptions schedulingOptions)
         {
 
             IList<IScheduleDayPro> days = _scheduleMatrix.FullWeeksPeriodDays;

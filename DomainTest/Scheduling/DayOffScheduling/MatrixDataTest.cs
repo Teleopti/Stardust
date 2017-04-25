@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private IMatrixData _target;
 		private IScheduleDayPro _scheduleDayPro1;
 		private IScheduleDayPro _scheduleDayPro2;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private IScheduleDayDataMapper _scheduleDayDataMapper;
 		private IVirtualSchedulePeriod _schedulePeriod;
 

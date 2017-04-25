@@ -19,6 +19,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IList<ShiftProjectionCache> FilterList(IList<ShiftProjectionCache> shiftList,
 		                                        IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 		                                        IScheduleMatrixPro matrix, 
-		                                        ISchedulingOptions schedulingOptions);
+		                                        SchedulingOptions schedulingOptions);
 	}
 }

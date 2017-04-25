@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private IScheduleDay _schedulePart;
         private IWorkShiftFinderResult _finderResult;
 
-        public bool CheckStatus(IScheduleDay schedulePart, IWorkShiftFinderResult finderResult, ISchedulingOptions schedulingOptions)
+        public bool CheckStatus(IScheduleDay schedulePart, IWorkShiftFinderResult finderResult, SchedulingOptions schedulingOptions)
         {
             _schedulePart = schedulePart;
             _finderResult = finderResult;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return checkTheStatus(schedulingOptions);
         }
 
-        private bool checkTheStatus(ISchedulingOptions schedulingOptions)
+        private bool checkTheStatus(SchedulingOptions schedulingOptions)
         {
             if (SchedulePeriod.IsValid == false)
             {

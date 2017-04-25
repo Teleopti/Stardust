@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
     public interface IAdvanceDaysOffSchedulingService
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+		void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
 			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization, DateOnlyPeriod selectedPeriod);
     }
 
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	        _missingDaysOffScheduler = missingDaysOffScheduler;
         }
 
-		public void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+		public void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
 			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization, DateOnlyPeriod selectedPeriod)
 		{
 			var cancelMe = false;

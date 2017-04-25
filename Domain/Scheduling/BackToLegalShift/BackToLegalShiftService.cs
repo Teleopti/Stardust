@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 {
 	public interface IBackToLegalShiftService
 	{
-		void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
+		void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, SchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer);
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 
 		public event EventHandler<BackToLegalShiftArgs> Progress;
 
-		public void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
+		public void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, SchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer)
 		{

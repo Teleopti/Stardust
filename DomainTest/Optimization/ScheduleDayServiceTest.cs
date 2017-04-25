@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
-    	private ISchedulingOptions _schedulingOptions;
+    	private SchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()

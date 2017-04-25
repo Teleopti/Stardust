@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <param name="rollbackService">The rollback service.</param>
 		/// <returns></returns>
-		bool Execute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
+		bool Execute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
 
         /// <summary>
         /// Gets the removed days during the Execute.

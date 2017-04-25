@@ -5,12 +5,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IEffectiveRestrictionShiftFilter
 	{
-		bool Filter(ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult);
+		bool Filter(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult);
 	}
 	
 	public class EffectiveRestrictionShiftFilter : IEffectiveRestrictionShiftFilter
 	{
-		public bool Filter(ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult)
+		public bool Filter(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult)
 		{
 			if (schedulingOptions == null) return false;
 		    if (effectiveRestriction == null)

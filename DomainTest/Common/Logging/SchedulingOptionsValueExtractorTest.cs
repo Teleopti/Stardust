@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
         public void VerifyTeamOptions()
         {
 	        GroupPageLight groupPage = new GroupPageLight("Test1", GroupPageType.Hierarchy);
-            ISchedulingOptions schedulingOptions = new SchedulingOptions
+            var schedulingOptions = new SchedulingOptions
                 {
                     TeamSameShiftCategory = true,
                     TeamSameStartTime = true,
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
         [Test]
         public void VerifyBlockOptions()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions
+            var schedulingOptions = new SchedulingOptions
             {
                 BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff ,
                 BlockSameShiftCategory = true,
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
         [Test]
         public void VerifyGeneralSchedulingOptions()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions
+            var schedulingOptions = new SchedulingOptions
             {
                 UsePreferences = true,
                 UseRotations = true

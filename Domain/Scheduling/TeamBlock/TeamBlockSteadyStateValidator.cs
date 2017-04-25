@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockSteadyStateValidator
 	{
-		bool IsTeamBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions);
+		bool IsTeamBlockInSteadyState(ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockSteadyStateValidator : ITeamBlockSteadyStateValidator
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		public bool IsTeamBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
+		public bool IsTeamBlockInSteadyState(ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions)
 		{
 			bool isSteadyState = true;
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(schedulingOptions) ||

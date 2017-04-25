@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface IValidatedTeamBlockInfoExtractor
     {
 	    ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer,
-		    IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
+		    IList<IScheduleMatrixPro> allPersonMatrixList, SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
     }
 
     public class ValidatedTeamBlockInfoExtractor : IValidatedTeamBlockInfoExtractor
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    }
 
 	    public ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer,
-		    IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions, 
+		    IList<IScheduleMatrixPro> allPersonMatrixList, SchedulingOptions schedulingOptions, 
 			DateOnlyPeriod selectedPeriod)
 	    {
 		    if (teamInfo == null || schedulingOptions == null) return null;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    }
 
 	    private ITeamBlockInfo createTeamBlockInfo(DateOnly datePointer,
-		    ITeamInfo teamInfo, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
+		    ITeamInfo teamInfo, SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
 	    {
 		    ITeamBlockInfo teamBlockInfo;
 				if (schedulingOptions.UseBlock)

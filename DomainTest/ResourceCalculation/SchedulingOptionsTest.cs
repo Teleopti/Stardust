@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
@@ -10,16 +9,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     [TestFixture]
     public class SchedulingOptionsTest
     {
-        private ISchedulingOptions _target;
-	    private MockRepository _mock;
+        private SchedulingOptions _target;
 	    private ShiftProjectionCache _shiftProjectionCache;
 
         [SetUp]
         public void Setup()
         {
             _target = new SchedulingOptions();
-			_mock = new MockRepository();
-	        _shiftProjectionCache = _mock.StrictMock<ShiftProjectionCache>();
+	        _shiftProjectionCache = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Test")), new PersonalShiftMeetingTimeChecker());
         }
 
         [Test]
@@ -150,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyClone()
         {
-            ISchedulingOptions cloned = _target.Clone() as ISchedulingOptions;
+            SchedulingOptions cloned = _target.Clone() as SchedulingOptions;
 
             Assert.IsNotNull(cloned);
             Assert.AreNotSame(_target, cloned);

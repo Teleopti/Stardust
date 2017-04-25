@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_lockDaysOnTeamBlockInfos = lockDaysOnTeamBlockInfos;
 		}
 
-		public IEnumerable<ITeamBlockInfo> Create(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IPerson[] allAgents, ISchedulingOptions schedulingOptions)
+		public IEnumerable<ITeamBlockInfo> Create(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IPerson[] allAgents, SchedulingOptions schedulingOptions)
 		{
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);
 			_teamInfoFactoryFactory.Create(allAgents, schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private IMissingDaysOffScheduler _missingDaysOffScheduler;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private IList<IScheduleMatrixPro> _matrixList;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private IScheduleTagSetter _scheduleTagSetter;
 
 		private bool _cancelTarget;

@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		[RemoveMeWithToggle("Maybe (?) remove IPeriodValueCalculator param", Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
 		public IEnumerable<ITeamInfo> Execute(IPeriodValueCalculator periodValueCalculatorForAllSkills, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
-			IEnumerable<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IEnumerable<IPerson> selectedPersons,
+			IEnumerable<ITeamInfo> remainingInfoList, SchedulingOptions schedulingOptions, IEnumerable<IPerson> selectedPersons,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			Action cancelAction,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress schedulingProgress)
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,
-			ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
+			SchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			Lazy<double> currentPeriodValue, double previousPeriodValue,
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		private void addAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService,
-			ISchedulingOptions schedulingOptions, IEnumerable<DateOnly> addedDaysOff, IPerson person)
+			SchedulingOptions schedulingOptions, IEnumerable<DateOnly> addedDaysOff, IPerson person)
 		{
 			foreach (DateOnly dateOnly in addedDaysOff)
 			{
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return false;
 		}
 
-		private bool reScheduleAllMovedDaysOff(ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
+		private bool reScheduleAllMovedDaysOff(SchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 			IEnumerable<DateOnly> removedDaysOff,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,

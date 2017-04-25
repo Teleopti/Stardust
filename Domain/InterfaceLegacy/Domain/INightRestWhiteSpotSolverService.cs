@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿using Teleopti.Ccc.Domain.ResourceCalculation;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Resolves night rest problems
@@ -12,6 +14,6 @@
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <param name="schedulePartModifyAndRollbackService">The schedule part modify and rollback service.</param>
 		/// <returns></returns>
-		bool Resolve(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService); 
+		bool Resolve(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService); 
     }
 }

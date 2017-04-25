@@ -54,11 +54,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         [Test]
         public void ShouldRunStep1()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions();
-            schedulingOptions.UseBlock  = false;
-            schedulingOptions.UseSameDayOffs = true;
-				schedulingOptions.UseTeam = true;
-            using (_mock.Record())
+	        var schedulingOptions = new SchedulingOptions
+	        {
+		        UseBlock = false,
+		        UseSameDayOffs = true,
+		        UseTeam = true
+	        };
+	        using (_mock.Record())
             {
                 Expect.Call(
                     () =>
@@ -78,11 +80,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         [Test]
         public void ShouldRunStep1AndStep2()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions();
-            schedulingOptions.UseBlock  = false;
-            schedulingOptions.UseSameDayOffs = false;
-            schedulingOptions.UseTeam = true ;
-            using (_mock.Record())
+	        var schedulingOptions = new SchedulingOptions
+	        {
+		        UseBlock = false,
+		        UseSameDayOffs = false,
+		        UseTeam = true
+	        };
+	        using (_mock.Record())
             {
                 Expect.Call(
                     () =>

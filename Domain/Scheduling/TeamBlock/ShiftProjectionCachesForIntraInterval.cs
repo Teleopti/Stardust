@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ITeamBlockInfo teamBlockInfo,
 			IPerson person,
 			DateOnly datePointer,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			IList<IWorkShiftCalculationResultHolder> resultList = new List<IWorkShiftCalculationResultHolder>();

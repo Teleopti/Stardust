@@ -6,25 +6,27 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface ISchedulingOptionsCreator
     {
-        ISchedulingOptions CreateSchedulingOptions(
+        SchedulingOptions CreateSchedulingOptions(
             IOptimizationPreferences optimizationPreferences);
     }
 
 	public class SchedulingOptionsCreator : ISchedulingOptionsCreator
 	{
-		public ISchedulingOptions CreateSchedulingOptions(IOptimizationPreferences optimizationPreferences)
+		public SchedulingOptions CreateSchedulingOptions(IOptimizationPreferences optimizationPreferences)
 		{
-			ISchedulingOptions schedulingOptions = new SchedulingOptions();
+			var schedulingOptions = new SchedulingOptions
+			{
+				ShiftBagBackToLegal = optimizationPreferences.ShiftBagBackToLegal,
+				TagToUseOnScheduling = optimizationPreferences.General.ScheduleTag,
+				UseTeam = optimizationPreferences.Extra.UseTeams,
+				TeamSameShiftCategory = optimizationPreferences.Extra.UseTeamSameShiftCategory,
+				TeamSameStartTime = optimizationPreferences.Extra.UseTeamSameStartTime,
+				TeamSameEndTime = optimizationPreferences.Extra.UseTeamSameEndTime,
+				UseSameDayOffs = optimizationPreferences.Extra.UseTeamSameDaysOff,
+				TeamSameActivity = optimizationPreferences.Extra.UseTeamSameActivity,
+				IsOptimization = true
+			};
 
-			schedulingOptions.ShiftBagBackToLegal = optimizationPreferences.ShiftBagBackToLegal;
-			schedulingOptions.TagToUseOnScheduling = optimizationPreferences.General.ScheduleTag;
-			schedulingOptions.UseTeam = optimizationPreferences.Extra.UseTeams;
-			schedulingOptions.TeamSameShiftCategory =
-				optimizationPreferences.Extra.UseTeamSameShiftCategory;
-			schedulingOptions.TeamSameStartTime = optimizationPreferences.Extra.UseTeamSameStartTime;
-			schedulingOptions.TeamSameEndTime = optimizationPreferences.Extra.UseTeamSameEndTime;
-			schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.UseTeamSameDaysOff;
-			schedulingOptions.TeamSameActivity = optimizationPreferences.Extra.UseTeamSameActivity;
 			if (schedulingOptions.TeamSameActivity)
 				schedulingOptions.CommonActivity = optimizationPreferences.Extra.TeamActivityValue;
 
@@ -65,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		private static void setPreferencesInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions)
+			SchedulingOptions schedulingOptions)
 		{
 			schedulingOptions.PreferencesDaysOnly = false; // always
 			schedulingOptions.UsePreferencesMustHaveOnly = false;
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		private static void setRotationsInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions)
+			SchedulingOptions schedulingOptions)
 		{
 			bool use = optimizationPreferences.General.UseRotations;
 			double value = optimizationPreferences.General.RotationsValue;
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		private static void setAvailabilitiesInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions)
+			SchedulingOptions schedulingOptions)
 		{
 			bool use = optimizationPreferences.General.UseAvailabilities;
 			double value = optimizationPreferences.General.AvailabilitiesValue;
@@ -98,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		private static void setStudentAvailabilitiesInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions)
+			SchedulingOptions schedulingOptions)
 		{
 			bool use = optimizationPreferences.General.UseStudentAvailabilities;
 			double value = optimizationPreferences.General.StudentAvailabilitiesValue;
@@ -107,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		private static void setTeamBlockOptions(IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions)
+			SchedulingOptions schedulingOptions)
 		{
 			schedulingOptions.UseBlock = optimizationPreferences.Extra.UseTeamBlockOption;
 			schedulingOptions.BlockSameEndTime = optimizationPreferences.Extra.UseBlockSameEndTime;

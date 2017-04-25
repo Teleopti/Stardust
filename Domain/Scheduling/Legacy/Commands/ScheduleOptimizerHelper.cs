@@ -140,11 +140,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			ISchedulingProgress backgroundWorker,
 			IDayOffTemplate dayOffTemplate,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IOptimizationPreferences optimizationPreferences)
 		{
-			if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
+			if (schedulingOptions == null) throw new ArgumentNullException(nameof(schedulingOptions));
 
 			_allResults = () => new WorkShiftFinderResultHolder();
 			_backgroundWorker = backgroundWorker;
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void ReOptimize(ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays,
-			ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
+			SchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
 			IOptimizationPreferences optimizationPreferences, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			_backgroundWorker = backgroundWorker;
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
+		private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
 								IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService,
 								IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingProgress backgroundWorker,
 								IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		private void runFairness(IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
-			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
+			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
-		private void runIntraInterval(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
+		private void runIntraInterval(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
 			DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter)
 		{
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, Resources.CollectingData, optimizationPreferences.Advanced.RefreshScreenInterval);

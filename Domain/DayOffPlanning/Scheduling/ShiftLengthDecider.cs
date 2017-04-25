@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			_desiredShiftLengthCalculator = desiredShiftLengthCalculator;
 		}
 
-		public IList<ShiftProjectionCache> FilterList(IList<ShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+		public IList<ShiftProjectionCache> FilterList(IList<ShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
 		{
 			if (shiftList == null) return null;
 			bool usingTeamBlockAndSameShift = schedulingOptions.UseBlock && schedulingOptions.BlockSameShift;

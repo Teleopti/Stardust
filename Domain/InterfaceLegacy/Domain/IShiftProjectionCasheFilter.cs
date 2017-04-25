@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="effectiveRestriction">The effective restriction.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        bool CheckRestrictions(ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult);
+        bool CheckRestrictions(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult);
 
         /// <summary>
         /// Filters the on restriction and not allowed shift categories.
@@ -118,16 +118,17 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <returns></returns>
         IList<ShiftProjectionCache> FilterOnStartAndEndTime(DateTimePeriod startAndEndTime, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult);
 
-        /// <summary>
-        /// Filters the specified valid min max.
-        /// </summary>
-        /// <param name="validMinMax">The valid min max.</param>
-        /// <param name="shiftList">The shift list.</param>
-        /// <param name="dateToSchedule">The date to schedule.</param>
-        /// <param name="current">The current.</param>
-        /// <param name="finderResult">The finder result.</param>
-        /// <returns></returns>
-        IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList,
+	    /// <summary>
+	    /// Filters the specified valid min max.
+	    /// </summary>
+	    /// <param name="schedules"></param>
+	    /// <param name="validMinMax">The valid min max.</param>
+	    /// <param name="shiftList">The shift list.</param>
+	    /// <param name="dateToSchedule">The date to schedule.</param>
+	    /// <param name="current">The current.</param>
+	    /// <param name="finderResult">The finder result.</param>
+	    /// <returns></returns>
+	    IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList,
                                             DateOnly dateToSchedule, IScheduleRange current,
                                             IWorkShiftFinderResult finderResult);
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
             _workShiftRangeCalculator = workShiftRangeCalculator;
         }
 
-		public bool Execute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
+		public bool Execute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
             _removedDays.Clear();
 			_removedSchedules.Clear();

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private ITeamBlockMoveTimeOptimizer _target;
 		private IList<IScheduleMatrixPro> _matrixList;
 		private IScheduleMatrixPro _matrix1;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IOptimizationPreferences _optimizationPreferences;

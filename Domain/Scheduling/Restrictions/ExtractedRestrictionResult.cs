@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		/// </summary>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <returns></returns>
-		public IEffectiveRestriction CombinedRestriction(ISchedulingOptions schedulingOptions)
+		public IEffectiveRestriction CombinedRestriction(SchedulingOptions schedulingOptions)
 		{
 			var start = new StartTimeLimitation();
 			var end = new EndTimeLimitation();
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			return _restrictionCombiner.CombineAvailabilityRestrictions(AvailabilityList, effectiveRestriction);
 		}
 
-		private IEffectiveRestriction extractPreferences(IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions)
+		private IEffectiveRestriction extractPreferences(IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions)
 		{
 			return _restrictionCombiner.CombinePreferenceRestrictions(PreferenceList, effectiveRestriction, schedulingOptions.UsePreferencesMustHaveOnly);
 		}

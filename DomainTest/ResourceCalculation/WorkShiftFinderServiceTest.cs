@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IWorkShiftCalculatorsManager _calculatorManager;
     	private IShiftLengthDecider _shiftLengthDecider;
 
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
     	private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
         [SetUp]

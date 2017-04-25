@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public class CommonActivityFilter
 	{
-		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction)
+		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction)
 		{
 			if (shiftList == null) return null;
 			if (shiftList.Count == 0) return shiftList;

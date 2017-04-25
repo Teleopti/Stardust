@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private PreSchedulingStatusChecker _target;
         private MockRepository _mocks;
         private IScheduleDay _part;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private IWorkShiftFinderResult _finderResult;
         private readonly DateOnly _scheduleDateOnly = new DateOnly(2009,2,2);
         private IPerson _person;

@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
 	public interface ITeamBlockRestrictionAggregator
 	{
-		IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, ShiftProjectionCache roleModel);
-		IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions);
+		IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, ShiftProjectionCache roleModel = null);
 	}
 
 	public class TeamBlockRestrictionAggregator : ITeamBlockRestrictionAggregator
@@ -32,14 +31,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			_nightlyRestRule = nightlyRestRule;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
-
-		public IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
-		{
-			return Aggregate(scheduleDictionary, datePointer, person, teamBlockInfo, schedulingOptions, null);
-		}
-
-		public IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-		                                       ShiftProjectionCache roleModel)
+		
+		public IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions,
+		                                       ShiftProjectionCache roleModel = null)
 		{
 			var dateOnlyList = teamBlockInfo?.BlockInfo.BlockPeriod.DayCollection();
 			if (dateOnlyList == null) return null;
@@ -109,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 				}
 			}
 
-			effectiveRestriction = combineRestriction(new NightlyRestRestrcition(_nightlyRestRule, schedulingOptions), dateOnlyList, matrixList,
+			effectiveRestriction = combineRestriction(new NightlyRestRestriction(_nightlyRestRule, schedulingOptions), dateOnlyList, matrixList,
 			                                          effectiveRestriction);
 
 			return effectiveRestriction;

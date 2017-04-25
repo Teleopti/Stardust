@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldFilterAccordingToEffectiveRestriction()
 		{
-			ISchedulingOptions schedulingOptions = new SchedulingOptions();
+			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
 			var result = _mocks.StrictMock<IWorkShiftFinderResult>();
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldReturnCorrectIfUsePreferenceMustHavesOnly()
 		{
-			ISchedulingOptions schedulingOptions = new SchedulingOptions();
+			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
 			var result = _mocks.StrictMock<IWorkShiftFinderResult>();
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void VerifyRestrictionCheckWhenTrue()
 		{
-			ISchedulingOptions schedulingOptions = new SchedulingOptions();
+			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
 			var result = _mocks.StrictMock<IWorkShiftFinderResult>();
 			IList<IWorkShiftFilterResult> lstResult = new List<IWorkShiftFilterResult>();
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void VerifyRestrictionCheckWithNullEffectiveReturnsFalse()
 		{
-			ISchedulingOptions schedulingOptions = new SchedulingOptions();
+			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			IEffectiveRestriction effectiveRestriction = null;
 			var result = _mocks.StrictMock<IWorkShiftFinderResult>();
 
@@ -143,11 +143,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			category.SetId(Guid.NewGuid());
 			IShiftCategory category1 = new ShiftCategory("optCat");
 			category1.SetId(Guid.NewGuid());
-			var options = _mocks.StrictMock<ISchedulingOptions>();
+			var options = new SchedulingOptions{ShiftCategory = category1};
 			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
 
 			Expect.Call(effective.ShiftCategory).Return(category).Repeat.Twice();
-			Expect.Call(options.ShiftCategory).Return(category1).Repeat.Twice();
 
 			_mocks.ReplayAll();
 			var ret = _target.Filter(options, effective, finderResult);

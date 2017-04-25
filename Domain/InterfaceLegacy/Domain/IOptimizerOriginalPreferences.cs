@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.ResourceCalculation;
+
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
@@ -9,6 +11,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <summary>
         /// Gets the scheduling options.
         /// </summary>
-        ISchedulingOptions SchedulingOptions { get; }
+        SchedulingOptions SchedulingOptions { get; }
     }
 }

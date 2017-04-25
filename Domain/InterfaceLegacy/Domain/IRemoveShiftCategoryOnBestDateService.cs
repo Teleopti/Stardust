@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="shiftCategory">The shift category.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <returns></returns>
-		IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions);
+		IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions);
 
 		/// <summary>
 		/// Executes the specified shift category.
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="period">The period.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <returns></returns>
-		IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, ISchedulingOptions schedulingOptions);
+		IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, SchedulingOptions schedulingOptions);
 
         /// <summary>
         /// Determines whether this day matches the shiftCategory.

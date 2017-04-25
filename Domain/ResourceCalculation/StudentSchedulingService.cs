@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		IList<IWorkShiftFinderResult> FinderResults { get; }
 		void ClearFinderResults();
-		bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
+		bool DoTheScheduling(IList<IScheduleDay> selectedParts, SchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
 
 	}
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_userTimeZone = userTimeZone;
 		}
 
-		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
+		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, SchedulingOptions schedulingOptions,
 			bool breakIfPersonCannotSchedule,
 			ISchedulePartModifyAndRollbackService rollbackService)
 		{
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return new CancelSignal();
 		}
 
-		private bool doTheSchedulingLoop(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
+		private bool doTheSchedulingLoop(IList<IScheduleDay> selectedParts, SchedulingOptions schedulingOptions,
 		 bool breakIfPersonCannotSchedule, bool excludeStudentsWithEnoughHours, IResourceCalculateDelayer resourceCalculateDelayer,
 		 ISchedulePartModifyAndRollbackService rollbackService)
 		{

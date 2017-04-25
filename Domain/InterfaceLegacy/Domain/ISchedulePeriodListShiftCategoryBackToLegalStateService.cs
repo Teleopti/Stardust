@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -14,6 +15,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="scheduleMatrixList">The schedule matrix list.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <param name="optimizationPreferences">The optimization preferences.</param>
-		void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences);
+		void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences);
 	}
 }

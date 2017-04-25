@@ -92,12 +92,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulerStateHolder schedulerStateHolder,
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulingProgress backgroundWorker,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			DateOnlyPeriod selectedPeriod)
 		{
-			if (matrixList == null) throw new ArgumentNullException("matrixList");
-			if (schedulerStateHolder == null) throw new ArgumentNullException("schedulerStateHolder");
-			if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
+			if (matrixList == null) throw new ArgumentNullException(nameof(matrixList));
+			if (schedulerStateHolder == null) throw new ArgumentNullException(nameof(schedulerStateHolder));
+			if (backgroundWorker == null) throw new ArgumentNullException(nameof(backgroundWorker));
 			foreach (var scheduleMatrix in matrixList)
 			{
 				var schedulePartModifyAndRollbackService =

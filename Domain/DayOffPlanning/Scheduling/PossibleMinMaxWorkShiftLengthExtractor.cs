@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Interfaces.Domain;
 
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             _extractedLengths.Clear();
         }
 
-        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
 		{
 			if (_extractedLengths.Count ==0)
 			{

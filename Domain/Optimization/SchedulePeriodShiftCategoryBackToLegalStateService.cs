@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions)
+		public bool Execute(IVirtualSchedulePeriod schedulePeriod, SchedulingOptions schedulingOptions)
         {
             bool result = true;
             var resultList = new List<IScheduleDayPro>();

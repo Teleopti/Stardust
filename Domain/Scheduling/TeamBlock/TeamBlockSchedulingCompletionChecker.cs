@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockSchedulingCompletionChecker
 	{
-		bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions);
+		bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, SchedulingOptions schedulingOptions);
 
 		bool IsDayScheduledInTeamBlockForSelectedPersons(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly,
-																		 IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions);
+																		 IList<IPerson> selectedPersons, SchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockSchedulingCompletionChecker : ITeamBlockSchedulingCompletionChecker
 	{
-		public bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions)
+		public bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, SchedulingOptions schedulingOptions)
 		{
 			if (teamBlockInfo == null) return false;
 
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return true;
 		}
 
-	    private bool checkScheduleStatus(DateOnly dateOnly, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+	    private bool checkScheduleStatus(DateOnly dateOnly, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
 	    {
 	        IScheduleRange rangeForPerson = matrix.ActiveScheduleRange;
 	        IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    }
 
 	    public bool IsDayScheduledInTeamBlockForSelectedPersons(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly,
-		                                                               IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions)
+		                                                               IList<IPerson> selectedPersons, SchedulingOptions schedulingOptions)
 		{
 			if (teamBlockInfo == null) return false;
 

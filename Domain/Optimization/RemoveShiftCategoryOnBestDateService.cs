@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleService = scheduleService;
         }
 
-		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions)
         {
             IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro>(_scheduleMatrix.EffectivePeriodDays);
             DateOnly start = periodDays[0].Day;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return ExecuteOne(shiftCategory, period, schedulingOptions);
         }
 
-		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, ISchedulingOptions schedulingOptions)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, SchedulingOptions schedulingOptions)
         {
             IList<IScheduleDayPro> daysToWorkWith = DaysToWorkWith(shiftCategory, period);
             IScheduleDayPro dayToRemove = FindDayToRemove(daysToWorkWith);

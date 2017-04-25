@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		IList<ITeamBlockInfo> Generate(IEnumerable<IPerson> personsInOrganisation,
 																		IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
 		                               DateOnlyPeriod selectedPeriod,
-		                               IEnumerable<IPerson> selectedPersons, ISchedulingOptions schedulingOptions);
+		                               IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockGenerator : ITeamBlockGenerator
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public IList<ITeamBlockInfo> Generate(IEnumerable<IPerson> personsInOrganisation,
 																					IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
 		                                      DateOnlyPeriod selectedPeriod,
-																					IEnumerable<IPerson> selectedPersons, ISchedulingOptions schedulingOptions)
+																					IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions)
 		{
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)

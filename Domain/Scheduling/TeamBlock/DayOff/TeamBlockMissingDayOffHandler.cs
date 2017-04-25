@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 {
     public interface ITeamBlockMissingDayOffHandler
     {
-        void Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
+        void Execute(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
     }
 
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
             _splitSchedulePeriodToWeekPeriod = splitSchedulePeriodToWeekPeriod;
         }
         
-        public void Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
+        public void Execute(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
 	        var matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
 	        var cancel = false;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
             }
         }
 
-        private void fixThisMatrix(IMatrixData workingItem, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, Action cancelAction)
+        private void fixThisMatrix(IMatrixData workingItem, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, Action cancelAction)
         {
             var tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(new List<IMatrixData> { workingItem });
 	        var matrix = tempWorkingList[0].Matrix;

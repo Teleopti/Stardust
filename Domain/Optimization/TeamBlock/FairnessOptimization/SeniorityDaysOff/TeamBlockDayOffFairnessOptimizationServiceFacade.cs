@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface ITeamBlockDayOffFairnessOptimizationServiceFacade
     {
-		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
+		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, SchedulingOptions schedulingOptions, 
 					IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, 
 					ISeniorityWorkDayRanks seniorityWorkDayRanks, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
         }
 
-		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
+		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, SchedulingOptions schedulingOptions, 
 							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, 
 							ISeniorityWorkDayRanks seniorityWorkDayRanks, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
         {

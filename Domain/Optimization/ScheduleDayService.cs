@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_userTimeZone = userTimeZone;
 		}
 
-		public bool ScheduleDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions)
+		public bool ScheduleDay(IScheduleDay schedulePart, SchedulingOptions schedulingOptions)
         {
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _schedulePartModifyAndRollbackService);
         }
 
-		public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions)
+		public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, SchedulingOptions schedulingOptions)
         {
             //TODO use a new Delete method with a rollbackservice
             var options = new DeleteOption {MainShift = true};

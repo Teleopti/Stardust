@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		IList<ITeamBlockInfo> Decide(IList<ITeamBlockInfo> originalTeamBlocks,
 		                                             IOptimizationPreferences optimizationPreferences,
-		                                             ISchedulingOptions schedulingOptions);
+		                                             SchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockIntradayDecisionMaker : ITeamBlockIntradayDecisionMaker
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public IList<ITeamBlockInfo> Decide(IList<ITeamBlockInfo> originalTeamBlocks,
 		                                    IOptimizationPreferences optimizationPreferences,
-		                                    ISchedulingOptions schedulingOptions)
+		                                    SchedulingOptions schedulingOptions)
 		{
 			var sortedTeamBlocks = new List<ITeamBlockInfo>();
 			sortedTeamBlocks.AddRange(
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		
 		public ITeamBlockInfo RecalculateTeamBlock(ITeamBlockInfo teamBlock,
 		                                           IOptimizationPreferences optimizationPreferences,
-		                                           ISchedulingOptions schedulingOptions)
+		                                           SchedulingOptions schedulingOptions)
 		{
             var standardDeviationData = new StandardDeviationData();
 

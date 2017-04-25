@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <returns>
         /// 	<c>true</c> if [is in legal state]; otherwise, <c>false</c>.
         /// </returns>
-        bool IsPeriodInLegalState(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
+        bool IsPeriodInLegalState(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions);
 
         /// <summary>
         /// Periods the legal state status.
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="matrix">The matrix.</param>
         /// <param name="schedulingOptions">The scheduling options.</param>
         /// <returns></returns>
-        int PeriodLegalStateStatus(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
+        int PeriodLegalStateStatus(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions);
 
         /// <summary>
         /// Determines whether [is week in legal state] [the specified week index].
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <returns>
         /// 	<c>true</c> if [is week in legal state] [the specified week index]; otherwise, <c>false</c>.
         /// </returns>
-        bool IsWeekInLegalState(int weekIndex, IScheduleMatrixPro matrix, ISchedulingOptions options);
+        bool IsWeekInLegalState(int weekIndex, IScheduleMatrixPro matrix, SchedulingOptions options);
 
         /// <summary>
         /// Determines whether [is week in legal state] [the specified date in week].
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <returns>
         /// 	<c>true</c> if [is week in legal state] [the specified date in week]; otherwise, <c>false</c>.
         /// </returns>
-        bool IsWeekInLegalState(DateOnly dateInWeek, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
+        bool IsWeekInLegalState(DateOnly dateInWeek, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions);
 
         /// <summary>
         /// Calculates allowed minimum and maximum contract time to be scheduled on the specific date.
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         MinMax<TimeSpan>? MinMaxAllowedShiftContractTime(
             DateOnly dayToSchedule, 
             IScheduleMatrixPro matrix,
-            ISchedulingOptions schedulingOptions);
+            SchedulingOptions schedulingOptions);
 
         ///// <summary>
         ///// Mins the max allowed shift contract time.
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="matrix">The matrix.</param>
         /// <param name="schedulingOptions">The scheduling options.</param>
         /// <returns></returns>
-        MinMax<TimeSpan> PossibleMinMaxTimeForPeriod(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
+        MinMax<TimeSpan> PossibleMinMaxTimeForPeriod(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions);
 
         /// <summary>
         /// Gets the week count that is used in the IWorkShiftMinMaxCalculator.
@@ -96,6 +97,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="matrix">The matrix.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <returns></returns>
-		IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix,  ISchedulingOptions schedulingOptions);
+		IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix,  SchedulingOptions schedulingOptions);
     }
 }

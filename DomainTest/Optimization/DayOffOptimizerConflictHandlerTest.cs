@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _scheduleDay;
         private IScheduleService _scheduleService;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private IEffectiveRestriction _effectiveRestriction;
         private ISchedulePartModifyAndRollbackService _rollbackService;
     	private IResourceCalculateDelayer _resourceCalculateDelayer;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _scheduleService = _mock.StrictMock<IScheduleService>();
             _effectiveRestrictionCreator = _mock.StrictMock<IEffectiveRestrictionCreator>();
-            _schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
+            _schedulingOptions = new SchedulingOptions();
             _rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
         	_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_target = new DayOffOptimizerConflictHandler(_scheduleMatrixPro, _scheduleService, _effectiveRestrictionCreator, _rollbackService, _resourceCalculateDelayer);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -33,6 +34,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </summary>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <returns></returns>
-		IEffectiveRestriction CombinedRestriction(ISchedulingOptions schedulingOptions);
+		IEffectiveRestriction CombinedRestriction(SchedulingOptions schedulingOptions);
 	}
 }

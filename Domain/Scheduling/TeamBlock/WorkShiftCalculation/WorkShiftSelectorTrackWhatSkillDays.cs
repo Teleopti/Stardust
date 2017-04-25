@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 		public override ShiftProjectionCache SelectShiftProjectionCache(IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			DateOnly datePointer, IList<ShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo teamBlockInfo,
-			ISchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person)
+			SchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person)
 		{
 			SkillDaysAsParameter = allSkillDays;
 			return base.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, timeZoneInfo, forRoleModel, person);

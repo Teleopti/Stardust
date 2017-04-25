@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.SystemSetting;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool _useRotations = true;
 		private bool _showTroubleshotInformation;
         
-		public void MapTo(ISchedulingOptions schedulingOptions, IEnumerable<IScheduleTag> scheduleTags)
+		public void MapTo(SchedulingOptions schedulingOptions, IEnumerable<IScheduleTag> scheduleTags)
 		{
 			schedulingOptions.TagToUseOnScheduling = scheduleTags.FirstOrDefault(scheduleTag => _scheduleTagId == scheduleTag.Id) ??
 			                                         NullScheduleTag.Instance;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.ShowTroubleshot = _showTroubleshotInformation;
 		}
 
-		public void MapFrom(ISchedulingOptions schedulingOptions)
+		public void MapFrom(SchedulingOptions schedulingOptions)
 		{
 			_scheduleTagId = schedulingOptions.TagToUseOnScheduling.Id;
 			_useRotations = schedulingOptions.UseRotations;

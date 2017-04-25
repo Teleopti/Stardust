@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		private DateOnlyPeriod? _period;
 		private readonly IVirtualSchedulePeriod _schedulePeriod;
 		private readonly DateOnly _selectedDate;
-		private readonly ISchedulingOptions _schedulingOptions;
+		private readonly SchedulingOptions _schedulingOptions;
 		private readonly IDictionary<string, TimeSpan> _timePerDefinitionSet = new Dictionary<string, TimeSpan>();
 		private readonly IScheduleMatrixPro _matrix;
 		private readonly IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		private Percent _studentAvailabilityFulfillment;
 
 		public AgentInfoHelper(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder,
-			ISchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IMatrixListFactory matrixListFactory)
+			SchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IMatrixListFactory matrixListFactory)
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 			if (person != null)
@@ -165,7 +166,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			get { return _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_matrix, IncludeScheduling(), _schedulingOptions.UsePreferences, _schedulingOptions.UseRotations); }
 		}
 
-		public ISchedulingOptions SchedulingOptions
+		public SchedulingOptions SchedulingOptions
 		{
 			get { return _schedulingOptions; }
 		}

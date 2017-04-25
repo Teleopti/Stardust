@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         {
             _mock = new MockRepository();
             _nightlyRestRule = _mock.StrictMock<IAssignmentPeriodRule>();
-            _target = new NightlyRestRestrcition(_nightlyRestRule, new SchedulingOptions());
+            _target = new NightlyRestRestriction(_nightlyRestRule, new SchedulingOptions());
             _matrix1 = _mock.StrictMock<IScheduleMatrixPro>();
             _matrix2 = _mock.StrictMock<IScheduleMatrixPro>();
             _range1 = _mock.StrictMock<IScheduleRange>();

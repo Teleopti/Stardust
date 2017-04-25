@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
         private ITeamBlockMissingDayOffHandler _teamBlockMissingDayOffHandler;
         private ISchedulePartModifyAndRollbackService _rollbackService;
         private IList<IScheduleMatrixPro> _matrixList;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private bool _cancelTarget;
         private ITeamDayOffScheduler _teamDayOffScheduler;
 	    private List<IPerson> _selectedPersons;
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 				Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
 				Expect.Call(() => _absencePreferenceScheduler.AddPreferredAbsence(_matrixList, _schedulingOptions))
-					.Callback(new Func<IList<IScheduleMatrixPro>, ISchedulingOptions, bool>((a, b) =>
+					.Callback(new Func<IList<IScheduleMatrixPro>, SchedulingOptions, bool>((a, b) =>
 					{
 						eventRaiser.Raise(null, args);
 						return true;

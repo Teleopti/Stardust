@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private DateTime _dateTime;
         private ISchedulingResultStateHolder _stateHolder;
 		private SchedulerStateHolder _schedulerStateHolder;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private DateOnly _dateOnly;
         private ISchedulePeriod _schedulePeriod;
         private const int targetDaysOff = 2;

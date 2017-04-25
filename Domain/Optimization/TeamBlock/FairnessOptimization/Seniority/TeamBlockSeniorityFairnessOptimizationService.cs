@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface ITeamBlockSeniorityFairnessOptimizationService
     {
-        void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
+        void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, SchedulingOptions schedulingOptions, 
 					IList<IShiftCategory> shiftCategories, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, 
 					IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 
 	    public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
-		    IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
+		    IList<IPerson> selectedPersons, SchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
 		    IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
 		    IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 	    {

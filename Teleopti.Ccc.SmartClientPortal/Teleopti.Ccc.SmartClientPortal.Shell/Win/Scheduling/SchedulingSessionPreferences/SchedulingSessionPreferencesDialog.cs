@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 {
 	public partial class SchedulingSessionPreferencesDialog : BaseDialogForm
 	{
-		private readonly ISchedulingOptions _schedulingOptions;
+		private readonly SchedulingOptions _schedulingOptions;
 		private readonly IDaysOffPreferences _daysOffPreferences;
 		private readonly IEnumerable<IShiftCategory> _shiftCategories;
 		private readonly bool _backToLegalStateDialog;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private SchedulingOptionsDayOffPlannerPersonalSettings _defaultDayOffPlannerSettings;
 
 		public SchedulingSessionPreferencesDialog(
-			ISchedulingOptions schedulingOptions, 
+			SchedulingOptions schedulingOptions, 
 			IDaysOffPreferences daysOffPreferences, 
 			IEnumerable<IShiftCategory> shiftCategories,
 			bool backToLegalStateDialog, 

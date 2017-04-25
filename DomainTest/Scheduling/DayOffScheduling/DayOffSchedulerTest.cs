@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 		private IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private IEffectiveRestriction _effectiveRestriction;
 		private IDayOffScheduler _target;

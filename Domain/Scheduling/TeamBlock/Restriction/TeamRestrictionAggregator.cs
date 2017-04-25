@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
 	public interface ITeamRestrictionAggregator
 	{
-		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, ShiftProjectionCache roleModel);
+		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, ShiftProjectionCache roleModel);
 	}
 
 	public class TeamRestrictionAggregator : ITeamRestrictionAggregator
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
-		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, DateOnly dateOnly,  ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, ShiftProjectionCache roleModel)
+		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, DateOnly dateOnly,  ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, ShiftProjectionCache roleModel)
 		{
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();

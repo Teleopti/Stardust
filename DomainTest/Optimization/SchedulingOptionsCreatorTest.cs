@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     {
         private SchedulingOptionsCreator _target;
         private IOptimizationPreferences _optimizationPreferences;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockClearer
 	{
-		void ClearTeamBlock(ISchedulingOptions schedulingOptions,
+		void ClearTeamBlock(SchedulingOptions schedulingOptions,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			ITeamBlockInfo teamBlock);
 
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_deleteSchedulePartService = deleteSchedulePartService;
 		}
 
-		public void ClearTeamBlock(ISchedulingOptions schedulingOptions,
+		public void ClearTeamBlock(SchedulingOptions schedulingOptions,
 		                           ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		                           ITeamBlockInfo teamBlock)
 		{

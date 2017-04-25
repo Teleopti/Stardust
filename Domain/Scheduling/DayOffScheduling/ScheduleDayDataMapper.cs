@@ -1,10 +1,11 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
 	public interface IScheduleDayDataMapper
 	{
-		IScheduleDayData Map(IScheduleDayPro scheduleDayPro, ISchedulingOptions schedulingOptions);
+		IScheduleDayData Map(IScheduleDayPro scheduleDayPro, SchedulingOptions schedulingOptions);
 	}
 
 	public class ScheduleDayDataMapper : IScheduleDayDataMapper
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IScheduleDayData Map(IScheduleDayPro scheduleDayPro, ISchedulingOptions schedulingOptions)
+		public IScheduleDayData Map(IScheduleDayPro scheduleDayPro, SchedulingOptions schedulingOptions)
 		{
 			IScheduleDayData toAdd = new ScheduleDayData(scheduleDayPro.Day);
 			IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();

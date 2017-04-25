@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             return filteredList;
         }
 
-        private IList<ITeamBlockInfo> constructTeamBlock(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, 
+        private IList<ITeamBlockInfo> constructTeamBlock(SchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, 
                                                             DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
             return _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions.BlockFinder(), schedulingOptions.GroupOnGroupPageForTeamBlockPer);

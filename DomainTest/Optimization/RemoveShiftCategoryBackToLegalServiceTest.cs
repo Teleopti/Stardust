@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayPro[] _extendedPeriodDays;
         private IScheduleDayPro[] _periodDays;
         private IList<bool> _correctCategory;
-    	private ISchedulingOptions _schedulingOptions;
+    	private SchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -216,13 +216,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _dayToReturn = dayToReturn;
         }
 
-		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions)
         {
             _callCount++;
             return _dayToReturn;
         }
 
-		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, ISchedulingOptions schedulingOptions)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, SchedulingOptions schedulingOptions)
         {
             _callCount++;
             return _dayToReturn;
@@ -249,13 +249,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _correctCategory = correctCategory;
         }
 
-		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions)
         {
             _callCount++;
             return null;
         }
 
-		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, ISchedulingOptions schedulingOptions)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, SchedulingOptions schedulingOptions)
         {
             _callCount++;
             return null;

@@ -1,12 +1,13 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class DaysOnlyHelper
 	{
-		private readonly ISchedulingOptions _schedulingOptions;
+		private readonly SchedulingOptions _schedulingOptions;
 
-		public DaysOnlyHelper(ISchedulingOptions schedulingOptions)
+		public DaysOnlyHelper(SchedulingOptions schedulingOptions)
 		{
 			_schedulingOptions = schedulingOptions;
 		}
@@ -19,11 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public ISchedulingOptions PreferenceOnlyOptions
+		public SchedulingOptions PreferenceOnlyOptions
 		{
 			get
 			{
-				var clonedOptions = _schedulingOptions.Clone() as ISchedulingOptions;
+				var clonedOptions = _schedulingOptions.Clone() as SchedulingOptions;
 				clonedOptions.UseRotations = false;
 				clonedOptions.RotationDaysOnly = false;
 				clonedOptions.UseAvailability = false;
@@ -33,11 +34,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public ISchedulingOptions RotationOnlyOptions
+		public SchedulingOptions RotationOnlyOptions
 		{
 			get
 			{
-				var clonedOptions = _schedulingOptions.Clone() as ISchedulingOptions;
+				var clonedOptions = _schedulingOptions.Clone() as SchedulingOptions;
 				clonedOptions.UsePreferences = false;
 				clonedOptions.PreferencesDaysOnly = false;
 				clonedOptions.UsePreferencesMustHaveOnly = false;
@@ -48,11 +49,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public ISchedulingOptions AvailabilityOnlyOptions
+		public SchedulingOptions AvailabilityOnlyOptions
 		{
 			get
 			{
-				var clonedOptions = _schedulingOptions.Clone() as ISchedulingOptions;
+				var clonedOptions = _schedulingOptions.Clone() as SchedulingOptions;
 				clonedOptions.UsePreferences = false;
 				clonedOptions.PreferencesDaysOnly = false;
 				clonedOptions.UsePreferencesMustHaveOnly = false;
@@ -63,11 +64,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public ISchedulingOptions NoOnlyOptions
+		public SchedulingOptions NoOnlyOptions
 		{
 			get
 			{
-				var clonedOptions = _schedulingOptions.Clone() as ISchedulingOptions;
+				var clonedOptions = _schedulingOptions.Clone() as SchedulingOptions;
 				clonedOptions.PreferencesDaysOnly = false;
 				clonedOptions.UsePreferencesMustHaveOnly = false;
 				clonedOptions.RotationDaysOnly = false;

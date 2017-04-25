@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -8,6 +9,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		DateOnlyPeriod Period { get; }
 		IList<IScheduleDay> ScheduleDays { get; }
 		int DaysOffCount { get; }
-		IScheduleDay FindBestSpotForDayOff(IHasContractDayOffDefinition hasContractDayOffDefinition, IScheduleDayAvailableForDayOffSpecification dayAvailableForDayOffSpecification, IEffectiveRestrictionCreator effectiveRestrictionCreator, ISchedulingOptions schedulingOptions);
+		IScheduleDay FindBestSpotForDayOff(IHasContractDayOffDefinition hasContractDayOffDefinition, IScheduleDayAvailableForDayOffSpecification dayAvailableForDayOffSpecification, IEffectiveRestrictionCreator effectiveRestrictionCreator, SchedulingOptions schedulingOptions);
 	}
 }

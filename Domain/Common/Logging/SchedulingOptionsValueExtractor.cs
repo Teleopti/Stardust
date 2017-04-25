@@ -1,12 +1,13 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Common.Logging
 {
     public class SchedulingOptionsValueExtractor
     {
-        private readonly ISchedulingOptions _schedulingOptions;
+        private readonly SchedulingOptions _schedulingOptions;
 
-        public SchedulingOptionsValueExtractor(ISchedulingOptions schedulingOptions)
+        public SchedulingOptionsValueExtractor(SchedulingOptions schedulingOptions)
         {
             _schedulingOptions = schedulingOptions;
         }

@@ -22,15 +22,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		}
 
 		public IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			IWorkShiftFinderService finderService)
 		{
 			if (schedulePart == null)
-				throw new ArgumentNullException("schedulePart");
+				throw new ArgumentNullException(nameof(schedulePart));
 			if (schedulingOptions == null)
-				throw new ArgumentNullException("schedulingOptions");
+				throw new ArgumentNullException(nameof(schedulingOptions));
 			if (finderService == null)
-				throw new ArgumentNullException("finderService");
+				throw new ArgumentNullException(nameof(finderService));
 
 			var scheduleDateOnlyPerson = schedulePart.DateOnlyAsPeriod.DateOnly;
 			IPersonPeriod personPeriod = schedulePart.Person.Period(scheduleDateOnlyPerson);

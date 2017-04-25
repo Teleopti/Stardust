@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
@@ -23,12 +24,12 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             _weekCalculator = weekCalculator;
         }
 
-        public bool IsPeriodInLegalState(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        public bool IsPeriodInLegalState(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
             return PeriodLegalStateStatus(matrix, schedulingOptions) == 0;
         }
 
-        public int PeriodLegalStateStatus(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        public int PeriodLegalStateStatus(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
             MinMax<TimeSpan> minMax = currentMinMax(null, matrix, schedulingOptions);
             TimeSpan corr = calculateSumCorrection(null, matrix, WeekCount(matrix), schedulingOptions);
@@ -43,14 +44,14 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             return 0;
         }
 
-        public bool IsWeekInLegalState(int weekIndex, IScheduleMatrixPro matrix, ISchedulingOptions options)
+        public bool IsWeekInLegalState(int weekIndex, IScheduleMatrixPro matrix, SchedulingOptions options)
         {
             IDictionary<DateOnly, MinMax<TimeSpan>> dic = PossibleMinMaxWorkShiftLengths(matrix, options); 
             bool ret = _weekCalculator.IsInLegalState(weekIndex, dic, matrix);
             return ret;
         }
 
-        public bool IsWeekInLegalState(DateOnly dateInWeek, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        public bool IsWeekInLegalState(DateOnly dateInWeek, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
             DateOnly startDate = matrix.FullWeeksPeriodDays[0].Day;
             int index = 0;
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             throw new ArgumentOutOfRangeException(nameof(dateInWeek), dateInWeek, "Value is outside matrix fullweek period");
         }
 
-        public MinMax<TimeSpan>? MinMaxAllowedShiftContractTime(DateOnly dayToSchedule, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        public MinMax<TimeSpan>? MinMaxAllowedShiftContractTime(DateOnly dayToSchedule, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
             MinMax<TimeSpan> minMax = currentMinMax(dayToSchedule, matrix, schedulingOptions);
             int numberOfWeeks = WeekCount(matrix);
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             return new MinMax<TimeSpan>(minLength, maxLength);
         }
 
-        private TimeSpan calculateSumCorrection(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, int numberOfWeeks, ISchedulingOptions schedulingOptions)
+        private TimeSpan calculateSumCorrection(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, int numberOfWeeks, SchedulingOptions schedulingOptions)
         {
             TimeSpan sumCorrection = TimeSpan.Zero;
             if(numberOfWeeks > 1)
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             return sumCorrection;
         }
 
-        public MinMax<TimeSpan> PossibleMinMaxTimeForPeriod(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        public MinMax<TimeSpan> PossibleMinMaxTimeForPeriod(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
     	{
     		return currentMinMax(null,matrix, schedulingOptions);
     	}
@@ -167,7 +168,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             _possibleMinMaxWorkShiftLengthExtractor.ResetCache();
         }
 
-        public IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        public IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
 	        return _possibleMinMaxWorkShiftLengthState ??
 				   (_possibleMinMaxWorkShiftLengthState =
@@ -175,7 +176,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 						   v => _possibleMinMaxWorkShiftLengthExtractor.PossibleLengthsForDate(v.Day, matrix, schedulingOptions)));
         }
 
-        private MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        private MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
             TimeSpan min = TimeSpan.Zero;
             TimeSpan max = TimeSpan.Zero;

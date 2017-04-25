@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private IScheduleDayPro _scheduleDayPro1;
 		private IScheduleDay _scheduleDay1;
 		private MockRepository _mocks;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private IEffectiveRestriction _effectiveRestriction;
 		private IHasContractDayOffDefinition _hasContractDayOffDefinition;
 

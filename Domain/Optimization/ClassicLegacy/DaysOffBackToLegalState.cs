@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 		public void Execute(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			ISchedulingProgress backgroundWorker,
 			IDayOffTemplate dayOffTemplate,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IOptimizationPreferences optimizationPreferences,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,

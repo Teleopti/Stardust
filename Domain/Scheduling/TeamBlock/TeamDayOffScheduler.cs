@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
-		                      ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+		                      ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
 							  IGroupPersonBuilderWrapper groupPersonBuilderForOptimization);
 	}
 
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
 		                             ISchedulePartModifyAndRollbackService rollbackService,
-		                             ISchedulingOptions schedulingOptions,
+		                             SchedulingOptions schedulingOptions,
 									 IGroupPersonBuilderWrapper groupPersonBuilderForOptimization)
 		{
 			var matrixDataList = _matrixDataListCreator.Create(matrixListAll, schedulingOptions);
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 		}
 
-		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions,
+		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons, SchedulingOptions schedulingOptions,
 							  IGroupPersonBuilderWrapper groupPersonBuilderForOptimization,
 		                      IPerson person, DateOnly scheduleDate,
 		                      out IEffectiveRestriction restriction)
@@ -127,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return selectedMatrixesForOnePerson;
 		}
 
-		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions, Group group, DateOnly scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, IPerson person)
+		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixListAll, SchedulingOptions schedulingOptions, Group group, DateOnly scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, IPerson person)
 	    {
 	        var scheduleDictionary = _schedulingResultStateHolder().Schedules;
 			var groupMembers = group.GroupMembers.ToList();
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        return restriction;
 	    }
 
-		private bool addDaysOffForTeam(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
+		private bool addDaysOffForTeam(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions,
 		                               ISchedulePartModifyAndRollbackService rollbackService,
 		                               DateOnly scheduleDate,
 		                               IEffectiveRestriction restriction)
@@ -177,7 +178,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return false;
 		}
 
-		private bool addContractDaysOffForTeam(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
+		private bool addContractDaysOffForTeam(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions,
 		                                       ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			foreach (var matrix in matrixList)

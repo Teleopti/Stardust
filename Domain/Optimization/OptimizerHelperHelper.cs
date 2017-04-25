@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class OptimizerHelperHelper
 	{
-		public void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, ISchedulingOptions options, IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak)
+		public void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, SchedulingOptions options, IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak)
 		{
 			options.ConsiderShortBreaks = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(persons, period);
 		}

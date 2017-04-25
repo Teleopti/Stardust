@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
 	public interface IIntraIntervalOptimizer
 	{
-		IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter);
+		IIntraIntervalIssues Optimize(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter);
 	}
 
 	public class IntraIntervalOptimizer : IIntraIntervalOptimizer
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_shiftProjectionCachesForIntraInterval = shiftProjectionCachesForIntraInterval;
 		}
 
-		public IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
+		public IIntraIntervalIssues Optimize(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter)

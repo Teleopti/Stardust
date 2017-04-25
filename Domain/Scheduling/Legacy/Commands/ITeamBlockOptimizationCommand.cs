@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
-			IScheduleTagSetter tagSetter, ISchedulingOptions schedulingOptions,
+			IScheduleTagSetter tagSetter, SchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> selectedSchedules, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 }

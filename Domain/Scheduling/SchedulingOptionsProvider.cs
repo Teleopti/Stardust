@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class SchedulingOptionsProvider : ISchedulingOptionsProvider
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private ISchedulingOptions _setFromTest;
+		private SchedulingOptions _setFromTest;
 
 		public SchedulingOptionsProvider(Func<ISchedulerStateHolder> schedulerStateHolder)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 		}
 
-		public ISchedulingOptions Fetch()
+		public SchedulingOptions Fetch()
 		{
 			if (_setFromTest != null)
 				return _setFromTest;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			};
 		}
 
-		public void SetFromTest(ISchedulingOptions schedulingOptions)
+		public void SetFromTest(SchedulingOptions schedulingOptions)
 		{
 			_setFromTest = schedulingOptions;
 		}

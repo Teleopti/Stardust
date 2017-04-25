@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             _extractor = extractor;
         }
 
-        public IList<DateOnly> Execute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        public IList<DateOnly> Execute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
             var ret = new List<DateOnly>();
             foreach (IScheduleDayPro scheduleDayPro in matrix.UnlockedDays)

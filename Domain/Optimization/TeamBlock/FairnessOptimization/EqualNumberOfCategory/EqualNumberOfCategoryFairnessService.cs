@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IEqualNumberOfCategoryFairnessService
 	{
-		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, 
+		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, SchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, 
 					ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, 
+		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, SchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, 
 						ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList).ToList();

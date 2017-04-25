@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
     {
         private MockRepository _mocks;
         private IScheduleRestrictionStrategy _target;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private IScheduleDayEquator _mainShiftEquator;
         private DateOnly _dateOnly;
         private IActivity _activity;

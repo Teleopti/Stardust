@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			targetOptions.ShowTroubleshot.Should().Be.True();
 	    }
 
-	    private static ISchedulingOptions createSchedulingOptions(ScheduleTag scheduleTag)
+	    private static SchedulingOptions createSchedulingOptions(ScheduleTag scheduleTag)
 	    {
 		    return new SchedulingOptions
 		    {

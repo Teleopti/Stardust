@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    _personSkillDayCreator = personSkillDayCreator;
         }
 
-        public WorkShiftFinderServiceResult FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction)
+        public WorkShiftFinderServiceResult FindBestShift(IScheduleDay schedulePart, SchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction)
         {
             _workShiftMinMaxCalculator().ResetCache();
 			var scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IWorkShiftCalculatorSkillStaffPeriodData dataHolders, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,
-            ISchedulingOptions schedulingOptions,
+            SchedulingOptions schedulingOptions,
 			IWorkShiftFinderResult workShiftFinderResult
 		)
         {
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
 		private IWorkShiftCalculationResultHolder findBestShift(IEffectiveRestriction effectiveRestriction,
-            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult workShiftFinderResult, IList<ShiftProjectionCache> shiftList)
+            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IWorkShiftFinderResult workShiftFinderResult, IList<ShiftProjectionCache> shiftList)
         {
 			using (PerformanceOutput.ForOperation("Filtering shifts before calculating"))
 			{

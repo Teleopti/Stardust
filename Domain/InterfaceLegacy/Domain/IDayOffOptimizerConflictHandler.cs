@@ -1,4 +1,5 @@
 ﻿
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -14,6 +15,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="schedulingOptions">The scheduling options.</param>
         /// <param name="dateOnly">The date only.</param>
         /// <returns></returns>
-        bool HandleConflict(ISchedulingOptions schedulingOptions, DateOnly dateOnly);
+        bool HandleConflict(SchedulingOptions schedulingOptions, DateOnly dateOnly);
     }
 }

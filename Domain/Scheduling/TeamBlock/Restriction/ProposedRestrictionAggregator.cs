@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
 	public interface IProposedRestrictionAggregator
 	{
-		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, ISchedulingOptions schedulingOptions, ITeamBlockInfo teamBlockInfo,
+		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, SchedulingOptions schedulingOptions, ITeamBlockInfo teamBlockInfo,
 														DateOnly dateOnly, IPerson person, ShiftProjectionCache roleModel);
 	}
 
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
-		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, ISchedulingOptions schedulingOptions, ITeamBlockInfo teamBlockInfo,
+		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, SchedulingOptions schedulingOptions, ITeamBlockInfo teamBlockInfo,
 											   DateOnly dateOnly, IPerson person, ShiftProjectionCache roleModel)
 		{
 			if (_teamBlockSchedulingOptions.IsTeamScheduling(schedulingOptions))

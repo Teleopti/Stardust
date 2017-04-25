@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		[TestLog]
-		public virtual void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
+		public virtual void Execute(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
 						IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, ISchedulingProgress backgroundWorker,
 						IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -63,10 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					optimizationPreferences, schedulingOptions, dayOffOptimizationPreferenceProvider);
 				weeklyRestSolverService.ResolvingWeek -= onResolvingWeek;
 
-			if (contextDisposal != null)
-			{
-				contextDisposal.Dispose();
-			}
+			contextDisposal?.Dispose();
 		}
 	}
 }

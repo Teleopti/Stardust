@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		private ProposedRestrictionAggregator _target;
 		private ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private ITeamBlockInfo _teamBlockInfo;
 		private DateOnly _dateOnly;
 		private IPerson _person;

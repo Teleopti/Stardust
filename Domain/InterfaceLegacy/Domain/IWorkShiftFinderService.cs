@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.ResourceCalculation;
+
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
@@ -5,7 +7,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// </summary>
     public interface IWorkShiftFinderService
     {
-		WorkShiftFinderServiceResult FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction);
+		WorkShiftFinderServiceResult FindBestShift(IScheduleDay schedulePart, SchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction);
     }
 
 	public class WorkShiftFinderServiceResult

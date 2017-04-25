@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			ITeamInfoFactory teamInfoFactory,

@@ -1,10 +1,11 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class AssignScheduledLayers
 	{
-		public void Execute(ISchedulingOptions schedulingOptions, IScheduleDay scheduleDay, IEditableShift shiftToAssign)
+		public void Execute(SchedulingOptions schedulingOptions, IScheduleDay scheduleDay, IEditableShift shiftToAssign)
 		{
 			if (schedulingOptions.OvertimeType != null)
 			{

@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
@@ -9,14 +8,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	public class ResourceOptimizerPreferencesTest
 	{
         private IOptimizerOriginalPreferences _target;
-		private MockRepository _mocks;
-		private ISchedulingOptions _userDefinedSchedulingOptions;
+		private SchedulingOptions _userDefinedSchedulingOptions;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_userDefinedSchedulingOptions = _mocks.PartialMock<SchedulingOptions>();
+			_userDefinedSchedulingOptions = new SchedulingOptions();
 		
 
 			_target = new OptimizerOriginalPreferences(_userDefinedSchedulingOptions);
@@ -28,14 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			Assert.IsNotNull(_target);
 		}
-
-		[Test]
-		public void VerifyConstructorOverload()
-		{
-			Assert.AreEqual(_target.SchedulingOptions, _userDefinedSchedulingOptions);
-
-		}
-
+		
 		[Test]
 		public void VerifyProperties()
 		{

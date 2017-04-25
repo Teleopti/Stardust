@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private IOptimizationPreferences _optimizationPreferences;
 		private ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private List<IScheduleMatrixPro> _allMatrixes;
 		private List<IPerson> _selectedPersons;
 		private List<ITeamBlockInfo> _teamBlockInfos;

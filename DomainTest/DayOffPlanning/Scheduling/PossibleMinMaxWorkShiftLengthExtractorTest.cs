@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         private IPerson _person;
         private IRuleSetBag _ruleSetBag;
     	private IVirtualSchedulePeriod _virtualSchedulePeriod;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
 
 	    [SetUp]
 	    public void Setup()

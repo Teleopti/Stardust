@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 		private ISafeRollbackAndResourceCalculation _safeRollBackAndResourceCalculation;
 		private ITeamBlockSingleDayScheduler _teamBlockSingleDayScheduler;
 		private ITeamBlockInfo _teamBlockInfo;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private ShiftProjectionCache _roleModelShift;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;

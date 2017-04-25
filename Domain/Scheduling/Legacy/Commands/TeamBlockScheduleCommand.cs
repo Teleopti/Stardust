@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private ISchedulingProgress _backgroundWorker;
 		private int _scheduledCount;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
+		public IWorkShiftFinderResultHolder Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IList<IPerson> selectedPersons, IEnumerable<IScheduleDay> selectedSchedules,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		private TeamBlockSchedulingService createSchedulingService(ISchedulingOptions schedulingOptions, IGroupPersonBuilderWrapper groupPersonBuilderForOptimization)
+		private TeamBlockSchedulingService createSchedulingService(SchedulingOptions schedulingOptions, IGroupPersonBuilderWrapper groupPersonBuilderForOptimization)
 		{
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 			IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor =

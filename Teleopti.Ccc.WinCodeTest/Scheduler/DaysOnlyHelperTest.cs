@@ -1,24 +1,24 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
 	[TestFixture]
 	public class DaysOnlyHelperTest
 	{
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private DaysOnlyHelper _daysOnlyHelper;
 
 		[SetUp]
 		public void Setup()
 		{
-			_schedulingOptions = new SchedulingOptions();
-			_schedulingOptions.UsePreferences = true;
-			_schedulingOptions.UseRotations = true;
-			_schedulingOptions.UseAvailability = true;
+			_schedulingOptions = new SchedulingOptions
+			{
+				UsePreferences = true,
+				UseRotations = true,
+				UseAvailability = true
+			};
 			_daysOnlyHelper = new DaysOnlyHelper(_schedulingOptions);
 		}
 

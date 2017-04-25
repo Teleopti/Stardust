@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         	_resourceCalculateDelayer = resourceCalculateDelayer;
         }
 		
-        public bool Resolve(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+        public bool Resolve(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
 	        var iterations = 0;
 	        while (resolveExecute(matrix, schedulingOptions, schedulePartModifyAndRollbackService) && iterations < 10)
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	        return matrix.IsFullyScheduled();
         }
 
-	    private bool resolveExecute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions,
+	    private bool resolveExecute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 	    {
 		    NightRestWhiteSpotSolverResult solverResult = _solver.Resolve(matrix);

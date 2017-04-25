@@ -3210,7 +3210,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void turnOffCalculateMinMaxCacheIfNeeded(ISchedulingOptions schedulingOptions)
+		private void turnOffCalculateMinMaxCacheIfNeeded(SchedulingOptions schedulingOptions)
 		{
 			var calculateMinMaxCacheDecider = new CalculateMinMaxCacheDecider();
 			bool turnOfCache = calculateMinMaxCacheDecider.ShouldCacheBeDisabled(_schedulerState, schedulingOptions,
@@ -3589,7 +3589,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					SchedulerState.SchedulingResultState.PersonsInOrganization);
 				if (!_teamLeaderMode)
 				{
-					ISchedulingOptions options = new SchedulingOptions();
+					var options = new SchedulingOptions();
 					optimizerHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.PersonsInOrganization,
 						SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>());
 					SchedulerState.ConsiderShortBreaks = options.ConsiderShortBreaks;

@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IEnumerable<changedDay> movedDates,
 			IEnumerable<DateOnly> removedIllegalWorkTimeDays,
 			IScheduleMatrixOriginalStateContainer originalStateContainer,
-			ISchedulingOptions schedulingOptions)
+			SchedulingOptions schedulingOptions)
 		{
 			var toSchedule = movedDates.Select(changedDay => changedDay.DateChanged).ToList();
 			toSchedule.AddRange(removedIllegalWorkTimeDays);
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 
-		private bool addDayOff(DateOnly dateOnly, bool handleConflict, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
+		private bool addDayOff(DateOnly dateOnly, bool handleConflict, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			var currentPart = _matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
 			var changed = new changedDay {DateChanged = dateOnly, PreviousSchedule = currentPart};
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
-		private IEnumerable<DateOnly> removeIllegalWorkTimeDays(ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
+		private IEnumerable<DateOnly> removeIllegalWorkTimeDays(SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			_workTimeBackToLegalStateService.Execute(_matrix, schedulingOptions, rollbackService);
 			var removedIllegalDates = _workTimeBackToLegalStateService.RemovedDays;

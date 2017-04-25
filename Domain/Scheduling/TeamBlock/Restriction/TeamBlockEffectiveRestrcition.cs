@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -10,10 +11,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IEnumerable<IPerson> _persons;
 		private readonly IScheduleDictionary _scheduleDictionary;
-		private readonly ISchedulingOptions _schedulingOptions;
+		private readonly SchedulingOptions _schedulingOptions;
 
 		public TeamBlockEffectiveRestrcition(IEffectiveRestrictionCreator effectiveRestrictionCreator,
-		                                     IPerson person, ISchedulingOptions schedulingOptions,
+		                                     IPerson person, SchedulingOptions schedulingOptions,
 		                                     IScheduleDictionary scheduleDictionary)
 			: this(effectiveRestrictionCreator, new List<IPerson> {person}, schedulingOptions, scheduleDictionary)
 		{
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 		}
 
 		public TeamBlockEffectiveRestrcition(IEffectiveRestrictionCreator effectiveRestrictionCreator,
-											 IEnumerable<IPerson> persons, ISchedulingOptions schedulingOptions,
+											 IEnumerable<IPerson> persons, SchedulingOptions schedulingOptions,
 											 IScheduleDictionary scheduleDictionary)
 		{
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;

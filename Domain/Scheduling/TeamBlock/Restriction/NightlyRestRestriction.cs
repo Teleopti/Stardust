@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
-    public class NightlyRestRestrcition : IScheduleRestrictionStrategy
+    public class NightlyRestRestriction : IScheduleRestrictionStrategy
     {
 		public IEffectiveRestriction ExtractRestriction(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList)
         {
@@ -33,9 +34,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
         }
 
         private readonly IAssignmentPeriodRule _nightlyRestRule;
-	    private readonly ISchedulingOptions _schedulingOptions;
+	    private readonly SchedulingOptions _schedulingOptions;
 
-	    public NightlyRestRestrcition(IAssignmentPeriodRule nightlyRestRule, ISchedulingOptions schedulingOptions)
+	    public NightlyRestRestriction(IAssignmentPeriodRule nightlyRestRule, SchedulingOptions schedulingOptions)
 	    {
 		    _nightlyRestRule = nightlyRestRule;
 		    _schedulingOptions = schedulingOptions;

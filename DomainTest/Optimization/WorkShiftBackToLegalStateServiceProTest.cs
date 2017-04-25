@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private IWorkShiftBackToLegalStateStep _workShiftBackToLegalStateStep;
         private IScheduleMatrixPro _matrix;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
     	private IScheduleDay _scheduleDay;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
     	private ISchedulePartModifyAndRollbackService _rollbackService;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _workShiftBackToLegalStateStep = _mocks.StrictMock<IWorkShiftBackToLegalStateStep>();
             _target = new WorkShiftBackToLegalStateServicePro(_workShiftBackToLegalStateStep, _workShiftMinMaxCalculator);
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
+            _schedulingOptions = new SchedulingOptions();
         	_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
         	_rollbackService = _mocks.Stub<ISchedulePartModifyAndRollbackService>();

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         private IScheduleRestrictionStrategy _target;
         private IEffectiveRestrictionCreator _effectiveRestrcitionCreator;
         private IScheduleDictionary _scheduleDictionary;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private DateOnly _date;
 	    private List<IPerson> _personList;
 

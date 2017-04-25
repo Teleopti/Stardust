@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		void Execute(IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList,
-			IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+			IOptimizationPreferences optimizationPreferences, SchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
 	}
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			ITeamBlockGenerator teamBlockGenerator, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IList<IScheduleMatrixPro> allPersonMatrixList, IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			SchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var cancel = false;
 			var screenRefreshRate = optimizationPreferences?.Advanced.RefreshScreenInterval ?? schedulingOptions.RefreshRate;
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		}
 
 		private bool isFullTeamSelected(IList<IPerson> selectedPersons, IPerson person, ITeamBlockGenerator teamBlockGenerator,
-			ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod week, IEnumerable<IPerson> personsInOrganisation)
+			SchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod week, IEnumerable<IPerson> personsInOrganisation)
 		{
 			var teamBlockInfo =
 				teamBlockGenerator.Generate(personsInOrganisation, allPersonMatrixList, week, new List<IPerson> {person}, schedulingOptions).First();

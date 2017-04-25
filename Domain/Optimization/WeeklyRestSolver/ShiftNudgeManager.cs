@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
 		bool RollbackLastScheduledWeek(ISchedulePartModifyAndRollbackService rollbackService,
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder, DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			if (optimizationPreferences != null)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="part">The part.</param>
 		/// <param name="options">The options.</param>
 		/// <returns></returns>
-		IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, ISchedulingOptions options);
+		IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, SchedulingOptions options);
 
 		/// <summary>
 		/// Gets the effective restriction.
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="options">The options.</param>
 		/// <param name="scheduleDictionary">The schedule dictionary.</param>
 		/// <returns></returns>
-		IEffectiveRestriction GetEffectiveRestriction(IEnumerable<IPerson> groupPersons, DateOnly dateOnly, ISchedulingOptions options, IScheduleDictionary scheduleDictionary);
+		IEffectiveRestriction GetEffectiveRestriction(IEnumerable<IPerson> groupPersons, DateOnly dateOnly, SchedulingOptions options, IScheduleDictionary scheduleDictionary);
 
 		/// <summary>
 		/// Get the effective restrictions for a person
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IEffectiveRestriction GetEffectiveRestrictionForSinglePerson(
 			IPerson person,
 			DateOnly dateOnly,
-			ISchedulingOptions options,
+			SchedulingOptions options,
 			IScheduleDictionary scheduleDictionary);
 	}
 }

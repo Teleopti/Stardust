@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
-			IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions,
+			IOptimizationPreferences optimizationPreferences, SchedulingOptions schedulingOptions,
 			IList<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection businessRuleCollection, 
 			Action cancelAction)

@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
 	public interface IAbsencePreferenceScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions);
+        void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions);
 	}
 
 	public class AbsencePreferenceScheduler : IAbsencePreferenceScheduler
@@ -28,9 +29,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_absencePreferenceFullDayLayerCreator = absencePreferenceFullDayLayerCreator;
 		}
 
-        public void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
+        public void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions)
         {
-            if(matrixList == null) throw new ArgumentNullException("matrixList");
+            if(matrixList == null) throw new ArgumentNullException(nameof(matrixList));
 
 	        var cancel = false;
             foreach (var scheduleMatrixPro in matrixList)

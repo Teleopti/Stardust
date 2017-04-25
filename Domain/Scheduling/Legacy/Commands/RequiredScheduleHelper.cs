@@ -17,15 +17,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public interface IRequiredScheduleHelper
 	{
 		void ScheduleSelectedStudents(IEnumerable<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,
-			ISchedulingOptions schedulingOptions);
+			SchedulingOptions schedulingOptions);
 
 		void RemoveShiftCategoryBackToLegalState(
 			IList<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
+			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
 
 		void ScheduleSelectedPersonDays(IEnumerable<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
-			ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions);
+			ISchedulingProgress backgroundWorker, SchedulingOptions schedulingOptions);
 	}
 
 	public class RequiredScheduleHelper : IRequiredScheduleHelper
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void RemoveShiftCategoryBackToLegalState(
 			IList<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
+			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
 		{
 			if (matrixList == null)
 				throw new ArgumentNullException(nameof(matrixList));
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void ScheduleSelectedPersonDays(IEnumerable<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
-			ISchedulingProgress backgroundWorker, ISchedulingOptions schedulingOptions)
+			ISchedulingProgress backgroundWorker, SchedulingOptions schedulingOptions)
 		{
 			if (matrixList == null) throw new ArgumentNullException(nameof(matrixList));
 
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void ScheduleSelectedStudents(IEnumerable<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,
-			ISchedulingOptions schedulingOptions)
+			SchedulingOptions schedulingOptions)
 		{
 			if (allSelectedSchedules == null) throw new ArgumentNullException(nameof(allSelectedSchedules));
 			if (schedulingOptions == null) throw new ArgumentNullException(nameof(schedulingOptions));

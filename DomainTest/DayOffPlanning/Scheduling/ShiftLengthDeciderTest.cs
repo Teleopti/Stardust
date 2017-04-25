@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 		private IDesiredShiftLengthCalculator _desiredShiftLengthCalculator;
 		private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private IScheduleMatrixPro _matrix;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 
 		[SetUp]
 		public void Setup()

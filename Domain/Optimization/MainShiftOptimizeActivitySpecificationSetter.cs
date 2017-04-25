@@ -1,11 +1,12 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IMainShiftOptimizeActivitySpecificationSetter
 	{
-		void SetMainShiftOptimizeActivitySpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate);
+		void SetMainShiftOptimizeActivitySpecification(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate);
 	}
 
 	public class MainShiftOptimizeActivitySpecificationSetter : IMainShiftOptimizeActivitySpecificationSetter
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizerActivitiesPreferencesFactory = optimizerActivitiesPreferencesFactory;
 		}
 
-		public void SetMainShiftOptimizeActivitySpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate)
+		public void SetMainShiftOptimizeActivitySpecification(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate)
 		{
 			if (schedulingOptions == null)
 				return;

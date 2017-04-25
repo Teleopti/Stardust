@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    bool ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 		    ShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, INewBusinessRuleCollection businessRules, ISchedulingOptions schedulingOptions, 
+		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, INewBusinessRuleCollection businessRules, SchedulingOptions schedulingOptions, 
 				Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
     }
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    public bool ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 		    ShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, INewBusinessRuleCollection businessRules, ISchedulingOptions schedulingOptions,
+		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, INewBusinessRuleCollection businessRules, SchedulingOptions schedulingOptions,
 				Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
 	    {
 		    var tempMatrixList =
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
 
-		private void assignShiftProjection(ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, ISchedulingOptions schedulingOptions)
+		private void assignShiftProjection(ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, SchedulingOptions schedulingOptions)
         {
 			shiftProjectionCache.SetDate(destinationScheduleDay.DateOnlyAsPeriod);
 

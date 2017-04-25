@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IEffectiveRestriction _effectiveRestriction;
 		private IScheduleService _scheduleService;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private IResourceCalculation _resourceOptimizationHelper;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_scheduleService = _mocks.StrictMock<IScheduleService>();
-			_schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
+			_schedulingOptions = new SchedulingOptions();
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceCalculation>();
 			_skill1 = SkillFactory.CreateSkill("Skill 1");
 			_skill2 = SkillFactory.CreateSkill("Skill 2");

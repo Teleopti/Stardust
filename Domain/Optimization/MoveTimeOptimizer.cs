@@ -215,17 +215,17 @@ namespace Teleopti.Ccc.Domain.Optimization
             return _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
         }
 
-		private bool tryScheduleSecondDay(DateOnly secondDate, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, TimeSpan originalLength)
+		private bool tryScheduleSecondDay(DateOnly secondDate, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, TimeSpan originalLength)
         {
             return tryScheduleDay(secondDate, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime, originalLength);
         }
 
-		private bool tryScheduleFirstDay(DateOnly firstDate, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, TimeSpan originalLength)
+		private bool tryScheduleFirstDay(DateOnly firstDate, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, TimeSpan originalLength)
         {
             return tryScheduleDay(firstDate, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.Long, originalLength);
         }
 
-        private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption, TimeSpan originalLength )
+        private bool tryScheduleDay(DateOnly day, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption, TimeSpan originalLength )
         {
 			IScheduleDayPro scheduleDay = _matrix.GetScheduleDayByKey(day);
             schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;

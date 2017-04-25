@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamBlockRemoveShiftCategoryOnBestDateService = teamBlockRemoveShiftCategoryOnBestDateService;
 		}
 
-		public IList<IScheduleDayPro> Remove(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions,  IScheduleMatrixPro scheduleMatrixPro, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		public IList<IScheduleDayPro> Remove(IShiftCategoryLimitation shiftCategoryLimitation, SchedulingOptions schedulingOptions,  IScheduleMatrixPro scheduleMatrixPro, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			IList<IScheduleDayPro> days = scheduleMatrixPro.FullWeeksPeriodDays;
 			IList<IScheduleDayPro> result = new List<IScheduleDayPro>();

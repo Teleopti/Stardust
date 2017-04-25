@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_shiftCategoryPeriodRemover = shiftCategoryPeriodRemover;
 		}
 
-		public IEnumerable<IScheduleDayPro> Execute(ISchedulingOptions schedulingOptions, 
+		public IEnumerable<IScheduleDayPro> Execute(SchedulingOptions schedulingOptions, 
 			IScheduleMatrixPro scheduleMatrixPro,
 			IOptimizationPreferences optimizationPreferences, 
 			IShiftCategoryLimitation limitation,

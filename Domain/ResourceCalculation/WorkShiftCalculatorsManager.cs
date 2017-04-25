@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IList<ShiftProjectionCache> shiftProjectionCaches,
 			IWorkShiftCalculatorSkillStaffPeriodData dataHolders,
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods,
-			ISchedulingOptions schedulingOptions);
+			SchedulingOptions schedulingOptions);
 	}
 
 	public class WorkShiftCalculatorsManager : IWorkShiftCalculatorsManager
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				IList<ShiftProjectionCache> shiftProjectionCaches,
 				IWorkShiftCalculatorSkillStaffPeriodData dataHolders,
 				IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods,
-				ISchedulingOptions schedulingOptions)
+				SchedulingOptions schedulingOptions)
 		{
 			var shouldCalculateNonBlendValue = nonBlendSkillPeriods.Count > 0;
 			var allValues = shiftProjectionCaches.AsParallel().Select(shiftProjection =>

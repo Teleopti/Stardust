@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _resultStateHolder = resultStateHolder;
         }
 
-        public void SetBlockedShiftCategories(ISchedulingOptions optimizerPreferences, IPerson person, DateOnly dateOnly)
+        public void SetBlockedShiftCategories(SchedulingOptions optimizerPreferences, IPerson person, DateOnly dateOnly)
         {
             optimizerPreferences.NotAllowedShiftCategories.Clear();
 	        if (optimizerPreferences.UseShiftCategoryLimitations)
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	        }
         }
 
-        private void setBlockedShiftCategoriesForPerson(ISchedulingOptions optimizerPreferences, IPerson person,
+        private void setBlockedShiftCategoriesForPerson(SchedulingOptions optimizerPreferences, IPerson person,
                                                         DateOnly dateOnly)
         {
             IVirtualSchedulePeriod schedulePeriod = person.VirtualSchedulePeriod(dateOnly);

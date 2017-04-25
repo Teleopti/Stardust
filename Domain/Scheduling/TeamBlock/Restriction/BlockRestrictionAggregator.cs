@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
 	public interface IBlockRestrictionAggregator
 	{
-		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, ShiftProjectionCache roleModel, DateOnly dateOnly);
+		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, ShiftProjectionCache roleModel, DateOnly dateOnly);
 	}
 	public class BlockRestrictionAggregator : IBlockRestrictionAggregator
 	{
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
-		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, ShiftProjectionCache roleModel, DateOnly dateOnly)
+		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, ShiftProjectionCache roleModel, DateOnly dateOnly)
 		{
 			var scheduleDictionary = schedules;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 													  effectiveRestriction);
 			}
 		
-			effectiveRestriction = combineRestriction(new NightlyRestRestrcition(_nightlyRestRule, schedulingOptions), dateOnly, matrixes,
+			effectiveRestriction = combineRestriction(new NightlyRestRestriction(_nightlyRestRule, schedulingOptions), dateOnly, matrixes,
 													  effectiveRestriction);
 
 			if (roleModel != null)

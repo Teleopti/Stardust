@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockRemoveShiftCategoryOnBestDateService
 	{
-		IScheduleDayPro Execute(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
+		IScheduleDayPro Execute(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
 		bool IsThisDayCorrectShiftCategory(IScheduleDayPro scheduleDayPro, IShiftCategory shiftCategory);
 	}
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_resourceCalculation = resourceCalculation;
 		}
 
-		public IScheduleDayPro Execute(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		public IScheduleDayPro Execute(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			
 			IList<IScheduleDayPro> daysToWorkWith = scheduleMatrixPro.UnlockedDays.Where(scheduleDayPro => dateOnlyPeriod.Contains(scheduleDayPro.Day) && IsThisDayCorrectShiftCategory(scheduleDayPro, shiftCategory)).ToList();
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return part.SignificantPart() == SchedulePartView.MainShift && part.PersonAssignment().ShiftCategory.Equals(shiftCategory);
 		}
 
-		private void deleteMainShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		private void deleteMainShift(IScheduleDay schedulePart, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			//copied from ScheduleDayService
 			var options = new DeleteOption { MainShift = true };

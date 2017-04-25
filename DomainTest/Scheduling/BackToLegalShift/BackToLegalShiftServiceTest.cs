@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 		private IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 		private ILegalShiftDecider _legalShiftDecider;
 		private ITeamBlockInfo _teamBlock;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IScheduleDictionary _schedules;
 		private ISchedulePartModifyAndRollbackService _rollBackService;

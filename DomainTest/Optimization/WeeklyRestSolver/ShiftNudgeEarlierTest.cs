@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		private ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private ITeamBlockScheduler _teamBlockScheduler;
 	    private ISchedulePartModifyAndRollbackService _rollbackService;
-	    private ISchedulingOptions _schedulingOptions;
+	    private SchedulingOptions _schedulingOptions;
 	    private IResourceCalculateDelayer _resourceCalculateDelayer;
 	    private ITeamBlockInfo _teamBlockInfo;
 	    private IPersonAssignment _personAssignment;

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private IPerson _person;
 		private ITeamInfo _teamInfo;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private DateOnlyPeriod _period;
 		private IScheduleMatrixLockableBitArrayConverterEx _matrixCoverter;

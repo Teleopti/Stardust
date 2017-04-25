@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -12,8 +13,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 {
 	public partial class SchedulingSessionPreferencesTabPanel : BaseUserControl, IDataExchange
 	{
-		private ISchedulingOptions _localSchedulingOptions;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _localSchedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private IEnumerable<IShiftCategory> _shiftCategories;
 		private bool _dataLoaded;
 		private IList<GroupPageLight> _groupPages;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			if (!DesignMode) SetTexts();
 		}
 
-		public void Initialize(ISchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, bool backToLegalStateDialog, ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
+		public void Initialize(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, bool backToLegalStateDialog, ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
 		{
 			_groupPagesProvider = groupPagesProvider;
 			_availableActivity = availableActivity;
@@ -203,7 +204,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 
 		private void dataOffline()
 		{
-			_localSchedulingOptions = (ISchedulingOptions) _schedulingOptions.Clone();
+			_localSchedulingOptions = (SchedulingOptions) _schedulingOptions.Clone();
 		}
 
 		private void dataOnline()

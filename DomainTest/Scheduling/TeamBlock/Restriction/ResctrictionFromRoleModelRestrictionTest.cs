@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 	{
 		private MockRepository _mocks;
 		private ResctrictionFromRoleModelRestriction _target;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private ShiftProjectionCache _shift;
 		private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private DateOnly _dateOnly;

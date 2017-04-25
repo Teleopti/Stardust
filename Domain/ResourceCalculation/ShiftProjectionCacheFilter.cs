@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return workShiftsWithActivity;
         }
 
-        public bool CheckRestrictions(ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult)
+        public bool CheckRestrictions(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult)
         {
             if (effectiveRestriction == null)
             {

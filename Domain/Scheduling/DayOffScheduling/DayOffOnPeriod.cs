@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			get { return _daysOffcount; }
 		}
 
-		public IScheduleDay FindBestSpotForDayOff(IHasContractDayOffDefinition hasContractDayOffDefinition, IScheduleDayAvailableForDayOffSpecification dayAvailableForDayOffSpecification, IEffectiveRestrictionCreator effectiveRestrictionCreator, ISchedulingOptions schedulingOptions)
+		public IScheduleDay FindBestSpotForDayOff(IHasContractDayOffDefinition hasContractDayOffDefinition, IScheduleDayAvailableForDayOffSpecification dayAvailableForDayOffSpecification, IEffectiveRestrictionCreator effectiveRestrictionCreator, SchedulingOptions schedulingOptions)
 		{
 			var contractDayOffs = new List<IScheduleDay>();
 			IList<KeyValuePair<IScheduleDay, int>> bestSpotList = new List<KeyValuePair<IScheduleDay, int>>();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -12,12 +13,12 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </summary>
     public class RelativeDailyStandardDeviationsByAllSkillsExtractor : IScheduleResultDataExtractor
     {
-        private readonly ISchedulingOptions _schedulingOptions;
+        private readonly SchedulingOptions _schedulingOptions;
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 	    private readonly TimeZoneInfo _userTimeZoneInfo;
 	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
-        public RelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo userTimeZoneInfo)
+        public RelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo userTimeZoneInfo)
         {
             _scheduleMatrix = scheduleMatrix;
             _schedulingOptions = schedulingOptions;

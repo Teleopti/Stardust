@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Security.Principal;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Common.Logging
 {
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
     {
 		private static Lazy<ILog> _log = new Lazy<ILog>(() => LogManager.GetLogger("Teleopti.AdvanceLoggingService"));
 
-        public static void LogSchedulingInfo(ISchedulingOptions schedulingOptions, int noOfAgent, int noOfSkillDays, Action callbackAction)
+        public static void LogSchedulingInfo(SchedulingOptions schedulingOptions, int noOfAgent, int noOfSkillDays, Action callbackAction)
         {
             var stop = new Stopwatch();
             stop.Start();
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
             }
         }
 
-        private static void populateSchedulingOptions(ISchedulingOptions schedulingOptions)
+        private static void populateSchedulingOptions(SchedulingOptions schedulingOptions)
         {
             var schedulingOptionsValueExtractor = new SchedulingOptionsValueExtractor(schedulingOptions);
             getTeamBlockOptions(schedulingOptionsValueExtractor, schedulingOptions);
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         }
 
 	    private static void getTeamBlockOptions(SchedulingOptionsValueExtractor schedulingOptionsValueExtractor,
-		    ISchedulingOptions schedulingOptions)
+		    SchedulingOptions schedulingOptions)
 	    {
 
 		    if (schedulingOptions.UseBlock &&

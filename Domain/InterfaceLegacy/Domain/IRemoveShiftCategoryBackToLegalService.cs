@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="shiftCategoryLimitation">The shift category limitation.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <returns></returns>
-        IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions);
+        IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation, SchedulingOptions schedulingOptions);
 
         /// <summary>
         /// Schedule matrix for a single person

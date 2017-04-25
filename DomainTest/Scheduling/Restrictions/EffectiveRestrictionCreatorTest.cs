@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		private IRestrictionExtractor _extractor;
 		private MockRepository _mocks;
 		private IScheduleDay _scheduleDay;
-		private ISchedulingOptions _options;
+		private SchedulingOptions _options;
 		private IExtractedRestrictionResult _extractorResult;
 
 		[SetUp]
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public void SimpleTest()
 		{
-			ISchedulingOptions options = new SchedulingOptions();
+			var options = new SchedulingOptions();
 			IEffectiveRestriction expected = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
 			                                                          new WorkTimeLimitation(), null, null, null,
 			                                                          new List<IActivityRestriction>());
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public void WhenUseAvailabilityAndIsAvailabilityDayAndNotAvailableTargetShouldHaveDayOff()
 		{
-			ISchedulingOptions options = new SchedulingOptions();
+			var options = new SchedulingOptions();
 			options.UseAvailability = true;
 			IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description());
 			options.DayOffTemplate = dayOffTemplate;
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public void WhenUseHourlyAvailabilityAndNotAvailableTargetShouldHaveDayOff()
 		{
 			_target = new EffectiveRestrictionCreator(_extractor);
-			ISchedulingOptions options = new SchedulingOptions();
+			var options = new SchedulingOptions();
 			options.UseAvailability = false;
 			options.UseStudentAvailability = true;
 			IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("Test"));
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var range1 = _mocks.StrictMock<IScheduleRange>();
 			var range2 = _mocks.StrictMock<IScheduleRange>();
 			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			ISchedulingOptions options = new SchedulingOptions();
+			var options = new SchedulingOptions();
 			IEffectiveRestriction restriction1 = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)), new EndTimeLimitation(),
 																	  new WorkTimeLimitation(), null, null, null,
 																	  new List<IActivityRestriction>());
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var range1 = _mocks.StrictMock<IScheduleRange>();
 			var range2 = _mocks.StrictMock<IScheduleRange>();
 			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			ISchedulingOptions options = new SchedulingOptions();
+			var options = new SchedulingOptions();
 			IEffectiveRestriction restriction1 = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
 																	  new WorkTimeLimitation(), cat1, null, null,
 																	  new List<IActivityRestriction>());
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var person1 = _mocks.StrictMock<IPerson>();
 			var range1 = _mocks.StrictMock<IScheduleRange>();
 			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			ISchedulingOptions options = new SchedulingOptions();
+			var options = new SchedulingOptions();
 			IEffectiveRestriction restriction1 = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)), new EndTimeLimitation(),
 																	  new WorkTimeLimitation(), null, null, null,
 																	  new List<IActivityRestriction>());

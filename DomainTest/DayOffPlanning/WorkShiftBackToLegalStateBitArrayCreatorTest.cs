@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         private IScheduleDay _schedulePartAbsence;
         private IScheduleDay _schedulePartWork;
 
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()

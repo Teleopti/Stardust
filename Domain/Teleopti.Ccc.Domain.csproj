@@ -771,7 +771,7 @@
     <Compile Include="InterfaceLegacy\Domain\IScheduleStorage.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleTag.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleTagSetter.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ISchedulingOptions.cs" />
+    <Compile Include="InterfaceLegacy\Domain\ScheduleEmploymentType.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulingResultService.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulingResultStateHolder.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScorecard.cs" />
@@ -2578,7 +2578,7 @@
     <Compile Include="Scheduling\TeamBlock\PullTargetValueFromSkillIntervalData.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\BlockRestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\CommonActivity.cs" />
-    <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcition.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ProposedRestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ResctrictionFromRoleModelRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameActivityRestriction.cs" />

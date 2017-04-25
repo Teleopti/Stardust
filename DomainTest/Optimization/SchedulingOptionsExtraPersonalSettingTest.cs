@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     public class SchedulingOptionsExtraPersonalSettingTest
     {
         private SchedulingOptionsExtraPersonalSetting _target;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private IList<IScheduleTag> _scheduleTags;
         private IList<GroupPageLight> _groupPages;
         private IScheduleTag _scheduleTag;

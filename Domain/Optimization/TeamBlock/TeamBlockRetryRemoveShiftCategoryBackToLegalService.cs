@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_userTimeZone = userTimeZone;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, 
+		public void Execute(SchedulingOptions schedulingOptions, 
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IEnumerable<IScheduleMatrixPro> scheduleMatrixListPros,
 			IOptimizationPreferences optimizationPreferences,
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			//
 		}
 
-		private void executePerShiftCategoryLimitation(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
+		private void executePerShiftCategoryLimitation(SchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros,
 			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences,

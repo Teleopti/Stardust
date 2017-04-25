@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
+		public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
 		{
 			IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator =
 				BuildScheduleMatrixValueCalculator(

@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 {
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private IHasContractDayOffDefinition _hasContractDayOffDefinition;
 		private IScheduleDayAvailableForDayOffSpecification _dayAvailableForDayOffSpecification;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 			
 		[SetUp]
 		public void Setup()
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_hasContractDayOffDefinition = _mock.StrictMock<IHasContractDayOffDefinition>();
 			_dayAvailableForDayOffSpecification = _mock.StrictMock<IScheduleDayAvailableForDayOffSpecification>();
 			_effectiveRestrictionCreator = _mock.StrictMock<IEffectiveRestrictionCreator>();
-			_schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
+			_schedulingOptions = new SchedulingOptions();
 		}
 
 		[Test]

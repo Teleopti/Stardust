@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, IScheduleTagSetter tagSetter,
-			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
+			SchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
 			IList<IScheduleDay> selectedSchedules,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private void optimizeMoveTimeBetweenDays(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
-			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, ISchedulingOptions schedulingOptions,
+			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, SchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> matrixesOnSelectedperiod,
 			IList<IScheduleMatrixPro> allMatrixes)
 		{
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizationPreferences optimizationPreferences,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService,
 			IList<IScheduleMatrixPro> allMatrixes,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService,
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			IList<IScheduleMatrixPro> allMatrixes,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			ITeamInfoFactory teamInfoFactory,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)

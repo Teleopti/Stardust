@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IWorkShiftFilterService
 	{
-		IList<ShiftProjectionCache> FilterForRoleModel(IGroupPersonSkillAggregator groupPersonSkillAggregator, IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, bool isSameOpenHoursInBlock, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays);
-		IList<ShiftProjectionCache> FilterForTeamMember(IScheduleDictionary schedules, DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, bool useShiftsForRestrictions);
+		IList<ShiftProjectionCache> FilterForRoleModel(IGroupPersonSkillAggregator groupPersonSkillAggregator, IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, bool isSameOpenHoursInBlock, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays);
+		IList<ShiftProjectionCache> FilterForTeamMember(IScheduleDictionary schedules, DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, bool useShiftsForRestrictions);
 	}
 
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		public IList<ShiftProjectionCache> FilterForRoleModel(IGroupPersonSkillAggregator groupPersonSkillAggregator, IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
-			IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult,
+			IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult,
 			bool isSameOpenHoursInBlock, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays)
 		{
 			if (effectiveRestriction == null)
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		public IList<ShiftProjectionCache> FilterForTeamMember(IScheduleDictionary schedules, DateOnly dateOnly, IPerson person,
-			ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions,
+			ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions,
 			IWorkShiftFinderResult finderResult, bool useShiftsForRestrictions)
 		{
 			if (effectiveRestriction == null)
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return shiftList.Count == 0 ? null : shiftList;
 		}
 
-		private bool allowanceToUseBlackList(IList<ShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions,
+		private bool allowanceToUseBlackList(IList<ShiftProjectionCache> shiftList, SchedulingOptions schedulingOptions,
 			IEffectiveRestriction effectiveRestriction)
 		{
 			if (shiftList == null || shiftList.Count == 0)
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		private IList<ShiftProjectionCache> runFiltersForRoleModel(IScheduleDictionary schedules, DateOnly dateOnly, IEffectiveRestriction effectiveRestriction,
-														ISchedulingOptions schedulingOptions,
+														SchedulingOptions schedulingOptions,
 														IWorkShiftFinderResult finderResult,
 														IList<ShiftProjectionCache> shiftList,
 														IPerson person, IList<IScheduleMatrixPro> matrixList, bool sameOpenHours)
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		private IList<ShiftProjectionCache> runFilters(IScheduleDictionary schedules, DateOnly dateOnly, IEffectiveRestriction effectiveRestriction,
-								 ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, IList<ShiftProjectionCache> shiftList,
+								 SchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, IList<ShiftProjectionCache> shiftList,
 								 IPerson person, IList<IScheduleMatrixPro> matrixList, bool sameContractTime)
 		{		
 			shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList,sameContractTime );

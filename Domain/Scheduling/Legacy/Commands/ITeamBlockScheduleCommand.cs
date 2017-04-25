@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface ITeamBlockScheduleCommand
 	{
-		IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IList<IPerson> selectedPersons,
+		IWorkShiftFinderResultHolder Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IList<IPerson> selectedPersons,
 			IEnumerable<IScheduleDay> selectedSchedules, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}

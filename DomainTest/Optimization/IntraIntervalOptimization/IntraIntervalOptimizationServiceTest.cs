@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private MockRepository _mock;
 		private IScheduleDayIntraIntervalIssueExtractor _scheduleDayIntraIntervalIssueExtractor;
 		private IIntraIntervalOptimizer _intraIntervalOptimizer;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private IOptimizationPreferences _optimizationPreferences;
 		private DateOnlyPeriod _dateOnlyPeriod;
 		private IScheduleDay _scheduleDay;

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private MockRepository _mocks;
         private IValidatedTeamBlockInfoExtractor _target;
         private ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private ITeamBlockInfoFactory _teamBlockInfoFactory;
 
         private TeamInfo _teamInfo;

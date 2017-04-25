@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
 namespace Teleopti.Ccc.TestCommon
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon
 				_countCallsToNightRestWhiteSpotSolverServiceFactory = countCallsToNightRestWhiteSpotSolverServiceFactory;
 			}
 
-			public bool Resolve(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+			public bool Resolve(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 			{
 				_countCallsToNightRestWhiteSpotSolverServiceFactory.NumberOfNightRestWhiteSpotServiceCalls++;
 				return true;

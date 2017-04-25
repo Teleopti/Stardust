@@ -96,13 +96,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixOriginalStateContainer originalStateContainer)
         {
             if (workingBitArray == null)
-                throw new ArgumentNullException("workingBitArray");
+                throw new ArgumentNullException(nameof(workingBitArray));
 
 			var lastOverLimitCount = _optimizationLimits.OverLimitsCounts(currentScheduleMatrix);
             if (daysOverMax())
                 return false;
 
-            ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
+            var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
         	schedulingOptions.UseCustomTargetTime = _originalStateContainer.OriginalWorkTime();
 
             var daysOffPreferences = _daysOffPreferences;
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ILockableBitArray workingBitArray, 
             ILockableBitArray originalBitArray, 
             IScheduleMatrixPro matrix,
-            ISchedulingOptions schedulingOptions,
+            SchedulingOptions schedulingOptions,
             IDaysOffPreferences daysOffPreferences)
         {
             IList<changedDay> movedDays = new List<changedDay>();
@@ -410,7 +410,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool rescheduleWhiteSpots(
             IEnumerable<changedDay> movedDates, 
             IEnumerable<DateOnly> removedIllegalWorkTimeDays, 
-            ISchedulingOptions schedulingOptions,
+            SchedulingOptions schedulingOptions,
             IScheduleMatrixPro matrix, 
             IScheduleMatrixOriginalStateContainer originalStateContainer)
         {
@@ -471,7 +471,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        private IList<DateOnly> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
+        private IList<DateOnly> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
 			if (!_workTimeBackToLegalStateService.Execute(matrix, schedulingOptions, rollbackService))
 				return null;

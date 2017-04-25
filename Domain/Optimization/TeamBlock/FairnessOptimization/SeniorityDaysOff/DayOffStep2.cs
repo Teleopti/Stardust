@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface IDayOffStep2
     {
-        void PerformStep2(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
+        void PerformStep2(SchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
 						ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IDictionary<DayOfWeek, 
 						int> weekDayPoints, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
         event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _teamBlockSeniorityValidator = teamBlockSeniorityValidator;
         }
 
-        public void PerformStep2(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
+        public void PerformStep2(SchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
 								ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, 
 								IDictionary<DayOfWeek, int> weekDayPoints, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
         {
@@ -150,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                                                daysToGiveAway, dayOffOptimizationPreferenceProvider);
         }
 
-        private IList<ITeamBlockInfo> stepAConstructTeamBlock(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList,
+        private IList<ITeamBlockInfo> stepAConstructTeamBlock(SchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList,
                                                             DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
             return _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions.BlockFinder(), schedulingOptions.GroupOnGroupPageForTeamBlockPer);

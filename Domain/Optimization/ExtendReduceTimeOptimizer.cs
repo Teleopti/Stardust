@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly ScheduleChangesAffectedDates _decider;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
 	    private readonly IOptimizationLimits _optimizationLimits;
-        private readonly ISchedulingOptions _schedulingOptions;
+        private readonly SchedulingOptions _schedulingOptions;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 	    private readonly IScheduleMatrixPro _matrix;
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ScheduleChangesAffectedDates decider,
             IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange,
  			IOptimizationLimits optimizationLimits,
-            ISchedulingOptions schedulingOptions,
+            SchedulingOptions schedulingOptions,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			IScheduleMatrixPro matrix)
         {
@@ -101,14 +101,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             return sucess;
         }
 
-        public IPerson Owner
-        {
-            get { return _matrix.Person; }
-        }
+        public IPerson Owner => _matrix.Person;
 
-        private bool rescheduleAndCheckPeriodValue(
+	    private bool rescheduleAndCheckPeriodValue(
             WorkShiftLengthHintOption lenghtHint, 
-            ISchedulingOptions schedulingOptions,
+            SchedulingOptions schedulingOptions,
             DateOnly dateOnly,
             IScheduleMatrixPro matrix, OverLimitResults lastOverLimitResults)
         {
@@ -187,7 +184,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	        _deleteService.Delete(new List<IScheduleDay> {scheduleDay}, deleteOption, _rollbackService, new NoSchedulingProgress());
         }
 
-        private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, WorkShiftLengthHintOption workShiftLengthHintOption)
+        private bool tryScheduleDay(DateOnly day, SchedulingOptions schedulingOptions, WorkShiftLengthHintOption workShiftLengthHintOption)
         {
             IScheduleDayPro scheduleDay = _matrix.GetScheduleDayByKey(day);
             schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;

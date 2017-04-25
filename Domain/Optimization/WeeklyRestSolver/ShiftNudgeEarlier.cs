@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	public interface IShiftNudgeEarlier
 	{
 		bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
-			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
+			SchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
 			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IOptimizationPreferences optimizationPreferences, bool firstNudge);
 	}
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 
 		public bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
-			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
+			SchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
 			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IOptimizationPreferences optimizationPreferences, bool firstNudge)
 		{

@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public IEnumerable<ITeamInfo> Execute(IPeriodValueCalculator periodValueCalculatorForAllSkills,
 			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
-			IEnumerable<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions,
+			IEnumerable<ITeamInfo> remainingInfoList, SchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder, Action cancelAction,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress schedulingProgress)
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private bool runOneTeam(IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
-			ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix,
+			SchedulingOptions schedulingOptions, IScheduleMatrixPro matrix,
 			ITeamInfo teamInfo,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 
-		private bool handleResult(ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+		private bool handleResult(ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
 			double previousPeriodValue, bool success, ITeamInfo teamInfo,
 			int totalLiveTeamInfos, int currentTeamInfoCounter, Lazy<double> currentPeriodCalculator,
 			bool checkPeriodValue, Action cancelAction, ISchedulingProgress schedulingProgress, int screenRefreshRate)
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return success;
 		}
 
-		private bool reScheduleAllMovedDaysOff(ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
+		private bool reScheduleAllMovedDaysOff(SchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 			IEnumerable<DateOnly> removedDaysOff,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		private void addAllDecidedDaysOffForTeam(ISchedulePartModifyAndRollbackService rollbackService,
-			ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
+			SchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 			IEnumerable<DateOnly> addedDaysOff)
 		{
 			foreach (DateOnly dateOnly in addedDaysOff)

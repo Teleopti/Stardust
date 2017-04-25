@@ -112,19 +112,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				var decisionMaker = new ExtendReduceTimeDecisionMaker(scheduleMatrixLockableBitArrayConverterEx);
 				
-				ICheckerRestriction restrictionChecker = new RestrictionChecker();
+				var restrictionChecker = new RestrictionChecker();
 
 				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(scheduleMatrixPro.Person, scheduleMatrixPro.EffectivePeriodDays.First().Day);
 
-				IOptimizationOverLimitByRestrictionDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i], dayOffOptimizationPreference);
+				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i], dayOffOptimizationPreference);
 
-				IOptimizationLimits optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
+				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
 
-				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
-				ISchedulingOptions schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
+				var schedulingOptionsCreator = new SchedulingOptionsCreator();
+				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
 
-				IExtendReduceTimeOptimizer optimizer = new ExtendReduceTimeOptimizer(
+				var optimizer = new ExtendReduceTimeOptimizer(
 					personalSkillsPeriodValueCalculator,
 					personalSkillsDataExtractor,
 					decisionMaker,

@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 
 		[TestLog]
-		protected virtual void ExecuteWeeklyRestSolverCommand(ISchedulingOptions schedulingOptions,
+		protected virtual void ExecuteWeeklyRestSolverCommand(SchedulingOptions schedulingOptions,
 															IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons,
 															DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays,
 															ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)

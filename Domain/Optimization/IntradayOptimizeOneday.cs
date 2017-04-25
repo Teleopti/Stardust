@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var lastOverLimitCounts = _optimizationLimits.OverLimitsCounts(_matrix);
 
-			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
 			var originalShift = _workShiftOriginalStateContainer.OldPeriodDaysState[dateOnly].GetEditorShift();
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrix.LockDay(day);
 		}
 
-		private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption)
+		private bool tryScheduleDay(DateOnly day, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption)
 		{
 			IScheduleDayPro scheduleDay = _matrix.FullWeeksPeriodDictionary[day];
 			schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;

@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
 	public interface ICalculateMinMaxCacheDecider
 	{
-		bool ShouldCacheBeDisabled(ISchedulerStateHolder stateHolder, ISchedulingOptions schedulingOptions, IEffectiveRestrictionCreator effectiveRestrictionCreator, int cacheEntryLimit);
+		bool ShouldCacheBeDisabled(ISchedulerStateHolder stateHolder, SchedulingOptions schedulingOptions, IEffectiveRestrictionCreator effectiveRestrictionCreator, int cacheEntryLimit);
 	}
 
 	public class CalculateMinMaxCacheDecider : ICalculateMinMaxCacheDecider
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool ShouldCacheBeDisabled(ISchedulerStateHolder stateHolder, ISchedulingOptions schedulingOptions, IEffectiveRestrictionCreator effectiveRestrictionCreator, int cacheEntryLimit)
+		public bool ShouldCacheBeDisabled(ISchedulerStateHolder stateHolder, SchedulingOptions schedulingOptions, IEffectiveRestrictionCreator effectiveRestrictionCreator, int cacheEntryLimit)
 		{
 			var persons = stateHolder.FilteredCombinedAgentsDictionary.Values;
 			var uniqueRestrictions = new HashSet<IEffectiveRestriction>();

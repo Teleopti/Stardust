@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	public interface IDayOffScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter);
+        void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter);
 	}
 
 	public class DayOffScheduler : IDayOffScheduler
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			_hasContractDayOffDefinition = hasContractDayOffDefinition;
 		}
 
-		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter)
+		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter)
         {
             using (PerformanceOutput.ForOperation("Inital assignment of days off"))
             {
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             }
         }
 
-		private void addDaysOff(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter)
+		private void addDaysOff(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter)
 		{
 			var cancel = false;
             foreach (var scheduleMatrixPro in matrixList)
@@ -81,10 +82,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             }          
         }
 
-        private void addContractDaysOff(IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
+        private void addContractDaysOff(IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions)
         {
             if (rollbackService == null)
-                throw new ArgumentNullException("rollbackService");
+                throw new ArgumentNullException(nameof(rollbackService));
 
 	        var cancel = false;
             foreach (var matrix in matrixList)

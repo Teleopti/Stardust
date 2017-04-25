@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ISafeRollbackAndResourceCalculation
 	{
-		void Execute(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions);
+		void Execute(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, SchedulingOptions schedulingOptions);
 	}
 
 	public class SafeRollbackAndResourceCalculation : ISafeRollbackAndResourceCalculation
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Execute(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions)
+		public void Execute(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, SchedulingOptions schedulingOptions)
 		{
 			var modifyedScheduleDays = schedulePartModifyAndRollbackService.ModificationCollection.ToList();
 			schedulePartModifyAndRollbackService.Rollback();

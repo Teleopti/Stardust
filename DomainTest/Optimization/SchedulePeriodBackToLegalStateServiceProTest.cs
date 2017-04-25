@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayService _scheduleDayService;
         private IScheduleDayPro _scheduleDayPro;
         private IScheduleDay _schedulePart;
-    	private ISchedulingOptions _schedulingOptions;
+    	private SchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()

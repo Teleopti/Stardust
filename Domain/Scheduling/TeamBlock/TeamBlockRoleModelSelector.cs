@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 																	ITeamBlockInfo teamBlockInfo, 
 																	DateOnly datePointer, 
 																	IPerson person, 
-																	ISchedulingOptions schedulingOptions, 
+																	SchedulingOptions schedulingOptions, 
 																	IEffectiveRestriction additionalEffectiveRestriction,
 																	IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return roleModel;
 		}
 
-		private ShiftProjectionCache filterAndSelect(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions, IGroupPersonSkillAggregator groupPersonSkillAggregator)
+		private ShiftProjectionCache filterAndSelect(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlock.Check(allSkillDays, teamBlockInfo, groupPersonSkillAggregator);
 			var shifts = _workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, schedules, datePointer, teamBlockInfo, effectiveRestriction,

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
     {
         private MatrixRestrictionLocker _target;
         private MockRepository _mocks;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private IRestrictionExtractor _extractor;
         private IScheduleMatrixPro _matrix;
         private DateOnly _dayToCheck;

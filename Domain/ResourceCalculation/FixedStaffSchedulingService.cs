@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         IList<IWorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
-		bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
+		bool DoTheScheduling(IList<IScheduleDay> selectedParts, SchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
     }
 
     public class FixedStaffSchedulingService : IFixedStaffSchedulingService
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _scheduleService.ClearFinderResults();
         }
 
-	    public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
+	    public bool DoTheScheduling(IList<IScheduleDay> selectedParts, SchedulingOptions schedulingOptions,
 		   bool breakIfPersonCannotSchedule,
 		    ISchedulePartModifyAndRollbackService rollbackService)
 	    {

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         private DateOnly _startDate;
         private IPersonContract _personContract;
         private IScheduleDayPro[] _periodList;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
     public class PossibleMinMaxWorkShiftLengthExtractorForThisTest : IPossibleMinMaxWorkShiftLengthExtractor
     {
-        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
             if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
                 return new MinMax<TimeSpan>(TimeSpan.FromHours(9), TimeSpan.FromHours(9));

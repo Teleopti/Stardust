@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		bool ScheduleTeamBlockDay(IWorkShiftSelector workShiftSelector,
 								ITeamBlockInfo teamBlockInfo, 
 								DateOnly datePointer, 
-								ISchedulingOptions schedulingOptions, 
+								SchedulingOptions schedulingOptions, 
 								ISchedulePartModifyAndRollbackService rollbackService, 
 								IResourceCalculateDelayer resourceCalculateDelayer,
 								IEnumerable<ISkillDay> allSkillDays,
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool ScheduleTeamBlockDay(IWorkShiftSelector workShiftSelector,
 			ITeamBlockInfo teamBlockInfo, 
 			DateOnly datePointer,
-			ISchedulingOptions schedulingOptions,
+			SchedulingOptions schedulingOptions,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IEnumerable<ISkillDay> allSkillDays,
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return success;
 		}
 
-		private bool tryScheduleBlock(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules, ShiftNudgeDirective shiftNudgeDirective, INewBusinessRuleCollection businessRules, Action cancelAction)
+		private bool tryScheduleBlock(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules, ShiftNudgeDirective shiftNudgeDirective, INewBusinessRuleCollection businessRules, Action cancelAction)
 		{
 			var lastIndex = selectedBlockDays.Count - 1;
 			IEffectiveRestriction shiftNudgeRestriction = new EffectiveRestriction();

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon
         public Group Group { get; set; }
 
 
-        public ISchedulingOptions SchedulingOptions { get; set; }
+        public SchedulingOptions SchedulingOptions { get; set; }
 
         public DateOnly BaseDateOnly { get; set; }
 

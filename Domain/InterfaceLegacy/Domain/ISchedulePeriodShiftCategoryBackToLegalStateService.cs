@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.ResourceCalculation;
+
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
@@ -12,6 +14,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="schedulePeriod">The schedule period.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <returns></returns>
-		bool Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions);
+		bool Execute(IVirtualSchedulePeriod schedulePeriod, SchedulingOptions schedulingOptions);
     }
 }

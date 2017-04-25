@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly ITeamInfoFactory _teamInfoFactory;
 	    private readonly ITeamBlockScheduler _teamBlockScheduler;
 	    private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
-	    private readonly ISchedulingOptions _schedulingOptions;
+	    private readonly SchedulingOptions _schedulingOptions;
 	    private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly IValidatedTeamBlockInfoExtractor  _validatedTeamBlockExtractor;
 	    private readonly ITeamMatrixChecker _teamMatrixChecker;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 	    public TeamBlockSchedulingService
-		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,
+		    (SchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,
 			    ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			    IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			    IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor,

@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private MockRepository _mock;
 		private IRestrictionExtractor _restrictionExtractor;
 		private IScheduleDay _scheduleDay;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private IEffectiveRestriction _effectiveRestriction;
 		private AgentRestrictionsNoWorkShiftfFinder _finder;
 		private IPerson _person;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_mock = new MockRepository();
 			_restrictionExtractor = _mock.StrictMock<IRestrictionExtractor>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
-			_schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
+			_schedulingOptions = new SchedulingOptions();
 			_effectiveRestriction = _mock.StrictMock<IEffectiveRestriction>();
 			_person = _mock.StrictMock<IPerson>();
 			_dateOnlyAsDateTimePeriod = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();

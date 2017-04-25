@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     	/// <param name="optimizerPreferences">The optimizer preferences.</param>
     	/// <param name="person"></param>
     	/// <param name="dateOnly"></param>
-        void SetBlockedShiftCategories(ISchedulingOptions optimizerPreferences, IPerson person, DateOnly dateOnly);
+        void SetBlockedShiftCategories(SchedulingOptions optimizerPreferences, IPerson person, DateOnly dateOnly);
 
         /// <summary>
         /// Determines whether [is shift category over period limit] [the specified shift category limitation].

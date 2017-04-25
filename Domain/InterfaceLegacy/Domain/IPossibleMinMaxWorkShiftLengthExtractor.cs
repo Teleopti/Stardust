@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="matrix">The matrix.</param>
         /// <param name="schedulingOptions">The scheduling options.</param>
         /// <returns></returns>
-        MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
+        MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions);
 
         ///<summary>
         ///</summary>

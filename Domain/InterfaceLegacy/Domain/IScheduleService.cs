@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	    bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
-            ISchedulingOptions schedulingOptions,
+            SchedulingOptions schedulingOptions,
 			IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
             ISchedulePartModifyAndRollbackService rollbackService);
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
-            ISchedulingOptions schedulingOptions,
+            SchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulePartModifyAndRollbackService rollbackService);
 

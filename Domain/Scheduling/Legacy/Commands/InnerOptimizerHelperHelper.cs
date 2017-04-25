@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			matrixUnselectedDaysLocker.Execute();
 		}
 
-		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, MatrixRestrictionLocker locker, ISchedulingOptions schedulingOptions)
+		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, MatrixRestrictionLocker locker, SchedulingOptions schedulingOptions)
 		{
 			IList<DateOnly> daysToLock = locker.Execute(matrix, schedulingOptions);
 			foreach (var dateOnly in daysToLock)

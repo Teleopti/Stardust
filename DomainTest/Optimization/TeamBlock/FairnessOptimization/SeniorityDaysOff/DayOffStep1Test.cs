@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private ITeamBlockInfo _juniorTeamBlock;
         private ITeamBlockInfo _seniorTeamBlock;
         private IList<IScheduleMatrixPro> _matrixList;
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
         private IScheduleDictionary _scheduleDictionary;
         private ISchedulePartModifyAndRollbackService _rollbackService;
         private IOptimizationPreferences _optimizationPreferences;

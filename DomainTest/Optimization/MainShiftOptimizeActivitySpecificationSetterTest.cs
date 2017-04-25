@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_optimizationPreferences.Shifts.SelectedActivities = new List<IActivity >();
 			_optimizationPreferences.Shifts.KeepActivityLength = true;
 
-			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences);
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences);
 
 			var minShiftOptimizeActivitySpecification = schedulingOptions.MainShiftOptimizeActivitySpecification;
 			Assert.AreEqual(typeof(All<IEditableShift>), minShiftOptimizeActivitySpecification.GetType());

@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 	{
 		private readonly ShiftProjectionCache _shift;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
-		private readonly ISchedulingOptions _schedulingOptions;
+		private readonly SchedulingOptions _schedulingOptions;
 
-		public ResctrictionFromRoleModelRestriction(ShiftProjectionCache shift, ITeamBlockSchedulingOptions teamBlockSchedulingOptions, ISchedulingOptions schedulingOptions)
+		public ResctrictionFromRoleModelRestriction(ShiftProjectionCache shift, ITeamBlockSchedulingOptions teamBlockSchedulingOptions, SchedulingOptions schedulingOptions)
 		{
 			_shift = shift;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;

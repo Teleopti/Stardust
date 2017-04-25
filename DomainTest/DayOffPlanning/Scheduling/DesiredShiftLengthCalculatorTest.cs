@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 		private IScheduleDayPro _scheduleDayPro2;
 		private IScheduleDay _scheduleDay1;
 		private IScheduleDay _scheduleDay2;
-		private ISchedulingOptions _schedulingOptions;
+		private SchedulingOptions _schedulingOptions;
 		private ISchedulePeriodTargetTimeCalculator _targetTimeCalculator;
 
 		[SetUp]

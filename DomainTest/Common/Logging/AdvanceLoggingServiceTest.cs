@@ -7,7 +7,6 @@ using log4net;
 using log4net.Appender;
 using log4net.Config;
 using log4net.Filter;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common.Logging
 {
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
 	[TestWithStaticDependenciesAvoidUse]
 	public class AdvanceLoggingServiceTest
     {
-        private ISchedulingOptions _schedulingOptions;
+        private SchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()

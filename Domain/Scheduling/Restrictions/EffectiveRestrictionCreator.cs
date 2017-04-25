@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_extractor = extractor;
 		}
 
-		public IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, ISchedulingOptions options)
+		public IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, SchedulingOptions options)
 		{
 			var result = _extractor.Extract(part);
 			IEffectiveRestriction ret = result.CombinedRestriction(options);
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		public IEffectiveRestriction GetEffectiveRestrictionForSinglePerson(
 			IPerson person,
 			DateOnly dateOnly,
-			ISchedulingOptions options,
+			SchedulingOptions options,
 			IScheduleDictionary scheduleDictionary)
 		{
 			InParameter.NotNull(nameof(scheduleDictionary), scheduleDictionary);
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		public IEffectiveRestriction GetEffectiveRestriction(
             IEnumerable<IPerson> groupPersons, 
             DateOnly dateOnly, 
-            ISchedulingOptions options, 
+            SchedulingOptions options, 
             IScheduleDictionary scheduleDictionary)
 		{
 			InParameter.NotNull(nameof(scheduleDictionary), scheduleDictionary);
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			return ret;
 		}
 
-		public static bool OptionsConflictWithRestrictions(ISchedulingOptions options, IEffectiveRestriction effectiveRestriction)
+		public static bool OptionsConflictWithRestrictions(SchedulingOptions options, IEffectiveRestriction effectiveRestriction)
 		{
 			if (options == null)
 				return false;

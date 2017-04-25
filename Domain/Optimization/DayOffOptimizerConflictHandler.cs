@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         	_resourceCalculateDelayer = resourceCalculateDelayer;
         }
 
-        public bool HandleConflict(ISchedulingOptions schedulingOptions, DateOnly dateOnly)
+        public bool HandleConflict(SchedulingOptions schedulingOptions, DateOnly dateOnly)
         {
             var result = false;
             var scheduleDayBefore = _scheduleMatrixPro.GetScheduleDayByKey(dateOnly.AddDays(-1));
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return result;
         }
 
-		private bool tryFix(IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions)
+		private bool tryFix(IScheduleDay scheduleDay, SchedulingOptions schedulingOptions)
 		{
 			scheduleDay.DeleteMainShift();
 			_rollbackService.Modify(scheduleDay);

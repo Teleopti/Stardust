@@ -1,10 +1,11 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IAgentRestrictionsNoWorkShiftfFinder
 	{
-		bool Find(IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions);
+		bool Find(IScheduleDay scheduleDay, SchedulingOptions schedulingOptions);
 	}
 
 	public class AgentRestrictionsNoWorkShiftfFinder : IAgentRestrictionsNoWorkShiftfFinder
@@ -18,14 +19,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_workShiftWorkTime = workShiftWorkTime;
 		}
 
-		public bool Find(IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions)
+		public bool Find(IScheduleDay scheduleDay, SchedulingOptions schedulingOptions)
 		{
 			if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.MainShift)) return false;
 			var person = scheduleDay.Person;
 			var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var personPeriod = person.Period(dateOnly);
-			if (personPeriod == null) return true;
-			var ruleSetBag = personPeriod.RuleSetBag;
+			var ruleSetBag = personPeriod?.RuleSetBag;
 			if (ruleSetBag == null) return true;
 
 			var result = _restrictionExtractor.Extract(scheduleDay);
