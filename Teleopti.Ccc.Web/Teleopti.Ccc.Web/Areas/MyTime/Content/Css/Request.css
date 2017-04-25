@@ -742,6 +742,6 @@ input[type=search]::-ms-clear {
 
 	    @media only screen and (max-width : 414px) {
 			.requests-wrapper .fab:focus {
-				height: 32%;
+				height: 45%;
 			}
 		}
