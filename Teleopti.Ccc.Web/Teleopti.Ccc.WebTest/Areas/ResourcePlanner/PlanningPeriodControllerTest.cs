@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var agentGroup = new AgentGroup().WithId(agentGroupId);
 			AgentGroupRepository.Add(agentGroup);
 			Now.Is(new DateTime(2015, 05, 23));
-			PlanningPeriodRepository.Add(new PlanningPeriod(new PlanningPeriodSuggestions(Now, new List<AggregatedSchedulePeriod>())));
+			PlanningPeriodRepository.Add(new PlanningPeriod(new PlanningPeriodSuggestions(Now, new List<AggregatedSchedulePeriod>()), agentGroup));
 
 			Target.Request = new HttpRequestMessage();
 			Target.GetNextPlanningPeriod(agentGroupId);
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
-		public void ShouldChangeLastPeriodAndCreateNewPeriodsWithDefaultRanges()
+		public void ShouldChangeLastPeriodAndCreateNewPeriodsWithSameRange()
 		{
 			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
 			var agentGroupId = Guid.NewGuid();
@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			periods.First(period => period.Id == firstPeriod.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 25));
 			periods.First(period => period.Id == changedPeriod.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 10));
-			periods.First(period => period.Id == lastPeriod.Content.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 17));
+			periods.First(period => period.Id == lastPeriod.Content.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 25));
 		}
 
 		private static List<AggregatedSchedulePeriod> suggestions()
