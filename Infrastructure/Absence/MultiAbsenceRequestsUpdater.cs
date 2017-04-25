@@ -194,6 +194,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					}
 					uow.PersistAll();
 				}
+				throw;
 			}
 		}
 
