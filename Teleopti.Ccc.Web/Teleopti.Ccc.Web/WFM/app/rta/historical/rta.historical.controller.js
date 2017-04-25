@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
     'use strict';
     angular.module('wfm.rta').controller('RtaHistoricalController', RtaHistoricalController);
     RtaHistoricalController.$inject = ['$stateParams', 'rtaService', '$translate', 'Toggle'];
@@ -12,15 +12,13 @@
         vm.cards = [];
         $stateParams.open = ($stateParams.open || "false")
 
-        vm.ooaTooltipTime = function(time) {
-            if (time == null)
-                return '';
-
-            return time.format('HH:mm:ss');
-        };
-
+		vm.ooaTooltipTime = function(time) {
+			if (time == null)
+				return '';
+			return time.format('HH:mm:ss');
+		};
         rtaService.getAgentHistoricalData(id)
-            .then(function(data) {
+			.then(function(data) {
 
                 data.Schedules = data.Schedules || [];
                 data.OutOfAdherences = data.OutOfAdherences || [];
@@ -47,20 +45,24 @@
             });
 
         function buildAgentOutOfAdherences(data, shiftInfo) {
-            return data.OutOfAdherences.map(function(ooa) {
-                var startTime = moment(ooa.StartTime);
-                var endTime = ooa.EndTime != null ? moment(ooa.EndTime) : null
+			return data.OutOfAdherences.map(function (ooa) {
+				var startTime = moment(ooa.StartTime);
+				var startTimeFormatted = shiftInfo.timeWindowStart > startTime ?
+					startTime.format('YYYY-MM-DD HH:mm:ss') :
+					startTime.format('HH:mm:ss');
+				var endTime = ooa.EndTime != null ? ooa.EndTime : data.Now;
+				var endTimeFormatted = ooa.EndTime != null ? moment(ooa.EndTime).format('HH:mm:ss') : '';
                 return {
-                    Width: calculateWidth(ooa.StartTime, ooa.EndTime != null ? ooa.EndTime : data.Now, shiftInfo.timeWindowSeconds),
-                    Offset: calculateWidth(shiftInfo.timeWindowStart, ooa.StartTime, shiftInfo.timeWindowSeconds),
-                    StartTime: startTime,
-                    EndTime: endTime
+					Width: calculateWidth(startTime, endTime, shiftInfo.timeWindowSeconds),
+					Offset: calculateWidth(shiftInfo.timeWindowStart, startTime, shiftInfo.timeWindowSeconds),
+					StartTime: startTimeFormatted,
+					EndTime: endTimeFormatted
                 };
             });
         }
 
         function buildAgentsFullSchedule(schedules, shiftInfo) {
-            return schedules.map(function(layer) {
+			return schedules.map(function (layer) {
                 return {
                     Width: calculateWidth(layer.StartTime, layer.EndTime, shiftInfo.timeWindowSeconds),
                     Offset: calculateWidth(shiftInfo.timeWindowStart, layer.StartTime, shiftInfo.timeWindowSeconds),
@@ -101,11 +103,11 @@
         }
 
         function buildDiamonds(shiftInfo, data) {
-            return data.Changes.map(function(change, i) {
+			return data.Changes.map(function (change, i) {
                 change.Offset = calculateWidth(shiftInfo.timeWindowStart, change.Time, shiftInfo.timeWindowSeconds);
 				change.RuleColor = !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor;
                 change.Color = change.RuleColor;
-                change.click = function() {
+				change.click = function () {
                     highlightThis(change);
                 };
                 return change;
@@ -113,7 +115,7 @@
         }
 
         function highlightThis(change) {
-            vm.diamonds.forEach(function(d) {
+			vm.diamonds.forEach(function (d) {
                 d.highlight = false;
             })
             change.highlight = true;
@@ -121,7 +123,7 @@
         }
 
         function mapChanges(changes, schedules) {
-            return changes.reduce(function(arr, change) {
+			return changes.reduce(function (arr, change) {
                 var changeTime = moment(change.Time);
                 var earliestStartTime = earliest(schedules);
                 var latestEndTime = latest(schedules);
@@ -136,7 +138,7 @@
                     } else if (changeTime.isAfter(latestEndTime)) {
                         key = $translate.instant('AfterShiftEnd');
                     } else {
-                        var activityWhenChangeOccurred = schedules.find(function(layer) {
+						var activityWhenChangeOccurred = schedules.find(function (layer) {
                             return layer.StartTime <= change.Time && layer.EndTime > change.Time;
                         });
                         var activityStart = moment(activityWhenChangeOccurred.StartTime);
@@ -145,7 +147,7 @@
                         key = activityWhenChangeOccurred.Name + ' ' + activityStart.format('HH:mm') + ' - ' + activityEnd.format('HH:mm');
                     }
                 }
-                var existing = arr.find(function(item) {
+				var existing = arr.find(function (item) {
                     return item.key === key;
                 });
                 if (existing == null) {
@@ -193,7 +195,7 @@
 
         function earliest(arr) {
             return arr
-                .map(function(el) {
+				.map(function (el) {
                     return moment(el.StartTime);
                 })
                 .sort(sorter)[0];
@@ -201,7 +203,7 @@
 
         function latest(arr) {
             return arr
-                .map(function(el) {
+				.map(function (el) {
                     return moment(el.EndTime);
                 })
                 .sort(reverseSorter)[0];

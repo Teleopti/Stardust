@@ -141,8 +141,8 @@ describe('RtaHistoricalController', function() {
 
         var vm = $controllerBuilder.createController().vm;
 
-        expect(vm.outOfAdherences[0].StartTime.format('HH:mm:ss')).toEqual('08:00:00');
-        expect(vm.outOfAdherences[0].EndTime.format('HH:mm:ss')).toEqual('08:15:00');
+		expect(vm.outOfAdherences[0].StartTime).toEqual('08:00:00');
+		expect(vm.outOfAdherences[0].EndTime).toEqual('08:15:00');
         expect(vm.outOfAdherences[0].Width).toEqual((15 * 60) / (12 * 3600) * 100 + '%');
         expect(vm.outOfAdherences[0].Offset).toEqual(1 / 12 * 100 + '%');
     });
@@ -172,6 +172,25 @@ describe('RtaHistoricalController', function() {
         expect(vm.outOfAdherences[1].Width).toEqual((45 * 60) / (12 * 3600) * 100 + '%');
         expect(vm.outOfAdherences[1].Offset).toEqual((15 * 60 + 7200) / (12 * 3600) * 100 + '%');
     });
+
+	it('should display out of adherence start date when started a long time ago', function() {
+		stateParams.personId = '1';
+		$fakeBackend.withAgent({
+			PersonId: '1',
+			AgentName: 'Mikkey Dee',
+			Schedules: [{
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T18:00:00'
+			}],
+			OutOfAdherences: [{
+				StartTime: '2016-10-09T17:00:00'
+			}]
+		});
+
+		var vm = $controllerBuilder.createController().vm;
+
+		expect(vm.outOfAdherences[0].StartTime).toEqual('2016-10-09 17:00:00');
+	});
 
     it('should display full timeline', function() {
         stateParams.personId = '1';

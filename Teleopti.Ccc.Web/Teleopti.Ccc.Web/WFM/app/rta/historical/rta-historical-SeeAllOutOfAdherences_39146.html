@@ -20,10 +20,10 @@
             </div>
 
             <div class="rta-out-of-adherences-wrapper">
-                <span ng-repeat="outOfAdherence in vm.outOfAdherences" class="rta-alarmline out-of-adherence" ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;" data-starttime="{{outOfAdherence.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}"
-                    data-endtime="{{outOfAdherence.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
+                <span ng-repeat="outOfAdherence in vm.outOfAdherences" class="rta-alarmline out-of-adherence" ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;"
+                    data-starttime="{{outOfAdherence.StartTime}}" data-endtime="{{outOfAdherence.EndTime}}">
 					<md-tooltip md-direction="top">
-						{{vm.ooaTooltipTime(outOfAdherence.StartTime)}} - {{vm.ooaTooltipTime(outOfAdherence.EndTime)}}
+						{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}
 					</md-tooltip>
 				</span>
 

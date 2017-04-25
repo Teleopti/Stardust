@@ -123,11 +123,10 @@
             </div>
 
             <div class="rta-out-of-adherences-wrapper">
-                <!--<span class="rta-schedule-overlay" style="background-color: rgba(0,0,0,.26); border: 1px solid rgba(0,0,0,.46); position: absolute; top: 4%; height: 85%; left: 18.181818181818183%; z-index: 5; width: calc(27.272727272727273% - 18.181818181818183%);"></span>-->
                 <span ng-repeat="outOfAdherence in vm.outOfAdherences" class="rta-alarmline out-of-adherence" ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;"
-                    data-starttime="{{outOfAdherence.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}" data-endtime="{{outOfAdherence.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
+                    data-starttime="{{outOfAdherence.StartTime}}" data-endtime="{{outOfAdherence.EndTime}}">
 					<md-tooltip md-direction="top">
-						{{vm.ooaTooltipTime(outOfAdherence.StartTime)}} - {{vm.ooaTooltipTime(outOfAdherence.EndTime)}}
+						{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}
 					</md-tooltip>
 				</span>
 
