@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public IScheduleStorage ScheduleStorage;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		public FakePreferenceDayRepository PreferenceDayRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
 		public DayOffOptimizationTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
@@ -355,58 +353,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest).Should().Be.True();
 		}
 
-		[Test, Explicit("To be fixed")]
-		public void ShouldOptimizeEvenWhenDayoffsAreNotInLegalStateAtStart()
-		{
-			var firstDay = new DateOnly(2015, 12, 07); //mon
-			var scenario = ScenarioRepository.Has("some name");
-			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
-			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
-			schedulePeriod.SetDaysOff(4);
-			DayOffRulesRepository.HasDefault(x =>
-			{
-				x.ConsecutiveDayOffs = new MinMax<int>(1, 1); //actual setup tp test 
-				x.ConsecutiveWorkdays = new MinMax<int>(1, 20); //just to make sure anything goes
-			});
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
-				new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"),
-				new Team {Site = new Site("site")}, schedulePeriod, ruleSet, skill);
-
-			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				20, //DO at start
-				10, //DO at start
-				10,
-				10,
-				10,
-				10,
-				1,
-
-				20, //DO at start
-				10, //DO at start
-				10,
-				10,
-				10,
-				10,
-				1
-			));
-
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory,
-				new DateOnlyPeriod(firstDay, firstDay.AddDays(14)), new TimePeriod(8, 0, 16, 0));
-			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.GetSingle(skillDays[7].CurrentDate).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.GetSingle(skillDays[8].CurrentDate).SetDayOff(new DayOffTemplate());
-
-			Target.Execute(planningPeriod.Id.Value);
-
-			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).DayOff().Should().Be.Null();
-			PersonAssignmentRepository.GetSingle(skillDays[7].CurrentDate).DayOff().Should().Be.Null();
-		}
-
 		[Test]
 		public void ShouldNotCalculateIntraIntervalIssuses()
 		{
@@ -537,46 +483,6 @@ Not really sure we need to make this green. If this is ignored in X weeks -> sim
 			PersonAssignmentRepository.LoadAll()
 				.Count(x => x.DayOff() != null && (x.Date == firstDay.AddDays(1) || x.Date == firstDay.AddDays(2)))
 				.Should().Be.LessThanOrEqualTo(1);
-		}
-
-		[Test]
-		[Ignore("#43858")]
-		public void ShouldTryAgainAfterRestrictionHasBlockedMove()
-		{
-			var firstDay = new DateOnly(2015, 10, 26); //mon
-			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
-			var scenario = ScenarioRepository.Has("some name");
-			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
-			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				10,
-				1, //restriction blocks this day
-				2,
-				10,
-				10,
-				10,
-				10
-			));
-			PreferenceDayRepository.Add(new PreferenceDay(agent, firstDay.AddDays(1),
-				new PreferenceRestriction
-				{
-					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(6))
-				}).WithId());
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new TimePeriod(6, 0, 14, 0));
-			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
-			var optPrefs = OptimizationPreferencesProvider.Fetch();
-			optPrefs.General.UsePreferences = true;
-			optPrefs.General.PreferencesValue = 1d;
-			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
-
-			Target.Execute(planningPeriod.Id.Value);
-
-			PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate).DayOff()
-				.Should().Not.Be.Null();
 		}
 
 		[TestCase(true)]
