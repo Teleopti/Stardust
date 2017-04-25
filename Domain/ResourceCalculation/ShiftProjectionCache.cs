@@ -14,8 +14,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private Lazy<IVisualLayerCollection> _mainshiftProjection;
     	private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 	    private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
-		
-        public ShiftProjectionCache(IWorkShift workShift, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker) : this()
+		private WorkShiftCalculatableVisualLayerCollection _workShiftCalculatableLayers;
+
+		public ShiftProjectionCache(IWorkShift workShift, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker) : this()
         {
 	        _workShift = workShift;
         	_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        if (_dateOnlyAsPeriod!=null && _dateOnlyAsPeriod.Equals(dateOnlyAsDateTimePeriod)) return;
 
 	        _dateOnlyAsPeriod = dateOnlyAsDateTimePeriod;
+	        _workShiftCalculatableLayers = null;
 	        _mainShift = new Lazy<IEditableShift>(() => _workShift.ToEditorShift(_dateOnlyAsPeriod, _dateOnlyAsPeriod.TimeZone()));
 	        _mainshiftProjection = new Lazy<IVisualLayerCollection>(() => TheMainShift.ProjectionService().CreateProjection());
         }
@@ -44,9 +46,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    public IVisualLayerCollection MainShiftProjection => _mainshiftProjection.Value;
 
-	    public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection);
+	    public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => _workShiftCalculatableLayers ??
+																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection));
 
-	    public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, IPersonAssignment personAssignment)
+		public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, IPersonAssignment personAssignment)
         {
             if (meetings.Count == 0 && personAssignment == null)
             {
