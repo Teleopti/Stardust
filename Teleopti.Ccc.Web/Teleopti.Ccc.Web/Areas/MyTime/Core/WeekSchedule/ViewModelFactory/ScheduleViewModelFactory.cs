@@ -62,7 +62,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var scheduleForThisDate = weekScheduleViewModel.Days.SingleOrDefault(d => d.Date == date.Date.ToShortDateString());
 			return new DayScheduleViewModel
 			{
-				Date = scheduleForThisDate == null ? date.ToShortDateString() : scheduleForThisDate.Date,
+				Date = date.Date.ToString("yyyy-MM-dd"),
+				DisplayDate = scheduleForThisDate == null ? date.ToShortDateString() : scheduleForThisDate.Date,
 				Schedule = scheduleForThisDate,
 				RequestPermission = weekScheduleViewModel.RequestPermission,
 				TimeLineCulture = weekScheduleViewModel.TimeLineCulture,

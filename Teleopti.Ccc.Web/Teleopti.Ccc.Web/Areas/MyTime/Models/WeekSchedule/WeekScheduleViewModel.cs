@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 	public class DayScheduleViewModel
 	{
 		public string Date { get; set; }
+		public string DisplayDate { get; set; }
 		public DayViewModel Schedule { get; set; }
 		public string TimeLineCulture { get; set; }
 		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
