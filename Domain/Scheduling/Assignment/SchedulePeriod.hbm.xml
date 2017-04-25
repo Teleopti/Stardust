@@ -99,4 +99,25 @@ GROUP BY PeriodType,Number,DateFrom,Culture
 ORDER BY [Priority] DESC
 		]]>
 	</sql-query>
+	<sql-query name="UniqueSchedulePeriodsForPeople">
+		<![CDATA[
+SELECT PeriodType,Number,DateFrom,Culture,COUNT(*) AS [Priority] FROM (SELECT pp.PeriodType,pp.Number,pp.DateFrom,person.Culture,
+	ISNULL(
+	(
+		SELECT CASE WHEN ISNULL(p.LeavingDate,'20591231 00:00') < MIN(DATEADD(DAY,-1,ISNULL(pp2.DateFrom,'20591231 00:00'))) THEN ISNULL(p.LeavingDate,'20591231 00:00')
+					ELSE MIN(DATEADD(DAY,-1,ISNULL(pp2.DateFrom,'20591231 00:00'))) END
+		FROM scheduleperiod pp2
+		WHERE pp2.parent = pp.parent
+		AND pp2.DateFrom > pp.DateFrom
+	)
+		,ISNULL(p.LeavingDate,'20591231 00:00')) AS EndDate
+FROM scheduleperiod pp
+INNER JOIN Person person ON person.Id = pp.Parent
+INNER JOIN readmodel.GroupingReadOnly p ON p.PersonId = pp.Parent and p.StartDate <= :date and p.EndDate >= :date
+WHERE p.BusinessUnitId = :businessUnit AND pp.DateFrom <= isnull(p.LeavingDate,'20591231 00:00') AND person.Id in (:personIds)) AS x
+WHERE x.EndDate >= :date and x.DateFrom <= :date
+GROUP BY PeriodType,Number,DateFrom,Culture
+ORDER BY [Priority] DESC
+		]]>
+	</sql-query>
 </hibernate-mapping>

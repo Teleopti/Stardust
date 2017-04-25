@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -15,19 +14,16 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("BucketB")]
 	public class PlanningPeriodRepositoryTest : RepositoryTest<IPlanningPeriod>
 	{
-		private static readonly DateOnly _startDate = new DateOnly(2001, 1, 1);
+		private static readonly DateOnly startDate = new DateOnly(2001, 1, 1);
 		private IPerson person;
 		private DateOnlyPeriod period;
 		private DateTime timestamp;
@@ -79,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetMostCommonlyUsedSchedulePeriods()
 		{
-			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[] {() => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1)});
+			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[] {() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1)});
 			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 			var range = planningPeriodSuggestions.Default().Range;
@@ -101,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetSuggestions()
 		{
-			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[] { () => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1) });
+			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[] { () => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1) });
 			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
@@ -114,8 +110,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
 			{
-				() => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1),
-				() => new SchedulePeriod(_startDate.AddDays(7), SchedulePeriodType.Week, 1)
+				() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1),
+				() => new SchedulePeriod(startDate.AddDays(7), SchedulePeriodType.Week, 1)
 			});
 			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
@@ -129,8 +125,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
 			{
-				() => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1),
-				() => new SchedulePeriod(_startDate.AddDays(5), SchedulePeriodType.Week, 1)
+				() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1),
+				() => new SchedulePeriod(startDate.AddDays(5), SchedulePeriodType.Week, 1)
 			});
 			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
@@ -144,9 +140,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
 			{
-				() => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1),
-				() => new SchedulePeriod(_startDate.AddDays(5), SchedulePeriodType.Week, 1)
+				() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1),
+				() => new SchedulePeriod(startDate.AddDays(5), SchedulePeriodType.Week, 1)
 			});
+
 			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
@@ -154,19 +151,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			suggestedPeriod.Count().Should().Be.EqualTo(7);
 		}
 
-	
-		private void SetupPersonsInOrganizationWithContract(IEnumerable<Func<SchedulePeriod>> schedulePeriodTypes)
+		[Test]
+		public void ShouldReturnSuggestionsOnlyForSpecificPeople()
+		{
+			var addedPeople = SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
+			{
+				() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1),
+				() => new SchedulePeriod(startDate, SchedulePeriodType.Month, 1)
+			});
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
+			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<Guid>{ addedPeople.First().Id.GetValueOrDefault()});
+
+			var suggestedPeriod = planningPeriodSuggestions.Default();
+			suggestedPeriod.Number.Should().Be.EqualTo(1);
+			suggestedPeriod.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Week);
+		}
+
+
+		private IList<IPerson> SetupPersonsInOrganizationWithContract(IEnumerable<Func<SchedulePeriod>> schedulePeriodTypes)
 		{
 			ITeam team = TeamFactory.CreateSimpleTeam("hola");
 			ISite site = SiteFactory.CreateSimpleSite();
 			site.AddTeam(team);
 			IActivity act = new Activity("for test");
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
-			ISkill skill = new Skill("for test", "sdf", Color.Blue, 3, skType);
-			skill.Activity = act;
-			skill.TimeZone = TimeZoneInfo.Local;
-
-			PersonPeriod okPeriod = new PersonPeriod(_startDate, createPersonContract2(), team);
+			ISkill skill = new Skill("for test", "sdf", Color.Blue, 3, skType)
+			{
+				Activity = act,
+				TimeZone = TimeZoneInfo.Local
+			};
+			var okPeriod = new PersonPeriod(startDate, createPersonContract2(), team);
 			okPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			
 			PersistAndRemoveFromUnitOfWork(act);
@@ -175,33 +189,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(team);
 
-			createPersonAndSchedulePeriod(okPeriod, schedulePeriodTypes);
+			var people = createPersonAndSchedulePeriod(okPeriod, schedulePeriodTypes);
 
 			forceReadModelUpdate();
+			return people;
 		}
 
 		private void forceReadModelUpdate()
 		{
-			var groupingReadModel = new GroupingReadOnlyRepository(new ThisUnitOfWork(UnitOfWork));
+			var groupingReadModel = new GroupingReadOnlyRepository(CurrUnitOfWork);
 			groupingReadModel.UpdateGroupingReadModel(new[] {Guid.Empty});
 		}
 
-		private void createPersonAndSchedulePeriod(PersonPeriod okPeriod, IEnumerable<Func<SchedulePeriod>> schedulePeriodTypes)
+		private IList<IPerson> createPersonAndSchedulePeriod(PersonPeriod okPeriod, IEnumerable<Func<SchedulePeriod>> schedulePeriodTypes)
 		{
-			schedulePeriodTypes.ForEach(x =>
+			return schedulePeriodTypes.Select(schedulePeriodCreator =>
 			{
-				SchedulePeriod schedulePeriod2 = x();
+				var schedulePeriod2 = schedulePeriodCreator();
 				var sCategory = new ShiftCategory("for test");
 				schedulePeriod2.AddShiftCategoryLimitation(new ShiftCategoryLimitation(sCategory));
 
 				IPerson okPerson = PersonFactory.CreatePerson("hejhej");
-				okPerson.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
+				okPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 				okPerson.AddPersonPeriod(okPeriod.NoneEntityClone());
 				okPerson.AddSchedulePeriod(schedulePeriod2);
 
 				PersistAndRemoveFromUnitOfWork(sCategory);
 				PersistAndRemoveFromUnitOfWork(okPerson);
-			});
+				return okPerson;
+			}).ToList();
 		}
 
 		private IPersonContract createPersonContract2()

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy
 	public interface IPlanningPeriod : IAggregateRoot
 	{
 		DateOnlyPeriod Range { get; }
-		void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation);
+		void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, bool updateTypeAndNumber = false);
 		IPlanningPeriod NextPlanningPeriod(IAgentGroup agentGroup);
 		PlanningPeriodState State { get; }
 		IAgentGroup AgentGroup { get; }

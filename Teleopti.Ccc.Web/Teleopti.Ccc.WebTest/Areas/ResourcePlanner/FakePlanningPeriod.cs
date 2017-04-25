@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		public DateOnlyPeriod Range { get; private set; }
-		public void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
+		public void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, bool updateTypeAndNumber = false)
 		{
 			throw new NotImplementedException();
 		}

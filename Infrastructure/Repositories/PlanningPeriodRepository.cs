@@ -27,6 +27,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new PlanningPeriodSuggestions(now, uniqueSchedulePeriods);
 		}
 
+		public IPlanningPeriodSuggestions Suggestions(INow now, ICollection<Guid> personIds)
+		{
+			var uniqueSchedulePeriods = Session.GetNamedQuery("UniqueSchedulePeriodsForPeople")
+				.SetDateTime("date", now.UtcDateTime())
+				.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetParameterList("personIds", personIds)
+				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(AggregatedSchedulePeriod)))
+				.List<AggregatedSchedulePeriod>();
+
+			return new PlanningPeriodSuggestions(now, uniqueSchedulePeriods);
+		}
+
 		public IEnumerable<IPlanningPeriod> LoadForAgentGroup(IAgentGroup agentGroup)
 		{
 			return Session.CreateCriteria(typeof(PlanningPeriod))

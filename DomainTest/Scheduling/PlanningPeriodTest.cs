@@ -78,5 +78,68 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			target.ChangeRange(new SchedulePeriodForRangeCalculation { Culture = culture, Number = 1, PeriodType = SchedulePeriodType.Week, StartDate = new DateOnly(2015, 06, 01) });
 			target.NextPlanningPeriod(null).Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 8, 2015, 06, 21));
 		}
+
+		[Test]
+		public void ShouldChangeTypeOfPeriodAndNextPeriodShouldUseSameWeek()
+		{
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>()));
+
+			var startDate = new DateOnly(2017, 04, 03);
+			target.ChangeRange(new SchedulePeriodForRangeCalculation
+			{
+				Number = 14,
+				PeriodType = SchedulePeriodType.Day,
+				StartDate = startDate
+			}, true);
+
+			target.Range.StartDate.Should().Be.EqualTo(startDate);
+			target.Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 16));
+
+			var nextPeriod = target.NextPlanningPeriod(null);
+			nextPeriod.Range.StartDate.Should().Be.EqualTo(new DateOnly(2017, 04, 17));
+			nextPeriod.Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 30));
+		}
+
+		[Test]
+		public void ShouldChangeTypeOfPeriodAndNextPeriodShouldUseSameMonth()
+		{
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>()));
+
+			var startDate = new DateOnly(2017, 04, 01);
+			target.ChangeRange(new SchedulePeriodForRangeCalculation
+			{
+				Number = 30,
+				PeriodType = SchedulePeriodType.Day,
+				StartDate = startDate
+			}, true);
+
+			target.Range.StartDate.Should().Be.EqualTo(startDate);
+			target.Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 30));
+
+			var nextPeriod = target.NextPlanningPeriod(null);
+			nextPeriod.Range.StartDate.Should().Be.EqualTo(new DateOnly(2017, 05, 01));
+			nextPeriod.Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 31));
+		}
+
+		[Test]
+		public void ShouldChangeTypeOfPeriodAndNextPeriodShouldUseSameDays()
+		{
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>()));
+
+			var startDate = new DateOnly(2017, 04, 01);
+			target.ChangeRange(new SchedulePeriodForRangeCalculation
+			{
+				Number = 8,
+				PeriodType = SchedulePeriodType.Day,
+				StartDate = startDate
+			}, true);
+
+			target.Range.StartDate.Should().Be.EqualTo(startDate);
+			target.Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 08));
+
+			var nextPeriod = target.NextPlanningPeriod(null);
+			nextPeriod.Range.StartDate.Should().Be.EqualTo(new DateOnly(2017, 04, 09));
+			nextPeriod.Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 16));
+		}
 	}
 }

@@ -97,5 +97,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				_planningPeriods.Add(planningPeriod);
 			_planningPeriodSuggestions = planningPeriodSuggestions;
 		}
+
+		public IPlanningPeriodSuggestions Suggestions(INow now, ICollection<Guid> personIds)
+		{
+			return Suggestions(now);
+		}
 	}
 }

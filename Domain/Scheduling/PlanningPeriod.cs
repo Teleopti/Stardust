@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -71,9 +72,27 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_state = PlanningPeriodState.Scheduled;
 		}
 
-		public virtual void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
+		public virtual void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, bool updateTypeAndNumber = false)
 		{
 			_range = _calculator.PeriodForType(schedulePeriodForRangeCalculation.StartDate, schedulePeriodForRangeCalculation);
+			if (updateTypeAndNumber)
+			{
+				if (schedulePeriodForRangeCalculation.PeriodType == SchedulePeriodType.Day && schedulePeriodForRangeCalculation.Number % 7 == 0)
+				{
+					_periodType = SchedulePeriodType.Week;
+					_number = schedulePeriodForRangeCalculation.Number / 7;
+				}
+				else if (schedulePeriodForRangeCalculation.PeriodType == SchedulePeriodType.Day && _range.StartDate.Day == 1 && _range.EndDate.Month != _range.EndDate.AddDays(1).Month)
+				{
+					_periodType = SchedulePeriodType.Month;
+					_number = 12 * (_range.EndDate.Year - _range.StartDate.Year) + (_range.EndDate.Month - _range.StartDate.Month) + 1;
+				}
+				else
+				{
+					_periodType = schedulePeriodForRangeCalculation.PeriodType;
+					_number = schedulePeriodForRangeCalculation.Number;
+				}			
+			}
 		}
 
 		public virtual void Publish(params IPerson[] people)
