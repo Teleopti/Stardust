@@ -64,6 +64,10 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		});
 	}
 
+   function _showDayScheduleForStartPage(){
+	 return Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446");
+   }
+
 	function _initNavigation() {
 		$('.dropdown-menu a[data-mytime-action]')
 			.click(function (e) {
@@ -73,9 +77,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		;
 
 		if (location.hash.length <= 1) {
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446")){
-			location.replace("#" + (_isMobile() ? "Schedule/MobileDay" : _settings.defaultNavigation));
-		} else {
+            if (_showDayScheduleForStartPage() && _isMobile()){
+			location.replace("#Schedule/MobileDay");
+            } else { 
 				location.replace("#" + (_isMobile() ? "Schedule/MobileWeek" : _settings.defaultNavigation));
 			} 
 		}
@@ -268,7 +272,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		var isWeekSchedule = hash.indexOf("#Schedule") >= 0;
 
 		if (_endsWith(hash, "Tab")) {
-			var suffix = (hash.indexOf("#Schedule") === 0) ? (_isMobile() ? "/MobileWeek" : "/Week") : "/Index";
+            var suffix = (hash.indexOf("#Schedule") === 0) ? (_isMobile() ? (_showDayScheduleForStartPage()?"/MobileDay": "/MobileWeek" ): "/Week") : "/Index";
 			hash = hash.substring(0, hash.length - 'Tab'.length) + suffix;
 		}
 
