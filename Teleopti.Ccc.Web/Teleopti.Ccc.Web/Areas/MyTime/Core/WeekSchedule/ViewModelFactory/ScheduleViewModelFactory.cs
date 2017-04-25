@@ -58,10 +58,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, domainData);
 			var weekScheduleViewModel = _weekMapper.Map(domainData);
 			setPossibilities(date, staffingPossiblityType, weekScheduleViewModel);
+
+			var scheduleForThisDate = weekScheduleViewModel.Days.SingleOrDefault(d => d.Date == date.Date.ToShortDateString());
 			return new DayScheduleViewModel
 			{
-				Date = date,
-				Schedule = weekScheduleViewModel.Days.SingleOrDefault(d=>d.Date == date.Date.ToShortDateString()),
+				Date = scheduleForThisDate == null ? date.ToShortDateString() : scheduleForThisDate.Date,
+				Schedule = scheduleForThisDate,
 				RequestPermission = weekScheduleViewModel.RequestPermission,
 				TimeLineCulture = weekScheduleViewModel.TimeLineCulture,
 				TimeLine = weekScheduleViewModel.TimeLine,
