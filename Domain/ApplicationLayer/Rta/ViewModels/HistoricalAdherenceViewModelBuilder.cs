@@ -41,10 +41,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		
 		public HistoricalAdherenceViewModel Build(Guid personId)
 		{
+			var now = _now.UtcDateTime();
 			var person = _persons.Load(personId);
 
 			var timeZone = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
-			var timeZoneTime = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), timeZone);
+			var timeZoneTime = TimeZoneInfo.ConvertTimeFromUtc(now, timeZone);
 			var date = new DateOnly(timeZoneTime);
 
 			var schedule = getScheduleLayers(date, person);
@@ -58,15 +59,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
 			endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
 			
-			var userNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			return new HistoricalAdherenceViewModel
 			{
-				Now = userNow.ToString("yyyy-MM-ddTHH:mm:ss"),
+				Now = formatForUser(now),
 				PersonId = personId,
 				AgentName = person?.Name.ToString(),
 				Schedules = buildSchedules(schedule),
 				Changes = buildChanges(personId, startTime, endTime),
-				OutOfAdherences = buildOutOfAdherences(personId, startTime, endTime)
+				OutOfAdherences = buildOutOfAdherences(personId, startTime, endTime),
+				Timeline = new ScheduleTimeline
+				{
+					StartTime = formatForUser(startTime),
+					EndTime = formatForUser(endTime)
+				}
 			};
 		}
 

@@ -132,5 +132,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 
 			data.Changes.Single().Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldIncludeTimelineEndpointsWithoutScheduleWhenUserInStockholm()
+		{
+			TimeZone.IsSweden();
+			Now.Is("2017-04-25 09:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person, "name");
+
+			var viewModel = Target.Build(person);
+
+			viewModel.Timeline.StartTime.Should().Be("2017-04-25T02:00:00");
+			viewModel.Timeline.EndTime.Should().Be("2017-04-26T02:00:00");
+		}
+
 	}
 }

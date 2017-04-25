@@ -107,5 +107,75 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 
 			viewModel.Schedules.Last().StartTime.Should().Be("2017-04-19T01:00:00");
 		}
+
+		[Test]
+		public void ShouldIncludeTimelineEndpoints()
+		{
+			Now.Is("2016-10-11 09:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person, "name")
+				.WithAssignment(person, "2016-10-11")
+				.WithActivity(null, "phone", ColorTranslator.FromHtml("#80FF80"))
+				.WithAssignedActivity("2016-10-11 09:00", "2016-10-11 17:00");
+
+			var viewModel = Target.Build(person);
+
+			viewModel.Timeline.StartTime.Should().Be("2016-10-11T08:00:00");
+			viewModel.Timeline.EndTime.Should().Be("2016-10-11T18:00:00");
+		}
+
+		[Test]
+		public void ShouldIncludeTimelineEndpointsForAgentInChina()
+		{
+			Now.Is("2016-10-12 12:00");
+			var person = Guid.NewGuid();
+
+			Database
+				.WithAgent(person, "nicklas", TimeZoneInfoFactory.ChinaTimeZoneInfo())
+				.WithAssignment(person, "2016-10-11")
+				.WithActivity()
+				.WithAssignedActivity("2016-10-11 00:00", "2016-10-11 09:00")
+				.WithAssignment(person, "2016-10-12")
+				.WithActivity()
+				.WithAssignedActivity("2016-10-12 00:00", "2016-10-12 09:00")
+				.WithAssignment(person, "2016-10-13")
+				.WithActivity()
+				.WithAssignedActivity("2016-10-13 00:00", "2016-10-13 09:00");
+
+			var viewModel = Target.Build(person);
+
+			viewModel.Timeline.StartTime.Should().Be("2016-10-11T23:00:00");
+			viewModel.Timeline.EndTime.Should().Be("2016-10-12T10:00:00");
+		}
+
+		[Test]
+		public void ShouldIncludeTimelineEndpointsWithoutSchedule()
+		{
+			Now.Is("2016-10-11 09:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person, "name");
+
+			var viewModel = Target.Build(person);
+
+			viewModel.Timeline.StartTime.Should().Be("2016-10-11T00:00:00");
+			viewModel.Timeline.EndTime.Should().Be("2016-10-12T00:00:00");
+		}
+
+		[Test]
+		public void ShouldIncludeTimelineEndpointsWithoutScheduleWhenAgentInChina()
+		{
+			Now.Is("2016-10-11 09:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person, "nicklas", TimeZoneInfoFactory.ChinaTimeZoneInfo());
+
+			var viewModel = Target.Build(person);
+
+			viewModel.Timeline.StartTime.Should().Be("2016-10-10T16:00:00");
+			viewModel.Timeline.EndTime.Should().Be("2016-10-11T16:00:00");
+		}
+
 	}
 }

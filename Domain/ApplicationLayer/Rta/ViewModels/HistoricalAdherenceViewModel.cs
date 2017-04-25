@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<AgentOutOfAdherenceViewModel> OutOfAdherences { get; set; }
 		public IEnumerable<HistoricalChangeViewModel> Changes { get; set; }
 		public string Now { get; set; }
+		public ScheduleTimeline Timeline { get; set; }
 	}
 
 	public class HistoricalAdherenceActivityViewModel
@@ -31,5 +32,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string RuleColor { get; set; }
 		public string Adherence { get; set; }
 		public string AdherenceColor { get; set; }
+	}
+
+	public class ScheduleTimeline
+	{
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
 	}
 }
