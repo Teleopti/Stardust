@@ -133,7 +133,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		self.IsPostingData(true);
 
-		// Teleopti.MyTimeWeb.Request.List.HideRequests(false);	
+		 Teleopti.MyTimeWeb.Request.List.HideRequests(false);	
 		var formData = _getFormData(model);
 		ajax.Ajax({
 			url: formData.Url,

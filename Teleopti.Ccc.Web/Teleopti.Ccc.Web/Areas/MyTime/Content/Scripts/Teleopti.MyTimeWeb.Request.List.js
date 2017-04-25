@@ -504,7 +504,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			_unbind();
 		},
 		HideRequests: function (show) {
-			pageViewModel.hideRequestsOnPhone(show);
+			if (pageViewModel != null)
+				pageViewModel.hideRequestsOnPhone(show);
 		}
 
 	};
