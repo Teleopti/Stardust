@@ -136,9 +136,7 @@
     <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Teleopti.Ccc.Sdk.ServiceBus\log4net.config">
-      <Link>log4net.config</Link>
-    </None>
+    <None Include="log4net.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -221,7 +219,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusHost.config" "$(ProjectDir)App.config"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusHost.config" "$(ProjectDir)App.config"
+if not exist "$(ProjectDir)log4net.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBuslog4net.config" "$(ProjectDir)log4net.config"</PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
