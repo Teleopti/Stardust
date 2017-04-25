@@ -15,6 +15,7 @@
     var toggledSchedulingOnStardust = false;
     var checkProgressRef;
     var keepAliveRef;
+    var preMessage = "";
     vm.selectedPp = null;
     vm.show = vm.selectedPp ? false : true;
     vm.schedulingPerformed = false;
@@ -87,6 +88,9 @@
         var query = planningPeriodService.getPlanningPeriodsForAgentGroup({ agentGroupId: id });
         return query.$promise.then(function (data) {
           vm.planningPeriods = data;
+          if (vm.planningPeriods.length == 0) {
+            startNextPlanningPeriod();
+          }
           return vm.planningPeriods;
         });
       }
@@ -119,7 +123,6 @@
       return planningPeriod.$promise.then(function (data) {
         vm.preValidation = data.ValidationResult.InvalidResources;
         getTotalValidationErrorsNumber(vm.preValidation, vm.scheduleIssues);
-        console.log('get pp',data);
         return vm.preValidation;
       });
     }
@@ -149,13 +152,15 @@
           if (!result.HasJob) {
             vm.schedulingPerformed = false;
           } else {
-            if (result.Successful) {
+            if (result.Successful === true) {
               if (vm.schedulingPerformed === true) {
                 vm.schedulingPerformed = false;
+                NoticeService.success("Successfully scheduled planning period:" + moment(vm.selectedPp.StartDate).format('DD/MM/YYYY') + "-" + moment(vm.selectedPp.EndDate).format('DD/MM/YYYY'), null, true);
                 loadLastResult(pp);
               }
-            } else if (result.Failed) {
+            } else if (result.Failed === true) {
               vm.schedulingPerformed = false;
+              vm.lastJobFail = true;
               if (result.CurrentStep === 0) {
                 handleScheduleOrOptimizeError($translate.instant('FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError'));
               } else if (result.CurrentStep === 1) {
@@ -178,8 +183,12 @@
     function handleScheduleOrOptimizeError(message) {
       if (!message)
         message = "An error occurred. Please try again.";
-      vm.schedulingPerformed = false;
-      vm.status = '';
+      if (message === preMessage) {
+        return
+      } else {
+        NoticeService.warning(message, null, true);
+        preMessage = message;
+      }
     }
 
     function intraOptimize(pp) {
@@ -302,14 +311,14 @@
       }
     }
 
-    function changeEndDate(){
+    function changeEndDate() {
       var newEndDate = moment(vm.lastPp.endDate).format('YYYY-MM-DD');
       vm.planningPeriods = [];
-        var changeEndDateForLastPlanningPeriod = planningPeriodService.changeEndDateForLastPlanningPeriod({ agentGroupId: agentGroupId, endDate: newEndDate});
-        return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
-          vm.planningPeriods = data;
-          return vm.planningPeriods;
-        });
+      var changeEndDateForLastPlanningPeriod = planningPeriodService.changeEndDateForLastPlanningPeriod({ agentGroupId: agentGroupId, endDate: newEndDate });
+      return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
+        vm.planningPeriods = data;
+        return vm.planningPeriods;
+      });
     }
 
     function displayGrid() {

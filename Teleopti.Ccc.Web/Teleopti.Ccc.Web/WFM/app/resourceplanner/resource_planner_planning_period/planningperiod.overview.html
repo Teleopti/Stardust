@@ -1,11 +1,11 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
 		<h1><i class="mdi mdi-calendar"></i> Schedule Agent Group "{{vm.agentGroup.Name}}"</h1>
-		<p ng-show="vm.selectedPp == null">Select planning period to work with</p>
-		<p ng-show="vm.selectedPp">Selected planning period: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</p>
-	</div>
-	<div>
-		<p class="pp-status" ng-if="vm.isDisable() && vm.totalAgents > 0">{{vm.status}}</p>
+		<div class="pp-sub-title">
+			<span ng-show="vm.selectedPp == null">Select planning period to work with</span>
+			<span ng-show="vm.selectedPp">Selected planning period: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
+			<span ng-if="vm.isDisable() && vm.totalAgents > 0" class="pp-status"> {{vm.status}}</span>
+		</div>
 	</div>
 </div>
 <div class="panel material-depth-1 pp-fix" ng-if="vm.show">
@@ -45,10 +45,10 @@
 		</div>
 	</div>
 </div>
+<div ng-if="vm.isDisable() && vm.totalAgents > 0" class="pp-progress test-schedule-is-running">
+	<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+</div>
 <div class="panel material-depth-1 pp-fix" ng-show="vm.selectedPp && !vm.show">
-	<div ng-show="vm.isDisable() && vm.totalAgents > 0" class="test-schedule-is-running">
-		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-	</div>
 	<div class="wfm-slide-tabs tabbed-panel">
 		<div class="head-actions panel-menu">
 			<div tabindex=0 class="context-menu card-context">
@@ -136,7 +136,7 @@
 					<md-tab-body class="md-padding">
 						<div class="con-row" ng-show="vm.preValidation.length == 0 && vm.scheduleIssues.length == 0 ">
 							<div class="con-flex">
-								<span><i class="mdi mdi-information-outline"></i>There are no validation issues for this planning period!</span>
+								<span><i class="mdi mdi-information-outline"></i>There are no validation issues for this planning period.</span>
 							</div>
 						</div>
 						<wfm-card-list multi-select>
@@ -146,7 +146,7 @@
 										<span><i class="mdi"></i>
 											Pre-scheduling validation issues
 											<div tabindex=0 class="context-menu card-context">
-												<i ng-click="vm.getPrevalidationByPpId(vm.selectedPp)" class="mdi mdi-refresh"></i>
+												<i ng-click="vm.getPrevalidationByPpId(vm.selectedPp);$event.stopPropagation();" class="mdi mdi-refresh"></i>
 												<md-tooltip>Refresh Pre-scheduling Validation issues</md-tooltip>
 											</div>
 										</span>
@@ -160,9 +160,10 @@
 											<div class="con-row">
 												<div class="con-flex ">
 													<label for="filter" class="input-icon">
-														<i class="mdi mdi-filter-outline"></i>
+														<i class="mdi mdi-filter-outline">
 														<input type="text" id="filter" ng-model="vm.validationFilter" placeholder="Filter validation issues">
 														<md-tooltip>Filter validation issues</md-tooltip>
+														</i>
 													</label>
 												</div>
 												<div class="con-flex"></div>
@@ -201,9 +202,10 @@
 											<div class="con-row">
 												<div class="con-flex ">
 													<label for="filter" class="input-icon">
-														<i class="mdi mdi-filter-outline"></i>
+														<i class="mdi mdi-filter-outline">
 														<input type="text" id="filter" ng-model="vm.scheduleIssuesFilter" placeholder="Filter validation issues">
 														<md-tooltip>Filter validation issues</md-tooltip>
+														</i>
 													</label>
 												</div>
 												<div class="con-flex"></div>
@@ -282,7 +284,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-
-</style>
