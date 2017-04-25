@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Intraday
@@ -9,16 +11,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly ISkillAreaRepository _skillAreaRepository;
 		private readonly ILoadAllSkillInIntradays _loadAllSkillInIntradays;
-
-		public FetchSkillArea(ISkillAreaRepository skillAreaRepository, ILoadAllSkillInIntradays loadAllSkillInIntradays)
+		private readonly IUserUiCulture _uiCulture;
+		public FetchSkillArea(ISkillAreaRepository skillAreaRepository, ILoadAllSkillInIntradays loadAllSkillInIntradays, IUserUiCulture uiCulture)
 		{
 			_skillAreaRepository = skillAreaRepository;
 			_loadAllSkillInIntradays = loadAllSkillInIntradays;
+			_uiCulture = uiCulture;
 		}
 
 		public IEnumerable<SkillAreaViewModel> GetAll()
 		{
-			var skillAreas = _skillAreaRepository.LoadAll();
+			var skillAreas = _skillAreaRepository.LoadAll()
+				.OrderBy(x => x.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
 			var skills = _loadAllSkillInIntradays.Skills().ToDictionary(x => x.Id, x => x);
 			
 			return skillAreas.Select(skillArea => new SkillAreaViewModel
@@ -33,7 +37,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 					SkillType = skills.ContainsKey(skill.Id) ? skills[skill.Id].SkillType: null,
 					DoDisplayData = skills.ContainsKey(skill.Id) && skills[skill.Id].DoDisplayData
 				}).ToArray()
-			}).ToArray();
+			})
+			.ToArray();
 		}
 
 		public SkillAreaViewModel Get(Guid skillAreaId)

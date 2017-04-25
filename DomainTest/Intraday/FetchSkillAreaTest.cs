@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -12,12 +15,17 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
-	public class FetchSkillAreaTest
+	public class FetchSkillAreaTest : ISetup
 	{
 		public FetchSkillArea Target;
 		public FakeSkillAreaRepository SkillAreaRepository;
 		public FakeLoadAllSkillInIntradays LoadAllSkillInIntradays;
+		public FakeUserUiCulture UiCulture;
 
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
+		}
 
 		[Test]
 		public void ShouldGetAll()
@@ -28,6 +36,33 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			Target.GetAll().Count()
 				.Should().Be.EqualTo(2);
 		}
+
+
+		[Test]
+		public void ShouldSortNameInSkillarea()
+		{
+			SkillAreaRepository.Has(new SkillArea { Name = "B",Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "C",Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "A", Skills = new List<SkillInIntraday>() }.WithId());
+			
+			UiCulture.IsSwedish();
+			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "B", "C" });
+
+		}
+
+	
+		[Test]
+		public void ShouldSortSwedishNameInSkillarea()
+		{
+			SkillAreaRepository.Has(new SkillArea { Name = "Ä", Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "A", Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "Å", Skills = new List<SkillInIntraday>() }.WithId());
+
+			UiCulture.IsSwedish();
+			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "Å", "Ä" });
+
+		}
+
 
 		[Test]
 		public void ShouldMapViewModelCorrectly()
@@ -113,5 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.Skills.Single().Name.Should().Be("Phone");
 			result.Skills.Single().IsDeleted.Should().Be(false);
 		}
+
+
 	}
 }
