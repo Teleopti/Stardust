@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				if (!_skillCombinationResourceReadModelValidator.Validate())
 				{
-					logger.Warn(Resources.DenyReasonTechnicalIssues + "Read model is not up to date");
+					logger.Error(Resources.DenyReasonTechnicalIssues + "Read model is not up to date");
 					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
 					return;
 				}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
 				if (!combinationResources.Any())
 				{
-					logger.Warn(Resources.DenyReasonTechnicalIssues + " Can not find any skillcombinations.");
+					logger.Error(Resources.DenyReasonTechnicalIssues + " Can not find any skillcombinations.");
 					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
 					return;
 				}
