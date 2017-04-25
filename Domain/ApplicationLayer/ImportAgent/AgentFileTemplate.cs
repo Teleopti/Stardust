@@ -50,6 +50,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public MemoryStream GetFileTemplate(params RawAgent[] agents)
 		{
 			var ms = new MemoryStream();
+			var returnedFile = GetWorkbook(agents);
+			returnedFile.Write(ms);
+			return ms;
+		}
+
+		public IWorkbook GetDefaultFileTemplate()
+		{
+			return GetWorkbook(GetDefaultAgent());
+		}
+
+		private IWorkbook GetWorkbook(params RawAgent[] agents)
+		{
 			var returnedFile = GetTemplateWorkbook(SHEETNAME);
 			var newSheet = returnedFile.GetSheet(SHEETNAME);
 
@@ -80,17 +92,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 				}
 			}
-			returnedFile.Write(ms);
-
-			return ms;
+			return returnedFile;
 		}
 
-
-
-		public IWorkbook GetTemplateWorkbook(string invalidUserSheetName, bool isXlsx = false)
+		public IWorkbook GetTemplateWorkbook(string sheetName, bool isXlsx = false)
 		{
 			var returnedFile = isXlsx ? (IWorkbook)new XSSFWorkbook() : new HSSFWorkbook();
-			var newsheet = returnedFile.CreateSheet(invalidUserSheetName);
+			var newsheet = returnedFile.CreateSheet(sheetName);
 
 			var fmt = returnedFile.CreateDataFormat();
 			var textStyle = returnedFile.CreateCellStyle();

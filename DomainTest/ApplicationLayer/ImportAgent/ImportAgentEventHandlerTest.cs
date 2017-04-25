@@ -213,8 +213,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			});
 			var message = jobResult.Details.Single().Message;
 			message.Should().Be.EqualTo("success count:1, failed count:0, warning count:0");
-			jobResult.Artifacts.Where(ar => ar.Category == JobResultArtifactCategory.OutputError).Count().Should().Be(0);
-			jobResult.Artifacts.Where(ar => ar.Category == JobResultArtifactCategory.OutputWarning).Count().Should().Be(0);
+			jobResult.Artifacts.Count(ar => ar.Category == JobResultArtifactCategory.OutputError).Should().Be(0);
+			jobResult.Artifacts.Count(ar => ar.Category == JobResultArtifactCategory.OutputWarning).Should().Be(0);
 		}
 
 		[Test]
@@ -238,8 +238,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var message = jobResult.Details.Single().Message;
 			message.Should().Be.EqualTo("success count:0, failed count:100, warning count:0");
 
-			jobResult.Artifacts.Where(ar => ar.Category == JobResultArtifactCategory.OutputError).Count().Should().Be(1);
-			jobResult.Artifacts.Where(ar => ar.Category == JobResultArtifactCategory.OutputWarning).Count().Should().Be(0);
+			jobResult.Artifacts.Count(ar => ar.Category == JobResultArtifactCategory.OutputError).Should().Be(1);
+			jobResult.Artifacts.Count(ar => ar.Category == JobResultArtifactCategory.OutputWarning).Should().Be(0);
 
 			var failedArtifact = jobResult.Artifacts.Single(ar => ar.Category == JobResultArtifactCategory.OutputError);
 			var wookbook = FileProcessor.ParseFile(new FileData
@@ -274,8 +274,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			});
 			var message = jobResult.Details.Single().Message;
 			message.Should().Be.EqualTo("success count:0, failed count:0, warning count:1");
-			jobResult.Artifacts.Where(ar => ar.Category == JobResultArtifactCategory.OutputError).Count().Should().Be(0);
-			jobResult.Artifacts.Where(ar => ar.Category == JobResultArtifactCategory.OutputWarning).Count().Should().Be(1);
+			jobResult.Artifacts.Count(ar => ar.Category == JobResultArtifactCategory.OutputError).Should().Be(0);
+			jobResult.Artifacts.Count(ar => ar.Category == JobResultArtifactCategory.OutputWarning).Should().Be(1);
 		}
 
 

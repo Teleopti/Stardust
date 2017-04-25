@@ -150,38 +150,34 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		protected virtual HttpResponseMessage ProcessInternal(IEnumerable<HttpContent> contents)
 		{
 			var formData = _multipartHttpContentExtractor.ExtractFormModel<ImportAgentDefaults>(contents);
-			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents);
-			var workbook = _fileProcessor.ParseFile(fileData.SingleOrDefault());
-			var isXlsx = workbook is XSSFWorkbook;
+			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents).Single();
+			var isXlsx = fileData.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase);
+			var processResult = _fileProcessor.Process(fileData, _userTimeZone.TimeZone(), formData);
 
-			var errorMsg = _fileProcessor.ValidateSheetColumnHeader(workbook);
-			if (!errorMsg.IsNullOrEmpty())
+			if (processResult.ErrorMessages.Any())
 			{
+				var errorMsg = string.Join(", ", processResult.ErrorMessages);
 				var invalidFileResponse = Request.CreateResponse((HttpStatusCode)422);
 				invalidFileResponse.Headers.Clear();
 				invalidFileResponse.Headers.Add("Message", $"format errors: {errorMsg}");
-
 				invalidFileResponse.Content = new StringContent(errorMsg);
-				invalidFileResponse.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 				return invalidFileResponse;
 			}
-			var total = _fileProcessor.GetNumberOfRecordsInSheet(workbook.GetSheetAt(0));
-			var invalidAgents = _fileProcessor.ProcessSheet(workbook.GetSheetAt(0), _userTimeZone.TimeZone(), formData).ToList();
 
-			var successCount = total - invalidAgents.Count;
-			var failedCount = invalidAgents.Count(a => a.Feedback.ErrorMessages.Any());
-			var warningCount = invalidAgents.Count(a => (!a.Feedback.ErrorMessages.Any()) && a.Feedback.WarningMessages.Any());
-
+			var invalidAgents = processResult.FailedAgents;
+			invalidAgents.AddRange(processResult.WarningAgents);
 			var response = Request.CreateResponse(HttpStatusCode.OK);
+			var message = processResult.GetSummaryMessage();
 			response.Headers.Clear();
-			response.Headers.Add("Message", $"success count:{successCount}, failed count:{failedCount}, warning count:{warningCount}");
-
+			response.Headers.Add("Message", message);
 			if (!invalidAgents.Any())
 			{
+				response.Content = new StringContent(message);
+				response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 				return response;
 			}
 
-			var ms = _fileProcessor.CreateFileForInvalidAgents(invalidAgents.ToList(), isXlsx);
+			var ms = _fileProcessor.CreateFileForInvalidAgents(invalidAgents, fileData.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase));
 			response.Content = new ByteArrayContent(ms.ToArray());
 			response.Content.Headers.ContentType =
 				new MediaTypeHeaderValue(isXlsx ? newExcelFileContentType : oldExcelFileContentType);

@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				ErrorMessages.AddRange(other.ErrorMessages);
 				WarningMessages.AddRange(other.WarningMessages);
 			}
-		
+
 		}
 
-	
+
 	}
 
 	public class AgentFileProcessResult : IImportAgentResultCount
@@ -37,19 +37,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public AgentFileProcessResult()
 		{
 			ErrorMessages = new List<string>();
+			WarningAgents = new List<AgentExtractionResult>();
+			FailedAgents = new List<AgentExtractionResult>();
+			SucceedAgents = new List<AgentExtractionResult>();
 		}
 
-		public IList<string> ErrorMessages { get; set; }
+		public List<string> ErrorMessages { get; set; }
 		public DetailLevel DetailLevel { get; set; }
-		public List<AgentExtractionResult> WarningAgents { get; internal set; }
-		public List<AgentExtractionResult> FailedAgents { get; internal set; }
-		public List<AgentExtractionResult> SucceedAgents { get; internal set; }
+		public List<AgentExtractionResult> WarningAgents { get; }
+		public List<AgentExtractionResult> FailedAgents { get; }
+		public List<AgentExtractionResult> SucceedAgents { get; }
 		public int SuccessCount => SucceedAgents?.Count ?? 0;
-		public int FailedCount  => FailedAgents?.Count ?? 0; 
+		public int FailedCount => FailedAgents?.Count ?? 0;
 		public int WarningCount => WarningAgents?.Count ?? 0;
 	}
 
-	
+	public class AgentFileExtractionResult
+	{
+		public AgentFileExtractionResult()
+		{
+			Feedback = new Feedback();
+			RawResults = new List<AgentExtractionResult>();
+		}
+
+		public IList<AgentExtractionResult> RawResults { get; }
+		public Feedback Feedback { get; }
+
+		public bool HasError => Feedback.ErrorMessages.Any();
+	}
+
 	public class AgentExtractionResult
 	{
 		public AgentDataModel Agent { get; set; }
