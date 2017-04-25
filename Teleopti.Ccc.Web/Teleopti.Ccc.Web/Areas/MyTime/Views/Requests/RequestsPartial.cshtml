@@ -11,6 +11,14 @@
 		Teleopti.MyTimeWeb.Request.RequestDetail.PrepareForViewModel(Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
 	});
 </script>
+<script>
+var messages = {
+	CURRENT_REQUESTS: "@Html.Raw(@Resources.CurrentRequests)",
+	ALL_REQUESTS: "	@Html.Raw(@Resources.AllRequests)",
+	BY_STARTDATE: "@Html.Raw(@Resources.SortByStartDate)",
+	BY_UPDATEDATE: "@Html.Raw(@Resources.SortByUpdateDate)"
+}
+</script>
 
 
 <script type="text/html" id="request-detail-not-set">
