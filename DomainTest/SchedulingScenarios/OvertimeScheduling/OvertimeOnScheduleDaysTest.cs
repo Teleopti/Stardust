@@ -276,7 +276,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		}
 
 		[Test]
-		[Ignore("43766")]
 		public void ShouldAddOvertimeOnPartOfSkillInterval()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
