@@ -448,43 +448,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				$"Tried optimize {numberOfAttempts} number of times but always moving DOs from same agent. Giving up...");
 		}
 
-		[Test, Ignore(@"
-This case is something that differs between classic and teamblock. 
-Our attempt to solve it killed perf though.
-Not really sure we need to make this green. If this is ignored in X weeks -> simply remove it.")]
-		public void ShouldTryAgainAfterFirstMoveFailed()
-		{
-			var firstDay = new DateOnly(2015, 10, 26); //mon
-			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
-			var scenario = ScenarioRepository.Has("some name");
-			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOf(2);
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 0, 0, 15), new TimePeriodWithSegment(8, 0, 8, 0, 15), shiftCategory));
-			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
-			var agentToForceMoveFirstDOFirst = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
-			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				10, //nattskift
-				10, //DO
-				10, //DO
-				10, //nattskift
-				1, //nattskift
-				1, //nattskift
-				10  //nattskift
-			));
-			PersonAssignmentRepository.Has(agentToForceMoveFirstDOFirst, scenario, activity, shiftCategory, firstDay.AddDays(2), new TimePeriod(15, 0, 17, 0));
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new TimePeriod(17, 0, 25, 0));
-			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate, agent).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate, agent).SetDayOff(new DayOffTemplate());
-
-			Target.Execute(planningPeriod.Id.Value);
-
-			PersonAssignmentRepository.LoadAll()
-				.Count(x => x.DayOff() != null && (x.Date == firstDay.AddDays(1) || x.Date == firstDay.AddDays(2)))
-				.Should().Be.LessThanOrEqualTo(1);
-		}
-
 		[TestCase(true)]
 		[TestCase(false)]
 		public void ShouldTryAgainAfterShiftCategoryLimitationHasBlockedFirstMove(bool order)
