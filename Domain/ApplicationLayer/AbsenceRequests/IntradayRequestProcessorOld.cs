@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessorOld));
 		private readonly IActivityRepository _activityRepository;
+		private readonly IAddResourcesToSubSkills _addResourcesToSubSkills;
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IPersonSkillProvider _personSkillProvider;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public IntradayRequestProcessorOld(ICommandDispatcher commandDispatcher,
 										   ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
 										   IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
-										   ISkillRepository skillRepository, IActivityRepository activityRepository,
+										   ISkillRepository skillRepository, IActivityRepository activityRepository, IAddResourcesToSubSkills addResourcesToSubSkills,
 										   ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff,
 										   SkillGroupPerActivityProvider skillGroupPerActivityProvider, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider,
 										   SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator)
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_skillRepository = skillRepository;
 			_activityRepository = activityRepository;
+			_addResourcesToSubSkills = addResourcesToSubSkills;
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_primarySkillOverstaff = primarySkillOverstaff;
 			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
@@ -175,7 +177,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 						{
 							var state = _primarySkillOverstaff.AvailableSum(skillStaffIntervalHolder, allSkillGroups, skillGroupsWithSameIndex, layer.Period);
-							state.AddResourcesToSubSkills.Execute(state, skillStaffIntervalHolder, skillGroupsWithSameIndex, layer.Period, new NoShovelingCallback());
+							_addResourcesToSubSkills.Execute(state, skillStaffIntervalHolder, skillGroupsWithSameIndex, layer.Period, new NoShovelingCallback());
 							_reducePrimarySkillResources.Execute(state, skillStaffIntervalHolder, layer.Period, null, new NoShovelingCallback());
 						}
 					}

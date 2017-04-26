@@ -7,24 +7,21 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class ShovelResourcesState
 	{
 		private readonly ResourceDistributionForSkillGroupsWithSameIndex _resourceDistribution;
-		private readonly double _minPrimaryOverstaffToContinue;
 		private readonly IDictionary<CascadingSkillGroup, double> _resourcesMovedOnSkillGroup;
 
-		public ShovelResourcesState(IAddResourcesToSubSkills addResourcesToSubSkills, 
-								IDictionary<ISkill, double> resources, 
+		public ShovelResourcesState(IDictionary<ISkill, double> resources, 
 								ResourceDistributionForSkillGroupsWithSameIndex resourceDistribution,
-								double minPrimaryOverstaffToContinue)
+								bool isAnyPrimarySkillOpen)
 		{
 			_resourceDistribution = resourceDistribution;
-			_minPrimaryOverstaffToContinue = minPrimaryOverstaffToContinue;
-			AddResourcesToSubSkills = addResourcesToSubSkills;
+			IsAnyPrimarySkillOpen = isAnyPrimarySkillOpen;
 			ResourcesAvailableForPrimarySkill = resources;
 			RemainingOverstaffing = ResourcesAvailableForPrimarySkill.Values.Sum();
 			TotalOverstaffingAtStart = RemainingOverstaffing;
 			_resourcesMovedOnSkillGroup = new Dictionary<CascadingSkillGroup, double>();
 		}
 
-		public IAddResourcesToSubSkills AddResourcesToSubSkills { get; }
+		public bool IsAnyPrimarySkillOpen { get; }
 		public IDictionary<ISkill, double> ResourcesAvailableForPrimarySkill { get; }
 		public double ResourcesMoved { get; private set; }
 		public double RemainingOverstaffing { get; private set; }
@@ -32,13 +29,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public bool ContinueShovel(CascadingSkillGroup skillGroup)
 		{
-			double resourcesMovedOnSkillGroup;
-			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out resourcesMovedOnSkillGroup))
+			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out double resourcesMovedOnSkillGroup))
 			{
 				resourcesMovedOnSkillGroup = 0;
 			}
-			return RemainingOverstaffing > _minPrimaryOverstaffToContinue && 
-				resourcesMovedOnSkillGroup < MaxToMoveForThisSkillGroup(skillGroup);
+			return RemainingOverstaffing > (IsAnyPrimarySkillOpen ? 0.1 : 0.001) &&
+					resourcesMovedOnSkillGroup < MaxToMoveForThisSkillGroup(skillGroup);
 		}
 
 		public double MaxToMoveForThisSkillGroup(CascadingSkillGroup skillgroup)

@@ -356,9 +356,6 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeApproveService.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePersonProvider.cs" />
     <Compile Include="Cascading\ActivityAndIntervalLength.cs" />
-    <Compile Include="Cascading\AddResourcesToSubSkillsWhenPrimaryIsClosed.cs" />
-    <Compile Include="Cascading\AddResourcesToSubSkillsWhenPrimaryIsOpen.cs" />
-    <Compile Include="Cascading\AddResourceToSubSkillsProvider.cs" />
     <Compile Include="Cascading\EmptyShovelResourceDataForInterval.cs" />
     <Compile Include="Cascading\IAddResourcesToSubSkills.cs" />
     <Compile Include="Cascading\OrderedSkillGroups.cs" />
