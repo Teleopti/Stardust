@@ -291,7 +291,7 @@
 			z-index: 115;
 		}
 
-		.team-schedule-wrapper .fab:focus {
+		.team-schedule-wrapper .fab-focus {
 			width: 100%;
 			height: 42%;
 			left: 0;
@@ -305,7 +305,7 @@
 			background-color: #9ccc33!important;
     		border-color: #8cbc23!;
 		}
-		.team-schedule-wrapper .fab:focus:before {
+		.team-schedule-wrapper .fab-focus:before {
 			display: none;
 		}
 		
@@ -315,7 +315,7 @@
     }
 
 		    @media only screen and (max-width : 414px) {
-			.team-schedule-wrapper .fab:focus {
+			.team-schedule-wrapper .fab-focus {
 				height: 22%!important;
 			}
 		}

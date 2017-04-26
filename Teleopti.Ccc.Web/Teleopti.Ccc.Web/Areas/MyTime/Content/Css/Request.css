@@ -714,7 +714,7 @@ input[type=search]::-ms-clear {
 			z-index: 115;
 		}
 
-		.requests-wrapper .fab:focus {
+		.requests-wrapper .fab-focus {
 			width: 100%;
 			height: 60%;
 			left: 0;
@@ -724,9 +724,19 @@ input[type=search]::-ms-clear {
 			padding: 1rem;
 			padding-bottom: 2rem;
 			border: none;
+			z-index: 1001;
 		}
 
-		.requests-wrapper .fab:focus:before {
+		.close-fab-overlay{
+			position: fixed;
+			top:0;
+			bottom:0;
+			left:0;
+			right:0;
+			z-index: 1000;
+		}
+
+		.requests-wrapper .fab-focus:before {
 			display: none;
 		}
 
@@ -744,7 +754,7 @@ input[type=search]::-ms-clear {
     }
 
 	    @media only screen and (max-width : 414px) {
-			.requests-wrapper .fab:focus {
+			.requests-wrapper .fab-focus {
 				height: 45%;
 			}
 		}

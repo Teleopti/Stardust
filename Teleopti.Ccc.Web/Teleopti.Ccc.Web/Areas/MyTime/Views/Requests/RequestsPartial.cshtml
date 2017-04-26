@@ -51,9 +51,10 @@ var messages = {
 
 <div class="requests-wrapper">
 <input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat" />
-	<div class="navbar-container" >
+	<div class="navbar-container"  >
+		<div class="close-fab-overlay" data-bind="visible: menuIsVisible,css: { 'hide-fab-on-phone': hideFab}, click: disableMenu"></div>
 		<div class="with-fab" data-bind="if: toggle, css: { 'hide-fab-on-phone': hideFab}">
-			<div class="navbar navbar-teleopti fab subnavbar" tabindex="0">
+			<div class="navbar navbar-teleopti fab subnavbar" data-bind="css: { 'fab-focus': menuIsVisible}, click: enableMenu, clickBubble: false" tabindex="0">
 				<div class="container">
 					<ul class="nav navbar-nav navbar-teleopti row submenu" >
 						@if (Model.RequestPermission.TextRequestPermission)
