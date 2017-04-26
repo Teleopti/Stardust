@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			setupContextMenuSkillGrid();
 			setupToolbarButtonsChartViews();
 			contextMenuViews.Opened += contextMenuViewsOpened;
-			setHeaderText(loadingPeriod.StartDate, loadingPeriod.EndDate);
+			setHeaderText(loadingPeriod.StartDate, loadingPeriod.EndDate, null, null);
 			setLoadingOptions();
 			setShowRibbonTexts();
 			setMenuItemsHardToLeftToRight();
@@ -546,11 +546,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripButtonValidation.Checked = _validation;
 		}
 
-		private void setHeaderText(DateOnly start, DateOnly end)
+		private void setHeaderText(DateOnly start, DateOnly end, DateOnly? outerStart, DateOnly? outerEnd)
 		{
 			var currentCultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var startDate = start.Date.ToString("d", currentCultureInfo);
 			var endDate = end.Date.ToString("d", currentCultureInfo);
+
+			if (outerStart.HasValue && outerEnd.HasValue)
+			{
+				if (start.AddDays(-7) != outerStart || end.AddDays(7) != outerEnd)
+				{
+					startDate = start.Date.ToString("d", currentCultureInfo) + "-" + end.Date.ToString("d", currentCultureInfo);
+					endDate = "(" + outerStart.Value.Date.ToString("d", currentCultureInfo) + "-" +
+							  outerEnd.Value.Date.ToString("d", currentCultureInfo) + ")";
+				}
+			}
 
 			Text = string.Format(currentCultureInfo, Resources.TeleoptiCCCColonModuleColonFromToDateScenarioColon, Resources.Schedules, startDate, endDate, _scenario.Description.Name);
 		}
@@ -2518,8 +2528,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 													  LanguageResourceHelper.Translate("XXLoadedColon") +
 													  " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
 			toolStripStatusLabelNumberOfAgents.Visible = true;
-			setHeaderText(_schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate, _schedulerState.RequestedPeriod.DateOnlyPeriod.EndDate);
-			
+			if (_schedulerState.LoadedPeriod != null)
+			{
+				var loadedPeriod = _schedulerState.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+				setHeaderText(_schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate, _schedulerState.RequestedPeriod.DateOnlyPeriod.EndDate, loadedPeriod.StartDate, loadedPeriod.EndDate);
+			}
+
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _loadRequsts)
 			{
 				using (PerformanceOutput.ForOperation("Creating new RequestView"))
