@@ -300,7 +300,19 @@
 			border-radius: 0;
 			padding: 1rem;
 			border: none;
+			z-index: 1001;
 		}
+
+
+		.close-fab-overlay{
+			position: fixed;
+			top:0;
+			bottom:0;
+			left:0;
+			right:0;
+			z-index: 1000;
+		}
+
 	.purest-green{
 			background-color: #9ccc33!important;
     		border-color: #8cbc23!;

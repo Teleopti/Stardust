@@ -1,11 +1,21 @@
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-
+/// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	var self = this;
 
 	self.toggle = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826');
-
 	self.isTeamScheduleNoReadModelEnable = ko.observable(false);
+	self.hideFab = ko.observable(false);
+	self.menuIsVisible = ko.observable(false);
+
+	self.enableMenu = function () {
+		self.menuIsVisible(true);
+	};
+
+	self.disableMenu = function () {
+		self.menuIsVisible(false);
+	};
+
 
 	self.isLoading = ko.observable(true);
 	self.cultureLoaded = ko.observable(false); // To delay rendering of date-picker
@@ -18,14 +28,17 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	};
 
 	self.initializeShiftTrade = function () {
+		self.menuIsVisible(false);
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/ShiftTrade/", self.requestedDate().format("YYYYMMDD"));
 	};
 
 	self.initializeShiftTradeBulletinBoard = function () {
+		self.menuIsVisible(false);
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/ShiftTradeBulletinBoard/", self.requestedDate().format("YYYYMMDD"));
 	};
 
 	self.initializePostShiftForTrade = function () {
+		self.menuIsVisible(false);
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/PostShiftForTrade/", self.requestedDate().format("YYYYMMDD"));
 	};
 
