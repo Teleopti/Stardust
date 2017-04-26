@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
-			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 1.1);
+			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 2);
 			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, skillB2Demand);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2);
