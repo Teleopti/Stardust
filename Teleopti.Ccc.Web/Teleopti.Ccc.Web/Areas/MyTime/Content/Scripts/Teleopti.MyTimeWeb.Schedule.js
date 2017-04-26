@@ -310,7 +310,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		function getUrlPartForProbability() {
-			return (self.staffingProbabilityEnabled() && self.selectedProbabilityType() !== constants.probabilityType.none && self.selectedProbabilityType())
+			return (self.showProbabilityToggle() && self.selectedProbabilityType() !== constants.probabilityType.none && self.selectedProbabilityType())
 				? "/Probability/" + self.selectedProbabilityType()
 				: "";
 		}
@@ -552,7 +552,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 		}
 		self.days(days);
-		if(self.selectedProbabilityType() == constants.probabilityType.absence || self.selectedProbabilityType() == constants.probabilityType.overtime)
+		if(self.showProbabilityToggle() && (self.selectedProbabilityType() == constants.probabilityType.absence || self.selectedProbabilityType() == constants.probabilityType.overtime))
 			self.fetchProbabilityData();
 	}
 

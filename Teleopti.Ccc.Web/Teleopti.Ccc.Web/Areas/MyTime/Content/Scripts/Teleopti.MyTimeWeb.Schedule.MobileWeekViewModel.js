@@ -64,19 +64,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.maxDate = ko.observable();
 	self.minDate = ko.observable();
 
-	self.setCurrentDate = function (date) {
-		if (self.selectedDateSubscription)
-			self.selectedDateSubscription.dispose();
-		self.selectedDate(date);
-		var probabilityUrlPart = self.selectedProbabilityOptionValue() !== probabilityType.none && self.selectedProbabilityOptionValue()
-			? "/Probability/" + self.selectedProbabilityOptionValue()
-			: "";
-		self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" +
-				Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD")) + probabilityUrlPart);
-		});
-	};
-
 	self.desktop = function () {
 		var date = self.selectedDate();
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" +
@@ -88,11 +75,20 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 
 	self.nextWeek = function () {
 		self.selectedDate(self.nextWeekDate());
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDate().format("YYYY-MM-DD")) + getProbabilityUrl());
 	};
 
 	self.previousWeek = function () {
 		self.selectedDate(self.previousWeekDate());
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDate().format("YYYY-MM-DD")) + getProbabilityUrl());
 	};
+
+	function getProbabilityUrl(){
+		if(self.selectedProbabilityOptionValue() !== probabilityType.none && self.selectedProbabilityOptionValue() && self.showProbabilityOptionsToggleIcon())
+			return "/Probability/" + self.selectedProbabilityOptionValue();
+		else 
+			return '';
+	}
 
 	self.showAddRequestToolbar = ko.computed(function () {
 		return (self.requestViewModel() || "") !== "";
@@ -320,7 +316,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		self.minDate(moment(data.Days[0].FixedDate).add("day", -1));
 		self.maxDate(moment(data.Days[data.Days.length - 1].FixedDate).add("day", 1));
 		self.displayDate(data.PeriodSelection.Display);
-		if(self.selectedProbabilityOptionValue() == constants.probabilityType.absence || self.selectedProbabilityOptionValue() == constants.probabilityType.overtime)
+		if(self.showProbabilityOptionsToggleIcon() && (self.selectedProbabilityOptionValue() == constants.probabilityType.absence || self.selectedProbabilityOptionValue() == constants.probabilityType.overtime))
 			self.fetchProbabilityData();
 	};
 };
