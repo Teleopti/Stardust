@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 {
 	public class WeekScheduleViewModelMapper
 	{
+		private const string commonShortDateFormat = "yyyy-MM-dd";
+
 		private readonly IPeriodSelectionViewModelFactory _periodSelectionViewModelFactory;
 		private readonly IPeriodViewModelFactory _periodViewModelFactory;
 		private readonly IHeaderViewModelFactory _headerViewModelFactory;
@@ -69,11 +71,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				DaylightSavingTimeAdjustment = daylightModel,
 				CurrentWeekStartDate =
 					DateHelper.GetFirstDateInWeek(s.Date, cultureInfo.DateTimeFormat.FirstDayOfWeek)
-						.Date.ToString("yyyy-MM-dd"),
+						.Date.ToString(commonShortDateFormat),
 				CurrentWeekEndDate =
 					DateHelper.GetFirstDateInWeek(s.Date, cultureInfo.DateTimeFormat.FirstDayOfWeek)
 						.AddDays(6)
-						.Date.ToString("yyyy-MM-dd"),
+						.Date.ToString(commonShortDateFormat),
 				PeriodSelection = _periodSelectionViewModelFactory.CreateModel(s.Date),
 				Styles = s.Days == null ? null : map(_scheduleColorProvider.GetColors(s.ColorSource)),
 				TimeLineCulture = currentUser.PermissionInformation.Culture().ToString(),
@@ -84,6 +86,36 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Days = days(s),
 				AsmPermission = s.AsmPermission,
 				IsCurrentWeek = s.IsCurrentWeek,
+				SiteOpenHourIntradayPeriod = s.SiteOpenHourIntradayPeriod,
+				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, timeZone)
+			};
+		}
+
+		public DayScheduleViewModel Map(DayScheduleDomainData s)
+		{
+			var currentUser = _loggedOnUser.CurrentUser();
+			var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
+
+			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(
+				timeZone, _now.LocalDateTime().Year);
+			var daylightModel = daylightSavingAdjustment != null
+				? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment)
+				: null;
+			var cultureInfo = _culture.GetCulture();
+			return new DayScheduleViewModel
+			{
+				Date = s.Date.Date.ToString(commonShortDateFormat),
+				DisplayDate = s.Date.Date.ToString(_culture.GetCulture().DateTimeFormat.ShortDatePattern),
+				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
+				DaylightSavingTimeAdjustment = daylightModel,
+				TimeLineCulture = currentUser.PermissionInformation.Culture().ToString(),
+				TimeLine = createTimeLine(s.MinMaxTime).ToArray(),
+				RequestPermission = map(s),
+				ViewPossibilityPermission = s.ViewPossibilityPermission,
+				DatePickerFormat = cultureInfo.DateTimeFormat.ShortDatePattern,
+				Schedule = createDayViewModel(s.ScheduleDay),
+				AsmPermission = s.AsmPermission,
+				IsToday = s.IsCurrentDay,
 				SiteOpenHourIntradayPeriod = s.SiteOpenHourIntradayPeriod,
 				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, timeZone)
 			};
@@ -102,33 +134,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData)
 		{
-			return scheduleDomainData?.Days?.Select(s =>
+			return scheduleDomainData?.Days?.Select(createDayViewModel).ToArray();
+		}
+
+		private DayViewModel createDayViewModel(WeekScheduleDayDomainData s)
+		{
+			var personAssignment = s.ScheduleDay?.PersonAssignment();
+			var significantPartForDisplay = s.ScheduleDay?.SignificantPartForDisplay();
+			return new DayViewModel
 			{
-				var personAssignment = s.ScheduleDay?.PersonAssignment();
-				var significantPartForDisplay = s.ScheduleDay?.SignificantPartForDisplay();
-				return new DayViewModel
-				{
-					Date = s.Date.ToShortDateString(),
-					FixedDate = s.Date.ToFixedClientDateOnlyFormat(),
-					DayOfWeekNumber = (int)s.Date.DayOfWeek,
-					Periods = projections(s).ToArray(),
-					TextRequestCount =
-						s.PersonRequests?.Count(
-							r => r.Request is TextRequest || r.Request is AbsenceRequest || (r.Request is ShiftExchangeOffer)) ?? 0,
-					ProbabilityClass = s.ProbabilityClass,
-					ProbabilityText = s.ProbabilityText,
-					State = s.Date == _now.LocalDateOnly() ? SpecialDateState.Today : 0,
-					Header = _headerViewModelFactory.CreateModel(s.ScheduleDay),
-					Note = s.ScheduleDay == null ? null : map(s.ScheduleDay.PublicNoteCollection()),
-					SeatBookings = s.SeatBookingInformation,
-					Summary = summary(s),
-					HasOvertime = personAssignment != null && personAssignment.ShiftLayers.OfType<OvertimeShiftLayer>().Any(),
-					IsFullDayAbsence = significantPartForDisplay == SchedulePartView.FullDayAbsence,
-					IsDayOff = significantPartForDisplay == SchedulePartView.DayOff,
-					OvertimeAvailabililty = overtimeAvailability(s),
-					Availability = s.Availability
-				};
-			}).ToArray();
+				Date = s.Date.ToShortDateString(),
+				FixedDate = s.Date.ToFixedClientDateOnlyFormat(),
+				DayOfWeekNumber = (int) s.Date.DayOfWeek,
+				Periods = projections(s).ToArray(),
+				TextRequestCount =
+					s.PersonRequests?.Count(
+						r => r.Request is TextRequest || r.Request is AbsenceRequest || (r.Request is ShiftExchangeOffer)) ?? 0,
+				ProbabilityClass = s.ProbabilityClass,
+				ProbabilityText = s.ProbabilityText,
+				State = s.Date == _now.LocalDateOnly() ? SpecialDateState.Today : 0,
+				Header = _headerViewModelFactory.CreateModel(s.ScheduleDay),
+				Note = s.ScheduleDay == null ? null : map(s.ScheduleDay.PublicNoteCollection()),
+				SeatBookings = s.SeatBookingInformation,
+				Summary = summary(s),
+				HasOvertime = personAssignment != null && personAssignment.ShiftLayers.OfType<OvertimeShiftLayer>().Any(),
+				IsFullDayAbsence = significantPartForDisplay == SchedulePartView.FullDayAbsence,
+				IsDayOff = significantPartForDisplay == SchedulePartView.DayOff,
+				OvertimeAvailabililty = overtimeAvailability(s),
+				Availability = s.Availability
+			};
 		}
 
 		private NoteViewModel map(ReadOnlyCollection<IPublicNote> s)
@@ -140,7 +174,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			};
 		}
 
-		private RequestPermission map(WeekScheduleDomainData s)
+		private RequestPermission map(BaseScheduleDomainData s)
 		{
 			return new RequestPermission
 			{

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
@@ -14,19 +13,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	public class ScheduleViewModelFactory : IScheduleViewModelFactory
 	{
 		private readonly MonthScheduleViewModelMapper _monthMapper;
-		private readonly WeekScheduleViewModelMapper _weekMapper;
+		private readonly WeekScheduleViewModelMapper _scheduleViewModelMapper;
 		private readonly IWeekScheduleDomainDataProvider _weekScheduleDomainDataProvider;
 		private readonly IMonthScheduleDomainDataProvider _monthScheduleDomainDataProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IStaffingPossibilityViewModelFactory _staffingPossibilityViewModelFactory;
 		private readonly INow _now;
 
-		public ScheduleViewModelFactory(MonthScheduleViewModelMapper monthMapper, WeekScheduleViewModelMapper weekMapper, IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider,
+		public ScheduleViewModelFactory(MonthScheduleViewModelMapper monthMapper,
+			WeekScheduleViewModelMapper scheduleViewModelMapper,
+			IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider,
 			IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider, ILoggedOnUser loggedOnUser,
 			IStaffingPossibilityViewModelFactory staffingPossibilityViewModelFactory, INow now)
 		{
 			_monthMapper = monthMapper;
-			_weekMapper = weekMapper;
+			_scheduleViewModelMapper = scheduleViewModelMapper;
 			_weekScheduleDomainDataProvider = weekScheduleDomainDataProvider;
 			_monthScheduleDomainDataProvider = monthScheduleDomainDataProvider;
 			_loggedOnUser = loggedOnUser;
@@ -42,86 +43,88 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public WeekScheduleViewModel CreateWeekViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
 		{
-			var domainData = _weekScheduleDomainDataProvider.GetWeekSchedule(date);
-			domainData.SiteOpenHourIntradayPeriod = getIntradaySiteOpenHourPeriod();
-			adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, domainData);
-			var weekScheduleViewModel = _weekMapper.Map(domainData);
-			setPossibilities(date, staffingPossiblityType, weekScheduleViewModel);
+			var weekDomainData = _weekScheduleDomainDataProvider.GetWeekSchedule(date);
+			weekDomainData.SiteOpenHourIntradayPeriod = getIntradaySiteOpenHourPeriod();
+			var minMaxTimeFixed = fixScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, weekDomainData);
+			if (minMaxTimeFixed && weekDomainData.Days != null)
+			{
+				foreach (var day in weekDomainData.Days)
+				{
+					day.MinMaxTime = weekDomainData.MinMaxTime;
+				}
+			}
+
+			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData);
+			weekScheduleViewModel.Possibilities = getPossibilities(date, staffingPossiblityType);
 			return weekScheduleViewModel;
 		}
-
-		// TODO-xinfli: Temporary implement for front-end debug only
+		
 		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
 		{
-			var domainData = _weekScheduleDomainDataProvider.GetWeekSchedule(date);
-			domainData.SiteOpenHourIntradayPeriod = getIntradaySiteOpenHourPeriod();
-			adjustScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, domainData);
-			var weekScheduleViewModel = _weekMapper.Map(domainData);
-			setPossibilities(date, staffingPossiblityType, weekScheduleViewModel);
+			var dayDomainData = _weekScheduleDomainDataProvider.GetDaySchedule(date);
+			dayDomainData.SiteOpenHourIntradayPeriod = getIntradaySiteOpenHourPeriod();
 
-			var scheduleForThisDate = weekScheduleViewModel.Days.SingleOrDefault(d => d.Date == date.Date.ToShortDateString());
-			return new DayScheduleViewModel
+			var minMaxTimeFixed = fixScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, dayDomainData);
+			if (minMaxTimeFixed)
 			{
-				Date = date.Date.ToString("yyyy-MM-dd"),
-				DisplayDate = scheduleForThisDate == null ? date.ToShortDateString() : scheduleForThisDate.Date,
-				Schedule = scheduleForThisDate,
-				RequestPermission = weekScheduleViewModel.RequestPermission,
-				TimeLineCulture = weekScheduleViewModel.TimeLineCulture,
-				TimeLine = weekScheduleViewModel.TimeLine,
-				AsmPermission = weekScheduleViewModel.AsmPermission,
-				ViewPossibilityPermission = weekScheduleViewModel.ViewPossibilityPermission,
-				IsToday = date.Date == DateTime.Now.Date,
-				DatePickerFormat = weekScheduleViewModel.DatePickerFormat,
-				DaylightSavingTimeAdjustment = weekScheduleViewModel.DaylightSavingTimeAdjustment,
-				BaseUtcOffsetInMinutes = weekScheduleViewModel.BaseUtcOffsetInMinutes,
-				CheckStaffingByIntraday = weekScheduleViewModel.CheckStaffingByIntraday,
-				Possibilities = weekScheduleViewModel.Possibilities,
-				SiteOpenHourIntradayPeriod = weekScheduleViewModel.SiteOpenHourIntradayPeriod
-			};
+				dayDomainData.ScheduleDay.MinMaxTime = dayDomainData.MinMaxTime;
+			}
+
+			var dayScheduleViewModel = _scheduleViewModelMapper.Map(dayDomainData);
+			dayScheduleViewModel.Possibilities = getPossibilities(date, staffingPossiblityType);
+
+			return dayScheduleViewModel;
 		}
 
-		private void adjustScheduleMinMaxTimeBySiteOpenHour(StaffingPossiblityType staffingPossiblityType,
-			WeekScheduleDomainData weekScheduleDomainData)
+		private bool fixScheduleMinMaxTimeBySiteOpenHour(StaffingPossiblityType staffingPossiblityType,
+			BaseScheduleDomainData scheduleDomainData)
 		{
 			if (staffingPossiblityType != StaffingPossiblityType.Overtime)
-				return;
+			{
+				return false;
+			}
 
-			var scheduleMinMaxTime = weekScheduleDomainData.MinMaxTime;
-			var siteOpenHourPeriod = weekScheduleDomainData.SiteOpenHourIntradayPeriod;
+			var siteOpenHourPeriod = scheduleDomainData.SiteOpenHourIntradayPeriod;
 			if (!siteOpenHourPeriod.HasValue)
-				return;
-
-			var minTime = scheduleMinMaxTime.StartTime;
-			var maxTime = scheduleMinMaxTime.EndTime;
-			if (siteOpenHourPeriod.Value.StartTime < minTime)
 			{
-				minTime = siteOpenHourPeriod.Value.StartTime;
-			}
-			if (siteOpenHourPeriod.Value.EndTime > maxTime)
-			{
-				maxTime = siteOpenHourPeriod.Value.EndTime;
+				return false;
 			}
 
-			if (minTime == scheduleMinMaxTime.StartTime && maxTime == scheduleMinMaxTime.EndTime)
-				return;
-
-			var newTimelinePeriod = new TimePeriod(minTime, maxTime);
-			weekScheduleDomainData.MinMaxTime = newTimelinePeriod;
-
-			if (weekScheduleDomainData.Days == null) return;
-
-			foreach (var day in weekScheduleDomainData.Days)
+			var  newTimelinePeriod = getTimelinePeriod(scheduleDomainData, (TimePeriod)siteOpenHourPeriod);
+			if (scheduleDomainData.MinMaxTime == newTimelinePeriod)
 			{
-				day.MinMaxTime = newTimelinePeriod;
+				return false;
 			}
+
+			scheduleDomainData.MinMaxTime = newTimelinePeriod;
+			return true;
 		}
 
-		private void setPossibilities(DateOnly date, StaffingPossiblityType staffingPossiblityType
-			, WeekScheduleViewModel weekScheduleViewModel)
+		private static TimePeriod getTimelinePeriod(BaseScheduleDomainData scheduleDomainData, TimePeriod siteOpenHourPeriod)
 		{
-			weekScheduleViewModel.Possibilities = staffingPossiblityType != StaffingPossiblityType.None
+			var scheduleMinMaxTime = scheduleDomainData.MinMaxTime;
+			var minTime = scheduleMinMaxTime.StartTime;
+			var maxTime = scheduleMinMaxTime.EndTime;
+			if (siteOpenHourPeriod.StartTime < minTime)
+			{
+				minTime = siteOpenHourPeriod.StartTime;
+			}
+			if (siteOpenHourPeriod.EndTime > maxTime)
+			{
+				maxTime = siteOpenHourPeriod.EndTime;
+			}
+
+			return minTime == scheduleMinMaxTime.StartTime && maxTime == scheduleMinMaxTime.EndTime
+				? scheduleMinMaxTime
+				: new TimePeriod(minTime, maxTime);
+		}
+
+		private IEnumerable<PeriodStaffingPossibilityViewModel> getPossibilities(DateOnly date,
+			StaffingPossiblityType staffingPossiblityType)
+		{
+			return staffingPossiblityType != StaffingPossiblityType.None
 				? _staffingPossibilityViewModelFactory.CreatePeriodStaffingPossibilityViewModels(date, staffingPossiblityType)
-				: new PeriodStaffingPossibilityViewModel[] {};
+				: new PeriodStaffingPossibilityViewModel[] { };
 		}
 
 		private TimePeriod? getIntradaySiteOpenHourPeriod()

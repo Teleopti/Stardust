@@ -9,44 +9,37 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 {
-	public class DayScheduleViewModel
+	public class BaseScheduleViewModel
+	{
+		public RequestPermission RequestPermission { get; set; }
+		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
+		public string TimeLineCulture { get; set; }
+		public bool AsmPermission { get; set; }
+		public bool ViewPossibilityPermission { get; set; }
+		public string DatePickerFormat { get; set; }
+		public DaylightSavingsTimeAdjustmentViewModel DaylightSavingTimeAdjustment { get; set; }
+		public double BaseUtcOffsetInMinutes { get; set; }
+		public bool CheckStaffingByIntraday { get; set; }
+		public IEnumerable<PeriodStaffingPossibilityViewModel> Possibilities { get; set; }
+		public TimePeriod? SiteOpenHourIntradayPeriod { get; set; }
+	}
+
+	public class DayScheduleViewModel: BaseScheduleViewModel
 	{
 		public string Date { get; set; }
 		public string DisplayDate { get; set; }
-		public DayViewModel Schedule { get; set; }
-		public string TimeLineCulture { get; set; }
-		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
 		public bool IsToday { get; set; }
-		public string DatePickerFormat { get; set; }
-		public DaylightSavingsTimeAdjustmentViewModel DaylightSavingTimeAdjustment { get; set; }
-		public double BaseUtcOffsetInMinutes { get; set; }
-		public bool CheckStaffingByIntraday { get; set; }
-		public IEnumerable<PeriodStaffingPossibilityViewModel> Possibilities { get; set; }
-		public TimePeriod? SiteOpenHourIntradayPeriod { get; set; }
-		public RequestPermission RequestPermission { get; set; }
-		public bool AsmPermission { get; set; }
-		public bool ViewPossibilityPermission { get; set; }
+		public DayViewModel Schedule { get; set; }
 	}
 
-	public class WeekScheduleViewModel
+	public class WeekScheduleViewModel : BaseScheduleViewModel
 	{
 		public PeriodSelectionViewModel PeriodSelection { get; set; }
-		public IEnumerable<StyleClassViewModel> Styles { get; set; }
 		public IEnumerable<DayViewModel> Days { get; set; }
-		public RequestPermission RequestPermission { get; set; }
-		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
-		public string TimeLineCulture { get; set; }
-		public bool AsmPermission { get; set; }
-		public bool ViewPossibilityPermission { get; set; }
 		public bool IsCurrentWeek { get; set; }
-		public string DatePickerFormat { get; set; }
-		public DaylightSavingsTimeAdjustmentViewModel DaylightSavingTimeAdjustment { get; set; }
-		public double BaseUtcOffsetInMinutes { get; set; }
 		public string CurrentWeekEndDate { get; set; }
 		public string CurrentWeekStartDate { get; set; }
-		public bool CheckStaffingByIntraday { get; set; }
-		public IEnumerable<PeriodStaffingPossibilityViewModel> Possibilities { get; set; }
-		public TimePeriod? SiteOpenHourIntradayPeriod { get; set; }
+		public IEnumerable<StyleClassViewModel> Styles { get; set; }
 	}
 
 	public class RequestPermission
@@ -99,9 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public IEnumerable<PeriodViewModel> Periods { get; set; }
 		public int DayOfWeekNumber { get; set; }
 		public bool Availability { get; set; }
-
 		public bool HasNote => !string.IsNullOrWhiteSpace(Note?.Message);
-
 		public string ProbabilityClass { get; set; }
 		public string ProbabilityText { get; set; }
 		public IList<OccupancyViewModel> SeatBookings { get; set; }
