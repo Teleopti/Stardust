@@ -5,10 +5,11 @@ using System.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
@@ -16,54 +17,106 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	{
 		private readonly IAgentPersister _agentPersister;
 		private readonly IWorkbookHandler _workbookHandler;
-
-		public FileProcessor(IAgentPersister agentPersister, IWorkbookHandler workbookHandler)
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private const int BATCH_SIZE = 200;
+		private bool hasException = false;
+		public FileProcessor(
+			IAgentPersister agentPersister,
+			IWorkbookHandler workbookHandler,
+			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_agentPersister = agentPersister;
 			_workbookHandler = workbookHandler;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
-		public AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null)
+		public AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null)
 		{
 			var workbook = ParseFile(fileData);
-			return Process(workbook, timezone, defaultValues);
+			return Process(workbook, timezone, defaultValues, sendProgress);
 		}
 
-		public AgentFileProcessResult Process(IWorkbook workbook, TimeZoneInfo timezone,
-			ImportAgentDefaults defaultValues = null)
+
+		public AgentFileProcessResult Process(IWorkbook workbook, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null,
+			Action<string> sendProgress = null)
 		{
-		
-			var processResult = new AgentFileProcessResult();
-			if (workbook == null)
+			if (sendProgress == null)
 			{
-				processResult.DetailLevel = DetailLevel.Error;
-				processResult.ErrorMessages.Add(Resources.InvalidInput);
-				return processResult;
+				sendProgress = (msg) => { };
 			}
-			var extractedResult = _workbookHandler.Process(workbook, defaultValues);
-
-			if (extractedResult.HasError)
+			var precessResult = extractFile(workbook, defaultValues, sendProgress);
+			if (precessResult.HasError)
 			{
-				processResult.DetailLevel = DetailLevel.Error;
-				processResult.ErrorMessages.AddRange(extractedResult.Feedback.ErrorMessages);
-				return processResult;
+				return precessResult;
 			}
 
-			var rawResults = extractedResult.RawResults;
-			_agentPersister.Persist(rawResults, timezone);
-			processResult.WarningAgents.AddRange(rawResults.Where(a => a.DetailLevel == DetailLevel.Warning));
-			processResult.FailedAgents.AddRange(rawResults.Where(a => a.DetailLevel == DetailLevel.Error).ToList());
-			processResult.SucceedAgents.AddRange(rawResults.Where(a => a.DetailLevel == DetailLevel.Info).ToList());
+			try
+			{
+				var rawResults = precessResult.RawResults;
+				var i = 0;
+				foreach (var result in rawResults.Batch(BATCH_SIZE))
+				{
+					sendProgress($"Start to persist agent {BATCH_SIZE * i} - {BATCH_SIZE * i + result.Count()}.");
+					using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+					{
+						_agentPersister.Persist(result, timezone);
+						uow.PersistAll();
+					}
+					i++;
+				}
+				if (hasException)
+				{
+					throw new Exception("only for test");
+				}
+			}
+			catch (Exception)
+			{
+				sendProgress($"An unexpected exception happened.");
+				rollbackAllPersisted();
+				throw;
+			}
 
-			processResult.DetailLevel = !processResult.FailedAgents.IsNullOrEmpty()
-				? DetailLevel.Error
-				: processResult.WarningAgents.IsNullOrEmpty() ? DetailLevel.Warning : DetailLevel.Info;
+			return precessResult;
 
-			return processResult;
+
 		}
 
 
+		private AgentFileProcessResult extractFile(IWorkbook workbook, ImportAgentDefaults defaultValues, Action<string> sendProgress)
+		{
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				sendProgress($"Start to extract file.");
+				var processResult = _workbookHandler.Process(workbook, defaultValues);
+				if (processResult.HasError)
+				{
+					var msg = string.Join(", ", processResult.Feedback.ErrorMessages);
+					sendProgress($"Extract file has error:{msg}.");
+					return processResult;
+				}
+				sendProgress($"Extract file succeed.");
+				return processResult;
+			}
+		}
 
+
+		private void rollbackAllPersisted()
+		{
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				_agentPersister.RollbackAllPersisted();
+				uow.PersistAll();
+			}
+		}
+
+		public void HasException()
+		{
+			hasException = true;
+		}
+		public void ResetException()
+		{
+			hasException = false;
+		}
 		public MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx)
 		{
 			const string invalidUserSheetName = "Agents";
@@ -123,9 +176,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	public interface IFileProcessor
 	{
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);
-		AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null);
-		AgentFileProcessResult Process(IWorkbook workbook, TimeZoneInfo timezone,
-			ImportAgentDefaults defaultValues = null);
+		AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null);
+		AgentFileProcessResult Process(IWorkbook workbook, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null);
 		IWorkbook ParseFile(FileData fileData);
 	}
 }

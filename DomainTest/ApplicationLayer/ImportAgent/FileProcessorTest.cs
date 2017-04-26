@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public FakeSiteRepository SiteRepository;
 		public FakeTeamRepository TeamRepository;
 		public FakeExternalLogOnRepository ExternalLogOnRepository;
-
+		public PersistPersonInfoFake PersonInfoPersister;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public FakeCurrentDatasource CurrentDatasource;
 		public FakeTenants FindTenantByName;
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			};
 
 			var result = Target.Process(fileData, TimeZoneInfo.Utc);
-			result.ErrorMessages.Single().Should().Be(Resources.InvalidInput);
+			result.Feedback.ErrorMessages.Single().Should().Be(Resources.InvalidInput);
 		}
 		[Test]
 		public void ShouldPersistAgentWithValidData()
@@ -121,7 +121,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
 		}
 
-		
+		[Test]
+		public void ShouldRollbackPersistedTenantUserWhenThereIsException()
+		{
+
+			var rawAgent = setupProviderData();
+			var ms = _agentFileTemplate.GetFileTemplate(rawAgent);
+			var workbook = new HSSFWorkbook(ms);
+			Target.HasException();
+			try
+			{
+				Target.Process(workbook, TimeZoneInfo.Utc);
+			}
+			catch (Exception)
+			{
+				PersonInfoPersister.RollBacked.Should().Be(true);
+			}
+			finally
+			{
+				Target.ResetException();
+			}
+		}
+
 		private RawAgent setupProviderData()
 		{
 			CurrentDatasource.FakeName("test");

@@ -132,6 +132,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			}
 			return _importAgentJobService.CreateJob(fileData, defaults);
 		}
+
 		[Route("UploadAgent"), HttpPost, RemoveMeWithToggle(Toggles.Wfm_People_ImportAndCreateAgentFromFile_42528)]
 		public async Task<HttpResponseMessage> UploadAgent()
 		{
@@ -146,17 +147,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return ProcessInternal(provider.Contents);
 		}
 
-		[UnitOfWork, RemoveMeWithToggle(Toggles.Wfm_People_ImportAndCreateAgentFromFile_42528)]
-		protected virtual HttpResponseMessage ProcessInternal(IEnumerable<HttpContent> contents)
+		[RemoveMeWithToggle(Toggles.Wfm_People_ImportAndCreateAgentFromFile_42528)]
+		private HttpResponseMessage ProcessInternal(IEnumerable<HttpContent> contents)
 		{
 			var formData = _multipartHttpContentExtractor.ExtractFormModel<ImportAgentDefaults>(contents);
 			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents).Single();
 			var isXlsx = fileData.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase);
 			var processResult = _fileProcessor.Process(fileData, _userTimeZone.TimeZone(), formData);
 
-			if (processResult.ErrorMessages.Any())
+			if (processResult.Feedback.ErrorMessages.Any())
 			{
-				var errorMsg = string.Join(", ", processResult.ErrorMessages);
+				var errorMsg = string.Join(", ", processResult.Feedback.ErrorMessages);
 				var invalidFileResponse = Request.CreateResponse((HttpStatusCode)422);
 				invalidFileResponse.Headers.Clear();
 				invalidFileResponse.Headers.Add("Message", $"format errors: {errorMsg}");

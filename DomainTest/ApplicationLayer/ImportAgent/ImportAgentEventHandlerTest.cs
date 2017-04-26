@@ -302,27 +302,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			jobResult.Details.Count().Should().Be(1);
 		}
 
-		[Test]
-		public void ShouldRollbackPersistedTenantUserWhenThereIsException()
-		{
-			var jobResult = fakeJobResult();
-			var rawAgent = setupProviderData();
-
-			var ms = new AgentFileTemplate().GetFileTemplate(rawAgent);
-			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test.xls", ms.ToArray()));
-			ImportAgentEventHandler.HasException();
-
-			Target.Handle(new ImportAgentEvent
-			{
-				JobResultId = jobResult.Id.Value
-			});
-
-			PersonInfoPersister.RollBacked.Should().Be(true);
-		}
-
+	
 		private IJobResult fakeJobResult()
 		{
-			ImportAgentEventHandler.ResetException();
 			var person = PersonFactory.CreatePerson().WithId();
 			var jobResult = new JobResult("WebImportAgent", DateOnly.Today.ToDateOnlyPeriod(), person, DateTime.UtcNow).WithId();
 			jobResult.SetVersion(1);

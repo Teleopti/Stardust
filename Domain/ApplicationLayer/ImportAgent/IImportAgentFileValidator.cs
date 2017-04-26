@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NPOI.SS.UserModel;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -32,38 +33,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 	}
 
+	
 	public class AgentFileProcessResult : IImportAgentResultCount
 	{
 		public AgentFileProcessResult()
 		{
-			ErrorMessages = new List<string>();
-			WarningAgents = new List<AgentExtractionResult>();
-			FailedAgents = new List<AgentExtractionResult>();
-			SucceedAgents = new List<AgentExtractionResult>();
-		}
-
-		public List<string> ErrorMessages { get; set; }
-		public DetailLevel DetailLevel { get; set; }
-		public List<AgentExtractionResult> WarningAgents { get; }
-		public List<AgentExtractionResult> FailedAgents { get; }
-		public List<AgentExtractionResult> SucceedAgents { get; }
-		public int SuccessCount => SucceedAgents?.Count ?? 0;
-		public int FailedCount => FailedAgents?.Count ?? 0;
-		public int WarningCount => WarningAgents?.Count ?? 0;
-	}
-
-	public class AgentFileExtractionResult
-	{
-		public AgentFileExtractionResult()
-		{
 			Feedback = new Feedback();
 			RawResults = new List<AgentExtractionResult>();
 		}
-
 		public IList<AgentExtractionResult> RawResults { get; }
+		public List<AgentExtractionResult> WarningAgents => RawResults.Where(a => a.DetailLevel == DetailLevel.Warning).ToList();
+		public List<AgentExtractionResult> FailedAgents => RawResults.Where(a => a.DetailLevel == DetailLevel.Error).ToList();
+		public List<AgentExtractionResult> SucceedAgents => RawResults.Where(a => a.DetailLevel == DetailLevel.Info).ToList();
 		public Feedback Feedback { get; }
-
 		public bool HasError => Feedback.ErrorMessages.Any();
+
+		public DetailLevel DetailLevel => HasError || FailedAgents.IsNullOrEmpty()
+			? DetailLevel.Error
+			: WarningAgents.IsNullOrEmpty()
+				? DetailLevel.Warning
+				: DetailLevel.Info;
+
+		public int SuccessCount => SucceedAgents.Count;
+		public int FailedCount => FailedAgents.Count;
+		public int WarningCount => WarningAgents.Count;
 	}
 
 	public class AgentExtractionResult

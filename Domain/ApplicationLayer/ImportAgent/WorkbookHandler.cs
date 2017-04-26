@@ -20,19 +20,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			_rawAgentMapper = rawAgentMapper;
 			_agentFileTemplate = new AgentFileTemplate();
 		}
-		
-		public AgentFileExtractionResult Process(IWorkbook workbook, ImportAgentDefaults defaultValues = null)
+
+		public AgentFileProcessResult Process(IWorkbook workbook, ImportAgentDefaults defaultValues = null)
 		{
-			var result = new AgentFileExtractionResult();
-			var sheet = workbook.GetSheetAt(0);
+			var result = new AgentFileProcessResult();
 			var validateMessage = validateWorkbook(workbook);
 			if (!validateMessage.IsNullOrEmpty())
 			{
 				result.Feedback.ErrorMessages.Add(validateMessage);
 				return result;
 			}
+			var sheet = workbook.GetSheetAt(0);
 			_rawAgentMapper.SetDefaultValues(defaultValues);
-
 			for (var i = 1; i <= sheet.LastRowNum; i++)
 			{
 				var row = sheet.GetRow(i);
@@ -155,7 +154,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		private string validateWorkbook(IWorkbook workbook)
 		{
-			if (workbook?.NumberOfSheets == 0)
+			if (workbook == null || workbook.NumberOfSheets == 0)
 			{
 				return Resources.InvalidInput;
 			}
@@ -233,6 +232,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 	public interface IWorkbookHandler
 	{
-		AgentFileExtractionResult Process(IWorkbook workbook, ImportAgentDefaults defaultValues = null);
+		AgentFileProcessResult Process(IWorkbook workbook, ImportAgentDefaults defaultValues = null);
 	}
 }

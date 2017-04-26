@@ -15,13 +15,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	public interface IAgentPersister
 	{
 		void Persist(IEnumerable<AgentExtractionResult> data, TimeZoneInfo timezone);
+		void RollbackAllPersisted();
 	}
 
 	public class AgentPersister : IAgentPersister
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly ITenantUserPersister _tenantUserPersister;
-
+		private readonly IList<IPerson> _persistedPersons = new List<IPerson>();
 		public AgentPersister(IPersonRepository personRepository,
 			ITenantUserPersister tenantUserPersister)
 		{
@@ -54,7 +55,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				}
 
 				addPersonData(person, agentData);
+				_persistedPersons.Add(person);
 			}
+		}
+
+		public void RollbackAllPersisted()
+		{
+			foreach (var person in _persistedPersons)
+			{
+				_personRepository.HardRemove(person);
+			}
+			_tenantUserPersister.RollbackAllPersistedTenantUsers();
 		}
 
 		private void addPersonData(IPerson person, AgentDataModel agentData)
@@ -99,7 +110,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		{
 			var person = new Person();
 			person.SetName(new Name(agentData.Firstname ?? " ", agentData.Lastname ?? " "));
-			
+
 			person.PermissionInformation.SetDefaultTimeZone(timezone);
 			agentData.Roles.ForEach(role => person.PermissionInformation.AddApplicationRole(role));
 			return person;
