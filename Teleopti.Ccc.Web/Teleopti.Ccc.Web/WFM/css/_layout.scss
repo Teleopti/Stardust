@@ -149,94 +149,17 @@ md-tooltip{
 md-card, .wfm-card-title{
 	background-color: $white!important;
 	color: $text-color-standard;
-}
+}//Moved
 
 .block{
 	display: block!important;
-}
+}//moved
 
 .relative{
 	position: relative;
-}
+}//moved
 
-.expandable{
-	.card-spacer{
-		$card-size: 160px;
-		margin-bottom: 1rem;
-
-		&.sm{
-			height: $card-size;
-			.open-card-panel {
-				height: $card-size;
-			}
-		}
-
-		&.md{
-			height: $card-size*2;
-			.open-card-panel {
-				height: $card-size*2;
-				overflow: auto;
-			}
-		}
-
-		&.lg{
-			height: $card-size*3;
-			.open-card-panel {
-				height: $card-size*3;
-			}
-		}
-
-		.open-card-panel{
-			overflow: auto;
-			border-top:3px solid $blue-300;
-		}
-
-		.con-footer{
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			right: 0;
-		}
-	}
-
-	.grid-card{
-		.unselected-card {
-			opacity:0.5;
-			pointer-events: none;
-		}
-
-		.list-content:after{
-			content: "_";
-			opacity: 1;
-			height: 20px;
-			width: 20px;
-			border-radius: 50%;
-			position: absolute;
-			z-index: 0;
-			bottom: -22px;
-			left: 45%;
-			right:0;
-			transform: rotate(180deg);
-			transform-origin:top;
-			transition: transform 0.6s cubic-bezier(.25,.8,.25,1);
-			color:transparent;
-		}
-
-		.selected-card:after {
-			transform: rotate(0deg);
-			background: $blue-300;
-		}
-	}
-
-	.card-expander{
-		position: absolute;
-		margin:5px;
-		left: 0;
-		right: 0;
-	}
-}
-
-// whp
+// whp - moved
 .working-hour-picker{
 	.mini{
 		min-width: 32px;
