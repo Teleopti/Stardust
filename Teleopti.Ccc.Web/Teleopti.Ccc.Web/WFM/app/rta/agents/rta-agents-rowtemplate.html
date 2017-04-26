@@ -5,8 +5,8 @@
 <div ng-show="grid.appScope.vm.isSelected(row.entity.PersonId)">
 	<div class="agent-menu historical-adherence" layout="row">
 		<div flex>
-			<a href="{{grid.appScope.vm.changeScheduleUrl(row.entity.PersonId)}}" class="change-schedule" target="_blank">
-				<span class="mdi mdi-pencil"></span>{{'ModifySchedule'|translate}}
+			<a href="{{grid.appScope.vm.changeScheduleUrl(row.entity.PersonId)}}" class="change-schedule" target="_blank" style="text-decoration: none;">
+				<i class="mdi mdi-pencil"><span style="text-decoration: underline; font-style: normal">{{'ModifySchedule'|translate}}</span></i>
 			</a>
 		</div>
 		<div flex ng-show="grid.appScope.vm.showAdherenceUpdates()">{{'Adherence'|translate}}: {{grid.appScope.vm.adherencePercent}}% </div>
