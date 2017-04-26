@@ -21,12 +21,20 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		public IResourceCalculation Target;
 
 		[Test]
-		public void ShouldTryToMakeSubSkillHaveSameRelativeDifferenceAfterShoveling_BothSkillSameDiffAtStart([Values(2, 100)] double skillB2Demand)
+		public void ShouldTryToMakeSubSkillHaveSameRelativeDifferenceAfterShoveling_BothSkillSameDiffAtStart([Values(2, 100)] double skillB2Demand, [Values(true, false)] bool primarySkillOpened)
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1);
+			if(primarySkillOpened)
+			{
+				skillA.IsOpenBetween(8, 9);
+			}
+			else
+			{
+				skillA.IsClosed();
+			}
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
@@ -44,12 +52,20 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldTryToMakeSubSkillHaveSameRelativeDifferenceAfterShoveling_SkillsDiffrerentDiffAtStart([Values(2, 100)] double skillB2Demand)
+		public void ShouldTryToMakeSubSkillHaveSameRelativeDifferenceAfterShoveling_SkillsDiffrerentDiffAtStart([Values(2, 100)] double skillB2Demand, [Values(true, false)] bool primarySkillOpened)
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1);
+			if (primarySkillOpened)
+			{
+				skillA.IsOpenBetween(8, 9);
+			}
+			else
+			{
+				skillA.IsClosed();
+			}
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 2);

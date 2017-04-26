@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						var dataForIntervalTo = shovelResourceData.GetDataForInterval(skillToMoveTo, interval);
 						if (shovelResourcesState.IsAnyPrimarySkillOpen)
 						{
-							resourceToMove = addResourcesToSkillsWithSameIndexWhenPrimarySkillIsOpened(
+							resourceToMove = addResourcesToSkillsWithSameIndex(
 								dataForIntervalTo, 
 								remainingResourcesToShovel,
 								maxToMoveForThisSkillGroup,
@@ -51,7 +51,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 						{
 							stopShovelDueToSubskills = false;
 							resourceToMove = addResourcesToSkillsWithSameIndexWhenPrimarySkillIsClosed(dataForIntervalTo,
-								subSkillsWithSameIndex, totalUnderstaffingPercent, remainingResourcesToShovel);
+								subSkillsWithSameIndex, totalUnderstaffingPercent, remainingResourcesToShovel,
+								maxToMoveForThisSkillGroup, totalFStaff, totalResurces);
 						}
 						if (resourceToMove.HasValue)
 						{
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 					  (demandAllSkills / demandThisSkill);
 		}
 
-		private static double? addResourcesToSkillsWithSameIndexWhenPrimarySkillIsOpened(IShovelResourceDataForInterval shovelResourceDataForInterval,
+		private static double? addResourcesToSkillsWithSameIndex(IShovelResourceDataForInterval shovelResourceDataForInterval,
 			double remainingResourcesToShovel, double maxToMoveForThisSkillGroup, double totalFStaff, double totalResurces)
 		{
 			var skillToMoveToAbsoluteDifference = shovelResourceDataForInterval.AbsoluteDifference;
@@ -92,22 +93,16 @@ namespace Teleopti.Ccc.Domain.Cascading
 		}
 
 		private static double? addResourcesToSkillsWithSameIndexWhenPrimarySkillIsClosed(IShovelResourceDataForInterval shovelResourceDataForInterval,
-			SubSkillsWithSameIndex subSkillsWithSameIndex, double totalUnderstaffingPercent, double remainingResourcesToShovel)
+			SubSkillsWithSameIndex subSkillsWithSameIndex, double totalUnderstaffingPercent, double remainingResourcesToShovel,
+			double maxToMoveForThisSkillGroup, double totalFStaff, double totalResurces)
 		{
 			if (totalUnderstaffingPercent > 0)
 			{
-				var skillToMoveToAbsoluteDifference = shovelResourceDataForInterval.AbsoluteDifference;
-				if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
-					return null;
-				var understaffingPercent = -shovelResourceDataForInterval.RelativeDifference;
-				var proportionalResourcesToMove = understaffingPercent / totalUnderstaffingPercent * remainingResourcesToShovel;
-				return Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
+				return addResourcesToSkillsWithSameIndex(shovelResourceDataForInterval, remainingResourcesToShovel, maxToMoveForThisSkillGroup, totalFStaff, totalResurces);
 			}
-			else
-			{
-				var proportionalResourcesToMove = remainingResourcesToShovel / subSkillsWithSameIndex.Count();
-				return Math.Min(remainingResourcesToShovel, proportionalResourcesToMove);
-			}
+
+			var proportionalResourcesToMove = remainingResourcesToShovel / subSkillsWithSameIndex.Count();
+			return Math.Min(remainingResourcesToShovel, proportionalResourcesToMove);
 		}
 	}
 }
