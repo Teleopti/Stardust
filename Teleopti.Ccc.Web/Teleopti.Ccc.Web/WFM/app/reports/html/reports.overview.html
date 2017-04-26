@@ -21,11 +21,12 @@
   </div>
 </div>
 
-<wfm-card-list>
+<wfm-card-list multi-select>
   <!-- custom -->
   <wfm-card ng-repeat="report in reports.customTypes | filter:reportFilter" ng-if="report.childNodes.length>0">
     <card-header>
       <b>{{report.Type}}</b>
+			<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
     </card-header>
     <card-body class="panel">
       <ul class="wfm-list">
@@ -36,10 +37,11 @@
     </card-body>
   </wfm-card>
 
-<!-- all reports -->
+  <!-- all reports -->
   <wfm-card ng-repeat="report in reports.reports | filter:reportFilter" >
     <card-header>
       <b>{{report.Type}}</b>
+      <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
     </card-header>
     <card-body class="panel">
 
@@ -51,10 +53,11 @@
     </card-body>
   </wfm-card>
 
-<!-- custom -->
+  <!-- custom -->
   <wfm-card ng-repeat="report in reports.customTypes | filter:reportFilter" ng-if="report.childNodes.length<1">
     <card-header>
       <b>{{report.Type}}</b>
+      <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
     </card-header>
     <card-body class="panel">
       <ul class="wfm-list">
