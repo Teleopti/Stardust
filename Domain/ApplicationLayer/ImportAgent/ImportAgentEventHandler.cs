@@ -11,7 +11,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
@@ -19,23 +18,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		IRunOnStardust
 	{
 		private readonly IJobResultRepository _jobResultRepository;
-		private readonly IWorkbookHandler _workbookHandler;
 		private readonly IFileProcessor _fileProcessor;
 		private readonly IStardustJobFeedback _feedback;
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		public ImportAgentEventHandler(
 			IJobResultRepository jobResultRepository,
-			IWorkbookHandler workbookHandler,
 			IFileProcessor fileProcessor,
-			IStardustJobFeedback feedback,
-			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+			IStardustJobFeedback feedback)
 		{
 			_jobResultRepository = jobResultRepository;
-			_workbookHandler = workbookHandler;
 			_fileProcessor = fileProcessor;
 			_feedback = feedback;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
 		[AsSystem]

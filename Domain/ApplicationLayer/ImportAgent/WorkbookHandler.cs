@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	{
 		private readonly IImportAgentFileValidator _rawAgentMapper;
 		private readonly AgentFileTemplate _agentFileTemplate;
-		private const int MAXIMUM_NUMBER_OF_ROWS = 5000;
+		private const int maximumNumberOfRows = 5000;
 		public WorkbookHandler(IImportAgentFileValidator rawAgentMapper)
 		{
 			_rawAgentMapper = rawAgentMapper;
@@ -182,9 +181,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				return Resources.NoDataAvailable;
 			}
 
-			if (numberOfRecords > MAXIMUM_NUMBER_OF_ROWS)
+			if (numberOfRecords > maximumNumberOfRows)
 			{
-				return string.Format(Resources.NumberOfRowsExceedsTheMaximum, MAXIMUM_NUMBER_OF_ROWS);
+				return string.Format(Resources.NumberOfRowsExceedsTheMaximum, maximumNumberOfRows);
 			}
 			return string.Empty;
 		}

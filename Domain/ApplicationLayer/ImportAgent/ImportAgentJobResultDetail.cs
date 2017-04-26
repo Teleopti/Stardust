@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
@@ -16,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		{
 			this.ResultDetail = result.Details.FirstOrDefault();
 			this.JobResult = result;
-			SetValues();
+			setValues();
 		}
 
 		public IJobResultDetail ResultDetail { get; }
@@ -32,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public bool HasError { get; private set; }
 		public bool HasException { get; private set; }
 
-		private void SetValues()
+		private void setValues()
 		{
 
 			this.InputArtifact = this.JobResult.Artifacts.FirstOrDefault(ar => ar.Category == JobResultArtifactCategory.Input);
