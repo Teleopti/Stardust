@@ -506,7 +506,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 		[Test]
 		[Ignore("44091 - making this green will most probably make other tests red. Investigate/talk with Anders...")]
-		public void ShouldTryToMakeSubSkillHaveSameRelativeDifferenceAfterShoveling()
+		public void ShouldTryToMakeSubSkillHaveSameRelativeDifferenceAfterShoveling([Values(2, 100)] double skillB2Demand)
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -516,7 +516,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
-			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 2);
+			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, skillB2Demand);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2);
 			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 
