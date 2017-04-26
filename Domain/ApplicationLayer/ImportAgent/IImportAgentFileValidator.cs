@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public Feedback Feedback { get; }
 		public bool HasError => Feedback.ErrorMessages.Any();
 
-		public DetailLevel DetailLevel => HasError || FailedAgents.IsNullOrEmpty()
+		public DetailLevel DetailLevel => HasError || !FailedAgents.IsNullOrEmpty()
 			? DetailLevel.Error
-			: WarningAgents.IsNullOrEmpty()
+			: !WarningAgents.IsNullOrEmpty()
 				? DetailLevel.Warning
 				: DetailLevel.Info;
 

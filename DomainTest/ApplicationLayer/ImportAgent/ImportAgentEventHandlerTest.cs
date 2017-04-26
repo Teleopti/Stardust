@@ -302,7 +302,61 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			jobResult.Details.Count().Should().Be(1);
 		}
 
-	
+		[Test]
+		public void ShouldJobDetailLevelBeInfoIfJobExecuteSucceed()
+		{
+			var jobResult = fakeJobResult();
+			var ms = new AgentFileTemplate().GetFileTemplate(setupProviderData());
+			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test.xls", ms.ToArray()));
+
+			Target.Handle(new ImportAgentEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+
+			jobResult.Details.Single().DetailLevel.Should().Be.EqualTo(DetailLevel.Info);
+
+		}
+
+		[Test]
+		public void ShouldJobDetailLevelBeErrorIfInputAgentsHasErrorMessages()
+		{
+			var jobResult = fakeJobResult();
+			var agent = setupProviderData();
+			agent.Role = "Invalid Role";
+			var ms = new AgentFileTemplate().GetFileTemplate(agent);
+			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test.xls", ms.ToArray()));
+
+			Target.Handle(new ImportAgentEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+			jobResult.Details.Single().DetailLevel.Should().Be.EqualTo(DetailLevel.Error);
+
+		}
+
+		[Test]
+		public void ShouldJobDetailLevelBeWarningIfFixedAgentsWithDefaults()
+		{
+			var jobResult = fakeJobResult();
+			var agent = setupProviderData();
+			agent.Role = "";
+			var ms = new AgentFileTemplate().GetFileTemplate(agent);
+			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test.xls", ms.ToArray()));
+			var defaultRole = ApplicationRoleFactory.CreateRole("default", "role description").WithId();
+			RoleRepository.Add(defaultRole);
+			Target.Handle(new ImportAgentEvent
+			{
+				JobResultId = jobResult.Id.Value,
+				Defaults = new ImportAgentDefaults
+				{
+					RoleIds = defaultRole.Id.ToString()
+				}
+			});
+			jobResult.Details.Single().DetailLevel.Should().Be.EqualTo(DetailLevel.Warning);
+
+		}
+
 		private IJobResult fakeJobResult()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
@@ -317,8 +371,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		{
 			CurrentDatasource.FakeName("test");
 			FindTenantByName.Has(new Tenant("test"));
-			var role = ApplicationRoleFactory.CreateRole("agent", "role description");
-
+			var role = ApplicationRoleFactory.CreateRole("agent", "role description").WithId();
 			RoleRepository.Add(role);
 			var team = TeamFactory.CreateSimpleTeam("preference");
 			var site = SiteFactory.CreateSimpleSite("London");
