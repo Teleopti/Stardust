@@ -9,12 +9,19 @@
 		var vm = this;
 		vm.reports = [];
 		vm.customTypes = [];
+		vm.checkURL = checkURL;
+
 		init();
 
 		function init() {
 			ReportsSvc.getCategorizedReports().then(function (reports) {
 				vm.reports = vm.groupReports(reports);
 			});
+		}
+
+		function checkURL(url) {
+		   	var substring = "http";
+				return url.indexOf(substring) !== -1;
 		}
 
 		vm.groupReports = function(reports) {

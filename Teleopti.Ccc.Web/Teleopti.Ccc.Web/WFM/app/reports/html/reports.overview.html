@@ -30,9 +30,14 @@
     </card-header>
     <card-body class="panel">
       <ul class="wfm-list">
-        <a href="{{rep.Url}}" style="text-decoration:none;" ng-repeat="rep in report.childNodes | filter:reportFilter" target="_blank">
-          <li>{{rep.Name}}</li>
-        </a>
+        <div ng-repeat="rep in report.childNodes | filter:reportFilter">
+          <a href="{{rep.Url}}" ng-if="reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+            <li>{{rep.Name}}</li>
+          </a>
+          <a ui-sref="{{rep.Url}}" ng-if="!reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+            <li>{{rep.Name}}</li>
+          </a>
+        </div>
       </ul>
     </card-body>
   </wfm-card>
@@ -46,9 +51,14 @@
     <card-body class="panel">
 
       <ul class="wfm-list">
-        <a href="{{rep.Url}}" style="text-decoration:none;" ng-repeat="rep in report.childNodes | filter:reportFilter" target="_blank">
-          <li>{{rep.Name}}</li>
-        </a>
+        <div ng-repeat="rep in report.childNodes | filter:reportFilter">
+          <a href="{{rep.Url}}" ng-if="reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+            <li>{{rep.Name}}</li>
+          </a>
+          <a ui-sref="{{rep.Url}}" ng-if="!reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+            <li>{{rep.Name}}</li>
+          </a>
+        </div>
       </ul>
     </card-body>
   </wfm-card>
@@ -61,9 +71,14 @@
     </card-header>
     <card-body class="panel">
       <ul class="wfm-list">
-        <a href="{{rep.Url}}" style="text-decoration:none;" ng-repeat="rep in report.childNodes | filter:reportFilter" target="_blank">
-          <li>{{rep.Name}}</li>
-        </a>
+        <div ng-repeat="rep in report.childNodes | filter:reportFilter">
+          <a href="{{rep.Url}}" ng-if="reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+            <li>{{rep.Name}}</li>
+          </a>
+          <a ui-sref="{{rep.Url}}" ng-if="!reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+            <li>{{rep.Name}}</li>
+          </a>
+        </div>
       </ul>
     </card-body>
   </wfm-card>
