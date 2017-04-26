@@ -37,21 +37,44 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Has(start, numberOfWeeks, null);
 		}
 
-		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks, IAgentGroup agentGroup)
+		public IPlanningPeriod Has(DateOnly start, int number, SchedulePeriodType type, IAgentGroup agentGroup)
 		{
+			DateTime now;
+			switch (type)
+			{
+				case SchedulePeriodType.Month:
+				case SchedulePeriodType.ChineseMonth:
+					now = start.Date.AddMonths(-number);
+					break;
+				case SchedulePeriodType.Week:
+					now = start.Date.AddDays(-7 * number);
+					break;
+				case SchedulePeriodType.Day:
+					now = start.Date.AddDays(-number);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type), type, null);
+			}
 			var planningPeriod =
-				new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(start.Date.AddDays(-7*numberOfWeeks)), new[]
+				new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(now), new[]
 				{
 					new AggregatedSchedulePeriod
 					{
 						DateFrom = start.Date,
-						Number = numberOfWeeks,
-						PeriodType = SchedulePeriodType.Week
+						Number = number,
+						PeriodType = type
 					}
 				}), agentGroup);
 			planningPeriod.SetId(Guid.NewGuid());
 			_planningPeriods.Add(planningPeriod);
 			return planningPeriod;
+
+			
+		}
+
+		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks, IAgentGroup agentGroup)
+		{
+			return Has(start, numberOfWeeks, SchedulePeriodType.Week, agentGroup);
 		}
 
 		public void Remove(IPlanningPeriod entity)
