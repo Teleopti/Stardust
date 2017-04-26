@@ -11,16 +11,31 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
     var probabilityType = constants.probabilityType;
 
     self.displayDate = ko.observable();
-    self.nextDate = ko.observable(moment());
-    self.previousDate = ko.observable(moment());
     self.selectedDate = ko.observable(moment().startOf("day"));
     self.selectedDateSubscription = null;
+
+    self.summaryColor = ko.observable();
+    self.summaryName = ko.observable();
+    self.summaryTime = ko.observable();
+    self.dayOfWeek = ko.observable(moment().format('DDDD'));
+    self.isDayOff = ko.observable(false);
 
     var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
     self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
 
     self.readData = function (data) {
         self.displayDate(data.DisplayDate);
+        self.summaryColor(data.Schedule.Summary.Color);
+        self.summaryName(data.Schedule.Summary.Title);
+        self.summaryTime(data.Schedule.Summary.TimeSpan);
+        self.isDayOff(data.Schedule.IsDayOff);
+        
+        if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
+            var dayDate = moment(data.Schedule.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+            self.dayOfWeek(dayDate.format("dddd"));
+        } else {
+            self.dayOfWeek(data.Schedule.Header.Title);
+        }
     };
 
 
@@ -38,10 +53,12 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
     };
 
     self.nextDay = function () {
-        self.selectedDate(self.nextDate());
+        var nextDate = moment(self.selectedDate()).add(1, 'days');
+        self.selectedDate(nextDate);
     };
 
     self.previousDay = function () {
-        self.selectedDate(self.previousDate());
+        var previousDate = moment(self.selectedDate()).add(-1, 'days');
+        self.selectedDate(previousDate);
     };
 }

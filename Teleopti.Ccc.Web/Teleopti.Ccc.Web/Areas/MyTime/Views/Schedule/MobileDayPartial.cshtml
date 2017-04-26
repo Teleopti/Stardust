@@ -28,6 +28,16 @@
 
 		</div>
 	</div>
-
-
+	
+    <div class="container">
+        <div class="dayview-view-body" data-bind="css: {'dayoff': isDayOff}">
+            <div class="dayview-summary-content" data-bind="style: { backgroundColor: summaryColor, color: 255 }">
+				<span data-bind="text: dayOfWeek"></span>
+				<span >(</span>
+				<span data-bind="text: summaryName"></span>
+				<span data-bind="text: summaryTime"></span>
+				<span >)</span>
+            </div>
+		</div>
+	</div>
 </div>

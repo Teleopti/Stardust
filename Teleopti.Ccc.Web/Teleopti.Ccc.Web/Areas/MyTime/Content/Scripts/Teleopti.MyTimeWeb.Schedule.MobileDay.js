@@ -37,8 +37,6 @@ Teleopti.MyTimeWeb.Schedule.MobileDay = (function ($) {
 			success: function (data) {
 				vm.readData(data);
 				vm.setCurrentDate(moment(data.Date));
-				vm.nextDate(moment(data.Date).add(1, 'days'));
-				vm.previousDate(moment(data.Date).add(-1, 'days'));
 				completelyLoaded();
 				if (!subscribed) subscribeForChanges();
 			}
