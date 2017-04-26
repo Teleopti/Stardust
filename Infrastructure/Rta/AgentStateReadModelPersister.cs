@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						AlarmColor = :AlarmColor,
 						Shift = :Shift,
 						OutOfAdherences = :OutOfAdherences,
-						StateGroupId = :StateGroupId
+						StateGroupId = :StateGroupId 
 					WHERE 
 						PersonId = :PersonId
 				")
@@ -96,7 +96,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							AlarmColor,
 							Shift,
 							OutOfAdherences,
-							StateGroupId
+							StateGroupId,
+							IsDeleted
 						)
 						VALUES
 						(
@@ -119,7 +120,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							:AlarmColor,
 							:Shift,
 							:OutOfAdherences,
-							:StateGroupId
+							:StateGroupId,
+							0		
 						)
 					")
 					.SetParameter("PersonId", model.PersonId)

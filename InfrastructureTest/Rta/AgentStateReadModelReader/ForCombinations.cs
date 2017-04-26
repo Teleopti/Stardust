@@ -20,8 +20,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		public WithUnitOfWork WithUnitOfWork;
 		public IAgentStateReadModelReader Target;
 
+		
 		[Test]
-		public void ShouldNotIncludeAgentsForSiteAndTeam()
+		public void ShouldExcludeDeletedAgentsForSiteAndTeam()
 		{
 			Now.Is("2016-11-07 08:00");
 			var personId1 = Guid.NewGuid();
@@ -45,13 +46,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StatePersister.UpsertDeleted(personId1, DateTime.Now);
 			});
 
-			WithUnitOfWork.Get(() => 
+			WithUnitOfWork.Get(() =>
 			Target.ReadFor(new[] { siteId }, new[] { teamId }, null))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(new[] { personId2 });
 		}
 
-		
+		[Test]
+		public void ShouldExcludeDeletedAgentsForSiteAndTeam2()
+		{
+			Now.Is("2016-11-07 08:00");
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					SiteId = siteId
+
+
+				});
+
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					TeamId = teamId
+
+				});
+				StatePersister.UpsertDeleted(personId1, DateTime.Now);
+			});
+
+			WithUnitOfWork.Get(() =>
+			Target.ReadFor(new[] { siteId }, new[] { teamId }, null))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(new[] { personId2 });
+		}
 
 		[Test]
 		public void ShouldLoadForSiteAndTeam()

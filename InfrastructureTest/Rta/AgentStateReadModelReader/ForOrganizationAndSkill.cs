@@ -65,6 +65,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				.Single().PersonId.Should().Be(expected);
 		}
 
+
+
 		[Test]
 		public void ShouldExcludeDeletedAgentForSiteAndSkill()
 		{
@@ -105,6 +107,58 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					SiteId = siteId
 				});
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongSite,
+					SiteId = Guid.NewGuid()
+				});
+
+				StatePersister.UpsertDeleted(unexpected, DateTime.Now);
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] { siteId }, null, new[] { currentSkillId }))
+				.Single().PersonId.Should().Be(expected);
+		}
+
+		[Test]
+		public void ShouldExcludeDeletedAgentForSiteAndSkill2()
+		{
+			Now.Is("2016-11-07 08:00");
+			Database
+				.WithAgent("wrongSite")
+				.WithSkill("phone")
+				.WithSite()
+				.WithAgent("expected")
+				.WithSkill("phone")
+				.WithAgent("unexpected")
+				.WithSkill("phone")
+				.WithAgent("wrongSkill")
+				.WithSkill("email")
+				;
+			var expected = Database.PersonIdFor("expected");
+			var unexpected = Database.PersonIdFor("unexpected");
+			var wrongSkill = Database.PersonIdFor("wrongSkill");
+			var wrongSite = Database.PersonIdFor("wrongSite");
+			var siteId = Database.CurrentSiteId();
+			var currentSkillId = Database.SkillIdFor("phone");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { expected, unexpected, wrongSkill, wrongSite });
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = expected,
+					SiteId = siteId
+				});
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = unexpected,
+					SiteId = siteId
+				});
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = wrongSkill,
+					SiteId = siteId
+				});
+				StatePersister.Persist(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSite,
 					SiteId = Guid.NewGuid()
