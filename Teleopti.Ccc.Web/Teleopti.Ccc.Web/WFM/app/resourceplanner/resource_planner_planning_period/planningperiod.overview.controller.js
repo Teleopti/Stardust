@@ -3,58 +3,87 @@
 
   angular
     .module('wfm.resourceplanner')
-    .controller('planningPeriodOverviewController', Controller)
-    .directive('planningPeriods', planingPeriodsDirective);
+    .controller('planningPeriodOverviewController', Controller);
 
   Controller.$inject = ['$stateParams', '$state', 'planningPeriodService', 'Toggle', 'NoticeService', '$translate', '$interval', '$scope', 'ResourcePlannerReportSrvc'];
 
   function Controller($stateParams, $state, planningPeriodService, toggleService, NoticeService, $translate, $interval, $scope, ResourcePlannerReportSrvc) {
     var vm = this;
     var agentGroupId = $stateParams.groupId;
+    var selectedPpId = $stateParams.ppId;
     var toggledOptimization = false;
     var toggledSchedulingOnStardust = false;
     var checkProgressRef;
     var keepAliveRef;
     var preMessage = "";
-    vm.selectedPp = null;
-    vm.show = vm.selectedPp ? false : true;
+    vm.agentGroup = {};
+    vm.selectedPp = $stateParams.selectedPp ? $stateParams.selectedPp : null;
     vm.schedulingPerformed = false;
     vm.optimizeRunning = false;
     vm.status = "";
-    vm.planningPeriods = [];
-    vm.preValidation = [];
-    vm.scheduleIssues = [];
     vm.dayNodes = undefined;
     vm.gridOptions = {};
-    vm.lastPp = undefined;
-    vm.originLastPp = undefined;
     vm.totalAgents = null;
     vm.scheduledAgents = 0;
-    vm.totalPreValNum = 0;
-    vm.totalValNum = 0;
-    vm.selectPp = selectPp;
+    vm.isDisableDo = true;
     vm.launchSchedule = launchSchedule;
-    vm.startNextPlanningPeriod = startNextPlanningPeriod;
     vm.intraOptimize = intraOptimize;
     vm.publishSchedule = publishSchedule;
     vm.isDisable = isDisable;
-    vm.deleteLastPp = deleteLastPp;
-    vm.getLastPp = getLastPp;
-    vm.getPrevalidationByPpId = getPrevalidationByPpId;
-    vm.isDisableDo = true;
-    vm.isEnddateChanged = isEnddateChanged;
-    vm.changeEndDate = changeEndDate;
+    vm.totalValNum = 0;
+    vm.valData = {
+      totalPreValNum: 0,
+      scheduleIssues: [],
+      preValidation: [],
+      selectedPp: $stateParams.selectedPp ? $stateParams.selectedPp : null,
+      getPlanningPeriodByPpId: getPlanningPeriodByPpId
+    };
 
     checkToggle();
     destroyCheckState();
-    getPlanningPeriod();
-    selectPp(vm.selectedPp);
+    getAgentGroupbyId();
+    getPlanningPeriodByPpId(selectedPpId);
 
     function checkToggle() {
       toggleService.togglesLoaded.then(function () {
         toggledOptimization = toggleService.Scheduler_IntradayOptimization_36617;
         toggledSchedulingOnStardust = toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874;
       });
+    }
+
+    function getAgentGroupbyId() {
+      if (agentGroupId !== null) {
+        var getAgentGroup = planningPeriodService.getAgentGroupById({ agentGroupId: agentGroupId });
+        return getAgentGroup.$promise.then(function (data) {
+          vm.agentGroup = data;
+          return vm.agentGroup;
+        });
+      }
+    }
+
+    function getPlanningPeriodByPpId(id) {
+      var planningPeriod = planningPeriodService.getPlanningPeriod({ id: id });
+      return planningPeriod.$promise.then(function (data) {
+        vm.selectedPp = data;
+        vm.valData.preValidation = data.ValidationResult.InvalidResources;
+        init();
+        return vm.selectedPp;
+      });
+    }
+
+    function init() {
+      checkState(vm.selectedPp);
+      getTotalAgents(vm.selectedPp);
+      loadLastResult(vm.selectedPp);
+    }
+
+    $scope.$on('$destroy', function () {
+      destroyCheckState();
+    });
+
+    function destroyCheckState() {
+      $interval.cancel(checkProgressRef);
+      $interval.cancel(keepAliveRef);
     }
 
     function checkState(pp) {
@@ -73,71 +102,6 @@
       if (vm.schedulingPerformed || vm.optimizeRunning || vm.totalAgents == 0) {
         return true;
       }
-    }
-
-    function destroyCheckState() {
-      $interval.cancel(checkProgressRef);
-      $interval.cancel(keepAliveRef);
-    }
-
-    $scope.$on('$destroy', function () {
-      destroyCheckState();
-    });
-
-    function getPlanningPeriod() {
-        var query = planningPeriodService.getPlanningPeriodsForAgentGroup({ agentGroupId: agentGroupId });
-        return query.$promise.then(function (data) {
-          vm.planningPeriods = data;
-          if (vm.planningPeriods.length == 0) {
-            startNextPlanningPeriod();
-          }
-          return vm.planningPeriods;
-        });
-    }
-
-    function startNextPlanningPeriod() {
-      var nextPlanningPeriod = planningPeriodService.nextPlanningPeriod({ agentGroupId: agentGroupId });
-      return nextPlanningPeriod.$promise.then(function (data) {
-        vm.planningPeriods.push(data);
-        return vm.planningPeriods;
-      });
-    }
-
-    function selectPp(pp) {
-      if (pp) {
-        vm.show = false;
-        vm.selectedPp = {};
-        vm.selectedPp = pp;
-        destroyCheckState();
-        checkState(vm.selectedPp);
-        getTotalAgents(vm.selectedPp);
-        getPrevalidationByPpId(vm.selectedPp);
-        loadLastResult(vm.selectedPp);
-        return vm.selectedPp;
-      }
-    }
-
-    function getPrevalidationByPpId(pp) {
-      var planningPeriod = planningPeriodService.getPlanningPeriod({ id: pp.Id });
-      return planningPeriod.$promise.then(function (data) {
-        vm.preValidation = data.ValidationResult.InvalidResources;
-        getTotalValidationErrorsNumber(vm.preValidation, vm.scheduleIssues);
-        return vm.preValidation;
-      });
-    }
-
-    function getTotalValidationErrorsNumber(pre, after) {  
-      vm.totalValNum = 0;
-      vm.totalPreValNum = 0;
-      if (pre.length > 0) {
-        angular.forEach(pre, function (item) {
-          vm.totalPreValNum += item.ValidationErrors.length;
-        });
-      }
-      if (after.length > 0) {
-        vm.totalValNum += vm.scheduleIssues.length;
-      }
-      return vm.totalValNum += vm.totalPreValNum;
     }
 
     function launchSchedule(pp) {
@@ -243,16 +207,30 @@
 
     function loadLastResult(pp) {
       vm.dayNodes = undefined;
-      vm.scheduleIssues = [];
+      vm.valData.scheduleIssues = [];
       vm.scheduledAgents = 0;
       planningPeriodService.lastJobResult({ id: pp.Id })
         .$promise.then(function (data) {
           if (data.OptimizationResult) {
             initResult(data.OptimizationResult, data.ScheduleResult, pp);
-            vm.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults ? data.ScheduleResult.BusinessRulesValidationResults : [];
-            getTotalValidationErrorsNumber(vm.preValidation, vm.scheduleIssues);
+            vm.valData.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults ? data.ScheduleResult.BusinessRulesValidationResults : [];
           }
+          getTotalValidationErrorsNumber(vm.valData.preValidation, vm.valData.scheduleIssues);
         });
+    }
+
+    function getTotalValidationErrorsNumber(pre, after) {
+      vm.totalValNum = 0;
+      vm.valData.totalPreValNum = 0;
+      if (pre.length > 0) {
+        angular.forEach(pre, function (item) {
+          vm.valData.totalPreValNum += item.ValidationErrors.length;
+        });
+      }
+      if (after.length > 0) {
+        vm.totalValNum += vm.valData.scheduleIssues.length;
+      }
+      return vm.totalValNum += vm.valData.totalPreValNum;
     }
 
     function initResult(interResult, result, pp) {
@@ -271,51 +249,6 @@
 
     function parseWeekends(period) {
       ResourcePlannerReportSrvc.parseWeek(period);
-    }
-
-    function deleteLastPp() {
-        vm.planningPeriods = [];
-        var deletePlanningPeriod = planningPeriodService.deleteLastPlanningPeriod({ agentGroupId: agentGroupId });
-        return deletePlanningPeriod.$promise.then(function (data) {
-          vm.planningPeriods = data;
-          return vm.planningPeriods;
-        });
-    }
-
-    function getLastPp(p) {
-      vm.originLastPp = angular.copy(p);
-      vm.lastPp = {
-        startDate: moment(p.StartDate).toDate(),
-        endDate: moment(p.EndDate).toDate()
-      };
-
-      var elementResult = document.getElementsByClassName('date-range-start-date');
-      elementResult[0].classList.add("pp-startDate-picker"); //css think mores
-
-      return vm.lastPp;
-    }
-
-    function isEnddateChanged() {
-      if (vm.lastPp !== undefined && vm.originLastPp !== undefined) {
-        var origin = moment(vm.originLastPp.EndDate).toDate();
-        var diff = moment(origin).diff(vm.lastPp.endDate, 'days');
-        if (diff == 0) {
-          return false;
-        }
-        else {
-          return true;
-        }
-      }
-    }
-
-    function changeEndDate() {
-      var newEndDate = moment(vm.lastPp.endDate).format('YYYY-MM-DD');
-      vm.planningPeriods = [];
-      var changeEndDateForLastPlanningPeriod = planningPeriodService.changeEndDateForLastPlanningPeriod({ agentGroupId: agentGroupId, endDate: newEndDate });
-      return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
-        vm.planningPeriods = data;
-        return vm.planningPeriods;
-      });
     }
 
     function displayGrid() {
@@ -337,18 +270,5 @@
         ]
       };
     }
-  }
-
-  function planingPeriodsDirective() {
-    var directive = {
-      restrict: 'EA',
-      scope: {
-        selectedPp: '='
-      },
-      templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
-      controller: 'planningPeriodOverviewController as vm',
-      bindToController: true
-    };
-    return directive;
   }
 })();

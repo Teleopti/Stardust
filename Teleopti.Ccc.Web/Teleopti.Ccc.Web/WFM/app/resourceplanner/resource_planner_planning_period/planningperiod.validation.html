@@ -1,0 +1,97 @@
+<div class="con-row" ng-show="vm.valData.preValidation.length == 0 && vm.valData.scheduleIssues.length == 0 ">
+    <div class="con-flex">
+        <span><i class="mdi mdi-information-outline"></i>There are no validation issues for this planning period.</span>
+    </div>
+</div>
+<wfm-card-list multi-select>
+    <wfm-card ng-show="vm.valData.preValidation.length > 0" ng-click="vm.validationFilter = ''">
+        <card-header tabindex="-1">
+            <div tabindex="0">
+                <span><i class="mdi"></i>
+                    Pre-scheduling validation issues
+                    <div tabindex=0 class="context-menu card-context">
+                        <i ng-click="vm.valData.getPrevalidationByPpId(vm.valData.selectedPp);$event.stopPropagation();" class="mdi mdi-refresh"></i>
+                        <md-tooltip>Refresh Pre-scheduling Validation issues</md-tooltip>
+                    </div>
+                </span>
+                <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
+                <span class="pull-right">{{vm.valData.totalPreValNum}} issues</span>
+            </div>
+        </card-header>
+        <card-body class="panel">
+            <div class="con-row demo-outline">
+                <div class="con-flex">
+                    <div class="con-row">
+                        <div class="con-flex ">
+                            <label for="filter" class="input-icon">
+                                <i class="mdi mdi-filter-outline">
+                                <input type="text" id="filter" ng-model="vm.validationFilter" placeholder="Filter validation issues">
+                                <md-tooltip>Filter validation issues</md-tooltip>
+                                </i>
+                            </label>
+                        </div>
+                        <div class="con-flex"></div>
+                    </div>
+                    <table class="wfm-table">
+                        <thead>
+                            <tr>
+                                <th>Issue</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="msg in vm.valData.preValidation | filter: vm.validationFilter">
+                                <td>{{msg.ResourceType}}: {{msg.ResourceName}}</td>
+                                <td>
+                                    <div ng-repeat="item in msg.ValidationErrors">{{item}}</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </card-body>
+    </wfm-card>
+    <wfm-card ng-show="vm.valData.scheduleIssues.length > 0">
+        <card-header tabindex="-1" ng-click="vm.scheduleIssuesFilter = ''">
+            <div tabindex="0">
+                <span><i class="mdi"></i>Issues during last scheduling</span>
+                <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
+                <span class="pull-right">{{vm.valData.scheduleIssues.length}} issues</span>
+            </div>
+        </card-header>
+        <card-body class="panel">
+            <div class="con-row demo-outline">
+                <div class="con-flex">
+                    <div class="con-row">
+                        <div class="con-flex ">
+                            <label for="filter" class="input-icon">
+                                <i class="mdi mdi-filter-outline">
+                                <input type="text" id="filter" ng-model="vm.scheduleIssuesFilter" placeholder="Filter validation issues">
+                                <md-tooltip>Filter validation issues</md-tooltip>
+                                </i>
+                            </label>
+                        </div>
+                        <div class="con-flex"></div>
+                    </div>
+                    <table class="wfm-table">
+                        <thead>
+                            <tr>
+                                <th>Issue</th>
+                                <th>Description</th>
+                                <!--<th>Issues-Type</th>-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="msg in vm.valData.scheduleIssues | filter: vm.scheduleIssuesFilter">
+                                <td>Agent: {{msg.Name}}</td>
+                                <td>{{msg.Message}}</td>
+                                <!--<td>{{msg.BusinessRuleCategoryText}}</td>-->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </card-body>
+    </wfm-card>
+</wfm-card-list>

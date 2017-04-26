@@ -17,8 +17,7 @@
 		vm.destoryRuleset = destoryRuleset;
 		vm.createRuleset = createRuleset;
 		vm.goDayoffRuleSetting = goDayoffRuleSetting;
-
-
+		
 		getDayOffRules();
 		getAgentGroupbyId();
 
@@ -79,8 +78,7 @@
 		var directive = {
 			restrict: 'EA',
 			scope: {
-				isDisable: '=',
-				agentGroup: '='
+				isDisable: '='
 			},
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
 			controller: 'dayoffRuleOverviewController as vm',

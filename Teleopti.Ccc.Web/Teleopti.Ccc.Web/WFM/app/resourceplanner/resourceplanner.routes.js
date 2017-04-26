@@ -67,12 +67,20 @@
 			params: {
 				groupId: ''
 			}
+		}).state('resourceplanner.selectplanningperiod', {
+			url: '/agentgroup/:groupId/selectplanningperiod',
+			templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.select.html',
+			controller: 'planningPeriodSelectController as vm',
+			params: {
+				groupId: ''
+			}
 		}).state('resourceplanner.oneagentgroup', {
-			url: '/agentgroup/:groupId/detail',
+			url: '/agentgroup/:groupId/detail/:ppId',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
 			controller: 'planningPeriodOverviewController as vm',
 			params: {
-				groupId: ''
+				groupId: '',
+				ppId: ''
 			}
 		}).state('resourceplanner.dayoffrulesOverview', {
 			params: {

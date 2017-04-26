@@ -3,7 +3,7 @@
 		<button class="wfm-btn wfm-btn-default " ng-click="vm.goForm()">New Agent Group</button>
 	</div>
 </div>
-<div class="con-row" ng-if="vm.agentGroups.length == 0">
+<div class="con-row" ng-if="vm.agentGroups !== undefined && vm.agentGroups.length == 0">
 	<div class="con-flex">
 		<div class="panel wfm-tip">
 			<div class="sub-header wfm-tip-header">
@@ -19,12 +19,12 @@
 	<div class="con-flex">
 		<div class="wfm-grid">
 			<div class="grid-card planingperiod-container" ng-repeat="agentGroup in vm.agentGroups | orderBy: '+Name'">
-				<div class="list-content panel">
+				<div class="list-content panel" ng-click="vm.goAgentGroup(agentGroup.Id)">
 					<div class="sub-header">
-						<div class="con-flex x3" ng-click="vm.goAgentGroup(agentGroup.Id)">
-							<h2>{{agentGroup.Name}}</h2>
+						<div class="con-flex x3">
+							<h2 ng-bind="agentGroup.Name"></h2>
 						</div>
-						<div class="con-flex head-actions panel-menu ag-menu">
+						<div class="con-flex head-actions panel-menu ag-menu" ng-click="$event.stopPropagation();">
 							<div tabindex=0 class="context-menu card-context">
 								<i class="mdi mdi-dots-vertical"></i>
 								<div class="context-menu-left">

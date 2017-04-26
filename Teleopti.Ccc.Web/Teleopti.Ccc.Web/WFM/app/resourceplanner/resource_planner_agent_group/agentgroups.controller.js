@@ -16,7 +16,7 @@
     vm.goAgentGroup = goAgentGroup;
     vm.goEditAgentGroup = goEditAgentGroup;
     vm.goDayoffRule = goDayoffRule;
-    vm.agentGroups = [];
+    vm.agentGroups = undefined;
 
     getAgentGroups();
 
@@ -34,13 +34,14 @@
 
     function goEditAgentGroup(groupId) {
       if (groupId) {
-        $state.go('resourceplanner.editagentgroup', { groupId: groupId });
+        $state.go('resourceplanner.editagentgroup', { groupId: groupId});
       }
     }
 
     function goAgentGroup(groupId) {
       if (groupId) {
-        $state.go('resourceplanner.oneagentgroup', { groupId: groupId });
+        // $state.go('resourceplanner.oneagentgroup', { groupId: groupId});
+        $state.go('resourceplanner.selectplanningperiod', { groupId: groupId});
       }
     }
 
