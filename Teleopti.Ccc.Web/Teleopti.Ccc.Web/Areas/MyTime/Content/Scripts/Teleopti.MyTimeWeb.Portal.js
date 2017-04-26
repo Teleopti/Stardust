@@ -68,7 +68,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	 return Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446");
    }
 
-	function _initNavigation() {
+	function _initNavigation(window) {
 		$('.dropdown-menu a[data-mytime-action]')
 			.click(function (e) {
 				e.preventDefault();
@@ -76,11 +76,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			})
 		;
 
-		if (location.hash.length <= 1) {
-            if (_showDayScheduleForStartPage() && _isMobile()){
-			location.replace("#Schedule/MobileDay");
+		if (window.location.hash.length <= 1) {
+            if (_showDayScheduleForStartPage() && _isMobile(window)){
+            	window.location.replace("#Schedule/MobileDay");
             } else { 
-				location.replace("#" + (_isMobile() ? "Schedule/MobileWeek" : _settings.defaultNavigation));
+            	window.location.replace("#" + (_isMobile(window) ? "Schedule/MobileWeek" : _settings.defaultNavigation));
 			} 
 		}
 
@@ -260,8 +260,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	}
 
-	function _isMobile() {
-		var ua = navigator.userAgent;
+	function _isMobile(window) {
+		var ua = window.navigator.userAgent;
 		if (ua.match(/Android/i) || ua.match(/webOS/i) || ua.match(/iPhone/i) || ua.match(/iPod/i)) {
 			return true;
 		}
@@ -272,7 +272,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		var isWeekSchedule = hash.indexOf("#Schedule") >= 0;
 
 		if (_endsWith(hash, "Tab")) {
-            var suffix = (hash.indexOf("#Schedule") === 0) ? (_isMobile() ? (_showDayScheduleForStartPage()?"/MobileDay": "/MobileWeek" ): "/Week") : "/Index";
+            var suffix = (hash.indexOf("#Schedule") === 0) ? (_isMobile(window) ? (_showDayScheduleForStartPage()?"/MobileDay": "/MobileWeek" ): "/Week") : "/Index";
 			hash = hash.substring(0, hash.length - 'Tab'.length) + suffix;
 		}
 
@@ -375,14 +375,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	return {
-		Init: function (settings) {
+		Init: function (settings, window) {
 			Teleopti.MyTimeWeb.AjaxSettings = settings;
 			Teleopti.MyTimeWeb.Common.Init(settings);
 			Teleopti.MyTimeWeb.Test.Init(settings);
 			_settings = settings;
 			_layout();
 			_attachAjaxEvents();
-			_initNavigation();
+			_initNavigation(window);
 			_setupRoutes();
 			_initializeHasher();
 		},

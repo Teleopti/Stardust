@@ -66,6 +66,7 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleViewModel.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleUtility.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.AlertActivity.js?bust=<%=version %>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Test.js?bust=<%=version %>"></script>
 
 		
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.Tests.js?bust=<%=version%>"></script>
@@ -92,6 +93,7 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel.Tests.js?bust=<%=version %>"></script>		
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.AlertActivity.Tests.js?bust=<%=version %>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Portal.Tests.js?bust=<%=version %>"></script>
 	</head>
 	<body>
 		<h1 id="qunit-header">All tests</h1>

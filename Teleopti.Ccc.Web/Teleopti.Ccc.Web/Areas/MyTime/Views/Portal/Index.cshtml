@@ -11,7 +11,7 @@
                 defaultNavigation: '@Html.Portal().GetDefaultAction(Model)',
                 baseUrl: '@Url.Content("~/MyTime/")',
                 startBaseUrl: '@Url.Content("~/Start/")'
-            });
+            }, window);
 
             @if (Model.HasAsmPermission)
             {
