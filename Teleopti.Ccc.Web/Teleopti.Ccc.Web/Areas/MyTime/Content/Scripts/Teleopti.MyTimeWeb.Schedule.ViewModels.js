@@ -284,8 +284,8 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, userTexts, parent)
 		var width;
 		if (layer.IsOvertimeAvailability) {
 			width = 20;
-		} else if (parent.probabilities && parent.probabilities.length > 0) {
-			width = 115;
+		} else if (parent.probabilities() && parent.probabilities().length > 0) {
+			width = 116;
 		} else {
 			width = 127;
 		}
