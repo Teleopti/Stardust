@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 		}
 
 		[Test]
-		public void ShouldGetNightShift()
+		public void ShouldGetFullNightShift()
 		{
 			Now.Is("2017-04-18 23:00");
 			var person = Guid.NewGuid();
@@ -106,6 +106,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 			var viewModel = Target.Build(person);
 
 			viewModel.Schedules.Last().StartTime.Should().Be("2017-04-19T01:00:00");
+		}
+
+		[Test]
+		public void ShouldGetOngoingNightShift()
+		{
+			Now.Is("2017-04-19 01:00");
+			var person = Guid.NewGuid();
+
+			Database
+				.WithAgent(person, "nicklas")
+				.WithAssignment(person, "2017-04-18")
+				.WithActivity()
+				.WithAssignedActivity("2017-04-18 23:00", "2017-04-19 02:00")
+				.WithAssignment(person, "2017-04-19")
+				.WithAssignedActivity("2017-04-19 23:00", "2017-04-20 02:00")
+				;
+
+			var viewModel = Target.Build(person);
+
+			viewModel.Schedules.Single().StartTime.Should().Be("2017-04-18T23:00:00");
 		}
 
 		[Test]

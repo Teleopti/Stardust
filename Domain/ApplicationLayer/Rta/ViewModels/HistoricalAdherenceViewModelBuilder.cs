@@ -38,39 +38,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_timeZone = timeZone;
 			_changes = changes;
 		}
-		
+
 		public HistoricalAdherenceViewModel Build(Guid personId)
 		{
 			var now = _now.UtcDateTime();
 			var person = _persons.Load(personId);
-
-			var timeZone = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
-			var timeZoneTime = TimeZoneInfo.ConvertTimeFromUtc(now, timeZone);
-			var date = new DateOnly(timeZoneTime);
-
-			var schedule = getScheduleLayers(date, person);
-			var startTime = TimeZoneInfo.ConvertTimeToUtc(timeZoneTime.Date, timeZone);
-			var endTime = startTime.AddDays(1);
-			if (schedule.Any())
-			{
-				startTime = schedule.Min(x => x.Period.StartDateTime).AddHours(-1);
-				endTime = schedule.Max(x => x.Period.EndDateTime).AddHours(1);
-			}
-			startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
-			endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
+			
+			var stuff = getSchedule(now, person);
 			
 			return new HistoricalAdherenceViewModel
 			{
 				Now = formatForUser(now),
 				PersonId = personId,
 				AgentName = person?.Name.ToString(),
-				Schedules = buildSchedules(schedule),
-				Changes = buildChanges(personId, startTime, endTime),
-				OutOfAdherences = buildOutOfAdherences(personId, startTime, endTime),
+				Schedules = buildSchedules(stuff.Schedule),
+				Changes = buildChanges(personId, stuff.StartTime, stuff.EndTime),
+				OutOfAdherences = buildOutOfAdherences(personId, stuff.StartTime, stuff.EndTime),
 				Timeline = new ScheduleTimeline
 				{
-					StartTime = formatForUser(startTime),
-					EndTime = formatForUser(endTime)
+					StartTime = formatForUser(stuff.StartTime),
+					EndTime = formatForUser(stuff.EndTime)
 				}
 			};
 		}
@@ -130,26 +117,76 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return changes;
 		}
 
-		private IEnumerable<IVisualLayer> getScheduleLayers(DateOnly date, IPerson person)
+		private class scheduleInfo
 		{
+			public IEnumerable<IVisualLayer> Schedule;
+			public DateTime StartTime;
+			public DateTime EndTime;
+		}
+
+		private scheduleInfo getSchedule( DateTime now , IPerson person)
+		{
+
+			var timeZone = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
+			var timeZoneTime = TimeZoneInfo.ConvertTimeFromUtc(now, timeZone);
+			var date = new DateOnly(timeZoneTime);
+
+			var schedule = Enumerable.Empty<IVisualLayer>();
+
 			var scenario = _scenario.Current();
-			if (scenario == null || person == null)
-				return Enumerable.Empty<IVisualLayer>();
+			if (scenario != null && person != null)
+			{
+				var period = new DateOnlyPeriod(date.AddDays(-2), date.AddDays(2));
 
-			var period = new DateOnlyPeriod(date.AddDays(-2), date.AddDays(2));
+				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
+					new[] { person },
+					new ScheduleDictionaryLoadOptions(false, false),
+					period,
+					scenario);
+				
+				var possibleShifts = (
+						from scheduleDay in schedules[person].ScheduledDayCollection(period)
+						where scheduleDay.DateOnlyAsPeriod.DateOnly == date.AddDays(-1)
+							  || scheduleDay.DateOnlyAsPeriod.DateOnly == date
+						let projection = scheduleDay.ProjectionService().CreateProjection()
+						select new
+						{
+							scheduleDay,
+							projection,
+						})
+					.ToArray();
 
-			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-				new[] { person },
-				new ScheduleDictionaryLoadOptions(false, false),
-				period,
-				scenario);
+				var shift = (
+						from s in possibleShifts
+						from l in s.projection
+						where l.Period.Contains(now)
+						select s)
+					.SingleOrDefault();
 
-			return (
-					from scheduleDay in schedules[person].ScheduledDayCollection(period)
-					where scheduleDay.DateOnlyAsPeriod.DateOnly == date
-					from layer in scheduleDay.ProjectionService().CreateProjection()
-					select layer)
-				.ToArray();
+				if (shift == null)
+					shift = (
+							from s in possibleShifts
+							where s.scheduleDay.DateOnlyAsPeriod.DateOnly == date
+							select s)
+						.SingleOrDefault();
+
+				schedule = shift.projection;
+			}
+
+			var startTime = TimeZoneInfo.ConvertTimeToUtc(timeZoneTime.Date, timeZone);
+			var result = new scheduleInfo
+			{
+				Schedule = schedule,
+				StartTime = startTime,
+				EndTime = startTime.AddDays(1)
+			};
+			if (result.Schedule.Any())
+			{
+				result.StartTime = result.Schedule.Min(x => x.Period.StartDateTime).AddHours(-1);
+				result.EndTime = result.Schedule.Max(x => x.Period.EndDateTime).AddHours(1);
+			}
+
+			return result;
 		}
 
 		private IEnumerable<internalHistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
