@@ -286,22 +286,25 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[UnitOfWork, HttpPut, Route("api/resourceplanner/agentgroup/{agentGroupId}/lastperiod")]
-		public virtual IHttpActionResult ChangeLastPeriod(Guid agentGroupId, DateTime endDate)
+		public virtual IHttpActionResult ChangeLastPeriod(Guid agentGroupId, DateTime? startDate, DateTime endDate)
 		{
 			var agentGroup = _agentGroupRepository.Get(agentGroupId);
 			if (agentGroup == null)
 				return BadRequest($"Invalid {nameof(agentGroupId)}");
 			var planningPeriods = _planningPeriodRepository.LoadForAgentGroup(agentGroup).ToList();
+			if (startDate.HasValue && planningPeriods.Count > 1)
+				return BadRequest($"You are only allowed to change {nameof(startDate)} for first period.");
 			var periodToChange = planningPeriods.OrderBy(x => x.Range.StartDate).LastOrDefault();
 			if (periodToChange != null)
 			{
-				var periodDays = (int) (endDate - periodToChange.Range.StartDate.Date).TotalDays + 1;
+				var newStartDate = startDate ?? periodToChange.Range.StartDate.Date;
+				var periodDays = (int) (endDate - newStartDate).TotalDays + 1;
 				if (periodDays <= 0)
 					return BadRequest($"Invalid {nameof(endDate)}");
 				periodToChange.ChangeRange(new SchedulePeriodForRangeCalculation
 				{
 					PeriodType = SchedulePeriodType.Day,
-					StartDate = periodToChange.Range.StartDate,
+					StartDate = new DateOnly(newStartDate),
 					Number = periodDays
 				}, true);
 				periodToChange.JobResults.Clear();

@@ -341,7 +341,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var periodStart = new DateOnly(2017, 04, 26);
 			var changedPeriod = PlanningPeriodRepository.Has(periodStart, 1, agentGroup);
 
-			Target.ChangeLastPeriod(agentGroupId, periodStart.Date + TimeSpan.FromDays(14));
+			Target.ChangeLastPeriod(agentGroupId, null, periodStart.Date + TimeSpan.FromDays(14));
 
 			Target.Request = new HttpRequestMessage();
 			var lastPeriod = (CreatedNegotiatedContentResult<PlanningPeriodModel>) Target.GetNextPlanningPeriod(agentGroupId);
@@ -351,6 +351,42 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			periods.First(period => period.Id == firstPeriod.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 25));
 			periods.First(period => period.Id == changedPeriod.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 10));
 			periods.First(period => period.Id == lastPeriod.Content.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 05, 25));
+		}
+
+		[Test]
+		public void ShouldNotBeAbleToChangeStartDateOfSecondPeriod()
+		{
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			var agentGroupId = Guid.NewGuid();
+			var agentGroup = new AgentGroup()
+				.WithId(agentGroupId);
+			AgentGroupRepository.Has(agentGroup);
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
+
+			PlanningPeriodRepository.Has(new DateOnly(2017, 04, 19), 1, agentGroup);
+			var periodStart = new DateOnly(2017, 04, 26);
+			PlanningPeriodRepository.Has(periodStart, 1, agentGroup);
+
+			var result = Target.ChangeLastPeriod(agentGroupId, periodStart.Date + TimeSpan.FromDays(1), periodStart.Date + TimeSpan.FromDays(14));
+			(result as BadRequestErrorMessageResult).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldBeAbleToChangeStartDateOfFirstPeriod()
+		{
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			var agentGroupId = Guid.NewGuid();
+			var agentGroup = new AgentGroup()
+				.WithId(agentGroupId);
+			AgentGroupRepository.Has(agentGroup);
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
+
+			var periodStart = new DateOnly(2017, 04, 26);
+			PlanningPeriodRepository.Has(periodStart, 1, agentGroup);
+
+			var newPeriodStart = periodStart.Date + TimeSpan.FromDays(1);
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.ChangeLastPeriod(agentGroupId, newPeriodStart, newPeriodStart.Date + TimeSpan.FromDays(14));
+			result.Content.First().StartDate.Should().Be.EqualTo(newPeriodStart);
 		}
 
 		private static List<AggregatedSchedulePeriod> suggestions()
