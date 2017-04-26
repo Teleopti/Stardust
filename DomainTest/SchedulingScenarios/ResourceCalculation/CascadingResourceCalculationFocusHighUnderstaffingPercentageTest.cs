@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	//specific tests to ensure skills with high understaffing percentage are reduced quickly
 	[DomainTest]
-	public class CascadingResourceCalculationFocusHighUnderstaffingPercentageTest
+	public class CascadingResourceCalculationFocusHighUnderstaffingPercentageTest : ResourceCalculationScenario
 	{
 		public IResourceCalculation Target;
 
@@ -53,6 +53,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			b1AbsDiff.Should().Be.LessThan(19.3);
 			(b1AbsDiff + b2AbsDiff).Should().Be.IncludedIn(98.99, 99.01);
+		}
+
+		public CascadingResourceCalculationFocusHighUnderstaffingPercentageTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
+		{
 		}
 	}
 }

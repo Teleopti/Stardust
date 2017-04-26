@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class ResourceCalculationContextPeriodTest
+	public class ResourceCalculationContextPeriodTest : ResourceCalculationScenario
 	{
 		public CascadingResourceCalculationContextFactory ResourceCalculationContextFactory;
 		public FakeTimeZoneGuard TimeZoneGuard;
@@ -46,6 +46,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				var partOfAssignmentInContext = ResourceCalculationContext.Fetch().AffectedResources(activity, today.ToDateTimePeriod(userTimeZone)).Any();
 				partOfAssignmentInContext.Should().Be.EqualTo(expected);
 			}
+		}
+
+		public ResourceCalculationContextPeriodTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
+		{
 		}
 	}
 }

@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class CascadingResourceCalculationContextTest
+	public class CascadingResourceCalculationContextTest : ResourceCalculationScenario
 	{
 		public IResourceCalculation Target;
 
@@ -35,6 +35,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			ResourceCalculationContext.InContext
 				.Should().Be.False();
+		}
+
+		public CascadingResourceCalculationContextTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
+		{
 		}
 	}
 }

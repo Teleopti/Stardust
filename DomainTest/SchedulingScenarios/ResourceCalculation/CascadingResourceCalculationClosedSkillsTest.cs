@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class CascadingResourceCalculationClosedSkillsTest
+	public class CascadingResourceCalculationClosedSkillsTest : ResourceCalculationScenario
 	{
 		public IResourceCalculation Target;
 
@@ -239,6 +239,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			subskillDay.SkillStaffPeriodCollection.First().CalculatedResource
 				.Should().Be.EqualTo(1);
+		}
+
+		public CascadingResourceCalculationClosedSkillsTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
+		{
 		}
 	}
 }

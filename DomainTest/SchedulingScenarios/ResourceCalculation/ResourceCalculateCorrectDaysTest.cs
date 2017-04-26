@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class ResourceCalculateCorrectDaysTest
+	public class ResourceCalculateCorrectDaysTest : ResourceCalculationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IScheduleDayChangeCallback ScheduleDayChangeCallback;
@@ -122,6 +122,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			undoRedoContainer.Redo();
 
 			stateHolder.DaysToRecalculate.Should().Have.SameValuesAs(date);
+		}
+
+		public ResourceCalculateCorrectDaysTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
+		{
 		}
 	}
 }

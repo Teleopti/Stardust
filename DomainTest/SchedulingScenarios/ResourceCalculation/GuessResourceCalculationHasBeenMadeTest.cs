@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class GuessResourceCalculationHasBeenMadeTest
+	public class GuessResourceCalculationHasBeenMadeTest : ResourceCalculationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public Func<IResourceOptimizationHelperExtended> ResourceOptimizationHelperExtended;
@@ -50,6 +50,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			stateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade()
 				.Should().Be.True();
+		}
+
+		public GuessResourceCalculationHasBeenMadeTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
+		{
 		}
 	}
 }

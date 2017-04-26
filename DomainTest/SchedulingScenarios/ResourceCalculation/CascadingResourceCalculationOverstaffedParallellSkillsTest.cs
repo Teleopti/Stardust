@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class CascadingResourceCalculationOverstaffedParallellSkillsTest
+	public class CascadingResourceCalculationOverstaffedParallellSkillsTest : ResourceCalculationScenario
 	{
 		public IResourceCalculation Target;
 
@@ -526,6 +526,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var b2RelativeDiff = skillDayB2.SkillStaffPeriodCollection.First().RelativeDifference;
 			var diffBetweenB1AndB2 = Math.Abs(b1RelativeDiff - b2RelativeDiff);
 			diffBetweenB1AndB2.Should().Be.LessThan(0.1);
+		}
+
+		public CascadingResourceCalculationOverstaffedParallellSkillsTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
+		{
 		}
 	}
 }

@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class CascadingResourceCalculationTrackShovelingTest
+	public class CascadingResourceCalculationTrackShovelingTest : ResourceCalculationScenario
 	{
 		public IResourceCalculation Target;
 
@@ -155,6 +155,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(2);
 			trackShoveling.For(subskill).ResourcesBeforeShoveling
 				.Should().Be.EqualTo(0);
+		}
+
+		public CascadingResourceCalculationTrackShovelingTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
+		{
 		}
 	}
 }

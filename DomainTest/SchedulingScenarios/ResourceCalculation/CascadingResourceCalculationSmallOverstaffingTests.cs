@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class CascadingResourceCalculationSmallOverstaffingTests
+	public class CascadingResourceCalculationSmallOverstaffingTests : ResourceCalculationScenario
 	{
 		//tests are based on limit on 0.1 -> if that changes, tests need to be rewritten
 		//(don't know if it's better to fake the value, but ended up not doing so...)
@@ -89,11 +89,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass, ass2 }, new[] { primarySkillDay, subSkill1Day, subSkill2Day }, false, false));
 
+
+			Console.WriteLine(primarySkillDay.SkillStaffPeriodCollection.First().CalculatedResource);
+
 			var primarySkillDiff = primarySkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference;
 			primarySkillDiff.IsZero().Should().Be.False();
 			primarySkillDiff.Should().Be.LessThanOrEqualTo(0.1);
 			var subSkill2Diff = subSkill2Day.SkillStaffPeriodCollection.First().AbsoluteDifference;
 			subSkill2Diff.IsZero().Should().Be.False();
+		}
+
+		public CascadingResourceCalculationSmallOverstaffingTests(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
+		{
 		}
 	}
 }
