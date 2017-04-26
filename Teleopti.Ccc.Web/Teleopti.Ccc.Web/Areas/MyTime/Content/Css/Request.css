@@ -675,6 +675,10 @@ input[type=search]::-ms-clear {
 	}
 }
 
+.filter-row {
+	margin: 0 !important;
+}
+
 /*Mobile tweaks*/
     @media only screen and (max-width : 736px) {
 		.requests-wrapper .navbar-teleopti{
@@ -702,7 +706,6 @@ input[type=search]::-ms-clear {
 			padding-top: 50px;
 			outline: none !important;
 		}
-
 		.requests-wrapper .fab:before {
 			content: '+';
 			position: absolute;
