@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_EvenRelativeDiff_44091)]
-	[Ignore("44091 - making this green will most probably make other tests red. Investigate/talk with Anders...")]
 	public class CascadingResourceCalculationEvenRelativeDifferenceTest
 	{
 		public IResourceCalculation Target;

@@ -9,16 +9,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[TestFixture(false)]
 	public abstract class ResourceCalculationScenario : IConfigureToggleManager
 	{
-		private readonly bool _resourcePlannerEvenRelativeDiff44091;
+		protected readonly bool ResourcePlannerEvenRelativeDiff44091;
 
 		protected ResourceCalculationScenario(bool resourcePlannerEvenRelativeDiff44091)
 		{
-			_resourcePlannerEvenRelativeDiff44091 = resourcePlannerEvenRelativeDiff44091;
+			ResourcePlannerEvenRelativeDiff44091 = resourcePlannerEvenRelativeDiff44091;
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			if(_resourcePlannerEvenRelativeDiff44091)
+			if(ResourcePlannerEvenRelativeDiff44091)
 				toggleManager.Enable(Toggles.ResourcePlanner_EvenRelativeDiff_44091);
 		}
 	}
