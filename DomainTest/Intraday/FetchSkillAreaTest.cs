@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -37,32 +37,27 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				.Should().Be.EqualTo(2);
 		}
 
-
 		[Test]
 		public void ShouldSortNameInSkillarea()
 		{
-			SkillAreaRepository.Has(new SkillArea { Name = "B",Skills = new List<SkillInIntraday>() }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Name = "C",Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "B", Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "C", Skills = new List<SkillInIntraday>() }.WithId());
 			SkillAreaRepository.Has(new SkillArea { Name = "A", Skills = new List<SkillInIntraday>() }.WithId());
-			
+
 			UiCulture.IsSwedish();
 			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "B", "C" });
-
 		}
 
-	
 		[Test]
 		public void ShouldSortSwedishNameInSkillarea()
 		{
-			SkillAreaRepository.Has(new SkillArea { Name = "Ä", Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "Ã„", Skills = new List<SkillInIntraday>() }.WithId());
 			SkillAreaRepository.Has(new SkillArea { Name = "A", Skills = new List<SkillInIntraday>() }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Name = "Å", Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "Ã…", Skills = new List<SkillInIntraday>() }.WithId());
 
 			UiCulture.IsSwedish();
-			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "Å", "Ä" });
-
+			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "Ã…", "Ã„" });
 		}
-
 
 		[Test]
 		public void ShouldMapViewModelCorrectly()
@@ -72,13 +67,13 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
 				{
-					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false}
+					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false }
 				}
 			}.WithId();
 
 			SkillAreaRepository.Has(existingSkillArea);
 
-			var skillInIntraday = new SkillInIntraday() {Id = existingSkillArea.Skills.First().Id, DoDisplayData = true, SkillType = "InboundPhone"};
+			var skillInIntraday = new SkillInIntraday() { Id = existingSkillArea.Skills.First().Id, DoDisplayData = true, SkillType = "InboundPhone" };
 			LoadAllSkillInIntradays.Has(skillInIntraday);
 
 			var result = Target.GetAll().Single();
@@ -104,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
 				{
-					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true}
+					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true }
 				}
 			}.WithId();
 
@@ -142,13 +137,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillAreaRepository.Has(existingSkillArea);
 
 			var result = Target.Get(skillAreaId);
-			
+
 			result.Name.Should().Be("SkillAreaName");
 			result.Skills.Single().Id.Should().Be(skillId);
 			result.Skills.Single().Name.Should().Be("Phone");
 			result.Skills.Single().IsDeleted.Should().Be(false);
 		}
-
-
 	}
 }
