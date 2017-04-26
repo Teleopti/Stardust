@@ -23,7 +23,7 @@
 
 <wfm-card-list>
   <!-- custom -->
-  <wfm-card ng-repeat="report in reports.customTypes | filter:reportFilter" "report.childNodes.length>0">
+  <wfm-card ng-repeat="report in reports.customTypes | filter:reportFilter" ng-if="report.childNodes.length>0">
     <card-header>
       <b>{{report.Type}}</b>
     </card-header>
