@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public bool ContinueShovel(CascadingSkillGroup skillGroup)
 		{
-			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out double resourcesMovedOnSkillGroup))
+			double resourcesMovedOnSkillGroup;
+			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out resourcesMovedOnSkillGroup))
 			{
 				resourcesMovedOnSkillGroup = 0;
 			}
