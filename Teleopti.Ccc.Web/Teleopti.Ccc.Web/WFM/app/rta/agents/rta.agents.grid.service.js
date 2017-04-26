@@ -32,9 +32,9 @@
 			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 			var alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.vm.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
 
-			var shiftHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div class="shift-cell-header rta-default-cursor"><div col-index="renderIndex" title="TOOLTIP">'
+			var shiftHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div col-index="renderIndex" title="TOOLTIP">'
 				+ '<label ng-repeat="row in grid.appScope.vm.timeline" class="label label-info"'
-				+ 'ng-attr-style="position: absolute; left: {{row.Offset}}">{{row.Time}}</label></div></div>';
+				+ 'ng-attr-style="position: absolute; left: {{row.Offset}}; top:5px;">{{row.Time}}</label></div>';
 
 			var cellHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div role="columnheader" ng-class="{ \'sortable\': sortable }" ui-grid-one-bind-aria-labelledby-grid="col.uid + \'-header-text \' + col.uid + \'-sortdir-text\'"'
 				+ 'aria-sort="{{col.sort.direction == asc ? \'ascending\' : ( col.sort.direction == desc ? \'descending\' : (!col.sort.direction ? \'none\' : \'other\'))}}">'
@@ -108,7 +108,7 @@
 				cellClass: 'shift-class',
 				cellTemplate: 'app/rta/agents/rta-agents-shiftcelltemplate.html',
 				width: "42%",
-				headerCellClass: 'white-cell-header',
+				headerCellClass: 'shift-cell-header rta-default-cursor',
 				enableHiding: false
 			};
 
