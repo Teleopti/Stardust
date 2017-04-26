@@ -262,6 +262,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftProjectionCachesFilter.cs" />
     <Compile Include="Security\Principal\IUpdatedBySystemUser.cs" />
     <Compile Include="Security\Principal\UpdatedBySystemUser.cs" />
+    <Compile Include="Staffing\ScheduleDayDifferenceSaver.cs" />
     <Compile Include="Staffing\SendUpdateStaffingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />

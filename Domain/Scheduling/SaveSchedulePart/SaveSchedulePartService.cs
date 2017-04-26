@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 {
@@ -13,12 +14,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IScheduleDayDifferenceSaver _scheduleDayDifferenceSaver;
 
-		public SaveSchedulePartService(IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleDayChangeCallback scheduleDayChangeCallback)
+		public SaveSchedulePartService(IScheduleDifferenceSaver scheduleDictionarySaver,
+			IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleDayChangeCallback scheduleDayChangeCallback,
+			IScheduleDayDifferenceSaver scheduleDayDifferenceSaver)
 		{
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_scheduleDayDifferenceSaver = scheduleDayDifferenceSaver;
 		}
 
 		public IList<string> Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection,
@@ -66,7 +71,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 
 		private void performSave (IScheduleDictionary dic, IScheduleDay scheduleDay)
 		{
+			_scheduleDayDifferenceSaver.TakeSnapShot(dic);
 			_scheduleDictionarySaver.SaveChanges (dic.DifferenceSinceSnapshot(), (IUnvalidatedScheduleRangeUpdate) dic[scheduleDay.Person]);
+			_scheduleDayDifferenceSaver.SaveDifferences();
 			_personAbsenceAccountRepository.AddRange (dic.ModifiedPersonAccounts);
 		}
 	}

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 {
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			mocks = new MockRepository();
 			scheduleDictionarySaver = mocks.DynamicMock<IScheduleDifferenceSaver>();
 			personAbsenceAccountRepository = mocks.DynamicMock<IPersonAbsenceAccountRepository>();
-			target = new SaveSchedulePartService(scheduleDictionarySaver, personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack());
+			target = new SaveSchedulePartService(scheduleDictionarySaver, personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack(), new EmptyScheduleDayDifferenceSaver());
 		}
 
 		[Test]
