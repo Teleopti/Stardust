@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
@@ -29,12 +30,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IPlanningPeriodSuggestions Suggestions(INow now, ICollection<Guid> personIds)
 		{
-			var uniqueSchedulePeriods = Session.GetNamedQuery("UniqueSchedulePeriodsForPeople")
-				.SetDateTime("date", now.UtcDateTime())
-				.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
-				.SetParameterList("personIds", personIds)
-				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(AggregatedSchedulePeriod)))
-				.List<AggregatedSchedulePeriod>();
+			var uniqueSchedulePeriods = personIds.Any()
+				? Session.GetNamedQuery("UniqueSchedulePeriodsForPeople")
+					.SetDateTime("date", now.UtcDateTime())
+					.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+					.SetParameterList("personIds", personIds)
+					.SetResultTransformer(new AliasToBeanResultTransformer(typeof(AggregatedSchedulePeriod)))
+					.List<AggregatedSchedulePeriod>()
+				: new List<AggregatedSchedulePeriod>();
 
 			return new PlanningPeriodSuggestions(now, uniqueSchedulePeriods);
 		}
