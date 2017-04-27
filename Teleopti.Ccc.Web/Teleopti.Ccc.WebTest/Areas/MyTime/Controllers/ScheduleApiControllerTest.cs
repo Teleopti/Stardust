@@ -1472,7 +1472,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Header.DayNumber.Should().Be.EqualTo("16");
 		}
 
-		[Test]
+		[Test, SetCulture("sv-SE")]
 		public void ShouldMapDayHeaderWithMontNameForFirstDayOfWeekOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 29);
@@ -1480,7 +1480,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Header.DayDescription.Should().Be.EqualTo("December");
 		}
 
-		[Test]
+		[Test, SetCulture("sv-SE")]
 		public void ShouldMapDayHeaderWithMontNameForCurrentOnFetchDayData()
 		{
 			var result = Target.FetchDayData(new DateOnly(2014, 12, 29)).Schedule;
