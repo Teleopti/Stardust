@@ -729,7 +729,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 
 			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period1.StartDateTime, period2.EndDateTime)).ToList();
-			skillCombinations.Count().Should().Be.EqualTo(4);
+			skillCombinations.Count.Should().Be.EqualTo(4);
 			skillCombAsserts(skillCombinations[0],period1, new[] { skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault() },9);
 			skillCombAsserts(skillCombinations[1],period2, new[] { skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault() },10);
 			skillCombAsserts(skillCombinations[2],period1, new[] { skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault() },10);

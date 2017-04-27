@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		//TODO: remove me later!
-		public string SkillCombinationKey()
+		public DoubleGuidCombinationKey SkillCombinationKey()
 		{
 			return _skills.MergedKey();
 		}
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (that == null)
 				return false;
 			return _activity == that._activity &&
-				_skills.MergedKey() == that._skills.MergedKey();
+				_skills.MergedKey().Equals(that._skills.MergedKey());
 		}
 
 		public override int GetHashCode()

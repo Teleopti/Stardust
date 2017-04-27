@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -19,9 +20,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private ISkill _phoneB;
 
         // p3 is ignorant, see excel test case
-        private string _person1;
-        private string _person2;
-        private string _person4;
+        private DoubleGuidCombinationKey _person1;
+        private DoubleGuidCombinationKey _person2;
+        private DoubleGuidCombinationKey _person4;
 
 
         [SetUp]
@@ -34,9 +35,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _phoneB = SkillFactory.CreateSkill("PhoneB");
 
             // p3 is ignorant, see excel test case
-            _person1 = "Person1";
-            _person2 = "Person2";
-            _person4 = "Person4";
+	        var person1Id = Guid.NewGuid();
+	        var person2Id = Guid.NewGuid();
+	        var person4Id = Guid.NewGuid();
+	        _person1 = new DoubleGuidCombinationKey(new[] { person1Id},new []{person1Id});
+	        _person2 = new DoubleGuidCombinationKey(new[] { person2Id},new []{person2Id});
+	        _person4 = new DoubleGuidCombinationKey(new[] { person4Id},new []{person4Id});
 
             var p1s = new Dictionary<ISkill, double> {{_phoneA, 2}, {_phoneB, 1}};
 

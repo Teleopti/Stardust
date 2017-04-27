@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -46,13 +47,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Gets the absolut person resources, the time, spent on the activity.
         /// </summary>
         /// <value>The absolut person resources.</value>
-		IDictionary<string, double> PersonResources { get; }
+		IDictionary<DoubleGuidCombinationKey, double> PersonResources { get; }
 
         /// <summary>
         /// Gets the relative person resources, also called TRAFF, spent on the activity.
         /// </summary>
         /// <value>The relative person resources.</value>
-		IDictionary<string, double> RelativePersonResources { get; }
+		IDictionary<DoubleGuidCombinationKey, double> RelativePersonResources { get; }
 
         /// <summary>
         /// Calculates the person resources summa for final result.
@@ -74,20 +75,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// </remarks>
     public class DividedActivityData : IDividedActivityData
     {
-
-        #region Variables
-        
         private readonly KeyedSkillResourceDictionary _keyedSkillResourceEfficiencies;
         private readonly KeyedSkillResourceDictionary _weightedRelativeKeyedSkillResourceResources;
         private readonly KeyedSkillResourceDictionary _relativeKeyedSkillResourceResources;
         private readonly Dictionary<ISkill, double> _targetDemands;
-		private readonly Dictionary<string, double> _personResources;
-		private readonly Dictionary<string, double> _relativePersonResources;
+		private readonly Dictionary<DoubleGuidCombinationKey, double> _personResources;
+		private readonly Dictionary<DoubleGuidCombinationKey, double> _relativePersonResources;
         private readonly Dictionary<ISkill, double> _weightedRelativePersonSkillResourcesSum;
         private readonly Dictionary<ISkill, double> _relativePersonSkillResourcesSum;
-
-        #endregion
-
+		
         /// <summary>
         /// Initializes a new instance of the <see cref="DividedActivityData"/> class.
         /// </summary>
@@ -97,87 +93,61 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _weightedRelativeKeyedSkillResourceResources = new KeyedSkillResourceDictionary();
             _relativeKeyedSkillResourceResources = new KeyedSkillResourceDictionary();
             _targetDemands = new Dictionary<ISkill, double>();
-            _personResources = new Dictionary<string, double>();
-            _relativePersonResources = new Dictionary<string, double>();
+            _personResources = new Dictionary<DoubleGuidCombinationKey, double>();
+            _relativePersonResources = new Dictionary<DoubleGuidCombinationKey, double>();
             _weightedRelativePersonSkillResourcesSum = new Dictionary<ISkill, double>();
             _relativePersonSkillResourcesSum = new Dictionary<ISkill, double>();
         }
-
-        #region Interface
-
+		
         /// <summary>
         /// Gets the person - skill efficiency matrix.
         /// </summary>
         /// <value>The skill efficiency matrix.</value>
-        public KeyedSkillResourceDictionary KeyedSkillResourceEfficiencies
-        {
-            get { return _keyedSkillResourceEfficiencies; }
-        }
+        public KeyedSkillResourceDictionary KeyedSkillResourceEfficiencies => _keyedSkillResourceEfficiencies;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the weighted relative person - skill resource matrix.
         /// </summary>
         /// <value>The weighted relative person - skill resource matrix.</value>
-        public KeyedSkillResourceDictionary WeightedRelativeKeyedSkillResourceResources
-        {
-            get { return _weightedRelativeKeyedSkillResourceResources; }
-        }
+        public KeyedSkillResourceDictionary WeightedRelativeKeyedSkillResourceResources => _weightedRelativeKeyedSkillResourceResources;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the target demands.
         /// </summary>
         /// <value>The target demands.</value>
-        public IDictionary<ISkill, double> TargetDemands
-        {
-            get { return _targetDemands; }
-        }
+        public IDictionary<ISkill, double> TargetDemands => _targetDemands;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the summa of weighted relative person - skill resources spent for a skill.
         /// </summary>
         /// <value>The weighted relative person - skill resources summa values.</value>
-        public IDictionary<ISkill, double> WeightedRelativePersonSkillResourcesSum
-        {
-            get { return _weightedRelativePersonSkillResourcesSum; }
-        }
+        public IDictionary<ISkill, double> WeightedRelativePersonSkillResourcesSum => _weightedRelativePersonSkillResourcesSum;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the relative person resources, also called TRAFF, spent on each skill in the activity.
         /// </summary>
         /// <value>The relative person - skill resource matrix.</value>
-        public KeyedSkillResourceDictionary RelativeKeyedSkillResourceResources
-        {
-            get { return _relativeKeyedSkillResourceResources; }
-        }
+        public KeyedSkillResourceDictionary RelativeKeyedSkillResourceResources => _relativeKeyedSkillResourceResources;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the relative person - skill resources (also called traff) sum for each skill in the activity.
         /// </summary>
         /// <value>The relative person - skill resource values sum.</value>
-        public IDictionary<ISkill, double> RelativePersonSkillResourcesSum
-        {
-            get { return _relativePersonSkillResourcesSum; }
-        }
+        public IDictionary<ISkill, double> RelativePersonSkillResourcesSum => _relativePersonSkillResourcesSum;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the absolut person resources, the time, spent on the activity.
         /// </summary>
         /// <value>The absolut person resources.</value>
-		public IDictionary<string, double> PersonResources
-        {
-            get { return _personResources; }
-        }
+		public IDictionary<DoubleGuidCombinationKey, double> PersonResources => _personResources;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the relative person resources, also called TRAFF, spent on the activity.
         /// </summary>
         /// <value>The relative person resources.</value>
-		public IDictionary<string, double> RelativePersonResources
-        {
-            get { return _relativePersonResources; }
-        }
+		public IDictionary<DoubleGuidCombinationKey, double> RelativePersonResources => _relativePersonResources;
 
-        /// <summary>
+	    /// <summary>
         /// Calculates the person resources summa for the final result.
         /// </summary>
         public void CalculatePersonResourcesSummaForReadingResultFromFurness()
@@ -232,11 +202,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 }
             }
         }
-
-
-
-
-        #endregion
-
     }
 }

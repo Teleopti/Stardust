@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					}
 					else
 					{
-						skillEfficiencyValue = (skillEfficiencyValue/headCount);
+						skillEfficiencyValue = skillEfficiencyValue/headCount;
 					}
 
 					double personSkillResourceValue = traff;

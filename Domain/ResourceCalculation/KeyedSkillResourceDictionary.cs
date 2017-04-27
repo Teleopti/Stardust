@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// of double as value with a key of Skill.
     /// </summary>
     [Serializable]
-	public class KeyedSkillResourceDictionary : Dictionary<string, Dictionary<ISkill, double>>
+	public class KeyedSkillResourceDictionary : Dictionary<DoubleGuidCombinationKey, Dictionary<ISkill, double>>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="KeyedSkillResourceDictionary"/> class.

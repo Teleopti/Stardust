@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -113,7 +114,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	public interface IResourcesForShovelAndCalculation
 	{
-		IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate);
+		IDictionary<DoubleGuidCombinationKey, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate);
 		int MinSkillResolution { get; }
 	}
 

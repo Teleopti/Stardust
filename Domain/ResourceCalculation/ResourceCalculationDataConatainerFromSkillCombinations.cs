@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class ResourceCalculationDataConatainerFromSkillCombinations : IResourceCalculationDataContainerWithSingleOperation
 	{
-		private readonly ConcurrentDictionary<Tuple<string, DateTimePeriod>, PeriodResource> _dictionary = new ConcurrentDictionary<Tuple<string, DateTimePeriod>, PeriodResource>();
+		private readonly ConcurrentDictionary<Tuple<GuidCombinationKey, DateTimePeriod>, PeriodResource> _dictionary = new ConcurrentDictionary<Tuple<GuidCombinationKey, DateTimePeriod>, PeriodResource>();
 		private readonly List<SkillCombinationResource> _skillCombinationResources;
 		private readonly ILookup<Guid, ISkill> _allSkills;
 
@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var fractionPeriod = new DateTimePeriod(skillCombinationResource.StartDateTime, skillCombinationResource.EndDateTime);
 				var resource = new PeriodResource();
 				resource.AppendResource(new ActivitySkillsCombination(actId.GetValueOrDefault(), skillCombination),skillCombination, 0, skillCombinationResource.Resource,fractionPeriod);
-				_dictionary.TryAdd(new Tuple<string, DateTimePeriod>(skillCombination.Key,fractionPeriod ), resource);
+				_dictionary.TryAdd(new Tuple<GuidCombinationKey, DateTimePeriod>(new GuidCombinationKey(skillCombination.Key),fractionPeriod ), resource);
 			}
 		}
 
-		public IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
+		public IDictionary<DoubleGuidCombinationKey, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
 		{
-			var result = new Dictionary<string, AffectedSkills>();
+			var result = new Dictionary<DoubleGuidCombinationKey, AffectedSkills>();
 
 			var relevantSkillCombinations = _skillCombinationResources.Where(s =>
 																				 s.Period().Intersect(periodToCalculate) &&
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 												   PeriodResource interval;
 												   var allSkillsInCombination = sc.SkillCombination.Select(s => _allSkills[s].FirstOrDefault()).ToArray();
 												   var skillCombination = new SkillCombination(allSkillsInCombination, periodToCalculate.ToDateOnlyPeriod(TimeZoneInfo.Utc), new SkillEffiencyResource[] {}, allSkillsInCombination);
-												   if (!_dictionary.TryGetValue(new Tuple<string, DateTimePeriod>(skillCombination.Key, periodToCalculate), out interval)) return;
+												   if (!_dictionary.TryGetValue(new Tuple<GuidCombinationKey, DateTimePeriod>(new GuidCombinationKey(skillCombination.Key), periodToCalculate), out interval)) return;
 
 												   foreach (var pair in interval.GetSkillKeyResources(activity.Id.GetValueOrDefault()))
 												   {

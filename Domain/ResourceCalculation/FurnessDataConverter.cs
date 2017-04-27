@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.Furness;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IDividedActivityData _dividedActivityData;
 
         private readonly IDictionary<ISkill, int> _skillIndexRegister = new Dictionary<ISkill, int>();
-        private readonly IDictionary<string, int> _personIndexRegister = new Dictionary<string, int>();
+        private readonly IDictionary<DoubleGuidCombinationKey, int> _personIndexRegister = new Dictionary<DoubleGuidCombinationKey, int>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FurnessDataConverter"/> class.

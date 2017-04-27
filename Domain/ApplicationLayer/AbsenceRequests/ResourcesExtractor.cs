@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			MinSkillResolution = resolution;
 		}
 
-		public IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
+		public IDictionary<DoubleGuidCombinationKey, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
 		{
 			var skillDictionary = _skills.Where(s => s.Activity != null && s.Activity.Equals(activity)).ToLookup(s => s.Id.GetValueOrDefault());
 			var withSkills =
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							Skills = r.SkillCombination.Select(s => skillDictionary[s].FirstOrDefault()).Where(s => s != null)
 						}).Where(s => s.Resource.StartDateTime == periodToCalculate.StartDateTime && s.Skills.Any());
 
-			return withSkills.ToDictionary(k => string.Join("_", k.Resource.SkillCombination),
+			return withSkills.ToDictionary(k => new DoubleGuidCombinationKey(k.Resource.SkillCombination.ToArray(), new Guid[0]),
 										   v =>
 										    new AffectedSkills
 											   {
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			MinSkillResolution = resolution;
 		}
 
-		public IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
+		public IDictionary<DoubleGuidCombinationKey, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
 		{
 
 			var skillDictionary = _skills.Where(s => s.Activity != null && s.Activity.Equals(activity)).ToLookup(s => s.Id.GetValueOrDefault());
@@ -72,7 +72,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							Skills = r.SkillCombination.Select(s => skillDictionary[s].FirstOrDefault()).Where(s => s != null)
 						}).Where(s => s.Resource.StartDateTime == periodToCalculate.StartDateTime && s.Skills.Any());
 
-			return withSkills.ToDictionary(k => string.Join("_", k.Resource.SkillCombination),
+			return withSkills.ToDictionary(k =>
+				{
+					var array = k.Resource.SkillCombination.ToArray();
+					return new DoubleGuidCombinationKey(array, array);
+				},
 				v =>
 					new AffectedSkills
 					{

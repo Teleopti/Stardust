@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -13,9 +14,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private KeyedSkillResourceDictionary _target;
         private ISkill _skill1;
         private ISkill _skill2;
-        private string _person1;
-        private string _person2;
-        private string _person3;
+        private DoubleGuidCombinationKey _person1;
+        private DoubleGuidCombinationKey _person2;
+        private DoubleGuidCombinationKey _person3;
 
         [SetUp]
         public void Setup()
@@ -23,20 +24,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target = new KeyedSkillResourceDictionary();
             _skill1 = SkillFactory.CreateSkill("s1");
             _skill2 = SkillFactory.CreateSkill("s2");
-            _person1 = "Person1";
-            _person2 = "Person2";
-            _person3 = "Person3";
-            Dictionary<ISkill, double> skillDic = new Dictionary<ISkill, double>();
-            skillDic.Add(_skill1, 0);
-            skillDic.Add(_skill2, 0);
-            _target.Add(_person1, skillDic);
-            skillDic = new Dictionary<ISkill, double>();
-            skillDic.Add(_skill2, 0);
-            _target.Add(_person2, skillDic);
-            skillDic = new Dictionary<ISkill, double>();
-            skillDic.Add(_skill2, 0);
-            skillDic.Add(_skill1, 0);
-            _target.Add(_person3, skillDic);
+
+	        var person1Id = Guid.NewGuid();
+	        var person2Id = Guid.NewGuid();
+	        var person3Id = Guid.NewGuid();
+	        _person1 = new DoubleGuidCombinationKey(new[] {person1Id}, new[] { person1Id });
+	        _person2 = new DoubleGuidCombinationKey(new[] {person2Id}, new[] { person2Id });
+	        _person3 = new DoubleGuidCombinationKey(new[] {person3Id}, new[] { person3Id });
+	        _target.Add(_person1, new Dictionary<ISkill, double> { { _skill1, 0 }, { _skill2, 0 } });
+	        _target.Add(_person2, new Dictionary<ISkill, double> { { _skill2, 0 } });
+	        _target.Add(_person3, new Dictionary<ISkill, double> { { _skill2, 0 }, { _skill1, 0 } });
         }
 
         [Test]

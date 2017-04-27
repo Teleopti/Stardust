@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					optimizedActivityData.RelativePersonResources
 						.ForEach(resources =>
 								 {
-									 var allSkills = resources.Key.Substring(resources.Key.IndexOf("+", StringComparison.InvariantCulture)+1).Split('_').Select(Guid.Parse);
+									 var allSkills = resources.Key.Second;
 									 resourceCalculationData.SkillCombinationHolder
 										 .Add(new SkillCombinationResource
 											  {

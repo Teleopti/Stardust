@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -10,8 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class SkillCombination
 	{
 		private readonly DateOnlyPeriod _period;
-		private readonly string _mergedKey;
-		private readonly IList<Guid> _skillKeys;
+		private readonly DoubleGuidCombinationKey _mergedKey;
 		private readonly ConcurrentDictionary<Guid,SkillCombination> _activityCombinations = new ConcurrentDictionary<Guid, SkillCombination>();
 
 		public SkillCombination(ISkill[] skills, DateOnlyPeriod period, SkillEffiencyResource[] skillEfficiencies, ISkill[] originalSkills)
@@ -20,30 +20,29 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SkillEfficiencies = skillEfficiencies;
 			Skills = skills;
 			OriginalSkills = originalSkills;
-			_skillKeys = Skills.Select(s => s.Id.GetValueOrDefault()).ToArray();
-			Key = toKey(_skillKeys);
+			Key = toKey(Skills.Select(s => s.Id.GetValueOrDefault()));
 			OriginalKey = toKey(originalSkills.Select(s => s.Id.GetValueOrDefault()));
-			_mergedKey = Key + "+" + OriginalKey;
+			_mergedKey = new DoubleGuidCombinationKey(Key, OriginalKey);
 		}
 
-		public string OriginalKey { get; }
+		public Guid[] OriginalKey { get; }
 
 		public bool IsValidForDate(DateOnly date)
 		{
 			return _period.Contains(date);
 		}
 
-		private static string toKey(IEnumerable<Guid> idCollection)
+		private static Guid[] toKey(IEnumerable<Guid> idCollection)
 		{
-			return string.Join("_", idCollection.OrderBy(s => s));
+			return idCollection.OrderBy(s => s).ToArray();
 		}
 
 		public bool HasSkill(Guid skill)
 		{
-			return _skillKeys.Contains(skill);
+			return Key.IndexOf(skill) > -1;
 		}
 
-		public string MergedKey()
+		public DoubleGuidCombinationKey MergedKey()
 		{
 			return _mergedKey;
 		}
@@ -53,15 +52,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _activityCombinations.GetOrAdd(activityId, id => new SkillCombination(
 				Skills.Where(
 					x =>
-						x.SkillType != null && x.SkillType.ForecastSource == ForecastSource.MaxSeatSkill ||
-						x.Activity != null && x.Activity.Id.GetValueOrDefault() == id).ToArray(), _period,
+						x.SkillType?.ForecastSource == ForecastSource.MaxSeatSkill ||
+						x.Activity?.Id.GetValueOrDefault() == id).ToArray(), _period,
 				SkillEfficiencies,OriginalSkills.Where(
 					x =>
-						x.SkillType != null && x.SkillType.ForecastSource == ForecastSource.MaxSeatSkill ||
-						x.Activity != null && x.Activity.Id.GetValueOrDefault() == id).ToArray()));
+						x.SkillType?.ForecastSource == ForecastSource.MaxSeatSkill ||
+						x.Activity?.Id.GetValueOrDefault() == id).ToArray()));
 		}
 
-		public string Key { get; }
+		public Guid[] Key { get; }
 		public ISkill[] Skills { get; }
 		public ISkill[] OriginalSkills { get; }
 		public SkillEffiencyResource[] SkillEfficiencies { get; }

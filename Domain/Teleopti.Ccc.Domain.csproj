@@ -254,6 +254,8 @@
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
     <Compile Include="Reports\IReportNavigationModel.cs" />
     <Compile Include="Reports\ReportNavigationModel.cs" />
+    <Compile Include="ResourceCalculation\DoubleGuidCombinationKey.cs" />
+    <Compile Include="ResourceCalculation\GuidCombinationKey.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCategorizeFinderService.cs" />
     <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />

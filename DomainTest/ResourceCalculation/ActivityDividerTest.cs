@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var resourceMatrix = dividedActivity.KeyedSkillResourceEfficiencies;
 
 			Assert.IsNotNull(resourceMatrix);
-			Assert.AreEqual(0.8, resourceMatrix[skill.Id.Value+"+"+ skill.Id.Value][skill], 0.001d);
+			Assert.AreEqual(0.8, resourceMatrix[new DoubleGuidCombinationKey(new []{ skill.Id.Value }, new[] { skill.Id.Value})][skill], 0.001d);
 		}
 
         [Test]
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
 									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 
-		    IDictionary<string, double> personResources = dividedActivity.PersonResources;
+		    var personResources = dividedActivity.PersonResources;
 		    Assert.IsNotNull(personResources);
 		    Assert.AreEqual(2, personResources.Count);
 		    Assert.AreEqual(20d, personResources[person1], 0.0001);
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
 
             // Person Relative Resources (TRAFF)
-            IDictionary<string, double> personResources = dividedActivity.RelativePersonResources;
+            var personResources = dividedActivity.RelativePersonResources;
             Assert.IsNotNull(personResources);
             Assert.AreEqual(2, personResources.Count);
             Assert.AreEqual(1.3333, personResources[person1], 0.0001);

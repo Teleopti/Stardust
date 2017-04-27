@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly ConcurrentDictionary<DateTimePeriod, PeriodResource> _dictionary = new ConcurrentDictionary<DateTimePeriod, PeriodResource>();
-		private readonly ConcurrentDictionary<string, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<string, IEnumerable<ISkill>>();
+		private readonly ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>>();
 		private readonly ConcurrentDictionary<Guid, bool> _activityRequiresSeat = new ConcurrentDictionary<Guid,bool>();
 		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			PeriodResource resources = _dictionary.GetOrAdd(resourceLayer.Period, new PeriodResource());
 
 			var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
-			if (skills.Key == "") return;
+			if (skills.Key.Length == 0) return;
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 			_skills.TryAdd(skills.MergedKey(),skills.Skills);
 			if (resourceLayer.RequiresSeat)
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 
 			var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
-			if (skills.Key == "") return;
+			if (skills.Key.Length == 0) return;
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 
 			resources.RemoveResource(key, skills, resourceLayer.Resource, resourceLayer.FractionPeriod);
@@ -128,9 +128,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return resource / periodSplit.Count;
 		}
 
-		public IDictionary<string, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
+		public IDictionary<DoubleGuidCombinationKey, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
 		{
-			var result = new Dictionary<string, AffectedSkills>();
+			var result = new Dictionary<DoubleGuidCombinationKey, AffectedSkills>();
 
 			var activityKey = activity.Id.GetValueOrDefault();
 			var divider = periodToCalculate.ElapsedTime().TotalMinutes/MinSkillResolution;
