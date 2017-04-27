@@ -76,16 +76,21 @@ Teleopti.MyTimeWeb.Schedule.MobileDay = (function ($) {
 			} 
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
-			//Hide AgentScheduleMessenger on mobile #40179
-			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").hide();
-			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").hide();
+			Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
+				//Hide AgentScheduleMessenger on mobile #40179
+				$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").hide();
+				$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").hide();
 
-			completelyLoaded = completelyLoadedCallback;
-			vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(userTexts, ajax, fetchData);
-			registerSwipe();
-			ko.applyBindings(vm, $("#page")[0]);
-			fetchData();
-			readyForInteractionCallback();
+				completelyLoaded = completelyLoadedCallback;
+				vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(userTexts, ajax, fetchData);
+				registerSwipe();
+
+				$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
+
+				ko.applyBindings(vm, $("#page")[0]);
+				fetchData();
+				readyForInteractionCallback();
+			});
 		},
 		SetupResource: function (resources) {
 			userTexts = resources;

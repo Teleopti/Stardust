@@ -7,6 +7,26 @@
 	display: flex;
 }
 
+.dayview-mobile .mobile-dayview-nav .submenu li{
+	float: left;
+	display: inline-block;
+	width: auto;
+}
+.dayview-mobile .mobile-dayview-nav .submenu li.mobile-today a{
+	padding: 14.5px 0;
+}
+
+.dayview-mobile .mobile-datepicker{
+	width: auto;
+	padding: 0;
+}
+
+@media(max-width: 500px){
+	.dayview-mobile .mobile-dayview-nav {
+		padding: 0;
+		margin: 0;
+	}
+}
 .dayview-mobile .dayview-mobile-nav-input-group {
 	max-width: 329px;
 	flex-grow: 1;
@@ -29,6 +49,7 @@
 	background: transparent;
 	border-right: 1px solid #dfdfdf;
 	position: relative;
+	margin-right: 4px;
 }
 
 .dayview-timeline-label {
@@ -42,10 +63,11 @@
 .dayview-schedule {
 	display: inline-block;
 	height: 668px;
-    width: 200px;
+    width: calc(100% - 35px);
 }
 
 .dayview-schedule-layer {
+	text-align: center;
 	border-radius: 2px;
 	border-left: 0;
 	overflow: hidden;

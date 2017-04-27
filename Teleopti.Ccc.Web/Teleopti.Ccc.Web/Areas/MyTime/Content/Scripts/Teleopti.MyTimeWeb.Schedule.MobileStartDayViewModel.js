@@ -50,7 +50,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
         self.layers(layers);
     };
 
-
     self.setCurrentDate = function (date) {
         if (self.selectedDateSubscription)
             self.selectedDateSubscription.dispose();
@@ -62,6 +61,11 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
             Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" +
                 Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD")) + probabilityUrlPart);
         });
+    };
+
+    self.today = function(){
+        self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime()).startOf("day"));
+        self.selectedDate(self.currentUserDate());
     };
 
     self.nextDay = function () {
@@ -182,13 +186,13 @@ var LayerViewModel = function (layer, userTexts, parent) {
     self.widthPx = ko.computed(function () {
         var width;
         if (layer.IsOvertimeAvailability) {
-            width = 20;
+            width = 20 + "%";
         } else if (parent.probabilities && parent.probabilities.length > 0) {
-            width = 115;
+            width = 80 + "%";
         } else {
-            width = 127;
+            width = 100 + "%";
         }
-        return width + "px";
+        return width;
     });
     self.heightPx = ko.computed(function () {
         return self.height() + "px";
