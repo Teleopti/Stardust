@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
@@ -7,7 +8,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class ShovelResourcesState
 	{
 		private readonly ResourceDistributionForSkillGroupsWithSameIndex _resourceDistribution;
-		private readonly IDictionary<CascadingSkillGroup, double> _resourcesMovedOnSkillGroup;
+		[RemoveMeWithToggle("Make private when done", Toggles.ResourcePlanner_EvenRelativeDiff_44091)]
+		protected readonly IDictionary<CascadingSkillGroup, double> _resourcesMovedOnSkillGroup;
+		private bool _continueShovelingBasedOnSubSkills;
+
 
 		public ShovelResourcesState(IDictionary<ISkill, double> resources, 
 								ResourceDistributionForSkillGroupsWithSameIndex resourceDistribution,
@@ -27,15 +31,19 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public double RemainingOverstaffing { get; private set; }
 		public double TotalOverstaffingAtStart { get; }
 
-		public bool ContinueShovel(CascadingSkillGroup skillGroup)
+		[RemoveMeWithToggle("Remove virtual when done", Toggles.ResourcePlanner_EvenRelativeDiff_44091)]
+		public virtual bool ContinueShovel(CascadingSkillGroup skillGroup)
 		{
 			double resourcesMovedOnSkillGroup;
 			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out resourcesMovedOnSkillGroup))
 			{
 				resourcesMovedOnSkillGroup = 0;
 			}
-			return RemainingOverstaffing > (IsAnyPrimarySkillOpen ? 0.1 : 0.001) &&
-					resourcesMovedOnSkillGroup < MaxToMoveForThisSkillGroup(skillGroup);
+			var ret =  RemainingOverstaffing > (IsAnyPrimarySkillOpen ? 0.1 : 0.001) &&
+					resourcesMovedOnSkillGroup < MaxToMoveForThisSkillGroup(skillGroup) &&
+					   _continueShovelingBasedOnSubSkills;
+			_continueShovelingBasedOnSubSkills = false;
+			return ret;
 		}
 
 		public double MaxToMoveForThisSkillGroup(CascadingSkillGroup skillgroup)
@@ -58,6 +66,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 			{
 				_resourcesMovedOnSkillGroup[skillGroup] = value;
 			}
+			SetContinueShovel();
+		}
+
+		public void SetContinueShovel()
+		{
+			_continueShovelingBasedOnSubSkills = true;
 		}
 	}
 }

@@ -229,6 +229,8 @@
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoLoggedOutStateGroupsException.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkillsOld.cs" />
+    <Compile Include="Cascading\PrimarySkillOverstaffOld.cs" />
+    <Compile Include="Cascading\ShovelResourcesStateOld.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
     <Compile Include="GroupPageCreator\GroupingsCreatorOptionalColumn.cs" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -44,7 +45,17 @@ namespace Teleopti.Ccc.Domain.Cascading
 				dic.Add(skillGroupsWithSameIndex.First().PrimarySkills.First(), resources);
 			}
 
-			return new ShovelResourcesState(dic, new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval), !primarySkillsExistsButTheyAreAllClosed);
+			return CreateShovelResourcesState(shovelResourceData, skillGroupsWithSameIndex, interval, dic, primarySkillsExistsButTheyAreAllClosed);
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_EvenRelativeDiff_44091)]
+		protected virtual ShovelResourcesState CreateShovelResourcesState(IShovelResourceData shovelResourceData,
+			IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval, Dictionary<ISkill, double> dic,
+			bool primarySkillsExistsButTheyAreAllClosed)
+		{
+			return new ShovelResourcesState(dic,
+				new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval),
+				!primarySkillsExistsButTheyAreAllClosed);
 		}
 	}
 }
