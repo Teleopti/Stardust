@@ -1037,7 +1037,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			await Task.Run(() =>
 			{
-				webView1.Url = "http://www.teleopti.com/elogin.aspx?";
+				webView1.Url = "https://www.teleopti.com/wfm/landing-pages/wfm_landing-pages_aspx.aspx";
 				showCustomerWebMenu = true;
 			});
 			
