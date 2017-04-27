@@ -108,7 +108,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("to be fixed")]
 		public void ShouldNotShovelMoreResourcesThanAvailableInPrimarySkill()
 		{
 			var scenario = new Scenario("_");
@@ -134,7 +133,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("Not yet red - will be red later")]
 		public void ShouldNotShovelEqualResourcesToSubskill()
 		{
 			var scenario = new Scenario("_");

@@ -25,42 +25,75 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 				foreach (var subSkillsWithSameIndex in skillGroup.SubSkillsWithSameIndex)
 				{
-					var shovelResourcesDataForIntervalForUnderstaffedSkills = subSkillsWithSameIndex
-						.Select(paralellSkill => shovelResourceData.GetDataForInterval(paralellSkill, interval))
-						.Where(x => x.AbsoluteDifference.IsUnderstaffed());
-					var totalFStaff = shovelResourcesDataForIntervalForUnderstaffedSkills.Sum(x => x.FStaff);
-					var totalResurces = shovelResourcesDataForIntervalForUnderstaffedSkills.Sum(x => x.CalculatedResource);
-					var totalUnderstaffingPercentIsPositive = shovelResourcesDataForIntervalForUnderstaffedSkills.Sum(x => -x.RelativeDifference) > 0;
-
-					var remainingResourcesToShovel = Math.Min(shovelResourcesState.RemainingOverstaffing, maxToMoveForThisSkillGroup);
-
-					foreach (var skillToMoveTo in subSkillsWithSameIndex)
+					if (!shovelResourcesState.IsAnyPrimarySkillOpen)
 					{
-						double? resourceToMove;
-						var dataForIntervalTo = shovelResourceData.GetDataForInterval(skillToMoveTo, interval);
-						if (shovelResourcesState.IsAnyPrimarySkillOpen)
+						stopShovelDueToSubskills = false;
+
+						//FIX THIS - just rest of some old gegga!!!!
+						var totalUnderstaffingPercentIsPositive =
+							subSkillsWithSameIndex
+								.Select(paralellSkill => shovelResourceData.GetDataForInterval(paralellSkill, interval))
+								.Where(x => x.AbsoluteDifference.IsUnderstaffed()).Sum(x => -x.RelativeDifference) > 0;
+						if (!totalUnderstaffingPercentIsPositive)
 						{
-							resourceToMove = addResourcesToSkillsWithSameIndex(dataForIntervalTo, remainingResourcesToShovel, maxToMoveForThisSkillGroup, totalFStaff, totalResurces);
+
+							var remainingResourcesToShovel = Math.Min(shovelResourcesState.RemainingOverstaffing, maxToMoveForThisSkillGroup);
+							foreach (var skillToMoveTo in subSkillsWithSameIndex)
+							{
+								var dataForIntervalTo = shovelResourceData.GetDataForInterval(skillToMoveTo, interval);
+								var resourceToMove = Math.Min(remainingResourcesToShovel, remainingResourcesToShovel / subSkillsWithSameIndex.Count());
+
+								shovelResourcesState.AddResourcesTo(dataForIntervalTo, skillGroup, resourceToMove);
+								shovelingCallback.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroupsWithSameIndex, skillGroup, resourceToMove);
+		
+							}
 						}
-						else
-						{
-							stopShovelDueToSubskills = false;
-							resourceToMove = totalUnderstaffingPercentIsPositive ?
-								addResourcesToSkillsWithSameIndex(dataForIntervalTo, remainingResourcesToShovel, maxToMoveForThisSkillGroup, totalFStaff, totalResurces) :
-								Math.Min(remainingResourcesToShovel, remainingResourcesToShovel / subSkillsWithSameIndex.Count());
-						}
-						if (resourceToMove.HasValue)
-						{
-							stopShovelDueToSubskills = false;
-							shovelResourcesState.AddResourcesTo(dataForIntervalTo, skillGroup, resourceToMove.Value);
-							shovelingCallback.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroupsWithSameIndex, skillGroup, resourceToMove.Value);
-						}
+						/////////////////////////////////////////
+					}
+					var affectedSkills = mightShovelToSubSkills(shovelResourcesState, shovelResourceData, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, subSkillsWithSameIndex, maxToMoveForThisSkillGroup, false);
+					if (affectedSkills.Any())
+					{
+						stopShovelDueToSubskills = false;
+						mightShovelToSubSkills(shovelResourcesState, shovelResourceData, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, affectedSkills, maxToMoveForThisSkillGroup, true);
 					}
 				}
 
 				if (stopShovelDueToSubskills)
 					return;
 			}
+		}
+
+		private static IEnumerable<ISkill> mightShovelToSubSkills(ShovelResourcesState shovelResourcesState,
+			IShovelResourceData shovelResourceData, CascadingSkillGroup skillGroup, DateTimePeriod interval,
+			IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, IShovelingCallback shovelingCallback,
+			IEnumerable<ISkill> subSkillsWithSameIndex, double maxToMoveForThisSkillGroup, bool doActualMove)
+		{
+			var affectedSkills = new List<ISkill>();
+			var shovelResourcesDataForIntervalForUnderstaffedSkills = subSkillsWithSameIndex
+				.Select(paralellSkill => shovelResourceData.GetDataForInterval(paralellSkill, interval))
+				.Where(x => x.AbsoluteDifference.IsUnderstaffed());
+			var totalFStaff = shovelResourcesDataForIntervalForUnderstaffedSkills.Sum(x => x.FStaff);
+			var totalResurces = shovelResourcesDataForIntervalForUnderstaffedSkills.Sum(x => x.CalculatedResource);
+
+			var remainingResourcesToShovel = Math.Min(shovelResourcesState.RemainingOverstaffing, maxToMoveForThisSkillGroup);
+
+			foreach (var skillToMoveTo in subSkillsWithSameIndex)
+			{
+				var dataForIntervalTo = shovelResourceData.GetDataForInterval(skillToMoveTo, interval);
+				var resourceToMove = addResourcesToSkillsWithSameIndex(dataForIntervalTo, remainingResourcesToShovel,
+					maxToMoveForThisSkillGroup, totalFStaff, totalResurces);
+
+				if (resourceToMove.HasValue)
+				{
+					if (doActualMove)
+					{
+						shovelResourcesState.AddResourcesTo(dataForIntervalTo, skillGroup, resourceToMove.Value);
+						shovelingCallback.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroupsWithSameIndex, skillGroup, resourceToMove.Value);
+					}
+					affectedSkills.Add(skillToMoveTo);
+				}
+			}
+			return affectedSkills;
 		}
 
 		private static double? addResourcesToSkillsWithSameIndex(IShovelResourceDataForInterval shovelResourceDataForInterval, double remainingResourcesToShovel, 
