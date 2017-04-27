@@ -45,7 +45,7 @@
 
 	Ctrl.prototype.onJobsFetched = function (data) {
 		this.jobs = data.map(function (j) {
-			var filename = j.InputArtifact ? j.InputArtifact.Name : 'No filename';
+			var filename = j.InputArtifact ? j.InputArtifact.Name : 'Purged';
 			var job = new Job(j.JobResultId, j.Owner, filename, j.Timestamp, j.IsWorking, j.ErrorMessage, j.SuccessCount + j.WarningCount, j.FailedCount, j.WarningCount);
 
 			if (j.InputArtifact) {

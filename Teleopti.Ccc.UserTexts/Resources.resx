@@ -15796,4 +15796,8 @@ Do you want to participate?</value>
     <value>Filter skills</value>
     <comment>Filter skills on web</comment>
   </data>
+  <data name="Purged" xml:space="preserve">
+    <value>Purged</value>
+    <comment>Indicating a job is purged in Import Agents</comment>
+  </data>
 </root>

@@ -7609,6 +7609,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter sites / teams.
+        /// </summary>
+        public static string DataFilterThreeDots {
+            get {
+                return ResourceManager.GetString("DataFilterThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes have been lost..
         /// </summary>
         public static string DataHasBeenDeleted {
@@ -11360,6 +11369,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter locations.
+        /// </summary>
+        public static string FilterLocations {
+            get {
+                return ResourceManager.GetString("FilterLocations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter Multiple Persons.
         /// </summary>
         public static string FilterMultiplePerson {
@@ -11504,6 +11522,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter reports.
+        /// </summary>
+        public static string FilterReports {
+            get {
+                return ResourceManager.GetString("FilterReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter roles.
+        /// </summary>
+        public static string FilterRoles {
+            get {
+                return ResourceManager.GetString("FilterRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter agent names / sites / teams / rules / states / current activites.
         /// </summary>
         public static string FilterRtaFull {
@@ -11545,6 +11581,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FilterSkills {
             get {
                 return ResourceManager.GetString("FilterSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter teams.
+        /// </summary>
+        public static string FilterTeams {
+            get {
+                return ResourceManager.GetString("FilterTeams", resourceCulture);
             }
         }
         
@@ -21961,6 +22006,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter functions.
+        /// </summary>
+        public static string PermissionsFilterThreeDots {
+            get {
+                return ResourceManager.GetString("PermissionsFilterThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Permissions Viewer.
         /// </summary>
         public static string PermissionsViewer {
@@ -23369,6 +23423,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PublisSchedulesToDateColon {
             get {
                 return ResourceManager.GetString("PublisSchedulesToDateColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Purged.
+        /// </summary>
+        public static string Purged {
+            get {
+                return ResourceManager.GetString("Purged", resourceCulture);
             }
         }
         
@@ -25649,6 +25712,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Role {
             get {
                 return ResourceManager.GetString("Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter roles.
+        /// </summary>
+        public static string RoleFilterThreeDots {
+            get {
+                return ResourceManager.GetString("RoleFilterThreeDots", resourceCulture);
             }
         }
         
