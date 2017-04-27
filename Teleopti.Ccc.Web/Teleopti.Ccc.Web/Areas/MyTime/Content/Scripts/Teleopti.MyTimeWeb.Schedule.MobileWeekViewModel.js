@@ -64,6 +64,10 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.maxDate = ko.observable();
 	self.minDate = ko.observable();
 
+	self.setCurrentDate = function(dateMoment){
+		self.selectedDate(dateMoment);
+	};
+
 	self.desktop = function () {
 		var date = self.selectedDate();
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" +
