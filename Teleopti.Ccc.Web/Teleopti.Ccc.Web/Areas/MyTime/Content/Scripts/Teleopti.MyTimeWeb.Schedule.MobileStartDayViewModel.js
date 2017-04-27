@@ -19,6 +19,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
     self.summaryTime = ko.observable();
     self.dayOfWeek = ko.observable(moment().format('DDDD'));
     self.isDayOff = ko.observable(false);
+    self.timeLines = ko.observableArray();
 
     var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
     self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
@@ -36,6 +37,11 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
         } else {
             self.dayOfWeek(data.Schedule.Header.Title);
         }
+
+        var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
+            return new TimelineViewModel(item);
+        });
+        self.timeLines(timelines);
     };
 
 
@@ -62,3 +68,20 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
         self.selectedDate(previousDate);
     };
 }
+
+var TimelineViewModel = function (timeline) {
+    var self = this;
+    self.positionPercentage = ko.observable(timeline.PositionPercentage);
+    var hourMinuteSecond = timeline.Time.split(":");
+    self.minutes = hourMinuteSecond[0] * 60 + parseInt(hourMinuteSecond[1]);
+    var timeFromMinutes = moment().startOf("day").add("minutes", self.minutes);
+
+    self.timeText = timeline.TimeLineDisplay;
+
+    self.topPosition = ko.computed(function () {
+        return Math.round(Teleopti.MyTimeWeb.Common.Constants.scheduleHeight * self.positionPercentage())  + "px";
+    });
+    self.evenHour = ko.computed(function () {
+        return timeFromMinutes.minute() === 0;
+    });
+};

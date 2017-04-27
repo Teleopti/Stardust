@@ -32,12 +32,21 @@
     <div class="container">
         <div class="dayview-view-body" data-bind="css: {'dayoff': isDayOff}">
             <div class="dayview-summary-content" data-bind="style: { backgroundColor: summaryColor, color: 255 }">
-				<span data-bind="text: dayOfWeek"></span>
-				<span >(</span>
-				<span data-bind="text: summaryName"></span>
-				<span data-bind="text: summaryTime"></span>
-				<span >)</span>
+                <span data-bind="text: dayOfWeek"></span>
+                <span >(</span>
+                <span data-bind="text: summaryName"></span>
+                <span data-bind="text: summaryTime"></span>
+                <span >)</span>
             </div>
-		</div>
+			
+			<!-- ko if: !isDayOff()-->
+            <div class="dayview-timeline floatleft">
+                <!-- ko foreach: timeLines -->
+                <div class="dayview-timeline-label absolute" data-bind="style: {top: topPosition}, text : timeText, visible : evenHour">
+                </div>
+                <!-- /ko -->
+            </div>
+			<!-- /ko -->
+        </div>
 	</div>
 </div>
