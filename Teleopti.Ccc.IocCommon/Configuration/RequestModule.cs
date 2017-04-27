@@ -81,10 +81,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<RequestAllowanceProvider>().As<IRequestAllowanceProvider>().SingleInstance();
 			builder.RegisterType<ShiftTradeApproveService>().As<IShiftTradeApproveService>().SingleInstance();
-			builder.RegisterType<ScheduleStaffingPossibilityCalculator>()
-				.As<IScheduleStaffingPossibilityCalculator>()
-				.SingleInstance();
-			builder.RegisterType<SkillStaffingDataLoader>().As<ISkillStaffingDataLoader>().SingleInstance();
+			
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)
