@@ -186,5 +186,35 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(3);
 		}
 
+		[Test]
+		[Ignore("#44106, to be fixed")]
+		public void ShouldNotCrashWhenTeamMembersHaveDifferentSchedulePeriods()
+		{
+			var firstDay = new DateOnly(2016, 05, 30);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()))) { Description = new Description("_") }.WithId();
+			RuleSetBagRepository.Add(ruleSetBag);
+			PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2), ruleSetBag, skill);
+			PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
+			DayOffTemplateRepository.Add(new DayOffTemplate());
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 2, 2, 2, 2, 2, 2));
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				UseTeam = true,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
+				UseBlock = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
+				TeamSameShiftCategory = true,
+				BlockSameShiftCategory = true
+			});
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.DoScheduling(new DateOnlyPeriod(firstDay, firstDay));
+			});
+		}
+
 	}
 }
