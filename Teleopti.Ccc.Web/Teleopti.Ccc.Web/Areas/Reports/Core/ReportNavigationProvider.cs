@@ -66,7 +66,8 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 				{
 					Url = leaderboardReportItem.Url,
 					Name = leaderboardReportItem.Name,
-					IsWebReport = leaderboardReportItem.IsWebReport
+					IsWebReport = leaderboardReportItem.IsWebReport,
+					Category = Resources.AgentPerformance
 				});
 			}
 
