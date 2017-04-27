@@ -21,65 +21,51 @@
   </div>
 </div>
 
-<wfm-card-list multi-select>
-  <!-- custom -->
-  <wfm-card ng-repeat="report in reports.customTypes | filter:reportFilter" ng-if="report.childNodes.length>0">
-    <card-header>
-      <b>{{report.Type}}</b>
-			<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
-    </card-header>
-    <card-body class="panel">
-      <ul class="wfm-list">
-        <div ng-repeat="rep in report.childNodes | filter:reportFilter">
-          <a href="{{rep.Url}}" ng-if="reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
-            <li>{{rep.Name}}</li>
-          </a>
-          <a ui-sref="{{rep.Url}}" ng-if="!reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
-            <li>{{rep.Name}}</li>
-          </a>
-        </div>
-      </ul>
-    </card-body>
-  </wfm-card>
+<!-- custom -->
+  <div class="con-row" ng-repeat="report in reports.customTypes | filter:reportFilter | orderBy:'Type'" ng-if="report.childNodes.length>0">
+    <div class="con-flex">
+      <div class="panel material-depth-1">
+       <div class="sub-header">
+         <h2>{{report.Type}}</h2>
+       </div>
+      <div class="con-row">
+         <div class="con-flex">
+           <ul class="wfm-list">
+             <div ng-repeat="rep in report.childNodes | filter:reportFilter | orderBy:'Name'">
+               <a href="{{rep.Url}}" ng-if="reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+                 <li>{{rep.Name}}</li>
+               </a>
+               <a ui-sref="{{rep.Url}}" ng-if="!reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+                 <li>{{rep.Name}}</li>
+               </a>
+             </div>
+           </ul>
+         </div>
+      </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- all reports -->
-  <wfm-card ng-repeat="report in reports.reports | filter:reportFilter" >
-    <card-header>
-      <b>{{report.Type}}</b>
-      <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
-    </card-header>
-    <card-body class="panel">
-
-      <ul class="wfm-list">
-        <div ng-repeat="rep in report.childNodes | filter:reportFilter">
-          <a href="{{rep.Url}}" ng-if="reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
-            <li>{{rep.Name}}</li>
-          </a>
-          <a ui-sref="{{rep.Url}}" ng-if="!reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
-            <li>{{rep.Name}}</li>
-          </a>
-        </div>
-      </ul>
-    </card-body>
-  </wfm-card>
-
-  <!-- custom -->
-  <wfm-card ng-repeat="report in reports.customTypes | filter:reportFilter" ng-if="report.childNodes.length<1">
-    <card-header>
-      <b>{{report.Type}}</b>
-      <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
-    </card-header>
-    <card-body class="panel">
-      <ul class="wfm-list">
-        <div ng-repeat="rep in report.childNodes | filter:reportFilter">
-          <a href="{{rep.Url}}" ng-if="reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
-            <li>{{rep.Name}}</li>
-          </a>
-          <a ui-sref="{{rep.Url}}" ng-if="!reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
-            <li>{{rep.Name}}</li>
-          </a>
-        </div>
-      </ul>
-    </card-body>
-  </wfm-card>
-</wfm-card-list>
+  <div class="con-row" ng-repeat="report in reports.reports | filter:reportFilter | orderBy:'Type'" ng-if="report.childNodes.length>0">
+    <div class="con-flex">
+      <div class="panel material-depth-1">
+       <div class="sub-header">
+         <h2>{{report.Type}}</h2>
+       </div>
+      <div class="con-row">
+         <div class="con-flex">
+           <ul class="wfm-list">
+             <div ng-repeat="rep in report.childNodes | filter:reportFilter | orderBy:'Name'">
+               <a href="{{rep.Url}}" ng-if="reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+                 <li>{{rep.Name}}</li>
+               </a>
+               <a ui-sref="{{rep.Url}}" ng-if="!reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+                 <li>{{rep.Name}}</li>
+               </a>
+             </div>
+           </ul>
+         </div>
+      </div>
+      </div>
+    </div>
+  </div>

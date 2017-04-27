@@ -10,7 +10,6 @@
 		vm.reports = [];
 		vm.customTypes = [];
 		vm.checkURL = checkURL;
-
 		init();
 
 		function init() {

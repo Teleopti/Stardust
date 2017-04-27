@@ -30,7 +30,7 @@ describe('ReportsOverviewController', function () {
       Category: "Category1",
       IsWebReport: false,
       Name: "Report3",
-      Url: "https://www.teleopti.com/index.aspx"
+      Url: "http://www.teleopti.com/index.aspx"
     },
     {
       Category: null, //Leave blank
