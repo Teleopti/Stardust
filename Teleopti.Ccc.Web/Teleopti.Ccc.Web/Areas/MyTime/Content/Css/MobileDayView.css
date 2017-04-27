@@ -38,3 +38,17 @@
 	text-align: center;
 	white-space: pre-wrap;
 }
+
+.dayview-schedule {
+	display: inline-block;
+	height: 668px;
+    width: 200px;
+}
+
+.dayview-schedule-layer {
+	border-radius: 2px;
+	border-left: 0;
+	overflow: hidden;
+	border-top: 1px solid #DFDFDF;
+	border-bottom: 1px solid #DFDFDF;
+}
