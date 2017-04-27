@@ -77,7 +77,8 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker.js",
 					"~/Content/scripts/pinify/scripts/jquery.pinify.min.js",
 					"~/Content/jasny-bootstrap/js/jasny-bootstrap.min.js",
-					"~/Content/jqueryui/jquery.ui.dialog.js"
+					"~/Content/jqueryui/jquery.ui.dialog.js",
+					"~/Content/jquery-plugin/jquery.touchSwipe.min.js"
 				)
 				.IncludeDirectory("~/Areas/MyTime/Content/Scripts", "*.js", true);
 			jsBundle.Orderer = new teleoptiScriptsOrderedByNumberOfDots();
