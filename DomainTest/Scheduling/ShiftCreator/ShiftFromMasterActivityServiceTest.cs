@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         Activity _activity4;
         Activity _activityNotInContractTime;
         Activity _activityDontRequireSkill;
-        IShiftCategory _shiftCategory;
         IWorkShift _workShift;
         DateTimePeriod _period8To17;
         DateTimePeriod _period10To13;
@@ -54,9 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 		        RequiresSkill = false
 	        };
 
-
-	        _shiftCategory = new ShiftCategory("shiftCategory");
-            _workShift = new WorkShift(_shiftCategory);
+            _workShift = new WorkShift(new ShiftCategory("shiftCategory"));
 
             DateTime time8 = new DateTime(2010, 1, 1, 8, 0, 0, DateTimeKind.Utc);
             DateTime time10 = new DateTime(2010, 1, 1, 10, 0, 0, DateTimeKind.Utc);

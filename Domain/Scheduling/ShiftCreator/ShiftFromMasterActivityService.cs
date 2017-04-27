@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 {
@@ -20,7 +21,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             return new[]{workShift};
         }
 
-        private static IList<IWorkShift> createShiftsFromShift(IWorkShift workShift)
+	    protected virtual DateTimePeriod FirstLayerPeriod(DateTimePeriod layerPeriod, DateTimePeriod workShiftPeriod)
+	    {
+		    return layerPeriod;
+	    }
+
+        private IList<IWorkShift> createShiftsFromShift(IWorkShift workShift)
         {
 			var result = new List<IWorkShift>();
             IVisualLayerCollection visualLayers = workShift.ProjectionService().CreateProjection();
@@ -46,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                                 }
                             }
 
-                            WorkShiftActivityLayer activityLayer = new WorkShiftActivityLayer(activity, layer.Period);
+                            WorkShiftActivityLayer activityLayer = new WorkShiftActivityLayer(activity, FirstLayerPeriod(layer.Period, workShift.LayerCollection.Period().GetValueOrDefault()));
                             newWorkShift.LayerCollection.Add(activityLayer);
 
                             foreach (var l in visualLayers)
