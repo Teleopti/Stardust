@@ -103,8 +103,35 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass, singleAss }, new[] { skillDayA, skillDayB1, skillDayB2 }, false, false));
 
-			skillDayB1.SkillStaffPeriodCollection.First()
-				.CalculatedResource.Should().Be.GreaterThanOrEqualTo(1);
+			skillDayB1.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.GreaterThanOrEqualTo(1);
+		}
+
+
+		[Test]
+		[Ignore("Not yet red - will be red later")]
+		public void ShouldNotShovelMoreResourcesThanAvailableInPrimarySkill()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 1.1); 
+			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 10); //innan shovling = -100% rel diff
+			var skillB3 = new Skill("B3").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var skillDayB3 = skillB3.CreateSkillDayWithDemand(scenario, dateOnly, 10); //innan shovling = -100% rel diff
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2, skillB3);
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
+			var singleSkilledAgent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB1);
+			var singleAss = new PersonAssignment(singleSkilledAgent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass, singleAss }, new[] { skillDayA, skillDayB1, skillDayB2, skillDayB3 }, false, false));
+
+			skillDayB2.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(skillDayB3.SkillStaffPeriodCollection.First().CalculatedResource);
 		}
 	}
 }
