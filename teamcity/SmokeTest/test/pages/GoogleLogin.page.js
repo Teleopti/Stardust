@@ -2,10 +2,10 @@ var Page = require('./Page.page')
 
 var GoogleLoginPage = Object.create(Page, {
 
-    username: { get: function () { return browser.element('#Email'); } },
-    next: { get: function () { return browser.element('#next'); } },
-    password: { get: function () { return browser.element('#Passwd'); } },
-    signinButton:     { get: function () { return browser.element('#signIn'); } },
+    username: { get: function () { return browser.element('input[type=email]'); } },
+    next: { get: function () { return browser.element('#identifierNext > content'); } },
+    password: { get: function () { return browser.element('input[type=password]'); } },
+    signinButton: { get: function () { return browser.element('#passwordNext'); } },
 	
     clickSignin: { value: function() {
         this.signinButton.click();
