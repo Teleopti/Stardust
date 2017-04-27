@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -155,6 +157,42 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			skillDayB2.SkillStaffPeriodCollection.First().CalculatedResource
 				.Should().Be.EqualTo(skillDayB3.SkillStaffPeriodCollection.First().CalculatedResource);
+		}
+
+		[Test]
+		public void ShouldShovelAllResourceToOneSubSkill()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 10);
+			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 10); 
+			var skillB3 = new Skill("B3").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var skillDayB3 = skillB3.CreateSkillDayWithDemand(scenario, dateOnly, 10);
+			var asses = new List<IPersonAssignment>();
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2, skillB3);
+			asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
+			for (var i = 0; i < 10; i++)
+			{
+				var agentSingleSkilledB1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1);
+				asses.Add(new PersonAssignment(agentSingleSkilledB1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
+			}
+			for (var i = 0; i < 6; i++)
+			{
+				var agentSingleSkilledB2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB2);
+				asses.Add(new PersonAssignment(agentSingleSkilledB2, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
+			}
+			var agentSingleSkilledB3 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB2);
+			asses.Add(new PersonAssignment(agentSingleSkilledB3, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayA, skillDayB1, skillDayB2, skillDayB3 }, false, false));
+
+			skillDayB3.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(2); //all of "agent" shoveled here
 		}
 	}
 }
