@@ -428,6 +428,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope();
 			builder.RegisterType<ExtractSkillStaffingDataForResourceCalculation>().InstancePerLifetimeScope();
 
+			builder.RegisterType<CompareProjection>().SingleInstance();
+
 			if (_configuration.Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388))
 			{
 				builder.RegisterType<UpdateStaffingLevelReadModelOnlySkillCombinationResources>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope();
