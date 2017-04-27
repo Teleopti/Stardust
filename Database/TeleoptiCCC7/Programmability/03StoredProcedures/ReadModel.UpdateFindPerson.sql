@@ -17,7 +17,7 @@ WITH EXECUTE AS OWNER
 -- 2013-02-20	RobinK	Faulty update with team id in some cases.
 -- =============================================
 AS
--- exec [ReadModel].[UpdateFindPerson] 'B0C67CB1-1C4F-4047-8DC1-9EF500DC79A6, 2AE730A0-5AF7-49B7-9498-9EF500DC79A6'
+-- exec [ReadModel].[UpdateFindPerson] 'B8F5BE96-2C4D-44B5-A5DB-9C6400BB5860'
 -- exec [ReadModel].[UpdateFindPerson] '00000000-0000-0000-0000-000000000000'
 SET NOCOUNT ON
 CREATE TABLE #ids (
@@ -132,16 +132,20 @@ INNER JOIN PersonSkill ps WITH (NOLOCK) ON pp.Id = ps.Parent
 INNER JOIN Skill s WITH (NOLOCK) ON ps.Skill = s.Id
 WHERE p.IsDeleted = 0 AND Active = 1 AND  s.IsDeleted = 0
 
+/*
+exec [ReadModel].[UpdateFindPerson] 'B8F5BE96-2C4D-44B5-A5DB-9C6400BB5860'
+*/
+
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id, p.FirstName, p.LastName, p.EmploymentNumber, p.Note, p.TerminalDate, 
 CASE SUBSTRING( ar.DescriptionText ,1 , 2 )
 WHEN  'xx'    THEN ar.Name
  ELSE ar.DescriptionText
  END
-,'Role', NULL, NULL, NULL, ar.Id, pp.StartDate, pp.EndDate, pp.Team  
+,'Role', NULL, NULL, NULL, ar.Id, ISNULL(pp.StartDate,'19000101'), pp.EndDate, pp.Team  
 FROM Person p WITH (NOLOCK)
 INNER JOIN #ids ids ON p.Id = ids.person
-INNER JOIN PersonPeriod pp WITH (NOLOCK) ON p.Id = pp.Parent
+LEFT JOIN PersonPeriod pp WITH (NOLOCK) ON p.Id = pp.Parent
 INNER JOIN PersonInApplicationRole pa WITH (NOLOCK) ON pa.Person = p.Id
 INNER JOIN ApplicationRole ar WITH (NOLOCK) ON ar.Id = pa.ApplicationRole
 WHERE p.IsDeleted = 0 AND ar.IsDeleted = 0
