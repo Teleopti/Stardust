@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[UnitOfWork, HttpPut, Route("api/resourceplanner/agentgroup/{agentGroupId}/lastperiod")]
-		public virtual IHttpActionResult ChangeLastPeriod(Guid agentGroupId, DateTime? startDate, DateTime endDate)
+		public virtual IHttpActionResult ChangeLastPeriod(Guid agentGroupId, DateTime endDate, DateTime? startDate=null)
 		{
 			var agentGroup = _agentGroupRepository.Get(agentGroupId);
 			if (agentGroup == null)

@@ -341,7 +341,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var periodStart = new DateOnly(2017, 04, 26);
 			var changedPeriod = PlanningPeriodRepository.Has(periodStart, 1, agentGroup);
 
-			Target.ChangeLastPeriod(agentGroupId, null, periodStart.Date + TimeSpan.FromDays(14));
+			Target.ChangeLastPeriod(agentGroupId, periodStart.Date + TimeSpan.FromDays(14));
 
 			Target.Request = new HttpRequestMessage();
 			var lastPeriod = (CreatedNegotiatedContentResult<PlanningPeriodModel>) Target.GetNextPlanningPeriod(agentGroupId);
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var periodStart = new DateOnly(2017, 04, 26);
 			PlanningPeriodRepository.Has(periodStart, 1, agentGroup);
 
-			var result = Target.ChangeLastPeriod(agentGroupId, periodStart.Date + TimeSpan.FromDays(1), periodStart.Date + TimeSpan.FromDays(14));
+			var result = Target.ChangeLastPeriod(agentGroupId, periodStart.Date + TimeSpan.FromDays(14), periodStart.Date + TimeSpan.FromDays(1));
 			(result as BadRequestErrorMessageResult).Should().Not.Be.Null();
 		}
 
@@ -385,7 +385,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			PlanningPeriodRepository.Has(periodStart, 1, agentGroup);
 
 			var newPeriodStart = periodStart.Date + TimeSpan.FromDays(1);
-			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.ChangeLastPeriod(agentGroupId, newPeriodStart, newPeriodStart.Date + TimeSpan.FromDays(14));
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.ChangeLastPeriod(agentGroupId, newPeriodStart.Date + TimeSpan.FromDays(14), newPeriodStart);
 			result.Content.First().StartDate.Should().Be.EqualTo(newPeriodStart);
 		}
 
