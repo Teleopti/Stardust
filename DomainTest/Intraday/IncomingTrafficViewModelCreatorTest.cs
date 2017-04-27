@@ -63,6 +63,35 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
+		public void ServiceLevelShouldNotExceed100Percent()
+		{
+			var interval = new IncomingIntervalModel()
+			{
+				IntervalDate = new DateTime(2016, 12, 02),
+				IntervalId = 35,
+				ForecastedCalls = 16,
+				ForecastedHandleTime = 150,
+				CalculatedCalls = 13,
+				HandleTime = 180,
+				AnsweredCallsWithinSL = 15,
+				AbandonedCalls = 2,
+				AbandonedRate = 2d / 12d,
+				ServiceLevel = 15d / 13d,
+				SpeedOfAnswer = 18,
+				AverageSpeedOfAnswer = 18d / 11d,
+				AnsweredCalls = 11
+			};
+
+			IntradayMonitorDataLoader.AddInterval(interval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
+
+			var result = Target.Load(new[] {Guid.NewGuid() });
+
+			result.DataSeries.ServiceLevel[0].Should().Not.Be.GreaterThan(100).And.Be.GreaterThan(0);
+			result.Summary.ServiceLevel.Should().Not.Be.GreaterThan(1).And.Be.GreaterThan(0);
+		}
+
+		[Test]
 		public void ShouldSummariseUpUntilLatestUpdate()
 		{
 			var thirdInterval = new IncomingIntervalModel()

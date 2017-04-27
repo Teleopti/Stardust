@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 					
 				averageSpeedOfAnswer.Add(interval.AnsweredCalls.HasValue ? interval.AverageSpeedOfAnswer : null);
 				abandonedRate.Add(interval.AbandonedCalls.HasValue ? interval.AbandonedRate * 100 : null);
-				serviceLevel.Add(interval.AnsweredCallsWithinSL.HasValue ? interval.ServiceLevel * 100 : null);
 
+				serviceLevel.Add(interval.AnsweredCallsWithinSL.HasValue ? (double?)Math.Min(interval.ServiceLevel.Value * 100, 100): null);
 			}
 
 			foreach (var interval in intervals.Where(interval => interval.IntervalId <= latestQueueStatsIntervalId))
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			summary.ServiceLevel = Math.Abs(summary.CalculatedCalls) < 0.0001
 					? -99
-					: summary.AnsweredCallsWithinSL / summary.CalculatedCalls;
+					: Math.Min(summary.AnsweredCallsWithinSL / summary.CalculatedCalls, 1);
 
 			summary.AbandonRate = Math.Abs(summary.CalculatedCalls) < 0.0001
 					? -99
