@@ -121,10 +121,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     double weightedSkillValue;
 	                if (!weightedRelativeKeyedSkillResourceResource.TryGetValue(skillKey, out weightedSkillValue))
                         weightedSkillValue = 0;
-	                resourceMatrix[producerIndex, productIndex] = weightedSkillValue;
+	                resourceMatrix[producerIndex][productIndex] = weightedSkillValue;
 
 	                double value = keyedSkillResourceEfficiency.ContainsKey(skillKey) ? 1 : 0;
-	                productivityMatrix[producerIndex, productIndex] = value;
+	                productivityMatrix[producerIndex][productIndex] = value;
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     if (skillValues.ContainsKey(skillKeyPair.Key))
 					{
 						int productIndex = skillKeyPair.Value;
-	                    skillValues[skillKeyPair.Key] = resourceMatrix[producerIndex, productIndex];
+	                    skillValues[skillKeyPair.Key] = resourceMatrix[producerIndex][productIndex];
                     }
                 }
             }

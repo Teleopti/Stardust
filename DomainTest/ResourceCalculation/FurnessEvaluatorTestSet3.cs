@@ -35,17 +35,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(15, target.Data.TotalProducerResources(), valueDelta);
             Assert.AreEqual(1, target.InnerIteration);
             target.Data.ResourceMatrix().DebugWriteMatrix();
-            Assert.AreEqual(12.0, target.Data.ResourceMatrix()[0, 0], timeDelta);
-            Assert.AreEqual(0, target.Data.ResourceMatrix()[0, 1], timeDelta);
-            Assert.AreEqual(0, target.Data.ResourceMatrix()[0, 2], timeDelta);
+            Assert.AreEqual(12.0, target.Data.ResourceMatrix()[0][0], timeDelta);
+            Assert.AreEqual(0, target.Data.ResourceMatrix()[0][1], timeDelta);
+            Assert.AreEqual(0, target.Data.ResourceMatrix()[0][2], timeDelta);
 
-            Assert.AreEqual(2.14, target.Data.ResourceMatrix()[1, 0], timeDelta);
-            Assert.AreEqual(0.85, target.Data.ResourceMatrix()[1, 1], timeDelta);
-            Assert.AreEqual(0.0, target.Data.ResourceMatrix()[1, 2], timeDelta);
+            Assert.AreEqual(2.14, target.Data.ResourceMatrix()[1][0], timeDelta);
+            Assert.AreEqual(0.85, target.Data.ResourceMatrix()[1][1], timeDelta);
+            Assert.AreEqual(0.0, target.Data.ResourceMatrix()[1][2], timeDelta);
 
-            Assert.AreEqual(0, target.Data.ResourceMatrix()[2, 0], timeDelta);
-            Assert.AreEqual(0, target.Data.ResourceMatrix()[2, 1], timeDelta);
-            Assert.AreEqual(0, target.Data.ResourceMatrix()[2, 2], timeDelta);
+            Assert.AreEqual(0, target.Data.ResourceMatrix()[2][0], timeDelta);
+            Assert.AreEqual(0, target.Data.ResourceMatrix()[2][1], timeDelta);
+            Assert.AreEqual(0, target.Data.ResourceMatrix()[2][2], timeDelta);
         }
 
         [Test]
@@ -59,17 +59,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			target.Evaluate(1, 2, Variances.StandardDeviation);
             Assert.AreEqual(2, target.InnerIteration);
             target.Data.ResourceMatrix().DebugWriteMatrix();
-            Assert.AreEqual(12.0, target.Data.ResourceMatrix()[0, 0], timeDelta);
-            Assert.AreEqual(0, target.Data.ResourceMatrix()[0, 1], timeDelta);
-            Assert.AreEqual(0, target.Data.ResourceMatrix()[0, 2], timeDelta);
+            Assert.AreEqual(12.0, target.Data.ResourceMatrix()[0][0], timeDelta);
+            Assert.AreEqual(0, target.Data.ResourceMatrix()[0][1], timeDelta);
+            Assert.AreEqual(0, target.Data.ResourceMatrix()[0][2], timeDelta);
 
-            Assert.AreEqual(1.29, target.Data.ResourceMatrix()[1, 0], timeDelta);
-            Assert.AreEqual(1.7, target.Data.ResourceMatrix()[1, 1], timeDelta);
-            Assert.AreEqual(0.0, target.Data.ResourceMatrix()[1, 2], timeDelta);
+            Assert.AreEqual(1.29, target.Data.ResourceMatrix()[1][0], timeDelta);
+            Assert.AreEqual(1.7, target.Data.ResourceMatrix()[1][1], timeDelta);
+            Assert.AreEqual(0.0, target.Data.ResourceMatrix()[1][2], timeDelta);
 
-            Assert.AreEqual(0, target.Data.ResourceMatrix()[2, 0], timeDelta);
-            Assert.AreEqual(0, target.Data.ResourceMatrix()[2, 1], timeDelta);
-            Assert.AreEqual(0, target.Data.ResourceMatrix()[2, 2], timeDelta);
+            Assert.AreEqual(0, target.Data.ResourceMatrix()[2][0], timeDelta);
+            Assert.AreEqual(0, target.Data.ResourceMatrix()[2][1], timeDelta);
+            Assert.AreEqual(0, target.Data.ResourceMatrix()[2][2], timeDelta);
         }
 
 	    [Test]

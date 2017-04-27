@@ -16,29 +16,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ret.ProducerResources()[1] = 7;
             ret.ProducerResources()[2] = 8;
 
-            ret.ProductivityMatrix()[0, 0] = 1.5;
-            ret.ProductivityMatrix()[0, 1] = 1.5;
-            ret.ProductivityMatrix()[0, 2] = 1.0;
+            ret.ProductivityMatrix()[0][0] = 1.5;
+            ret.ProductivityMatrix()[0][1] = 1.5;
+            ret.ProductivityMatrix()[0][2] = 1.0;
 
-            ret.ProductivityMatrix()[1, 0] = 2.0;
-            ret.ProductivityMatrix()[1, 1] = 0.5;
-            ret.ProductivityMatrix()[1, 2] = 0.0;
+            ret.ProductivityMatrix()[1][0] = 2.0;
+            ret.ProductivityMatrix()[1][1] = 0.5;
+            ret.ProductivityMatrix()[1][2] = 0.0;
 
-            ret.ProductivityMatrix()[2, 0] = 0.0;
-            ret.ProductivityMatrix()[2, 1] = 1.0;
-            ret.ProductivityMatrix()[2, 2] = 1.5;
+            ret.ProductivityMatrix()[2][ 0] = 0.0;
+            ret.ProductivityMatrix()[2][ 1] = 1.0;
+            ret.ProductivityMatrix()[2][2] = 1.5;
 
-            ret.ResourceMatrix()[0, 0] = 1;
-            ret.ResourceMatrix()[0, 1] = 1;
-            ret.ResourceMatrix()[0, 2] = 1;
+            ret.ResourceMatrix()[0][ 0] = 1;
+            ret.ResourceMatrix()[0][ 1] = 1;
+            ret.ResourceMatrix()[0][2] = 1;
 
-            ret.ResourceMatrix()[1, 0] = 1;
-            ret.ResourceMatrix()[1, 1] = 1;
-            ret.ResourceMatrix()[1, 2] = 0;
+            ret.ResourceMatrix()[1][ 0] = 1;
+            ret.ResourceMatrix()[1][ 1] = 1;
+            ret.ResourceMatrix()[1][2] = 0;
 
-            ret.ResourceMatrix()[2, 0] = 0;
-            ret.ResourceMatrix()[2, 1] = 1;
-            ret.ResourceMatrix()[2, 2] = 1;
+            ret.ResourceMatrix()[2][ 0] = 0;
+            ret.ResourceMatrix()[2][ 1] = 1;
+            ret.ResourceMatrix()[2][2] = 1;
 
             return ret;
         }
@@ -53,23 +53,23 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ret.ProducerResources()[1] = 40;
             ret.ProducerResources()[2] = 100;
 
-            ret.ProductivityMatrix()[0, 0] = 1;
-            ret.ProductivityMatrix()[0, 1] = 1;
+            ret.ProductivityMatrix()[0][ 0] = 1;
+            ret.ProductivityMatrix()[0][1] = 1;
 
-            ret.ProductivityMatrix()[1, 0] = 1;
-            ret.ProductivityMatrix()[1, 1] = 0;
+            ret.ProductivityMatrix()[1][ 0] = 1;
+            ret.ProductivityMatrix()[1][1] = 0;
 
-            ret.ProductivityMatrix()[2, 0] = 1;
-            ret.ProductivityMatrix()[2, 1] = 1;
+            ret.ProductivityMatrix()[2][ 0] = 1;
+            ret.ProductivityMatrix()[2][1] = 1;
 
-            ret.ResourceMatrix()[0, 0] = 1;
-            ret.ResourceMatrix()[0, 1] = 1;
+            ret.ResourceMatrix()[0][ 0] = 1;
+            ret.ResourceMatrix()[0][1] = 1;
 
-            ret.ResourceMatrix()[1, 0] = 1;
-            ret.ResourceMatrix()[1, 1] = 0;
+            ret.ResourceMatrix()[1][ 0] = 1;
+            ret.ResourceMatrix()[1][1] = 0;
 
-            ret.ResourceMatrix()[2, 0] = 1;
-            ret.ResourceMatrix()[2, 1] = 1;
+            ret.ResourceMatrix()[2][ 0] = 1;
+            ret.ResourceMatrix()[2][1] = 1;
 
             return ret;
         }
@@ -85,29 +85,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ret.ProducerResources()[1] = 3;
             ret.ProducerResources()[2] = 0;
 
-            ret.ProductivityMatrix()[0, 0] = 1;
-            ret.ProductivityMatrix()[0, 1] = 0;
-            ret.ProductivityMatrix()[0, 2] = 0;
+            ret.ProductivityMatrix()[0][ 0] = 1;
+            ret.ProductivityMatrix()[0][ 1] = 0;
+            ret.ProductivityMatrix()[0][2] = 0;
 
-            ret.ProductivityMatrix()[1, 0] = 1;
-            ret.ProductivityMatrix()[1, 1] = 1;
-            ret.ProductivityMatrix()[1, 2] = 0;
+            ret.ProductivityMatrix()[1][0] = 1;
+            ret.ProductivityMatrix()[1][1] = 1;
+            ret.ProductivityMatrix()[1][2] = 0;
 
-            ret.ProductivityMatrix()[2, 0] = 0;
-            ret.ProductivityMatrix()[2, 1] = 0;
-            ret.ProductivityMatrix()[2, 2] = 0;
+            ret.ProductivityMatrix()[2][0] = 0;
+            ret.ProductivityMatrix()[2][1] = 0;
+            ret.ProductivityMatrix()[2][2] = 0;
 
-            ret.ResourceMatrix()[0, 0] = 1;
-            ret.ResourceMatrix()[0, 1] = 0;
-            ret.ResourceMatrix()[0, 2] = 0;
+            ret.ResourceMatrix()[0][0] = 1;
+            ret.ResourceMatrix()[0][1] = 0;
+            ret.ResourceMatrix()[0][2] = 0;
 
-            ret.ResourceMatrix()[1, 0] = 1;
-            ret.ResourceMatrix()[1, 1] = 1;
-            ret.ResourceMatrix()[1, 2] = 0;
+            ret.ResourceMatrix()[1][0] = 1;
+            ret.ResourceMatrix()[1][1] = 1;
+            ret.ResourceMatrix()[1][2] = 0;
 
-            ret.ResourceMatrix()[2, 0] = 0;
-            ret.ResourceMatrix()[2, 1] = 0;
-            ret.ResourceMatrix()[2, 2] = 0;
+            ret.ResourceMatrix()[2][0] = 0;
+            ret.ResourceMatrix()[2][1] = 0;
+            ret.ResourceMatrix()[2][2] = 0;
 
             return ret;
         }
@@ -123,29 +123,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ret.ProducerResources()[1] = 7;
             ret.ProducerResources()[2] = 8;
 
-            ret.ProductivityMatrix()[0, 0] = 1.5;
-            ret.ProductivityMatrix()[0, 1] = 1.5;
-            ret.ProductivityMatrix()[0, 2] = 1.0;
+            ret.ProductivityMatrix()[0][0] = 1.5;
+            ret.ProductivityMatrix()[0][1] = 1.5;
+            ret.ProductivityMatrix()[0][2] = 1.0;
 
-            ret.ProductivityMatrix()[1, 0] = 2.0;
-            ret.ProductivityMatrix()[1, 1] = 0.5;
-            ret.ProductivityMatrix()[1, 2] = 0.0;
+            ret.ProductivityMatrix()[1][0] = 2.0;
+            ret.ProductivityMatrix()[1][1] = 0.5;
+            ret.ProductivityMatrix()[1][2] = 0.0;
 
-            ret.ProductivityMatrix()[2, 0] = 0.0;
-            ret.ProductivityMatrix()[2, 1] = 0.0;
-            ret.ProductivityMatrix()[2, 2] = 0.5;
+            ret.ProductivityMatrix()[2][0] = 0.0;
+            ret.ProductivityMatrix()[2][1] = 0.0;
+            ret.ProductivityMatrix()[2][2] = 0.5;
 
-            ret.ResourceMatrix()[0, 0] = 1;
-            ret.ResourceMatrix()[0, 1] = 1;
-            ret.ResourceMatrix()[0, 2] = 0;
+            ret.ResourceMatrix()[0][0] = 1;
+            ret.ResourceMatrix()[0][1] = 1;
+            ret.ResourceMatrix()[0][2] = 0;
 
-            ret.ResourceMatrix()[1, 0] = 1;
-            ret.ResourceMatrix()[1, 1] = 1;
-            ret.ResourceMatrix()[1, 2] = 0;
+            ret.ResourceMatrix()[1][0] = 1;
+            ret.ResourceMatrix()[1][1] = 1;
+            ret.ResourceMatrix()[1][2] = 0;
 
-            ret.ResourceMatrix()[2, 0] = 0;
-            ret.ResourceMatrix()[2, 1] = 0;
-            ret.ResourceMatrix()[2, 2] = 1;
+            ret.ResourceMatrix()[2][0] = 0;
+            ret.ResourceMatrix()[2][1] = 0;
+            ret.ResourceMatrix()[2][2] = 1;
 
             return ret;
         }

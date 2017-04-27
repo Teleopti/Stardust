@@ -101,30 +101,30 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(_activityData.PersonResources[_person2], furnessData.ProducerResources()[1]);
             Assert.AreEqual(_activityData.PersonResources[_person4], furnessData.ProducerResources()[2]);
 
-            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person1][_phoneA], furnessData.ResourceMatrix()[0, 0]);
-            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person1][_phoneB], furnessData.ResourceMatrix()[0, 1]);
-            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person2][_phoneA], furnessData.ResourceMatrix()[1, 0]);
-            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person2][_phoneB], furnessData.ResourceMatrix()[1, 1]);
+            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person1][_phoneA], furnessData.ResourceMatrix()[0][ 0]);
+            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person1][_phoneB], furnessData.ResourceMatrix()[0][ 1]);
+            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person2][_phoneA], furnessData.ResourceMatrix()[1][ 0]);
+            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person2][_phoneB], furnessData.ResourceMatrix()[1][1]);
             // this key pair does not exist, so the value must be 0
-            Assert.AreEqual(0d, furnessData.ResourceMatrix()[2, 0]);
-            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person4][_phoneB], furnessData.ResourceMatrix()[2, 1]);
+            Assert.AreEqual(0d, furnessData.ResourceMatrix()[2][0]);
+            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person4][_phoneB], furnessData.ResourceMatrix()[2][1]);
 
-            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[0, 0]);
-            Assert.AreEqual(_activityData.KeyedSkillResourceEfficiencies[_person1][_phoneB], furnessData.ProductivityMatrix()[0, 1]);
-            Assert.AreEqual(_activityData.KeyedSkillResourceEfficiencies[_person2][_phoneA], furnessData.ProductivityMatrix()[1, 0]);
-            Assert.AreEqual(_activityData.KeyedSkillResourceEfficiencies[_person2][_phoneB], furnessData.ProductivityMatrix()[1, 1]);
+            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[0][0]);
+            Assert.AreEqual(_activityData.KeyedSkillResourceEfficiencies[_person1][_phoneB], furnessData.ProductivityMatrix()[0][1]);
+            Assert.AreEqual(_activityData.KeyedSkillResourceEfficiencies[_person2][_phoneA], furnessData.ProductivityMatrix()[1][0]);
+            Assert.AreEqual(_activityData.KeyedSkillResourceEfficiencies[_person2][_phoneB], furnessData.ProductivityMatrix()[1][1]);
             // this key pair does not exist, so the value must be 0
-            Assert.AreEqual(0d, furnessData.ProductivityMatrix()[2, 0]);
+            Assert.AreEqual(0d, furnessData.ProductivityMatrix()[2][0]);
 
-            Assert.AreEqual(_activityData.KeyedSkillResourceEfficiencies[_person4][_phoneB], furnessData.ProductivityMatrix()[2, 1]);
+            Assert.AreEqual(_activityData.KeyedSkillResourceEfficiencies[_person4][_phoneB], furnessData.ProductivityMatrix()[2][1]);
 
-            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[0, 0]);
-            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[0, 1]);
-            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[1, 0]);
-            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[1, 1]);
+            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[0][0]);
+            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[0][1]);
+            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[1][0]);
+            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[1][1]);
             // this key pair does not exist, so the value must be 0
-            Assert.AreEqual(0d, furnessData.ProductivityMatrix()[2, 0]);
-            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[2, 1]);
+            Assert.AreEqual(0d, furnessData.ProductivityMatrix()[2][0]);
+            Assert.AreEqual(1d, furnessData.ProductivityMatrix()[2][1]);
 
         }
 
@@ -136,20 +136,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 for(int skillIndex = 0;skillIndex < furnessData.ProductTypes;skillIndex++)
                 {
-                    var resource = furnessData.ResourceMatrix()[personIndex, skillIndex] *= 2;
-                    furnessData.ProductionMatrix()[personIndex, skillIndex] =
+                    var resource = furnessData.ResourceMatrix()[personIndex][skillIndex] *= 2;
+                    furnessData.ProductionMatrix()[personIndex][skillIndex] =
                         resource*
-                        furnessData.ProductivityMatrix()[personIndex, skillIndex];
+                        furnessData.ProductivityMatrix()[personIndex][skillIndex];
                 }
             }
 
             _target.ConvertFurnessDataBackToActivity();
 
-            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person1][_phoneA], furnessData.ResourceMatrix()[0, 0]);
-            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person1][_phoneB], furnessData.ResourceMatrix()[0, 1]);
-            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person2][_phoneA], furnessData.ResourceMatrix()[1, 0]);
-            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person2][_phoneB], furnessData.ResourceMatrix()[1, 1]);
-            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person4][_phoneB], furnessData.ResourceMatrix()[2, 1]);
+            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person1][_phoneA], furnessData.ResourceMatrix()[0][0]);
+            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person1][_phoneB], furnessData.ResourceMatrix()[0][1]);
+            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person2][_phoneA], furnessData.ResourceMatrix()[1][0]);
+            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person2][_phoneB], furnessData.ResourceMatrix()[1][1]);
+            Assert.AreEqual(_activityData.WeightedRelativeKeyedSkillResourceResources[_person4][_phoneB], furnessData.ResourceMatrix()[2][1]);
         }
     }
 }

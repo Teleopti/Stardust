@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var target = FurnessDataFactory.CreateFurnessDataForTestSet1(); 
             Assert.AreEqual(3, target.ProductivityMatrix().GetLongLength(0));
-            Assert.AreEqual(3, target.ProductivityMatrix().GetLongLength(1));
-            Assert.AreEqual(1.5, target.ProductivityMatrix()[0, 0]);
-            Assert.AreEqual(1.5, target.ProductivityMatrix()[2, 2]);
+            Assert.AreEqual(3, target.ProductivityMatrix()[0].GetLongLength(0));
+            Assert.AreEqual(1.5, target.ProductivityMatrix()[0][0]);
+            Assert.AreEqual(1.5, target.ProductivityMatrix()[2][2]);
         }
 
         [Test]
@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var target = FurnessDataFactory.CreateFurnessDataForTestSet1(); 
             Assert.AreEqual(3, target.ResourceMatrix().GetLongLength(0));
-            Assert.AreEqual(3, target.ResourceMatrix().GetLongLength(1));
+            Assert.AreEqual(3, target.ResourceMatrix()[0].GetLongLength(0));
             Assert.AreEqual(3, target.ProductTypes);
             Assert.AreEqual(3, target.Producers);
-            Assert.AreEqual(1, target.ResourceMatrix()[0, 0]);
-            Assert.AreEqual(1, target.ResourceMatrix()[2, 2]);
+            Assert.AreEqual(1, target.ResourceMatrix()[0][0]);
+            Assert.AreEqual(1, target.ResourceMatrix()[2][2]);
         }
 
         [Test]

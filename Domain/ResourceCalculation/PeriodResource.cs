@@ -100,14 +100,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IEnumerable<DateTimePeriod> GetFractionResources(Guid activityKey, Guid skillKey)
 		{
-			var result = new List<DateTimePeriod>();
-			foreach (var pair in _resourceDictionary)
-			{
-				if ((Guid.Empty == activityKey || pair.Key.HasActivity(activityKey)) && (pair.Key.ContainsSkill(skillKey)))
-				{
-					result.AddRange(pair.Value.FractionPeriods);
-				}
-			}
+			var result = _resourceDictionary.Where(
+					pair => pair.Key.ContainsSkill(skillKey) && (Guid.Empty == activityKey || pair.Key.HasActivity(activityKey)))
+				.SelectMany(pair => pair.Value.FractionPeriods)
+				.ToArray();
 			return result;
 		}
 
