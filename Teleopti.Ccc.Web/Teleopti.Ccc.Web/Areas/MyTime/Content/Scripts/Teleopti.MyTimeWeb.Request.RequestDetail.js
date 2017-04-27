@@ -58,7 +58,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		};
 
 		self.CancelAddingNewRequest = function () {
-			Teleopti.MyTimeWeb.Request.List.HideRequests(false);	
+			Teleopti.MyTimeWeb.Request.List.HideRequests(false);
 			Teleopti.MyTimeWeb.Request.HideFab(false);
 
 			self.requestViewModel(null);
@@ -83,7 +83,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _prepareForAddingRequest() {
 		_hideOthers();
 		var model = parentViewModel.createRequestViewModel();
-		model.AddRequestCallback = function(data) {
+		model.AddRequestCallback = function (data) {
 			_addItemAtTop(data);
 			model.IsPostingData(false);
 		};
@@ -92,19 +92,19 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _addTextRequestClick() {
-		Teleopti.MyTimeWeb.Request.List.HideRequests(true);	
+		Teleopti.MyTimeWeb.Request.List.HideRequests(true);
 		_prepareForAddingRequest();
 		parentViewModel.requestViewModel().AddTextRequest(true);
 	}
 
 	function _addAbsenceRequestClick() {
-		Teleopti.MyTimeWeb.Request.List.HideRequests(true);	
+		Teleopti.MyTimeWeb.Request.List.HideRequests(true);
 		_prepareForAddingRequest();
 		parentViewModel.requestViewModel().AddAbsenceRequest(true);
 	}
 
 	function _addPostShiftForTradeClick(date) {
-		Teleopti.MyTimeWeb.Request.List.HideRequests(true);	
+		Teleopti.MyTimeWeb.Request.List.HideRequests(true);
 		_hideOthers();
 		var defaultTime = { defaultStartTime: defaultDateTimes.defaultStartTime, defaultEndTime: defaultDateTimes.defaultEndTime };
 		var model = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _addItemAtTop).Create(defaultTime);
@@ -128,15 +128,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _addRequest(model, successCallback, errorCallback) {
-
 		if (self.IsPostingData()) {
 			return;
 		}
-
+		model.ShowError(false);
 		self.IsPostingData(true);
 
-		 Teleopti.MyTimeWeb.Request.List.HideRequests(false);	
-		 Teleopti.MyTimeWeb.Request.HideFab(false);
+
 		var formData = _getFormData(model);
 		ajax.Ajax({
 			url: formData.Url,
@@ -145,6 +143,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			type: "POST",
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
+				Teleopti.MyTimeWeb.Request.List.HideRequests(false);
+				Teleopti.MyTimeWeb.Request.HideFab(false);
 				model.IsNewInProgress(false);
 				model.Subject("");
 				model.Message("");
