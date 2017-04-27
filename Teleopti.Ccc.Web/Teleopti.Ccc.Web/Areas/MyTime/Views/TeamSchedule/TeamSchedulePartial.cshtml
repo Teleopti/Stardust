@@ -35,7 +35,7 @@
 </div>
 <div data-bind="if: toggle, css: { 'hide-fab-on-phone': hideFab}">
 <div class="close-fab-overlay" data-bind="visible: menuIsVisible,css: { 'hide-fab-on-phone': hideFab}, click: disableMenu"></div>
-<div class="navbar navbar-teleopti fab subnavbar" data-bind="css: { 'fab-focus': menuIsVisible}, click: enableMenu, clickBubble: false" tabindex="0">
+<div class="navbar navbar-teleopti fab subnavbar" data-bind="css: { 'fab-focus': menuIsVisible}, click: enableMenu" tabindex="0">
 	<div class="container" >
 		<ul class="nav navbar-nav navbar-teleopti row submenu ts-menu">
 			@if (Model.ShiftTradePermisssion)

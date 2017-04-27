@@ -31,7 +31,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		self.addPostShiftForTradeActive = ko.observable(false);
 		self.menuIsVisible = ko.observable(false);
 
-		self.enableMenu = function () {
+		self.enableMenu = function (blah, e) {
 			self.menuIsVisible(true);
 		};
 
@@ -55,16 +55,18 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
-		self.addShiftTradeRequest = function (date) {
-			// self.disableMenu()
+		self.addShiftTradeRequest = function (date, e) {
+			e.stopPropagation();
 			self.resetToolbarActiveButtons();
 			self.addShiftTradeRequestActive(true);
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow(date);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
+			self.disableMenu()
 		};
 
-		self.addShiftTradeBulletinBoardRequest = function (date) {
-			// self.disableMenu()
+		self.addShiftTradeBulletinBoardRequest = function (date, e) {
+			e.stopPropagation();
+			self.disableMenu()
 			self.resetToolbarActiveButtons();
 			self.addShiftTradeBulletinBoardActive(true);
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeBulletinWindow(date);
@@ -136,6 +138,11 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			if (requestNavigationViewModel != null) {
 				requestNavigationViewModel.hideFab(show);
 				requestNavigationViewModel.menuIsVisible(show);
+			}
+		},
+		MenuIsOpen: function () {
+			if (requestNavigationViewModel != null) {
+				return requestNavigationViewModel.menuIsVisible();
 			}
 		}
 	};
