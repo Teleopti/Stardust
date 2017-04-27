@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			QueryAllAttributes<UseEventPublisherAttribute>()
 				.ForEach(a => system.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
 			system.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
-			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			system.UseTestDouble<EmptyStardustJobFeedback>().For<IStardustJobFeedback>();
 			//
 
 			// Database aspects
