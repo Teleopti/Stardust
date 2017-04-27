@@ -187,7 +187,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#44106, to be fixed")]
 		public void ShouldNotCrashWhenTeamMembersHaveDifferentSchedulePeriods()
 		{
 			var firstDay = new DateOnly(2016, 05, 30);

@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             //isSingleAgentTeam can be removed if more scheduling options are needed then we can move the scheduling options.
             if (scheduleMatrixPro == null) throw new ArgumentNullException("scheduleMatrixPro");
 	        var person = scheduleMatrixPro.Person;
-			IScheduleRange rangeForPerson = scheduleMatrixPro.ActiveScheduleRange;
+			var rangeForPerson = scheduleMatrixPro.ActiveScheduleRange;
 	        
-			IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(providedDateOnly);
+			var scheduleDay = rangeForPerson.ScheduledDay(providedDateOnly);
             if (isDayOff(scheduleDay))
 		        return null;
 
@@ -24,9 +24,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return new DateOnlyPeriod(providedDateOnly, providedDateOnly);
 
 	        var terminalDate = person.TerminalDate;
-	        DateOnly personPeriodStartDate = personPeriod.StartDate;
-			DateOnly startDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, -1, schedulePeriod, personPeriodStartDate, terminalDate);
-			DateOnly endDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, 1, schedulePeriod, personPeriodStartDate, terminalDate);
+	        var personPeriodStartDate = personPeriod.StartDate;
+			var startDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, -1, schedulePeriod, personPeriodStartDate, terminalDate);
+			var endDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, 1, schedulePeriod, personPeriodStartDate, terminalDate);
+	        if (endDate < startDate) return null;
 
 	        return new DateOnlyPeriod(startDate, endDate);
         }
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private static DateOnly traverse(IScheduleRange rangeForPerson, DateOnlyPeriod rangePeriod, DateOnly providedDateOnly,
 								  int stepDays, DateOnlyPeriod currentSchedulePeriod, DateOnly personPeriodStartDate, DateOnly? terminalDate)
 		{
-			DateOnly edgeDate = providedDateOnly;
+			var edgeDate = providedDateOnly;
 			currentSchedulePeriod = new DateOnlyPeriod(currentSchedulePeriod.StartDate.AddDays(-10),
 			                                           currentSchedulePeriod.EndDate.AddDays(10));
 			
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (isDayOff(scheduleDay))
 					break;
 
-				edgeDate = edgeDate.AddDays(stepDays);
+				edgeDate = edgeDate.AddDays(stepDays);	
 			}
 
 			return edgeDate.AddDays(-stepDays);
