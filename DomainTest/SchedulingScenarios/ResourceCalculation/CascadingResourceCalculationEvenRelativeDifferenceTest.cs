@@ -160,7 +160,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("44091 - to be fixed")]
 		public void ShouldShovelAllResourceToOneSubSkill()
 		{
 			var scenario = new Scenario("_");
@@ -179,15 +178,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 			for (var i = 0; i < 10; i++)
 			{
-				var agentSingleSkilledB1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1);
+				var agentSingleSkilledB1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB1);
 				asses.Add(new PersonAssignment(agentSingleSkilledB1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 			}
 			for (var i = 0; i < 6; i++)
 			{
-				var agentSingleSkilledB2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB2);
+				var agentSingleSkilledB2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB2);
 				asses.Add(new PersonAssignment(agentSingleSkilledB2, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 			}
-			var agentSingleSkilledB3 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB2);
+			var agentSingleSkilledB3 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB3);
 			asses.Add(new PersonAssignment(agentSingleSkilledB3, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayA, skillDayB1, skillDayB2, skillDayB3 }, false, false));

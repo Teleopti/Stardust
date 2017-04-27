@@ -50,7 +50,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 						}
 						/////////////////////////////////////////
 					}
-					var affectedSkills = mightShovelToSubSkills(shovelResourcesState, shovelResourceData, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, subSkillsWithSameIndex, maxToMoveForThisSkillGroup, false);
+					IEnumerable<ISkill> affectedSkills = subSkillsWithSameIndex;
+					while (true)
+					{
+						var countBefore = affectedSkills.Count();
+						affectedSkills = mightShovelToSubSkills(shovelResourcesState, shovelResourceData, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, affectedSkills, maxToMoveForThisSkillGroup, false);
+						if (affectedSkills.Count() == countBefore)
+							break;
+					}
 					if (affectedSkills.Any())
 					{
 						stopShovelDueToSubskills = false;
