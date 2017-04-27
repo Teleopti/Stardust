@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -32,17 +33,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Process(string displayName, string tenant, IEvent @event, string handlerType)
 		{
+			Process(displayName, tenant, new[]{@event}, handlerType);
+		}
+
+		public void Process(string displayName, string tenant, IEnumerable<IEvent> events, string handlerType)
+		{
 			var handlerT = Type.GetType(handlerType, true);
-			var handlers = _resolver.HandlerTypesFor<IRunOnHangfire>(@event);
+			var handlers = _resolver.HandlerTypesFor<IRunOnHangfire>(events);
 
 			var publishTo = handlers.Single(o => o == handlerT);
 
-			_processor.Process(tenant, @event, publishTo);
-		}
-
-		public void Process(string tenant, IEvent @event, Type handlerType)
-		{
-			_processor.Process(tenant, @event, handlerType);
+			_processor.Process(tenant, events, publishTo);
 		}
 
 	}

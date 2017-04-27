@@ -31,7 +31,41 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		[TestLog]
 		public virtual void Publish(params IEvent[] events)
 		{
-			events.SelectMany(jobsFor).ForEach(x => _client.Enqueue(x.Job));
+			//events.SelectMany(jobsFor).ForEach(x => _client.Enqueue(x.Job));
+			jobsFor(events).ForEach(x => _client.Enqueue(x.Job));
+		}
+
+		private IEnumerable<JobInfo> jobsFor(IEvent[] events)
+		{
+			var tenant = _dataSource.CurrentName();
+			var handlerTypes = _resolver.HandlerTypesFor<IRunOnHangfire>(events);
+
+			return handlerTypes
+				.Select(handlerType => new
+				{
+					handlerType,
+					interestingEvents = _resolver.EventsFor(handlerType, @events)
+				})
+				.Where(x => x.interestingEvents.Any())
+				.Select(x =>
+				{
+					var @event = events.First();
+					var attemptsAttribute = _resolver.GetAttemptsAttribute(x.handlerType, @event);
+					return new JobInfo
+					{
+						Job = new HangfireEventJob
+						{
+							DisplayName = $"{x.handlerType.Name} got {@event.GetType().Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
+							Tenant = tenant,
+							Events = x.interestingEvents,
+							HandlerTypeName = $"{x.handlerType.FullName}, {x.handlerType.Assembly.GetName().Name}",
+							QueueName = _resolver.QueueTo(x.handlerType, @event),
+							Attempts = _resolver.AttemptsFor(attemptsAttribute),
+							AllowFailures = 0
+						},
+					};
+				});
+
 		}
 
 		public void PublishDaily(IEvent @event)
@@ -92,7 +126,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					{
 						DisplayName = $"{handlerType.Name} got {eventType.Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
 						Tenant = tenant,
-						Event = @event,
+						Events = new[]{ @event },
 						HandlerTypeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}",
 						QueueName = _resolver.QueueTo(handlerType, @event),
 						Attempts = _resolver.AttemptsFor(attemptsAttribute),

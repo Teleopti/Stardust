@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon
 				DisplayName = job.DisplayName,
 				Tenant = job.Tenant,
 				EventType = job.EventTypeName(),
-				Event = _serializer.SerializeEvent(job.Event),
+				Event = _serializer.SerializeEvent(job.Events.First()),
 				HandlerType = job.HandlerTypeName
 			});
 		}
@@ -80,19 +80,19 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void AddOrUpdateHourly(HangfireEventJob job2)
 		{
-			var job = recurring(job2.DisplayName, job2.RecurringId(), job2.Tenant, job2.EventTypeName(), _serializer.SerializeEvent(job2.Event), job2.HandlerTypeName);
+			var job = recurring(job2.DisplayName, job2.RecurringId(), job2.Tenant, job2.EventTypeName(), _serializer.SerializeEvent(job2.Events.First()), job2.HandlerTypeName);
 			job.Hourly = true;
 		}
 
 		public void AddOrUpdateMinutely(HangfireEventJob job2)
 		{
-			var job = recurring(job2.DisplayName, job2.RecurringId(), job2.Tenant, job2.EventTypeName(), _serializer.SerializeEvent(job2.Event), job2.HandlerTypeName);
+			var job = recurring(job2.DisplayName, job2.RecurringId(), job2.Tenant, job2.EventTypeName(), _serializer.SerializeEvent(job2.Events.First()), job2.HandlerTypeName);
 			job.Minutely = true;
 		}
 
 		public void AddOrUpdateDaily(HangfireEventJob job)
 		{
-			var j = recurring(job.DisplayName, job.RecurringId(), job.Tenant, job.EventTypeName(), _serializer.SerializeEvent(job.Event), job.HandlerTypeName);
+			var j = recurring(job.DisplayName, job.RecurringId(), job.Tenant, job.EventTypeName(), _serializer.SerializeEvent(job.Events.First()), job.HandlerTypeName);
 			j.Daily = true;
 		}
 

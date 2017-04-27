@@ -1,4 +1,8 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
@@ -10,5 +14,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	public interface IHandleEventOnQueue<TEvent> where TEvent : IEvent
 	{
 		string QueueTo(TEvent @event);
+	}
+
+	public interface IHandleEvents
+	{
+		void Subscribe(ISubscriptionsRegistror subscriptions);
+		void Handle(IEnumerable<IEvent> events);
+	}
+
+	public interface ISubscriptionsRegistror
+	{
+		void Add<T>() where T : IEvent;
+		bool Has(Type type);
+	}
+
+	public class SubscriptionsRegistror : ISubscriptionsRegistror
+	{
+		private IEnumerable<Type> types = Enumerable.Empty<Type>();
+
+		public void Add<T>() where T : IEvent
+		{
+			types = types.Append(typeof(T));
+		}
+
+		public bool Has(Type type)
+		{
+			return types.Contains(type);
+		}
 	}
 }

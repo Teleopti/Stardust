@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -14,12 +16,12 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public string QueueName;
 		public int Attempts;
 		public int AllowFailures;
-		public IEvent Event;
+		public IEnumerable<IEvent> Events;
 		public string HandlerTypeName;
 		
 		public string EventTypeName()
 		{
-			var eventType = Event.GetType();
+			var eventType = Events.First().GetType();
 			return $"{eventType.FullName}, {eventType.Assembly.GetName().Name}";
 		}
 
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public string RecurringId()
 		{
-			var hashedHandlerAndEvent = $"{HandlerTypeName}{delimiter}{Event.GetType().Name}".GenerateGuid().ToString("N");
+			var hashedHandlerAndEvent = $"{HandlerTypeName}{delimiter}{Events.First().GetType().Name}".GenerateGuid().ToString("N");
 			var hashedTenant = Tenant?.GenerateGuid().ToString("N") ?? "";
 			return $"{hashedTenant}{delimiter}{hashedHandlerAndEvent}";
 		}

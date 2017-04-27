@@ -159,6 +159,7 @@
     <Compile Include="ApplicationLayer\Dates\AnalyticsPersonLocalDateUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireAllowRecurringFailuresEventPublishingConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireAllowRecurringFailuresEventPublishingTest.cs" />
+    <Compile Include="ApplicationLayer\Events\HangfireEventPackagePublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireQueueSelectionEventPublishingConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireRetryEventPublishingConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireSerializeEventPublishingTest.cs" />
