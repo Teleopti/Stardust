@@ -8,6 +8,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -1382,10 +1383,9 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(periodWithPreviousDay)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
-			now.Stub(x => x.UtcDateTime()).Return(date.Date);
+			now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
 
 			var result = target.GetDaySchedule(date);
-
 			result.IsCurrentDay.Should().Be.True();
 		}
 		
