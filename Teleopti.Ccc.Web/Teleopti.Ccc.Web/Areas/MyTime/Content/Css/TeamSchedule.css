@@ -321,9 +321,9 @@
 			display: none;
 		}
 		
-		.shift-trade-add-schedule > div > div > div > div:nth-child(4n+0){
+		/*.shift-trade-add-schedule > div > div > div > div:nth-child(4n+0){
 			opacity: 0;
-		}
+		}*/
     }
 
 		    @media only screen and (max-width : 414px) {
