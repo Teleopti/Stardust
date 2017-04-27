@@ -1,14 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class CompareProjection
 	{
-		public IEnumerable<SkillCombinationResource> Compare(IScheduleDay before, IScheduleDay after)
+		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
+
+		public CompareProjection(IIntervalLengthFetcher intervalLengthFetcher)
 		{
-			return new List<SkillCombinationResource>();
+			_intervalLengthFetcher = intervalLengthFetcher;
 		}
+
+		public IEnumerable<ActivityResourceInterval> Compare(IScheduleDay before, IScheduleDay after)
+		{
+			var resourceChanges = new List<ActivityResourceInterval>();
+			var resolution = _intervalLengthFetcher.IntervalLength;
+			resourceChanges.AddRange(remove(before, resolution));
+			return resourceChanges;
+		}
+
+		private IEnumerable<ActivityResourceInterval> remove(IScheduleDay before, int resolution)
+		{
+			var activityResouceIntervals = new List<ActivityResourceInterval>();
+			var projection = before.ProjectionService().CreateProjection();
+
+			var layers = projection.ToResourceLayers(resolution).ToList();
+			foreach (var layer in layers)
+			{
+				activityResouceIntervals.Add(new ActivityResourceInterval
+				{
+					Activity = layer.PayloadId,
+					Interval = layer.Period,
+					Resource = -layer.Resource
+				});
+			}
+			return activityResouceIntervals;
+		}
+	}
+
+	public class ActivityResourceInterval
+	{
+		public Guid Activity;
+		public DateTimePeriod Interval;
+		public double Resource;
 	}
 }
