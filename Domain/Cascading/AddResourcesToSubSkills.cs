@@ -29,14 +29,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 					{
 						stopShovelDueToSubskills = false;
 
-						//FIX THIS - just rest of some old gegga!!!!
-						var totalUnderstaffingPercentIsPositive =
+						var understaffedSubSkillsExists =
 							subSkillsWithSameIndex
 								.Select(paralellSkill => shovelResourceData.GetDataForInterval(paralellSkill, interval))
-								.Where(x => x.AbsoluteDifference.IsUnderstaffed()).Sum(x => -x.RelativeDifference) > 0;
-						if (!totalUnderstaffingPercentIsPositive)
+								.Any(x => x.AbsoluteDifference.IsUnderstaffed());
+						if (!understaffedSubSkillsExists)
 						{
-
 							var remainingResourcesToShovel = Math.Min(shovelResourcesState.RemainingOverstaffing, maxToMoveForThisSkillGroup);
 							foreach (var skillToMoveTo in subSkillsWithSameIndex)
 							{
@@ -47,8 +45,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 								shovelingCallback.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroupsWithSameIndex, skillGroup, resourceToMove);
 		
 							}
+							continue;
 						}
-						/////////////////////////////////////////
 					}
 					IEnumerable<ISkill> affectedSkills = subSkillsWithSameIndex;
 					while (true)
