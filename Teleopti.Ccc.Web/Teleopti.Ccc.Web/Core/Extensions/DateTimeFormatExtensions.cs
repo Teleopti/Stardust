@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
+namespace Teleopti.Ccc.Web.Core.Extensions
 {
-	public static class DateAndTimeFormatExtensions
+	public static class DateTimeFormatExtensions
 	{
 		public const string FixedDateFormat = "yyyy-MM-dd";
 		public const string FixedDateTimeFormat = "yyyy-MM-dd HH:mm";
@@ -11,45 +11,24 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public const string FixedTimeFormat = "HH:mm";
 
 		// see http://momentjs.com/docs/
-		public static string FixedDateFormatForMoment = ToMomentFormat(FixedDateFormat);
-		public static string FixedDateTimeFormatForMoment = ToMomentFormat(FixedDateTimeFormat);
-		public static string FixedDateTimeWithSecondsFormatForMoment = ToMomentFormat(FixedDateTimeWithSecondsFormat);
-		public static string FixedTimeFormatForMoment = ToMomentFormat(FixedTimeFormat);
+		public static string FixedDateFormatForMoment = convertToMomentJsFormat(FixedDateFormat);
+		public static string FixedDateTimeFormatForMoment = convertToMomentJsFormat(FixedDateTimeFormat);
+		public static string FixedDateTimeWithSecondsFormatForMoment = convertToMomentJsFormat(FixedDateTimeWithSecondsFormat);
+		public static string FixedTimeFormatForMoment = convertToMomentJsFormat(FixedTimeFormat);
 
-		public static string DateFormat()
-		{
-			return CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
-		}
+		public static string LocalizedDateFormat => CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
+		public static string LocalizedTimeFormat => CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
+		public static string LocalizedDateTimeFormat => $"{LocalizedDateFormat} {LocalizedTimeFormat}";
+		public static DayOfWeek FirstDayOfWeek => CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
 
-		public static string DateTimeFormat()
-		{
-			return DateFormat() + " " + TimeFormat();
-		}
-
-		public static string TimeFormat()
-		{
-			return CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
-		}
-
-		public static string DateFormatForMoment()
-		{
-			return ToMomentFormat(DateFormat());
-		}
-
-		public static string DateTimeFormatForMoment()
-		{
-			return ToMomentFormat(DateTimeFormat());
-		}
-
-		public static string TimeFormatForMoment()
-		{
-			return ToMomentFormat(TimeFormat());
-		}
+		public static string LocalizedDateFormatForMoment => convertToMomentJsFormat(LocalizedDateFormat);
+		public static string LocalizedDateTimeFormatForMoment => convertToMomentJsFormat(LocalizedDateTimeFormat);
+		public static string LocalizedTimeFormatForMoment => convertToMomentJsFormat(LocalizedTimeFormat);
 
 		// http://msdn.microsoft.com/en-us/library/8kb3ddd4.aspx to
 		// http://momentjs.com/docs/ "formatting tokens" / LDML
 		// https://docs.google.com/spreadsheet/ccc?key=0AtgZluze7WMJdDBOLUZfSFIzenIwOHNjaWZoeGFqbWc&hl=en_US#gid=0
-		private static string ToMomentFormat(string format)
+		private static string convertToMomentJsFormat(string format)
 		{
 			format = format.Replace("dddd", "dddd");
 			format = format.Replace("ddd", "ddd");
@@ -86,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			return format;
 		}
 
+		#region Extension methods for DateTime
 		public static string ToFixedDateTimeFormat(this DateTime instance)
 		{
 			return instance.ToString(FixedDateTimeFormat);
@@ -95,5 +75,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			return instance.ToString(FixedDateFormat);
 		}
+
+		public static string ToLocalizedDateFormat(this DateTime instance)
+		{
+			return instance.ToString(LocalizedDateFormat);
+		}
+
+		public static string ToLocalizedDateTimeFormat(this DateTime instance)
+		{
+			return instance.ToString(LocalizedDateTimeFormat);
+		}
+
+		public static string ToLocalizedTimeFormat(this DateTime instance)
+		{
+			return instance.ToString(LocalizedTimeFormat);
+		}
+		#endregion
 	}
 }

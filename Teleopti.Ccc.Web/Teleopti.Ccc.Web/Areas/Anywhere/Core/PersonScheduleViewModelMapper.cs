@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
@@ -71,34 +72,33 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		}
 
 		private DefaultIntradayAbsenceViewModel map(IList<SimpleLayer> s)
+		{
+			return new DefaultIntradayAbsenceViewModel
 			{
-				return new DefaultIntradayAbsenceViewModel
-				{
-					StartTime = startTime(s),
-					EndTime = endTime(s)
-				};
-			}
-
-			private PersonScheduleViewModelPersonAbsence map(PersonScheduleData personScheduleData, IPersonAbsence personAbsence)
-			{
-				var destinationTimeZone = _userTimeZone.TimeZone();
-				return new PersonScheduleViewModelPersonAbsence
-				{
-					Id = personAbsence.Id.GetValueOrDefault().ToString(),
-					StartTime =
-						TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Layer.Period.StartDateTime, destinationTimeZone)
-							.ToFixedDateTimeFormat(),
-					EndTime =
-						TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Layer.Period.EndDateTime, destinationTimeZone)
-							.ToFixedDateTimeFormat(),
-					Name = personAbsence.Layer.Payload.Confidential && !personScheduleData.HasViewConfidentialPermission
-						? ConfidentialPayloadValues.Description.Name
-						: personAbsence.Layer.Payload.Description.Name,
-					Color = personAbsence.Layer.Payload.Confidential && !personScheduleData.HasViewConfidentialPermission
-						? ConfidentialPayloadValues.DisplayColorHex
-						: personAbsence.Layer.Payload.DisplayColor.ToHtml()
-				};
-			}
+				StartTime = startTime(s),
+				EndTime = endTime(s)
+			};
 		}
 
+		private PersonScheduleViewModelPersonAbsence map(PersonScheduleData personScheduleData, IPersonAbsence personAbsence)
+		{
+			var destinationTimeZone = _userTimeZone.TimeZone();
+			return new PersonScheduleViewModelPersonAbsence
+			{
+				Id = personAbsence.Id.GetValueOrDefault().ToString(),
+				StartTime =
+					TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Layer.Period.StartDateTime, destinationTimeZone)
+						.ToFixedDateTimeFormat(),
+				EndTime =
+					TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Layer.Period.EndDateTime, destinationTimeZone)
+						.ToFixedDateTimeFormat(),
+				Name = personAbsence.Layer.Payload.Confidential && !personScheduleData.HasViewConfidentialPermission
+					? ConfidentialPayloadValues.Description.Name
+					: personAbsence.Layer.Payload.Description.Name,
+				Color = personAbsence.Layer.Payload.Confidential && !personScheduleData.HasViewConfidentialPermission
+					? ConfidentialPayloadValues.DisplayColorHex
+					: personAbsence.Layer.Payload.DisplayColor.ToHtml()
+			};
+		}
 	}
+}

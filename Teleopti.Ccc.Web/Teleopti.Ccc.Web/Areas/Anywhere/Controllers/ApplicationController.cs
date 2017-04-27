@@ -13,11 +13,9 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Ccc.Web.Core.Startup;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
@@ -165,21 +163,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				UserTexts.Resources.NoHierarchiesExist,
 				UserTexts.Resources.TryOutTheNewImprovedTeams,
 
-				DateAndTimeFormatExtensions.FixedDateFormat,
-				DateAndTimeFormatExtensions.FixedDateTimeFormat,
-				DateAndTimeFormatExtensions.FixedTimeFormat,
-				DateAndTimeFormatExtensions.FixedDateFormatForMoment,
-				DateAndTimeFormatExtensions.FixedDateTimeFormatForMoment,
-				DateAndTimeFormatExtensions.FixedDateTimeWithSecondsFormatForMoment,
-				DateAndTimeFormatExtensions.FixedTimeFormatForMoment,
+				DateTimeFormatExtensions.FixedDateFormat,
+				DateTimeFormatExtensions.FixedDateTimeFormat,
+				DateTimeFormatExtensions.FixedTimeFormat,
+				DateTimeFormatExtensions.FixedDateFormatForMoment,
+				DateTimeFormatExtensions.FixedDateTimeFormatForMoment,
+				DateTimeFormatExtensions.FixedDateTimeWithSecondsFormatForMoment,
+				DateTimeFormatExtensions.FixedTimeFormatForMoment,
 
-				DateFormat = DateAndTimeFormatExtensions.DateFormat(),
-				DateTimeFormat = DateAndTimeFormatExtensions.DateTimeFormat(),
-				TimeFormat = DateAndTimeFormatExtensions.TimeFormat(),
+				DateFormat = DateTimeFormatExtensions.LocalizedDateFormat,
+				DateTimeFormat = DateTimeFormatExtensions.LocalizedDateTimeFormat,
+				TimeFormat = DateTimeFormatExtensions.LocalizedTimeFormat,
 
-				DateFormatForMoment = DateAndTimeFormatExtensions.DateFormatForMoment(),
-				DateTimeFormatForMoment = DateAndTimeFormatExtensions.DateTimeFormatForMoment(),
-				TimeFormatForMoment = DateAndTimeFormatExtensions.TimeFormatForMoment(),
+				DateFormatForMoment = DateTimeFormatExtensions.LocalizedDateFormatForMoment,
+				DateTimeFormatForMoment = DateTimeFormatExtensions.LocalizedDateTimeFormatForMoment,
+				TimeFormatForMoment = DateTimeFormatExtensions.LocalizedTimeFormatForMoment,
 
 				TimeZoneOffsetMinutes = _userTimeZone.TimeZone().GetUtcOffset(_now.UtcDateTime()).TotalMinutes,
 
@@ -188,7 +186,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
 				
 				WfmTeamSchedule_MoveToBaseLicense_41039 = _toggles.IsEnabled(Toggles.WfmTeamSchedule_MoveToBaseLicense_41039)
-
 			}, Formatting.Indented);
 
 			template = string.Format(template, userTexts);

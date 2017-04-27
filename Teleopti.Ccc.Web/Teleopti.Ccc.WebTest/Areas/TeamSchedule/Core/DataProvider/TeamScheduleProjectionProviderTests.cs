@@ -19,6 +19,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
+using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
