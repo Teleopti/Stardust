@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldTryToMakeSubSkillHaveSameRelativeDifferenceAfterShoveling_SkillsDiffrerentDiffAtStart([Values(2, 100)] double skillB2Demand, [Values(true, false)] bool primarySkillOpened)
+		public void ShouldTryToMakeSubSkillHaveSameRelativeDifferenceAfterShoveling_SkillsDiffrerentDiffAtStart([Values(true, false)] bool primarySkillOpened)
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -68,9 +68,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			}
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
-			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 2);
+			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 8);
 			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
-			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, skillB2Demand);
+			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 7);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2);
 			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 			var singleSkilledAgent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB1);
@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("44091")]
 		public void ShouldNotRemoveSingleSkilledAgentWhenShovling()
 		{
 			var scenario = new Scenario("_");

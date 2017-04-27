@@ -75,6 +75,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 											totalResurces -
 											shovelResourceDataForInterval.CalculatedResource) / (totalFStaff / shovelResourceDataForInterval.FStaff);
 
+			if (proportionalResourcesToMove < 0)
+				return null;
+
 			return Math.Min(Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove), remainingResourcesToShovel);
 		}
 	}
