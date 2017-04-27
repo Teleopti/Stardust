@@ -273,7 +273,7 @@
     <Compile Include="Areas\MultiTenancy\PersonInfoControllerTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromGuidsTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromIdentitiesTest.cs" />
-    <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerPossibiliesTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\SiteProviderTest.cs" />

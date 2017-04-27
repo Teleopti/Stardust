@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			}
 
 			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData);
-			weekScheduleViewModel.Possibilities = getPossibilities(date, staffingPossiblityType);
 			return weekScheduleViewModel;
 		}
 		
@@ -71,7 +70,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			}
 
 			var dayScheduleViewModel = _scheduleViewModelMapper.Map(dayDomainData);
-			dayScheduleViewModel.Possibilities = getPossibilities(date, staffingPossiblityType);
 
 			return dayScheduleViewModel;
 		}
@@ -117,14 +115,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return minTime == scheduleMinMaxTime.StartTime && maxTime == scheduleMinMaxTime.EndTime
 				? scheduleMinMaxTime
 				: new TimePeriod(minTime, maxTime);
-		}
-
-		private IEnumerable<PeriodStaffingPossibilityViewModel> getPossibilities(DateOnly date,
-			StaffingPossiblityType staffingPossiblityType)
-		{
-			return staffingPossiblityType != StaffingPossiblityType.None
-				? _staffingPossibilityViewModelFactory.CreatePeriodStaffingPossibilityViewModels(date, staffingPossiblityType)
-				: new PeriodStaffingPossibilityViewModel[] { };
 		}
 
 		private TimePeriod? getIntradaySiteOpenHourPeriod()

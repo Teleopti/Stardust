@@ -887,14 +887,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
 		}
 
-
-		[Test]
-		public void ShouldNotGetPossibilitiesWhenNotShowingIntradaySchedule()
-		{
-			var result = Target.FetchWeekData(Now.LocalDateOnly().AddDays(10), StaffingPossiblityType.Absence);
-			Assert.AreEqual(0, result.Possibilities.Count());
-		}
-
 		[Test]
 		public void ShouldReportNoNoteWhenNull()
 		{
@@ -1885,14 +1877,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
-		}
-
-		[Test]
-		public void ShouldNotGetPossibilitiesWhenNotShowingIntradayScheduleOnFetchDayData()
-		{
-			var date = new DateOnly(2014, 12, 18);
-			var result = Target.FetchDayData(date.AddDays(10), StaffingPossiblityType.Absence);
-			Assert.AreEqual(0, result.Possibilities.Count());
 		}
 		#endregion
 	}

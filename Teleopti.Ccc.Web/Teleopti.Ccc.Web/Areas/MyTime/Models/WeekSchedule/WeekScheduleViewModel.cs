@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public DaylightSavingsTimeAdjustmentViewModel DaylightSavingTimeAdjustment { get; set; }
 		public double BaseUtcOffsetInMinutes { get; set; }
 		public bool CheckStaffingByIntraday { get; set; }
-		public IEnumerable<PeriodStaffingPossibilityViewModel> Possibilities { get; set; }
 		public TimePeriod? SiteOpenHourIntradayPeriod { get; set; }
 	}
 
