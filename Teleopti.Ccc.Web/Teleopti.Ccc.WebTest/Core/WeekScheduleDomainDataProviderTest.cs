@@ -8,7 +8,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -58,8 +57,7 @@ namespace Teleopti.Ccc.WebTest.Core
 					new FuncTimeZone(() => timeZone),
 					permissionProvider,
 					now,
-					probabilityProvider,
-					new FakeUserCulture(CultureInfo.CurrentCulture));
+					probabilityProvider);
 		}
 
 		#region Test cases for GetWeekSchedule()

@@ -16,21 +16,19 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 {
 	public class WeekScheduleViewModelMapper
 	{
-		private const string commonShortDateFormat = "yyyy-MM-dd";
-
 		private readonly IPeriodSelectionViewModelFactory _periodSelectionViewModelFactory;
 		private readonly IPeriodViewModelFactory _periodViewModelFactory;
 		private readonly IHeaderViewModelFactory _headerViewModelFactory;
 		private readonly IScheduleColorProvider _scheduleColorProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly INow _now;
-		private readonly IUserCulture _culture;
 		private readonly CommonViewModelMapper _commonMapper;
 		private readonly OvertimeAvailabilityViewModelMapper _overtimeMapper;
 
@@ -39,7 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			IHeaderViewModelFactory headerViewModelFactory,
 			IScheduleColorProvider scheduleColorProvider,
 			ILoggedOnUser loggedOnUser, INow now,
-			IUserCulture culture,
 			CommonViewModelMapper commonMapper,
 			OvertimeAvailabilityViewModelMapper overtimeMapper)
 		{
@@ -49,7 +46,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_scheduleColorProvider = scheduleColorProvider;
 			_loggedOnUser = loggedOnUser;
 			_now = now;
-			_culture = culture;
 			_commonMapper = commonMapper;
 			_overtimeMapper = overtimeMapper;
 		}
@@ -64,25 +60,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			var daylightModel = daylightSavingAdjustment != null
 				? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment)
 				: null;
-			var cultureInfo = _culture.GetCulture();
+			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(s.Date, DateTimeFormatExtensions.FirstDayOfWeek);
 			return new WeekScheduleViewModel
 			{
 				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
 				DaylightSavingTimeAdjustment = daylightModel,
-				CurrentWeekStartDate =
-					DateHelper.GetFirstDateInWeek(s.Date, cultureInfo.DateTimeFormat.FirstDayOfWeek)
-						.Date.ToString(commonShortDateFormat),
-				CurrentWeekEndDate =
-					DateHelper.GetFirstDateInWeek(s.Date, cultureInfo.DateTimeFormat.FirstDayOfWeek)
-						.AddDays(6)
-						.Date.ToString(commonShortDateFormat),
+				CurrentWeekStartDate = firstDayOfWeek.ToFixedClientDateOnlyFormat(),
+				CurrentWeekEndDate = firstDayOfWeek.AddDays(6).ToFixedClientDateOnlyFormat(),
 				PeriodSelection = _periodSelectionViewModelFactory.CreateModel(s.Date),
 				Styles = s.Days == null ? null : map(_scheduleColorProvider.GetColors(s.ColorSource)),
 				TimeLineCulture = currentUser.PermissionInformation.Culture().ToString(),
 				TimeLine = createTimeLine(s.MinMaxTime).ToArray(),
 				RequestPermission = map(s),
 				ViewPossibilityPermission = s.ViewPossibilityPermission,
-				DatePickerFormat = cultureInfo.DateTimeFormat.ShortDatePattern,
+				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
 				Days = days(s),
 				AsmPermission = s.AsmPermission,
 				IsCurrentWeek = s.IsCurrentWeek,
@@ -101,18 +92,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			var daylightModel = daylightSavingAdjustment != null
 				? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment)
 				: null;
-			var cultureInfo = _culture.GetCulture();
 			return new DayScheduleViewModel
 			{
-				Date = s.Date.Date.ToString(commonShortDateFormat),
-				DisplayDate = s.Date.Date.ToString(_culture.GetCulture().DateTimeFormat.ShortDatePattern),
+				Date = s.Date.ToFixedClientDateOnlyFormat(),
+				DisplayDate = s.Date.Date.ToLocalizedDateFormat(),
 				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
 				DaylightSavingTimeAdjustment = daylightModel,
 				TimeLineCulture = currentUser.PermissionInformation.Culture().ToString(),
 				TimeLine = createTimeLine(s.MinMaxTime).ToArray(),
 				RequestPermission = map(s),
 				ViewPossibilityPermission = s.ViewPossibilityPermission,
-				DatePickerFormat = cultureInfo.DateTimeFormat.ShortDatePattern,
+				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
 				Schedule = createDayViewModel(s.ScheduleDay),
 				AsmPermission = s.AsmPermission,
 				IsToday = s.IsCurrentDay,
@@ -212,14 +202,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.Distinct();
 
 			var diff = endTime - startTime;
-			var cultureInfo = _culture.GetCulture();
-			return from t in times
-				   select new TimeLineViewModel
-				   {
-					   Time = t,
-					   TimeLineDisplay = new DateTime().Add(t).ToString(cultureInfo.DateTimeFormat.ShortTimePattern),
-					   PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(t - startTime).Ticks / diff.Ticks
-				   };
+			return times.Select(t => new TimeLineViewModel
+			{
+				Time = t,
+				TimeLineDisplay = new DateTime().Add(t).ToLocalizedTimeFormat(),
+				PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal) (t - startTime).Ticks / diff.Ticks
+			});
 		}
 
 		private IEnumerable<PeriodViewModel> projections(WeekScheduleDayDomainData s)

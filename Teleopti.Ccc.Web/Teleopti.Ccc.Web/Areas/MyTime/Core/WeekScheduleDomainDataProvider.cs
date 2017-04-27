@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
+using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core
@@ -26,7 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly INow _now;
 		private readonly IAbsenceRequestProbabilityProvider _absenceRequestProbabilityProvider;
-		private readonly IUserCulture _culture;
 
 		public WeekScheduleDomainDataProvider(IScheduleProvider scheduleProvider,
 			IProjectionProvider projectionProvider,
@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			IUserTimeZone userTimeZone,
 			IPermissionProvider permissionProvider,
 			INow now,
-			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider,
-			IUserCulture culture)
+			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			_permissionProvider = permissionProvider;
 			_now = now;
 			_absenceRequestProbabilityProvider = absenceRequestProbabilityProvider;
-			_culture = culture;
 		}
 
 		internal class ScheduleDaysAndProjection
@@ -80,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 
 		public WeekScheduleDomainData GetWeekSchedule(DateOnly date)
 		{
-			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(date, _culture.GetCulture().DateTimeFormat.FirstDayOfWeek);
+			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(date, DateTimeFormatExtensions.FirstDayOfWeek);
 			var week = new DateOnlyPeriod(firstDayOfWeek, firstDayOfWeek.AddDays(6));
 			return getScheduleDomainData(date, week);
 		}
