@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var person = currentSchedulePeriod.Person;
 			var categorizedShifts =
 				shiftProjectionCaches.ToLookup(
-					s => new Tuple<TimeSpan, TimeSpan, Guid[]>(s.WorkShiftStartTime, s.WorkShiftEndTime, s.TheWorkShift.Activities));
+					s => new Tuple<TimeSpan, TimeSpan, GuidCombinationKey>(s.WorkShiftStartTime, s.WorkShiftEndTime, new GuidCombinationKey(s.TheWorkShift.Activities)));
 			IList<IWorkShiftCalculationResultHolder> allValues = _workShiftCalculatorsManager.RunCalculators(person,
 				categorizedShifts.Select(s => s.First()).ToArray(),
 				dataHolders,
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					.OfType<IWorkShiftCalculationResultHolder>()
 					.ToArray();
 
-			var projectionCacheForChosenCategories = foundValues.SelectMany(s => categorizedShifts[new Tuple<TimeSpan, TimeSpan, Guid[]>(s.ShiftProjection.WorkShiftStartTime, s.ShiftProjection.WorkShiftEndTime, s.ShiftProjection.TheWorkShift.Activities)]);
+			var projectionCacheForChosenCategories = foundValues.SelectMany(s => categorizedShifts[new Tuple<TimeSpan, TimeSpan, GuidCombinationKey>(s.ShiftProjection.WorkShiftStartTime, s.ShiftProjection.WorkShiftEndTime, new GuidCombinationKey(s.ShiftProjection.TheWorkShift.Activities))]);
 			allValues = _workShiftCalculatorsManager.RunCalculators(person,
 				projectionCacheForChosenCategories.ToArray(),
 				dataHolders,

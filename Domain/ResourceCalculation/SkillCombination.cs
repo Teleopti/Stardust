@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public bool HasSkill(Guid skill)
 		{
-			return Key.IndexOf(skill) > -1;
+			return Array.IndexOf(Key, skill) > -1;
 		}
 
 		public DoubleGuidCombinationKey MergedKey()

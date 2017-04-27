@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	        if (layer.Payload.RequiresSkill)
 	        {
 		        var activityId = layer.Payload.Id.GetValueOrDefault();
-		        if (Activities.IndexOf(activityId) == -1)
+		        if (Array.IndexOf(Activities,activityId) == -1)
 		        {
 			        Activities = Activities.Append(activityId).ToArray();
 		        }
