@@ -106,6 +106,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			PersonRepository.LoadAll().Should().Be.Empty();
 		}
 
+
+		[Test]
+		public void ShouldRemovePersistedPersonAndTenantAfterRollback()
+		{
+			var agentData = getAgentDataModel();
+			var holder = new AgentExtractionResult { Agent = agentData };
+			Target.Persist(new List<AgentExtractionResult> { holder }, TimeZoneInfo.Utc);
+			PersonRepository.LoadAll().Count.Should().Be(1);
+			Target.RollbackAllPersisted();
+
+			PersonRepository.LoadAll().Should().Be.Empty();
+			TenantUserRepository.RollBacked.Should().Be.True();
+
+		}
+
 		private AgentDataModel getAgentDataModel()
 		{
 			CurrentDatasource.FakeName("test");

@@ -63,7 +63,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		{
 			foreach (var person in _persistedPersons)
 			{
+				person.RemoveAllPersonPeriods();
+				person.RemoveAllSchedulePeriods();
 				_personRepository.HardRemove(person);
+				
 			}
 			_tenantUserPersister.RollbackAllPersistedTenantUsers();
 		}
