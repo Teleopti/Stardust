@@ -18,17 +18,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 				{
 					foreach (var subSkillsWithSameIndex in skillGroup.SubSkillsWithSameIndex)
 					{
-						IEnumerable<ISkill> affectedSkills = subSkillsWithSameIndex;
-						while (true)
-						{
-							var countBefore = affectedSkills.Count();
-							affectedSkills = mightShovelToSubSkills(shovelResourcesState, shovelResourceData, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, affectedSkills, maxToMoveForThisSkillGroup, false);
-							if (affectedSkills.Count() == countBefore)
-								break;
-						}
+						var affectedSkills = findSkillsToShovelTo(shovelResourcesState, shovelResourceData, skillGroupsWithSameIndex, interval, shovelingCallback, subSkillsWithSameIndex, skillGroup, maxToMoveForThisSkillGroup);
 						if (affectedSkills.Any())
 						{
-							mightShovelToSubSkills(shovelResourcesState, shovelResourceData, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, affectedSkills, maxToMoveForThisSkillGroup, true);
+							shovelToSubSkills(shovelResourcesState, shovelResourceData, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, affectedSkills, maxToMoveForThisSkillGroup, doActualShoveling);
 						}
 						else
 						{
@@ -48,12 +41,31 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 		}
 
-		private static IEnumerable<ISkill> mightShovelToSubSkills(ShovelResourcesState shovelResourcesState,
+		private static ICollection<ISkill> findSkillsToShovelTo(ShovelResourcesState shovelResourcesState,
+			IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval,
+			IShovelingCallback shovelingCallback, SubSkillsWithSameIndex subSkillsWithSameIndex, CascadingSkillGroup skillGroup,
+			double maxToMoveForThisSkillGroup)
+		{
+			ICollection<ISkill> affectedSkills = subSkillsWithSameIndex.ToList();
+			while (true)
+			{
+				var countBefore = affectedSkills.Count;
+				var newAffectedSkills = new List<ISkill>();
+				shovelToSubSkills(shovelResourcesState, shovelResourceData, skillGroup, interval, skillGroupsWithSameIndex,
+					shovelingCallback, affectedSkills, maxToMoveForThisSkillGroup, (arg1, arg2, arg3, arg4, arg5, arg6, arg7, skill) => newAffectedSkills.Add(skill));
+				affectedSkills = newAffectedSkills;
+				if (newAffectedSkills.Count == countBefore)
+					break;
+			}
+			return affectedSkills;
+		}
+
+		private static void shovelToSubSkills(ShovelResourcesState shovelResourcesState,
 			IShovelResourceData shovelResourceData, CascadingSkillGroup skillGroup, DateTimePeriod interval,
 			IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, IShovelingCallback shovelingCallback,
-			IEnumerable<ISkill> subSkillsWithSameIndex, double maxToMoveForThisSkillGroup, bool doActualMove)
+			IEnumerable<ISkill> subSkillsWithSameIndex, double maxToMoveForThisSkillGroup, 
+			Action<ShovelResourcesState, CascadingSkillGroup, DateTimePeriod , IEnumerable<CascadingSkillGroup>, IShovelingCallback, IShovelResourceDataForInterval, double, ISkill> shovelAction)
 		{
-			var affectedSkills = new List<ISkill>();
 			var shovelResourcesDataForIntervalForUnderstaffedSkills = subSkillsWithSameIndex
 				.Select(paralellSkill => shovelResourceData.GetDataForInterval(paralellSkill, interval))
 				.Where(x => x.AbsoluteDifference.IsUnderstaffed());
@@ -76,13 +88,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 					continue;
 
 				var resourceToMove = Math.Min(Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove), remainingResourcesToShovel);
-				if (doActualMove)
-				{
-					doActualShoveling(shovelResourcesState, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, dataForIntervalTo, resourceToMove, skillToMoveTo);
-				}
-				affectedSkills.Add(skillToMoveTo);
+				shovelAction(shovelResourcesState, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, dataForIntervalTo, resourceToMove, skillToMoveTo);
 			}
-			return affectedSkills;
 		}
 
 		private static void doActualShoveling(ShovelResourcesState shovelResourcesState, CascadingSkillGroup skillGroup,
