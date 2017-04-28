@@ -57,8 +57,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			RemainingOverstaffing -= value;
 			ResourcesMoved += value;
 			skillGroup.RemainingResources -= value;
-			double currentValue;
-			if (_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out currentValue))
+			if (_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out double currentValue))
 			{
 				_resourcesMovedOnSkillGroup[skillGroup] = value + currentValue;
 			}
