@@ -407,15 +407,15 @@ background-color: #cacaca;
 	
 	.result-container .legends {
 		padding: 10px;
-		border-bottom: 1px solid gray;
-		border-top: 1px solid gray;
+		border-bottom: 1px solid $gray026 ;
+		border-top: 1px solid $gray026 ;
 	}
 	
 	.pp-validation {
 		position: absolute;
 		top: 11px;
 		z-index: 3;
-		background-color: #ee8f7d;
+		background-color: $orange-400 ;
 		color: #FFF;
 		right: 6px;
 		padding: 4px 0;
@@ -431,19 +431,19 @@ background-color: #cacaca;
 	}
 	
 	.pp-scheduled {
-		background-color: #c2e085 !important;
+		background-color: $green-100  !important;
 	}
 
 	.pp-scheduled-failed {
-		background-color: #ffc285 !important;
+		background-color: $orange-400  !important;
 	}
 
 	.pp-scheduled-label {
-		color: #c2e085 !important;
+		color: $green-100  !important;
 	}
 
 	.pp-scheduled-failed-label {
-		color: #ffc285 !important;
+		color: $orange-400  !important;
 	}
 	
 	.pp-color-label {
@@ -454,7 +454,7 @@ background-color: #cacaca;
 	
 	.pp-status {
 		padding: 6px;
-		background-color: #FFA726;
+		background-color: $orange-500 ;
 		border-radius: 3px;
 	}
 

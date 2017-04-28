@@ -1,5 +1,5 @@
 'use strict';
-describe('agentGroupFormController', function () {
+xdescribe('agentGroupFormController', function () {
 	var $httpBackend,
 		$controller,
 		fakeBackend;
