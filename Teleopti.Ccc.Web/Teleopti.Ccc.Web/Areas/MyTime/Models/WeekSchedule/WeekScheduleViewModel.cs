@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 	{
 		public RequestPermission RequestPermission { get; set; }
 		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
-		public string TimeLineCulture { get; set; }
 		public bool AsmPermission { get; set; }
 		public bool ViewPossibilityPermission { get; set; }
 		public string DatePickerFormat { get; set; }

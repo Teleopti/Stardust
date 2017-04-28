@@ -720,13 +720,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5 / (17.5 - 8.5));
 		}
 
-		[Test, SetCulture("sv-SE")]
-		public void ShouldMapTimeLineCulture()
-		{
-			var result = Target.FetchWeekData(null);
-			result.TimeLineCulture.Should().Be.EqualTo("sv-SE");
-		}
-
 		[Test]
 		public void ShouldMapAsmPermission()
 		{
@@ -1725,14 +1718,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.ElementAt(1).Time.Hours.Should().Be.EqualTo(9);
 			result.TimeLine.ElementAt(1).Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5 / (17.5 - 8.5));
-		}
-
-		[Test, SetCulture("sv-SE")]
-		public void ShouldMapTimeLineCultureOnFetchDayData()
-		{
-			var date = new DateOnly(2014, 12, 18);
-			var result = Target.FetchDayData(date);
-			result.TimeLineCulture.Should().Be.EqualTo("sv-SE");
 		}
 
 		[Test]

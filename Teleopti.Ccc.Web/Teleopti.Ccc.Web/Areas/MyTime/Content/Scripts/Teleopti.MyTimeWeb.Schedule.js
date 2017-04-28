@@ -126,7 +126,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}, 1000);
 	};
 
-	var TimelineViewModel = function (timeline, timelineCulture) {
+	var TimelineViewModel = function (timeline) {
 		var self = this;
 		self.positionPercentage = ko.observable(timeline.PositionPercentage);
 		var hourMinuteSecond = timeline.Time.split(":");
@@ -541,7 +541,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			: null;
 
 		var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
-			return new TimelineViewModel(item, data.TimeLineCulture);
+			return new TimelineViewModel(item);
 		});
 		self.timeLines(timelines);
 

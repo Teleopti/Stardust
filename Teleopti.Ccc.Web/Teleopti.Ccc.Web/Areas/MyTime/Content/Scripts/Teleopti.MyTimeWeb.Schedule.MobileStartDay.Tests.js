@@ -134,7 +134,6 @@
                         }, {
                              "Time": "16:15:00", "TimeLineDisplay": "16:15", "PositionPercentage": 1.0, "TimeFixedFormat": null
                         }],
-                        "TimeLineCulture": "en-GB",
                         "AsmPermission": true,
                         "ViewPossibilityPermission": false,
                         "DatePickerFormat": "dd/MM/yyyy",
