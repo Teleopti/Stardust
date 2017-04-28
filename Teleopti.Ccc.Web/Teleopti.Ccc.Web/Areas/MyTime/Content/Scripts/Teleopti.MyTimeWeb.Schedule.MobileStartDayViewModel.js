@@ -55,7 +55,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
         });
         self.layers(layers);
 
-        if (data.Schedule.Periods.length > 0) setTimelineHeight(data.Schedule.Periods[data.Schedule.Periods.length - 1]);
+        if (data.Schedule.Periods != null && data.Schedule.Periods.length > 0) setTimelineHeight(data.Schedule.Periods[data.Schedule.Periods.length - 1]);
     };
 
     self.setCurrentDate = function (date) {
