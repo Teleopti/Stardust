@@ -222,7 +222,7 @@
 													<td>{{'ESL'|translate}}</td>
 													<td class="number-cell esl">{{viewObj.summary.summaryEstimatedServiceLevel}} %</td>
 												</tr>
-												<tr>
+												<tr ng-if="!viewObj.hasEmailSkill">
 													<td>{{'AbandonedRate'|translate}}</td>
 													<td class="number-cell abandoned-rate">{{viewObj.summary.summaryAbandonedRate}} %</td>
 												</tr>

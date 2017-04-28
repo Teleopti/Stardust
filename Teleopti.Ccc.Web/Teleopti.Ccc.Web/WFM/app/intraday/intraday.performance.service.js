@@ -31,6 +31,7 @@
 
 			var hiddenArray = [];
 			var intervalStart;
+			var mixedArea;
 			service.setPerformanceData = function (result, showEsl) {
 				clearData();
 
@@ -61,6 +62,13 @@
 
 				if (showEsl)
 					performanceData.summary.summaryEstimatedServiceLevel = $filter('number')(result.Summary.EstimatedServiceLevel, 1);
+
+				if (mixedArea){
+					performanceData.abandonedRateObj.series = [];
+					performanceData.hasEmailSkill= true;
+				}else{
+					performanceData.hasEmailSkill= null;
+				}
 
 				angular.forEach(result.DataSeries.Time, function (value, key) {
 					this.push($filter('date')(value, 'shortTime'));
@@ -117,6 +125,12 @@
 
 				service.pollSkillAreaData = function (selectedItem, toggles) {
 					performanceData.waitingForData = true;
+
+					function findEmail(area) {
+					    return area.SkillType === 'SkillTypeEmail';
+					}
+					mixedArea = selectedItem.Skills.find(findEmail);
+
 					intradayService.getSkillAreaMonitorPerformance.query(
 						{
 							id: selectedItem.Id
