@@ -12,13 +12,13 @@
         vm.cards = [];
         $stateParams.open = ($stateParams.open || "false")
 
-		vm.ooaTooltipTime = function(time) {
-			if (time == null)
-				return '';
-			return time.format('HH:mm:ss');
-		};
+        vm.ooaTooltipTime = function (time) {
+            if (time == null)
+                return '';
+            return time.format('HH:mm:ss');
+        };
         rtaService.getAgentHistoricalData(id)
-			.then(function(data) {
+            .then(function (data) {
 
                 data.Schedules = data.Schedules || [];
                 data.OutOfAdherences = data.OutOfAdherences || [];
@@ -45,24 +45,24 @@
             });
 
         function buildAgentOutOfAdherences(data, shiftInfo) {
-			return data.OutOfAdherences.map(function (ooa) {
-				var startTime = moment(ooa.StartTime);
-				var startTimeFormatted = shiftInfo.timeWindowStart > startTime ?
-					startTime.format('YYYY-MM-DD HH:mm:ss') :
-					startTime.format('HH:mm:ss');
-				var endTime = ooa.EndTime != null ? ooa.EndTime : data.Now;
-				var endTimeFormatted = ooa.EndTime != null ? moment(ooa.EndTime).format('HH:mm:ss') : '';
+            return data.OutOfAdherences.map(function (ooa) {
+                var startTime = moment(ooa.StartTime);
+                var startTimeFormatted = shiftInfo.timeWindowStart > startTime ?
+                    startTime.format('YYYY-MM-DD HH:mm:ss') :
+                    startTime.format('HH:mm:ss');
+                var endTime = ooa.EndTime != null ? ooa.EndTime : data.Now;
+                var endTimeFormatted = ooa.EndTime != null ? moment(ooa.EndTime).format('HH:mm:ss') : '';
                 return {
-					Width: calculateWidth(startTime, endTime, shiftInfo.timeWindowSeconds),
-					Offset: calculateWidth(shiftInfo.timeWindowStart, startTime, shiftInfo.timeWindowSeconds),
-					StartTime: startTimeFormatted,
-					EndTime: endTimeFormatted
+                    Width: calculateWidth(startTime, endTime, shiftInfo.timeWindowSeconds),
+                    Offset: calculateWidth(shiftInfo.timeWindowStart, startTime, shiftInfo.timeWindowSeconds),
+                    StartTime: startTimeFormatted,
+                    EndTime: endTimeFormatted
                 };
             });
         }
 
         function buildAgentsFullSchedule(schedules, shiftInfo) {
-			return schedules.map(function (layer) {
+            return schedules.map(function (layer) {
                 return {
                     Width: calculateWidth(layer.StartTime, layer.EndTime, shiftInfo.timeWindowSeconds),
                     Offset: calculateWidth(shiftInfo.timeWindowStart, layer.StartTime, shiftInfo.timeWindowSeconds),
@@ -103,11 +103,11 @@
         }
 
         function buildDiamonds(shiftInfo, data) {
-			return data.Changes.map(function (change, i) {
+            return data.Changes.map(function (change, i) {
                 change.Offset = calculateWidth(shiftInfo.timeWindowStart, change.Time, shiftInfo.timeWindowSeconds);
-				change.RuleColor = !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor;
+                change.RuleColor = !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor;
                 change.Color = change.RuleColor;
-				change.click = function () {
+                change.click = function () {
                     highlightThis(change);
                 };
                 return change;
@@ -115,106 +115,106 @@
         }
 
         function highlightThis(change) {
-			vm.diamonds.forEach(function (d) {
+            vm.diamonds.forEach(function (d) {
                 d.highlight = false;
             })
             change.highlight = true;
-            change.parent.isOpen = !change.parent.isOpen;
+            change.parent.isOpen = true;
         }
 
-        function mapChanges(changes, schedules) {
-			return changes.reduce(function (arr, change) {
-                var changeTime = moment(change.Time);
-                var earliestStartTime = earliest(schedules);
-                var latestEndTime = latest(schedules);
+    function mapChanges(changes, schedules) {
+        return changes.reduce(function (arr, change) {
+            var changeTime = moment(change.Time);
+            var earliestStartTime = earliest(schedules);
+            var latestEndTime = latest(schedules);
 
-                var key;
-                var cardColor = 'black';
-                if (schedules.length === 0) {
-                    key = $translate.instant('NoShift');
+            var key;
+            var cardColor = 'black';
+            if (schedules.length === 0) {
+                key = $translate.instant('NoShift');
+            } else {
+                if (changeTime.isBefore(earliestStartTime)) {
+                    key = $translate.instant('BeforeShiftStart');
+                } else if (changeTime.isAfter(latestEndTime)) {
+                    key = $translate.instant('AfterShiftEnd');
                 } else {
-                    if (changeTime.isBefore(earliestStartTime)) {
-                        key = $translate.instant('BeforeShiftStart');
-                    } else if (changeTime.isAfter(latestEndTime)) {
-                        key = $translate.instant('AfterShiftEnd');
-                    } else {
-						var activityWhenChangeOccurred = schedules.find(function (layer) {
-                            return layer.StartTime <= change.Time && layer.EndTime > change.Time;
-                        });
-                        var activityStart = moment(activityWhenChangeOccurred.StartTime);
-                        var activityEnd = moment(activityWhenChangeOccurred.EndTime);
-                        cardColor = activityWhenChangeOccurred.Color;
-                        key = activityWhenChangeOccurred.Name + ' ' + activityStart.format('HH:mm') + ' - ' + activityEnd.format('HH:mm');
-                    }
+                    var activityWhenChangeOccurred = schedules.find(function (layer) {
+                        return layer.StartTime <= change.Time && layer.EndTime > change.Time;
+                    });
+                    var activityStart = moment(activityWhenChangeOccurred.StartTime);
+                    var activityEnd = moment(activityWhenChangeOccurred.EndTime);
+                    cardColor = activityWhenChangeOccurred.Color;
+                    key = activityWhenChangeOccurred.Name + ' ' + activityStart.format('HH:mm') + ' - ' + activityEnd.format('HH:mm');
                 }
-				var existing = arr.find(function (item) {
-                    return item.key === key;
-                });
-                if (existing == null) {
-                    existing = {
-                        key: key,
-                        Header: key,
-                        Items: [change],
-                        Color: cardColor,
-                        isOpen: $stateParams.open != "false"
-                    };
-                    arr.push(existing);
-                } else {
-                    existing.Items.push(change);
-                }
-
-                change.parent = existing;
-
-                return arr;
-            }, []);
-        }
-
-        function calculateWidth(startTime, endTime, totalSeconds) {
-            var diff = moment(endTime).diff(moment(startTime), 'seconds');
-            return (diff / totalSeconds) * 100 + '%';
-        }
-
-        function buildTimeline(times) {
-            var timeline = [];
-            var currentMoment = moment(times.StartTime);
-            var endTime = moment(times.EndTime);
-            var totalHours = endTime.diff(currentMoment, 'hours');
-            var hourPercent = 100 / totalHours;
-
-            for (var i = 1; i < totalHours; i++) {
-                currentMoment.add(1, 'hour');
-                var percent = hourPercent * i;
-                timeline.push({
-                    Offset: percent + '%',
-                    Time: currentMoment.clone()
-                });
+            }
+            var existing = arr.find(function (item) {
+                return item.key === key;
+            });
+            if (existing == null) {
+                existing = {
+                    key: key,
+                    Header: key,
+                    Items: [change],
+                    Color: cardColor,
+                    isOpen: $stateParams.open != "false"
+                };
+                arr.push(existing);
+            } else {
+                existing.Items.push(change);
             }
 
-            return timeline;
-        }
+            change.parent = existing;
 
-        function earliest(arr) {
-            return arr
-				.map(function (el) {
-                    return moment(el.StartTime);
-                })
-                .sort(sorter)[0];
-        }
-
-        function latest(arr) {
-            return arr
-				.map(function (el) {
-                    return moment(el.EndTime);
-                })
-                .sort(reverseSorter)[0];
-        }
-
-        function sorter(first, second) {
-            return first.diff(second, 'seconds');
-        }
-
-        function reverseSorter(first, second) {
-            return sorter(second, first);
-        }
+            return arr;
+        }, []);
     }
+
+    function calculateWidth(startTime, endTime, totalSeconds) {
+        var diff = moment(endTime).diff(moment(startTime), 'seconds');
+        return (diff / totalSeconds) * 100 + '%';
+    }
+
+    function buildTimeline(times) {
+        var timeline = [];
+        var currentMoment = moment(times.StartTime);
+        var endTime = moment(times.EndTime);
+        var totalHours = endTime.diff(currentMoment, 'hours');
+        var hourPercent = 100 / totalHours;
+
+        for (var i = 1; i < totalHours; i++) {
+            currentMoment.add(1, 'hour');
+            var percent = hourPercent * i;
+            timeline.push({
+                Offset: percent + '%',
+                Time: currentMoment.clone()
+            });
+        }
+
+        return timeline;
+    }
+
+    function earliest(arr) {
+        return arr
+            .map(function (el) {
+                return moment(el.StartTime);
+            })
+            .sort(sorter)[0];
+    }
+
+    function latest(arr) {
+        return arr
+            .map(function (el) {
+                return moment(el.EndTime);
+            })
+            .sort(reverseSorter)[0];
+    }
+
+    function sorter(first, second) {
+        return first.diff(second, 'seconds');
+    }
+
+    function reverseSorter(first, second) {
+        return sorter(second, first);
+    }
+}
 })();
