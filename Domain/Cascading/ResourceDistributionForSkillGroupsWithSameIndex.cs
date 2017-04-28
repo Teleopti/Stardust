@@ -27,6 +27,18 @@ namespace Teleopti.Ccc.Domain.Cascading
 				ret[skillGroup] = double.IsNaN(myFactor) ? 1 : myFactor;
 			}
 			return ret;
+
+			/* Use this block to make ShouldMoveResourceOnlyWithinSkillGroupWhenParallellSubskillsExists green. 
+			var ret = new Dictionary<CascadingSkillGroup, double>();
+			var tottiRelativeDifference = skillGroupsWithSameIndex.Sum(x => x.RemainingResources);
+			foreach (var skillGroup in skillGroupsWithSameIndex)
+			{
+				var myrelativeDifference = skillGroup.RemainingResources;
+				var myFactor = myrelativeDifference / tottiRelativeDifference;
+				ret[skillGroup] = double.IsNaN(myFactor) ? 1 : myFactor;
+			}
+			return ret;
+			*/
 		}
 
 		public double For(CascadingSkillGroup skillGroup)
