@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 		}
 
-		private static ICollection<ISkill> findSkillsToShovelTo(ShovelResourcesState shovelResourcesState,
+		private static IEnumerable<ISkill> findSkillsToShovelTo(ShovelResourcesState shovelResourcesState,
 			IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval,
 			IShovelingCallback shovelingCallback, SubSkillsWithSameIndex subSkillsWithSameIndex, CascadingSkillGroup skillGroup,
 			double maxToMoveForThisSkillGroup)
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			IShovelResourceData shovelResourceData, CascadingSkillGroup skillGroup, DateTimePeriod interval,
 			IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, IShovelingCallback shovelingCallback,
 			IEnumerable<ISkill> subSkillsWithSameIndex, double maxToMoveForThisSkillGroup, 
-			Action<ShovelResourcesState, CascadingSkillGroup, DateTimePeriod , IEnumerable<CascadingSkillGroup>, IShovelingCallback, IShovelResourceDataForInterval, double, ISkill> shovelAction)
+			Action<ShovelResourcesState, CascadingSkillGroup, DateTimePeriod, IEnumerable<CascadingSkillGroup>, IShovelingCallback, IShovelResourceDataForInterval, double, ISkill> shovelAction)
 		{
 			var shovelResourcesDataForIntervalForUnderstaffedSkills = subSkillsWithSameIndex
 				.Select(paralellSkill => shovelResourceData.GetDataForInterval(paralellSkill, interval))
