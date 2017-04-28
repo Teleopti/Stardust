@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 		[Test]
 		[Ignore("#44156")]
-		public void ShouldConsiderSkillGroupsAlsoWhenPrimarySkillIsClosedAndSubSkillsAreOverstaffed()
+		public void ShouldConsiderSkillGroupsAlsoWhenPrimarySkillIsClosed([Values(0, 100)] int demandOnSubskill1, [Values(0, 100)] int demandOnSubskill2)
 		{
 			const int numberOfB1Agents = 3;
 			const int numberOfB2Agents = 5;
@@ -257,8 +257,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 10);
 			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 10);
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 100);
-			var skillB1Day = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillB2Day = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var skillB1Day = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, demandOnSubskill1); //either over or understaffed depending on inparam
+			var skillB2Day = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, demandOnSubskill2); //either over or understaffed depending on inparam
 			var asses = new List<IPersonAssignment>();
 			for (var i = 0; i < numberOfB1Agents; i++)
 			{
