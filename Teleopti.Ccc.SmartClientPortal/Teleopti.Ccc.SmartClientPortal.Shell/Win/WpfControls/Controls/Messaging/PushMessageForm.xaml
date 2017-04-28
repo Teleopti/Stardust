@@ -7,5 +7,5 @@
     Title="{x:Static UserTexts:Resources.Messages}" 
 	Height="500" 
 	Width="500" 
-	Icon="/Teleopti.Ccc.Win;component/WpfControls/Resources/ccc_Agent_ListRequests_32x32.png">
+	Icon="/Teleopti.Ccc.SmartClientPortal.Shell;component/Win/WpfControls/Resources/ccc_Agent_ListRequests_32x32.png">
 </Window>
