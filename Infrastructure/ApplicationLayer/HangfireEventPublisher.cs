@@ -38,34 +38,57 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private IEnumerable<JobInfo> jobsFor(IEvent[] events)
 		{
 			var tenant = _dataSource.CurrentName();
-			var handlerTypes = _resolver.HandlerTypesFor<IRunOnHangfire>(events);
-
-			return handlerTypes
-				.Select(handlerType => new
-				{
-					handlerType,
-					interestingEvents = _resolver.EventsFor(handlerType, @events)
-				})
-				.Where(x => x.interestingEvents.Any())
-				.Select(x =>
-				{
-					var @event = events.First();
-					var attemptsAttribute = _resolver.GetAttemptsAttribute(x.handlerType, @event);
-					return new JobInfo
+			var jobInfos = _resolver.GetThings<IRunOnHangfire>(events);
+			return jobInfos.Select(x =>
+			{
+				var @event = events.First();
+				var attemptsAttribute = _resolver.GetAttemptsAttribute(x.Job.HandlerType, @event);
+				return new JobInfo
 					{
+
 						Job = new HangfireEventJob
 						{
-							DisplayName = $"{x.handlerType.Name} got {@event.GetType().Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
+							DisplayName = $"{x.Job.HandlerType.Name} got {@event.GetType().Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
 							Tenant = tenant,
-							Events = x.interestingEvents,
-							HandlerTypeName = $"{x.handlerType.FullName}, {x.handlerType.Assembly.GetName().Name}",
-							QueueName = _resolver.QueueTo(x.handlerType, @event),
+							Event = x.Job.Event,
+							HandlerTypeName = $"{x.Job.HandlerType.FullName}, {x.Job.HandlerType.Assembly.GetName().Name}",
+							QueueName = _resolver.QueueTo(x.Job.HandlerType, @event),
 							Attempts = _resolver.AttemptsFor(attemptsAttribute),
 							AllowFailures = 0
-						},
-					};
-				});
+						}
 
+					};
+				}
+			);
+
+		//var handlerTypes = _resolver.HandlerTypesFor<IRunOnHangfire>(events);
+			
+		//	return handlerTypes
+		//		.Select(handlerType => new
+		//		{
+		//			handlerType,
+		//			interestingEvents = _resolver.EventsFor(handlerType, events)
+		//		})
+		//		.Where(x => x.interestingEvents.Any())
+		//		.Select(x =>
+		//		{
+		//			var @event = events.First();
+		//			var attemptsAttribute = _resolver.GetAttemptsAttribute(x.handlerType, @event);
+		//			return new JobInfo
+		//			{
+		//				Job = new HangfireEventJob
+		//				{
+		//					DisplayName = $"{x.handlerType.Name} got {@event.GetType().Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
+		//					Tenant = tenant,
+		//					Events = x.interestingEvents,
+		//					HandlerTypeName = $"{x.handlerType.FullName}, {x.handlerType.Assembly.GetName().Name}",
+		//					QueueName = _resolver.QueueTo(x.handlerType, @event),
+		//					Attempts = _resolver.AttemptsFor(attemptsAttribute),
+		//					AllowFailures = 0
+		//				},
+		//			};
+		//		});
+		
 		}
 
 		public void PublishDaily(IEvent @event)
@@ -100,13 +123,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			});
 		}
 
-		private class JobInfo
-		{
-			public HangfireEventJob Job;
-			public AttemptsAttribute AttemptsAttribute;
-			public AllowFailuresAttribute AllowFailuresAttribute;
-		}
-
 		private IEnumerable<JobInfo> jobsFor(IEvent @event)
 		{
 			var tenant = _dataSource.CurrentName();
@@ -126,7 +142,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					{
 						DisplayName = $"{handlerType.Name} got {eventType.Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
 						Tenant = tenant,
-						Events = new[]{ @event },
+						Event = @event,
 						HandlerTypeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}",
 						QueueName = _resolver.QueueTo(handlerType, @event),
 						Attempts = _resolver.AttemptsFor(attemptsAttribute),
@@ -156,5 +172,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_client.GetRecurringJobIds()
 				.ForEach(x => _client.RemoveIfExists(x));
 		}
+	}
+	public class JobInfo
+	{
+		public HangfireEventJob Job;
+		public AttemptsAttribute AttemptsAttribute;
+		public AllowFailuresAttribute AllowFailuresAttribute;
+		public bool SingleEvent;
 	}
 }

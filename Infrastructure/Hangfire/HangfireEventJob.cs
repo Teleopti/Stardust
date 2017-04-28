@@ -16,12 +16,13 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public string QueueName;
 		public int Attempts;
 		public int AllowFailures;
-		public IEnumerable<IEvent> Events;
+		public IEvent Event;
+		public IEnumerable<IEvent> Package;
 		public string HandlerTypeName;
 		
 		public string EventTypeName()
 		{
-			var eventType = Events.First().GetType();
+			var eventType = Event.GetType();
 			return $"{eventType.FullName}, {eventType.Assembly.GetName().Name}";
 		}
 
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public string RecurringId()
 		{
-			var hashedHandlerAndEvent = $"{HandlerTypeName}{delimiter}{Events.First().GetType().Name}".GenerateGuid().ToString("N");
+			var hashedHandlerAndEvent = $"{HandlerTypeName}{delimiter}{Event.GetType().Name}".GenerateGuid().ToString("N");
 			var hashedTenant = Tenant?.GenerateGuid().ToString("N") ?? "";
 			return $"{hashedTenant}{delimiter}{hashedHandlerAndEvent}";
 		}

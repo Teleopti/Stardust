@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
@@ -68,6 +69,62 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				?.Invoke(_resolve.Resolve(handler), new[] {@event}) as string;
 		}
 
+		public IEnumerable<JobInfo> GetThings<T>(IEvent[] events)
+		{
+			var result = new List<JobInfo>();
+
+			_resolve.ConcreteTypesFor(typeof(IHandleEvents))
+				.ForEach(handler =>
+				{
+					var subscriptions = new SubscriptionsRegistror();
+					handler
+						.GetMethods()
+						.FirstOrDefault(x => x.Name == "Subscribe")
+						.Invoke(_resolve.Resolve(handler), new[] {subscriptions});
+
+					var interestingEvents = events.Where(x => subscriptions.Has(x.GetType())).ToArray();
+					if (interestingEvents.Any())
+						result.Add(new JobInfo
+						{
+							Job = new HangfireEventJobThing
+							{
+								Events = interestingEvents,
+								HandlerType = handler
+							},
+							SingleEvent = false
+						});
+				});
+
+			events.Select(e => new
+				{
+					type = e.GetType(),
+					@event = e
+				})
+				.Select(x => new
+				{
+					type = typeof(IHandleEvent<>).MakeGenericType(x.type),
+					x.@event
+				})
+				.ForEach(x =>
+				{
+					_resolve.ConcreteTypesFor(x.type)
+						.ForEach(y =>
+						{
+							result.Add(new JobInfo
+							{
+								Job = new HangfireEventJobThing
+								{
+									Event = x.@event,
+									HandlerType = x.type
+								},
+								SingleEvent = true
+							});
+						});
+				});
+
+			return result;
+		}
+
 		public IEnumerable<IEvent> EventsFor(Type handlerType, IEvent[] events)
 		{
 			var subscriptions = new SubscriptionsRegistror();
@@ -77,10 +134,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 			if (method == null)
 				return events;
-
+			
+			var extras = events.Select(e => new
+				{
+					type = e.GetType(),
+					@event = e
+				})
+				.Select(x => new
+				{
+					type = typeof(IHandleEvent<>).MakeGenericType(x.type),
+					x.@event
+				})
+				.Where(x => handlerType.GetInterfaces().Contains(x.type))
+				.Select(x => x.@event);
 			method.Invoke(_resolve.Resolve(handlerType), new[] {subscriptions});
 
-			return events.Where(x => subscriptions.Has(x.GetType())).ToArray();
+			return events.Where(x => subscriptions.Has(x.GetType())).Concat(extras).ToArray();
 
 		//	events.Where(e =>
 		//		{
@@ -117,5 +186,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				.Cast<AttemptsAttribute>()
 				.SingleOrDefault();
 		}
+	}
+
+	public class JobInfo
+	{
+		public HangfireEventJobThing Job;
+		public AttemptsAttribute AttemptsAttribute;
+		public AllowFailuresAttribute AllowFailuresAttribute;
+		public bool SingleEvent;
+	}
+
+	public class HangfireEventJobThing
+	{
+		public string DisplayName;
+		public string Tenant;
+		public string QueueName;
+		public int Attempts;
+		public int AllowFailures;
+		public IEvent Event;
+		public IEnumerable<IEvent> Events;
+		public Type HandlerType;
+		public string HandlerTypeName;
 	}
 }

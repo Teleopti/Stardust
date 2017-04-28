@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			Hangfire.EmulateWorkerIteration();
 
-			Handler.GotEvents.Single().Should().Be.OfType<TestEvent>();
+			Handler.Packeged.Single().Should().Be.OfType<TestEvent>();
 		}
 
 		[Test]
@@ -41,9 +41,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			Hangfire.EmulateWorkerIteration();
 
-			Handler.GotEvents.OfType<TestEvent>().Should().Have.Count.EqualTo(2);
+			Handler.Packeged.OfType<TestEvent>().Should().Have.Count.EqualTo(2);
 		}
-
 
 		[Test]
 		public void ShouldReceieveSubscribedEvents()
@@ -52,8 +51,20 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			Hangfire.EmulateWorkerIteration();
 
-			Handler.GotEvents.OfType<TestEvent>().Should().Have.Count.EqualTo(1);
-			Handler.GotEvents.OfType<AnotherTestEvent>().Should().Have.Count.EqualTo(0);
+			Handler.Packeged.OfType<TestEvent>().Should().Have.Count.EqualTo(1);
+			Handler.Packeged.OfType<AnotherTestEvent>().Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldReceiveAnotherEventSeperately()
+		{
+			Publisher.Publish(new TestEvent(), new AnotherTestEvent());
+
+			Hangfire.EmulateWorkerIteration();
+			Hangfire.EmulateWorkerIteration();
+
+			Handler.Packeged.Should().Have.Count.EqualTo(1);
+			Handler.AnotherEvent.Should().Be.OfType<AnotherTestEvent>();
 		}
 
 		public class TestEvent : IEvent
@@ -66,10 +77,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		public class TestHandler :
 			IHandleEvents,
+			IHandleEvent<AnotherTestEvent>,
 			IRunOnHangfire
 		{
 
-			public IEnumerable<IEvent> GotEvents;
+			public IEnumerable<IEvent> Packeged;
+			public IEvent AnotherEvent;
 
 			public void Subscribe(ISubscriptionsRegistror subscriptions)
 			{
@@ -78,7 +91,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			public void Handle(IEnumerable<IEvent> events)
 			{
-				GotEvents = events;
+				Packeged = events;
+			}
+
+			public void Handle(AnotherTestEvent @event)
+			{
+				AnotherEvent = @event;
 			}
 		}
 	}

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var handlerT = Type.GetType(handlerType, true);
 			var handlers = _resolver.HandlerTypesFor<IRunOnHangfire>(events);
 
-			var publishTo = handlers.Single(o => o == handlerT);
+			var publishTo = handlers.First(o => o == handlerT);
 
 			_processor.Process(tenant, events, publishTo);
 		}
