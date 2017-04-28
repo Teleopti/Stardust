@@ -4,6 +4,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using NHibernate;
+using NHibernate.SqlAzure;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -64,12 +66,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return combinationId;
 		}
 
-		private static Dictionary<string, Guid> loadSkillCombination(SqlConnection connection, SqlTransaction transaction)
+		private Dictionary<string, Guid> loadSkillCombination(SqlConnection connection, SqlTransaction transaction)
 		{
+		    
 			var skillCombinations = new Dictionary<string, Guid>();
 			var result = new List<internalSkillCombination>();
 			using (var command = new SqlCommand("select Id, SkillId from [ReadModel].[SkillCombination] order by id", connection, transaction))
 			{
+
+				if (transaction == null)
+					_currentUnitOfWork.Current().Session().Transaction.Enlist(command);
+				
 				using (var reader = command.ExecuteReader())
 				{
 					if (!reader.HasRows) return skillCombinations;
@@ -222,68 +229,85 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 		public void PersistChanges(IEnumerable<SkillCombinationResource> deltas)
 		{
-			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
-
-			using (var connection = new SqlConnection(connectionString))
+			_retryPolicy.ExecuteAction(() =>
 			{
-				connection.OpenWithRetry(_retryPolicy);
-				var skillCombinations = loadSkillCombination(connection, null);
-
-				var dt = new DataTable();
-				dt.Columns.Add("SkillCombinationId", typeof(Guid));
-				dt.Columns.Add("StartDateTime", typeof(DateTime));
-				dt.Columns.Add("EndDateTime", typeof(DateTime));
-				dt.Columns.Add("InsertedOn", typeof(DateTime));
-				dt.Columns.Add("DeltaResource", typeof(double));
-
-				foreach (var delta in deltas)
-				{
-					Guid id;
-					if (!skillCombinations.TryGetValue(keyFor(delta.SkillCombination), out id)) continue;
-
-					var row = dt.NewRow();
-					row["SkillCombinationId"] = id;
-					row["StartDateTime"] = delta.StartDateTime;
-					row["EndDateTime"] = delta.EndDateTime;
-					row["InsertedOn"] = DateTime.UtcNow;
-					row["DeltaResource"] = delta.Resource;
-					dt.Rows.Add(row);
-
-					var numberResources = _currentUnitOfWork.Current().Session().CreateSQLQuery("SELECT COUNT(*) FROM [ReadModel].[SkillCombinationResource] WHERE StartDateTime = :StartDateTime AND SkillCombinationId = :id")
-						.SetParameter("StartDateTime", delta.StartDateTime)
-						.SetParameter("id", id)
-						.UniqueResult<int>();
-
-					if (numberResources != 0) continue;
-
-					var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
-					var lastUpdated = GetLastCalculatedTime();
-					_currentUnitOfWork.Current().Session()
-						.CreateSQLQuery(@"
-							INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
-							VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, :Resource, :InsertedOn, :BusinessUnit)")
-						.SetParameter("SkillCombinationId", id)
-						.SetParameter("StartDateTime", delta.StartDateTime)
-						.SetParameter("EndDateTime", delta.EndDateTime)
-						.SetParameter("Resource", 0)
-						.SetParameter("InsertedOn", lastUpdated)
-						.SetParameter("BusinessUnit", bu)
-						.ExecuteUpdate();
-				}
-
-				using (var transaction = connection.BeginTransaction())
-				{
-					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
-					{
-						sqlBulkCopy.DestinationTableName = "[ReadModel].[SkillCombinationResourceDelta]";
-						sqlBulkCopy.WriteToServer(dt);
-					}
-					transaction.Commit();
-				}
-			}
+				tryPersistChanges(deltas);
+			});
 		}
 
-		public DateTime GetLastCalculatedTime()
+		private void tryPersistChanges(IEnumerable<SkillCombinationResource> deltas)
+	    {
+	        var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
+			var reliableConnection = (ReliableSqlDbConnection)_currentUnitOfWork.Current().Session().Connection;
+			//not transient safe 
+			var connection = reliableConnection.ReliableConnection.Current;
+			using (var aconnection = new SqlConnection(connectionString))
+	        {
+	            aconnection.OpenWithRetry(_retryPolicy);
+	            
+				var skillCombinations = loadSkillCombination(connection, null);
+
+	            var dt = new DataTable();
+	            dt.Columns.Add("SkillCombinationId", typeof(Guid));
+	            dt.Columns.Add("StartDateTime", typeof(DateTime));
+	            dt.Columns.Add("EndDateTime", typeof(DateTime));
+	            dt.Columns.Add("InsertedOn", typeof(DateTime));
+	            dt.Columns.Add("DeltaResource", typeof(double));
+
+	            foreach (var delta in deltas)
+	            {
+	                Guid id;
+	                if (!skillCombinations.TryGetValue(keyFor(delta.SkillCombination), out id)) continue;
+
+	                var row = dt.NewRow();
+	                row["SkillCombinationId"] = id;
+	                row["StartDateTime"] = delta.StartDateTime;
+	                row["EndDateTime"] = delta.EndDateTime;
+	                row["InsertedOn"] = DateTime.UtcNow;
+	                row["DeltaResource"] = delta.Resource;
+	                dt.Rows.Add(row);
+
+	                var numberResources =
+	                    _currentUnitOfWork.Current()
+	                        .Session()
+	                        .CreateSQLQuery(
+	                            "SELECT COUNT(*) FROM [ReadModel].[SkillCombinationResource] WHERE StartDateTime = :StartDateTime AND SkillCombinationId = :id")
+	                        .SetParameter("StartDateTime", delta.StartDateTime)
+	                        .SetParameter("id", id)
+	                        .UniqueResult<int>();
+
+	                if (numberResources != 0) continue;
+
+	                var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
+	                var lastUpdated = GetLastCalculatedTime();
+
+	                _currentUnitOfWork.Current().Session()
+	                    .CreateSQLQuery(@"
+					               		INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
+					               		VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, :Resource, :InsertedOn, :BusinessUnit)")
+	                    .SetParameter("SkillCombinationId", id)
+	                    .SetParameter("StartDateTime", delta.StartDateTime)
+	                    .SetParameter("EndDateTime", delta.EndDateTime)
+	                    .SetParameter("Resource", 0)
+	                    .SetParameter("InsertedOn", lastUpdated)
+	                    .SetParameter("BusinessUnit", bu)
+	                    .ExecuteUpdate();
+	            }
+	            using (var cmd = new SqlCommand())
+	            {
+					_currentUnitOfWork.Current().Session().Transaction.Enlist(cmd);
+					
+					using (
+	                    var bulk = new SqlBulkCopy(connection,SqlBulkCopyOptions.Default, cmd.Transaction))
+	                {
+	                    bulk.DestinationTableName = "[ReadModel].[SkillCombinationResourceDelta]";
+	                    bulk.WriteToServer(dt);
+	                }
+	            }
+	        }
+	    }
+
+	    public DateTime GetLastCalculatedTime()
 		{
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var latest = _currentUnitOfWork.Current().Session()
@@ -294,17 +318,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 			return latest;
 		}
 
-		protected string AddArrayParameters(SqlCommand sqlCommand, Guid[] array, string paramName)
-		{
-			var parameters = new string[array.Length];
-			for (var i = 0; i < array.Length; i++)
-			{
-				parameters[i] = $"@{paramName}{i}";
-				sqlCommand.Parameters.AddWithValue(parameters[i], array[i]);
-			}
-
-			return string.Join(", ", parameters);
-		}
+		
 	}
 
 	public class RawSkillCombinationResource
