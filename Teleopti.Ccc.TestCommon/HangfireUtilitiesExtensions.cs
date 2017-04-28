@@ -16,10 +16,7 @@ namespace Teleopti.Ccc.TestCommon
 
 				workers.Times(() =>
 				{
-					run.InParallel(() =>
-					{
-						hangfire.EmulateWorkerIteration();
-					});
+					run.InParallel(hangfire.EmulateWorkerIteration);
 				});
 				run.Wait();
 

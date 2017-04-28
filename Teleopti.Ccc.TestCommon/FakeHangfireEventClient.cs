@@ -36,21 +36,21 @@ namespace Teleopti.Ccc.TestCommon
 		public IEnumerable<string> Events { get { return _enqueuedJobs.Select(x => x.Event); } }
 		public IEnumerable<string> HandlerTypes { get { return _enqueuedJobs.Select(x => x.HandlerType); } }
 
-		public string DisplayName { get { return DisplayNames.First(); } }
-		public string Tenant { get { return Tenants.First(); } }
-		public string EventType { get { return EventTypes.First(); } }
-		public string SerializedEvent { get { return Events.First(); } }
-		public string HandlerType { get { return HandlerTypes.First(); } }
+		public string DisplayName => DisplayNames.First();
+		public string Tenant => Tenants.First();
+		public string EventType => EventTypes.First();
+		public string SerializedEvent => Events.First();
+		public string HandlerType => HandlerTypes.First();
 
-		public bool WasEnqueued { get { return _enqueuedJobs.Any(); } }
+		public bool WasEnqueued => _enqueuedJobs.Any();
 
-		public void Enqueue(Infrastructure.Hangfire.HangfireEventJob job)
+		public void Enqueue(HangfireEventJob job)
 		{
 			_enqueuedJobs.Add(new JobInfo
 			{
 				DisplayName = job.DisplayName,
 				Tenant = job.Tenant,
-				EventType = job.EventTypeName(),
+				EventType = EventTypeName(job),
 				Event = _serializer.SerializeEvent(job.Event),
 				HandlerType = job.HandlerTypeName
 			});
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.TestCommon
 			});
 		}
 
-		public IEnumerable<JobInfo> Recurring { get { return _recurringJobs; } }
+		public IEnumerable<JobInfo> Recurring => _recurringJobs;
 		public IEnumerable<string> RecurringIds { get { return _recurringJobs.Select(x => x.Id); } }
 		public IEnumerable<string> RecurringDisplayNames { get { return _recurringJobs.Select(x => x.DisplayName); } }
 		public IEnumerable<string> RecurringTenants { get { return _recurringJobs.Select(x => x.Tenant); } }
@@ -76,24 +76,30 @@ namespace Teleopti.Ccc.TestCommon
 		public IEnumerable<string> RecurringEvents { get { return _recurringJobs.Select(x => x.Event); } }
 		public IEnumerable<string> RecurringHandlerTypes { get { return _recurringJobs.Select(x => x.HandlerType); } }
 
-		public bool HasRecurringJobs { get { return _recurringJobs.Any(); } }
+		public bool HasRecurringJobs => _recurringJobs.Any();
 
-		public void AddOrUpdateHourly(HangfireEventJob job2)
+		public void AddOrUpdateHourly(HangfireEventJob job)
 		{
-			var job = recurring(job2.DisplayName, job2.RecurringId(), job2.Tenant, job2.EventTypeName(), _serializer.SerializeEvent(job2.Event), job2.HandlerTypeName);
-			job.Hourly = true;
+			var j = recurring(job.DisplayName, job.RecurringId(), job.Tenant, EventTypeName(job), _serializer.SerializeEvent(job.Event), job.HandlerTypeName);
+			j.Hourly = true;
 		}
 
-		public void AddOrUpdateMinutely(HangfireEventJob job2)
+		public void AddOrUpdateMinutely(HangfireEventJob job)
 		{
-			var job = recurring(job2.DisplayName, job2.RecurringId(), job2.Tenant, job2.EventTypeName(), _serializer.SerializeEvent(job2.Event), job2.HandlerTypeName);
-			job.Minutely = true;
+			var j = recurring(job.DisplayName, job.RecurringId(), job.Tenant, EventTypeName(job), _serializer.SerializeEvent(job.Event), job.HandlerTypeName);
+			j.Minutely = true;
 		}
 
 		public void AddOrUpdateDaily(HangfireEventJob job)
 		{
-			var j = recurring(job.DisplayName, job.RecurringId(), job.Tenant, job.EventTypeName(), _serializer.SerializeEvent(job.Event), job.HandlerTypeName);
+			var j = recurring(job.DisplayName, job.RecurringId(), job.Tenant, EventTypeName(job), _serializer.SerializeEvent(job.Event), job.HandlerTypeName);
 			j.Daily = true;
+		}
+
+		public string EventTypeName(HangfireEventJob j)
+		{
+			var eventType = j.Event.GetType();
+			return $"{eventType.FullName}, {eventType.Assembly.GetName().Name}";
 		}
 
 		private JobInfo recurring(string displayName, string id, string tenant, string eventType, string serializedEvent,
@@ -126,4 +132,5 @@ namespace Teleopti.Ccc.TestCommon
 				_recurringJobs.Remove(job);
 		}
 	}
+	
 }

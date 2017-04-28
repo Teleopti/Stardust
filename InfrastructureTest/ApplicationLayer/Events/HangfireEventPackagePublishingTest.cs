@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new TestEvent(), new AnotherTestEvent());
 
-			Hangfire.EmulateWorkerIteration();
+			Hangfire.EmulateQueueProcessing();
 
 			Handler.Packeged.OfType<TestEvent>().Should().Have.Count.EqualTo(1);
 			Handler.Packeged.OfType<AnotherTestEvent>().Should().Have.Count.EqualTo(0);
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			public IEnumerable<IEvent> Packeged;
 			public IEvent AnotherEvent;
 
-			public void Subscribe(ISubscriptionsRegistror subscriptions)
+			public void Subscribe(ISubscriptionsRegistrator subscriptions)
 			{
 				subscriptions.Add<TestEvent>();
 			}

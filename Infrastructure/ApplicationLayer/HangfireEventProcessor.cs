@@ -31,19 +31,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			Process(displayName, tenant, @event, handlerType);
 		}
 
-		public void Process(string displayName, string tenant, IEvent @event, string handlerType)
-		{
-			Process(displayName, tenant, new[]{@event}, handlerType);
-		}
-
-		public void Process(string displayName, string tenant, IEnumerable<IEvent> events, string handlerType)
+		public void Process(string displayName, string tenant, IEnumerable<IEvent> package, string handlerType)
 		{
 			var handlerT = Type.GetType(handlerType, true);
-			var handlers = _resolver.HandlerTypesFor<IRunOnHangfire>(events);
+			_processor.Process(tenant, package, handlerT);
+		}
 
-			var publishTo = handlers.First(o => o == handlerT);
-
-			_processor.Process(tenant, events, publishTo);
+		public void Process(string displayName, string tenant, IEvent @event, string handlerType)
+		{
+			var handlerT = Type.GetType(handlerType, true);
+			_processor.Process(tenant, @event, handlerT);
 		}
 
 	}

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				from @event in events
 				from handlerType in _resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event)
 				select Task.Run(() =>
-					_processor.Process(@event, handlerType)
+					_processor.ProcessDontUse(@event, handlerType)
 					))
 				.ToArray());
 		}

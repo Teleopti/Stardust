@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon
 						var method = _resolver.HandleMethodFor(handlerType, @event);
 						if (method == null)
 							continue;
-						_processor.Process(tenant, new []{@event}, handlerType);
+						_processor.Process(tenant, @event, handlerType);
 					}
 				}
 			});

@@ -25,38 +25,57 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		}
 
 		[TenantScope]
-		public virtual void Process(string tenant, IEnumerable<IEvent> events, Type handlerType)
+		public virtual void Process(string tenant, IEvent @event, Type handlerType)
 		{
-			Process(events, handlerType);
+			process(@event, handlerType);
 		}
 
-		public virtual void Process(IEvent @event, Type handlerType)
+		[TenantScope]
+		public virtual void Process(string tenant, IEnumerable<IEvent> package, Type handlerType)
 		{
-			Process(new[]{@event}, handlerType);
+			process(package, handlerType);
 		}
 
-		public virtual void Process(IEnumerable<IEvent> events, Type handlerType)
+		public virtual void ProcessDontUse(IEvent @event, Type handlerType)
 		{
-			using (_initiatorIdentifierScope.OnThisThreadUse(InitiatorIdentifier.FromMessage(events.First())))
+			process(@event, handlerType);
+		}
+
+		private void process(IEvent @event, Type handlerType)
+		{
+			using (_initiatorIdentifierScope.OnThisThreadUse(InitiatorIdentifier.FromMessage(@event)))
 			{
 				try
 				{
 					using (var scope = _resolve.NewScope())
 					{
 						dynamic handler = scope.Resolve(handlerType);
-						if (handlerType.GetInterfaces().Contains(typeof(IHandleEvents)))
-						{
-							handler.Handle((dynamic) events);
-						}
-						else
-						{
-							handler.Handle((dynamic) events.Single());
-						}
+						handler.Handle((dynamic) @event);
 					}
 				}
 				catch (Exception)
 				{
-					sendTrackingMessage(events.First());
+					sendTrackingMessage(@event);
+					throw;
+				}
+			}
+		}
+
+		private void process(IEnumerable<IEvent> package, Type handlerType)
+		{
+			using (_initiatorIdentifierScope.OnThisThreadUse(InitiatorIdentifier.FromMessage(package.First())))
+			{
+				try
+				{
+					using (var scope = _resolve.NewScope())
+					{
+						dynamic handler = scope.Resolve(handlerType);
+						handler.Handle((dynamic)package);
+					}
+				}
+				catch (Exception)
+				{
+					sendTrackingMessage(package.First());
 					throw;
 				}
 			}

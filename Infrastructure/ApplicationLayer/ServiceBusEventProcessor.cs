@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				foreach (var handler in handlerTypes)
-					_processor.Process(@event, handler);
+					_processor.ProcessDontUse(@event, handler);
 				unitOfWork.PersistAll(InitiatorIdentifier.FromMessage(@event));
 			}
 		}

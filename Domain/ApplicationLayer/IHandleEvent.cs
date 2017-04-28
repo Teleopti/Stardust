@@ -18,17 +18,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 	public interface IHandleEvents
 	{
-		void Subscribe(ISubscriptionsRegistror subscriptions);
+		void Subscribe(ISubscriptionsRegistrator subscriptions);
 		void Handle(IEnumerable<IEvent> events);
 	}
 
-	public interface ISubscriptionsRegistror
+	public interface ISubscriptionsRegistrator
 	{
 		void Add<T>() where T : IEvent;
 		bool Has(Type type);
 	}
 
-	public class SubscriptionsRegistror : ISubscriptionsRegistror
+	public class SubscriptionsRegistrator : ISubscriptionsRegistrator
 	{
 		private IEnumerable<Type> types = Enumerable.Empty<Type>();
 

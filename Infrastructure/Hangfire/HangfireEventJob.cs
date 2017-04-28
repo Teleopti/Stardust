@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -16,16 +14,10 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public string QueueName;
 		public int Attempts;
 		public int AllowFailures;
-		public IEvent Event;
+		public IEvent Event; // this means its a single event job to a single event handler method, but we'r keeping the name to not break compatibility
 		public IEnumerable<IEvent> Package;
 		public string HandlerTypeName;
 		
-		public string EventTypeName()
-		{
-			var eventType = Event.GetType();
-			return $"{eventType.FullName}, {eventType.Assembly.GetName().Name}";
-		}
-
 		public static string TenantHashForRecurringId(string id)
 		{
 			return id.Substring(0, id.IndexOf(delimiter, StringComparison.Ordinal));

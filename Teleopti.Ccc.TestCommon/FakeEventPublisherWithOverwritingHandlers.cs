@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon
 				var eventType = @event.GetType().FullName;
 				if (_overwritingEventHandling.ContainsKey(eventType))
 				{
-					_processor.Process(@event, _overwritingEventHandling[eventType]);
+					_processor.ProcessDontUse(@event, _overwritingEventHandling[eventType]);
 				}
 				else
 				{
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon
 						.Concat(_resolver.HandlerTypesFor<IRunOnStardust>(@event))
 						.Concat(_resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event));
 					foreach(var handlerType in handlerTypes)
-						_processor.Process(@event,handlerType);
+						_processor.ProcessDontUse(@event,handlerType);
 				}
 			}
 		}
