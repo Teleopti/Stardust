@@ -119,7 +119,7 @@
                 d.highlight = false;
             })
             change.highlight = true;
-            change.parent.isOpen = true;
+            change.parent.isOpen = !change.parent.isOpen;
         }
 
         function mapChanges(changes, schedules) {
