@@ -38,15 +38,13 @@
                         data-starttime="{{activity.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}" data-endtime="{{activity.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
                     </div>
                 </div>
+                
             </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="hidden-md" style="height: 30px; position: relative;">
+              <div class="hidden-md" style="height: 30px; position: relative;">
             <div ng-repeat="diamond in vm.diamonds" ng-class="{'diamond': true, 'highlight': diamond.highlight}" ng-click="diamond.click()"
                 ng-attr-style="left: {{diamond.Offset}}; border-color: {{diamond.RuleColor}};">
                 <div class="inner" ng-attr-style="background-color: {{diamond.RuleColor}};"></div>
+            </div>
             </div>
         </div>
     </div>
