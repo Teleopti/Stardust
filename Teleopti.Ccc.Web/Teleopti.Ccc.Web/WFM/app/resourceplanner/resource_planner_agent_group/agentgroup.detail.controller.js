@@ -11,6 +11,7 @@
 	function Controller($stateParams, agentGroupService) {
 		var vm = this;
 	}
+	
 	function agentgroupDetailDirective() {
 		var directive = {
 			restrict: 'EA',

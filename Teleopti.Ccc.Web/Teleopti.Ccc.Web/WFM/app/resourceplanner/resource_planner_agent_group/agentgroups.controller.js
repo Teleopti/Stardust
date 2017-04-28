@@ -8,7 +8,6 @@
 
   Controller.$inject = ['$state', 'agentGroupService'];
 
-  /* @ngInject */
   function Controller($state, agentGroupService) {
     var vm = this;
 
@@ -40,7 +39,6 @@
 
     function goAgentGroup(groupId) {
       if (groupId) {
-        // $state.go('resourceplanner.oneagentgroup', { groupId: groupId});
         $state.go('resourceplanner.selectplanningperiod', { groupId: groupId});
       }
     }

@@ -25,7 +25,6 @@
 		vm.removeAgentGroup = removeAgentGroup;
 		var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
 
-		//load agentgroup to edit
 		getAgentGroupbyId(agentGroupId);
 
 		function getAgentGroupbyId(id) {
@@ -40,7 +39,6 @@
 			}
 		}
 
-		//load empty form
 		function cancel() {
 			$state.go('resourceplanner.newoverview');
 			vm.editAgentGroup = {};
@@ -119,7 +117,6 @@
 			}
 		}
 
-		//delete agent group
 		function removeAgentGroup(id) {
 			agentGroupService.removeAgentGroup({ id: id }).$promise.then(function () {
 				vm.editAgentGroup = {};

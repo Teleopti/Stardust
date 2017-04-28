@@ -9,6 +9,5 @@
 
 	function Controller($stateParams, agentGroupService, $state) {
 		var vm = this;
-
 	}
 })();
