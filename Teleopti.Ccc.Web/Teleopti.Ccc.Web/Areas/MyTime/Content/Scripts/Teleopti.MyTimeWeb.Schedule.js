@@ -206,10 +206,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 		};
 
-		self.nextWeek = function () {
-			self.selectedDate(self.nextWeekDate());
-		};
-
 		var validProbabilitiesTypes = [
 			userTexts.hideStaffingInfo,
 			userTexts.showAbsenceProbability,
@@ -289,12 +285,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.selectedDate(self.previousWeekDate());
 		};
 
+		self.nextWeek = function () {
+			self.selectedDate(self.nextWeekDate());
+		};
+
 		self.today = function () {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForProbability());
 		};
 
-		self.week = function (date) {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(date) + getUrlPartForProbability());
+		self.week = function () {
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability());
 		};
 
 		self.month = function () {
