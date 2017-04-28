@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 						{
 							if (!shovelResourcesState.IsAnyPrimarySkillOpen)
 							{
-								//TODO - don't we have to use maxToMoveForThisSkillGroup here as well?
 								var remainingResourcesToShovel = shovelResourcesState.RemainingOverstaffing;
 								foreach (var skillToMoveTo in subSkillsWithSameIndex)
 								{
