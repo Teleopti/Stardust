@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_wrap = Inner.Select(l => new WorkShiftCalculatableLayer(l)).ToArray();
 		}
 
-		public IVisualLayerCollection Inner { get; private set; }
+		public IVisualLayerCollection Inner { get; }
 
 		public IEnumerator<IWorkShiftCalculatableLayer> GetEnumerator()
 		{
@@ -53,28 +53,29 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class WorkShiftCalculatableLayer : IWorkShiftCalculatableLayer
 	{
-		private readonly IVisualLayer _layer;
-
 		public WorkShiftCalculatableLayer(IVisualLayer layer)
 		{
-			_layer = layer;
+			PeriodStartDateTime = layer.Period.StartDateTime;
+			PeriodEndDateTime = layer.Period.EndDateTime;
+			Activity = new WorkShiftCalculatableActivity((IActivity) layer.Payload);
 		}
 
-		public DateTime PeriodStartDateTime { get { return _layer.Period.StartDateTime; } }
-		public DateTime PeriodEndDateTime { get { return _layer.Period.EndDateTime; } }
-		public IWorkShiftCalculatableActivity Activity { get { return new WorkShiftCalculatableActivity((IActivity)_layer.Payload); } }
+		public DateTime PeriodStartDateTime { get; }
+		public DateTime PeriodEndDateTime { get; }
+		public IWorkShiftCalculatableActivity Activity { get; }
 	}
 
 	public class WorkShiftCalculatableActivity : IWorkShiftCalculatableActivity
 	{
-		public IActivity Activity { get; private set; }
-
 		public WorkShiftCalculatableActivity(IActivity activity)
 		{
 			Activity = activity;
+			RequiresSkill = Activity.RequiresSkill;
 		}
 
-		public bool RequiresSkill { get { return Activity.RequiresSkill; } }
+		public IActivity Activity { get; }
+
+		public bool RequiresSkill { get; }
 	}
 
 	public class WorkShiftCalculatorSkillStaffPeriodData : IWorkShiftCalculatorSkillStaffPeriodData
@@ -116,6 +117,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			_data = data;
 		}
+
+		public IDictionary<DateTime, ISkillStaffPeriodDataHolder> Data => _data;
 
 		public IWorkShiftCalculatableSkillStaffPeriod ForTime(DateTime dateTime)
 		{

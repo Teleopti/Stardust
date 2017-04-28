@@ -10,36 +10,31 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     [TestFixture]
     public class AffectedPersonSkillServiceTest
     {
-        private IAffectedPersonSkillService _target;
-        private IList<ISkill> _validSkills;
-
-        [SetUp]
-        public void Setup()
-        {
-            _validSkills = new List<ISkill>();
-            _target = new AffectedPersonSkillService(_validSkills);
-        }
-
 	    [Test]
 	    public void CanGetValidSkills()
 	    {
-		    ISkill skill = SkillFactory.CreateSkill("d");
-		    _validSkills.Add(skill);
-		    IEnumerable<ISkill> valid = _target.AffectedSkills;
+			ISkill skill = SkillFactory.CreateSkill("d");
+		    var validSkills = new List<ISkill> {skill};
+		    var target = new AffectedPersonSkillService(validSkills);
+
+			IEnumerable<ISkill> valid = target.AffectedSkills;
 		    Assert.AreEqual(1, valid.Count());
 		    Assert.AreSame(skill, valid.First());
 	    }
-
-
+		
 		[Test]
 		public void AffectedSkillsShouldNotContainMaxSeatSkillOrNonBlendSkill()
 		{
-			_validSkills.Add(SkillFactory.CreateSkill("vanligt"));
-			_validSkills.Add(SkillFactory.CreateSiteSkill("site"));
-			_validSkills.Add(SkillFactory.CreateNonBlendSkill("non"));
-			_target = new AffectedPersonSkillService(_validSkills);
-			Assert.AreEqual(1, _target.AffectedSkills.Count());
-			ISkill skill = _target.AffectedSkills.FirstOrDefault();
+			var validSkills = new List<ISkill>
+			{
+				SkillFactory.CreateSkill("vanligt"),
+				SkillFactory.CreateSiteSkill("site"),
+				SkillFactory.CreateNonBlendSkill("non")
+			};
+
+			var target = new AffectedPersonSkillService(validSkills);
+			Assert.AreEqual(1, target.AffectedSkills.Count());
+			ISkill skill = target.AffectedSkills.FirstOrDefault();
 			Assert.AreEqual("vanligt", skill.Name);
 		}
     }

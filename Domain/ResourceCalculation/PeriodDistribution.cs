@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IActivity _activity;
 		private readonly DateTimePeriod _period;
 		private readonly int _lengthToSplitOn;
-		readonly double[] _splittedValues;
+		private readonly double[] _splittedValues;
 		private readonly double _demandedTraff;
 		private readonly IList<DateTimePeriod> _periods;
 
@@ -59,10 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void ProcessLayers(IResourceCalculationDataContainerWithSingleOperation resourceCalculationDataContainer, ISkill skill)
 		{
-			for (int i = 0; i < _splittedValues.Length; i++)
-			{
-				_splittedValues[i] = 0;
-			}
+			Array.Clear(_splittedValues,0,_splittedValues.Length);
 
 			var intraIntervalValues = resourceCalculationDataContainer.IntraIntervalResources(skill, _period);
 			foreach (var resourcePeriod in intraIntervalValues)

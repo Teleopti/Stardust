@@ -109,13 +109,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IEnumerable<SkillKeyResource> GetSkillKeyResources(Guid activityKey)
 		{
-			foreach (var pair in _resourceDictionary)
-			{
-				if (!pair.Key.HasActivity(activityKey)) continue;
-
-				var skillKey = pair.Key.SkillCombinationKey();
-				yield return new SkillKeyResource { SkillKey = skillKey, Resource = new PeriodResourceDetail(pair.Value.Count,pair.Value.Resource), Effiencies = pair.Value.EffiencyResources };
-			}
+			return
+				_resourceDictionary.Where(k => k.Key.HasActivity(activityKey))
+					.Select(
+						pair =>
+							new SkillKeyResource
+							{
+								SkillKey = pair.Key.SkillCombinationKey(),
+								Resource = new PeriodResourceDetail(pair.Value.Count, pair.Value.Resource),
+								Effiencies = pair.Value.EffiencyResources
+							});
 		}
 	}
 }
