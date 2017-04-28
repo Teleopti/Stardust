@@ -84,7 +84,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			{
 				foreach (ISkillDay skillDay in skill.Value)
 				{
-					foreach (ISkillStaffPeriodView skillStaffPeriodView in skillDay.SkillStaffPeriodViewCollection(new TimeSpan(0, minutesPerInterval, 0)))
+					foreach (ISkillStaffPeriodView skillStaffPeriodView in skillDay.SkillStaffPeriodViewCollection(new TimeSpan(0, minutesPerInterval, 0), useShrinkage))
 					{
 						IScheduleForecastSkillKey scheduleForecastSkillKey =
 							 new ScheduleForecastSkillKey(skillStaffPeriodView.Period.StartDateTime,
