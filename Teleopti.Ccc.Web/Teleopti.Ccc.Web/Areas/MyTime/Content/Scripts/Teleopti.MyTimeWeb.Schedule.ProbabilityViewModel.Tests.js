@@ -52,8 +52,8 @@ $(document).ready(function () {
 			boundaries, userTexts, dayViewModel);
 
 		var expectedIntervalLength = rawProbability.endTimeMoment.diff(rawProbability.startTimeMoment, "minute");
-		var expectedStartPositionInPercentage = (rawProbability.startTimeInMinutes - boundaries.timelineStartMinutes) * boundaries.lengthPercentagePerMinute * 100;
-		var expectedLengthInPercentage = boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100;
+		var expectedStartPositionInPercentage = ((rawProbability.startTimeInMinutes - boundaries.timelineStartMinutes) * boundaries.lengthPercentagePerMinute * 100).toFixed(2);
+		var expectedLengthInPercentage = (boundaries.lengthPercentagePerMinute * expectedIntervalLength * 100).toFixed(2);
 		var expectedActualClass = "probability-" + probabilityNames[rawProbability.possibility];
 
 		equal(vm.styleJson.top, expectedStartPositionInPercentage + "%");
