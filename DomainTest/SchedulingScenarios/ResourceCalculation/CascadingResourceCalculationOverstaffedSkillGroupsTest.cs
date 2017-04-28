@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -213,6 +215,42 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0);
 			skillCDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
+		}
+
+		[Test]
+		[Ignore("#44156")]
+		public void ShouldMoveResourceOnlyWithinSkillGroupWhenParallellSubskillsExists()
+		{
+			const int numberOfB1Agents = 3;
+			const int numberOfB2Agents = 5;
+
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(9, 10);
+			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(9, 10);
+			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(9, 10);
+			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var skillB1Day = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 100);
+			var skillB2Day = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 100);
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < numberOfB1Agents; i++)
+			{
+				var skillB1Agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1);
+				asses.Add(new PersonAssignment(skillB1Agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(9, 10)));
+			}
+			for (var i = 0; i < numberOfB2Agents; i++)
+			{
+				var skillB2Agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB2);
+				asses.Add(new PersonAssignment(skillB2Agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(9, 10)));
+			}
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillADay, skillB1Day, skillB2Day }, false, false));
+
+			skillB1Day.SkillStaffPeriodCollection.Last().CalculatedResource
+				.Should().Be.EqualTo(numberOfB1Agents);
+			skillB2Day.SkillStaffPeriodCollection.Last().CalculatedResource
+				.Should().Be.EqualTo(numberOfB2Agents);
 		}
 
 		public CascadingResourceCalculationOverstaffedSkillGroupsTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
