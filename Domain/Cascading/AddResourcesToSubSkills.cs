@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 				.Where(x => x.AbsoluteDifference.IsUnderstaffed());
 			var totalFStaff = shovelResourcesDataForIntervalForUnderstaffedSkills.Sum(x => x.FStaff);
 			var totalResurces = shovelResourcesDataForIntervalForUnderstaffedSkills.Sum(x => x.CalculatedResource);
-			var remainingResourcesToShovel = Math.Min(shovelResourcesState.RemainingOverstaffing, maxToMoveForThisSkillGroup);
 
 			foreach (var skillToMoveTo in subSkillsWithSameIndex)
 			{
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				if (proportionalResourcesToMove < 0)
 					continue;
 
-				var resourceToMove = Math.Min(Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove), remainingResourcesToShovel);
+				var resourceToMove = Math.Min(Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove), shovelResourcesState.RemainingOverstaffing);
 				shovelAction(shovelResourcesState, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, dataForIntervalTo, resourceToMove, skillToMoveTo);
 			}
 		}
