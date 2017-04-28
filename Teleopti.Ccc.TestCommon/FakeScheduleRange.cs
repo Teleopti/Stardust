@@ -89,6 +89,15 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return new TargetScheduleSummary{TargetDaysOff = CalculatedTargetScheduleDaysOff(periodToCheck), TargetTime = CalculatedTargetTimeHolder(periodToCheck) };
 		}
+
+		public CurrentScheduleSummary CalculatedCurrentScheduleSummary(DateOnlyPeriod periodToCheck)
+		{
+			return new CurrentScheduleSummary
+			{
+				ContractTime = CalculatedContractTimeHolderOnPeriod(periodToCheck),
+				NumberOfDaysOff = CalculatedScheduleDaysOffOnPeriod(periodToCheck)
+			};
+		}
 		public int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck)
 		{
 			return 8;

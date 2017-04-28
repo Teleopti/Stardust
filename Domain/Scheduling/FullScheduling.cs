@@ -104,11 +104,23 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private static bool isAgentScheduled(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
 		{
-			var summary = scheduleRange.CalculatedTargetTimeSummary(periodToCheck);
-			var scheduledTime = scheduleRange.CalculatedContractTimeHolderOnPeriod(periodToCheck);
-			return summary.TargetTime.HasValue && 
-				summary.TargetTime.Value - summary.NegativeTargetTimeTolerance <= scheduledTime &&
-				summary.TargetTime.Value + summary.PositiveTargetTimeTolerance >= scheduledTime;
+			return isAgentFullfillingContractTime(scheduleRange, periodToCheck) &&
+				   getAgentScheduleDaysWithoutSchedule(scheduleRange, periodToCheck) == 0;
+		}
+
+		private static bool isAgentFullfillingContractTime(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
+		{
+			var targetSummary = scheduleRange.CalculatedTargetTimeSummary(periodToCheck);
+			var scheduleSummary = scheduleRange.CalculatedCurrentScheduleSummary(periodToCheck);
+			return targetSummary.TargetTime.HasValue &&
+				   targetSummary.TargetTime - targetSummary.NegativeTargetTimeTolerance <= scheduleSummary.ContractTime &&
+				   targetSummary.TargetTime + targetSummary.PositiveTargetTimeTolerance >= scheduleSummary.ContractTime;
+		}
+
+		private static int getAgentScheduleDaysWithoutSchedule(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
+		{
+			var scheduleSummary = scheduleRange.CalculatedCurrentScheduleSummary(periodToCheck);
+			return scheduleSummary.DaysWithoutSchedule;
 		}
 
 		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(
@@ -132,7 +144,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
 					});
 				}
-				else if (!isAgentScheduled(item.Value, periodTocheck))
+				else if (!isAgentFullfillingContractTime(item.Value, periodTocheck))
 				{
 					result.Add(new BusinessRulesValidationResult
 					{
@@ -142,6 +154,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 							$"Target of {DateHelper.HourMinutesString(item.Value.CalculatedTargetTimeHolder(periodTocheck).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)} scheduled time is not fulfilled",
 						Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
 					});
+				}
+				else
+				{
+					var agentScheduleDaysWithoutSchedule = getAgentScheduleDaysWithoutSchedule(item.Value, periodTocheck);
+					if (agentScheduleDaysWithoutSchedule > 0)
+					{
+						result.Add(new BusinessRulesValidationResult
+						{
+							BusinessRuleCategory = BusinessRuleCategory.DayOff,
+							BusinessRuleCategoryText = "Scheduled time",
+							Message = $"Agent has {agentScheduleDaysWithoutSchedule} days without any scheduling.",
+							Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
+						});
+					}
 				}
 			}
 			return result;

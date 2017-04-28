@@ -152,6 +152,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    void Reassociate(IUnitOfWork unitOfWork);
 
 	    TargetScheduleSummary CalculatedTargetTimeSummary(DateOnlyPeriod periodToCheck);
-
+	    CurrentScheduleSummary CalculatedCurrentScheduleSummary(DateOnlyPeriod periodToCheck);
     }
 }

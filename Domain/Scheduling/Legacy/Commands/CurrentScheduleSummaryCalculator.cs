@@ -6,17 +6,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class CurrentScheduleSummaryCalculator
 	{
-		public Tuple<TimeSpan, int> GetCurrent(IScheduleRange scheduleRange, DateOnlyPeriod period)
+		public CurrentScheduleSummary GetCurrent(IScheduleRange scheduleRange, DateOnlyPeriod period)
 		{
 			var person = scheduleRange.Person;
 			return calculate(scheduleRange, period, person);
 		}
 
-		private Tuple<TimeSpan, int> calculate(IScheduleRange scheduleRange, DateOnlyPeriod period, IPerson person)
+		private CurrentScheduleSummary calculate(IScheduleRange scheduleRange, DateOnlyPeriod period, IPerson person)
 		{
-			var contractTime = TimeSpan.Zero;
-			var numberOfDaysOff = 0;
-			
+			var result = new CurrentScheduleSummary();
 			foreach (var scheduleDay in scheduleRange.ScheduledDayCollection(period))
 			{
 				if (!person.IsAgent(scheduleDay.DateOnlyAsPeriod.DateOnly))
@@ -25,14 +23,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				var significantPart = scheduleDay.SignificantPartForDisplay();
 				if (significantPart == SchedulePartView.ContractDayOff || significantPart == SchedulePartView.DayOff)
 				{
-					numberOfDaysOff++;
+					result.NumberOfDaysOff++;
 					continue;
 				}
 
-				contractTime = contractTime.Add(scheduleDay.ProjectionService().CreateProjection().ContractTime());
+				var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
+				if (!visualLayerCollection.HasLayers)
+					result.DaysWithoutSchedule++;
+				result.ContractTime = result.ContractTime.Add(visualLayerCollection.ContractTime());
 			}
-
-			return new Tuple<TimeSpan, int>(contractTime, numberOfDaysOff);	
+			return result;	
 		}
+	}
+
+	public class CurrentScheduleSummary
+	{
+		public TimeSpan ContractTime { get; set; }
+		public int NumberOfDaysOff { get; set; }
+		public int DaysWithoutSchedule { get; set; }
 	}
 }

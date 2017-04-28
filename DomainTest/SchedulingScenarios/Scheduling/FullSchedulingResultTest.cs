@@ -54,6 +54,33 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
+		public void ShouldShowAgentsWithNoScheduleAsNotScheduledEvenWithTolerance()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(90), TimeSpan.FromHours(8), TimeSpan.FromHours(0)),
+				WorkTime = new WorkTime(TimeSpan.FromHours(8)),
+				NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(40),
+			};
+			var agent = PersonRepository.Has(contract, ContractScheduleFactory.CreateWorkingWeekContractSchedule(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
+
+			var result = Target.DoScheduling(firstDay.ToDateOnlyPeriod(), new[] { agent.Id.Value });
+
+			var assignments = AssignmentRepository.Find(new[] { agent }, firstDay.ToDateOnlyPeriod(), scenario);
+			assignments.Count.Should().Be.EqualTo(0);
+
+			result.ScheduledAgentsCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldShowAgentWithinNegativeToleranceAsScheduled()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
