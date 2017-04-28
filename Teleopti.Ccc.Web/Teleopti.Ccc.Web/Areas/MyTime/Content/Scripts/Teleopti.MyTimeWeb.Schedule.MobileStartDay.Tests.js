@@ -6,7 +6,7 @@
         setup();
 
 	    $("body").addClass("dayview-view-body");
-        Teleopti.MyTimeWeb.Schedule.MobileDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+        Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
         var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
         var currentDate = vm.selectedDate();
         $(".dayview-view-body").swipe("option").swipeLeft();
@@ -19,7 +19,7 @@
         setup();
 
         $("body").addClass("dayview-view-body");
-        Teleopti.MyTimeWeb.Schedule.MobileDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+        Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
         var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
         var currentDate = vm.selectedDate();
         $(".dayview-view-body").swipe("option").swipeRight();

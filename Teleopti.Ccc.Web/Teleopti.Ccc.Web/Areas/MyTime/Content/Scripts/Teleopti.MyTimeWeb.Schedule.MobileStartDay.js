@@ -77,8 +77,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
         Init: function () {
             if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
                 Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack("Schedule/MobileDay",
-                    Teleopti.MyTimeWeb.Schedule.MobileDay.PartialInit,
-                    Teleopti.MyTimeWeb.Schedule.MobileDay.PartialDispose);
+                    Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit,
+                    Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialDispose);
             }
         },
         PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxObj) {
