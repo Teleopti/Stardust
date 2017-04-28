@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -120,6 +121,24 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return new PlanningPeriod(agentGroup) {_range = range, _number = _number, _periodType = _periodType};
 			}
 			return new PlanningPeriod { _range = range, _number = _number, _periodType = _periodType };
+		}
+
+		public virtual IJobResult GetLastSchedulingJob()
+		{
+			return getLastJobResult(JobCategory.WebSchedule);
+		}
+
+		public virtual IJobResult GetLastIntradayOptimizationJob()
+		{
+			return getLastJobResult(JobCategory.WebIntradayOptimiztion);
+		}
+
+		private IJobResult getLastJobResult(string category)
+		{
+			return JobResults
+				.Where(x => x.JobCategory == category && x.FinishedOk)
+				.OrderByDescending(x => x.Timestamp)
+				.FirstOrDefault();
 		}
 	}
 }

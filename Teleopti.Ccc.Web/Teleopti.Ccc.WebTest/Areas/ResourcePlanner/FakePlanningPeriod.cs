@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -13,6 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			Id = id;
 			Range = range;
 			AgentGroup = agentGroup;
+			JobResults = new HashSet<IJobResult>();
 		}
 
 		public FakePlanningPeriod(Guid id, DateOnlyPeriod range)
@@ -20,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			Id = id;
 			Range = range;
 			AgentGroup = null;
+			JobResults = new HashSet<IJobResult>();
 		}
 		public bool Equals(IEntity other)
 		{
@@ -60,6 +64,24 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void Publish(params IPerson[] people)
 		{
 			throw new NotImplementedException();
+		}
+
+		public virtual IJobResult GetLastSchedulingJob()
+		{
+			return getLastJobResult(JobCategory.WebSchedule);
+		}
+
+		public virtual IJobResult GetLastIntradayOptimizationJob()
+		{
+			return getLastJobResult(JobCategory.WebIntradayOptimiztion);
+		}
+
+		private IJobResult getLastJobResult(string category)
+		{
+			return JobResults
+				.Where(x => x.JobCategory == category && x.FinishedOk)
+				.OrderByDescending(x => x.Timestamp)
+				.FirstOrDefault();
 		}
 	}
 }

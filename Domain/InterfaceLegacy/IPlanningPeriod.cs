@@ -14,12 +14,15 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy
 		ISet<IJobResult> JobResults { get; }
 		void Scheduled();
 		void Publish(params IPerson[] people);
+		IJobResult GetLastSchedulingJob();
+		IJobResult GetLastIntradayOptimizationJob();
 	}
 
 	public enum PlanningPeriodState
 	{
 		New,
 		Scheduled,
-		Published
+		Published,
+		Failed
 	}
 }
