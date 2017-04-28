@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		private IJobResult getLastJobResult(string category)
 		{
 			return JobResults
-				.Where(x => x.JobCategory == category && x.FinishedOk)
+				.Where(x => x.JobCategory == category)
 				.OrderByDescending(x => x.Timestamp)
 				.FirstOrDefault();
 		}

@@ -5,8 +5,10 @@ using System.Net.Http;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
@@ -387,6 +389,46 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var newPeriodStart = periodStart.Date + TimeSpan.FromDays(1);
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.ChangeLastPeriod(agentGroupId, newPeriodStart.Date + TimeSpan.FromDays(14), newPeriodStart);
 			result.Content.First().StartDate.Should().Be.EqualTo(newPeriodStart);
+		}
+
+		[Test]
+		public void ShouldBeStatusFailedWhenSchedulingFailedLastJob()
+		{
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			var agentGroupId = Guid.NewGuid();
+			var agentGroup = new AgentGroup()
+				.WithId(agentGroupId);
+			AgentGroupRepository.Has(agentGroup);
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
+
+			var periodStart = new DateOnly(2017, 04, 26);
+			var planningPeriod = PlanningPeriodRepository.Has(periodStart, 1, agentGroup);
+			var jobResult = new JobResult(JobCategory.WebSchedule, planningPeriod.Range, PersonFactory.CreatePerson(), DateTime.UtcNow);
+			jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "Whatever", DateTime.Now, new Exception()));
+			planningPeriod.JobResults.Add(jobResult);
+
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(agentGroupId);
+			result.Content.First().State.Should().Be(PlanningPeriodState.ScheduleFailed.ToString());
+		}
+
+		[Test]
+		public void ShouldBeStatusFailedWhenIntradayOptimizationFailedLastJob()
+		{
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			var agentGroupId = Guid.NewGuid();
+			var agentGroup = new AgentGroup()
+				.WithId(agentGroupId);
+			AgentGroupRepository.Has(agentGroup);
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
+
+			var periodStart = new DateOnly(2017, 04, 26);
+			var planningPeriod = PlanningPeriodRepository.Has(periodStart, 1, agentGroup);
+			var jobResult = new JobResult(JobCategory.WebIntradayOptimiztion, planningPeriod.Range, PersonFactory.CreatePerson(), DateTime.UtcNow);
+			jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "Whatever", DateTime.Now, new Exception()));
+			planningPeriod.JobResults.Add(jobResult);
+
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(agentGroupId);
+			result.Content.First().State.Should().Be(PlanningPeriodState.IntradayOptimizationFailed.ToString());
 		}
 
 		private static List<AggregatedSchedulePeriod> suggestions()

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				return BadRequest("Invalid planningPeriodId");
 			var range = planningPeriod.Range;
 			var lastJobResult = planningPeriod.GetLastSchedulingJob();
-			if (lastJobResult != null)
+			if (lastJobResult != null && lastJobResult.FinishedOk)
 				return Ok(new
 				{
 					PlanningPeriod = new
@@ -329,14 +329,20 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 		private PlanningPeriodModel createPlanningPeriodModel(IPlanningPeriod planningPeriod, ValidationResult validationResult)
 		{
-			var lastJobResult = planningPeriod.GetLastSchedulingJob();
+			var lastScheduleJobResult = planningPeriod.GetLastSchedulingJob();
+			var lastIntradayOptimizationResult = planningPeriod.GetLastIntradayOptimizationJob();
+			var state = planningPeriod.State;
+			if (lastIntradayOptimizationResult != null && lastIntradayOptimizationResult.HasError())
+				state = PlanningPeriodState.IntradayOptimizationFailed;
+			if (lastScheduleJobResult != null && lastScheduleJobResult.HasError())
+				state = PlanningPeriodState.ScheduleFailed;
 			return new PlanningPeriodModel
 			{
 				StartDate = planningPeriod.Range.StartDate.Date,
 				EndDate = planningPeriod.Range.EndDate.Date,
 				Id = planningPeriod.Id.GetValueOrDefault(),
 				HasNextPlanningPeriod = hasNextPlanningPeriod(planningPeriod.Range.EndDate.AddDays(1)),
-				State = (lastJobResult != null && lastJobResult.HasError() ? PlanningPeriodState.Failed : planningPeriod.State).ToString(),
+				State = state.ToString(),
 				ValidationResult = validationResult,
 				AgentGroupId = planningPeriod.AgentGroup?.Id
 			};

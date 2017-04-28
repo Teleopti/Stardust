@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy
 		New,
 		Scheduled,
 		Published,
-		Failed
+		ScheduleFailed,
+		IntradayOptimizationFailed
 	}
 }
