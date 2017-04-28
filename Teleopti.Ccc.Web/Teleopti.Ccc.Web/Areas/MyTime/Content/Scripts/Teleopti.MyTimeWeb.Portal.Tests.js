@@ -28,7 +28,24 @@
 			Teleopti.MyTimeWeb.Portal.Init(setting, fakeWindow);
 			equal("#Schedule/MobileDay", fakeWindow.location.url);
 		})();
+    });
+
+	test("should navigate to mobile day page when toggle 43446 is on and access from ipad", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_DayScheduleForStartPage_43446") return true;
+			return false;
+		};
+
+		(function () {
+			setup();
+            var fakeWindow = getFakeWindow();
+			fakeWindow.navigator.userAgent = "iPad";
+			var setting = getDefaultSetting();
+			Teleopti.MyTimeWeb.Portal.Init(setting, fakeWindow);
+			equal("#Schedule/MobileDay", fakeWindow.location.url);
+		})();
 	});
+
 
 	function setup() {
 		this.crossroads = {
@@ -55,7 +72,7 @@
 				}
 			},
 			navigator: {
-				userAgent: "Android"
+                userAgent: "Android"
 			}
 		};
 	}

@@ -77,7 +77,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		;
 
 		if (window.location.hash.length <= 1) {
-            if (_showDayScheduleForStartPage() && _isMobile(window)){
+            if (_showDayScheduleForStartPage() && (_isMobile(window)||_isIpad(window))){
             	window.location.replace("#Schedule/MobileDay");
             } else { 
             	window.location.replace("#" + (_isMobile(window) ? "Schedule/MobileWeek" : _settings.defaultNavigation));
@@ -261,18 +261,29 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _isMobile(window) {
-		var ua = window.navigator.userAgent;
-		if (ua.match(/Android/i) || ua.match(/webOS/i) || ua.match(/iPhone/i) || ua.match(/iPod/i)) {
+        var ua = window.navigator.userAgent;
+
+
+        if (ua.match(/Android/i) || ua.match(/webOS/i) || ua.match(/iPhone/i) || ua.match(/iPod/i)) {
 			return true;
 		}
 		return false;
+    }
+
+    function _isIpad(window) {
+	    var ua = window.navigator.userAgent; 
+
+        if (ua.match(/iPad/i)) {
+		    return true;
+	    }
+	    return false; 
 	}
 
 	function _parseHash(hash) {
 		var isWeekSchedule = hash.indexOf("#Schedule") >= 0;
 
 		if (_endsWith(hash, "Tab")) {
-            var suffix = (hash.indexOf("#Schedule") === 0) ? (_isMobile(window) ? (_showDayScheduleForStartPage()?"/MobileDay": "/MobileWeek" ): "/Week") : "/Index";
+            var suffix = (hash.indexOf("#Schedule") === 0) ? ((_isMobile(window) || _isIpad(window))? (_showDayScheduleForStartPage()?"/MobileDay": "/MobileWeek" ): "/Week") : "/Index";
 			hash = hash.substring(0, hash.length - 'Tab'.length) + suffix;
 		}
 
