@@ -44,10 +44,11 @@
 }
 
 .dayview-timeline {
-	width: 31px;
-	height: 792px;
+	width: 32px;
 	background: transparent;
 	border-right: 1px solid #dfdfdf;
+	border-left: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
 	position: relative;
 	margin-right: 4px;
 }
@@ -63,7 +64,7 @@
 .dayview-schedule {
 	display: inline-block;
 	height: 668px;
-    width: calc(100% - 35px);
+    width: calc(100% - 37px);
 }
 
 .dayview-schedule-layer {

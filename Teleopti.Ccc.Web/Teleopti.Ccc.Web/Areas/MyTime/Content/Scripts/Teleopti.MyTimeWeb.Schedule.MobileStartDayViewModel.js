@@ -21,9 +21,15 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
     self.isDayOff = ko.observable(false);
     self.timeLines = ko.observableArray();
     self.layers = ko.observableArray();
+    self.scheduleHeight = ko.observable();
 
     var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
     self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
+
+    var setTimelineHeight = function (lastLayer) {
+        var height = Math.round(constants.scheduleHeight * lastLayer.EndPositionPercentage) + 1 + 'px';
+        self.scheduleHeight(height);
+    };
 
     self.readData = function (data) {
         self.displayDate(data.DisplayDate);
@@ -48,6 +54,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
             return new LayerViewModel(item, parent.userTexts, self);
         });
         self.layers(layers);
+
+        if (data.Schedule.Periods.length > 0) setTimelineHeight(data.Schedule.Periods[data.Schedule.Periods.length - 1]);
     };
 
     self.setCurrentDate = function (date) {
