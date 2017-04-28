@@ -182,7 +182,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 	};
 
 	self.showStaffingProbabilityBar = ko.computed(function () {
-		if(parent.staffingProbabilityForMultipleDaysEnabled())
+		if(parent.staffingProbabilityForMultipleDaysEnabled)
 			return  (moment(self.fixedDate()) >= moment(self.formatedCurrentUserDate())) && (moment(self.fixedDate()) < moment(self.formatedCurrentUserDate()).add('day', constants.maximumDaysDisplayingProbability));
 
 		return self.formattedFixedDate() === self.formatedCurrentUserDate();

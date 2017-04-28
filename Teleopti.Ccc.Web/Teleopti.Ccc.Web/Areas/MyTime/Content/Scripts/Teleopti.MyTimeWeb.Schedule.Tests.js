@@ -1,5 +1,6 @@
 ﻿/// <reference path="~/Content/Scripts/qunit.js" />
 /// <reference path="~/Content/moment/moment.js" />
+/// <reference path="~/Content/hasher/hasher.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js" />
 
@@ -23,10 +24,34 @@ $(document).ready(function() {
 			}
 		};
 	};
-	var basedDate = moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD');
+	var momentWithLocale = function(date){return moment(date).locale('en-gb');};
+	var basedDate = momentWithLocale(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD');
+
+	var blockFetchProbabilityAjax = true;
 
 	function getFakeScheduleData() {
 		return {
+			PeriodSelection: {
+				StartDate: momentWithLocale(basedDate).weekday(0).format('YYYY-MM-DDTHH:mm:ss'),
+				EndDate: momentWithLocale(basedDate).weekday(6).format('YYYY-MM-DDTHH:mm:ss'),
+				Display: momentWithLocale(basedDate).weekday(0).format('YYYY/MM/DDTHH:mm:ss') + ' - ' + momentWithLocale(basedDate).weekday(6).format('YYYY/MM/DDTHH:mm:ss'),
+				Date: basedDate,
+				SelectedDateRange: {
+					MinDate: momentWithLocale(basedDate).weekday(0).format('YYYY-MM-DD'),
+					MaxDate: momentWithLocale(basedDate).weekday(6).format('YYYY-MM-DD')
+				},
+				SelectableDateRange: {
+					MinDate: "1900-04-30",
+					MaxDate: "2077-11-16"
+				},
+				PeriodNavigation: {
+					NextPeriod: momentWithLocale(basedDate).add('day', 7).format('YYYY-MM-DD'),
+					HasNextPeriod: true,
+					PrevPeriod: momentWithLocale(basedDate).subtract('day', 7).format('YYYY-MM-DD'),
+					HasPrevPeriod: true,
+					CanPickPeriod: false
+				}
+			},
 			BaseUtcOffsetInMinutes: 60,
 			Days: [{
 					FixedDate: basedDate,
@@ -42,8 +67,8 @@ $(document).ready(function() {
 					Summary: {
 						Title: 'Early',
 						TimeSpan: '09:30 - 16:45',
-						StartTime: moment(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						EndTime: moment(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+						StartTime: momentWithLocale(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						EndTime: momentWithLocale(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 						Summary: '7:15',
 						StyleClassName: 'color_80FF80',
 						Meeting: null,
@@ -65,8 +90,8 @@ $(document).ready(function() {
 					Periods: [{
 						'Title': 'Phone',
 						'TimeSpan': '09:30 - 16:45',
-						'StartTime': moment(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						'EndTime': moment(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+						'StartTime': momentWithLocale(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						'EndTime': momentWithLocale(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 						'Summary': '7:15',
 						'StyleClassName': 'color_80FF80',
 						'Meeting': null,
@@ -77,10 +102,10 @@ $(document).ready(function() {
 					}]
 				},
 				{
-					FixedDate: moment(basedDate).add('day', 1).format('YYYY-MM-DD'),
+					FixedDate: momentWithLocale(basedDate).add('day', 1).format('YYYY-MM-DD'),
 					Header: {
 						Title: 'Tomorrow',
-						Date: moment(basedDate).add('day', 1).format('YYYY-MM-DD'),
+						Date: momentWithLocale(basedDate).add('day', 1).format('YYYY-MM-DD'),
 						DayDescription: '',
 						DayNumber: '18'
 					},
@@ -90,8 +115,8 @@ $(document).ready(function() {
 					Summary: {
 						Title: 'Early',
 						TimeSpan: '09:30 - 16:45',
-						StartTime: moment(basedDate).add('day', 1).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						EndTime: moment(basedDate).add('day', 1).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+						StartTime: momentWithLocale(basedDate).add('day', 1).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						EndTime: momentWithLocale(basedDate).add('day', 1).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 						Summary: '7:15',
 						StyleClassName: 'color_80FF80',
 						Meeting: null,
@@ -113,8 +138,8 @@ $(document).ready(function() {
 					Periods: [{
 						'Title': 'Phone',
 						'TimeSpan': '09:30 - 16:45',
-						'StartTime': moment(basedDate).startOf('day').add('day', 1).add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						'EndTime': moment(basedDate).startOf('day').add('day', 1).add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+						'StartTime': momentWithLocale(basedDate).startOf('day').add('day', 1).add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+						'EndTime': momentWithLocale(basedDate).startOf('day').add('day', 1).add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 						'Summary': '7:15',
 						'StyleClassName': 'color_80FF80',
 						'Meeting': null,
@@ -125,6 +150,7 @@ $(document).ready(function() {
 					}]
 				}
 			],
+			IsCurrentWeek: true,
 			CheckStaffingByIntraday: true,
 			ViewPossibilityPermission: true,
 			RequestPermission: {
@@ -156,13 +182,13 @@ $(document).ready(function() {
 		return [
 			{
 				Date: basedDate,
-				StartTime: moment(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-				EndTime: moment(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+				StartTime: momentWithLocale(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+				EndTime: momentWithLocale(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 				Possibility: 0
 			}, {
-				Date: moment(basedDate).add('day', 1).format('YYYY-MM-DD'),
-				StartTime: moment(basedDate).add('day', 1).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-				EndTime: moment(basedDate).add('day', 1).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+				Date: momentWithLocale(basedDate).add('day', 1).format('YYYY-MM-DD'),
+				StartTime: momentWithLocale(basedDate).add('day', 1).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+				EndTime: momentWithLocale(basedDate).add('day', 1).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
 				Possibility: 1
 			}
 		];
@@ -173,8 +199,8 @@ $(document).ready(function() {
 		for (var i = 0; i < 24 * 60 / constants.probabilityIntervalLengthInMinute; i++) {
 			result.push({
 				Date: formattedDate, 
-				StartTime: moment(formattedDate).startOf('day').add(constants.probabilityIntervalLengthInMinute * i, "minutes").format('YYYY-MM-DDTHH:mm:ss'),
-				EndTime: moment(formattedDate).startOf('day').add(constants.probabilityIntervalLengthInMinute * (i + 1), "minutes").format('YYYY-MM-DDTHH:mm:ss'),
+				StartTime: momentWithLocale(formattedDate).startOf('day').add(constants.probabilityIntervalLengthInMinute * i, "minutes").format('YYYY-MM-DDTHH:mm:ss'),
+				EndTime: momentWithLocale(formattedDate).startOf('day').add(constants.probabilityIntervalLengthInMinute * (i + 1), "minutes").format('YYYY-MM-DDTHH:mm:ss'),
 				Possibility: constants.probabilityIntervalLengthInMinute * i < 12 * 60 ? 0 : 1
 			});
 		}
@@ -182,7 +208,7 @@ $(document).ready(function() {
 	}
 
 	test("should read absence report permission", function() {
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		vm.initializeData(getFakeScheduleData());
 
 		equal(vm.absenceReportPermission(), true);
@@ -190,7 +216,7 @@ $(document).ready(function() {
 
 	test("should read scheduled days", function() {
 		var fakeScheduleData = getFakeScheduleData();
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 
 		vm.initializeData(fakeScheduleData);
 		equal(vm.days().length, 2);
@@ -221,7 +247,7 @@ $(document).ready(function() {
 				TimeFixedFormat: null
 			});
 		}
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 
 		vm.initializeData(fakeScheduleData);
 
@@ -236,9 +262,9 @@ $(document).ready(function() {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return false;
 		};
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.absence)
+		week.selectedProbabilityType = constants.probabilityType.absence;
 		week.updateProbabilityData(getFakeProbabilityData());
 
 		week.days().forEach(function(day){
@@ -251,9 +277,9 @@ $(document).ready(function() {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return false;
 		};
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.overtime);
+		week.selectedProbabilityType = constants.probabilityType.overtime;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -267,10 +293,10 @@ $(document).ready(function() {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.none);
+		week.selectedProbabilityType = constants.probabilityType.none;
 
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
@@ -280,14 +306,57 @@ $(document).ready(function() {
 		});
 	});
 
+	test("should keep possibility selection for today when changing date", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+		};
+		var fakeScheduleData = getFakeScheduleData();
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
+
+		week.initializeData(fakeScheduleData);
+		week.selectedProbabilityType = constants.probabilityType.absence;
+		week.nextWeek();
+
+		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
+		week.updateProbabilityData(fakeProbabilityData);
+
+		week.previousWeek();
+
+		equal(week.selectedProbabilityType, constants.probabilityType.absence);
+		equal(Teleopti.MyTimeWeb.Portal.ParseHash().probability, constants.probabilityType.absence);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
+	test("should keep possibility selection for multiple days when changing date", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+		};
+		var fakeScheduleData = getFakeScheduleData();
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
+
+
+		week.initializeData(fakeScheduleData);
+		week.selectedProbabilityType = constants.probabilityType.overtime;
+
+		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
+		week.updateProbabilityData(fakeProbabilityData);
+
+		week.previousWeek();
+
+		equal(week.selectedProbabilityType, constants.probabilityType.overtime);
+		equal(Teleopti.MyTimeWeb.Portal.ParseHash().probability, constants.probabilityType.overtime);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
 	test("should show absence possibility within schedule time range", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.absence);
+		week.selectedProbabilityType = constants.probabilityType.absence;
 
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
@@ -300,6 +369,7 @@ $(document).ready(function() {
 				equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
 			}
 		}
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show overtime possibility within timeline range", function () {
@@ -319,9 +389,9 @@ $(document).ready(function() {
 			PositionPercentage: 1,
 			TimeFixedFormat: null
 		}];
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.overtime);
+		week.selectedProbabilityType = constants.probabilityType.overtime;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -330,6 +400,7 @@ $(document).ready(function() {
 		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
 			equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
 		}
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should hide absence possibility earlier than now", function () {
@@ -338,9 +409,9 @@ $(document).ready(function() {
 		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Possibilities = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.absence);
+		week.selectedProbabilityType = constants.probabilityType.absence;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -356,6 +427,7 @@ $(document).ready(function() {
 			else
 				equal(week.days()[0].probabilities()[i].tooltips().length > 0, true);
 		}
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should hide overtime possibility earlier than now", function () {
@@ -364,9 +436,9 @@ $(document).ready(function() {
 		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Possibilities = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.overtime);
+		week.selectedProbabilityType = constants.probabilityType.overtime;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -384,6 +456,7 @@ $(document).ready(function() {
 				equal(probability.tooltips().length > 0, true);
 			}
 		}
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show no absence possibility for dayoff", function () {
@@ -392,14 +465,15 @@ $(document).ready(function() {
 		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.absence);
+		week.selectedProbabilityType = constants.probabilityType.absence;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
 		week.days()[0].userNowInMinute(0);
 		equal(week.days()[0].probabilities().length, 0);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show no absence possibility for fullday absence", function () {
@@ -408,13 +482,14 @@ $(document).ready(function() {
 		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsFullDayAbsence = true;
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.absence);
+		week.selectedProbabilityType = constants.probabilityType.absence;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
 		equal(week.days()[0].probabilities().length, 0);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show overtime possibility for dayoff", function () {
@@ -435,9 +510,9 @@ $(document).ready(function() {
 			PositionPercentage: 1,
 			TimeFixedFormat: null
 		}];
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.overtime);
+		week.selectedProbabilityType = constants.probabilityType.overtime;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -447,6 +522,7 @@ $(document).ready(function() {
 		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
 			equal(week.days()[0].probabilities()[i].tooltips().length > 0, true);
 		}
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show overtime possibility based on intraday open hour", function () {
@@ -458,9 +534,9 @@ $(document).ready(function() {
 			StartTime: '10:00:00',
 			EndTime: '15:00:00'
 		};
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.overtime);
+		week.selectedProbabilityType = constants.probabilityType.overtime;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -470,6 +546,7 @@ $(document).ready(function() {
 		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
 			equal(week.days()[0].probabilities()[i].tooltips().length > 0, true);
 		}
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show overtime possibility for dayoff based on intraday open hour", function () {
@@ -482,9 +559,9 @@ $(document).ready(function() {
 			StartTime: '10:00:00',
 			EndTime: '15:00:00'
 		};
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.overtime);
+		week.selectedProbabilityType = constants.probabilityType.overtime;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -496,6 +573,7 @@ $(document).ready(function() {
 		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
 			equal( week.days()[0].probabilities()[i].tooltips().length > 0, true);
 		}
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show overtime possibility for fullday absence", function () {
@@ -517,9 +595,9 @@ $(document).ready(function() {
 			TimeFixedFormat: null
 		}];
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.overtime);
+		week.selectedProbabilityType = constants.probabilityType.overtime;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -537,7 +615,7 @@ $(document).ready(function() {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
-		fakeScheduleData.Days[0].StartTime = moment(basedDate).subtract('day', 1).add('hour', 22).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[0].StartTime = momentWithLocale(basedDate).subtract('day', 1).add('hour', 22).format('YYYY-MM-DDTHH:mm:ss');
 		fakeScheduleData.TimeLine = [{
 			Time: "00:00:00",
 			TimeLineDisplay: "00:00",
@@ -551,9 +629,9 @@ $(document).ready(function() {
 			TimeFixedFormat: null
 		}];
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.overtime);
+		week.selectedProbabilityType = constants.probabilityType.overtime;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -564,6 +642,7 @@ $(document).ready(function() {
 		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
 			equal(week.days()[0].probabilities()[i].tooltips().length > 0, true);
 		}
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show correct absence possibility for cross day schedule", function () {
@@ -571,11 +650,11 @@ $(document).ready(function() {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
-		fakeScheduleData.Days[0].Periods[0].StartTime = moment(basedDate).subtract('day', 1).add('hour', 22).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[0].Periods[0].StartTime = momentWithLocale(basedDate).subtract('day', 1).add('hour', 22).format('YYYY-MM-DDTHH:mm:ss');
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.absence);
+		week.selectedProbabilityType = constants.probabilityType.absence;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -587,6 +666,7 @@ $(document).ready(function() {
 		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
 			equal(week.days()[0].probabilities()[i].tooltips().length > 0, true);
 		}
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show absence possibility for night shift schedule", function () {
@@ -594,7 +674,7 @@ $(document).ready(function() {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
-		fakeScheduleData.Days[0].Periods[0].EndTime = moment(basedDate).add('day', 1).add('hour', 2).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[0].Periods[0].EndTime = momentWithLocale(basedDate).add('day', 1).add('hour', 2).format('YYYY-MM-DDTHH:mm:ss');
 		fakeScheduleData.TimeLine = [{
 			Time: "09:15:00",
 			TimeLineDisplay: "09:15",
@@ -608,9 +688,9 @@ $(document).ready(function() {
 			TimeFixedFormat: null
 		}];
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 		week.initializeData(fakeScheduleData);
-		week.selectedProbabilityType(constants.probabilityType.absence);
+		week.selectedProbabilityType = constants.probabilityType.absence;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
@@ -618,7 +698,7 @@ $(document).ready(function() {
 
 		//9:30 ~ 24:00 = 14.5 * 4 = 58
 		equal(week.days()[0].probabilities().length, 58);
-
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should apply multiple day probabilities to week view model when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on ", function() {
@@ -627,26 +707,27 @@ $(document).ready(function() {
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
 		};
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
-		equal(vm.days().length, 0);
-		vm.initializeData(getFakeScheduleData());
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
+		equal(week.days().length, 0);
+		week.initializeData(getFakeScheduleData());
 
-		vm.selectedProbabilityType(constants.probabilityType.absence);
-		vm.updateProbabilityData(getFakeProbabilityData());
+		week.selectedProbabilityType = constants.probabilityType.absence;
+		week.updateProbabilityData(getFakeProbabilityData());
 
-		equal(vm.days().length, 2);
-		equal(vm.days()[0].probabilities().length, 1);
-		equal(vm.days()[0].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass);
-		equal(vm.days()[0].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
-		equal(vm.days()[0].probabilities()[0].styleJson.left != '', true);
-		equal(vm.days()[0].probabilities()[0].styleJson.width != '', true);
+		equal(week.days().length, 2);
+		equal(week.days()[0].probabilities().length, 1);
+		equal(week.days()[0].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass);
+		equal(week.days()[0].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
+		equal(week.days()[0].probabilities()[0].styleJson.left != '', true);
+		equal(week.days()[0].probabilities()[0].styleJson.width != '', true);
 
-		equal(vm.days()[1].probabilities().length, 1);
-		equal(vm.days()[1].probabilities().length, 1);
-		equal(vm.days()[1].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.highProbabilityClass);
-		equal(vm.days()[1].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
-		equal(vm.days()[1].probabilities()[0].styleJson.left != '', true);
-		equal(vm.days()[1].probabilities()[0].styleJson.width != '', true);
+		equal(week.days()[1].probabilities().length, 1);
+		equal(week.days()[1].probabilities().length, 1);
+		equal(week.days()[1].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.highProbabilityClass);
+		equal(week.days()[1].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
+		equal(week.days()[1].probabilities()[0].styleJson.left != '', true);
+		equal(week.days()[1].probabilities()[0].styleJson.width != '', true);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should apply single day probabilities to week view model when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is off ", function() {
@@ -656,20 +737,21 @@ $(document).ready(function() {
 		};
 
 		var fakeScheduleData = getFakeScheduleData();
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
 
-		equal(vm.days().length, 0);
-		vm.initializeData(fakeScheduleData);
+		equal(week.days().length, 0);
+		week.initializeData(fakeScheduleData);
 
-		vm.selectedProbabilityType(constants.probabilityType.absence);
-		vm.updateProbabilityData(getFakeProbabilityData());
-		equal(vm.days().length, 2);
-		equal(vm.days()[0].probabilities().length, 1);
-		equal(vm.days()[0].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass);
-		equal(vm.days()[0].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
-		equal(vm.days()[0].probabilities()[0].styleJson.left != '', true);
-		equal(vm.days()[0].probabilities()[0].styleJson.width != '', true);
-		equal(vm.days()[1].probabilities().length, 0);
+		week.selectedProbabilityType = constants.probabilityType.absence;
+		week.updateProbabilityData(getFakeProbabilityData());
+		equal(week.days().length, 2);
+		equal(week.days()[0].probabilities().length, 1);
+		equal(week.days()[0].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass);
+		equal(week.days()[0].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForAbsence) > -1, true);
+		equal(week.days()[0].probabilities()[0].styleJson.left != '', true);
+		equal(week.days()[0].probabilities()[0].styleJson.width != '', true);
+		equal(week.days()[1].probabilities().length, 0);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should not show probability toggle if current week doesn't intercept with 14 upcoming days period even when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on ", function() {
@@ -680,23 +762,24 @@ $(document).ready(function() {
 
 		var fakeScheduleData = getFakeScheduleData();
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
-		vm.initializeData(fakeScheduleData);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, blockFetchProbabilityAjax);
+		week.initializeData(fakeScheduleData);
 
-		vm.selectedProbabilityType(constants.probabilityType.absence);
-		vm.updateProbabilityData(getFakeProbabilityData());
-		equal(vm.showProbabilityToggle(), true);
+		week.selectedProbabilityType = constants.probabilityType.absence;
+		week.updateProbabilityData(getFakeProbabilityData());
+		equal(week.showProbabilityToggle(), true);
 
-		fakeScheduleData.Days[0].FixedDate = moment(basedDate).add('day', 15).format('YYYY-MM-DD');
-		fakeScheduleData.Days[0].Periods[0].StartTime = moment(fakeScheduleData.Days[0].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
-		fakeScheduleData.Days[0].Periods[0].EndTime = moment(fakeScheduleData.Days[0].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[0].FixedDate = momentWithLocale(basedDate).add('day', 15).format('YYYY-MM-DD');
+		fakeScheduleData.Days[0].Periods[0].StartTime = momentWithLocale(fakeScheduleData.Days[0].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[0].Periods[0].EndTime = momentWithLocale(fakeScheduleData.Days[0].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
 
-		fakeScheduleData.Days[0].FixedDate = moment(basedDate).add('day', 15).format('YYYY-MM-DD');
-		fakeScheduleData.Days[1].Periods[0].StartTime = moment(fakeScheduleData.Days[1].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
-		fakeScheduleData.Days[1].Periods[0].EndTime = moment(fakeScheduleData.Days[1].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[0].FixedDate = momentWithLocale(basedDate).add('day', 15).format('YYYY-MM-DD');
+		fakeScheduleData.Days[1].Periods[0].StartTime = momentWithLocale(fakeScheduleData.Days[1].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[1].Periods[0].EndTime = momentWithLocale(fakeScheduleData.Days[1].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
 
-		vm.selectedProbabilityType(constants.probabilityType.none);
-		vm.initializeData(fakeScheduleData);
-		equal(vm.showProbabilityToggle(), false);
+		week.selectedProbabilityType = constants.probabilityType.none;
+		week.initializeData(fakeScheduleData);
+		equal(week.showProbabilityToggle(), false);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 });

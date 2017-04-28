@@ -23,6 +23,8 @@ $(document).ready(function () {
 	};
 	var basedDate = moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD');
 
+	var stopFetchProbabilityData = true;
+
 	function getFakeScheduleData(){
 		return {
 			PeriodSelection:{
@@ -112,7 +114,7 @@ $(document).ready(function () {
 	}
 
 	test("should read date", function () {
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null);
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null, stopFetchProbabilityData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(getFakeScheduleData().Days[0], false, true, weekViewModel);
 
 		equal(vm.fixedDate(), basedDate);
@@ -121,7 +123,7 @@ $(document).ready(function () {
 	});
 
 	test("should read permission", function () {
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null);
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null, stopFetchProbabilityData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel({}, false, true, weekViewModel);
 
 		equal(vm.absenceReportPermission(), false);
@@ -129,7 +131,7 @@ $(document).ready(function () {
 	});
 
 	test("should load shift category data", function () {
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null);
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null, stopFetchProbabilityData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(getFakeScheduleData().Days[0], true, true, weekViewModel);
 		equal(vm.summaryName(), getFakeScheduleData().Days[0].Summary.Title);
 		equal(vm.summaryTimeSpan(), getFakeScheduleData().Days[0].Summary.TimeSpan);
@@ -141,27 +143,27 @@ $(document).ready(function () {
 	test("should read dayoff data", function () {
 		var fakeData = getFakeScheduleData();
 		fakeData.Days[0].IsDayOff = true;
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null);
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null, stopFetchProbabilityData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(fakeData.Days[0], true, true, weekViewModel);
 
 		equal(vm.isDayoff(), true);
 	});
 
 	test("should indicate has shift", function () {
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null);
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null, stopFetchProbabilityData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(getFakeScheduleData().Days[0], true, true, weekViewModel);
 		equal(vm.hasShift, true);
 	});
 
 	test("should read week day header titles", function () {
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null);
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null, stopFetchProbabilityData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(getFakeScheduleData().Days[0], true, true, weekViewModel);
 
 		equal(vm.weekDayHeaderTitle(), "Today");
 	});
 
 	test("should read summary timespan when there is overtime and overtime availability", function () {
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null);
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null, stopFetchProbabilityData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(getFakeScheduleData().Days[0], true, true, weekViewModel);
 		equal(vm.summaryTimeSpan(), getFakeScheduleData().Days[0].Summary.TimeSpan);
 		equal(vm.layers.length, 1);

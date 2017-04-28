@@ -50,6 +50,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				date: selectedDate,
 			},
 			success: function (data) {
+				vm.setCurrentDate(moment(data.PeriodSelection.Date));
 				_bindData(data);
 				_setTimeIndicator(getCurrentUserDateTime(vm.baseUtcOffsetInMinutes));
 				if (dataHandler != undefined) {
@@ -143,7 +144,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	};
 
-	var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart, undefined) {
+	var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart, blockProbabilityAjaxForTestOnly) {
 		var self = this;
 		self.initializeData = initializeWeekViewModel;
 		self.navigateToRequestsMethod = navigateToRequestsMethod;
@@ -157,11 +158,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.overtimeAvailabilityPermission = ko.observable();
 		self.shiftExchangePermission = ko.observable();
 		self.personAccountPermission = ko.observable();
-		self.staffingProbabilityEnabled = ko.observable();
-		self.staffingProbabilityForMultipleDaysEnabled = ko.observable();
+		self.staffingProbabilityEnabled = false;
+		self.staffingProbabilityForMultipleDaysEnabled = false;
 		self.absenceProbabilityEnabled = ko.observable();
 		self.showProbabilityToggle = ko.observable();
 		self.loadingProbabilityData = ko.observable(false);
+		self.blockProbabilityAjaxForTestOnly = blockProbabilityAjaxForTestOnly;
 
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
@@ -197,25 +199,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		};
 
-		self.setCurrentDate = function (selectedDate) {
-			if (self.selectedDateSubscription)
-				self.selectedDateSubscription.dispose();
-			self.selectedDate(selectedDate);
-			self.selectedDateSubscription = self.selectedDate.subscribe(function (date) {
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(date) + getUrlPartForProbability());
-			});
-		};
-
 		var validProbabilitiesTypes = [
 			userTexts.hideStaffingInfo,
 			userTexts.showAbsenceProbability,
 			userTexts.showOvertimeProbability
 		];
 
-		self.selectedProbabilityType = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().probability);
-		self.probabilityTypes = ko.observable(constants.probabilityType);
+		self.selectedProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
+		self.probabilityTypes = constants.probabilityType;
 		self.probabilityLabel = function () {
-			var selectedProbabilityType = validProbabilitiesTypes[self.selectedProbabilityType()];
+			var selectedProbabilityType = validProbabilitiesTypes[self.selectedProbabilityType];
 			if (!selectedProbabilityType) {
 				return userTexts.staffingInfo;
 			}
@@ -225,8 +218,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.hideProbabilityEarlierThanNow = true;
 
 		self.switchProbabilityType = function (probabilityType) {
-			self.selectedProbabilityType(probabilityType);
-			if(self.selectedProbabilityType() == constants.probabilityType.none){
+			self.selectedProbabilityType = probabilityType;
+			if(self.selectedProbabilityType == constants.probabilityType.none){
 				self.days().forEach(function(d){
 					d.probabilities([]);
 				});
@@ -245,7 +238,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				type: "GET",
 				data: {
 					date: self.selectedDate().format('YYYY-MM-DD'),
-					staffingPossiblityType: self.selectedProbabilityType()
+					staffingPossiblityType: self.selectedProbabilityType
 				},
 				success: function (data) {
 					self.updateProbabilityData(data);
@@ -254,10 +247,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.updateProbabilityData = function(data){
-			if(!self.staffingProbabilityEnabled()) return;
+			if(!self.staffingProbabilityEnabled) return;
 
 			var options = {
-				probabilityType: self.selectedProbabilityType(),
+				probabilityType: self.selectedProbabilityType,
 				layoutDirection: constants.layoutDirection.vertical,
 				timelines: self.timeLines(),
 				intradayOpenPeriod: self.intradayOpenPeriod,
@@ -265,7 +258,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
 				userTexts: self.userTexts
 			};
-			if(self.staffingProbabilityForMultipleDaysEnabled()) {
+			if(self.staffingProbabilityForMultipleDaysEnabled) {
 				self.days().forEach(function(day){
 					var rawProbabilities = data.filter(function(d){return d.Date == day.fixedDate();});
 					day.probabilities(Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbabilities, day, options));
@@ -281,12 +274,18 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.loadingProbabilityData(false);
 		};
 
+		self.setCurrentDate = function (selectedDate) {
+			self.selectedDate(selectedDate);
+		};
+
 		self.previousWeek = function () {
 			self.selectedDate(self.previousWeekDate());
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability());
 		};
 
 		self.nextWeek = function () {
 			self.selectedDate(self.nextWeekDate());
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability());
 		};
 
 		self.today = function () {
@@ -310,8 +309,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		function getUrlPartForProbability() {
-			return (self.showProbabilityToggle() && self.selectedProbabilityType() !== constants.probabilityType.none && self.selectedProbabilityType())
-				? "/Probability/" + self.selectedProbabilityType()
+			return (self.selectedProbabilityType !== constants.probabilityType.none && self.selectedProbabilityType)
+				? "/Probability/" + self.selectedProbabilityType
 				: "";
 		}
 
@@ -493,21 +492,19 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
 		}
 
-		self.staffingProbabilityEnabled(data.ViewPossibilityPermission
-			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608"));
-		self.staffingProbabilityForMultipleDaysEnabled(self.staffingProbabilityEnabled() 
-			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880"));
+		self.staffingProbabilityEnabled = data.ViewPossibilityPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608");
+		self.staffingProbabilityForMultipleDaysEnabled = self.staffingProbabilityEnabled && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880");
 
-		self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled());
-		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityType() === constants.probabilityType.absence) {
-			self.selectedProbabilityType(constants.probabilityType.none);
+		self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
+		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityType === constants.probabilityType.absence) {
+			self.selectedProbabilityType = constants.probabilityType.none;
 		}
 
-		if(self.staffingProbabilityForMultipleDaysEnabled()){
+		if(self.staffingProbabilityForMultipleDaysEnabled){
 			var interceptWith14Days = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(currentUserDate)) && (moment(data.Days[0].FixedDate) < moment(currentUserDate).add('day', constants.maximumDaysDisplayingProbability));
 			self.showProbabilityToggle(interceptWith14Days);
 		}else{
-			self.showProbabilityToggle(self.staffingProbabilityEnabled() && self.isCurrentWeek());
+			self.showProbabilityToggle(self.staffingProbabilityEnabled && self.isCurrentWeek());
 		}
 
 		self.asmPermission(data.AsmPermission);
@@ -552,8 +549,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 		}
 		self.days(days);
-		if(self.showProbabilityToggle() && (self.selectedProbabilityType() == constants.probabilityType.absence || self.selectedProbabilityType() == constants.probabilityType.overtime))
+		if(self.showProbabilityToggle() && (self.selectedProbabilityType == constants.probabilityType.absence || self.selectedProbabilityType == constants.probabilityType.overtime) && !self.blockProbabilityAjaxForTestOnly){
 			self.fetchProbabilityData();
+		}
 	}
 
 	function _setTimeIndicator(theDate) {

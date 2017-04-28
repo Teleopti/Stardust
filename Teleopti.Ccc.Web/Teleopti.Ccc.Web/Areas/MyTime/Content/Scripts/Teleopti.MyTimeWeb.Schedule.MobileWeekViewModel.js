@@ -17,7 +17,7 @@ if (typeof Teleopti.MyTimeWeb.Schedule === "undefined") {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, reloadData) {
+Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, reloadData, blockProbabilityAjaxForTestOnly) {
 	var self = this;
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
@@ -41,6 +41,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
 	self.showingAbsenceProbability = ko.observable(initializeProbabilityType === probabilityType.absence);
 	self.showingOvertimeProbability = ko.observable(initializeProbabilityType === probabilityType.overtime);
+	self.blockProbabilityAjaxForTestOnly = blockProbabilityAjaxForTestOnly;
 
 	self.absenceProbabilityEnabled = ko.observable(false);
 
@@ -88,7 +89,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	};
 
 	function getProbabilityUrl(){
-		if(self.selectedProbabilityOptionValue() !== probabilityType.none && self.selectedProbabilityOptionValue() && self.showProbabilityOptionsToggleIcon())
+		if(self.selectedProbabilityOptionValue() !== probabilityType.none && self.selectedProbabilityOptionValue())
 			return "/Probability/" + self.selectedProbabilityOptionValue();
 		else 
 			return '';
@@ -320,7 +321,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 		self.minDate(moment(data.Days[0].FixedDate).add("day", -1));
 		self.maxDate(moment(data.Days[data.Days.length - 1].FixedDate).add("day", 1));
 		self.displayDate(data.PeriodSelection.Display);
-		if(self.showProbabilityOptionsToggleIcon() && (self.selectedProbabilityOptionValue() == constants.probabilityType.absence || self.selectedProbabilityOptionValue() == constants.probabilityType.overtime))
+		if(self.showProbabilityOptionsToggleIcon() && (self.selectedProbabilityOptionValue() == constants.probabilityType.absence || self.selectedProbabilityOptionValue() == constants.probabilityType.overtime) && !self.blockProbabilityAjaxForTestOnly)
 			self.fetchProbabilityData();
 	};
 };

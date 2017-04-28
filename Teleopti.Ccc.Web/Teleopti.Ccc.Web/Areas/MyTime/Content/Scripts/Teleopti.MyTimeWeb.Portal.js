@@ -280,10 +280,10 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _parseHash(hash) {
-		var isWeekSchedule = hash.indexOf("#Schedule") >= 0;
+		var isWeekSchedule = hash.indexOf("Schedule/") >= 0;
 
 		if (_endsWith(hash, "Tab")) {
-            var suffix = (hash.indexOf("#Schedule") === 0) ? ((_isMobile(window) || _isIpad(window))? (_showDayScheduleForStartPage()?"/MobileDay": "/MobileWeek" ): "/Week") : "/Index";
+            var suffix = (hash.indexOf("Schedule/") === 0) ? ((_isMobile(window) || _isIpad(window))? (_showDayScheduleForStartPage()?"/MobileDay": "/MobileWeek" ): "/Week") : "/Index";
 			hash = hash.substring(0, hash.length - 'Tab'.length) + suffix;
 		}
 
@@ -292,16 +292,15 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		}
 
 		var parts = $.merge(hash.split('/'), [null, null, null, null, null, null, null, null]);
-		parts.length = 8;
+		parts.length = 8;// why set length to 8?
 
 		var probability = undefined;
 		if (isWeekSchedule) {
-			if (parts[5] === "Probability") {
-				probability = parseInt(parts[6]);
-			}
-			else if (parts[2] === "Probability") {
-				probability = parseInt(parts[3]);
-			}
+			parts.forEach(function(p, i, arr){
+				if(p == "Probability" && arr[i + 1]){
+					probability = parseInt(arr[i + 1]);
+				}
+			});
 		}
 
 		var controller = parts[0];
@@ -322,6 +321,10 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			dateHash: dateHash,
 			probability: probability
 		};
+	}
+
+	function _resetParsedHash(){
+		location.hash = '';
 	}
 
 	function _adjustTabs(hashInfo) {
@@ -400,6 +403,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 		NavigateTo: function (action, date, id) {
 			_navigateTo(action, date, id);
+		},
+		ResetParsedHash: function(){
+			_resetParsedHash();
 		},
 		ParseHash: function () {
 			return _parseHash(location.hash);
