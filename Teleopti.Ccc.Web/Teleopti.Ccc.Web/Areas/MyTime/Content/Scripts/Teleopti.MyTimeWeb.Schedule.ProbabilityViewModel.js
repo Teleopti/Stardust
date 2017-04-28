@@ -1,5 +1,7 @@
 ﻿Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel = function (rawProbabilityCellData, probabilityType, boundaries, userTexts, parent, layoutDirection, hideProbabilityEarlierThanNow) {
-	var constants = Teleopti.MyTimeWeb.Common.Constants;
+	var startPositionVal,
+		intervalLengthVal,
+		constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	var probabilityLevel = {
 		low: 0,
@@ -27,8 +29,12 @@
 		var startPositionProperty = layoutDirection === constants.layoutDirection.horizontal ? "left" : "top";
 		var lengthProperty = layoutDirection === constants.layoutDirection.horizontal ? "width" : "height";
 
-		styleJson[startPositionProperty] = boundaries.lengthPercentagePerMinute * (rawProbabilityCellData.startTimeInMinutes - boundaries.timelineStartMinutes) * 100 + "%";
-		styleJson[lengthProperty] = boundaries.lengthPercentagePerMinute * (rawProbabilityCellData.endTimeInMinutes - rawProbabilityCellData.startTimeInMinutes) * 100 + "%";
+		startPositionVal = (boundaries.lengthPercentagePerMinute * (rawProbabilityCellData.startTimeInMinutes - boundaries.timelineStartMinutes) * 100).toFixed(2);
+
+		intervalLengthVal = (boundaries.lengthPercentagePerMinute * (rawProbabilityCellData.endTimeInMinutes - rawProbabilityCellData.startTimeInMinutes) * 100).toFixed(2);
+
+		styleJson[startPositionProperty] = startPositionVal + "%";
+		styleJson[lengthProperty] = intervalLengthVal + "%";
 
 		return styleJson;
 	}
@@ -72,6 +78,8 @@
 
 	return {
 		styleJson: generateStyleJson(),
+		startPosition: startPositionVal,
+		intervalLength: intervalLengthVal,
 		cssClass: generateCssClass,
 		tooltips: generateTooltips
 	};

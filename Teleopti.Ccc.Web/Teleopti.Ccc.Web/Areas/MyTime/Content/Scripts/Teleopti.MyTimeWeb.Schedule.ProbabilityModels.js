@@ -142,6 +142,21 @@
 			}
 		}
 
+		probabilityModels.forEach(function(p, i, arr){
+			if(arr[i + 1]){
+				p.intervalLength = (arr[i + 1].startPosition - p.startPosition).toFixed(2);
+
+				if (p.styleJson['width'] && p.styleJson['width'].length > 0){
+					p.styleJson['width'] = p.intervalLength + "%";
+					return;
+				}
+
+				if (p.styleJson['height'] && p.styleJson['height'].length > 0){
+					p.styleJson['height'] = p.intervalLength + "%";
+				}
+			}
+		});
+
 		return probabilityModels;
 	};
 
