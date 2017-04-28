@@ -27,11 +27,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 						{
 							if (!shovelResourcesState.IsAnyPrimarySkillOpen)
 							{
-								var remainingResourcesToShovel = Math.Min(shovelResourcesState.RemainingOverstaffing, maxToMoveForThisSkillGroup);
+								//TODO - don't we have to use maxToMoveForThisSkillGroup here as well?
+								var remainingResourcesToShovel = shovelResourcesState.RemainingOverstaffing;
 								foreach (var skillToMoveTo in subSkillsWithSameIndex)
 								{
 									var dataForIntervalTo = shovelResourceData.GetDataForInterval(skillToMoveTo, interval);
-									var resourceToMove = Math.Min(remainingResourcesToShovel, remainingResourcesToShovel / subSkillsWithSameIndex.Count());
+									var resourceToMove = remainingResourcesToShovel / subSkillsWithSameIndex.Count();
 									doActualShoveling(shovelResourcesState, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, dataForIntervalTo, resourceToMove, skillToMoveTo);
 								}
 							}
