@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		public bool PersonAccountPermission { get; set; }
 		public bool ViewPossibilityPermission { get; set; }
 		public bool ShiftTradeBulletinBoardPermission { get; set; }
-		public TimePeriod? SiteOpenHourIntradayPeriod { get; set; }
 	}
 
 	public class DayScheduleDomainData : BaseScheduleDomainData

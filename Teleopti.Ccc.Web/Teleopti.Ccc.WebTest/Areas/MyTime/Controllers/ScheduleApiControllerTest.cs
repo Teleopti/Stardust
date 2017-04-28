@@ -886,6 +886,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchWeekData(null).Days.First();
 			result.HasNote.Should().Be.False();
 		}
+
+		[Test, SetCulture("sv-SE")]
+		public void ShouldGetSiteOpenHourPeriodForDayView()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = new TimePeriod(9, 0, 10, 0),
+				WeekDay = DayOfWeek.Thursday
+			});
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = new TimePeriod(10, 0, 11, 0),
+				WeekDay = DayOfWeek.Friday
+			});
+			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+			var result = Target.FetchWeekData(null);
+			result.Days.ElementAt(3).SiteOpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(9));
+			result.Days.ElementAt(3).SiteOpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(10));
+			result.Days.ElementAt(4).SiteOpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(10));
+			result.Days.ElementAt(4).SiteOpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(11));
+		}
 		#endregion
 
 		#region Test cases for FetchMonthData()

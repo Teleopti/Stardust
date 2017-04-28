@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Days = days(s),
 				AsmPermission = s.AsmPermission,
 				IsCurrentWeek = s.IsCurrentWeek,
-				SiteOpenHourIntradayPeriod = s.SiteOpenHourIntradayPeriod,
-				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, timeZone)
+				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, timeZone),
+				SiteOpenHourIntradayPeriod = getSiteOpenHourPeriod(_now.LocalDateOnly())
 			};
 		}
 
@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Schedule = createDayViewModel(s.ScheduleDay),
 				AsmPermission = s.AsmPermission,
 				IsToday = s.IsCurrentDay,
-				SiteOpenHourIntradayPeriod = s.SiteOpenHourIntradayPeriod,
-				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, timeZone)
+				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, timeZone),
+				SiteOpenHourIntradayPeriod = getSiteOpenHourPeriod(s.Date)
 			};
 		}
 
@@ -149,7 +149,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				IsFullDayAbsence = significantPartForDisplay == SchedulePartView.FullDayAbsence,
 				IsDayOff = significantPartForDisplay == SchedulePartView.DayOff,
 				OvertimeAvailabililty = overtimeAvailability(s),
-				Availability = s.Availability
+				Availability = s.Availability,
+				SiteOpenHourPeriod = getSiteOpenHourPeriod(s.Date)
 			};
 		}
 
@@ -327,6 +328,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				}
 			}
 			return new PeriodViewModel();
+		}
+
+		private TimePeriod? getSiteOpenHourPeriod(DateOnly date)
+		{
+			var siteOpenHour = _loggedOnUser.CurrentUser().SiteOpenHour(date);
+			if (siteOpenHour == null || siteOpenHour.IsClosed)
+			{
+				return null;
+			}
+			return siteOpenHour.TimePeriod;
 		}
 	}
 }
