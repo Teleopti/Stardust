@@ -10,9 +10,18 @@
 	<div class="con-flex">
 		<button ng-if="!vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.startNextPlanningPeriod()">Create next planning period</button>
 		<button ng-if="vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.modifyFirstPpModal = true; vm.getSugesstionsForFirstPp()">Create planning period</button>
+		<div class="line-right pp-color-label" ng-if="!vm.isNonePp() && vm.displayButton">
+			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>Scheduled Succeeded </span>
+			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>Scheduled Failed </span>
+		</div>
+	</div>
+</div>
+<div class="con-row">
+	<div class="con-flex">
 		<div class="wfm-grid">
 			<div class="grid-card" ng-repeat="p in vm.planningPeriods | orderBy: '-EndDate'">
-				<div class="list-content panel" ng-class="{'pp-scheduled':p.State == 'Scheduled'}" ng-click="vm.selectPp(p)">
+				<div class="list-content panel" ng-class="{'pp-scheduled':p.State == 'Scheduled', 'pp-scheduled-failed':p.State == 'ScheduleFailed'|| p.State == 'IntradayOptimizationFailed'}"
+				 ng-click="vm.selectPp(p)">
 					<div class="ag-pp">
 						<div class="con-flex x3 pp-inner-card">
 							<span>
@@ -128,7 +137,7 @@
 									<i class="mdi mdi-alert"></i> You are going to create this planning period from {{vm.selectedSuggestion.startDate | amDateFormat:"L"}} to {{vm.selectedSuggestion.endDate | amDateFormat:"L"}}
 								</label>
 							</div>
-							<div class="con-row" >
+							<div class="con-row">
 								<date-range-picker class="pp-datepicker" ng-model="vm.selectedSuggestion"></date-range-picker>
 							</div>
 						</div>

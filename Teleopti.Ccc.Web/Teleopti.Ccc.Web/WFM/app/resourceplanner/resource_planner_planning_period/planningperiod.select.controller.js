@@ -51,6 +51,7 @@
             return query.$promise.then(function (data) {
                 vm.planningPeriods = data;
                 vm.displayButton = true;
+                console.log(vm.planningPeriods)
                 return vm.planningPeriods;
             });
         }

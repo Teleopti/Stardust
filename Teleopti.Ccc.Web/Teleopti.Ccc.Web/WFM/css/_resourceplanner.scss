@@ -433,6 +433,24 @@ background-color: #cacaca;
 	.pp-scheduled {
 		background-color: #c2e085 !important;
 	}
+
+	.pp-scheduled-failed {
+		background-color: #ffc285 !important;
+	}
+
+	.pp-scheduled-label {
+		color: #c2e085 !important;
+	}
+
+	.pp-scheduled-failed-label {
+		color: #ffc285 !important;
+	}
+	
+	.pp-color-label {
+		display: inline-block;
+		margin: 10px 10px 0 0;
+		padding: 5px 10px;
+	}
 	
 	.pp-status {
 		padding: 6px;
