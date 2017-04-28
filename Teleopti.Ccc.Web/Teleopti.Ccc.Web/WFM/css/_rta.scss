@@ -209,7 +209,7 @@
     }
 
  .highlight>td {
-        background-color: #C2E085;
+        background-color: $green-100;
     }
     
     .diamond {
@@ -246,7 +246,7 @@
     }
     
     .change.highlight {
-        background-color: #9CCC65;
+        background-color: $green-300;
     }
     
     .label:empty {
@@ -254,7 +254,7 @@
     }
     
     .rta-change-row {
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid $gray-300;
         padding: 8px;
     }
     
@@ -273,13 +273,17 @@
     }
     
     .rta-card .wfm-card-title {
-        border-left: 10px solid black;
+        border-left: 10px solid $gray100;
     }
     
     .rta-card .wfm-card-selected .wfm-card-title {
-        background-color: white;
-        border-bottom: 1px solid #eee;
+        background-color: $white;
+        border-bottom: 1px solid $gray-300;
     }
+
+	.rta-card-full-width {
+		margin:8px 0px;
+	}
     
     .test {
         font-size: 24px;

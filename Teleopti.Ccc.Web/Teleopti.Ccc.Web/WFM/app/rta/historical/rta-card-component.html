@@ -1,5 +1,5 @@
 <div class="rta-card wfm-card-list">
-    <md-card ng-class="{'wfm-card-selected material-depth-2': $ctrl.ngOpen, 'wfm-card-unselected': !$ctrl.ngOpen}">
+    <md-card ng-class="{'wfm-card-selected material-depth-2 rta-card-full-width': $ctrl.ngOpen, 'wfm-card-unselected rta-card-full-width': !$ctrl.ngOpen}">
         <div ng-transclude="header"></div>
         <div ng-if="$ctrl.ngOpen" ng-transclude="body"></div>
     </md-card>
