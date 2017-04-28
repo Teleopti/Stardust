@@ -747,10 +747,6 @@ input[type=search]::-ms-clear {
 			background-color: #9ccc33!important;
     		border-color: #8cbc23!;
 		}
-		.new-filter{
-		    padding-left: 2vw!important;
-    		padding-right: 2vw!important;
-		}
 		/*.shift-trade-add-schedule > div > div > div > div:nth-child(even){
 			background: red !important;
 		}*/
