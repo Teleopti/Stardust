@@ -5,12 +5,12 @@
     test("should navigate to next date when swiping left", function () {
         setup();
 
+	    $("body").addClass("dayview-view-body");
         Teleopti.MyTimeWeb.Schedule.MobileDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
         var vm = Teleopti.MyTimeWeb.Schedule.MobileDay.Vm();
         var currentDate = vm.selectedDate();
-
-        $(document).swipe("option").swipeLeft();
-        $(document).swipe("disable");
+        $(".dayview-view-body").swipe("option").swipeLeft();
+        $(".dayview-view-body").swipe("disable");
         equal(vm.selectedDate().format("MMM Do YY"), moment(currentDate).add(1, 'days').format("MMM Do YY"));
 
     });
@@ -18,12 +18,12 @@
     test("should navigate to previous date when swiping right", function () {
         setup();
 
+        $("body").addClass("dayview-view-body");
         Teleopti.MyTimeWeb.Schedule.MobileDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
         var vm = Teleopti.MyTimeWeb.Schedule.MobileDay.Vm();
         var currentDate = vm.selectedDate();
-
-        $(document).swipe("option").swipeRight();
-        $(document).swipe("disable");
+        $(".dayview-view-body").swipe("option").swipeRight();
+        $(".dayview-view-body").swipe("disable");
         equal(vm.selectedDate().format("MMM Do YY"), moment(currentDate).add(-1, 'days').format("MMM Do YY"));
 
     });

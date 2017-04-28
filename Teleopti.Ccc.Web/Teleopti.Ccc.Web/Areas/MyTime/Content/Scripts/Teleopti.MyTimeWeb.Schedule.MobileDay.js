@@ -62,13 +62,13 @@ Teleopti.MyTimeWeb.Schedule.MobileDay = (function ($) {
         subscribed = true;
     }
 
-    function registerSwipe() {
-        $(document).swipe({
+    function registerSwipe() {	
+    	$(".dayview-view-body").swipe({
             swipeLeft: function () {
-                vm.nextDay();
+            	vm.nextDay();
             },
             swipeRight: function () {
-                vm.previousDay();
+            	vm.previousDay();
             }
         });
     }
