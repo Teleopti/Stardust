@@ -6,9 +6,9 @@
 		.controller('agentGroupsDetailController', Controller)
 		.directive('agentgroupDetail', agentgroupDetailDirective);
 
-	Controller.$inject = ['$stateParams', 'agentGroupService', '$state'];
+	Controller.$inject = ['$stateParams', 'agentGroupService'];
 
-	function Controller($stateParams, agentGroupService, $state) {
+	function Controller($stateParams, agentGroupService) {
 		var vm = this;
 	}
 	function agentgroupDetailDirective() {

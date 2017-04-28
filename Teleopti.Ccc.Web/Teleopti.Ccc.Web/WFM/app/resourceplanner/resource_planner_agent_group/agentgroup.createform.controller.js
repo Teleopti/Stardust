@@ -7,7 +7,6 @@
 
 	Controller.$inject = ['$state', '$timeout', '$stateParams', 'agentGroupService', 'NoticeService', '$translate', 'debounceService'];
 
-	/* @ngInject */
 	function Controller($state, $timeout, $stateParams, agentGroupService, NoticeService, $translate, debounceService) {
 		var vm = this;
 

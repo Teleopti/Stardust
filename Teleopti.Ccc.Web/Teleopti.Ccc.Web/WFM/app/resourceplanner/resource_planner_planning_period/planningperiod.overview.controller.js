@@ -35,8 +35,7 @@
       totalPreValNum: 0,
       scheduleIssues: [],
       preValidation: [],
-      selectedPp: $stateParams.selectedPp ? $stateParams.selectedPp : null,
-      getPlanningPeriodByPpId: getPlanningPeriodByPpId
+      selectedPpId: $stateParams.ppId ? $stateParams.ppId : null
     };
 
     checkToggle();

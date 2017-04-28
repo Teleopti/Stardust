@@ -6,10 +6,40 @@
         .controller('planningPeriodValidationController', Controller)
         .directive('ppValidation', planningperiodValidationDirective);
 
-    Controller.$inject = ['$state', '$stateParams', 'planningPeriodService'];
+    Controller.$inject = ['$state', '$stateParams', '$timeout', 'planningPeriodService'];
 
-    function Controller($state, $stateParams, planningPeriodService) {
+    function Controller($state, $stateParams, $timeout, planningPeriodService) {
         var vm = this;
+
+        vm.message = "";
+        vm.updatePreValidation = updatePreValidation;
+
+        function updatePreValidation() {
+            var preValidation = planningPeriodService.getPlanningPeriod({ id: vm.valData.selectedPpId });
+            return preValidation.$promise.then(function (data) {
+                vm.valData.preValidation = data.ValidationResult.InvalidResources;
+                getTotalValidationErrorsNumber(vm.valData.preValidation, vm.valData.scheduleIssues);
+                vm.message = "The validation issues are up-to-date.";
+                $timeout(function () {
+                    vm.message = "";
+                }, 5000);
+                return vm.valData;
+            });
+        }
+
+        function getTotalValidationErrorsNumber(pre, after) {
+            vm.totalValNum = 0;
+            vm.valData.totalPreValNum = 0;
+            if (pre.length > 0) {
+                angular.forEach(pre, function (item) {
+                    vm.valData.totalPreValNum += item.ValidationErrors.length;
+                });
+            }
+            if (after.length > 0) {
+                vm.totalValNum += vm.valData.scheduleIssues.length;
+            }
+            return vm.totalValNum += vm.valData.totalPreValNum;
+        }
     }
 
     function planningperiodValidationDirective() {

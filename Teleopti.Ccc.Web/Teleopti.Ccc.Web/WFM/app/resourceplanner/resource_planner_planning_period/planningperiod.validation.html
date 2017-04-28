@@ -9,10 +9,14 @@
             <div tabindex="0">
                 <span><i class="mdi"></i>
                     Pre-scheduling validation issues
-                    <div tabindex=0 class="context-menu card-context">
-                        <i ng-click="vm.valData.getPrevalidationByPpId(vm.valData.selectedPp);$event.stopPropagation();" class="mdi mdi-refresh"></i>
+                    <div tabindex=0 class="context-menu card-context" ng-click="vm.updatePreValidation();$event.stopPropagation();"> 
+                        <i class="mdi mdi-refresh"></i>
                         <md-tooltip>Refresh Pre-scheduling Validation issues</md-tooltip>
                     </div>
+                </span>
+                <span ng-if="vm.message" class="text-warning">
+                    <i class="mdi mdi-alert"></i>
+                    {{vm.message}}
                 </span>
                 <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
                 <span class="pull-right">{{vm.valData.totalPreValNum}} issues</span>
