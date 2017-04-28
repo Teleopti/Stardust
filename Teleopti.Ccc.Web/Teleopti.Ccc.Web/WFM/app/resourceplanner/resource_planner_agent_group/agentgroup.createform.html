@@ -63,7 +63,7 @@
 			</div>
 			<div class="con-footer">
 				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
-				<button ng-show="vm.editAgentGroup.Id" class="wfm-btn wfm-btn-invis-default" ng-click='confirmModal1=true'>{{'Delete'|translate}}</button>
+				<button ng-show="vm.editAgentGroup.Id" class="wfm-btn wfm-btn-invis-default" ng-click='confirmModal1=true;'>{{'Delete'|translate}}</button>
 				<button class="wfm-btn" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
 				 ng-click="vm.persist()" translate>Save</button>
 				<div ng-cloak class="modal-box">
@@ -72,7 +72,7 @@
 							<div class="dialog-mini material-depth-1">
 								<div class="modal-inner-content">
 									<h3>Delete</h3>
-									Are you sure you want to delete agent group {{vm.editAgentGroup.Name}} ?
+									Are you sure you want to delete agent group {{vm.editAgentGroup.Name}} and its related settings?
 								</div>
 								<div class="modal-actions">
 									<aside>

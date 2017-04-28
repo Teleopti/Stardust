@@ -12,13 +12,15 @@
         var agentGroupId = $stateParams.groupId;
         vm.agentGroup = {};
         vm.suggestions = [];
-        vm.planningPeriods = undefined;
+        vm.planningPeriods = [];
         vm.originLastPp = undefined;
         vm.lastPp = undefined;
         vm.selectedSuggestion = {
             startDate: null,
             endDate: null
         };
+        vm.show = false;
+        vm.displayButton = false;
         vm.startNextPlanningPeriod = startNextPlanningPeriod;
         vm.getLastPp = getLastPp;
         vm.selectPp = selectPp;
@@ -29,6 +31,7 @@
         vm.selectSuggestion = selectSuggestion;
         vm.createFirstPp = createFirstPp;
         vm.resetSelectedSuggestion = resetSelectedSuggestion;
+        vm.isNonePp = isNonePp;
 
         getAgentGroupbyId();
         getPlanningPeriod();
@@ -47,6 +50,7 @@
             var query = planningPeriodService.getPlanningPeriodsForAgentGroup({ agentGroupId: agentGroupId });
             return query.$promise.then(function (data) {
                 vm.planningPeriods = data;
+                vm.displayButton = true;
                 return vm.planningPeriods;
             });
         }
@@ -59,7 +63,7 @@
             });
         }
 
-        function selectPp(pp) { 
+        function selectPp(pp) {
             $state.go('resourceplanner.oneagentgroup', { groupId: agentGroupId, ppId: pp.Id });
         }
 
@@ -69,8 +73,10 @@
                 startDate: moment(p.StartDate).toDate(),
                 endDate: moment(p.EndDate).toDate()
             };
-            var elementResult = document.getElementsByClassName('date-range-start-date');
-            elementResult[0].classList.add("pp-startDate-picker"); //css think mores
+            if (vm.planningPeriods.length > 1) {
+                var elementResult = document.getElementsByClassName('date-range-start-date');
+                elementResult[0].classList.add("pp-startDate-picker"); 
+            }
             return vm.lastPp;
         }
 
@@ -95,10 +101,12 @@
             }
         }
 
-        function createFirstPp() { // chagned later?
+        function createFirstPp() { 
+            vm.displayButton = false; 
             var nextPlanningPeriod = planningPeriodService.nextPlanningPeriod({ agentGroupId: agentGroupId });
             nextPlanningPeriod.$promise.then(function () {
                 changeDateForPp(vm.selectedSuggestion);
+                vm.show = false;
             });
         }
 
@@ -108,6 +116,7 @@
             var changeEndDateForLastPlanningPeriod = planningPeriodService.changeEndDateForLastPlanningPeriod({ agentGroupId: agentGroupId, startDate: startDate, endDate: newEndDate });
             return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
                 vm.planningPeriods = data;
+                vm.displayButton = true;
                 return vm.planningPeriods;
             });
         }
@@ -126,6 +135,10 @@
             var suggestionsForFirstPp = planningPeriodService.getPlanningPeriodSuggestions({ agentGroupId: agentGroupId });
             return suggestionsForFirstPp.$promise.then(function (data) {
                 vm.suggestions = data;
+                if (data.length > 0) {
+                    selectSuggestion(vm.suggestions[0]);
+                }
+                vm.show = true;
                 return vm.suggestions;
             });
         }
@@ -143,6 +156,15 @@
                 startDate: null,
                 endDate: null
             };
+            vm.show = false;
+        }
+
+        function isNonePp() {
+            if (vm.planningPeriods.length == 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 })();
