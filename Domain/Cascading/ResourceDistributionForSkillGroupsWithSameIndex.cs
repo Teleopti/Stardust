@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			return ret;
 
 			/* Use this block to make ShouldMoveResourceOnlyWithinSkillGroupWhenParallellSubskillsExists green. 
+			 * Maybe/probably we don't have to check IsNaN anylonger...
 			var ret = new Dictionary<CascadingSkillGroup, double>();
 			var tottiRelativeDifference = skillGroupsWithSameIndex.Sum(x => x.RemainingResources);
 			foreach (var skillGroup in skillGroupsWithSameIndex)
