@@ -61,14 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 
 			if (isPermittedLeaderBoardUnderReports())
 			{
-				var leaderboardReportItem = createLeaderBoardReportItem();
-				reportItems.Add(new CategorizedReportItem
-				{
-					Url = leaderboardReportItem.Url,
-					Name = leaderboardReportItem.Name,
-					IsWebReport = leaderboardReportItem.IsWebReport,
-					Category = Resources.AgentPerformance
-				});
+				reportItems.Add(createLeaderBoardReportItem());
 			}
 
 			return reportItems;
@@ -80,24 +73,22 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 				   _toggleManager.IsEnabled(Toggles.WfmReportPortal_LeaderBoard_39440);
 		}
 
-		private ReportItem createLeaderBoardReportItem()
+		private CategorizedReportItem createLeaderBoardReportItem()
 		{
 			return new CategorizedReportItem
 			{
 				Url = "reports/leaderboard",
 				Name = Resources.BadgeLeaderBoardReport,
 				IsWebReport = true,
+				Category = Resources.AgentPerformance
 			};
 		}
 
 		private IEnumerable<IMatrixFunctionGroup> getCategorizedReports()
 		{
 			var reports = _reportNavigationModel.PermittedCategorizedReportFunctions.ToList();
-			var realTimeReports = _reportNavigationModel.PermittedRealTimeReportFunctions;
 			var customReports = _reportNavigationModel.PermittedCustomReportFunctions;
-
 			reports.Add(new MatrixFunctionGroup() { LocalizedDescription = Resources.CustomReports, ApplicationFunctions = customReports });
-			reports.Add(new MatrixFunctionGroup() { LocalizedDescription = Resources.RealTime, ApplicationFunctions = realTimeReports });
 
 			return reports;
 		}
