@@ -18,19 +18,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private static IDictionary<CascadingSkillGroup, double> init(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
 			var ret = new Dictionary<CascadingSkillGroup, double>();
-			var tottiRelativeDifference = 0d;
-			foreach (var skillGroupWithSameIndex in skillGroupsWithSameIndex)
-			{
-				foreach (var otherPrimarySkill in skillGroupWithSameIndex.PrimarySkills)
-				{
-					var relDiffInOtherPrimarySkill = shovelResourceData.GetDataForInterval(otherPrimarySkill, interval).AbsoluteDifference;
-					//TODO: suspicious code here - bug? Only include positive values here?
-					if (!double.IsNaN(relDiffInOtherPrimarySkill)) 
-					{
-						tottiRelativeDifference += relDiffInOtherPrimarySkill;
-					}
-				}
-			}
+			var tottiRelativeDifference = skillGroupsWithSameIndex.SelectMany(skillGroupWithSameIndex => skillGroupWithSameIndex.PrimarySkills)
+				.Sum(otherPrimarySkill => shovelResourceData.GetDataForInterval(otherPrimarySkill, interval).AbsoluteDifference);
 			foreach (var skillGroup in skillGroupsWithSameIndex)
 			{
 				var myrelativeDifference = skillGroup.PrimarySkills.Sum(primarySkill => shovelResourceData.GetDataForInterval(primarySkill, interval).AbsoluteDifference);
