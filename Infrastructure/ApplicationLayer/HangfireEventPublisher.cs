@@ -73,11 +73,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				.Select(x =>
 					{
 						var @event = x.Event ?? x.Package.First();
-						var attemptsAttribute = _resolver.GetAttemptsAttribute(x.HandlerType, @event);
-						var method = _resolver.HandleMethodFor(x.HandlerType, @event);
-						var allowedFailuresAttribute = method?
-							.GetCustomAttributes(typeof(AllowFailuresAttribute), true).Cast<AllowFailuresAttribute>()
-							.SingleOrDefault();
 						return new JobInfo
 						{
 							Job = new HangfireEventJob
@@ -87,12 +82,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 								Event = x.Event,
 								Package = x.Package,
 								HandlerTypeName = $"{x.HandlerType.FullName}, {x.HandlerType.Assembly.GetName().Name}",
-								QueueName = _resolver.QueueTo(x.HandlerType, @event),
-								Attempts = _resolver.AttemptsFor(attemptsAttribute),
-								AllowFailures = allowedFailuresAttribute?.Failures ?? 0
+								QueueName = x.Queue,
+								Attempts = x.Attempts,
+								AllowFailures = x.AllowFailures
 							},
-							AttemptsAttribute = attemptsAttribute,
-							AllowFailuresAttribute = allowedFailuresAttribute
+							AttemptsAttribute = x.AttemptsAttribute,
+							AllowFailuresAttribute = x.AllowFailuresAttribute
 						};
 					}
 				);

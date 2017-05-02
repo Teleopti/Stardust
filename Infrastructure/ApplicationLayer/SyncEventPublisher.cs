@@ -28,35 +28,25 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			(
-					from @event in events
-					from handlerType in _resolver.HandlerTypesFor<IRunInSync>(@event)
-					let attempts = _resolver.AttemptsFor(handlerType, @event)
-					select new
-					{
-						handlerType,
-						@event,
-						attempts
-					}
-				)
-				.ForEach(x =>
-				{
-					retry(x.handlerType, x.@event, x.attempts);
-				});
+			var jobs = _resolver.JobsFor<IRunInSync>(events);
+			jobs.ForEach(execute);
 		}
 
-		private void retry(Type handlerType, IEvent @event, int attempts)
+		private void execute(Domain.ApplicationLayer.JobInfo job)
 		{
 			var tenant = _dataSource.CurrentName();
 			var exceptions = new List<Exception>();
 
-			while (attempts --> 0)
+			while (job.Attempts --> 0)
 			{
 				var thread = new Thread(() =>
 				{
 					try
 					{
-						_processor.Process(tenant, @event, handlerType);
+						if (job.Event != null)
+							_processor.Process(tenant, job.Event, job.HandlerType);
+						else
+							_processor.Process(tenant, job.Package, job.HandlerType);
 						exceptions.Clear();
 					}
 					catch (Exception e)

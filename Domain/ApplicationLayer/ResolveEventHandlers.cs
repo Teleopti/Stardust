@@ -14,35 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			_resolve = resolve;
 		}
-
-		public IEnumerable<Type> HandlerTypesFor<T>(IEvent @event)
-		{
-			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
-			return _resolve.ConcreteTypesFor(handlerType)
-				.Where(x => x.GetInterfaces().Contains(typeof(T)));
-		}
-
-		public MethodInfo HandleMethodFor(Type handler, IEvent @event)
-		{
-			return handler
-				.GetMethods()
-				.FirstOrDefault(m =>
-					m.Name == "Handle" &&
-					m.GetParameters().Single().ParameterType == @event.GetType()
-				);
-		}
-
-		public string QueueTo(Type handler, IEvent @event)
-		{
-			// check for interface? Naaahh...
-			return handler
-				.GetMethods()
-				.FirstOrDefault(m =>
-						m.Name == "QueueTo" &&
-						m.GetParameters().Single().ParameterType == @event.GetType()
-				)
-				?.Invoke(_resolve.Resolve(handler), new[] {@event}) as string;
-		}
+		
 
 		public IEnumerable<JobInfo> JobsFor<T>(IEnumerable<IEvent> events)
 		{
@@ -63,20 +35,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 				})
 				.Where(x => x.events.Any())
-				.Select(x => new JobInfo
-				{
-					HandlerType = x.handler,
-					Package = x.events
-				});
+				.Select(x => build(x.handler, typeof(IEnumerable<IEvent>), null, x.events))
+				;
 
-			var singles = from e in events
-				let type = typeof(IHandleEvent<>).MakeGenericType(e.GetType())
-				from t in _resolve.ConcreteTypesFor(type)
-				select new JobInfo
-				{
-					HandlerType = t,
-					Event = e
-				};
+			var singles = from @event in events
+				let type = typeof(IHandleEvent<>).MakeGenericType(@event.GetType())
+				from handler in _resolve.ConcreteTypesFor(type)
+				select build(handler, @event.GetType(), @event, null);
 
 			return packages
 				.Concat(singles)
@@ -84,22 +49,67 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				.ToArray();
 		}
 
-		public int AttemptsFor(Type handlerType, IEvent @event)
+		private JobInfo build(Type handler, Type eventType, IEvent @event, IEnumerable<IEvent> package)
 		{
-			return AttemptsFor(GetAttemptsAttribute(handlerType, @event));
+			var e = @event ?? package.First();
+			var handleMethod = HandleMethodFor(handler, eventType);
+			var allowFailuresAttribute = getAllowFailuresAttribute(handleMethod);
+
+			return new JobInfo
+			{
+				HandlerType = handler,
+				Event = @event,
+				Queue = queueTo(handler, e),
+				Package = package,
+				Attempts = getAttemptsAttribute(handleMethod)?.Attempts ?? 3,
+				AttemptsAttribute = getAttemptsAttribute(handleMethod),
+				AllowFailures = allowFailuresAttribute?.Failures ?? 0,
+				AllowFailuresAttribute = allowFailuresAttribute
+			};
 		}
 
-		public int AttemptsFor(AttemptsAttribute attemptsAttribute)
+		private string queueTo(Type handler, IEvent @event)
 		{
-			return attemptsAttribute?.Attempts ?? 3;
+			// check for interface? Naaahh...
+			return handler
+				.GetMethods()
+				.FirstOrDefault(m =>
+						m.Name == "QueueTo" &&
+						m.GetParameters().Single().ParameterType == @event.GetType()
+				)
+				?.Invoke(_resolve.Resolve(handler), new[] { @event }) as string;
 		}
-
-		public AttemptsAttribute GetAttemptsAttribute(Type handlerType, IEvent @event)
+		private AttemptsAttribute getAttemptsAttribute(MethodInfo handlerMethod)
 		{
-			return HandleMethodFor(handlerType, @event)?
+			return handlerMethod?
 				.GetCustomAttributes(typeof(AttemptsAttribute), true)
 				.Cast<AttemptsAttribute>()
 				.SingleOrDefault();
+		}
+
+		private AllowFailuresAttribute getAllowFailuresAttribute(MethodInfo handlerMethod)
+		{
+			return handlerMethod?
+				.GetCustomAttributes(typeof(AllowFailuresAttribute), true)
+				.Cast<AllowFailuresAttribute>()
+				.SingleOrDefault();
+		}
+
+		public MethodInfo HandleMethodFor(Type handler, Type evenType)
+		{
+			return handler
+				.GetMethods()
+				.FirstOrDefault(m =>
+					m.Name == "Handle" &&
+					m.GetParameters().Single().ParameterType == evenType
+				);
+		}
+
+		public IEnumerable<Type> HandlerTypesFor<T>(IEvent @event)
+		{
+			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
+			return _resolve.ConcreteTypesFor(handlerType)
+				.Where(x => x.GetInterfaces().Contains(typeof(T)));
 		}
 	}
 
@@ -108,5 +118,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		public Type HandlerType;
 		public IEvent Event;
 		public IEnumerable<IEvent> Package;
+
+		public string Queue;
+
+		public int Attempts;
+		public AttemptsAttribute AttemptsAttribute;
+		public int AllowFailures;
+		public AllowFailuresAttribute AllowFailuresAttribute;
 	}
 }

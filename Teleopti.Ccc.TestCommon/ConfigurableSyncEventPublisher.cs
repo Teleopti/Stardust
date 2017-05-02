@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon
 				{
 					foreach (var handlerType in _handlerTypes)
 					{
-						var method = _resolver.HandleMethodFor(handlerType, @event);
+						var method = _resolver.HandleMethodFor(handlerType, @event.GetType());
 						if (method == null)
 							continue;
 						_processor.Process(tenant, @event, handlerType);

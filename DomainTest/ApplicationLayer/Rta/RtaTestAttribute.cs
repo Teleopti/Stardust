@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			{
 				foreach (var handlerType in _handlerTypes)
 				{
-					var method = _resolver.HandleMethodFor(handlerType, @event);
+					var method = _resolver.HandleMethodFor(handlerType, @event.GetType());
 					if (method == null)
 						continue;
 
