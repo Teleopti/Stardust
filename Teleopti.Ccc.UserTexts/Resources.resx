@@ -15844,4 +15844,8 @@ Do you want to participate?</value>
     <value>Target of {0} scheduled time is not fulfilled</value>
     <comment>Used in Web resource planner </comment>
   </data>
+  <data name="EmailSkillSelected" xml:space="preserve">
+    <value>There is currently a email skill selected, abandoned rate can not be shown</value>
+    <comment>warning in web intraday if a skill or skill area contains a skill of type email</comment>
+  </data>
 </root>

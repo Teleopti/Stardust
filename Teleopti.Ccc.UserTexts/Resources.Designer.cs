@@ -9794,6 +9794,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is currently a email skill selected, abandoned rate can not be shown.
+        /// </summary>
+        public static string EmailSkillSelected {
+            get {
+                return ResourceManager.GetString("EmailSkillSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employee.
         /// </summary>
         public static string Employee {
