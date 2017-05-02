@@ -213,11 +213,13 @@ function StartTeleoptiServer
 	Invoke-Expression -Command:"iisreset /START"
 	AppPools-Start $isAzure
 	TeleoptiWindowsServices-Start
-
-	$BaseUrl = BaseUrl-get $isAzure
-	Write-Host "Waiting for web services to start..."
-	$Url = $BaseURL + "web/StardustDashboard/ping"
-	$cred = GetCredentials
-	WaitForUrl $Url $cred
+	if ([int]$psversiontable.psversion.major -gt 2)
+    {
+        $BaseUrl = BaseUrl-get $isAzure
+        Write-Host "Waiting for web services to start..."
+        $Url = $BaseURL + "web/StardustDashboard/ping"
+        $cred = GetCredentials
+        WaitForUrl $Url $cred
+    }
 }
 
