@@ -90,12 +90,4 @@ namespace Teleopti.Ccc.Domain.Staffing
 	{
 		void Send(Guid businessUnitId);
 	}
-
-	public class IntradayResourceCalculationForAbsenceHandler : IHandleEvent<TenantMinuteTickEvent>, IRunOnHangfire
-	{
-		public virtual void Handle(TenantMinuteTickEvent @event)
-		{
-			// If there are any IntradayResourceCalculationForAbsenceHandler leftovers in the queue after update
-		}
-	}
 }
