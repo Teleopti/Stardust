@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			return !isMultisiteSkill &&
 				   (skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture) ||
-				   skill.SkillType.Description.Name.Equals("SkillTypeChat", StringComparison.InvariantCulture));
+					skill.SkillType.Description.Name.Equals("SkillTypeChat", StringComparison.InvariantCulture)) ||
+				    skill.SkillType.Description.Name.Equals("SkillTypeRetail", StringComparison.InvariantCulture);
 		}
 	}
 }
