@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -31,6 +32,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         private IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
 	    private IScheduleDay _scheduleDay;
 	    private MinMax<TimeSpan> _overtimeSpecifiedPeriod;
+	    private IProjectionService _projectionService;
+	    private IVisualLayerCollection _visualLayerCollection;
 		
 		[SetUp]
         public void Setup()
@@ -49,6 +52,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _overtimeSkillIntervalDataAggregator = _mocks.StrictMock<IOvertimeSkillIntervalDataAggregator>();
             _calculateBestOvertime = _mocks.StrictMock<ICalculateBestOvertime>();
             _overtimePeriodValueMapper = new OvertimePeriodValueMapper();
+	        _projectionService = _mocks.StrictMock<IProjectionService>();
+			_visualLayerCollection = new VisualLayerCollection(_person, new List<IVisualLayer>(), null );
 			_overtimeSpecifiedPeriod = new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.FromDays(1).Add(TimeSpan.FromHours(6)));
             _target = new OvertimeLengthDecider(_skillResolutionProvider, _overtimeSkillStaffPeriodToSkillIntervalDataMapper,
                                                 _overtimeSkillIntervalDataDivider, ()=>_schedulingResultStateHolder, 
@@ -77,6 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var skillIntervalData5 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(75)), 2, 4);
 			var skillIntervalData6 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(75), _date.AddMinutes(90)), 1, 5);
 			var skillIntervalData7 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(90), _date.AddMinutes(105)), -3, 6);
+			
 			MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(1), TimeSpan.FromHours(2));
 			var overtimeSkillIntervalDataList = new[]
 				{
@@ -108,6 +114,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 					_overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(new List<IList<IOvertimeSkillIntervalData>>()))
 					.IgnoreArguments()
 					.Return(overtimeSkillIntervalDataList);
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 			}
 			using (_mocks.Playback())
 			{
@@ -141,6 +149,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false, null))
 					  .IgnoreArguments()
 					  .Return(new List<DateTimePeriod>());
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 			}
 			using (_mocks.Playback())
 			{
@@ -175,6 +185,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false, new List<IOvertimeSkillIntervalData>{}))
 					.IgnoreArguments()
 					.Return(new List<DateTimePeriod>());
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 			}
 			using (_mocks.Playback())
 			{

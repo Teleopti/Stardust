@@ -45,9 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         {
             var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
             if (skills.Count == 0) return Enumerable.Empty<DateTimePeriod>();
-            var minimumResolution = _skillResolutionProvider.MinimumResolution(skills);
-	        if (minimumResolution > duration.Minimum.TotalMinutes) minimumResolution = 15;
-            var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(-1), dateOnly, dateOnly.AddDays(1) });
+	        var minimumResolution = getMinimumResolution(skills, duration, scheduleDay);
+			var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(-1), dateOnly, dateOnly.AddDays(1) });
             if (skillDays == null) return Enumerable.Empty<DateTimePeriod>();  
             var overtimeSkillIntervalDataList = createOvertimeSkillIntervalDataList(skills, skillDays, minimumResolution);
 			var overtimeSkillIntervalDataAggregatedList = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(overtimeSkillIntervalDataList);
@@ -56,6 +55,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return _calculateBestOvertime.GetBestOvertime(duration, specifiedPeriod, mappedAggregatedList, scheduleDay,
 				minimumResolution, onlyAvailableAgents, overtimeSkillIntervalDataAggregatedList);
         }
+
+	    private int getMinimumResolution(IList<ISkill> skills, MinMax<TimeSpan> duration, IScheduleDay scheduleDay)
+	    {
+		    var minimumResolution = _skillResolutionProvider.MinimumResolution(skills);
+		    var projection = scheduleDay.ProjectionService().CreateProjection();
+			var shiftPeriod = projection.Period().GetValueOrDefault();
+		    var shiftEndMinute = shiftPeriod.EndDateTime.Minute;
+		    var shiftStartMinute = shiftPeriod.StartDateTime.Minute;
+
+			if (minimumResolution > duration.Minimum.TotalMinutes)
+				minimumResolution = 15;
+
+		    if (minimumResolution > shiftEndMinute && shiftEndMinute != 0)
+			    minimumResolution = shiftEndMinute;
+
+		    if (minimumResolution > shiftStartMinute && shiftStartMinute != 0)
+			    minimumResolution = shiftStartMinute;
+
+		    if ((int) duration.Minimum.TotalMinutes % minimumResolution != 0)
+			    minimumResolution = 5;
+		   
+		    return minimumResolution;
+	    }
 
 	    private IList<IList<IOvertimeSkillIntervalData>> createOvertimeSkillIntervalDataList(List<ISkill> skills, IEnumerable<ISkillDay> skillDays, int minimumResolution)
 	    {
