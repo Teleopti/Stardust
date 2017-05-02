@@ -40,7 +40,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			layoutDirection: {
 				vertical: 0,
 				horizontal: 1
-			}
+			},
+			dateOnlyFormat:"YYYY-MM-DD"
 		};
 
 	function isToggleEnabled(toggleName) {

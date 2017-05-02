@@ -236,17 +236,71 @@ $(document).ready(function () {
 		equal(probabilities.length, 0);
 	});
 
-	//test("Should create probability for cross day schedule starts from previous day even today is dayoff", function() {
-	//	var scheduleDay = {
-	//		IsFullDayAbsence: false,
-	//		IsDayOff: true,
+	test("Should create probability for schedule starts from yesterday even today is dayoff", function() {
+		var scheduleDay = {
+			isFullDayAbsence: false,
+			isDayOff: true,
+			fixedDate: function () { return baseDate },
+			periods: [
+				{
+					"StartTime": yesterday + "T20:00:00",
+					"EndTime": baseDate + "T10:00:00"
+				}
+			]
+		};
+		var rawProbability = createRawProbabilities();
+		var options = {
+			probabilityType: constants.probabilityType.absence,
+			timelines: createTimeline(1, 8)
+		};
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
 
-	//	};
-	//	var rawProbability = createRawProbabilities();
-	//	var options = {
-	//		probabilityType: constants.probabilityType.absence
-	//	};
-	//});
+		ok(probabilities.length > 0, "cannot find probability");
+		equal(probabilities.length, 40);
+	});
+
+	test("Should create probability with same height for vertical layout direction with two continues periods", function () {
+		var scheduleDay = {
+			fixedDate: function () { return baseDate },
+			isFullDayAbsence: false,
+			isDayOff: false,
+			periods: [
+				{
+					"StartTime": yesterday + "T20:00:00",
+					"EndTime": baseDate + "T10:00:00"
+				}, {
+					"StartTime": baseDate + "T12:00:00",
+					"EndTime": baseDate + "T13:00:00"
+				}, {
+					"StartTime": baseDate + "T13:00:00",
+					"EndTime": baseDate + "T15:00:00"
+				}
+			]
+		};
+		var rawProbability = createRawProbabilities();
+		var options = {
+			probabilityType: constants.probabilityType.absence,
+			layoutDirection: constants.layoutDirection.vertical,
+			mergeSameIntervals: false,
+			timelines: createTimeline(1, 8),
+			userTexts: {
+				"high": "High",
+				"low": "Low",
+				"probabilityForAbsence": "Probability to get absence:",
+				"probabilityForOvertime": "Probability to get overtime:"
+			}
+		};
+
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
+
+		var previousHeight;
+		for (var i = 0; i < probabilities.length; i++) {
+			var currentHeight = parseFloat(probabilities[i].styleJson.height);
+			ok(previousHeight == undefined || Math.abs(currentHeight - previousHeight) < 0.01,
+				"invalid height" + probabilities[i].styleJson.height);
+			previousHeight = currentHeight;
+		}
+	});
 
 	test("Should create probability with height for vertical layout direction", function () {
 		var scheduleDay = {

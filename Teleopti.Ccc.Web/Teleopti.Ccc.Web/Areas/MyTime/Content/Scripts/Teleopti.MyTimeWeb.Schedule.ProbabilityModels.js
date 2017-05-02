@@ -79,11 +79,14 @@
 			return [];
 		}
 
-		// If today is full day absence or dayoff, Then hide absence probabilities
-		if (options.probabilityType === constants.probabilityType.none
-			|| (options.probabilityType === constants.probabilityType.absence
-			&& (dayViewModel.isFullDayAbsence || dayViewModel.isDayOff))) {
+		if (options.probabilityType === constants.probabilityType.none)
 			return [];
+
+		if (options.probabilityType === constants.probabilityType.absence) {
+			if (dayViewModel.isFullDayAbsence)
+				return [];
+			if (dayViewModel.isDayOff && !existsScheduleFromYesterday(dayViewModel))
+				return [];
 		}
 
 		var continousPeriods = [];
@@ -142,23 +145,36 @@
 			}
 		}
 
-		probabilityModels.forEach(function(p, i, arr){
-			if(arr[i + 1]){
-				p.intervalLength = (arr[i + 1].startPosition - p.startPosition).toFixed(2);
+		probabilityModels.forEach(function (p, i, arr) {
 
-				if (p.styleJson['width'] && p.styleJson['width'].length > 0){
-					p.styleJson['width'] = p.intervalLength + "%";
-					return;
-				}
+			if (arr[i + 1]) {
+				var isContinuedPeriod = arr[i + 1].startTimeInMinutes === p.endTimeInMinutes;
+				if (isContinuedPeriod) {
+					p.intervalLength = (arr[i + 1].startPosition - p.startPosition).toFixed(2);
 
-				if (p.styleJson['height'] && p.styleJson['height'].length > 0){
-					p.styleJson['height'] = p.intervalLength + "%";
+					if (p.styleJson['width'] && p.styleJson['width'].length > 0) {
+						p.styleJson['width'] = p.intervalLength + "%";
+						return;
+					}
+
+					if (p.styleJson['height'] && p.styleJson['height'].length > 0) {
+						p.styleJson['height'] = p.intervalLength + "%";
+					}
 				}
 			}
 		});
 
 		return probabilityModels;
 	};
+
+	function existsScheduleFromYesterday(dayViewModel) {
+		if (dayViewModel.periods == undefined || dayViewModel.periods.length === 0)
+			return false;
+		var period = dayViewModel.periods[0];
+		var startDate = moment(period.StartTime).format(constants.dateOnlyFormat);
+		var endDate = moment(period.EndTime).format(constants.dateOnlyFormat);
+		return moment(startDate).isBefore(endDate);
+	}
 
 	function trimIntervalAccordingContinuousSchedulePeriod(probabilityCellData, continousPeriods) {
 		for (var i = 0; i < continousPeriods.length; i++) {

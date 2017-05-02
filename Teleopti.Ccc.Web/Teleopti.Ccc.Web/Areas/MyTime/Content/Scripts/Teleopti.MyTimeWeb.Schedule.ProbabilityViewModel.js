@@ -81,6 +81,8 @@
 		startPosition: startPositionVal,
 		intervalLength: intervalLengthVal,
 		cssClass: generateCssClass,
-		tooltips: generateTooltips
+		tooltips: generateTooltips,
+		startTimeInMinutes: rawProbabilityCellData.startTimeInMinutes,
+		endTimeInMinutes: rawProbabilityCellData.endTimeInMinutes
 	};
 };
