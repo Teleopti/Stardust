@@ -29,6 +29,52 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public IScheduleStorage ScheduleStorage;
 
 		[Test]
+		public void ShouldThrowIfScheduleDaysAreNotForSamePerson()
+		{
+			IntervalLengthFetcher.Has(15);
+			var now = new DateTime(2017, 5, 1, 0, 0, 0);
+			Now.Is(now);
+
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skill", activity).WithId();
+			var person = PersonRepository.Has(skill);
+			var person2 = PersonRepository.Has(skill);
+
+			var assignmentPeriod = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod, new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, assignmentPeriod, new ShiftCategory("category")));
+
+			var scheduleDay1 = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now));
+			var scheduleDay2 = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person2, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person2].ScheduledDay(new DateOnly(now));
+			
+			Assert.That(() => Target.Compare(scheduleDay1, scheduleDay2), Throws.Exception);
+		}
+
+		[Test]
+		public void ShouldThrowIfScheduleDaysAreNotForSameDate()
+		{
+			IntervalLengthFetcher.Has(15);
+			var now = new DateTime(2017, 5, 1, 0, 0, 0);
+			Now.Is(now);
+
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skill", activity).WithId();
+			var person = PersonRepository.Has(skill);
+
+			var assignmentPeriod = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
+			var assignmentPeriod2 = new DateTimePeriod(2017, 5, 2, 8, 2017, 5, 2, 9);
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod, new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod2, new ShiftCategory("category")));
+
+			var scheduleDay1 = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(assignmentPeriod.StartDateTime));
+			var scheduleDay2 = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod2, scenario)[person].ScheduledDay(new DateOnly(assignmentPeriod2.StartDateTime));
+
+			Assert.That(() => Target.Compare(scheduleDay1, scheduleDay2), Throws.Exception);
+		}
+
+		[Test]
 		public void ShouldNotGiveAnythingIfSame()
 		{
 			IntervalLengthFetcher.Has(15);
@@ -123,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
 			activityResourceIntervals.Count().Should().Be.EqualTo(1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == noSkillPeriod.StartDateTime).Resource.Should().Be.EqualTo(-1);
+			activityResourceIntervals.First(x => x.Interval.StartDateTime == noSkillPeriod.StartDateTime && x.Activity == activity.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(-1);
 		}
 
 		[Test]
@@ -151,7 +197,63 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			var activityResourceIntervals = Target.Compare(before, afterCopy);
 			activityResourceIntervals.Count().Should().Be.EqualTo(1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == noSkillPeriod.StartDateTime).Resource.Should().Be.EqualTo(1);
+			activityResourceIntervals.First(x => x.Interval.StartDateTime == noSkillPeriod.StartDateTime && x.Activity == activity.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldRemoveResourceWhenAddingActivityThatDoesNotBelongToPersonSkill()
+		{
+			const int resolution = 60;
+			IntervalLengthFetcher.Has(resolution);
+			var now = new DateTime(2017, 5, 1, 0, 0, 0);
+			Now.Is(now);
+
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var activityOtherSkill = ActivityRepository.Has("activityOtherSkill");
+			var skill = SkillRepository.Has("skill", activity).WithId();
+			var skill2 = SkillRepository.Has("skill2", activityOtherSkill).WithId();
+			skill.DefaultResolution = skill2.DefaultResolution = resolution;
+			var person = PersonRepository.Has(skill);
+
+			var assignmentPeriod = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod, new ShiftCategory("category"));
+			PersonAssignmentRepository.Has(assignment);
+			var beforeCopy = (IScheduleDay)ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now)).Clone();
+			assignment.AddActivity(activityOtherSkill, assignmentPeriod);
+			var after = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now));
+
+			var activityResourceIntervals = Target.Compare(beforeCopy, after);
+			activityResourceIntervals.Count().Should().Be.EqualTo(1);
+			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod.StartDateTime && x.Activity == activity.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(-1);
+		}
+
+		[Test]
+		public void ShouldAddResourceWhenRemovingActivityThatDoesNotBelongToPersonSkill()
+		{
+			const int resolution = 60;
+			IntervalLengthFetcher.Has(resolution);
+			var now = new DateTime(2017, 5, 1, 0, 0, 0);
+			Now.Is(now);
+
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var activityOtherSkill = ActivityRepository.Has("activityOtherSkill");
+			var skill = SkillRepository.Has("skill", activity).WithId();
+			var skill2 = SkillRepository.Has("skill2", activityOtherSkill).WithId();
+			skill.DefaultResolution = skill2.DefaultResolution = resolution;
+			var person = PersonRepository.Has(skill);
+
+			var assignmentPeriod = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod, new ShiftCategory("category"));
+			PersonAssignmentRepository.Has(assignment);
+			var afterCopy = (IScheduleDay)ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now)).Clone();
+			assignment.AddActivity(activityOtherSkill, assignmentPeriod);
+			var before = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now));
+
+			var activityResourceIntervals = Target.Compare(before, afterCopy);
+			activityResourceIntervals.Count().Should().Be.EqualTo(1);
+			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod.StartDateTime && x.Activity == activity.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(1);
 		}
 
 		[Test]

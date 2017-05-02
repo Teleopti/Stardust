@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -14,21 +15,29 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
+		private readonly IPersonSkillProvider _personSkillProvider;
 
-		public CompareProjection(IIntervalLengthFetcher intervalLengthFetcher, IActivityRepository activityRepository, IDisableDeletedFilter disableDeletedFilter)
+		public CompareProjection(IIntervalLengthFetcher intervalLengthFetcher, IActivityRepository activityRepository, IDisableDeletedFilter disableDeletedFilter, IPersonSkillProvider personSkillProvider)
 		{
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_activityRepository = activityRepository;
 			_disableDeletedFilter = disableDeletedFilter;
+			_personSkillProvider = personSkillProvider;
 		}
 
 		public IEnumerable<ActivityResourceInterval> Compare(IScheduleDay scheduleDayBefore, IScheduleDay scheduleDayAfter)
 		{
+			if (!scheduleDayBefore.Person.Equals(scheduleDayAfter.Person))
+				throw new Exception("ScheduleDays must be for the same person!");
+			if (scheduleDayBefore.Period != scheduleDayAfter.Period)
+				throw new Exception("ScheduleDays must be for the same date!");
+
 			IEnumerable<IActivity> allActivities;
 			using (_disableDeletedFilter.Disable())
 			{
 				allActivities = _activityRepository.LoadAll();
 			}
+			var personSkills = _personSkillProvider.SkillsOnPersonDate(scheduleDayBefore.Person, scheduleDayAfter.DateOnlyAsPeriod.DateOnly);
 
 			var resolution = _intervalLengthFetcher.IntervalLength;
 			var beforeIntervals = getActivityIntervals(scheduleDayBefore, resolution).ToList();
@@ -49,21 +58,37 @@ namespace Teleopti.Ccc.Domain.Staffing
 				var after = afterIntervals.Where(x => x.Interval.StartDateTime == intervalStart).ToList();
 				intervalStart = intervalStart.AddMinutes(resolution);
 
-				var intervalOutput = (from activityResourceInterval in before where allActivities.First(x => x.Id == activityResourceInterval.Activity).RequiresSkill
-					select new ActivityResourceInterval
-					{
-						Interval = activityResourceInterval.Interval,
-						Activity = activityResourceInterval.Activity,
-						Resource = -activityResourceInterval.Resource //negative
-					}).ToList();
+				var intervalOutput = new List<ActivityResourceInterval>();
+				foreach (var activityResourceInterval in before)
+				{
+					var activity = allActivities.First(x => x.Id == activityResourceInterval.Activity);
+					if (activity.RequiresSkill && personSkills.Skills.Select(x => x.Activity).Contains(activity))
+						intervalOutput.Add(new ActivityResourceInterval
+						{
+							Interval = activityResourceInterval.Interval,
+							Activity = activityResourceInterval.Activity,
+							Resource = -activityResourceInterval.Resource //negative
+						});
+				}
 
-				intervalOutput.AddRange(from activityResourceInterval in after where allActivities.First(x => x.Id == activityResourceInterval.Activity).RequiresSkill
-										select new ActivityResourceInterval
-										{
-											Interval = activityResourceInterval.Interval,
-											Activity = activityResourceInterval.Activity,
-											Resource = activityResourceInterval.Resource
-										});
+				foreach (var activityResourceInterval in after)
+				{
+					var activity = allActivities.First(x => x.Id == activityResourceInterval.Activity);
+					if (activity.RequiresSkill && personSkills.Skills.Select(x => x.Activity).Contains(activity))
+						intervalOutput.Add(new ActivityResourceInterval
+						{
+							Interval = activityResourceInterval.Interval,
+							Activity = activityResourceInterval.Activity,
+							Resource = activityResourceInterval.Resource 
+						});
+				}
+
+				//intervalOutput.AddRange(after.Where(activityResourceInterval => allActivities.First(x => x.Id == activityResourceInterval.Activity).RequiresSkill).Select(activityResourceInterval => new ActivityResourceInterval
+				//{
+				//	Interval = activityResourceInterval.Interval,
+				//	Activity = activityResourceInterval.Activity,
+				//	Resource = activityResourceInterval.Resource
+				//}));
 
 				var intervalOutputsSum = intervalOutput
 					.GroupBy(p => new {p.Interval, p.Activity})
@@ -71,6 +96,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 				output.AddRange(intervalOutputsSum.Where(x => Math.Abs(x.Resource) >= 0.001));
 			}
+
+			
+		
+
 			return output;
 		}
 
