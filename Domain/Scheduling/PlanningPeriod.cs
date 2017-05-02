@@ -92,7 +92,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				{
 					_periodType = schedulePeriodForRangeCalculation.PeriodType;
 					_number = schedulePeriodForRangeCalculation.Number;
-				}			
+				}
+				_state = PlanningPeriodState.New;
 			}
 		}
 
