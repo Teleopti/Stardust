@@ -185,9 +185,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<ILongestPeriodForAssignmentCalculator>()
 				.SingleInstance();
 			builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
-			builder.RegisterType<ShiftFromMasterActivityService>()
-				.As<IShiftFromMasterActivityService>()
-				.InstancePerLifetimeScope();
+
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MasterActivityBaseLayer_44134))
+			{
+				builder.RegisterType<ShiftsFromMasterActivityBaseActivityService>().As<IShiftFromMasterActivityService>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<ShiftFromMasterActivityService>().As<IShiftFromMasterActivityService>().InstancePerLifetimeScope();
+			}
+				
 			builder.RegisterType<RuleSetDeletedActivityChecker>().As<IRuleSetDeletedActivityChecker>().SingleInstance();
 			builder.RegisterType<RuleSetDeletedShiftCategoryChecker>()
 				.As<IRuleSetDeletedShiftCategoryChecker>()

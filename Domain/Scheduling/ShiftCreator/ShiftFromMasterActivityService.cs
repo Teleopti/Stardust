@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 {
-    public class ShiftFromMasterActivityService : IShiftFromMasterActivityService
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MasterActivityBaseLayer_44134)]
+	public class ShiftFromMasterActivityService : IShiftFromMasterActivityService
     {
         public IList<IWorkShift> ExpandWorkShiftsWithMasterActivity(IWorkShift workShift)
         {
@@ -20,11 +21,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
            
             return new[]{workShift};
         }
-
-	    protected virtual DateTimePeriod FirstLayerPeriod(DateTimePeriod layerPeriod, DateTimePeriod workShiftPeriod)
-	    {
-		    return layerPeriod;
-	    }
 
         private IList<IWorkShift> createShiftsFromShift(IWorkShift workShift)
         {
@@ -52,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                                 }
                             }
 
-                            WorkShiftActivityLayer activityLayer = new WorkShiftActivityLayer(activity, FirstLayerPeriod(layer.Period, workShift.LayerCollection.Period().GetValueOrDefault()));
+                            WorkShiftActivityLayer activityLayer = new WorkShiftActivityLayer(activity, layer.Period);
                             newWorkShift.LayerCollection.Add(activityLayer);
 
                             foreach (var l in visualLayers)

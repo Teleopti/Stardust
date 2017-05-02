@@ -508,6 +508,7 @@
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverTest.cs" />
     <Compile Include="Scheduling\SchedulerStateHolder_LoadSchedulesTest.cs" />
     <Compile Include="Scheduling\FindSchedulesForPersonsTest.cs" />
+    <Compile Include="Scheduling\ShiftCreator\ShiftsFromMasterActivityBaseActivityServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Bug39939.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDeciderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduleCommandTest.cs" />

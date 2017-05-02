@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 {
     [DomainTest]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MasterActivityBaseLayer_44134)]
     public class ShiftFromMasterActivityServiceTest
     {
         public IShiftFromMasterActivityService ShiftFromMasterActivityService;
@@ -75,27 +76,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _period12To13 = new DateTimePeriod(time12, time13);
             _period13To17 = new DateTimePeriod(time13, time17);
         }
-
-	    [Test, Ignore("PBI#44134")]
-	    public void ShouldAssignFirstUsedActivityInMasterActivityListAsBaseActivityForTheShifts()
-	    {
-		    var phoneActivity = new Activity { InContractTime = true, RequiresSkill = true }.WithId();
-			var emailActivity = new Activity { InContractTime = true, RequiresSkill = true }.WithId();
-			var lunchActivity = new Activity { InContractTime = false, RequiresSkill = false }.WithId();
-			var masterActivity = new MasterActivity();
-			masterActivity.UpdateActivityCollection(new List<IActivity>{phoneActivity, emailActivity});
-			var workShift = new WorkShift(new ShiftCategory("shiftCategory"));
-		    var layer1 = new WorkShiftActivityLayer(masterActivity, new DateTimePeriod(2017, 4, 27, 8, 2017, 4, 27, 9));
-			var layer2 = new WorkShiftActivityLayer(lunchActivity, new DateTimePeriod(2017, 4, 27, 9, 2017, 4, 27, 10));
-			var layer3 = new WorkShiftActivityLayer(masterActivity, new DateTimePeriod(2017, 4, 27, 10, 2017, 4, 27, 11));
-			workShift.LayerCollection.Add(layer1);
-			workShift.LayerCollection.Add(layer2);
-			workShift.LayerCollection.Add(layer3);
-
-			var workShifts = ShiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(workShift);
-			workShifts[0].LayerCollection[0].Period.Should().Be.EqualTo(new DateTimePeriod(2017, 4, 27, 8, 2017, 4, 27, 11));
-			workShifts[0].LayerCollection[2].Period.Should().Be.EqualTo(new DateTimePeriod(2017, 4, 27, 10, 2017, 4, 27, 11));
-		}
 
         [Test]
         public void ShouldReturnOriginalWorkShiftWhenNoMasterActivity()

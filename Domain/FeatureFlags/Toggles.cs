@@ -165,6 +165,7 @@
 		ResourcePlanner_MasterActivity_42795,
 		ResourcePlanner_CategorizeShiftSelection_xx,
 		ResourcePlanner_EvenRelativeDiff_44091,
+		ResourcePlanner_MasterActivityBaseLayer_44134,
 
 		Wfm_DisplayOnlineHelp_39402,
 

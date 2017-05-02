@@ -176,6 +176,7 @@ ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI u
 ResourcePlanner_TeamBlockPeriod_42836 = RC
 ResourcePlanner_MasterActivity_42795 = RC
 ResourcePlanner_CategorizeShiftSelection_xx = false
+ResourcePlanner_MasterActivityBaseLayer_44134 = RC
 
 Wfm_DisplayOnlineHelp_39402 = RC
 
