@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// /// </remarks>
         public bool Equals(WorkTimeLimitation other)
         {
-            return GetHashCode() == other.GetHashCode();
+	        return other._startTime == _startTime && other._endTime == _endTime;
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// /// </remarks>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is WorkTimeLimitation))
+            if (!(obj is WorkTimeLimitation))
             {
                 return false;
             }
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         public bool HasValue()
         {
-            return StartTime.HasValue | EndTime.HasValue;
+            return StartTime.HasValue || EndTime.HasValue;
         }
 
  

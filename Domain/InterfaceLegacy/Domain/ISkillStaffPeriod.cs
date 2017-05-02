@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -23,15 +24,15 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         IList<ISkillStaffSegmentPeriod> SortedSegmentCollection { get; }
 
-        /// <summary>
-        /// Gets the segment in this collection.
-        /// </summary>
-        /// <value>The segment in this collection.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-04-18
-        /// </remarks>
-        IList<ISkillStaffSegmentPeriod> SegmentInThisCollection { get; }
+		/// <summary>
+		/// Gets the segment in this collection.
+		/// </summary>
+		/// <value>The segment in this collection.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-04-18
+		/// </remarks>
+		ILookup<ISkillStaffPeriod, ISkillStaffSegmentPeriod> SegmentInThisCollection { get; }
 
         /// <summary>
         /// Gets the relative difference for display only.

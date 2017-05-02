@@ -22,27 +22,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _multisiteDays = multisiteDays;
         }
 
-        public IMultisiteSkill MultisiteSkill
-        {
-            get { return _multisiteSkill; }
-        }
+        public IMultisiteSkill MultisiteSkill => _multisiteSkill;
 
-        public ReadOnlyCollection<IMultisiteDay> MultisiteDays
-        {
-            get { return new ReadOnlyCollection<IMultisiteDay>(_multisiteDays); }
-        }
+	    public ReadOnlyCollection<IMultisiteDay> MultisiteDays => new ReadOnlyCollection<IMultisiteDay>(_multisiteDays);
 
-        public ReadOnlyCollection<IMultisiteDay> VisibleMultisiteDays
+	    public ReadOnlyCollection<IMultisiteDay> VisibleMultisiteDays
         {
             get { return new ReadOnlyCollection<IMultisiteDay>(_multisiteDays.Where(m => VisiblePeriod.Contains(m.MultisiteDayDate)).ToList()); }
         }
 
-        public IDictionary<IChildSkill, IDictionary<DateTime, ISkillStaffPeriod>> ChildSkillStaffPeriods
-        {
-            get { return new ReadOnlyDictionary<IChildSkill, IDictionary<DateTime, ISkillStaffPeriod>>(_childSkillStaffPeriods); }
-        }
+        public IDictionary<IChildSkill, IDictionary<DateTime, ISkillStaffPeriod>> ChildSkillStaffPeriods => new ReadOnlyDictionary<IChildSkill, IDictionary<DateTime, ISkillStaffPeriod>>(_childSkillStaffPeriods);
 
-        public void SetChildSkillDays(IChildSkill childSkill, IList<ISkillDay> childSkillDays)
+	    public void SetChildSkillDays(IChildSkill childSkill, IList<ISkillDay> childSkillDays)
         {
             if (!_multisiteSkill.ChildSkills.Contains(childSkill)) throw new ArgumentException("The supplied child skill is not contained in this multisite skill.","childSkill");
             if (_childSkillDays.ContainsKey(childSkill)) _childSkillDays.Remove(childSkill);

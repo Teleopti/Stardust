@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 				if (freeSlots == 0)
 					return currentAverage;
 
-				var diff = targetTime.TotalSeconds - fixedTime.TotalSeconds;
-				newAverage = TimeSpan.FromSeconds(diff / freeSlots);
+				var diff = targetTime - fixedTime;
+				newAverage = TimeSpan.FromSeconds(diff.TotalSeconds / freeSlots);
 				candidateAverages.Add(newAverage);
 				if (newAverage == currentAverage)
 					exit = true;

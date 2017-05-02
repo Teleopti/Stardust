@@ -40,21 +40,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public void InvokeDatesUnsaved(IUnsavedDaysInfo unsavedDays)
     	{
             if (unsavedDays == null) return;
-    		var handler = DaysUnsaved;
-            if (handler != null) handler(this, new CustomEventArgs<IUnsavedDaysInfo>(unsavedDays));
-    	}
+			DaysUnsaved?.Invoke(this, new CustomEventArgs<IUnsavedDaysInfo>(unsavedDays));
+		}
 
-    	public ISkill Skill
-        {
-            get { return _skill; }
-        }
+    	public ISkill Skill => _skill;
 
-        public IEnumerable<ISkillDay> SkillDays
-        {
-            get { return _skillDays; }
-        }
+	    public IEnumerable<ISkillDay> SkillDays => _skillDays;
 
-        /// <summary>
+	    /// <summary>
         /// Gets a value indicating whether this instance is calculated within day.
         /// Only valid after calculation of task periods.
         /// </summary>
@@ -65,12 +58,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-09-02
         /// </remarks>
-        public bool IsCalculatedWithinDay
-        {
-            get { return _isCalculatedWithinDay; }
-        }
+        public bool IsCalculatedWithinDay => _isCalculatedWithinDay;
 
-        public DateOnlyPeriod VisiblePeriod
+	    public DateOnlyPeriod VisiblePeriod
         {
             get { return _visiblePeriod; }
             set { _visiblePeriod = value; }
@@ -81,12 +71,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _skillDays.Where(s => _visiblePeriod.Contains(s.CurrentDate)); }
         }
 
-        public IEnumerable<ISkillStaffPeriod> SkillStaffPeriods
-        {
-            get { return _skillStaffPeriods.Values; }
-        }
+        public IEnumerable<ISkillStaffPeriod> SkillStaffPeriods => _skillStaffPeriods.Values;
 
-        public IEnumerable<ITemplateTaskPeriod> CalculateTaskPeriods(ISkillDay skillDay, bool enableSpillover)
+	    public IEnumerable<ITemplateTaskPeriod> CalculateTaskPeriods(ISkillDay skillDay, bool enableSpillover)
         {
             var result = new List<ITemplateTaskPeriod>();
 

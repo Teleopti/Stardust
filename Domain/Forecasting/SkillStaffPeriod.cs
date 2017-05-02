@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public IList<ISkillStaffSegmentPeriod> SortedSegmentCollection => new ReadOnlyCollection<ISkillStaffSegmentPeriod>(_sortedSegmentCollection.Values);
 
-		public IList<ISkillStaffSegmentPeriod> SegmentInThisCollection => new ReadOnlyCollection<ISkillStaffSegmentPeriod>(_segmentInThisCollection);
+		public ILookup<ISkillStaffPeriod,ISkillStaffSegmentPeriod> SegmentInThisCollection => _segmentInThisCollection.ToLookup(l => l.BelongsTo);
 
 		public double RelativeDifference => new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviation;
 
@@ -420,11 +420,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             else
             {
                 var sortedSegmentInThisCollection =
-                 SegmentInThisCollection.OrderBy(s => s.BelongsTo.Period.StartDateTime).ToList();
+                 SegmentInThisCollection.OrderBy(s => s.Key.Period.StartDateTime).ToArray();
 
                 foreach (var ySegment in sortedSegmentInThisCollection)
                 {
-                    ySegment.BelongsTo.PickResources65();
+                    ySegment.Key.PickResources65();
                 } 
             }
         }
@@ -533,8 +533,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 
                 if (period == null) continue;
-                var belongsToThis = period.SegmentInThisCollection.Where(s => s.BelongsTo.Equals(this)).ToList();
-                if (belongsToThis.Count==0 && i>currentIndex) break; //Because we do this sequential, we can stop when no more distributed segments are found
+                var belongsToThis = period.SegmentInThisCollection[this].ToArray();
+                if (belongsToThis.Length==0 && i>currentIndex) break; //Because we do this sequential, we can stop when no more distributed segments are found
 
                 foreach (ISkillStaffSegmentPeriod segmentPeriod in belongsToThis)
                 {
@@ -754,7 +754,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             Payload.Reset();
             _sortedSegmentCollection.Clear();
-            _segmentInThisCollection = _segmentInThisCollection.Where(s => !s.BelongsTo.Equals(this)).ToList();
+            _segmentInThisCollection = SegmentInThisCollection.Where(s => !s.Key.Equals(this)).SelectMany(a => a).ToList();
             _isAvailable = false;
         }
 

@@ -39,16 +39,16 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			if (startTime.HasValue)
 			{
 				if (startTime.Value >= verifyLimit)
-					throw new ArgumentOutOfRangeException("startTime", startTime, "Start Time can't be bigger than 23:59:59 +1");
+					throw new ArgumentOutOfRangeException(nameof(startTime), startTime, "Start Time can't be bigger than 23:59:59 +1");
 
 				if (endTime.HasValue && startTime > endTime.Value)
-					throw new ArgumentOutOfRangeException("startTime", startTime, "Start Time can't be greater than End Time");
+					throw new ArgumentOutOfRangeException(nameof(startTime), startTime, "Start Time can't be greater than End Time");
 			}
 
 			if (endTime.HasValue)
 			{
 				if (endTime.Value >= verifyLimit)
-					throw new ArgumentOutOfRangeException("endTime", endTime, "End Time can't be bigger than 23:59:59 +1");
+					throw new ArgumentOutOfRangeException(nameof(endTime), endTime, "End Time can't be bigger than 23:59:59 +1");
 			}
     	}
 
@@ -60,12 +60,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// </remarks>
-		public TimeSpan? StartTime
-        {
-			get { return _startTime; }
-        }
+		public TimeSpan? StartTime => _startTime;
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the end time.
         /// </summary>
         /// <value>The end time.</value>
@@ -73,13 +70,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// </remarks>
-		public TimeSpan? EndTime
-        {
-			get { return _endTime; }
+		public TimeSpan? EndTime => _endTime;
 
-        }
-
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the start time string.
         /// </summary>
         /// <value>The start time string.</value>
@@ -87,15 +80,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// </remarks>
-        public string StartTimeString
-        {
-            get
-            {
-                return StringFromTimeSpan(StartTime);
-            }
-        }
+        public string StartTimeString => StringFromTimeSpan(StartTime);
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the end time string.
         /// </summary>
         /// <value>The end time string.</value>
@@ -103,15 +90,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-15    
         /// </remarks>
-        public string EndTimeString
-        {
-            get
-            {
-                return StringFromTimeSpan(EndTime);
-            }
-        }
+        public string EndTimeString => StringFromTimeSpan(EndTime);
 
-        /// <summary>
+	    /// <summary>
         /// Implements the operator ==.
         /// </summary>
         /// <param name="per1">The per1.</param>
@@ -172,7 +153,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         public bool Equals(EndTimeLimitation other)
         {
-            return GetHashCode() == other.GetHashCode();
+            return _startTime == other._startTime && _endTime == other._endTime;
         }
 
         /// <summary>
@@ -188,7 +169,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is EndTimeLimitation))
+            if (!(obj is EndTimeLimitation))
             {
                 return false;
             }
@@ -206,10 +187,10 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
 		public string StringFromTimeSpan(TimeSpan? value)
         {
-            string ret = "";
+            var ret = "";
             if (value.HasValue)
             {
-				ret = TimeHelper.TimeOfDayFromTimeSpan((TimeSpan)value, CultureInfo.CurrentCulture);
+				ret = TimeHelper.TimeOfDayFromTimeSpan(value.Value, CultureInfo.CurrentCulture);
             }
             return ret;
         }
@@ -226,7 +207,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         public bool HasValue()
         {
-            return StartTime.HasValue | EndTime.HasValue;
+            return StartTime.HasValue || EndTime.HasValue;
         }
 
 

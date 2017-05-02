@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             if (restriction == null) return null;
 			if (!restriction.MayMatchWithShifts()) return null;
 
-		  	var validRuleSets = _ruleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.IsValidDate(onDate)).ToList();
+		  	var validRuleSets = _ruleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.IsValidDate(onDate)).ToArray();
             
             var nonRestrictionSets = validRuleSets.Where(workShiftRuleSet => !workShiftRuleSet.OnlyForRestrictions).ToList();
 				var retVal = worktimeForRuleSetsAndRestriction(restriction, nonRestrictionSets, workShiftWorkTime);

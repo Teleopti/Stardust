@@ -456,11 +456,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             workloadDay3.TaskPeriodList[8].Tasks = 13;
             workloadDay3.TaskPeriodList[8].AverageTaskTime = TimeSpan.FromSeconds(13);
 
-            Assert.AreEqual(2, newSkillDay3.SkillStaffPeriodCollection[0].SegmentInThisCollection.Count);
+            Assert.AreEqual(2, newSkillDay3.SkillStaffPeriodCollection[0].SegmentInThisCollection.SelectMany(a => a).Count());
             
             target.DistributeStaff();
             
-            Assert.AreEqual(2,newSkillDay3.SkillStaffPeriodCollection[0].SegmentInThisCollection.Count);
+            Assert.AreEqual(2,newSkillDay3.SkillStaffPeriodCollection[0].SegmentInThisCollection.SelectMany(a => a).Count());
             Assert.AreEqual(2, newSkillDay3.SkillStaffPeriodCollection[0].SortedSegmentCollection.Count);
         }
 

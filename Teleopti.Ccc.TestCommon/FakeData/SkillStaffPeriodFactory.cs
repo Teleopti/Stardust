@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// forecastedDistributedDemand
         public static SkillStaffPeriod InjectForecastedDistributedDemand(SkillStaffPeriod skillStaffPeriod, double value)
         {
-            ISkillStaffSegmentPeriod skillStaffSegmentPeriod = skillStaffPeriod.SegmentInThisCollection[0];
+            ISkillStaffSegmentPeriod skillStaffSegmentPeriod = skillStaffPeriod.SegmentInThisCollection.First().First();
             ISkillStaffSegment skillStaffSegment = skillStaffSegmentPeriod.Payload;
             typeof(SkillStaffSegment).GetField("_forecastedDistributedDemand", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(skillStaffSegment, value);

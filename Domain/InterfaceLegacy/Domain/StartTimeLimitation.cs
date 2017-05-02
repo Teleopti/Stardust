@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// /// </remarks>
         public bool Equals(StartTimeLimitation other)
         {
-            return GetHashCode() == other.GetHashCode();
+            return _startTime == other._startTime && _endTime == other._endTime;
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// /// </remarks>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is StartTimeLimitation))
+            if (!(obj is StartTimeLimitation))
             {
                 return false;
             }
@@ -193,12 +193,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         public string StringFromTimeSpan(TimeSpan? value)
         {
-            string ret = "";
-            if (value.HasValue)
-            {
-				ret = TimeHelper.TimeOfDayFromTimeSpan((TimeSpan)value, CultureInfo.CurrentCulture);
-            }
-            return ret;
+            return value.HasValue ? TimeHelper.TimeOfDayFromTimeSpan(value.Value, CultureInfo.CurrentCulture) : "";
         }
 
         /// <summary>
@@ -213,7 +208,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         public bool HasValue()
         {
-            return StartTime.HasValue | EndTime.HasValue;
+            return StartTime.HasValue || EndTime.HasValue;
         }
 
 
