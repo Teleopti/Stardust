@@ -6,7 +6,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	self.toggle = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826');
 	self.isTeamScheduleNoReadModelEnable = ko.observable(false);
 	self.hideFab = ko.observable(false);
-	self.menuIsVisible = Teleopti.MyTimeWeb.Request.MenuIsOpen();
+	self.menuIsVisible = ko.observable(false);
 
 	self.enableMenu = function () {
 		self.menuIsVisible(true);
