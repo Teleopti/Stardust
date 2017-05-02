@@ -166,6 +166,9 @@
 				}
 				else if (skill.SkillType === 'SkillTypeInboundTelephony') {
 					return "mdi mdi-phone";
+                }
+				else if (skill.SkillType === "SkillTypeRetail") {
+                    return "mdi mdi-credit-card";
 				}
 			}
 
