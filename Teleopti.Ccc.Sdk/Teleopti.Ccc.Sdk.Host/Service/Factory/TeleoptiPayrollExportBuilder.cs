@@ -53,7 +53,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 			var payrollTimeExportDataDto = createDtoWithPersonData(person, dateOnly);
 
 			if (schedulePartDto.PersonDayOff != null)
+			{
 				payrollTimeExportDataDto.DayOffPayrollCode = schedulePartDto.PersonDayOff.PayrollCode;
+				payrollTimeExportDataDto.StartDate = payrollTimeExportDataDto.Date;
+				payrollTimeExportDataDto.EndDate = payrollTimeExportDataDto.Date;
+			}
 			else
 			{
 				if (schedulePartDto.IsFullDayAbsence)
