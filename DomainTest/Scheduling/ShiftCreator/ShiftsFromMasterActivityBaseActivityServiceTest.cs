@@ -20,6 +20,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 		public IShiftFromMasterActivityService Target;
 		public IShiftCreatorService ShiftCreatorService;
 
+		[Test, Ignore("#44134")]
+		public void ShouldRemoveAdditionalLayersWithSamePayloadAsBaseLayer()
+		{
+			var phoneActivity = new Activity("Phone") { InContractTime = true, RequiresSkill = true }.WithId();
+			var emailActivity = new Activity("Email") { InContractTime = true, RequiresSkill = true }.WithId();
+			var lunchActivity = new Activity("Lunch") { InContractTime = false, RequiresSkill = false }.WithId();
+			var masterActivity = new MasterActivity();
+			masterActivity.UpdateActivityCollection(new List<IActivity> { phoneActivity, emailActivity });
+			var ruleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(masterActivity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(11, 0, 11, 0, 15), new ShiftCategory("_")));
+			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(lunchActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15),
+				new TimePeriodWithSegment(9, 0, 9, 0, 15)));
+			var shiftCollectionFromSpecificStart = ShiftCreatorService.Generate(ruleSet, new WorkShiftAddStopperCallback());
+			var firstGenaratedShiftCollection = shiftCollectionFromSpecificStart[0];
+
+			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0]);
+			foreach (var workShift in workShifts)
+			{
+				var firstLayer = workShift.LayerCollection.First();
+				var firstPayLoad = firstLayer.Payload;
+				foreach (var layer in workShift.LayerCollection)
+				{
+					if(layer.Equals(firstLayer))
+						continue;
+
+					layer.Payload.Should().Not.Be.EqualTo(firstPayLoad);
+				}
+			}
+		}
+
 		[Test]
 		public void ShouldWorkIfWeHaveAnActivityAndMasterOnTop()
 		{
