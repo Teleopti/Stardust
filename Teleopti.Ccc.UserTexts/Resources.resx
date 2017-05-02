@@ -15836,4 +15836,12 @@ Do you want to participate?</value>
     <value>TODO</value>
     <comment>TODO</comment>
   </data>
+  <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
+    <value>"Agent has {0} days without any schedule.</value>
+    <comment>Used in Web resource planner</comment>
+  </data>
+  <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
+    <value>Target of {0} scheduled time is not fulfilled</value>
+    <comment>Used in Web resource planner </comment>
+  </data>
 </root>

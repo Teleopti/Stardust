@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						BusinessRuleCategory = BusinessRuleCategory.DayOff,
 						BusinessRuleCategoryText = "Scheduled time",
 						Message =
-							$"Target of {DateHelper.HourMinutesString(item.Value.CalculatedTargetTimeHolder(periodTocheck).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)} scheduled time is not fulfilled",
+							string.Format(UserTexts.Resources.TargetScheduleTimeNotFullfilled, DateHelper.HourMinutesString(item.Value.CalculatedTargetTimeHolder(periodTocheck).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)),
 						Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
 					});
 				}
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						{
 							BusinessRuleCategory = BusinessRuleCategory.DayOff,
 							BusinessRuleCategoryText = "Scheduled time",
-							Message = $"Agent has {agentScheduleDaysWithoutSchedule} days without any scheduling.",
+							Message = string.Format(UserTexts.Resources.AgentHasDaysWithoutAnySchedule, agentScheduleDaysWithoutSchedule),
 							Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
 						});
 					}

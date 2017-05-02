@@ -1799,6 +1799,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;Agent has {0} days without any schedule..
+        /// </summary>
+        public static string AgentHasDaysWithoutAnySchedule {
+            get {
+                return ResourceManager.GetString("AgentHasDaysWithoutAnySchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Historical Adherence.
         /// </summary>
         public static string AgentHistoricalAdherence {
@@ -31393,6 +31402,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TargetRate {
             get {
                 return ResourceManager.GetString("TargetRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target of {0} scheduled time is not fulfilled.
+        /// </summary>
+        public static string TargetScheduleTimeNotFullfilled {
+            get {
+                return ResourceManager.GetString("TargetScheduleTimeNotFullfilled", resourceCulture);
             }
         }
         
