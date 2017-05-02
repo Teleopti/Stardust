@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 
 			var resolution = _intervalLengthFetcher.IntervalLength;
-			var beforeIntervals = getActivityIntervals(scheduleDayBefore, resolution);
-			var afterIntervals = getActivityIntervals(scheduleDayAfter, resolution);
+			var beforeIntervals = getActivityIntervals(scheduleDayBefore, resolution).ToList();
+			var afterIntervals = getActivityIntervals(scheduleDayAfter, resolution).ToList();
 
 			var allIntervals = new List<ActivityResourceInterval>();
 			allIntervals.AddRange(beforeIntervals);
@@ -45,44 +45,31 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var intervalStart = totalStart;
 			while (intervalStart < totaltEnd)
 			{
-				var before = beforeIntervals.FirstOrDefault(x => x.Interval.StartDateTime == intervalStart);
-				var after = afterIntervals.FirstOrDefault(x => x.Interval.StartDateTime == intervalStart);
+				var before = beforeIntervals.Where(x => x.Interval.StartDateTime == intervalStart).ToList();
+				var after = afterIntervals.Where(x => x.Interval.StartDateTime == intervalStart).ToList();
 				intervalStart = intervalStart.AddMinutes(resolution);
 
-				if (before != null && after != null)
-				{
-					if (before.Activity == after.Activity && Math.Abs(before.Resource - after.Resource) <= 0.01)
-						continue;
-
-
-					if (before.Activity == after.Activity && allActivities.First(x => x.Id == after.Activity).RequiresSkill)
+				var intervalOutput = (from activityResourceInterval in before where allActivities.First(x => x.Id == activityResourceInterval.Activity).RequiresSkill
+					select new ActivityResourceInterval
 					{
-						output.Add(new ActivityResourceInterval
-						{
-							Interval = before.Interval,
-							Activity = before.Activity,
-							Resource = after.Resource - before.Resource
-						});
-						continue;
-					}
+						Interval = activityResourceInterval.Interval,
+						Activity = activityResourceInterval.Activity,
+						Resource = -activityResourceInterval.Resource //negative
+					}).ToList();
 
-					//activity is different
-					if (allActivities.First(x => x.Id == before.Activity).RequiresSkill)
-						output.Add(new ActivityResourceInterval
-						{
-							Interval = before.Interval,
-							Activity = before.Activity,
-							Resource = -before.Resource
-						});
-					if (allActivities.First(x => x.Id == after.Activity).RequiresSkill)
-						output.Add(new ActivityResourceInterval
-						{
-							Interval = after.Interval,
-							Activity = after.Activity,
-							Resource = after.Resource
-						});
+				intervalOutput.AddRange(from activityResourceInterval in after where allActivities.First(x => x.Id == activityResourceInterval.Activity).RequiresSkill
+										select new ActivityResourceInterval
+										{
+											Interval = activityResourceInterval.Interval,
+											Activity = activityResourceInterval.Activity,
+											Resource = activityResourceInterval.Resource
+										});
 
-				}
+				var intervalOutputsSum = intervalOutput
+					.GroupBy(p => new {p.Interval, p.Activity})
+					.Select(g => new ActivityResourceInterval {Interval = g.Key.Interval, Activity = g.Key.Activity, Resource = g.Sum(p => p.Resource)});
+
+				output.AddRange(intervalOutputsSum.Where(x => Math.Abs(x.Resource) >= 0.001));
 			}
 			return output;
 		}
