@@ -3,7 +3,8 @@ xdescribe('agentGroupFormController', function () {
 	var $httpBackend,
 		$controller,
 		$state,
-		fakeBackend;
+		fakeBackend,
+		vm;
 
 	beforeEach(function () {
 		module('wfm.resourceplanner');
@@ -12,58 +13,55 @@ xdescribe('agentGroupFormController', function () {
 	beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _fakeResourcePlanningBackend_) {
 		$httpBackend = _$httpBackend_;
 		$controller = _$controller_;
-		$state = _$state_;
-		spyOn($state, 'go');
 		fakeBackend = _fakeResourcePlanningBackend_;
+		$state = _$state_;
 
+		spyOn($state, 'go');
 		fakeBackend.clear();
+
+		vm = $controller('agentGroupFormController');
+
+		$httpBackend.whenGET(/.*?api\/filtersagentgroup\?.*/).respond(function (method, url, data, headers) {
+			return [200, [{
+				Id: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
+				Name: "Skill 1",
+				FilterType: "Skill"
+			}, {
+				Id: "a98d2c45-a8f4-4c70-97f9-907ab364af75",
+				Name: "Skill 2",
+				FilterType: "Skill"
+			}], {}];
+		});
 	}));
 
+	afterEach(function () {
+		$httpBackend.verifyNoOutstandingExpectation();
+		$httpBackend.verifyNoOutstandingRequest();
+	});
 
-	it('should not create new agentgroup when submit data is not valid', function () {	
-		var vm = $controller('agentGroupFormController');
-		vm.persist();
+	it('should get filter skills', function () {
+		vm.searchString = "skill";
+		vm.inputFilterData();
+		$httpBackend.flush();
 
-		expect($state.go).not.toHaveBeenCalledWith('resourceplanner.newoverview');
+		console.log(vm.filterResults);
+
+		expect(vm.filterResults.length).toEqual(2);
 	});
 
 	xit('should create new agentgroup when submit data is valid', function () {
-		var vm = $controller('agentGroupFormController');
+		$httpBackend.whenPOST('../api/ResourcePlanner/AgentGroup').respond(function (method, url, data, headers) {
+			return [200, {
+				Id: "3d3d7ddc-27b4-4188-93c0-d986e93c9712",
+				Name: "TEST agent group",
+			}];
+		});
+
 		vm.name = 'Test';
+		vm.selectedResults = [];
 		vm.persist();
+		$httpBackend.flush();
 
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.newoverview');
 	});
-
-	xit('should load exit agentgroup', function () {
-		fakeBackend.withActivity({
-			ActivityGuid: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
-			ActivityName: "Phone"
-		}).withActivity({
-			ActivityGuid: "a98d2c45-a8f4-4c70-97f9-907ab364af75",
-			ActivityName: "Lunch"
-		});
-
-		var vm = $controller('skillPrioControllerNew');
-		$httpBackend.flush();
-
-		expect(vm.activites.length).toEqual(2);
-	});
-
-	xit('should not save edit agentgroup when submit data is not valid', function () {
-		fakeBackend.withActivity({
-			ActivityGuid: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
-			ActivityName: "Phone"
-		}).withActivity({
-			ActivityGuid: "a98d2c45-a8f4-4c70-97f9-907ab364af75",
-			ActivityName: "Lunch"
-		});
-
-		var vm = $controller('skillPrioControllerNew');
-		$httpBackend.flush();
-
-		expect(vm.activites.length).toEqual(2);
-	});
-
-
 });

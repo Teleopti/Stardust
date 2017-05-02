@@ -43,7 +43,6 @@
 		}
 
 		function editRuleset(dayOffRule) {
-			// temporary use the old one, should be rebuilt; resourceplanner.filter => resourceplanner.dayoffrules
 			$state.go('resourceplanner.dayoffrules', {
 				filterId: dayOffRule.Id,
 				groupId: $stateParams.groupId,
@@ -60,7 +59,6 @@
 		}
 
 		function createRuleset() {
-			// temporary use the old one, should be rebuilt; resourceplanner.filter => resourceplanner.dayoffrules
 			$state.go('resourceplanner.dayoffrules', {
 				groupId: $stateParams.groupId,
 				periodId: undefined

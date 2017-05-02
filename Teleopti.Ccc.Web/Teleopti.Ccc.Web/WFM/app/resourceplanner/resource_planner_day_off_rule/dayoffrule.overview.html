@@ -30,8 +30,26 @@
 						<div tabindex=0 class="context-menu card-context" ng-click="vm.editRuleset(dayOffRule)">
 							<i class="filter-header mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
 						</div>
-						<div tabindex=0 class="context-menu card-context" ng-click="vm.destoryRuleset(dayOffRule)" ng-show="!dayOffRule.Default">
+						<div tabindex=0 class="context-menu card-context" ng-click="confirmModal1 = true" ng-show="!dayOffRule.Default">
 							<i class="filter-header mdi mdi-delete pointer"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
+						</div>
+						<div ng-cloak class="modal-box">
+							<div ng-cloak ng-show="confirmModal1">
+								<div class="modalbg">
+									<div class="dialog-mini material-depth-1">
+										<div class="modal-inner-content">
+											<h3>Delete</h3>
+											Are you sure you want to delete dayoff rule {{dayOffRule.Name}} and its related settings?
+										</div>
+										<div class="modal-actions">
+											<aside>
+												<button ng-click="confirmModal1=false" class="wfm-btn wfm-btn-invis-default">Cancel</button>
+												<button ng-click="confirmModal1=false; vm.destoryRuleset(dayOffRule)" class="wfm-btn wfm-btn-invis-primary">Delete</button>
+											</aside>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -67,28 +85,46 @@
 				</div>
 				<div class="con-row">
 					<div class="con-flex" ng-show="!dayOffRule.Default">{{'AppliedFilters'|translate}}
-						<span class="appliedFilters con-row" ng-repeat="filter in dayOffRule.Filters | limitTo:5">
-              <span class="filter-handle">{{filter.FilterType}}</span>
-						<span class="filter-chip">{{filter.Name}}</span>
-						</span>
-						<span class="moreExists" ng-show="dayOffRule.Filters.length>5">{{'ThreeDots' | translate}}</span>
+						<div class="con-row" ng-repeat="filter in dayOffRule.Filters | limitTo:2">
+							<div class="con-flex">
+								<div class="wfm-filter-selected">
+									<div class="wfm-chip-wrap pp-filter-chip-wrap">
+										<span class="wfm-chip">
+									<span class="chip-handle">{{filter.FilterType}}</span>
+										<span class="chip-text">{{filter.Name}}</span>
+										</span>
+										<span class="moreExists" ng-show="$index == 1">{{'ThreeDots' | translate}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="con-footer">
+				<div class="con-footer" ng-show="dayOffRule.Filters.length>2">
 					<div class="modal-container">
 						<div ng-cloak class="modal-box">
-							<button ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default" ng-hide="dayOffRule.Filters.length <6">
-          		<span>{{'ShowAll'|translate}}</span>
-          	</button>
+							<button ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default">
+								<span>{{'ShowAll'|translate}}</span>
+							</button>
 							<div ng-cloak ng-show="showFilterRules">
 								<div class="modalbg">
 									<div class="dialog">
 										<h1 class="modal-title">
-											{{dayOffRule.Name}}
+											Agent Group "{{vm.agentGroup.Name}}" - DayOff Rule "{{dayOffRule.Name}}"
 										</h1>
 										<div class="modal-inner-content">
-											<div ng-repeat="subfilter in dayOffRule.Filters">
-												{{subfilter.FilterType}} {{subfilter.Name}}
+											{{'AppliedFilters'|translate}}
+											<div class="con-row" ng-repeat="filter in dayOffRule.Filters">
+												<div class="con-flex">
+													<div class="wfm-filter-selected">
+														<div class="wfm-chip-wrap pp-filter-chip-wrap">
+															<span class="wfm-chip">
+																<span class="chip-handle">{{filter.FilterType}}</span>
+																<span class="chip-text">{{filter.Name}}</span>
+															</span>
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 										<div class="modal-actions">

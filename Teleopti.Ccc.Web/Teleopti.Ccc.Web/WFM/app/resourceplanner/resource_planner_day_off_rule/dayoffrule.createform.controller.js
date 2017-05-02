@@ -14,11 +14,12 @@
         vm.name = "";
         vm.isEnabled = true;
         vm.selectedItem = undefined;
-        vm.searchString = undefined;
+        vm.searchString = '';
         vm.results = [];
         vm.default = false;
         vm.selectedResults = [];
         vm.filterId = "";
+        vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
         vm.isValid = isValid;
         vm.isValidDayOffsPerWeek = isValidDayOffsPerWeek;
         vm.isValidConsecDaysOff = isValidConsecDaysOff;
@@ -94,16 +95,24 @@
             };
         }
 
-        vm.query = debounceService.debounce(function (input) {
-            if (input === "") {
-                return [];
-            };
-
-            return dayOffRuleService.getFilterData({
-                searchString: input,
-                maxHits: maxHits
-            }).$promise;
-        }, 250);
+        function inputFilterData() {
+			if (vm.searchString !== '') {
+				return dayOffRuleService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
+					if (vm.selectedResults.length > 0) {
+						for (var i = data.length - 1; i >= 0; i--) {
+							angular.forEach(vm.selectedResults, function (selectedItem) {
+								if (data[i].Id === selectedItem.Id) {
+									data.splice(i, 1);
+								}
+							});
+						}
+					}
+					return data;
+				});
+			} else {
+				return [];
+			}
+		}
 
         function isValid() {
             return vm.isValidDayOffsPerWeek() &&
@@ -178,7 +187,7 @@
         }
 
         function noResultsExists() {
-            return vm.results.length === 0 && vm.searchString.length > 0;
+            return vm.results.length === 0 && vm.searchString !== '';
         }
 
         function removeNode(node) {

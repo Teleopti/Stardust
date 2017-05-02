@@ -12,6 +12,7 @@
 
 		vm.searchString = '';
 		vm.selectedResults = [];
+		vm.filterResults = [];
 		vm.name = '';
 		vm.cancel = cancel;
 		vm.editAgentGroup = {};
@@ -45,16 +46,31 @@
 		}
 
 		function inputFilterData() {
-			var searchString = vm.searchString;
-			if (searchString.length > 0) {
-				return agentGroupService.getFilterData({ searchString: searchString }).$promise;
+			if (vm.searchString !== '') {
+				var filters = agentGroupService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
+					removeSelectedFiltersInList(data, vm.selectedResults)
+					return vm.filterResults = data;
+				});
+				return filters;
 			} else {
 				return [];
 			}
 		}
 
+		function removeSelectedFiltersInList(filters, selectedFilters) {
+			if (selectedFilters.length > 0){
+				for (var i = filters.length - 1; i >= 0; i--) {
+					angular.forEach(selectedFilters, function (selectedItem) {
+						if (filters[i].Id === selectedItem.Id) {
+							filters.splice(i, 1);
+						}
+					});
+				}
+			}
+		}
+
 		function selectResultItem(item) {
-			if (item === null) {
+			if (item == null) {
 				return;
 			}
 			if (isVaildUnit(item)) {
@@ -101,9 +117,10 @@
 		}
 
 		function persist() {
+			var id = vm.editAgentGroup ? vm.editAgentGroup.Id : null;
 			if (isValid()) {
 				agentGroupService.saveAgentGroup({
-					Id: vm.editAgentGroup ? vm.editAgentGroup.Id : null,
+					Id: id,
 					Name: vm.name,
 					Filters: vm.selectedResults
 				}).$promise.then(function () {

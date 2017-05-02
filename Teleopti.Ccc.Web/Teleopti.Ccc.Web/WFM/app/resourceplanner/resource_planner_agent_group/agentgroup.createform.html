@@ -16,8 +16,7 @@
 					<form name="form" class="wfm-form" novalidate>
 						<div class="form-input-wrap">
 							<label for="agentGroupName" translate>NameColon</label>
-							<input type="text" name="agentGroupName" id="agentGroupName" autofocus autocomplete="off" ng-model="vm.name" ng-model-options="{ debounce: 500 }"
-							/>
+							<input type="text" name="agentGroupName" id="agentGroupName" autofocus autocomplete="off" ng-model="vm.name" ng-model-options="{ debounce: 500 }"/>
 							<p class="text-danger" ng-show="!vm.isValidName()" translate>
 								NameRequired
 							</p>
@@ -30,8 +29,8 @@
 							<md-autocomplete md-no-cache="true" md-selected-item="selectedItem" md-search-text="vm.searchString" placeholder="{{'Find'|translate}}: {{'Skill'|translate}} / {{'Contract'|translate}} / {{'Team'|translate}}"
 							 md-items="item in vm.inputFilterData()" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">
 								<md-item-template>
-									<div class="wfm-filter-selected">
-										<div class="wfm-chip-wrap">
+									<div class="wfm-filter-selected" >
+										<div class="wfm-chip-wrap pp-filter-chip-wrap" >
 											<span class="wfm-chip">
 												<span class="chip-handle">{{item.FilterType}}</span>
 											<span class="chip-text">{{item.Name}}</span>
@@ -45,7 +44,7 @@
 							</md-autocomplete>
 						</form>
 					</div>
-					<p class="text-danger" ng-show="!vm.isValidFilters() ">
+					<p class="text-danger" ng-show="!vm.isValidFilters()">
 						<span translate>ValidationforFilter</span>
 					</p>
 					<div ng-show="vm.selectedResults.length > 0">

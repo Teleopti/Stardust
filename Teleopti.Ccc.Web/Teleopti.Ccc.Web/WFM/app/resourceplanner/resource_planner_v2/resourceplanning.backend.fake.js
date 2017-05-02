@@ -4,8 +4,11 @@
         .module('wfm.resourceplanner')
         .service('fakeResourcePlanningBackend', function ($httpBackend) {
 
-            // var activites = [];
-            // var skills = [];
+            var service = {
+                clear : clear,
+            }
+
+            var filterResults = [];
 
             var paramsOf = function (url) {
                 var result = {};
@@ -32,34 +35,10 @@
                     });
             };
 
-            // fakeGet('../ToggleHandler/AllToggles',
-            //     function () {
-            //         return [200, {}];
-            //     });
-            // fakeGet('../api/ResourcePlanner/AdminSkillRoutingActivity',
-            //     function () {
-            //         return [200, activites];
-            //     });
-            // fakeGet('../api/ResourcePlanner/AdminSkillRoutingPriority',
-            //     function () {
-            //         return [200, skills];
-            //     });
-            // $httpBackend.whenPOST("../api/ResourcePlanner/AdminSkillRoutingPriorityPost").respond(function(){
-            //   return 200;
-            // })
-
-            this.clear = function () {
-                
+            function clear () {       
+                filterResults = [];
             };
 
-            // this.withActivity = function (activity) {
-            //     activites.push(activity);
-            //     return this;
-            // };
-            // this.withSkill = function (skill) {
-            //     skills.push(skill);
-            //     return this;
-            // };
-
+            return service;
         });
 })();
