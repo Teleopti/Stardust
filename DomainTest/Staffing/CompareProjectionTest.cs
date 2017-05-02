@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var after = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario)[person].ScheduledDay(new DateOnly(now));
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
 			activityResourceIntervals.Count().Should().Be.EqualTo(1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod1.StartDateTime).Resource.Should().Be.EqualTo(0.5);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod1.StartDateTime).Resource.Should().Be.EqualTo(0.5);
 		}
 
 		[Test]
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var before = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario)[person].ScheduledDay(new DateOnly(now));
 			var activityResourceIntervals = Target.Compare(before, afterCopy);
 			activityResourceIntervals.Count().Should().Be.EqualTo(1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod1.StartDateTime).Resource.Should().Be.EqualTo(-0.5);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod1.StartDateTime).Resource.Should().Be.EqualTo(-0.5);
 		}
 
 		[Test]
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
 			activityResourceIntervals.Count().Should().Be.EqualTo(1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == noSkillPeriod.StartDateTime && x.Activity == activity.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(-1);
+			activityResourceIntervals.First(x => x.StartDateTime == noSkillPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(-1);
 		}
 
 		[Test]
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			var activityResourceIntervals = Target.Compare(before, afterCopy);
 			activityResourceIntervals.Count().Should().Be.EqualTo(1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == noSkillPeriod.StartDateTime && x.Activity == activity.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(1);
+			activityResourceIntervals.First(x => x.StartDateTime == noSkillPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
 			activityResourceIntervals.Count().Should().Be.EqualTo(1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod.StartDateTime && x.Activity == activity.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(-1);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(-1);
 		}
 
 		[Test]
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			var activityResourceIntervals = Target.Compare(before, afterCopy);
 			activityResourceIntervals.Count().Should().Be.EqualTo(1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod.StartDateTime && x.Activity == activity.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(1);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -275,13 +275,13 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var assignmentPeriod = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activityBefore, assignmentPeriod, new ShiftCategory("category"));
 			PersonAssignmentRepository.Has(assignment);
-			var beforeCopy = (IScheduleDay)ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now)).Clone();
+			var beforeCopy = (IScheduleDay) ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now)).Clone();
 			assignment.AddActivity(activityAfter, assignmentPeriod);
 			var after = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now));
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
 			activityResourceIntervals.Count().Should().Be.EqualTo(2);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod.StartDateTime && x.Activity == activityBefore.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(-1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod.StartDateTime && x.Activity == activityAfter.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(1);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] {skill.Id.GetValueOrDefault()})).Resource.Should().Be.EqualTo(-1);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] {skill2.Id.GetValueOrDefault()})).Resource.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -310,8 +310,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var after = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario)[person].ScheduledDay(new DateOnly(now));
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
 			activityResourceIntervals.Count().Should().Be.EqualTo(2);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriodTotal.StartDateTime && x.Activity == activity.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(-0.5);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriodTotal.StartDateTime && x.Activity == activity2.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(0.5);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriodTotal.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(-0.5);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriodTotal.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill2.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(0.5);
 		}
 
 		[Test]
@@ -340,8 +340,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var before = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario)[person].ScheduledDay(new DateOnly(now));
 			var activityResourceIntervals = Target.Compare(before, afterCopy);
 			activityResourceIntervals.Count().Should().Be.EqualTo(2);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriodTotal.StartDateTime && x.Activity == activity.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(0.5);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriodTotal.StartDateTime && x.Activity == activity2.Id.GetValueOrDefault()).Resource.Should().Be.EqualTo(-0.5);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriodTotal.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(0.5);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriodTotal.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill2.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(-0.5);
 		}
 
 		[Test]
@@ -367,8 +367,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var after = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario)[person].ScheduledDay(new DateOnly(now));
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
 			activityResourceIntervals.Count().Should().Be.EqualTo(2);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod1.StartDateTime).Resource.Should().Be.EqualTo(-1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod1.EndDateTime).Resource.Should().Be.EqualTo(1);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod1.StartDateTime).Resource.Should().Be.EqualTo(-1);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod1.EndDateTime).Resource.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -394,8 +394,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var after = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario)[person].ScheduledDay(new DateOnly(now));
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
 			activityResourceIntervals.Count().Should().Be.EqualTo(2);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod2.EndDateTime).Resource.Should().Be.EqualTo(-1);
-			activityResourceIntervals.First(x => x.Interval.StartDateTime == assignmentPeriod2.StartDateTime).Resource.Should().Be.EqualTo(1);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod2.EndDateTime).Resource.Should().Be.EqualTo(-1);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod2.StartDateTime).Resource.Should().Be.EqualTo(1);
 		}
 	}
 }
