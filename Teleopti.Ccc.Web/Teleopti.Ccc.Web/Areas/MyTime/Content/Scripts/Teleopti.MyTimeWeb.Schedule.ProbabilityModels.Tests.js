@@ -59,7 +59,7 @@ $(document).ready(function () {
 
 	test("No continous period for empty schedule periods", function () {
 		var schedulePeriods = [];
-		var vm = new Teleopti.MyTimeWeb.Schedule.Helper.GetContinousPeriods(baseDate, schedulePeriods);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(baseDate, schedulePeriods);
 
 		equal(vm.length, 0);
 	});
@@ -78,7 +78,7 @@ $(document).ready(function () {
 			}
 		];
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.Helper.GetContinousPeriods(baseDate, schedulePeriods);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(baseDate, schedulePeriods);
 		equal(vm.length, 1);
 		equal(vm[0].startTimeInMin, 165);
 		equal(vm[0].endTimeInMin, 360);
@@ -98,7 +98,7 @@ $(document).ready(function () {
 			}
 		];
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.Helper.GetContinousPeriods(baseDate, schedulePeriods);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(baseDate, schedulePeriods);
 		equal(vm.length, 2);
 
 		var firstContinousPeriod = vm[0];
@@ -127,7 +127,7 @@ $(document).ready(function () {
 			}
 		];
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.Helper.GetContinousPeriods(baseDate, schedulePeriods);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(baseDate, schedulePeriods);
 		equal(vm.length, 3);
 
 		var firstContinousPeriod = vm[0];
@@ -157,7 +157,7 @@ $(document).ready(function () {
 			}
 		];
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.Helper.GetContinousPeriods(baseDate, schedulePeriods);
+		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(baseDate, schedulePeriods);
 		equal(vm.length, 2);
 
 		var firstContinousPeriod = vm[0];
@@ -176,44 +176,84 @@ $(document).ready(function () {
 			probabilityType: constants.probabilityType.none
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
 		equal(probabilities.length, 0);
 	});
 
 	test("Should not create probability if set to show absence probability but is full day absence", function () {
 		var scheduleDay = {
-			IsFullDayAbsence: true,
-			IsDayOff: false
+			isFullDayAbsence: true,
+			isDayOff: false,
+			fixedDate: function () { },
+			periods: [
+				{
+					"StartTime": baseDate + "T02:45:00",
+					"EndTime": baseDate + "T04:00:00"
+				}, {
+					"StartTime": baseDate + "T04:00:00",
+					"EndTime": baseDate + "T04:15:00"
+				}, {
+					"StartTime": baseDate + "T04:15:00",
+					"EndTime": baseDate + "T06:00:00"
+				}
+			]
 		};
 		var rawProbability = createRawProbabilities();
 		var options = {
-			probabilityType: constants.probabilityType.absence
+			probabilityType: constants.probabilityType.absence,
+			timelines: createTimeline(1, 8)
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
 		equal(probabilities.length, 0);
 	});
 
 	test("Should not create probability if set to show absence probability but is dayoff", function () {
 		var scheduleDay = {
-			IsFullDayAbsence: false,
-			IsDayOff: true
+			isFullDayAbsence: false,
+			isDayOff: true,
+			fixedDate: function () { },
+			periods: [
+				{
+					"StartTime": baseDate + "T02:45:00",
+					"EndTime": baseDate + "T04:00:00"
+				}, {
+					"StartTime": baseDate + "T04:00:00",
+					"EndTime": baseDate + "T04:15:00"
+				}, {
+					"StartTime": baseDate + "T04:15:00",
+					"EndTime": baseDate + "T06:00:00"
+				}
+			]
 		};
 		var rawProbability = createRawProbabilities();
 		var options = {
-			probabilityType: constants.probabilityType.absence
+			probabilityType: constants.probabilityType.absence,
+			timelines: createTimeline(1, 8)
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
 		equal(probabilities.length, 0);
 	});
 
+	//test("Should create probability for cross day schedule starts from previous day even today is dayoff", function() {
+	//	var scheduleDay = {
+	//		IsFullDayAbsence: false,
+	//		IsDayOff: true,
+
+	//	};
+	//	var rawProbability = createRawProbabilities();
+	//	var options = {
+	//		probabilityType: constants.probabilityType.absence
+	//	};
+	//});
+
 	test("Should create probability with height for vertical layout direction", function () {
 		var scheduleDay = {
-			FixedDate: baseDate,
-			IsFullDayAbsence: false,
-			IsDayOff: false,
-			Periods: [
+			fixedDate: function () { return baseDate },
+			isFullDayAbsence: false,
+			isDayOff: false,
+			periods: [
 				{
 					"StartTime": baseDate + "T02:45:00",
 					"EndTime": baseDate + "T04:00:00"
@@ -240,7 +280,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
 
 		equal(probabilities.length, 13);
 		for (var i = 0; i < probabilities.length; i++) {
@@ -251,10 +291,10 @@ $(document).ready(function () {
 
 	test("Should create probability with height for horizontal layout direction", function () {
 		var scheduleDay = {
-			FixedDate: baseDate,
-			IsFullDayAbsence: false,
-			IsDayOff: false,
-			Periods: [
+			fixedDate: function () { return baseDate },
+			isFullDayAbsence: false,
+			isDayOff: false,
+			periods: [
 				{
 					"StartTime": baseDate + "T02:45:00",
 					"EndTime": baseDate + "T04:00:00"
@@ -281,7 +321,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay, rawProbability, {}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
 		equal(probabilities.length, 13);
 		for (var i = 0; i < probabilities.length; i++) {
 			equal(probabilities[i].styleJson.width != undefined, true);
@@ -294,15 +334,16 @@ $(document).ready(function () {
 
 		var timelineStart = 1, timelineEnd = 9;
 		var scheduleDay = {
-			FixedDate: baseDate,
-			IsFullDayAbsence: false,
-			IsDayOff: false,
-			Periods: [
+			fixedDate: function () { return baseDate },
+			isFullDayAbsence: false,
+			isDayOff: false,
+			periods: [
 	 			{
 	 				"StartTime": baseDate + "T06:00:00",
 	 				"EndTime": baseDate + "T09:00:00"
 	 			}
-			]
+			],
+			userNowInMinute: function () { return 0; }
 		};
 		var rawProbabilities = createRawProbabilities();
 
@@ -329,11 +370,8 @@ $(document).ready(function () {
 			}
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay,
-			expectedRawProbabilities,
-			{
-				userNowInMinute: function () { return 0; }
-			}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels( 
+			expectedRawProbabilities,scheduleDay, options);
 
 		var expectedLengthPercentagePerMinute = 1 / ((timelineEnd - timelineStart) * 60 + 2 * constants.timelineMarginInMinutes);
 
@@ -348,13 +386,13 @@ $(document).ready(function () {
 		//equal(probability.styleJson.left,
 		//	((((7 - timelineStart) * 60 - constants.timelineMarginInMinutes) * expectedLengthPercentagePerMinute * 100) + "%"));
 		//equal(probability.styleJson.width,
-		//	((((7 - 6) * 60) * expectedLengthPercentagePerMinute * 100) + "%"));
-		equal(probability.tooltips().indexOf("6:00 - 7:00") > -1, true);
+		//	((((7 - 6) * 60) * expectedLengthPercentagePerMinute * 100) + "%")); 
+		equal(probability.tooltips().indexOf("06:00 - 07:00") > -1, true);
 		equal(probability.cssClass(), "probability-low");
 
 		probability = probabilities[1];
 		//equal(probability.styleJson.width, (((9 - 7) * 60 * expectedLengthPercentagePerMinute * 100) + "%"));
-		equal(probability.tooltips().indexOf("7:00 - 9:00") > -1, true);
+		equal(probability.tooltips().indexOf("07:00 - 09:00") > -1, true);
 		equal(probability.cssClass(), "probability-high");
 	});
 
@@ -363,10 +401,10 @@ $(document).ready(function () {
 
 		var timelineStart = 0, timelineEnd = 9;
 		var scheduleDay = {
-			FixedDate: baseDate,
-			IsFullDayAbsence: false,
-			IsDayOff: false,
-			Periods: [
+			fixedDate: function () { return baseDate },
+			isFullDayAbsence: false,
+			isDayOff: false,
+			periods: [
 	 			{
 	 				"StartTime": baseDate + "T00:00:00",
 	 				"EndTime": baseDate + "T04:00:00"
@@ -375,7 +413,8 @@ $(document).ready(function () {
 	 				"StartTime": baseDate + "T06:00:00",
 	 				"EndTime": baseDate + "T09:00:00"
 	 			}
-			]
+			],
+			userNowInMinute: function () { return 0; }
 		};
 		var rawProbabilities = createRawProbabilities();
 
@@ -403,11 +442,8 @@ $(document).ready(function () {
 			}
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay,
-			expectedRawProbabilities,
-			{
-				userNowInMinute: function () { return 0; }
-			}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(
+			expectedRawProbabilities, scheduleDay, options);
 
 		// Only 1 margin at end of timeline since timeline is start from 00:00
 		var expectedLengthPercentagePerMinute = 1 / ((timelineEnd - timelineStart) * 60 + constants.timelineMarginInMinutes);
@@ -438,11 +474,11 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var timelineStart = 0, timelineEnd = 9;
-		var scheduleDay = {
-			FixedDate: baseDate,
-			IsFullDayAbsence: false,
-			IsDayOff: false,
-			Periods: [
+		var scheduleDay = { 
+			fixedDate: function () { return baseDate },
+			isFullDayAbsence: false,
+			isDayOff: false,
+			periods: [
 	 			{
 	 				"StartTime": baseDate + "T00:00:00",
 	 				"EndTime": baseDate + "T04:10:00"
@@ -451,7 +487,8 @@ $(document).ready(function () {
 	 				"StartTime": baseDate + "T08:50:00",
 	 				"EndTime": baseDate + "T09:00:00"
 	 			}
-			]
+			],
+			userNowInMinute: function () { return 0; }
 		};
 		//probability period is 24 hours
 		var rawProbabilities = createRawProbabilities();
@@ -477,11 +514,8 @@ $(document).ready(function () {
 			}
 		};
 
-		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(scheduleDay,
-			expectedRawProbabilities,
-			{
-				userNowInMinute: function () { return 0; }
-			}, options);
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(
+			expectedRawProbabilities, scheduleDay, options);
 
 		equal(probabilities[probabilities.length - 2].tooltips().indexOf("00:00 - 04:10") > -1, true);
 		equal(probabilities[probabilities.length - 1].tooltips().indexOf("08:50 - 09:00") > -1, true);
