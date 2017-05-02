@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
@@ -14,11 +15,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 			foreach (var person in people)
 			{
 				var periods = person.PersonPeriods(range);
-				if (periods.Any(x => ((IDeleteTag)x.PersonContract.Contract).IsDeleted))
+				foreach (var period in periods.Where(x => ((IDeleteTag)x.PersonContract.Contract).IsDeleted))
+				{
 					list.Add(new PersonValidationError(person)
 					{
-						ValidationError = "Assigned deleted contract for one or more person period within the planning period."
+						ValidationError = string.Format(Resources.DeletedContractAssignedForPlanningPeriod, period.PersonContract.Contract.Description.Name)
 					});
+				}
 			}
 			return list;
 		}

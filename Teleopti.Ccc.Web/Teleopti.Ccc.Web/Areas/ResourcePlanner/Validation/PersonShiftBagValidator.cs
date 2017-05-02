@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
@@ -14,16 +14,19 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 			foreach (var person in people)
 			{
 				var periods = person.PersonPeriods(range);
-				if (periods.Any(x => x.RuleSetBag == null))
-					list.Add(new PersonValidationError(person)
-					{
-						ValidationError = "Missing shift bag for one or more person period within the planning period."
-					});
-				else if (periods.Any(x => ((IDeleteTag)x.RuleSetBag).IsDeleted))
-					list.Add(new PersonValidationError(person)
-					{
-						ValidationError = "Assigned deleted shift bag for one or more person period within the planning period."
-					});
+				foreach (var period in periods)
+				{
+					if (period.RuleSetBag == null)
+						list.Add(new PersonValidationError(person)
+						{
+							ValidationError = Resources.MissingShiftBagForPlanningPeriod
+						});
+					else if (((IDeleteTag)period.RuleSetBag).IsDeleted)
+						list.Add(new PersonValidationError(person)
+						{
+							ValidationError = string.Format(Resources.DeletedShiftBagAssignedForPlanningPeriod, period.RuleSetBag.Description.Name)
+						});
+				}
 			}
 			return list;
 		}

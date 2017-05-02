@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 				{
 					list.Add(new PersonValidationError(person)
 					{
-						ValidationError = "Has no schedule periods for the planning period."
+						ValidationError = Resources.MissingSchedulePeriodForPlanningPeriod
 					});
 				}
 				else
@@ -44,10 +45,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 							start = (period?.EndDate ?? incrementor.Increase(start, schedulePeriod.Number)).AddDays(1);
 						}
 					}
-					if (!containedPeriods.Any(x => x.StartDate >= range.StartDate && x.EndDate <= range.EndDate))
+					if (containedPeriods.All(x => x.StartDate != range.StartDate) || containedPeriods.All(x => x.EndDate != (person.TerminalDate ?? range.EndDate)))
 						list.Add(new PersonValidationError(person)
 						{
-							ValidationError = "No full schedule period contained in the planning period."
+							ValidationError = Resources.NoFullSchedulePeriod
 						});
 				}
 			}

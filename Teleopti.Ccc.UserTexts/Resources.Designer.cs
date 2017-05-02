@@ -8426,11 +8426,47 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The contract {0} assigned to this agent has been deleted.
+        /// </summary>
+        public static string DeletedContractAssignedForPlanningPeriod {
+            get {
+                return ResourceManager.GetString("DeletedContractAssignedForPlanningPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The contract schedule {0} assigned to this agent has been deleted.
+        /// </summary>
+        public static string DeletedContractScheduleAssignedForPlanningPeriod {
+            get {
+                return ResourceManager.GetString("DeletedContractScheduleAssignedForPlanningPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete definition set.
         /// </summary>
         public static string DeleteDefinitionSet {
             get {
                 return ResourceManager.GetString("DeleteDefinitionSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The part-time-percentage {0} assigned to this agent has been deleted.
+        /// </summary>
+        public static string DeletedPartTimePercentageAssignedForPlanningPeriod {
+            get {
+                return ResourceManager.GetString("DeletedPartTimePercentageAssignedForPlanningPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The shift bag {0} assigned to this agent has been deleted.
+        /// </summary>
+        public static string DeletedShiftBagAssignedForPlanningPeriod {
+            get {
+                return ResourceManager.GetString("DeletedShiftBagAssignedForPlanningPeriod", resourceCulture);
             }
         }
         
@@ -16781,11 +16817,47 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The agent does not have a person period for all or part of the planning period.
+        /// </summary>
+        public static string MissingPersonPeriodForPlanningPeriod {
+            get {
+                return ResourceManager.GetString("MissingPersonPeriodForPlanningPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The agent does not have any schedule period for the planning period.
+        /// </summary>
+        public static string MissingSchedulePeriodForPlanningPeriod {
+            get {
+                return ResourceManager.GetString("MissingSchedulePeriodForPlanningPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The agent does not have a shift bag for all or part of the planning period.
+        /// </summary>
+        public static string MissingShiftBagForPlanningPeriod {
+            get {
+                return ResourceManager.GetString("MissingShiftBagForPlanningPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forecasts are missing for these skills.
         /// </summary>
         public static string MissingSkills {
             get {
                 return ResourceManager.GetString("MissingSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The agent does not have skills for all or part of the planning period.
+        /// </summary>
+        public static string MissingSkillsForPlanningPeriod {
+            get {
+                return ResourceManager.GetString("MissingSkillsForPlanningPeriod", resourceCulture);
             }
         }
         
@@ -19066,6 +19138,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoExistingShiftSelected {
             get {
                 return ResourceManager.GetString("NoExistingShiftSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        public static string NoFullSchedulePeriod {
+            get {
+                return ResourceManager.GetString("NoFullSchedulePeriod", resourceCulture);
             }
         }
         

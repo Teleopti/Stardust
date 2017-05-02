@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation
 				if (!periods.Any(personPeriod => personPeriod.StartDate <= range.StartDate))
 					list.Add(new PersonValidationError(person)
 					{
-						ValidationError = "Has no person period for all or parts the planning period."
+						ValidationError = Resources.MissingPersonPeriodForPlanningPeriod
 					});
 			}
 			return list;

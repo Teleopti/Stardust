@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 using Teleopti.Interfaces.Domain;
 
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner.Validation
 			var validationError = result.SingleOrDefault();
 			validationError.PersonId.Should().Be.EqualTo(person.Id);
 			validationError.PersonName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationError.Should().Not.Be.Null().And.Not.Be.Empty();
+			validationError.ValidationError.Should().Be.EqualTo(Resources.MissingSchedulePeriodForPlanningPeriod);
 		}
 
 		[Test]
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner.Validation
 			var validationError = result.SingleOrDefault();
 			validationError.PersonId.Should().Be.EqualTo(person.Id);
 			validationError.PersonName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationError.Should().Not.Be.Null().And.Not.Be.Empty();
+			validationError.ValidationError.Should().Be.EqualTo(Resources.NoFullSchedulePeriod);
 		}
 
 		[Test]
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner.Validation
 			var validationError = result.SingleOrDefault();
 			validationError.PersonId.Should().Be.EqualTo(person.Id);
 			validationError.PersonName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationError.Should().Not.Be.Null().And.Not.Be.Empty();
+			validationError.ValidationError.Should().Be.EqualTo(Resources.NoFullSchedulePeriod);
 		}
 
 		[Test]
@@ -127,13 +128,32 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner.Validation
 			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
 
 			var person = PersonFactory.CreatePerson().WithId();
-			var schedulePeriod = new SchedulePeriod(new DateOnly(2017, 01, 31), SchedulePeriodType.Week, 1);
+			var schedulePeriod = new SchedulePeriod(new DateOnly(2017, 01, 23), SchedulePeriodType.Week, 1);
 			person.AddSchedulePeriod(schedulePeriod);
 			person.TerminatePerson(new DateOnly(2017, 02, 05), new PersonAccountUpdaterDummy());
 
 			var result = Target.GetPeopleMissingSchedulePeriod(new[] { person }, planningPeriod).ToList();
 
 			result.Should().Be.Empty();
+		}
+
+		[Test]
+		public void PersonWithNotAllSchedulePeriodsMatchingPlanningPeriodShouldReturnValidationError()
+		{
+			var startDate = new DateOnly(2017, 01, 23);
+			var endDate = new DateOnly(2017, 02, 12);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+
+			var person = PersonFactory.CreatePerson().WithId();
+			var schedulePeriod = new SchedulePeriod(new DateOnly(2017, 01, 23), SchedulePeriodType.Week, 2);
+			person.AddSchedulePeriod(schedulePeriod);
+
+			var result = Target.GetPeopleMissingSchedulePeriod(new[] { person }, planningPeriod).ToList();
+
+			var validationError = result.SingleOrDefault();
+			validationError.PersonId.Should().Be.EqualTo(person.Id);
+			validationError.PersonName.Should().Be.EqualTo(person.Name.ToString());
+			validationError.ValidationError.Should().Be.EqualTo(Resources.NoFullSchedulePeriod);
 		}
 	}
 }
