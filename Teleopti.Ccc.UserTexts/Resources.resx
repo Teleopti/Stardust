@@ -15833,8 +15833,8 @@ Do you want to participate?</value>
     <comment>Shown when validating agents in ResourcePlanner on WFM web and an agent does not have any skills within the planning period</comment>
   </data>
   <data name="NoFullSchedulePeriod" xml:space="preserve">
-    <value>TODO</value>
-    <comment>TODO</comment>
+    <value>Schedule period does not match the planning period</value>
+    <comment>Used in web resource planner validation</comment>
   </data>
   <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
     <value>"Agent has {0} days without any schedule.</value>

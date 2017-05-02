@@ -19160,7 +19160,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TODO.
+        ///   Looks up a localized string similar to Schedule period does not match the planning period.
         /// </summary>
         public static string NoFullSchedulePeriod {
             get {
