@@ -218,28 +218,7 @@
 }
 
 .scroll-free-tree{
-	max-height: none;
+	max-height: none!important;
 }
 
-//helpers to the styleguide
-.non-pointer{
-	pointer-events: none;
-
-	&:focus{
-		display: none;
-	}
-}
-.locked {
-	color: $text-color-muted!important;
-	cursor: not-allowed;
-	pointer-events:none;
-}
-
-.tree-handle-wrapper{
-	width:100%;
-}
-
-.margin-center{
-	margin: 0 auto;
-}
 //end refact
