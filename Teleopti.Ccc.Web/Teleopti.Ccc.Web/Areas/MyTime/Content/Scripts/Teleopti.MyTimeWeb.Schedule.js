@@ -144,7 +144,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	};
 
-	var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart, blockProbabilityAjaxForTestOnly) {
+	var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart) { 
 		var self = this;
 		self.initializeData = initializeWeekViewModel;
 		self.navigateToRequestsMethod = navigateToRequestsMethod;
@@ -162,8 +162,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.staffingProbabilityForMultipleDaysEnabled = false;
 		self.absenceProbabilityEnabled = ko.observable();
 		self.showProbabilityToggle = ko.observable();
-		self.loadingProbabilityData = ko.observable(false);
-		self.blockProbabilityAjaxForTestOnly = blockProbabilityAjaxForTestOnly;
+		self.loadingProbabilityData = ko.observable(false); 
 
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
@@ -242,6 +241,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				},
 				success: function (data) {
 					self.updateProbabilityData(data);
+					ko.applyBindings(self, $(".probabilityLabel")[0]);
 				}
 			});
 		};
@@ -549,7 +549,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 		}
 		self.days(days);
-		if(self.showProbabilityToggle() && (self.selectedProbabilityType == constants.probabilityType.absence || self.selectedProbabilityType == constants.probabilityType.overtime) && !self.blockProbabilityAjaxForTestOnly){
+		if (self.showProbabilityToggle() && (self.selectedProbabilityType == constants.probabilityType.absence || self.selectedProbabilityType == constants.probabilityType.overtime)) {
+
 			self.fetchProbabilityData();
 		}
 	}
@@ -648,9 +649,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack("Schedule/Week", Teleopti.MyTimeWeb.Schedule.PartialInit, Teleopti.MyTimeWeb.Schedule.PartialDispose);
 			}
 		},
-		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxObj) {
 			readyForInteractionCallback();
 			completelyLoaded = completelyLoadedCallback;
+			if (ajaxObj != undefined) {
+				ajax = ajaxObj;
+			}
 		},
 		SetupViewModel: function (userTexts, defaultDateTimes, callback) {
 			Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {

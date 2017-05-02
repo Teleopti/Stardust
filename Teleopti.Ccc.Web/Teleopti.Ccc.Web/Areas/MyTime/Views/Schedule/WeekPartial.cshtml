@@ -75,7 +75,7 @@
                     <div class="btn-group" role="group" aria-describedby="basic-addon1" id="probabilityDropdownMenu">
                         <a class="btn btn-default dropdown-toggle" id="dropdown-probability-type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <i class="glyphicon" data-bind="css: {'glyphicon-eye-open': selectedProbabilityType > probabilityTypes.none, 'glyphicon-eye-close': selectedProbabilityType === probabilityTypes.none}"></i>
-                            <span data-bind="text: probabilityLabel()"></span>
+                            <span data-bind="text: probabilityLabel()" class="probabilityLabel"></span>
                             <span class="caret"></span>
 
                             <img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." data-bind="visible: loadingProbabilityData">
