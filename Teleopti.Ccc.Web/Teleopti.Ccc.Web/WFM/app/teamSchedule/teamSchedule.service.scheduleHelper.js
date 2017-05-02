@@ -66,7 +66,7 @@
             if (personIds.indexOf(schedule.PersonId) > -1) {
                 previousDayShifts = previousDayShifts.concat(schedule.Shifts.filter(function (shift) {
                     return shift.Projections.length > 0 &&
-                        shift.Date !== dateMoment.format('YYYY-MM-DD');
+                        dateMoment.isAfter(shift.Date);
                 }));
             }
         });
@@ -95,16 +95,15 @@
 
         var latestStart = null;
         var projectionShiftLayerIds = [];
-        var currentDayShifts = [];
+        var shifts = [];
 
         schedules.forEach(function (schedule) {
             if (personIds.indexOf(schedule.PersonId) > -1) {
-                currentDayShifts = currentDayShifts.concat(schedule.Shifts.filter(function (shift) {
-                    return shift.Date === dateMoment.format('YYYY-MM-DD');
-                }));
+                shifts = shifts.concat(schedule.Shifts);
             }
         });
-        currentDayShifts.forEach(function (shift) {
+
+        shifts.forEach(function (shift) {
             if (shift.Projections) {
                 shift.Projections.forEach(function (projection) {
                     var scheduleStart = moment(projection.Start).toDate();
