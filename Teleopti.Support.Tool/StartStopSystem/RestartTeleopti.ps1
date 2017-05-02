@@ -1,3 +1,8 @@
+#powershell v2 won't get $PSScriptroot, revert back to old style...
+if (!$PSScriptroot)
+{
+    $PSScriptroot = split-path -parent $MyInvocation.MyCommand.Definition
+}
 
 . "$PSScriptroot\RestartHelper.ps1"
 
