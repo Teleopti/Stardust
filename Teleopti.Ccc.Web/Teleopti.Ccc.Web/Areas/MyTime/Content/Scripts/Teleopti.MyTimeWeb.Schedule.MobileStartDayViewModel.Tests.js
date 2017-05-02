@@ -113,4 +113,24 @@ $(document).ready(function() {
 
         equal(viewModel.isDayOff(), rawData.Schedule.IsDayOff);
     });
+
+    test("should set to next date", function () {
+        var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+        var today = moment().format('YYYY-MM-DD');
+        viewModel.selectedDate(today);
+
+        viewModel.nextDay();
+
+        equal(viewModel.selectedDate().format("YYYY-MM-DD"), moment(today).add(1, 'days').format("YYYY-MM-DD"));
+    });
+
+    test("should set to previous date", function () {
+        var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+        var today = moment().format('YYYY-MM-DD');
+        viewModel.selectedDate(today);
+
+        viewModel.previousDay();
+
+        equal(viewModel.selectedDate().format("YYYY-MM-DD"), moment(today).add(-1, 'days').format("YYYY-MM-DD"));
+    });
 });
