@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		[RemoveMeWithToggle("Remove virtual when done", Toggles.ResourcePlanner_EvenRelativeDiff_44091)]
 		public virtual bool ContinueShovel(CascadingSkillGroup skillGroup)
 		{
-			double resourcesMovedOnSkillGroup;
-			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out resourcesMovedOnSkillGroup))
+			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out double resourcesMovedOnSkillGroup))
 			{
 				resourcesMovedOnSkillGroup = 0;
 			}
@@ -57,8 +56,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			RemainingOverstaffing -= value;
 			ResourcesMoved += value;
 			skillGroup.RemainingResources -= value;
-			double currentValue;
-			if (_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out currentValue))
+			if (_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out double currentValue))
 			{
 				_resourcesMovedOnSkillGroup[skillGroup] = value + currentValue;
 			}
