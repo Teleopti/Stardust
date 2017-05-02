@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 		public IShiftFromMasterActivityService Target;
 		public IShiftCreatorService ShiftCreatorService;
 
-		[Test, Ignore("#44134")]
+		[Test]
 		public void ShouldRemoveAdditionalLayersWithSamePayloadAsBaseLayer()
 		{
 			var phoneActivity = new Activity("Phone") { InContractTime = true, RequiresSkill = true }.WithId();

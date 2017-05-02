@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 					var shiftToTest = stack.Pop();
 					var thisResult = createShiftsFromShift(shiftToTest, false);
 					if (!thisResult.Any())
-						finalList.Add(shiftToTest);
+						finalList.Add(cleanWorkShiftFromRedundantLayers(shiftToTest));
 
 					foreach (var shift in thisResult)
 					{
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 				WorkShiftActivityLayer newLayer;
 				if (originalLayer.Equals(layerToReplace))
 				{
-					newLayer = new WorkShiftActivityLayer(newActivity, newLength);
+					newLayer = new WorkShiftActivityLayer(newActivity, newLength);				
 				}
 				else
 				{
@@ -99,6 +99,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 		private static bool hasMasterActivity(IWorkShift workShift)
 		{
 			return workShift.LayerCollection.Any(l => l.Payload is IMasterActivity);
+		}
+
+		private IWorkShift cleanWorkShiftFromRedundantLayers(IWorkShift workShift)
+		{
+			var resultingShift = new WorkShift(workShift.ShiftCategory);
+			var firstLayer = workShift.LayerCollection.First();
+			var firstPayLoad = firstLayer.Payload;
+			foreach (var originalLayer in workShift.LayerCollection)
+			{
+				WorkShiftActivityLayer newLayer;
+				if(originalLayer.Equals(firstLayer))
+				{
+					newLayer = new WorkShiftActivityLayer(originalLayer.Payload, originalLayer.Period);
+					resultingShift.LayerCollection.Add(newLayer);
+				}
+				else
+				{
+					if(originalLayer.Payload.Equals(firstPayLoad))
+						continue;
+
+					newLayer = new WorkShiftActivityLayer(originalLayer.Payload, originalLayer.Period);
+					resultingShift.LayerCollection.Add(newLayer);
+				}
+			}
+
+			return resultingShift;
 		}
 	}
 }
