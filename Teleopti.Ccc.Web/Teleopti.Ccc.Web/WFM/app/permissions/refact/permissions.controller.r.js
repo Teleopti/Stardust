@@ -5,13 +5,16 @@
 		.module('wfm.permissions')
 		.controller('PermissionsRefactController', PermissionsCtrl);
 
-	PermissionsCtrl.$inject = ['$filter', 'PermissionsServiceRefact', 'permissionsDataService', 'localeLanguageSortingService'];
-
-	function PermissionsCtrl($filter, PermissionsServiceRefact, permissionsDataService, localeLanguageSortingService) {
+	PermissionsCtrl.$inject = ['$filter', '$location', 'PermissionsServiceRefact', 'permissionsDataService', 'localeLanguageSortingService'];
+	
+	function PermissionsCtrl($filter, $location, PermissionsServiceRefact, permissionsDataService, localeLanguageSortingService) {
 		var vm = this;
 		vm.showCreateModal;
 		vm.roleName;
 		vm.isAllFunctionSelected = false;
+		var url = $location.search().open;
+		vm.roleOptionsOpen = url ? true : false;
+		
 		fetchData();
 		vm.createRole = createRole;
 		vm.editRole = editRole;

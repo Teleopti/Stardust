@@ -21,6 +21,3 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		}
 	}
 }
-		}
-	}
-}
