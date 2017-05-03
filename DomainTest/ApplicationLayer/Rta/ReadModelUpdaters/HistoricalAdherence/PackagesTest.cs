@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 	{
 		public FakeHistoricalAdherenceReadModelPersister AdherencePersister;
 		public FakeHistoricalChangeReadModelPersister ChangePersister;
-		public HistoricalAdherenceUpdater Target;
+		public HistoricalAdherenceUpdaterWithPackages Target;
 		public MutableNow Now;
 
 		[Test]

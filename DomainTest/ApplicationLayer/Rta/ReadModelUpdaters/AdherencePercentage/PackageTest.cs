@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 	public class PackageTest
 	{
 		public FakeAdherencePercentageReadModelPersister Persister;
-		public AdherencePercentageReadModelUpdater Target;
+		public AdherencePercentageReadModelUpdaterWithPackages Target;
 
 		[Test]
 		public void ShouldSubscribeToEvents()
