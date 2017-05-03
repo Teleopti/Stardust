@@ -13,16 +13,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	public class StaffingPossibilityViewModelFactory : IStaffingPossibilityViewModelFactory
 	{
 		private readonly IScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly INow _now;
 		private readonly IToggleManager _toggleManager;
 		private readonly int _maxAvailableDays = 13;
 
 		public StaffingPossibilityViewModelFactory(
-			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, ILoggedOnUser loggedOnUser, INow now, IToggleManager toggleManager)
+			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, INow now, IToggleManager toggleManager)
 		{
 			_scheduleStaffingPossibilityCalculator = scheduleStaffingPossibilityCalculator;
-			_loggedOnUser = loggedOnUser;
 			_now = now;
 			_toggleManager = toggleManager;
 		}
@@ -31,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			StaffingPossiblityType staffingPossiblityType)
 		{
 			var period = getAvailablePeriod(startDate);
-			if (!period.HasValue) return new PeriodStaffingPossibilityViewModel[] {};
+			if (!period.HasValue) return new PeriodStaffingPossibilityViewModel[] { };
 			switch (staffingPossiblityType)
 			{
 				case StaffingPossiblityType.Absence:
@@ -43,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 						createPeriodStaffingPossibilityViewModels(
 							_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period.Value));
 			}
-			return new PeriodStaffingPossibilityViewModel[] {};
+			return new PeriodStaffingPossibilityViewModel[] { };
 		}
 
 		private IEnumerable<PeriodStaffingPossibilityViewModel> createPeriodStaffingPossibilityViewModels(

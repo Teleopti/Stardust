@@ -56,10 +56,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test, SetCulture("en-US")]
+		public void ShouldNotReturnAbsencePossibiliesForDaysNotInAbsenceOpenPeriod()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill();
+			setupWorkFlowControlSet();
+			var absenceRequestOpenDatePeriod =
+				(AbsenceRequestOpenDatePeriod)User.CurrentUser().WorkflowControlSet.AbsenceRequestOpenPeriods[0];
+			absenceRequestOpenDatePeriod.Period =
+				absenceRequestOpenDatePeriod.OpenForRequestsPeriod =
+					new DateOnlyPeriod(Now.LocalDateOnly().AddDays(6), Now.LocalDateOnly().AddDays(7));
+
+			var result =
+				Target.GetIntradayAbsencePossibility(Now.LocalDateOnly().AddDays(7), StaffingPossiblityType.Absence)
+					.ToList();
+			result.Count.Should().Be.EqualTo(4);
+		}
+
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnPossibiliesForCurrentWeek()
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill();
+			setupWorkFlowControlSet();
 			var result = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence).ToList();
 			result.Count.Should().Be.EqualTo(6);
 			new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(2)).DayCollection().ToList().ForEach(day =>
@@ -73,6 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill();
+			setupWorkFlowControlSet();
 			var result = Target.GetIntradayAbsencePossibility(Now.LocalDateOnly().AddWeeks(1), StaffingPossiblityType.Absence).ToList();
 			result.Count.Should().Be.EqualTo(14);
 			DateHelper.GetWeekPeriod(Now.LocalDateOnly().AddWeeks(1), CultureInfo.CurrentCulture)
@@ -89,6 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill();
+			setupWorkFlowControlSet();
 			var result = Target.GetIntradayAbsencePossibility(Now.LocalDateOnly().AddDays(-1), StaffingPossiblityType.Absence).ToList();
 			result.Count.Should().Be.EqualTo(6);
 		}
@@ -98,6 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill();
+			setupWorkFlowControlSet();
 			var result = Target.GetIntradayAbsencePossibility(Now.LocalDateOnly().AddWeeks(3), StaffingPossiblityType.Absence);
 			result.Count().Should().Be.EqualTo(0);
 		}
@@ -127,6 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			createAssignment(person, activity2);
 
+			setupWorkFlowControlSet();
 			var possibilities =
 				Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Overtime)
 					.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat()).ToList();
@@ -142,11 +165,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupTestDataForOneSkill(useShrinkage: true);
 			var person = User.CurrentUser();
 			var absence = AbsenceFactory.CreateAbsenceWithId();
+
 			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new PendingAbsenceRequest(),
 				false);
-			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator =
-				new StaffingThresholdWithShrinkageValidator();
+
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly().AddDays(-20), Now.LocalDateOnly().AddDays(20)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly().AddDays(-20), Now.LocalDateOnly().AddDays(20)),
+				StaffingThresholdValidator = new StaffingThresholdWithShrinkageValidator()
+			});
 			person.WorkflowControlSet = workflowControlSet;
+
 			var possibilities =
 				Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence)
 					.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
@@ -158,7 +188,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetPossibilitiesWhenSomeStaffingDataIsNotAvailable()
 		{
 			setupSiteOpenHour();
-			setupTestDataForOneSkill(new double?[] {10d}, new double?[] {11d, 11d});
+			setupTestDataForOneSkill(new double?[] { 10d }, new double?[] { 11d, 11d });
+			setupWorkFlowControlSet();
 			var possibilities =
 				Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence)
 					.Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
@@ -171,6 +202,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill();
+			setupWorkFlowControlSet();
 			ScheduleData.Clear();
 			var possibilities = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Overtime).Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
 					.ToList();
@@ -183,6 +215,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill();
+			setupWorkFlowControlSet();
 			SkillRepository.LoadAllSkills().First().SkillType.Description = new Description("NotSupportedSkillType");
 			var possibilities = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Overtime).ToList();
 			Assert.AreEqual(0, possibilities.Count);
@@ -193,6 +226,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill();
+			setupWorkFlowControlSet();
 			var possibilities = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence).Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
 					.ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -205,6 +239,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 11d, 11d });
+			setupWorkFlowControlSet();
 			var possibilities = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence).Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
 					.ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -217,6 +252,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 8d, 11d });
+			setupWorkFlowControlSet();
 			var possibilities = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence).Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
 				.ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -241,7 +277,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			person.AddPersonPeriod(personPeriod);
 
 			createAssignment(person, activity1, activity2);
-
+			setupWorkFlowControlSet();
 			var possibilities = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence).Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
 				.ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -278,6 +314,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill(new double?[] { 10d, 10d }, new double?[] { 7d, 6d });
+			setupWorkFlowControlSet();
 			var possibilities = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Overtime).Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
 			.ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -323,6 +360,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var possibilities = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Overtime).Where(d => d.Date == Now.LocalDateOnly().ToFixedClientDateOnlyFormat())
 			.ToList();
 			Assert.AreEqual(2, possibilities.Count);
+		}
+
+		private void setupWorkFlowControlSet()
+		{
+			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly().AddDays(-20), Now.LocalDateOnly().AddDays(20)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly().AddDays(-20), Now.LocalDateOnly().AddDays(20)),
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			};
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenDatePeriod);
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
 		}
 
 		private void setupSiteOpenHour()

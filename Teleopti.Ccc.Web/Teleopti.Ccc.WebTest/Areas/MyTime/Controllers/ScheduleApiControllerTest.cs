@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	[MyTimeWebTest]
+	[SetCulture("sv-SE")]
 	public class ScheduleApiControllerTest
 	{
 		public ScheduleApiController Target;
@@ -46,7 +48,64 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModel.Should().Not.Be.Null();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
+		public void ShouldShowAbsenceProbabilityOptionWhen14DaysAreWithinAbsencePeriod()
+		{
+			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(13)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(13)),
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			}; 
+			var workFlowControlSet=new  WorkflowControlSet();
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenDatePeriod);
+		    User.CurrentUser().WorkflowControlSet = workFlowControlSet; 
+
+			var result = Target.FetchWeekData(null);
+			result.CheckStaffingByIntraday.Should().Be(true);
+
+			result = Target.FetchWeekData(Now.LocalDateOnly().AddWeeks(1));
+			result.CheckStaffingByIntraday.Should().Be(true);
+
+			result = Target.FetchWeekData(Now.LocalDateOnly().AddWeeks(2));
+			result.CheckStaffingByIntraday.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldShowAbsenceProbabilityOptionWhenSomeDaysWithinAbsencePeriod()
+		{
+			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly().AddDays(6), Now.LocalDateOnly().AddDays(8)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly().AddDays(6), Now.LocalDateOnly().AddDays(8)),
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			};
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenDatePeriod);
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(Now.LocalDateOnly().AddDays(4));
+			result.CheckStaffingByIntraday.Should().Be(true); 
+		}
+
+		[Test]
+		public void ShouldNotShowAbsenceProbabilityOptionWhenNoDaysWithinAbsencePeriod()
+		{
+			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly().AddDays(6), Now.LocalDateOnly().AddDays(8)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly().AddDays(6), Now.LocalDateOnly().AddDays(8)),
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			};
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenDatePeriod);
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(null);
+			result.CheckStaffingByIntraday.Should().Be(false);
+		}
+
+		[Test]
 		public void ShouldMapTimeLineEdges()
 		{
 			Now.Is("2015-03-29 10:00");
@@ -62,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("17:15");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnDayBeforeDst()
 		{
 			TimeZone.IsSweden();
@@ -81,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("18:15");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnFirstDstDay()
 		{
 			TimeZone.IsSweden();
@@ -100,7 +159,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("19:15");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnFirstDstDayAndNightShift()
 		{
 			TimeZone.IsSweden();
@@ -127,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("06:15");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnEndDstDayAndNightShift()
 		{
 			TimeZone.IsSweden();
@@ -190,7 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.IsNull(viewModel.DaylightSavingTimeAdjustment);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldValidatePeriodSelectionStartDateAndEndDateFormatCorrectly()
 		{
 			TimeZone.IsSweden();
@@ -201,7 +260,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual("2015-07-12", viewModel.CurrentWeekEndDate);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapPeriodSelectionForWeek()
 		{
 			var result = Target.FetchWeekData(null).PeriodSelection;
@@ -222,7 +281,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.SelectableDateRange.MaxDate.Should().Be.EqualTo(DateOnly.MaxValue.ToFixedClientDateOnlyFormat());
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreatePeriodViewModelFromActivityLayer()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
@@ -244,7 +303,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.EndPositionPercentage.Should().Be.EqualTo(9.25M / 9.5M);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreatePeriodViewModelFromActivityLayerForNightShift()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
@@ -266,7 +325,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.EndPositionPercentage.Should().Be.EqualTo(1M);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreatePeriodViewModelFromAbsenceLayer()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
@@ -291,7 +350,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.EndPositionPercentage.Should().Be.EqualTo(9.25M / 9.5M);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreatePeriodViewModelFromOvertimeLayer()
 		{
 			var definitionSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("Overtime",
@@ -319,7 +378,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.IsOvertime.Should().Be(true);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreatePeriodViewModelFromMeetingLayer()
 		{
 			var meeting = new Meeting(User.CurrentUser(), new[] { new MeetingPerson(User.CurrentUser(), false) }, "subj", "loc",
@@ -353,7 +412,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.EndPositionPercentage.Should().Be.EqualTo(9.25M / 9.5M);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreateOvertimeAvailabilityPeriodViewModelNotSpanToTomorrow()
 		{
 			var start = new TimeSpan(12, 0, 0);
@@ -372,7 +431,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Color.Should().Be.EqualTo(Color.Gray.ToCSV());
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreateOvertimeAvailabilityPeriodViewModel()
 		{
 			var start = new TimeSpan(12, 0, 0);
@@ -391,7 +450,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Color.Should().Be.EqualTo(Color.Gray.ToCSV());
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreateOvertimeAvailabilityPeriodViewModelForYesterday()
 		{
 			var start = new TimeSpan(12, 0, 0);
@@ -411,7 +470,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Color.Should().Be.EqualTo(Color.Gray.ToCSV());
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldNotCreateOvertimeAvailabilityPeriodViewModelForYesterdayIfNotSpanToToday()
 		{
 			var start = new TimeSpan(12, 0, 0);
@@ -424,7 +483,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Should().Be.Empty();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapDayOfWeekNumber()
 		{
 			var result = Target.FetchWeekData(null);
@@ -440,7 +499,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Days.First().Availability.Should().Be.EqualTo(false);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapStateToday()
 		{
 			var result = Target.FetchWeekData(null);
@@ -448,7 +507,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Days.ElementAt(3).State.Should().Be.EqualTo(SpecialDateState.Today);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapNoSpecialState()
 		{
 			var result = Target.FetchWeekData(Now.LocalDateOnly().AddDays(-2));
@@ -456,7 +515,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Days.First().State.Should().Be.EqualTo((SpecialDateState)0);
 		}
 
-		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
+		[Test, SetUICulture("sv-SE")]
 		public void ShouldMapDayHeader()
 		{
 			var date = Now.LocalDateOnly().AddDays(-2);
@@ -468,7 +527,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Header.DayNumber.Should().Be.EqualTo("16");
 		}
 
-		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
+		[Test, SetUICulture("sv-SE")]
 		public void ShouldMapDayHeaderWithMontNameForFirstDayOfWeek()
 		{
 			var date = Now.LocalDateOnly().AddDays(-2);
@@ -477,7 +536,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Header.DayDescription.Should().Be.EqualTo("december");
 		}
 
-		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
+		[Test, SetUICulture("sv-SE")]
 		public void ShouldMapDayHeaderWithMontNameForFirstDayOfMonth()
 		{
 			var result = Target.FetchWeekData(new DateOnly(2014, 12, 29)).Days.ElementAt(3);
@@ -485,7 +544,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Header.DayDescription.Should().Be.EqualTo("januari");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapPublicNote()
 		{
 			ScheduleData.Add(new PublicNote(User.CurrentUser(), Now.LocalDateOnly(), Scenario.Current(), "TestNote"));
@@ -495,7 +554,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Days.ElementAt(3).Note.Message.Should().Be.EqualTo("TestNote");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapOvertimeAvailability()
 		{
 			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), Now.LocalDateOnly(), new TimeSpan(1, 1, 1), new TimeSpan(1, 2, 2, 2));
@@ -508,7 +567,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.OvertimeAvailabililty.HasOvertimeAvailability.Should().Be.EqualTo(true);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapOvertimeAvailabilityDefaultValuesForEmpty()
 		{
 			ScheduleData.Add(new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly()));
@@ -519,7 +578,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.OvertimeAvailabililty.DefaultEndTimeNextDay.Should().Be.EqualTo(false);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapOvertimeAvailabilityDefaultValuesForDayOff()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
@@ -532,7 +591,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.OvertimeAvailabililty.DefaultEndTimeNextDay.Should().Be.EqualTo(false);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapOvertimeAvailabilityDefaultValuesIfHasShift()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
@@ -547,7 +606,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(dateTimePeriod.TimePeriod(timeZone).EndTime.Add(TimeSpan.FromHours(1)), CultureInfo.CurrentCulture));
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTextRequestCount()
 		{
 			var period = new DateTimePeriod(2014, 12, 18, 8, 2014, 12, 18, 17);
@@ -559,7 +618,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TextRequestCount.Should().Be.EqualTo(2);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapSummaryForDayWithOtherSignificantPart()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
@@ -569,7 +628,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Summary.Should().Not.Be.Null();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapSummaryForDayOff()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
@@ -582,7 +641,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapSummaryForMainShift()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
@@ -599,7 +658,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Summary.Summary.Should().Be.EqualTo(TimeHelper.GetLongHourMinuteTimeString(period.ElapsedTime(), CultureInfo.CurrentUICulture));
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldNotMapPersonalActivityToSummaryTimespan()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
@@ -614,7 +673,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.Be.EqualTo(period.TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapSummaryForAbsence()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
@@ -639,7 +698,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Summary.Summary.Should().Be.EqualTo(TimeHelper.GetLongHourMinuteTimeString(TimeSpan.FromHours(9), CultureInfo.CurrentUICulture));
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapStyleClassViewModelsFromScheduleColors()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
@@ -658,7 +717,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.Should().Have.SameValuesAs(Color.Blue.ToCSV(), Color.Red.ToCSV());
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapStyleClassForAbsenceOnPersonDayOff()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
@@ -681,7 +740,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLine()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
@@ -753,7 +812,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.SiteOpenHourIntradayPeriod.Equals(timePeriod).Should().Be.True();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapDateFormatForUser()
 		{
 			var result = Target.FetchWeekData(null);
@@ -862,7 +921,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.HasNote.Should().Be.False();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldGetSiteOpenHourPeriodForDayView()
 		{
 			var date = new DateOnly(2014, 12, 18);
@@ -887,7 +946,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		#endregion
 
 		#region Test cases for FetchMonthData()
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldHaveTheFirstDayOfTheFirstWeekInMonth()
 		{
 			var result = Target.FetchMonthData(null);
@@ -895,7 +954,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ScheduleDays.First().FixedDate.Should().Be.EqualTo(new DateOnly(2014, 12, 1).ToFixedClientDateOnlyFormat());
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldHaveCorrectNumberOfDaysAccordingToMonth()
 		{
 			var result = Target.FetchMonthData(null);
@@ -929,7 +988,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.DayHeaders.First().ShortName.Should().Be.EqualTo("Mo");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapAbsenceName()
 		{
 			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
@@ -941,7 +1000,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ScheduleDays.First().Absence.ShortName.Should().Be.EqualTo("IL");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapAbsenceRespectingPriority()
 		{
 			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
@@ -954,7 +1013,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ScheduleDays.First().Absence.ShortName.Should().Be.EqualTo("IL");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapIsFullDayAbsence()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
@@ -967,7 +1026,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ScheduleDays.First().Absence.IsFullDayAbsence.Should().Be.True();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapIsDayOff()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
@@ -978,7 +1037,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ScheduleDays.First().IsDayOff.Should().Be.True();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapIsNotDayOffForWorkingDay()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
@@ -989,7 +1048,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ScheduleDays.First().IsDayOff.Should().Be.False();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapIsDayOffForContractDayOff()
 		{
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 1, 1));
@@ -1067,7 +1126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Schedule.HasNote.Should().Be.False();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLineEdgesOnFetchDayData()
 		{
 			var date = new DateOnly(2015, 03, 29);
@@ -1082,7 +1141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("17:15");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnDayBeforeDstOnFetchDayData()
 		{
 			TimeZone.IsSweden();
@@ -1101,7 +1160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("18:15");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnFirstDstDayOnFetchDayData()
 		{
 			TimeZone.IsSweden();
@@ -1119,7 +1178,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("19:15");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnFirstDstDayAndNightShiftOnFetchDayData()
 		{
 			TimeZone.IsSweden();
@@ -1145,7 +1204,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("06:15");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnEndDstDayAndNightShiftOnFetchDayData()
 		{
 			TimeZone.IsSweden();
@@ -1171,7 +1230,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("05:15");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapBaseUtcOffsetOnFetchDayData()
 		{
 			TimeZone.IsHawaii();
@@ -1211,7 +1270,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.IsNull(viewModel.DaylightSavingTimeAdjustment);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreatePeriodViewModelFromActivityLayerOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
@@ -1239,7 +1298,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.EndPositionPercentage.Should().Be.EqualTo(9.25M / 9.5M);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreatePeriodViewModelFromActivityLayerForNightShiftOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
@@ -1268,7 +1327,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.EndPositionPercentage.Should().Be.EqualTo(1M);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreatePeriodViewModelFromAbsenceLayerOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
@@ -1305,7 +1364,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.EndPositionPercentage.Should().Be.EqualTo(9.25M / 9.5M);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreatePeriodViewModelFromOvertimeLayerOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
@@ -1334,7 +1393,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.IsOvertime.Should().Be(true);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreatePeriodViewModelFromMeetingLayerOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
@@ -1374,7 +1433,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.EndPositionPercentage.Should().Be.EqualTo(9.25M / 9.5M);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldCreateOvertimeAvailabilityPeriodViewModelOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
@@ -1428,7 +1487,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Should().Be.Empty();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapDayOfWeekNumberOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
@@ -1436,14 +1495,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Schedule.DayOfWeekNumber.Should().Be.EqualTo((int)date.DayOfWeek);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapNoSpecialStateOnFetchDayData()
 		{
 			var result = Target.FetchDayData(Now.LocalDateOnly().AddDays(-2));
 			result.Schedule.State.Should().Be.EqualTo((SpecialDateState)0);
 		}
 
-		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
+		[Test, SetUICulture("sv-SE")]
 		public void ShouldMapDayHeaderOnFetchDayData()
 		{
 			var date = Now.LocalDateOnly().AddDays(-2);
@@ -1455,7 +1514,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Header.DayNumber.Should().Be.EqualTo("16");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapDayHeaderWithMontNameForFirstDayOfWeekOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 29);
@@ -1463,7 +1522,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Header.DayDescription.Should().Be.EqualTo("December");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapDayHeaderWithMontNameForCurrentOnFetchDayData()
 		{
 			var result = Target.FetchDayData(new DateOnly(2014, 12, 29)).Schedule;
@@ -1480,7 +1539,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Schedule.Note.Message.Should().Be.EqualTo("TestNote");
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapOvertimeAvailabilityOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 29);
@@ -1499,7 +1558,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.OvertimeAvailabililty.HasOvertimeAvailability.Should().Be.EqualTo(true);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapOvertimeAvailabilityDefaultValuesForEmptyOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 29);
@@ -1513,7 +1572,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.OvertimeAvailabililty.DefaultEndTimeNextDay.Should().Be.EqualTo(false);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapOvertimeAvailabilityDefaultValuesForDayOffOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 29);
@@ -1529,7 +1588,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.OvertimeAvailabililty.DefaultEndTimeNextDay.Should().Be.EqualTo(false);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapOvertimeAvailabilityDefaultValuesIfHasShiftOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 18);
@@ -1574,7 +1633,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Summary.Should().Not.Be.Null();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapSummaryForDayOffOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 18);
@@ -1594,7 +1653,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			schedule.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapSummaryForMainShiftOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 18);
@@ -1614,7 +1673,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.Be.EqualTo(TimeHelper.GetLongHourMinuteTimeString(period.ElapsedTime(), CultureInfo.CurrentUICulture));
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldNotMapPersonalActivityToSummaryTimespanOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 18);
@@ -1630,7 +1689,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.Be.EqualTo(period.TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapSummaryForAbsenceOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
@@ -1645,10 +1704,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var illnessAbsense = new AbsenceLayer(
 				new Absence
-			{
-				Description = new Description("Illness", "IL"),
+				{
+					Description = new Description("Illness", "IL"),
 					InContractTime = true
-			},
+				},
 				timePeriod);
 			var absenceToDisplay = new PersonAbsence(User.CurrentUser(), Scenario.Current(), illnessAbsense);
 			absenceToDisplay.Layer.Payload.Priority = 1;
@@ -1656,10 +1715,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var holidayAbsence = new AbsenceLayer(
 				new Absence
-			{
-				Description = new Description("Holiday", "HO"),
+				{
+					Description = new Description("Holiday", "HO"),
 					InContractTime = true
-			},
+				},
 				timePeriod);
 			var highPriority = new PersonAbsence(User.CurrentUser(), Scenario.Current(), holidayAbsence);
 			highPriority.Layer.Payload.Priority = 2;
@@ -1671,7 +1730,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Summary.Summary.Should().Be.EqualTo(TimeHelper.GetLongHourMinuteTimeString(TimeSpan.FromHours(9), CultureInfo.CurrentUICulture));
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapStyleClassForAbsenceOnPersonDayOffOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
@@ -1695,7 +1754,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapTimeLineOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 18);
@@ -1750,7 +1809,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.SiteOpenHourIntradayPeriod.Equals(timePeriod).Should().Be.True();
 		}
 
-		[Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldMapDateFormatForUserOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 18);

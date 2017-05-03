@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Days = days(s),
 				AsmPermission = s.AsmPermission,
 				IsCurrentWeek = s.IsCurrentWeek,
-				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, timeZone),
+				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, s.Date),
 				SiteOpenHourIntradayPeriod = getSiteOpenHourPeriod(_now.LocalDateOnly())
 			};
 		}
@@ -105,20 +105,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Schedule = createDayViewModel(s.ScheduleDay),
 				AsmPermission = s.AsmPermission,
 				IsToday = s.IsCurrentDay,
-				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, timeZone),
+				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, s.Date),
 				SiteOpenHourIntradayPeriod = getSiteOpenHourPeriod(s.Date)
 			};
 		}
 
-		private static bool isCheckStaffingByIntraday(IWorkflowControlSet workflowControlSet,
-			TimeZoneInfo timeZone)
+		private bool isCheckStaffingByIntraday(IWorkflowControlSet workflowControlSet, DateOnly showForDate)
 		{
 			if (workflowControlSet?.AbsenceRequestOpenPeriods == null || !workflowControlSet.AbsenceRequestOpenPeriods.Any())
 			{
 				return false;
 			}
-			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(timeZone) ||
-					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(timeZone);
+			var weekPeriod = DateHelper.GetWeekPeriod(showForDate, CultureInfo.CurrentCulture);
+			if (weekPeriod.StartDate < _now.LocalDateOnly() && _now.LocalDateOnly() < weekPeriod.EndDate)
+			{
+				weekPeriod = new DateOnlyPeriod(_now.LocalDateOnly(), weekPeriod.EndDate);
+			}
+			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.LocalDateOnly(), weekPeriod) ||
+					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.LocalDateOnly(), weekPeriod);
 		}
 
 		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData)
@@ -134,7 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			{
 				Date = s.Date.ToShortDateString(),
 				FixedDate = s.Date.ToFixedClientDateOnlyFormat(),
-				DayOfWeekNumber = (int) s.Date.DayOfWeek,
+				DayOfWeekNumber = (int)s.Date.DayOfWeek,
 				Periods = projections(s).ToArray(),
 				TextRequestCount =
 					s.PersonRequests?.Count(
@@ -206,7 +210,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			{
 				Time = t,
 				TimeLineDisplay = new DateTime().Add(t).ToLocalizedTimeFormat(),
-				PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal) (t - startTime).Ticks / diff.Ticks
+				PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(t - startTime).Ticks / diff.Ticks
 			});
 		}
 

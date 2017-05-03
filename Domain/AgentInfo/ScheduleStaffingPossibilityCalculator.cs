@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
@@ -19,24 +21,28 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;
+		private readonly INow _now;
 
 		public ScheduleStaffingPossibilityCalculator(ILoggedOnUser loggedOnUser, IScheduleStorage scheduleStorage,
-			ICurrentScenario scenarioRepository, ISkillStaffingDataLoader skillStaffingDataLoader)
+			ICurrentScenario scenarioRepository, ISkillStaffingDataLoader skillStaffingDataLoader, INow now)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleStorage = scheduleStorage;
 			_scenarioRepository = scenarioRepository;
 			_skillStaffingDataLoader = skillStaffingDataLoader;
+			_now = now;
 		}
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
 			var skillStaffingDatas = _skillStaffingDataLoader.Load(period);
+			var filteredSkillStaffingDatas = skillStaffingDatas.Where(a => isCheckingIntradayStaffing(a.Date)).ToList();
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => new IntervalHasUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
-			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary);
+			return calculatePossibilities(filteredSkillStaffingDatas, isSatisfied, scheduleDictionary);
 		}
+
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
 		{
@@ -45,6 +51,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => !new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
 			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary);
+		}
+
+
+		private bool isCheckingIntradayStaffing(DateOnly date)
+		{
+			var workflowControlSet = _loggedOnUser.CurrentUser().WorkflowControlSet;
+			if (workflowControlSet?.AbsenceRequestOpenPeriods == null || !workflowControlSet.AbsenceRequestOpenPeriods.Any())
+			{
+				return false;
+			}
+
+			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.LocalDateOnly(), new DateOnlyPeriod(date, date)) ||
+					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.LocalDateOnly(), new DateOnlyPeriod(date, date));
 		}
 
 		private IScheduleDictionary loadScheduleDictionary(DateOnlyPeriod period)

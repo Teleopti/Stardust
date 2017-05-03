@@ -298,5 +298,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IAbsenceRequestOpenPeriod GetMergedAbsenceRequestOpenPeriod(IAbsenceRequest absenceRequest);
 
 		bool IsAbsenceRequestValidatorEnabled<T>(TimeZoneInfo timeZone) where T : IAbsenceRequestValidator;
+
+		bool IsAbsenceRequestValidatorEnabled<T>(DateOnly today, DateOnlyPeriod period) where T : IAbsenceRequestValidator;
 	}
 }
