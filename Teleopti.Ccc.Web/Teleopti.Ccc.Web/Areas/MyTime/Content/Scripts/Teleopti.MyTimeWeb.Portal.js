@@ -26,7 +26,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	var _partialViewDisposeCallback = {};
 	var currentViewId = null;
 	var currentFixedDate = null;
-	var ajax = new Teleopti.MyTimeWeb.Ajax();
+    var _ajax;
 
 	function _layout() {
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateHorizontalScroll();
@@ -342,7 +342,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	function _loadContent(hashInfo, secondAction) {
 		_disablePortalControls();
 
-		ajax.Ajax({
+		_ajax.Ajax({
 			url: hashInfo.hash,
 			global: true,
 			success: function (html) {
@@ -389,11 +389,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	return {
-		Init: function (settings, window) {
+        Init: function (settings, window, ajax) {
+            _ajax = ajax ? ajax : new Teleopti.MyTimeWeb.Ajax();
 			Teleopti.MyTimeWeb.AjaxSettings = settings;
-			Teleopti.MyTimeWeb.Common.Init(settings);
+            Teleopti.MyTimeWeb.Common.Init(settings, _ajax);
 			Teleopti.MyTimeWeb.Test.Init(settings);
-			_settings = settings;
+            _settings = settings;
 			_layout();
 			_attachAjaxEvents();
 			_initNavigation(window);

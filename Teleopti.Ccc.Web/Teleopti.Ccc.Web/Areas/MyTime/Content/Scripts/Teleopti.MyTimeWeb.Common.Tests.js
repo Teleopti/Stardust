@@ -263,5 +263,28 @@ $(document).ready(function () {
 
 		equal(getTeleoptiTime(currentUtcTime).toGMTString(), new Date('2016-10-26T06:30:00Z').toGMTString());
 
-	});
+    });
+
+    test("Should get user texts", function () {
+        var ajax = {
+            Ajax: function(options) {
+                if (options.url === "UserData/FetchUserTexts") {
+                    options.success({Fair: "Fair"});
+                }
+            }
+        };
+        var setting = getDefaultSetting();
+        common.Init(setting, ajax);
+
+        var texts = common.GetUserTexts();
+        equal("Fair", texts.Fair);
+    });
+
+    function getDefaultSetting() {
+        return {
+            defaultNavigation: '/',
+            baseUrl: '/',
+            startBaseUrl: '/'
+        };
+    }
 });

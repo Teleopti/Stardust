@@ -13,8 +13,10 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Common = (function ($) {
-	var _settings = {},
+    var _settings = {},
+        _ajax,
 		_userData = null,
+		_userTexts = null,
 		_userDataCallQueue = [],
 		_userDataFetchInProgress = false,
 		toggleCache = {},
@@ -52,10 +54,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 		if (_settings.baseUrl == undefined) {
 			throw "you cannot ask toggle before you initialize it!";
-		}
+        }
 
-		var ajax = new Teleopti.MyTimeWeb.Ajax();
-		ajax.Ajax({
+		_ajax.Ajax({
 			url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
 			async: false,
 			success: function (data) {
@@ -95,11 +96,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			return;
 		};
 
-		_userDataFetchInProgress = true;
+        _userDataFetchInProgress = true;
 
-		var ajax = new Teleopti.MyTimeWeb.Ajax();
-
-		ajax.Ajax({
+		_ajax.Ajax({
 			url: 'UserData/FetchUserData',
 			dataType: "json",
 			type: 'GET',
@@ -111,7 +110,22 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 				}
 			}
 		});
-	};
+    };
+
+    function _getUserTexts() {
+        if (_userTexts != null) return _userTexts;
+
+        _ajax.Ajax({
+            url: 'UserData/FetchUserTexts',
+            dataType: "json",
+            type: 'GET',
+            success: function (data) {
+                _userTexts = data;
+            }
+        });
+
+        return _userTexts;
+    };
 
 	function _subscribeToMessageBroker(options) {
 
@@ -302,11 +316,13 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 	};
 
 	return {
-		Init: function (settings) {
-		    _settings = settings;
+		Init: function (settings, ajax) {
+            _settings = settings;
+            _ajax = ajax ? ajax : new Teleopti.MyTimeWeb.Ajax();
+            _getUserTexts();
 		},
 		PartialInit: function () {
-			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
+            Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 		},
 		AjaxFailed: function (jqXHR, noIdea, title) {
 			var msg = $.parseJSON(jqXHR.responseText);
@@ -405,7 +421,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		Constants: constants,
 		SubscribeToMessageBroker: _subscribeToMessageBroker,
 		GetUserData: _getUserData,
-		IsToggleEnabled: isToggleEnabled
+        IsToggleEnabled: isToggleEnabled,
+        GetUserTexts: _getUserTexts
 	};
 
 })(jQuery);

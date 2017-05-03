@@ -23,7 +23,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
     var completelyLoaded;
     var currentPage = "Teleopti.MyTimeWeb.Schedule";
     var subscribed = false;
-    var userTexts;
 
     var fetchData = function () {
         ajax.Ajax({
@@ -94,7 +93,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
                     ajax = ajaxObj;
                 }
 
-                vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(userTexts, ajax, fetchData);
+                vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(ajax, fetchData);
                 registerSwipe();
 
                 $(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
@@ -103,9 +102,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
                 fetchData();
                 readyForInteractionCallback();
             });
-        },
-        SetupResource: function (resources) {
-            userTexts = resources;
         },
         ReloadScheduleListener: function (notification) {
 

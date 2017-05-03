@@ -9,8 +9,7 @@
 		(function () {
 			setup();
 			var fakeWindow = getFakeWindow();
-			var setting = getDefaultSetting();
-			Teleopti.MyTimeWeb.Portal.Init(setting, fakeWindow);
+            init(fakeWindow);
 			equal("#Schedule/MobileWeek", fakeWindow.location.url);
 		})();
 	});
@@ -24,8 +23,7 @@
 		(function() {
 			setup();
 			var fakeWindow = getFakeWindow();
-			var setting = getDefaultSetting();
-			Teleopti.MyTimeWeb.Portal.Init(setting, fakeWindow);
+		    init(fakeWindow);
 			equal("#Schedule/MobileDay", fakeWindow.location.url);
 		})();
     });
@@ -40,8 +38,7 @@
 			setup();
             var fakeWindow = getFakeWindow();
 			fakeWindow.navigator.userAgent = "iPad";
-			var setting = getDefaultSetting();
-			Teleopti.MyTimeWeb.Portal.Init(setting, fakeWindow);
+		    init(fakeWindow);
 			equal("#Schedule/MobileDay", fakeWindow.location.url);
 		})();
 	});
@@ -60,6 +57,16 @@
 			},
 			init: function () { }
 		};
+	}
+
+	function init(window) {
+	    var ajax = {
+	        Ajax: function(options) {
+	        }
+        };
+
+        var setting = getDefaultSetting();
+        Teleopti.MyTimeWeb.Portal.Init(setting, window, ajax);
 	}
 
 	function getFakeWindow() {

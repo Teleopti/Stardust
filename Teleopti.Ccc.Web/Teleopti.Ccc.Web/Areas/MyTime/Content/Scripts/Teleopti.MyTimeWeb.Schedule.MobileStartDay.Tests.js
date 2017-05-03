@@ -196,10 +196,8 @@
             }
         };
         this.ajax = ajax;
-        this.hasher = {
-            setHash: function () { }
-        };
 
+        initPortal();
 
         Teleopti.MyTimeWeb.UserInfo = {
             WhenLoaded: function (whenLoadedCallBack) {
@@ -207,6 +205,51 @@
                 whenLoadedCallBack(data);
             }
         };
+    }
 
+    function initPortal() {
+        this.crossroads = {
+            addRoute: function () { }
+        };
+        this.hasher = {
+            setHash: function () { },
+            initialized: {
+                add: function () { }
+            },
+            changed: {
+                add: function () { }
+            },
+            init: function () { }
+        };
+
+        var setting = getDefaultSetting();
+        var fakeWindow = getFakeWindow();
+        var commonAjax = {
+            Ajax: function (options) {
+            }
+        };
+        Teleopti.MyTimeWeb.Portal.Init(setting, fakeWindow, commonAjax);
+	}
+
+    function getDefaultSetting() {
+        return {
+            defaultNavigation: '/',
+            baseUrl: '/',
+            startBaseUrl: '/'
+        };
+    }
+    function getFakeWindow() {
+        return {
+            location: {
+                hash: "#",
+                url: "",
+                replace: function (newUrl) {
+                    this.url = newUrl;
+                }
+            },
+            navigator: {
+                userAgent: "Android"
+            }
+        };
     }
 })

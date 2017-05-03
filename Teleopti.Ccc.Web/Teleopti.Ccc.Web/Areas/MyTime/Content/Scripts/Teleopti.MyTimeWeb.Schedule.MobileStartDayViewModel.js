@@ -53,7 +53,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
         self.timeLines(timelines);
 
         var layers = ko.utils.arrayMap(data.Schedule.Periods, function (item) {
-            return new LayerViewModel(item, parent.userTexts, self);
+            return new LayerViewModel(item, self);
         });
         self.layers(layers);
 
@@ -106,9 +106,9 @@ var TimelineViewModel = function (timeline) {
     });
 };
 
-var LayerViewModel = function (layer, userTexts, parent) {
+var LayerViewModel = function (layer, parent) {
     var self = this;
-
+    var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
     var constants = Teleopti.MyTimeWeb.Common.Constants;
 
     self.title = ko.observable(layer.Title);
@@ -158,11 +158,11 @@ var LayerViewModel = function (layer, userTexts, parent) {
             "<div class='tooltip-wordwrap' style='white-space: normal'><i>{5}</i> {6}</div>" +
             "</div>")
             .format(self.timeSpan(),
-            userTexts.subjectColon,
+            userTexts.SubjectColon,
             $("<div/>").text(self.meetingTitle()).html(),
-            userTexts.locationColon,
+            userTexts.LocationColon,
             $("<div/>").text(self.meetingLocation()).html(),
-            userTexts.descriptionColon,
+            userTexts.DescriptionColon,
             $("<div/>").text(self.meetingDescription()).html());
         return tooltipContent + text;
     });
