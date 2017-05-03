@@ -1998,7 +1998,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Code.ShortDateString(Fields!date.Value)</Value>
+                              <Value>=Code.ShortDateStringByCulture(Fields!date.Value, Parameters!culture.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
@@ -3062,13 +3062,24 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
-  <Code>Public Function TimeString(i as integer)as string
+  <Code>
+	  Public Function TimeString(i as integer)as string
 	return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
-End function
+	  End function
 
-Public Function ShortDateString(d as System.DateTime)as string
-	return d.ToString("d",System.Globalization.CultureInfo.CurrentUICulture)
-End function</Code>
+	  Public Function ShortDateString(d as System.DateTime)as string
+	  return d.ToString("d",System.Globalization.CultureInfo.CurrentUICulture)
+	  End function
+
+	  Public Function ShortDateStringByCulture(ByVal d as System.DateTime, ByVal culture as string)as string
+	  Try
+	  Dim c As New System.Globalization.CultureInfo(culture)
+	  return d.ToString("d",c)
+	  Catch ex As System.Globalization.CultureNotFoundException
+	  return ShortDateString(d)
+	  End Try
+	  End function
+  </Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
