@@ -452,6 +452,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[TestCase(false)]
 		public void ShouldTryAgainAfterShiftCategoryLimitationHasBlockedFirstMove(bool order)
 		{
+			//Won't be red all runs if fix is gone. Not optimal, fix if we touch these areas again...
 			var firstDay = new DateOnly(2015, 10, 26); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
