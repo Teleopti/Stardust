@@ -3,11 +3,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
-using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -19,15 +17,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[Toggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
-	public class DayOffOptimizationResultTestWithTeamBlock : DayOffOptimizationResultTest
-	{
-		
-	}
-
 	[DomainTest]
-	[TestFixture]
-	public class DayOffOptimizationResultTest
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class DayOffOptimizationResultTest : DayOffOptimizationScenario
 	{
 		public IScheduleOptimization Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -37,12 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeDayOffRulesRepository DayOffRulesRepository;
 		public FakeAgentGroupRepository AgentGroupRepository;
-		public IScheduleStorage ScheduleStorage;
-		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
-		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
 		[Test]
 		public void ShouldIncludeAgentsInOtherAgentGroupsWhenCalculatingStaffing()
@@ -52,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var irrelevantActivity = ActivityRepository.Has("irrelevant");
 			var skill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
 			var irrelevantSkill = SkillRepository.Has("irrelevant skill", irrelevantActivity); // To see we don't include this in the result
-			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Day, 1);
@@ -77,6 +64,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var dayCount = skillResult.First().SkillDetails.ToList();
 			dayCount.Count.Should().Be.EqualTo(1);
 			dayCount.First().RelativeDifference.Should().Be.EqualTo(0);
+		}
+
+		public DayOffOptimizationResultTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
+		{
 		}
 	}
 }
