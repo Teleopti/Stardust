@@ -16,8 +16,15 @@ GO
 -- 2012-09-17 Investigating Bug, CleanUp, SpeedUp
 -- Description:	Used by report Service level and Agents Ready
 -- =============================================
---exec report_data_service_level_agents_ready @skill_set=N'2',@workload_set=N'1',@interval_type=N'1',@date_from='2006-01-04 00:00:00:000',@date_to='2006-01-04 00:00:00:000',@interval_from=N'0',@interval_to=N'287',@sl_calc_id=3,@time_zone_id=81, @person_code='7EB3E1AE-3DF5-4558-81CF-9AB100258670',@report_id=9,@language_id=1053
+/*
+set statistics time on
+set statistics io on
 
+exec mart.report_data_service_level_agents_ready @skill_set=N'13',@workload_set=N'13',@interval_type=1,
+@date_from='2016-01-04 00:00:00:000',@date_to='2016-01-05 00:00:00:000',@interval_from=0,@interval_to=287,
+@sl_calc_id=3,@time_zone_id=2, @person_code='7EB3E1AE-3DF5-4558-81CF-9AB100258670',@report_id='AE758403-C16B-40B0-B6B2-E8F6043B6E04',@language_id=1053,
+@business_unit_code='1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B'
+*/
 CREATE PROCEDURE [mart].[report_data_service_level_agents_ready] 
 @skill_set nvarchar(max),
 @workload_set nvarchar(max),
@@ -28,7 +35,7 @@ CREATE PROCEDURE [mart].[report_data_service_level_agents_ready]
 @interval_to int,
 @sl_calc_id int,
 @time_zone_id int,
-@person_code uniqueidentifier,
+@person_code uniqueidentifier, --Not used!
 @report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
