@@ -38,7 +38,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
         self.summaryName(data.Schedule.Summary.Title);
         self.summaryTime(data.Schedule.Summary.TimeSpan);
         self.isDayOff(data.Schedule.IsDayOff);
-        self.hasShift(data.Schedule.Periods.length > 0 || data.Schedule.HasOvertime);
+        self.hasShift((data.Schedule.Periods && data.Schedule.Periods.length > 0) || data.Schedule.HasOvertime);
 
         if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
             var dayDate = moment(data.Schedule.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
