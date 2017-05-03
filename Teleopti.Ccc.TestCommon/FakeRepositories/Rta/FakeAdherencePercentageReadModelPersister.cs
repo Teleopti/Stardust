@@ -28,7 +28,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void Persist(AdherencePercentageReadModel model)
 		{
-			_data.Add(model);
+			var existing = _data.SingleOrDefault(x => x.PersonId == model.PersonId);
+			if (existing == null)
+				_data.Add(model);
+			else
+			{
+				_data.Remove(existing);
+				_data.Add(model);
+			}
 		}
 
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)

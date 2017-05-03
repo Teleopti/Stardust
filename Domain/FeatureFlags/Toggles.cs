@@ -26,6 +26,8 @@
 		RTA_SolidProofWhenManagingAgentAdherence_39351,
 		RTA_SnappierDisplayOfOverview_43568,
 		RTA_NoHangfireExperiment_43924,
+		HangFire_EventPackages_43924,
+
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,

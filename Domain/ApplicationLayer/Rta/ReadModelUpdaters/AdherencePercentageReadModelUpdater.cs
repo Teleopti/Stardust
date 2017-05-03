@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
@@ -23,6 +25,46 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		}
 	}
 
+	[EnabledBy(Toggles.HangFire_EventPackages_43924)]
+	public class AdherencePercentageReadModelUpdaterWithPackages : AdherencePercentageReadModelUpdater, IHandleEvents
+	{
+		public AdherencePercentageReadModelUpdaterWithPackages(IAdherencePercentageReadModelPersister persister) : base(persister)
+		{
+		}
+
+		public virtual void Subscribe(ISubscriptionsRegistrator subscriptions)
+		{
+			subscriptions.Add<PersonInAdherenceEvent>();
+			subscriptions.Add<PersonOutOfAdherenceEvent>();
+			subscriptions.Add<PersonNeutralAdherenceEvent>();
+			subscriptions.Add<PersonShiftStartEvent>();
+			subscriptions.Add<PersonShiftEndEvent>();
+			subscriptions.Add<PersonDeletedEvent>();
+
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(IEnumerable<IEvent> events)
+		{
+			foreach (var @event in events)
+			{
+				if (@event is PersonInAdherenceEvent)
+					handle(@event as PersonInAdherenceEvent);
+				if (@event is PersonOutOfAdherenceEvent)
+					handle(@event as PersonOutOfAdherenceEvent);
+				if (@event is PersonNeutralAdherenceEvent)
+					handle(@event as PersonNeutralAdherenceEvent);
+				if (@event is PersonShiftStartEvent)
+					handle(@event as PersonShiftStartEvent);
+				if (@event is PersonShiftEndEvent)
+					handle(@event as PersonShiftEndEvent);
+				if (@event is PersonDeletedEvent)
+					handle(@event as PersonDeletedEvent);
+			}
+		}
+	}
+
+
 	public abstract class AdherencePercentageReadModelUpdaterImpl :
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonOutOfAdherenceEvent>,
@@ -38,8 +80,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_persister = persister;
 		}
 		
+		
+
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonShiftStartEvent @event)
+		{
+			handle(@event);
+		}
+		
+		protected void handle(PersonShiftStartEvent @event)
 		{
 			handleEvent(
 				@event.PersonId,
@@ -59,33 +108,48 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
+			handle(@event);
+		}
+
+		protected void handle(PersonInAdherenceEvent @event)
+		{
 			handleEvent(
 				@event.PersonId,
 				@event.BelongsToDate,
 				new AdherencePercentageReadModelState
 				{
-					Timestamp = @event.Timestamp, 
+					Timestamp = @event.Timestamp,
 					InAdherence = true
-				}, 
+				},
 				m => m.IsLastTimeInAdherence = true);
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
+			handle(@event);
+		}
+
+		protected void handle(PersonOutOfAdherenceEvent @event)
+		{
 			handleEvent(
 				@event.PersonId,
- 				@event.BelongsToDate,
+				@event.BelongsToDate,
 				new AdherencePercentageReadModelState
 				{
-					Timestamp = @event.Timestamp, 
+					Timestamp = @event.Timestamp,
 					InAdherence = false
-				}, 
+				},
 				m => m.IsLastTimeInAdherence = false);
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonNeutralAdherenceEvent @event)
+		{
+			handle(@event);
+		}
+
+		protected void handle(PersonNeutralAdherenceEvent @event)
 		{
 			handleEvent(
 				@event.PersonId,
@@ -101,6 +165,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonShiftEndEvent @event)
 		{
+			handle(@event);
+		}
+
+		protected void handle(PersonShiftEndEvent @event)
+		{
 			handleEvent(
 				@event.PersonId,
 				@event.BelongsToDate,
@@ -114,6 +183,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
+		{
+			handle(@event);
+		}
+
+		protected void handle(PersonDeletedEvent @event)
 		{
 			_persister.Delete(@event.PersonId);
 		}
