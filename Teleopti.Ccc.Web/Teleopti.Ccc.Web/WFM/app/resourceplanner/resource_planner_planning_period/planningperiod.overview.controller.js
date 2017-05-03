@@ -30,8 +30,8 @@
     vm.intraOptimize = intraOptimize;
     vm.publishSchedule = publishSchedule;
     vm.isDisable = isDisable;
-    vm.totalValNum = 0;
     vm.valData = {
+      totalValNum: 0,
       totalPreValNum: 0,
       scheduleIssues: [],
       preValidation: [],
@@ -219,7 +219,7 @@
     }
 
     function getTotalValidationErrorsNumber(pre, after) {
-      vm.totalValNum = 0;
+      vm.valData.totalValNum = 0;
       vm.valData.totalPreValNum = 0;
       if (pre.length > 0) {
         angular.forEach(pre, function (item) {
@@ -227,9 +227,9 @@
         });
       }
       if (after.length > 0) {
-        vm.totalValNum += vm.valData.scheduleIssues.length;
+        vm.valData.totalValNum += vm.valData.scheduleIssues.length;
       }
-      return vm.totalValNum += vm.valData.totalPreValNum;
+      return vm.valData.totalValNum += vm.valData.totalPreValNum;
     }
 
     function initResult(interResult, result, pp) {

@@ -48,9 +48,9 @@
             //   return 200;
             // })
 
-            // this.clear = function () {
-            //     activites = [];
-            // };
+            this.clear = function () {
+                
+            };
 
             // this.withActivity = function (activity) {
             //     activites.push(activity);
