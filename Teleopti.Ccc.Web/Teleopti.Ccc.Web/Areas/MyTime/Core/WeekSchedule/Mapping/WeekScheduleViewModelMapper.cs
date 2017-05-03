@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Periods = projections(s).ToArray(),
 				TextRequestCount =
 					s.PersonRequests?.Count(
-						r => r.Request is TextRequest || r.Request is AbsenceRequest || (r.Request is ShiftExchangeOffer)) ?? 0,
+						r => r.Request is TextRequest || r.Request is AbsenceRequest || r.Request is ShiftExchangeOffer) ?? 0,
 				ProbabilityClass = s.ProbabilityClass,
 				ProbabilityText = s.ProbabilityText,
 				State = s.Date == _now.LocalDateOnly() ? SpecialDateState.Today : 0,
@@ -213,9 +213,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		{
 			var projectionList = new List<IVisualLayer>();
 			if (s.ProjectionYesterday != null)
+			{
 				projectionList.AddRange(s.ProjectionYesterday);
+			}
+
 			if (s.Projection != null)
+			{
 				projectionList.AddRange(s.Projection);
+			}
+
 			var periodViewModelFactory = _periodViewModelFactory;
 			var periodsViewModels = periodViewModelFactory.CreatePeriodViewModels(projectionList, s.MinMaxTime, s.Date.Date,
 				s.ScheduleDay?.TimeZone) ?? new PeriodViewModel[0];
@@ -228,86 +234,85 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private OvertimeAvailabilityViewModel overtimeAvailability(WeekScheduleDayDomainData s)
 		{
 			if (s.OvertimeAvailability != null)
-				return _overtimeMapper.Map(s.OvertimeAvailability);
-			if (s.ScheduleDay?.SignificantPartForDisplay() == SchedulePartView.MainShift)
 			{
-				var personAssignment = s.ScheduleDay.PersonAssignment();
+				return _overtimeMapper.Map(s.OvertimeAvailability);
+			}
+
+			if (s.ScheduleDay?.SignificantPartForDisplay() != SchedulePartView.MainShift)
+			{
 				return new OvertimeAvailabilityViewModel
 				{
 					HasOvertimeAvailability = false,
-					DefaultStartTime = TimeHelper.TimeOfDayFromTimeSpan(
-						personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime, CultureInfo.CurrentCulture),
-					DefaultEndTime = TimeHelper.TimeOfDayFromTimeSpan(
-						personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime.Add(TimeSpan.FromHours(1)),
-						CultureInfo.CurrentCulture),
-					DefaultEndTimeNextDay =
-						personAssignment
-							.Period.TimePeriod(s.ScheduleDay.TimeZone)
-							.EndTime.Add(TimeSpan.FromHours(1))
-							.Days > 0
+					DefaultStartTime = TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(8)),
+					DefaultEndTime = TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(17)),
+					DefaultEndTimeNextDay = false
 				};
 			}
+
+			var personAssignment = s.ScheduleDay.PersonAssignment();
+			var endTime = personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime;
+			var endTimeTomorrow = endTime.Add(TimeSpan.FromHours(1));
 			return new OvertimeAvailabilityViewModel
 			{
 				HasOvertimeAvailability = false,
-				DefaultStartTime = TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(8)),
-				DefaultEndTime = TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(17)),
-				DefaultEndTimeNextDay = false
+				DefaultStartTime = TimeHelper.TimeOfDayFromTimeSpan(endTime, CultureInfo.CurrentCulture),
+				DefaultEndTime = TimeHelper.TimeOfDayFromTimeSpan(endTimeTomorrow, CultureInfo.CurrentCulture),
+				DefaultEndTimeNextDay = endTimeTomorrow.Days > 0
 			};
 		}
 
 		private static PeriodViewModel summary(WeekScheduleDayDomainData s)
 		{
-			if (s.ScheduleDay != null)
+			if (s.ScheduleDay == null)
 			{
-				var significantPart = s.ScheduleDay.SignificantPartForDisplay();
+				return new PeriodViewModel();
+			}
 
-				if (significantPart == SchedulePartView.ContractDayOff)
+			var significantPart = s.ScheduleDay.SignificantPartForDisplay();
+
+			switch (significantPart)
+			{
+				case SchedulePartView.ContractDayOff:
 				{
 					var personAbsence = s.ScheduleDay.PersonAbsenceCollection()
-					   .OrderBy(a => a.Layer.Payload.Priority)
-					   .ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a))
-					   .First();
+						.OrderBy(a => a.Layer.Payload.Priority)
+						.ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a))
+						.First();
 					var periodViewModel = new FullDayAbsencePeriodViewModel
 					{
-						Title =
-							personAbsence
-								.Layer.Payload.Description.Name,
-						Summary = TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture),
-						StyleClassName =
-							personAbsence
-								.Layer.Payload.DisplayColor.ToStyleClass(),
-						Color =
-							$"rgb({personAbsence.Layer.Payload.DisplayColor.R},{personAbsence.Layer.Payload.DisplayColor.G},{personAbsence.Layer.Payload.DisplayColor.B})"
+						Title = personAbsence.Layer.Payload.Description.Name,
+						Summary = toFormattedTimeSpan(s.Projection.ContractTime()),
+						StyleClassName = personAbsence.Layer.Payload.DisplayColor.ToStyleClass(),
+						Color = toRgbColor(personAbsence.Layer.Payload.DisplayColor)
 					};
 
 					periodViewModel.StyleClassName += " " + StyleClasses.Striped;
 					return periodViewModel;
 				}
-				if (significantPart == SchedulePartView.DayOff)
+				case SchedulePartView.DayOff:
+				{
 					return new PersonDayOffPeriodViewModel
 					{
 						Title = s.ScheduleDay?.PersonAssignment()?.DayOff()?.Description.Name,
 						StyleClassName = StyleClasses.DayOff + " " + StyleClasses.Striped
 					};
-				if (significantPart == SchedulePartView.MainShift)
+				}
+				case SchedulePartView.MainShift:
 				{
 					var personAssignment = s.ScheduleDay?.PersonAssignment();
+					var shiftCategory = personAssignment?.ShiftCategory;
 					return new PersonAssignmentPeriodViewModel
 					{
-						Title = personAssignment?.ShiftCategory?.Description.Name,
-						Summary = TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture),
-						TimeSpan =
-							personAssignment?
-								.PeriodExcludingPersonalActivity()
-								.TimePeriod(s.ScheduleDay?.TimeZone)
-								.ToShortTimeString(),
-						StyleClassName = personAssignment?.ShiftCategory?.DisplayColor.ToStyleClass(),
-						Color =
-							$"rgb({personAssignment?.ShiftCategory?.DisplayColor.R},{personAssignment?.ShiftCategory?.DisplayColor.G},{personAssignment?.ShiftCategory?.DisplayColor.B})"
+						Title = shiftCategory?.Description.Name,
+						Summary = toFormattedTimeSpan(s.Projection.ContractTime()),
+						TimeSpan = personAssignment?.PeriodExcludingPersonalActivity()
+							.TimePeriod(s.ScheduleDay?.TimeZone)
+							.ToShortTimeString(),
+						StyleClassName = shiftCategory?.DisplayColor.ToStyleClass(),
+						Color = toRgbColor(shiftCategory?.DisplayColor)
 					};
 				}
-				if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
+				case SchedulePartView.FullDayAbsence:
 				{
 					var personAbsence = s.ScheduleDay.PersonAbsenceCollection()
 						.OrderBy(a => a.Layer.Payload.Priority)
@@ -315,19 +320,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						.First();
 					return new FullDayAbsencePeriodViewModel
 					{
-						Title =
-							personAbsence
-								.Layer.Payload.Description.Name,
-						Summary = TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture),
-						StyleClassName =
-							personAbsence
-								.Layer.Payload.DisplayColor.ToStyleClass(),
-						Color =
-							$"rgb({personAbsence.Layer.Payload.DisplayColor.R},{personAbsence.Layer.Payload.DisplayColor.G},{personAbsence.Layer.Payload.DisplayColor.B})",
+						Title = personAbsence.Layer.Payload.Description.Name,
+						Summary = toFormattedTimeSpan(s.Projection.ContractTime()),
+						StyleClassName = personAbsence.Layer.Payload.DisplayColor.ToStyleClass(),
+						Color = toRgbColor(personAbsence.Layer.Payload.DisplayColor)
 					};
 				}
+				default:
+				{
+					return new PeriodViewModel();
+				}
 			}
-			return new PeriodViewModel();
+		}
+
+		private static string toFormattedTimeSpan(TimeSpan timespan)
+		{
+			return TimeHelper.GetLongHourMinuteTimeString(timespan, CultureInfo.CurrentUICulture);
 		}
 
 		private TimePeriod? getSiteOpenHourPeriod(DateOnly date)
@@ -338,6 +346,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				return null;
 			}
 			return siteOpenHour.TimePeriod;
+		}
+
+		private static string toRgbColor(Color? color)
+		{
+			return color == null
+				? string.Empty
+				: $"rgb({color.Value.R},{color.Value.G},{color.Value.B})";
 		}
 	}
 }
