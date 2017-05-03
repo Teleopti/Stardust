@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using NHibernate;
 using NHibernate.SqlAzure;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Helper;
