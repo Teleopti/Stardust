@@ -56,7 +56,9 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		};
 
 		self.addShiftTradeRequest = function (date, e) {
-			e.stopPropagation();
+			if (e) {
+				e.stopPropagation();
+			}
 			self.resetToolbarActiveButtons();
 			self.addShiftTradeRequestActive(true);
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow(date);
@@ -65,8 +67,10 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		};
 
 		self.addShiftTradeBulletinBoardRequest = function (date, e) {
-			e.stopPropagation();
-			self.disableMenu()
+			if (e) {
+				e.stopPropagation();
+			}
+			self.disableMenu();
 			self.resetToolbarActiveButtons();
 			self.addShiftTradeBulletinBoardActive(true);
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeBulletinWindow(date);

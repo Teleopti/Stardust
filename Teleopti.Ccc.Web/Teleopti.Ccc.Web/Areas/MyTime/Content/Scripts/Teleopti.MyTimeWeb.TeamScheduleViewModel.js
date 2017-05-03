@@ -28,7 +28,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	};
 
 	self.initializeShiftTrade = function () {
-	//	self.menuIsVisible(false);
+		self.menuIsVisible(false);
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/ShiftTrade/", self.requestedDate().format("YYYYMMDD"));
 	};
 
