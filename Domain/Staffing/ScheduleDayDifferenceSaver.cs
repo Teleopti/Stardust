@@ -1,47 +1,44 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
 	public interface IScheduleDayDifferenceSaver
 	{
-		void TakeSnapShot(IScheduleDictionary scheduleDictionary);
-		void SaveDifferences();
+		void SaveDifferences(IScheduleDictionary dic, IPerson person, DateOnlyPeriod dateOnlyPeriod);
 	}
 
 	public class ScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
 	{
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
-		private IScheduleDictionary _scheduleDictionary;
+		private readonly CompareProjection _compareProjection;
 
-		public ScheduleDayDifferenceSaver(ISkillCombinationResourceRepository skillCombinationResourceRepository)
+		public ScheduleDayDifferenceSaver(ISkillCombinationResourceRepository skillCombinationResourceRepository, CompareProjection compareProjection)
 		{
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
-		}
-		public void TakeSnapShot(IScheduleDictionary scheduleDictionary)
-		{
-			_scheduleDictionary = scheduleDictionary;
-			//do nothing yet
-			// clone all days and put in a list
+			_compareProjection = compareProjection;
 		}
 
-		public void SaveDifferences()
+		public void SaveDifferences(IScheduleDictionary dic, IPerson person, DateOnlyPeriod dateOnlyPeriod)
 		{
-			//do nothing yet
-			//compare whats in the snapshot with whats in the dictionary now
-			//and get a list of deltas, IEnumerable<SkillCombinationResource>
-			// that we save to _skillCombinationResourceRepository.Persist
+			var snapshot = ((ScheduleRange) dic[person]).Snapshot;
+			var scheduleDaysAfter = dic[person];
+			var skillCombinationResourceDeltas = new List<SkillCombinationResource>();
+			foreach (var snapShotDay in snapshot.ScheduledDayCollection(dateOnlyPeriod))
+			{
+				skillCombinationResourceDeltas.AddRange(_compareProjection.Compare(snapShotDay, scheduleDaysAfter.ScheduledDay(snapShotDay.DateOnlyAsPeriod.DateOnly)));
+			}
+			_skillCombinationResourceRepository.PersistChanges(skillCombinationResourceDeltas);
 		}
 	}
 
 	public class EmptyScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
 	{
-		public void TakeSnapShot(IScheduleDictionary scheduleDictionary)
-		{
-			//do nothing
-		}
-
-		public void SaveDifferences()
+		public void SaveDifferences(IScheduleDictionary dic, IPerson person, DateOnlyPeriod dateOnlyPeriod)
 		{
 			//do nothing
 		}

@@ -71,9 +71,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 
 		private void performSave (IScheduleDictionary dic, IScheduleDay scheduleDay)
 		{
-			_scheduleDayDifferenceSaver.TakeSnapShot(dic);
+			_scheduleDayDifferenceSaver.SaveDifferences(dic, scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly.ToDateOnlyPeriod());
 			_scheduleDictionarySaver.SaveChanges (dic.DifferenceSinceSnapshot(), (IUnvalidatedScheduleRangeUpdate) dic[scheduleDay.Person]);
-			_scheduleDayDifferenceSaver.SaveDifferences();
 			_personAbsenceAccountRepository.AddRange (dic.ModifiedPersonAccounts);
 		}
 	}
