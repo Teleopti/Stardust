@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
@@ -18,6 +19,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
+	[Toggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
+	public class DayOffOptimizationResultTestWithTeamBlock : DayOffOptimizationResultTest
+	{
+		
+	}
+
 	[DomainTest]
 	[TestFixture]
 	public class DayOffOptimizationResultTest
