@@ -43,14 +43,18 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var beforeIntervals = getActivityIntervals(scheduleDayBefore, resolution).ToList();
 			var afterIntervals = getActivityIntervals(scheduleDayAfter, resolution).ToList();
 
+
 			var allIntervals = new List<ActivityResourceInterval>();
 			allIntervals.AddRange(beforeIntervals);
 			allIntervals.AddRange(afterIntervals);
 
+			if (!allIntervals.Any()) return new List<SkillCombinationResource>();
+
+			var output = new List<ActivityResourceInterval>();
 			var totalStart = allIntervals.Min(x => x.Interval.StartDateTime);
 			var totaltEnd = allIntervals.Max(x => x.Interval.EndDateTime);
 
-			var output = new List<ActivityResourceInterval>();
+
 			var intervalStart = totalStart;
 			while (intervalStart < totaltEnd)
 			{
@@ -79,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 						{
 							Interval = activityResourceInterval.Interval,
 							Activity = activityResourceInterval.Activity,
-							Resource = activityResourceInterval.Resource 
+							Resource = activityResourceInterval.Resource
 						});
 				}
 

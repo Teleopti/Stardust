@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var absenceTimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()),
 														TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
 
-			var scheduleRange = getScheduleRangeForPeriod(absenceTimePeriod.ToDateOnlyPeriod(_timeZone.TimeZone()), person);
+			var scheduleRange = getScheduleRangeForPeriod(absenceTimePeriod.ToDateOnlyPeriod(_timeZone.TimeZone()).Inflate(1), person);
 			var scheduleDay = scheduleRange.ScheduledDay(new DateOnly(command.StartTime));
 
 			var creatorInfo = new AbsenceCreatorInfo()

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var snapshot = ((ScheduleRange) dic[person]).Snapshot;
 			var scheduleDaysAfter = dic[person];
 			var skillCombinationResourceDeltas = new List<SkillCombinationResource>();
-			foreach (var snapShotDay in snapshot.ScheduledDayCollection(dateOnlyPeriod))
+			foreach (var snapShotDay in snapshot.ScheduledDayCollection(dateOnlyPeriod.Inflate(1)))  //inflate to handle midnight shift
 			{
 				skillCombinationResourceDeltas.AddRange(_compareProjection.Compare(snapShotDay, scheduleDaysAfter.ScheduledDay(snapShotDay.DateOnlyAsPeriod.DateOnly)));
 			}
