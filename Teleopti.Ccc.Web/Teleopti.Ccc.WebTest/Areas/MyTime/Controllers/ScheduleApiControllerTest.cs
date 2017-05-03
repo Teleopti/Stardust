@@ -1582,10 +1582,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetDayOff(new DayOffTemplate(new Description("Day off", "DO")), true);
 			ScheduleData.Add(assignment);
 
-			var result = Target.FetchDayData(date).Schedule;
-			result.Summary.Title.Should().Be.EqualTo("Day off");
-			result.Summary.StyleClassName.Should().Contain(StyleClasses.DayOff);
-			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
+			var result = Target.FetchDayData(date);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(15);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+
+			var schedule = result.Schedule;
+			schedule.Summary.Title.Should().Be.EqualTo("Day off");
+			schedule.Summary.StyleClassName.Should().Contain(StyleClasses.DayOff);
+			schedule.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
 
 		[Test, SetCulture("sv-SE")]
@@ -1849,6 +1855,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(9);
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldUseDefaultTimelineForDayWithoutSchedule()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(15);
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
 		}
 

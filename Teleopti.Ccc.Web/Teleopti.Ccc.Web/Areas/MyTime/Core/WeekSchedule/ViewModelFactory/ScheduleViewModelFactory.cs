@@ -1,5 +1,8 @@
-﻿using Teleopti.Ccc.Domain.Common.Time;
+﻿using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
@@ -55,11 +58,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
 		{
 			var dayDomainData = _weekScheduleDomainDataProvider.GetDaySchedule(date);
+			var personAssignment = dayDomainData.ScheduleDay.ScheduleDay.PersonAssignment();
 
-			var minMaxTimeFixed = fixScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, dayDomainData);
-			if (minMaxTimeFixed)
+			if (!dayDomainData.ScheduleDay.Projection.Any() && personAssignment != null &&
+				!personAssignment.ShiftLayers.OfType<OvertimeShiftLayer>().Any())
 			{
-				dayDomainData.ScheduleDay.MinMaxTime = dayDomainData.MinMaxTime;
+				// Set timeline to 8:00-15:00 if no schedule
+				// Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.ShiftTradeTimeLineHoursViewModelMapper.getTimeLinePeriod()
+				var defaultTimeLinePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(15));
+				dayDomainData.MinMaxTime = defaultTimeLinePeriod;
+				dayDomainData.ScheduleDay.MinMaxTime = defaultTimeLinePeriod;
+			}
+			else
+			{
+				var minMaxTimeFixed = fixScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, dayDomainData);
+				if (minMaxTimeFixed)
+				{
+					dayDomainData.ScheduleDay.MinMaxTime = dayDomainData.MinMaxTime;
+				}
 			}
 
 			var dayScheduleViewModel = _scheduleViewModelMapper.Map(dayDomainData);
