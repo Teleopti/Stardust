@@ -369,6 +369,7 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationNoPeriodValueCalculatorTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationResultTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationSameBitArrayTest.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationAgentGroupTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandHandlerIncreaseIslandsAsyncTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationJobFromWebTest.cs" />

@@ -95,13 +95,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var currentMatrixCounter = 0;
 			var allFailed = new Dictionary<ITeamInfo, bool>();
 			var matrixes = new List<Tuple<IScheduleMatrixPro, ITeamInfo>>();
-			foreach (var teamInfo in remainingInfoList.Randomize()) //this randomize could be removed if we could randomize no matter IsClassic below...
+			foreach (var teamInfo in remainingInfoList)
 			{
 				allFailed[teamInfo] = true;
 				matrixes.AddRange(teamInfo.MatrixesForGroup().Select(scheduleMatrixPro => new Tuple<IScheduleMatrixPro, ITeamInfo>(scheduleMatrixPro, teamInfo)));
 			}
 
-			foreach (var matrix in optimizationPreferences.Extra.IsClassic() ? matrixes.Randomize() : matrixes)
+			foreach (var matrix in matrixes.Randomize())
 			{
 				currentMatrixCounter++;
 
