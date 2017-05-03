@@ -207,6 +207,23 @@ $(document).ready(function() {
 		return result;
 	}
 
+    function initCommon() {
+        var setting = getDefaultSetting();
+        var commonAjax = {
+            Ajax: function (options) {
+            }
+        };
+        Teleopti.MyTimeWeb.Common.Init(setting, commonAjax);
+    }
+
+    function getDefaultSetting() {
+        return {
+            defaultNavigation: '/',
+            baseUrl: '/',
+            startBaseUrl: '/'
+        };
+    }
+
 	test("should read absence report permission", function() {
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null);
 		vm.initializeData(getFakeScheduleData());
@@ -306,7 +323,8 @@ $(document).ready(function() {
 		});
 	});
 
-	test("should keep possibility selection for today when changing date", function () {
+    test("should keep possibility selection for today when changing date", function () {
+        initCommon();
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
@@ -327,7 +345,8 @@ $(document).ready(function() {
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
-	test("should keep possibility selection for multiple days when changing date", function () {
+    test("should keep possibility selection for multiple days when changing date", function () {
+        initCommon();
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
