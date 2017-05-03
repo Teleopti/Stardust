@@ -27,6 +27,7 @@
 			var autocompleteSkill;
 			var autocompleteSkillArea;
 			var timeoutPromise;
+			var polling;
 			var pollingTimeout = 60000;
 			$scope.DeleteSkillAreaModal = false;
 			$scope.prevArea;
@@ -166,9 +167,9 @@
 				}
 				else if (skill.SkillType === 'SkillTypeInboundTelephony') {
 					return "mdi mdi-phone";
-                }
+				}
 				else if (skill.SkillType === "SkillTypeRetail") {
-                    return "mdi mdi-credit-card";
+					return "mdi mdi-credit-card";
 				}
 			}
 
@@ -269,8 +270,18 @@
 				}
 			};
 
+			function poll() {
+				polling = $interval(function() {
+					pollActiveTabData($scope.activeTab);
+				},
+				pollingTimeout);
+			};
+			poll();
+
 			$scope.pollActiveTabDataHelper = function(activeTab) {
+				$interval.cancel(polling);
 				pollActiveTabData(activeTab);
+				poll();
 			};
 
 			function pollActiveTabData(activeTab) {
@@ -331,11 +342,6 @@
 			function() {
 				pollActiveTabData($scope.activeTab);
 			});
-
-			var polling = $interval(function() {
-				pollActiveTabData($scope.activeTab);
-			},
-			pollingTimeout);
 
 			var notifySkillAreaDeletion = function() {
 				var message = $translate.instant('Deleted');
