@@ -29,9 +29,15 @@
 		var startPositionProperty = layoutDirection === constants.layoutDirection.horizontal ? "left" : "top";
 		var lengthProperty = layoutDirection === constants.layoutDirection.horizontal ? "width" : "height";
 
-		startPositionVal = (boundaries.lengthPercentagePerMinute * (rawProbabilityCellData.startTimeInMinutes - boundaries.timelineStartMinutes) * 100).toFixed(2);
+	    startPositionVal = (Math.ceil(boundaries.lengthPercentagePerMinute *
+	            (rawProbabilityCellData.startTimeInMinutes - boundaries.timelineStartMinutes) *
+	            10000) /
+	        100).toFixed(2);
 
-		intervalLengthVal = (boundaries.lengthPercentagePerMinute * (rawProbabilityCellData.endTimeInMinutes - rawProbabilityCellData.startTimeInMinutes) * 100).toFixed(2);
+	    intervalLengthVal = (Math.ceil(boundaries.lengthPercentagePerMinute *
+	            (rawProbabilityCellData.endTimeInMinutes - rawProbabilityCellData.startTimeInMinutes) *
+	            10000) /
+	        100).toFixed(2);
 
 		styleJson[startPositionProperty] = startPositionVal + "%";
 		styleJson[lengthProperty] = intervalLengthVal + "%";
@@ -81,8 +87,6 @@
 		startPosition: startPositionVal,
 		intervalLength: intervalLengthVal,
 		cssClass: generateCssClass,
-		tooltips: generateTooltips,
-		startTimeInMinutes: rawProbabilityCellData.startTimeInMinutes,
-		endTimeInMinutes: rawProbabilityCellData.endTimeInMinutes
+		tooltips: generateTooltips
 	};
 };
