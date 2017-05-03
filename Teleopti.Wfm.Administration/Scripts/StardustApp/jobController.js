@@ -50,8 +50,10 @@
 		}
 
 		function pollNewData() {
-			vm.Jobs = [];
+			var tmpFrom = vm.resultsFrom;
+			vm.resultsFrom = 1;
 			getJobs();
+			vm.resultsFrom = tmpFrom;
 		}
 
 		$interval(pollNewData, refreshInterval);
