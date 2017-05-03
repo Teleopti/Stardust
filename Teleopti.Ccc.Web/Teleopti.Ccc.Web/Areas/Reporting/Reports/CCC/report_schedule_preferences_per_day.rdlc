@@ -2405,7 +2405,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
 End function
 
 Public Function ShortDateString(d as System.DateTime)as string
-	return d.ToString("d",System.Globalization.CultureInfo.CurrentUICulture)
+	return d.ToString("d",System.Globalization.CultureInfo.CurrentCulture)
 End function</Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
