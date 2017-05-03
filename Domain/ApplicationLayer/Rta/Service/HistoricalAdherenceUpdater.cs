@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -18,8 +19,45 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	[DisabledBy(Toggles.RTA_NoHangfireExperiment_43924)]
 	public class HistoricalAdherenceUpdater : HistoricalAdherenceUpdaterImpl, IRunOnHangfire
 	{
-		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister, INow now) : base(adherencePersister, historicalChangePersister, now)
+		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister adherencePersister,
+			IHistoricalChangeReadModelPersister historicalChangePersister, INow now)
+			: base(adherencePersister, historicalChangePersister, now)
 		{
+		}
+	}
+
+	[EnabledBy(Toggles.HangFire_EventPackages_43924)]
+	public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdater, IHandleEvents
+	{
+		public HistoricalAdherenceUpdaterWithPackages(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister, INow now) : base(adherencePersister, historicalChangePersister, now)
+		{
+		}
+
+		public void Subscribe(ISubscriptionsRegistrator subscriptionsRegistrator)
+		{
+			subscriptionsRegistrator.Add<PersonOutOfAdherenceEvent>();
+			subscriptionsRegistrator.Add<PersonInAdherenceEvent>();
+			subscriptionsRegistrator.Add<PersonNeutralAdherenceEvent>();
+			subscriptionsRegistrator.Add<PersonStateChangedEvent>();
+			subscriptionsRegistrator.Add<PersonRuleChangedEvent>();
+		}
+
+		[ReadModelUnitOfWork]
+		public void Handle(IEnumerable<IEvent> events)
+		{
+			foreach (var @event in events)
+			{
+				if (@event is PersonOutOfAdherenceEvent)
+					handle(@event as PersonOutOfAdherenceEvent);
+				if (@event is PersonInAdherenceEvent)
+					handle(@event as PersonInAdherenceEvent);
+				if (@event is PersonRuleChangedEvent)
+					handle(@event as PersonRuleChangedEvent);
+				if (@event is PersonStateChangedEvent)
+					handle(@event as PersonStateChangedEvent);
+				if (@event is PersonNeutralAdherenceEvent)
+					handle(@event as PersonNeutralAdherenceEvent);
+			}
 		}
 	}
 
@@ -49,12 +87,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
+			handle(@event);
+		}
+
+		protected void handle(PersonOutOfAdherenceEvent @event)
+		{
 			_adherencePersister.AddOut(@event.PersonId, @event.Timestamp);
 		}
 
 		[ReadModelUnitOfWork]
 		[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 		public virtual void Handle(PersonInAdherenceEvent @event)
+		{
+			handle(@event);
+		}
+
+		protected void handle(PersonInAdherenceEvent @event)
 		{
 			_adherencePersister.AddIn(@event.PersonId, @event.Timestamp);
 		}
@@ -63,12 +111,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 		public virtual void Handle(PersonNeutralAdherenceEvent @event)
 		{
+			handle(@event);
+		}
+
+		protected void handle(PersonNeutralAdherenceEvent @event)
+		{
 			_adherencePersister.AddNeutral(@event.PersonId, @event.Timestamp);
 		}
 
 		[ReadModelUnitOfWork]
 		[EnabledBy(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
 		public virtual void Handle(PersonStateChangedEvent @event)
+		{
+			handle(@event);
+		}
+
+		protected void handle(PersonStateChangedEvent @event)
 		{
 			_historicalChangePersister.Persist(new HistoricalChangeReadModel
 			{
@@ -88,6 +146,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[ReadModelUnitOfWork]
 		[EnabledBy(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
 		public virtual void Handle(PersonRuleChangedEvent @event)
+		{
+			handle(@event);
+		}
+
+		protected void handle(PersonRuleChangedEvent @event)
 		{
 			_historicalChangePersister.Persist(new HistoricalChangeReadModel
 			{
