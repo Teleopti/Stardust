@@ -13,11 +13,18 @@ var GoogleLoginPage = Object.create(Page, {
 	
 	signin: { value: function() {
 		console.log('Signing in using Google');
-		this.username.waitForVisible(60 * 1000);
-		this.username.setValue('demo.teleopti@gmail.com');
-		this.next.click();
+		if (!browser.isExisting('input[type=password]')) {
+			this.username.waitForVisible(60 * 1000);
+			console.log('Username input exists, entering username');
+			this.username.setValue('demo.teleopti@gmail.com');
+			console.log('Clicking next button');
+			this.next.click();
+		}		
+		
 		this.password.waitForVisible(60 * 1000);
+		console.log('Password input exists, entering password');
 		this.password.setValue('m8kemew0rk');
+		console.log('Clicking next button');
         this.signinButton.click();
     } }
 });
