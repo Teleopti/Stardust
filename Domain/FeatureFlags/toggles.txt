@@ -242,7 +242,7 @@ QRCodeForMobileApps_42695 = RC
 ConfigQRCodeURLForMobileApps_43224 = RC
 
 ETL_SpeedUpNightlyDayOff_38213 = true
-WFM_ImproveIntradaySkillArea_37291 = DEV
+WFM_ImproveIntradaySkillArea_37291 = RC
 Wfm_Intraday_SupportSkillTypeWebChat_42591 = RC
 MyTimeWeb_MobileResponsive_43826 = RC
 WFM_ReportHierarchy_43002 = RC
