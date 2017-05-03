@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
@@ -328,7 +329,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				}
 				default:
 				{
-					return new PeriodViewModel();
+					return new PeriodViewModel
+					{
+						Title = Resources.NotScheduled
+					};
 				}
 			}
 		}
