@@ -11,7 +11,7 @@
 					<thead>
 					<tr>
 						<th>
-							<md-checkbox style="margin-bottom: 0" ng-checked="vm.isChecked()"
+							<md-checkbox style="margin-bottom: 0" aria-label="check all" ng-checked="vm.isChecked()"
 											 md-indeterminate="vm.isIndeterminate()"
 											 ng-click="vm.toggleAll()">
 							</md-checkbox>
@@ -22,7 +22,7 @@
 					</thead>
 					<tbody>
 					<tr ng-repeat="job in vm.Jobs">
-						<td><md-checkbox style="margin-bottom: 0" type="checkbox" ng-checked="vm.exists(job.JobId, vm.selected)" ng-click="vm.toggle(job.JobId, vm.selected)"/></td>
+						<td><md-checkbox aria-label="check to delete" style="margin-bottom: 0" type="checkbox" ng-checked="vm.exists(job.JobId, vm.selected)" ng-click="vm.toggle(job.JobId, vm.selected)"/></td>
 						<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
 						<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 					</tr>

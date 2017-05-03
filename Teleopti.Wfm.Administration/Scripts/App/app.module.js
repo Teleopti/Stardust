@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies'])
+		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies', 'ngAria'])
 		.config(function ($routeProvider, $httpProvider) {
 
 			$routeProvider
