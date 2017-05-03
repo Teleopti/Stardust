@@ -19,6 +19,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
     self.summaryTime = ko.observable();
     self.dayOfWeek = ko.observable(moment().format('DDDD'));
     self.isDayOff = ko.observable(false);
+    self.hasShift = ko.observable(false);
     self.timeLines = ko.observableArray();
     self.layers = ko.observableArray();
     self.scheduleHeight = ko.observable();
@@ -37,7 +38,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
         self.summaryName(data.Schedule.Summary.Title);
         self.summaryTime(data.Schedule.Summary.TimeSpan);
         self.isDayOff(data.Schedule.IsDayOff);
-        
+        self.hasShift(data.Schedule.Periods.length > 0 || data.Schedule.HasOvertime);
+
         if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
             var dayDate = moment(data.Schedule.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
             self.dayOfWeek(dayDate.format("dddd"));
