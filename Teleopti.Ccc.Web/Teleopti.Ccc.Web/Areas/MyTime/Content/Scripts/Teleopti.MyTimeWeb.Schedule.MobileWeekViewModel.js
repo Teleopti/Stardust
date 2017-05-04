@@ -17,13 +17,13 @@ if (typeof Teleopti.MyTimeWeb.Schedule === "undefined") {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, reloadData, blockProbabilityAjaxForTestOnly) {
+Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData, blockProbabilityAjaxForTestOnly) {
 	var self = this;
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 	var probabilityType = constants.probabilityType;
 
-	self.userTexts = userTexts;
+    self.userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 	self.dayViewModels = ko.observableArray();
 	self.displayDate = ko.observable();
 	self.nextWeekDate = ko.observable(moment());

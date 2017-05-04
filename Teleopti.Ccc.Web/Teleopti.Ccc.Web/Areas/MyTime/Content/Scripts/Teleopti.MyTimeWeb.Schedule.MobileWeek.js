@@ -24,7 +24,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 	var completelyLoaded;
 	var currentPage = "Teleopti.MyTimeWeb.Schedule";
 	var subscribed = false;
-	var userTexts;
 
 	var fetchData = function () {
 		ajax.Ajax({
@@ -78,14 +77,11 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 				$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").hide();
 
 				completelyLoaded = completelyLoadedCallback;
-				vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(userTexts, ajax, fetchData);
+				vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(ajax, fetchData);
 				ko.applyBindings(vm, $("#page")[0]);
 				fetchData();
 				readyForInteractionCallback();
 			}
-		},
-		SetupResource: function (resources) {
-			userTexts = resources;
 		},
 		ReloadScheduleListener: function (notification) {
 

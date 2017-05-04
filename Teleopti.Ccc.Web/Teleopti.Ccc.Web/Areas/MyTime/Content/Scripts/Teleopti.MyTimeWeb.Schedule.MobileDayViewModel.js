@@ -160,11 +160,11 @@ var MobileWeekLayerViewModel = function (layer, userTexts) {
 				"<div class='tooltip-wordwrap' style='white-space: normal'><i>{5}</i> {6}</div>" +
 				"</div>")
 			.format(self.timeSpan(),
-				userTexts.subjectColon,
+				userTexts.SubjectColon,
 				$("<div/>").text(self.meetingTitle()).html(),
-				userTexts.locationColon,
+				userTexts.LocationColon,
 				$("<div/>").text(self.meetingLocation()).html(),
-				userTexts.descriptionColon,
+				userTexts.DescriptionColon,
 				$("<div/>").text(self.meetingDescription()).html());
 
 		return "<div>{0}</div>{1}".format(self.title(), text);
