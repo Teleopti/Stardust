@@ -5,7 +5,9 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js" />
 
 $(document).ready(function() {
-	module("Teleopti.MyTimeWeb.Schedule");
+    module("Teleopti.MyTimeWeb.Schedule");
+
+	var hash = "";
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 	var fakeUserText = {
@@ -328,6 +330,9 @@ $(document).ready(function() {
 
     test("should keep possibility selection for today when changing date", function () {
         initCommon();
+
+        setup();
+
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
@@ -343,13 +348,19 @@ $(document).ready(function() {
 
 		week.previousWeek();
 
-		equal(week.selectedProbabilityType, constants.probabilityType.absence);
-		equal(Teleopti.MyTimeWeb.Portal.ParseHash().probability, constants.probabilityType.absence);
+        equal(week.selectedProbabilityType, constants.probabilityType.absence); 
+
+        equal(Teleopti.MyTimeWeb.Portal.ParseHash({ hash: hash }).probability, constants.probabilityType.absence);
+
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
+	
+
     test("should keep possibility selection for multiple days when changing date", function () {
         initCommon();
+        setup();
+
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
@@ -367,7 +378,7 @@ $(document).ready(function() {
 		week.previousWeek();
 
 		equal(week.selectedProbabilityType, constants.probabilityType.overtime);
-		equal(Teleopti.MyTimeWeb.Portal.ParseHash().probability, constants.probabilityType.overtime);
+        equal(Teleopti.MyTimeWeb.Portal.ParseHash({ hash: hash }).probability, constants.probabilityType.overtime);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
@@ -909,5 +920,18 @@ $(document).ready(function() {
         equal(fakeUserText.hideStaffingInfo, $(".probabilityLabel").text());
 
         $(".probabilityLabel").remove();
-	});
+    });
+
+	function setup() {
+		this.hasher = {
+			initialized: {
+				add: function () { }
+			},
+			changed: {
+				add: function () { }
+			},
+			init: function () { },
+			setHash: function (data) { hash = "#"+data; }
+		};
+	}
 });
