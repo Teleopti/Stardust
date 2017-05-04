@@ -32,10 +32,10 @@
          <div class="con-flex">
            <ul class="wfm-list">
              <div ng-repeat="rep in report.childNodes | filter:reportFilter | orderBy:'Name'">
-               <a href="{{rep.Url}}" ng-if="reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+               <a href="{{rep.Url}}" ng-if="!rep.IsWeb" style="text-decoration:none;"  target="_blank">
                  <li>{{rep.Name}}</li>
                </a>
-               <a ui-sref="{{rep.Url}}" ng-if="!reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+               <a ui-sref="{{rep.Url}}" ng-if="rep.IsWeb" style="text-decoration:none;"  target="_blank">
                  <li>{{rep.Name}}</li>
                </a>
              </div>
@@ -56,10 +56,10 @@
          <div class="con-flex">
            <ul class="wfm-list">
              <div ng-repeat="rep in report.childNodes | filter:reportFilter | orderBy:'Name'">
-               <a href="{{rep.Url}}" ng-if="reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+               <a href="{{rep.Url}}" ng-if="!rep.IsWeb" style="text-decoration:none;"  target="_blank">
                  <li>{{rep.Name}}</li>
                </a>
-               <a ui-sref="{{rep.Url}}" ng-if="!reports.checkURL(rep.Url)" style="text-decoration:none;"  target="_blank">
+               <a ui-sref="{{rep.Url}}" ng-if="rep.IsWeb" style="text-decoration:none;"  target="_blank">
                  <li>{{rep.Name}}</li>
                </a>
              </div>

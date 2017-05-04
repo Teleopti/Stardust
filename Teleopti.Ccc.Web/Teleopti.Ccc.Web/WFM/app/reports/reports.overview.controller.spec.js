@@ -47,12 +47,4 @@ describe('ReportsOverviewController', function () {
     expect(vm.groupReports(fakeReports)[1].Type).toEqual('Category2');
   });
 
-  it("should detect url type", function() {
-    var Url1 = vm.checkURL(fakeReports[0].Url);
-    var Url2 = vm.checkURL(fakeReports[3].Url);
-
-    expect(Url1).toEqual(true);
-    expect(Url2).toEqual(false);
-  });
-
 ﻿})

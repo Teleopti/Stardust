@@ -9,18 +9,12 @@
 		var vm = this;
 		vm.reports = [];
 		vm.customTypes = [];
-		vm.checkURL = checkURL;
 		init();
 
 		function init() {
 			ReportsSvc.getCategorizedReports().then(function (reports) {
 				vm.reports = vm.groupReports(reports);
 			});
-		}
-
-		function checkURL(url) {
-		   	var substring = "http";
-				return url.indexOf(substring) !== -1;
 		}
 
 		vm.groupReports = function(reports) {
@@ -36,7 +30,7 @@
 					types[item.Category] = {Type: item.Category, childNodes: []};
 					grouped.push(types[item.Category]);
 				}
-				types[item.Category].childNodes.push({Name:item.Name, Url:item.Url});
+				types[item.Category].childNodes.push({Name:item.Name, IsWeb:item.IsWebReport, Url:item.Url});
 			}
 
 			return unshiftCustom(grouped);
