@@ -48,6 +48,7 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Portal.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.js?bust=<%=version%>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.LayerViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MonthViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel.js?bust=<%=version%>"></script>
