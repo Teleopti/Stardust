@@ -18,58 +18,64 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === "undefined") {
 }
 
 Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
-    var ajax;
     var vm;
     var completelyLoaded;
     var currentPage = "Teleopti.MyTimeWeb.Schedule";
     var subscribed = false;
+    var dataService;
 
-    var fetchData = function () {
-        ajax.Ajax({
-            url: "../api/Schedule/FetchDayData",
-            dataType: "json",
-            type: "GET",
-            data: {
-                date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash,
-                staffingPossiblityType: vm.selectedProbabilityOptionValue()
-            },
-            success: function (data) {
-                vm.readData(data);
-                vm.setCurrentDate(moment(data.Date));
-                try {
-                    completelyLoaded();
-                    if (!subscribed) subscribeForChanges();
-                }
-                catch (err) {
-
-                }
-
-            }
-        });
-    };
-
-    var cleanBinding = function () {
+    function cleanBinding() {
         ko.cleanNode($("#page")[0]);
     };
 
     function subscribeForChanges() {
         Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
-            successCallback: Teleopti.MyTimeWeb.Schedule.MobileDay.ReloadScheduleListener,
+            successCallback: Teleopti.MyTimeWeb.Schedule.MobileStartDay.ReloadScheduleListener,
             domainType: "IScheduleChangedInDefaultScenario",
             page: currentPage
         });
         subscribed = true;
     }
 
-    function registerSwipe() {	
-    	$(".dayview-view-body").swipe({
+    function registerSwipeEvent() {
+        $(".dayview-view-body").swipe({
             swipeLeft: function () {
-            	vm.nextDay();
+                vm.nextDay();
             },
             swipeRight: function () {
-            	vm.previousDay();
+                vm.previousDay();
             }
         });
+    }
+
+    function registerUserInfoLoadedCallback() {
+        Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
+            $(".moment-datepicker").attr("data-bind",
+                "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
+        });
+    }
+
+    function hideAgentScheduleMessenger() {
+        $("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").hide();
+        $("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").hide();
+    }
+
+    function initViewModel() {
+        vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+        ko.applyBindings(vm, $("#page")[0]);
+    }
+
+    function fetchData() {
+        dataService.fetchData(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash,
+            vm.selectedProbabilityOptionValue(),
+            fetchDataSuccessCallback);
+    }
+
+    function fetchDataSuccessCallback(data) {
+        vm.readData(data);
+        vm.setCurrentDate(moment(data.Date));
+        completelyLoaded();
+        if (!subscribed) subscribeForChanges();
     }
 
     return {
@@ -80,44 +86,31 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
                     Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialDispose);
             }
         },
-        PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxObj) {
-            Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
-                //Hide AgentScheduleMessenger on mobile #40179
-                $("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").hide();
-                $("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").hide();
+        PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, dataServiceInstance) {
+            dataService = dataServiceInstance ||
+                new Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService(new Teleopti.MyTimeWeb.Ajax());
+            completelyLoaded = completelyLoadedCallback;
 
-                completelyLoaded = completelyLoadedCallback;
-                if (!ajaxObj) {
-                    ajax = new Teleopti.MyTimeWeb.Ajax();
-                } else {
-                    ajax = ajaxObj;
-                }
+            registerUserInfoLoadedCallback();
+            registerSwipeEvent();
 
-                vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(ajax, fetchData);
-                registerSwipe();
+            hideAgentScheduleMessenger();
+            initViewModel();
 
-                $(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
-
-                ko.applyBindings(vm, $("#page")[0]);
-                fetchData();
-                readyForInteractionCallback();
-            });
+            fetchData();
+            readyForInteractionCallback();
         },
         ReloadScheduleListener: function (notification) {
-
             var messageDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
-
             if (vm.isWithinSelected(messageDate, messageDate)) {
                 fetchData();
             };
         },
-
         PartialDispose: function () {
             cleanBinding();
         },
         Vm: function () {
             return vm;
         }
-
     };
 })(jQuery);

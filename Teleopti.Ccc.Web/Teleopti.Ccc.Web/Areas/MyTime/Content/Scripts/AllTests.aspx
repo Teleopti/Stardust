@@ -72,8 +72,7 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.AlertActivity.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Test.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileStartDay.js?bust=<%=version %>"></script>
-
-
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService.js?bust=<%=version %>"></script>
 		
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Tests.js?bust=<%=version%>"></script>
