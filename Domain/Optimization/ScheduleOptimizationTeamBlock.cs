@@ -32,11 +32,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly OptimizationResult _optimizationResult;
 		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
-		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPersonRepository _personRepository;
 		private readonly IResourceCalculation _resourceCalculation;
-		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
+		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
 		public ScheduleOptimizationTeamBlock(
 			IFillSchedulerStateHolder fillSchedulerStateHolder, 
@@ -52,11 +51,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			OptimizationResult optimizationResult,
 			TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			IResourceCalculation resourceOptimizationHelper,
-			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IUserTimeZone userTimeZone,
 			IPersonRepository personRepository,
 			IResourceCalculation resourceCalculation,
-			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory)
+			TeamInfoFactoryFactory teamInfoFactoryFactory)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -71,11 +69,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizationResult = optimizationResult;
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_userTimeZone = userTimeZone;
 			_personRepository = personRepository;
 			_resourceCalculation = resourceCalculation;
-			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
+			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -123,14 +120,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences); 
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 
-			//copied from other places -what is this!? needed to get green test
-			var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
-			if (groupPageType == GroupPageType.SingleAgent)
-				_groupPersonBuilderWrapper.SetSingleAgentTeam();
-			else
-				_groupPersonBuilderForOptimizationFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-			//
-
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true, period.Inflate(1)))
 			{
 				_resourceCalculation.ResourceCalculate(period.Inflate(1), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, false));
@@ -141,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					schedulingOptions,
 					resourceCalcDelayer, 
 					dayOffOptimizationPreferenceProvider,
-					new TeamInfoFactory(_groupPersonBuilderWrapper),
+					_teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer),
 					new NoSchedulingProgress());
 
 				_weeklyRestSolverExecuter.Resolve(
