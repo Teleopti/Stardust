@@ -31,11 +31,11 @@ namespace Teleopti.MessagingTest
 			_server.NotifyClients(message);
 		}
 
-		public Task Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
+		public Task<HttpResponseMessage> Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
 			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
 			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
-			return Task.FromResult(false);
+			return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
 		}
 
 		public void PostOrThrow(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.Services
 			});
 		}
 
-		public void Notify(INotificationMessage messages, IPerson[] persons)
+		public Task<bool> Notify(INotificationMessage messages, IPerson[] persons)
 		{
 			persons.ForEach(person =>
 			{
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.TestCommon.Services
 					Person = person
 				});
 			});
+
+			return Task.FromResult(false);
 		}
 
 		public class SentMessage

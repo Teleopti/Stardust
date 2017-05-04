@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Module = Autofac.Module;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				builder.RegisterType<MultipleNotificationSenderFactory>().As<INotificationSenderFactory>();
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
 			builder.RegisterType<Notifier>().As<INotifier>();
-			builder.RegisterType<NotifyAppSubscriptions>();
+			builder.RegisterType<NotifyAppSubscriptions>().ApplyAspects();
 		}
 	}
 }

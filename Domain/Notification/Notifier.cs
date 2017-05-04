@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System.Threading.Tasks;
+using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Notification
@@ -17,8 +18,8 @@ namespace Teleopti.Ccc.Domain.Notification
 			_notificationChecker = notificationChecker;
 			_notifyAppSubscriptions = notifyAppSubscriptions;
 		}
-		
-		public void Notify(INotificationMessage messages, params IPerson[] persons)
+
+		public Task<bool> Notify(INotificationMessage messages, params IPerson[] persons)
 		{
 			var sender = _notificationSenderFactory.GetSender();
 			if (sender != null)
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.Domain.Notification
 				}
 			}
 
-			_notifyAppSubscriptions.TrySend(messages, persons);
+			return _notifyAppSubscriptions.TrySend(messages, persons);
 		}
+
 	}
 }

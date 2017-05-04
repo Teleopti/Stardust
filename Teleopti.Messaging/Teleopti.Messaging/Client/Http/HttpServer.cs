@@ -24,7 +24,7 @@ namespace Teleopti.Messaging.Client.Http
 			_serializer = serializer ?? new ToStringSerializer();
 		}
 
-		public Task Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
+		public Task<HttpResponseMessage> Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
 			return innerPost(new Uri(uri), thing, customHeadersFunc);
 		}
@@ -46,6 +46,7 @@ namespace Teleopti.Messaging.Client.Http
 					request.Headers.TryAddWithoutValidation(header,headers[header]);
 				}
 			}
+		
 			return _client.SendAsync(request);
 		}
 

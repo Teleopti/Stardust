@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Messages.Core.Ioc
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Core.Ioc
 			builder.RegisterType<MultipleNotificationSenderFactory>().As<INotificationSenderFactory>();
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
 			builder.RegisterType<Notifier>().As<INotifier>();
-			builder.RegisterType<NotifyAppSubscriptions>();
+			builder.RegisterType<NotifyAppSubscriptions>().ApplyAspects();
 		}
 	}
 }

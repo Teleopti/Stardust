@@ -17,5 +17,13 @@ namespace Teleopti.Ccc.Domain.Notification
 		}
 
 		public IEnumerable<string> TokenList => tokens;
+
+		public void RemoveToken(params string[] ts)
+		{
+			foreach (var t in ts)
+			{
+				tokens.Remove(t);
+			}
+		}
 	}
 }

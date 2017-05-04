@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 			}
 
 		}
-		
+
 		public class Input
 		{
 			public string Tenant { get; set; }
@@ -57,11 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 			public string Tenant { get; set; }
 		}
 
-		public class InputWithLogonContext : ILogOnContext
-		{
-			public string LogOnDatasource { get; set; }
-			public Guid LogOnBusinessUnitId { get; set; }
-		}
+
 
 		[Test]
 		public void ShouldSetCurrentDatasourceFromTenantStringArgument()
@@ -108,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		{
 			Database.WithTenant("tenant", "key");
 
-			TheService.Does(new InputWithLogonContext {LogOnDatasource = "tenant"});
+			TheService.Does(new InputWithLogOnContext("tenant", Guid.Empty));
 
 			TheService.RanWithDataSource.DataSourceName.Should().Be("tenant");
 		}

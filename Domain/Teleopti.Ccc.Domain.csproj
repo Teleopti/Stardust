@@ -106,6 +106,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
@@ -238,6 +239,7 @@
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
+    <Compile Include="InterfaceLegacy\Messages\InputWithLogOnContext.cs" />
     <Compile Include="Intraday\ISupportedSkillsInIntradayProvider.cs" />
     <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />
     <Compile Include="Intraday\ForecastedStaffingToDataSeries.cs" />
@@ -249,7 +251,7 @@
     <Compile Include="MultiTenancy\PersonInfoModel.cs" />
     <Compile Include="MultiTenancy\TenantApplicationConfigKey.cs" />
     <Compile Include="MultiTenancy\TenantUserPersister.cs" />
-    <Compile Include="Optimization\OptimizationPreferencesPerfTestProvider.cs" />
+    <Compile Include="Notification\FCMSendMessageResponse.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
     <Compile Include="Optimization\TeamBlock\DayOffOptimizerStandard.cs" />
     <Compile Include="Optimization\TeamBlock\DayOffOptimizerUseTeamSameDaysOff.cs" />

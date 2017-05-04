@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ISettingData PersistSettingValue(string entityName, ISettingValue value)
 		{
+			value.SetOwner(new PersonalSettingData(entityName, (value.BelongsTo as PersonalSettingData)?.OwnerPerson));
 			storage[entityName] = value;
-			value.SetOwner(new PersonalSettingData(entityName,null));
 			return value.BelongsTo;
 		}
 
