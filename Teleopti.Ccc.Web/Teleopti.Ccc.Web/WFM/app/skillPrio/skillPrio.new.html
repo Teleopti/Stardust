@@ -42,15 +42,16 @@
 				<h2 class="text-warning">
 					<i class="mdi mdi-alert"></i>
 					You have unsaved changes
-					<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click='confirmModal1=true' name="button">Discard</button>
+					<button type="button" class="wfm-btn wfm-btn-default" ng-click='confirmModal1=true' name="button">Discard</button>
 				</h2>
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
 					<label for="filter" class="input-icon">
-						<i class="mdi mdi-filter-outline"></i>
-						<input type="text" id="filter" ng-model="skillFilter" placeholder="{{'FilterSkills' | translate}}">
-						<md-tooltip>{{'FilterSkills' | translate}}</md-tooltip>
+						<i class="mdi mdi-filter-outline">
+							<input type="text" id="filter" ng-model="skillFilter" placeholder="{{'FilterSkills' | translate}}">
+							<md-tooltip>{{'FilterSkills' | translate}}</md-tooltip>
+						</i>
 					</label>
 				</div>
 				<div class="con-flex"></div>
