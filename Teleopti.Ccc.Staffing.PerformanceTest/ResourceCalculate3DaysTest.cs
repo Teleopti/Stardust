@@ -45,37 +45,54 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(4));
-			WithUnitOfWork.Do(() =>
-							  {
+			var deltas = new List<SkillCombinationResource>();
+			WithUnitOfWork.Do((uow) =>
+			{
 
-								  using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
-								  {
-									  connection.Open();
+				using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
+				{
+					connection.Open();
 
-									  using (var command = new SqlCommand(@"truncate table readmodel.SkillCombinationResource", connection))
-									  {
-										  command.ExecuteNonQuery();
-									  }
-									  using (var command = new SqlCommand(@"truncate table readmodel.SkillCombinationResourceDelta", connection))
-									  {
-										  command.ExecuteNonQuery();
-									  }
-									  using (var command = new SqlCommand(@"truncate table readmodel.SkillCombinationResource", connection))
-									  {
-										  command.ExecuteNonQuery();
-									  }
-									  using (var command = new SqlCommand(@"truncate table readmodel.ScheduleForecastSkill", connection))
-									  {
-										  command.ExecuteNonQuery();
-									  }
-									  using (var command = new SqlCommand(@"truncate table readmodel.ScheduleForecastSkillChange", connection))
-									  {
-										  command.ExecuteNonQuery();
-									  }
-								  }
-								  skills = SkillRepository.LoadAllSkills();
-								  UpdateStaffingLevel.Update(period);
-							  });
+					using (var command = new SqlCommand(@"truncate table readmodel.SkillCombinationResource", connection))
+					{
+						command.ExecuteNonQuery();
+					}
+					using (var command = new SqlCommand(@"truncate table readmodel.SkillCombinationResourceDelta", connection))
+					{
+						command.ExecuteNonQuery();
+					}
+					using (var command = new SqlCommand(@"truncate table readmodel.SkillCombinationResource", connection))
+					{
+						command.ExecuteNonQuery();
+					}
+					using (var command = new SqlCommand(@"truncate table readmodel.ScheduleForecastSkill", connection))
+					{
+						command.ExecuteNonQuery();
+					}
+					using (var command = new SqlCommand(@"truncate table readmodel.ScheduleForecastSkillChange", connection))
+					{
+						command.ExecuteNonQuery();
+					}
+				}
+				skills = SkillRepository.LoadAllSkills();
+				UpdateStaffingLevel.Update(period);
+				uow.Current().PersistAll();
+				var skillCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period);
+				foreach (var skillCombinationResource in skillCombinationResources)
+				{
+					for (var index = 1; index <= 10; index++)
+					{
+						deltas.Add(new SkillCombinationResource
+						{
+							StartDateTime = skillCombinationResource.StartDateTime,
+							EndDateTime = skillCombinationResource.EndDateTime,
+							SkillCombination = skillCombinationResource.SkillCombination,
+							Resource = skillCombinationResource.Resource / index
+						});
+					}
+				}
+				SkillCombinationResourceRepository.PersistChanges(deltas);
+			});
 		}
 
 		[Test]
