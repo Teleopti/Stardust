@@ -4,6 +4,7 @@
 /// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
 
 Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
     var self = this;
@@ -75,15 +76,7 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
         return self.top() + "px";
     });
     self.widthPx = ko.computed(function () {
-        var width;
-        if (layer.IsOvertimeAvailability) {
-            width = 20 + "%";
-        } else if (parent.probabilities && parent.probabilities.length > 0) {
-            width = 80 + "%";
-        } else {
-            width = 100 + "%";
-        }
-        return width;
+        return getWidth(layer.IsOvertimeAvailability, parent.probabilities);
     });
     self.heightPx = ko.computed(function () {
         return self.height() + "px";
@@ -138,4 +131,27 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
     self.showDetail = ko.computed(function () {
         return self.heightDouble() > constants.pixelToDisplayAll;
     });
+};
+
+var getWidth = function (isOvertimeAvailability, probabilities) {
+    var width;
+    if (Teleopti.MyTimeWeb.Portal.IsMobile(window) || Teleopti.MyTimeWeb.Portal.IsIPad(window)) {
+        if (isOvertimeAvailability) {
+            width = 20 + "%";
+        } else if (probabilities && probabilities.length > 0) {
+            width = 80 + "%";
+        } else {
+            width = 100 + "%";
+        }
+        return width;
+    } else {
+        if (isOvertimeAvailability) {
+            width = 20;
+        } else if (probabilities && probabilities.length > 0) {
+            width = 116;
+        } else {
+            width = 127;
+        }
+        return width + "px";
+    }
 };
