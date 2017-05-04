@@ -428,7 +428,7 @@ namespace Stardust.Manager.Helpers
 
 		public void TagQueueItem(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
 		{
-			const string commandText = "update [Stardust].[JobQueue] set Tagged = NULL where JobId = @Id";
+			const string commandText = "update [Stardust].[JobQueue] set lockTimestamp = NULL where JobId = @Id";
 
 			using (var cmd = new SqlCommand(commandText, sqlConnection, sqlTransaction))
 			{
