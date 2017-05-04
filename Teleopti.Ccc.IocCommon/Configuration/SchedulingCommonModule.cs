@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().SingleInstance();
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998))
+			if (_configuration.Toggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998) || _configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
 			{
 				builder.RegisterType<ScheduleOptimizationTeamBlock>().As<IScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizationDesktopTeamBlock>().AsSelf().As<IDayOffOptimizationDesktop>().InstancePerLifetimeScope(); 
@@ -410,7 +410,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
 			builder.RegisterType<AgentGroupStaffLoader>().As<IAgentGroupStaffLoader>().SingleInstance();
 			builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
-			builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().AsSelf().As<IOptimizationPreferencesProvider>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
+			{
+				builder.RegisterType<OptimizationPreferencesPerfTestProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().AsSelf().As<IOptimizationPreferencesProvider>().SingleInstance();
+			}
 			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();
 			builder.RegisterType<FetchAgentGroupModel>().As<IFetchAgentGroupModel>().SingleInstance();
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();

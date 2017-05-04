@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPersonRepository _personRepository;
 		private readonly IResourceCalculation _resourceCalculation;
+		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 
 		public ScheduleOptimizationTeamBlock(
 			IFillSchedulerStateHolder fillSchedulerStateHolder, 
@@ -54,7 +55,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IUserTimeZone userTimeZone,
 			IPersonRepository personRepository,
-			IResourceCalculation resourceCalculation)
+			IResourceCalculation resourceCalculation,
+			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -73,6 +75,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_userTimeZone = userTimeZone;
 			_personRepository = personRepository;
 			_resourceCalculation = resourceCalculation;
+			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -88,10 +91,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
-			/* We think this is needed... Let's confirm it first (preferably in a test) instead of "just adding it".
-			optimizationPreferences.Extra.UseTeams = true; //flytta in i provider
-			optimizationPreferences.Extra.UseTeamBlockOption = true; //flytta in i provider
-			*/
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider;
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
@@ -124,7 +123,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences); 
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 
-			_groupPersonBuilderWrapper.SetSingleAgentTeam();
+			//copied from other places -what is this!? needed to get green test
+			var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
+			if (groupPageType == GroupPageType.SingleAgent)
+				_groupPersonBuilderWrapper.SetSingleAgentTeam();
+			else
+				_groupPersonBuilderForOptimizationFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+			//
 
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true, period.Inflate(1)))
 			{
