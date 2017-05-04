@@ -1,0 +1,17 @@
+Getting started
+
+Open solution
+The CruiseControl.sln is the solution containing all the projects needed to build all parts of Teleopti WFM.
+
+Configuring environment
+Make sure that http://hestia/nuget is configured as a nuget package source as this will use the internal nuget mirror. It is significantly faster and we have some internal packages not available in public nuget sources.
+
+To be able to build the Windows application client you will have to install Syncfusion Essential Studio of the correct version. An alternative is to apply the BuildServerSetup.reg file found in \\a380\hangaren\#PROGRAM\Develop\Syncfusion\BuildServer. Please note that you cannot open any form containing Syncfusion controls in edit mode with only the build server setup.
+
+Starting the client
+To run the web applications you set the Teleopti.Ccc.Web as a Startup project and run the solution. If you need backend processing to be running, please start the Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost project manually using the context menu "Debug" > "Start new instance".
+
+To run the Windows application client, set Teleopti.Ccc.SmartClientPortal.Shell project as startup project and run the solution.
+
+Translations
+All translations resources (except reports) are defined in Resources.resx in the Teleopti.Ccc.UserTexts project.
