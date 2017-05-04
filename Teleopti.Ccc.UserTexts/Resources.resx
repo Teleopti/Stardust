@@ -15848,4 +15848,152 @@ Do you want to participate?</value>
     <value>There is currently an email skill selected, abandoned rate cannot be shown</value>
     <comment>warning in web intraday if a skill or skill area contains a skill of type email</comment>
   </data>
+  <data name="AgentsHaveScheduled" xml:space="preserve">
+    <value>agents have been scheduled</value>
+    <comment>agents have been scheduled</comment>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheAgentGroup" xml:space="preserve">
+    <value>Are you sure you want to delete agent group {0} and its related settings?</value>
+    <comment>Delete agent group and related setting</comment>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
+    <value>Are you sure you want to delete day off rule {0} and its related settings?</value>
+    <comment>AreYouSureYouWantToDeleteTheDayOffRule</comment>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningPeriod" xml:space="preserve">
+    <value>Are you sure you want to delete the planning period {0}-{1} and its related settings?</value>
+    <comment>AreYouSureYouWantToDeleteThePlanningPeriod</comment>
+  </data>
+  <data name="ChangePlanningDuration" xml:space="preserve">
+    <value>Change planning duration</value>
+    <comment>Change planning duration</comment>
+  </data>
+  <data name="CreateAgentGroup" xml:space="preserve">
+    <value>Create Agent Group</value>
+    <comment>text for helping information </comment>
+  </data>
+  <data name="CreateFirstPp" xml:space="preserve">
+    <value>Create planning period</value>
+    <comment>Create first planning period</comment>
+  </data>
+  <data name="CreateNextPp" xml:space="preserve">
+    <value>Create next planning period</value>
+    <comment>Create next planning period</comment>
+  </data>
+  <data name="DayOffRule" xml:space="preserve">
+    <value>Day Off Rule</value>
+    <comment>DayOffRule</comment>
+  </data>
+  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
+    <value>The following settings are applied to agent group {0}</value>
+    <comment>DayOffRuleAppliedFilters</comment>
+  </data>
+  <data name="DayOffRuleSetting" xml:space="preserve">
+    <value>Day Off Rules Setting</value>
+    <comment>text for day off rules setting</comment>
+  </data>
+  <data name="DeleteAgentGroup" xml:space="preserve">
+    <value>Delete Agent Group</value>
+    <comment>text for Delete Agent Group</comment>
+  </data>
+  <data name="DeleteDayOffRule" xml:space="preserve">
+    <value>Delete Day Off Rule</value>
+    <comment>DeleteDayOffRule</comment>
+  </data>
+  <data name="DeletePlanningPeriod" xml:space="preserve">
+    <value>Delete planning period</value>
+    <comment>Delete planning period</comment>
+  </data>
+  <data name="EditAgentGroup" xml:space="preserve">
+    <value>Edit Agent Group</value>
+    <comment>text for edit agent group</comment>
+  </data>
+  <data name="FilterValidationIssues" xml:space="preserve">
+    <value>Filter validation issues</value>
+    <comment>Filter validation issues</comment>
+  </data>
+  <data name="HelpCreateAgentGroup" xml:space="preserve">
+    <value>You need an agent group to schdule your agents. Do you want to create agent group?</value>
+    <comment>text for helping information</comment>
+  </data>
+  <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
+    <value>Dayoff Rules will be applied for all planning periods</value>
+    <comment>HelpDayOffForPlanningPeriod</comment>
+  </data>
+  <data name="Issue" xml:space="preserve">
+    <value>Issue</value>
+    <comment>Issue</comment>
+  </data>
+  <data name="ManageDayOffForAgentGroup" xml:space="preserve">
+    <value>Manage your dayoff rules for agentgroup {0}</value>
+    <comment>ManageDayOffForAgentGroup</comment>
+  </data>
+  <data name="NewAgentGroup" xml:space="preserve">
+    <value>New Agent Group</value>
+    <comment>text for create new agent group</comment>
+  </data>
+  <data name="NoAgentsWithinAgentGroup" xml:space="preserve">
+    <value>There are no agents that can be scheduled in this agent group</value>
+    <comment>There are no agents that can be scheduled in this agent group</comment>
+  </data>
+  <data name="NoPreviousScheduleResult" xml:space="preserve">
+    <value>This planning period has no previous schedule result</value>
+    <comment>This planning period has no previous schedule result</comment>
+  </data>
+  <data name="NoValidIssuesForPp" xml:space="preserve">
+    <value>There are no validation issues for this planning period</value>
+    <comment>There are no validation issues for this planning period</comment>
+  </data>
+  <data name="NoValidScheduleResult" xml:space="preserve">
+    <value>This planning period has no valid schedule result</value>
+    <comment>This planning period has no valid schedule result</comment>
+  </data>
+  <data name="PreSchedulingValidationIssues" xml:space="preserve">
+    <value>Pre-scheduling validation issues</value>
+    <comment>Pre-scheduling validation issues</comment>
+  </data>
+  <data name="RefreshPreSchedulingValidationIssues" xml:space="preserve">
+    <value>Refresh Pre-scheduling Validation issues</value>
+    <comment>Refresh Pre-scheduling Validation issues</comment>
+  </data>
+  <data name="ScheduleAgentGroup" xml:space="preserve">
+    <value>Schedule Agent Group</value>
+    <comment>ScheduleAgentGroup</comment>
+  </data>
+  <data name="ScheduledFailed" xml:space="preserve">
+    <value>Scheduled Failed</value>
+    <comment>Scheduled Failed</comment>
+  </data>
+  <data name="ScheduledIssues" xml:space="preserve">
+    <value>Issues during last scheduling</value>
+    <comment>Issues during last scheduling</comment>
+  </data>
+  <data name="ScheduledSucceeded" xml:space="preserve">
+    <value>Scheduled Succeeded</value>
+    <comment>Scheduled Succeeded</comment>
+  </data>
+  <data name="SchedulePageSelectAg" xml:space="preserve">
+    <value>Select agent group to work with</value>
+    <comment>text in Schedules overview</comment>
+  </data>
+  <data name="SearchForAgentGroup" xml:space="preserve">
+    <value>Search site / team / skill / contract</value>
+    <comment>SearchForAgentGroup</comment>
+  </data>
+  <data name="SearchForDayOff" xml:space="preserve">
+    <value>Search site / team / contract</value>
+    <comment>SearchForDayOff</comment>
+  </data>
+  <data name="SelectedPlanningPeriod" xml:space="preserve">
+    <value>Selected planning period</value>
+    <comment>SelectedPlanningPeriod</comment>
+  </data>
+  <data name="SelectPpWorkWith" xml:space="preserve">
+    <value>Select planning period to work with</value>
+    <comment>Select planning period to work with</comment>
+  </data>
+  <data name="UpdatedValidation" xml:space="preserve">
+    <value>The validation issues are up-to-date</value>
+    <comment>The validation issues are up-to-date</comment>
+  </data>
 </root>

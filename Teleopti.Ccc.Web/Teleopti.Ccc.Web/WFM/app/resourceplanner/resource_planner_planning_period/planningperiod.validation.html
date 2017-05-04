@@ -1,6 +1,6 @@
 <div class="con-row" ng-show="vm.valData.preValidation.length == 0 && vm.valData.scheduleIssues.length == 0 ">
     <div class="con-flex">
-        <span><i class="mdi mdi-information-outline"></i>There are no validation issues for this planning period.</span>
+        <span><i class="mdi mdi-information-outline"></i>{{'NoValidIssuesForPp' | translate}}</span>
     </div>
 </div>
 <wfm-card-list multi-select>
@@ -8,10 +8,10 @@
         <card-header tabindex="-1">
             <div tabindex="0">
                 <span><i class="mdi"></i>
-                    Pre-scheduling validation issues
+                     {{'PreSchedulingValidationIssues' | translate}}
                     <div tabindex=0 class="context-menu card-context" ng-click="vm.updatePreValidation();$event.stopPropagation();"> 
                         <i class="mdi mdi-refresh"></i>
-                        <md-tooltip>Refresh Pre-scheduling Validation issues</md-tooltip>
+                        <md-tooltip> {{'RefreshPreSchedulingValidationIssues' | translate}}</md-tooltip>
                     </div>
                 </span>
                 <span ng-if="vm.message" class="text-warning">
@@ -19,7 +19,7 @@
                     {{vm.message}}
                 </span>
                 <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
-                <span class="pull-right">{{vm.valData.totalPreValNum}} issues</span>
+                <span class="pull-right">{{vm.valData.totalPreValNum}} {{'IssuesText' | translate}}</span>
             </div>
         </card-header>
         <card-body class="panel">
@@ -29,8 +29,8 @@
                         <div class="con-flex ">
                             <label for="filter" class="input-icon">
                                 <i class="mdi mdi-filter-outline">
-                                <input type="text" id="filter" ng-model="vm.validationFilter" placeholder="Filter validation issues">
-                                <md-tooltip>Filter validation issues</md-tooltip>
+                                <input type="text" id="filter" ng-model="vm.validationFilter" placeholder="{{'FilterValidationIssues' | translate}}">
+                                <md-tooltip>{{'FilterValidationIssues' | translate}}</md-tooltip> 
                                 </i>
                             </label>
                         </div>
@@ -39,8 +39,8 @@
                     <table class="wfm-table">
                         <thead>
                             <tr>
-                                <th>Issue</th>
-                                <th>Description</th>
+                                <th>{{'Issue' | translate}}</th>
+                                <th>{{'Description' | translate}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,9 +59,9 @@
     <wfm-card ng-show="vm.valData.scheduleIssues.length > 0">
         <card-header tabindex="-1" ng-click="vm.scheduleIssuesFilter = ''">
             <div tabindex="0">
-                <span><i class="mdi"></i>Issues during last scheduling</span>
+                <span><i class="mdi"></i>{{'ScheduledIssues' | translate}}</span> 
                 <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
-                <span class="pull-right">{{vm.valData.scheduleIssues.length}} issues</span>
+                <span class="pull-right">{{vm.valData.scheduleIssues.length}}{{'IssuesText' | translate}}</span>
             </div>
         </card-header>
         <card-body class="panel">
@@ -71,8 +71,8 @@
                         <div class="con-flex ">
                             <label for="filter" class="input-icon">
                                 <i class="mdi mdi-filter-outline">
-                                <input type="text" id="filter" ng-model="vm.scheduleIssuesFilter" placeholder="Filter validation issues">
-                                <md-tooltip>Filter validation issues</md-tooltip>
+                                <input type="text" id="filter" ng-model="vm.scheduleIssuesFilter" placeholder="{{'FilterValidationIssues' | translate}}">
+                                <md-tooltip>{{'FilterValidationIssues' | translate}}</md-tooltip>
                                 </i>
                             </label>
                         </div>
@@ -81,8 +81,8 @@
                     <table class="wfm-table">
                         <thead>
                             <tr>
-                                <th>Issue</th>
-                                <th>Description</th>
+                                <th>{{'Issue' | translate}}</th>
+                                <th>{{'Description' | translate}}</th>
                                 <!--<th>Issues-Type</th>-->
                             </tr>
                         </thead>

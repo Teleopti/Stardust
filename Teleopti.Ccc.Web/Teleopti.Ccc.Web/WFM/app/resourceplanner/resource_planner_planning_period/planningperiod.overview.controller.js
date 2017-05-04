@@ -15,12 +15,12 @@
     var toggledSchedulingOnStardust = false;
     var checkProgressRef;
     var keepAliveRef;
-    var preMessage = "";
+    var preMessage = '';
     vm.agentGroup = {};
     vm.selectedPp = $stateParams.selectedPp ? $stateParams.selectedPp : null;
     vm.schedulingPerformed = false;
     vm.optimizeRunning = false;
-    vm.status = "";
+    vm.status = '';
     vm.dayNodes = undefined;
     vm.gridOptions = {};
     vm.totalAgents = null;

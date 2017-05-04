@@ -1,8 +1,8 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> Schedule Agent Group "{{vm.agentGroup.Name}}"</h1>
+		<h1><i class="mdi mdi-calendar"></i> {{'ScheduleAgentGroup' | translate}} - {{vm.agentGroup.Name}}</h1>
 		<div class="pp-sub-title">
-			<span ng-show="vm.selectedPp">Selected planning period: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
+			<span ng-show="vm.selectedPp">{{'SelectedPlanningPeriod' | translate}}: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
 			<span ng-if="vm.isDisable() && vm.totalAgents > 0" ng-bind="vm.status" class="pp-status"></span>
 		</div>
 	</div>
@@ -30,7 +30,7 @@
 									{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}
 								</span>
 								<span class="pp-agentnumber" ng-hide="vm.dayNodes">
-									{{vm.scheduledAgents}}/{{vm.totalAgents}} agents have been scheduled
+									{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsHaveScheduled'|translate}} 
 								</span>
 								<div class="legends" ng-show="vm.dayNodes">
 									<span>
@@ -71,11 +71,11 @@
 									</table>
 								</div>
 								<div ng-show="vm.dayNodes.length == 0">
-									<span><i class="mdi mdi-information-outline"></i> This planning period has no valid schedule result.</span><br/>
+									<span><i class="mdi mdi-information-outline"></i> {{'NoValidScheduleResult' | translate}}</span><br/>
 								</div>
 								<div ng-show="vm.dayNodes == undefined">
-									<span><i class="mdi mdi-information-outline"></i> This planning period has no previous schedule result.</span><br/>
-									<span ng-show="vm.totalAgents == 0"><i class="mdi mdi-information-outline"></i> There are no agents that can be scheduled in this agent group.</span>
+									<span><i class="mdi mdi-information-outline"></i> {{'NoPreviousScheduleResult' | translate}}</span><br/>
+									<span ng-show="vm.totalAgents == 0"><i class="mdi mdi-information-outline"></i> {{'NoAgentsWithinAgentGroup' | translate}}</span>
 								</div>
 							</div>
 						</div>
@@ -83,7 +83,7 @@
 				</md-tab>
 				<md-tab>
 					<md-tab-label>
-						<span>Validation</span>
+						<span translate>Validation</span>
 						<span class="pp-validation" ng-if="vm.valData.totalValNum > 0" ng-bind="vm.valData.totalValNum"></span>
 					</md-tab-label>
 					<md-tab-body class="md-padding">

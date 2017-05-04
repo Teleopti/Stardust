@@ -5,9 +5,9 @@
         .module('wfm.resourceplanner')
         .controller('planningPeriodSelectController', Controller);
 
-    Controller.$inject = ['$state', '$stateParams', 'planningPeriodService'];
+    Controller.$inject = ['$state', '$stateParams', '$translate','planningPeriodService'];
 
-    function Controller($state, $stateParams, planningPeriodService) {
+    function Controller($state, $stateParams, $translate, planningPeriodService) {
         var vm = this;
         var agentGroupId = $stateParams.groupId;
         vm.agentGroup = {};
@@ -21,6 +21,7 @@
         };
         vm.show = false;
         vm.displayButton = false;
+        vm.textForDeletePp = '';
         vm.startNextPlanningPeriod = startNextPlanningPeriod;
         vm.getLastPp = getLastPp;
         vm.selectPp = selectPp;
@@ -31,6 +32,7 @@
         vm.selectSuggestion = selectSuggestion;
         vm.createFirstPp = createFirstPp;
         vm.resetSelectedSuggestion = resetSelectedSuggestion;
+        vm.getPpInfo = getPpInfo;
         vm.isNonePp = isNonePp;
 
         getAgentGroupbyId();
@@ -157,6 +159,12 @@
                 endDate: null
             };
             vm.show = false;
+        }
+
+        function getPpInfo(p) {
+            vm.textForDeletePp = $translate.instant("AreYouSureYouWantToDeleteThePlanningPeriod")
+            .replace("{0}", moment(p.startDate).format('YYYY-MM-DD'))
+            .replace("{1}", moment(p.startDate).format('YYYY-MM-DD'));
         }
 
         function isNonePp() {

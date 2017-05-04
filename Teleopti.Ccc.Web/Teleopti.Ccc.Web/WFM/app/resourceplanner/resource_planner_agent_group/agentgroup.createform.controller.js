@@ -16,6 +16,7 @@
 		vm.name = '';
 		vm.cancel = cancel;
 		vm.editAgentGroup = {};
+		vm.deleteAgentGroupText = '';
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
 		vm.isValidFilters = isValidFilters;
@@ -33,6 +34,7 @@
 				var getAgentGroup = agentGroupService.getAgentGroupbyId({ id: id });
 				return getAgentGroup.$promise.then(function (data) {
 					vm.editAgentGroup = data;
+					vm.deleteAgentGroupText = $translate.instant("AreYouSureYouWantToDeleteTheAgentGroup").replace("{0}", vm.editAgentGroup.Name);
 					vm.name = data.Name;
 					vm.selectedResults = data.Filters;
 					return vm.editAgentGroup;

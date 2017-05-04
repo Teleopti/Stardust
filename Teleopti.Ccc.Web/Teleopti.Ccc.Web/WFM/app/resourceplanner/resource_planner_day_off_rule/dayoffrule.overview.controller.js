@@ -6,14 +6,18 @@
 		.controller('dayoffRuleOverviewController', Controller)
 		.directive('dayoffRules', dayoffRulesDirective);
 
-	Controller.$inject = ['$state', '$stateParams', 'dayOffRuleService', 'agentGroupService'];
+	Controller.$inject = ['$state', '$stateParams', '$translate' ,'dayOffRuleService', 'agentGroupService'];
 
-	function Controller($state, $stateParams, dayOffRuleService, agentGroupService) {
+	function Controller($state, $stateParams, $translate, dayOffRuleService, agentGroupService) {
 		var vm = this;
 
 		vm.dayOffRules = [];
 		vm.agentGroup = {};
+		vm.textManageDoRule = '';
+		vm.textDeleteDoRule = '';
+		vm.textDoRuleAppliedFilter = '';
 		vm.editRuleset = editRuleset;
+		vm.getDoRuleInfo = getDoRuleInfo;
 		vm.destoryRuleset = destoryRuleset;
 		vm.createRuleset = createRuleset;
 		vm.goDayoffRuleSetting = goDayoffRuleSetting;
@@ -26,6 +30,8 @@
 				var getAgentGroup = agentGroupService.getAgentGroupbyId({ id: $stateParams.groupId });
 				return getAgentGroup.$promise.then(function (data) {
 					vm.agentGroup = data;
+					vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", vm.agentGroup.Name);
+					vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", vm.agentGroup.Name);
 					return vm.agentGroup;
 				});
 			}
@@ -49,6 +55,10 @@
 				isDefault: dayOffRule.Default,
 				periodId: undefined
 			});
+		}
+
+		function getDoRuleInfo(dayOffRule) {
+			vm.textDeleteDoRule = $translate.instant("AreYouSureYouWantToDeleteTheDayOffRule").replace("{0}", dayOffRule.Name);
 		}
 
 		function destoryRuleset(dayOffRule) {

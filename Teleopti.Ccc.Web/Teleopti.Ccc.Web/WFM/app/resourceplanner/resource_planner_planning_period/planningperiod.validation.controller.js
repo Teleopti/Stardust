@@ -6,9 +6,9 @@
         .controller('planningPeriodValidationController', Controller)
         .directive('ppValidation', planningperiodValidationDirective);
 
-    Controller.$inject = ['$state', '$stateParams', '$timeout', 'planningPeriodService'];
+    Controller.$inject = ['$state', '$stateParams', '$translate', '$timeout', 'planningPeriodService'];
 
-    function Controller($state, $stateParams, $timeout, planningPeriodService) {
+    function Controller($state, $stateParams, $translate, $timeout, planningPeriodService) {
         var vm = this;
 
         vm.message = "";
@@ -19,7 +19,7 @@
             return preValidation.$promise.then(function (data) {
                 vm.valData.preValidation = data.ValidationResult.InvalidResources;
                 getTotalValidationErrorsNumber(vm.valData.preValidation, vm.valData.scheduleIssues);
-                vm.message = "The validation issues are up-to-date.";
+                vm.message = $translate.instant("UpdatedValidation");
                 $timeout(function () {
                     vm.message = "";
                 }, 5000);
