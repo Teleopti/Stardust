@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     module("Teleopti.MyTimeWeb.Schedule.MobileStartDay");
-
+    var hash = "";
 
     test("should navigate to next date when swiping left", function () {
         setup();
@@ -75,6 +75,33 @@
         equal(vm.scheduleHeight(), "651px");
     });
 
+    test("should set unreadMessage", function () {
+        setup();
+
+        Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+        var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+        equal(vm.unreadMessageCount(), 2);
+    });
+
+    test("should navigate to messages", function () {
+	    Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+		    if (x === "MyTimeWeb_DayScheduleForStartPage_43446") return true;
+		    return false;
+        };
+
+        setup();
+
+        var fakeWindow = getFakeWindow();
+        var setting = getDefaultSetting();
+        Teleopti.MyTimeWeb.Portal.Init(setting, fakeWindow); 
+
+        Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+        var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm(); 
+        vm.navigateToMessages();
+		 
+        equal(hash, "MessageTab");
+    }); 
+
     function fakeCompletelyLoadedCallback() { throw new Error("for test"); }
 
     function fakeReadyForInteractionCallback() { }
@@ -84,6 +111,7 @@
             Ajax: function (options) {
                 if (options.url === "../api/Schedule/FetchDayData") {
                     options.success({
+						"UnReadMessageCount":2,
                         "Date": "2017-04-28",
                         "DisplayDate": "28/04/2017",
                         "IsToday": false, "Schedule": {
@@ -195,7 +223,20 @@
                 }
             }
         };
-        this.ajax = ajax;
+        this.ajax = ajax; 
+	    this.crossroads = {
+		    addRoute: function () { }
+        };
+	    this.hasher = {
+		    initialized: {
+			    add: function () { }
+		    },
+		    changed: {
+			    add: function () { }
+		    },
+            init: function () { },
+            setHash: function (data) { hash = data; }
+	    };
 
         initPortal();
 
@@ -210,16 +251,6 @@
     function initPortal() {
         this.crossroads = {
             addRoute: function () { }
-        };
-        this.hasher = {
-            setHash: function () { },
-            initialized: {
-                add: function () { }
-            },
-            changed: {
-                add: function () { }
-            },
-            init: function () { }
         };
 
         var setting = getDefaultSetting();

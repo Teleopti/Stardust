@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 
 	public class DayScheduleViewModel: BaseScheduleViewModel
 	{
+		public int UnReadMessageCount { get; set; }
 		public string Date { get; set; }
 		public string DisplayDate { get; set; }
 		public bool IsToday { get; set; }

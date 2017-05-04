@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
@@ -19,11 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly IMonthScheduleDomainDataProvider _monthScheduleDomainDataProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly INow _now;
+		private readonly IPushMessageProvider _pushMessageProvider;
 
 		public ScheduleViewModelFactory(MonthScheduleViewModelMapper monthMapper,
 			WeekScheduleViewModelMapper scheduleViewModelMapper,
 			IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider,
-			IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider, ILoggedOnUser loggedOnUser, INow now)
+			IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider, 
+			ILoggedOnUser loggedOnUser, 
+			INow now,
+			IPushMessageProvider pushMessageProvider)
 		{
 			_monthMapper = monthMapper;
 			_scheduleViewModelMapper = scheduleViewModelMapper;
@@ -31,6 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			_monthScheduleDomainDataProvider = monthScheduleDomainDataProvider;
 			_loggedOnUser = loggedOnUser;
 			_now = now;
+			_pushMessageProvider = pushMessageProvider;
+
 		}
 
 		public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
@@ -77,6 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					dayDomainData.ScheduleDay.MinMaxTime = dayDomainData.MinMaxTime;
 				}
 			}
+			dayDomainData.UnReadMessageCount = _pushMessageProvider.UnreadMessageCount;
 
 			var dayScheduleViewModel = _scheduleViewModelMapper.Map(dayDomainData);
 

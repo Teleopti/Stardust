@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 	{
 		public WeekScheduleDayDomainData ScheduleDay { get; set; }
 		public bool IsCurrentDay { get; set; }
+
+		public int UnReadMessageCount { get; set; }
 	}
 
 	public class WeekScheduleDomainData: BaseScheduleDomainData

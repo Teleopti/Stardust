@@ -162,6 +162,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AbsenceRequestDetailViewModelFactory>().As<IAbsenceRequestDetailViewModelFactory>();
 			builder.RegisterType<SiteOpenHoursSpecification>().As<ISiteOpenHoursSpecification>();
 			builder.RegisterType<ShiftTradeSiteOpenHourFilter>().As<IShiftTradeSiteOpenHourFilter>();
+
+			builder.RegisterType<PushMessageProvider>().As<IPushMessageProvider>();
 		}
 
 		private void registerMapperTypes(ContainerBuilder builder)

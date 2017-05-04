@@ -1115,6 +1115,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		#endregion
 
 		#region Test cases for FetchDayData()
+		[Test, SetCulture("sv-SE")]
+		public void ShouldGetUnReadMessageCountOnFetchDayData()
+		{ 
+			var result = Target.FetchDayData(null); 
+			result.UnReadMessageCount.Should().Be.GreaterThan(0);
+		}
+
 		[Test]
 		public void ShouldMapScheduleForTodayWithoutParameter()
 		{

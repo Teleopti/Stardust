@@ -16,6 +16,10 @@
 	padding: 14.5px 0;
 }
 
+.dayview-mobile .mobile-dayview-nav .submenu li.mobile-message a {
+	padding: 14.5px 0 0 10px;
+}
+
 .dayview-mobile .mobile-datepicker{
 	width: auto;
 	padding: 0;

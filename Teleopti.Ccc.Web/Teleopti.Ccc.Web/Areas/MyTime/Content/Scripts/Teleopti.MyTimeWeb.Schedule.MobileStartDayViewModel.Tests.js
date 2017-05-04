@@ -112,7 +112,7 @@ $(document).ready(function() {
         viewModel.readData(rawData);
 
         equal(viewModel.isDayOff(), rawData.Schedule.IsDayOff);
-    });
+    }); 
 
     test("should set to next date", function () {
         var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();

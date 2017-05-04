@@ -1,4 +1,4 @@
-﻿@using Teleopti.Ccc.UserTexts
+﻿@using Teleopti.Ccc.UserTexts 
 @{
 	Layout = null;
 }
@@ -27,6 +27,9 @@
 				</li>
 				<li class="mobile-today">
 					<a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a>
+				</li>
+				<li class="mobile-message">
+					<a href="#"   data-bind="click: navigateToMessages"><span class="badge badge-important" data-bind="text: unreadMessageCount"></span></a>
 				</li>
 			</ul>
 
