@@ -145,7 +145,7 @@ Wfm_Seatplan_UseDatePeriodForPlanning_42167 = true
 Wfm_Intraday_38074 = true
 
 Wfm_People_PrepareForRelease_39040 = RC #Was not ready enough
-Wfm_People_ImportAndCreateAgentFromFile_42528 = RC
+Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = RC
 
@@ -165,7 +165,7 @@ MyTimeWeb_ViewIntradayStaffingProbability_41608 = RC #Do not release yet, need m
 MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = RC #Do not release yet, need more accurate numbers first.
 MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 = RC
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
-MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = RC
+MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = true
 MyTimeWeb_DayScheduleForStartPage_43446 = DEV
 
 Scheduler_IntradayOptimization_36617 = true
@@ -174,11 +174,11 @@ WfmGlobalLayout_personalOptions_37114 = true
 
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = RC
 ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI until we have a proper UI
-ResourcePlanner_TeamBlockPeriod_42836 = RC
-ResourcePlanner_MasterActivity_42795 = RC
+ResourcePlanner_TeamBlockPeriod_42836 = true
+ResourcePlanner_MasterActivity_42795 = true
 ResourcePlanner_CategorizeShiftSelection_xx = false
 ResourcePlanner_MasterActivityBaseLayer_44134 = RC
-ResourcePlanner_EvenRelativeDiff_44091 = RC
+ResourcePlanner_EvenRelativeDiff_44091 = true
 
 Wfm_DisplayOnlineHelp_39402 = RC
 
@@ -243,6 +243,6 @@ ConfigQRCodeURLForMobileApps_43224 = RC
 
 ETL_SpeedUpNightlyDayOff_38213 = true
 WFM_ImproveIntradaySkillArea_37291 = RC
-Wfm_Intraday_SupportSkillTypeWebChat_42591 = RC
+Wfm_Intraday_SupportSkillTypeWebChat_42591 = true
 MyTimeWeb_MobileResponsive_43826 = RC
 WFM_ReportHierarchy_43002 = RC
