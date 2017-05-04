@@ -24,8 +24,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
     self.timeLines = ko.observableArray();
     self.layers = ko.observableArray();
     self.scheduleHeight = ko.observable();
-	self.unreadMessageCount = ko.observable();
-	 
+    self.unreadMessageCount = ko.observable();
+
     var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
     self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
 
@@ -35,17 +35,17 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
     };
 
     self.navigateToMessages = function() {
-	    Teleopti.MyTimeWeb.Portal.NavigateTo("MessageTab");
+	      Teleopti.MyTimeWeb.Portal.NavigateTo("MessageTab");
     }
 
-	self.readData = function (data) {
+    self.readData = function (data) {
         self.displayDate(data.DisplayDate);
         self.summaryColor(data.Schedule.Summary.Color);
         self.summaryName(data.Schedule.Summary.Title);
         self.summaryTime(data.Schedule.Summary.TimeSpan);
         self.isDayOff(data.Schedule.IsDayOff);
-		self.unreadMessageCount(data.UnReadMessageCount);
-        self.hasShift((data.Schedule.Periods && data.Schedule.Periods.length > 0) || data.Schedule.HasOvertime);
+        self.unreadMessageCount(data.UnReadMessageCount);
+        self.hasShift(data.Schedule.HasMainShift || data.Schedule.HasOvertime);
 
         if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
             var dayDate = moment(data.Schedule.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);

@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public HeaderViewModel Header { get; set; }
 		public NoteViewModel Note { get; set; }
 		public OvertimeAvailabilityViewModel OvertimeAvailabililty { get; set; }
+		public bool HasMainShift { get; set; }
 		public bool HasOvertime { get; set; }
 		public bool IsFullDayAbsence { get; set; }
 		public bool IsDayOff { get; set; }

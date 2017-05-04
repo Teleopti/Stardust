@@ -152,6 +152,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				SeatBookings = s.SeatBookingInformation,
 				Summary = summary(s),
 				HasOvertime = personAssignment != null && personAssignment.ShiftLayers.OfType<OvertimeShiftLayer>().Any(),
+				HasMainShift = personAssignment != null && personAssignment.ShiftLayers.OfType<MainShiftLayer>().Any(),
 				IsFullDayAbsence = significantPartForDisplay == SchedulePartView.FullDayAbsence,
 				IsDayOff = significantPartForDisplay == SchedulePartView.DayOff,
 				OvertimeAvailabililty = overtimeAvailability(s),

@@ -56,7 +56,7 @@
 			
 			<div class="dayview-schedule relative">
 				<!-- ko foreach: layers -->
-				<div class="dayview-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson">
+				<div class="dayview-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime &amp;&amp; overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime &amp;&amp; overTimeDarkerBackgroundStyle}">
                     <div data-bind="visible: showTitle()">
 						<strong class="truncate" data-bind="text: title()"></strong>
 						<!-- ko if: hasMeeting -->
