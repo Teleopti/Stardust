@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			_resolver = resolver;
 		}
 
-		//[DebuggerStepThrough]
+		[DebuggerStepThrough]
 		public void Intercept(IInvocation invocation)
 		{
 			var attributes = invocation.Method.GetCustomAttributes<AspectAttribute>(false);
