@@ -123,12 +123,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .Add(workloadDayOpenHour);
 
 				var days = CollectionHelper.ToDistinctGenericCollection<ISkillDay>(wrapMultiCriteria(multi));
-				foreach (ISkillDay skillDay in days)
-				{
-					skillDay.SetupSkillDay();
-					skillDay.SkillDayCalculator = new SkillDayCalculator(skillDay.Skill, new List<ISkillDay> { skillDay },
-																		 new DateOnlyPeriod());
-				}
+	            var grouped = days.GroupBy(d => d.Skill);
+	            foreach (var group in grouped)
+	            {
+		            var calculator = new SkillDayCalculator(group.Key,group,period);
+		            foreach (var skillDay in group)
+		            {
+						skillDay.SetupSkillDay();
+						skillDay.SkillDayCalculator = calculator;
+					}
+	            }
 				skillDays.AddRange(days);
             }
 	        Session.DefaultReadOnly = defaultReadOnly;

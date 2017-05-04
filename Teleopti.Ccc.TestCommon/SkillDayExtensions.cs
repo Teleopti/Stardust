@@ -94,13 +94,17 @@ namespace Teleopti.Ccc.TestCommon
 			intervals.AddRange(midnightBreakIntervals);
 			var startDateTime = intervals.First().StartDateTime;
 			var intervalDemandsDic = intervalDemands.ToDictionary(k => new DateTimePeriod(startDateTime.Add(k.Item1.StartTime), startDateTime.Add(k.Item1.EndTime)), v => v.Item2);
+			var serviceAgreement = skill.SkillType.Description.Name == "SkillTypeEmail"
+				? new ServiceAgreement(new ServiceLevel(new Percent(1), 7200), new Percent(0), new Percent(0))
+				: ServiceAgreement.DefaultValues();
+				
 			foreach (var interval in intervals)
 			{
 				var intervalDemandMatch = intervalDemandsDic.SingleOrDefault(x => x.Key.Contains(interval));
 				var demand = intervalDemandMatch.Key == new DateTimePeriod() ?
 					defaultDemand :
 					intervalDemandMatch.Value;
-				skillDataPeriods.Add(new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(), interval) { ManualAgents = demand });
+				skillDataPeriods.Add(new SkillDataPeriod(serviceAgreement, new SkillPersonData(), interval) { ManualAgents = demand });
 			}
 
 			return setupSkillDay(skill, scenario, dateOnly, skillDataPeriods);

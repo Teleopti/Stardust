@@ -61,10 +61,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 				if (skillData == null)
 					continue;
 
-				var efficencyPerSkillInterval = skillDay.SkillStaffPeriodCollection
+				var efficencyPerSkillList = skillDay.SkillStaffPeriodCollection
 					.Where(x => x.Period.StartDateTime <= actualStatsStartTimeUtc && x.Period.EndDateTime > actualStatsStartTimeUtc)
-					.Select(s => s.Payload.Efficiency)
-					.First();
+					.ToList();
+
+				if (!efficencyPerSkillList.Any())
+					continue;
+				var efficencyPerSkillInterval = efficencyPerSkillList.Select(s => s.Payload.Efficiency).First();
 				var efficiencyFactor = (1/efficencyPerSkillInterval.Value);
 
 				var agents = staffingCalculatorService.AgentsUseOccupancy(
