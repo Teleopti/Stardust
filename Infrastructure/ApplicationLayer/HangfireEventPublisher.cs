@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Hangfire;
+using batchRef = Teleopti.Ccc.Domain.Collection.Extensions;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -31,7 +32,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		[TestLog]
 		public virtual void Publish(params IEvent[] events)
 		{
-			jobsFor(events).ForEach(x => _client.Enqueue(x.Job));
+			batchRef.Batch(events, 50)
+				.Select(jobsFor)
+				.ForEach(b => b.ForEach(j => _client.Enqueue(j.Job)));
 		}
 
 		public void PublishDaily(IEvent @event)
