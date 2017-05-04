@@ -30,13 +30,23 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
     self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
 
     var setTimelineHeight = function (lastLayer) {
-        var height = Math.round(constants.scheduleHeight * lastLayer.EndPositionPercentage) + 1 + 'px';
+    var scheduleHeightPercentage = lastLayer == null ? 0 : lastLayer.EndPositionPercentage;
+
+        var timelinePoints = self.timeLines();
+        var timelineEndPositionPercentage = timelinePoints && timelinePoints.length > 0
+            ? timelinePoints[timelinePoints.length - 1].positionPercentage()
+            : 1;
+        if (timelineEndPositionPercentage > scheduleHeightPercentage) {
+            scheduleHeightPercentage = timelineEndPositionPercentage;
+        }
+
+        var height = Math.round(constants.scheduleHeight * scheduleHeightPercentage) + 1 + 'px';
         self.scheduleHeight(height);
     };
 
     self.navigateToMessages = function() {
 	      Teleopti.MyTimeWeb.Portal.NavigateTo("MessageTab");
-    }
+    };
 
     self.readData = function (data) {
         self.displayDate(data.DisplayDate);
@@ -59,12 +69,13 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
         });
         self.timeLines(timelines);
 
-        var layers = ko.utils.arrayMap(data.Schedule.Periods, function (item) {
+        var rawPeriods = data.Schedule.Periods;
+        var layers = ko.utils.arrayMap(rawPeriods, function (item) {
             return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self);
         });
         self.layers(layers);
 
-        if (data.Schedule.Periods != null && data.Schedule.Periods.length > 0) setTimelineHeight(data.Schedule.Periods[data.Schedule.Periods.length - 1]);
+        setTimelineHeight(rawPeriods && rawPeriods.length > 0 ? rawPeriods[rawPeriods.length - 1] : undefined);
     };
 
     self.setCurrentDate = function (date) {
@@ -94,7 +105,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
         var previousDate = moment(self.selectedDate()).add(-1, 'days');
         self.selectedDate(previousDate);
     };
-}
+};
 
 var TimelineViewModel = function (timeline) {
     var self = this;
@@ -106,7 +117,7 @@ var TimelineViewModel = function (timeline) {
     self.timeText = timeline.TimeLineDisplay;
 
     self.topPosition = ko.computed(function () {
-        return Math.round(Teleopti.MyTimeWeb.Common.Constants.scheduleHeight * self.positionPercentage())  + "px";
+        return Math.round(Teleopti.MyTimeWeb.Common.Constants.scheduleHeight * self.positionPercentage() - 5)  + "px";
     });
     self.evenHour = ko.computed(function () {
         return timeFromMinutes.minute() === 0;

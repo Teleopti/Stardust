@@ -46,7 +46,6 @@
 				<span >)</span>
 			</div>
 			
-			<!-- ko if: !isDayOff() && hasShift()-->
 			<div class="dayview-timeline floatleft" data-bind="style: {height: scheduleHeight}">
 				<!-- ko foreach: timeLines -->
 				<div class="dayview-timeline-label absolute" data-bind="style: {top: topPosition}, text : timeText, visible : evenHour">
@@ -71,10 +70,6 @@
 				</div>
 				<!-- /ko -->
 			</div>
-			<!-- /ko -->
-			<!-- ko if: isDayOff() || !hasShift()-->
-			<div style="min-height: 450px;"></div>
-			<!-- /ko -->
 		</div>
 	</div>
 </div>

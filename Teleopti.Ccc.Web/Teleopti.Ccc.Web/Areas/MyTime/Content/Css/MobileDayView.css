@@ -42,17 +42,16 @@
 }
 
 .dayview-summary-content {
-    margin-top: 3px;
-    width: 100%;
-	text-align: center
+	margin-top: 3px;
+	width: 100%;
+	text-align: center;
+	margin-bottom: 5px;
 }
 
 .dayview-timeline {
 	width: 32px;
 	background: transparent;
 	border-right: 1px solid #dfdfdf;
-	border-left: 1px solid #dfdfdf;
-	border-bottom: 1px solid #dfdfdf;
 	position: relative;
 	margin-right: 4px;
 }
