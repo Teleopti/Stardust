@@ -3,6 +3,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Content/moment/moment.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -14,7 +15,7 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selectedDate, parent) {
+Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selectedDate) {
 
 	var self = this;
 	var currentDate = moment(scheduleDate.FixedDate, 'YYYY-MM-DD');
@@ -58,11 +59,10 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
 	};
 
 	self.seatBookingMessage = ko.computed(function () {
-
-		var seatBookingsTitle = parent.userTexts ? parent.userTexts.seatBookingsTitle : '';
+        var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 
 		var message = '<div class="seatbooking-tooltip">' +
-			'<span class="tooltip-header">{0}</span><table class="seatbooking-tooltip-table">'.format(seatBookingsTitle);
+            '<span class="tooltip-header">{0}</span><table class="seatbooking-tooltip-table">'.format(userTexts.SeatBookings);
 		var messageEnd = '</table></div>';
 
 		if (self.seatBookings != null) {
@@ -106,11 +106,7 @@ Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {
 Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
 	var self = this;
 	this.weekViewModels = ko.observableArray();
-	this.weekDayNames = ko.observableArray();
-
-	this.setupTranslationTexts = function (userTexts) {
-		self.userTexts = userTexts;
-	};
+    this.weekDayNames = ko.observableArray();
 
 	this.selectedDate = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ? moment(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash) : moment());
 
@@ -185,9 +181,9 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
 			}
 			var newDay;
 			if (useJalaaliCalendar) {
-				newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[base - count], self.selectedDate(), self);
+				newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[base - count], self.selectedDate());
 			} else {
-				newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], self.selectedDate(), self);
+				newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], self.selectedDate());
 			}
 
 			count++;

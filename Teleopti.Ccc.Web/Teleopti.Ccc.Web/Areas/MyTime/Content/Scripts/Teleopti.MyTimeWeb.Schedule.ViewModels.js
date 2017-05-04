@@ -77,7 +77,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 	self.holidayChanceText = ko.computed(function () {
 		var probabilityText = self.probabilityText();
 		if (probabilityText)
-			return parent.userTexts.ChanceOfGettingAbsencerequestGranted + probabilityText;
+            return parent.userTexts.ChanceOfGettingAbsenceRequestGranted + probabilityText;
 		return probabilityText;
 	});
 
@@ -115,7 +115,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 
 	self.seatBookingMessage = ko.computed(function () {
 		var message = "<div class='seatbooking-tooltip'>" +
-							"<span class='tooltip-header'>{0}</span><table>".format(parent.userTexts.SeatBookingsTitle);
+            "<span class='tooltip-header'>{0}</span><table>".format(parent.userTexts.SeatBookings);
 
 		var messageEnd = "</table></div>";
 
