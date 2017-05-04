@@ -697,7 +697,6 @@ input[type=search]::-ms-clear {
 			right: 5%;
 			z-index: 115;
 			background: #9ccc33;
-			transition: 0.2s all ease;
 			width: 55px;
 			height: 55px;
 			border-radius: 50%;
@@ -719,7 +718,7 @@ input[type=search]::-ms-clear {
 
 		.requests-wrapper .fab-focus {
 			width: 100%;
-			height: 60%;
+			height: auto;
 			left: 0;
 			bottom: 0;
 			right: 0;
@@ -751,9 +750,3 @@ input[type=search]::-ms-clear {
 			background: red !important;
 		}*/
     }
-
-	    @media only screen and (max-width : 414px) {
-			.requests-wrapper .fab-focus {
-				height: 45%;
-			}
-		}

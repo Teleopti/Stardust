@@ -270,7 +270,6 @@
 			right: 5%;
 			z-index: 115;
 			background: #9ccc33;
-			transition: 0.2s all ease;
 			width: 55px;
 			height: 55px;
 			border-radius: 50%;
@@ -293,7 +292,7 @@
 
 		.team-schedule-wrapper .fab-focus {
 			width: 100%;
-			height: 42%;
+			height: auto;
 			left: 0;
 			bottom: 0;
 			right: 0;
@@ -325,9 +324,3 @@
 			opacity: 0;
 		}*/
     }
-
-		    @media only screen and (max-width : 414px) {
-			.team-schedule-wrapper .fab-focus {
-				height: 30%!important;
-			}
-		}
