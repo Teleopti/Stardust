@@ -35,7 +35,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 	});
 
 	self.baseUtcOffsetInMinutes = ko.observable();
-	self.intradayOpenPeriod = null;
 
 	var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
@@ -233,7 +232,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 			probabilityType: self.selectedProbabilityOptionValue(),
 			layoutDirection: constants.layoutDirection.horizontal,
 			timelines: self.timeLines(),
-			intradayOpenPeriod: self.intradayOpenPeriod,
 			mergeSameIntervals: self.mergeIdenticalProbabilityIntervals,
 			hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
 			userTexts: self.userTexts
@@ -300,12 +298,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, rel
 			};
 		});
 		self.timeLines = ko.observableArray(timelines);
-
-		self.intradayOpenPeriod = data.SiteOpenHourIntradayPeriod &&
-			{
-				"startTime": data.SiteOpenHourIntradayPeriod.StartTime,
-				"endTime": data.SiteOpenHourIntradayPeriod.EndTime
-			};
 
 		self.absenceReportPermission(hasAbsenceReportPermission);
 		self.overtimeAvailabilityPermission(hasOvertimeAvailabilityPermission);

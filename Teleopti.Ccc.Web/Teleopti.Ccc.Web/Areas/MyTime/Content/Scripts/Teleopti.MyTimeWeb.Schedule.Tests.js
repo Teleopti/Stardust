@@ -547,12 +547,12 @@ $(document).ready(function() {
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
-	test("should show overtime possibility based on intraday open hour", function () {
+	test("should show overtime possibility based on site open hour", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
-		fakeScheduleData.SiteOpenHourIntradayPeriod = {
+		fakeScheduleData.Days[0].SiteOpenHourPeriod = {
 			StartTime: '10:00:00',
 			EndTime: '15:00:00'
 		};
@@ -577,7 +577,7 @@ $(document).ready(function() {
 		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
-		fakeScheduleData.SiteOpenHourIntradayPeriod = {
+		fakeScheduleData.Days[0].SiteOpenHourPeriod = {
 			StartTime: '10:00:00',
 			EndTime: '15:00:00'
 		};

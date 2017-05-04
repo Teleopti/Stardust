@@ -159,7 +159,6 @@ $(document).ready(function () {
 					PositionPercentage: 1,
 					TimeFixedFormat: null
 				}],
-			SiteOpenHourIntradayPeriod: null
 			};
 	}
 
@@ -450,7 +449,7 @@ $(document).ready(function () {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
-		fakeScheduleData.SiteOpenHourIntradayPeriod = {
+		fakeScheduleData.Days[0].SiteOpenHourPeriod = {
 			StartTime: '10:00:00',
 			EndTime: '15:00:00'
 		};

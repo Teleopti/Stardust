@@ -183,7 +183,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.initialRequestDay = ko.observable();
 		self.selectedDateSubscription = null;
-		self.intradayOpenPeriod = null;
 
 		self.showAddRequestToolbar = ko.computed(function () {
 			return (self.requestViewModel() || "") !== "";
@@ -254,7 +253,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				probabilityType: self.selectedProbabilityType,
 				layoutDirection: constants.layoutDirection.vertical,
 				timelines: self.timeLines(),
-				intradayOpenPeriod: self.intradayOpenPeriod,
 				mergeSameIntervals: self.mergeIdenticalProbabilityIntervals,
 				hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
 				userTexts: self.userTexts
@@ -532,14 +530,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		$.each(data.Styles, function (key, value) {
 			styleToSet[value.Name] = "rgb({0})".format(value.RgbColor);
 		});
-		self.styles(styleToSet);
 
-		self.intradayOpenPeriod = data.SiteOpenHourIntradayPeriod != null
-			? {
-				"startTime": data.SiteOpenHourIntradayPeriod.StartTime,
-				"endTime": data.SiteOpenHourIntradayPeriod.EndTime
-			}
-			: null;
+		self.styles(styleToSet);
 
 		var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
 			return new TimelineViewModel(item);

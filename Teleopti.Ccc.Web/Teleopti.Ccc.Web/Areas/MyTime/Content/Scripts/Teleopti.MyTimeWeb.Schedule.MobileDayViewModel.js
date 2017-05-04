@@ -35,6 +35,7 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceR
 	self.isFullDayAbsence = scheduleDay.IsFullDayAbsence;
 	self.isDayOff = scheduleDay.IsDayOff;
 	self.periods = scheduleDay.Periods;
+	self.siteOpenHourPeriod = scheduleDay.SiteOpenHourPeriod;
 	self.probabilities = ko.observableArray();
 	self.isDayoff = function () {
 		return scheduleDay.IsDayOff;

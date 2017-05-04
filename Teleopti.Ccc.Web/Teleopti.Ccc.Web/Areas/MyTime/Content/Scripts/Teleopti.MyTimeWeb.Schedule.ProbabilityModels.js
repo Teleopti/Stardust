@@ -97,7 +97,7 @@
 		}
 
 		var boundaries = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, options.timelines,
-			options.probabilityType, rawProbabilities, options.intradayOpenPeriod);
+			options.probabilityType, rawProbabilities);
 
 		var probabilityModels = [], filteredRawProbabilities = [], cellDataList = [];
 

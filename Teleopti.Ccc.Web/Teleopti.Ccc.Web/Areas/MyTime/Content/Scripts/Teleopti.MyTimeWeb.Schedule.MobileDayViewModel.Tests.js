@@ -96,7 +96,6 @@ $(document).ready(function () {
 					PositionPercentage: 1,
 					TimeFixedFormat: null
 				}],
-			SiteOpenHourIntradayPeriod: null
 			};
 	}
 
