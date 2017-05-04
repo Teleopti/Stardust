@@ -1,10 +1,10 @@
 Getting started
 
+Database
+To run the application you must have a set of databases. Run ".debug-Setup\Restore to local.bat" to restore a matching set of databases and make sure the configuration is correct.
+
 Open solution
 The CruiseControl.sln is the solution containing all the projects needed to build all parts of Teleopti WFM.
-
-Configuring environment
-Make sure that http://hestia/nuget is configured as a nuget package source as this will use the internal nuget mirror. It is significantly faster and we have some internal packages not available in public nuget sources.
 
 To be able to build the Windows application client you will have to install Syncfusion Essential Studio of the correct version. An alternative is to apply the BuildServerSetup.reg file found in \\a380\hangaren\#PROGRAM\Develop\Syncfusion\BuildServer. Please note that you cannot open any form containing Syncfusion controls in edit mode with only the build server setup.
 
