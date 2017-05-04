@@ -267,6 +267,7 @@
     <Compile Include="Security\Principal\UpdatedBySystemUser.cs" />
     <Compile Include="Staffing\CompareProjection.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayResourceCalculationForAbsenceHandler.cs" />
+    <Compile Include="Staffing\IStaffingSettingsReader.cs" />
     <Compile Include="Staffing\ScheduleDayDifferenceSaver.cs" />
     <Compile Include="Staffing\SendUpdateStaffingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
@@ -319,6 +320,7 @@
     <Compile Include="ApplicationLayer\Events\UpdateStaffingLevelReadModelEvent.cs" />
     <Compile Include="ApplicationLayer\Intraday\SkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\Intraday\SplitSkillStaffInterval.cs" />
+    <Compile Include="Staffing\StaffingSettingsReader.cs" />
     <Compile Include="Staffing\UpdateStaffingLevelReadModel2WeeksHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsHourlyAvailabilityMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsOptionalColumnGroupPageHandler.cs" />

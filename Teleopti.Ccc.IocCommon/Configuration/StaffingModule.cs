@@ -31,12 +31,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			
             if (_configuration.Toggle(Toggles.Staffing_ReadModel_Update14Days_43840))
             {
-                builder.RegisterType<UpdateStaffingLevelReadModelSender14Days>().As<IUpdateStaffingLevelReadModelSender>().InstancePerLifetimeScope();
-            }
+	            builder.RegisterType<StaffingSettingsReader>().As<IStaffingSettingsReader>().SingleInstance();
+			}
             else
             {
-                builder.RegisterType<UpdateStaffingLevelReadModelSender1Day>().As<IUpdateStaffingLevelReadModelSender>().InstancePerLifetimeScope();
-            }
+	            builder.RegisterType<StaffingSettingsReader1Day>().As<IStaffingSettingsReader>().SingleInstance();
+			}
 			builder.RegisterType<ScheduleStaffingPossibilityCalculator>().As<IScheduleStaffingPossibilityCalculator>().SingleInstance();
 			builder.RegisterType<SkillStaffingDataLoader>().As<ISkillStaffingDataLoader>().SingleInstance();
 		}

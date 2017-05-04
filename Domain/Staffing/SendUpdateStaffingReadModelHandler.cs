@@ -16,18 +16,20 @@ namespace Teleopti.Ccc.Domain.Staffing
         private readonly IBusinessUnitRepository _businessUnitRepository;
 	    private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
 	    private readonly IUpdatedBySystemUser _updatedBySystemUser;
-	    private readonly IUpdateStaffingLevelReadModelSender _updateStaffingLevelReadModelSender;
+	    private readonly IEventPublisher _publisher;
+		private readonly IStaffingSettingsReader _staffingSettingsReader;
 
 		public SendUpdateStaffingReadModelHandler(IBusinessUnitRepository businessUnitRepository, 
-			IRequestStrategySettingsReader requestStrategySettingsReader, IJobStartTimeRepository jobStartTimeRepository, IUpdatedBySystemUser updatedBySystemUser, 
-			IUpdateStaffingLevelReadModelSender updateStaffingLevelReadModelSender)
+			IRequestStrategySettingsReader requestStrategySettingsReader, IJobStartTimeRepository jobStartTimeRepository, 
+			IUpdatedBySystemUser updatedBySystemUser, IEventPublisher publisher, IStaffingSettingsReader staffingSettingsReader)
         {
             _businessUnitRepository = businessUnitRepository;
 	        _requestStrategySettingsReader = requestStrategySettingsReader;
 	        _jobStartTimeRepository = jobStartTimeRepository;
 	        _updatedBySystemUser = updatedBySystemUser;
-	        _updateStaffingLevelReadModelSender = updateStaffingLevelReadModelSender;
-        }
+	        _publisher = publisher;
+			_staffingSettingsReader = staffingSettingsReader;
+		}
 
 		[UnitOfWork]
 		public virtual void Handle(TenantMinuteTickEvent @event)
@@ -42,52 +44,15 @@ namespace Teleopti.Ccc.Domain.Staffing
 				{
 					var businessUnitId = businessUnit.Id.GetValueOrDefault();
 					if (!_jobStartTimeRepository.CheckAndUpdate(updateResourceReadModelIntervalMinutes, businessUnitId)) return;
-					_updateStaffingLevelReadModelSender.Send(businessUnitId);
+
+					_publisher.Publish(new UpdateStaffingLevelReadModelEvent
+					{
+						Days = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14),
+						LogOnBusinessUnitId = businessUnitId
+					});
+
 				});
 			}
 		}
     }
-
-	public class UpdateStaffingLevelReadModelSender1Day : IUpdateStaffingLevelReadModelSender
-	{
-		private readonly IEventPublisher _publisher;
-
-		public UpdateStaffingLevelReadModelSender1Day(IEventPublisher publisher)
-		{
-			_publisher = publisher;
-		}
-
-		public void Send(Guid businessUnitId)
-		{
-			_publisher.Publish(new UpdateStaffingLevelReadModelEvent
-			{
-				Days = 1,
-				LogOnBusinessUnitId = businessUnitId
-			});
-		}
-	}
-
-	public class UpdateStaffingLevelReadModelSender14Days : IUpdateStaffingLevelReadModelSender
-	{
-		private readonly IEventPublisher _publisher;
-
-		public UpdateStaffingLevelReadModelSender14Days(IEventPublisher publisher)
-		{
-			_publisher = publisher;
-		}
-
-		public void Send(Guid businessUnitId)
-		{
-			_publisher.Publish(new UpdateStaffingLevelReadModelEvent
-			{
-				Days = 14,
-				LogOnBusinessUnitId = businessUnitId
-			});
-		}
-	}
-
-	public interface IUpdateStaffingLevelReadModelSender
-	{
-		void Send(Guid businessUnitId);
-	}
 }

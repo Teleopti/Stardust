@@ -177,8 +177,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				  .As<IScheduleForecastSkillReadModelRepository>()
 				  .SingleInstance();
 
-	        builder.RegisterType<RequestStrategySettingsReader>().As<IRequestStrategySettingsReader>().SingleInstance();
-
 			builder.RegisterType<PersonPeriodTransformer>().As<IPersonPeriodTransformer>().SingleInstance();
 
 			_config.Cache().This<IAnalyticsDateRepository>((c, b) => b.CacheMethod(x => x.Date(new DateTime())).CacheKey(c.Resolve<CachePerDataSource>()));
