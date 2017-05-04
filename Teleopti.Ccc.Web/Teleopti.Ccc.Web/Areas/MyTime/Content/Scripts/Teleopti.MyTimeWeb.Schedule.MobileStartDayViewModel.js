@@ -21,6 +21,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
     self.dayOfWeek = ko.observable(moment().format('DDDD'));
     self.isDayOff = ko.observable(false);
     self.hasShift = ko.observable(false);
+    self.hasOvertime = ko.observable(false);
     self.timeLines = ko.observableArray();
     self.layers = ko.observableArray();
     self.scheduleHeight = ko.observable();
@@ -60,6 +61,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
         self.isDayOff(data.Schedule.IsDayOff);
         self.unreadMessageCount(data.UnReadMessageCount);
         self.hasShift(data.Schedule.HasMainShift || data.Schedule.HasOvertime);
+        self.hasOvertime(data.Schedule.HasOvertime);
 
         if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
             var dayDate = moment(data.Schedule.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
@@ -121,6 +123,7 @@ var TimelineViewModel = function (timeline) {
     self.timeText = timeline.TimeLineDisplay;
 
     self.topPosition = ko.computed(function () {
+        // 5 is half of timeline label height (10px)
         return Math.round(Teleopti.MyTimeWeb.Common.Constants.scheduleHeight * self.positionPercentage() - 5)  + "px";
     });
     self.evenHour = ko.computed(function () {

@@ -46,6 +46,9 @@
 				<span data-bind="text: summaryName"></span>
 				<span data-bind="text: summaryTime"></span>
 				<span >)</span>
+				<!-- ko if: hasOvertime-->
+				<span>@Resources.Overtime</span>
+				<!-- /ko -->
 			</div>
 			
 			<div class="dayview-timeline floatleft" data-bind="style: {height: scheduleHeight}">
