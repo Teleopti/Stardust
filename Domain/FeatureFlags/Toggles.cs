@@ -168,6 +168,7 @@
 		ResourcePlanner_CategorizeShiftSelection_xx,
 		ResourcePlanner_EvenRelativeDiff_44091,
 		ResourcePlanner_MasterActivityBaseLayer_44134,
+		ResourcePlanner_RunPerfTestAsTeam_43537,
 
 		Wfm_DisplayOnlineHelp_39402,
 

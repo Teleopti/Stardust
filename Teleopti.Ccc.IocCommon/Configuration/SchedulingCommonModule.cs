@@ -112,8 +112,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehaviorWithoutShoveling>().InstancePerLifetimeScope();
 			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
-			
-			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
+			{
+				builder.RegisterType<SchedulingOptionsProviderForTeamPerfTest>().As<ISchedulingOptionsProvider>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
+			}
 			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();

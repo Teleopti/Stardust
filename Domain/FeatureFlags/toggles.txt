@@ -179,6 +179,7 @@ ResourcePlanner_MasterActivity_42795 = true
 ResourcePlanner_CategorizeShiftSelection_xx = false
 ResourcePlanner_MasterActivityBaseLayer_44134 = RC
 ResourcePlanner_EvenRelativeDiff_44091 = true
+ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 
 Wfm_DisplayOnlineHelp_39402 = RC
 

@@ -260,6 +260,7 @@
     <Compile Include="ResourceCalculation\WorkShiftCategorizeFinderService.cs" />
     <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
+    <Compile Include="Scheduling\SchedulingOptionsProviderForTeamPerfTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftsFromMasterActivityBaseActivityService.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoExtensions.cs" />

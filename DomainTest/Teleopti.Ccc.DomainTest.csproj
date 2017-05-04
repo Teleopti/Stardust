@@ -418,6 +418,7 @@
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationScenario.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingWithCategorizedShiftSelectionResultTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingResultTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\PerformanceTestHackTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\ShiftCategoryLimitationWithAndWithoutRandomnessTest.cs" />
