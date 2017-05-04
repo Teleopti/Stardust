@@ -13,23 +13,25 @@
 							<button class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
 								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
+							<a class="btn btn-default moment-datepicker" type="button">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</a>
 						</span>
 						<input class="form-control text-center date-input-style" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
 						<span class="input-group-btn">
-							<button class="btn btn-default moment-datepicker" type="button">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
 							<button class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button">
 								<i class="glyphicon glyphicon-chevron-right"></i>
 							</button>
 						</span>
 					</div>
 				</li>
-				<li class="mobile-today">
-					<a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a>
+				<li class="mobile-today" data-bind="click: today">
+					<a href="#">@Resources.Today</a>
 				</li>
-				<li class="mobile-message">
-					<a href="#"   data-bind="click: navigateToMessages"><span class="badge badge-important" data-bind="text: unreadMessageCount"></span></a>
+				<li class="mobile-message" data-bind="click: navigateToMessages">
+					<a href="#">
+						<span class="badge badge-important" data-bind="text: unreadMessageCount"></span>
+					</a>
 				</li>
 			</ul>
 
