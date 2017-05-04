@@ -76,6 +76,11 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			return getLastJobResult(JobCategory.WebIntradayOptimiztion);
 		}
 
+		public void Reset()
+		{
+			throw new NotImplementedException();
+		}
+
 		private IJobResult getLastJobResult(string category)
 		{
 			return JobResults

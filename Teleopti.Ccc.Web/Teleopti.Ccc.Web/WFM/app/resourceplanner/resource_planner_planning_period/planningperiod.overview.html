@@ -20,6 +20,7 @@
 							<div class="con-flex">
 								<button class="wfm-btn material-depth-1" ng-click="vm.launchSchedule(vm.selectedPp)" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(),'wfm-btn-primary':!vm.isDisable()}">{{'ScheduleVerb' | translate }}</button>
 								<button class="wfm-btn material-depth-1" ng-click="vm.intraOptimize(vm.selectedPp)" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(),'wfm-btn-primary':!vm.isDisable()}">Intraday Optimize</button>
+								<button class="wfm-btn material-depth-1" ng-click="vm.clearSchedules(vm.selectedPp)" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(),'wfm-btn-primary':!vm.isDisable()}">Clear schedules</button>
 								<button class="pull-right wfm-btn material-depth-1" ng-click="vm.publishSchedule(vm.selectedPp)" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(), 'wfm-btn-primary':!vm.isDisable()}">Publish</button>
 							</div>
 						</div>

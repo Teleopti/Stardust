@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					StartDate = new DateOnly(newStartDate),
 					Number = periodDays
 				}, true);
-				periodToChange.JobResults.Clear();
+				periodToChange.Reset();
 			}
 			return buildPlanningPeriodViewModels(planningPeriods, new List<PlanningPeriodModel>(), false, agentGroup);
 		}

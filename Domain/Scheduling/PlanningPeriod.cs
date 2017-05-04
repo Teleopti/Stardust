@@ -93,7 +93,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					_periodType = schedulePeriodForRangeCalculation.PeriodType;
 					_number = schedulePeriodForRangeCalculation.Number;
 				}
-				_state = PlanningPeriodState.New;
 			}
 		}
 
@@ -132,6 +131,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual IJobResult GetLastIntradayOptimizationJob()
 		{
 			return getLastJobResult(JobCategory.WebIntradayOptimiztion);
+		}
+
+		public virtual void Reset()
+		{
+			JobResults.Clear();
+			_state = PlanningPeriodState.New;
 		}
 
 		private IJobResult getLastJobResult(string category)

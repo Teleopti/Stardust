@@ -227,6 +227,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidator.cs" />
     <Compile Include="ApplicationLayer\IPersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoLoggedOutStateGroupsException.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkillsOld.cs" />
     <Compile Include="Cascading\PrimarySkillOverstaffOld.cs" />

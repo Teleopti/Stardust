@@ -20,7 +20,8 @@
 			changeRange: { method: 'PUT', params: { id: "@id" } },
 			schedule: { method: 'POST', params: { id: "@id", runAsynchronously: function (d) { return d.runAsynchronously } }, url: planningPeriodBaseUrl + '/schedule' },
 			optimize: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/optimize' },
-			getAgentCount: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/countagents'}
+			getAgentCount: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/countagents' },
+			clear: { method: 'DELETE', params: { id: "@id" }, url: planningPeriodBaseUrl + '/schedule' }
 		});
 
 		var getPlanningPeriodSuggestions = $resource('../api/resourceplanner/planningperiod/suggestions/:agentGroupId');
@@ -60,6 +61,7 @@
 			// Scheduling
 			launchScheduling: planningPeriod.schedule,
 			launchOptimization: planningPeriod.optimize,
+			clearSchedules : planningPeriod.clear,
 			// TODO: deprecate once schedule/optimization on stardust
 			keepAlive: function() {
 				return $http({ url: '../api/resourceplanner/keepalive', method: 'POST' });
