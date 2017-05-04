@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -16,11 +17,16 @@ namespace Teleopti.Ccc.Domain.Staffing
 	{
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly CompareProjection _compareProjection;
+		private readonly INow _now;
+		private readonly IStaffingSettingsReader _staffingSettingsReader;
 
-		public ScheduleDayDifferenceSaver(ISkillCombinationResourceRepository skillCombinationResourceRepository, CompareProjection compareProjection)
+		public ScheduleDayDifferenceSaver(ISkillCombinationResourceRepository skillCombinationResourceRepository, CompareProjection compareProjection, 
+			INow now, IStaffingSettingsReader staffingSettingsReader)
 		{
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_compareProjection = compareProjection;
+			_now = now;
+			_staffingSettingsReader = staffingSettingsReader;
 		}
 
 		public void SaveDifferences(IScheduleDictionary dic, IPerson person, DateOnlyPeriod dateOnlyPeriod)
@@ -28,7 +34,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var snapshot = ((ScheduleRange) dic[person]).Snapshot;
 			var scheduleDaysAfter = dic[person];
 			var skillCombinationResourceDeltas = new List<SkillCombinationResource>();
-			foreach (var snapShotDay in snapshot.ScheduledDayCollection(dateOnlyPeriod.Inflate(1)))  //inflate to handle midnight shift
+			var readModelPeriod = new DateTimePeriod(_now.UtcDateTime().AddDays(-1).AddHours(-1), _now.UtcDateTime().AddDays(_staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14)).AddHours(1));
+			foreach (var snapShotDay in snapshot.ScheduledDayCollection(dateOnlyPeriod.Inflate(1)).Where(x => readModelPeriod.Contains(x.DateOnlyAsPeriod.DateOnly.Date)))  //inflate to handle midnight shift
 			{
 				skillCombinationResourceDeltas.AddRange(_compareProjection.Compare(snapShotDay, scheduleDaysAfter.ScheduledDay(snapShotDay.DateOnlyAsPeriod.DateOnly)));
 			}

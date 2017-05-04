@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 		{
 			const int resolution = 60;
 			IntervalLengthFetcher.Has(resolution);
-			var now = new DateTime(2017, 5, 1, 0, 0, 0);
+			var now = new DateTime(2017, 5, 1, 0, 0, 0).Utc();
 			Now.Is(now);
 
 			var scenario = ScenarioRepository.Has("scenario");
@@ -155,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 		{
 			const int resolution = 60;
 			IntervalLengthFetcher.Has(resolution);
-			var now = new DateTime(2017, 5, 1, 0, 0, 0);
+			var now = new DateTime(2017, 5, 1, 0, 0, 0).Utc();
 			Now.Is(now);
 
 			var scenario = ScenarioRepository.Has("scenario");
@@ -183,6 +184,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 10)).ToList();
 			resources.Count().Should().Be.EqualTo(1);
 			resources.First().Resource.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldOnlyPersistDeltasForReadModelPeriod()
+		{
+			const int resolution = 60;
+			IntervalLengthFetcher.Has(resolution);
+			var now = new DateTime(2017, 5, 1, 0, 0, 0).Utc();
+			Now.Is(now);
+
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skill", activity).WithId();
+			skill.DefaultResolution = resolution;
+			var person = PersonRepository.Has(skill);
+
+			var assignmentPeriod1 = new DateTimePeriod(2017, 5, 20, 8, 2017, 5, 20, 10);
+			var absencePeriod = new DateTimePeriod(2017, 5, 20, 9, 2017, 5, 20, 10);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category"));
+			assignment.SetId(Guid.NewGuid());
+			ScheduleStorage.Add(assignment);
+			var dic = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+																			  new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario);
+			var day = dic[person].ScheduledDay(new DateOnly(2017, 5, 20));
+			day.CreateAndAddAbsence(new AbsenceLayer(new Absence(), absencePeriod));
+			dic.Modify(day, new FakeNewBusinessRuleCollection());
+
+			Target.Save(day, new FakeNewBusinessRuleCollection(),
+						new NullScheduleTag());
+			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 20, 8, 2017, 5, 20, 10)).ToList();
+			resources.Count().Should().Be.EqualTo(0);
 		}
 	}
 
