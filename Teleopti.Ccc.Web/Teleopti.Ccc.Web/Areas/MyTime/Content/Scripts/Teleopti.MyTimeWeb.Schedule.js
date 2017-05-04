@@ -144,7 +144,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	};
 
-	var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart) { 
+    var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart) {
 		var self = this;
 		self.initializeData = initializeWeekViewModel;
 		self.navigateToRequestsMethod = navigateToRequestsMethod;
@@ -204,7 +204,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			userTexts.showOvertimeProbability
 		];
 
-		self.selectedProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
+        self.selectedProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability; 
 		self.probabilityTypes = constants.probabilityType;
 		self.probabilityLabel = function () {
 			var selectedProbabilityType = validProbabilitiesTypes[self.selectedProbabilityType];
@@ -218,11 +218,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.switchProbabilityType = function (probabilityType) {
 			self.selectedProbabilityType = probabilityType;
-			if(self.selectedProbabilityType == constants.probabilityType.none){
+			if(self.selectedProbabilityType === constants.probabilityType.none){
 				self.days().forEach(function(d){
 					d.probabilities([]);
 				});
-				self.loadingProbabilityData(false);
+                self.loadingProbabilityData(false);
+                rebindProbabilityLabel(self);
 				return;
 			}
 
@@ -240,8 +241,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					staffingPossiblityType: self.selectedProbabilityType
 				},
 				success: function (data) {
-					self.updateProbabilityData(data);
-					ko.applyBindings(self, $(".probabilityLabel")[0]);
+                    self.updateProbabilityData(data);
+				    rebindProbabilityLabel(self);
 				}
 			});
 		};
@@ -474,7 +475,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		function reloadSchedule() {
 			self.CancelAddingNewRequest();
 			_fetchData();
-		}
+        }
+
 	};
 
 	function initializeWeekViewModel(data) {
@@ -495,9 +497,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.staffingProbabilityEnabled = data.ViewPossibilityPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608");
 		self.staffingProbabilityForMultipleDaysEnabled = self.staffingProbabilityEnabled && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880");
 
-		self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
+        self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
+
 		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityType === constants.probabilityType.absence) {
-			self.selectedProbabilityType = constants.probabilityType.none;
+            self.selectedProbabilityType = constants.probabilityType.none;
+            rebindProbabilityLabel(self);
 		}
 
 		if(self.staffingProbabilityForMultipleDaysEnabled){
@@ -641,6 +645,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _navigateToRequests() {
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index");
+	}
+
+	function rebindProbabilityLabel(viewmodel) {
+		ko.applyBindings(viewmodel, $(".probabilityLabel")[0]);
 	}
 
 	return {

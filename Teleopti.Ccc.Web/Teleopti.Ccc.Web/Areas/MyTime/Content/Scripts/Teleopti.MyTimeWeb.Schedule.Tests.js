@@ -16,7 +16,8 @@ $(document).ready(function() {
 		showAbsenceProbability: '@Resources.ShowAbsenceProbability',
 		showOvertimeProbability: '@Resources.ShowOvertimeProbability',
 		staffingInfo: '@Resources.StaffingInfo'
-	};
+    };
+
 	var fakeAddRequestViewModel = function() {
 		return {
 			DateFormat: function() {
@@ -25,9 +26,7 @@ $(document).ready(function() {
 		};
 	};
 	var momentWithLocale = function(date){return moment(date).locale('en-gb');};
-	var basedDate = momentWithLocale(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD');
-
-	var blockFetchProbabilityAjax = true;
+	var basedDate = momentWithLocale(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD'); 
 
 	function getFakeScheduleData() {
 		return {
@@ -810,6 +809,7 @@ $(document).ready(function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+			return false;
 		};
 
 		var ajax = {
@@ -818,7 +818,9 @@ $(document).ready(function() {
 					options.success(getFakeProbabilityData());
 				}
 			}
-		}
+        }
+
+        $("body").append("<span data-bind='text: probabilityLabel()' class='probabilityLabel'></span>");
 
 		Teleopti.MyTimeWeb.Schedule.PartialInit(function() {},
 			function() {},
@@ -828,9 +830,84 @@ $(document).ready(function() {
 		var fakeScheduleData = getFakeScheduleData();
 
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null);
-		week.initializeData(fakeScheduleData);
+        week.initializeData(fakeScheduleData); 
+      
 		week.switchProbabilityType(constants.probabilityType.absence);
 
-		equal(fakeUserText.showAbsenceProbability, week.probabilityLabel());
+        equal(fakeUserText.showAbsenceProbability, $(".probabilityLabel").text());
+
+        $(".probabilityLabel").remove();
+    });
+
+    test("should select hide staffing info option when switching to hide probability", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+			return false;
+		};
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === "../api/ScheduleStaffingPossibility") {
+					options.success(getFakeProbabilityData());
+				}
+			}
+		}
+
+        $("body").append("<span data-bind='text: probabilityLabel()' class='probabilityLabel'></span>");
+
+		Teleopti.MyTimeWeb.Schedule.PartialInit(function () { },
+			function () { },
+			ajax
+		);
+
+		var fakeScheduleData = getFakeScheduleData();
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null);
+		week.initializeData(fakeScheduleData); 
+
+		week.switchProbabilityType(constants.probabilityType.absence);
+		week.switchProbabilityType(constants.probabilityType.none);
+        equal(fakeUserText.hideStaffingInfo, $(".probabilityLabel").text());
+
+		$(".probabilityLabel").remove();
+	});
+
+    test("should select hide staffing info option when CheckStaffingByIntraday is changed to false from true", function () {
+        initCommon();
+
+        Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+            if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+            if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+            return false;
+        };
+
+        var ajax = {
+            Ajax: function (options) {
+                if (options.url === "../api/ScheduleStaffingPossibility") {
+                    options.success(getFakeProbabilityData());
+                }
+            }
+        }
+
+        $("body").append("<span data-bind='text: probabilityLabel()' class='probabilityLabel'></span>");
+
+        Teleopti.MyTimeWeb.Schedule.PartialInit(function () { },
+            function () { },
+            ajax
+        );
+
+        var fakeScheduleData = getFakeScheduleData();
+        var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null);
+        week.initializeData(fakeScheduleData); 
+
+        week.switchProbabilityType(constants.probabilityType.absence);
+
+        fakeScheduleData.CheckStaffingByIntraday = false;
+
+        week.initializeData(fakeScheduleData); 
+
+        equal(fakeUserText.hideStaffingInfo, $(".probabilityLabel").text());
+
+        $(".probabilityLabel").remove();
 	});
 });
