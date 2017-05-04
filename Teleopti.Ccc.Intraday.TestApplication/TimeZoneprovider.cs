@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			_connectionString = connectionString;
 		}
 
-		public TimeZoneInterval Provide()
+		public TimeZoneInterval Provide(string timeZoneCode)
 		{
 			var dbCommand = new DatabaseCommand(CommandType.StoredProcedure, "mart.web_intraday_simulator_get_timezone", _connectionString);
 
 			var parameterList = new[]
 			{
-				new SqlParameter("@time_zone_code", TimeZoneInfo.Local.Id)
+				new SqlParameter("@time_zone_code", timeZoneCode)
 			};
 
 			DataSet resultSet = dbCommand.ExecuteDataSet(parameterList);

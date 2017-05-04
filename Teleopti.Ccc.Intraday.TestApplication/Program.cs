@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			IDictionary<int, IList<QueueInterval>> queueDataDictionary = new Dictionary<int, IList<QueueInterval>>();
 			IQueueDataPersister queueDataPersister = new QueueDataPersister(analyticsConnectionString);
 			TimeZoneprovider timeZoneprovider = new TimeZoneprovider(analyticsConnectionString);
-			var timeZoneIntervalLength = timeZoneprovider.Provide();
+			var userTimeZoneProvider = new UserTimeZoneProvider(appDbConnectonString);
 			UniqueQueueProvider uniqueQueueProvider = new UniqueQueueProvider(appDbConnectonString, analyticsConnectionString);
 
 			Console.WriteLine("This tool will generate queue statistics for today for forecasted skills.");
@@ -37,6 +37,22 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.ReadKey();
 			Console.WriteLine("");
 			Console.WriteLine("");
+
+
+			var userTimezone = userTimeZoneProvider.GetTimeZoneForCurrentUser();
+			var useCurrentUser = false;
+			if (userTimezone != null)
+			{
+				Console.WriteLine($"Use {userTimezone.Username} with timezone {userTimezone.TimeZoneId}. Y/N?");
+				useCurrentUser = Console.ReadLine()?.ToUpper() == "Y";
+			}
+			if (!useCurrentUser)
+			{
+				userTimezone = getTimeZoneForUser(userTimeZoneProvider);
+			}
+
+			var timeZoneIntervalLength = timeZoneprovider.Provide(userTimezone.TimeZoneId);
+			Console.WriteLine($"Using timezone {timeZoneIntervalLength.TimeZoneId}");
 
 			var time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, DateTime.Now);
 			Console.WriteLine("");
@@ -55,7 +71,6 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, time);
 			}
 
-			Console.WriteLine("");
 			Console.WriteLine("We're doing stuff. Please hang around...");
 
 			var timeUtc = TimeZoneInfo.Local.SafeConvertTimeToUtc(DateTime.SpecifyKind(time, DateTimeKind.Unspecified));
@@ -75,7 +90,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				queueDataDictionary.Add(targetQueue.QueueId, generateQueueDataIntervals(forecastIntervals, targetQueue));
 			}
 
-			queueDataPersister.Persist(queueDataDictionary);
+			queueDataPersister.Persist(queueDataDictionary, timeZoneIntervalLength.TimeZoneId);
 
 			var skillsContainingQueue = new List<string>();
 
@@ -119,6 +134,28 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.WriteLine("");
 			Console.WriteLine("We're done! Press any key to exit.");
 			Console.ReadKey();
+		}
+
+		private static UserTimeZoneInfo getTimeZoneForUser(UserTimeZoneProvider userTimeZoneProvider)
+		{
+			while (true)
+			{
+				Console.Write("Enter username: ");
+				var username = Console.ReadLine();
+				var userTimeZone = userTimeZoneProvider.GetTimeZoneForUser(username);
+
+				if (userTimeZone == null)
+				{
+					Console.WriteLine("User not found");
+					continue;
+				}
+
+				Console.WriteLine($"Use {userTimeZone.Username} with timezone {userTimeZone.TimeZoneId}. Y/N?");
+				if (Console.ReadLine()?.ToUpper() == "Y")
+				{
+					return userTimeZone;
+				}
+			}
 		}
 
 		private static int RandomNumber(int min, int max)

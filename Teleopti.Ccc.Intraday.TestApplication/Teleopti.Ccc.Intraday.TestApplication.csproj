@@ -76,6 +76,7 @@
     <Compile Include="TimeZoneInterval.cs" />
     <Compile Include="TimeZoneprovider.cs" />
     <Compile Include="UniqueQueueProvider.cs" />
+    <Compile Include="UserTimeZoneProvider.cs" />
     <Compile Include="WorkloadInfo.cs" />
     <Compile Include="WorkloadQueuesProvider.cs" />
     <Compile Include="Infrastructure\SqlTransientErrorChecker.cs" />
