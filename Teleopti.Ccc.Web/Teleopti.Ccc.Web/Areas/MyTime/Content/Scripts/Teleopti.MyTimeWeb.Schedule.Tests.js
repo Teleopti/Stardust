@@ -224,7 +224,8 @@ $(document).ready(function() {
         };
     }
 
-	test("should read absence report permission", function() {
+    test("should read absence report permission", function () {
+        initCommon();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null);
 		vm.initializeData(getFakeScheduleData());
 
@@ -249,7 +250,8 @@ $(document).ready(function() {
 		equal(vm.days()[0].seatBookings(), fakeScheduleData.Days[0].SeatBookings);
 	});
 
-	test("should read timelines", function() {
+    test("should read timelines", function () {
+        initCommon();
 		var fakeScheduleData = getFakeScheduleData();
 		//9:30 ~ 17:00 makes 9 timeline points
 		fakeScheduleData.TimeLine = [{
@@ -274,7 +276,7 @@ $(document).ready(function() {
 		equal(timelines[timelines.length - 1].minutes, 16.75 * 60 + 15); //16:45 => 17:00
 	});
 
-	test("should show no absence possibility if the feature is disabled", function () {
+    test("should show no absence possibility if the feature is disabled", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return false;
 		};
@@ -289,7 +291,8 @@ $(document).ready(function() {
 		});
 	});
 
-	test("should show no overtime possibility if the feature is disabled", function () {
+    test("should show no overtime possibility if the feature is disabled", function () {
+        initCommon();
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return false;
 		};
@@ -305,7 +308,8 @@ $(document).ready(function() {
 		});
 	});
 
-	test("should show no absence possibility if set to hide probability", function () {
+    test("should show no absence possibility if set to hide probability", function () {
+        initCommon();
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
