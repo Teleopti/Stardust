@@ -17,7 +17,8 @@ $(document).ready(function() {
         var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
         var rawData = {
-            DisplayDate: moment().format('YYYY-MM-DD'),
+            Date: moment().format('YYYY-MM-DD'),
+            DisplayDate: moment().format('DD/MM/YYYY'),
             Schedule: {
 				FixedDate: null,
                 Summary: {
@@ -31,6 +32,31 @@ $(document).ready(function() {
         viewModel.readData(rawData);
 
         equal(viewModel.displayDate(), rawData.DisplayDate);
+    });
+
+    test("should display date correctly when in Persian date format", function () {
+        Teleopti.MyTimeWeb.Common.SetupCalendar({
+            DateFormat: "DD/MM/YYYY",
+            UseJalaaliCalendar: true
+        });
+        var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+        var rawData = {
+            Date: moment().format('YYYY-MM-DD'),
+            DisplayDate: moment().format('DD/MM/YYYY'),
+            Schedule: {
+                FixedDate: null,
+                Summary: {
+                    Color: null,
+                    Title: null,
+                    TimeSpan: null
+                },
+                Header:{Title: null}
+            }
+        };
+        viewModel.readData(rawData);
+
+        equal(viewModel.displayDate(), moment(rawData.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
     });
 
     test("should set summary color", function () {
