@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 						if (!firstLayerIsAbsence &&
 						    (firstLayerDefinitionSet == null || firstLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
 						{
-							if (checkIfInsideOpenHour(periodBefore, skillIntervalDataList))
+							if (checkIfEndOrStartInsideOpenHours(periodBefore, skillIntervalDataList))
 							{
 								dateTimePeriodHolders.Add(periodBefore);
 							}
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 						if (!lastLayerIsAbsence &&
 						    (lastLayerDefinitionSet == null || lastLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
 						{
-							if (checkIfInsideOpenHour(periodAfter, skillIntervalDataList))
+							if (checkIfEndOrStartInsideOpenHours(periodAfter, skillIntervalDataList))
 							{
 								dateTimePeriodHolders.Add(periodAfter);
 							}
@@ -79,27 +79,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return dateTimePeriodHolders;
 		}
 
-		private bool checkIfInsideOpenHour(DateTimePeriod period, IList<IOvertimeSkillIntervalData> skillIntervalDataList)
+		private bool checkIfEndOrStartInsideOpenHours(DateTimePeriod period, IList<IOvertimeSkillIntervalData> skillIntervalDataList)
 		{
-			var startOfPeriodToCheck = period.StartDateTime;
-			while (startOfPeriodToCheck < period.EndDateTime)
-			{
-				var found = false;
-				foreach (var overtimeSkillIntervalData in skillIntervalDataList)
-				{
-					if (overtimeSkillIntervalData.Period.Contains(startOfPeriodToCheck))
-					{
-						found = true;
-						break;
-					}
-				}
-				startOfPeriodToCheck = startOfPeriodToCheck.AddMinutes(5);
+			if (skillIntervalDataList.Any(x => x.Period.Contains(period.StartDateTime) || x.Period.Contains(period.EndDateTime)))
+				return true;
 
-				if (!found)
-					return false;
-			}
-
-			return true;
+			return false;
 		}
 	}
 }
