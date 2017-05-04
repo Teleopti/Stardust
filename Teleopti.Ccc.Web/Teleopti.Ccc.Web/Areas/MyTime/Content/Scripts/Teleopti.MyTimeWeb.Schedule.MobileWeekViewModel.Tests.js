@@ -15,6 +15,17 @@ $(document).ready(function () {
 		staffingInfo: '@Resources.StaffingInfo'
 	};
 
+    var userTexts = {
+        HideStaffingInfo: "HideStaffingInfo",
+        XRequests: "XRequests",
+        Fair: "Fair",
+        ShowAbsenceProbability: "ShowAbsenceProbability",
+        ProbabilityToGetAbsenceColon: "ProbabilityToGetAbsenceColon",
+        ProbabilityToGetOvertimeColon: "ProbabilityToGetOvertimeColon",
+        StaffingInfo: "StaffingInfo",
+        ShowOvertimeProbability: "ShowOvertimeProbability"
+    }
+
 	var momentWithLocale = function(date){return moment(date).locale('en-gb');};
 	var basedDate = momentWithLocale(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD');
 
@@ -700,7 +711,7 @@ $(document).ready(function () {
 			Possibility: 1
 		});
 
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null, blockFetchProbabilityAjax);
+        var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(userTexts, null, null, blockFetchProbabilityAjax);
 		weekViewModel.readData(fakeScheduleData);
 		//Steps in production code:
 		//var fakeFixedDateObj = {fixedDate: function(){return fakeScheduleData.Days[0].FixedDate}};
@@ -711,7 +722,7 @@ $(document).ready(function () {
 
 		equal(weekViewModel.dayViewModels()[0].probabilities().length, 2);
 		equal(weekViewModel.dayViewModels()[0].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass);
-		equal(weekViewModel.dayViewModels()[0].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForOvertime) > -1, true);
+        equal(weekViewModel.dayViewModels()[0].probabilities()[0].tooltips().indexOf(userTexts.ProbabilityToGetOvertimeColon) > -1, true);
 		equal(weekViewModel.dayViewModels()[0].probabilities()[0].tooltips().indexOf('09:30 - 12:00') > -1, true);
 		equal(weekViewModel.dayViewModels()[0].probabilities()[1].tooltips().indexOf('12:00 - 16:45') > -1, true);
 		equal(weekViewModel.dayViewModels()[0].probabilities()[0].styleJson.left != '', true);
@@ -719,7 +730,7 @@ $(document).ready(function () {
 
 		equal(weekViewModel.dayViewModels()[1].probabilities().length, 1);
 		equal(weekViewModel.dayViewModels()[1].probabilities()[0].cssClass(), Teleopti.MyTimeWeb.Common.Constants.probabilityClass.highProbabilityClass);
-		equal(weekViewModel.dayViewModels()[1].probabilities()[0].tooltips().indexOf(fakeUserText.probabilityForOvertime) > -1, true);
+        equal(weekViewModel.dayViewModels()[1].probabilities()[0].tooltips().indexOf(userTexts.ProbabilityToGetOvertimeColon) > -1, true);
 		equal(weekViewModel.dayViewModels()[1].probabilities()[0].tooltips().indexOf('09:30 - 16:45') > -1, true);
 		equal(weekViewModel.dayViewModels()[1].probabilities()[0].styleJson.left != '', true);
 		equal(weekViewModel.dayViewModels()[1].probabilities()[0].styleJson.width != '', true);

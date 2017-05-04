@@ -144,11 +144,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	};
 
-    var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart) {
+    var WeekScheduleViewModel = function (addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart) {
 		var self = this;
 		self.initializeData = initializeWeekViewModel;
 		self.navigateToRequestsMethod = navigateToRequestsMethod;
-		self.userTexts = userTexts;
+        self.userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 		self.textPermission = ko.observable();
 		self.requestPermission = ko.observable();
 		self.periodSelection = ko.observable();
@@ -198,9 +198,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		var validProbabilitiesTypes = [
-			userTexts.hideStaffingInfo,
-			userTexts.showAbsenceProbability,
-			userTexts.showOvertimeProbability
+			self.userTexts.HideStaffingInfo,
+			self.userTexts.ShowAbsenceProbability,
+			self.userTexts.ShowOvertimeProbability
 		];
 
         self.selectedProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability; 
@@ -208,7 +208,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.probabilityLabel = function () {
 			var selectedProbabilityType = validProbabilitiesTypes[self.selectedProbabilityType];
 			if (!selectedProbabilityType) {
-				return userTexts.staffingInfo;
+                return self.userTexts.StaffingInfo;
 			}
 			return selectedProbabilityType;
 		};
@@ -656,7 +656,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				ajax = ajaxObj;
 			}
 		},
-		SetupViewModel: function (userTexts, defaultDateTimes, callback) {
+		SetupViewModel: function (defaultDateTimes, callback) {
 			Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 				var addRequestViewModel = function () {
 					var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, data.WeekStart, defaultDateTimes);
@@ -665,7 +665,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					return model;
 				};
 
-				vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart);
+				vm = new WeekScheduleViewModel(addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart);
 
 				callback();
 				$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");

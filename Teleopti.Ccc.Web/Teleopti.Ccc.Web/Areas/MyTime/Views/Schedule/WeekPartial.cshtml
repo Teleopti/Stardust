@@ -7,26 +7,6 @@
 <script>
 	$(function () {
 		Teleopti.MyTimeWeb.Schedule.SetupViewModel(
-			{
-				xRequests: '@Resources.XRequests',
-				subjectColon: '@Resources.SubjectColon',
-				locationColon: '@Resources.LocationColon',
-				descriptionColon: '@Resources.DescriptionColon',
-				chanceOfGettingAbsencerequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted',
-				seatBookingsTitle: '@Resources.SeatBookings',
-				noSeatBookingsForDate: '@Resources.YouHaveNotBeenAllocatedSeat',
-				fair: '@Resources.Fair',
-				poor: '@Resources.Poor',
-				good: '@Resources.Good',
-				high: '@Resources.High',
-				low: '@Resources.Low',
-				probabilityForAbsence: '@Resources.ProbabilityToGetAbsenceColon',
-				probabilityForOvertime: '@Resources.ProbabilityToGetOvertimeColon',
-				hideStaffingInfo: '@Resources.HideStaffingInfo',
-				showAbsenceProbability: '@Resources.ShowAbsenceProbability',
-				showOvertimeProbability: '@Resources.ShowOvertimeProbability',
-				staffingInfo: '@Resources.StaffingInfo'
-			},
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues,
 			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
 		);

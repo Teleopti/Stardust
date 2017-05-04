@@ -10,14 +10,14 @@ $(document).ready(function () {
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	var userTexts = {
-		"high": "High",
-		"low": "Low",
-		"probabilityForAbsence": "Probability to get absence:",
-		"probabilityForOvertime": "Probability to get overtime:"
+		High: "High",
+		Low: "Low",
+		ProbabilityToGetAbsenceColon: "Probability to get absence:",
+		ProbabilityToGetOvertimeColon: "Probability to get overtime:"
 	};
 
 	var probabilityNames = ["low", "high"];
-	var probabilityLabels = [userTexts.low, userTexts.high];
+	var probabilityLabels = [userTexts.Low, userTexts.High];
 	var expiredProbabilityCssClass = "probability-expired";
 
 	var createDayViewModel = function () {

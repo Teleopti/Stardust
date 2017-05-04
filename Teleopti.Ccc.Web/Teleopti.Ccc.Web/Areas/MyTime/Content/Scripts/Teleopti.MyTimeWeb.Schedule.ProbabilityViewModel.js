@@ -48,9 +48,9 @@
 	function getTooltipsTitle() {
 		var result = "";
 		if (probabilityType === constants.probabilityType.absence) {
-			result = userTexts.probabilityForAbsence;
+            result = userTexts.ProbabilityToGetAbsenceColon;
 		} else if (probabilityType === constants.probabilityType.overtime) {
-			result = userTexts.probabilityForOvertime;
+            result = userTexts.ProbabilityToGetOvertimeColon;
 		}
 		return result;
 	}
@@ -62,9 +62,9 @@
 				intervalTimeSpanText = generateIntervalTimeSpanText(rawProbabilityCellData.startTimeMoment, rawProbabilityCellData.endTimeMoment);
 
 			if (rawProbabilityCellData.possibility === probabilityLevel.low)
-				label = userTexts.low;
+				label = userTexts.Low;
 			else if (rawProbabilityCellData.possibility === probabilityLevel.high)
-				label = userTexts.high;
+				label = userTexts.High;
 
 			return "<div>" +
 				"  <div>" + tooltipTitle + "</div>" +
