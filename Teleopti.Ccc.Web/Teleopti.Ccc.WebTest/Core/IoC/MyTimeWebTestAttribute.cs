@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
 			system.UseTestDouble<FakeNameFormatSettingProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
 			system.UseTestDouble<FakePushMessageProvider>().For<IPushMessageProvider>(); 
+			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>(); 
 		}
 	}
 }
