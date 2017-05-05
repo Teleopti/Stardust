@@ -944,7 +944,7 @@ $(document).ready(function() {
 		};
 
 		var fakeScheduleData = getFakeScheduleData();
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null);
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 
 		vm.initializeData(fakeScheduleData);
 
