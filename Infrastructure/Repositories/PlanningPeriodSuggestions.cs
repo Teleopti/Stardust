@@ -96,8 +96,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			});
 
 			result.AddRange(resultingRanges);
-			result.Add(new Tuple<int, SuggestedPlanningPeriod>(0,monthIsLastResort(range.StartDate.Date)));
-			result.Add(new Tuple<int, SuggestedPlanningPeriod>(0,monthIsLastResort(range.EndDate.Date)));
 			return
 				result.Where(r => r.Item2.Range.StartDate > new DateOnly(_now.UtcDateTime()))
 					.GroupBy(i => i.Item2)
