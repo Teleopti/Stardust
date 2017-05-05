@@ -54,7 +54,7 @@
 				<!-- /ko -->
 			</div>
 			
-			<div class="dayview-schedule relative">
+			<div class="dayview-schedule relative" data-bind="style: {height: scheduleHeight}">
 				<!-- ko foreach: layers -->
 				<div class="dayview-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime &amp;&amp; overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime &amp;&amp; overTimeDarkerBackgroundStyle}">
 				<div data-bind="visible: showTitle()">

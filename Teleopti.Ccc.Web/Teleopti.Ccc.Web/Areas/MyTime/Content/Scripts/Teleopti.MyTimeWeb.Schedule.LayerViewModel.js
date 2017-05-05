@@ -64,11 +64,13 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
     self.isOvertimeAvailability = ko.observable(layer.IsOvertimeAvailability);
     self.isOvertime = layer.IsOvertime;
 
+    var isMobile = Teleopti.MyTimeWeb.Portal.IsMobile(window) || Teleopti.MyTimeWeb.Portal.IsIPad(window);
+    var scheduleHeight = isMobile ? Teleopti.MyTimeWeb.Schedule.GetMobileScheduleHeight() : constants.scheduleHeight;
     self.top = ko.computed(function () {
-        return Math.round(constants.scheduleHeight * self.startPositionPercentage());
+        return Math.round(scheduleHeight * self.startPositionPercentage());
     });
     self.height = ko.computed(function () {
-        var bottom = Math.round(constants.scheduleHeight * self.endPositionPercentage()) + 1;
+        var bottom = Math.round(scheduleHeight * self.endPositionPercentage()) + 1;
         var top = self.top();
         return bottom > top ? bottom - top : 0;
     });
@@ -123,7 +125,7 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
     });
 
     self.heightDouble = ko.computed(function () {
-        return constants.scheduleHeight * (self.endPositionPercentage() - self.startPositionPercentage());
+        return scheduleHeight * (self.endPositionPercentage() - self.startPositionPercentage());
     });
     self.showTitle = ko.computed(function () {
         return self.heightDouble() > constants.pixelToDisplayTitle;

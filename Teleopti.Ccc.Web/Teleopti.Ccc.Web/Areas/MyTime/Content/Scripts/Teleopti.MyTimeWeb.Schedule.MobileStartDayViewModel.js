@@ -1,4 +1,4 @@
-﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
+/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/moment/moment.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
@@ -31,19 +31,16 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 	var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
 
-	var setTimelineHeight = function (lastLayer) {
-	var scheduleHeightPercentage = lastLayer == null ? 0 : lastLayer.EndPositionPercentage;
+	var calculateScheduleHeight = function (lastLayer, lastTimelinePoint) {
+		var scheduleHeightPercentage = lastLayer ? lastLayer.EndPositionPercentage : 0;
 
-		var timelinePoints = self.timeLines();
-		var timelineEndPositionPercentage = timelinePoints && timelinePoints.length > 0
-			? timelinePoints[timelinePoints.length - 1].positionPercentage()
-			: 1;
+		var timelineEndPositionPercentage = lastTimelinePoint ? lastTimelinePoint.PositionPercentage : 1;
 		if (timelineEndPositionPercentage > scheduleHeightPercentage) {
 			scheduleHeightPercentage = timelineEndPositionPercentage;
 		}
 
-		var height = Math.round(constants.scheduleHeight * scheduleHeightPercentage) + 1 + 'px';
-		self.scheduleHeight(height);
+		var scheduleHeight = Teleopti.MyTimeWeb.Schedule.GetMobileScheduleHeight();
+		return Math.round(scheduleHeight * scheduleHeightPercentage) + 1;
 	};
 
 	self.navigateToMessages = function() {
@@ -68,18 +65,21 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 			self.dayOfWeek(data.Schedule.Header.Title);
 		}
 
+		var rawPeriods = data.Schedule.Periods;
+		var lastLayer = rawPeriods && rawPeriods.length > 0 ? rawPeriods[rawPeriods.length - 1] : undefined;
+		var lastTimelinePoint = data.TimeLine && data.TimeLine.length > 0 ? data.TimeLine[data.TimeLine.length - 1] : undefined;
+		var scheduleHeight = calculateScheduleHeight(lastLayer, lastTimelinePoint);
+		self.scheduleHeight(scheduleHeight + "px");
+
 		var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
-			return new TimelineViewModel(item);
+			return new TimelineViewModel(item, scheduleHeight);
 		});
 		self.timeLines(timelines);
 
-		var rawPeriods = data.Schedule.Periods;
 		var layers = ko.utils.arrayMap(rawPeriods, function (item) {
 			return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self);
 		});
 		self.layers(layers);
-
-		setTimelineHeight(rawPeriods && rawPeriods.length > 0 ? rawPeriods[rawPeriods.length - 1] : undefined);
 	};
 
 	self.setCurrentDate = function (date) {
@@ -111,7 +111,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 	};
 };
 
-var TimelineViewModel = function (timeline) {
+var TimelineViewModel = function (timeline, scheduleHeight) {
 	var self = this;
 	self.positionPercentage = ko.observable(timeline.PositionPercentage);
 	var hourMinuteSecond = timeline.Time.split(":");
@@ -122,7 +122,7 @@ var TimelineViewModel = function (timeline) {
 
 	self.topPosition = ko.computed(function () {
 		// 5 is half of timeline label height (10px)
-		return Math.round(Teleopti.MyTimeWeb.Common.Constants.scheduleHeight * self.positionPercentage() - 5)  + "px";
+		return Math.round(scheduleHeight * self.positionPercentage() - 5) + "px";
 	});
 	self.evenHour = ko.computed(function () {
 		return timeFromMinutes.minute() === 0;

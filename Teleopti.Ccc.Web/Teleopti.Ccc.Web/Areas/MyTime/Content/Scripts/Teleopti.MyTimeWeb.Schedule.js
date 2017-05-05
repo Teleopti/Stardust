@@ -651,6 +651,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		return Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446");
 	}
 
+	function getMobileScheduleHeight() {
+		var screenHeight = isNaN(window.innerHeight) ? window.clientHeight : window.innerHeight;
+		var totalToolbarHeight = 185;
+		var validHeightForSchedule = screenHeight - totalToolbarHeight;
+		return validHeightForSchedule > constants.mobileMinScheduleHeight
+			? validHeightForSchedule
+			: constants.mobileMinScheduleHeight;
+	}
+
 	return {
 		Init: function () {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
@@ -701,7 +710,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);
 		},
-		GetCurrentUserDateTime: getCurrentUserDateTime
+		GetCurrentUserDateTime: getCurrentUserDateTime,
+		GetMobileScheduleHeight: getMobileScheduleHeight
 	};
 })(jQuery);
 

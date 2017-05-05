@@ -41,7 +41,7 @@
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
-		equal(vm.timeLines()[1].topPosition(), "13px");
+		equal(vm.timeLines()[1].topPosition(), "10px");
 	});
 
 	test("should set display time for timeline", function () {
@@ -73,7 +73,7 @@
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
-		equal(vm.scheduleHeight(), "669px");
+		equal(vm.scheduleHeight(), "551px"); // mobileMinScheduleHeight + 1
 	});
 
 	test("should set unreadMessage", function () {
