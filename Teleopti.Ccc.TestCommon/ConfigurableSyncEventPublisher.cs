@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -36,16 +37,12 @@ namespace Teleopti.Ccc.TestCommon
 			var tenant = _dataSource.CurrentName();
 			onAnotherThread(() =>
 			{
-				foreach (var @event in events)
-				{
-					foreach (var handlerType in _handlerTypes)
+				_resolver.ResolveAllJobs(events)
+					.ForEach(job =>
 					{
-						var method = _resolver.HandleMethodFor(handlerType, @event.GetType());
-						if (method == null)
-							continue;
-						_processor.Process(tenant, @event, null, handlerType);
-					}
-				}
+						if (_handlerTypes.Contains(job.HandlerType))
+							_processor.Process(tenant, job.Event, job.Package, job.HandlerType);
+					});
 			});
 		}
 

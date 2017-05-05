@@ -20,36 +20,26 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	{
 		public ResolveEventHandlers Resolver;
 		public IResolve Resolve;
-
-		private IEnumerable<IJobInfo> allJobs(IEnumerable<IEvent> events)
-		{
-			return Resolver.JobsFor<IRunOnServiceBus>(events)
-				.Concat(Resolver.JobsFor<IRunOnHangfire>(events))
-				.Concat(Resolver.JobsFor<IRunOnStardust>(events))
-				.Concat(Resolver.JobsFor<IRunInSync>(events))
-				.Concat(Resolver.JobsFor<IRunInSyncInFatClientProcess>(events));
-
-		}
-
+		
 		[AllTogglesOff]
 		[Test]
 		public void ShouldResolveAllEventHandlersWhenTogglesDisabled()
 		{
-			allJobs(oneOfEachEvent());
+			Resolver.ResolveAllJobs(oneOfEachEvent());
 		}
 
 		[AllTogglesOn]
 		[Test]
 		public void ShouldResolveAllEventHandlersWhenTogglesEnabled()
 		{
-			allJobs(oneOfEachEvent());
+			Resolver.ResolveAllJobs(oneOfEachEvent());
 		}
 
 		[Test]
 		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldResolveSameInstanceOfHandlers()
 		{
-			allJobs(oneOfEachEvent())
+			Resolver.ResolveAllJobs(oneOfEachEvent())
 				.ForEach(x =>
 				{
 					var instance1 = Resolve.Resolve(x.HandlerType);

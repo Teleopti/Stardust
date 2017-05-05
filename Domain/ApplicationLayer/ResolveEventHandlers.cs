@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -14,6 +15,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		public ResolveEventHandlers(IResolve resolve)
 		{
 			_resolve = resolve;
+		}
+
+		public IEnumerable<IJobInfo> ResolveAllJobs(IEnumerable<IEvent> events)
+		{
+			return 
+#pragma warning disable 618
+				jobsFor<IRunOnServiceBus>(events)
+#pragma warning restore 618
+				.Concat(jobsFor<IRunOnHangfire>(events))
+				.Concat(jobsFor<IRunOnStardust>(events))
+				.Concat(jobsFor<IRunInSync>(events))
+				.Concat(jobsFor<IRunInSyncInFatClientProcess>(events))
+				.ToArray();
 		}
 
 		public IEnumerable<IJobInfo> JobsFor<T>(IEnumerable<IEvent> events)
