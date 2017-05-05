@@ -119,39 +119,10 @@
 		(function initialize() {
 			vm.pollingLock = false;
 			if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
-				toggleService.togglesLoaded.then(function () {
-					if (toggleService.RTA_FasterAgentsView_42039) {
-						agentState();
-						updateStatesDelegate = agentState;
-					} else {
-						getAgents()
-							.then(agentsByParams)
-							.then(updateStuff)
-							.then(updateStates)
-							.then(updatePhoneStatesFromStateParams);
-					}
-				});
-
+				agentState();
+				updateStatesDelegate = agentState;
 			}
 		})();
-
-		function agentsByParams(fn) {
-			return fn({
-				siteIds: siteIds,
-				teamIds: teamIds,
-				skillIds: skillIds,
-				skillAreaId: skillAreaId
-			});
-		}
-
-		function updateStuff(data) {
-			agentsInfo = data;
-			vm.agents = data;
-			$scope.$watchCollection(
-				function () { return vm.agents; },
-				filterData);
-			vm.pollingLock = true;
-		}
 
 		/************AGENTS GRID************/
 		function getTableHeight() {
@@ -232,7 +203,7 @@
 		function agentState() {
 			getAgentStates()
 				.then(getAgentStatesByParams)
-				.then(updateStuff2)
+				.then(updateStuff)
 				.then(updateAgentStates)
 				.then(updatePhoneStatesFromStateParams);
 		}
@@ -247,7 +218,7 @@
 			})
 		}
 
-		function updateStuff2(data) {
+		function updateStuff(data) {
 			agentsInfo = data.States;
 			vm.agents = data.States;
 			$scope.$watchCollection(

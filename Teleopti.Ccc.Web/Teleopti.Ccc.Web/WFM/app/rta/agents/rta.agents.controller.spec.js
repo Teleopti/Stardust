@@ -34,8 +34,6 @@ describe('RtaAgentsController', function () {
 
 		$fakeBackend.clear();
 		spyOn($state, 'go');
-
-		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 	}));
 
 	it('should get agent states', function () {

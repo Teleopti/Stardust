@@ -35,8 +35,6 @@ describe('RtaAgentsController', function() {
 		scope = $controllerBuilder.setup('RtaAgentsController');
 
 		spyOn($state, 'go');
-
-		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 	}));
 
 	it('should display time in rule', function() {

@@ -33,7 +33,6 @@ describe('RtaAgentsController', function() {
 		$fakeBackend.clear();
 
 		scope = $controllerBuilder.setup('RtaAgentsController');
-		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 		spyOn($state, 'go');
 	}));
 

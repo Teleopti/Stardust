@@ -34,7 +34,6 @@ describe('RtaAgentsController', function () {
 		
 		$fakeBackend.clear();
 		$fakeBackend.withToggle('RTA_SeeRecentOutOfAdherenceOccurancesToday_39145');	
-		$fakeBackend.withToggle('RTA_FasterAgentsView_42039');
 		spyOn($state, 'go');
 	}));
 
