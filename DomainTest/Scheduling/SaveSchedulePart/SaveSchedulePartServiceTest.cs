@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 		{
 			const int resolution = 60;
 			IntervalLengthFetcher.Has(resolution);
-			var now = new DateTime(2017, 5, 1, 0, 0, 0);
+			var now = new DateTime(2017, 5, 1, 0, 0, 0, DateTimeKind.Utc);
 			Now.Is(now);
 
 			var scenario = ScenarioRepository.Has("scenario");
