@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			int processedBlocks = 0;
 			_workShiftFinderResultHolder.Clear();
 			_workShiftFinderResultHolder.AlwaysShowTroubleshoot = true;
-			var workShiftFinderResultList = new List<IWorkShiftFinderResult>();
+			var workShiftFinderResultList = new List<WorkShiftFinderResult>();
 			foreach (var selectedTeamBlock in selectedTeamBlocks.GetRandom(selectedTeamBlocks.Count, true))
 			{
 				isSingleTeamSingleDay(selectedTeamBlock);

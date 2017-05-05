@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public class ActivityRestrictionsShiftFilter
 	{
-		public IList<ShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, WorkShiftFinderResult finderResult)
 		{
 		    if (restriction == null || person == null || shiftList == null || finderResult == null ) return null;
 

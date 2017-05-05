@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Common
 			if (this == other)
 				return true;
 
-			return (GetHashCode() == other.GetHashCode());
+			return _descriptionKey == other.DescriptionKey && Id == other.Id;
 		}
     }
 }

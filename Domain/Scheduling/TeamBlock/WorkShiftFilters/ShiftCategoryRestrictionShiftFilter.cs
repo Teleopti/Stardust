@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	public interface IShiftCategoryRestrictionShiftFilter
 	{
 		IList<ShiftProjectionCache> Filter(IShiftCategory category, IList<ShiftProjectionCache> shiftList,
-															IWorkShiftFinderResult finderResult);
+															WorkShiftFinderResult finderResult);
 	}
 	
 	public class ShiftCategoryRestrictionShiftFilter : IShiftCategoryRestrictionShiftFilter
 	{
         public IList<ShiftProjectionCache> Filter(IShiftCategory category, IList<ShiftProjectionCache> shiftList,
-		                                           IWorkShiftFinderResult finderResult)
+		                                           WorkShiftFinderResult finderResult)
         {
 	        if (shiftList == null) return null;
 			if (shiftList.Count == 0) return shiftList;

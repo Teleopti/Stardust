@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IDisallowedShiftProjectionCachesFilter
 	{
-		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> notAllowedShiftProjectionCaches, IList<ShiftProjectionCache> shiftProjectionCaches, IWorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> notAllowedShiftProjectionCaches, IList<ShiftProjectionCache> shiftProjectionCaches, WorkShiftFinderResult finderResult);
 	}
 
 	public class DisallowedShiftProjectionCachesFilter : IDisallowedShiftProjectionCachesFilter
 	{
-		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> notAllowedShiftProjectionCaches, IList<ShiftProjectionCache> shiftProjectionCaches, IWorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> notAllowedShiftProjectionCaches, IList<ShiftProjectionCache> shiftProjectionCaches, WorkShiftFinderResult finderResult)
 		{
 			if (shiftProjectionCaches == null) return null;
 			if (finderResult == null) return null;

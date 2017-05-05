@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -104,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
 				c2.SetDate(dateOnlyAsDateTimePeriod);
 				shifts.Add(c2);
-				retShifts = _target.Filter(shifts, _effectiveRestriction, new WorkShiftFinderResultForTest());
+				retShifts = _target.Filter(shifts, _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
 
 			}
 			retShifts.Should().Contain(c1);
@@ -114,10 +113,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(null, _effectiveRestriction, new WorkShiftFinderResultForTest());
+			var result = _target.Filter(null, _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.IsNull(result);
 
-			result = _target.Filter(new List<ShiftProjectionCache>(), null, new WorkShiftFinderResultForTest());
+			result = _target.Filter(new List<ShiftProjectionCache>(), null, new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.IsNull(result);
 
 			result = _target.Filter(new List<ShiftProjectionCache>(), _effectiveRestriction, null);

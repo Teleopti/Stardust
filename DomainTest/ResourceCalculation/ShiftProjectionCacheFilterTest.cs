@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IShiftCategory _category;
         private IActivity _activity;
         private IEffectiveRestriction _effectiveRestriction;
-        private IWorkShiftFinderResult _finderResult;
+        private WorkShiftFinderResult _finderResult;
         private MockRepository _mocks;
         private TimeZoneInfo _timeZoneInfo;
         private IScheduleRange _scheduleRange;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var schedulingOptions = new SchedulingOptions();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-            var result = _mocks.StrictMock<IWorkShiftFinderResult>();
+            var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
             using (_mocks.Record())
             {
@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(effectiveRestriction.IsAvailabilityDay).Return(false);
                 Expect.Call(effectiveRestriction.IsPreferenceDay).Return(false);
                 Expect.Call(effectiveRestriction.IsStudentAvailabilityDay).Return(false);
-                Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
             }
 
             schedulingOptions.UseRotations = true;
@@ -87,6 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
                 bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
+	            result.FilterResults.Count.Should().Be.EqualTo(1);
                 Assert.IsFalse(ret);
             }
         }
@@ -96,9 +96,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             SchedulingOptions schedulingOptions = new SchedulingOptions();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-            var result = _mocks.StrictMock<IWorkShiftFinderResult>();
+			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
-            using (_mocks.Record())
+			using (_mocks.Record())
             {
                 Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
                 Expect.Call(effectiveRestriction.IsPreferenceDay).Return(false);
@@ -117,7 +117,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
                 bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
-                Assert.IsFalse(ret);
+				result.FilterResults.Count.Should().Be.EqualTo(2);
+				Assert.IsFalse(ret);
             }
         }
 
@@ -126,8 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             SchedulingOptions schedulingOptions = new SchedulingOptions();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-            var result = _mocks.StrictMock<IWorkShiftFinderResult>();
-            IList<IWorkShiftFilterResult> lstResult = new List<IWorkShiftFilterResult>();
+			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
             using (_mocks.Record())
             {
                 Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
@@ -146,29 +146,23 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
                 Assert.IsTrue(ret);
-                Assert.AreEqual(0, lstResult.Count);
+                Assert.AreEqual(0, result.FilterResults.Count);
             }
         }
 
-        [Test]
-        public void VerifyRestrictionCheckWithNullEffectiveReturnsFalse()
-        {
-            SchedulingOptions schedulingOptions = new SchedulingOptions();
-            IEffectiveRestriction effectiveRestriction = null;
-            var result = _mocks.StrictMock<IWorkShiftFinderResult>();
+	    [Test]
+	    public void VerifyRestrictionCheckWithNullEffectiveReturnsFalse()
+	    {
+		    SchedulingOptions schedulingOptions = new SchedulingOptions();
+		    IEffectiveRestriction effectiveRestriction = null;
+		    var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
-            using (_mocks.Record())
-            {
-                Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
-            }
-            using (_mocks.Playback())
-            {
-                bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
-                Assert.IsFalse(ret);
-            }
-        }
+		    bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
+		    result.FilterResults.Count.Should().Be.EqualTo(1);
+		    Assert.IsFalse(ret);
+	    }
 
-        [Test]
+	    [Test]
         public void CanFilterOnEffectiveRestrictionAndNotAllowedShiftCategories()
         {
             var ret = _target.FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, _timeZoneInfo, GetCashes(), _effectiveRestriction, new List<IShiftCategory>(), _finderResult);
@@ -305,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
                 c2.SetDate(dateOnlyAsDateTimePeriod);
                 shifts.Add(c2);
-                retShifts = _target.FilterOnRestrictionMinMaxWorkTime(shifts, _effectiveRestriction, new WorkShiftFinderResultForTest());
+                retShifts = _target.FilterOnRestrictionMinMaxWorkTime(shifts, _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
 
             }
             retShifts.Should().Contain(c1);
@@ -344,7 +338,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
                 c2.SetDate(dateOnlyAsDateTimePeriod);
                 shifts.Add(c2);
-                retShifts = _target.FilterOnContractTime(minMaxcontractTime, shifts, new WorkShiftFinderResultForTest());
+                retShifts = _target.FilterOnContractTime(minMaxcontractTime, shifts, new WorkShiftFinderResult(new Person(), new DateOnly()));
 
             }
             retShifts.Should().Contain(c1);
@@ -367,7 +361,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	        var cache3 = new ShiftProjectionCache(workShift3,personalShiftMeetingTimeChecker);
             
             IList<ShiftProjectionCache> caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
-            IWorkShiftFinderResult finderResult = new WorkShiftFinderResultForTest();
+            var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly());
             using (_mocks.Record())
             {
                 Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
@@ -404,8 +398,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
             var categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
-            var finderResult = new WorkShiftFinderResultForTest();
-            using (_mocks.Record())
+			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly());
+			using (_mocks.Record())
             {
                 Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
                 Expect.Call(workShift2.ShiftCategory).Return(shiftCategory2).Repeat.AtLeastOnce();
@@ -516,13 +510,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
                 c2.SetDate(dateOnlyAsDateTimePeriod);
                 shifts.Add(c2);
-                retShifts = _target.FilterOnStartAndEndTime(scheduleDayPeriod, shifts, new WorkShiftFinderResultForTest());
+                retShifts = _target.FilterOnStartAndEndTime(scheduleDayPeriod, shifts, new WorkShiftFinderResult(new Person(), new DateOnly()));
 
             }
 
             retShifts.Should().Contain(c1);
             retShifts.Count.Should().Be.EqualTo(1);
-
         }
         
         [Test]

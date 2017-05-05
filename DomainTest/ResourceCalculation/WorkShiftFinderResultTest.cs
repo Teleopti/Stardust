@@ -20,18 +20,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [SetUp]
         public void Setup()
         {
-            _person = new Person();
+            _person = new Person().WithId();
             _theDate = new DateOnly(2008, 1, 1);
             _target = new WorkShiftFinderResult(_person,_theDate);
             _filter = new WorkShiftFilterResult("hej", 100, 50);
         }
         
-        [Test]
-        public void VerifyNoPublicEmptyConstructor()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_target.GetType()));
-        }
-
         [Test]
         public void VerifyCreate()
         {
@@ -53,17 +47,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(_theDate, _target.ScheduleDate);
             Assert.IsNotNull(_target.PersonName);
 
-            Guid guid = Guid.NewGuid();
-            _target.Person.SetId(guid);
-            var expectedKey = new Tuple<Guid,DateOnly>(guid, _target.ScheduleDate);
+            var expectedKey = new Tuple<Guid,DateOnly>(_person.Id.Value, _target.ScheduleDate);
             Assert.AreEqual(expectedKey, _target.PersonDateKey);
         }
-
-        [Test]
-        public void VerifyNoPublicEmptyConstructorFilter()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_filter.GetType()));
-        }
+		
         [Test]
         public void VerifyFilterProperties()
         {
@@ -78,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             WorkShiftFinderResultHolder holder = new WorkShiftFinderResultHolder();
 			_target.AddFilterResults(_filter);
-            holder.AddResults(new List<IWorkShiftFinderResult>{_target}, DateTime.Now);
+            holder.AddResults(new List<WorkShiftFinderResult>{_target}, DateTime.Now);
 
             Assert.IsNotNull(holder.GetResults());
         }
@@ -88,11 +75,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             WorkShiftFinderResultHolder holder = new WorkShiftFinderResultHolder();
 			_target.AddFilterResults(_filter);
-            holder.AddResults(new List<IWorkShiftFinderResult> { _target }, DateTime.Now);
+            holder.AddResults(new List<WorkShiftFinderResult> { _target }, DateTime.Now);
 
             DateOnly theDate2 = new DateOnly(2008, 1, 2);
-            IWorkShiftFinderResult result2 = new WorkShiftFinderResult(_person, theDate2);
-            holder.AddResults(new List<IWorkShiftFinderResult> { result2 }, theDate2.Date);
+            var result2 = new WorkShiftFinderResult(_person, theDate2);
+            holder.AddResults(new List<WorkShiftFinderResult> { result2 }, theDate2.Date);
 
             Assert.IsNotNull(holder.GetResults(true));
             Assert.AreEqual(1,holder.GetResults(true).Count);
@@ -105,12 +92,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             WorkShiftFinderResultHolder holder = new WorkShiftFinderResultHolder();
 			_target.AddFilterResults(_filter);
             _target.Successful = false;
-            holder.AddResults(new List<IWorkShiftFinderResult> { _target }, DateTime.Now);
+            holder.AddResults(new List<WorkShiftFinderResult> { _target }, DateTime.Now);
 
             DateOnly theDate2 = new DateOnly(2008, 1, 2);
-            IWorkShiftFinderResult result2 = new WorkShiftFinderResult(_person, theDate2) {Successful = true};
+            var result2 = new WorkShiftFinderResult(_person, theDate2) {Successful = true};
 
-            holder.AddResults(new List<IWorkShiftFinderResult> { result2 }, theDate2.Date);
+            holder.AddResults(new List<WorkShiftFinderResult> { result2 }, theDate2.Date);
 
             Assert.IsNotNull(holder.GetResults(true));
             Assert.AreEqual(1, holder.GetResults(true).Count);
@@ -126,19 +113,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             WorkShiftFinderResultHolder holder = new WorkShiftFinderResultHolder();
 			_target.AddFilterResults(_filter);
             _target.Successful = false;
-            holder.AddResults(new List<IWorkShiftFinderResult> { _target }, DateTime.Now);
+            holder.AddResults(new List<WorkShiftFinderResult> { _target }, DateTime.Now);
 
             DateOnly theDate2 = new DateOnly(2008, 1, 2);
-            IWorkShiftFinderResult result2 = new WorkShiftFinderResult(_person, theDate2) {Successful = true};
+            var result2 = new WorkShiftFinderResult(_person, theDate2) {Successful = true};
 
-            holder.AddResults(new List<IWorkShiftFinderResult> { result2 }, theDate2.Date);
+            holder.AddResults(new List<WorkShiftFinderResult> { result2 }, theDate2.Date);
 
             Assert.IsTrue(holder.LastResultIsSuccessful);
 
             DateOnly theDate3 = new DateOnly(2008, 1, 3);
-            IWorkShiftFinderResult result3 = new WorkShiftFinderResult(_person, theDate3) {Successful = false};
+            WorkShiftFinderResult result3 = new WorkShiftFinderResult(_person, theDate3) {Successful = false};
 
-            holder.AddResults(new List<IWorkShiftFinderResult> { result3 }, theDate3.Date);
+            holder.AddResults(new List<WorkShiftFinderResult> { result3 }, theDate3.Date);
 
             Assert.IsFalse(holder.LastResultIsSuccessful);
 
@@ -160,9 +147,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldNotAddResultIfItExistsBefore()
 		{
 			var holder = new WorkShiftFinderResultHolder();
-			holder.AddResults(new List<IWorkShiftFinderResult>{  _target},DateTime.Now);
+			holder.AddResults(new List<WorkShiftFinderResult>{  _target},DateTime.Now);
 			_target = new WorkShiftFinderResult(_person, _theDate);
-			holder.AddResults(new List<IWorkShiftFinderResult>{  _target},DateTime.Now);
+			holder.AddResults(new List<WorkShiftFinderResult>{  _target},DateTime.Now);
 
 			Assert.That(holder.GetResults().Count,Is.EqualTo(1));
 		}
@@ -171,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void CanAddFilterToFinderResultOnHolder()
 		{
 			var holder = new WorkShiftFinderResultHolder();
-			holder.AddResults(new List<IWorkShiftFinderResult> { _target }, DateTime.Now);
+			holder.AddResults(new List<WorkShiftFinderResult> { _target }, DateTime.Now);
 			Assert.That(holder.GetResults().Count, Is.EqualTo(1));
 			var result = holder.GetResults()[0];
 			Assert.That(result.FilterResults.Count, Is.EqualTo(0));

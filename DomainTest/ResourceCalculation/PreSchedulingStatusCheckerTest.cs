@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private MockRepository _mocks;
         private IScheduleDay _part;
         private SchedulingOptions _schedulingOptions;
-        private IWorkShiftFinderResult _finderResult;
         private readonly DateOnly _scheduleDateOnly = new DateOnly(2009,2,2);
         private IPerson _person;
         private TimeZoneInfo _timeZoneInfo;
@@ -31,9 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _part = _mocks.StrictMock<IScheduleDay>();
             
             _person = _mocks.StrictMock<IPerson>();
-            _finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
-            TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
-            _timeZoneInfo = (zone);
+            _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
             _personPeriod = _mocks.StrictMock<IPersonPeriod>();
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
@@ -58,9 +55,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(virtualSchedulePeriod);
                 Expect.Call(virtualSchedulePeriod.IsValid).Return(false).Repeat.Twice();
                 Expect.Call(_person.Period(_scheduleDateOnly)).Return(personPeriod);
-            }
-            
-            var ret =_target.CheckStatus(_part, _finderResult, _schedulingOptions);
+				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
+			}
+
+			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
+			var ret =_target.CheckStatus(_part, finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -72,9 +71,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.IsValid).Return(false).Repeat.Twice();
                 Expect.Call(_person.Period(_scheduleDateOnly)).Return(null);
-            }
+				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
+			}
 
-			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
+			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
+			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -93,10 +94,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.HourlyStaff);
-                
-            }
+				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
 
-			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
+			}
+
+			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
+			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
             Assert.AreEqual(_person, _target.Person);
             Assert.AreEqual(_scheduleDateOnly, _target.ScheduleDateOnly);
@@ -118,10 +121,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
-                
-            }
+				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
 
-			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
+			}
+
+			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
+			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -141,9 +146,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		        Expect.Call(personContract.Contract).Return(contract);
 		        Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
 		        Expect.Call(_part.IsScheduled()).Return(true);
-	        }
+				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
+			}
 
-	        var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
+			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
+			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -164,9 +171,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
                 Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
                 Expect.Call(_part.IsScheduled()).Return(true);
-            }
+				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
+			}
 
-			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
+			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
+			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -188,9 +197,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
 				Expect.Call(_part.IsScheduled()).Return(false);
                 Expect.Call(_personPeriod.RuleSetBag).Return(null);
-            }
+				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
+			}
 
-			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
+			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
+			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -211,9 +222,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
 				Expect.Call(_part.IsScheduled()).Return(false);
                 Expect.Call(_personPeriod.RuleSetBag).Return(ruleSetBag);
-            }
+				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
+			}
 
-			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
+			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
+			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
             Assert.IsTrue(ret);
         }
     }

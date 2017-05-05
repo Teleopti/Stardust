@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		}
 
 		public IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, IPerson person, IList<ShiftProjectionCache> shiftList,
-		                                           DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
+		                                           DateOnly dateToCheck, WorkShiftFinderResult finderResult)
 		{
 			if (person == null) return null;
 			if (shiftList == null) return null;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			return _validDateTimePeriodShiftFilter.Filter(shiftList, returnPeriod.Value, finderResult);
 		}
 
-		private static IList<ShiftProjectionCache> filterResults(IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+		private static IList<ShiftProjectionCache> filterResults(IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult)
 		{
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(UserTexts.Resources.CannotFindAValidPeriodAccordingToTheBusinessRules,

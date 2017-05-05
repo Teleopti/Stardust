@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IValidDateTimePeriodShiftFilter
 	{
-		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, DateTimePeriod validPeriod, WorkShiftFinderResult finderResult);
 	}
 
 	public class ValidDateTimePeriodShiftFilter : IValidDateTimePeriodShiftFilter
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_userCulture = userCulture;
 		}
 
-		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, DateTimePeriod validPeriod, WorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
 			if (finderResult == null) return null;

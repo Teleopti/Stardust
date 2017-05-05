@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -72,6 +71,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                _shiftProjectionCacheManager, _calculatorManager, ()=>_workShiftMinMaxCalculator, new FairnessAndMaxSeatCalculatorsManager28317(),
 			   _shiftLengthDecider, new PersonSkillDayCreator(new PersonalSkillsProvider()));
         	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
+
+			Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
 		}
 
         [Test]
@@ -634,61 +635,4 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
         }
     }
-
-	internal class WorkShiftFinderResultForTest : IWorkShiftFinderResult
-	{
-		private readonly IList<IWorkShiftFilterResult> _filterResults = new List<IWorkShiftFilterResult>();
-
-		public IPerson Person
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public Tuple<Guid,DateOnly> PersonDateKey
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public string PersonName
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public DateOnly ScheduleDate
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool Successful
-		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
-		}
-
-
-		public ReadOnlyCollection<IWorkShiftFilterResult> FilterResults
-		{
-			get { return new ReadOnlyCollection<IWorkShiftFilterResult>(_filterResults); }
-		}
-
-		public DateTime SchedulingDateTime
-		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
-		}
-
-		public bool StoppedOnOverstaffing
-		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
-		}
-
-		public void AddFilterResults(IWorkShiftFilterResult filterResult)
-		{
-			_filterResults.Add(filterResult);
-		}
-
-        
-	}
-
 }

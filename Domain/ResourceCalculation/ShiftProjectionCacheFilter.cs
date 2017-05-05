@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
     	public IList<ShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, 
-            IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IList<IShiftCategory> notAllowedCategories, IWorkShiftFinderResult finderResult)
+            IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IList<IShiftCategory> notAllowedCategories, WorkShiftFinderResult finderResult)
         {
             if (restriction == null)
             {
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    return ret;
         }
 		
-        public static IList<ShiftProjectionCache> FilterOnActivityRestrictions(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction , IWorkShiftFinderResult finderResult)
+        public static IList<ShiftProjectionCache> FilterOnActivityRestrictions(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction , WorkShiftFinderResult finderResult)
         {
             IList<IActivityRestriction> activityRestrictions = restriction.ActivityRestrictionCollection;
             if (activityRestrictions.Count == 0)
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return workShiftsWithActivity;
         }
 
-        public bool CheckRestrictions(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult)
+        public bool CheckRestrictions(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftFinderResult finderResult)
         {
             if (effectiveRestriction == null)
             {
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
         public IList<ShiftProjectionCache> FilterOnRestrictionTimeLimits(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<ShiftProjectionCache> shiftList,
-                                                                   IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
+                                                                   IEffectiveRestriction restriction, WorkShiftFinderResult finderResult)
         {
             if (shiftList.Count == 0)
                 return shiftList;
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return workShiftsWithinPeriod;
         }
 
-        public IList<ShiftProjectionCache> FilterOnDateTimePeriod(IList<ShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> FilterOnDateTimePeriod(IList<ShiftProjectionCache> shiftList, DateTimePeriod validPeriod, WorkShiftFinderResult finderResult)
         {
             var cntBefore = shiftList.Count;
 	        IList<ShiftProjectionCache> workShiftsWithinPeriod =
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return workShiftsWithinPeriod;
         }
 
-        public IList<ShiftProjectionCache> FilterOnLatestStartTime(IList<ShiftProjectionCache> shiftList, DateTime latestStart, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> FilterOnLatestStartTime(IList<ShiftProjectionCache> shiftList, DateTime latestStart, WorkShiftFinderResult finderResult)
         {
             int cntBefore = shiftList.Count;
 	        IList<ShiftProjectionCache> workShiftsWithinPeriod =
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return workShiftsWithinPeriod;
         }
 
-        public IList<ShiftProjectionCache> FilterOnEarliestEndTime(IList<ShiftProjectionCache> shiftList, DateTime earliestEnd, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> FilterOnEarliestEndTime(IList<ShiftProjectionCache> shiftList, DateTime earliestEnd, WorkShiftFinderResult finderResult)
         {
             int cntBefore = shiftList.Count;
             IList<ShiftProjectionCache> workShiftsWithinPeriod = shiftList.Select(s => new
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return workShiftsWithinPeriod;
         }
 
-        public IList<ShiftProjectionCache> FilterOnContractTime(MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> FilterOnContractTime(MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult)
         {
             if (shiftList.Count == 0)
                 return shiftList;
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         }
 
-        public IList<ShiftProjectionCache> FilterOnRestrictionMinMaxWorkTime(IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> FilterOnRestrictionMinMaxWorkTime(IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, WorkShiftFinderResult finderResult)
         {
             if (shiftList.Count == 0)
                 return shiftList;
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        return shiftList;
         }
 
-        public IList<ShiftProjectionCache> FilterOnShiftCategory(IShiftCategory category, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> FilterOnShiftCategory(IShiftCategory category, IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult)
         {
             if (shiftList.Count == 0)
                 return shiftList;
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return ret;
         }
 
-        public IList<ShiftProjectionCache> FilterOnNotAllowedShiftCategories(IList<IShiftCategory> categories, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> FilterOnNotAllowedShiftCategories(IList<IShiftCategory> categories, IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult)
         {
             if (categories.Count == 0)
                 return shiftList;
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return ret;
         }
 
-        public IList<ShiftProjectionCache> FilterOnBusinessRules(IScheduleRange current, IList<ShiftProjectionCache> shiftList, DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> FilterOnBusinessRules(IScheduleRange current, IList<ShiftProjectionCache> shiftList, DateOnly dateToCheck, WorkShiftFinderResult finderResult)
         {
             if (shiftList.Count == 0)
                 return shiftList;
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return FilterOnDateTimePeriod(shiftList, rulePeriod.Value, finderResult);
         }
 
-        public IList<ShiftProjectionCache> FilterOnStartAndEndTime(DateTimePeriod startAndEndTime, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> FilterOnStartAndEndTime(DateTimePeriod startAndEndTime, IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult)
         {
             int cnt = shiftList.Count;
 
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         
 
-        public IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList, DateOnly dateToSchedule, IScheduleRange current, IWorkShiftFinderResult finderResult)
+        public IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList, DateOnly dateToSchedule, IScheduleRange current, WorkShiftFinderResult finderResult)
         {
             shiftList = FilterOnContractTime(validMinMax, shiftList, finderResult);
 
@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         
 
-		public IList<ShiftProjectionCache> FilterOnBusinessRules(IEnumerable<IPerson> groupOfPersons, IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> FilterOnBusinessRules(IEnumerable<IPerson> groupOfPersons, IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult)
         {
 			InParameter.NotNull(nameof(groupOfPersons), groupOfPersons);
 			InParameter.NotNull(nameof(scheduleDictionary), scheduleDictionary);

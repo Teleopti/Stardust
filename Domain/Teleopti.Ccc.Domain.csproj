@@ -911,8 +911,6 @@
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftExtender.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IWorkShiftFilterResult.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IWorkShiftFinderResult.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftFinderService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftLimiter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftMinMaxCalculator.cs" />

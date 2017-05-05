@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public interface IWorkShiftFinderResultHolder
     {
-        void AddResults(IList<IWorkShiftFinderResult> results, DateTime theDateTime);
-        IList<IWorkShiftFinderResult> GetResults();
+        void AddResults(IList<WorkShiftFinderResult> results, DateTime theDateTime);
+        IList<WorkShiftFinderResult> GetResults();
         bool LastResultIsSuccessful { get; }
-        IList<IWorkShiftFinderResult> GetResults(bool latestOnly);
-        IList<IWorkShiftFinderResult> GetResults(bool latestOnly, bool notSuccessfulOnly);
+        IList<WorkShiftFinderResult> GetResults(bool latestOnly);
+        IList<WorkShiftFinderResult> GetResults(bool latestOnly, bool notSuccessfulOnly);
         void AddFilterToResult(IPerson person, DateOnly theDate, string message);
         void AddFilterToResult(IPerson person, DateOnly theDate, string message, Guid key);
         void AddFilterToResult(IPerson person, DateOnly theDate, string message, Guid key, int shiftsBefore, int shiftsAfter);
@@ -24,12 +24,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
     public class WorkShiftFinderResultHolder : IWorkShiftFinderResultHolder
     {
-		private readonly HashSet<IWorkShiftFinderResult> _finderResultList;
+		private readonly HashSet<WorkShiftFinderResult> _finderResultList;
         private DateTime _lastFinderResultDate;
 
         public WorkShiftFinderResultHolder()
         {
-            _finderResultList = new HashSet<IWorkShiftFinderResult>();
+            _finderResultList = new HashSet<WorkShiftFinderResult>();
         }
 
         public void Clear()
@@ -40,15 +40,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public void Clear(IPerson person, DateOnly theDate)
         {
-            IWorkShiftFinderResult result = getResultForPersonAndDate(person, theDate);
+            var result = getResultForPersonAndDate(person, theDate);
             _finderResultList.Remove(result);
         }
 
 	    public bool AlwaysShowTroubleshoot { get; set; }
 
-	    public void AddResults(IList<IWorkShiftFinderResult> results, DateTime theDateTime)
+	    public void AddResults(IList<WorkShiftFinderResult> results, DateTime theDateTime)
         {
-            foreach (IWorkShiftFinderResult result in results)
+            foreach (WorkShiftFinderResult result in results)
             {
                 result.SchedulingDateTime = theDateTime;
             	_finderResultList.Add(result);
@@ -59,22 +59,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 _lastFinderResultDate = theDateTime;
         }
 
-        public IList<IWorkShiftFinderResult> GetResults()
+        public IList<WorkShiftFinderResult> GetResults()
         {
             return GetResults(false, false);
         }
 
-        public bool LastResultIsSuccessful
-        {
-            get { return GetResults(true, true).Count == 0; }
-        }
+        public bool LastResultIsSuccessful => GetResults(true, true).Count == 0;
 
-        public IList<IWorkShiftFinderResult> GetResults(bool latestOnly)
+	    public IList<WorkShiftFinderResult> GetResults(bool latestOnly)
         {
             return GetResults(latestOnly, false);
         }
 
-        public IList<IWorkShiftFinderResult> GetResults(bool latestOnly, bool notSuccessfulOnly)
+        public IList<WorkShiftFinderResult> GetResults(bool latestOnly, bool notSuccessfulOnly)
         {
             if (latestOnly & !notSuccessfulOnly)
                 return filterOnLatest();
@@ -88,17 +85,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return _finderResultList.ToList();
         }
 
-        private IList<IWorkShiftFinderResult> filterOnLatest()
+        private IList<WorkShiftFinderResult> filterOnLatest()
         {
             return (from sd in _finderResultList where sd.SchedulingDateTime == _lastFinderResultDate select sd).ToList();
         }
 
-        private IList<IWorkShiftFinderResult> filterOnSuccess()
+        private IList<WorkShiftFinderResult> filterOnSuccess()
         {
             return (from sd in _finderResultList where sd.Successful == false select sd).ToList();
         }
 
-        private IList<IWorkShiftFinderResult> filterOnSuccessAndLatest()
+        private IList<WorkShiftFinderResult> filterOnSuccessAndLatest()
         {
             return (from sd in _finderResultList where sd.Successful == false & sd.SchedulingDateTime == _lastFinderResultDate select sd).ToList();
         }
@@ -115,22 +112,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void AddFilterToResult(IPerson person, DateOnly theDate, string message, Guid key, int shiftsBefore, int shiftsAfter)
     	{
-    		IWorkShiftFinderResult result = getResultForPersonAndDate(person, theDate);
+    		var result = getResultForPersonAndDate(person, theDate);
 
 			result.AddFilterResults(new WorkShiftFilterResult(message, shiftsBefore, shiftsAfter, key));
     	}
 
 		public void SetResultSuccessful(IPerson person, DateOnly theDate, string newMessage)
 		{
-			IWorkShiftFinderResult result = getResultForPersonAndDate(person, theDate);
+			var result = getResultForPersonAndDate(person, theDate);
 			result.Successful = true;
 			if(!string.IsNullOrEmpty(newMessage))
 				result.AddFilterResults(new WorkShiftFilterResult(newMessage, 0, 0));
 		}
 
-        private IWorkShiftFinderResult getResultForPersonAndDate(IPerson person, DateOnly theDate)
+        private WorkShiftFinderResult getResultForPersonAndDate(IPerson person, DateOnly theDate)
 		{
-			IWorkShiftFinderResult result = _finderResultList.Where(workShiftFinderResult => workShiftFinderResult.Person.Equals(person) && workShiftFinderResult.ScheduleDate.Equals(theDate)).FirstOrDefault();
+			WorkShiftFinderResult result = _finderResultList.FirstOrDefault(workShiftFinderResult => workShiftFinderResult.Person.Equals(person) && workShiftFinderResult.ScheduleDate.Equals(theDate));
 			if (result == null)
 			{
 				result = new WorkShiftFinderResult(person, theDate);

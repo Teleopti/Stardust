@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 							cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);
 						}
 						var result = cache.FinderResult;
-						_allResults().AddResults(new List<IWorkShiftFinderResult> {result}, schedulingTime);
+						_allResults().AddResults(new List<WorkShiftFinderResult> {result}, schedulingTime);
 
 						if (cache.ResultHolder == null)
 							return null;

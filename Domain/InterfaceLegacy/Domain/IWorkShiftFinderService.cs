@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	public class WorkShiftFinderServiceResult
 	{
-		public WorkShiftFinderServiceResult(IWorkShiftCalculationResultHolder resultHolder, IWorkShiftFinderResult finderResult)
+		public WorkShiftFinderServiceResult(IWorkShiftCalculationResultHolder resultHolder, WorkShiftFinderResult finderResult)
 		{
 			FinderResult = finderResult;
 			ResultHolder = resultHolder;
 		}
 
 		public IWorkShiftCalculationResultHolder ResultHolder { get; private set; }
-		public IWorkShiftFinderResult FinderResult { get; private set; }
+		public WorkShiftFinderResult FinderResult { get; private set; }
 	}
 }

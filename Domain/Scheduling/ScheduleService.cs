@@ -1,11 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IMatrixListFactory _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-        private readonly Hashtable _finderResults = new Hashtable();
+        private readonly Dictionary<Tuple<Guid,DateOnly>,WorkShiftFinderResult> _finderResults = new Dictionary<Tuple<Guid, DateOnly>, WorkShiftFinderResult>();
 
         public ScheduleService(
 					Func<ISchedulerStateHolder> stateHolder,
@@ -32,20 +33,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
         }
 
-        public ReadOnlyCollection<IWorkShiftFinderResult> FinderResults
-        {
-            get
-            {
-                IList<IWorkShiftFinderResult> tmp = new List<IWorkShiftFinderResult>(_finderResults.Count);
-                foreach (DictionaryEntry finderResult in _finderResults)
-                {
-                    tmp.Add((IWorkShiftFinderResult)finderResult.Value);
-                }
-                return new ReadOnlyCollection<IWorkShiftFinderResult>(tmp);
-            }
-        }
+        public ReadOnlyCollection<WorkShiftFinderResult> FinderResults => new ReadOnlyCollection<WorkShiftFinderResult>(_finderResults.Values.ToArray());
 
-        public void ClearFinderResults()
+	    public void ClearFinderResults()
         {
             _finderResults.Clear();
         }
@@ -93,9 +83,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 if (effectiveRestriction == null)
                 {
-                    IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, scheduleDateOnly);
+                    var finderResult = new WorkShiftFinderResult(person, scheduleDateOnly);
                     finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.ConflictingRestrictions, 0, 0));
-                    if (!_finderResults.Contains(finderResult.PersonDateKey))
+                    if (!_finderResults.ContainsKey(finderResult.PersonDateKey))
                         _finderResults.Add(finderResult.PersonDateKey, finderResult);
                     return false;
                 }
@@ -117,16 +107,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 if (cache.ResultHolder == null)
                 {
-                    if (!_finderResults.Contains(cache.FinderResult.PersonDateKey))
+                    if (!_finderResults.ContainsKey(cache.FinderResult.PersonDateKey))
                     {
                         _finderResults.Add(cache.FinderResult.PersonDateKey, cache.FinderResult);
                     }
                     return false;
                 }
 
-	            if (_finderResults.Contains(cache.FinderResult.PersonDateKey))
+	            WorkShiftFinderResult res;
+	            if (_finderResults.TryGetValue(cache.FinderResult.PersonDateKey, out res))
 	            {
-		            var res = (WorkShiftFinderResult) _finderResults[cache.FinderResult.PersonDateKey];
 		            res.Successful = true;
 	            }
 

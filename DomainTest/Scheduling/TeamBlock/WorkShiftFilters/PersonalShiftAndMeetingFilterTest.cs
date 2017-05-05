@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private PersonalShiftAndMeetingFilter _target;
 		private IScheduleDay _part;
 		private IPersonAssignment _personAssignment;
-		private IWorkShiftFinderResult _finderResult;
+		private WorkShiftFinderResult _finderResult;
 
 		public void setup()
 		{
@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				var retPeriod = _target.GetMaximumPeriodForPersonalShiftsAndMeetings(_part);
 				Assert.AreEqual(resultPeriod, retPeriod);
 			}
-
 		}
 
 		[Test]
@@ -72,8 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 											new DateTime(2009, 2, 2, 9, 30, 0, DateTimeKind.Utc));
 			var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc),
 											 new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc));
-
-
+			
 			var retList = new List<IPersonMeeting>();
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(retList);
 

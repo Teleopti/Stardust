@@ -16,78 +16,58 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// Created by: Ola
     /// Created date: 2008-09-23
     /// /// </remarks>
-    public class WorkShiftFinderResult : IWorkShiftFinderResult
+    public class WorkShiftFinderResult
     {
-
         private readonly IPerson _person;
-        private readonly DateOnly _scheduleDate;
-    	private readonly HashSet<IWorkShiftFilterResult> _filterResult;
+	    private readonly HashSet<WorkShiftFilterResult> _filterResult;
 
         public WorkShiftFinderResult(IPerson person, DateOnly scheduleDate)
         {
             _person = person;
-            _scheduleDate = scheduleDate;
-			_filterResult = new HashSet<IWorkShiftFilterResult>();
-        	//Successful = true;
+            ScheduleDate = scheduleDate;
+			_filterResult = new HashSet<WorkShiftFilterResult>();
+
+	        PersonDateKey = new Tuple<Guid, DateOnly>(Person.Id.GetValueOrDefault(), ScheduleDate);
         }
-
-        protected WorkShiftFinderResult(){}
-
+		
 		public bool Successful { get; set; }
 		public DateTime SchedulingDateTime { get; set; }
 		public bool StoppedOnOverstaffing { get; set; }
 
-    	public void AddFilterResults(IWorkShiftFilterResult filterResult)
+    	public void AddFilterResults(WorkShiftFilterResult filterResult)
 		{
     		_filterResult.Add(filterResult);
     	}
 
-    	public IPerson Person
-        {
-            get { return _person; }
-        }
-        public Tuple<Guid,DateOnly> PersonDateKey
-        {
-            get { return new Tuple<Guid, DateOnly>(Person.Id.GetValueOrDefault(), ScheduleDate); }
-        }
+    	public IPerson Person => _person;
 
-        public string PersonName
-        {
-            get { return Person.Name.ToString(NameOrderOption.FirstNameLastName); }
-        }
+	    public Tuple<Guid,DateOnly> PersonDateKey { get; }
 
-        public DateOnly ScheduleDate
-        {
-            get { return _scheduleDate; }
-        }
+	    public string PersonName => Person.Name.ToString(NameOrderOption.FirstNameLastName);
 
-        public ReadOnlyCollection<IWorkShiftFilterResult>  FilterResults
-        {
-            get
-            {
-				return new ReadOnlyCollection<IWorkShiftFilterResult>(_filterResult.ToList());
-            }
-        }
+	    public DateOnly ScheduleDate { get; }
 
-		public override int GetHashCode()
+	    public ReadOnlyCollection<WorkShiftFilterResult>  FilterResults => new ReadOnlyCollection<WorkShiftFilterResult>(_filterResult.ToList());
+
+	    public override int GetHashCode()
 		{
 			return PersonDateKey.GetHashCode();
 		}
 
 		public override bool Equals(object obj)
 		{
-			var ent = obj as IWorkShiftFinderResult;
+			var ent = obj as WorkShiftFinderResult;
 			return ent != null && Equals(ent);
 		}
 
-		public virtual bool Equals(IWorkShiftFinderResult other)
+		public virtual bool Equals(WorkShiftFinderResult other)
 		{
 			if (other == null)
 				return false;
 			if (this == other)
 				return true;
 
-			return (GetHashCode() == other.GetHashCode());
+			return PersonDateKey.Equals(other.PersonDateKey);
 		}
 
     }

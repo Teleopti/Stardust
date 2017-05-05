@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public interface IFixedStaffSchedulingService
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        IList<IWorkShiftFinderResult> FinderResults { get; }
+        IList<WorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
 		bool DoTheScheduling(IList<IScheduleDay> selectedParts, SchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
     }
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly IResourceCalculation _resourceOptimizationHelper;
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
-        private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
+        private readonly HashSet<WorkShiftFinderResult> _finderResults = new HashSet<WorkShiftFinderResult>();
 	    private IUserTimeZone _userTimeZone;
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -47,12 +47,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
-    	public IList<IWorkShiftFinderResult> FinderResults
+    	public IList<WorkShiftFinderResult> FinderResults
 	    {
             get
             {
-                var ret = new List<IWorkShiftFinderResult>(_scheduleService.FinderResults);
-                ret.AddRange(new List<IWorkShiftFinderResult>(_finderResults));
+                var ret = new List<WorkShiftFinderResult>(_scheduleService.FinderResults);
+                ret.AddRange(new List<WorkShiftFinderResult>(_finderResults));
 
                 return ret;
             }
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         protected void AddFinderResult(IPerson person, DateOnly scheduleDateOnly, string message)
         {
-            IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, scheduleDateOnly);
+            var finderResult = new WorkShiftFinderResult(person, scheduleDateOnly);
             finderResult.AddFilterResults(new WorkShiftFilterResult(message, 0, 0));
             _finderResults.Add(finderResult);
         }

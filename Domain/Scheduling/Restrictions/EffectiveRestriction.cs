@@ -360,13 +360,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (scheduleDayDateOnly == ExitDate)
 				return false;
 
-            if (!layers.Any())
+	        var layersLookup = layers.ToLookup(k => k.ActivityId);
+            if (!layersLookup.Any())
                 return false;
-
+			
             foreach (IActivityRestriction activityRestriction in _activityRestrictionCollection)
             {
                 bool result = visualLayerCollectionSatisfiesOneActivityRestriction(agentTimeZone,
-                                                                                   layers, activityRestriction);
+																				   layersLookup, activityRestriction);
                 if(!result)
                     return false;
             }
@@ -376,12 +377,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		
         public bool IsRestriction => IsAvailabilityDay || IsPreferenceDay || IsRotationDay || IsStudentAvailabilityDay;
 
-	    private static bool visualLayerCollectionSatisfiesOneActivityRestriction(TimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layerCollection, IActivityRestriction activityRestriction)
+	    private static bool visualLayerCollectionSatisfiesOneActivityRestriction(TimeZoneInfo agentTimeZone, ILookup<Guid, IActivityRestrictableVisualLayer> layerCollection, IActivityRestriction activityRestriction)
         {
             IActivityRestriction actRestriction = activityRestriction;
             
-			var layers = layerCollection.ToLookup(l => l.ActivityId)[activityRestriction.Activity.Id.GetValueOrDefault()];
-
+			var layers = layerCollection[activityRestriction.Activity.Id.GetValueOrDefault()];
 			foreach (var layer in layers)
             {
             	TimePeriod period = layer.Period.TimePeriod(agentTimeZone);
@@ -454,10 +454,48 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		public bool Equals(EffectiveRestriction restriction)
 		{
-			return restriction.GetHashCode() == GetHashCode();
+			return restriction.IsAvailabilityDay == IsAvailabilityDay &&
+				   restriction.IsPreferenceDay == IsPreferenceDay &&
+				   restriction.IsRestriction == IsRestriction &&
+				   restriction.IsRotationDay == IsRotationDay &&
+				   restriction.IsStudentAvailabilityDay == IsStudentAvailabilityDay &&
+				   restriction.MustHave == MustHave &&
+				   restriction.NotAllowedForDayOffs == NotAllowedForDayOffs &&
+				   restriction.NotAvailable == NotAvailable &&
+				   (restriction.ShiftCategory?.Equals(ShiftCategory) ?? restriction.ShiftCategory == null && ShiftCategory == null) &&
+				   (restriction.Absence?.Equals(Absence) ?? restriction.Absence == null && Absence == null) &&
+				   (restriction.DayOffTemplate?.Equals(DayOffTemplate) ??
+					restriction.DayOffTemplate == null && DayOffTemplate == null) &&
+				   restriction._startTimeLimitation.Equals(_startTimeLimitation) &&
+				   restriction._endTimeLimitation.Equals(_endTimeLimitation) &&
+				   restriction._workTimeLimitation.Equals(_workTimeLimitation) &&
+				   restriction._activityRestrictionCollection.Count == _activityRestrictionCollection.Count &&
+				   restrictionCollectionsAreEqual(restriction._activityRestrictionCollection, _activityRestrictionCollection) &&
+				   ((restriction.CommonActivity == null && CommonActivity == null) ||
+					(restriction.CommonActivity != null && CommonActivity != null &&
+					 restriction.CommonActivity.GetHashCode() == CommonActivity.GetHashCode())) &&
+				   ((restriction.CommonMainShift == null && CommonMainShift == null) ||
+					(restriction.CommonMainShift != null && CommonMainShift != null &&
+					 restriction.CommonMainShift.GetHashCode() == CommonMainShift.GetHashCode()));
 		}
 
-		public bool NotAllowedForDayOffs { get; set; }
+	    private bool restrictionCollectionsAreEqual(IList<IActivityRestriction> collection1, IList<IActivityRestriction> collection2)
+	    {
+		    for (int i = 0; i < collection1.Count; i++)
+		    {
+			    if (!collection1[i].Activity.Equals(collection2[i].Activity))
+				    return false;
+				if (!collection1[i].StartTimeLimitation.Equals(collection2[i].StartTimeLimitation))
+					return false;
+				if (!collection1[i].EndTimeLimitation.Equals(collection2[i].EndTimeLimitation))
+					return false;
+				if (!collection1[i].WorkTimeLimitation.Equals(collection2[i].WorkTimeLimitation))
+					return false;
+			}
+		    return true;
+	    }
+
+	    public bool NotAllowedForDayOffs { get; set; }
 	    public IEditableShift CommonMainShift { get; set; }
 	    public ICommonActivity CommonActivity { get; set; }
     }

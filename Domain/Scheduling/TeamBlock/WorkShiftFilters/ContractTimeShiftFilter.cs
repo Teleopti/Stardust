@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	{
 		IList<ShiftProjectionCache> Filter(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList,
 		                                                    IList<ShiftProjectionCache> shiftList,
-		                                                    SchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
+		                                                    SchedulingOptions schedulingOptions, WorkShiftFinderResult finderResult);
 	}
 	
 	public class ContractTimeShiftFilter : IContractTimeShiftFilter
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		
 		public IList<ShiftProjectionCache> Filter(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList,
 		                                           IList<ShiftProjectionCache> shiftList,
-		                                           SchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
+		                                           SchedulingOptions schedulingOptions, WorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
 			if (finderResult == null) return null;

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != this.GetType()) return false;
+			if (obj.GetType() != GetType()) return false;
 			return Equals((CommonActivity)obj);
 		}
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 		{
 			unchecked
 			{
-				return ((Activity != null ? Activity.GetHashCode() : 0) * 397) ^ periodsHashCode();
+				return ((Activity?.GetHashCode() ?? 0) * 397) ^ periodsHashCode();
 			}
 		}
 

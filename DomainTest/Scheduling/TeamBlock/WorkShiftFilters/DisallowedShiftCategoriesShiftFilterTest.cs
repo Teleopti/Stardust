@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.DomainTest.ResourceCalculation;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 {
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void CanFilterOnNotAllowedCategoriesWithEmptyList()
 		{
 			IShiftCategory shiftCategory1 = new ShiftCategory("allowed");
-			var ret = _target.Filter(new List<IShiftCategory> { shiftCategory1 }, new List<ShiftProjectionCache>(), new WorkShiftFinderResultForTest());
+			var ret = _target.Filter(new List<IShiftCategory> { shiftCategory1 }, new List<ShiftProjectionCache>(), new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.IsNotNull(ret);
 		}
 
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			IList<ShiftProjectionCache> caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
 			IList<IShiftCategory> categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
-			IWorkShiftFinderResult finderResult = new WorkShiftFinderResultForTest();
+			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly());
 			using (_mocks.Record())
 			{
 				Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			IWorkShiftFinderResult finderResult = new WorkShiftFinderResultForTest();
+			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly());
 			
 			var result = _target.Filter(new List<IShiftCategory>(), null, finderResult);
 			Assert.IsNull(result);

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void ShouldFilterAccordingToEarliestEndTimeLimitation()
 		{
 			var earlistEnd = new DateTime(2013, 3, 1, 17, 0, 0, DateTimeKind.Utc);
-			var result = _target.Filter(getCashes(), earlistEnd, new WorkShiftFinderResultForTest());
+			var result = _target.Filter(getCashes(), earlistEnd, new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.That(result.Count, Is.EqualTo(2));
 		}
 
@@ -52,10 +51,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var result = _target.Filter(getCashes(), new DateTime(), null);
 			Assert.IsNull(result);
 
-			result = _target.Filter(null, new DateTime(), new WorkShiftFinderResultForTest());
+			result = _target.Filter(null, new DateTime(), new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.IsNull(result);
 
-			result = _target.Filter(new List<ShiftProjectionCache>(),new DateTime(), new WorkShiftFinderResultForTest());
+			result = _target.Filter(new List<ShiftProjectionCache>(),new DateTime(), new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 

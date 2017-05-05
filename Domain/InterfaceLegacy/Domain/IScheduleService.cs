@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	public interface IScheduleService
 	{
 
-		ReadOnlyCollection<IWorkShiftFinderResult> FinderResults { get; }
+		ReadOnlyCollection<WorkShiftFinderResult> FinderResults { get; }
 
 	    bool SchedulePersonOnDay(
             IScheduleDay schedulePart,

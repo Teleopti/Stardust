@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private IPersonPeriod _currentPersonPeriod;
         private IVirtualSchedulePeriod _currentSchedulePeriod;
         private IScheduleDay _schedulePart;
-        private IWorkShiftFinderResult _finderResult;
+        private WorkShiftFinderResult _finderResult;
 
-        public bool CheckStatus(IScheduleDay schedulePart, IWorkShiftFinderResult finderResult, SchedulingOptions schedulingOptions)
+        public bool CheckStatus(IScheduleDay schedulePart, WorkShiftFinderResult finderResult, SchedulingOptions schedulingOptions)
         {
             _schedulePart = schedulePart;
             _finderResult = finderResult;

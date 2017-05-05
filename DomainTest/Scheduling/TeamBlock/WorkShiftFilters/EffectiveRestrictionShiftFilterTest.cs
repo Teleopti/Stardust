@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			var result = _mocks.StrictMock<IWorkShiftFinderResult>();
+			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
 			using (_mocks.Record())
 			{
@@ -39,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(effectiveRestriction.IsAvailabilityDay).Return(false);
 				Expect.Call(effectiveRestriction.IsPreferenceDay).Return(false);
 				Expect.Call(effectiveRestriction.IsStudentAvailabilityDay).Return(false);
-				Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
 			}
 
 			schedulingOptions.UseRotations = true;
@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Playback())
 			{
 				bool ret = _target.Filter(schedulingOptions, effectiveRestriction, result);
+				result.FilterResults.Count.Should().Be.EqualTo(1);
 				Assert.IsFalse(ret);
 			}
 		}
@@ -63,13 +64,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			var result = _mocks.StrictMock<IWorkShiftFinderResult>();
+			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
 			using (_mocks.Record())
 			{
 				Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
 				Expect.Call(effectiveRestriction.IsPreferenceDay).Return(false);
-				Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
 			}
 
 			schedulingOptions.UseRotations = false;
@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Playback())
 			{
 				bool ret = _target.Filter(schedulingOptions, effectiveRestriction, result);
+				result.FilterResults.Count.Should().Be.EqualTo(1);
 				Assert.IsFalse(ret);
 			}
 		}
@@ -93,8 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			var result = _mocks.StrictMock<IWorkShiftFinderResult>();
-			IList<IWorkShiftFilterResult> lstResult = new List<IWorkShiftFilterResult>();
+			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 			using (_mocks.Record())
 			{
 				Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			{
 				bool ret = _target.Filter(schedulingOptions, effectiveRestriction, result);
 				Assert.IsTrue(ret);
-				Assert.AreEqual(0, lstResult.Count);
+				Assert.AreEqual(0, result.FilterResults.Count);
 			}
 		}
 
@@ -122,17 +122,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			IEffectiveRestriction effectiveRestriction = null;
-			var result = _mocks.StrictMock<IWorkShiftFinderResult>();
+			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
-			using (_mocks.Record())
-			{
-				Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
-			}
-			using (_mocks.Playback())
-			{
-				bool ret = _target.Filter(schedulingOptions, effectiveRestriction, result);
-				Assert.IsFalse(ret);
-			}
+			bool ret = _target.Filter(schedulingOptions, effectiveRestriction, result);
+			Assert.IsFalse(ret);
+			result.FilterResults.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]

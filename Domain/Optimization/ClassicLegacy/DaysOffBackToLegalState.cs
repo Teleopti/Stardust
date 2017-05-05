@@ -56,18 +56,17 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 					if (!backToLegalStateSolverContainer.Result)
 					{
 						backToLegalStateSolverContainer.MatrixOriginalStateContainer.StillAlive = false;
-						IWorkShiftFinderResult workShiftFinderResult =
+						WorkShiftFinderResult workShiftFinderResult =
 							new WorkShiftFinderResult(backToLegalStateSolverContainer.MatrixOriginalStateContainer.ScheduleMatrix.Person,
 								DateOnly.Today)
 							{ Successful = false };
 						foreach (string descriptionKey in backToLegalStateSolverContainer.FailedSolverDescriptionKeys)
 						{
 							string localizedText = Resources.ResourceManager.GetString(descriptionKey);
-							IWorkShiftFilterResult workShiftFilterResult =
-								new WorkShiftFilterResult(localizedText, 0, 0);
+							var workShiftFilterResult = new WorkShiftFilterResult(localizedText, 0, 0);
 							workShiftFinderResult.AddFilterResults(workShiftFilterResult);
 						}
-						workShiftFinderResultHolder().AddResults(new List<IWorkShiftFinderResult> { workShiftFinderResult }, DateTime.Now);
+						workShiftFinderResultHolder().AddResults(new List<WorkShiftFinderResult> { workShiftFinderResult }, DateTime.Now);
 					}
 				}
 			}

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="effectiveRestriction">The effective restriction.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        bool CheckRestrictions(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult);
+        bool CheckRestrictions(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftFinderResult finderResult);
 
         /// <summary>
         /// Filters the on restriction and not allowed shift categories.
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
         IList<ShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<ShiftProjectionCache> shiftList,
-                                                                                   IEffectiveRestriction restriction, IList<IShiftCategory> notAllowedCategories, IWorkShiftFinderResult finderResult);
+                                                                                   IEffectiveRestriction restriction, IList<IShiftCategory> notAllowedCategories, WorkShiftFinderResult finderResult);
 
         /// <summary>
         /// Filters the on restriction time limits.
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
         IList<ShiftProjectionCache> FilterOnRestrictionTimeLimits(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<ShiftProjectionCache> shiftList,
-                                                                                   IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult);
+                                                                                   IEffectiveRestriction restriction, WorkShiftFinderResult finderResult);
 
         /// <summary>
         /// Filters the on date time period.
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="validPeriod">The valid period.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<ShiftProjectionCache> FilterOnDateTimePeriod(IList<ShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult);
+        IList<ShiftProjectionCache> FilterOnDateTimePeriod(IList<ShiftProjectionCache> shiftList, DateTimePeriod validPeriod, WorkShiftFinderResult finderResult);
         /// <summary>
         /// Filters the on latest start time.
         /// </summary>
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="latestStart">The latest start.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<ShiftProjectionCache> FilterOnLatestStartTime(IList<ShiftProjectionCache> shiftList, DateTime latestStart, IWorkShiftFinderResult finderResult);
+        IList<ShiftProjectionCache> FilterOnLatestStartTime(IList<ShiftProjectionCache> shiftList, DateTime latestStart, WorkShiftFinderResult finderResult);
         /// <summary>
         /// Filters the on earliest end time.
         /// </summary>
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="earliestEnd">The earliest end.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<ShiftProjectionCache> FilterOnEarliestEndTime(IList<ShiftProjectionCache> shiftList, DateTime earliestEnd, IWorkShiftFinderResult finderResult);
+        IList<ShiftProjectionCache> FilterOnEarliestEndTime(IList<ShiftProjectionCache> shiftList, DateTime earliestEnd, WorkShiftFinderResult finderResult);
         /// <summary>
         /// Filters the on contract time.
         /// </summary>
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="shiftList">The shift list.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<ShiftProjectionCache> FilterOnContractTime(MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult);
+        IList<ShiftProjectionCache> FilterOnContractTime(MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult);
         /// <summary>
         /// Filters the on restriction min max work time.
         /// </summary>
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="restriction">The restriction.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<ShiftProjectionCache> FilterOnRestrictionMinMaxWorkTime(IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult);
+        IList<ShiftProjectionCache> FilterOnRestrictionMinMaxWorkTime(IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, WorkShiftFinderResult finderResult);
         /// <summary>
         /// Filters the on shift category.
         /// </summary>
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="shiftList">The shift list.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<ShiftProjectionCache> FilterOnShiftCategory(IShiftCategory category, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult);
+        IList<ShiftProjectionCache> FilterOnShiftCategory(IShiftCategory category, IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult);
         /// <summary>
         /// Filters the on not allowed shift categories.
         /// </summary>
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="shiftList">The shift list.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<ShiftProjectionCache> FilterOnNotAllowedShiftCategories(IList<IShiftCategory> categories, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult);
+        IList<ShiftProjectionCache> FilterOnNotAllowedShiftCategories(IList<IShiftCategory> categories, IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult);
         /// <summary>
         /// Filters the on business rules.
         /// </summary>
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="dateToCheck">The date to check.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<ShiftProjectionCache> FilterOnBusinessRules(IScheduleRange current, IList<ShiftProjectionCache> shiftList, DateOnly dateToCheck, IWorkShiftFinderResult finderResult);
+        IList<ShiftProjectionCache> FilterOnBusinessRules(IScheduleRange current, IList<ShiftProjectionCache> shiftList, DateOnly dateToCheck, WorkShiftFinderResult finderResult);
         /// <summary>
         /// Filters the on start and end time.
         /// </summary>
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="shiftList">The shift list.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<ShiftProjectionCache> FilterOnStartAndEndTime(DateTimePeriod startAndEndTime, IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult);
+        IList<ShiftProjectionCache> FilterOnStartAndEndTime(DateTimePeriod startAndEndTime, IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult);
 
 	    /// <summary>
 	    /// Filters the specified valid min max.
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    /// <returns></returns>
 	    IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList,
                                             DateOnly dateToSchedule, IScheduleRange current,
-                                            IWorkShiftFinderResult finderResult);
+                                            WorkShiftFinderResult finderResult);
 
         /// <summary>
         /// Filters on main shift optimize activities specification.
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     	IList<ShiftProjectionCache> FilterOnBusinessRules(IEnumerable<IPerson> groupOfPersons,
     	                                                   IScheduleDictionary scheduleDictionary,
 														   DateOnly dateOnly, IList<ShiftProjectionCache> shiftList, 
-    	                                                   IWorkShiftFinderResult finderResult);
+    	                                                   WorkShiftFinderResult finderResult);
 
         
     }

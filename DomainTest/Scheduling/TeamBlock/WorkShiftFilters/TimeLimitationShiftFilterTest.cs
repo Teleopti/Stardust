@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			var startTime = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2013, 3, 1, 17, 30, 0, DateTimeKind.Utc);
-			var result = _target.Filter(getCashes(), new DateTimePeriod(startTime, endTime), new WorkShiftFinderResultForTest());
+			var result = _target.Filter(getCashes(), new DateTimePeriod(startTime, endTime), new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.That(result.Count, Is.EqualTo(1));
 		}
 
@@ -55,13 +54,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var startTime = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2013, 3, 1, 17, 30, 0, DateTimeKind.Utc);
 			
-			var result = _target.Filter(null, new DateTimePeriod(startTime, endTime), new WorkShiftFinderResultForTest());
+			var result = _target.Filter(null, new DateTimePeriod(startTime, endTime), new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.IsNull(result);
 
 			result = _target.Filter(new List<ShiftProjectionCache>(), new DateTimePeriod(startTime, endTime), null);
 			Assert.IsNull(result);
 			
-			result = _target.Filter(new List<ShiftProjectionCache>(), new DateTimePeriod(startTime, endTime), new WorkShiftFinderResultForTest());
+			result = _target.Filter(new List<ShiftProjectionCache>(), new DateTimePeriod(startTime, endTime), new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 

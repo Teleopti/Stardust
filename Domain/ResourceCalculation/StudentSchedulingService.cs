@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public interface IStudentSchedulingService
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		IList<IWorkShiftFinderResult> FinderResults { get; }
+		IList<WorkShiftFinderResult> FinderResults { get; }
 		void ClearFinderResults();
 		bool DoTheScheduling(IList<IScheduleDay> selectedParts, SchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 
-		public IList<IWorkShiftFinderResult> FinderResults => _scheduleService.FinderResults.ToList();
+		public IList<WorkShiftFinderResult> FinderResults => _scheduleService.FinderResults.ToList();
 
 		public void ClearFinderResults()
 		{

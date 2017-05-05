@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+			_timeZoneInfo = TimeZoneInfo.Utc;
 			_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResultForTest());
+				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResult(new Person(), new DateOnly()));
 
 				retShifts.Should().Contain(c1);
 				retShifts.Count.Should().Be.EqualTo(1);
@@ -117,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Playback())
 			{
 				IList<ShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions,
-					new WorkShiftFinderResultForTest());
+					new WorkShiftFinderResult(new Person(), new DateOnly()));
 
 				retShifts.Should().Contain(c1);
 				retShifts.Count.Should().Be.EqualTo(1);
@@ -154,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Playback())
 			{
 				IList<ShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions,
-					new WorkShiftFinderResultForTest());
+					new WorkShiftFinderResult(new Person(), new DateOnly()));
 
 				retShifts.Should().Contain(c1);
 				retShifts.Count.Should().Be.EqualTo(1);
@@ -199,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResultForTest());
+				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResult(new Person(), new DateOnly()));
 
 				retShifts.Should().Contain(c1);
 				retShifts.Count.Should().Be.EqualTo(1);
@@ -230,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResultForTest());
+				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResult(new Person(), new DateOnly()));
 
 				retShifts.Count.Should().Be.EqualTo(0);
 			}
@@ -241,15 +240,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void ShouldCheckParameters()
 		{
 			var dateOnly = new DateOnly(2013, 3, 1);
-			var result = _target.Filter(dateOnly, _allMatrixes, null, _scheduleOptions, new WorkShiftFinderResultForTest());
+			var result = _target.Filter(dateOnly, _allMatrixes, null, _scheduleOptions, new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.IsNull(result);
 			result = _target.Filter(dateOnly, _allMatrixes, new List<ShiftProjectionCache>(), _scheduleOptions, null);
 			Assert.IsNull(result);
 			result = _target.Filter(dateOnly, null, new List<ShiftProjectionCache>(), _scheduleOptions,
-				new WorkShiftFinderResultForTest());
+				new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.IsNull(result);
 			result = _target.Filter(dateOnly, _allMatrixes, new List<ShiftProjectionCache>(), _scheduleOptions,
-				new WorkShiftFinderResultForTest());
+				new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 	}

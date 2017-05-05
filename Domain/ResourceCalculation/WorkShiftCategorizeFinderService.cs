@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods,
 			IVirtualSchedulePeriod currentSchedulePeriod,
 			SchedulingOptions schedulingOptions,
-			IWorkShiftFinderResult workShiftFinderResult
+			WorkShiftFinderResult workShiftFinderResult
 		)
 		{
 			if (schedulingOptions.IsOptimization)
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private IWorkShiftCalculationResultHolder fullShiftSelection(IList<ShiftProjectionCache> shiftProjectionCaches,
 			IWorkShiftCalculatorSkillStaffPeriodData dataHolders, IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods,
 			IVirtualSchedulePeriod currentSchedulePeriod, SchedulingOptions schedulingOptions,
-			IWorkShiftFinderResult workShiftFinderResult)
+			WorkShiftFinderResult workShiftFinderResult)
 		{
 			var person = currentSchedulePeriod.Person;
 			IList<IWorkShiftCalculationResultHolder> allValues = _workShiftCalculatorsManager.RunCalculators(person,
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private IWorkShiftCalculationResultHolder categorizedShiftSelection(IList<ShiftProjectionCache> shiftProjectionCaches,
 			IWorkShiftCalculatorSkillStaffPeriodData dataHolders, IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods,
 			IVirtualSchedulePeriod currentSchedulePeriod, SchedulingOptions schedulingOptions,
-			IWorkShiftFinderResult workShiftFinderResult)
+			WorkShiftFinderResult workShiftFinderResult)
 		{
 			var person = currentSchedulePeriod.Person;
 			var categorizedShifts =
@@ -285,13 +285,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 
-		private void loggFilterResult(string message, int countWorkShiftsBefore, int countWorkShiftsAfter, IWorkShiftFinderResult workShiftFinderResult)
+		private void loggFilterResult(string message, int countWorkShiftsBefore, int countWorkShiftsAfter, WorkShiftFinderResult workShiftFinderResult)
 		{
 			workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(message, countWorkShiftsBefore, countWorkShiftsAfter));
 		}
 
 		private IWorkShiftCalculationResultHolder findBestShift(IEffectiveRestriction effectiveRestriction,
-			IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IWorkShiftFinderResult workShiftFinderResult, IList<ShiftProjectionCache> shiftList)
+			IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, WorkShiftFinderResult workShiftFinderResult, IList<ShiftProjectionCache> shiftList)
 		{
 			using (PerformanceOutput.ForOperation("Filtering shifts before calculating"))
 			{

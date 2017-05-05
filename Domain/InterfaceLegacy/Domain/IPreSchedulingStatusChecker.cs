@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="finderResult">The finder result.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <returns></returns>
-		bool CheckStatus(IScheduleDay schedulePart, IWorkShiftFinderResult finderResult, SchedulingOptions schedulingOptions);
+		bool CheckStatus(IScheduleDay schedulePart, WorkShiftFinderResult finderResult, SchedulingOptions schedulingOptions);
         /// <summary>
         /// Gets the person period.
         /// </summary>

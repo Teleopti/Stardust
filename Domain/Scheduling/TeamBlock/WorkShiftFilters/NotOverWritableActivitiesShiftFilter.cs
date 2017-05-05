@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	public interface INotOverWritableActivitiesShiftFilter
 	{
 		IList<ShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateToSchedule, IPerson person,
-															IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult);
+															IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult);
 	}
 
 	public class NotOverWritableActivitiesShiftFilter : INotOverWritableActivitiesShiftFilter
 	{
 		public IList<ShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateToSchedule, IPerson person,
-		                                           IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+		                                           IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
 			if (person == null) return null;

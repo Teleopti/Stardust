@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadData()
 		{
-			IList<IWorkShiftFinderResult> finderResult = result();
+			IList<WorkShiftFinderResult> finderResult = result();
 			setUpGrid(finderResult);
 			setColorAndColumName();
 		}
 
-		private IList<IWorkShiftFinderResult> result()
+		private IList<WorkShiftFinderResult> result()
 		{
 			return _workShiftFinderResultHolder.GetResults(_latestOnly, true);
 		}
@@ -63,7 +63,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			detailGrid.TableDescriptor.Columns[1].HeaderText = UserTexts.Resources.WorkShiftsBefore;
 			detailGrid.TableDescriptor.Columns[2].HeaderText = UserTexts.Resources.WorkShiftsAfter;
 		}
-		private void setUpGrid(IList<IWorkShiftFinderResult> finderResults)
+
+		private void setUpGrid(IList<WorkShiftFinderResult> finderResults)
 		{
 			finderResults = finderResults.ToLookup(bugfix => bugfix.PersonDateKey).Select(y => y.First()).ToList();
 			 
@@ -98,9 +99,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			masterGrid.TableModel.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 			detailGrid.TableModel.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 		}
-
-
-		private DataTable getTopTable(IEnumerable<IWorkShiftFinderResult> finderResults)
+		
+		private DataTable getTopTable(IEnumerable<WorkShiftFinderResult> finderResults)
 		{
 			var dt = new DataTable("TopTable") {Locale = CultureInfo.CurrentCulture};
 
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			dt.Columns.Add(new DataColumn("ScheduleDate"));
 			dt.Columns.Add(new DataColumn("Message"));
 
-			foreach (IWorkShiftFinderResult result in finderResults)
+			foreach (WorkShiftFinderResult result in finderResults)
 			{
 				DataRow dr = dt.NewRow();
 				dr[0] = result.PersonDateKey;
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return dt;
 		}
 
-		private static DataTable getDetailTable(IEnumerable<IWorkShiftFinderResult> finderResults)
+		private static DataTable getDetailTable(IEnumerable<WorkShiftFinderResult> finderResults)
 		{
 			var dt = new DataTable("DetailTable") {Locale = CultureInfo.CurrentCulture};
 
@@ -132,9 +132,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			dt.Columns.Add(new DataColumn("WorkShiftsAfter"));
 			dt.Columns.Add(new DataColumn("PersonDateKey"));
 
-			foreach (IWorkShiftFinderResult result in finderResults)
+			foreach (var result in finderResults)
 			{
-				foreach (IWorkShiftFilterResult filterResult in result.FilterResults)
+				foreach (var filterResult in result.FilterResults)
 				{
 					DataRow dr = dt.NewRow();
 					dr[0] = filterResult.Message;

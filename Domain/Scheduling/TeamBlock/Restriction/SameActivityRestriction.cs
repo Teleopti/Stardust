@@ -27,11 +27,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 				foreach (DateOnly dateOnly in dateOnlyList)
 				{
 					IScheduleDayPro schedule = matrix.GetScheduleDayByKey(dateOnly);
-					if (schedule == null)
-						continue;
 
-					IScheduleDay schedulePart = schedule.DaySchedulePart();
-					if (schedulePart.SignificantPart() == SchedulePartView.MainShift)
+					IScheduleDay schedulePart = schedule?.DaySchedulePart();
+					if (schedulePart?.SignificantPart() == SchedulePartView.MainShift)
 					{
 						IPersonAssignment assignment = schedulePart.PersonAssignment();
 						if (assignment == null) continue;

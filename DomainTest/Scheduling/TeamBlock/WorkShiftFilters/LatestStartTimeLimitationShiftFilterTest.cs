@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -39,14 +37,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void ShouldFilterAccordingToEarliestEndTimeLimitation()
 		{
 			var earlistEnd = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);
-			var result = _target.Filter(getCashes(), earlistEnd, new WorkShiftFinderResultForTest());
+			var result = _target.Filter(getCashes(), earlistEnd, new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.That(result.Count, Is.EqualTo(1));
 		}
 
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(new List<ShiftProjectionCache>(), new DateTime(), new WorkShiftFinderResultForTest());
+			var result = _target.Filter(new List<ShiftProjectionCache>(), new DateTime(), new WorkShiftFinderResult(new Person(), new DateOnly()));
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 
@@ -72,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             var shiftList = new List<ShiftProjectionCache> {cache1};
             
             var earlistEnd = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);
-            var result = _target.Filter(shiftList, earlistEnd, new WorkShiftFinderResultForTest());
+            var result = _target.Filter(shiftList, earlistEnd, new WorkShiftFinderResult(new Person(), new DateOnly()));
             Assert.AreEqual(result.Count ,0);
         }
 

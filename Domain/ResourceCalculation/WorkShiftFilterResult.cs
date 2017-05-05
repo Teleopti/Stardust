@@ -1,65 +1,49 @@
 ﻿
 using System;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class WorkShiftFilterResult : IWorkShiftFilterResult
+    public class WorkShiftFilterResult
     {
-        private readonly string _message;
-        private readonly int _workShiftsBefore;
-        private readonly int _workShiftsAfter;
-    	private readonly Guid _key;
-
-    	public WorkShiftFilterResult(string message, int workShiftsBefore, int workShiftsAfter)
+	    public WorkShiftFilterResult(string message, int workShiftsBefore, int workShiftsAfter)
 			:this(message,workShiftsBefore,workShiftsAfter,Guid.NewGuid())
 		{}
         
 		public WorkShiftFilterResult(string message, int workShiftsBefore, int workShiftsAfter, Guid key)
 		{
-			_message = message;
-			_workShiftsBefore = workShiftsBefore;
-			_workShiftsAfter = workShiftsAfter;
-			_key = key;
+			Message = message;
+			WorkShiftsBefore = workShiftsBefore;
+			WorkShiftsAfter = workShiftsAfter;
+			Key = key;
 		}
+		
+        public string Message { get; }
 
-        protected WorkShiftFilterResult(){}
+	    public int WorkShiftsBefore { get; }
 
-        public string Message
-        {
-            get { return _message; }
-        }
+	    public int WorkShiftsAfter { get; }
 
-        public int     WorkShiftsBefore
-        { get { return _workShiftsBefore; } }
+	    public Guid Key { get; }
 
-        public int WorkShiftsAfter
-        { get { return _workShiftsAfter; } }
-
-		public Guid Key
-		{
-			get { return _key; }
-		}
-
-		public override int GetHashCode()
+	    public override int GetHashCode()
 		{
 			return Key.GetHashCode();
 		}
 
 		public override bool Equals(object obj)
 		{
-			var ent = obj as IWorkShiftFilterResult;
+			var ent = obj as WorkShiftFilterResult;
 			return ent != null && Equals(ent);
 		}
 
-		public virtual bool Equals(IWorkShiftFilterResult other)
+		public virtual bool Equals(WorkShiftFilterResult other)
 		{
 			if (other == null)
 				return false;
 			if (this == other)
 				return true;
 
-			return (GetHashCode() == other.GetHashCode());
+			return Key == other.Key;
 		}
     }
 }

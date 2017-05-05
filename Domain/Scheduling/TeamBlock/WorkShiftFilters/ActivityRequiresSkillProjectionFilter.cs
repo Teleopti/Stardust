@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_personalSkillsProvider = personalSkillsProvider;
 		}
 
-		public IList<ShiftProjectionCache> Filter(IPerson person, IList<ShiftProjectionCache> shiftList, DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(IPerson person, IList<ShiftProjectionCache> shiftList, DateOnly dateToCheck, WorkShiftFinderResult finderResult)
 		{
 			if (person == null) return null;
 			if (shiftList == null) return null;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			return workShiftsWithValidActivities.Count == 0 ? filterResults(shiftList, finderResult) : workShiftsWithValidActivities;
 		}
 
-		private static IList<ShiftProjectionCache> filterResults(IList<ShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+		private static IList<ShiftProjectionCache> filterResults(IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult)
 		{
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstActivities,
