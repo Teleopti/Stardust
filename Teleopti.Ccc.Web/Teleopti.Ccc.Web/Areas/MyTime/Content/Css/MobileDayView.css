@@ -3,6 +3,10 @@
 	display: flex;
 	justify-content: space-between;
 }
+.dayview-mobile .mobile-dayview-nav .submenu li{
+	display: inline-block;
+	white-space: nowrap;
+}
 .dayview-mobile .mobile-dayview-nav .submenu li.mobile-datepicker{
 	max-width: 329px;
 }
