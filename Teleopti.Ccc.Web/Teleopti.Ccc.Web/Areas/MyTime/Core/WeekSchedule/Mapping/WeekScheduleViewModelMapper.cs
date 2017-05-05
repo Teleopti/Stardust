@@ -95,7 +95,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			return new DayScheduleViewModel
 			{
 				Date = s.Date.ToFixedClientDateOnlyFormat(),
-				DisplayDate = s.Date.Date.ToLocalizedDateFormat(),
 				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
 				DaylightSavingTimeAdjustment = daylightModel,
 				TimeLine = createTimeLine(s.MinMaxTime).ToArray(),
