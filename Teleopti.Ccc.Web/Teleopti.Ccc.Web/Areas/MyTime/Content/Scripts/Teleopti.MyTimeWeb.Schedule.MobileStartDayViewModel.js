@@ -33,6 +33,11 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
 
 	var calculateScheduleHeight = function (lastLayer, lastTimelinePoint) {
+		var isMobile = Teleopti.MyTimeWeb.Portal.IsMobile(window) || Teleopti.MyTimeWeb.Portal.IsIPad(window);
+		if (!isMobile) {
+			return constants.scheduleHeight;
+		}
+
 		var scheduleHeightPercentage = lastLayer ? lastLayer.EndPositionPercentage : 0;
 
 		var timelineEndPositionPercentage = lastTimelinePoint ? lastTimelinePoint.PositionPercentage : 1;
