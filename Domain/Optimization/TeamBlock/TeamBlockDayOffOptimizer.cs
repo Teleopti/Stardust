@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_dayOffOptimizerUseTeamSameDaysOff = dayOffOptimizerUseTeamSameDaysOff;
 		}
 
-		public void OptimizeDaysOff(
+		[TestLog]
+		public virtual void OptimizeDaysOff(
 			IList<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons,
