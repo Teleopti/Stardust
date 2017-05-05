@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FileProcessor>().As<IFileProcessor>().SingleInstance();
 			builder.RegisterType<WorkbookHandler>().As<IWorkbookHandler>().SingleInstance();
 			builder.RegisterType<ImportAgentJobService>().As<IImportAgentJobService>();
+			builder.RegisterType<ImportAgentJobArtifactValidator>().As<IImportAgentJobArtifactValidator>().ApplyAspects();
 		}
 	}
 }

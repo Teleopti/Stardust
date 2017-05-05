@@ -669,5 +669,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 		}
 	}
-
 }

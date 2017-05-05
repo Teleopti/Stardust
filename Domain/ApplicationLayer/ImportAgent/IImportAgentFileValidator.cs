@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NPOI.SS.UserModel;
 using Teleopti.Ccc.Domain.Collection;
@@ -54,6 +55,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		public int SuccessCount => SucceedAgents.Count;
 		public int FailedCount => FailedAgents.Count;
 		public int WarningCount => WarningAgents.Count;
+
+		public TimeZoneInfo TimezoneForCreator { get; set; }
+		public dynamic InputArtifactInfo { get; set; }
 	}
 
 	public class AgentExtractionResult

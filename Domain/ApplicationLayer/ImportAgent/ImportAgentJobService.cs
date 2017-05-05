@@ -54,7 +54,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				.ToList();
 			return resultList.Select(jr => new ImportAgentJobResultDetail(jr)).ToList();
 		}
-
-		
 	}
 }

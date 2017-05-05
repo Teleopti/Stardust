@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly ITenantUserPersister _tenantUserPersister;
-		private readonly IList<IPerson> _persistedPersons = new List<IPerson>();
+		private readonly IList<IPerson> _persistedAgents = new List<IPerson>();
 		public AgentPersister(IPersonRepository personRepository,
 			ITenantUserPersister tenantUserPersister)
 		{
@@ -55,13 +55,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				}
 
 				addPersonData(person, agentData);
-				_persistedPersons.Add(person);
+				_persistedAgents.Add(person);
 			}
 		}
 
 		public void RollbackAllPersisted()
 		{
-			foreach (var person in _persistedPersons)
+			foreach (var person in _persistedAgents)
 			{
 				person.RemoveAllPersonPeriods();
 				person.RemoveAllSchedulePeriods();

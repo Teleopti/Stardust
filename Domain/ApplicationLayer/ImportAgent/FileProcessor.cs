@@ -28,31 +28,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
-		public AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null)
+		public AgentFileProcessResult Process(FileData fileData, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null)
 		{
 			var workbook = ParseFile(fileData);
-			return Process(workbook, timezone, defaultValues, sendProgress);
-		}
 
-
-		public AgentFileProcessResult Process(IWorkbook workbook, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null,
-			Action<string> sendProgress = null)
-		{
 			if (sendProgress == null)
 			{
 				sendProgress = (msg) => { };
 			}
-			var precessResult = extractFile(workbook, defaultValues, sendProgress);
-			if (precessResult.HasError)
-			{
-				return precessResult;
-			}
+			var fileProcessResult = extractFileWithoutSeperateSession(workbook, defaultValues, sendProgress);
+			return fileProcessResult;
+		}
 
+		public void BatchPersist(TimeZoneInfo timezone, Action<string> sendProgress, AgentExtractionResult[] extractedAgents)
+		{
 			try
 			{
-				var rawResults = precessResult.RawResults;
 				var i = 0;
-				foreach (var result in rawResults.Batch(BATCH_SIZE))
+				foreach (var result in extractedAgents.Batch(BATCH_SIZE))
 				{
 					sendProgress($"Start to persist agent {BATCH_SIZE * i} - {BATCH_SIZE * i + result.Count()}.");
 					using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -73,12 +66,48 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				rollbackAllPersisted();
 				throw;
 			}
+		}
 
-			return precessResult;
+		public AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null)
+		{
+			var workbook = ParseFile(fileData);
+			return Process(workbook, timezone, defaultValues, sendProgress);
+		}
 
+
+		public AgentFileProcessResult Process(IWorkbook workbook, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null,
+			Action<string> sendProgress = null)
+		{
+			if (sendProgress == null)
+			{
+				sendProgress = (msg) => { };
+			}
+			var processResult = extractFile(workbook, defaultValues, sendProgress);
+			if (processResult.HasError)
+			{
+				return processResult;
+			}
+
+			BatchPersist(timezone, sendProgress, processResult.RawResults.ToArray());
+
+			return processResult;
 
 		}
 
+		private AgentFileProcessResult extractFileWithoutSeperateSession(IWorkbook workbook, ImportAgentDefaults defaultValues,
+			Action<string> sendProgress)
+		{
+			sendProgress($"Start to extract file.");
+			var processResult = _workbookHandler.Process(workbook, defaultValues);
+			if (processResult.HasError)
+			{
+				var msg = string.Join(", ", processResult.Feedback.ErrorMessages);
+				sendProgress($"Extract file has error:{msg}.");
+				return processResult;
+			}
+			sendProgress($"Extract file succeed.");
+			return processResult;
+		}
 
 		private AgentFileProcessResult extractFile(IWorkbook workbook, ImportAgentDefaults defaultValues, Action<string> sendProgress)
 		{
@@ -107,14 +136,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 		}
 
-		public void HasException()
-		{
-			hasException = true;
-		}
-		public void ResetException()
-		{
-			hasException = false;
-		}
 		public MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx)
 		{
 			const string invalidUserSheetName = "Agents";
@@ -169,13 +190,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				: new HSSFWorkbook(dataStream);
 		}
 
+		public void HasException()
+		{
+			hasException = true;
+		}
+		public void ResetException()
+		{
+			hasException = false;
+		}
 	}
 
 	public interface IFileProcessor
 	{
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);
+		AgentFileProcessResult Process(FileData fileData, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null);
 		AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null);
 		AgentFileProcessResult Process(IWorkbook workbook, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null);
 		IWorkbook ParseFile(FileData fileData);
+		void BatchPersist(TimeZoneInfo timezone, Action<string> sendProgress, AgentExtractionResult[] extractedAgents);
 	}
 }
