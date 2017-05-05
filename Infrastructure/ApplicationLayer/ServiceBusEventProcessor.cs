@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -34,11 +30,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Process(IEvent @event)
 		{
-			Process(@event, _resolver.HandlerTypesFor<IRunOnServiceBus>(@event));
-		}
+			var handlerTypes = _resolver.HandlerTypesFor<IRunOnServiceBus>(@event);
 
-		public void Process(IEvent @event, IEnumerable<Type> handlerTypes)
-		{
 			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
 
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())

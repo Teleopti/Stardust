@@ -166,7 +166,6 @@
     <Compile Include="BaseLineData.cs" />
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="ConcurrencyRunner.cs" />
-    <Compile Include="ConfigurableAsyncEventPublisher.cs" />
     <Compile Include="ConfigurableSyncEventPublisher.cs" />
     <Compile Include="CountCallsToNightRestWhiteSpotSolverServiceFactory.cs" />
     <Compile Include="Database.cs" />
