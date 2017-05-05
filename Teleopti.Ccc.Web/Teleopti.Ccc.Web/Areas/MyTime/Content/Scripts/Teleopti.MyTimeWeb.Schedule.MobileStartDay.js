@@ -80,6 +80,37 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		if (!subscribed) subscribeForChanges();
 	}
 
+	function registerScrollEvent() {
+		var element = $("div.navbar-teleopti");
+		var top = element.position().top;
+		var pos = element.css("position");
+		var zindex = element.css("z-index");
+
+		$(window).scroll(function () {  
+			var scrolls = $(this).scrollTop();
+			if (scrolls > top) {  
+				if (window.XMLHttpRequest) {  
+					element.css({ 
+						position: "fixed", 
+						top: 0, 
+						"z-index": 9999,
+						width: "100%"
+					});
+				} else {  
+					element.css({
+						top: scrolls 
+					});
+				}
+			} else {
+				element.css({  
+					position: pos,
+					top: 0,
+					"z-index": zindex
+				});
+			}
+		});
+	}
+
 	return {
 		Init: function () {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
@@ -95,6 +126,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 
 			registerUserInfoLoadedCallback();
 			registerSwipeEvent();
+			registerScrollEvent();
 
 			hideAgentScheduleMessenger();
 			initViewModel();
