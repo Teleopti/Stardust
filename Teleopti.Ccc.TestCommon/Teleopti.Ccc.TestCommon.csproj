@@ -193,7 +193,6 @@
     <Compile Include="FakeData\PersonAssignmentListContainer.cs" />
     <Compile Include="FakeData\PersonRequestAuthorizationCheckerConfigurable.cs" />
     <Compile Include="FakeData\WorkflowControlSetFactory.cs" />
-    <Compile Include="FakeEventPublisherWithOverwritingHandlers.cs" />
     <Compile Include="FakeHttpServer.cs" />
     <Compile Include="FakeLicenseActivator.cs" />
     <Compile Include="FakeLicenseActivatorProvider.cs" />

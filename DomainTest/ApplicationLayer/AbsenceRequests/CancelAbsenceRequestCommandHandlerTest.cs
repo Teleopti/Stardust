@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -34,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	[UseEventPublisher(typeof (FakeEventPublisherWithOverwritingHandlers))]
 	public class CancelAbsenceRequestCommandHandlerEventTest :ISetup
 	{
 		public CancelAbsenceRequestCommandHandler Target;
@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeCommonAgentNameProvider CommonAgentNameProvider;
 		public FakeUserCulture UserCulture;
 		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
-		public FakeEventPublisherWithOverwritingHandlers EventPublisher;
 		public FakeGlobalSettingDataRepository GlobalSetting;
 		public INow Now;
 	
@@ -283,29 +282,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			events[0].Should().Be.OfType<PersonAbsenceRemovedEvent>();
 			events[1].Should().Be.OfType<RequestPersonAbsenceRemovedEvent>();
 		}
-
-		[Test]
-		public void BasicCancelAbsenceRequestShouldEventuallyFireOnlyOneScheduleChangedEvent()
-		{
-			commonSetup();
-			var cancelRequestCommand = new CancelAbsenceRequestCommand();
-			basicCancelAbsenceRequest(cancelRequestCommand);
-			var personAbsence = PersonAbsenceRepository.LoadAll().First();
-
-			personAbsence.NotifyTransactionComplete(DomainUpdateType.Delete);
-			personAbsence.NotifyDelete();
-			var events = personAbsence.PopAllEvents().ToList();
-
-			EventPublisher.OverwriteHandler(typeof(ScheduleChangedEvent), typeof(ScheduleChangedEventDetector));
-			EventPublisher.OverwriteHandler(typeof(RequestPersonAbsenceRemovedEvent), typeof(FakeEventHandler));
-			ScheduleChangedEventDetector.Reset();
-
-			events.ForEach(e => EventPublisher.Publish(e));
-			var scheduleChangedEvents = ScheduleChangedEventDetector.GetEvents();
-
-			scheduleChangedEvents.Count().Should().Be.EqualTo(1);
-		}
-
+		
 		[Test]
 		public void ShouldUpdateMessageWhenThereIsAReplyMessage()
 		{

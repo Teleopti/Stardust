@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.TestCommon
 			var tenant = _dataSource.CurrentName();
 			onAnotherThread(() =>
 			{
-
 				foreach (var @event in events)
 				{
 					foreach (var handlerType in _handlerTypes)
