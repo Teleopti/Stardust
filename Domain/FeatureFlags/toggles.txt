@@ -172,7 +172,7 @@ Scheduler_IntradayOptimization_36617 = true
 Scheduler_ShowSkillPrioLevels_41980 = true
 WfmGlobalLayout_personalOptions_37114 = true
 
-ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = RC
+ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = true
 ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI until we have a proper UI
 ResourcePlanner_TeamBlockPeriod_42836 = true
 ResourcePlanner_MasterActivity_42795 = true
@@ -236,7 +236,7 @@ Reporting_Optional_Columns_42066 = true
 Staffing_ReadModel_UseSkillCombination_xx = true
 WfmStaffing_AllowActions_42524 = RC #Enables the entire Staffing page!
 StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388 = true # don't enable without Staffing_ReadModel_UseSkillCombination_xx
-Staffing_ReadModel_Update14Days_43840 = RC # don't enable without StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388
+Staffing_ReadModel_Update14Days_43840 = true # don't enable without StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388
 Staffing_ReadModel_BetterAccuracy_43447 = RC
 
 QRCodeForMobileApps_42695 = RC
