@@ -17,10 +17,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		weekStart = data.WeekStart;
 	});
 
-	self.IsPostingData = ko.observable(false);
-
-
-
 	var RequestDetailParentViewModel = function () {
 
 		var self = this;
@@ -128,12 +124,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _addRequest(model, successCallback, errorCallback) {
-		if (self.IsPostingData()) {
-			return;
-		}
 		model.ShowError(false);
-		self.IsPostingData(true);
-
 
 		var formData = _getFormData(model);
 		ajax.Ajax({
@@ -148,8 +139,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 				model.IsNewInProgress(false);
 				model.Subject("");
 				model.Message("");
-
-				self.IsPostingData(false);
 
 				if (successCallback != undefined) {
 					successCallback(data);
@@ -167,8 +156,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-
-				self.IsPostingData(false);
+				
 				if (errorCallback != undefined) {
 					errorCallback(jqXHR, textStatus, errorThrown);
 				}

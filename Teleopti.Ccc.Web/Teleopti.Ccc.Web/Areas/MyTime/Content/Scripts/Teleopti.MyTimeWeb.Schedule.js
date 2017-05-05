@@ -365,6 +365,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 			self.requestViewModel(addRequestModel);
+			self.requestViewModel().model.IsPostingData(false);
 			_fillFormData(data);
 			self.requestViewModel().model.AddTextRequest(false);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
@@ -375,6 +376,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 			self.requestViewModel(addRequestModel);
+			self.requestViewModel().model.IsPostingData(false);
 			self.requestViewModel().model.readPersonalAccountPermission(self.personAccountPermission());
 			_fillFormData(data);
 			self.requestViewModel().model.AddAbsenceRequest(false);
