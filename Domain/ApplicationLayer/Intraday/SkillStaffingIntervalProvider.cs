@@ -16,18 +16,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 	{
 		private readonly SplitSkillStaffInterval _splitSkillStaffInterval;
 		private readonly ISkillRepository _skillRepository;
+		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IExtractSkillForecastIntervals _extractSkillForecastIntervals;
 
 		public SkillStaffingIntervalProvider(SplitSkillStaffInterval splitSkillStaffInterval,
-											 ISkillCombinationResourceRepository skillCombinationResourceRepository, ISkillRepository skillRepository, IResourceCalculation resourceCalculation, IExtractSkillForecastIntervals extractSkillForecastIntervals)
+											 ISkillCombinationResourceRepository skillCombinationResourceRepository, ISkillRepository skillRepository, IResourceCalculation resourceCalculation, IExtractSkillForecastIntervals extractSkillForecastIntervals, IActivityRepository activityRepository)
 		{
 			_splitSkillStaffInterval = splitSkillStaffInterval;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_skillRepository = skillRepository;
 			_resourceCalculation = resourceCalculation;
 			_extractSkillForecastIntervals = extractSkillForecastIntervals;
+			_activityRepository = activityRepository;
 		}
 
 		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution, bool useShrinkage)
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 
 		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources, bool useShrinkage)
 		{
+			_activityRepository.LoadAll();
 			var skills = _skillRepository.LoadAll().ToList();
 
 			var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, period, useShrinkage).ToList();
