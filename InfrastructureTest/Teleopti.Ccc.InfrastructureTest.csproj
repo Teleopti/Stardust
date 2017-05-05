@@ -165,7 +165,7 @@
     <Compile Include="ApplicationLayer\Events\HangfireRetryEventPublishingConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireSerializeEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireTestAttribute.cs" />
-    <Compile Include="ApplicationLayer\Events\HangfireEventProcessorTest.cs" />
+    <Compile Include="ApplicationLayer\Events\HangfireEventServerTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventShortNameSerializationTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireRetryEventPublishingTest.cs" />

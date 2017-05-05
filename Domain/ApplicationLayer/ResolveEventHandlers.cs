@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 			return jobs;
 		}
-
+		
 		public IEnumerable<Type> HandlerTypesFor<T>(IEvent @event)
 		{
 			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());

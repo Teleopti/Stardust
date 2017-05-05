@@ -6,23 +6,24 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
+#pragma warning disable 618
+
 	[TestFixture]
 	[InfrastructureTest]
-	public class HangfireEventProcessorTest : ISetup
+	public class HangfireEventServerTest : ISetup
 	{
 		public AHandler Handler;
 		public AnotherHandler Another;
 		public AspectedHandler Aspected;
-		public HangfireEventProcessor Target;
+		public HangfireEventServer Target;
 		public FakeDataSourceForTenant DataSources;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -136,4 +137,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 		
 	}
+#pragma warning restore 618
+
 }

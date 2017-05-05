@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -21,8 +22,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	public class HangfireEventShortNameSerializationTest : ISetup
 	{
 		public FakeHangfireEventClient JobClient;
-		public IEventPublisher Client;
-		public HangfireEventProcessor Server;
+		public IEventPublisher Publisher;
+		public HangfireEventServer Server;
 		public IJsonSerializer Serializer;
 		public IJsonDeserializer Deserializer;
 		public FakeHandler Handler;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldSerializePersonStateChangedEvent()
 		{
-			Client.Publish(new PersonStateChangedEvent());
+			Publisher.Publish(new PersonStateChangedEvent());
 
 			var actual = Deserializer.DeserializeObject<Dictionary<string, string>>(JobClient.SerializedEvent);
 			actual.Keys.ForEach(k =>
@@ -47,9 +48,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldDeserializePersonStateChangedEvent()
 		{
-			Client.Publish(new PersonStateChangedEvent {Timestamp = "2015-08-17 15:40".Utc()});
+			Publisher.Publish(new PersonStateChangedEvent {Timestamp = "2015-08-17 15:40".Utc()});
 
+#pragma warning disable 618
 			Server.Process(null, RandomName.Make(), typeof(PersonStateChangedEvent).AssemblyQualifiedName, JobClient.SerializedEvent, typeof(FakeHandler).AssemblyQualifiedName);
+#pragma warning restore 618
 
 			Handler.GotEvent.Timestamp.Should().Be("2015-08-17 15:40".Utc());
 		}
