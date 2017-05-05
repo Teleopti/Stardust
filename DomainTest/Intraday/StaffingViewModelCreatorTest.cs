@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeWebChat_42591)]
+		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldReturnForecastedStaffingForEmailSkill()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);

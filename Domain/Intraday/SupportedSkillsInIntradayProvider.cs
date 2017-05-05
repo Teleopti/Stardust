@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -9,34 +10,25 @@ namespace Teleopti.Ccc.Domain.Intraday
 	public class SupportedSkillsInIntradayProvider : ISupportedSkillsInIntradayProvider
 	{
 		private readonly ISkillRepository _skillRepository;
+		private readonly IEnumerable<ISupportedSkillCheck> _skillChecks;
 
-		public SupportedSkillsInIntradayProvider(ISkillRepository skillRepository)
+		public SupportedSkillsInIntradayProvider(ISkillRepository skillRepository, IEnumerable<ISupportedSkillCheck> skillChecks)
 		{
 			_skillRepository = skillRepository;
+			_skillChecks = skillChecks;
 		}
 
 		public IList<ISkill> GetSupportedSkills(Guid[] skillIdList)
 		{
 			var skills = _skillRepository.LoadSkills(skillIdList);
-			var supportedSkills = new List<ISkill>();
+			var supportedSkills = skills.Where(CheckSupportedSkill).ToList();
 
-			foreach (var skill in skills)
-			{
-				if (CheckSupportedSkill(skill))
-					supportedSkills.Add(skill);
-			}
 			return supportedSkills;
 		}
 
 		public bool CheckSupportedSkill(ISkill skill)
 		{
-			var isMultisiteSkill = skill.GetType() == typeof(MultisiteSkill);
-
-			return !isMultisiteSkill &&
-				   (skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture) ||
-					skill.SkillType.Description.Name.Equals("SkillTypeChat", StringComparison.InvariantCulture) ||
-					skill.SkillType.Description.Name.Equals("SkillTypeRetail", StringComparison.InvariantCulture) ||
-					skill.SkillType.Description.Name.Equals("SkillTypeEmail", StringComparison.InvariantCulture));
+			return _skillChecks.Any(s => s.IsSupported(skill));
 		}
 	}
 }

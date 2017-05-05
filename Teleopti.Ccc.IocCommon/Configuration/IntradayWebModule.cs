@@ -29,19 +29,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastedStaffingProvider>().SingleInstance();
 			builder.RegisterType<ForecastedStaffingToDataSeries>().SingleInstance();
 			builder.RegisterType<ReforecastedStaffingProvider>().SingleInstance();
+			builder.RegisterType<SupportedSkillsInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
+			builder.RegisterType<InboundPhoneSkillSupported>().As<ISupportedSkillCheck>();
 			if (_configuration.Toggle(Toggles.Wfm_Intraday_SupportSkillTypeWebChat_42591))
-			{
-				if (_configuration.Toggle(Toggles.WFM_Intraday_SupportMultisiteSkill_43874))
-				{
-					builder.RegisterType<SupportSkillsWithMultiskillInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
-				}
-				else
-				{
-					builder.RegisterType<SupportedSkillsInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
-				}
-			}
-			else
-				builder.RegisterType<SupportedLimitedSkillsInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
+				builder.RegisterType<OtherSkillsLikePhoneSupported>().As<ISupportedSkillCheck>();
+			if (_configuration.Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002))
+				builder.RegisterType<SkillsLikeEmailSupported>().As<ISupportedSkillCheck>();
+			builder.RegisterType<MultisiteSkillSupported>().As<ISupportedSkillCheck>();
+
 			builder.RegisterType<TaskPeriodsProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
 			builder.RegisterType<FetchSkillArea>().SingleInstance();
