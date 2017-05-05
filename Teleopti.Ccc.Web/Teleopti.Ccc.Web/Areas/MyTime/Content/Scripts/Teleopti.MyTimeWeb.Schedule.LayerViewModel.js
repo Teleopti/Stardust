@@ -137,23 +137,12 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
 
 function getWidth(isOvertimeAvailability, probabilities) {
     var width;
-    if (Teleopti.MyTimeWeb.Portal.IsMobile(window) || Teleopti.MyTimeWeb.Portal.IsIPad(window)) {
-        if (isOvertimeAvailability) {
-            width = 20 + "%";
-        } else if (probabilities && probabilities.length > 0) {
-            width = 80 + "%";
-        } else {
-            width = 100 + "%";
-        }
-        return width;
+    if (isOvertimeAvailability) {
+        width = 20 + "%";
+    } else if (probabilities && probabilities.length > 0) {
+        width = 100 + "%";
     } else {
-        if (isOvertimeAvailability) {
-            width = 20;
-        } else if (probabilities && probabilities.length > 0) {
-            width = 116;
-        } else {
-            width = 127;
-        }
-        return width + "px";
+        width = "calc(" + 100 + "%" + " - 2px)";
     }
+    return width;
 };
