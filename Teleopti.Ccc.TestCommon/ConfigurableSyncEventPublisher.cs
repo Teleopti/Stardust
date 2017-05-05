@@ -4,7 +4,6 @@ using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon
 						var method = _resolver.HandleMethodFor(handlerType, @event.GetType());
 						if (method == null)
 							continue;
-						_processor.Process(tenant, @event, handlerType);
+						_processor.Process(tenant, @event, null, handlerType);
 					}
 				}
 			});

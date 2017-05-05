@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_processor.Process(displayName, tenant, eventType, serializedEvent, handlerType);
 		}
 
+		[Obsolete("backward compatible")]
 		[DisplayName("{0}")]
 		[QueueFromArgument("{2}")]
 		[AutomaticRetry(Attempts = 10, OnAttemptsExceeded = AttemptsExceededAction.Fail)]
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_processor.Process(displayName, tenant, eventType, serializedEvent, handlerType);
 		}
 
+		[Obsolete("backward compatible")]
 		[DisplayName("{0}")]
 		[QueueFromArgument("{2}")]
 		[AttemptsFromArgument("{3}")]
@@ -42,10 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		[AttemptsFromArgument(Order = 2)]
 		public void Process(string displayName, HangfireEventJob job)
 		{
-			if (job.Event != null)
-				_processor.Process(job.DisplayName, job.Tenant, job.Event, job.HandlerTypeName);
-			else
-				_processor.Process(job.DisplayName, job.Tenant, job.Package, job.HandlerTypeName);
+			_processor.Process(job.DisplayName, job.Tenant, job.Event, job.Package, job.HandlerTypeName);
 		}
 	}
 }

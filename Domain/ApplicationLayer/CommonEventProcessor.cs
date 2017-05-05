@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
@@ -25,33 +24,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		}
 
 		[TenantScope]
-		public virtual void Process(string tenant, IEvent @event, Type handlerType)
+		public virtual void Process(string tenant, IEvent @event, IEnumerable<IEvent> package, Type handlerType)
 		{
-			process(@event, handlerType);
+			if (@event != null)
+				processWithInitiatorAndTrackingMessage(@event, handlerType);
+			else
+				invokeHandler(package, handlerType);
+		}
+		
+		[Obsolete("Without tenant scope for the job. Dont use.")]
+		public virtual void Process(IEvent @event, Type handlerType)
+		{
+			processWithInitiatorAndTrackingMessage(@event, handlerType);
 		}
 
-		[TenantScope]
-		public virtual void Process(string tenant, IEnumerable<IEvent> package, Type handlerType)
-		{
-			process(package, handlerType);
-		}
-
-		public virtual void ProcessDontUse(IEvent @event, Type handlerType)
-		{
-			process(@event, handlerType);
-		}
-
-		private void process(IEvent @event, Type handlerType)
+		private void processWithInitiatorAndTrackingMessage(IEvent @event, Type handlerType)
 		{
 			using (_initiatorIdentifierScope.OnThisThreadUse(InitiatorIdentifier.FromMessage(@event)))
 			{
 				try
 				{
-					using (var scope = _resolve.NewScope())
-					{
-						dynamic handler = scope.Resolve(handlerType);
-						handler.Handle((dynamic) @event);
-					}
+					invokeHandler(@event, handlerType);
 				}
 				catch (Exception)
 				{
@@ -60,24 +53,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				}
 			}
 		}
-
-		private void process(IEnumerable<IEvent> package, Type handlerType)
+		
+		private void invokeHandler(object argument, Type handlerType)
 		{
-			using (_initiatorIdentifierScope.OnThisThreadUse(InitiatorIdentifier.FromMessage(package.First())))
+			using (var scope = _resolve.NewScope())
 			{
-				try
-				{
-					using (var scope = _resolve.NewScope())
-					{
-						dynamic handler = scope.Resolve(handlerType);
-						handler.Handle((dynamic)package);
-					}
-				}
-				catch (Exception)
-				{
-					sendTrackingMessage(package.First());
-					throw;
-				}
+				dynamic handler = scope.Resolve(handlerType);
+				handler.Handle((dynamic) argument);
 			}
 		}
 

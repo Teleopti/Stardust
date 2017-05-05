@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				from @event in events
 				from handlerType in _resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event)
 				select Task.Run(() =>
-					_processor.ProcessDontUse(@event, handlerType)
+#pragma warning disable 618
+					_processor.Process(@event, handlerType)
+#pragma warning restore 618
 					))
 				.ToArray());
 		}

@@ -1,47 +1,40 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class HangfireEventProcessor
 	{
 		private readonly IJsonEventDeserializer _deserializer;
-		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
 
 		public HangfireEventProcessor(
 			IJsonEventDeserializer deserializer,
-			ResolveEventHandlers resolver,
 			CommonEventProcessor processor)
 		{
 			_deserializer = deserializer;
-			_resolver = resolver;
 			_processor = processor;
 		}
 
+		[Obsolete("backward compatible")]
 		public void Process(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
 			var eventT = Type.GetType(eventType, true);
 			var @event = _deserializer.DeserializeEvent(serializedEvent, eventT) as IEvent;
-			Process(displayName, tenant, @event, handlerType);
+			Process(displayName, tenant, @event, null, handlerType);
 		}
 
-		public void Process(string displayName, string tenant, IEnumerable<IEvent> package, string handlerType)
+		public void Process(string displayName, string tenant, IEvent @event, IEnumerable<IEvent> package, string handlerType)
 		{
 			var handlerT = Type.GetType(handlerType, true);
-			_processor.Process(tenant, package, handlerT);
+			Process(displayName, tenant, @event, package, handlerT);
 		}
 
-		public void Process(string displayName, string tenant, IEvent @event, string handlerType)
+		public void Process(string displayName, string tenant, IEvent @event, IEnumerable<IEvent> package, Type handlerType)
 		{
-			var handlerT = Type.GetType(handlerType, true);
-			_processor.Process(tenant, @event, handlerT);
+			_processor.Process(tenant, @event, package, handlerType);
 		}
-
 	}
 }

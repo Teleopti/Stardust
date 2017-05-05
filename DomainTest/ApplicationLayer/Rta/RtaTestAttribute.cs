@@ -160,7 +160,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 					onAnotherThread(() =>
 					{
-						_processor.ProcessDontUse(@event, handlerType);
+#pragma warning disable 618
+						_processor.Process(@event, handlerType);
+#pragma warning restore 618
 					});
 				}
 			}

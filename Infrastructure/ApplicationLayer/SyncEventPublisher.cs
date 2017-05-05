@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -44,10 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				{
 					try
 					{
-						if (job.Event != null)
-							_processor.Process(tenant, job.Event, job.HandlerType);
-						else
-							_processor.Process(tenant, job.Package, job.HandlerType);
+						_processor.Process(tenant, job.Event, job.Package, job.HandlerType);
 						exceptions.Clear();
 					}
 					catch (Exception e)

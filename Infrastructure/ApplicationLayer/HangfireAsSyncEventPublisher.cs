@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 using AggregateException = System.AggregateException;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly ICurrentDataSource _dataSource;
 		private readonly HangfireEventProcessor _processor;
 		private readonly ResolveEventHandlers _resolver;
-		private readonly ConcurrentQueue<IEvent> _queue = new ConcurrentQueue<IEvent>();
+		private readonly ConcurrentQueue<IJobInfo> _queue = new ConcurrentQueue<IJobInfo>();
 		private readonly object processLock = new object();
 
 		public HangfireAsSyncEventPublisher(
@@ -34,10 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			events.ForEach(e =>
+			_resolver.JobsFor<IRunOnHangfire>(events).ForEach(e =>
 			{
-				if (!_resolver.HandlerTypesFor<IRunOnHangfire>(e).Any())
-					return;
 				_queue.Enqueue(e);
 			});
 
@@ -70,20 +67,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		private void processQueue(string tenant, ICollection<Exception> exceptions)
 		{
-			IEvent @event;
-			while (_queue.TryDequeue(out @event))
+			IJobInfo job;
+			while (_queue.TryDequeue(out job))
 			{
-				foreach (var handler in _resolver.HandlerTypesFor<IRunOnHangfire>(@event))
+				try
 				{
-					try
-					{
-						_processor.Process("", tenant, @event, handler.AssemblyQualifiedName);
-					}
-					catch (Exception e)
-					{
-						PreserveStack.For(e);
-						exceptions.Add(e);
-					}
+					_processor.Process(null, tenant, job.Event, job.Package, job.HandlerType);
+				}
+				catch (Exception e)
+				{
+					PreserveStack.For(e);
+					exceptions.Add(e);
 				}
 			}
 		}
