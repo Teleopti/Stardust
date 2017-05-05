@@ -1,7 +1,6 @@
 ﻿.dayview-mobile .mobile-dayview-nav .navbar-teleopti{
 	margin: 0;
 	display: flex;
-	justify-content: space-between;
 }
 .dayview-mobile .mobile-dayview-nav .submenu li{
 	display: inline-block;
