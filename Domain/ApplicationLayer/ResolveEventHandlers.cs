@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
@@ -15,29 +16,51 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_resolve = resolve;
 		}
 
-		public IEnumerable<JobInfo> JobsFor<T>(IEnumerable<IEvent> events)
+		public IEnumerable<IJobInfo> MinutelyRecurringJobsFor<T>(IEvent @event)
 		{
-			var packages = 
-				_resolve.ConcreteTypesFor(typeof(IHandleEvents))
-				.Select(handler =>
-				{
-					var registrator = new subscriptionRegistrator();
-					(_resolve.Resolve(handler) as dynamic).Subscribe(registrator);
-					return new
-					{
-						events = events.Where(x => registrator.SubscribesTo(x.GetType())).ToArray(),
-						handler
-					};
+			var jobs = jobsFor<T>(new[] {@event});
 
-				})
-				.Where(x => x.events.Any())
-				.Select(x => build(x.handler, typeof(IEnumerable<IEvent>), null, x.events))
+			if (jobs.Any(x => x.AttemptsAttribute != null))
+				throw new Exception("Retrying minutely recurring job is a bad idea");
+
+			// different defaults, thats all
+			jobs.ForEach(x =>
+			{
+				x.Attempts = 1;
+				if (x.AllowFailuresAttribute == null)
+					x.AllowFailures = 10;
+			});
+
+			return jobs;
+		}
+
+		public IEnumerable<IJobInfo> JobsFor<T>(IEnumerable<IEvent> events)
+		{
+			return jobsFor<T>(events);
+		}
+
+		private IEnumerable<jobInfo> jobsFor<T>(IEnumerable<IEvent> events)
+		{
+			var packages =
+					_resolve.ConcreteTypesFor(typeof(IHandleEvents))
+						.Select(handler =>
+						{
+							var registrator = new SubscriptionRegistrator();
+							(_resolve.Resolve(handler) as dynamic).Subscribe(registrator);
+							return new
+							{
+								events = events.Where(x => registrator.SubscribesTo(x.GetType())).ToArray(),
+								handler
+							};
+						})
+						.Where(x => x.events.Any())
+						.Select(x => buildJobInfo(x.handler, typeof(IEnumerable<IEvent>), null, x.events))
 				;
 
 			var singles = from @event in events
 				let type = typeof(IHandleEvent<>).MakeGenericType(@event.GetType())
 				from handler in _resolve.ConcreteTypesFor(type)
-				select build(handler, @event.GetType(), @event, null);
+				select buildJobInfo(handler, @event.GetType(), @event, null);
 
 			return packages
 				.Concat(singles)
@@ -45,19 +68,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				.ToArray();
 		}
 
-		private JobInfo build(Type handler, Type handleMethodArgumentType, IEvent @event, IEnumerable<IEvent> package)
+		private jobInfo buildJobInfo(Type handler, Type handleMethodArgumentType, IEvent @event, IEnumerable<IEvent> package)
 		{
 			var handleMethod = HandleMethodFor(handler, handleMethodArgumentType);
+			var attemptsAttribute = getAttemptsAttribute(handleMethod);
 			var allowFailuresAttribute = getAllowFailuresAttribute(handleMethod);
 
-			return new JobInfo
+			return new jobInfo
 			{
 				HandlerType = handler,
 				Event = @event,
-				Queue = queueTo(handler, @event ?? package.First()),
+				QueueName = queueTo(handler, @event ?? package.First()),
 				Package = package,
-				Attempts = getAttemptsAttribute(handleMethod)?.Attempts ?? 3,
-				AttemptsAttribute = getAttemptsAttribute(handleMethod),
+				Attempts = attemptsAttribute?.Attempts ?? 3,
+				AttemptsAttribute = attemptsAttribute,
 				AllowFailures = allowFailuresAttribute?.Failures ?? 0,
 				AllowFailuresAttribute = allowFailuresAttribute
 			};
@@ -107,33 +131,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				.Where(x => x.GetInterfaces().Contains(typeof(T)));
 		}
 
-		private class subscriptionRegistrator : ISubscriptionRegistrator
+		private class jobInfo : IJobInfo
 		{
-			private readonly IList<Type> subscriptions = new List<Type>();
+			public Type HandlerType { get; set; }
+			public IEvent Event { get; set; }
+			public IEnumerable<IEvent> Package { get; set; }
 
-			public void SubscribeTo<T>() where T : IEvent
-			{
-				subscriptions.Add(typeof(T));
-			}
+			public string QueueName { get; set; }
 
-			public bool SubscribesTo(Type type)
-			{
-				return subscriptions.Contains(type);
-			}
+			public int Attempts { get; set; }
+			public int AllowFailures { get; set; }
+
+			public AttemptsAttribute AttemptsAttribute { get; set; }
+			public AllowFailuresAttribute AllowFailuresAttribute { get; set; }
 		}
 	}
 
-	public class JobInfo
+	public interface IJobInfo
 	{
-		public Type HandlerType;
-		public IEvent Event;
-		public IEnumerable<IEvent> Package;
+		Type HandlerType { get; }
+		IEvent Event { get; }
+		IEnumerable<IEvent> Package { get; }
 
-		public string Queue;
+		string QueueName { get; }
 
-		public int Attempts;
-		public AttemptsAttribute AttemptsAttribute;
-		public int AllowFailures;
-		public AllowFailuresAttribute AllowFailuresAttribute;
+		int Attempts { get; }
+		int AllowFailures { get; }
 	}
+
 }

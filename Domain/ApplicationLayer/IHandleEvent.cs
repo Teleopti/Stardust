@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
@@ -18,13 +16,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 	public interface IHandleEvents
 	{
-		void Subscribe(ISubscriptionRegistrator registrator);
+		void Subscribe(SubscriptionRegistrator registrator);
 		void Handle(IEnumerable<IEvent> events);
 	}
-
-	public interface ISubscriptionRegistrator
+	
+	public class SubscriptionRegistrator
 	{
-		void SubscribeTo<T>() where T : IEvent;
+		private readonly IList<Type> subscriptions = new List<Type>();
+
+		public void SubscribeTo<T>() where T : IEvent
+		{
+			subscriptions.Add(typeof(T));
+		}
+
+		public bool SubscribesTo(Type type)
+		{
+			return subscriptions.Contains(type);
+		}
 	}
 
 }

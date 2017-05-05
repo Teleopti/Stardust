@@ -24,16 +24,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 		[Test]
 		public void ShouldSubscribeToEvents()
 		{
-			var subscriptionsRegistrator = new SubscriptionsRegistrator();
+			var subscriptionsRegistrator = new SubscriptionRegistrator();
 
 			Target.Subscribe(subscriptionsRegistrator);
 
-			subscriptionsRegistrator.Has(typeof(PersonInAdherenceEvent)).Should().Be(true);
-			subscriptionsRegistrator.Has(typeof(PersonOutOfAdherenceEvent)).Should().Be(true);
-			subscriptionsRegistrator.Has(typeof(PersonNeutralAdherenceEvent)).Should().Be(true);
-			subscriptionsRegistrator.Has(typeof(PersonShiftStartEvent)).Should().Be(true);
-			subscriptionsRegistrator.Has(typeof(PersonShiftEndEvent)).Should().Be(true);
-			subscriptionsRegistrator.Has(typeof(PersonDeletedEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonInAdherenceEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonOutOfAdherenceEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonNeutralAdherenceEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonShiftStartEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonShiftEndEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonDeletedEvent)).Should().Be(true);
 		}
 
 		[Test]

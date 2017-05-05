@@ -33,68 +33,58 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			batchRef.Batch(events, 50)
 				.Select(jobsFor)
-				.ForEach(b => b.ForEach(j => _client.Enqueue(j.Job)));
+				.ForEach(b => b.ForEach(j => _client.Enqueue(j)));
 		}
 
 		public void PublishDaily(IEvent @event)
 		{
-			jobsFor(@event).ForEach(x => _client.AddOrUpdateDaily(x.Job));
+			jobsFor(@event).ForEach(x => _client.AddOrUpdateDaily(x));
 		}
 
 		public void PublishHourly(IEvent @event)
 		{
-			jobsFor(@event).ForEach(x => _client.AddOrUpdateHourly(x.Job));
+			jobsFor(@event).ForEach(x => _client.AddOrUpdateHourly(x));
 		}
 
 		public void PublishMinutely(IEvent @event)
 		{
-			jobsFor(@event).ForEach(x =>
-			{
-
-				if (x.AttemptsAttribute != null)
-					throw new Exception("Retrying minutely recurring job is a bad idea");
-				x.Job.Attempts = 1;
-
-				if (x.AllowFailuresAttribute == null)
-					x.Job.AllowFailures = 10;
-
-				_client.AddOrUpdateMinutely(x.Job);
-			});
+			var jobs = _resolver.MinutelyRecurringJobsFor<IRunOnHangfire>(@event);
+			jobsFor(jobs).ForEach(x => _client.AddOrUpdateMinutely(x));
 		}
 
-		private IEnumerable<JobInfo> jobsFor(IEvent @event)
+		private IEnumerable<HangfireEventJob> jobsFor(IEvent @event)
 		{
 			return jobsFor(new[] {@event});
 		}
 
-		private IEnumerable<JobInfo> jobsFor(IEnumerable<IEvent> events)
+		private IEnumerable<HangfireEventJob> jobsFor(IEnumerable<IEvent> events)
+		{
+			return jobsFor(_resolver.JobsFor<IRunOnHangfire>(events));
+		}
+
+		private IEnumerable<HangfireEventJob> jobsFor(IEnumerable<IJobInfo> jobInfos)
 		{
 			var tenant = _dataSource.CurrentName();
-			var jobInfos = _resolver.JobsFor<IRunOnHangfire>(events);
 			return jobInfos
 				.Select(x =>
 					{
-						var @event = x.Event ?? x.Package.First();
-						return new JobInfo
+						var eventDisplayName = x.Event?.GetType().Name ?? "a package";
+						var tenantDisplayName = (string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant);
+						return new HangfireEventJob
 						{
-							Job = new HangfireEventJob
-							{
-								DisplayName = $"{x.HandlerType.Name} got {@event.GetType().Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
-								Tenant = tenant,
-								Event = x.Event,
-								Package = x.Package,
-								HandlerTypeName = $"{x.HandlerType.FullName}, {x.HandlerType.Assembly.GetName().Name}",
-								QueueName = x.Queue,
-								Attempts = x.Attempts,
-								AllowFailures = x.AllowFailures
-							},
-							AttemptsAttribute = x.AttemptsAttribute,
-							AllowFailuresAttribute = x.AllowFailuresAttribute
+							DisplayName = $"{x.HandlerType.Name} got {eventDisplayName} on {tenantDisplayName}",
+							Tenant = tenant,
+							Event = x.Event,
+							Package = x.Package,
+							HandlerTypeName = $"{x.HandlerType.FullName}, {x.HandlerType.Assembly.GetName().Name}",
+							QueueName = x.QueueName,
+							Attempts = x.Attempts,
+							AllowFailures = x.AllowFailures
 						};
 					}
 				);
 		}
-		
+
 		public void StopPublishingForTenantsExcept(IEnumerable<string> excludedTenants)
 		{
 			var hashed = excludedTenants.Select(x => x.GenerateGuid().ToString("N")).ToList();

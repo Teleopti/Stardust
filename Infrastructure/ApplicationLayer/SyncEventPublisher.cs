@@ -32,12 +32,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			jobs.ForEach(execute);
 		}
 
-		private void execute(Domain.ApplicationLayer.JobInfo job)
+		private void execute(IJobInfo job)
 		{
 			var tenant = _dataSource.CurrentName();
 			var exceptions = new List<Exception>();
 
-			while (job.Attempts --> 0)
+			var attempts = job.Attempts;
+			while (attempts-- > 0)
 			{
 				var thread = new Thread(() =>
 				{

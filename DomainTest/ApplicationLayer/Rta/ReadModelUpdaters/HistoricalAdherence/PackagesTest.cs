@@ -28,15 +28,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 		[Test]
 		public void ShouldSubscribeToEvents()
 		{
-			var subscriptionsRegistrator = new SubscriptionsRegistrator();
+			var subscriptionsRegistrator = new SubscriptionRegistrator();
 
 			Target.Subscribe(subscriptionsRegistrator);
 
-			subscriptionsRegistrator.Has(typeof(PersonInAdherenceEvent)).Should().Be(true);
-			subscriptionsRegistrator.Has(typeof(PersonOutOfAdherenceEvent)).Should().Be(true);
-			subscriptionsRegistrator.Has(typeof(PersonNeutralAdherenceEvent)).Should().Be(true);
-			subscriptionsRegistrator.Has(typeof(PersonStateChangedEvent)).Should().Be(true);
-			subscriptionsRegistrator.Has(typeof(PersonRuleChangedEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonInAdherenceEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonOutOfAdherenceEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonNeutralAdherenceEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonStateChangedEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonRuleChangedEvent)).Should().Be(true);
 		}
 
 		[Test]
