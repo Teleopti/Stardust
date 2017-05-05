@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				{
 					connection.Open();
 
-					using (var command = new SqlCommand(@"truncate table readmodel.SkillCombinationResource", connection))
+					using (var command = new SqlCommand(@"truncate table readmodel.SkillCombination", connection))
 					{
 						command.ExecuteNonQuery();
 					}
