@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -415,7 +416,10 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private void persistScheduleChanges(IPerson person)
 		{
-			_scheduleDictionarySaver.SaveChanges(_schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot(), (IUnvalidatedScheduleRangeUpdate)_schedulingResultStateHolder.Schedules[person]);
+			_scheduleDictionarySaver.SaveChanges(
+				_schedulingResultStateHolder.Schedules[person].DifferenceSinceSnapshot(
+					new DifferenceEntityCollectionService<IPersistableScheduleData>()),
+				(IUnvalidatedScheduleRangeUpdate) _schedulingResultStateHolder.Schedules[person]);
 		}
 	}
 }

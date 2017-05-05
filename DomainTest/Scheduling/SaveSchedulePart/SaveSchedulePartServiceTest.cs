@@ -142,7 +142,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 				new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario);
 			var day = dic[person].ScheduledDay(new DateOnly(2017, 5, 1));
 			day.CreateAndAddAbsence(new AbsenceLayer(new Absence(), absencePeriod));
-			dic.Modify(day, new FakeNewBusinessRuleCollection());	
 			
 			Target.Save(day, new FakeNewBusinessRuleCollection(),
 				new NullScheduleTag());
@@ -177,12 +176,42 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 				new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario);
 			var day = dic[person].ScheduledDay(new DateOnly(2017, 5, 1));
 			day.Remove(personAbs);
-			dic.Modify(day, new FakeNewBusinessRuleCollection());
-
+			
 			Target.Save(day, new FakeNewBusinessRuleCollection(),
 				new NullScheduleTag());
 			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 10)).ToList();
 			resources.Count().Should().Be.EqualTo(1);
+			resources.First().Resource.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldSaveDeltasIfAddedActivity()
+		{
+			const int resolution = 60;
+			IntervalLengthFetcher.Has(resolution);
+			var now = new DateTime(2017, 5, 1, 0, 0, 0);
+			Now.Is(now);
+
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skill", activity).WithId();
+			skill.DefaultResolution = resolution;
+			var person = PersonRepository.Has(skill);
+
+			var assignmentPeriod1 = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 10);
+			var assignmentPeriod2 = new DateTimePeriod(2017, 5, 1, 10, 2017, 5, 1, 12);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category"));
+			assignment.SetId(Guid.NewGuid());
+			ScheduleStorage.Add(assignment);
+			var dic = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+				new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario);
+			var day = dic[person].ScheduledDay(new DateOnly(2017, 5, 1));
+			day.CreateAndAddActivity(activity, assignmentPeriod2);
+
+			Target.Save(day, new FakeNewBusinessRuleCollection(),
+				new NullScheduleTag());
+			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 12)).ToList();
+			resources.Count().Should().Be.EqualTo(2);
 			resources.First().Resource.Should().Be.EqualTo(1);
 		}
 
