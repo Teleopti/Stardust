@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -22,7 +21,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			events.Where(e => _resolver.HandlerTypesFor<IRunOnStardust>(e).Any()).ForEach(b => _sender.Send(b));
+			_resolver.JobsFor<IRunOnStardust>(events)
+				.Select(x => x.Event)
+				.Where(x => x != null)
+				.Distinct()
+				.ForEach(x => _sender.Send(x));
 		}
 	}
 }
