@@ -73,7 +73,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 		self.scheduleHeight(scheduleHeight + "px");
 
 		var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
-			return new TimelineViewModel(item, scheduleHeight);
+			// 5 is half of timeline label height (10px)
+			return new Teleopti.MyTimeWeb.Schedule.TimelineViewModel(item, scheduleHeight, -5);
 		});
 		self.timeLines(timelines);
 
@@ -110,22 +111,4 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 		var previousDate = moment(self.selectedDate()).add(-1, 'days');
 		self.selectedDate(previousDate);
 	};
-};
-
-var TimelineViewModel = function (timeline, scheduleHeight) {
-	var self = this;
-	self.positionPercentage = ko.observable(timeline.PositionPercentage);
-	var hourMinuteSecond = timeline.Time.split(":");
-	self.minutes = hourMinuteSecond[0] * 60 + parseInt(hourMinuteSecond[1]);
-	var timeFromMinutes = moment().startOf("day").add("minutes", self.minutes);
-
-	self.timeText = timeline.TimeLineDisplay;
-
-	self.topPosition = ko.computed(function () {
-		// 5 is half of timeline label height (10px)
-		return Math.round(scheduleHeight * self.positionPercentage() - 5) + "px";
-	});
-	self.evenHour = ko.computed(function () {
-		return timeFromMinutes.minute() === 0;
-	});
 };

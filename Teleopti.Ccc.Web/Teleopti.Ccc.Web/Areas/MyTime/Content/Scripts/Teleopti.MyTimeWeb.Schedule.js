@@ -127,17 +127,17 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}, 1000);
 	};
 
-	var TimelineViewModel = function (timeline) {
+	var TimelineViewModel = function (rawTimeline, scheduleHeight, offset) {
 		var self = this;
-		self.positionPercentage = ko.observable(timeline.PositionPercentage);
-		var hourMinuteSecond = timeline.Time.split(":");
+		self.positionPercentage = ko.observable(rawTimeline.PositionPercentage);
+		var hourMinuteSecond = rawTimeline.Time.split(":");
 		self.minutes = hourMinuteSecond[0] * 60 + parseInt(hourMinuteSecond[1]);
 		var timeFromMinutes = moment().startOf("day").add("minutes", self.minutes);
 
-		self.timeText = timeline.TimeLineDisplay;
+		self.timeText = rawTimeline.TimeLineDisplay;
 
 		self.topPosition = ko.computed(function () {
-			return Math.round(constants.scheduleHeight * self.positionPercentage()) + timeLineOffset + "px";
+			return Math.round(scheduleHeight * self.positionPercentage()) + offset + "px";
 		});
 		self.evenHour = ko.computed(function () {
 			return timeFromMinutes.minute() === 0;
@@ -538,7 +538,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.styles(styleToSet);
 
 		var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
-			return new TimelineViewModel(item);
+			return new TimelineViewModel(item, constants.scheduleHeight, timeLineOffset);
 		});
 		self.timeLines(timelines);
 
@@ -689,6 +689,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				ko.applyBindings(vm, $("#page")[0]);
 			});
 		},
+		TimelineViewModel: TimelineViewModel,
 		WeekScheduleViewModel: WeekScheduleViewModel,
 		LoadAndBindData: function () {
 			_fetchData(_subscribeForChanges);
