@@ -210,8 +210,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					@"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, 
 (CASE WHEN (r.Resource + ISNULL(SUM(d.DeltaResource), 0)) <= 0 THEN 0 ELSE r.Resource + ISNULL(SUM(d.DeltaResource), 0) END) as Resource, c.SkillId from 
 [ReadModel].[SkillCombinationResource] r INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = r.SkillCombinationId 
-LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId = r.SkillCombinationId AND d.StartDateTime = r.StartDateTime AND d.EndDateTime = r.EndDateTime
- WHERE r.StartDateTime < :endDateTime AND r.EndDateTime > :startDateTime AND r.BusinessUnit = :bu GROUP BY r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource, c.SkillId")
+LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId = r.SkillCombinationId AND d.StartDateTime = r.StartDateTime
+ WHERE r.StartDateTime < :endDateTime AND r.EndDateTime > :startDateTime AND r.BusinessUnit = :bu GROUP BY r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource, c.SkillId Order By r.SkillCombinationId, c.SkillId")
 				.SetDateTime("startDateTime", period.StartDateTime)
 				.SetDateTime("endDateTime", period.EndDateTime)
 				.SetParameter("bu", bu)
