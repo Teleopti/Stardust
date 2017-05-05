@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			_resolve = resolve;
 		}
-		
 
 		public IEnumerable<JobInfo> JobsFor<T>(IEnumerable<IEvent> events)
 		{
@@ -22,14 +21,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				_resolve.ConcreteTypesFor(typeof(IHandleEvents))
 				.Select(handler =>
 				{
-					var subscriptions = new SubscriptionsRegistrator();
-					handler
-						.GetMethods()
-						.FirstOrDefault(x => x.Name == "Subscribe")
-						.Invoke(_resolve.Resolve(handler), new[] { subscriptions });
+					var registrator = new subscriptionRegistrator();
+					(_resolve.Resolve(handler) as dynamic).Subscribe(registrator);
 					return new
 					{
-						events = events.Where(x => subscriptions.Has(x.GetType())).ToArray(),
+						events = events.Where(x => registrator.SubscribesTo(x.GetType())).ToArray(),
 						handler
 					};
 
@@ -49,17 +45,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				.ToArray();
 		}
 
-		private JobInfo build(Type handler, Type eventType, IEvent @event, IEnumerable<IEvent> package)
+		private JobInfo build(Type handler, Type handleMethodArgumentType, IEvent @event, IEnumerable<IEvent> package)
 		{
-			var e = @event ?? package.First();
-			var handleMethod = HandleMethodFor(handler, eventType);
+			var handleMethod = HandleMethodFor(handler, handleMethodArgumentType);
 			var allowFailuresAttribute = getAllowFailuresAttribute(handleMethod);
 
 			return new JobInfo
 			{
 				HandlerType = handler,
 				Event = @event,
-				Queue = queueTo(handler, e),
+				Queue = queueTo(handler, @event ?? package.First()),
 				Package = package,
 				Attempts = getAttemptsAttribute(handleMethod)?.Attempts ?? 3,
 				AttemptsAttribute = getAttemptsAttribute(handleMethod),
@@ -95,13 +90,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				.SingleOrDefault();
 		}
 
-		public MethodInfo HandleMethodFor(Type handler, Type evenType)
+		public MethodInfo HandleMethodFor(Type handler, Type argumentType)
 		{
 			return handler
 				.GetMethods()
 				.FirstOrDefault(m =>
 					m.Name == "Handle" &&
-					m.GetParameters().Single().ParameterType == evenType
+					m.GetParameters().Single().ParameterType == argumentType
 				);
 		}
 
@@ -110,6 +105,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
 			return _resolve.ConcreteTypesFor(handlerType)
 				.Where(x => x.GetInterfaces().Contains(typeof(T)));
+		}
+
+		private class subscriptionRegistrator : ISubscriptionRegistrator
+		{
+			private readonly IList<Type> subscriptions = new List<Type>();
+
+			public void SubscribeTo<T>() where T : IEvent
+			{
+				subscriptions.Add(typeof(T));
+			}
+
+			public bool SubscribesTo(Type type)
+			{
+				return subscriptions.Contains(type);
+			}
 		}
 	}
 

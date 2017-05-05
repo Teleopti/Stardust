@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			public IEnumerable<IEvent> Packeged;
 			public IEvent AnotherEvent;
 
-			public void Subscribe(ISubscriptionsRegistrator subscriptions)
+			public void Subscribe(ISubscriptionRegistrator registrator)
 			{
-				subscriptions.Add<TestEvent>();
+				registrator.SubscribeTo<TestEvent>();
 			}
 
 			public void Handle(IEnumerable<IEvent> events)

@@ -86,9 +86,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			private bool _fails;
 			public int Attempts;
 
-			public void Subscribe(ISubscriptionsRegistrator subscriptions)
+			public void Subscribe(ISubscriptionRegistrator registrator)
 			{
-				subscriptions.Add<TestEvent>();
+				registrator.SubscribeTo<TestEvent>();
 			}
 
 			[Attempts(2)]

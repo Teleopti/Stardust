@@ -32,14 +32,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		{
 		}
 
-		public virtual void Subscribe(ISubscriptionsRegistrator subscriptions)
+		public virtual void Subscribe(ISubscriptionRegistrator registrator)
 		{
-			subscriptions.Add<PersonInAdherenceEvent>();
-			subscriptions.Add<PersonOutOfAdherenceEvent>();
-			subscriptions.Add<PersonNeutralAdherenceEvent>();
-			subscriptions.Add<PersonShiftStartEvent>();
-			subscriptions.Add<PersonShiftEndEvent>();
-			subscriptions.Add<PersonDeletedEvent>();
+			registrator.SubscribeTo<PersonInAdherenceEvent>();
+			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
+			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
+			registrator.SubscribeTo<PersonShiftStartEvent>();
+			registrator.SubscribeTo<PersonShiftEndEvent>();
+			registrator.SubscribeTo<PersonDeletedEvent>();
 
 		}
 

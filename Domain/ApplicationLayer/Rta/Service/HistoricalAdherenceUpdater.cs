@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 		}
 
-		public void Subscribe(ISubscriptionsRegistrator subscriptionsRegistrator)
+		public void Subscribe(ISubscriptionRegistrator registrator)
 		{
-			subscriptionsRegistrator.Add<PersonOutOfAdherenceEvent>();
-			subscriptionsRegistrator.Add<PersonInAdherenceEvent>();
-			subscriptionsRegistrator.Add<PersonNeutralAdherenceEvent>();
-			subscriptionsRegistrator.Add<PersonStateChangedEvent>();
-			subscriptionsRegistrator.Add<PersonRuleChangedEvent>();
+			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
+			registrator.SubscribeTo<PersonInAdherenceEvent>();
+			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
+			registrator.SubscribeTo<PersonStateChangedEvent>();
+			registrator.SubscribeTo<PersonRuleChangedEvent>();
 		}
 
 		[ReadModelUnitOfWork]
