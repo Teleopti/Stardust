@@ -6507,6 +6507,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will toggle this item and all items below it, are you sure you want to proceed?.
+        /// </summary>
+        public static string ConfirmToggleAllData {
+            get {
+                return ResourceManager.GetString("ConfirmToggleAllData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This will toggle the state of all functions, are you sure you want to proceed?.
         /// </summary>
         public static string ConfirmToggleAllPermissions {

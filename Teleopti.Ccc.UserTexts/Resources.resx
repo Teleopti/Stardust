@@ -15996,4 +15996,8 @@ Do you want to participate?</value>
     <value>The validation issues are up-to-date</value>
     <comment>The validation issues are up-to-date</comment>
   </data>
+  <data name="ConfirmToggleAllData" xml:space="preserve">
+    <value>This will toggle this item and all items below it, are you sure you want to proceed?</value>
+    <comment>message to confirm toggle in a tree structure</comment>
+  </data>
 </root>
