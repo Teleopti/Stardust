@@ -4,10 +4,11 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
+#pragma warning disable 618
+
 	public class FakeEventPublisherWithOverwritingHandlers: IEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
@@ -44,9 +45,7 @@ namespace Teleopti.Ccc.TestCommon
 				}
 				else
 				{
-#pragma warning disable 618
 					var handlerTypes = _resolver.HandlerTypesFor<IRunOnServiceBus>(@event)
-#pragma warning restore 618
 						.Concat(_resolver.HandlerTypesFor<IRunOnHangfire>(@event))
 						.Concat(_resolver.HandlerTypesFor<IRunOnStardust>(@event))
 						.Concat(_resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event));
@@ -57,4 +56,7 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 	}
+
+#pragma warning restore 618
+
 }

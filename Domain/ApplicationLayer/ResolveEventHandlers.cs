@@ -16,9 +16,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_resolve = resolve;
 		}
 
+		public IEnumerable<IJobInfo> JobsFor<T>(IEnumerable<IEvent> events)
+		{
+			return jobsFor<T>(events);
+		}
+
 		public IEnumerable<IJobInfo> MinutelyRecurringJobsFor<T>(IEvent @event)
 		{
-			var jobs = jobsFor<T>(new[] {@event});
+			var jobs = jobsFor<T>(new[] { @event });
 
 			if (jobs.Any(x => x.AttemptsAttribute != null))
 				throw new Exception("Retrying minutely recurring job is a bad idea");
@@ -34,9 +39,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			return jobs;
 		}
 
-		public IEnumerable<IJobInfo> JobsFor<T>(IEnumerable<IEvent> events)
+		public IEnumerable<Type> HandlerTypesFor<T>(IEvent @event)
 		{
-			return jobsFor<T>(events);
+			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
+			return _resolve.ConcreteTypesFor(handlerType)
+				.Where(x => x.GetInterfaces().Contains(typeof(T)));
 		}
 
 		private IEnumerable<jobInfo> jobsFor<T>(IEnumerable<IEvent> events)
@@ -122,13 +129,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					m.Name == "Handle" &&
 					m.GetParameters().Single().ParameterType == argumentType
 				);
-		}
-
-		public IEnumerable<Type> HandlerTypesFor<T>(IEvent @event)
-		{
-			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
-			return _resolve.ConcreteTypesFor(handlerType)
-				.Where(x => x.GetInterfaces().Contains(typeof(T)));
 		}
 
 		private class jobInfo : IJobInfo
