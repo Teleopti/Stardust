@@ -77,8 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Days = days(s),
 				AsmPermission = s.AsmPermission,
 				IsCurrentWeek = s.IsCurrentWeek,
-				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, s.Date),
-				SiteOpenHourIntradayPeriod = getSiteOpenHourPeriod(_now.LocalDateOnly())
+				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, s.Date)
 			};
 		}
 
@@ -105,7 +104,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				AsmPermission = s.AsmPermission,
 				IsToday = s.IsCurrentDay,
 				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, s.Date),
-				SiteOpenHourIntradayPeriod = getSiteOpenHourPeriod(s.Date),
 				UnReadMessageCount = s.UnReadMessageCount
 			};
 		}

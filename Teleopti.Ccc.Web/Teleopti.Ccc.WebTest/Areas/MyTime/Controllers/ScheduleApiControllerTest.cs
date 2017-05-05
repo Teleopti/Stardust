@@ -56,10 +56,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				Period = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(13)),
 				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(13)),
 				StaffingThresholdValidator = new StaffingThresholdValidator()
-			}; 
-			var workFlowControlSet=new  WorkflowControlSet();
+			};
+			var workFlowControlSet = new WorkflowControlSet();
 			workFlowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenDatePeriod);
-		    User.CurrentUser().WorkflowControlSet = workFlowControlSet; 
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchWeekData(null);
 			result.CheckStaffingByIntraday.Should().Be(true);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchWeekData(Now.LocalDateOnly().AddDays(4));
-			result.CheckStaffingByIntraday.Should().Be(true); 
+			result.CheckStaffingByIntraday.Should().Be(true);
 		}
 
 		[Test]
@@ -808,8 +808,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team));
 
-			var result = Target.FetchWeekData(null);
-			result.SiteOpenHourIntradayPeriod.Equals(timePeriod).Should().Be.True();
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
+			result.SiteOpenHourPeriod.Equals(timePeriod).Should().Be.True();
 		}
 
 		[Test]
@@ -1117,8 +1117,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		#region Test cases for FetchDayData()
 		[Test, SetCulture("sv-SE")]
 		public void ShouldGetUnReadMessageCountOnFetchDayData()
-		{ 
-			var result = Target.FetchDayData(null); 
+		{
+			var result = Target.FetchDayData(null);
 			result.UnReadMessageCount.Should().Be.GreaterThan(0);
 		}
 
@@ -1812,8 +1812,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
 
-			var result = Target.FetchDayData(date);
-			result.SiteOpenHourIntradayPeriod.Equals(timePeriod).Should().Be.True();
+			var result = Target.FetchDayData(date).Schedule;
+			result.SiteOpenHourPeriod.Equals(timePeriod).Should().Be.True();
 		}
 
 		[Test]
