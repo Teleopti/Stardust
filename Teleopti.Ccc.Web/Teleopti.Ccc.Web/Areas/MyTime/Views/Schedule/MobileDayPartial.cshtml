@@ -38,10 +38,10 @@
 		<div class="dayview-view-body">
 			<div class="dayview-summary-content" data-bind="style: { backgroundColor: summaryColor, color: 255 }, css: {'dayoff': isDayOff}">
 				<span data-bind="text: dayOfWeek"></span>
-				<span >(</span>
+				<span data-bind="visible: summaryVisible" >(</span>
 				<span data-bind="text: summaryName"></span>
 				<span data-bind="text: summaryTime"></span>
-				<span >)</span>
+				<span data-bind="visible: summaryVisible">)</span>
 				<!-- ko if: hasOvertime-->
 				<span>@Resources.Overtime</span>
 				<!-- /ko -->
