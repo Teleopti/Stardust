@@ -522,12 +522,18 @@ end
 
 --delete job result artifacts according to purge setting
 select @KeepUntil = DATEADD(day, -1*(select isnull(Value, 30) from PurgeSetting where [Key] = 'DaysToKeepJobResultArtifacts'), GETDATE())
+CREATE TABLE #ExpiredArtifacts (Id uniqueidentifier NOT NULL, Parent uniqueidentifier NOT NULL)
 
 set @RowCount = 1
 while @RowCount > 0
 begin
-	delete top(1000) dbo.JobResultArtifact
-	where CreateTime < @KeepUntil
+
+	Insert Into #ExpiredArtifacts select  top 1000 Id, Parent from dbo.JobResultArtifact
+		where CreateTime < @KeepUntil
+	delete from dbo.JobResultArtifact where id in (select id from #ExpiredArtifacts)
+	delete from dbo.JobResultDetail where Parent in (select distinct Parent from #ExpiredArtifacts)
+	delete from dbo.JobResult where id in (select distinct Parent from #ExpiredArtifacts)
+	truncate table #ExpiredArtifacts
 
 	select @RowCount = @@rowcount
 	if datediff(second,@start,getdate()) > @timeout 
