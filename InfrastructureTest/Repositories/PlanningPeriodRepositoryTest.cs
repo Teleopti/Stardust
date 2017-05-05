@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6),new DateOnly(2015, 4,12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(3);
+			suggestedPeriod.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(3);
+			suggestedPeriod.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(7);
+			suggestedPeriod.Count().Should().Be.EqualTo(6);
 		}
 
 		[Test]
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(7);
+			suggestedPeriod.Count().Should().Be.EqualTo(6);
 		}
 
 		[Test]
