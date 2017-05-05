@@ -6,7 +6,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.LayerViewModel.js" />
 
-Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
+Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function () {
 	var self = this;
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 	var probabilityType = constants.probabilityType;
@@ -21,7 +21,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 	self.dayOfWeek = ko.observable();
 	self.isDayOff = ko.observable(false);
 	self.hasShift = ko.observable(false);
-	self.summaryVisible = ko.observable(false); 
+	self.summaryVisible = ko.observable(false);
 	self.hasOvertime = ko.observable(false);
 	self.timeLines = ko.observableArray();
 	self.layers = ko.observableArray();
@@ -33,7 +33,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
 
 	var calculateScheduleHeight = function (lastLayer, lastTimelinePoint) {
-		var isMobile = Teleopti.MyTimeWeb.Portal.IsMobile(window) || Teleopti.MyTimeWeb.Portal.IsIPad(window);
+		var isMobile = Teleopti.MyTimeWeb.Portal.IsMobile(window);
 		if (!isMobile) {
 			return constants.scheduleHeight;
 		}
@@ -49,8 +49,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 		return Math.round(scheduleHeight * scheduleHeightPercentage) + 1;
 	};
 
-	self.navigateToMessages = function() {
-		  Teleopti.MyTimeWeb.Portal.NavigateTo("MessageTab");
+	self.navigateToMessages = function () {
+		Teleopti.MyTimeWeb.Portal.NavigateTo("MessageTab");
 	};
 
 	self.readData = function (data) {
@@ -102,7 +102,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 		});
 	};
 
-	self.today = function(){
+	self.today = function () {
 		self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime()).startOf("day"));
 		self.selectedDate(self.currentUserDate());
 	};

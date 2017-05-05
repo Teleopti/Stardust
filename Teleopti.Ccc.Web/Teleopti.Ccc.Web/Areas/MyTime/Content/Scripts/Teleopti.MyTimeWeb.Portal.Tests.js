@@ -9,7 +9,7 @@
 		(function () {
 			setup();
 			var fakeWindow = getFakeWindow();
-            init(fakeWindow);
+			init(fakeWindow);
 			equal("#Schedule/MobileWeek", fakeWindow.location.url);
 		})();
 	});
@@ -20,15 +20,15 @@
 			return false;
 		};
 
-		(function() {
+		(function () {
 			setup();
 			var fakeWindow = getFakeWindow();
-		    init(fakeWindow);
+			init(fakeWindow);
 			equal("#Schedule/MobileDay", fakeWindow.location.url);
 		})();
-    });
+	});
 
-	test("should navigate to mobile day page when toggle 43446 is on and access from ipad", function () {
+	test("should navigate to mobile week page when toggle 43446 is on and access from ipad", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_DayScheduleForStartPage_43446") return true;
 			return false;
@@ -36,10 +36,10 @@
 
 		(function () {
 			setup();
-            var fakeWindow = getFakeWindow();
+			var fakeWindow = getFakeWindow();
 			fakeWindow.navigator.userAgent = "iPad";
-		    init(fakeWindow);
-			equal("#Schedule/MobileDay", fakeWindow.location.url);
+			init(fakeWindow);
+			equal("#Schedule/MobileWeek", fakeWindow.location.url);
 		})();
 	});
 
@@ -60,13 +60,13 @@
 	}
 
 	function init(window) {
-	    var ajax = {
-	        Ajax: function(options) {
-	        }
-        };
+		var ajax = {
+			Ajax: function (options) {
+			}
+		};
 
-        var setting = getDefaultSetting();
-        Teleopti.MyTimeWeb.Portal.Init(setting, window, ajax);
+		var setting = getDefaultSetting();
+		Teleopti.MyTimeWeb.Portal.Init(setting, window, ajax);
 	}
 
 	function getFakeWindow() {
@@ -79,14 +79,14 @@
 				}
 			},
 			navigator: {
-                userAgent: "Android"
+				userAgent: "Android"
 			}
 		};
 	}
 
 	function getDefaultSetting() {
 		return {
-			defaultNavigation: '/',
+			defaultNavigation: 'Schedule/MobileWeek',
 			baseUrl: '/',
 			startBaseUrl: '/'
 		};
