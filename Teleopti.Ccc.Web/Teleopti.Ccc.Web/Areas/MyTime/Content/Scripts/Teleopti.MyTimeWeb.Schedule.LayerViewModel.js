@@ -78,7 +78,7 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
         return self.top() + "px";
     });
     self.widthPx = ko.computed(function () {
-        return getWidth(layer.IsOvertimeAvailability, parent.probabilities);
+        return getWidth(layer.IsOvertimeAvailability, parent.probabilities());
     });
     self.heightPx = ko.computed(function () {
         return self.height() + "px";
@@ -135,7 +135,7 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
     });
 };
 
-var getWidth = function (isOvertimeAvailability, probabilities) {
+function getWidth(isOvertimeAvailability, probabilities) {
     var width;
     if (Teleopti.MyTimeWeb.Portal.IsMobile(window) || Teleopti.MyTimeWeb.Portal.IsIPad(window)) {
         if (isOvertimeAvailability) {
