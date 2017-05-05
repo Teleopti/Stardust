@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -145,6 +146,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			public AttemptsAttribute AttemptsAttribute { get; set; }
 			public AllowFailuresAttribute AllowFailuresAttribute { get; set; }
 		}
+
 	}
 
 	public interface IJobInfo

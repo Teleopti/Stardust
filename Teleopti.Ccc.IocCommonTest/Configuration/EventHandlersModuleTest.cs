@@ -9,10 +9,11 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
+#pragma warning disable 618
+
 	[TestFixture]
 	[DomainTest]
 	public class EventHandlersModuleTest
@@ -20,87 +21,64 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public ResolveEventHandlers Resolver;
 		public IResolve Resolve;
 
+		private IEnumerable<IJobInfo> allJobs(IEnumerable<IEvent> events)
+		{
+			return Resolver.JobsFor<IRunOnServiceBus>(events)
+				.Concat(Resolver.JobsFor<IRunOnHangfire>(events))
+				.Concat(Resolver.JobsFor<IRunOnStardust>(events))
+				.Concat(Resolver.JobsFor<IRunInSync>(events))
+				.Concat(Resolver.JobsFor<IRunInSyncInFatClientProcess>(events));
+
+		}
+
 		[AllTogglesOff]
 		[Test]
 		public void ShouldResolveAllEventHandlersWhenTogglesDisabled()
 		{
-			allEvents().ForEach(x =>
-			{
-#pragma warning disable 618
-				Resolver.HandlerTypesFor<IRunOnServiceBus>(x);
-#pragma warning restore 618
-				Resolver.HandlerTypesFor<IRunOnHangfire>(x);
-				Resolver.HandlerTypesFor<IRunOnStardust>(x);
-			});
+			allJobs(oneOfEachEvent());
 		}
 
 		[AllTogglesOn]
 		[Test]
 		public void ShouldResolveAllEventHandlersWhenTogglesEnabled()
 		{
-			allEvents().ForEach(x =>
-			{
-#pragma warning disable 618
-				Resolver.HandlerTypesFor<IRunOnServiceBus>(x);
-#pragma warning restore 618
-				Resolver.HandlerTypesFor<IRunOnHangfire>(x);
-				Resolver.HandlerTypesFor<IRunOnStardust>(x);
-			});
+			allJobs(oneOfEachEvent());
 		}
 
 		[Test]
 		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldResolveSameInstanceOfHandlers()
 		{
-			allEvents().ForEach(x =>
-			{
-#pragma warning disable 618
-				var handlerTypes = Resolver.HandlerTypesFor<IRunOnServiceBus>(x)
-#pragma warning restore 618
-					.Concat(Resolver.HandlerTypesFor<IRunOnHangfire>(x))
-					.Concat(Resolver.HandlerTypesFor<IRunOnStardust>(x))
-					.Concat(Resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(x))
-					;
-				handlerTypes.ForEach(t =>
+			allJobs(oneOfEachEvent())
+				.ForEach(x =>
 				{
-					var instance1 = Resolve.Resolve(t);
-					var instance2 = Resolve.Resolve(t);
+					var instance1 = Resolve.Resolve(x.HandlerType);
+					var instance2 = Resolve.Resolve(x.HandlerType);
 					instance1.Should().Be.SameInstanceAs(instance2);
 				});
-			});
 		}
 
 		[Test]
 		[AllTogglesOn]
 		public void ShouldHaveNoHandlersOnBusWithoutLogOnContextTogglesEnabled()
 		{
-			var eventsWithoutLogOnContext = allEvents()
+			var eventsWithoutLogOnContext = oneOfEachEvent()
 				.Where(e => !(e is ILogOnContext));
-			eventsWithoutLogOnContext.ForEach(x =>
-			{
-#pragma warning disable 618
-				Resolver.HandlerTypesFor<IRunOnServiceBus>(x)
-#pragma warning restore 618
-					.Should().Be.Empty();
-			});
+			Resolver.JobsFor<IRunOnServiceBus>(eventsWithoutLogOnContext)
+				.Should().Be.Empty();
 		}
 
 		[Test]
 		[AllTogglesOff]
 		public void ShouldHaveNoHandlersOnBusWithoutLogOnContextTogglesDisabled()
 		{
-			var eventsWithoutLogOnContext = allEvents()
+			var eventsWithoutLogOnContext = oneOfEachEvent()
 				.Where(e => !(e is ILogOnContext));
-			eventsWithoutLogOnContext.ForEach(x =>
-			{
-#pragma warning disable 618
-				Resolver.HandlerTypesFor<IRunOnServiceBus>(x)
-#pragma warning restore 618
-					.Should().Be.Empty();
-			});
+			Resolver.JobsFor<IRunOnServiceBus>(eventsWithoutLogOnContext)
+				.Should().Be.Empty();
 		}
 
-		private static IEnumerable<IEvent> allEvents()
+		private static IEnumerable<IEvent> oneOfEachEvent()
 		{
 			var events = (
 				from type in typeof (Event).Assembly.GetTypes()
@@ -111,4 +89,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			return events;
 		}
 	}
+#pragma warning restore 618
+
 }
