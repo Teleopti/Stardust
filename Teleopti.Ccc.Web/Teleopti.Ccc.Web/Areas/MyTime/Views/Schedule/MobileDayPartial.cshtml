@@ -2,6 +2,29 @@
 @{
 	Layout = null;
 }
+<style>
+	html, body, article#body,
+	.dayview-mobile, .dayview-mobile .dayview-view-body {
+		height: 100%;
+	}
+
+	#body-inner {
+		height: calc(100% - 21px);
+	}
+
+	section#page {
+		height: calc(100%);
+	}
+
+	.dayview-mobile > .container {
+		height: calc(100% - 53px);
+	}
+
+	.dayview-view-body {
+		height: 100%;
+		overflow-y: auto;
+	}
+</style>
 
 <div class="dayview-mobile">
 	<div class="navbar navbar-teleopti subnavbar">
