@@ -299,8 +299,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability());
 		};
 
-		self.mobile = function () {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability());
+        self.mobile = function () {
+            if (showDayScheduleForStartPage()) {
+	            Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay");
+            } else {
+		        Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability());
+	        }
 		};
 
 		function getUrlPartForDate(date) {
@@ -641,6 +645,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function rebindProbabilityLabel(viewmodel) {
 		ko.applyBindings(viewmodel, $(".probabilityLabel")[0]);
+    }
+
+	function showDayScheduleForStartPage() {
+		return Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446");
 	}
 
 	return {

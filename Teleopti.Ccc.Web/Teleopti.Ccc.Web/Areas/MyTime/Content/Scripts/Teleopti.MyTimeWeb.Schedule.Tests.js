@@ -362,9 +362,7 @@ $(document).ready(function() {
         equal(Teleopti.MyTimeWeb.Portal.ParseHash({ hash: hash }).probability, constants.probabilityType.absence);
 
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
-	});
-
-	
+	});  
 
     test("should keep possibility selection for multiple days when changing date", function () {
         initUserTexts();
@@ -934,6 +932,24 @@ $(document).ready(function() {
         equal(userTexts.HideStaffingInfo, $(".probabilityLabel").text());
 
         $(".probabilityLabel").remove();
+    });
+
+    test("should open new start page when changing to mobile view and  toggle 43446 is on", function () {
+
+        Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+		    if (x === "MyTimeWeb_DayScheduleForStartPage_43446") return true;
+		    return false;
+        };
+
+	    var fakeScheduleData = getFakeScheduleData();
+	    var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null);
+
+        vm.initializeData(fakeScheduleData);
+
+        vm.mobile(); 
+
+	    equal("#Schedule/MobileDay", hash);
+	    
     });
 
 	function setup() {
