@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_dataSource = dataSource;
 		}
 
-		[TestLog]
-		public virtual void Publish(params IEvent[] events)
+		public void Publish(params IEvent[] events)
 		{
 			batchRef.Batch(events, 50)
 				.Select(jobsFor)
