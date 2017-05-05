@@ -14,11 +14,14 @@ $(document).ready(function() {
     });
 
     test("should set display date", function () {
+         Teleopti.MyTimeWeb.Common.SetupCalendar({
+            DateFormat: "DD/MM/YYYY",
+            UseJalaaliCalendar: false
+        });
         var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
         var rawData = {
             Date: moment().format('YYYY-MM-DD'),
-            DisplayDate: moment().format('DD/MM/YYYY'),
             Schedule: {
 				FixedDate: null,
                 Summary: {
@@ -31,7 +34,7 @@ $(document).ready(function() {
         };
         viewModel.readData(rawData);
 
-        equal(viewModel.displayDate(), rawData.DisplayDate);
+        equal(viewModel.displayDate(), moment().format('DD/MM/YYYY'));
     });
 
     test("should display date correctly when in Persian date format", function () {
@@ -43,7 +46,6 @@ $(document).ready(function() {
 
         var rawData = {
             Date: moment().format('YYYY-MM-DD'),
-            DisplayDate: moment().format('DD/MM/YYYY'),
             Schedule: {
                 FixedDate: null,
                 Summary: {
@@ -63,7 +65,6 @@ $(document).ready(function() {
         var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
         var rawData = {
-            DisplayDate: null,
             Schedule: {
 				FixedDate: null,
                 Summary: {
@@ -83,7 +84,6 @@ $(document).ready(function() {
         var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
         var rawData = {
-            DisplayDate: null,
             Schedule: {
 				FixedDate: null,
                 Summary: {
@@ -103,7 +103,6 @@ $(document).ready(function() {
         var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
         var rawData = {
-            DisplayDate: null,
             Schedule: {
 				FixedDate: null,
                 Summary: {
@@ -123,7 +122,6 @@ $(document).ready(function() {
         var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
         var rawData = {
-            DisplayDate: null,
             Schedule: {
 				FixedDate: null,
                 Summary: {

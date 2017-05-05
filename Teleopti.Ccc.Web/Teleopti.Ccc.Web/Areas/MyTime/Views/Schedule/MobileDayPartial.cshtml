@@ -13,11 +13,8 @@
 							<button class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
 								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
-							<a class="btn btn-default moment-datepicker" type="button">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</a>
 						</span>
-						<input class="form-control text-center date-input-style" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
+						<input class="form-control text-center date-input-style moment-datepicker" data-bind="value: displayDate" type="text"/>
 						<span class="input-group-btn">
 							<button class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button">
 								<i class="glyphicon glyphicon-chevron-right"></i>
@@ -34,10 +31,9 @@
 					</a>
 				</li>
 			</ul>
-
 		</div>
 	</div>
-	
+
 	<div class="container">
 		<div class="dayview-view-body">
 			<div class="dayview-summary-content" data-bind="style: { backgroundColor: summaryColor, color: 255 }, css: {'dayoff': isDayOff}">
@@ -61,7 +57,7 @@
 			<div class="dayview-schedule relative">
 				<!-- ko foreach: layers -->
 				<div class="dayview-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime &amp;&amp; overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime &amp;&amp; overTimeDarkerBackgroundStyle}">
-                    <div data-bind="visible: showTitle()">
+				<div data-bind="visible: showTitle()">
 						<strong class="truncate" data-bind="text: title()"></strong>
 						<!-- ko if: hasMeeting -->
 						<div class="meeting floatright">

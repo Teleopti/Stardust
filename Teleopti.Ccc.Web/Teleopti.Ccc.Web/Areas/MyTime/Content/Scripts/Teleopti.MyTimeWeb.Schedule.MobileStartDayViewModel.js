@@ -50,11 +50,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
     };
 
     self.readData = function (data) {
-        if(Teleopti.MyTimeWeb.Common.UseJalaaliCalendar){
-            self.displayDate(moment(data.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
-        }else{
-            self.displayDate(data.DisplayDate);
-        }
+        self.displayDate(moment(data.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
         self.summaryColor(data.Schedule.Summary.Color);
         self.summaryName(data.Schedule.Summary.Title);
         self.summaryTime(data.Schedule.Summary.TimeSpan);
