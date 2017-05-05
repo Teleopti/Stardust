@@ -252,6 +252,7 @@
     <Compile Include="MultiTenancy\TenantApplicationConfigKey.cs" />
     <Compile Include="MultiTenancy\TenantUserPersister.cs" />
     <Compile Include="Notification\FCMSendMessageResponse.cs" />
+    <Compile Include="Optimization\OptimizationPreferencesPerfTestProvider.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
     <Compile Include="Optimization\TeamBlock\DayOffOptimizerStandard.cs" />
     <Compile Include="Optimization\TeamBlock\DayOffOptimizerUseTeamSameDaysOff.cs" />
