@@ -1,4 +1,4 @@
-/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/moment/moment.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
@@ -18,15 +18,16 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 	self.summaryColor = ko.observable();
 	self.summaryName = ko.observable();
 	self.summaryTime = ko.observable();
-    self.dayOfWeek = ko.observable();
+	self.dayOfWeek = ko.observable();
 	self.isDayOff = ko.observable(false);
 	self.hasShift = ko.observable(false);
-    self.summaryVisible = ko.observable(false); 
+	self.summaryVisible = ko.observable(false); 
 	self.hasOvertime = ko.observable(false);
 	self.timeLines = ko.observableArray();
 	self.layers = ko.observableArray();
 	self.scheduleHeight = ko.observable();
 	self.unreadMessageCount = ko.observable();
+	self.probabilities = ko.observableArray([]);
 
 	var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
@@ -51,7 +52,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function() {
 		self.displayDate(moment(data.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
 		self.summaryColor(data.Schedule.Summary.Color);
 		self.summaryName(data.Schedule.Summary.Title);
-	    self.summaryVisible(true);
+		self.summaryVisible(true);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
 		self.isDayOff(data.Schedule.IsDayOff);
 		self.unreadMessageCount(data.UnReadMessageCount);
