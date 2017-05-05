@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakeMeetingRepository MeetingRepository;
+		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 
 		[Test]
 		public void ShouldClearAssignmentWithinRange()
@@ -177,7 +178,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			AgentGroupRepository.Has(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
 
-			//AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16));
 			var assignment = new PersonAssignment(agent, scenario, startDate);
 			assignment.AddActivity(activity, new TimePeriod(9, 16));
 			assignment.AddPersonalActivity(activity, new DateTimePeriod(2017, 05, 01, 8, 2017, 05, 01, 9));
@@ -195,6 +195,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			assignments.Count.Should().Be.EqualTo(1);
 			assignments.First().ShiftLayers.Count().Should().Be.EqualTo(1);
 			assignments.First().ShiftLayers.First().Should().Be.OfType<PersonalShiftLayer>();
+		}
+
+		[Test]
+		public void ShouldClearDayOffButNotPersonalActivity()
+		{
+			var startDate = new DateOnly(2017, 05, 01);
+			var endDate = new DateOnly(2017, 05, 07);
+			var team = new Team().WithId();
+			var dayOffTemplate = new DayOffTemplate().WithId();
+			DayOffTemplateRepository.Has(dayOffTemplate);
+			var activity = ActivityRepository.Has("_");
+			var scenario = ScenarioRepository.Has("some name");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var skill = SkillRepository.Has("skill", activity);
+			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team,
+				new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
+			var agentGroup = new AgentGroup("_").WithId().AddFilter(new TeamFilter(team));
+			AgentGroupRepository.Has(agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
+
+			var assignment = new PersonAssignment(agent, scenario, startDate);
+			assignment.SetDayOff(dayOffTemplate);
+			assignment.AddPersonalActivity(activity, new DateTimePeriod(2017, 05, 01, 8, 2017, 05, 01, 9));
+			AssignmentRepository.Has(assignment);
+
+			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
+			{
+				PlanningPeriodId = planningPeriod.Id.GetValueOrDefault()
+			});
+
+			planningPeriod.State.Should().Be.EqualTo(PlanningPeriodState.New);
+
+			var assignments = AssignmentRepository.Find(new[] { agent }, new DateOnlyPeriod(startDate, endDate), scenario);
+			assignments.Count.Should().Be.EqualTo(1);
+			assignments.First().ShiftLayers.Count().Should().Be.EqualTo(1);
+			assignments.First().ShiftLayers.First().Should().Be.OfType<PersonalShiftLayer>();
+			assignments.First().AssignedWithDayOff(dayOffTemplate).Should().Be.False();
 		}
 
 		[Test]

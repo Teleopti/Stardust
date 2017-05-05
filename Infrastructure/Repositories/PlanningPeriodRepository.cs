@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				? Session.GetNamedQuery("UniqueSchedulePeriodsForPeople")
 					.SetDateTime("date", now.UtcDateTime())
 					.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
-					.SetParameterList("personIds", personIds)
+					.SetParameterList("personIds", personIds.Take(1000))
 					.SetResultTransformer(new AliasToBeanResultTransformer(typeof(AggregatedSchedulePeriod)))
 					.List<AggregatedSchedulePeriod>()
 				: new List<AggregatedSchedulePeriod>();
