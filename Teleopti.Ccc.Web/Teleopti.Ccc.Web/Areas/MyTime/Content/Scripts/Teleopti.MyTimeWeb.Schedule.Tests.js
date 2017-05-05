@@ -340,7 +340,7 @@ $(document).ready(function() {
 		initUserTexts();
 		initCommon();
 
-		setup();
+		setupHash();
 
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
@@ -367,7 +367,7 @@ $(document).ready(function() {
 	test("should keep possibility selection for multiple days when changing date", function () {
 		initUserTexts();
 		initCommon();
-		setup();
+		setupHash();
 
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
@@ -938,6 +938,7 @@ $(document).ready(function() {
 
 	test("should open new start page when changing to mobile view and  toggle 43446 is on", function () {
 		initUserTexts();
+		setupHash();
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_DayScheduleForStartPage_43446") return true;
 			return false;
@@ -951,10 +952,9 @@ $(document).ready(function() {
 		vm.mobile(); 
 
 		equal("#Schedule/MobileDay", hash);
-		
 	});
 
-	function setup() {
+	function setupHash() {
 		this.hasher = {
 			initialized: {
 				add: function () { }
