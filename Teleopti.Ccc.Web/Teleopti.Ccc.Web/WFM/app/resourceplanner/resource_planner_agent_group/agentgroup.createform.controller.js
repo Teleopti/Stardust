@@ -22,7 +22,7 @@
 		vm.isValidFilters = isValidFilters;
 		vm.isValidName = isValidName;
 		vm.isValid = isValid;
-		vm.removeNode = removeNode;
+		vm.removeSelectedFilter = removeSelectedFilter;
 		vm.persist = persist;
 		vm.removeAgentGroup = removeAgentGroup;
 		var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
@@ -99,7 +99,7 @@
 			vm.results = [];
 		}
 
-		function removeNode(node) {
+		function removeSelectedFilter(node) {
 			var p = vm.selectedResults.indexOf(node);
 			vm.selectedResults.splice(p, 1);
 		}

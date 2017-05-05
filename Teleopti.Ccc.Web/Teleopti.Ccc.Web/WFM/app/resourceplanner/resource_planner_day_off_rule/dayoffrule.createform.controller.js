@@ -30,7 +30,7 @@
         vm.selectResultItem = selectResultItem;
         vm.moreResultsExists = moreResultsExists;
         vm.noResultsExists = noResultsExists;
-        vm.removeNode = removeNode;
+        vm.removeSelectedFilter = removeSelectedFilter;
         vm.persist = persist;
         vm.cancelCreate = returnFromCreate;
         vm.dayOffsPerWeek = {
@@ -49,12 +49,12 @@
         checkIfEditDefaultRule();
 
         function checkIfEditDefaultRule() {
-            if (Object.keys($stateParams.filterId).length > 0) {
+            if ($stateParams.filterId) {
                 if ($stateParams.isDefault) {
                     vm.default = $stateParams.isDefault;
                     vm.name = "Default";
                     vm.filterId = $stateParams.filterId;
-                    if (vm.filterId !== '00000000-0000-0000-0000-000000000000') {
+                    if (vm.filterId !== '') {
                         dayOffRuleService.getDayOffRule({ id: $stateParams.filterId })
                             .$promise.then(function (result) {
                                 vm.dayOffsPerWeek = {
@@ -77,7 +77,7 @@
                             vm.name = result.Name;
                             vm.filterId = $stateParams.filterId;
                             vm.default = result.Default;
-                            vm.selectedResults = result.Filters;
+                            vm.selectedResults = result.Filters ? result.Filters : [];
                             vm.dayOffsPerWeek = {
                                 MinDayOffsPerWeek: result.MinDayOffsPerWeek,
                                 MaxDayOffsPerWeek: result.MaxDayOffsPerWeek
@@ -96,23 +96,28 @@
         }
 
         function inputFilterData() {
-			if (vm.searchString !== '') {
-				return dayOffRuleService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
-					if (vm.selectedResults.length > 0) {
-						for (var i = data.length - 1; i >= 0; i--) {
-							angular.forEach(vm.selectedResults, function (selectedItem) {
-								if (data[i].Id === selectedItem.Id) {
-									data.splice(i, 1);
-								}
-							});
-						}
-					}
-					return data;
-				});
-			} else {
-				return [];
-			}
-		}
+            if (vm.searchString !== '') {
+                var filters = dayOffRuleService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
+                    removeSelectedFiltersInList(data, vm.selectedResults);
+                    return vm.filterResults = data;
+                });
+                return filters;
+            } else {
+                return [];
+            }
+        }
+
+        function removeSelectedFiltersInList(filters, selectedFilters) {
+            if (selectedFilters.length > 0) {
+                for (var i = filters.length - 1; i >= 0; i--) {
+                    angular.forEach(selectedFilters, function (selectedItem) {
+                        if (filters[i].Id === selectedItem.Id) {
+                            filters.splice(i, 1);
+                        }
+                    });
+                }
+            }
+        }
 
         function isValid() {
             return vm.isValidDayOffsPerWeek() &&
@@ -190,7 +195,7 @@
             return vm.results.length === 0 && vm.searchString !== '';
         }
 
-        function removeNode(node) {
+        function removeSelectedFilter(node) {
             var p = vm.selectedResults.indexOf(node);
             vm.selectedResults.splice(p, 1);
         }
@@ -222,13 +227,7 @@
                     {
                         groupId: $stateParams.groupId
                     });
-            } else {
-                $state.go('resourceplanner.planningperiod',
-                    {
-                        id: $stateParams.periodId
-                    });
             }
         }
-
     }
 })();

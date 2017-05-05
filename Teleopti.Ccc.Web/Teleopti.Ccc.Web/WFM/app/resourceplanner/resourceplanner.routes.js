@@ -84,9 +84,9 @@
 			}
 		}).state('resourceplanner.dayoffrulesOverview', {
 			params: {
-				filterId: {},
-				periodId: {},
-				isDefault: {},
+				filterId: '',
+				periodId: '',
+				isDefault: undefined,
 				groupId: undefined
 			},
 			url: '/agentgroup/:groupId/dayoffrules/overview',
@@ -94,12 +94,12 @@
 			controller: 'dayoffRuleOverviewController as vm'
 		}).state('resourceplanner.dayoffrules', {
 			params: {
-				filterId: {},
-				periodId: {},
-				isDefault: {},
+				filterId: '',
+				periodId: '',
+				isDefault: undefined,
 				groupId: undefined
 			},
-			url: '/agentgroup/:groupId/dayoffrules/',
+			url: '/agentgroup/:groupId/dayoffrules/:filterId',
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.createform.html',
 			controller: 'dayoffRuleCreateController as vm'
 		});

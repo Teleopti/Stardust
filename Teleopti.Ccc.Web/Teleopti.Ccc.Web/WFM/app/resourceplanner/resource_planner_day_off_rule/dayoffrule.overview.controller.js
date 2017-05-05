@@ -50,7 +50,7 @@
 
 		function editRuleset(dayOffRule) {
 			$state.go('resourceplanner.dayoffrules', {
-				filterId: dayOffRule.Id,
+				filterId: dayOffRule.Id.toString(),
 				groupId: $stateParams.groupId,
 				isDefault: dayOffRule.Default,
 				periodId: undefined

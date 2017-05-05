@@ -1533,6 +1533,7 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroups.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroups.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.createform.controller.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.createform.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.createform.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.overview.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.overview.html" />

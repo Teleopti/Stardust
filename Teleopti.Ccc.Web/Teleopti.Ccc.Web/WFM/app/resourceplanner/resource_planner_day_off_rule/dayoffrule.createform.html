@@ -93,14 +93,14 @@
 							<div class="unrelated-filters" ng-repeat="selected in vm.selectedResults" ng-if="selected.FilterType != 'contract'">
 								<span class="filter-handle">{{selected.FilterType}}</span>
 								<span class="filter-chip">{{selected.Name}}
-									<i class="mdi mdi-close" ng-click="vm.removeNode(selected)"></i>
+									<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i>
 								</span>
 							</div>
 							<br/>
 							<div class="unrelated-filters" ng-repeat="contractSelected in vm.selectedResults" ng-if="contractSelected.FilterType === 'contract'">
 								<span class="filter-handle">{{contractSelected.FilterType}}
 										</span>
-								<span class="filter-chip">{{contractSelected.Name}}<i class="mdi mdi-close" ng-click="vm.removeNode(contractSelected)"></i></span>
+								<span class="filter-chip">{{contractSelected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(contractSelected)"></i></span>
 							</div>
 						</div>
 					</div>
