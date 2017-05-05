@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 	}
 
+	[DisabledBy(Toggles.HangFire_EventPackages_43924)]
 	public abstract class HistoricalAdherenceUpdaterImpl : 
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonInAdherenceEvent>,

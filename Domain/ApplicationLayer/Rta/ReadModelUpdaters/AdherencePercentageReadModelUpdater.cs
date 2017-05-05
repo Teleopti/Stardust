@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			}
 		}
 	}
-
-
+	
+	[DisabledBy(Toggles.HangFire_EventPackages_43924)]
 	public abstract class AdherencePercentageReadModelUpdaterImpl :
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonOutOfAdherenceEvent>,
