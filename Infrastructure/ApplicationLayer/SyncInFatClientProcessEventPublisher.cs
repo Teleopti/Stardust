@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			Task.WaitAll((
 				from @event in events
+#pragma warning disable 618
 				from handlerType in _resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event)
 				select Task.Run(() =>
-#pragma warning disable 618
 					_processor.Process(@event, handlerType)
 #pragma warning restore 618
 					))

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 

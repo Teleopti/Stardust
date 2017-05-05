@@ -17,6 +17,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_resolve = resolve;
 		}
 
+		[Obsolete("Use the method JobsFor<T> instead")]
+		public IEnumerable<Type> HandlerTypesFor<T>(IEvent @event)
+		{
+			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
+			return _resolve.ConcreteTypesFor(handlerType)
+				.Where(x => x.GetInterfaces().Contains(typeof(T)));
+		}
+
 		public IEnumerable<IJobInfo> ResolveAllJobs(IEnumerable<IEvent> events)
 		{
 			return 
@@ -51,13 +59,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			});
 
 			return jobs;
-		}
-		
-		public IEnumerable<Type> HandlerTypesFor<T>(IEvent @event)
-		{
-			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
-			return _resolve.ConcreteTypesFor(handlerType)
-				.Where(x => x.GetInterfaces().Contains(typeof(T)));
 		}
 
 		private IEnumerable<jobInfo> jobsFor<T>(IEnumerable<IEvent> events)
