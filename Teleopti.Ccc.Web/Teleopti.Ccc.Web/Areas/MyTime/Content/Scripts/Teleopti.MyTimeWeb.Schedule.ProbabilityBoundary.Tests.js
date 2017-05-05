@@ -6,23 +6,9 @@
 
 $(document).ready(function() {
 	module("Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary");
-
-	var constants = Teleopti.MyTimeWeb.Common.Constants;
-	var expiredProbabilityCssClass = "probability-expired";
-
 	Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
-	var intervalLengthInMinute = 15;
-	var fakeUserText = {
-		xRequests: '@Resources.XRequests',
-		probabilityForAbsence: '@Resources.ProbabilityToGetAbsenceColon',
-		probabilityForOvertime: '@Resources.ProbabilityToGetOvertimeColon',
-		hideStaffingInfo: '@Resources.HideStaffingInfo',
-		showAbsenceProbability: '@Resources.ShowAbsenceProbability',
-		showOvertimeProbability: '@Resources.ShowOvertimeProbability',
-		staffingInfo: '@Resources.StaffingInfo'
-	};
 
 	var fakeAddRequestViewModel = function() {
 		return {
@@ -119,17 +105,6 @@ $(document).ready(function() {
 		};
 	}
 
-	function getFakeProbabilityData() {
-		return [
-			{
-				Date: basedDate,
-				StartTime: moment(basedDate).startOf('day').add('hour', 19).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-				EndTime: moment(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
-				Possibility: 0
-			}
-		];
-	}
-
 	function initCommon() {
 		var setting = getDefaultSetting();
 		var commonAjax = {
@@ -151,7 +126,7 @@ $(document).ready(function() {
 	test("Calculate absence probability boundaries for dayoff", function() {
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
 		week.initializeData(fakeScheduleData);
 		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
@@ -167,7 +142,7 @@ $(document).ready(function() {
 	test("Calculate absence probability boundaries for full day absence", function() {
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsFullDayAbsence = true;
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
 		week.initializeData(fakeScheduleData);
 		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
@@ -183,7 +158,7 @@ $(document).ready(function() {
 	test("Calculate overtime probability boundaries for dayoff", function() {
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
 		week.initializeData(fakeScheduleData);
 		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
@@ -200,7 +175,7 @@ $(document).ready(function() {
 	test("Calculate overtime probability boundaries for full day absence", function() {
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsFullDayAbsence = true;
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
 		week.initializeData(fakeScheduleData);
 		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
@@ -229,7 +204,7 @@ $(document).ready(function() {
 					TimeFixedFormat: null
 				}];
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
 		week.initializeData(fakeScheduleData);
 		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
@@ -257,7 +232,7 @@ $(document).ready(function() {
 				TimeFixedFormat: null
 			}];
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
 		week.initializeData(fakeScheduleData);
 		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
@@ -286,7 +261,7 @@ $(document).ready(function() {
 				TimeFixedFormat: null
 			}];
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
 		week.initializeData(fakeScheduleData);
 		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
@@ -315,7 +290,7 @@ $(document).ready(function() {
 				TimeFixedFormat: null
 			}];
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
 		week.initializeData(fakeScheduleData);
 		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
@@ -344,7 +319,7 @@ $(document).ready(function() {
 				TimeFixedFormat: null
 			}];
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
 		week.initializeData(fakeScheduleData);
 		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
@@ -375,7 +350,7 @@ $(document).ready(function() {
 				TimeFixedFormat: null
 			}];
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeUserText, fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
 		week.initializeData(fakeScheduleData);
 		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
