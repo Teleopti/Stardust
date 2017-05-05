@@ -475,6 +475,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public void Unload()
 		{
+
 		}
 
 		public void SetUnitOfWork(IUnitOfWork value)
@@ -889,7 +890,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void textBoxDescription_Leave(object sender, EventArgs e)
 		{
-			if (_presenter == null || _presenter.SelectedModel == null) return;
+			if (_presenter == null || _presenter.SelectedModel == null || Disposing) return;
 			_presenter.SelectedModel.Name = textBoxDescription.Text;
 			var selectedModel = _presenter.SelectedModel;
 			FillWorkloadControlSetCombo(_presenter.WorkflowControlSetModelCollection, "Name");
