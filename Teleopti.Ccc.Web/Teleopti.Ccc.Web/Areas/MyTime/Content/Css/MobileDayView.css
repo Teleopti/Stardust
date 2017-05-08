@@ -6,12 +6,17 @@
 	display: flex;
 	justify-content: space-between;
 }
-.mobile-start-day .mobile-start-day-nav input.form-control {
-	min-width: 90px;
-}
 @media(max-width: 500px){
 	.mobile-start-day .mobile-start-day-nav .input-group {
 		max-width: 200px;
+	}
+	.mobile-start-day .mobile-start-day-nav input.form-control {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.mobile-start-day .mobile-start-day-nav .input-group .btn{
+		padding-left: 14px;
+		padding-right: 14px;
 	}
 }
 .mobile-start-day .mobile-start-day-nav .submenu li {
@@ -22,28 +27,33 @@
 	max-width: 329px;
 }
 .mobile-start-day .mobile-start-day-nav .submenu li a {
-	padding: 14.5px 5px 5px 10px;
+	display: inline-block;
+	padding: 14.5px 5px 5px 5px;
+	text-align: center;
 	min-width: 35px;
 	height: 100%;
 }
 .mobile-start-day .mobile-start-day-nav .submenu li a > i {
 	transform: scale(1.4);
 }
-.mobile-start-day .mobile-start-day-nav .submenu li.mobile-today a {
-	padding-left: 0;
-	padding-right: 0;
-	text-align: center;
+.mobile-start-day .mobile-start-day-nav .submenu li.mobile-today{
+	margin-left: -10px;
+}
+.mobile-start-day .mobile-start-day-nav .submenu li.mobile-today a{
+	padding: 12.5px 0 0 0;
 }
 .mobile-start-day .mobile-start-day-nav .submenu li.mobile-message a {
-	padding: 14.5px 0 0 10px;
 	position: relative;
 }
 .mobile-start-day .mobile-start-day-nav .submenu li.mobile-message a > span.badge {
 	position: absolute;
 	top: 5px;
 	right: -2px;
-	font-size: 9px;
-	padding: 3px 5px;
+	font-size: 12px;
+	padding: 3px;
+}
+.mobile-start-day .mobile-start-day-nav .submenu li.mobile-request{
+	min-width: 35px;
 }
 .mobile-start-day .mobile-summary-content {
 	margin: 5px 0;

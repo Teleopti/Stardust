@@ -54,8 +54,8 @@
 						</span>
 					</a>
 				</li>
-				<li class="mobile-request" data-bind="click: navigateToRequests, visible: requestCount() > 0">
-					<a>
+				<li class="mobile-request" data-bind="click: function(e, d){ if(requestCount() > 0){navigateToRequests();}}">
+					<a data-bind="visible: requestCount() > 0">
 						<i class="glyphicon glyphicon-comment"></i>
 					</a>
 				</li>
