@@ -132,15 +132,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						}
 					}
 
-					var resCalcState = new UndoRedoContainer();
 					var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 					if (optimizationPreferences.Extra.IsClassic())
 					{
 						currentPeriodValue = new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1));
-
-						//TODO: hack -> always do this
-						resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 					}
+					var resCalcState = new UndoRedoContainer();
+					resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 					var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
 						resourceCalculateDelayer,
 						schedulingResultStateHolder,
@@ -155,16 +153,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					}
 					else
 					{
-						if (optimizationPreferences.Extra.IsClassic())
-						{
-							//TODO: hack -> always do this
-							resCalcState.UndoAll();
-							rollbackService.RollbackMinimumChecks();
-						}
-						else
-						{
-							_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-						}
+						resCalcState.UndoAll();
+						rollbackService.RollbackMinimumChecks();
 
 						if (!optimizationPreferences.Advanced.UseTweakedValues)
 						{
