@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Core
 		{
 			var attr2 = Attribute
 					.GetCustomAttribute(
-						Assembly.GetEntryAssembly(),
+						typeof(AppVersionTelemetryInitializer).Assembly,
 						typeof(AssemblyInformationalVersionAttribute))
 				as AssemblyInformationalVersionAttribute;
 			return attr2 == null ? "1.0.0.0" : attr2.InformationalVersion;
