@@ -165,7 +165,7 @@ MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = RC #Do not release yet
 MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 = RC
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
 MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = true
-MyTimeWeb_DayScheduleForStartPage_43446 = DEV
+MyTimeWeb_DayScheduleForStartPage_43446 = RC
 
 Scheduler_IntradayOptimization_36617 = true
 Scheduler_ShowSkillPrioLevels_41980 = true
