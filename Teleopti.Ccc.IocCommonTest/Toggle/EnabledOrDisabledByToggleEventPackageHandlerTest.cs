@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 
 		[Test]
 		[Toggle(Toggles.TestToggle)]
-		public void ShouldResolveHandlerEnabledByTestToggle()
+		public void ShouldResolvePackageHandlerEnabledByTestToggle()
 		{
 			var handlers = Container
 				.Resolve<IEnumerable<IHandleEvents>>()
@@ -26,6 +26,18 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 
 			handlers.Should()
 				.Contain(typeof(PackageHandlerEnabledByTestToggle));
+		}
+
+		[Test]
+		[ToggleOff(Toggles.TestToggle)]
+		public void ShouldNotResolvePackageHandlerEnabledByTestToggle()
+		{
+			var handlers = Container
+				.Resolve<IEnumerable<IHandleEvents>>()
+				.Select(ProxyUtil.GetUnproxiedType);
+
+			handlers.Should()
+				.Not.Contain(typeof(PackageHandlerEnabledByTestToggle));
 		}
 	}
 }
