@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly DayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
@@ -51,7 +50,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
-			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
@@ -70,7 +68,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
-			_schedulerStateHolder = schedulerStateHolder;
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_dayOffOptimizerPreMoveResultPredictor = dayOffOptimizerPreMoveResultPredictor;
@@ -114,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Item1.Person, matrix.Item1.EffectivePeriodDays.First().Day);
 
 				var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(dayOffOptimizationPreference.ConsiderWeekBefore, dayOffOptimizationPreference.ConsiderWeekAfter, matrix.Item1);
-				var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix.Item1, originalArray, optimizationPreferences, dayOffOptimizationPreference, _schedulerStateHolder().SchedulingResultState);
+				var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix.Item1, originalArray, optimizationPreferences, dayOffOptimizationPreference, schedulingResultStateHolder);
 
 				var movedDaysOff = _affectedDayOffs.Execute(matrix.Item1, dayOffOptimizationPreference, originalArray, resultingArray);
 				if (movedDaysOff != null)
@@ -138,7 +135,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						currentPeriodValue = new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1));
 					}
 					var resCalcState = new UndoRedoContainer();
-					resCalcState.FillWith(_schedulerStateHolder().SchedulingResultState.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
+					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 					var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
 						resourceCalculateDelayer,
 						schedulingResultStateHolder,

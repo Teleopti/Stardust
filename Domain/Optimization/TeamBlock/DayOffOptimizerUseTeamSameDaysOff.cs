@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
-			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IWorkShiftSelector workShiftSelector,
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
-			_schedulerStateHolder = schedulerStateHolder;
 			_workShiftSelector = workShiftSelector;
 			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
@@ -135,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			out bool checkPeriodValue)
 		{
 			var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter, matrix);
-			var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, daysOffPreferences, _schedulerStateHolder().SchedulingResultState);
+			var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, daysOffPreferences, schedulingResultStateHolder);
 
 			var movedDaysOff = _affectedDayOffs.Execute(matrix, daysOffPreferences, originalArray, resultingArray);
 			if (movedDaysOff == null)
