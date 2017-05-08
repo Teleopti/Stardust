@@ -319,8 +319,4 @@
 		.team-schedule-wrapper .fab-focus:before {
 			display: none;
 		}
-
-		.shift-trade-add-schedule > .shift-trade-timeline > .relative > div > div:nth-child(4n+0) {
-			opacity: 0;
-		}
     }

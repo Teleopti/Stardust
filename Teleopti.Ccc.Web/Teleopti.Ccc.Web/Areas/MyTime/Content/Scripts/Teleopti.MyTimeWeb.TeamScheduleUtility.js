@@ -321,15 +321,33 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 		var start = moment(hours[1].StartTime);
 		var diff = start.diff(self.timeLineStartTime(), 'minutes');
 		var newHour;
-		if (hours.length < 18) {
+		if (hours.length < 8) {
 			for (var j = 0; j < hours.length; j++) {
 				newHour = new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(j, hours[j], diff, self.pixelPerMinute(), true);
 				self.hours.push(newHour);
 			}
-		} else {
+				
+		}
+		else if (hours.length < 15) {
 			for (var i = 0; i < hours.length; i++) {
 				var isVisible = (i % 2 != 0);
-				newHour = new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(i, hours[i], diff, self.pixelPerMinute(), isVisible);
+				newHour =
+					new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(i,
+						hours[i],
+						diff,
+						self.pixelPerMinute(),
+						isVisible);
+				self.hours.push(newHour);
+			}
+		} else {
+			for (var i = 0; i < hours.length; i++) {
+				var isVisible = (i % 3 == 2);
+				newHour =
+					new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(i,
+						hours[i],
+						diff,
+						self.pixelPerMinute(),
+						isVisible);
 				self.hours.push(newHour);
 			}
 		}
