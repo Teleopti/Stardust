@@ -15837,7 +15837,7 @@ Do you want to participate?</value>
     <comment>Used in web resource planner validation</comment>
   </data>
   <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
-    <value>"Agent has {0} days without any schedule.</value>
+    <value>Agent has {0} days without any schedule.</value>
     <comment>Used in Web resource planner</comment>
   </data>
   <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
@@ -15853,7 +15853,7 @@ Do you want to participate?</value>
     <comment>agents have been scheduled</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteTheAgentGroup" xml:space="preserve">
-    <value>Are you sure you want to delete agent group {0} and its related settings?</value>
+    <value>Are you sure you want to delete the agent group '{0}' and its related settings?</value>
     <comment>Delete agent group and related setting</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
@@ -15872,8 +15872,8 @@ Do you want to participate?</value>
     <value>Create Agent Group</value>
     <comment>text for helping information </comment>
   </data>
-  <data name="CreateFirstPp" xml:space="preserve">
-    <value>Create planning period</value>
+  <data name="CreateFirstPlanningPeriod" xml:space="preserve">
+    <value>Create first planning period</value>
     <comment>Create first planning period</comment>
   </data>
   <data name="CreateNextPp" xml:space="preserve">
@@ -15999,5 +15999,53 @@ Do you want to participate?</value>
   <data name="ConfirmToggleAllData" xml:space="preserve">
     <value>This will toggle this item and all items below it, are you sure you want to proceed?</value>
     <comment>message to confirm toggle in a tree structure</comment>
+  </data>
+  <data name="AnErrorOccurredPleaseTryAgain" xml:space="preserve">
+    <value>An error occurred. Please try again.</value>
+    <comment>Used in resource planner on web when either scheduling or optimization failed without a specific reason</comment>
+  </data>
+  <data name="ChangePlanningPeriodDurationColon" xml:space="preserve">
+    <value>Change planning period duration:</value>
+    <comment>Used in resource planner on web when modifying planning period</comment>
+  </data>
+  <data name="ClearScheduleResultAndHistoryData" xml:space="preserve">
+    <value>Clear schedule result and history data</value>
+    <comment>Used in resource planner as a hint text to clear schedules action button</comment>
+  </data>
+  <data name="CreatePlanningPeriod" xml:space="preserve">
+    <value>Create planning period</value>
+    <comment>Used in resource planner on web</comment>
+  </data>
+  <data name="ModifyEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Modify end date for this planning period.</value>
+    <comment>Used in resource planner when modifying planning period</comment>
+  </data>
+  <data name="ModifyStartAndEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Modify start date and end date for this planning period.</value>
+    <comment>Used in resource planner when modifying planning period</comment>
+  </data>
+  <data name="RunningIntradayOptimization" xml:space="preserve">
+    <value>Running Intraday Optimization</value>
+    <comment>Used in resource planner as a status text when running intraday optimization</comment>
+  </data>
+  <data name="SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot" xml:space="preserve">
+    <value>Select a suggested period to work with or pick start date and end date directly.</value>
+    <comment>Used in resource planner on web when creating a new planning period</comment>
+  </data>
+  <data name="SuccessfullyScheduledPlanningPeriodFromTo" xml:space="preserve">
+    <value>Successfully scheduled planning period: {0} - {1}</value>
+    <comment>Used in resource planner on the web when a schedule execution is successful for a planning period</comment>
+  </data>
+  <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
+    <value>You are going to change this planning period from</value>
+    <comment>Used in resource planner when modifying planning period</comment>
+  </data>
+  <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
+    <value>You are going to create a planning period from</value>
+    <comment>Used in resource planner on web as a confirmation message when creating a new planning period</comment>
+  </data>
+  <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
+    <value>You need a planning period to schedule your agents. Do you want to create a planning period?</value>
+    <comment>Help text in resource planner to show that you need to create a planning period</comment>
   </data>
 </root>

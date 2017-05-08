@@ -52,7 +52,7 @@
 						<div class="wfm-filter-selected">
 							<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults | orderBy: ['+FilterType','+Name']">
 								<span class="wfm-chip">
-									<span class="chip-handle">{{selected.FilterType}}</span>
+									<span class="chip-handle">{{selected.FilterType | translate}}</span>
 								<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i></span>
 								</span>
 							</div>

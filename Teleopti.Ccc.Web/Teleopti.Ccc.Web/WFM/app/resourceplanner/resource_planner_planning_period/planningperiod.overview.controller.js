@@ -130,7 +130,9 @@
             if (result.Successful === true) {
               if (vm.schedulingPerformed === true) {
                 vm.schedulingPerformed = false;
-                NoticeService.success("Successfully scheduled planning period:" + moment(vm.selectedPp.StartDate).format('DD/MM/YYYY') + "-" + moment(vm.selectedPp.EndDate).format('DD/MM/YYYY'), null, true);
+				NoticeService.success($translate.instant('SuccessfullyScheduledPlanningPeriodFromTo')
+					.replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+					.replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
                 loadLastResult(pp);
               }
             } else if (result.Failed === true) {
@@ -157,9 +159,9 @@
 
     function handleScheduleOrOptimizeError(message) {
       if (!message)
-        message = "An error occurred. Please try again.";
+        message = $translate.instant('AnErrorOccurredPleaseTryAgain');
       if (message === preMessage) {
-        return
+        return;
       } else {
         NoticeService.warning(message, null, true);
         preMessage = message;
@@ -190,7 +192,7 @@
             vm.status = '';
           } else {
             vm.optimizeRunning = true;
-            vm.status = "Running Intraday Optimization";
+			vm.status = $translate.instant('RunningIntradayOptimization');
           }
         }
       });

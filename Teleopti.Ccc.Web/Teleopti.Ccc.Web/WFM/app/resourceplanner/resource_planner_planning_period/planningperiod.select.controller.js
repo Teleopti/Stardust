@@ -113,8 +113,8 @@
         }
 
         function changeDateForPp(pp) {
-            var startDate = moment(pp.startDate).format('YYYY-MM-DD');
-            var newEndDate = moment(pp.endDate).format('YYYY-MM-DD');
+			var startDate = moment(pp.startDate).format('YYYY-MM-DD');
+			var newEndDate = moment(pp.endDate).format('YYYY-MM-DD');
             var changeEndDateForLastPlanningPeriod = planningPeriodService.changeEndDateForLastPlanningPeriod({ agentGroupId: agentGroupId, startDate: startDate, endDate: newEndDate });
             return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
                 vm.planningPeriods = data;
@@ -124,7 +124,7 @@
         }
 
         function changeEndDateForLastPp(last) {
-            var newEndDate = moment(last.endDate).format('YYYY-MM-DD');
+			var newEndDate = moment(last.endDate).format('YYYY-MM-DD');
             var changeEndDateForLastPlanningPeriod = planningPeriodService.changeEndDateForLastPlanningPeriod({ agentGroupId: agentGroupId, startDate: null, endDate: newEndDate });
             return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
                 vm.planningPeriods = data;
@@ -163,8 +163,8 @@
 
         function getPpInfo(p) {
             vm.textForDeletePp = $translate.instant("AreYouSureYouWantToDeleteThePlanningPeriod")
-            .replace("{0}", moment(p.startDate).format('YYYY-MM-DD'))
-            .replace("{1}", moment(p.startDate).format('YYYY-MM-DD'));
+            .replace("{0}", moment(p.startDate).format('L'))
+            .replace("{1}", moment(p.startDate).format('L'));
         }
 
         function isNonePp() {

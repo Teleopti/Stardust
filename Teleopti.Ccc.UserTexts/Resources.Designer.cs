@@ -1799,7 +1799,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Agent has {0} days without any schedule..
+        ///   Looks up a localized string similar to Agent has {0} days without any schedule..
         /// </summary>
         public static string AgentHasDaysWithoutAnySchedule {
             get {
@@ -2555,6 +2555,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred. Please try again..
+        /// </summary>
+        public static string AnErrorOccurredPleaseTryAgain {
+            get {
+                return ResourceManager.GetString("AnErrorOccurredPleaseTryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A new import job has been created for &apos;{0}&apos;.
         /// </summary>
         public static string ANewImportJobHasBeenCreatedFor {
@@ -3178,7 +3187,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete agent group {0} and its related settings?.
+        ///   Looks up a localized string similar to Are you sure you want to delete the agent group &apos;{0}&apos; and its related settings?.
         /// </summary>
         public static string AreYouSureYouWantToDeleteTheAgentGroup {
             get {
@@ -5686,6 +5695,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change planning period duration:.
+        /// </summary>
+        public static string ChangePlanningPeriodDurationColon {
+            get {
+                return ResourceManager.GetString("ChangePlanningPeriodDurationColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change planning period to.
         /// </summary>
         public static string ChangePlanningPeriodTo {
@@ -6106,6 +6124,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ClearOverride {
             get {
                 return ResourceManager.GetString("ClearOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear schedule result and history data.
+        /// </summary>
+        public static string ClearScheduleResultAndHistoryData {
+            get {
+                return ResourceManager.GetString("ClearScheduleResultAndHistoryData", resourceCulture);
             }
         }
         
@@ -7138,11 +7165,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create planning period.
+        ///   Looks up a localized string similar to Create first planning period.
         /// </summary>
-        public static string CreateFirstPp {
+        public static string CreateFirstPlanningPeriod {
             get {
-                return ResourceManager.GetString("CreateFirstPp", resourceCulture);
+                return ResourceManager.GetString("CreateFirstPlanningPeriod", resourceCulture);
             }
         }
         
@@ -7243,6 +7270,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CreatePerformanceManagerReport {
             get {
                 return ResourceManager.GetString("CreatePerformanceManagerReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create planning period.
+        /// </summary>
+        public static string CreatePlanningPeriod {
+            get {
+                return ResourceManager.GetString("CreatePlanningPeriod", resourceCulture);
             }
         }
         
@@ -17186,6 +17222,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modify end date for this planning period..
+        /// </summary>
+        public static string ModifyEndDateForThisPlanningPeriodDot {
+            get {
+                return ResourceManager.GetString("ModifyEndDateForThisPlanningPeriodDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modify Group Page.
         /// </summary>
         public static string ModifyGroupPage {
@@ -17317,6 +17362,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ModifySkillArea {
             get {
                 return ResourceManager.GetString("ModifySkillArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modify start date and end date for this planning period..
+        /// </summary>
+        public static string ModifyStartAndEndDateForThisPlanningPeriodDot {
+            get {
+                return ResourceManager.GetString("ModifyStartAndEndDateForThisPlanningPeriodDot", resourceCulture);
             }
         }
         
@@ -26472,6 +26526,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Running Intraday Optimization.
+        /// </summary>
+        public static string RunningIntradayOptimization {
+            get {
+                return ResourceManager.GetString("RunningIntradayOptimization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Same activity.
         /// </summary>
         public static string SameActivity {
@@ -27835,6 +27898,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectAnActivity {
             get {
                 return ResourceManager.GetString("SelectAnActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a suggested period to work with or pick start date and end date directly..
+        /// </summary>
+        public static string SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot {
+            get {
+                return ResourceManager.GetString("SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot", resourceCulture);
             }
         }
         
@@ -31330,6 +31402,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfullyImportedCountColon {
             get {
                 return ResourceManager.GetString("SuccessfullyImportedCountColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully scheduled planning period: {0} - {1}.
+        /// </summary>
+        public static string SuccessfullyScheduledPlanningPeriodFromTo {
+            get {
+                return ResourceManager.GetString("SuccessfullyScheduledPlanningPeriodFromTo", resourceCulture);
             }
         }
         
@@ -35902,6 +35983,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are going to change this planning period from.
+        /// </summary>
+        public static string YouAreGoingToChangeThisPlanningPeriodFrom {
+            get {
+                return ResourceManager.GetString("YouAreGoingToChangeThisPlanningPeriodFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are going to create a planning period from.
+        /// </summary>
+        public static string YouAreGoingToCreateAPlanningPeriodFrom {
+            get {
+                return ResourceManager.GetString("YouAreGoingToCreateAPlanningPeriodFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are not authorised to run the application! The application will be closed..
         /// </summary>
         public static string YouAreNotAuthorizedToRunTheApplication {
@@ -36195,6 +36294,16 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YouMustHaveAtLeastOneDateInShiftTradeRequest {
             get {
                 return ResourceManager.GetString("YouMustHaveAtLeastOneDateInShiftTradeRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You need a planning period to schedule your agents. Do you want to create a planning period?.
+        /// </summary>
+        public static string YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion {
+            get {
+                return ResourceManager.GetString("YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestio" +
+                        "n", resourceCulture);
             }
         }
         

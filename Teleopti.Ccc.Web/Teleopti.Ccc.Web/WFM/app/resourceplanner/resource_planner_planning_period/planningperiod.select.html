@@ -9,7 +9,7 @@
 <div class="con-row">
 	<div class="con-flex">
 		<button ng-if="!vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.startNextPlanningPeriod()">{{'CreateNextPp' | translate}}</button>
-		<button ng-if="vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.modifyFirstPpModal = true; vm.getSugesstionsForFirstPp()">{{'CreateFirstPp' | translate}}</button>
+		<button ng-if="vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.modifyFirstPpModal = true; vm.getSugesstionsForFirstPp()">{{'CreateFirstPlanningPeriod' | translate}}</button>
 		<div class="line-right pp-color-label" ng-if="!vm.isNonePp() && vm.displayButton">
 			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>{{'ScheduledSucceeded' | translate}}</span>
 			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>{{'ScheduledFailed' | translate}}</span>
@@ -69,11 +69,10 @@
 	<div class="con-flex">
 		<div class="panel wfm-tip">
 			<div class="sub-header wfm-tip-header">
-				<h2><i class="mdi mdi-information-outline"></i> You need an planning period to schedule your agents. Do you want to create
-					a planning period?</h2>
+				<h2><i class="mdi mdi-information-outline"></i>{{'YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion' | translate}}</h2>
 			</div>
 			<div class="con-footer">
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.modifyFirstPpModal = true; vm.getSugesstionsForFirstPp()">Create planning period</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.modifyFirstPpModal = true; vm.getSugesstionsForFirstPp()" translate>CreatePlanningPeriod</button>
 			</div>
 		</div>
 	</div>
@@ -85,14 +84,14 @@
 				<div class="modalbg">
 					<div class="dialog material-depth-1">
 						<div class="modal-inner-content">
-							<h3>Change planning duration: {{vm.originLastPp.StartDate | amDateFormat:"L"}} - {{vm.originLastPp.EndDate | amDateFormat:"L"}}</h3>
+							<h3>{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.StartDate | amDateFormat:"L"}} - {{vm.originLastPp.EndDate | amDateFormat:"L"}}</h3>
 							<div class="con-row">
 								<label ng-if="!vm.isEnddateChanged() && vm.planningPeriods.length > 1">
-									<i class="mdi mdi-information-outline"></i> Modify end date for this planning period.</label>
-								<label ng-if="!vm.isEnddateChanged() && vm.planningPeriods.length == 1"><i class="mdi mdi-information-outline"></i> Modify start date and end date for this planning period.</label>
+									<i class="mdi mdi-information-outline"></i> {{'ModifyEndDateForThisPlanningPeriodDot' | translate}}</label>
+								<label ng-if="!vm.isEnddateChanged() && vm.planningPeriods.length == 1"><i class="mdi mdi-information-outline"></i> {{'ModifyStartAndEndDateForThisPlanningPeriodDot' | translate}}</label>
 								<label ng-if="vm.isEnddateChanged()" class="text-warning">
 									<i class="mdi mdi-alert"></i>
-									You are going to change this planning period from {{vm.originLastPp.StartDate | amDateFormat:"L"}} - {{vm.originLastPp.EndDate | amDateFormat:"L"}} to {{vm.lastPp.startDate | amDateFormat:"L"}} - {{vm.lastPp.endDate | amDateFormat:"L"}}
+									{{'YouAreGoingToChangeThisPlanningPeriodFrom' | translate}} {{vm.originLastPp.StartDate | amDateFormat:"L"}} - {{vm.originLastPp.EndDate | amDateFormat:"L"}} {{'ToText' | translate}} {{vm.lastPp.startDate | amDateFormat:"L"}} - {{vm.lastPp.endDate | amDateFormat:"L"}}
 								</label>
 							</div>
 							<div class="con-row">
@@ -101,9 +100,12 @@
 						</div>
 						<div class="modal-actions">
 							<aside>
-								<button ng-click="vm.modifyLastPpModal=false" class="wfm-btn wfm-btn-invis-default">Cancel</button>
-								<button ng-class="{'wfm-btn-invis-primary':vm.isEnddateChanged(), 'wfm-btn-invis-disabled': !vm.isEnddateChanged()}" ng-click="vm.modifyLastPpModal=false; vm.changeEndDateForLastPp(vm.lastPp);"
-								 class="wfm-btn ">Apply</button>
+								<button ng-click="vm.modifyLastPpModal=false" class="wfm-btn wfm-btn-invis-default" translate>
+									Cancel
+								</button>
+								<button ng-class="{'wfm-btn-invis-primary':vm.isEnddateChanged(), 'wfm-btn-invis-disabled': !vm.isEnddateChanged()}" ng-click="vm.modifyLastPpModal=false; vm.changeEndDateForLastPp(vm.lastPp);" class="wfm-btn" translate>
+									Apply
+								</button>
 							</aside>
 						</div>
 					</div>
@@ -119,10 +121,10 @@
 				<div class="modalbg">
 					<div class="dialog material-depth-1">
 						<div class="modal-inner-content">
-							<h3>Create First Planning Period</h3>
+							<h3>{{'CreateFirstPlanningPeriod' | translate}}</h3>
 							<div class="con-row">
 								<div class="con-flex">
-									<p><i class="mdi mdi-information-outline"></i>Select a suggest plan to work with or pick start date and end date directly.</p>
+									<p><i class="mdi mdi-information-outline"></i>{{'SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot' | translate}}</p>
 									<div class="wfm-chip-wrap" ng-repeat="s in vm.suggestions">
 										<span class="wfm-chip" ng-click="vm.selectSuggestion(s)">
 										<span class="chip-handle">{{s.Number}}{{s.PeriodType}}</span>
@@ -133,7 +135,7 @@
 							</div>
 							<div class="con-row" ng-show="vm.selectedSuggestion.endDate">
 								<label class="text-warning">
-									<i class="mdi mdi-alert"></i> You are going to create this planning period from {{vm.selectedSuggestion.startDate | amDateFormat:"L"}} to {{vm.selectedSuggestion.endDate | amDateFormat:"L"}}
+									<i class="mdi mdi-alert"></i>{{'YouAreGoingToCreateAPlanningPeriodFrom' | translate}} {{vm.selectedSuggestion.startDate | amDateFormat:"L"}} {{'ToText' | translate}} {{vm.selectedSuggestion.endDate | amDateFormat:"L"}}
 								</label>
 							</div>
 							<div class="con-row">
@@ -142,9 +144,12 @@
 						</div>
 						<div class="modal-actions">
 							<aside>
-								<button ng-click="vm.modifyFirstPpModal=false; vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default">Cancel</button>
-								<button ng-class="{'wfm-btn-invis-primary':vm.selectedSuggestion, 'wfm-btn-invis-disabled': !vm.selectedSuggestion}" ng-click="vm.modifyFirstPpModal=false; vm.createFirstPp()"
-								 class="wfm-btn ">Apply</button>
+								<button ng-click="vm.modifyFirstPpModal=false; vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default" translate>
+									Cancel
+								</button>
+								<button ng-class="{'wfm-btn-invis-primary':vm.selectedSuggestion, 'wfm-btn-invis-disabled': !vm.selectedSuggestion}" ng-click="vm.modifyFirstPpModal=false; vm.createFirstPp()" class="wfm-btn" translate>
+									Apply
+								</button>
 							</aside>
 						</div>
 					</div>

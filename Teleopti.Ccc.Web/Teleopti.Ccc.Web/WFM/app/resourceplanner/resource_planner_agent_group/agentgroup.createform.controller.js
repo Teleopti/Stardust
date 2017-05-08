@@ -50,7 +50,7 @@
 		function inputFilterData() {
 			if (vm.searchString !== '') {
 				var filters = agentGroupService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
-					removeSelectedFiltersInList(data, vm.selectedResults)
+					removeSelectedFiltersInList(data, vm.selectedResults);
 					return vm.filterResults = data;
 				});
 				return filters;
