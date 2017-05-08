@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterAssemblyTypes(GetType().Assembly)
-				.Where(t => typeof(IBootstrapperTask).IsAssignableFrom(t) && t.TypeEnabledByToggle(_config))
+				.Where(t => typeof(IBootstrapperTask).IsAssignableFrom(t) && t.EnabledByToggle(_config))
 				.SingleInstance()
 				.As<IBootstrapperTask>();
 

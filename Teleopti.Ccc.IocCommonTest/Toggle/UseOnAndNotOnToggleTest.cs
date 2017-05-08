@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(false);
 
-			Assert.That(typeof(targetWithMultiAttribOnNotOn).TypeEnabledByToggle(iocConfig), Is.True);
+			Assert.That(typeof(targetWithMultiAttribOnNotOn).EnabledByToggle(iocConfig), Is.True);
 		}
 
 		[Test]
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(false);
 
-			Assert.That(typeof(targetWithMultiAttribOnNotOn).TypeEnabledByToggle(iocConfig), Is.False);
+			Assert.That(typeof(targetWithMultiAttribOnNotOn).EnabledByToggle(iocConfig), Is.False);
 		}
 
 		[Test]
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(true);
 
-			Assert.That(typeof(targetWithMultiAttribOnNotOn).TypeEnabledByToggle(iocConfig), Is.False);
+			Assert.That(typeof(targetWithMultiAttribOnNotOn).EnabledByToggle(iocConfig), Is.False);
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(true);
 
-			Assert.That(typeof(targetWithMultiAttribOnNotOn).TypeEnabledByToggle(iocConfig), Is.False);
+			Assert.That(typeof(targetWithMultiAttribOnNotOn).EnabledByToggle(iocConfig), Is.False);
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(false);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle3)).Return(true);
 
-			Assert.That(typeof(targetWithMultiAttribOnNotOn2).TypeEnabledByToggle(iocConfig), Is.False);
+			Assert.That(typeof(targetWithMultiAttribOnNotOn2).EnabledByToggle(iocConfig), Is.False);
 		}
 
 		[EnabledBy(Toggles.TestToggle), DisabledBy(Toggles.TestToggle2)]

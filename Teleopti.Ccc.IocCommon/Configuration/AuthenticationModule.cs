@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 
 
-			if (typeof(LicensedFunctionsProvider).TypeEnabledByToggle(_configuration))
+			if (typeof(LicensedFunctionsProvider).EnabledByToggle(_configuration))
 			{
 				builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
 			}

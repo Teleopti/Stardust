@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public static class UseOnToggleExtensions
 	{
-		public static bool TypeEnabledByToggle(this Type type, IIocConfiguration iocConfiguration)
+		public static bool EnabledByToggle(this Type type, IIocConfiguration iocConfiguration)
 		{
 			var attributes = type.GetCustomAttributes(false);
 			return innerEnabledByToggle(iocConfiguration, attributes);
 		}
 
-		public static bool MethodEnabledByToggle(this MethodInfo method, IIocConfiguration iocConfiguration)
+		public static bool EnabledByToggle(this MethodInfo method, IIocConfiguration iocConfiguration)
 		{
 			var attributes = method.GetCustomAttributes(false);
 			return innerEnabledByToggle(iocConfiguration, attributes);

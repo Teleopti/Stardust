@@ -1,9 +1,13 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
+	// yep, that didnt work (you'll know when u try)
+	// count: 1
+
 	[EnabledBy(Toggles.TestToggle)]
 	public class HandlerEnabledByTestToggle : 
 		IHandleEvent<TestToggleEvent>,
@@ -69,9 +73,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		public void Handle(TestToggleEvent @event)
 		{
 		}
+	}
 
-		public void DeleteAll()
+
+
+	[EnabledBy(Toggles.TestToggle)]
+	public class PackageHandlerEnabledByTestToggle :
+		IHandleEvents,
+		IRunOnHangfire
+	{
+		public void Subscribe(SubscriptionRegistrator registrator)
+		{
+		}
+
+		public void Handle(IEnumerable<IEvent> events)
 		{
 		}
 	}
+	
+
 }
