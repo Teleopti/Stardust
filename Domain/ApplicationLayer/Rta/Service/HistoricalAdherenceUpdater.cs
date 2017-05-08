@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 	}
 
-	[EnabledBy(Toggles.HangFire_EventPackages_43924)]
+	[EnabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
 	public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdater, IHandleEvents
 	{
 		public HistoricalAdherenceUpdaterWithPackages(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister, INow now) : base(adherencePersister, historicalChangePersister, now)
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 	}
 
-	[DisabledBy(Toggles.HangFire_EventPackages_43924)]
+	[DisabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
 	public abstract class HistoricalAdherenceUpdaterImpl : 
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonInAdherenceEvent>,

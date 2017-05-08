@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		}
 	}
 
-	[EnabledBy(Toggles.HangFire_EventPackages_43924)]
+	[EnabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
 	public class AdherencePercentageReadModelUpdaterWithPackages : AdherencePercentageReadModelUpdater, IHandleEvents
 	{
 		public AdherencePercentageReadModelUpdaterWithPackages(IAdherencePercentageReadModelPersister persister) : base(persister)
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		}
 	}
 	
-	[DisabledBy(Toggles.HangFire_EventPackages_43924)]
+	[DisabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
 	public abstract class AdherencePercentageReadModelUpdaterImpl :
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonOutOfAdherenceEvent>,

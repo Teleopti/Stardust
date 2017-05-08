@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 	[DomainTest]
 	[TestFixture]
 	[Toggle(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
-	[Toggle(Toggles.HangFire_EventPackages_43924)]
+	[Toggle(Toggles.RTA_EventPackagesExperiment_43924)]
 	public class PackagesTest
 	{
 		public FakeHistoricalAdherenceReadModelPersister AdherencePersister;
