@@ -68,7 +68,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		return Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446");
 	}
 
-	function _initNavigation(window) {
+	function _initNavigation(awindow) {
 		$('.dropdown-menu a[data-mytime-action]')
 			.click(function (e) {
 				e.preventDefault();
@@ -76,11 +76,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			})
 			;
 
-		if (window.location.hash.length <= 1) {
-			if (_showDayScheduleForStartPage() && (_isMobile(window))) {
-				window.location.replace("#Schedule/MobileDay");
+		if (awindow.location.hash.length <= 1) {
+			if (_showDayScheduleForStartPage() && _isMobile(awindow)) {
+				awindow.location.replace("#Schedule/MobileDay");
 			} else {
-				window.location.replace("#" + (_isMobile(window) ? "Schedule/MobileWeek" : _settings.defaultNavigation));
+				awindow.location.replace("#" + (_isMobile(awindow) ? "Schedule/MobileWeek" : _settings.defaultNavigation));
 			}
 		}
 
@@ -260,8 +260,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	}
 
-	function _isMobile(window) {
-		var ua = window.navigator.userAgent;
+	function _isMobile(mywindow) {
+		var ua = mywindow.navigator.userAgent;
 		if (ua.match(/Android/i) || ua.match(/webOS/i) || ua.match(/iPhone/i) || ua.match(/iPod/i)) {
 			return true;
 		}
@@ -378,7 +378,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	return {
-		Init: function (settings, window, ajax) {
+		Init: function (settings, thewindow, ajax) {
 			_ajax = ajax ? ajax : new Teleopti.MyTimeWeb.Ajax();
 			Teleopti.MyTimeWeb.AjaxSettings = settings;
 			Teleopti.MyTimeWeb.Common.Init(settings, _ajax);
@@ -386,7 +386,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			_settings = settings;
 			_layout();
 			_attachAjaxEvents();
-			_initNavigation(window);
+			_initNavigation(thewindow);
 			_setupRoutes();
 			_initializeHasher();
 		},
