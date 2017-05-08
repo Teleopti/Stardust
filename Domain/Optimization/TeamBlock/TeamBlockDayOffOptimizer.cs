@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -19,8 +20,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly DayOffOptimizerStandard _dayOffOptimizerStandard;
-		private readonly DayOffOptimizerUseTeamSameDaysOff _dayOffOptimizerUseTeamSameDaysOff;
+		private readonly DayOffOptimizerStandard _dayOffOptimizeStandard;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamSameDayOff_44265)]
+		private readonly IDayOffOptimizerUseTeamSameDaysOff _dayOffOptimizerUseTeamSameDaysOff;
 
 		public TeamBlockDayOffOptimizer(
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
@@ -28,19 +30,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IOptimizerHelperHelper optimizerHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			DayOffOptimizerStandard dayOffOptimizerStandard,
-			DayOffOptimizerUseTeamSameDaysOff dayOffOptimizerUseTeamSameDaysOff)
+			DayOffOptimizerStandard dayOffOptimizeStandard,
+			IDayOffOptimizerUseTeamSameDaysOff dayOffOptimizerUseTeamSameDaysOff)
 		{
 			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 			_teamBlockDaysOffSameDaysOffLockSyncronizer = teamBlockDaysOffSameDaysOffLockSyncronizer;
 			_schedulerStateHolder = schedulerStateHolder;
 			_optimizerHelper = optimizerHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_dayOffOptimizerStandard = dayOffOptimizerStandard;
+			_dayOffOptimizeStandard = dayOffOptimizeStandard;
 			_dayOffOptimizerUseTeamSameDaysOff = dayOffOptimizerUseTeamSameDaysOff;
 		}
 
 		[TestLog]
+		[RemoveMeWithToggle("Remove if about team + sameDO below", Toggles.ResourcePlanner_TeamSameDayOff_44265)]
 		public virtual void OptimizeDaysOff(
 			IList<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
@@ -96,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if(optimizationPreferences.Extra.UseTeams && optimizationPreferences.Extra.UseTeamSameDaysOff)
 				{
 					teamInfosToRemove = _dayOffOptimizerUseTeamSameDaysOff.Execute(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
-					                                            remainingInfoList, schedulingOptions,
+					                                            remainingInfoList, schedulingOptions, Enumerable.Empty<IPerson>(),
 					                                            resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, ()=>
 					                                            {
 						                                            cancelMe = true;
@@ -105,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 				else
 				{
-					teamInfosToRemove = _dayOffOptimizerStandard.Execute(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
+					teamInfosToRemove = _dayOffOptimizeStandard.Execute(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
 					                                                           remainingInfoList, schedulingOptions,
 					                                                           selectedPersons,
 																			   resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, () =>

@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
@@ -16,7 +16,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public class DayOffOptimizerUseTeamSameDaysOff
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamSameDayOff_44265)]
+	public class DayOffOptimizerUseTeamSameDaysOff : IDayOffOptimizerUseTeamSameDaysOff
 	{
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public IEnumerable<ITeamInfo> Execute(IPeriodValueCalculator periodValueCalculatorForAllSkills,
 			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
-			IEnumerable<ITeamInfo> remainingInfoList, SchedulingOptions schedulingOptions,
+			IEnumerable<ITeamInfo> remainingInfoList, SchedulingOptions schedulingOptions, IEnumerable<IPerson> selectedPersons,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder, Action cancelAction,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress schedulingProgress)

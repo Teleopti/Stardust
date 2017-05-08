@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public class DayOffOptimizerStandard
+	public class DayOffOptimizerStandard : IDayOffOptimizerUseTeamSameDaysOff
 	{
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
