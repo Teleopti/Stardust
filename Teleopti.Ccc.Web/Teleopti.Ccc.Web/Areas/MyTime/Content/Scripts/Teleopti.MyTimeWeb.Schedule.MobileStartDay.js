@@ -39,7 +39,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 	}
 
 	function registerSwipeEvent() {
-		$(".dayview-view-body").swipe({
+		$(".moible-start-day-body").swipe({
 			swipeLeft: function () {
 				vm.nextDay();
 			},
@@ -64,7 +64,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 
 	function initViewModel() {
 		vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
-		ko.applyBindings(vm, $("#page")[0]);
 	}
 
 	function fetchData() {
@@ -78,6 +77,11 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		vm.setCurrentDate(moment(data.Date));
 		completelyLoaded();
 		if (!subscribed) subscribeForChanges();
+		applyBindings();
+	}
+
+	function applyBindings() {
+		ko.applyBindings(vm, $("#page")[0]);
 	}
 
 	return {
@@ -99,13 +103,15 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			hideAgentScheduleMessenger();
 			initViewModel();
 
-			fetchData();
+			fetchData(); 
+
+
 			readyForInteractionCallback();
 		},
 		ReloadScheduleListener: function (notification) {
 			var messageDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
-			if (vm.isWithinSelected(messageDate, messageDate)) {
-				fetchData();
+			if (vm.isWithinSelected(messageDate, messageDate)) { 
+				fetchData(); 
 			};
 		},
 		PartialDispose: function () {

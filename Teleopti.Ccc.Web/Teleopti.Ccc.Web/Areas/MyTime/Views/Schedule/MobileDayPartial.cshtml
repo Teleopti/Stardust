@@ -54,7 +54,7 @@
 						</span>
 					</a>
 				</li>
-				<li class="mobile-request" xdata-bind="click: navigateToRequests" style="display: none;">
+				<li class="mobile-request" data-bind="click: navigateToRequests, visible: requestCount > 0">
 					<a>
 						<i class="glyphicon glyphicon-comment"></i>
 					</a>
