@@ -129,11 +129,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						}
 					}
 
-					var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
-					if (optimizationPreferences.Extra.IsClassic())
-					{
-						currentPeriodValue = new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1));
-					}
+					var currentPeriodValue = optimizationPreferences.Extra.IsClassic() ? 
+						new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1)) : 
+						new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 					var resCalcState = new UndoRedoContainer();
 					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 					var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
@@ -228,27 +226,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 			}
 
-			return checkPeriodValue(currentPeriodValue, previousPeriodValue);
-		}
-
-		private static bool checkPeriodValue(Lazy<double> currentPeriodValue, double previousPeriodValue)
-		{
 			return currentPeriodValue.Value < previousPeriodValue;
 		}
 
-		private void addAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService,
-			SchedulingOptions schedulingOptions, IEnumerable<DateOnly> addedDaysOff, IPerson person)
+		private void addAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions, IEnumerable<DateOnly> addedDaysOff, IPerson person)
 		{
-			foreach (DateOnly dateOnly in addedDaysOff)
+			foreach (var dateOnly in addedDaysOff)
 			{
 				_teamDayOffModifier.AddDayOffForMember(rollbackService, person, dateOnly, schedulingOptions.DayOffTemplate, true);
 			}
 		}
 
-		private void removeAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService,
-			IEnumerable<DateOnly> removedDaysOff, IPerson person)
+		private void removeAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService, IEnumerable<DateOnly> removedDaysOff, IPerson person)
 		{
-			foreach (DateOnly dateOnly in removedDaysOff)
+			foreach (var dateOnly in removedDaysOff)
 			{
 				_teamDayOffModifier.RemoveDayOffForMember(rollbackService, person, dateOnly);
 			}
