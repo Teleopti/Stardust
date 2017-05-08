@@ -18,31 +18,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private readonly IScheduleViewModelFactory _scheduleViewModelFactory;
 		private readonly INow _now;
+		private readonly IUserTimeZone _timeZone;
 
-		public ScheduleApiController(IScheduleViewModelFactory scheduleViewModelFactory, INow now)
+		public ScheduleApiController(IScheduleViewModelFactory scheduleViewModelFactory, INow now, IUserTimeZone timeZone)
 		{
 			_scheduleViewModelFactory = scheduleViewModelFactory;
 			_now = now;
+			_timeZone = timeZone;
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchDayData"), HttpGet]
 		public virtual DayScheduleViewModel FetchDayData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date, StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None)
 		{
-			var showForDate = date ?? _now.LocalDateOnly();
+			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
+			var showForDate = date ?? new DateOnly(nowForUser.Date);
+			
 			return _scheduleViewModelFactory.CreateDayViewModel(showForDate, staffingPossiblityType);
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchWeekData"), HttpGet]
 		public virtual WeekScheduleViewModel FetchWeekData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date, StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None)
 		{
-			var showForDate = date ?? _now.LocalDateOnly();
+			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
+			var showForDate = date ?? new DateOnly(nowForUser.Date);
+			
 			return _scheduleViewModelFactory.CreateWeekViewModel(showForDate, staffingPossiblityType);
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchMonthData"), HttpGet]
 		public virtual MonthScheduleViewModel FetchMonthData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date)
 		{
-			var showForDate = date ?? _now.LocalDateOnly();
+			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
+			var showForDate = date ?? new DateOnly(nowForUser.Date);
 			return _scheduleViewModelFactory.CreateMonthViewModel(showForDate);
 		}
 	}

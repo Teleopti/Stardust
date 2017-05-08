@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				ShiftTradeBulletinBoardPermission = periodSchedule.ShiftTradeBulletinBoardPermission,
 				PersonAccountPermission = periodSchedule.PersonAccountPermission,
 				ViewPossibilityPermission = periodSchedule.ViewPossibilityPermission,
-				IsCurrentDay = date == _now.LocalDateOnly()
+				IsCurrentDay = date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone()))
 			};
 		}
 
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var viewPossibilityPermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewStaffingInfo);
 
-			var isCurrentWeek = period.Contains(_now.LocalDateOnly());
+			var isCurrentWeek = period.Contains(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone())));
 
 			return new WeekScheduleDomainData
 			{

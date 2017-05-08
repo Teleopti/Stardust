@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						r => r.Request is TextRequest || r.Request is AbsenceRequest || r.Request is ShiftExchangeOffer) ?? 0,
 				ProbabilityClass = s.ProbabilityClass,
 				ProbabilityText = s.ProbabilityText,
-				State = s.Date == _now.LocalDateOnly() ? SpecialDateState.Today : 0,
+				State = s.Date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone())) ? SpecialDateState.Today : 0,
 				Header = _headerViewModelFactory.CreateModel(s.ScheduleDay),
 				Note = s.ScheduleDay == null ? null : map(s.ScheduleDay.PublicNoteCollection()),
 				SeatBookings = s.SeatBookingInformation,

@@ -44,8 +44,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMap()
 		{
+			Now.Is(new DateTime(2017, 5, 7, 20, 0, 0, DateTimeKind.Utc));
+			TimeZone.IsSweden();
+
 			var viewModel = Target.FetchWeekData(null);
 			viewModel.Should().Not.Be.Null();
+			viewModel.PeriodSelection.Date.Should().Be.EqualTo("2017-05-07");
+			viewModel.IsCurrentWeek.Should().Be.True();
 		}
 
 		[Test]
@@ -855,9 +860,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldHaveTheFirstDayOfTheFirstWeekInMonth()
 		{
+			Now.Is(new DateTime(2014, 11, 30, 20, 0, 0, DateTimeKind.Utc));
+			TimeZone.IsSweden();
+
 			var result = Target.FetchMonthData(null);
-			result.ScheduleDays.First().Date.Should().Be.EqualTo(new DateTime(2014, 12, 1));
-			result.ScheduleDays.First().FixedDate.Should().Be.EqualTo(new DateOnly(2014, 12, 1).ToFixedClientDateOnlyFormat());
+			result.CurrentDate.Date.Should().Be.EqualTo(new DateTime(2014, 11, 30));
+			result.ScheduleDays.First().Date.Should().Be.EqualTo(new DateTime(2014, 10, 27));
+			result.ScheduleDays.First().FixedDate.Should().Be.EqualTo(new DateOnly(2014, 10, 27).ToFixedClientDateOnlyFormat());
 		}
 
 		[Test]
@@ -1031,6 +1040,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapScheduleForTodayWithoutParameter()
 		{
+			Now.Is(new DateTime(2017, 5, 7, 20, 0, 0, DateTimeKind.Utc));
+			TimeZone.IsSweden();
 			var result = Target.FetchDayData(null);
 			result.Should().Not.Be.Null();
 			result.IsToday.Should().Be.True();
