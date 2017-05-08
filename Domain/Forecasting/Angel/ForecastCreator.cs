@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Collection;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -18,7 +19,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		public void CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, ForecastWorkloadInput[] workloads, IScenario scenario)
 		{
-			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
+			var workloadMap = workloads.ToLookup(x => x.WorkloadId);
+			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource()
+				.Where(skill => skill.WorkloadCollection.Any(
+					workload => workload.Id.HasValue && workloadMap.Contains(workload.Id.Value))).ToList();
 			skills.ForEach(skill => _quickForecaster.ForecastWorkloadsWithinSkill(skill, workloads, futurePeriod, scenario));
 		}
 	}
