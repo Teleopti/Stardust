@@ -29,15 +29,16 @@
 		var startPositionProperty = layoutDirection === constants.layoutDirection.horizontal ? "left" : "top";
 		var lengthProperty = layoutDirection === constants.layoutDirection.horizontal ? "width" : "height";
 
-	    startPositionVal = (Math.ceil(boundaries.lengthPercentagePerMinute *
-	            (rawProbabilityCellData.startTimeInMinutes - boundaries.timelineStartMinutes) *
-	            10000) /
-	        100).toFixed(2);
+		startPositionVal = (Math.ceil(boundaries.lengthPercentagePerMinute *
+				(rawProbabilityCellData.startTimeInMinutes - boundaries.timelineStartMinutes) *
+				10000) /
+			100).toFixed(2);
 
-	    intervalLengthVal = (Math.ceil(boundaries.lengthPercentagePerMinute *
-	            (rawProbabilityCellData.endTimeInMinutes - rawProbabilityCellData.startTimeInMinutes) *
-	            10000) /
-	        100).toFixed(2);
+		var percentagePerMinute = Math.ceil(boundaries.lengthPercentagePerMinute * 10000) / 10000;
+		intervalLengthVal = (Math.ceil(percentagePerMinute *
+				(rawProbabilityCellData.endTimeInMinutes - rawProbabilityCellData.startTimeInMinutes) *
+				10000) /
+			100).toFixed(2);
 
 		styleJson[startPositionProperty] = startPositionVal + "%";
 		styleJson[lengthProperty] = intervalLengthVal + "%";
@@ -48,9 +49,9 @@
 	function getTooltipsTitle() {
 		var result = "";
 		if (probabilityType === constants.probabilityType.absence) {
-            result = userTexts.ProbabilityToGetAbsenceColon;
+			result = userTexts.ProbabilityToGetAbsenceColon;
 		} else if (probabilityType === constants.probabilityType.overtime) {
-            result = userTexts.ProbabilityToGetOvertimeColon;
+			result = userTexts.ProbabilityToGetOvertimeColon;
 		}
 		return result;
 	}
