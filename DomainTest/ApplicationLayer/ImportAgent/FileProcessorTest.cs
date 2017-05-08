@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
@@ -213,8 +211,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 				SchedulePeriodLength = 4
 			};
 		}
-
-
 	}
 }
 

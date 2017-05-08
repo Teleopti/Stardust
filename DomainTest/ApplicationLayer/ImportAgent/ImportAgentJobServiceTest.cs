@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
+using ICSharpCode.SharpZipLib.Zip;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -119,13 +121,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		{
 			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
 			CurrentBusinessUnit.OnThisThreadUse(bu1);
-			var person1 = setCurrentLoggedOnUser();
 			var job1 = createValidJob();
 
-			EventHandler.Handle(new ImportAgentEvent
+			Assert.Throws<ZipException>(() => EventHandler.Handle(new ImportAgentEvent
 			{
 				JobResultId = job1.Id.GetValueOrDefault()
-			});
+			}));
 			var detail = Target.GetJobsForCurrentBusinessUnit().FirstOrDefault();
 			detail.JobResult.IsWorking().Should().Be(false);
 			detail.ResultDetail?.DetailLevel.Should().Be(DetailLevel.Error);
