@@ -163,7 +163,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			{
 				var sourceRow = agents[i].Row;
 				var newRow = newSheet.CreateRow(i + 1);
-				sourceRow.CopyTo(newRow, 0, columnsCount - 1);
+				var endColumnIndex = sourceRow.LastCellNum < columnsCount ? sourceRow.LastCellNum - 1 : columnsCount - 1;
+				sourceRow.CopyTo(newRow, 0, endColumnIndex);
 				if (hasErrorMessages)
 				{
 					newRow.CreateCell(errorMessageColumnIndex).SetCellValue(string.Join(";", agents[i].Feedback.ErrorMessages));

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private readonly IFileProcessor _fileProcessor;
 		private readonly IStardustJobFeedback _feedback;
 		private readonly IImportAgentJobArtifactValidator _validator;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportAgentEventHandler));
 
 		public ImportAgentEventHandler(
 			IJobResultRepository jobResultRepository,
@@ -42,7 +44,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 			catch (Exception e)
 			{
+				Logger.Error(e);
 				SaveJobResultDetail(@event, e);
+				throw;
 			}
 		}
 
@@ -126,8 +130,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			var detail = new JobResultDetail(level, message, DateTime.UtcNow, exception);
 			result.AddDetail(detail);
 			result.FinishedOk = true;
-
-			_feedback.SendProgress($"Done with adding job process detail, detail level:{level}, message:{detail.Message}.");
+			if (exception == null)
+			{
+				_feedback.SendProgress($"Done with adding job process detail, detail level:{level}, message:{detail.Message}.");
+			}
+			else
+			{
+				_feedback.SendProgress($"Done with adding job process detail, detail level:{level}, message:{detail.Message}, exception: {exception}.");
+			}
 		}
 
 		private IJobResult getJobResult(ImportAgentEvent @event)

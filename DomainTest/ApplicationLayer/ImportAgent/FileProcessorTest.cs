@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
@@ -141,6 +142,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			{
 				Target.ResetException();
 			}
+		}
+
+		[Test]
+		public void ShouldCreateReturnedFileFromTheRawData()
+		{
+			var template = new AgentFileTemplate();
+			var workbook = template.GetTemplateWorkbook("agents", true);
+			var row = workbook.GetSheetAt(0).CreateRow(0);
+			row.CreateCell(0).SetCellValue("aa");
+			row.CreateCell(1).SetCellValue("bb");
+			row.CreateCell(5).SetCellValue("agent");
+			var agents = new []
+			{
+				new AgentExtractionResult
+				{
+					Feedback = { ErrorMessages = { "has error"}},
+					Row = row,
+				}
+			};
+
+			var ms = Target.CreateFileForInvalidAgents(agents, true);
+
+			ms.Should().Not.Be.Null();
 		}
 
 		private RawAgent setupProviderData()

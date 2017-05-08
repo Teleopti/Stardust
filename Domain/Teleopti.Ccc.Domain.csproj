@@ -135,7 +135,6 @@
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="ApplicationLayer\Dates\AnalyticsPersonLocalDateUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\ReloadSchedules.cs" />
-    <Compile Include="ApplicationLayer\ImportAgent\AgentArtifactValidator.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentDataModel.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplate.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersister.cs" />
@@ -148,6 +147,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentDefaults.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentEventHandler.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentFileValidator.cs" />
+    <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobArtifactValidator.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobResultDetail.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobService.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentsSettingDataModel.cs" />
