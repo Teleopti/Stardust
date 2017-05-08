@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return combinationId;
 		}
 
-		private Dictionary<string, Guid> loadSkillCombination(SqlConnection connection, SqlTransaction transaction)
+		private Dictionary<GuidCombinationKey, Guid> loadSkillCombination(SqlConnection connection, SqlTransaction transaction)
 		{
 		    
-			var skillCombinations = new Dictionary<string, Guid>();
+			var skillCombinations = new Dictionary<GuidCombinationKey, Guid>();
 			var result = new List<internalSkillCombination>();
 			using (var command = new SqlCommand("select Id, SkillId from [ReadModel].[SkillCombination] order by id", connection, transaction))
 			{
@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return skillCombinations;
 		}
 
-		private static string keyFor(IEnumerable<Guid> skillIds)
+		private static GuidCombinationKey keyFor(IEnumerable<Guid> skillIds)
 		{
-			return string.Join("_", skillIds.OrderBy(x => x));
+			return new GuidCombinationKey(skillIds.OrderBy(x => x).ToArray());
 		}
 
 		private class internalSkillCombination
