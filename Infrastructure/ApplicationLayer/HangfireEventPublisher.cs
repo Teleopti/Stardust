@@ -1,15 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using batchRef = Teleopti.Ccc.Domain.Collection.Extensions;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -31,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			batchRef.Batch(events, 50)
+			events.Batch(50)
 				.Select(jobsFor)
 				.ForEach(b => b.ForEach(j => _client.Enqueue(j)));
 		}
