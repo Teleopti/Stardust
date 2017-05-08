@@ -61,33 +61,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData);
 			return weekScheduleViewModel;
 		}
-		
+
 		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
 		{
 			var dayDomainData = _weekScheduleDomainDataProvider.GetDaySchedule(date);
-			var personAssignment = dayDomainData.ScheduleDay.ScheduleDay.PersonAssignment();
+			var scheduleDay = dayDomainData.ScheduleDay;
+			
+			var hasAnySchedule = scheduleDay.Projection.Any() || scheduleDay.ProjectionYesterday.Any();
+			var hasAnyOvertime = scheduleDay.OvertimeAvailability != null || scheduleDay.OvertimeAvailabilityYesterday != null;
 
-			if (!dayDomainData.ScheduleDay.Projection.Any() && (personAssignment == null || 
-				!personAssignment.ShiftLayers.OfType<OvertimeShiftLayer>().Any()))
+			if (hasAnySchedule || hasAnyOvertime)
+			{
+				var minMaxTimeFixed = fixScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, dayDomainData);
+				if (minMaxTimeFixed)
+				{
+					scheduleDay.MinMaxTime = dayDomainData.MinMaxTime;
+				}
+			}
+			else
 			{
 				// Set timeline to 8:00-15:00 if no schedule
 				// Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.ShiftTradeTimeLineHoursViewModelMapper.getTimeLinePeriod()
 				var defaultTimeLinePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(15));
 				dayDomainData.MinMaxTime = defaultTimeLinePeriod;
-				dayDomainData.ScheduleDay.MinMaxTime = defaultTimeLinePeriod;
+				scheduleDay.MinMaxTime = defaultTimeLinePeriod;
 			}
-			else
-			{
-				var minMaxTimeFixed = fixScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, dayDomainData);
-				if (minMaxTimeFixed)
-				{
-					dayDomainData.ScheduleDay.MinMaxTime = dayDomainData.MinMaxTime;
-				}
-			}
+
 			dayDomainData.UnReadMessageCount = _pushMessageProvider.UnreadMessageCount;
 
 			var dayScheduleViewModel = _scheduleViewModelMapper.Map(dayDomainData);
-
 			return dayScheduleViewModel;
 		}
 
