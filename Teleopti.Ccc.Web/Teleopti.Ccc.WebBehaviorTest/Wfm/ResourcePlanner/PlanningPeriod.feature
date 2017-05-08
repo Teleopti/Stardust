@@ -13,7 +13,6 @@ Scenario: show the next planning period
 	When I view Resource planner
 	Then I should see planning period from '2014-05-01'to '2014-05-31'
 
-@ignore
 @OnlyRunIfDisabled('Wfm_ResourcePlanner_SchedulingOnStardust_42874')
 Scenario: schedule the next planning period
 	Given the time is '2014-04-10'
