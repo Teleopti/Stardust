@@ -1,68 +1,74 @@
-﻿.dayview-mobile .mobile-dayview-nav .navbar-teleopti{
+﻿.mobile-start-day .mobile-start-day-nav {
+	padding: 0;
+}
+.mobile-start-day .mobile-start-day-nav .navbar-teleopti {
 	margin: 0;
 	display: flex;
+	justify-content: space-between;
 }
-.dayview-mobile .mobile-dayview-nav .submenu li{
+.mobile-start-day .mobile-start-day-nav input.form-control {
+	min-width: 90px;
+}
+@media(max-width: 500px){
+	.mobile-start-day .mobile-start-day-nav .input-group {
+		max-width: 200px;
+	}
+}
+.mobile-start-day .mobile-start-day-nav .submenu li {
 	display: inline-block;
 	white-space: nowrap;
 }
-.dayview-mobile .mobile-dayview-nav .submenu li.mobile-datepicker{
+.mobile-start-day .mobile-start-day-nav .submenu li.mobile-datepicker {
 	max-width: 329px;
 }
-.dayview-mobile .mobile-dayview-nav .submenu li.mobile-today a{
-	padding: 14.5px 0;
+.mobile-start-day .mobile-start-day-nav .submenu li a {
+	padding: 14.5px 5px 5px 10px;
+	min-width: 35px;
+	height: 100%;
+}
+.mobile-start-day .mobile-start-day-nav .submenu li a > i {
+	transform: scale(1.4);
+}
+.mobile-start-day .mobile-start-day-nav .submenu li.mobile-today a {
+	padding-left: 0;
+	padding-right: 0;
 	text-align: center;
 }
-.dayview-mobile .mobile-dayview-nav .submenu li.mobile-message a {
+.mobile-start-day .mobile-start-day-nav .submenu li.mobile-message a {
 	padding: 14.5px 0 0 10px;
+	position: relative;
 }
-@media(max-width: 350px){
-	.dayview-mobile .dayview-mobile-nav-input-group {
-		max-width: 150px;
-	}
-	.dayview-mobile .mobile-dayview-nav {
-		padding: 0;
-		margin: 0;
-	}
-	.dayview-mobile .mobile-dayview-nav input.form-control{
-		width: 90px;
-	}
+.mobile-start-day .mobile-start-day-nav .submenu li.mobile-message a > span.badge {
+	position: absolute;
+	top: 5px;
+	right: -2px;
+	font-size: 9px;
+	padding: 3px 5px;
 }
-
-.dayview-view-body {
-	display: inline-block;
-	width: 100%;
-}
-
-.dayview-summary-content {
-	margin-top: 3px;
+.mobile-start-day .mobile-summary-content {
+	margin: 5px 0;
 	width: 100%;
 	text-align: center;
-	margin-bottom: 5px;
 }
-
-.dayview-timeline {
+.mobile-start-day .mobile-timeline {
 	width: 32px;
 	background: transparent;
 	border-right: 1px solid #dfdfdf;
 	position: relative;
 	margin-right: 4px;
 }
-
-.dayview-timeline-label {
+.mobile-start-day .mobile-timeline-label {
 	font-size: 7pt;
 	width: 30px;
 	height: 10px;
 	text-align: center;
 	white-space: pre-wrap;
 }
-
-.dayview-schedule {
+.mobile-start-day .mobile-schedule-container {
 	display: inline-block;
 	width: calc(100% - 36px);
 }
-
-.dayview-schedule-layer {
+.mobile-start-day .mobile-schedule-layer {
 	text-align: center;
 	border-radius: 2px;
 	border-left: 0;

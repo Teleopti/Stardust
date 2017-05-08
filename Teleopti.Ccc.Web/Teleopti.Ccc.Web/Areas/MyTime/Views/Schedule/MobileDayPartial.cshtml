@@ -3,8 +3,7 @@
 	Layout = null;
 }
 <style>
-	html, body, article#body,
-	.dayview-mobile, .dayview-mobile .dayview-view-body {
+	html, body, article#body, .mobile-start-day, .moible-start-day-body {
 		height: 100%;
 	}
 
@@ -16,22 +15,22 @@
 		height: calc(100%);
 	}
 
-	.dayview-mobile > .container {
+	.mobile-start-day > .container {
 		height: calc(100% - 53px);
 	}
 
-	.dayview-view-body {
+	.moible-start-day-body {
 		height: 100%;
 		overflow-y: auto;
 	}
 </style>
 
-<div class="dayview-mobile">
+<div class="mobile-start-day">
 	<div class="navbar navbar-teleopti subnavbar">
-		<div class="container mobile-dayview-nav">
+		<div class="container mobile-start-day-nav">
 			<ul class="nav navbar-nav navbar-teleopti row submenu">
 				<li class="mobile-datepicker">
-					<div class="input-group dayview-mobile-nav-input-group">
+					<div class="input-group">
 						<span class="input-group-btn">
 							<button class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
 								<i class="glyphicon glyphicon-chevron-left"></i>
@@ -49,51 +48,56 @@
 					<a href="#">@Resources.Today</a>
 				</li>
 				<li class="mobile-message" data-bind="click: navigateToMessages">
-					<a href="#">
-						<span class="badge badge-important" data-bind="text: unreadMessageCount"></span>
+					<a>
+						<i class="glyphicon glyphicon-envelope"></i>
+						<span class="badge badge-important" data-bind="text: unreadMessageCount">
+						</span>
+					</a>
+				</li>
+				<li class="mobile-request" xdata-bind="click: navigateToRequests" style="display: none;">
+					<a>
+						<i class="glyphicon glyphicon-comment"></i>
 					</a>
 				</li>
 			</ul>
 		</div>
 	</div>
 
-	<div class="container">
-		<div class="dayview-view-body">
-			<div class="dayview-summary-content" data-bind="style: { backgroundColor: summaryColor, color: 255 }, css: {'dayoff': isDayOff}">
-				<span data-bind="text: dayOfWeek"></span>
-				<span data-bind="visible: summaryVisible" >(</span>
-				<span data-bind="text: summaryName"></span>
-				<span data-bind="text: summaryTime"></span>
-				<span data-bind="visible: summaryVisible">)</span>
-				<!-- ko if: hasOvertime-->
-				<span>@Resources.Overtime</span>
-				<!-- /ko -->
+	<div class="moible-start-day-body container">
+		<div class="mobile-summary-content" data-bind="style: { backgroundColor: summaryColor, color: 255 }, css: {'dayoff': isDayOff}">
+			<span data-bind="text: dayOfWeek"></span>
+			<span data-bind="visible: summaryVisible" >(</span>
+			<span data-bind="text: summaryName"></span>
+			<span data-bind="text: summaryTime"></span>
+			<span data-bind="visible: summaryVisible">)</span>
+			<!-- ko if: hasOvertime-->
+			<span>@Resources.Overtime</span>
+			<!-- /ko -->
+		</div>
+		
+		<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleHeight}">
+			<!-- ko foreach: timeLines -->
+			<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text : timeText, visible : evenHour">
 			</div>
-			
-			<div class="dayview-timeline floatleft" data-bind="style: {height: scheduleHeight}">
-				<!-- ko foreach: timeLines -->
-				<div class="dayview-timeline-label absolute" data-bind="style: {top: topPosition}, text : timeText, visible : evenHour">
-				</div>
-				<!-- /ko -->
-			</div>
-			
-			<div class="dayview-schedule relative" data-bind="style: {height: scheduleHeight}">
-				<!-- ko foreach: layers -->
-				<div class="dayview-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime &amp;&amp; overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime &amp;&amp; overTimeDarkerBackgroundStyle}">
-				<div data-bind="visible: showTitle()">
-						<strong class="truncate" data-bind="text: title()"></strong>
-						<!-- ko if: hasMeeting -->
-						<div class="meeting floatright">
-							<i class="meeting-icon mr10">
-								<i class="glyphicon glyphicon-user ml10"></i>
-							</i>
-						</div>
-						<!-- /ko -->
-						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
+			<!-- /ko -->
+		</div>
+		
+		<div class="mobile-schedule-container relative" data-bind="style: {height: scheduleHeight}">
+			<!-- ko foreach: layers -->
+			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime &amp;&amp; overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime &amp;&amp; overTimeDarkerBackgroundStyle}">
+			<div data-bind="visible: showTitle()">
+					<strong class="truncate" data-bind="text: title()"></strong>
+					<!-- ko if: hasMeeting -->
+					<div class="meeting floatright">
+						<i class="meeting-icon mr10">
+							<i class="glyphicon glyphicon-user ml10"></i>
+						</i>
 					</div>
+					<!-- /ko -->
+					<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
 				</div>
-				<!-- /ko -->
 			</div>
+			<!-- /ko -->
 		</div>
 	</div>
 </div>
