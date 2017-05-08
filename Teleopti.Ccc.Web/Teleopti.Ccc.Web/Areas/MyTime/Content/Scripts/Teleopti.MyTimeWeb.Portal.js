@@ -262,8 +262,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _isMobile(window) {
 		var ua = window.navigator.userAgent;
-
-
 		if (ua.match(/Android/i) || ua.match(/webOS/i) || ua.match(/iPhone/i) || ua.match(/iPod/i)) {
 			return true;
 		}
@@ -274,7 +272,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		var isWeekSchedule = hash.indexOf("#Schedule") >= 0;
 
 		if (_endsWith(hash, "Tab")) {
-			var suffix = (hash.indexOf("#Schedule") === 0) ? ((_isMobile(window)) ? (_showDayScheduleForStartPage() ? "/MobileDay" : "/MobileWeek") : "/Week") : "/Index";
+			var suffix = (hash.indexOf("#Schedule") === 0) ? (_isMobile(window) ? (_showDayScheduleForStartPage() ? "/MobileDay" : "/MobileWeek") : "/Week") : "/Index";
 			hash = hash.substring(0, hash.length - 'Tab'.length) + suffix;
 		}
 
@@ -289,7 +287,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		var probability = undefined;
 		if (isWeekSchedule) {
 			parts.forEach(function (p, i, arr) {
-				if (p == "Probability" && arr[i + 1]) {
+				if (p === "Probability" && arr[i + 1]) {
 					probability = parseInt(arr[i + 1]);
 				}
 			});
@@ -411,7 +409,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		},
 		InitPeriodSelection: function (rangeSelectorId, periodData, actionSuffix) {
 		},
-		IsMobile: function () { return _isMobile(window) }
+		IsMobile: function () { return _isMobile(window); }
 	};
 })(jQuery);
 
