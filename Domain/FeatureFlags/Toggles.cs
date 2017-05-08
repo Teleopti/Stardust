@@ -27,7 +27,6 @@
 		RTA_SnappierDisplayOfOverview_43568,
 		RTA_EventPackagesExperiment_43924,
 
-
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
 		MyTimeWeb_ShiftTradeBoardNoReadModel_36662,
