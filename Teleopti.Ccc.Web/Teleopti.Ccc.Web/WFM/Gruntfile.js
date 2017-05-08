@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                 options: {
                     projectConfiguration: 'Debug',
                     targets: ['Rebuild'],
-                    version: 14.0,
+                    version: 15.0,
                     maxCpuCount: null,
                     buildParameters: {
                         WarningLevel: 2
@@ -43,7 +43,7 @@ module.exports = function(grunt) {
                 options: {
                     projectConfiguration: 'Debug',
                     targets: ['build'],
-                    version: 14.0,
+                    version: 15.0,
                     maxCpuCount: null,
                     buildParameters: {
                         WarningLevel: 2
@@ -429,6 +429,7 @@ module.exports = function(grunt) {
     grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
     grunt.registerTask('nova', ['devDist', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('build', ['msbuild:build']); // build the solution
+    grunt.registerTask('rebuild', ['msbuild:rebuild']); // rebuild the solution
     grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
     grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
     grunt.registerTask('eslint-beta', ['eslint']);
