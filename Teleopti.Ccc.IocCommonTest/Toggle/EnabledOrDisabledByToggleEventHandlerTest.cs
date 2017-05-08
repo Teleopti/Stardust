@@ -12,25 +12,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	[TestFixture]
 	[IoCTest]
-	public class EnabledOrDisabledByToggleEventPackageHandlerTest
-	{
-		public IComponentContext Container;
-
-		[Test]
-		[Toggle(Toggles.TestToggle)]
-		public void ShouldResolveHandlerEnabledByTestToggle()
-		{
-			var handlers = Container
-				.Resolve<IEnumerable<IHandleEvents>>()
-				.Select(ProxyUtil.GetUnproxiedType);
-
-			handlers.Should()
-				.Contain(typeof(PackageHandlerEnabledByTestToggle));
-		}
-	}
-
-	[TestFixture]
-	[IoCTest]
 	public class EnabledOrDisabledByToggleEventHandlerTest
 	{
 		public IComponentContext Container;

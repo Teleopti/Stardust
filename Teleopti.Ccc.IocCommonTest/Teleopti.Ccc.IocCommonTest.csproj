@@ -116,6 +116,7 @@
     <Compile Include="MultipleConfig\WebConfigReaderTest.cs" />
     <Compile Include="Toggle\CustomerTest.cs" />
     <Compile Include="Toggle\DeveloperTest.cs" />
+    <Compile Include="Toggle\EnabledOrDisabledByToggleEventPackageHandlerTest.cs" />
     <Compile Include="Toggle\GeneralTest.cs" />
     <Compile Include="Toggle\UseNotOnToggleTest.cs" />
     <Compile Include="Toggle\UseOnAndNotOnToggleTest.cs" />
