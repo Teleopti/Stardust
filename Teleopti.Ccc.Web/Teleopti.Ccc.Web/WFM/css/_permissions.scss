@@ -198,6 +198,10 @@
 	border-top: 1px solid $gray012;
 }
 
+.perm-list{
+	max-height: none;
+}
+
 .permissions-tabs{
 	md-tabs{
 		transition: height .01s!important;
