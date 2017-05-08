@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -31,19 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[ReadModelUnitOfWork]
 		public void Handle(IEnumerable<IEvent> events)
 		{
-			foreach (var @event in events)
-			{
-				if (@event is PersonOutOfAdherenceEvent)
-					handle(@event as PersonOutOfAdherenceEvent);
-				if (@event is PersonInAdherenceEvent)
-					handle(@event as PersonInAdherenceEvent);
-				if (@event is PersonRuleChangedEvent)
-					handle(@event as PersonRuleChangedEvent);
-				if (@event is PersonStateChangedEvent)
-					handle(@event as PersonStateChangedEvent);
-				if (@event is PersonNeutralAdherenceEvent)
-					handle(@event as PersonNeutralAdherenceEvent);
-			}
+			events.ForEach(e => handle((dynamic)e));
 		}
 	}
 

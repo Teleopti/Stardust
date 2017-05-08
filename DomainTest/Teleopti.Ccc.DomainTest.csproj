@@ -208,7 +208,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ExternalLogons\ExternalLogonReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\HistoricalAdherence\HistoricalRuleChangeUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\HistoricalAdherence\HistoricalStateChangeUpdaterTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\HistoricalAdherence\PackagesTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\HistoricalAdherence\PackageTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\PersonEmploymentNumberChangedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\PersonNameChangedTest.cs" />
