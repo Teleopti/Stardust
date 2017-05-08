@@ -137,6 +137,18 @@
 
 /*Hide user name in small screen*/
 @media(max-width: 768px) {
+	.navbar-brand {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+	.navbar-nav.navbar-user-setting{
+		margin-right: 5px;
+		margin-left: 5px;
+	}
+	.navbar-nav.navbar-user-setting a{
+		padding-left: 5px;
+		padding-right: 5px;
+	}
 	.bdd-mytime-top-menu span.user-name {
 		display: none;
 	}
