@@ -265,7 +265,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 	            row["SkillCombinationId"] = id;
 	            row["StartDateTime"] = delta.StartDateTime;
 	            row["EndDateTime"] = delta.EndDateTime;
-	            row["InsertedOn"] = DateTime.UtcNow;
+	            row["InsertedOn"] = _now.UtcDateTime();
 	            row["DeltaResource"] = delta.Resource;
 	            dt.Rows.Add(row);
 
