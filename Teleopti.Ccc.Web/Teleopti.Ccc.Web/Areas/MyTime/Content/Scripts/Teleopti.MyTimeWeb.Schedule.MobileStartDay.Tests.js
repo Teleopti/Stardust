@@ -29,6 +29,23 @@
 		equal(vm.selectedDate().format("MMM Do YY"), moment(currentDate).add(-1, 'days').format("MMM Do YY"));
 	});
 
+	test("should go back to current date after clicking 'home' icon", function () {
+		setup();
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		var currentDate = vm.selectedDate().format('YYYY-MM-DD');
+
+		Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime = function(){
+			return currentDate;
+		}
+
+		vm.nextDay();
+		equal(vm.selectedDate().format('YYYY-MM-DD'), moment(currentDate).add('days', 1).format("YYYY-MM-DD"));
+		vm.today();
+		equal(vm.selectedDate().format('YYYY-MM-DD'), moment(currentDate).format("YYYY-MM-DD"));
+	});
+
 	test("should set timelines", function () {
 		setup();
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
