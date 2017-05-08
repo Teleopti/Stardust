@@ -3052,6 +3052,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to clear schedule result and history data for planning period {0}-{1} ?.
+        /// </summary>
+        public static string AreYouSureYouWantToClearPlanningPeriodData {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToClearPlanningPeriodData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete?.
         /// </summary>
         public static string AreYouSureYouWantToDelete {
@@ -6124,6 +6133,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ClearOverride {
             get {
                 return ResourceManager.GetString("ClearOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear planning period data.
+        /// </summary>
+        public static string ClearPlanningPeriod {
+            get {
+                return ResourceManager.GetString("ClearPlanningPeriod", resourceCulture);
             }
         }
         
@@ -23787,6 +23805,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Publishing schedule.
+        /// </summary>
+        public static string PublishingSchedule {
+            get {
+                return ResourceManager.GetString("PublishingSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Publish Schedule.
         /// </summary>
         public static string PublishSchedule {
@@ -23810,6 +23837,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PublishSchedulesToColon {
             get {
                 return ResourceManager.GetString("PublishSchedulesToColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Published schedule success.
+        /// </summary>
+        public static string PublishScheduleSuccess {
+            get {
+                return ResourceManager.GetString("PublishScheduleSuccess", resourceCulture);
             }
         }
         
@@ -31366,6 +31402,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Success {
             get {
                 return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully clear schedule result and history data for planning period {0}-{1}.
+        /// </summary>
+        public static string SuccessClearPlanningPeriodData {
+            get {
+                return ResourceManager.GetString("SuccessClearPlanningPeriodData", resourceCulture);
             }
         }
         

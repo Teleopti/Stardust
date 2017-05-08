@@ -16048,4 +16048,24 @@ Do you want to participate?</value>
     <value>You need a planning period to schedule your agents. Do you want to create a planning period?</value>
     <comment>Help text in resource planner to show that you need to create a planning period</comment>
   </data>
+  <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
+    <value>Are you sure you want to clear schedule result and history data for planning period {0}-{1} ?</value>
+    <comment>AreYouSureYouWantToClearPlaningPeriodData</comment>
+  </data>
+  <data name="ClearPlanningPeriod" xml:space="preserve">
+    <value>Clear planning period data</value>
+    <comment>Clear planning period</comment>
+  </data>
+  <data name="PublishingSchedule" xml:space="preserve">
+    <value>Publishing schedule</value>
+    <comment>Publishing schedule</comment>
+  </data>
+  <data name="PublishScheduleSuccess" xml:space="preserve">
+    <value>Published schedule success</value>
+    <comment>Published schedule success</comment>
+  </data>
+  <data name="SuccessClearPlanningPeriodData" xml:space="preserve">
+    <value>Successfully clear schedule result and history data for planning period {0}-{1}</value>
+    <comment>SuccessClearPlanningPeriodData</comment>
+  </data>
 </root>

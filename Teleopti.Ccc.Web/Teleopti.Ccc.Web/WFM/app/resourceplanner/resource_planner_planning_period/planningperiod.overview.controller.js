@@ -16,6 +16,7 @@
     var checkProgressRef;
     var keepAliveRef;
     var preMessage = '';
+    var publishing = false;
     vm.agentGroup = {};
     vm.selectedPp = $stateParams.selectedPp ? $stateParams.selectedPp : null;
     vm.schedulingPerformed = false;
@@ -32,7 +33,7 @@
     vm.publishSchedule = publishSchedule;
     vm.clearSchedules = clearSchedules;
     vm.isDisable = isDisable;
-    vm.openmModal = openmModal;
+    vm.openModal = openModal;
     vm.valData = {
       totalValNum: 0,
       totalPreValNum: 0,
@@ -43,7 +44,7 @@
 
     checkToggle();
     destroyCheckState();
-    getAgentGroupbyId();
+    getAgentGroupById();
     getPlanningPeriodByPpId(selectedPpId);
 
     function checkToggle() {
@@ -53,7 +54,7 @@
       });
     }
 
-    function getAgentGroupbyId() {
+    function getAgentGroupById() {
       if (agentGroupId !== null) {
         var getAgentGroup = planningPeriodService.getAgentGroupById({ agentGroupId: agentGroupId });
         return getAgentGroup.$promise.then(function (data) {
@@ -106,7 +107,10 @@
       }
     }
 
-    function openmModal() {
+    function openModal() {
+      vm.textForClearPp = $translate.instant("AreYouSureYouWantToClearPlanningPeriodData")
+          .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+					.replace('{1}', moment(vm.selectedPp.EndDate).format('L'));
       return vm.confirmModal = true;
     }
 
@@ -115,7 +119,9 @@
         vm.isClearing = true;
         planningPeriodService.clearSchedules({ id: pp.Id }).$promise.then(function () {
         vm.isClearing = false;
-        NoticeService.success("Successfully clear schedule result and history data for planning period" + moment(vm.selectedPp.StartDate).format('DD/MM/YYYY') + "-" + moment(vm.selectedPp.EndDate).format('DD/MM/YYYY'), 20000, true);
+        NoticeService.success($translate.instant('SuccessClearPlanningPeriodData')
+					.replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+					.replace('{1}', moment(vm.selectedPp.EndDate).format('L')), 20000, true);
         init();
       });
       }   
@@ -198,22 +204,21 @@
             vm.status = '';
           } else {
             vm.optimizeRunning = true;
-			vm.status = $translate.instant('RunningIntradayOptimization');
+			      vm.status = $translate.instant('RunningIntradayOptimization');
           }
         }
       });
     }
 
     function publishSchedule(pp) {
-      if (vm.publishedClicked === true) {
-        NoticeService.warning($translate.instant('Publishing schedule.'), null, true);
+      if (publishing === true) {
+        NoticeService.warning($translate.instant('PublishingSchedule'), null, true);
         return;
       }
-      vm.publishedClicked = true;
-      planningPeriodService.publishPeriod({
-        id: pp.Id
-      }).$promise.then(function () {
-        NoticeService.success($translate.instant('Published schedule sucess.'), null, true);
+      publishing = true;
+      planningPeriodService.publishPeriod({ id: pp.Id }).$promise.then(function () {
+        NoticeService.success($translate.instant('PublishScheduleSuccess'), null, true);
+        publishing = false;
       });
     };
 
@@ -230,7 +235,6 @@
       vm.scheduledAgents = 0;
       planningPeriodService.lastJobResult({ id: pp.Id })
         .$promise.then(function (data) {
-          console.log(data)
           if (data.OptimizationResult) {
             initResult(data.OptimizationResult, data.ScheduleResult, pp);
             vm.valData.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults ? data.ScheduleResult.BusinessRulesValidationResults : [];

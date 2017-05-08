@@ -18,16 +18,16 @@
 		vm.textDoRuleAppliedFilter = '';
 		vm.editRuleset = editRuleset;
 		vm.getDoRuleInfo = getDoRuleInfo;
-		vm.destoryRuleset = destoryRuleset;
+		vm.destroyRuleset = destroyRuleset;
 		vm.createRuleset = createRuleset;
 		vm.goDayoffRuleSetting = goDayoffRuleSetting;
 		
 		getDayOffRules();
-		getAgentGroupbyId();
+		getAgentGroupById();
 
-		function getAgentGroupbyId() {
+		function getAgentGroupById() {
 			if ($stateParams.groupId !== null) {
-				var getAgentGroup = agentGroupService.getAgentGroupbyId({ id: $stateParams.groupId });
+				var getAgentGroup = agentGroupService.getAgentGroupById({ id: $stateParams.groupId });
 				return getAgentGroup.$promise.then(function (data) {
 					vm.agentGroup = data;
 					vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", vm.agentGroup.Name);
@@ -61,7 +61,7 @@
 			vm.textDeleteDoRule = $translate.instant("AreYouSureYouWantToDeleteTheDayOffRule").replace("{0}", dayOffRule.Name);
 		}
 
-		function destoryRuleset(dayOffRule) {
+		function destroyRuleset(dayOffRule) {
 			if (!dayOffRule.Default) {
 				dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id })
 					.$promise.then(getDayOffRules);

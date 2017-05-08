@@ -72,7 +72,7 @@
 				<h2><i class="mdi mdi-information-outline"></i>{{'YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion' | translate}}</h2>
 			</div>
 			<div class="con-footer">
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.modifyFirstPpModal = true; vm.getSugesstionsForFirstPp()" translate>CreatePlanningPeriod</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.modifyFirstPpModal = true; vm.getSuggestionsForFirstPp()" translate>CreatePlanningPeriod</button>
 			</div>
 		</div>
 	</div>
@@ -86,10 +86,10 @@
 						<div class="modal-inner-content">
 							<h3>{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.StartDate | amDateFormat:"L"}} - {{vm.originLastPp.EndDate | amDateFormat:"L"}}</h3>
 							<div class="con-row">
-								<label ng-if="!vm.isEnddateChanged() && vm.planningPeriods.length > 1">
+								<label ng-if="!vm.isEndDateChanged() && vm.planningPeriods.length > 1">
 									<i class="mdi mdi-information-outline"></i> {{'ModifyEndDateForThisPlanningPeriodDot' | translate}}</label>
-								<label ng-if="!vm.isEnddateChanged() && vm.planningPeriods.length == 1"><i class="mdi mdi-information-outline"></i> {{'ModifyStartAndEndDateForThisPlanningPeriodDot' | translate}}</label>
-								<label ng-if="vm.isEnddateChanged()" class="text-warning">
+								<label ng-if="!vm.isEndDateChanged() && vm.planningPeriods.length == 1"><i class="mdi mdi-information-outline"></i> {{'ModifyStartAndEndDateForThisPlanningPeriodDot' | translate}}</label>
+								<label ng-if="vm.isEndDateChanged()" class="text-warning">
 									<i class="mdi mdi-alert"></i>
 									{{'YouAreGoingToChangeThisPlanningPeriodFrom' | translate}} {{vm.originLastPp.StartDate | amDateFormat:"L"}} - {{vm.originLastPp.EndDate | amDateFormat:"L"}} {{'ToText' | translate}} {{vm.lastPp.startDate | amDateFormat:"L"}} - {{vm.lastPp.endDate | amDateFormat:"L"}}
 								</label>
@@ -103,7 +103,7 @@
 								<button ng-click="vm.modifyLastPpModal=false" class="wfm-btn wfm-btn-invis-default" translate>
 									Cancel
 								</button>
-								<button ng-class="{'wfm-btn-invis-primary':vm.isEnddateChanged(), 'wfm-btn-invis-disabled': !vm.isEnddateChanged()}" ng-click="vm.modifyLastPpModal=false; vm.changeEndDateForLastPp(vm.lastPp);" class="wfm-btn" translate>
+								<button ng-class="{'wfm-btn-invis-primary':vm.isEndDateChanged(), 'wfm-btn-invis-disabled': !vm.isEndDateChanged()}" ng-click="vm.modifyLastPpModal=false; vm.changeEndDateForLastPp(vm.lastPp);" class="wfm-btn" translate>
 									Apply
 								</button>
 							</aside>

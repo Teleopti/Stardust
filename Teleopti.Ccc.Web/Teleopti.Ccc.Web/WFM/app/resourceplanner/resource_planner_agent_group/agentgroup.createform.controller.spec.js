@@ -114,7 +114,7 @@ describe('agentGroupFormController', function () {
 		expect($state.go).not.toHaveBeenCalledWith('resourceplanner.newoverview');
 	});
 
-	it('should create new agentgroup when submit data is valid', function () {
+	it('should create new agent group when submit data is valid', function () {
 		var vm = $controller('agentGroupFormController');
 		vm.searchString = "skill";
 		vm.inputFilterData();

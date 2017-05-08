@@ -15,7 +15,7 @@
 		var service = {
 			getAgentGroups: agentGroup.query,
 			saveAgentGroup: agentGroup.save,
-			getAgentGroupbyId: agentGroup.get,
+			getAgentGroupById: agentGroup.get,
 			getFilterData: filterResult.query,
 			removeAgentGroup: agentGroup.remove
 		};

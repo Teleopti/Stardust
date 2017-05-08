@@ -25,20 +25,20 @@
         vm.startNextPlanningPeriod = startNextPlanningPeriod;
         vm.getLastPp = getLastPp;
         vm.selectPp = selectPp;
-        vm.isEnddateChanged = isEnddateChanged;
+        vm.isEndDateChanged = isEndDateChanged;
         vm.changeEndDateForLastPp = changeEndDateForLastPp;
         vm.deleteLastPp = deleteLastPp;
-        vm.getSugesstionsForFirstPp = getSugesstionsForFirstPp;
+        vm.getSuggestionsForFirstPp = getSuggestionsForFirstPp;
         vm.selectSuggestion = selectSuggestion;
         vm.createFirstPp = createFirstPp;
         vm.resetSelectedSuggestion = resetSelectedSuggestion;
         vm.getPpInfo = getPpInfo;
         vm.isNonePp = isNonePp;
 
-        getAgentGroupbyId();
+        getAgentGroupById();
         getPlanningPeriod();
 
-        function getAgentGroupbyId() {
+        function getAgentGroupById() {
             if (agentGroupId !== null) {
                 var getAgentGroup = planningPeriodService.getAgentGroupById({ agentGroupId: agentGroupId });
                 return getAgentGroup.$promise.then(function (data) {
@@ -90,7 +90,7 @@
             });
         }
 
-        function isEnddateChanged() {
+        function isEndDateChanged() {
             if (vm.lastPp !== undefined && vm.originLastPp !== undefined) {
                 var origin = moment(vm.originLastPp.EndDate).toDate();
                 var diff = moment(origin).diff(vm.lastPp.endDate, 'days');
@@ -132,7 +132,7 @@
             });
         }
 
-        function getSugesstionsForFirstPp() {
+        function getSuggestionsForFirstPp() {
             vm.suggestions = [];
             var suggestionsForFirstPp = planningPeriodService.getPlanningPeriodSuggestions({ agentGroupId: agentGroupId });
             return suggestionsForFirstPp.$promise.then(function (data) {

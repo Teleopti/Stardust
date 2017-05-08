@@ -164,7 +164,7 @@
             return vm.name.length > 0 && vm.name.length <= 100;
         }
 
-        function isVaildUnit(item) {
+        function isValidUnit(item) {
             var check = true;
             vm.selectedResults.forEach(function (node) {
                 if (node.Id === item.Id) {
@@ -178,7 +178,7 @@
             if (item === null) {
                 return;
             }
-            if (isVaildUnit(item)) {
+            if (isValidUnit(item)) {
                 vm.selectedResults.push(item);
                 vm.clearInput();
             } else {
