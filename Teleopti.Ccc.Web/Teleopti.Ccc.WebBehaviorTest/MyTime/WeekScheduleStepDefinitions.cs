@@ -123,8 +123,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar\").height()",
 							  overtimeAvailability.Date.ToString("yyyy-MM-dd"));
 			var layerWidth =
-				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar\").width()",
-							  overtimeAvailability.Date.ToString("yyyy-MM-dd"));
+				string.Format(".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar[style*='width: 20%']",
+								overtimeAvailability.Date.ToString("yyyy-MM-dd"));
 			if (overtimeAvailability.Date.Day == 20)
 			{
 				Browser.Interactions.AssertJavascriptResultContains(layerTop,"111");
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				Browser.Interactions.AssertJavascriptResultContains(layerTop, "0");
 				Browser.Interactions.AssertJavascriptResultContains(layerHeight, "89");
 			}
-			Browser.Interactions.AssertJavascriptResultContains(layerWidth, "20");
+			Browser.Interactions.AssertExists(layerWidth); 
 		}
 
 		[Then(@"I should see activities on date '(.*)'")]
