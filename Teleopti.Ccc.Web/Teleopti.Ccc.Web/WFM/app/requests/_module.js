@@ -20,12 +20,11 @@
 		'wfm.ngEnter'
 	]).run(moduleRun);
 
-	moduleRun.$inject = ['$rootScope', 'organizationPickerSvc', 'FavoriteSearchDataService'];
-	function moduleRun($rootScope, organizationPickerSvc, FavoriteSearchDataService) {
+	moduleRun.$inject = ['$rootScope', 'FavoriteSearchDataService'];
+	function moduleRun($rootScope, FavoriteSearchDataService) {
 		$rootScope.$on('$stateChangeSuccess',
 			function (event, toState) {
 				if (toState.name === "requests") {
-					organizationPickerSvc.setModule("wfm.requests");
 					FavoriteSearchDataService.setModule("wfm.requests");
 				}
 			});

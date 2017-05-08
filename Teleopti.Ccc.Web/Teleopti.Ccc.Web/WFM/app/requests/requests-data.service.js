@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.requests').service('requestsDataService', ['$http', '$translate', 'requestsDefinitions', 'Toggle', requestsDataService]);
+	angular.module('wfm.requests').service('requestsDataService', ['$q', '$http', '$translate', 'requestsDefinitions', 'Toggle', requestsDataService]);
 
-	function requestsDataService($http, $translate, requestsDefinitions, toggleSvc) {
+	function requestsDataService($q, $http, $translate, requestsDefinitions, toggleSvc) {
 		var loadTextAndAbsenceRequestsUrl_old = '../api/Requests/loadTextAndAbsenceRequests';
 		var listRequestsUrl = '../api/Requests/requests';
 		var listShiftTradeRequestsUrl = '../api/Requests/shiftTradeRequests';
@@ -17,9 +17,10 @@
 		var getSitesUrl = '../api/sites';
 		var maintainOpenHoursUrl = '../api/Sites/MaintainOpenHours';
 		var getLastCaluclatedDateUrl = '../GetLastCaluclatedDateTime';
-		var resourceCalculateUrl = '../TriggerResourceCalculate';		
+		var resourceCalculateUrl = '../TriggerResourceCalculate';
 		var getBudgetGroupsUrl = "../api/RequestAllowance/budgetGroups";
 		var getBudgetAllowanceUrl = "../api/RequestAllowance/allowances";
+		var hierarchyUrl = '../api/Requests/FetchPermittedTeamHierachy';
 
 		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -141,6 +142,20 @@
 					Enabled: toggleSvc.Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274
 				}
 			];
-		};		
+		};
+
+		this.hierarchy = function (dateStr) {
+			if (!dateStr) {
+				return;
+			}
+			return $q(function (resolve, reject) {
+				$http.get(hierarchyUrl, {params: {date: dateStr}})
+					.then(function (response) {
+						resolve(response.data);
+					}, function (response) {
+						reject(response.data);
+					});
+			});
+		};
 	}
 })();

@@ -14,11 +14,11 @@
 			],
 			controller: organizationPickerCtrl,
 			bindings: {
-				date: '<',
 				preselectedTeamIds: '<?',
 				onOpen: '&',
 				onPick: '&',
-				onInitAsync: '<?'
+				onInitAsync: '<?',
+				asyncDatasource: '&',
 			}
 		});
 
@@ -26,9 +26,9 @@
 		return !('single' in attrs);
 	}
 
-	organizationPickerCtrl.$inject = ['$scope', '$translate', '$attrs', 'organizationPickerSvc'];
+	organizationPickerCtrl.$inject = ['$scope', '$translate', '$attrs'];
 
-	function organizationPickerCtrl($scope, $translate, $attrs, orgPickerSvc) {
+	function organizationPickerCtrl($scope, $translate, $attrs) {
 		var ctrl = this,
 			currentSite,
 			initialSelectedTeamIds = [],
@@ -39,14 +39,14 @@
 		ctrl.searchTerm = '';
 		ctrl.selectedTeamIds = [];
 
-		ctrl.$onInit = function init() {
-			orgPickerSvc.getAvailableHierarchy(moment(ctrl.date).format('YYYY-MM-DD'))
-				.then(function (resp) {
-					populateGroupList(resp.data.Children);
+		ctrl.$onInit = function () {
+			ctrl.asyncDatasource()
+				.then(function (data) {
+					populateGroupList(data.Children);
 					if (!ctrl.preselectedTeamIds || !ctrl.preselectedTeamIds.length) {
 						ctrl.preselectedTeamIds = [];
-						if (resp.data.LogonUserTeamId) {
-							ctrl.preselectedTeamIds.push(resp.data.LogonUserTeamId);
+						if (data.LogonUserTeamId) {
+							ctrl.preselectedTeamIds.push(data.LogonUserTeamId);
 						}
 					}
 					if (ctrl.preselectedTeamIds.length) {

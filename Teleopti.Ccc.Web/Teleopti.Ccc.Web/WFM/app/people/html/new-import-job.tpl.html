@@ -51,7 +51,7 @@
 						<tr>
 							<td>Organization</td>
 							<td>
-								<organization-picker date="$ctrl.now" on-pick="$ctrl.setTeam(teams)" single></organization-picker>
+								<organization-picker date="$ctrl.now" on-pick="$ctrl.setTeam(teams)" single async-datasource="$ctrl.parent.sitesAndTeams()"></organization-picker>
 							</td>
 						</tr>
 						<tr>

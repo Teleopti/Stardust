@@ -43,6 +43,11 @@
 			vm.defaultTeamLoadedDefer.resolve();
 		}
 
+		vm.sitesAndTeamsAsync = function () {
+			return (vm._sitesAndTeamsPromise ||
+				(vm._sitesAndTeamsPromise = requestsDataService.hierarchy(moment().format('YYYY-MM-DD'))));
+		};
+
 		$q.all([toggleService.togglesLoaded])
 			.then(FavoriteSearchSvc.hasPermission().then(function(response){
 				vm.hasFavoriteSearchPermission = response.data;

@@ -6,17 +6,6 @@
 
 		beforeEach(module('wfm.templates', 'wfm.organizationPicker', 'ngMaterial'));
 
-		beforeEach(function() {
-			var fakeOrgPickerSvc = new FakeOrgPickerSvc();
-
-			module(function($provide) {
-				$provide.service('organizationPickerSvc',
-					function() {
-						return fakeOrgPickerSvc;
-					});
-			});
-		});
-
 		beforeEach(inject(function(_$componentController_,
 			_$q_,
 			_$rootScope_,
@@ -29,50 +18,9 @@
 			$document = _$document_;
 		}));
 
-		function FakeOrgPickerSvc() {
-
-			this.getAvailableHierarchy = function() {
-				var data = {
-					Children: [
-						{
-							Id: 'site1',
-							Name: 'site1',
-							Children: [
-								{
-									Id: 'team1',
-									Name: 'team1'
-								}
-							]
-						},
-						{
-							Id: "site2",
-							Name: 'site2',
-							Children: [
-								{
-									Id: 'team2',
-									Name: 'team2'
-								},
-								{
-									Id: 'team3',
-									Name: 'team3'
-								}
-							]
-						}
-					],
-					logonUserTeamId: 'logonUserTeamId'
-				};
-				return {
-					then: function(cb) {
-						cb({ data: data });
-					}
-				}
-			}
-		}
-
-
 		it('should populate hierachy list', function () {
 			var bindings = {
-				date: new Date('2015-09-01'),
+				asyncDatasource: fakeDatasource,
 				onOpen: function () { },
 				onPick: angular.noop
 			};
@@ -89,7 +37,7 @@
 
 		it('should extract the right abbreviation of the selected time zone', function () {
 			var bindings = {
-				date: new Date('2015-09-01'),
+				asyncDatasource: fakeDatasource,
 				onOpen: function() {},
 				onPick: angular.noop
 			}
@@ -111,7 +59,7 @@
 			function() {
 				var selectedTeams = [];
 				var bindings = {
-					date: new Date('2015-09-01'),
+					asyncDatasource: fakeDatasource,
 					onOpen: function() {},
 					onPick: function(input) {
 						selectedTeams = input.teams;
@@ -131,7 +79,7 @@
 			function() {
 				var selectedTeams = [];
 				var bindings = {
-					date: new Date('2015-09-01'),
+					asyncDatasource: fakeDatasource,
 					onOpen: function() {},
 					onPick: function(input) {
 						selectedTeams = input.teams;
@@ -151,7 +99,8 @@
 			function() {
 				var scope = $rootScope.$new();
 				var selectedTeams = [];
-				var html = angular.element('<organization-picker on-pick=selectTeams(teams) single></organization-picker>');
+				var html = angular.element('<organization-picker async-datasource="datasource()" on-pick="selectTeams(teams)" single></organization-picker>');
+				scope.datasource = fakeDatasource;
 				scope.selectTeams = function(teams) {
 					selectedTeams = teams;
 				}
@@ -186,5 +135,41 @@
 				expect(selectedTeams).toEqual(angular.element(opt2).text());
 
 			});
+
+		var data = {
+			Children: [
+				{
+					Id: 'site1',
+					Name: 'site1',
+					Children: [
+						{
+							Id: 'team1',
+							Name: 'team1'
+						}
+					]
+				},
+				{
+					Id: "site2",
+					Name: 'site2',
+					Children: [
+						{
+							Id: 'team2',
+							Name: 'team2'
+						},
+						{
+							Id: 'team3',
+							Name: 'team3'
+						}
+					]
+				}
+			],
+			logonUserTeamId: 'logonUserTeamId'
+		};
+
+		function fakeDatasource() {
+			return {
+				then: function (f) { f(data); },
+			};
+		}
 
 	});

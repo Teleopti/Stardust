@@ -1,12 +1,14 @@
 (function (angular) {
 	'use strict';
 
-	function ImportAgentsService($http) {
+	function ImportAgentsService($q, $http) {
+		this._q = $q;
 		this._http = $http;
 	}
 
 	ImportAgentsService.prototype.optionsUrl = '../api/People/GetImportAgentSettingsData';
 	ImportAgentsService.prototype.jobsUrl = '../api/People/AgentJobList';
+	ImportAgentsService.prototype.hierarchyUrl = '../api/TeamScheduleData/FetchPermittedTeamHierachy';
 
 	ImportAgentsService.prototype.fetchOptions = function () {
 		return this._http.get(this.optionsUrl)
@@ -22,6 +24,21 @@
 			});
 	};
 
+	ImportAgentsService.prototype.fetchHierarchy = function (dateStr) {
+		if (!dateStr) {
+			return;
+		}
+		var self = this;
+		return self._q(function (resolve, reject) {
+			self._http.get(self.hierarchyUrl, {params: {date: dateStr}})
+				.then(function (response) {
+					resolve(response.data);
+				}, function (response) {
+					reject(response.data);
+				});
+		});
+	};
+
 	angular.module('wfm.people')
-		.service('importAgentsService', ['$http', ImportAgentsService]);
+		.service('importAgentsService', ['$q', '$http', ImportAgentsService]);
 })(angular);

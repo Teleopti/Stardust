@@ -1,5 +1,5 @@
-﻿'use strict';
-(function() {
+﻿(function() {
+	'use strict';
 	var myteam = angular.module('wfm.teamSchedule', [
 			'currentUserInfoService',
 			'wfm.pagination',
@@ -18,7 +18,7 @@
 			'wfm.focusInput'
 		])
 	.config(['$mdThemingProvider', teamScheduleConfig])
-		.run(['$rootScope', '$state', '$location', 'organizationPickerSvc', 'FavoriteSearchDataService', teamScheduleRun]);;
+		.run(['$rootScope', '$state', '$location', 'FavoriteSearchDataService', teamScheduleRun]);
 
 	function teamScheduleConfig($mdThemingProvider) {
 		var teleoptiStyleguideWarnMap = $mdThemingProvider.extendPalette('orange', {
@@ -40,13 +40,12 @@
 			});
 	}
 
-	function teamScheduleRun($rootScope, $state, $location, organizationPickerSvc, FavoriteSearchDataService) {
+	function teamScheduleRun($rootScope, $state, $location, FavoriteSearchDataService) {
 		$rootScope.$on('$stateChangeSuccess',
 			function (event, toState) {
 				if (!toState) return;
 				if ($location.url() == $state.current.url && toState.name == 'teams') $state.go('teams.dayView');
 				if (toState.name.indexOf("teams.") === 0) {
-					organizationPickerSvc.setModule("wfm.teamSchedule");
 					FavoriteSearchDataService.setModule("wfm.teamSchedule");
 				}
 			});

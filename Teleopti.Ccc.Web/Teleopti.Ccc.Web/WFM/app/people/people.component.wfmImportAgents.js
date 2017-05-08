@@ -110,6 +110,11 @@
 		saveAs(blob, filename);
 	};
 
+	WfmImportAgentsCtrl.prototype.sitesAndTeams = function () {
+		return (this._sitesAndTeamsPromise ||
+			(this._sitesAndTeamsPromise = this._svc.fetchHierarchy(moment().format('YYYY-MM-DD'))));
+	};
+
 	angular.module('wfm.people')
 		.component('wfmImportAgents',
 		{

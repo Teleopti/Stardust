@@ -19,12 +19,12 @@
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
 			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && vm.searchEnabled"
-								 date="vm.scheduleDate"
-								 class="organization-picker-container inline-block"
-								 on-open="vm.searchOptions.focusingSearch = false"
-								 on-init-async="vm.onSelectedTeamsInitDefer"
-								 on-pick="vm.onSelectedTeamsChanged(teams)"
-								 preselected-team-ids="vm.selectedTeamIds"></organization-picker>
+				async-datasource="vm.sitesAndTeamsAsync()"
+				class="organization-picker-container inline-block"
+				on-open="vm.searchOptions.focusingSearch = false"
+				on-init-async="vm.onSelectedTeamsInitDefer"
+				on-pick="vm.onSelectedTeamsChanged(teams)"
+				preselected-team-ids="vm.selectedTeamIds"></organization-picker>
 
 			<div class="people-search-container inline-block"
 			     ng-if="vm.searchEnabled"

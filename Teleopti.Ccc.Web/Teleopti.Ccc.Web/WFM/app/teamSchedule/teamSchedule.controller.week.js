@@ -125,6 +125,11 @@
 			vm.onSelectedTeamsInitDefer.resolve();
 		}
 
+		vm.sitesAndTeamsAsync = function () {
+			return (vm._sitesAndTeamsPromise ||
+				(vm._sitesAndTeamsPromise = teamScheduleSvc.hierarchy(moment(vm.scheduleDate).format('YYYY-MM-DD'))));
+		};
+
 		$q.all(asyncData).then(function init(data) {
 			if (data.pageSetting.Agents > 0) {
 				vm.paginationOptions.pageSize = data.pageSetting.Agents;

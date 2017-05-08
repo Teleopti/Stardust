@@ -8,6 +8,7 @@
 
 		var service = this;	
 		var searchDayViewScheduleUrl = '../api/TeamSchedule/SearchSchedules';
+		var hierarchyUrl = '../api/TeamScheduleData/FetchPermittedTeamHierachy';
 
 		service.searchSchedules = searchSchedule;
 
@@ -74,6 +75,18 @@
 			return service.getPermissions.query().$promise;
 		};
 
-		
+		service.hierarchy = function (dateStr) {
+			if (!dateStr) {
+				return;
+			}
+			return $q(function (resolve, reject) {
+				$http.get(hierarchyUrl, {params: {date: dateStr}})
+					.then(function (response) {
+						resolve(response.data);
+					}, function (response) {
+						reject(response.data);
+					});
+			});
+		};
 	}
 })();
