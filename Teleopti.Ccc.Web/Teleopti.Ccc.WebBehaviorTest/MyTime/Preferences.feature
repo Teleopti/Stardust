@@ -69,6 +69,7 @@ Scenario: No access to preferences page
 	And I navigate to the preferences page
 	Then I should see an error message
 
+@ignore
 Scenario: Navigate next virtual schedule period
 	Given I am an agent
 	And I have several virtual schedule periods
@@ -76,6 +77,7 @@ Scenario: Navigate next virtual schedule period
 	When I click next virtual schedule period button
 	Then I should see the virtual schedule period from '2001-01-15' to '2001-01-28'
 
+@ignore
 Scenario: Navigate previous virtual schedule period
 	Given I am an agent
 	And I have several virtual schedule periods
