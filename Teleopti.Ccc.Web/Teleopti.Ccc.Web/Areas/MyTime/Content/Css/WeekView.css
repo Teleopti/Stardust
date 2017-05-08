@@ -108,6 +108,7 @@
 
 .probability-vertical-bar {
 	position: relative;
+	right: 2px;
 	display: inline-block;
 	width: 10px;
 	height: 668px;
