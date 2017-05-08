@@ -28,9 +28,10 @@
     vm.isDisableDo = true;
     vm.launchSchedule = launchSchedule;
     vm.intraOptimize = intraOptimize;
-	vm.publishSchedule = publishSchedule;
-	vm.clearSchedules = clearSchedules;
+    vm.publishSchedule = publishSchedule;
+    vm.clearSchedules = clearSchedules;
     vm.isDisable = isDisable;
+    vm.openmModal = openmModal;
     vm.valData = {
       totalValNum: 0,
       totalPreValNum: 0,
@@ -104,11 +105,15 @@
       }
     }
 
-	function clearSchedules(pp) {
-		planningPeriodService.clearSchedules({ id: pp.Id }).$promise.then(function () {
-			init();
-		});
-	}
+    function openmModal() {
+      return vm.confirmModal = true;
+    }
+
+    function clearSchedules(pp) {
+      planningPeriodService.clearSchedules({ id: pp.Id }).$promise.then(function () {
+        init();
+      });
+    }
 
     function launchSchedule(pp) {
       planningPeriodService.launchScheduling({ id: pp.Id, runAsynchronously: true }).$promise.then(function () {
