@@ -12,9 +12,6 @@ namespace Teleopti.Ccc.Domain.Reports
 {
 	public class ReportNavigationModel : IReportNavigationModel
 	{
-
-		private IEnumerable<IMatrixFunctionGroup> _matrixFunctionGroups;
-
 		public IEnumerable<IApplicationFunction> PermittedReportFunctions
 		{
 			get
@@ -44,11 +41,10 @@ namespace Teleopti.Ccc.Domain.Reports
 		{
 			get
 			{
-				if (_matrixFunctionGroups == null)
-				{
-					_matrixFunctionGroups =
-						new List<IMatrixFunctionGroup>
-						{
+
+				IEnumerable<IMatrixFunctionGroup> matrixFunctionGroups =
+					new List<IMatrixFunctionGroup>
+					{
 							new MatrixFunctionGroup
 							{
 								LocalizedDescription = Resources.ScheduleAnalysis,
@@ -105,10 +101,10 @@ namespace Teleopti.Ccc.Domain.Reports
 									where new[] {"7F918C26-4044-4F6B-B0AE-7D27625D052E"}.Contains(a.ForeignId.ToUpper())
 									select a
 							}
-						};
-					_matrixFunctionGroups = from g in _matrixFunctionGroups where g.ApplicationFunctions.Any() select g;
-				}
-				return _matrixFunctionGroups;
+					};
+				matrixFunctionGroups = from g in matrixFunctionGroups where g.ApplicationFunctions.Any() select g;
+
+				return matrixFunctionGroups;
 			}
 		}
 
@@ -118,11 +114,11 @@ namespace Teleopti.Ccc.Domain.Reports
 			{
 				var groupedMatrixFunctionForeignIds =
 				(from g in PermittedCategorizedReportFunctions
-					from f in g.ApplicationFunctions
-					select f.ForeignId).ToList();
+				 from f in g.ApplicationFunctions
+				 select f.ForeignId).ToList();
 				return from f in PermittedReportFunctions
-					where groupedMatrixFunctionForeignIds.Contains(f.ForeignId) == false
-					select f;
+					   where groupedMatrixFunctionForeignIds.Contains(f.ForeignId) == false
+					   select f;
 			}
 		}
 

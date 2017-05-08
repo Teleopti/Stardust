@@ -92,6 +92,50 @@ namespace Teleopti.Ccc.DomainTest.Reports
 		}
 
 		[Test]
+		public void ShouldNotStoreReportFunctions()
+		{
+			var authorization = _mocks.StrictMock<IAuthorization>();
+			var reportFunctions = new List<IApplicationFunction>
+			{
+				new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54", ForeignSource = DefinedForeignSourceNames.SourceMatrix},
+			};
+
+			using (_mocks.Record())
+			{
+				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(reportFunctions).Repeat.AtLeastOnce();
+			}
+			using (_mocks.Playback())
+			{
+				using (CurrentAuthorization.ThreadlyUse(authorization))
+				{
+					IEnumerable<IMatrixFunctionGroup> actualReportFunctionGroups = _target.PermittedCategorizedReportFunctions.ToList();
+
+					Assert.That(actualReportFunctionGroups.Count(), Is.EqualTo(1));
+				}
+			}
+
+			_mocks.VerifyAll();
+			_mocks.BackToRecordAll();
+			reportFunctions.Add(new ApplicationFunction() { ForeignId = "009BCDD2-3561-4B59-A719-142CD9216727", ForeignSource = DefinedForeignSourceNames.SourceMatrix });
+
+			using (_mocks.Record())
+			{
+				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(reportFunctions).Repeat.AtLeastOnce();
+			}
+			using (_mocks.Playback())
+			{
+				using (CurrentAuthorization.ThreadlyUse(authorization))
+				{
+					IEnumerable<IMatrixFunctionGroup> actualReportFunctionGroups = _target.PermittedCategorizedReportFunctions.ToList();
+
+					Assert.That(actualReportFunctionGroups.Count(), Is.EqualTo(2));
+				}
+			}
+
+
+		}
+
+		[Test]
 		public void ShouldProvidePermittedCustomReportFunctions()
 		{
 
