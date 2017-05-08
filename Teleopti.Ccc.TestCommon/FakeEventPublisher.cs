@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon
 			if (_handlerTypes.IsEmpty())
 				return;
 
-			if (PublishedEvents.Count() > 100)
+			if (PublishedEvents.Count() > 1000)
 				throw new Exception("Looks like a circular/recursive event chain?");
 
 			var tenant = _dataSource.CurrentName();
