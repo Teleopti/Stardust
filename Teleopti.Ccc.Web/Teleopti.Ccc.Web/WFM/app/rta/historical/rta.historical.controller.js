@@ -87,16 +87,16 @@
                 var earliestStartTime = earliest(schedule);
                 var latestEndTime = latest(schedule);
                 var start = earliestStartTime.clone();
-                start.startOf('hour');
+                start.startOf('minute');
                 var end = latestEndTime.clone();
-                end.endOf('hour');
+                end.endOf('minute');
 
                 result.start = start;
                 result.end = end;
                 result.totalSeconds = latestEndTime.diff(earliestStartTime, 'seconds');
             }
 
-            result.timeWindowSeconds = result.totalSeconds + 7200;
+            result.timeWindowSeconds = result.totalSeconds % 3600 == 0 ?  result.totalSeconds + 7200 : result.totalSeconds + (3600-(result.totalSeconds % 3600)) + 7200;
             result.timeWindowStart = result.start.clone().add(-1, 'hour');
 
             return result;
@@ -178,7 +178,7 @@
         var timeline = [];
         var currentMoment = moment(times.StartTime);
         var endTime = moment(times.EndTime);
-        var totalHours = endTime.diff(currentMoment, 'hours');
+        var totalHours = (endTime.diff(currentMoment, 'minutes') % 60 == 0) ? endTime.diff(currentMoment, 'hours') : endTime.diff(currentMoment, 'hours') + 1;
         var hourPercent = 100 / totalHours;
 
         for (var i = 1; i < totalHours; i++) {

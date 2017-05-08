@@ -118,10 +118,10 @@ describe('RtaHistoricalController', function() {
 
         var vm = $controllerBuilder.createController().vm;
 
-        expect(vm.agentsFullSchedule[0].Width).toEqual(4.5 / 12.5 * 100 + '%');
-        expect(vm.agentsFullSchedule[0].Offset).toEqual(1 / 12.5 * 100 + '%');
-        expect(vm.agentsFullSchedule[1].Width).toEqual(6 / 12.5 * 100 + '%');
-        expect(vm.agentsFullSchedule[1].Offset).toEqual(5.5 / 12.5 * 100 + '%');
+        expect(vm.agentsFullSchedule[0].Width).toEqual(4.5 / 13 * 100 + '%');
+        expect(vm.agentsFullSchedule[0].Offset).toEqual(1 / 13 * 100 + '%');
+        expect(vm.agentsFullSchedule[1].Width).toEqual(6 / 13 * 100 + '%');
+        expect(vm.agentsFullSchedule[1].Offset).toEqual(5.5 / 13 * 100 + '%');
     });
 
     it('should display out of adherence', function() {
