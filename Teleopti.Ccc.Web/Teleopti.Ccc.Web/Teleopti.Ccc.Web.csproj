@@ -776,10 +776,12 @@
     <Compile Include="Areas\TeamSchedule\Models\RemoveActivityFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\SearchDaySchedulesFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\SearchWeekSchedulesFormData.cs" />
+    <Compile Include="Core\AppVersionTelemetryInitializer.cs" />
     <Compile Include="Core\Data\IMultiplicatorDefinitionSetProvider.cs" />
     <Compile Include="Core\Data\IShiftCategoryProvider.cs" />
     <Compile Include="Core\Data\MultiplicatorDefinitionSetProvider.cs" />
     <Compile Include="Core\Data\ShiftCategoryProvider.cs" />
+    <Compile Include="Core\DeployedHostTelemetryInitializer.cs" />
     <Compile Include="Core\Extensions\DateTimeFormatExtensions.cs" />
     <Compile Include="Core\Startup\CsrfFilter.cs" />
     <Compile Include="Core\Startup\InitializeApplication\PublishStartupJobsTask.cs" />

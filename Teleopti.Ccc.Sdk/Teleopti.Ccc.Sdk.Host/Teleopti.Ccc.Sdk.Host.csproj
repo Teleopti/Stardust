@@ -202,7 +202,9 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppVersionTelemetryInitializer.cs" />
     <Compile Include="AutofacServiceBus.cs" />
+    <Compile Include="DeployedHostTelemetryInitializer.cs" />
     <Compile Include="GetPayrollResultById.aspx.cs">
       <DependentUpon>GetPayrollResultById.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
