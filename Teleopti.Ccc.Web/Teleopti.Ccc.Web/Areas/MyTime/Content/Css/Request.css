@@ -679,9 +679,26 @@ input[type=search]::-ms-clear {
 	margin: 0 !important;
 }
 
+.posting-mask {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: grey;
+	opacity: 0.8;
+	z-index: 100;
+}
+
+	.posting-mask img {
+		position: absolute;
+		top: calc(50% - 16px);
+		left: calc(50% - 16px);
+	}
+
 /*Mobile tweaks*/
-    @media only screen and (max-width : 736px) {
-		.requests-wrapper .navbar-teleopti{
+@media only screen and (max-width : 736px) {
+	.requests-wrapper .navbar-teleopti{
 			background: transparent;
 			border: none;
 		}
