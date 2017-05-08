@@ -12,8 +12,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
-#pragma warning disable 618
-
 	[TestFixture]
 	[DomainTest]
 	public class EventHandlersModuleTest
@@ -48,6 +46,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				});
 		}
 
+#pragma warning disable 618
 		[Test]
 		[AllTogglesOn]
 		public void ShouldHaveNoHandlersOnBusWithoutLogOnContextTogglesEnabled()
@@ -67,6 +66,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			Resolver.JobsFor<IRunOnServiceBus>(eventsWithoutLogOnContext)
 				.Should().Be.Empty();
 		}
+#pragma warning restore 618
 
 		private static IEnumerable<IEvent> oneOfEachEvent()
 		{
@@ -79,6 +79,5 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			return events;
 		}
 	}
-#pragma warning restore 618
 
 }

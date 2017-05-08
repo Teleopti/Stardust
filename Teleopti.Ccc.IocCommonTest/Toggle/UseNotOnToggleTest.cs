@@ -8,7 +8,7 @@ using Teleopti.Ccc.IocCommon.Toggle;
 namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	[TestFixture]
-	class UseNotOnToggleTest
+	public class UseNotOnToggleTest
 	{
 
 		[Test]
