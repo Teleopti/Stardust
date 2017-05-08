@@ -8,15 +8,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	[EnabledBy(Toggles.RTA_NoHangfireExperiment_43924)]
-	public class HistoricalAdherenceUpdaterInSync : HistoricalAdherenceUpdaterImpl, IRunInSync
-	{
-		public HistoricalAdherenceUpdaterInSync(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister, INow now) : base(adherencePersister, historicalChangePersister, now)
-		{
-		}
-	}
-
-	[DisabledBy(Toggles.RTA_NoHangfireExperiment_43924)]
 	public class HistoricalAdherenceUpdater : HistoricalAdherenceUpdaterImpl, IRunOnHangfire
 	{
 		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister adherencePersister,

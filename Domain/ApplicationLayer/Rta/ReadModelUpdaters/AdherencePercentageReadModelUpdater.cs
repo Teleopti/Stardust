@@ -9,15 +9,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	[EnabledBy(Toggles.RTA_NoHangfireExperiment_43924)]
-	public class AdherencePercentageReadModelUpdaterInSync : AdherencePercentageReadModelUpdaterImpl, IRunInSync
-	{
-		public AdherencePercentageReadModelUpdaterInSync(IAdherencePercentageReadModelPersister persister) : base(persister)
-		{
-		}
-	}
-
-	[DisabledBy(Toggles.RTA_NoHangfireExperiment_43924)]
 	public class AdherencePercentageReadModelUpdater : AdherencePercentageReadModelUpdaterImpl, IRunOnHangfire
 	{
 		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister) : base(persister)
