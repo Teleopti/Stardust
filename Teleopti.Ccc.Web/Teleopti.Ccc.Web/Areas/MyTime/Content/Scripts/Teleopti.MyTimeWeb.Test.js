@@ -29,8 +29,7 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 	    var messages = "";
 	    _displayEnable();
 		for (var i = 0; i < _messages.length; i++) {
-		    var message = _messages[i];
-		    messages = messages + message;
+			messages = messages + _messages[i];
 		}
 		return messages;
 	}
@@ -39,8 +38,7 @@ Teleopti.MyTimeWeb.Test = (function ($) {
         if (!_displayEnabled) {
             _displayEnabled = true;
             for (var i = 0; i < _messages.length; i++) {
-                var message = _messages[i];
-                _displayMessage(message);
+				_displayMessage(_messages[i]);
             }
         }
     }

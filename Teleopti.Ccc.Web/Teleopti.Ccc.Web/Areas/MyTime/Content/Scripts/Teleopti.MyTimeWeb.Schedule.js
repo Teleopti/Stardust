@@ -669,11 +669,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxObj) {
+			Teleopti.MyTimeWeb.Test.TestMessage("1partialinit");
 			readyForInteractionCallback();
 			completelyLoaded = completelyLoadedCallback;
 			if (ajaxObj != undefined) {
 				ajax = ajaxObj;
 			}
+			Teleopti.MyTimeWeb.Test.TestMessage("2partialinit");
 		},
 		SetupViewModel: function (defaultDateTimes, callback) {
 			Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {

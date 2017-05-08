@@ -33,8 +33,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _registerPartialCallback(viewId, callBack, disposeCallback) {
-		_partialViewInitCallback[viewId.toUpperCase()] = callBack;
-		_partialViewDisposeCallback[viewId.toUpperCase()] = disposeCallback;
+		var view = viewId.toUpperCase();
+		_partialViewInitCallback[view] = callBack;
+		_partialViewDisposeCallback[view] = disposeCallback;
 	}
 
 	//disable navigation controls on ajax-begin
@@ -77,10 +78,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			;
 
 		if (awindow.location.hash.length <= 1) {
-			if (_showDayScheduleForStartPage() && _isMobile(awindow)) {
+			var isMobile = _isMobile(awindow);
+			if (_showDayScheduleForStartPage() && isMobile) {
 				awindow.location.replace("#Schedule/MobileDay");
 			} else {
-				awindow.location.replace("#" + (_isMobile(awindow) ? "Schedule/MobileWeek" : _settings.defaultNavigation));
+				awindow.location.replace("#" + (isMobile ? "Schedule/MobileWeek" : _settings.defaultNavigation));
 			}
 		}
 
