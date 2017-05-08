@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -16,7 +15,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
@@ -32,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public ConcurrencyRunner Run;
 		public ICurrentDataSource DataSource;
-		public ConfigurableSyncEventPublisher Publisher;
+		public FakeEventPublisher Publisher;
 		public IKeyValueStorePersister KeyValues;
 		public WithReadModelUnitOfWork WithReadModelUnitOfWork;
 		public WithUnitOfWork UnitOfWork;
@@ -43,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<RetryingQueueSimulator>();
-			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		private void setup()

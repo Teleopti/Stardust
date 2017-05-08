@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
 	public class PerformanceMeasurementTestAttribute : InfrastructureTestAttribute
 	{
-		public ConfigurableSyncEventPublisher Publisher;
+		public FakeEventPublisher Publisher;
 		public AnalyticsDatabase Analytics;
 		public WithUnitOfWork Uow;
 		public IPersonRepository Persons;

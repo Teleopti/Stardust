@@ -92,7 +92,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		private jobInfo buildJobInfo(Type handler, Type handleMethodArgumentType, IEvent @event, IEnumerable<IEvent> package)
 		{
-			var handleMethod = HandleMethodFor(handler, handleMethodArgumentType);
+			var handleMethod = handler
+				.GetMethods()
+				.FirstOrDefault(m =>
+					m.Name == "Handle" &&
+					m.GetParameters().Single().ParameterType == handleMethodArgumentType
+				);
 			var attemptsAttribute = getAttemptsAttribute(handleMethod);
 			var allowFailuresAttribute = getAllowFailuresAttribute(handleMethod);
 
@@ -135,17 +140,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				.Cast<AllowFailuresAttribute>()
 				.SingleOrDefault();
 		}
-
-		public MethodInfo HandleMethodFor(Type handler, Type argumentType)
-		{
-			return handler
-				.GetMethods()
-				.FirstOrDefault(m =>
-					m.Name == "Handle" &&
-					m.GetParameters().Single().ParameterType == argumentType
-				);
-		}
-
+		
 		private class jobInfo : IJobInfo
 		{
 			public Type HandlerType { get; set; }

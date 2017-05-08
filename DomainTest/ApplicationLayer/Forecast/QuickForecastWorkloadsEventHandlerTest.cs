@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private IMultisiteDayRepository _multisiteDayRep;
 		private IRepository<IMultisiteSkill> _skillRep;
 		private IValidatedVolumeDayRepository _validatedVolumeDayRepo;
-		private FakeEventPublisher _eventPublisher;
+		private LegacyFakeEventPublisher _eventPublisher;
 		private ICurrentUnitOfWork _currentUnitOfWork;
 
 		[SetUp]
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_forecastClassesCreator = MockRepository.GenerateMock<IForecastClassesCreator>();
 			_statisticHelper = MockRepository.GenerateMock<IStatisticHelper>();
 			_validatedVolumeDayRepo = MockRepository.GenerateMock<IValidatedVolumeDayRepository>();
-			_eventPublisher = new FakeEventPublisher();
+			_eventPublisher = new LegacyFakeEventPublisher();
 			_currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 
 			_target = new QuickForecastWorkloadsEventHandlerBase(_workloadRep, _multisiteDayRep, _outlierRep, _skillDayRep, _scenarioRep, _jobResultRep, _jobResultFeedback,

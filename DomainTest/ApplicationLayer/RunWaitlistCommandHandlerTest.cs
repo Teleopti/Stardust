@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			((FakeCurrentBusinessUnit) currentCurrentBusinessUnit)
 				.FakeBusinessUnit(new Domain.Common.BusinessUnit("TestBu"));
 			currentDataSource = new FakeCurrentDatasource("TestDataSource");
-			publisher = new FakeEventPublisher();
+			publisher = new LegacyFakeEventPublisher();
 			target = new RunWaitlistCommandHandler(currentCurrentBusinessUnit,
 				currentDataSource, publisher);
 		}
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 
 			target.Handle(command);
-			var @event = ((FakeEventPublisher) publisher).PublishedEvents.Single() as RunRequestWaitlistEvent;
+			var @event = ((LegacyFakeEventPublisher) publisher).PublishedEvents.Single() as RunRequestWaitlistEvent;
 			Assert.NotNull(@event);
 			Assert.AreEqual(@event.StartTime, period.StartDateTime);
 			Assert.AreEqual(@event.EndTime, period.EndDateTime);

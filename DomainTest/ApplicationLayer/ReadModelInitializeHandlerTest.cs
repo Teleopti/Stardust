@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 		private IPersonScheduleDayReadModelPersister _personScheduleDayReadModelRepository;
 		private ICurrentScenario _currentScenario;
-		private FakeEventPublisher _eventPublisher;
+		private LegacyFakeEventPublisher _eventPublisher;
 		private IDistributedLockAcquirer _distributedLockAquirer;
 
 		[SetUp]
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_scheduleDayReadModelRepository = MockRepository.GenerateMock<IScheduleDayReadModelRepository>();
 			_personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();
 			_currentScenario = new FakeCurrentScenario();
-			_eventPublisher = new FakeEventPublisher();
+			_eventPublisher = new LegacyFakeEventPublisher();
 			_distributedLockAquirer = new FakeDistributedLockAcquirer();
 
 			target = new ReadModelInitializeHandler(_personRepository, _scheduleProjectionReadOnlyPersister, _scheduleDayReadModelRepository, _personScheduleDayReadModelRepository, _currentScenario, _eventPublisher, _distributedLockAquirer);

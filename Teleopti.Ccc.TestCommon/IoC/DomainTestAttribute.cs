@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -45,6 +44,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	[Toggle(Domain.FeatureFlags.Toggles.Wfm_Requests_Check_Expired_Requests_40274)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
+		public static string DefaultTenantName = "default";
+
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			//TODO: move this to common
@@ -59,7 +60,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
-			system.UseTestDouble<FakeTenants>()
+			var tenants = new FakeTenants();
+			tenants.Has(DefaultTenantName, LegacyAuthenticationKey.TheKey);
+			system.UseTestDouble(tenants)
 				.For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
 			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 			system.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
@@ -230,7 +233,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				person.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
 				person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
 				var loggedOnBu = new BusinessUnit("loggedOnBu").WithId();
-				var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", new FakeDataSource("Fake DataSource"), loggedOnBu, null, null), person);
+				var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", new FakeDataSource(DefaultTenantName), loggedOnBu, null, null), person);
 				context.SetCurrentPrincipal(principal);
 			}
 

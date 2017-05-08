@@ -27,11 +27,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IPersonRepository Persons;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public IAgentStateReadModelLegacyReader ReadModels;
-		public ConfigurableSyncEventPublisher Publisher;
+		public FakeEventPublisher Publisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]

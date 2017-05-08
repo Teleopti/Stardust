@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 
 			Target.PublishRecurringJobs();
 
-			Publisher.Publishings.Select(x => x.Tenant).Should().Have.SameValuesAs("tenant");
+			Publisher.Publishings.Select(x => x.Tenant).Should().Contain("tenant");
 		}
 
 		[Test]
@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 
 			Target.PublishRecurringJobs();
 
-			Publisher.Tenants.Should().Have.SameValuesAs(tenant1, tenant2);
+			Publisher.Tenants.Should().Contain(tenant1);
+			Publisher.Tenants.Should().Contain(tenant2);
 		}
 
 		[Test]

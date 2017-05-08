@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		public Database Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public FakeConfigReader Config;
-		public ConfigurableSyncEventPublisher Publisher;
+		public FakeEventPublisher Publisher;
 		public AgentStateMaintainer Maintainer;
 		public MutableNow Now;
 		public AnalyticsDatabase Analytics;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		private void createData()

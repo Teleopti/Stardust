@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonRequestIdList = personRequestIdList
 			};
-			var publisher = new FakeEventPublisher();
+			var publisher = new LegacyFakeEventPublisher();
 			var target = new ApproveBatchRequestsCommandHandler(publisher);
 
 			target.Handle(command);

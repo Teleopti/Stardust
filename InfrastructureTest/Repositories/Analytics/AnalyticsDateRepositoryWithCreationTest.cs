@@ -27,13 +27,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	{
 		public IAnalyticsDateRepository Target;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
-		private FakeEventPublisher _fakeEventPublisher;
-
+		public FakeEventPublisher FakeEventPublisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_fakeEventPublisher = new FakeEventPublisher();
-			system.UseTestDouble(_fakeEventPublisher).For<IEventPublisher>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[SetUp]
@@ -52,8 +50,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
 			date.DateId.Should().Be.GreaterThan(0);
 
-			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
-			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
+			FakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
+			FakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
 		}
 
 		[TestLog]
@@ -64,8 +62,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
 			date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
 
-			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
-			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
+			FakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
+			FakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -81,8 +79,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
 			date.DateId.Should().Be.GreaterThan(0);
 
-			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
-			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
+			FakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
+			FakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -126,8 +124,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			await Task.WhenAll(tasks.ToArray());
 
-			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
-			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
+			FakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
+			FakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -135,13 +133,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			var targetDate = new DateTime(2000, 01, 05);
 			var createdDate = WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
-			_fakeEventPublisher.Clear();
+			FakeEventPublisher.Clear();
 
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.MaxDate());
 			date.DateDate.Date.Should().Be.EqualTo(targetDate + TimeSpan.FromDays(42));
 			date.DateId.Should().Be.EqualTo(createdDate.DateId + 42);
 
-			_fakeEventPublisher.PublishedEvents.Should().Be.Empty();
+			FakeEventPublisher.PublishedEvents.Should().Be.Empty();
 		}
 
 		[Test]
@@ -149,13 +147,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			var targetDate = new DateTime(2000, 01, 05);
 			WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
-			_fakeEventPublisher.Clear();
+			FakeEventPublisher.Clear();
 
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.MinDate());
 			date.DateDate.Should().Be.EqualTo(new DateTime(1999, 12, 31));
 			date.DateId.Should().Be.GreaterThan(0);
 
-			_fakeEventPublisher.PublishedEvents.Should().Be.Empty();
+			FakeEventPublisher.PublishedEvents.Should().Be.Empty();
 		}
 	}
 }

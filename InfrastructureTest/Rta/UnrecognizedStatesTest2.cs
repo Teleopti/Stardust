@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public Database Database;
 		public AnalyticsDatabase Analytics;
-		public ConfigurableSyncEventPublisher Publisher;
+		public FakeEventPublisher Publisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			system.AddService<TheServiceImpl>();
 		}
 		

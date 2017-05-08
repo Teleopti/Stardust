@@ -24,6 +24,7 @@ using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
@@ -361,7 +362,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private RtaRule _rule;
 		private Meeting _meeting;
 
-		public static string DefaultTenantName = "default";
+		public static string DefaultTenantName => DomainTestAttribute.DefaultTenantName;
 		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
 
 		public FakeDatabase(
@@ -464,7 +465,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				CultureInfoFactory.CreateEnglishCulture(), null);
 			_person.PermissionInformation.AddApplicationRole(role);
 
-			WithTenant(DefaultTenantName, LegacyAuthenticationKey.TheKey);
 			WithBusinessUnit(DefaultBusinessUnitId);
 
 			WithScenario(null, true);

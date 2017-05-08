@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -26,14 +24,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 	public class RtaTestLoggedOnAttribute : DomainTestAttribute
 	{
-		public FakeEventPublisher_ExperimentalEventPublishing Publisher;
+		public FakeEventPublisher Publisher;
 		public MutableNow_ExperimentalEventPublishing Now;
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
 
-			system.UseTestDouble<FakeEventPublisher_ExperimentalEventPublishing>().For<FakeEventPublisher, IEventPublisher>();
 			system.UseTestDouble<MutableNow_ExperimentalEventPublishing>().For<MutableNow, INow>();
 			system.UseTestDouble<FakeUnitOfWorkAspect_ExperimentalEventPublishing>().For<IUnitOfWorkAspect, IAllBusinessUnitsUnitOfWorkAspect>();
 
@@ -119,60 +116,4 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 	}
 	
-	public class FakeEventPublisher_ExperimentalEventPublishing : FakeEventPublisher
-	{
-		private readonly ResolveEventHandlers _resolver;
-		private readonly CommonEventProcessor _processor;
-		private readonly List<Type> _handlerTypes = new List<Type>();
-
-		public FakeEventPublisher_ExperimentalEventPublishing(ResolveEventHandlers resolver, CommonEventProcessor processor)
-		{
-			_resolver = resolver;
-			_processor = processor;
-		}
-
-		public void AddHandler<T>()
-		{
-			_handlerTypes.Add(typeof(T));
-		}
-
-		public void AddHandler(Type type)
-		{
-			_handlerTypes.Add(type);
-		}
-
-		public override void Publish(params IEvent[] events)
-		{
-			base.Publish(events);
-
-			if (PublishedEvents.Count() > 100)
-				throw new Exception("Looks like a circular/recursive event chain?");
-
-			foreach (var @event in events)
-			{
-				foreach (var handlerType in _handlerTypes)
-				{
-					var method = _resolver.HandleMethodFor(handlerType, @event.GetType());
-					if (method == null)
-						continue;
-
-					//events.ForEach(e => Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {e} to {handlerType}"));
-
-					onAnotherThread(() =>
-					{
-#pragma warning disable 618
-						_processor.Process(@event, handlerType);
-#pragma warning restore 618
-					});
-				}
-			}
-		}
-
-		private static void onAnotherThread(Action action)
-		{
-			var thread = new Thread(action.Invoke);
-			thread.Start();
-			thread.Join();
-		}
-	}
 }

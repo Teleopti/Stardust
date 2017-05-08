@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
@@ -12,19 +13,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 {
 	[RtaTestLoggedOn]
 	[TestFixture]
-	public class InconsistentPercentage32862 //: ISetup
+	public class InconsistentPercentage32862
 	{
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeAdherencePercentageReadModelPersister Percentage;
 		public IAdherencePercentageViewModelBuilder PercentageView;
-		public FakeEventPublisher_ExperimentalEventPublishing Publisher;
-
-		//public void Setup(ISystem system, IIocConfiguration configuration)
-		//{
-		//	system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
-		//}
+		public FakeEventPublisher Publisher;
 		
 		[Test]
 		public void TestReadModels()

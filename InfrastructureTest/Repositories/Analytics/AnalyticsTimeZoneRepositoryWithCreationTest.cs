@@ -23,13 +23,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	{
 		public IAnalyticsTimeZoneRepository Target;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
-		private FakeEventPublisher _fakeEventPublisher;
-
+		public FakeEventPublisher FakeEventPublisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_fakeEventPublisher = new FakeEventPublisher();
-			system.UseTestDouble(_fakeEventPublisher).For<IEventPublisher>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[SetUp]
@@ -47,8 +45,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var timeZone = WithAnalyticsUnitOfWork.Get(() => Target.Get(targetTimeZone.Id));
 			timeZone.TimeZoneCode.Should().Be.EqualTo(targetTimeZone.Id);
 
-			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
-			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsTimeZoneChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
+			FakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
+			FakeEventPublisher.PublishedEvents.OfType<AnalyticsTimeZoneChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
 		}
 	}
 }

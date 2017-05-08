@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 		public IDataSourceScope Tenant;
 		public Http Http;
 		public IEventPublisherScope EventPublisher;
-		public ConfigurableSyncEventPublisher Publisher;
+		public FakeEventPublisher Publisher;
 
 		[Test]
 		public void BatchTest()
