@@ -83,7 +83,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				window.location.replace("#" + (_isMobile(window) ? "Schedule/MobileWeek" : _settings.defaultNavigation));
 			}
 		}
-		console.log(window.location)
+
 		var asmWindow;
 		$('#asm-link').click(function (ev) {
 			$(".dropdown#user-settings").removeClass("open");
