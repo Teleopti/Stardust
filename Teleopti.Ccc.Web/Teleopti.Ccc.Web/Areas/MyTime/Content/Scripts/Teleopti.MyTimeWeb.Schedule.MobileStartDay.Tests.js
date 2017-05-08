@@ -7,12 +7,12 @@
 	test("should navigate to next date when swiping left", function () {
 		setup();
 
-		$("body").addClass("dayview-view-body");
+		$("body").addClass("moible-start-day-body");
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		var currentDate = vm.selectedDate();
-		$(".dayview-view-body").swipe("option").swipeLeft();
-		$(".dayview-view-body").swipe("disable");
+		$(".moible-start-day-body").swipe("option").swipeLeft();
+		$(".moible-start-day-body").swipe("disable");
 		equal(vm.selectedDate().format("MMM Do YY"), moment(currentDate).add(1, 'days').format("MMM Do YY"));
 
 	});
@@ -20,12 +20,12 @@
 	test("should navigate to previous date when swiping right", function () {
 		setup();
 
-		$("body").addClass("dayview-view-body");
+		$("body").addClass("moible-start-day-body");
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		var currentDate = vm.selectedDate();
-		$(".dayview-view-body").swipe("option").swipeRight();
-		$(".dayview-view-body").swipe("disable");
+		$(".moible-start-day-body").swipe("option").swipeRight();
+		$(".moible-start-day-body").swipe("disable");
 		equal(vm.selectedDate().format("MMM Do YY"), moment(currentDate).add(-1, 'days').format("MMM Do YY"));
 	});
 
@@ -82,7 +82,7 @@
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		equal(vm.unreadMessageCount, 2);
+		equal(vm.unreadMessageCount(), 2);
 	});
 
 	test("should navigate to messages", function () {
@@ -106,11 +106,11 @@
 		setup();
 		startDayData.Schedule.TextRequestCount = 1;
 
-		$("body").append("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestCount > 0'>test</span>");
+		$("body").append("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestCount() > 0'>test</span>");
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		equal(vm.requestCount, 1);
+		equal(vm.requestCount(), 1);
 
 		equal(1, $("#page:visible").length);
 		$("#page").remove();
@@ -132,7 +132,7 @@
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		equal(vm.requestCount, 0);
+		equal(vm.requestCount(), 0);
 
 		equal(0, $("#page:visible").length);
 		$("#page").remove();

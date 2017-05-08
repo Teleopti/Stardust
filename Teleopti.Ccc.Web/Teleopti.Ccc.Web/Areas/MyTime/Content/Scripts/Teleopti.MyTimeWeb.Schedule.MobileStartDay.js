@@ -64,6 +64,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 
 	function initViewModel() {
 		vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		applyBindings();
 	}
 
 	function fetchData() {
@@ -77,7 +78,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		vm.setCurrentDate(moment(data.Date));
 		completelyLoaded();
 		if (!subscribed) subscribeForChanges();
-		applyBindings();
 	}
 
 	function applyBindings() {
