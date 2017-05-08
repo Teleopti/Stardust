@@ -473,7 +473,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		var totalContentHeight = jqDocument.height();
 		var inViewContentHeight = jqWindow.height();
 		var aboveViewContentHeight = jqWindow.scrollTop();
-		return totalContentHeight - inViewContentHeight - aboveViewContentHeight <= 0;
+		return totalContentHeight - inViewContentHeight - aboveViewContentHeight <= 10;
 	}
 
 	function _unbind() {

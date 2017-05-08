@@ -298,8 +298,9 @@ var messages = {
 				<div class="loading">
 				</div>
 			</div>
-
-			<div id="pagingIndicator" class="arrow-down displaynone" data-bind="fadeInIf: MoreToLoad, hideWhenFadedOut: true">
+			<div class="pagingIndicatorWrapper" data-bind="ifnot: isLoadingRequests">
+				<div id="pagingIndicator" class="arrow-down displaynone" data-bind="fadeInIf: MoreToLoad, hideWhenFadedOut: true">
+				</div>
 			</div>
 			<div class="clearboth">
 			</div>
