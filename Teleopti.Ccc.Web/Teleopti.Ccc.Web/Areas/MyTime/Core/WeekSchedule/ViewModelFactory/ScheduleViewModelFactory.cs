@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var dayDomainData = _weekScheduleDomainDataProvider.GetDaySchedule(date);
 			var personAssignment = dayDomainData.ScheduleDay.ScheduleDay.PersonAssignment();
 
-			if (!dayDomainData.ScheduleDay.Projection.Any() && personAssignment != null &&
-				!personAssignment.ShiftLayers.OfType<OvertimeShiftLayer>().Any())
+			if (!dayDomainData.ScheduleDay.Projection.Any() && (personAssignment == null || 
+				!personAssignment.ShiftLayers.OfType<OvertimeShiftLayer>().Any()))
 			{
 				// Set timeline to 8:00-15:00 if no schedule
 				// Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.ShiftTradeTimeLineHoursViewModelMapper.getTimeLinePeriod()
