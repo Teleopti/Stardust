@@ -510,5 +510,18 @@ background-color: #cacaca;
 	    cursor: not-allowed;
 	}
 
+	.pp-clear-parent {
+		position:relative;
+	}
+
+	.pp-clear-spinner {
+		position: absolute;
+		top: -8px;
+		left: -8px;
+		z-index: 3;
+	}
+
+	
+
 
 	

@@ -26,6 +26,7 @@
     vm.totalAgents = null;
     vm.scheduledAgents = 0;
     vm.isDisableDo = true;
+    vm.isClearing = false;
     vm.launchSchedule = launchSchedule;
     vm.intraOptimize = intraOptimize;
     vm.publishSchedule = publishSchedule;
@@ -100,7 +101,7 @@
     }
 
     function isDisable() {
-      if (vm.schedulingPerformed || vm.optimizeRunning || vm.totalAgents == 0) {
+      if (vm.schedulingPerformed || vm.optimizeRunning || vm.totalAgents == 0 || vm.isClearing) {
         return true;
       }
     }
@@ -110,9 +111,14 @@
     }
 
     function clearSchedules(pp) {
-      planningPeriodService.clearSchedules({ id: pp.Id }).$promise.then(function () {
+      if(pp.Id) {
+        vm.isClearing = true;
+        planningPeriodService.clearSchedules({ id: pp.Id }).$promise.then(function () {
+        vm.isClearing = false;
+        NoticeService.success("Successfully clear schedule result and history data for planning period" + moment(vm.selectedPp.StartDate).format('DD/MM/YYYY') + "-" + moment(vm.selectedPp.EndDate).format('DD/MM/YYYY'), 20000, true);
         init();
       });
+      }   
     }
 
     function launchSchedule(pp) {
@@ -224,6 +230,7 @@
       vm.scheduledAgents = 0;
       planningPeriodService.lastJobResult({ id: pp.Id })
         .$promise.then(function (data) {
+          console.log(data)
           if (data.OptimizationResult) {
             initResult(data.OptimizationResult, data.ScheduleResult, pp);
             vm.valData.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults ? data.ScheduleResult.BusinessRulesValidationResults : [];

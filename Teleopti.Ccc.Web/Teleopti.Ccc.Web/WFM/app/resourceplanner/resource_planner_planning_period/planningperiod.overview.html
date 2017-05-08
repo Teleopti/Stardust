@@ -3,11 +3,11 @@
 		<h1><i class="mdi mdi-calendar"></i> {{'ScheduleAgentGroup' | translate}} - {{vm.agentGroup.Name}}</h1>
 		<div class="pp-sub-title">
 			<span ng-show="vm.selectedPp">{{'SelectedPlanningPeriod' | translate}}: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
-			<span ng-if="vm.isDisable() && vm.totalAgents > 0" ng-bind="vm.status" class="pp-status"></span>
+			<span ng-if="vm.isDisable() && vm.totalAgents > 0 && !vm.isClearing" ng-bind="vm.status" class="pp-status"></span>
 		</div>
 	</div>
 </div>
-<div ng-if="vm.isDisable() && vm.totalAgents > 0" class="pp-progress test-schedule-is-running">
+<div ng-if="vm.isDisable() && vm.totalAgents > 0 && !vm.isClearing" class="pp-progress test-schedule-is-running">
 	<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 </div>
 <div class="panel material-depth-1 pp-fix" ng-show="vm.selectedPp">
@@ -20,8 +20,11 @@
 							<div class="con-flex">
 								<button class="wfm-btn material-depth-1" ng-click="!vm.isDisable() && vm.launchSchedule(vm.selectedPp)" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(),'wfm-btn-primary':!vm.isDisable()}">{{'ScheduleVerb' | translate }}</button>
 								<button class="wfm-btn material-depth-1" ng-click="!vm.isDisable() && vm.intraOptimize(vm.selectedPp)" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(),'wfm-btn-primary':!vm.isDisable()}">{{'IntraOptimize' | translate }}</button>
-								<button class="wfm-fab material-depth-1 mini" ng-click="!vm.isDisable() && vm.openmModal()" ng-class="{'mini-schedule': vm.isDisable()}"><i class="mdi mdi-delete-forever"></i>
+								<button class="wfm-fab material-depth-1 mini pp-clear-parent" ng-click="!vm.isDisable() && vm.openmModal()" ng-class="{'mini-schedule': vm.isDisable()}"><i class="mdi mdi-delete-forever"></i>
 									<md-tooltip>{{'ClearScheduleResultAndHistoryData' | translate}}</md-tooltip>
+									<span class="pp-clear-spinner" ng-if="vm.isClearing">
+										<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+									</span>
 								</button>
 								<button class="pull-right wfm-btn material-depth-1" ng-click="!vm.isDisable() && vm.publishSchedule(vm.selectedPp)" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(), 'wfm-btn-primary':!vm.isDisable()}">{{'PublishSchedule' | translate }}</button>
 							</div>
@@ -122,7 +125,7 @@
 					<h3>Clear schedule result for planning period {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</h3>
 					<!--{{'DeletePlanningPeriod' | translate}}-->
 					<!--{{vm.textForDeletePp}}-->
-					Are you sure you want to clear schedule result and history data for planning period {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}
+					Are you sure you want to clear schedule result and history data for planning period {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate
 				</div>
 				<div class="modal-actions">
 					<aside>
