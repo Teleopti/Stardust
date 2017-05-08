@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public DayOffRulesModel ToModel(DayOffRules dayOffRules)
 		{
 			var filterModels = dayOffRules.Filters.Select(filter => _filterMapper.ToModel(filter)).ToList();
-
+			
 			return new DayOffRulesModel
 			{
 				MinConsecutiveWorkdays = dayOffRules.ConsecutiveWorkdays.Minimum,
@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				Id = dayOffRules.Id ?? Guid.Empty,
 				Default = dayOffRules.Default,
 				Name = dayOffRules.Name,
-				Filters = filterModels
+				Filters = filterModels,
+				AgentGroupId = dayOffRules.AgentGroup?.Id
 			};
 		}
 	}
