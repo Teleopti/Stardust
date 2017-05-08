@@ -7,12 +7,12 @@
 	test("should navigate to next date when swiping left", function () {
 		setup();
 
-		$("body").addClass("moible-start-day-body");
+		$("body").addClass("mobile-start-day-body");
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		var currentDate = vm.selectedDate();
-		$(".moible-start-day-body").swipe("option").swipeLeft();
-		$(".moible-start-day-body").swipe("disable");
+		$(".mobile-start-day-body").swipe("option").swipeLeft();
+		$(".mobile-start-day-body").swipe("disable");
 		equal(vm.selectedDate().format("MMM Do YY"), moment(currentDate).add(1, 'days').format("MMM Do YY"));
 
 	});
@@ -20,12 +20,12 @@
 	test("should navigate to previous date when swiping right", function () {
 		setup();
 
-		$("body").addClass("moible-start-day-body");
+		$("body").addClass("mobile-start-day-body");
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		var currentDate = vm.selectedDate();
-		$(".moible-start-day-body").swipe("option").swipeRight();
-		$(".moible-start-day-body").swipe("disable");
+		$(".mobile-start-day-body").swipe("option").swipeRight();
+		$(".mobile-start-day-body").swipe("disable");
 		equal(vm.selectedDate().format("MMM Do YY"), moment(currentDate).add(-1, 'days').format("MMM Do YY"));
 	});
 

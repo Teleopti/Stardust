@@ -39,7 +39,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 	}
 
 	function registerSwipeEvent() {
-		$(".moible-start-day-body").swipe({
+		$(".mobile-start-day-body").swipe({
 			swipeLeft: function () {
 				vm.nextDay();
 			},
