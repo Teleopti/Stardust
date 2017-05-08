@@ -4,6 +4,7 @@ using Coypu;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
@@ -234,6 +235,18 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			try
 			{
 				writer(_browser.ExecuteScript("return document.documentElement.outerHTML;").ToString());
+
+				var driver = _browser.Driver.Native as ChromeDriver;
+				var manage = driver?.Manage();
+				var logs = manage?.Logs?.GetLog(LogType.Browser);
+				if (logs != null)
+				{
+					writer(" Console log:");
+					foreach (var logEntry in logs)
+					{
+						writer(logEntry.ToString());
+					}
+				}
 			}
 			catch (Exception)
 			{

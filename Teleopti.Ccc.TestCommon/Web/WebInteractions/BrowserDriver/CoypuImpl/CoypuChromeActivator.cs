@@ -1,5 +1,6 @@
 ﻿using System;
 using Coypu.Drivers.Selenium;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
@@ -26,7 +27,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		{
 			var profilePath = System.IO.Path.Combine(Environment.CurrentDirectory, Guid.NewGuid() + ".ChromeWebDriverProfile");
 			var options = new ChromeOptions();
-			options.AddArgument(string.Format("--user-data-dir={0}", profilePath));
+			options.AddArgument($"--user-data-dir={profilePath}");
+			options.SetLoggingPreference(LogType.Browser,LogLevel.All);
 			return new ChromeDriver(options);
 		}
 	}
