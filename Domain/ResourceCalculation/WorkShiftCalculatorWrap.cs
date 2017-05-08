@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class WorkShiftCalculatorStaffPeriodData : IWorkShiftCalculatorStaffPeriodData
 	{
 		private readonly IDictionary<DateTime, ISkillStaffPeriodDataHolder> _data;
+		private int? _resolution;
 
 		public WorkShiftCalculatorStaffPeriodData(IDictionary<DateTime, ISkillStaffPeriodDataHolder> data)
 		{
@@ -127,11 +128,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return result;
 		}
 
-		public IWorkShiftCalculatableSkillStaffPeriod First()
+		public int Resolution()
 		{
-			return _data.Values.FirstOrDefault();
-		}
+			if (_resolution.HasValue) return _resolution.Value;
 
+			_resolution = 15;
+
+			var firstPeriod = _data.Values.FirstOrDefault();
+			if (firstPeriod != null)
+			{
+				_resolution = (int)firstPeriod.PeriodEndDateTime.Subtract(firstPeriod.PeriodStartDateTime).TotalMinutes;
+			}
+			return _resolution.Value;
+		}
+		
 		public IEnumerable<IWorkShiftCalculatableSkillStaffPeriod> All()
 		{
 			return _data.Values;

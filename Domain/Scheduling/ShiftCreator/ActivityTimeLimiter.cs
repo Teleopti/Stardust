@@ -77,35 +77,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 			if (layers.HasLayers)
 			{
-				foreach (var layerTime in layers.Select(layer => layer.Period.ElapsedTime()))
+				switch (TimeLimitOperator)
 				{
-					bool ok;
-					switch (TimeLimitOperator)
-					{
-						case OperatorLimiter.Equals:
-							ok = layerTime == _timeLimit;
-							break;
-						case OperatorLimiter.LessThen:
-							ok = layerTime < _timeLimit;
-							break;
-						case OperatorLimiter.GreaterThen:
-							ok = layerTime > _timeLimit;
-							break;
-						case OperatorLimiter.LessThenEquals:
-							ok = layerTime <= _timeLimit;
-							break;
-						case OperatorLimiter.GreaterThenEquals:
-							ok = layerTime >= _timeLimit;
-							break;
-						default:
-							throw new NotImplementedException("Unknown operator limiter: " + TimeLimitOperator);
-					}
-
-					if (!ok)
-						return false;
+					case OperatorLimiter.Equals:
+						return layers.All(layer => layer.Period.ElapsedTime() == _timeLimit);
+					case OperatorLimiter.LessThen:
+						return !layers.Any(layer => layer.Period.ElapsedTime() >= _timeLimit);
+					case OperatorLimiter.GreaterThen:
+						return !layers.Any(layer => layer.Period.ElapsedTime() <= _timeLimit);
+					case OperatorLimiter.LessThenEquals:
+						return !layers.Any(layer => layer.Period.ElapsedTime() > _timeLimit);
+					case OperatorLimiter.GreaterThenEquals:
+						return !layers.Any(layer => layer.Period.ElapsedTime() < _timeLimit);
+					default:
+						throw new NotImplementedException("Unknown operator limiter: " + TimeLimitOperator);
 				}
-
-				return true;
 			}
 
 			return _timeLimitOperator == OperatorLimiter.LessThenEquals || _timeLimitOperator == OperatorLimiter.LessThen;
@@ -118,8 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 			retobj.SetParent(null);
 			return retobj;
 		}
-
-
+		
 		public override IWorkShiftLimiter EntityClone()
 		{
 			return (IWorkShiftLimiter)MemberwiseClone();
