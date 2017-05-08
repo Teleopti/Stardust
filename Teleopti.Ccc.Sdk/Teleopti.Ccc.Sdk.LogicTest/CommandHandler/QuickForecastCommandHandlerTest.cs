@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private  IJobResultRepository _jobResultRepository;
 		private QuickForecastCommandHandler _target;
 		private IUnitOfWork _unitOfWork;
-	    private FakeEventPublisher _publisher;
+	    private LegacyFakeEventPublisher _publisher;
 
 	    [SetUp]
 		public void Setup()
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_mocks = new MockRepository();
 			_unitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_jobResultRepository = _mocks.DynamicMock<IJobResultRepository>();
-		    _publisher = new FakeEventPublisher();
+		    _publisher = new LegacyFakeEventPublisher();
             _target = new QuickForecastCommandHandler( _unitOfWorkFactory, _jobResultRepository, _publisher, new DummyInfrastructureInfoPopulator());
 			_unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
 		}

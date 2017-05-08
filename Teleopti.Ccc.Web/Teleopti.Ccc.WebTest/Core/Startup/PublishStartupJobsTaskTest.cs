@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.Startup
 {
@@ -23,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 	public class PublishStartupJobsTaskTest
 	{
 		private FakeToggleManager _toggleManager;
-		private FakeEventPublisher _eventPublisher;
+		private LegacyFakeEventPublisher _eventPublisher;
 		private FakeTenants _loadAllTenants;
 		private TenantUnitOfWorkFake _tenantUnitOfWorkFake;
 		private IDataSourceScope _dataSourceScope;
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			_toggleManager = new FakeToggleManager();
 			
-			_eventPublisher = new FakeEventPublisher();
+			_eventPublisher = new LegacyFakeEventPublisher();
 			_loadAllTenants = new FakeTenants();
 			_tenantUnitOfWorkFake = new TenantUnitOfWorkFake();
 			_dataSourceScope = MockRepository.GenerateMock<IDataSourceScope>();

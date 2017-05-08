@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			StardustRepository = new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			var fakeThisIsAnnoying = new FakeJobStartTimeRepository(new MutableNow());
-			Target = new StardustController(StardustRepository, new FakeEventPublisher(), new FakeTenants(), fakeThisIsAnnoying);
+			Target = new StardustController(StardustRepository, new LegacyFakeEventPublisher(), new FakeTenants(), fakeThisIsAnnoying);
 		}
 
 		[Test]
