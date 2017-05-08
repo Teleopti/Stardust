@@ -16,46 +16,45 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		}
 	}
 
-	[EnabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
-	public class AdherencePercentageReadModelUpdaterWithPackages : AdherencePercentageReadModelUpdater, IHandleEvents
-	{
-		public AdherencePercentageReadModelUpdaterWithPackages(IAdherencePercentageReadModelPersister persister) : base(persister)
-		{
-		}
+	//[EnabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
+	//public class AdherencePercentageReadModelUpdaterWithPackages : AdherencePercentageReadModelUpdater, IHandleEvents
+	//{
+	//	public AdherencePercentageReadModelUpdaterWithPackages(IAdherencePercentageReadModelPersister persister) : base(persister)
+	//	{
+	//	}
 
-		public virtual void Subscribe(SubscriptionRegistrator registrator)
-		{
-			registrator.SubscribeTo<PersonInAdherenceEvent>();
-			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
-			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
-			registrator.SubscribeTo<PersonShiftStartEvent>();
-			registrator.SubscribeTo<PersonShiftEndEvent>();
-			registrator.SubscribeTo<PersonDeletedEvent>();
+	//	public virtual void Subscribe(SubscriptionRegistrator registrator)
+	//	{
+	//		registrator.SubscribeTo<PersonInAdherenceEvent>();
+	//		registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
+	//		registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
+	//		registrator.SubscribeTo<PersonShiftStartEvent>();
+	//		registrator.SubscribeTo<PersonShiftEndEvent>();
+	//		registrator.SubscribeTo<PersonDeletedEvent>();
 
-		}
+	//	}
 
-		[ReadModelUnitOfWork]
-		public virtual void Handle(IEnumerable<IEvent> events)
-		{
-			foreach (var @event in events)
-			{
-				if (@event is PersonInAdherenceEvent)
-					handle(@event as PersonInAdherenceEvent);
-				if (@event is PersonOutOfAdherenceEvent)
-					handle(@event as PersonOutOfAdherenceEvent);
-				if (@event is PersonNeutralAdherenceEvent)
-					handle(@event as PersonNeutralAdherenceEvent);
-				if (@event is PersonShiftStartEvent)
-					handle(@event as PersonShiftStartEvent);
-				if (@event is PersonShiftEndEvent)
-					handle(@event as PersonShiftEndEvent);
-				if (@event is PersonDeletedEvent)
-					handle(@event as PersonDeletedEvent);
-			}
-		}
-	}
+	//	[ReadModelUnitOfWork]
+	//	public virtual void Handle(IEnumerable<IEvent> events)
+	//	{
+	//		foreach (var @event in events)
+	//		{
+	//			if (@event is PersonInAdherenceEvent)
+	//				handle(@event as PersonInAdherenceEvent);
+	//			if (@event is PersonOutOfAdherenceEvent)
+	//				handle(@event as PersonOutOfAdherenceEvent);
+	//			if (@event is PersonNeutralAdherenceEvent)
+	//				handle(@event as PersonNeutralAdherenceEvent);
+	//			if (@event is PersonShiftStartEvent)
+	//				handle(@event as PersonShiftStartEvent);
+	//			if (@event is PersonShiftEndEvent)
+	//				handle(@event as PersonShiftEndEvent);
+	//			if (@event is PersonDeletedEvent)
+	//				handle(@event as PersonDeletedEvent);
+	//		}
+	//	}
+	//}
 	
-	[DisabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
 	public abstract class AdherencePercentageReadModelUpdaterImpl :
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonOutOfAdherenceEvent>,

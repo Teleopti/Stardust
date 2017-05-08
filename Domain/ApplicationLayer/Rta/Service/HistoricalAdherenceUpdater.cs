@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -17,42 +16,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 	}
 
-	[EnabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
-	public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdater, IHandleEvents
-	{
-		public HistoricalAdherenceUpdaterWithPackages(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister, INow now) : base(adherencePersister, historicalChangePersister, now)
-		{
-		}
+	//[EnabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
+	//public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdater, IHandleEvents
+	//{
+	//	public HistoricalAdherenceUpdaterWithPackages(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister, INow now) : base(adherencePersister, historicalChangePersister, now)
+	//	{
+	//	}
 
-		public void Subscribe(SubscriptionRegistrator registrator)
-		{
-			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
-			registrator.SubscribeTo<PersonInAdherenceEvent>();
-			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
-			registrator.SubscribeTo<PersonStateChangedEvent>();
-			registrator.SubscribeTo<PersonRuleChangedEvent>();
-		}
+	//	public void Subscribe(SubscriptionRegistrator registrator)
+	//	{
+	//		registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
+	//		registrator.SubscribeTo<PersonInAdherenceEvent>();
+	//		registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
+	//		registrator.SubscribeTo<PersonStateChangedEvent>();
+	//		registrator.SubscribeTo<PersonRuleChangedEvent>();
+	//	}
 
-		[ReadModelUnitOfWork]
-		public void Handle(IEnumerable<IEvent> events)
-		{
-			foreach (var @event in events)
-			{
-				if (@event is PersonOutOfAdherenceEvent)
-					handle(@event as PersonOutOfAdherenceEvent);
-				if (@event is PersonInAdherenceEvent)
-					handle(@event as PersonInAdherenceEvent);
-				if (@event is PersonRuleChangedEvent)
-					handle(@event as PersonRuleChangedEvent);
-				if (@event is PersonStateChangedEvent)
-					handle(@event as PersonStateChangedEvent);
-				if (@event is PersonNeutralAdherenceEvent)
-					handle(@event as PersonNeutralAdherenceEvent);
-			}
-		}
-	}
+	//	[ReadModelUnitOfWork]
+	//	public void Handle(IEnumerable<IEvent> events)
+	//	{
+	//		foreach (var @event in events)
+	//		{
+	//			if (@event is PersonOutOfAdherenceEvent)
+	//				handle(@event as PersonOutOfAdherenceEvent);
+	//			if (@event is PersonInAdherenceEvent)
+	//				handle(@event as PersonInAdherenceEvent);
+	//			if (@event is PersonRuleChangedEvent)
+	//				handle(@event as PersonRuleChangedEvent);
+	//			if (@event is PersonStateChangedEvent)
+	//				handle(@event as PersonStateChangedEvent);
+	//			if (@event is PersonNeutralAdherenceEvent)
+	//				handle(@event as PersonNeutralAdherenceEvent);
+	//		}
+	//	}
+	//}
 
-	[DisabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
 	public abstract class HistoricalAdherenceUpdaterImpl : 
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonInAdherenceEvent>,
