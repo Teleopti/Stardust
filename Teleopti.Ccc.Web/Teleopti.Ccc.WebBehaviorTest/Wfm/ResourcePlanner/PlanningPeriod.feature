@@ -17,6 +17,7 @@ Scenario: show the next planning period
 @OnlyRunIfDisabled('Wfm_ResourcePlanner_SchedulingOnStardust_42874')
 Scenario: schedule the next planning period
 	Given the time is '2014-04-10'
+	And there is a dayoff named 'Day off'
 	And I have a role with
 		| Field									| Value            |
         | Name									| Resource Planner |
