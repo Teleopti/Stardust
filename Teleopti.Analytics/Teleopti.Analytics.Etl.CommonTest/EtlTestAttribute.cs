@@ -15,7 +15,11 @@ namespace Teleopti.Analytics.Etl.CommonTest
 
 			system.AddModule(new EtlModule(configuration));
 			system.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
-			system.UseTestDouble<FakeAllTenantEtlSettings>().For<IAllTenantEtlSettings>();
+
+			// same as domain test attribute does, sweet!
+			var tenants = new FakeAllTenantEtlSettings();
+			tenants.Has(DefaultTenantName);
+			system.UseTestDouble(tenants).For<IAllTenantEtlSettings>();
 		}
 	}
 }

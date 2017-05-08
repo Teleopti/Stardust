@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 			_data.Remove(existing);
 		}
 	}
+
 	public class FakeTenants : 
 		IFindTenantNameByRtaKey, 
 		ICountTenants, 

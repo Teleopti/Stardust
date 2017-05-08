@@ -32,13 +32,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			FakeAllTenantEtlSettings.Has(new Tenant(tenantName));
 			FakeTenants.Has(new Tenant(tenantName));
 		}
-
-		private void removedTenant()
-		{
-			FakeAllTenantEtlSettings.WasRemoved("t");
-			FakeTenants.WasRemoved("t");
-		}
-
+		
 		[Test]
 		public void ShouldStopAllPublishings()
 		{
@@ -65,7 +59,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			target.EnsureTenantRecurringJobs();
 
 			Publisher.HasPublishing.Should().Be.True();
-			Publisher.Publishings.Count().Should().Be.EqualTo(3);
+			Publisher.Publishings.Count(x => x.Tenant == "t").Should().Be.EqualTo(3);
 		}
 
 		[Test]
@@ -114,10 +108,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			Publisher.Publishings.Should().Not.Be.Empty();
 
 			Now.Is("2016-03-21 13:10");
-			removedTenant();
+			FakeAllTenantEtlSettings.WasRemoved("t");
+			FakeTenants.WasRemoved("t");
 			target.EnsureTenantRecurringJobs();
 
-			Publisher.Publishings.Should().Be.Empty();
+			Publisher.Publishings.Select(x => x.Tenant).Should().Not.Contain("t");
 		}
 
 		[Test]
