@@ -81,8 +81,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_schedulingOptions = schedulingOptions;
 			_backgroundWorker = backgroundWorker;
 			_fixedStaffSchedulingService.ClearFinderResults();
-			if (schedulingOptions == null)
-				return new WorkShiftFinderResultHolder();
 
 			var schedulePartModifyAndRollbackServiceForContractDaysOff =
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(),
