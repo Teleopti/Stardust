@@ -34,13 +34,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				builder.RegisterType<FakeEventPublisher>().SingleInstance();
 				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			}, this);
-			
-		}
-		
-		[OneTimeTearDown]
-		public void Teardown()
-		{
+
 			TestSiteConfigurationSetup.TearDown();
 		}
+		
 	}
 }

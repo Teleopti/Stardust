@@ -10,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
@@ -65,11 +66,15 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
 			Impersonate.Impersonate(DataSourceHelper.TestTenantName, businessUnitId);
+
+			TestSiteConfigurationSetup.Setup();
 		}
 
 		protected override void AfterTest()
 		{
 			base.AfterTest();
+
+			TestSiteConfigurationSetup.TearDown();
 
 			Impersonate?.EndImpersonation();
 
