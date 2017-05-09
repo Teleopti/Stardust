@@ -76,8 +76,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IWorkShiftFinderResultHolder Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IList<IPerson> selectedPersons, IEnumerable<IScheduleDay> selectedSchedules,
-			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IResourceCalculateDelayer resourceCalculateDelayer, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
+			ISchedulePartModifyAndRollbackService rollbackService =
+				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
+					_scheduleDayChangeCallback(),
+					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+
 			_schedulingOptions = schedulingOptions;
 			_backgroundWorker = backgroundWorker;
 			_fixedStaffSchedulingService.ClearFinderResults();

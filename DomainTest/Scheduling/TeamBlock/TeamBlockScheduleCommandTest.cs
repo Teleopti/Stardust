@@ -95,13 +95,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var selectedSchedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, null, new UtcTimeZone());
 
-			ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState,
-					ScheduleDayChangeCallback(),
-					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
 			var result = Target.Execute(schedulingOptions, new NoSchedulingProgress(), new List<IPerson> {agent1},
-				selectedSchedules, rollbackService, resourceCalculateDelayer, dayOffOptimizePreferenceProvider);
+				selectedSchedules, resourceCalculateDelayer, dayOffOptimizePreferenceProvider);
 			result.GetResults(true, true).Count.Should().Be.EqualTo(0);
 		}
 
@@ -180,13 +176,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var selectedSchedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, new UtcTimeZone());
 
-			ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState,
-					ScheduleDayChangeCallback(),
-					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
 			Target.Execute(schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 },
-				selectedSchedules, rollbackService, resourceCalculateDelayer, dayOffOptimizePreferenceProvider);
+				selectedSchedules, resourceCalculateDelayer, dayOffOptimizePreferenceProvider);
 
 			var schedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
 			schedules[0].PersonAssignment().AssignedWithDayOff(dayOffTemplate).Should().Be.True();

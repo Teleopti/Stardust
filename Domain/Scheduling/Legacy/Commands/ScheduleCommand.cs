@@ -99,15 +99,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 							schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 
-						ISchedulePartModifyAndRollbackService rollbackService =
-							new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
-								_scheduleDayChangeCallback(),
-								new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+
 						_workShiftFinderResultHolder().Clear();
 						_workShiftFinderResultHolder()
 							.AddResults(
 								_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
-									rollbackService, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider).GetResults(), DateTime.Today);
+									resourceCalculateDelayer, dayOffOptimizationPreferenceProvider).GetResults(), DateTime.Today);
 					}
 					else
 					{
