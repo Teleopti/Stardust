@@ -102,10 +102,13 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			readyForInteractionCallback();
 		},
 		ReloadScheduleListener: function (notification) {
-			var messageDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
-			if (vm.isWithinSelected(messageDate, messageDate)) { 
-				fetchData(); 
-			};
+			var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
+			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
+			var selectedDate = vm.selectedDate().toDate();
+
+			if (messageStartDate <= selectedDate && messageEndDate >= selectedDate) {
+				fetchData();
+			}
 		},
 		PartialDispose: function () {
 			cleanBinding();
