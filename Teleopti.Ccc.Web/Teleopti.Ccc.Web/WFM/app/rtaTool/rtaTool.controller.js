@@ -80,37 +80,34 @@
 				}));
 		}
 
-		vm.sendBatches = function (stateName) {
-			sendBatch(function () { return stateName; });
+		vm.sendBatches = function (stateCode) {
+			sendBatch(stateCode);
 		}
 
-		vm.sendRandomBatch = function () {
+		vm.sendRandom = function () {
 			var selectedAgents = vm.gridApi.selection.getSelectedRows();
 			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents
 			var randomAgent = selectedAgents[Math.floor(Math.random() * selectedAgents.length)];
 			var stateName = vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)].Name;
 			vm.sendState(randomAgent.UserCode, randomAgent.DataSource, stateName);
-
-			// sendBatch(function () {
-			// 	return vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)].Name;
-			// });
 		}
 
-		function sendBatch(stateName) {
+		function sendBatch(stateCode) {
 			var selectedAgents = vm.gridApi.selection.getSelectedRows();
 			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents
-			var distinctAgents = [];
-			var distinctDatasources = [];
-			distinctDatasources =
-				selectedAgents.map(function (s) {
-					if (distinctDatasources.indexOf(s.DataSource) == -1) {
-						distinctDatasources.push(s.DataSource);
-						return s.DataSource;
-					}
-				}).filter(function (d) { return d != null });
 
 			var snapshotId = now();
 
+			var distinctDatasources = selectedAgents
+				.map(function (s) {
+					return s.DataSource
+				})
+				.reduce(function (groups, s) {
+					if (groups.indexOf(s) == -1)
+						groups.push(s)
+					return groups;
+				}, []);
+				
 			distinctDatasources.forEach(function (d) {
 
 				var states = selectedAgents
@@ -126,9 +123,7 @@
 					.map(function (s) {
 						return {
 							UserCode: s.UserCode,
-							StateCode: vm.stateCodes
-								.filter(function (s) { return s.Name == stateName(); })
-								.map(function (s) { return s.Code; })[0]
+							StateCode: stateCode
 						};
 					});
 
@@ -147,15 +142,14 @@
 			});
 		}
 
-
-
-		vm.sendState = function (userCode, dataSource, stateName) {
+		vm.sendState = function (userCode, dataSource, displayName) {
+			var stateCode = vm.stateCodes
+				.filter(function (s) { return s.Name == displayName; })
+				.map(function (s) { return s.Code; })[0];
 			var state = {
 				AuthenticationKey: vm.authKey,
 				UserCode: userCode,
-				StateCode: vm.stateCodes
-					.filter(function (s) { return s.Name == stateName; })
-					.map(function (s) { return s.Code; })[0],
+				StateCode: stateCode,
 				SourceId: dataSource,
 				SnapshotId: now()
 			};
@@ -180,7 +174,7 @@
 
 		function startSendingBatchWithRandomStates() {
 			sendingBatchWithRandomStatesTrigger = $interval(function () {
-				vm.sendRandomBatch();
+				vm.sendRandom();
 			}, parseInt(vm.sendInterval.time) * 1000);
 		}
 
