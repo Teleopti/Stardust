@@ -59,17 +59,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
 		{
-			var dayDomainData = _weekScheduleDomainDataProvider.GetDaySchedule(date);
-			var scheduleDay = dayDomainData.ScheduleDay;
+			var daySchedule = _weekScheduleDomainDataProvider.GetDaySchedule(date);
+			var hasVisualSchedule = hasAnyVisualSchedule(date, daySchedule);
 
-			var hasAnySchedule = scheduleDay.Projection.Any() || scheduleDay.ProjectionYesterday.Any();
-			var hasAnyOvertime = scheduleDay.OvertimeAvailability != null || scheduleDay.OvertimeAvailabilityYesterday != null;
-
-			if (hasAnySchedule || hasAnyOvertime)
+			if (hasVisualSchedule)
 			{
 				if (staffingPossiblityType == StaffingPossiblityType.Overtime)
 				{
-					_scheduleMinMaxTimeSiteOpenHourCalculator.AdjustScheduleMinMaxTime(dayDomainData);
+					_scheduleMinMaxTimeSiteOpenHourCalculator.AdjustScheduleMinMaxTime(daySchedule);
 				}
 			}
 			else
@@ -77,14 +74,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				// Set timeline to 8:00-15:00 if no schedule
 				// Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.ShiftTradeTimeLineHoursViewModelMapper.getTimeLinePeriod()
 				var defaultTimeLinePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(15));
-				dayDomainData.MinMaxTime = defaultTimeLinePeriod;
-				scheduleDay.MinMaxTime = defaultTimeLinePeriod;
+				daySchedule.MinMaxTime = defaultTimeLinePeriod;
+				daySchedule.ScheduleDay.MinMaxTime = defaultTimeLinePeriod;
 			}
 
-			dayDomainData.UnReadMessageCount = _pushMessageProvider.UnreadMessageCount;
+			daySchedule.UnReadMessageCount = _pushMessageProvider.UnreadMessageCount;
 
-			var dayScheduleViewModel = _scheduleViewModelMapper.Map(dayDomainData);
+			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule);
 			return dayScheduleViewModel;
+		}
+		
+		private bool periodIsVisible(DateTimePeriod? period, DateOnly date, TimeZoneInfo timeZone)
+		{
+			if (period == null) return false;
+
+			var startDate = period.Value.StartDateTimeLocal(timeZone).Date;
+			var endDate = period.Value.EndDateTimeLocal(timeZone).Date;
+			return startDate == date.Date || (startDate < date.Date && endDate == date.Date);
+		}
+
+		private bool hasAnyVisualSchedule(DateOnly date, DayScheduleDomainData daySchedule)
+		{
+			var dayDomainData = daySchedule.ScheduleDay;
+			var timeZone = dayDomainData.ScheduleDay?.TimeZone;
+			
+			var hasVisualLayerToday = dayDomainData.Projection.Any(p => periodIsVisible(p.Period, date, timeZone));
+			var hasVisualLayerYesterday = dayDomainData.ProjectionYesterday.Any(p => periodIsVisible(p.Period, date, timeZone));
+
+			var hasVisibleOvertimeToday = periodIsVisible(dayDomainData.OvertimeAvailability?.Period, date, timeZone);
+			var hasVisibleOvertimeYesterday = periodIsVisible(dayDomainData.OvertimeAvailabilityYesterday?.Period, date, timeZone);
+
+			var hasVisualSchedule = hasVisualLayerToday || hasVisualLayerYesterday || hasVisibleOvertimeToday || hasVisibleOvertimeYesterday;
+			return hasVisualSchedule;
 		}
 	}
 }

@@ -1855,6 +1855,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
 		}
 
+		[Test]
+		public void ShouldUseDefaultTimelineForDayWithoutScheduleAndOvertimeYesterdayInvisible()
+		{
+			var dateOnly = new DateOnly(2014, 12, 18);
+			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 17, 23, 59, 0, DateTimeKind.Utc));
+
+			var activity = new Activity("a") {InWorkTime = true, DisplayColor = Color.Blue};
+			var multiplicatorDefinicationSet = new MultiplicatorDefinitionSet("aa", MultiplicatorType.Overtime);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), dateOnly);
+			assignment.AddOvertimeActivity(activity, period, multiplicatorDefinicationSet, false);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(dateOnly, StaffingPossiblityType.Overtime);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(15);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
 		#endregion
 	}
 }
