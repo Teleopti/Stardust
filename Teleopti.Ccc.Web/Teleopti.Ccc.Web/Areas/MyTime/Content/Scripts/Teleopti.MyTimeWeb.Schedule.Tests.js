@@ -979,7 +979,8 @@ $(document).ready(function() {
 					invokeFetchWeekDataCount++;
 					options.success(getFakeScheduleData());
 				}
-			}
+			},
+			AbortAll: function () { }
 		}
 
 		Teleopti.MyTimeWeb.Schedule.PartialInit(function () { },
@@ -999,8 +1000,13 @@ $(document).ready(function() {
 			}
 		};
 
+		Teleopti.MyTimeWeb.MessageBroker = {
+			RemoveListeners: function() {}
+		}
+
 		Teleopti.MyTimeWeb.Schedule.SetupViewModel(undefined, function() {}); 
 		Teleopti.MyTimeWeb.Schedule.Vm().switchProbabilityType(constants.probabilityType.overtime);
+		Teleopti.MyTimeWeb.Schedule.PartialDispose();
 
 		equal(1, invokeFetchWeekDataCount);
 	});
@@ -1040,7 +1046,8 @@ $(document).ready(function() {
 					currentTimeline = fakeScheduleDataOvertime.TimeLine;
 					options.success(fakeScheduleDataOvertime);
 				}
-			}
+			},
+			AbortAll: function() {}
 		}
 
 		Teleopti.MyTimeWeb.Schedule.PartialInit(function () { },
@@ -1060,10 +1067,15 @@ $(document).ready(function() {
 			}
 		};
 
+		Teleopti.MyTimeWeb.MessageBroker = {
+			RemoveListeners: function () { }
+		}
+
 		Teleopti.MyTimeWeb.Schedule.SetupViewModel(undefined, function () { });
 
 		Teleopti.MyTimeWeb.Schedule.Vm().switchProbabilityType(constants.probabilityType.overtime);
 		Teleopti.MyTimeWeb.Schedule.Vm().switchProbabilityType(constants.probabilityType.absence);
+		Teleopti.MyTimeWeb.Schedule.PartialDispose();
 
 		ok(currentTimeline[currentTimeline.length - 1].Time === "17:00:00", currentTimeline[currentTimeline.length - 1].Time);
 	});
