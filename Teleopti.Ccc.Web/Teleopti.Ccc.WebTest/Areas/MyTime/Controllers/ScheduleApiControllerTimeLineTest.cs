@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -31,8 +29,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public ILoggedOnUser User;
 		public FakeScheduleDataReadScheduleStorage ScheduleData;
 		public MutableNow Now;
-		public FakeUserTimeZone TimeZone;
-		public FakePersonRequestRepository PersonRequestRepository;
 
 		[Test]
 		public void ShouldAdjustTimelineForOverTimeWhenSiteOpenHourPeriodContainsSchedulePeriod()
@@ -129,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineAccordingSiteOpenHourInWeek()
 		{
 			var team = TeamFactory.CreateTeam("team1", "site1");
@@ -161,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineAccordingCrossDaySiteOpenHourInWeek()
 		{
 			var team = TeamFactory.CreateTeam("team1", "site1");
@@ -199,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineAccordingCrossWeekSiteOpenHourInWeek()
 		{
 			var team = TeamFactory.CreateTeam("team1", "site1");
@@ -237,7 +233,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldNotAdjustTimelineWithSiteOpenHourWhenCurrentWeekOutOfRange()
 		{
 			var team = TeamFactory.CreateTeam("team1", "site1");
@@ -271,6 +267,140 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldAdjustTimelineForOverTimeWhenSiteOpenHourPeriodContainsSchedulePeriodOnFetchDayData()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var timePeriod = new TimePeriod(8, 0, 17, 0);
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = timePeriod,
+				IsClosed = false,
+				WeekDay = DayOfWeek.Thursday
+			});
+			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+			var activity = new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue };
+			assignment.AddActivity(activity, period);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date, StaffingPossiblityType.Overtime);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(17);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotAdjustTimelineForOverTimeWhenSchedulePeriodContainsSiteOpenHourPeriodOnFetchDayData()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var timePeriod = new TimePeriod(8, 0, 17, 0);
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = timePeriod,
+				IsClosed = false,
+				WeekDay = DayOfWeek.Thursday
+			});
+			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 7, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 17, 45, 0, DateTimeKind.Utc));
+			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date, StaffingPossiblityType.Overtime);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(18);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotAdjustTimelineBySiteOpenHourWhenAskForAbsenceOnFetchDayData()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var timePeriod = new TimePeriod(8, 0, 17, 0);
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = timePeriod,
+				IsClosed = false,
+				WeekDay = DayOfWeek.Thursday
+			});
+			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date, StaffingPossiblityType.Absence);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(9);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotAdjustTimelineForOverTimeWhenNoSiteOpenHourAvailableOnFetchDayData()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date, StaffingPossiblityType.Overtime);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(9);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldUseDefaultTimelineForDayWithoutSchedule()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(15);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldUseDefaultTimelineForDayWithoutScheduleAndOvertimeYesterdayInvisible()
+		{
+			var dateOnly = new DateOnly(2014, 12, 18);
+			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 17, 23, 59, 0, DateTimeKind.Utc));
+
+			var activity = new Activity("test activity") { InWorkTime = true, DisplayColor = Color.Blue };
+			var multiplicatorDefinicationSet = new MultiplicatorDefinitionSet("aa", MultiplicatorType.Overtime);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), dateOnly);
+			assignment.AddOvertimeActivity(activity, period, multiplicatorDefinicationSet, false);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(dateOnly, StaffingPossiblityType.Overtime);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(15);
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
 		}
 	}
