@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[ReadModelUnitOfWork]
-		public void Handle(IEnumerable<IEvent> events)
+		public virtual void Handle(IEnumerable<IEvent> events)
 		{
 			events.ForEach(e => handle((dynamic)e));
 		}
