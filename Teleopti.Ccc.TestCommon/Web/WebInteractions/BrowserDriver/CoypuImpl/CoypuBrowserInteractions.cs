@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Coypu;
 using NUnit.Framework;
@@ -79,10 +80,12 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		{
 			tryUntil(tryThis, until, waitBeforeRetry);
 		}
+
 		public bool IsVisible(string selector)
 		{
 			return _browser.FindCss(selector, optionsVisibleOnly()).Exists(options());
 		}
+
 		public bool IsExists(string selector)
 		{
 			return _browser.FindCss(selector, options()).Exists(options());
@@ -227,30 +230,41 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 
 		public void DumpInfo(Action<string> writer)
 		{
-			writer(" Time: ");
-			writer(DateTime.Now.ToString());
-			writer(" Url: ");
-			writer(_browser.Location.ToString());
+			writer($" Time: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+			writer($" Current culture: {CultureInfo.CurrentCulture.Name}");
+			writer($" Current time zone: {TimeZone.CurrentTimeZone.StandardName} [Daylight saving time: {TimeZone.CurrentTimeZone.IsDaylightSavingTime(DateTime.Now)}]");
+			writer($" Url: {_browser.Location}");
 			writer(" Html: ");
 			try
 			{
 				writer(_browser.ExecuteScript("return document.documentElement.outerHTML;").ToString());
+			}
+			catch (Exception)
+			{
+				writer("Failed to dump html content");
+			}
+
+			try
+			{
+				writer(" Console log:");
 
 				var driver = _browser.Driver.Native as ChromeDriver;
 				var manage = driver?.Manage();
 				var logs = manage?.Logs?.GetLog(LogType.Browser);
-				if (logs != null)
+				if (logs == null || logs.Count == 0)
 				{
-					writer(" Console log:");
-					foreach (var logEntry in logs)
-					{
-						writer(logEntry.ToString());
-					}
+					writer("No console log");
+					return;
+				}
+
+				foreach (var logEntry in logs)
+				{
+					writer(logEntry.ToString());
 				}
 			}
 			catch (Exception)
 			{
-				writer("Failed");
+				writer("Failed to dump console log");
 			}
 		}
 		
@@ -283,6 +297,5 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			var o = options();
 			EventualAssert.That(value, constraint, message, new SeleniumExceptionCatcher(), o.RetryInterval, o.Timeout);
 		}
-
 	}
 }
