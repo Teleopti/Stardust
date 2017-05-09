@@ -66,7 +66,7 @@
 		};
 	}
 
-	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleHelper','teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];
+	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleHelper', 'teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];
 
 	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider) {
 		var vm = this;
@@ -82,14 +82,19 @@
 		});
 
 		vm.isTimeRangeValid = function () {
-			return vm.isAbsenceTimeValid() || vm.isAbsenceDateValid();
+			if (!vm.isFullDayAbsence)
+				return vm.isAbsenceTimeValid();
+			return vm.isAbsenceDateValid();
 		};
 
 		vm.isAbsenceTimeValid = function () {
-			return !vm.isFullDayAbsence && (moment(vm.timeRange.endTime) >= moment(vm.timeRange.startTime));
+			return (moment(vm.timeRange.endTime).isAfter(moment(vm.timeRange.startTime)));
+		};
+		vm.isAbsenceDateValid = function () {
+			return moment(vm.timeRange.endTime).isSameOrAfter(moment(vm.timeRange.startTime), 'day');
 		};
 
-		vm.updateInvalidAgents = function() {
+		vm.updateInvalidAgents = function () {
 			if (vm.manageScheduleForDistantTimezonesEnabled) {
 				if (vm.isFullDayAbsence) {
 					determineIsSameTimezoneForFullDayAbsence();
@@ -100,18 +105,16 @@
 			}
 		};
 
-		vm.isAbsenceDateValid = function () {
-			return vm.isFullDayAbsence && moment(vm.timeRange.endTime).isSameOrAfter(moment(vm.timeRange.startTime), 'day');
-		};
 
-		vm.getDefaultAbsenceStartTime = function() {
+
+		vm.getDefaultAbsenceStartTime = function () {
 			var curDateMoment = moment(vm.selectedDate());
-			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
+			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
 			return scheduleHelper.getEarliestStartOfSelectedSchedules(schedules, curDateMoment, personIds);
 		};
 
-		vm.getDefaultAbsenceEndTime = function() {
+		vm.getDefaultAbsenceEndTime = function () {
 			return moment(vm.getDefaultAbsenceStartTime()).add(1, 'hour').toDate();
 		};
 
@@ -137,16 +140,16 @@
 				var personSchedule = vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
 				if (!belongsToDateDecider
 					.checkTimeRangeAllowedForIntradayAbsence(timeRangeMoment,
-						belongsToDateDecider.normalizePersonScheduleVm(personSchedule, vm.getCurrentTimezone())))
+					belongsToDateDecider.normalizePersonScheduleVm(personSchedule, vm.getCurrentTimezone())))
 					vm.invalidAgents.push(agent);
 			});
-			var invalidAgentNameList = vm.invalidAgents.map(function(agent) {
+			var invalidAgentNameList = vm.invalidAgents.map(function (agent) {
 				return agent.Name;
 			});
 			vm.invalidAgentNameListString = invalidAgentNameList.join(', ');
 		}
 
-		vm.anyValidAgent = function() {
+		vm.anyValidAgent = function () {
 			return vm.invalidAgents.length !== vm.selectedAgents.length;
 		};
 
@@ -210,14 +213,14 @@
 			}
 
 			if (commandExecutionPromise) {
-				commandExecutionPromise.then(function() { vm.runningCommand = false; });
+				commandExecutionPromise.then(function () { vm.runningCommand = false; });
 			} else {
 				vm.runningCommand = false;
 			}
 
 		};
 
-		vm.updateDateAndTimeFormat = function() {
+		vm.updateDateAndTimeFormat = function () {
 			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
 			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
 		};

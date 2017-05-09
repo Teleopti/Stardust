@@ -4035,6 +4035,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bad request.
+        /// </summary>
+        public static string BadRequest {
+            get {
+                return ResourceManager.GetString("BadRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bags.
         /// </summary>
         public static string Bags {
@@ -10384,6 +10393,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string EndTimeMustBeGreaterOrEqualToStartTime {
             get {
                 return ResourceManager.GetString("EndTimeMustBeGreaterOrEqualToStartTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The end time should occur after start time..
+        /// </summary>
+        public static string EndTimeMustBeGreaterThanStartTime {
+            get {
+                return ResourceManager.GetString("EndTimeMustBeGreaterThanStartTime", resourceCulture);
             }
         }
         

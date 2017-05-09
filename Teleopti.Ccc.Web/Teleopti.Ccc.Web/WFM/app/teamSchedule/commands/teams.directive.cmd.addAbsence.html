@@ -37,7 +37,8 @@
 					<span class="wfm-checkbox-label">{{'FullDayAbsence'|translate}}</span>
 				</label>
 			</div>
-			<p class="text-danger" ng-if="!vm.isTimeRangeValid()">{{'EndTimeMustBeGreaterOrEqualToStartTime'|translate}}</p>
+			<p class="text-danger" ng-if="!vm.isFullDayAbsence && !vm.isTimeRangeValid()">{{'EndTimeMustBeGreaterThanStartTime'|translate}}</p>
+			<p class="text-danger" ng-if="vm.isFullDayAbsence && !vm.isAbsenceDateValid()">{{'EndTimeMustBeGreaterOrEqualToStartTime'|translate}}</p>
 			<div class="text-danger" ng-if="vm.invalidAgentNameListString && vm.invalidAgentNameListString.length > 0">
 				<p ng-if="vm.isFullDayAbsence">
 					<i class="mdi mdi-alert-octagon"></i>

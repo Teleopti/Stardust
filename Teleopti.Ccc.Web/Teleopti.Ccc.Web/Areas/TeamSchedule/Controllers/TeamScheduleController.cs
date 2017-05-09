@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			if (!form.IsValid())
 			{
-				return BadRequest(Resources.EndTimeMustBeGreaterOrEqualToStartTime);
+				return BadRequest(Resources.EndTimeMustBeGreaterThanStartTime);
 			}
 
 			setTrackedCommandInfo(form.TrackedCommandInfo);

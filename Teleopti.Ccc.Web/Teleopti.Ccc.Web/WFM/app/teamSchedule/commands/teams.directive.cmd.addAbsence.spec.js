@@ -1,54 +1,55 @@
-﻿describe('teamschedule add absence diretive test', function() {
+﻿describe('teamschedule add absence diretive test', function () {
 	'use strict';
 
-	var	fakeAbsenceService,
+	var fakeAbsenceService,
 		fakeScheduleManagementSvc,
 		fakePermissions,
 		scheduleHelper,
 		$compile,
 		$rootScope,
 		$httpBackend,
-		PersonSelection;
+		fakePersonSelectionService;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
 
-	beforeEach(function() {
+	beforeEach(function () {
 		fakeAbsenceService = new FakePersonAbsence();
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
 		fakePermissions = new FakePermissions();
 		scheduleHelper = new FakeScheduleHelper();
+		fakePersonSelectionService = new FakePersonSelectionService();
 
-		module(function($provide) {
-			$provide.service('PersonAbsence', function() {
+		module(function ($provide) {
+			$provide.service('PersonAbsence', function () {
 				return fakeAbsenceService;
 			});
-			$provide.service('ScheduleManagement', function() {
+			$provide.service('ScheduleManagement', function () {
 				return fakeScheduleManagementSvc;
 			});
-			$provide.service('ScheduleHelper', function() {
+			$provide.service('ScheduleHelper', function () {
 				return scheduleHelper;
 			});
 			$provide.service('teamsPermissions', function () {
 				return fakePermissions;
 			});
+			$provide.service('PersonSelection', function () {
+				return fakePersonSelectionService;
+			});
 		});
 	});
 
 
-	beforeEach(inject(function(_$rootScope_, _$compile_, _$httpBackend_, _PersonSelection_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-
-		PersonSelection = _PersonSelection_;
-		PersonSelection.clearPersonInfo();
 		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
-	it('add-absence should render correctly', function() {
+	it('add-absence should render correctly', function () {
 		var result = setUp();
-		expect(result.commandControl).not.toBeNull();
+		expect(result.commandScope.vm).not.toBeNull();
 	});
 
 	it('should handle default start and end time attribute', function () {
@@ -92,6 +93,30 @@
 		expect(checkBoxInput.length).toBe(0);
 	});
 
+	it('should not able to add intraday absence when startime is early or equal to endtime', function () {
+		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
+
+		var result = setUp(new Date('2015-01-01 10:00:00'));
+		var vm = result.commandScope.vm;
+		vm.timeRange = {};
+		vm.timeRange.startTime = new Date('2015-01-01 10:00:00');
+		vm.timeRange.endTime = new Date('2015-01-01 10:00:00');
+		vm.selectedAbsenceId = getAvailableAbsenceTypes()[0].Id;
+		vm.isFullDayAbsence = false;
+		vm.selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleStartTime: null,
+				ScheduleEndTime: null
+			}];
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+		result.commandScope.$apply();
+		var applyButton = result.container[0].querySelectorAll('#applyAbsence');
+		expect(applyButton[0].disabled).toBe(true);
+	});
+
+
 	function setUp(inputDate, inputConfigurations) {
 		var date, configurations;
 		var html = '<teamschedule-command-container date="curDate" configurations="configurations"></teamschedule-command-container>';
@@ -120,11 +145,11 @@
 		vm.setActiveCmd('AddAbsence');
 		scope.$apply();
 
-		var commandControl = angular.element(container[0].querySelector('.add-absence')).scope().vm;
+		var commandScope = angular.element(container[0].querySelector('.add-absence')).scope();
 
 		var obj = {
 			container: container,
-			commandControl: commandControl,
+			commandScope: commandScope,
 			scope: scope
 		};
 
@@ -170,27 +195,27 @@
 		var latestStartTime = null;
 		var latestEndTime = null;
 
-		this.setEarliestStartTime = function(date) {
+		this.setEarliestStartTime = function (date) {
 			earliestStartTime = date;
 		};
 
-		this.setLatestStartTime = function(date) {
+		this.setLatestStartTime = function (date) {
 			latestStartTime = date;
 		};
 
-		this.setLatestEndTime = function(date) {
+		this.setLatestEndTime = function (date) {
 			latestEndTime = date;
 		};
 
-		this.getEarliestStartOfSelectedSchedules = function() {
+		this.getEarliestStartOfSelectedSchedules = function () {
 			return earliestStartTime;
 		};
 
-		this.getLatestStartOfSelectedSchedules = function() {
+		this.getLatestStartOfSelectedSchedules = function () {
 			return latestStartTime;
 		};
 
-		this.getLatestPreviousDayOvernightShiftEnd = function() {
+		this.getLatestPreviousDayOvernightShiftEnd = function () {
 			return latestEndTime;
 		};
 	}
@@ -198,11 +223,11 @@
 	function FakePermissions() {
 		var _permissions = {}
 
-		this.all = function() {
+		this.all = function () {
 			return _permissions;
 		}
 
-		this.setPermissions = function(permissions) {
+		this.setPermissions = function (permissions) {
 			_permissions = permissions;
 		}
 	}
@@ -212,39 +237,51 @@
 		var targetAbsence = null;
 		var fakeResponse = { data: [] };
 
-		this.loadAbsences = function() {
+		this.loadAbsences = function () {
 			return {
-				then: function(cb) {
+				then: function (cb) {
 					cb(availableAbsenceTypes);
 				}
 			};
 		};
 
-		this.addFullDayAbsence = function(input) {
+		this.addFullDayAbsence = function (input) {
 			targetAbsence = input;
 			return {
-				then: (function(cb) {
+				then: (function (cb) {
 					cb(fakeResponse);
 				})
 			};
 		};
 
-		this.addIntradayAbsence = function(input) {
+		this.addIntradayAbsence = function (input) {
 			targetAbsence = input;
 			return {
-				then: (function(cb) {
+				then: (function (cb) {
 					cb(fakeResponse);
 				})
 			};
 		};
 
-		this.getAddAbsenceCalledWith = function() {
+		this.getAddAbsenceCalledWith = function () {
 			return targetAbsence;
 		};
 
-		this.setAvailableAbsenceTypes = function(absences) {
+		this.setAvailableAbsenceTypes = function (absences) {
 			availableAbsenceTypes = absences;
 		};
+	}
+
+	function FakePersonSelectionService() {
+		var fakePersonList = [];
+
+		this.setFakeCheckedPersonInfoList = function (input) {
+			fakePersonList = input;
+		}
+
+		this.getCheckedPersonInfoList = function () {
+			return fakePersonList;
+		}
 	}
 
 });

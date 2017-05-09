@@ -1,5 +1,5 @@
 'use strict';
-describe('HttpTest', function() {
+describe('HttpTest', function () {
 	var $q,
 		$rootScope,
 		$httpBackend,
@@ -8,18 +8,18 @@ describe('HttpTest', function() {
 		NoticeService,
 		Settings;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		module('wfm.http');
-		module(function($provide) {
-			$provide.service('NoticeService', function() {
+		module(function ($provide) {
+			$provide.service('NoticeService', function () {
 				return {
-					error: function() {
+					error: function () {
 					}
 				};
 			});
 		});
 	});
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$http_, _httpInterceptor_, _NoticeService_, _Settings_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$http_, _httpInterceptor_, _NoticeService_, _Settings_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
@@ -29,17 +29,17 @@ describe('HttpTest', function() {
 		Settings = _Settings_;
 	}));
 
-	it('Should react to http error 500', function (done) {
+	function reactHttp(statusCode, done) {
 		var scope = $rootScope.$new();
-		$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200,'mock');
+		$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, 'mock');
 		spyOn(NoticeService, 'error');
 		var rejection = {
-			status: 500
+			status: statusCode
 		};
 		Settings.init();
 		var response = httpInterceptor.responseError(rejection);
-		var successCallback = function() {};
-		var errorCallback = function(resolved) {
+		var successCallback = function () { };
+		var errorCallback = function () {
 			expect(NoticeService.error).toHaveBeenCalled();
 			done();
 		};
@@ -48,45 +48,25 @@ describe('HttpTest', function() {
 		scope.$digest();
 
 		$httpBackend.flush();
-		
+
+	}
+
+	it('Should react to http error 400', function (done) {
+		reactHttp(400, done);
 	});
 
-	it('Should react to all 4.XX http errors', function(done) {
-		var scope = $rootScope.$new();
-		$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, 'mock');
-		spyOn(NoticeService, 'error');
-		var rejection = {
-			status: 418
-		};
-		var response = httpInterceptor.responseError(rejection);
-		var successCallback = function() {};
-		var errorCallback = function(resolved) {
-			expect(NoticeService.error).toHaveBeenCalled();
-			done();
-		};
+	it('Should react to http error 500', function (done) {
+		reactHttp(500, done);
 
-		response.then(successCallback, errorCallback);
-		scope.$digest();
-		$httpBackend.flush();
 	});
 
-	it('Should react to http error -1', function(done) {
-		var scope = $rootScope.$new();
-		$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, 'mock');
-		spyOn(NoticeService, 'error');
-		var rejection = {
-			status: -1
-		};
-		var response = httpInterceptor.responseError(rejection);
-		var successCallback = function() {};
-		var errorCallback = function(resolved) {
-			expect(NoticeService.error).toHaveBeenCalled();
-			done();
-		};
+	it('Should react to all 404-600 http errors', function (done) {
+		reactHttp(418, done);
 
-		response.then(successCallback, errorCallback);
-		scope.$digest();
-		$httpBackend.flush();
+	});
+
+	it('Should react to http error -1', function (done) {
+		reactHttp(-1, done);
 	});
 
 

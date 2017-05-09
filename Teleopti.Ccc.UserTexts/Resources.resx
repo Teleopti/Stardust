@@ -16068,4 +16068,12 @@ Do you want to participate?</value>
     <value>Successfully clear schedule result and history data for planning period {0}-{1}</value>
     <comment>SuccessClearPlanningPeriodData</comment>
   </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>Bad request</value>
+    <comment>Bad request</comment>
+  </data>
+  <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
+    <value>The end time should occur after start time.</value>
+    <comment>The end time should occur after start time.</comment>
+  </data>
 </root>
