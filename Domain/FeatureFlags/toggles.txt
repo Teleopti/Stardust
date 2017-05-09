@@ -146,7 +146,7 @@ Wfm_Intraday_38074 = true
 Wfm_People_PrepareForRelease_39040 = RC #Was not ready enough
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
-Wfm_People_MoveImportJobToBackgroundService_43582 = RC
+Wfm_People_MoveImportJobToBackgroundService_43582 = true
 
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 WfmIntraday_MonitorActualvsForecasted_35176 = true
