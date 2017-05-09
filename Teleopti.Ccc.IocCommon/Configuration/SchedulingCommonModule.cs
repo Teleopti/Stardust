@@ -126,7 +126,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<ScheduleOvertimeModule>();
 			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicScheduleCommand>().InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
+			{
+				builder.RegisterType<ScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();
+			}
+			else
+			{
+				builder.RegisterType<ScheduleExecutorOld>().InstancePerLifetimeScope().ApplyAspects();
+			}
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();

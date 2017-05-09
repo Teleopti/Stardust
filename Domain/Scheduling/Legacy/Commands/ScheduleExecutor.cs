@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -11,13 +12,29 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class ScheduleExecutor
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class ScheduleExecutor : ScheduleExecutorOld
+	{
+		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, IResourceCalculation resourceOptimizationHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, TeamBlockScheduleCommand teamBlockScheduleCommand, ClassicScheduleCommand classicScheduleCommand, IMatrixListFactory matrixListFactory, Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IWeeklyRestSolverCommand weeklyRestSolverCommand, PeriodExtractorFromScheduleParts periodExtractor, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IUserTimeZone userTimeZone, DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime) : base(schedulerStateHolder, requiredScheduleOptimizerHelper, resourceOptimizationHelper, scheduleDayChangeCallback, teamBlockScheduleCommand, classicScheduleCommand, matrixListFactory, resourceOptimizationHelperExtended, weeklyRestSolverCommand, periodExtractor, resourceCalculationContextFactory, userTimeZone, doFullResourceOptimizationOneTime)
+		{
+		}
+
+		protected override void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedScheduleDays, bool runWeeklyRestSolver,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, SchedulingOptions schedulingOptions)
+		{
+			_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays, dayOffOptimizationPreferenceProvider);
+		}
+	}
+
+	public class ScheduleExecutorOld
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
-		private readonly TeamBlockScheduleCommand _teamBlockScheduleCommand;
+		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+		protected readonly TeamBlockScheduleCommand _teamBlockScheduleCommand;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		private readonly ClassicScheduleCommand _classicScheduleCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
@@ -27,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
-		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder,
+		public ScheduleExecutorOld(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
 			IResourceCalculation resourceOptimizationHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
@@ -91,14 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-					if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
-					{
-						_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays, dayOffOptimizationPreferenceProvider);
-					}
-					else
-					{
-						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays, dayOffOptimizationPreferenceProvider, runWeeklyRestSolver);
-					}
+					DoScheduling(backgroundWorker, selectedScheduleDays, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider, schedulingOptions);
 				}
 				else
 				{
@@ -132,6 +142,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
+		}
+
+		protected virtual void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedScheduleDays,
+			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
+			SchedulingOptions schedulingOptions)
+		{
+			if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
+			{
+				_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays,
+					dayOffOptimizationPreferenceProvider);
+			}
+			else
+			{
+				_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays,
+					dayOffOptimizationPreferenceProvider, runWeeklyRestSolver);
+			}
 		}
 
 

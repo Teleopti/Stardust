@@ -168,6 +168,7 @@
 		ResourcePlanner_MasterActivityBaseLayer_44134,
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_TeamSameDayOff_44265,
+		ResourcePlanner_MergeTeamblockClassicScheduling_44289,
 
 		Wfm_DisplayOnlineHelp_39402,
 
