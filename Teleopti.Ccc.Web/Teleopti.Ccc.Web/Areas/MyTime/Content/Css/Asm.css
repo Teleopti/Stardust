@@ -22,7 +22,8 @@
 	border: 1px solid rgb(216, 216, 216);
 	height: 65px;
 	display: none; /*hide when loaded, before moved to correct place*/
-    margin: 1px 1px 1px 1px;
+	margin: 1px 1px 1px 1px;
+	margin-top: calc(-55.5px - 5px - 2px);
 }
 
 .asm-layer
