@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly TeamBlockScheduleCommand _teamBlockScheduleCommand;
 		private readonly IClassicScheduleCommand _classicScheduleCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			TeamBlockScheduleCommand teamBlockScheduleCommand,
 			IClassicScheduleCommand classicScheduleCommand,
 			IMatrixListFactory matrixListFactory,
-			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			PeriodExtractorFromScheduleParts periodExtractor,
@@ -50,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockScheduleCommand = teamBlockScheduleCommand;
 			_classicScheduleCommand = classicScheduleCommand;
 			_matrixListFactory = matrixListFactory;
-			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_periodExtractor = periodExtractor;
@@ -96,19 +93,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 					if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 					{
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-							schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
-
-
-						_workShiftFinderResultHolder().Clear();
-						_workShiftFinderResultHolder()
-							.AddResults(
-								_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
-									resourceCalculateDelayer, dayOffOptimizationPreferenceProvider).GetResults(), DateTime.Today);
+						_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, 
+							selectedScheduleDays, dayOffOptimizationPreferenceProvider);
 					}
 					else
 					{
-						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, _requiredScheduleOptimizerHelper,
+						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, _requiredScheduleOptimizerHelper, 
 							selectedScheduleDays, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
 					}
 				}

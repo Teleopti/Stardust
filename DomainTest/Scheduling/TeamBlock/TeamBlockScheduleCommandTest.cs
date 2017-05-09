@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -33,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public Func<IScheduleDayChangeCallback> ScheduleDayChangeCallback;
 		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public Func<IWorkShiftFinderResultHolder> WorkShiftFinderResultHolder;
 
 		[Test]
 		public void ShouldBeAbleToScheduleTeamWithAllMembersLoadedButOneMemberFilteredOut()
@@ -93,12 +93,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			};
 
 			var selectedSchedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, null, new UtcTimeZone());
-
+		
 			var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
-			var result = Target.Execute(schedulingOptions, new NoSchedulingProgress(), new List<IPerson> {agent1},
-				selectedSchedules, resourceCalculateDelayer, dayOffOptimizePreferenceProvider);
-			result.GetResults(true, true).Count.Should().Be.EqualTo(0);
+			Target.Execute(schedulingOptions, new NoSchedulingProgress(), new List<IPerson> {agent1},selectedSchedules, dayOffOptimizePreferenceProvider);
+			WorkShiftFinderResultHolder().GetResults(true, true).Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -174,11 +172,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			};
 
 			var selectedSchedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, new UtcTimeZone());
 
 			var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
 			Target.Execute(schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 },
-				selectedSchedules, resourceCalculateDelayer, dayOffOptimizePreferenceProvider);
+				selectedSchedules, dayOffOptimizePreferenceProvider);
 
 			var schedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
 			schedules[0].PersonAssignment().AssignedWithDayOff(dayOffTemplate).Should().Be.True();

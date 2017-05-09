@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IFixedStaffSchedulingService _fixedStaffSchedulingService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
+		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly IAdvanceDaysOffSchedulingService _advanceDaysOffSchedulingService;
 		private readonly IMatrixListFactory _matrixListFactory;
@@ -35,10 +36,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+		private readonly IResourceCalculation _resourceCalculation;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
+			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 			IAdvanceDaysOffSchedulingService advanceDaysOffSchedulingService,
 			IMatrixListFactory matrixListFactory,
@@ -52,11 +56,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			PeriodExtractorFromScheduleParts periodExtractor,
 			IWorkShiftSelector workShiftSelector,
-			IGroupPersonSkillAggregator groupPersonSkillAggregator)
+			IGroupPersonSkillAggregator groupPersonSkillAggregator,
+			IResourceCalculation resourceCalculation,
+			IUserTimeZone userTimeZone)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_advanceDaysOffSchedulingService = advanceDaysOffSchedulingService;
 			_matrixListFactory = matrixListFactory;
@@ -72,12 +79,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_periodExtractor = periodExtractor;
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+			_resourceCalculation = resourceCalculation;
+			_userTimeZone = userTimeZone;
 		}
 
-		public IWorkShiftFinderResultHolder Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
+		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IList<IPerson> selectedPersons, IEnumerable<IScheduleDay> selectedSchedules,
-			IResourceCalculateDelayer resourceCalculateDelayer, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
+			_workShiftFinderResultHolder().Clear();
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1,
+				schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
 					_scheduleDayChangeCallback(),
@@ -102,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedSchedules);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
-				return new WorkShiftFinderResultHolder();
+				return;
 
 			var allVisibleMatrixes = selectedPeriod.HasValue ? _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod.Value) : new List<IScheduleMatrixPro>();
 
@@ -127,10 +139,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					selectedPeriod.Value, allVisibleMatrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
 			}
 
-			return workShiftFinderResultHolder;
+			_workShiftFinderResultHolder()
+				.AddResults(workShiftFinderResultHolder.GetResults(), DateTime.Today);
 		}
-
-
 
 
 		private void schedulingServiceDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
