@@ -2453,7 +2453,6 @@
     <Compile Include="Scheduling\Legacy\Commands\ISchedulerStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ITeamBlockMoveTimeBetweenDaysCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ITeamBlockOptimizationCommand.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\ITeamBlockScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IWeeklyRestSolverCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MatrixListFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MatrixUserLockLocker.cs" />

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
-		private readonly ITeamBlockScheduleCommand _teamBlockScheduleCommand;
+		private readonly TeamBlockScheduleCommand _teamBlockScheduleCommand;
 		private readonly IClassicScheduleCommand _classicScheduleCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
 			IResourceCalculation resourceOptimizationHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
-			ITeamBlockScheduleCommand teamBlockScheduleCommand,
+			TeamBlockScheduleCommand teamBlockScheduleCommand,
 			IClassicScheduleCommand classicScheduleCommand,
 			IMatrixListFactory matrixListFactory,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,

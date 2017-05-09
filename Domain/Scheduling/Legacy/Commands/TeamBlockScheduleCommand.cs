@@ -12,7 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class TeamBlockScheduleCommand : ITeamBlockScheduleCommand
+	public class TeamBlockScheduleCommand
 	{
 		private readonly IFixedStaffSchedulingService _fixedStaffSchedulingService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
