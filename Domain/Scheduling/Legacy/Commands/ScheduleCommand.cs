@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 					if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 					{
-						_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, 
-							selectedScheduleDays, dayOffOptimizationPreferenceProvider);
+						_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays, 
+							dayOffOptimizationPreferenceProvider);
 					}
 					else
 					{

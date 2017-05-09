@@ -84,8 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IList<IPerson> selectedPersons, IEnumerable<IScheduleDay> selectedSchedules,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IEnumerable<IScheduleDay> selectedSchedules, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_workShiftFinderResultHolder().Clear();
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1,
@@ -94,6 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
 					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 
 			_schedulingOptions = schedulingOptions;
 			_backgroundWorker = backgroundWorker;
