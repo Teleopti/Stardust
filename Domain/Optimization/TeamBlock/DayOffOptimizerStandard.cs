@@ -102,13 +102,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				currentMatrixCounter++;
 
-				//could this be deleted? If yes, remove also selectedpersons inparameter
 				if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff))
 				{
 					if (!selectedPersons.Contains(matrix.Item1.Person))
 						continue;
 				}
-				//
 				rollbackService.ClearModificationCollection();
 				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Item1.Person, matrix.Item1.EffectivePeriodDays.First().Day);
 
