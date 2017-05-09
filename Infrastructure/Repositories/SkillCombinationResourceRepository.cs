@@ -236,6 +236,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 		public void PersistChanges(IEnumerable<SkillCombinationResource> deltas)
 		{
+			if (!deltas.Any()) return;
 			_retryPolicy.ExecuteAction(() =>
 			{
 				tryPersistChanges(deltas);
