@@ -414,8 +414,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
             return _userTexts;
         },
 		ShowAgentScheduleMessenger: function () {
-			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").hide();
-			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").hide();
+			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").show();
+			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").show();
 		},
 		HideAgentScheduleMessenger: function () {
 			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").hide();
