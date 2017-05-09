@@ -57,11 +57,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		});
 	}
 
-	function hideAgentScheduleMessenger() {
-		$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").hide();
-		$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").hide();
-	}
-
 	function initViewModel() {
 		vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		applyBindings();
@@ -96,15 +91,13 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			dataService = dataServiceInstance ||
 				new Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService(new Teleopti.MyTimeWeb.Ajax());
 			completelyLoaded = completelyLoadedCallback;
-
 			registerUserInfoLoadedCallback();
 			registerSwipeEvent();
+			Teleopti.MyTimeWeb.Common.HideAgentScheduleMessenger();
 
-			hideAgentScheduleMessenger();
 			initViewModel();
 
-			fetchData(); 
-
+			fetchData();
 
 			readyForInteractionCallback();
 		},

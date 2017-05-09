@@ -412,7 +412,15 @@ Teleopti.MyTimeWeb.Common = (function ($) {
         IsToggleEnabled: isToggleEnabled,
         GetUserTexts: function () {
             return _userTexts;
-        }
+        },
+		ShowAgentScheduleMessenger: function () {
+			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").hide();
+			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").hide();
+		},
+		HideAgentScheduleMessenger: function () {
+			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").hide();
+			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").hide();
+		}
 	};
 
 })(jQuery);
