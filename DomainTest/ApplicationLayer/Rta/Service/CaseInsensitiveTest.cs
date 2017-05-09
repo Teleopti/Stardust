@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Persister.Models.Single().Should().Not.Be.Null();
 		}
 
-
 		[Test]
 		public void ShouldHandleStateCode()
 		{

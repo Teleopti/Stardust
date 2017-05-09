@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -21,18 +22,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	}
 
-	public interface IAgentStateReadModelUpdater
-	{
-		void Handle(AgentStateReadModelUpdaterEventPackage @event);
-	}
-
-	public class AgentStateReadModelUpdaterEventPackage : IEvent
-	{
-		public Guid PersonId { get; set; }
-		public IEnumerable<IEvent> Events { get; set; }
-	}
-
-	public class AgentStateReadModelUpdater : IAgentStateReadModelUpdater
+	public class AgentStateReadModelUpdater :
+		IHandleEvents,
+		IRunInSync
 	{
 		private readonly IAgentStateReadModelPersister _persister;
 		private readonly INow _now;
@@ -43,37 +35,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_now = now;
 		}
 
-		public void Handle(AgentStateReadModelUpdaterEventPackage @event)
+		public void Subscribe(SubscriptionRegistrator registrator)
 		{
-			var model = _persister.Load(@event.PersonId) ?? new AgentStateReadModel();
-			if (model.IsDeleted) return;
-			applyEvents(model, @event.Events);
-			_persister.Persist(model);
+			registrator.SubscribeTo<AgentStateChangedEvent>();
+			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
+			registrator.SubscribeTo<PersonInAdherenceEvent>();
+			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
+			registrator.SubscribeTo<PersonStateChangedEvent>();
+			registrator.SubscribeTo<PersonRuleChangedEvent>();
 		}
-		
-		private void applyEvents(AgentStateReadModel model, IEnumerable<IEvent> events)
-		{
-			foreach (var @event in events)
-			{
-				if (@event is AgentStateChangedEvent)
-					handle(model, @event as AgentStateChangedEvent);
-				if (@event is PersonOutOfAdherenceEvent)
-					handle(model, @event as PersonOutOfAdherenceEvent);
-				else if (@event is PersonInAdherenceEvent)
-					handle(model, @event as PersonInAdherenceEvent);
-				else if (@event is PersonNeutralAdherenceEvent)
-					handle(model, @event as PersonNeutralAdherenceEvent);
-				else if (@event is PersonStateChangedEvent)
-					handle(model, @event as PersonStateChangedEvent);
-				else if (@event is PersonRuleChangedEvent)
-					handle(model, @event as PersonRuleChangedEvent);
-			}
 
-			if (model.OutOfAdherences != null)
-				model.OutOfAdherences = model.OutOfAdherences
-					.Where(x => x.EndTime == null || x.EndTime > _now.UtcDateTime().AddHours(-1))
-					.ToArray()
-					;
+		[UnitOfWork]
+		public virtual void Handle(IEnumerable<IEvent> events)
+		{
+			events.GroupBy(x => ((dynamic) x).PersonId as Guid?)
+				.ForEach(eventsForPerson =>
+				{
+					var model = _persister.Load(eventsForPerson.Key.Value) ?? new AgentStateReadModel();
+					if (model.IsDeleted) return;
+
+					events.ForEach(e => handle(model, (dynamic) e));
+
+					if (model.OutOfAdherences != null)
+						model.OutOfAdherences = model.OutOfAdherences
+								.Where(x => x.EndTime == null || x.EndTime > _now.UtcDateTime().AddHours(-1))
+								.ToArray()
+							;
+
+					_persister.Persist(model);
+				});
 		}
 		
 		private static void handle(AgentStateReadModel model, AgentStateChangedEvent @event)
@@ -141,6 +131,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						EndTime = null
 					}).ToArray();
 		}
+
 	}
 
 }

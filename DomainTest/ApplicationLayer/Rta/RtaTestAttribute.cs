@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			Publisher.AddHandler<MappingReadModelUpdater>();
 			Publisher.AddHandler<ScheduleChangeProcessor>();
 			Publisher.AddHandler<AgentStateMaintainer>();
+
+			Publisher.AddHandler<AgentStateReadModelUpdater>();
 		}
 	}
 

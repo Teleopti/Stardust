@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -11,7 +10,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public bool Processed;
 		public AgentState State;
-		public IEnumerable<IEvent> Events;
 	}
 
 	public class ProcessInput
@@ -75,19 +73,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[LogInfo]
 		public virtual ProcessResult Process(ProcessInput input)
 		{
-			var eventCollector = new EventCollector(_eventPublisher);
-
 			AgentState resultState;
 
+			var eventCollector = new EventCollector(_eventPublisher);
 			using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
 			{
 				resultState = processRelevantMoments(input);
 			}
+			eventCollector.Publish();
 
 			return new ProcessResult
 			{
 				Processed = resultState != null,
-				Events = eventCollector.Publish(),
 				State = resultState
 			};
 		}

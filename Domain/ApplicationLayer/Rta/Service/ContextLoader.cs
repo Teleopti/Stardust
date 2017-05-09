@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
 	{
-		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater) : base(dataSource, dataSourceMapper, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor, agentStateReadModelUpdater)
+		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor)
+			: base(dataSource, dataSourceMapper, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor)
 		{
 		}
 
@@ -61,9 +62,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly DeadLockRetrier _deadLockRetrier;
 		private readonly IKeyValueStorePersister _keyValues;
 		private readonly AgentStateProcessor _processor;
-		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 
-		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor, IAgentStateReadModelUpdater agentStateReadModelUpdater)
+		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor)
 		{
 			_dataSource = dataSource;
 			_dataSourceMapper = dataSourceMapper;
@@ -77,7 +77,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_deadLockRetrier = deadLockRetrier;
 			_keyValues = keyValues;
 			_processor = processor;
-			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 		}
 
 		public void For(StateInputModel input)
@@ -210,19 +209,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				if (Thread.CurrentThread.Name == null)
 					Thread.CurrentThread.Name = $"{strategy.ParentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
 
-				IEnumerable<AgentStateReadModelUpdaterEventPackage> packages = null;
-				_deadLockRetrier.RetryOnDeadlock(() => { packages = Transaction(tenant, strategy, transaction); });
-
-				if (packages.Any())
-				{
-					WithUnitOfWork(() =>
-					{
-						packages.ForEach(x =>
-						{
-							_agentStateReadModelUpdater.Handle(x);
-						});
-					});
-				}
+				_deadLockRetrier.RetryOnDeadlock(() => { Transaction(tenant, strategy, transaction); });
 			}
 			catch (Exception e)
 			{
@@ -230,39 +217,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		protected virtual IEnumerable<AgentStateReadModelUpdaterEventPackage> Transaction(
+		protected virtual void Transaction(
 			string tenant,
 			IContextLoadingStrategy strategy,
 			Func<IEnumerable<AgentState>> agentStates
 			)
 		{
-			return WithUnitOfWork(() =>
+			WithUnitOfWork(() =>
 			{
 				return agentStates
 					.Invoke()
 					.Select(state =>
-							new ProcessInput(
-								strategy.CurrentTime,
-								strategy.DeadLockVictim,
-								strategy.GetInputFor(state),
-								state,
-								_scheduleCache.Read(state.PersonId),
-								_stateMapper,
-								_appliedAlarm
-							)
+						new ProcessInput(
+							strategy.CurrentTime,
+							strategy.DeadLockVictim,
+							strategy.GetInputFor(state),
+							state,
+							_scheduleCache.Read(state.PersonId),
+							_stateMapper,
+							_appliedAlarm
+						)
 					)
 					.Select(x => _processor.Process(x))
 					.Where(x => x.Processed)
-					.Select(x =>
-					{
-						_agentStatePersister.Update(x.State);
-						return new AgentStateReadModelUpdaterEventPackage
-						{
-							PersonId = x.State.PersonId,
-							Events = x.Events
-						};
-					})
-					.ToArray();
+					.ForEach(x => _agentStatePersister.Update(x.State));
 			});
 
 		}

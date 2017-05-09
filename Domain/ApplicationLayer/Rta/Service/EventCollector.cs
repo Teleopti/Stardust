@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			events.ForEach(_events.Add);
 		}
 
-		public IEnumerable<IEvent> Publish()
+		public void Publish()
 		{
 			var publisher = _publisher.Current();
 			var toPublish = _events
@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				})
 				.ToArray();
 			publisher.Publish(toPublish);
-			return toPublish;
 		}
 
 	}
