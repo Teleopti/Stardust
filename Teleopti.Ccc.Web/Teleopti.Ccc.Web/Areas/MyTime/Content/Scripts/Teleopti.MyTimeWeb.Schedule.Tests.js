@@ -210,7 +210,7 @@ $(document).ready(function() {
 	}
 
 	function initUserTexts() {
-	    Teleopti.MyTimeWeb.Common.SetUserTexts(userTexts);
+		Teleopti.MyTimeWeb.Common.SetUserTexts(userTexts);
 	}
 
 	test("should read absence report permission", function () {
@@ -816,22 +816,46 @@ $(document).ready(function() {
 				if (options.url === "../api/ScheduleStaffingPossibility") {
 					options.success(getFakeProbabilityData());
 				}
+
+				if (options.url === "../api/Schedule/FetchWeekData" &&
+					(!options.data.staffingPossiblityType ||
+						options.data.staffingPossiblityType === constants.probabilityType.none ||
+						options.data.staffingPossiblityType === constants.probabilityType.absence)) {
+					var fakeScheduleDataAbsence = getFakeScheduleData();
+					options.success(fakeScheduleDataAbsence); 
+				} 
 			}
 		}
 
-		$("body").append("<span data-bind='text: probabilityLabel()' class='probabilityLabel'></span>");
+		$("body").append("<span id='page' data-bind='text: probabilityLabel()' class='probabilityLabel'></span>");
 
 		Teleopti.MyTimeWeb.Schedule.PartialInit(function() {},
 			function() {},
 			ajax
 		);
 
-		var fakeScheduleData = getFakeScheduleData();
+		Teleopti.MyTimeWeb.Request.RequestDetail = {
+			AddTextOrAbsenceRequest: function () {
+			}
+		};
 
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
-		week.initializeData(fakeScheduleData); 
+		Teleopti.MyTimeWeb.UserInfo = {
+			WhenLoaded: function (whenLoadedCallBack) {
+				var data = { WeekStart: "" };
+				whenLoadedCallBack(data);
+			}
+		};
+
+		Teleopti.MyTimeWeb.Schedule.SetupViewModel(undefined, function () { });
+
+		//var fakeScheduleData = getFakeScheduleData();
+
+		//var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		//week.initializeData(fakeScheduleData); 
 	  
-		week.switchProbabilityType(constants.probabilityType.absence);
+		//week.switchProbabilityType(constants.probabilityType.absence);
+
+		Teleopti.MyTimeWeb.Schedule.Vm().switchProbabilityType(constants.probabilityType.absence);
 
 		equal(userTexts.ShowAbsenceProbability, $(".probabilityLabel").text());
 
@@ -943,7 +967,15 @@ $(document).ready(function() {
 				if (options.url === "../api/ScheduleStaffingPossibility") {
 					options.success(getFakeProbabilityData());
 				}
-				if (options.url === "../api/Schedule/FetchWeekData") {
+				if (options.url === "../api/Schedule/FetchWeekData" &&
+					(!options.data.staffingPossiblityType ||
+						options.data.staffingPossiblityType === constants.probabilityType.none ||
+						options.data.staffingPossiblityType === constants.probabilityType.absence)) {
+					var fakeScheduleDataAbsence = getFakeScheduleData();
+					options.success(fakeScheduleDataAbsence);
+				}
+				if (options.url === "../api/Schedule/FetchWeekData" &&
+					options.data.staffingPossiblityType === constants.probabilityType.overtime) {
 					invokeFetchWeekDataCount++;
 					options.success(getFakeScheduleData());
 				}
@@ -968,14 +1000,72 @@ $(document).ready(function() {
 		};
 
 		Teleopti.MyTimeWeb.Schedule.SetupViewModel(undefined, function() {}); 
-
-		var fakeScheduleData = getFakeScheduleData();
-
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
-		week.initializeData(fakeScheduleData);  
-		week.switchProbabilityType(constants.probabilityType.overtime);
+		Teleopti.MyTimeWeb.Schedule.Vm().switchProbabilityType(constants.probabilityType.overtime);
 
 		equal(1, invokeFetchWeekDataCount);
+	});
+
+	test("should reload schedule when switch to absence/hide probability from overtime probability", function () {
+		initUserTexts();
+
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+			return false;
+		};
+
+		var currentTimeline;
+		var ajax = {
+			Ajax: function(options) {
+				if (options.url === "../api/ScheduleStaffingPossibility") {
+					options.success(getFakeProbabilityData());
+				}
+				if (options.url === "../api/Schedule/FetchWeekData" &&
+				(!options.data.staffingPossiblityType ||
+					options.data.staffingPossiblityType === constants.probabilityType.none ||
+					options.data.staffingPossiblityType === constants.probabilityType.absence)) {
+					var fakeScheduleDataAbsence = getFakeScheduleData();
+					options.success(fakeScheduleDataAbsence);
+					currentTimeline = fakeScheduleDataAbsence.TimeLine;
+				}
+				if (options.url === "../api/Schedule/FetchWeekData" &&
+					options.data.staffingPossiblityType === constants.probabilityType.overtime) {
+					var fakeScheduleDataOvertime = getFakeScheduleData();
+					fakeScheduleDataOvertime.TimeLine.push({
+						Time: "20:00:00",
+						TimeLineDisplay: "20:00",
+						PositionPercentage: 1,
+						TimeFixedFormat: null
+					});
+					currentTimeline = fakeScheduleDataOvertime.TimeLine;
+					options.success(fakeScheduleDataOvertime);
+				}
+			}
+		}
+
+		Teleopti.MyTimeWeb.Schedule.PartialInit(function () { },
+			function () { },
+			ajax
+		);
+
+		Teleopti.MyTimeWeb.Request.RequestDetail = {
+			AddTextOrAbsenceRequest: function () {
+			}
+		};
+
+		Teleopti.MyTimeWeb.UserInfo = {
+			WhenLoaded: function (whenLoadedCallBack) {
+				var data = { WeekStart: "" };
+				whenLoadedCallBack(data);
+			}
+		};
+
+		Teleopti.MyTimeWeb.Schedule.SetupViewModel(undefined, function () { });
+
+		Teleopti.MyTimeWeb.Schedule.Vm().switchProbabilityType(constants.probabilityType.overtime);
+		Teleopti.MyTimeWeb.Schedule.Vm().switchProbabilityType(constants.probabilityType.absence);
+
+		ok(currentTimeline[currentTimeline.length - 1].Time === "17:00:00", currentTimeline[currentTimeline.length - 1].Time);
 	});
 
 	function setupHash() {

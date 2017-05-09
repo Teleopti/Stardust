@@ -27,7 +27,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		daylightSavingAdjustment,
 		baseUtcOffsetInMinutes,
 		currentPage = "Teleopti.MyTimeWeb.Schedule",
-		constants = Teleopti.MyTimeWeb.Common.Constants;
+		constants = Teleopti.MyTimeWeb.Common.Constants,
+		scheduleDataCache = {};
 
 	function _bindData(data) {
 		vm.initializeData(data);
@@ -42,23 +43,38 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _fetchData(probabilityType, dataHandler) {
 		var selectedDate = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
-		ajax.Ajax({
-			url: "../api/Schedule/FetchWeekData",
-			dataType: "json",
-			type: "GET",
-			data: {
-				date: selectedDate,
-				staffingPossiblityType: probabilityType
-			},
-			success: function (data) {
-				vm.setCurrentDate(moment(data.PeriodSelection.Date));
-				_bindData(data);
-				_setTimeIndicator(getCurrentUserDateTime(vm.baseUtcOffsetInMinutes));
-				if (dataHandler != undefined) {
-					dataHandler(data);
+		var scheduleDataCacheKey = constants.probabilityType.none + selectedDate;
+		if (probabilityType === constants.probabilityType.overtime) {
+			scheduleDataCacheKey = constants.probabilityType.overtime + selectedDate;
+		}
+
+		if (scheduleDataCache[scheduleDataCacheKey]) {
+			callback(scheduleDataCache[scheduleDataCacheKey]);
+		} else {
+			ajax.Ajax({
+				url: "../api/Schedule/FetchWeekData",
+				dataType: "json",
+				type: "GET",
+				data: {
+					date: selectedDate,
+					staffingPossiblityType: probabilityType
+				},
+				success: function (data) {
+					callback(data);
+					scheduleDataCache[scheduleDataCacheKey] = data;
 				}
+			});
+		}
+
+		function callback(data) {
+			vm.setCurrentDate(moment(data.PeriodSelection.Date));
+			_bindData(data);
+			_setTimeIndicator(getCurrentUserDateTime(vm.baseUtcOffsetInMinutes));
+			if (dataHandler != undefined) {
+				dataHandler(data);
 			}
-		});
+
+		}
 	}
 
 	function _ensureDST(userTime) {
@@ -218,18 +234,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.switchProbabilityType = function (probabilityType) {
 			self.selectedProbabilityType = probabilityType;
+			reloadSchedule(probabilityType);
 			if (self.selectedProbabilityType === constants.probabilityType.none) {
 				self.days().forEach(function (d) {
 					d.probabilities([]);
 				});
 				self.loadingProbabilityData(false);
-				rebindProbabilityLabel(self);
-				return;
-			} else if (self.selectedProbabilityType === constants.probabilityType.overtime) {
-				reloadSchedule(constants.probabilityType.overtime);
-			} else {
-				self.fetchProbabilityData();
-			}
+				rebindProbabilityLabel(self); 
+			}  
 		};
 
 		self.fetchProbabilityData = function () {
@@ -698,7 +710,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		TimelineViewModel: TimelineViewModel,
 		WeekScheduleViewModel: WeekScheduleViewModel,
 		LoadAndBindData: function () {
-            _fetchData(vm.selectedProbabilityType, _subscribeForChanges);
+			_fetchData(vm.selectedProbabilityType, _subscribeForChanges);
 		},
 
 		ReloadScheduleListener: function (notification) {
@@ -713,12 +725,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_cleanBindings();
 			ajax.AbortAll();
 			Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
+			scheduleDataCache = {};
 		},
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);
 		},
 		GetCurrentUserDateTime: getCurrentUserDateTime,
-		GetMobileScheduleHeight: getMobileScheduleHeight
+		GetMobileScheduleHeight: getMobileScheduleHeight,
+		Vm: function () {
+			return vm;
+		}
 	};
 })(jQuery);
 
