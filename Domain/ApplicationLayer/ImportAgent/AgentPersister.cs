@@ -14,15 +14,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public interface IAgentPersister
 	{
-		void Persist(IEnumerable<AgentExtractionResult> data, TimeZoneInfo timezone);
-		void RollbackAllPersisted();
+		dynamic Persist(IEnumerable<AgentExtractionResult> data, TimeZoneInfo timezone);
+		void Rollback(dynamic persisted);
 	}
 
 	public class AgentPersister : IAgentPersister
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly ITenantUserPersister _tenantUserPersister;
-		private readonly IList<IPerson> _persistedAgents = new List<IPerson>();
 		public AgentPersister(IPersonRepository personRepository,
 			ITenantUserPersister tenantUserPersister)
 		{
@@ -30,8 +29,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			_tenantUserPersister = tenantUserPersister;
 		}
 
-		public void Persist(IEnumerable<AgentExtractionResult> data, TimeZoneInfo timezone)
+		public dynamic Persist(IEnumerable<AgentExtractionResult> data, TimeZoneInfo timezone)
 		{
+			var persistedAgentIds = new List<Guid>();
+			var persistedTenantUserIds = new List<Guid>();
 			foreach (var agentResult in data)
 			{
 				var agentData = agentResult.Agent;
@@ -45,9 +46,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					Password = agentData.Password.IsNullOrEmpty() ? null : agentData.Password,
 					PersonId = person.Id.GetValueOrDefault()
 				};
-				var errorMessages = _tenantUserPersister.Persist(personInfo);
+				var tenantUserResult = _tenantUserPersister.Persist(personInfo);
+				var errorMessages = tenantUserResult.ErrorMessages;
 
-				if (errorMessages.Any())
+				if (errorMessages.Count > 0)
 				{
 					_personRepository.HardRemove(person);
 					agentResult.Feedback.ErrorMessages.AddRange(errorMessages);
@@ -55,20 +57,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 				}
 
 				addPersonData(person, agentData);
-				_persistedAgents.Add(person);
+
+				persistedAgentIds.Add(person.Id.GetValueOrDefault());
+				persistedTenantUserIds.Add(tenantUserResult.TenantUserId);
 			}
+
+			return new
+			{
+				AgentIds = persistedAgentIds,
+				TenantUserIds = persistedTenantUserIds
+			};
 		}
 
-		public void RollbackAllPersisted()
+		public void Rollback(dynamic persisted)
 		{
-			foreach (var person in _persistedAgents)
+			var agents = _personRepository.FindPeople(persisted.AgentIds);
+			foreach (var person in agents)
 			{
 				person.RemoveAllPersonPeriods();
 				person.RemoveAllSchedulePeriods();
 				_personRepository.HardRemove(person);
 				
 			}
-			_tenantUserPersister.RollbackAllPersistedTenantUsers();
+			_tenantUserPersister.RollbackAllPersistedTenantUsers(persisted.TenantUserIds);
 		}
 
 		private void addPersonData(IPerson person, AgentDataModel agentData)

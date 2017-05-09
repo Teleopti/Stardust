@@ -42,16 +42,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		public void BatchPersist(TimeZoneInfo timezone, Action<string> sendProgress, AgentExtractionResult[] extractedAgents)
 		{
+			var result = new
+			{
+				AgentIds = new List<Guid>(),
+				TenantUserIds = new List<Guid>()
+			};
 			try
 			{
 				var i = 0;
-				foreach (var result in extractedAgents.Batch(BATCH_SIZE))
+				foreach (var agents in extractedAgents.Batch(BATCH_SIZE))
 				{
-					sendProgress($"Start to persist agent {BATCH_SIZE * i} - {BATCH_SIZE * i + result.Count()}.");
+					sendProgress($"Start to persist agent {BATCH_SIZE * i} - {BATCH_SIZE * i + agents.Count()}.");
 					using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 					{
-						_agentPersister.Persist(result, timezone);
+						var batchResult = _agentPersister.Persist(agents, timezone);
 						uow.PersistAll();
+						result.AgentIds.AddRange(batchResult.AgentIds);
+						result.TenantUserIds.AddRange(batchResult.TenantUserIds);
 					}
 					i++;
 				}
@@ -62,8 +69,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 			catch (Exception)
 			{
-				sendProgress($"An unexpected exception happened.");
-				rollbackAllPersisted();
+				sendProgress($"An unexpected exception happened, rollback persisted agents:{string.Join(",", result.AgentIds)}, tenant user:{string.Join(",", result.TenantUserIds)}");
+				rollbackAllPersisted(result);
 				throw;
 			}
 		}
@@ -127,11 +134,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 
 
-		private void rollbackAllPersisted()
+		private void rollbackAllPersisted(dynamic persisted)
 		{
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				_agentPersister.RollbackAllPersisted();
+				_agentPersister.Rollback(persisted);
 				uow.PersistAll();
 			}
 		}

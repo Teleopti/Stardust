@@ -8,26 +8,25 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 {
 	public interface ITenantUserPersister
 	{
-		List<string> Persist(IPersonInfoModel tenantUserData);
-		void RollbackAllPersistedTenantUsers();
+		dynamic Persist(IPersonInfoModel tenantUserData);
+		void RollbackAllPersistedTenantUsers(IList<Guid> tenantUserIds);
 	}
 
 	public class TenantUserPersister : ITenantUserPersister
 	{
 		private readonly IPersonInfoCreator _creator;
-		private readonly IList<Guid> _persistedTenantUserIds = new List<Guid>();
 
 		public TenantUserPersister(IPersonInfoCreator creator)
 		{
 			_creator = creator;
 		}
-		public List<string> Persist(IPersonInfoModel tenantUserData)
+		public dynamic Persist(IPersonInfoModel tenantUserData)
 		{
 			var errorMessages = new List<string>();
-
+			var persistedPersonInfoId = Guid.Empty;
 			try
 			{
-				_persistedTenantUserIds.Add(PersistInternal(tenantUserData));
+				persistedPersonInfoId = PersistInternal(tenantUserData);
 			}
 			catch (PasswordStrengthException)
 			{
@@ -46,7 +45,11 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 				errorMessages.Add(string.Format(Resources.InternalErrorMsg, exception.Message));
 			}
 
-			return errorMessages;
+			return new
+			{
+				TenantUserId = persistedPersonInfoId,
+				ErrorMessages = errorMessages
+			};
 		}
 	
 		[TenantUnitOfWork]
@@ -56,9 +59,9 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 		}
 
 		[TenantUnitOfWork]
-		public virtual void RollbackAllPersistedTenantUsers()
+		public virtual void RollbackAllPersistedTenantUsers(IList<Guid> tenantUserIds)
 		{
-			foreach (var personId in _persistedTenantUserIds)
+			foreach (var personId in tenantUserIds)
 			{
 				_creator.RollbackPersistedTenantUsers(personId);
 			}

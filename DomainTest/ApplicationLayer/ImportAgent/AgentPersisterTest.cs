@@ -112,9 +112,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		{
 			var agentData = getAgentDataModel();
 			var holder = new AgentExtractionResult { Agent = agentData };
-			Target.Persist(new List<AgentExtractionResult> { holder }, TimeZoneInfo.Utc);
+			var persisted = Target.Persist(new List<AgentExtractionResult> { holder }, TimeZoneInfo.Utc);
 			PersonRepository.LoadAll().Count.Should().Be(1);
-			Target.RollbackAllPersisted();
+			Target.Rollback(persisted);
 
 			PersonRepository.LoadAll().Should().Be.Empty();
 			TenantUserRepository.RollBacked.Should().Be.True();
