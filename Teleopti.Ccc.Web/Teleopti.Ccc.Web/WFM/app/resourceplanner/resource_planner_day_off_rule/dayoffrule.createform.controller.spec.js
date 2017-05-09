@@ -54,7 +54,7 @@ describe('dayoffRuleCreateController', function () {
         $httpBackend.whenGET('../api/resourceplanner/dayoffrules/33f52ff4-0314-4a9e-80fa-5c958c57c92f').respond(function (method, url, data, headers) {
             return [200, {
                 Id: '33f52ff4-0314-4a9e-80fa-5c958c57c92f',
-                // AgentGroupId: null,
+                AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 Name: "Default",
                 MinDayOffsPerWeek: 1,
                 MaxDayOffsPerWeek: 3,
@@ -69,7 +69,7 @@ describe('dayoffRuleCreateController', function () {
         $httpBackend.whenGET('../api/resourceplanner/dayoffrules/8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb').respond(function (method, url, data, headers) {
             return [200, {
                 Id: '8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb',
-                // AgentGroupId: null,
+                AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 Name: "Day off rule 101",
                 Default: false,
                 MinDayOffsPerWeek: 1,
@@ -140,7 +140,7 @@ describe('dayoffRuleCreateController', function () {
         var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparams });
         vm.persist();
 
-        expect($state.go).not.toHaveBeenCalledWith('resourceplanner.dayoffrulesOverview');
+        expect($state.go).not.toHaveBeenCalledWith('resourceplanner.dayoffrulesoverview');
     });
 
     it('should create new day off rule when submit data is valid', function () {
@@ -154,7 +154,7 @@ describe('dayoffRuleCreateController', function () {
         vm.persist();
         $httpBackend.flush();
 
-        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesOverview', {
+        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
         });
     });
@@ -191,7 +191,7 @@ describe('dayoffRuleCreateController', function () {
             MaxConsecutiveDayOffs: 3
         });
 
-        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesOverview', {
+        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
         });
     });
@@ -231,7 +231,7 @@ describe('dayoffRuleCreateController', function () {
             MaxConsecutiveDayOffs: 3
         });
 
-        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesOverview', {
+        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
         });
     });
@@ -282,7 +282,7 @@ describe('dayoffRuleCreateController', function () {
             MaxConsecutiveDayOffs: 3
         });
 
-        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesOverview', {
+        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
         });
     });

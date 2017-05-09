@@ -10,6 +10,7 @@
 	function Controller($state, $timeout, $stateParams, agentGroupService, NoticeService, $translate, debounceService) {
 		var vm = this;
 
+		var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
 		vm.searchString = '';
 		vm.selectedResults = [];
 		vm.filterResults = [];
@@ -25,7 +26,6 @@
 		vm.removeSelectedFilter = removeSelectedFilter;
 		vm.persist = persist;
 		vm.removeAgentGroup = removeAgentGroup;
-		var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
 
 		getAgentGroupById(agentGroupId);
 
@@ -42,14 +42,10 @@
 			}
 		}
 
-		function cancel() {
-			$state.go('resourceplanner.newoverview');
-			vm.editAgentGroup = {};
-		}
-
 		function inputFilterData() {
 			if (vm.searchString !== '') {
-				var filters = agentGroupService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
+				var filters = agentGroupService.getFilterData({ searchString: vm.searchString });
+				filters.$promise.then(function (data) {
 					removeSelectedFiltersInList(data, vm.selectedResults);
 					return vm.filterResults = data;
 				});
@@ -60,7 +56,7 @@
 		}
 
 		function removeSelectedFiltersInList(filters, selectedFilters) {
-			if (selectedFilters.length > 0){
+			if (selectedFilters.length > 0) {
 				for (var i = filters.length - 1; i >= 0; i--) {
 					angular.forEach(selectedFilters, function (selectedItem) {
 						if (filters[i].Id === selectedItem.Id) {
@@ -75,7 +71,7 @@
 			if (item == null) {
 				return;
 			}
-			if (isVaildUnit(item)) {
+			if (isValidUnit(item)) {
 				vm.selectedResults.push(item);
 				clearInput();
 			} else {
@@ -84,7 +80,7 @@
 			}
 		}
 
-		function isVaildUnit(item) {
+		function isValidUnit(item) {
 			var check = true;
 			vm.selectedResults.forEach(function (node) {
 				if (node.Id === item.Id) {
@@ -134,6 +130,11 @@
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 				return;
 			}
+		}
+
+		function cancel() {
+			$state.go('resourceplanner.newoverview');
+			vm.editAgentGroup = {};
 		}
 
 		function removeAgentGroup(id) {

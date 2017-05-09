@@ -74,7 +74,7 @@
 			params: {
 				groupId: ''
 			}
-		}).state('resourceplanner.oneagentgroup', {
+		}).state('resourceplanner.planningperiodoverview', {
 			url: '/agentgroup/:groupId/detail/:ppId',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
 			controller: 'planningPeriodOverviewController as vm',
@@ -82,10 +82,8 @@
 				groupId: '',
 				ppId: ''
 			}
-		}).state('resourceplanner.dayoffrulesOverview', {
+		}).state('resourceplanner.dayoffrulesoverview', {
 			params: {
-				filterId: '',
-				isDefault: undefined,
 				groupId: undefined
 			},
 			url: '/agentgroup/:groupId/dayoffrules/overview',

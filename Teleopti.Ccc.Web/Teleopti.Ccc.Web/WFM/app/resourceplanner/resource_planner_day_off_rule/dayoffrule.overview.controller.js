@@ -16,17 +16,17 @@
 		vm.textManageDoRule = '';
 		vm.textDeleteDoRule = '';
 		vm.textDoRuleAppliedFilter = '';
-		vm.editRuleset = editRuleset;
 		vm.getDoRuleInfo = getDoRuleInfo;
-		vm.destroyRuleset = destroyRuleset;
-		vm.createRuleset = createRuleset;
-		vm.goDayoffRuleSetting = goDayoffRuleSetting;
+		vm.deleteDoRule = deleteDoRule;
+		vm.goEditDoRule = goEditDoRule;
+		vm.goCreateDoRule = goCreateDoRule;
+		vm.goDoRulesSetting = goDoRulesSetting;
 
 		getDayOffRules();
 		getAgentGroupById();
 
 		function getAgentGroupById() {
-			if ($stateParams.groupId !== null) {
+			if ($stateParams.groupId) {
 				var getAgentGroup = agentGroupService.getAgentGroupById({ id: $stateParams.groupId });
 				return getAgentGroup.$promise.then(function (data) {
 					vm.agentGroup = data;
@@ -38,16 +38,30 @@
 		}
 
 		function getDayOffRules() {
-			if ($stateParams.groupId !== null) {
-				return dayOffRuleService.getDayOffRulesForAgentGroup({ agentGroupId: $stateParams.groupId })
-					.$promise.then(function (data) {
-						vm.dayOffRules = data;
-						return vm.dayOffRules;
-					});
+			if ($stateParams.groupId) {
+				var dayOffRule = dayOffRuleService.getDayOffRulesByAgentGroupId({ agentGroupId: $stateParams.groupId });
+				return dayOffRule.$promise.then(function (data) {
+					vm.dayOffRules = data;
+					return vm.dayOffRules;
+				});
 			}
 		}
 
-		function editRuleset(dayOffRule) {
+		function getDoRuleInfo(dayOffRule) {
+			vm.textDeleteDoRule = $translate.instant("AreYouSureYouWantToDeleteTheDayOffRule").replace("{0}", dayOffRule.Name);
+		}
+
+		function deleteDoRule(dayOffRule) {
+			if (!dayOffRule.Default) {
+				var deleteDayOffRule = dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id });
+				return deleteDayOffRule.$promise.then(function() {
+					var index = vm.dayOffRules.indexOf(dayOffRule);
+					vm.dayOffRules.splice(index,1);
+				});
+			}
+		}
+
+		function goEditDoRule(dayOffRule) {
 			$state.go('resourceplanner.dayoffrule', {
 				filterId: dayOffRule.Id.toString(),
 				groupId: $stateParams.groupId,
@@ -55,25 +69,14 @@
 			});
 		}
 
-		function getDoRuleInfo(dayOffRule) {
-			vm.textDeleteDoRule = $translate.instant("AreYouSureYouWantToDeleteTheDayOffRule").replace("{0}", dayOffRule.Name);
-		}
-
-		function destroyRuleset(dayOffRule) {
-			if (!dayOffRule.Default) {
-				dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id })
-					.$promise.then(getDayOffRules);
-			}
-		}
-
-		function createRuleset() {
+		function goCreateDoRule() {
 			$state.go('resourceplanner.dayoffrule', {
 				groupId: $stateParams.groupId
 			});
 		}
 
-		function goDayoffRuleSetting() {
-			$state.go('resourceplanner.dayoffrulesOverview', {
+		function goDoRulesSetting() {
+			$state.go('resourceplanner.dayoffrulesoverview', {
 				groupId: $stateParams.groupId,
 			});
 		}

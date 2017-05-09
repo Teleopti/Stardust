@@ -1,40 +1,69 @@
 'use strict';
-xdescribe('dayoffRuleOverviewController', function () {
+describe('dayoffRuleOverviewController', function () {
     var $httpBackend,
         $controller,
-        $state,
         $injector,
         $q,
         dayOffRuleService,
         agentGroupService,
-        vm;
+        stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' };
 
     beforeEach(function () {
         module('wfm.resourceplanner');
     });
 
-    beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _$q_, _dayOffRuleService_, _agentGroupService_) {
+    beforeEach(inject(function (_$httpBackend_, _$controller_, _$q_, _dayOffRuleService_, _agentGroupService_) {
         $httpBackend = _$httpBackend_;
         $controller = _$controller_;
         dayOffRuleService = _dayOffRuleService_;
         agentGroupService = _agentGroupService_;
         $q = _$q_;
-        $state = _$state_;
 
-        spyOn($state, 'go');
-        // spyOn(dayOffRuleService, 'getFilterData').and.callThrough();
+        $httpBackend.whenGET('../api/ResourcePlanner/AgentGroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
+            return [200, {
+                Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+                Name: "Agent Group Test",
+                Filters: []
+            }];
+        });
 
-        vm = $controller('dayoffRuleOverviewController');
+        $httpBackend.whenDELETE('../api/resourceplanner/dayoffrules/ec4356ba-8278-48e4-b4f8-c3102b7af684').respond(function (method, url, data, headers) {
+            return [200, true];
+        });
 
-        $httpBackend.whenGET(/.*?api\/filters\?.*/).respond(function (method, url, data, headers) {
+        $httpBackend.whenGET('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/dayoffrules').respond(function (method, url, data, headers) {
             return [200, [{
-                Id: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2',
-                Name: "Skill 1",
-                FilterType: "Skill"
+                Id: '00e9d2f9-e35e-408a-9cef-a76cfc9f6d6c',
+                AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+                Name: "Default",
+                Default: true,
+                MinDayOffsPerWeek: 1,
+                MaxDayOffsPerWeek: 3,
+                MinConsecutiveWorkdays: 2,
+                MaxConsecutiveWorkdays: 6,
+                MinConsecutiveDayOffs: 1,
+                MaxConsecutiveDayOffs: 3,
+                Filters: []
             }, {
-                Id: 'a98d2c45-a8f4-4c70-97f9-907ab364af75',
-                Name: "Skill 2",
-                FilterType: "Skill"
+                Id: 'ec4356ba-8278-48e4-b4f8-c3102b7af684',
+                AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+                Name: "Day off rule 101",
+                Default: false,
+                MinDayOffsPerWeek: 1,
+                MaxDayOffsPerWeek: 3,
+                MinConsecutiveWorkdays: 2,
+                MaxConsecutiveWorkdays: 6,
+                MinConsecutiveDayOffs: 1,
+                MaxConsecutiveDayOffs: 3,
+                Filters: [{
+                    Id: "79c466f0-cbe8-4209-b949-9b5e015b23f7",
+                    FilterType: "contract",
+                    Name: "Full time Fixed staff"
+                }, {
+                    Id: "cac4e7e7-5645-49ce-87c7-0bdd578d0bc6",
+                    FilterType: "skill",
+                    Name: "phone"
+                }]
             }], {}];
         });
     }));
@@ -44,12 +73,25 @@ xdescribe('dayoffRuleOverviewController', function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('should get agent group information by groupId', function () {
-        vm.searchString = "skill";
-        vm.inputFilterData();
+    it('should get day off rules by agent group id', function () {
+        spyOn(dayOffRuleService, 'getDayOffRulesByAgentGroupId').and.callThrough();
+        var vm = $controller('dayoffRuleOverviewController', { $stateParams: stateparams });
         $httpBackend.flush();
 
-        expect(dayOffRuleService.getFilterData).toHaveBeenCalled();
+        expect(dayOffRuleService.getDayOffRulesByAgentGroupId).toHaveBeenCalledWith({ agentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' });
+        expect(vm.dayOffRules.length).toEqual(2);
+    });
+
+    it('should delete selected off rule', function () {
+        spyOn(dayOffRuleService, 'removeDayOffRule').and.callThrough();
+        var vm = $controller('dayoffRuleOverviewController', { $stateParams: stateparams });
+        $httpBackend.flush();
+
+        vm.deleteDoRule(vm.dayOffRules[1]);
+        $httpBackend.flush();
+
+        expect(dayOffRuleService.removeDayOffRule).toHaveBeenCalledWith({ id: 'ec4356ba-8278-48e4-b4f8-c3102b7af684' });
+        expect(vm.dayOffRules.length).toEqual(1);
     });
 
 });

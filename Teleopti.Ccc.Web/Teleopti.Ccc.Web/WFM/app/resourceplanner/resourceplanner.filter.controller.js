@@ -181,7 +181,7 @@
 
 				function returnFromCreate() {
 					if ($stateParams.groupId) {
-						$state.go('resourceplanner.oneagentgroup',
+						$state.go('resourceplanner.planningperiodoverview',
 						{
 							groupId: $stateParams.groupId
 						});

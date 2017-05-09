@@ -6,12 +6,12 @@
 </div>
 <div class="con-row" ng-hide="vm.isDisable">
 	<div class="con-flex">
-		<button type="button" name="button" ng-click="vm.createRuleset()" class="wfm-btn material-depth-1 wfm-btn-primary">{{'NewDayOffRule' | translate}}</button>
+		<button type="button" name="button" ng-click="vm.goCreateDoRule()" class="wfm-btn material-depth-1 wfm-btn-primary">{{'NewDayOffRule' | translate}}</button>
 	</div>
 </div>
 <div class="con-row" ng-if="vm.isDisable">
 	<div class="con-flex">
-		<button type="button" name="button" ng-click="vm.goDayoffRuleSetting()" class="wfm-btn material-depth-1 wfm-btn-primary">{{'DayOffRuleSetting' | translate}}</button>
+		<button type="button" name="button" ng-click="vm.goDoRulesSetting()" class="wfm-btn material-depth-1 wfm-btn-primary">{{'DayOffRuleSetting' | translate}}</button>
 	</div>
 </div>
 <div class="con-row" ng-if="vm.isDisable">
@@ -22,11 +22,11 @@
 <div class="con-row">
 	<div class="con-flex">
 		<div class="card-group">
-			<div class="panel material-depth-1 wfm-card filter-boxes" ng-repeat="dayOffRule in vm.dayOffRules track by dayOffRule.Id">
+			<div class="panel material-depth-1 wfm-card filter-boxes" ng-repeat="dayOffRule in vm.dayOffRules">
 				<div class="sub-header">
 					<h2>{{dayOffRule.Name}}</h2>
 					<div class="head-actions panel-menu " ng-hide="vm.isDisable">
-						<div tabindex=0 class="context-menu card-context" ng-click="vm.editRuleset(dayOffRule)">
+						<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditDoRule(dayOffRule)">
 							<i class="filter-header mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
 						</div>
 						<div tabindex=0 class="context-menu card-context" ng-click="confirmModal1 = true; vm.getDoRuleInfo(dayOffRule);" ng-show="!dayOffRule.Default">
@@ -43,7 +43,7 @@
 										<div class="modal-actions">
 											<aside>
 												<button ng-click="confirmModal1=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel' | translate }}</button>
-												<button ng-click="confirmModal1=false; vm.destroyRuleset(dayOffRule)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
+												<button ng-click="confirmModal1=false; vm.deleteDoRule(dayOffRule)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
 											</aside>
 										</div>
 									</div>

@@ -5,9 +5,9 @@
 		.module('wfm.resourceplanner')
 		.controller('resourceplanningOverviewController', Controller);
 
-	Controller.$inject = ['$stateParams', 'agentGroupService', '$state'];
+	Controller.$inject = [];
 
-	function Controller($stateParams, agentGroupService, $state) {
+	function Controller() {
 		var vm = this;
 	}
 })();

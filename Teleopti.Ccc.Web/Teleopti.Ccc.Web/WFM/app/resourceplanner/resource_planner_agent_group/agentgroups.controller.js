@@ -14,7 +14,7 @@
     vm.goForm = goForm;
     vm.goAgentGroup = goAgentGroup;
     vm.goEditAgentGroup = goEditAgentGroup;
-    vm.goDayoffRule = goDayoffRule;
+    vm.goDayOffRule = goDayOffRule;
     vm.agentGroups = undefined;
 
     getAgentGroups();
@@ -43,9 +43,9 @@
       }
     }
 
-    function goDayoffRule(groupId) {
+    function goDayOffRule(groupId) {
       if (groupId) {
-        $state.go('resourceplanner.dayoffrulesOverview', { groupId: groupId });
+        $state.go('resourceplanner.dayoffrulesoverview', { groupId: groupId });
       }
     }
   }
