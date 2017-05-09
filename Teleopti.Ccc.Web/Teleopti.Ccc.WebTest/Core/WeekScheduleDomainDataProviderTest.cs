@@ -1369,7 +1369,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapIsCurrentDayOnGetDaySchedule()
 		{
-			var date = DateOnly.Today;
+			var date = new DateOnly(2012, 08, 26);
 			var periodWithPreviousDay = new DateOnlyPeriod(date.AddDays(-1), date);
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 
@@ -1381,7 +1381,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(periodWithPreviousDay)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
-			now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
+			now.Stub(x => x.UtcDateTime()).Return(date.Date);
 
 			var result = target.GetDaySchedule(date);
 			result.IsCurrentDay.Should().Be.True();
