@@ -95,14 +95,18 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 				var jsonBatches = batches
 					.Select(b =>
 					{
-						return b.States
-							.Select(s => new ExternalUserStateWebModel
-							{
-								AuthenticationKey = b.AuthenticationKey,
-								UserCode = s.UserCode,
-								StateCode = s.StateCode,
-								SourceId = b.SourceId,
-							});
+						return new ExternalUserBatchWebModel
+						{
+							AuthenticationKey = b.AuthenticationKey,
+							SourceId = b.SourceId,
+							States = b.States
+								.Select(s => new ExternalUserBatchStateWebModel
+								{
+									UserCode = s.UserCode,
+									StateCode = s.StateCode,
+								})
+								.ToArray()
+						};
 					});
 
 				var timer = new Stopwatch();

@@ -339,7 +339,6 @@
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationFromWeb.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommand.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommandHandler.cs" />
-    <Compile Include="ApplicationLayer\Rta\ExternalCloseSnapshotWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IHistoricalChangeReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTool\IRtaToolViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTool\RtaToolViewModel.cs" />

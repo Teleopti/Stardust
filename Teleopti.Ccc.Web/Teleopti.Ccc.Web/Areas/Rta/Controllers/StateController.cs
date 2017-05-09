@@ -56,25 +56,21 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		}
 
 		[HttpPost, Route("Rta/State/Batch")]
-		public IHttpActionResult Batch([FromBody]IEnumerable<ExternalUserStateWebModel> input)
+		public IHttpActionResult Batch([FromBody]ExternalUserBatchWebModel input)
 		{
-
 			try
 			{
-				var states = input.Select(i => new BatchStateInputModel
-				{
-					UserCode = i.UserCode,
-					StateCode = i.StateCode
-				}).ToArray();
-
-				var root = input.First();
-
 				_rta.SaveStateBatch(new BatchInputModel
 				{
-					AuthenticationKey = root.AuthenticationKey,
-					SourceId = root.SourceId,
-					SnapshotId = parseSnapshotId(root.SnapshotId),
-					States = states
+					AuthenticationKey = input.AuthenticationKey,
+					SourceId = input.SourceId,
+					SnapshotId = parseSnapshotId(input.SnapshotId),
+					States = input.States.Select(i => new BatchStateInputModel
+						{
+							UserCode = i.UserCode,
+							StateCode = i.StateCode
+						})
+						.ToArray()
 				});
 
 			}

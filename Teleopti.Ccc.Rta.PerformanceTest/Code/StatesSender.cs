@@ -69,24 +69,35 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_http.PostJson("/Test/SetCurrentTime", new {time = stateChange.Time});
 
 			_data.LogonsWorking()
-				.Select(logon => new ExternalUserStateWebModel
+				.Select(logon => new ExternalUserBatchStateWebModel
 				{
-					AuthenticationKey = LegacyAuthenticationKey.TheKey,
 					UserCode = logon.UserCode,
 					StateCode = stateChange.StateCode,
-					SourceId = _testConfiguration.SourceId,
 				})
 				.Batch(batchSize)
-				.ForEach(x => Send(x.ToArray()));
+				.Select(x => new ExternalUserBatchWebModel
+				{
+					AuthenticationKey = LegacyAuthenticationKey.TheKey,
+					SourceId = _testConfiguration.SourceId,
+					States = x
+				})
+				.ForEach(Send);
 		}
 
 		[TestLog]
-		protected virtual void Send(IEnumerable<ExternalUserStateWebModel> states)
+		protected virtual void Send(ExternalUserBatchWebModel batch)
 		{
-			if (states.Count() == 1)
-				_http.PostJson("Rta/State/Change", states.Single());
+			if (batch.States.Count() == 1)
+				_http.PostJson("Rta/State/Change", new ExternalUserStateWebModel
+				{
+					AuthenticationKey = batch.AuthenticationKey,
+					SnapshotId = batch.SnapshotId,
+					SourceId = batch.SourceId,
+					StateCode = batch.States.Single().StateCode,
+					UserCode = batch.States.Single().UserCode
+				});
 			else
-				_http.PostJson("Rta/State/Batch", states);
+				_http.PostJson("Rta/State/Batch", batch);
 		}
 
 		// ~10% adherence changes

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			DataSourceHelper.CreateDatabases();
 
 			TestSiteConfigurationSetup.Setup();
-			
+
 			IntegrationIoCTest.Setup(builder =>
 			{
 				builder.RegisterType<TestConfiguration>().SingleInstance();
