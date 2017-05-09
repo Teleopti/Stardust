@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using IISExpressAutomation;
 using Teleopti.Ccc.Domain;
@@ -28,6 +30,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		{
 			_portsConfiguration = RandomPortsAndUrls();
 			writeWebConfigs();
+			killAllIISExpress();
 			StartIISExpress();
 		}
 
@@ -115,8 +118,30 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				//sometimes throws "Process window not found" - don't make that exception bubble up in this teardown...
 				//https://github.com/ElemarJR/IISExpress.Automation/blob/master/src/IISExpress.Automation/ProcessEnvelope.cs
 			}
+
+			waitForIISExpressToClose();
+			killAllIISExpress();
+
 			_portsConfiguration?.Dispose();
 			writeWebConfigs();
+		}
+
+		private static void waitForIISExpressToClose()
+		{
+			var counter = 0;
+			while (Process.GetProcessesByName("iisexpress").Any())
+			{
+				Thread.Sleep(100);
+				counter++;
+				if (counter == 50)
+					break;
+			}
+		}
+		
+		private static void killAllIISExpress()
+		{
+			Process.GetProcessesByName("iisexpress")
+				.ForEach(p => p.Kill());
 		}
 
 		private static void writeWebConfigs()
