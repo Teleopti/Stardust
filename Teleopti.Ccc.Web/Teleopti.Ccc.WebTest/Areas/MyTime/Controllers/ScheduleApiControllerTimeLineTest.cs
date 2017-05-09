@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			team.Site.AddOpenHour(new SiteOpenHour
 			{
-				TimePeriod = new TimePeriod(TimeSpan.FromHours(8),TimeSpan.FromHours(25)),
+				TimePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(25)),
 				IsClosed = false,
 				WeekDay = DayOfWeek.Saturday
 			});
@@ -234,6 +234,44 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(23);
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(59);
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldNotAdjustTimelineWithSiteOpenHourWhenCurrentWeekOutOfRange()
+		{
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = new TimePeriod(8, 0, 17, 0),
+				IsClosed = false,
+				WeekDay = DayOfWeek.Thursday
+			});
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = new TimePeriod(7, 0, 18, 0),
+				IsClosed = false,
+				WeekDay = DayOfWeek.Friday
+			});
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(25)),
+				IsClosed = false,
+				WeekDay = DayOfWeek.Sunday
+			});
+			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team));
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015,1,5));
+			var period = new DateTimePeriod(new DateTime(2015, 1, 5, 9, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 1, 5, 9, 45, 0, DateTimeKind.Utc));
+			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchWeekData(new DateOnly(2015, 1, 5), StaffingPossiblityType.Overtime);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
 		}
 	}
 }

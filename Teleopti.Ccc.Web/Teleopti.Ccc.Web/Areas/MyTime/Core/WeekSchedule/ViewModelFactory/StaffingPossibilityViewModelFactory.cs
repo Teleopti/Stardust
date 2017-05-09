@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly IScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
 		private readonly INow _now;
 		private readonly IToggleManager _toggleManager;
-		private readonly int _maxAvailableDays = 13;
 
 		public StaffingPossibilityViewModelFactory(
 			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, INow now, IToggleManager toggleManager)
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var maxEndDate = today;
 			if (_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880))
 			{
-				maxEndDate = today.AddDays(_maxAvailableDays);
+				maxEndDate = today.AddDays(ScheduleStaffingPossibilityConsts.MaxAvailableDays);
 			}
 			var availablePeriod = new DateOnlyPeriod(today, maxEndDate);
 			return availablePeriod.Intersection(weekPeriod);

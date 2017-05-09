@@ -928,6 +928,57 @@ $(document).ready(function() {
 		equal("#Schedule/MobileDay", hash);
 	});
 
+	test("should reload schedule when switch to overtime probability", function () {
+		initUserTexts();
+		initCommon();
+
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+			return false;
+		};
+
+		var invokeFetchWeekDataCount = 0;
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === "../api/ScheduleStaffingPossibility") {
+					options.success(getFakeProbabilityData());
+				}
+				if (options.url === "../api/Schedule/FetchWeekData") {
+					invokeFetchWeekDataCount++;
+					options.success(getFakeScheduleData());
+				}
+			}
+		}
+
+		Teleopti.MyTimeWeb.Schedule.PartialInit(function () { },
+			function () { },
+			ajax
+		); 
+
+		Teleopti.MyTimeWeb.Request.RequestDetail = {
+			AddTextOrAbsenceRequest: function () { 
+			}
+		};
+
+		Teleopti.MyTimeWeb.UserInfo = {
+			WhenLoaded: function (whenLoadedCallBack) {
+				var data = { WeekStart: "" };
+				whenLoadedCallBack(data);
+			}
+		};
+
+		Teleopti.MyTimeWeb.Schedule.SetupViewModel(undefined, function() {}); 
+
+		var fakeScheduleData = getFakeScheduleData();
+
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		week.initializeData(fakeScheduleData);  
+		week.switchProbabilityType(constants.probabilityType.overtime);
+
+		equal(1, invokeFetchWeekDataCount);
+	});
+
 	function setupHash() {
 		this.hasher = {
 			initialized: {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -55,7 +56,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			}
 			else if (_toggles.IsEnabled(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880))
 			{
-				siteOpenHourPeriod = getWeekSiteOpenHourPeriod();
+				var weekPeriod = DateHelper.GetWeekPeriod(scheduleDomainData.Date, CultureInfo.CurrentCulture);
+				if (weekPeriod.StartDate > _now.LocalDateOnly().AddDays(ScheduleStaffingPossibilityConsts.MaxAvailableDays))
+				{
+					return false;
+				}
+				siteOpenHourPeriod = getWeekSiteOpenHourPeriod(weekPeriod);
 			}
 			else
 			{
@@ -77,10 +83,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return true;
 		}
 
-		private TimePeriod? getWeekSiteOpenHourPeriod()
+		private TimePeriod? getWeekSiteOpenHourPeriod(DateOnlyPeriod weekPeriod)
 		{
 			var timePeriods = new List<TimePeriod>();
-			var weekPeriod = DateHelper.GetWeekPeriod(_now.LocalDateOnly(), CultureInfo.CurrentCulture);
+
 			foreach (var day in weekPeriod.DayCollection())
 			{
 				var siteOpenHourPeriod = getSiteOpenHourPeriod(day);
@@ -117,7 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return new TimePeriod(startTime, endTime);
 		}
 
-		private static TimeSpan getMaxEndTime() => TimeSpan.FromDays(1).Subtract(TimeSpan.FromMinutes(1));
+		private static TimeSpan getMaxEndTime() => TimeSpan.FromDays(1).Subtract(TimeSpan.FromSeconds(1));
 
 		private static bool isCrossDay(TimeSpan timeSpan) => timeSpan.Days >= 1;
 

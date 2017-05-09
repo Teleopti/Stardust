@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public class ScheduleStaffingPossibilityCalculator : IScheduleStaffingPossibilityCalculator
 	{
-		private const int goodPossibility = 1;
-		private const int fairPossibility = 0;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _scenarioRepository;
@@ -131,7 +129,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				FStaff = skillStaffingData.ForecastedStaffing.Value
 			};
 			var isSatisfied = staffingSpecification(skillStaffingData.Skill, staffingInterval);
-			return isSatisfied ? fairPossibility : goodPossibility;
+			return isSatisfied ? ScheduleStaffingPossibilityConsts.FairPossibility : ScheduleStaffingPossibilityConsts.GoodPossibility;
 		}
 
 		private static bool isSkillScheduled(IScheduleDictionary scheduleDictionary, DateOnly date, ISkill skill)
@@ -149,7 +147,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private static bool hasFairPossibilityInThisInterval(Dictionary<DateTime, int> intervalPossibilities, DateTime time)
 		{
 			int possibility;
-			return intervalPossibilities.TryGetValue(time, out possibility) && possibility == fairPossibility;
+			return intervalPossibilities.TryGetValue(time, out possibility) && possibility == ScheduleStaffingPossibilityConsts.FairPossibility;
 		}
 
 		private static bool staffingDataHasValue(SkillStaffingData skillStaffingData)

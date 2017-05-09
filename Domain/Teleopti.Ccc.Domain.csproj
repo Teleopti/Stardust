@@ -131,6 +131,7 @@
     <Compile Include="AgentInfo\FixedStaffLoader.cs" />
     <Compile Include="AgentInfo\IAgentGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
+    <Compile Include="AgentInfo\ScheduleStaffingPossibilityConsts.cs" />
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="ApplicationLayer\Dates\AnalyticsPersonLocalDateUpdater.cs" />
