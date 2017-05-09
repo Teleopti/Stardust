@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			Now.Is(_nowDateTime);
 		}
 
-		[Test, Ignore("WIP")]
+		[Test, Ignore("Can not provoke daed locks, but leave the code for the future")]
 		public void Run200RequestsPossibleDeadLock()
 		{
 			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
