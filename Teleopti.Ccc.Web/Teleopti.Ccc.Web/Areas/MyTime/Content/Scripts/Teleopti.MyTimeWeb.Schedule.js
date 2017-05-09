@@ -452,6 +452,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if (!self.overtimeAvailabilityPermission()) {
 				return;
 			}
+
+			scheduleDataCache = {};
 			self.requestViewModel(addOvertimeModel);
 			_fillFormData(data);
 		};
