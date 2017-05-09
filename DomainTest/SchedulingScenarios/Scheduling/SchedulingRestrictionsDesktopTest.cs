@@ -25,10 +25,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		public SchedulingRestrictionsDesktopTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
-		{
-		}
-
 		[Test]
 		public void ShouldNotScheduleShiftsForRestrictionsOnlyWhenNoRestrictionExists()
 		{
@@ -55,6 +51,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				);
 
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.False();
+		}
+
+		public SchedulingRestrictionsDesktopTest(bool resourcePlannerTeamBlockPeriod42836, bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerTeamBlockPeriod42836, resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
 		}
 	}
 }

@@ -28,10 +28,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
-		public ShiftCategoryLimitationTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
-		{
-		}
-
 		[Test]
 		public void ShouldRespectShiftCategoryLimitationWhenUsingTeamAndBlock()
 		{
@@ -549,6 +545,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				}
 			};
 			return optimizerOriginalPreferences;
+		}
+
+		public ShiftCategoryLimitationTest(bool resourcePlannerTeamBlockPeriod42836, bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerTeamBlockPeriod42836, resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
 		}
 	}
 }

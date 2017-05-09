@@ -31,10 +31,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public IResourceOptimizationHelperExtended ResourceCalculation;
 
-		public SchedulingCascadingTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
-		{
-		}
-
 		[TestCase(true)]
 		[TestCase(false)]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation(bool resourceCalculationHasBeenMade)
@@ -71,6 +67,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(numberOfAgents/2);
 			allAssignmentsStartTime.Count(x => x == new TimeSpan(8, 0, 0))
 				.Should().Be.EqualTo(numberOfAgents/2);
+		}
+
+		public SchedulingCascadingTest(bool resourcePlannerTeamBlockPeriod42836, bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerTeamBlockPeriod42836, resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
 		}
 	}
 }

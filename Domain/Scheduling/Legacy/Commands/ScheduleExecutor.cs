@@ -13,6 +13,16 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public interface IScheduleExecutor
+	{
+		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
+			ISchedulingProgress backgroundWorker,
+			IEnumerable<IScheduleDay> selectedScheduleDays,
+			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class ScheduleExecutor : ScheduleExecutorOld
 	{
 		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, IResourceCalculation resourceOptimizationHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, TeamBlockScheduleCommand teamBlockScheduleCommand, ClassicScheduleCommand classicScheduleCommand, IMatrixListFactory matrixListFactory, Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IWeeklyRestSolverCommand weeklyRestSolverCommand, PeriodExtractorFromScheduleParts periodExtractor, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IUserTimeZone userTimeZone, DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime) : base(schedulerStateHolder, requiredScheduleOptimizerHelper, resourceOptimizationHelper, scheduleDayChangeCallback, teamBlockScheduleCommand, classicScheduleCommand, matrixListFactory, resourceOptimizationHelperExtended, weeklyRestSolverCommand, periodExtractor, resourceCalculationContextFactory, userTimeZone, doFullResourceOptimizationOneTime)
@@ -26,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 	}
 
-	public class ScheduleExecutorOld
+	[RemoveMeWithToggle("Rename and keep this one merge with new one", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class ScheduleExecutorOld : IScheduleExecutor
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;

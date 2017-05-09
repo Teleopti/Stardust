@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class DesktopScheduling
 	{
-		private readonly ScheduleExecutorOld _scheduleExecutor;
+		private readonly IScheduleExecutor _scheduleExecutor;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resouceResourceOptimizationHelper;
 
-		public DesktopScheduling(ScheduleExecutorOld scheduleExecutor, 
+		public DesktopScheduling(IScheduleExecutor scheduleExecutor, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IResourceCalculation resouceResourceOptimizationHelper)
 		{

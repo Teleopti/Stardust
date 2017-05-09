@@ -27,10 +27,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public IResourceOptimizationHelperExtended ResourceCalculation;
 
-		public SchedulingCascadingDesktopTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
-		{
-		}
-
 		[TestCase(true)]
 		[TestCase(false)]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation(bool resourceCalculationHasBeenMade)
@@ -178,6 +174,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				x.Period.StartDateTime.TimeOfDay
 					.Should().Be.EqualTo(TimeSpan.FromHours(0));
 			});
+		}
+
+		public SchedulingCascadingDesktopTest(bool resourcePlannerTeamBlockPeriod42836, bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerTeamBlockPeriod42836, resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
 		}
 	}
 }

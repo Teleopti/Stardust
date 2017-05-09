@@ -37,10 +37,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePreferenceDayRepository PreferenceDayRepository;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 
-		public TeamBlockSchedulingTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
-		{
-		}
-
 		[TestCase(true)]
 		[TestCase(false)]
 		public void ShouldHandleMixOfTeamAndBlockAndNotClearToMuch_BetweenDayOffs(bool reversedAgentOrder)
@@ -594,6 +590,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoScheduling(period);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
+		}
+
+		public TeamBlockSchedulingTest(bool resourcePlannerTeamBlockPeriod42836, bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerTeamBlockPeriod42836, resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
 		}
 	}
 }

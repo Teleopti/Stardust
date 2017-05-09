@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class FullScheduling
 	{
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
-		private readonly ScheduleExecutorOld _scheduleExecutor;
+		private readonly IScheduleExecutor _scheduleExecutor;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 
 		public FullScheduling(IFillSchedulerStateHolder fillSchedulerStateHolder,
-			ScheduleExecutorOld scheduleExecutor, Func<ISchedulerStateHolder> schedulerStateHolder,
+			IScheduleExecutor scheduleExecutor, Func<ISchedulerStateHolder> schedulerStateHolder,
 			IScheduleDictionaryPersister persister, ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
 			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork, 
 			ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider)

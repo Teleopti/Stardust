@@ -37,10 +37,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IFillSchedulerStateHolder FillSchedulerStateHolder;
 
-		public BackToLegalShiftCommandTest(bool resourcePlannerTeamBlockPeriod42836) : base(resourcePlannerTeamBlockPeriod42836)
-		{
-		}
-
 		[Test]
 		public void ShouldRestoreToLegalShiftBagShiftWithSameStartAndEndTime()
 		{
@@ -255,6 +251,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				PersonAssignment(true).
 				ShiftLayers.Single(x => x.Payload.Equals(otherActivity)).Period.StartDateTime.Minute.
 				Should().Be.EqualTo(15);
+		}
+
+		public BackToLegalShiftCommandTest(bool resourcePlannerTeamBlockPeriod42836, bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerTeamBlockPeriod42836, resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
 		}
 	}
 }
