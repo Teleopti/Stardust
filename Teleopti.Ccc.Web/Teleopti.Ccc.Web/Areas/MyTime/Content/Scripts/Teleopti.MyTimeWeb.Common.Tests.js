@@ -266,25 +266,12 @@ $(document).ready(function () {
     });
 
     test("Should get user texts", function () {
-        var ajax = {
-            Ajax: function(options) {
-                if (options.url === "UserData/FetchUserTexts") {
-                    options.success({Fair: "Fair"});
+        var userTexts = {
+            Fair: 'Fair'
                 }
-            }
-        };
-        var setting = getDefaultSetting();
-        common.Init(setting, ajax);
+        common.SetUserTexts(userTexts);
 
         var texts = common.GetUserTexts();
         equal("Fair", texts.Fair);
     });
-
-    function getDefaultSetting() {
-        return {
-            defaultNavigation: '/',
-            baseUrl: '/',
-            startBaseUrl: '/'
-        };
-    }
 });

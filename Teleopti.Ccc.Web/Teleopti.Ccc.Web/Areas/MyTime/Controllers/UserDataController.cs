@@ -19,34 +19,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Ok(_userDataFactory.CreateViewModel());
 		}
-
-		[UnitOfWork]
-		[HttpGet,Route("mytime/userdata/FetchUserTexts")]
-		public virtual IHttpActionResult FetchUserText()
-		{
-		    var userText = new
-		    {
-				UserTexts.Resources.XRequests,
-				UserTexts.Resources.SubjectColon,
-				UserTexts.Resources.LocationColon,
-				UserTexts.Resources.DescriptionColon,
-				UserTexts.Resources.ChanceOfGettingAbsenceRequestGranted,
-				UserTexts.Resources.SeatBookings,
-				UserTexts.Resources.YouHaveNotBeenAllocatedSeat,
-				UserTexts.Resources.Fair,
-				UserTexts.Resources.Poor,
-				UserTexts.Resources.Good,
-				UserTexts.Resources.High,
-				UserTexts.Resources.Low,
-				UserTexts.Resources.ProbabilityToGetAbsenceColon,
-				UserTexts.Resources.ProbabilityToGetOvertimeColon,
-				UserTexts.Resources.HideStaffingInfo,
-				UserTexts.Resources.ShowAbsenceProbability,
-				UserTexts.Resources.ShowOvertimeProbability,
-				UserTexts.Resources.StaffingInfo
-			};
-
-			return Ok(userText);
-		}
 	}
 }

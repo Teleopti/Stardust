@@ -1,6 +1,7 @@
 ﻿@using System.Web.Optimization
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Core.Startup.InitializeApplication
+@using Teleopti.Ccc.UserTexts 
 
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
@@ -54,6 +55,32 @@
 		});
 	</script>
 	}
+
+	<script>
+	    $(function() {
+	        Teleopti.MyTimeWeb.Common.SetUserTexts(
+	        {
+				XRequests: '@Resources.XRequests',
+				SubjectColon: '@Resources.SubjectColon',
+				LocationColon: '@Resources.LocationColon',
+				DescriptionColon: '@Resources.DescriptionColon',
+				ChanceOfGettingAbsenceRequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted',
+				SeatBookings: '@Resources.SeatBookings',
+				YouHaveNotBeenAllocatedSeat: '@Resources.YouHaveNotBeenAllocatedSeat',
+				Fair: '@Resources.Fair',
+				Poor: '@Resources.Poor',
+				Good: '@Resources.Good',
+				High: '@Resources.High',
+				Low: '@Resources.Low',
+				ProbabilityToGetAbsenceColon: '@Resources.ProbabilityToGetAbsenceColon',
+				ProbabilityToGetOvertimeColon: '@Resources.ProbabilityToGetOvertimeColon',
+				HideStaffingInfo: '@Resources.HideStaffingInfo',
+				ShowAbsenceProbability: '@Resources.ShowAbsenceProbability',
+				ShowOvertimeProbability: '@Resources.ShowOvertimeProbability',
+				StaffingInfo: '@Resources.StaffingInfo'
+			});
+		})
+	</script>
 
 	@RenderSection("head", required: false)
 </head>

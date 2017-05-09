@@ -113,22 +113,6 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		});
     };
 
-    function _getUserTexts() {
-        if (_userTexts != null) return _userTexts;
-
-        _ajax.Ajax({
-            url: 'UserData/FetchUserTexts',
-			dataType: "json",
-			async: false,
-            type: 'GET',
-            success: function (data) {
-                _userTexts = data;
-            }
-        });
-
-        return _userTexts;
-    };
-
 	function _subscribeToMessageBroker(options) {
 		_ajax = _ajax || new Teleopti.MyTimeWeb.Ajax();
 
@@ -322,7 +306,6 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		Init: function (settings, ajax) {
             _settings = settings;
             _ajax = ajax ? ajax : new Teleopti.MyTimeWeb.Ajax();
-            _getUserTexts();
 		},
 		PartialInit: function () {
             Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
@@ -350,7 +333,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		Log: function (logmessage) {
 			_log(logmessage);
 		},
-
+		SetUserTexts: function(userTexts) {
+            _userTexts = userTexts;
+		},
 		SetupCalendar: function (options) {
 			_setupCalendar(options);
 		},
@@ -425,7 +410,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		SubscribeToMessageBroker: _subscribeToMessageBroker,
 		GetUserData: _getUserData,
         IsToggleEnabled: isToggleEnabled,
-        GetUserTexts: _getUserTexts
+        GetUserTexts: function () {
+            return _userTexts;
+        }
 	};
 
 })(jQuery);

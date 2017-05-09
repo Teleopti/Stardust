@@ -11,22 +11,6 @@ $(document).ready(function () {
         ProbabilityToGetOvertimeColon: "ProbabilityToGetOvertimeColon"
     }
 
-    function initCommon() {
-        var setting = getDefaultSetting();
-        var commonAjax = {
-            Ajax: function (options) {
-            }
-        };
-        Teleopti.MyTimeWeb.Common.Init(setting, commonAjax);
-    }
-    function getDefaultSetting() {
-        return {
-            defaultNavigation: '/',
-            baseUrl: '/',
-            startBaseUrl: '/'
-        };
-    }
-
 	var momentWithLocale = function(date){return moment(date).locale('en-gb');};
 	var basedDate = momentWithLocale(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD');
 
@@ -543,7 +527,6 @@ $(document).ready(function () {
 	});
 
     test("should show absence possibility for night shift schedule", function () {
-        initCommon();
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 		};
@@ -564,7 +547,6 @@ $(document).ready(function () {
 	});
 
     test("should change probability option value to absence(1) after selecting 'Show absence probability' ", function () {
-        initCommon();
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 		};
@@ -590,7 +572,6 @@ $(document).ready(function () {
 	});
 
     test("should change staffing probability option value to overtime(2) after selecting 'Show overtime  probability' ", function () {
-        initCommon();
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 		};

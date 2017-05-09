@@ -105,24 +105,6 @@ $(document).ready(function() {
 		};
 	}
 
-	function initCommon() {
-		var setting = getDefaultSetting();
-		var commonAjax = {
-			Ajax: function(options) {}
-		};
-		Teleopti.MyTimeWeb.Common.Init(setting, commonAjax);
-	}
-
-	function getDefaultSetting() {
-		return {
-			defaultNavigation: '/',
-			baseUrl: '/',
-			startBaseUrl: '/'
-		};
-	}
-
-	initCommon();
-
 	test("Calculate absence probability boundaries for dayoff", function() {
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;

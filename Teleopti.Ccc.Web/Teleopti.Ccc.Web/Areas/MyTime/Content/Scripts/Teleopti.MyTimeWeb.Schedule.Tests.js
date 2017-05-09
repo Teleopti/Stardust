@@ -198,15 +198,6 @@ $(document).ready(function() {
 		return result;
 	}
 
-	function initCommon() {
-		var setting = getDefaultSetting();
-		var commonAjax = {
-			Ajax: function (options) {
-			}
-		};
-		Teleopti.MyTimeWeb.Common.Init(setting, commonAjax);
-	}
-
 	var userTexts = {
 		HideStaffingInfo: "HideStaffingInfo",
 		XRequests: "XRequests",
@@ -219,22 +210,11 @@ $(document).ready(function() {
 	}
 
 	function initUserTexts() {
-		Teleopti.MyTimeWeb.Common.GetUserTexts = function () {
-			return userTexts;
-		};
-	}
-
-	function getDefaultSetting() {
-		return {
-			defaultNavigation: '/',
-			baseUrl: '/',
-			startBaseUrl: '/'
-		};
+	    Teleopti.MyTimeWeb.Common.SetUserTexts(userTexts);
 	}
 
 	test("should read absence report permission", function () {
 		initUserTexts();
-		initCommon();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 		vm.initializeData(getFakeScheduleData());
 
@@ -260,7 +240,6 @@ $(document).ready(function() {
 	});
 
 	test("should read timelines", function () {
-		initCommon();
 		var fakeScheduleData = getFakeScheduleData();
 		//9:30 ~ 17:00 makes 9 timeline points
 		fakeScheduleData.TimeLine = [{
@@ -301,7 +280,6 @@ $(document).ready(function() {
 	});
 
 	test("should show no overtime possibility if the feature is disabled", function () {
-		initCommon();
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return false;
 		};
@@ -318,7 +296,6 @@ $(document).ready(function() {
 	});
 
 	test("should show no absence possibility if set to hide probability", function () {
-		initCommon();
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
@@ -338,7 +315,6 @@ $(document).ready(function() {
 
 	test("should keep possibility selection for today when changing date", function () {
 		initUserTexts();
-		initCommon();
 
 		setupHash();
 
@@ -366,7 +342,6 @@ $(document).ready(function() {
 
 	test("should keep possibility selection for multiple days when changing date", function () {
 		initUserTexts();
-		initCommon();
 		setupHash();
 
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
@@ -898,7 +873,6 @@ $(document).ready(function() {
 	});
 
 	test("should select hide staffing info option when CheckStaffingByIntraday is changed to false from true", function () {
-		initCommon();
 
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
