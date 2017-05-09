@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
 		}
 
-		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IEnumerable<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedSchedules, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, bool runWeeklyRestSolver)
 		{
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 
