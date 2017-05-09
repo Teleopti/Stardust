@@ -930,7 +930,6 @@ $(document).ready(function() {
 
 	test("should reload schedule when switch to overtime probability", function () {
 		initUserTexts();
-		initCommon();
 
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
