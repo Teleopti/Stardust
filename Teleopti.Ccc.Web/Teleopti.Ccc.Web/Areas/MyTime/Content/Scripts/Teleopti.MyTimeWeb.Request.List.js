@@ -311,7 +311,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		});
 
 		self.pages = 0;
-
+		self.loadMoreRequests = function() {
+			self.MoreToLoad(false);
+			self.LoadPage();
+		};
 		self.LoadPage = function () {
 			var skip = self.pages * 20;
 			var take = 20;
@@ -473,7 +476,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		var totalContentHeight = jqDocument.height();
 		var inViewContentHeight = jqWindow.height();
 		var aboveViewContentHeight = jqWindow.scrollTop();
-		return totalContentHeight - inViewContentHeight - aboveViewContentHeight <= 10;
+		return totalContentHeight - inViewContentHeight - aboveViewContentHeight <= 0;
 	}
 
 	function _unbind() {
