@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var repositoryFactory = new RepositoryFactory();
 			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-			var scheduleDifferenceSaver = new SaveSchedulePartService(new ScheduleDifferenceSaver(scheduleRepository, CurrentUnitOfWork.Make()), personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack(),new EmptyScheduleDayDifferenceSaver());
+			var scheduleDifferenceSaver = new SaveSchedulePartService(new ScheduleDifferenceSaver(scheduleRepository, CurrentUnitOfWork.Make(), new EmptyScheduleDayDifferenceSaver()), personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack(),new ScheduleDayDifferenceSaveTemporaryEmpty());
 			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
 			var personAbsenceCreator = new PersonAbsenceCreator (scheduleDifferenceSaver, businessRulesForAccountUpdate);
 			var commandConverter = new AbsenceCommandConverter(new ThisCurrentScenario(scenario), new PersonRepository(currentUnitOfWork), new AbsenceRepository(currentUnitOfWork), scheduleRepository, UserTimeZone.Make());

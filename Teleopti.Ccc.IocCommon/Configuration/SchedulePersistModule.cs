@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EmptyInitiatorIdentifier>().As<IInitiatorIdentifier>().SingleInstance(); // shouldnt be registered at all, inject ICurrentInitiatorIdentifier!
 			builder.RegisterType<dontReassociateDataForSchedules>().As<IReassociateDataForSchedules>().SingleInstance();
 			builder.RegisterType<EmptyScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
+			builder.RegisterType<ScheduleDayDifferenceSaveTemporaryEmpty>().As<IScheduleDayDifferenceSaveTemporary>().SingleInstance();
 		}
 
 		private class dontReassociateDataForSchedules : IReassociateDataForSchedules

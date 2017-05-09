@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
@@ -9,15 +9,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 	{
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly IScheduleDayDifferenceSaver _scheduleDayDifferenceSaver;
 
-		public ScheduleDifferenceSaver(IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork)
+		public ScheduleDifferenceSaver(IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork, IScheduleDayDifferenceSaver scheduleDayDifferenceSaver)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentUnitOfWork = currentUnitOfWork;
+			_scheduleDayDifferenceSaver = scheduleDayDifferenceSaver;
 		}
 
 		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater)
 		{
+			var scheduleRange = stateInMemoryUpdater as IScheduleRange;
+			_scheduleDayDifferenceSaver.SaveDifferences(scheduleRange);
 			foreach (var scheduleChange in scheduleChanges)
 			{
 				switch (scheduleChange.Status)
