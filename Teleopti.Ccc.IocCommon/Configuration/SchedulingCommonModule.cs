@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<ScheduleOvertimeModule>();
 			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicScheduleCommand>().InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleCommand>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<ScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();

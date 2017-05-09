@@ -2458,7 +2458,7 @@
     <Compile Include="Scheduling\Legacy\Commands\MatrixUserLockLocker.cs" />
     <Compile Include="Scheduling\Legacy\Commands\OptimizationExecuter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ResourceOptimizationHelperExtended.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\ScheduleCommand.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\ScheduleExecutor.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleOvertime.cs" />
     <Compile Include="Scheduling\Legacy\Commands\SchedulerGroupPagesProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\SchedulerStateHolder.cs" />

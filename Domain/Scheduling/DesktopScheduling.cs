@@ -12,15 +12,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class DesktopScheduling
 	{
-		private readonly ScheduleCommand _scheduleCommand;
+		private readonly ScheduleExecutor _scheduleExecutor;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resouceResourceOptimizationHelper;
 
-		public DesktopScheduling(ScheduleCommand scheduleCommand, 
+		public DesktopScheduling(ScheduleExecutor scheduleExecutor, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IResourceCalculation resouceResourceOptimizationHelper)
 		{
-			_scheduleCommand = scheduleCommand;
+			_scheduleExecutor = scheduleExecutor;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resouceResourceOptimizationHelper = resouceResourceOptimizationHelper;
 		}
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IOptimizationPreferences optimizationPreferences,
 			IDaysOffPreferences dayOffsPreferences)
 		{
-			_scheduleCommand.Execute(optimizerOriginalPreferences, backgroundWorker, selectedScheduleDays,
+			_scheduleExecutor.Execute(optimizerOriginalPreferences, backgroundWorker, selectedScheduleDays,
 				optimizationPreferences, true,
 				new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
 

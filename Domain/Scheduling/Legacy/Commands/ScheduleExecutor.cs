@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class ScheduleCommand
+	public class ScheduleExecutor
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
-		public ScheduleCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
+		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
 			IResourceCalculation resourceOptimizationHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
