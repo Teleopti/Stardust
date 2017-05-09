@@ -102,11 +102,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				currentMatrixCounter++;
 
-				if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff))
+				//could this be deleted? If yes, remove also selectedpersons inparameter
+				if (selectedPersons!=null && !(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff))
 				{
 					if (!selectedPersons.Contains(matrix.Item1.Person))
 						continue;
 				}
+				//
 				rollbackService.ClearModificationCollection();
 				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Item1.Person, matrix.Item1.EffectivePeriodDays.First().Day);
 
@@ -183,8 +185,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			Lazy<double> currentPeriodValue, double previousPeriodValue,
 			MovedDaysOff movedDaysOff)
 		{
-			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, matrix.Person);
-			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, matrix.Person);
+			if (optimizationPreferences.Extra.UseTeams && optimizationPreferences.Extra.UseTeamSameDaysOff)
+			{
+				movedDaysOff.RemovedDaysOff.ForEach(date => _teamDayOffModifier.RemoveDayOffForTeam(rollbackService, teamInfo, date));
+				movedDaysOff.AddedDaysOff.ForEach(date => _teamDayOffModifier.AddDayOffForTeamAndResourceCalculate(rollbackService, teamInfo, date, schedulingOptions.DayOffTemplate));
+			}
+			else
+			{
+				movedDaysOff.RemovedDaysOff.ForEach(date => _teamDayOffModifier.RemoveDayOffForMember(rollbackService, matrix.Person, date));
+				movedDaysOff.AddedDaysOff.ForEach(date => _teamDayOffModifier.AddDayOffForMember(rollbackService, matrix.Person, date, schedulingOptions.DayOffTemplate, true));
+			}
 
 			var personToSetShiftCategoryLimitationFor = optimizationPreferences.Extra.IsClassic() ? matrix.Person : null;
 			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, personToSetShiftCategoryLimitationFor, matrix, optimizationPreferences))
@@ -226,22 +236,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 
 			return currentPeriodValue.Value < previousPeriodValue;
-		}
-
-		private void addAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions, IEnumerable<DateOnly> addedDaysOff, IPerson person)
-		{
-			foreach (var dateOnly in addedDaysOff)
-			{
-				_teamDayOffModifier.AddDayOffForMember(rollbackService, person, dateOnly, schedulingOptions.DayOffTemplate, true);
-			}
-		}
-
-		private void removeAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService, IEnumerable<DateOnly> removedDaysOff, IPerson person)
-		{
-			foreach (var dateOnly in removedDaysOff)
-			{
-				_teamDayOffModifier.RemoveDayOffForMember(rollbackService, person, dateOnly);
-			}
 		}
 
 		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, double periodValue, int screenRefreshRate)

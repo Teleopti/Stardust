@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if(optimizationPreferences.Extra.UseTeams && optimizationPreferences.Extra.UseTeamSameDaysOff)
 				{
 					teamInfosToRemove = _dayOffOptimizerUseTeamSameDaysOff.Execute(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
-					                                            remainingInfoList, schedulingOptions, Enumerable.Empty<IPerson>(),
+					                                            remainingInfoList, schedulingOptions, null,
 					                                            resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, ()=>
 					                                            {
 						                                            cancelMe = true;
