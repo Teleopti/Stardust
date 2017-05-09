@@ -18,6 +18,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
+	/* Running teamblock test with toggle teamBlockDayOffForIndividuals false
+	 * doesn't really make much sense here because web doesn't currently support teamblock-DO.
+	 * However, the test works also with toggle true (for wrong reason) so let's leave it for now.
+	 */
 	[TestFixture(false, true)]
 	[TestFixture(true, true)]
 	[TestFixture(false, false)]
