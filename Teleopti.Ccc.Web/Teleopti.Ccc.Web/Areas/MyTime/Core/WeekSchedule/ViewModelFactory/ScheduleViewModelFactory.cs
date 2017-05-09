@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
@@ -18,26 +20,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly WeekScheduleViewModelMapper _scheduleViewModelMapper;
 		private readonly IWeekScheduleDomainDataProvider _weekScheduleDomainDataProvider;
 		private readonly IMonthScheduleDomainDataProvider _monthScheduleDomainDataProvider;
-		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly INow _now;
 		private readonly IPushMessageProvider _pushMessageProvider;
+		private readonly IScheduleMinMaxTimeSiteOpenHourCalculator _scheduleMinMaxTimeSiteOpenHourCalculator;
+
 
 		public ScheduleViewModelFactory(MonthScheduleViewModelMapper monthMapper,
 			WeekScheduleViewModelMapper scheduleViewModelMapper,
 			IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider,
-			IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider, 
-			ILoggedOnUser loggedOnUser, 
-			INow now,
-			IPushMessageProvider pushMessageProvider)
+			IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider,
+			IPushMessageProvider pushMessageProvider,
+			IScheduleMinMaxTimeSiteOpenHourCalculator scheduleMinMaxTimeSiteOpenHourCalculator)
 		{
 			_monthMapper = monthMapper;
 			_scheduleViewModelMapper = scheduleViewModelMapper;
 			_weekScheduleDomainDataProvider = weekScheduleDomainDataProvider;
 			_monthScheduleDomainDataProvider = monthScheduleDomainDataProvider;
-			_loggedOnUser = loggedOnUser;
-			_now = now;
 			_pushMessageProvider = pushMessageProvider;
-
+			_scheduleMinMaxTimeSiteOpenHourCalculator = scheduleMinMaxTimeSiteOpenHourCalculator;
 		}
 
 		public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
@@ -49,13 +48,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		public WeekScheduleViewModel CreateWeekViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
 		{
 			var weekDomainData = _weekScheduleDomainDataProvider.GetWeekSchedule(date);
-			var minMaxTimeFixed = fixScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, weekDomainData);
-			if (minMaxTimeFixed && weekDomainData.Days != null)
+			if (staffingPossiblityType == StaffingPossiblityType.Overtime)
 			{
-				foreach (var day in weekDomainData.Days)
-				{
-					day.MinMaxTime = weekDomainData.MinMaxTime;
-				}
+				_scheduleMinMaxTimeSiteOpenHourCalculator.AdjustScheduleMinMaxTime(weekDomainData);
 			}
 
 			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData);
@@ -66,16 +61,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		{
 			var dayDomainData = _weekScheduleDomainDataProvider.GetDaySchedule(date);
 			var scheduleDay = dayDomainData.ScheduleDay;
-			
+
 			var hasAnySchedule = scheduleDay.Projection.Any() || scheduleDay.ProjectionYesterday.Any();
 			var hasAnyOvertime = scheduleDay.OvertimeAvailability != null || scheduleDay.OvertimeAvailabilityYesterday != null;
 
 			if (hasAnySchedule || hasAnyOvertime)
 			{
-				var minMaxTimeFixed = fixScheduleMinMaxTimeBySiteOpenHour(staffingPossiblityType, dayDomainData);
-				if (minMaxTimeFixed)
+				if (staffingPossiblityType == StaffingPossiblityType.Overtime)
 				{
-					scheduleDay.MinMaxTime = dayDomainData.MinMaxTime;
+					_scheduleMinMaxTimeSiteOpenHourCalculator.AdjustScheduleMinMaxTime(dayDomainData);
 				}
 			}
 			else
@@ -91,59 +85,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 			var dayScheduleViewModel = _scheduleViewModelMapper.Map(dayDomainData);
 			return dayScheduleViewModel;
-		}
-
-		private bool fixScheduleMinMaxTimeBySiteOpenHour(StaffingPossiblityType staffingPossiblityType,
-			BaseScheduleDomainData scheduleDomainData)
-		{
-			if (staffingPossiblityType != StaffingPossiblityType.Overtime)
-			{
-				return false;
-			}
-
-			var siteOpenHourPeriod = getIntradaySiteOpenHourPeriod();
-			if (!siteOpenHourPeriod.HasValue)
-			{
-				return false;
-			}
-
-			var  newTimelinePeriod = getTimelinePeriod(scheduleDomainData, (TimePeriod)siteOpenHourPeriod);
-			if (scheduleDomainData.MinMaxTime == newTimelinePeriod)
-			{
-				return false;
-			}
-
-			scheduleDomainData.MinMaxTime = newTimelinePeriod;
-			return true;
-		}
-
-		private static TimePeriod getTimelinePeriod(BaseScheduleDomainData scheduleDomainData, TimePeriod siteOpenHourPeriod)
-		{
-			var scheduleMinMaxTime = scheduleDomainData.MinMaxTime;
-			var minTime = scheduleMinMaxTime.StartTime;
-			var maxTime = scheduleMinMaxTime.EndTime;
-			if (siteOpenHourPeriod.StartTime < minTime)
-			{
-				minTime = siteOpenHourPeriod.StartTime;
-			}
-			if (siteOpenHourPeriod.EndTime > maxTime)
-			{
-				maxTime = siteOpenHourPeriod.EndTime;
-			}
-
-			return minTime == scheduleMinMaxTime.StartTime && maxTime == scheduleMinMaxTime.EndTime
-				? scheduleMinMaxTime
-				: new TimePeriod(minTime, maxTime);
-		}
-
-		private TimePeriod? getIntradaySiteOpenHourPeriod()
-		{
-			var siteOpenHour = _loggedOnUser.CurrentUser().SiteOpenHour(_now.LocalDateOnly());
-			if (siteOpenHour == null || siteOpenHour.IsClosed)
-			{
-				return null;
-			}
-			return siteOpenHour.TimePeriod;
 		}
 	}
 }

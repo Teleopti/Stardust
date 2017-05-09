@@ -23,6 +23,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider;
@@ -74,7 +75,8 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
 			system.UseTestDouble<FakeNameFormatSettingProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
 			system.UseTestDouble<FakePushMessageProvider>().For<IPushMessageProvider>(); 
-			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>(); 
+			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
+			system.UseTestDouble<ScheduleMinMaxTimeSiteOpenHourCalculator>().For<IScheduleMinMaxTimeSiteOpenHourCalculator>();
 		}
 	}
 }
