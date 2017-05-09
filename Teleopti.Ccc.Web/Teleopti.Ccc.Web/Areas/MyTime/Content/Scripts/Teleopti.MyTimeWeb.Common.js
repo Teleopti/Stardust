@@ -118,7 +118,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
         _ajax.Ajax({
             url: 'UserData/FetchUserTexts',
-            dataType: "json",
+			dataType: "json",
+			async: false,
             type: 'GET',
             success: function (data) {
                 _userTexts = data;
