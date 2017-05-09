@@ -10,14 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public interface IClassicScheduleCommand
-	{
-		void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IEnumerable<IScheduleDay> selectedSchedules, 
-			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-	}
-
-	public class ClassicScheduleCommand : IClassicScheduleCommand
+	public class ClassicScheduleCommand
 	{
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
@@ -26,13 +19,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
 
 		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IResourceCalculation> resourceOptimizationHelper,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			PeriodExtractorFromScheduleParts periodExtractor,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			IRequiredScheduleHelper requiredScheduleOptimizerHelper)
 		{
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
@@ -41,11 +36,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_schedulerStateHolder = schedulerStateHolder;
 			_periodExtractor = periodExtractor;
 			_userTimeZone = userTimeZone;
+			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
 		}
 
 		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IEnumerable<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver, 
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IEnumerable<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 
@@ -57,29 +52,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (daysOnlyHelper.DaysOnly)
 			{
 				if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
-					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 						backgroundWorker,
 						daysOnlyHelper.PreferenceOnlyOptions);
 
 				if (schedulingOptions.RotationDaysOnly)
-					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 						backgroundWorker,
 						daysOnlyHelper.RotationOnlyOptions);
 
 				if (schedulingOptions.AvailabilityDaysOnly)
-					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 						backgroundWorker,
 						daysOnlyHelper.AvailabilityOnlyOptions);
 
 				if (daysOnlyHelper.UsePreferencesWithNoDaysOnly || daysOnlyHelper.UseRotationsWithNoDaysOnly ||
 					daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
-					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 						backgroundWorker,
 						daysOnlyHelper.NoOnlyOptions);
 
 			}
 			else
-				requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+				_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 					backgroundWorker,
 					schedulingOptions);
 

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly TeamBlockScheduleCommand _teamBlockScheduleCommand;
-		private readonly IClassicScheduleCommand _classicScheduleCommand;
+		private readonly ClassicScheduleCommand _classicScheduleCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceCalculation resourceOptimizationHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			TeamBlockScheduleCommand teamBlockScheduleCommand,
-			IClassicScheduleCommand classicScheduleCommand,
+			ClassicScheduleCommand classicScheduleCommand,
 			IMatrixListFactory matrixListFactory,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					}
 					else
 					{
-						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, _requiredScheduleOptimizerHelper, 
-							selectedScheduleDays, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
+						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays, 
+							runWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
 					}
 				}
 				else
