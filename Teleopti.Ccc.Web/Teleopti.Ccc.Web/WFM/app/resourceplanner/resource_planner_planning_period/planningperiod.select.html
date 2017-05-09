@@ -9,7 +9,7 @@
 <div class="con-row">
 	<div class="con-flex">
 		<button ng-if="!vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.startNextPlanningPeriod()">{{'CreateNextPp' | translate}}</button>
-		<button ng-if="vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.modifyFirstPpModal = true; vm.getSugesstionsForFirstPp()">{{'CreateFirstPlanningPeriod' | translate}}</button>
+		<button ng-if="vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.openCreatePpModal = true; vm.getSuggestionsForFirstPp()">{{'CreateFirstPlanningPeriod' | translate}}</button>
 		<div class="line-right pp-color-label" ng-if="!vm.isNonePp() && vm.displayButton">
 			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>{{'ScheduledSucceeded' | translate}}</span>
 			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>{{'ScheduledFailed' | translate}}</span>
@@ -72,7 +72,7 @@
 				<h2><i class="mdi mdi-information-outline"></i>{{'YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion' | translate}}</h2>
 			</div>
 			<div class="con-footer">
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.modifyFirstPpModal = true; vm.getSuggestionsForFirstPp()" translate>CreatePlanningPeriod</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.openCreatePpModal = true; vm.getSuggestionsForFirstPp()" translate>CreatePlanningPeriod</button>
 			</div>
 		</div>
 	</div>
@@ -117,7 +117,7 @@
 <div class="con-row">
 	<div class="con-flex pp-modal">
 		<div ng-cloak class="modal-box">
-			<div ng-cloak ng-show="vm.modifyFirstPpModal && vm.show == true">
+			<div ng-cloak ng-show="vm.openCreatePpModal && vm.show == true">
 				<div class="modalbg">
 					<div class="dialog material-depth-1">
 						<div class="modal-inner-content">
@@ -144,10 +144,10 @@
 						</div>
 						<div class="modal-actions">
 							<aside>
-								<button ng-click="vm.modifyFirstPpModal=false; vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default" translate>
+								<button ng-click="vm.openCreatePpModal=false; vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default" translate>
 									Cancel
 								</button>
-								<button ng-class="{'wfm-btn-invis-primary':vm.selectedSuggestion, 'wfm-btn-invis-disabled': !vm.selectedSuggestion}" ng-click="vm.modifyFirstPpModal=false; vm.createFirstPp()" class="wfm-btn" translate>
+								<button ng-class="{'wfm-btn-invis-primary':vm.selectedSuggestion, 'wfm-btn-invis-disabled': !vm.selectedSuggestion}" ng-click="vm.openCreatePpModal=false; vm.createFirstPp()" class="wfm-btn" translate>
 									Apply
 								</button>
 							</aside>
@@ -158,12 +158,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	.btn.ng-animate {
-		transition: 0s none;
-		-webkit-transition: 0s none;
-		animation: 0s none;
-		-webkit-animation: 0s none;
-	}
-</style>

@@ -85,17 +85,15 @@
 		}).state('resourceplanner.dayoffrulesOverview', {
 			params: {
 				filterId: '',
-				periodId: '',
 				isDefault: undefined,
 				groupId: undefined
 			},
 			url: '/agentgroup/:groupId/dayoffrules/overview',
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
 			controller: 'dayoffRuleOverviewController as vm'
-		}).state('resourceplanner.dayoffrules', {
+		}).state('resourceplanner.dayoffrule', {
 			params: {
 				filterId: '',
-				periodId: '',
 				isDefault: undefined,
 				groupId: undefined
 			},

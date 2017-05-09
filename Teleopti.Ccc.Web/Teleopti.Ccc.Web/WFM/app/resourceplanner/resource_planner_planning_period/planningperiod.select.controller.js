@@ -163,8 +163,8 @@
 
         function getPpInfo(p) {
             vm.textForDeletePp = $translate.instant("AreYouSureYouWantToDeleteThePlanningPeriod")
-            .replace("{0}", moment(p.startDate).format('L'))
-            .replace("{1}", moment(p.startDate).format('L'));
+            .replace("{0}", moment(p.StartDate).format('L'))
+            .replace("{1}", moment(p.EndDate).format('L'));
         }
 
         function isNonePp() {

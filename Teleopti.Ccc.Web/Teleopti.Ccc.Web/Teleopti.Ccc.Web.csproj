@@ -1540,6 +1540,7 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.createform.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.createform.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.overview.controller.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.overview.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.overview.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.service.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.controller.js" />
