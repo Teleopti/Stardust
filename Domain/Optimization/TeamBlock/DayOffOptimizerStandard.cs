@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				currentMatrixCounter++;
 
 				//could this be deleted? If yes, remove also selectedpersons inparameter
-				if (selectedPersons!=null && !(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff))
+				if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff))
 				{
 					if (!selectedPersons.Contains(matrix.Item1.Person))
 						continue;
