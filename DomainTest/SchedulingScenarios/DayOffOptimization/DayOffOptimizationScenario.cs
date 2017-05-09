@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			_teamBlockDayOffForIndividuals = teamBlockDayOffForIndividuals;
 		}
 
-		public void Configure(FakeToggleManager toggleManager)
+		public virtual void Configure(FakeToggleManager toggleManager)
 		{
 			if (_teamBlockDayOffForIndividuals)
 			{

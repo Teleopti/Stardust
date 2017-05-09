@@ -2,12 +2,14 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -16,11 +18,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
+	[TestFixture(false, true)]
+	[TestFixture(true, true)]
+	[TestFixture(false, false)]
+	[TestFixture(true, false)]
 	[DomainTest]
 	public class DayOffOptimizationTeamBlockTest : DayOffOptimizationScenario
 	{
+		private readonly bool _teamSameDayOff;
 		public IScheduleOptimization Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
@@ -81,8 +86,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				$"Tried optimize {numberOfAttempts} number of times but always moving DOs from same agent. Giving up...");
 		}
 
-		public DayOffOptimizationTeamBlockTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
+		public override void Configure(FakeToggleManager toggleManager)
 		{
+			base.Configure(toggleManager);
+			if (_teamSameDayOff)
+				toggleManager.Enable(Toggles.ResourcePlanner_TeamSameDayOff_44265);
+		}
+
+		public DayOffOptimizationTeamBlockTest(bool teamBlockDayOffForIndividuals, bool teamSameDayOff) : base(teamBlockDayOffForIndividuals)
+		{
+			_teamSameDayOff = teamSameDayOff;
 		}
 	}
 }
