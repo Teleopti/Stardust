@@ -419,7 +419,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
 			var act = ActivityRepository.Has("act");
 			var skill = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill", openHours, false, act);
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 1, new Tuple<TimePeriod, double>(openHours, 1)).WithId();
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 1, ServiceAgreement.DefaultValues(), new Tuple<TimePeriod, double>(openHours, 1)).WithId();
 			skillDay.WorkloadDayCollection.First().TaskPeriodList[0].Tasks = 0.00008;
 			skillDay.WorkloadDayCollection.First().TaskPeriodList[1].Tasks = 2;
 			skillDay.WorkloadDayCollection.Last().TaskPeriodList[2].Tasks = 2;

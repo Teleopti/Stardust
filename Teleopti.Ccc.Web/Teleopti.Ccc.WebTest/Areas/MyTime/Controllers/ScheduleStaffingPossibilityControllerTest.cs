@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				}
 
 				ScheduleForecastSkillReadModelRepository.Persist(skillStaffingIntervals, new DateTime());
-				SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(Scenario.Current(), day, 0,
+				SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(Scenario.Current(), day, 0, ServiceAgreement.DefaultValues(),
 					timePeriodTuples.ToArray()));
 			});
 

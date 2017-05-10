@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15), false);
 			var scenario = fakeScenarioAndIntervalLength();
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 0, new Tuple<TimePeriod, double>(new TimePeriod(8, 0, 8, 15), 0)).WithId();
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 0, ServiceAgreement.DefaultValues(), new Tuple<TimePeriod, double>(new TimePeriod(8, 0, 8, 15), 0)).WithId();
 
 
 			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
@@ -672,7 +672,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 						new Tuple<TimePeriod, double>(openHours, 3)).WithId();
 			else
 				skillDay =
-					skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), agents,
+					skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), agents, ServiceAgreement.DefaultValues(),
 						new Tuple<TimePeriod, double>(openHours, 3)).WithId();
 
 			var index = 0;

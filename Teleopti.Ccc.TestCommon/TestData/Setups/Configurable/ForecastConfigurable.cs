@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			var date = new DateOnly(_date);
 			var skillDayRepository = new SkillDayRepository(currentUnitOfWork);
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(defaultScenario, date, 5,
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(defaultScenario, date, 5, ServiceAgreement.DefaultValues(),
 				new Tuple<TimePeriod, double>(openHours, 5));
 			skillDayRepository.Add(skillDay);
 			var workloadDay = skillDay.WorkloadDayCollection[0];

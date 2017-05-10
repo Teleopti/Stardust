@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, 0.1, new Tuple<TimePeriod, double>(new TimePeriod(9, 45, 10, 0), 1));
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, 0.1, ServiceAgreement.DefaultValues(), new Tuple<TimePeriod, double>(new TimePeriod(9, 45, 10, 0), 1));
 			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(10, 18));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
 			var overtimePreference = new OvertimePreferences

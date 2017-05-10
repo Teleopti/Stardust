@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public static ISkillDay CreateSkillDayWithDemandOnInterval(this ISkill skill, IScenario scenario, DateOnly dateOnly,
-			double defaultDemand, params Tuple<TimePeriod, double>[] intervalDemands)
+			double defaultDemand, ServiceAgreement serviceAgreement, params Tuple<TimePeriod, double>[] intervalDemands)
 		{
 			var skillDataPeriods = new List<ISkillDataPeriod>();
 			List<DateTimePeriod> intervals = dateOnly.ToDateTimePeriod(skill.TimeZone).Intervals(TimeSpan.FromMinutes(skill.DefaultResolution)).ToList();
@@ -94,17 +94,19 @@ namespace Teleopti.Ccc.TestCommon
 			intervals.AddRange(midnightBreakIntervals);
 			var startDateTime = intervals.First().StartDateTime;
 			var intervalDemandsDic = intervalDemands.ToDictionary(k => new DateTimePeriod(startDateTime.Add(k.Item1.StartTime), startDateTime.Add(k.Item1.EndTime)), v => v.Item2);
-			var serviceAgreement = skill.SkillType.Description.Name == "SkillTypeEmail"
-				? new ServiceAgreement(new ServiceLevel(new Percent(1), 7200), new Percent(0), new Percent(0))
-				: ServiceAgreement.DefaultValues();
 				
 			foreach (var interval in intervals)
 			{
+				if (defaultDemand < 0)
+				{
+					skillDataPeriods.Add(new SkillDataPeriod(serviceAgreement, new SkillPersonData(), interval));
+					continue;
+				}
 				var intervalDemandMatch = intervalDemandsDic.SingleOrDefault(x => x.Key.Contains(interval));
 				var demand = intervalDemandMatch.Key == new DateTimePeriod() ?
 					defaultDemand :
 					intervalDemandMatch.Value;
-				skillDataPeriods.Add(new SkillDataPeriod(serviceAgreement, new SkillPersonData(), interval) { ManualAgents = demand });
+				skillDataPeriods.Add(new SkillDataPeriod(serviceAgreement, new SkillPersonData(), interval) {ManualAgents = demand});
 			}
 
 			return setupSkillDay(skill, scenario, dateOnly, skillDataPeriods);

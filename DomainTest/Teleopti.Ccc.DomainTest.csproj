@@ -349,6 +349,7 @@
     <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdaterTest.cs" />
     <Compile Include="Forecasting\SkillPriorityProviderTest.cs" />
     <Compile Include="Intraday\StaffingViewModelCreatorEmailTest.cs" />
+    <Compile Include="Intraday\StaffingViewModelCreatorTestHelper.cs" />
     <Compile Include="Intraday\StaffingViewModelCreatorTest_useSkillCombinationsTolleOn.cs" />
     <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
