@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using IISExpressAutomation;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Support.Library.Config;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
@@ -128,20 +129,29 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		private static void waitForIISExpressToClose()
 		{
+			TestLog.Static.Debug("waitForIISExpressToClose");
 			var counter = 0;
 			while (Process.GetProcessesByName("iisexpress").Any())
 			{
+				TestLog.Static.Debug("waitForIISExpressToClose/wait");
 				Thread.Sleep(100);
 				counter++;
 				if (counter == 50)
 					break;
 			}
+			TestLog.Static.Debug("/waitForIISExpressToClose");
 		}
-		
+
 		private static void killAllIISExpress()
 		{
+			TestLog.Static.Debug("killAllIISExpress");
 			Process.GetProcessesByName("iisexpress")
-				.ForEach(p => p.Kill());
+				.ForEach(p =>
+				{
+					TestLog.Static.Debug("killAllIISExpress/kill");
+					p.Kill();
+				});
+			TestLog.Static.Debug("/killAllIISExpress");
 		}
 
 		private static void writeWebConfigs()

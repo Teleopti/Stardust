@@ -20,5 +20,13 @@ namespace Teleopti.Ccc.Domain.Aop
 		{
 			_log.Debug(message);
 		}
+
+		public static class Static
+		{
+			public static void Debug(string message)
+			{
+				LogManager.GetLogger("Teleopti.TestLog").Debug(message);
+			}
+		}
 	}
 }
