@@ -63,7 +63,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 					PasswordExpired = passwordCheck.PasswordExpired,
 					Success = passwordCheck.Successful,
 					Tenant = personInfo.Tenant.Name,
-					TenantPassword = personInfo.TenantPassword
+					TenantPassword = personInfo.TenantPassword,
+					DataSourceConfiguration = _dataSourceConfigurationEncryption.EncryptConfig(personInfo.Tenant.DataSourceConfiguration),
+					PersonId = personInfo.Id,
 				};
 
 			if (hashFunction.GetType() != _currentHashFunction.GetType())

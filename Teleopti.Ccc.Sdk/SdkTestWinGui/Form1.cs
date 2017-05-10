@@ -86,9 +86,9 @@ namespace SdkTestWinGui
                 rethrowBackgroundException(backgroundWorkerLogon, e);
             }
 
-            if (Service.BusinessUnit == null)
+            if (!Service.SuccessfullyLoggedOn)
             {
-                MessageBox.Show("Invalid username or password.");
+                MessageBox.Show(this,Service.Message, "Not logged on");
                 logOn();
                 return;
             }

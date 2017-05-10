@@ -57,6 +57,9 @@ namespace SdkTestClientWin.Infrastructure
 			get { return _internalService; }
 		}
 
+		public string  Message { get; set; }
+		public bool SuccessfullyLoggedOn { get; set; }
+
 		private void logon(string logonName, string passWord)
 		{
 			//Create the Service object
@@ -87,6 +90,8 @@ namespace SdkTestClientWin.Infrastructure
 			//new way
 			authenticationResult = LogonService.LogOnAsApplicationUser(logonName, passWord);
 			// END NEW WAY
+			SuccessfullyLoggedOn = authenticationResult.Successful;
+			Message = authenticationResult.Message;
 
 			if (authenticationResult.Successful)
 			{
