@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimizer2Creator : IIntradayOptimizerCreator
+	public class IntradayOptimizerCreator
 	{
 		private readonly IntradayDecisionMaker _decisionMaker;
 		private readonly IScheduleService _scheduleService;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
-		public IntradayOptimizer2Creator(
+		public IntradayOptimizerCreator(
 			IntradayDecisionMaker decisionMaker,
 			IScheduleService scheduleService,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
