@@ -697,73 +697,30 @@ input[type=search]::-ms-clear {
 	}
 
 /*Mobile tweaks*/
-@media only screen and (max-width : 736px) {
+@media only screen and (max-width : 768px) {
 	.requests-wrapper .navbar-teleopti{
-			background: transparent;
-			border: none;
-		}
-		.hide-requests-on-phone{
-			display: none!important;
-		}
-		.hide-fab-on-phone{
-			display: none!important;
-		}
-		.requests-wrapper .fab {
-			position: fixed;
-			bottom: 3%;
-			right: 5%;
-			z-index: 115;
-			background: #9ccc33;
-			width: 55px;
-			height: 55px;
-			border-radius: 50%;
-			overflow: hidden;
-			box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
-			padding-top: 50px;
-			outline: none !important;
-		}
-		.requests-wrapper .fab:before {
-			content: '+';
-			position: absolute;
-			top: 1px;
-			left: 19px;
-			color: white;
-			font-size: 240%;
-			font-weight: bold;
-			z-index: 115;
-		}
+		
+	}
+	.hide-requests-on-phone{
+		display: none!important;
+	}
+	.hide-fab-on-phone{
+		display: none!important;
+	}
+	.close-fab-overlay{
+		position: fixed;
+		top:0;
+		bottom:0;
+		left:0;
+		right:0;
+		z-index: 1000;
+	}
 
-		.requests-wrapper .fab-focus {
-			width: 100%;
-			height: auto;
-			left: 0;
-			bottom: 0;
-			right: 0;
-			border-radius: 0;
-			padding: 1rem;
-			padding-bottom: 2rem;
-			border: none;
-			z-index: 1001;
-		}
-
-		.close-fab-overlay{
-			position: fixed;
-			top:0;
-			bottom:0;
-			left:0;
-			right:0;
-			z-index: 1000;
-		}
-
-		.requests-wrapper .fab-focus:before {
-			display: none;
-		}
-
-		.purest-green{
-			background-color: #9ccc33!important;
-    		border-color: #8cbc23!;
-		}
-		/*.shift-trade-add-schedule > div > div > div > div:nth-child(even){
-			background: red !important;
-		}*/
-    }
+	.purest-green{
+		background-color: #9ccc33!important;
+		border-color: #8cbc23!;
+	}
+	/*.shift-trade-add-schedule > div > div > div > div:nth-child(even){
+		background: red !important;
+	}*/
+}

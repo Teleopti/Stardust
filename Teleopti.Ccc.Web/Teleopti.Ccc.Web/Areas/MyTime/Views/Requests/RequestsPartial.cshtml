@@ -49,85 +49,83 @@ var messages = {
 	@Html.Partial("../Schedule/AddShiftExchangeOfferPartial")
 </script>
 
-<div class="requests-wrapper">
 <input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat" />
-	<div class="navbar-container"  >
-		<div class="close-fab-overlay" data-bind="visible: menuIsVisible,css: { 'hide-fab-on-phone': hideFab}, click: disableMenu"></div>
-		<div class="with-fab" data-bind="if: toggle, css: { 'hide-fab-on-phone': hideFab}">
-			<div class="navbar navbar-teleopti fab subnavbar" data-bind="css: { 'fab-focus': menuIsVisible}, click: enableMenu" tabindex="0">
-				<div class="container">
-					<ul class="nav navbar-nav navbar-teleopti row submenu" >
-						@if (Model.RequestPermission.TextRequestPermission)
-						{
-							<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-							</li>
-						}
-						@if (Model.RequestPermission.AbsenceRequestPermission)
-						{
-							<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-							</li>
-						}
-						@if (Model.RequestPermission.ShiftTradeRequestPermission)
-						{
-							<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-							</li>
-						}
+<div class="navbar-container">
+	<div class="close-fab-overlay" data-bind="visible: menuIsVisible,css: { 'hide-fab-on-phone': hideFab}, click: disableMenu"></div>
+	<div class="with-fab" data-bind="if: showFabButton, css: { 'hide-fab-on-phone': hideFab}">
+		<div class="fab" data-bind="click: enableMenu" tabindex="0"></div>
+		<div class="navbar navbar-teleopti subnavbar" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
+			<ul class="nav navbar-nav navbar-teleopti row submenu" >
+				@if (Model.RequestPermission.TextRequestPermission)
+				{
+					<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
+						<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+					</li>
+				}
+				@if (Model.RequestPermission.AbsenceRequestPermission)
+				{
+					<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
+						<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+					</li>
+				}
+				@if (Model.RequestPermission.ShiftTradeRequestPermission)
+				{
+					<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
+						<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+					</li>
+				}
 
-						@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
-						{
-							<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
-								<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-							</li>
+				@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
+				{
+					<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
+						<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+					</li>
 
-							<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
-								<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
-							</li>
-						}
-					</ul>
-				</div>
-			</div>
+					<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
+						<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+					</li>
+				}
+			</ul>
 		</div>
-		<div class="no-fab" data-bind="ifnot: toggle">
-			<div class="navbar navbar-teleopti purest-green subnavbar" tabindex="0">
-				<div class="container">
-					<ul class="nav navbar-nav navbar-teleopti row submenu" >
-						@if (Model.RequestPermission.TextRequestPermission)
-						{
-							<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-							</li>
-						}
-						@if (Model.RequestPermission.AbsenceRequestPermission)
-						{
-							<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-							</li>
-						}
-						@if (Model.RequestPermission.ShiftTradeRequestPermission)
-						{
-							<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
-								<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-							</li>
-						}
+	</div>
+	<div class="no-fab" data-bind="ifnot: showFabButton">
+		<div class="navbar navbar-teleopti purest-green subnavbar" tabindex="0">
+			<div class="container">
+				<ul class="nav navbar-nav navbar-teleopti row submenu" >
+					@if (Model.RequestPermission.TextRequestPermission)
+					{
+						<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
+							<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+						</li>
+					}
+					@if (Model.RequestPermission.AbsenceRequestPermission)
+					{
+						<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
+							<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+						</li>
+					}
+					@if (Model.RequestPermission.ShiftTradeRequestPermission)
+					{
+						<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
+							<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+						</li>
+					}
 
-						@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
-						{
-							<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
-								<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-							</li>
+					@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
+					{
+						<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
+							<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+						</li>
 
-							<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
-								<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
-							</li>
-						}
-					</ul>
-				</div>
+						<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
+							<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+						</li>
+					}
+				</ul>
 			</div>
 		</div>
 	</div>
+</div>
 
 <div class="container pagebody">
 
@@ -306,5 +304,4 @@ var messages = {
 			</div>
 		</div>
 	</div>
-</div>
 </div>

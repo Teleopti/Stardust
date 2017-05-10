@@ -3,7 +3,8 @@
 Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	var self = this;
 
-	self.toggle = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826');
+	self.showFabButton = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826') && Teleopti.MyTimeWeb.Common.IsHostAMobile();
+
 	self.isTeamScheduleNoReadModelEnable = ko.observable(false);
 	self.hideFab = ko.observable(false);
 	self.menuIsVisible = ko.observable(false);

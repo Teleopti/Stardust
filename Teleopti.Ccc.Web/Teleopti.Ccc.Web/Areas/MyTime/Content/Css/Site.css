@@ -1615,3 +1615,40 @@ End personal drop down menu
 		background-color: transparent !important;
 	}
 }
+
+.fab {
+	position: fixed;
+	bottom: 3%;
+	right: 5%;
+	z-index: 115;
+	background: #9ccc33;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	overflow: hidden;
+	box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
+	outline: none;
+}
+.fab:before {
+	content: '+';
+	position: absolute;
+	top: 0;
+	left: calc(25px - 10px);
+	color: white;
+	font-size: 240%;
+	font-weight: bold;
+	z-index: 115;
+}
+
+.menu-focusing {
+	padding: 15px;
+	position: fixed;
+	width: 100%;
+	height: auto;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	border-radius: 0;
+	border: none;
+	z-index: 1001;
+}

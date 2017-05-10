@@ -258,65 +258,9 @@
 }
 
 /*Mobile tweaks*/
-    @media only screen and (max-width : 736px) {
-		.team-schedule-wrapper .navbar-teleopti{
-			background: transparent;
-			border: none;
-		}
-
-		.team-schedule-wrapper .fab {
-			position: fixed;
-			bottom: 3%;
-			right: 5%;
-			z-index: 115;
-			background: #9ccc33;
-			width: 55px;
-			height: 55px;
-			border-radius: 50%;
-			overflow: hidden;
-			box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
-			padding-top: 50px;
-			outline: none !important;
-		}
-
-		.team-schedule-wrapper .fab:before {
-			content: '+';
-			position: absolute;
-			top: 1px;
-			left: 19px;
-			color: white;
-			font-size: 240%;
-			font-weight: bold;
-			z-index: 115;
-		}
-
-		.team-schedule-wrapper .fab-focus {
-			width: 100%;
-			height: auto;
-			left: 0;
-			bottom: 0;
-			right: 0;
-			border-radius: 0;
-			padding: 1rem;
-			border: none;
-			z-index: 1001;
-		}
-
-
-		.close-fab-overlay{
-			position: fixed;
-			top:0;
-			bottom:0;
-			left:0;
-			right:0;
-			z-index: 1000;
-		}
-
+@media only screen and (max-width : 768px) {
 	.purest-green{
-			background-color: #9ccc33!important;
-    		border-color: #8cbc23!;
-		}
-		.team-schedule-wrapper .fab-focus:before {
-			display: none;
-		}
-    }
+		background-color: #9ccc33!important;
+		border-color: #8cbc23!;
+	}
+}

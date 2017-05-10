@@ -21,7 +21,8 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	function RequestNavigationViewModel() {
 		var self = this;
 
-		self.toggle = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826')
+		self.showFabButton = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826') && Teleopti.MyTimeWeb.Common.IsHostAMobile();
+
 		self.hideFab = ko.observable(false);
 
 		self.addTextRequestActive = ko.observable(false);
