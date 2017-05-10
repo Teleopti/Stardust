@@ -47,17 +47,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return matrixes;
 		}
 		
-		private static IList<IScheduleMatrixPro> createMatrixes(IScheduleDictionary schedules, IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod)
+		private static IList<IScheduleMatrixPro> createMatrixes(IScheduleDictionary schedules, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var matrixes = new List<IScheduleMatrixPro>();
-			foreach (var person in selectedPersons)
+			var startDate = period.StartDate;
+			foreach (var person in agents)
 			{
-				foreach (var date in selectedPeriod.DayCollection())
+				var date = startDate;
+				while (date <= period.EndDate)
 				{
 					var matrix = createMatrixForPersonAndDate(schedules, person, date);
 					if (matrix == null)
+					{
+						date = date.AddDays(1);
 						continue;
+					}
 					matrixes.Add(matrix);
+					date = matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1);
 				}
 			}
 			return matrixes;
