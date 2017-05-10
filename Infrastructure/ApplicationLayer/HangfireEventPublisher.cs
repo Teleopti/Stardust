@@ -28,9 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			events.Batch(50)
-				.Select(jobsFor)
-				.ForEach(b => b.ForEach(j => _client.Enqueue(j)));
+			jobsFor(events).ForEach(j => _client.Enqueue(j));
 		}
 
 		public void PublishDaily(IEvent @event)
