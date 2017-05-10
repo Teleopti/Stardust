@@ -68,23 +68,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Handler.AnotherEvent.Should().Be.OfType<AnotherTestEvent>();
 		}
 		
-		[Test]
-		public void ShouldPublishPackagesInBatchesOf50()
-		{
-			var fiftyOneEvents = 
-				Enumerable.Range(1, 51)
-				.Select(x => new TestEvent())
-				.ToArray();
-
-			Publisher.Publish(fiftyOneEvents);
-
-			Hangfire.EmulateWorkerIteration();
-			Handler.Packeged.Should().Have.Count.EqualTo(50);
-
-			Hangfire.EmulateWorkerIteration();
-			Handler.Packeged.Should().Have.Count.EqualTo(1);
-		}
-
 		public class TestEvent : IEvent
 		{
 		}
