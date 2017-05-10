@@ -54,6 +54,10 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 			$(".moment-datepicker").attr("data-bind",
 				"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'right', autoHide: true, weekStart: " + data.WeekStart + "}");
+
+			initViewModel();
+
+			fetchData();
 		});
 	}
 
@@ -93,12 +97,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 			registerUserInfoLoadedCallback();
 			registerSwipeEvent();
-			Teleopti.MyTimeWeb.Common.HideAgentScheduleMessenger();
-
-			initViewModel();
-
-			fetchData();
-
+			Teleopti.MyTimeWeb.Common.HideAgentScheduleMessenger(); 
 			readyForInteractionCallback();
 		},
 		ReloadScheduleListener: function (notification) {

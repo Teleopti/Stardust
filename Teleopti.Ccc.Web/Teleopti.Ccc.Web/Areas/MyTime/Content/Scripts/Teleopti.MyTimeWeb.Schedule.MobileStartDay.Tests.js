@@ -148,6 +148,28 @@
 		$("#page").remove();
 	});
 
+	test("should show add text request form", function() {
+		setup();
+
+		var bindElement = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
+			"<div data-bind='with: model'><div><div data-bind='template: Template'></div></div></div>" +
+			"<!-- /ko --></span>");
+		$("body").append(bindElement);
+
+		Teleopti.MyTimeWeb.Request.RequestDetail = {
+			AddTextOrAbsenceRequest: function () { }
+		}
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+
+		vm.showAddTextRequestForm(); 
+
+		equal("add-new-request-detail-template", vm.requestViewModel().model.Template());
+
+		bindElement.remove();
+	});
+
 	function fakeCompletelyLoadedCallback() { }
 
 	function fakeReadyForInteractionCallback() { }

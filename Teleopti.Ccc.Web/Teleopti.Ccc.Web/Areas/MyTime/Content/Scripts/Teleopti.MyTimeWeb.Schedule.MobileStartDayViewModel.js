@@ -6,7 +6,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.LayerViewModel.js" />
 
-Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function () {
+Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	var self = this;
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 	var probabilityType = constants.probabilityType;
@@ -29,6 +29,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function () {
 	self.unreadMessageCount = ko.observable(0);
 	self.probabilities = ko.observableArray([]);
 	self.requestCount = ko.observable(0);
+	self.requestViewModel = ko.observable();
 
 	var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
@@ -40,7 +41,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function () {
 	self.navigateToRequests = function () {
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index");
 	};
-	
 
 	self.readData = function (data) {
 		self.displayDate(moment(data.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
@@ -105,4 +105,19 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function () {
 		var previousDate = moment(self.selectedDate()).add(-1, 'days');
 		self.selectedDate(previousDate);
 	};
+
+	var cancelAddingNewRequest = function () {
+		self.requestViewModel(undefined);
+	}
+
+	self.showAddTextRequestForm = function () {
+		var requestViewModel = new Teleopti.MyTimeWeb.Request
+			.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest,
+			weekStart,
+			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
+		self.requestViewModel({
+			model: requestViewModel,
+			CancelAddingNewRequest: cancelAddingNewRequest
+		});
+	}
 };

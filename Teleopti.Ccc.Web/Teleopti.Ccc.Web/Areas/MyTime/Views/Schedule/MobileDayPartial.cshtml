@@ -21,6 +21,11 @@
 	}
 </style>
 
+
+<script type="text/html" id="add-new-request-detail-template">
+	@Html.Partial("~/Areas/MyTime/Views/Requests/AddNewRequestDetailView.cshtml")
+</script>
+
 <div class="mobile-start-day">
 	<div class="navbar navbar-teleopti subnavbar">
 		<div class="container mobile-start-day-nav">
@@ -86,7 +91,7 @@
 		<div class="mobile-schedule-container relative" data-bind="style: {height: scheduleHeight}">
 			<!-- ko foreach: layers -->
 			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime &amp;&amp; overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime &amp;&amp; overTimeDarkerBackgroundStyle}">
-			<div data-bind="visible: showTitle()">
+				<div data-bind="visible: showTitle()">
 					<strong data-bind="text: title()"></strong>
 					<!-- ko if: hasMeeting -->
 					<div class="meeting floatright">
@@ -101,4 +106,13 @@
 			<!-- /ko -->
 		</div>
 	</div>
+
+	<!-- ko with: requestViewModel -->
+	<div data-bind="with: model">
+		<div id="Request-add-section" class="well well-sm clearfix">
+			<div data-bind="template: Template">
+			</div>
+		</div>
+	</div>
+	<!-- /ko -->
 </div>
