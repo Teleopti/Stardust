@@ -110,6 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulingOptions.UseShiftCategoryLimitations = false;
 
 			var selectedPersons = selectedScheduleDays.Select(x => x.Person).Distinct().ToList();
+			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedScheduleDays);
 
 #pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true))
@@ -132,11 +133,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
 					if (schedulingOptions.UseShiftCategoryLimitations)
 					{
-						var selectedPeriod = _periodExtractor.ExtractPeriod(selectedScheduleDays);
 						if (!selectedPeriod.HasValue)
 							return;
 
-						var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedScheduleDays);
+						var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedPersons, selectedPeriod.Value);
 						if (matrixesOfSelectedScheduleDays.Count == 0)
 							return;
 
