@@ -23,6 +23,10 @@
 		height: 100%;
 		overflow-y: auto;
 	}
+
+	.datepicker.dropdown-menu{
+		transform: translateX(calc(-50% + 23px));
+	}
 </style>
 
 <div class="mobile-start-day">
@@ -32,13 +36,16 @@
 				<li class="mobile-datepicker">
 					<div class="input-group">
 						<span class="input-group-btn">
-							<button class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
+							<button class="btn btn-default" data-bind="click: previousDay" type="button">
 								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
 						</span>
-						<input class="form-control text-center date-input-style moment-datepicker" data-bind="value: displayDate" type="text"/>
+						<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly"/>
 						<span class="input-group-btn">
-							<button class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button">
+							<span class="btn btn-default moment-datepicker" type="button">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</span>
+							<button class="btn btn-default" data-bind="click: nextDay" type="button">
 								<i class="glyphicon glyphicon-chevron-right"></i>
 							</button>
 						</span>
