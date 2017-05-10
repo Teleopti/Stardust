@@ -26,59 +26,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IList<IScheduleMatrixPro> CreateMatrixListAllForLoadedPeriod(IScheduleDictionary schedules, IEnumerable<IPerson> personsInOrganization, DateOnlyPeriod selectedPeriod)
 		{
-			var period = schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TimeZoneInfo.Utc).Inflate(10); 
-			var startDate = period.StartDate;
-			var matrixes = new List<IScheduleMatrixPro>();
-			foreach (var person in personsInOrganization)
-			{
-				var date = startDate;
-				while (date <= period.EndDate)
-				{
-					var matrix = createMatrixForPersonAndDate(schedules, person, date);
-					if (matrix == null)
-					{
-						date = date.AddDays(1);
-						continue;
-					}
-					matrixes.Add(matrix);
-					date = matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1);
-				}
-			}
+			var period = schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TimeZoneInfo.Utc).Inflate(10);
+			var matrixes = createMatrixes(schedules, personsInOrganization, period);
 			_matrixUserLockLocker.Execute(matrixes, selectedPeriod);
 			_matrixNotPermittedLocker.Execute(matrixes);
-
-
 			return matrixes;
 		}
 
 		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IScheduleDictionary schedules, IEnumerable<IScheduleDay> scheduleDays)
 		{
-			var matrixes = new List<IScheduleMatrixPro>();
 			var selectedPeriod = _periodExtractor.ExtractPeriod(scheduleDays);
 			if (!selectedPeriod.HasValue)
-				return matrixes;
+				return new List<IScheduleMatrixPro>();
 
-			var startDate = selectedPeriod.Value.StartDate;
-			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);			
+			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);
+
+			var matrixes = createMatrixes(schedules, selectedPersons, selectedPeriod.Value);
+			_matrixUserLockLocker.Execute(matrixes, selectedPeriod.Value);
+			_matrixNotPermittedLocker.Execute(matrixes);
+			return matrixes;
+		}
+		
+		private static IList<IScheduleMatrixPro> createMatrixes(IScheduleDictionary schedules, IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod)
+		{
+			var matrixes = new List<IScheduleMatrixPro>();
 			foreach (var person in selectedPersons)
 			{
-				var date = startDate;
-				while (date <= selectedPeriod.Value.EndDate)
+				foreach (var date in selectedPeriod.DayCollection())
 				{
 					var matrix = createMatrixForPersonAndDate(schedules, person, date);
 					if (matrix == null)
-					{
-						date = date.AddDays(1);
 						continue;
-					}
 					matrixes.Add(matrix);
-					date = matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1);
 				}
 			}
-
-			_matrixUserLockLocker.Execute(matrixes, selectedPeriod.Value);
-			_matrixNotPermittedLocker.Execute(matrixes);
-
 			return matrixes;
 		}
 
