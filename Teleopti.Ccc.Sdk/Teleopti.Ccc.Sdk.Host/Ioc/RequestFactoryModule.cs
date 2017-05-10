@@ -42,10 +42,15 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
 			builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>().InstancePerDependency();
 			if (_configuration.Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_43447))
 			{
-				builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().InstancePerDependency();
 				builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceRepository>().SingleInstance();
+				builder.RegisterType<ScheduleDayDifferenceSaveTemporary>().As<IScheduleDayDifferenceSaveTemporary>().SingleInstance();
 			}
-				
+			if (_configuration.Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271))
+			{
+				builder.RegisterType<ScheduleDayDifferenceSaveTemporaryEmpty>().As<IScheduleDayDifferenceSaveTemporary>().SingleInstance();
+				builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
+			}
+
 		}
 	}
 }
