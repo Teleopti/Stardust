@@ -281,6 +281,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.setCurrentDate = function (selectedDate) {
+			if (self.selectedDate() === selectedDate) return;
 			self.selectedDate(selectedDate);
 
 			if (self.selectedDateSubscription)
