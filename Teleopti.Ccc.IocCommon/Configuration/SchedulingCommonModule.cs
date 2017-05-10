@@ -571,6 +571,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockClearer>().As<ITeamBlockClearer>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSteadyStateValidator>().As<ITeamBlockSteadyStateValidator>().InstancePerLifetimeScope();
+			builder.RegisterType<ValidatedTeamBlockInfoExtractor>().InstancePerLifetimeScope();
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>().SingleInstance();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>().SingleInstance();
 			builder.RegisterType<DailyTargetValueCalculatorForTeamBlock>().As<IDailyTargetValueCalculatorForTeamBlock>();
@@ -601,6 +602,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockSchedulingService>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCachesForIntraInterval>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockGenerator>().As<ITeamBlockGenerator>().InstancePerLifetimeScope();
 			builder.RegisterType<MissingDayOffBestSpotDecider>().As<IMissingDayOffBestSpotDecider>();

@@ -5,13 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-    public interface IValidatedTeamBlockInfoExtractor
-    {
-	    ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer,
-		    IList<IScheduleMatrixPro> allPersonMatrixList, SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
-    }
-
-    public class ValidatedTeamBlockInfoExtractor : IValidatedTeamBlockInfoExtractor
+    public class ValidatedTeamBlockInfoExtractor
     {
         private readonly ITeamBlockSteadyStateValidator  _teamBlockSteadyStateValidator;
         private readonly ITeamBlockInfoFactory  _teamBlockInfoFactory;
