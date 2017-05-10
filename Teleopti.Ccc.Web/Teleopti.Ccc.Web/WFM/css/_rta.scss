@@ -261,6 +261,11 @@
     .rta-change-row .time {
         font-weight: bold;
     }
+
+    .rta-card main {
+        background-color: $white;
+        color: $text-color-standard;
+    }
     
     .rta-list {
         max-height: 100%;
@@ -271,7 +276,7 @@
         margin-bottom: 0px!important;
         padding: 0px!important;
     }
-    
+
     .rta-card .wfm-card-title {
         border-left: 10px solid $gray100;
     }
