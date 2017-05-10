@@ -107,6 +107,12 @@
       <HintPath>..\..\packages\MbCache.2.10\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights.Log4NetAppender, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.Log4NetAppender.2.2.0\lib\net45\Microsoft.ApplicationInsights.Log4NetAppender.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Practices.Composite.Presentation.1.0.0\lib\3.5\Microsoft.Practices.Composite.dll</HintPath>
     </Reference>
@@ -5180,6 +5186,9 @@
       <Link>Teleopti.Ccc.Sdk.ServiceBus.Client.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="WinCode\Meetings\MeetingsClassDiagram.cd" />
     <None Include="Win\Resources\WFM-People.png" />
     <None Include="Win\Resources\WFM-Payroll-Integration.png" />
@@ -6185,6 +6194,7 @@
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)app.config" copy "$(ProjectDir)..\..\BuildArtifacts\AppRaptor.config" "$(ProjectDir)app.config"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)app.config" copy "$(ProjectDir)..\..\BuildArtifacts\AppRaptor.config" "$(ProjectDir)app.config"
+if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\..\BuildArtifacts\AppApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"</PreBuildEvent>
   </PropertyGroup>
 </Project>

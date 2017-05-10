@@ -6,8 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
 
@@ -43,15 +41,9 @@ namespace Teleopti.Messaging.Client.Composite
 			_signalRClient.StartBrokerService(useLongPolling);
 		}
 
-		public bool IsAlive
-		{
-			get { return _signalRClient.IsAlive; }
-		}
+		public bool IsAlive => _signalRClient.IsAlive;
 
-		public bool IsPollingAlive
-		{
-			get { return _mailboxListener.IsAlive(); }
-		}
+		public bool IsPollingAlive => _mailboxListener.IsAlive();
 
 		public void Dispose()
 		{
@@ -99,7 +91,5 @@ namespace Teleopti.Messaging.Client.Composite
 			_signalRMessageListener.UnregisterSubscription(eventMessageHandler);
 			_mailboxListener.UnregisterSubscription(eventMessageHandler);
 		}
-
 	}
-
 }
