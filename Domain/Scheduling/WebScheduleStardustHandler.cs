@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			try
 			{
-				var tuple = GetScheduleInfo(@event.PlanningPeriodId);
-				var result = _fullScheduling.DoScheduling(tuple.Item1, tuple.Item2);
+				var schedulingInformation = GetInfoFromPlanningPeriod(@event.PlanningPeriodId);
+				var result = _fullScheduling.DoScheduling(schedulingInformation.Period, schedulingInformation.PersonIds);
 				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
 				_eventPublisher.Publish(new WebDayoffOptimizationStardustEvent(@event)
 				{
@@ -52,13 +52,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		[UnitOfWork]
-		protected virtual Tuple<DateOnlyPeriod, IList<Guid>> GetScheduleInfo(Guid planningPeriodId)
+		protected virtual SchedulingInformation GetInfoFromPlanningPeriod(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			var people = _agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup);
-			var peopleIds = people.AllPeople.Select(x => x.Id.Value).ToList();
-			return new Tuple<DateOnlyPeriod, IList<Guid>>(period, peopleIds);
+			if (planningPeriod.AgentGroup != null)
+			{
+				return new SchedulingInformation(period,
+					_agentGroupStaffLoader.LoadPersonIds(period, planningPeriod.AgentGroup));
+			}
+			var people = _agentGroupStaffLoader.Load(period, null);
+			return new SchedulingInformation(period, people.AllPeople.Select(x => x.Id.Value).ToList());
 		}
 
 		[UnitOfWork]
@@ -66,6 +70,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var jobResult = _jobResultRepository.Get(@event.JobResultId);
 			jobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));
+		}
+
+		protected class SchedulingInformation
+		{
+			public IList<Guid> PersonIds { get; }
+			public DateOnlyPeriod Period { get; }
+
+			public SchedulingInformation(DateOnlyPeriod period, IList<Guid> personIds)
+			{
+				PersonIds = personIds;
+				Period = period;
+			}
 		}
 	}
 }

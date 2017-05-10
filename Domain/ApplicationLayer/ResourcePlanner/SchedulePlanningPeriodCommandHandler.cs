@@ -56,16 +56,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		protected SchedulingResultModel ExecuteSync(SchedulePlanningPeriodCommand command)
 		{
 			var schedulingData = GetInfoFromPlanningPeriod(command.PlanningPeriodId);
-			return _fullScheduling.DoScheduling(schedulingData.Item1, schedulingData.Item2);
+			return _fullScheduling.DoScheduling(schedulingData.Period, schedulingData.PersonIds);
 		}
 
 		[UnitOfWork]
-		protected virtual Tuple<DateOnlyPeriod, IList<Guid>> GetInfoFromPlanningPeriod(Guid planningPeriodId)
+		protected virtual SchedulingInformation GetInfoFromPlanningPeriod(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			var people = _agentGroupStaffLoader.Load(period, planningPeriod.AgentGroup);
-			return new Tuple<DateOnlyPeriod, IList<Guid>>(period, people.AllPeople.Select(x => x.Id.Value).ToList());
+			if (planningPeriod.AgentGroup != null)
+			{
+				return new SchedulingInformation(period,
+					_agentGroupStaffLoader.LoadPersonIds(period, planningPeriod.AgentGroup));
+			}
+			var people = _agentGroupStaffLoader.Load(period, null);
+			return new SchedulingInformation(period, people.AllPeople.Select(x => x.Id.Value).ToList());
+		}
+
+		protected class SchedulingInformation
+		{
+			public IList<Guid> PersonIds { get; }
+			public DateOnlyPeriod Period { get; }
+
+			public SchedulingInformation(DateOnlyPeriod period, IList<Guid> personIds)
+			{
+				PersonIds = personIds;
+				Period = period;
+			}
 		}
 	}
 }

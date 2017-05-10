@@ -184,10 +184,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private IPlanningPeriodSuggestions getSuggestion(IAgentGroup agentGroup)
 		{
 			var period = new DateOnly(_now.UtcDateTime()).ToDateOnlyPeriod();
-			var suggestion = _planningPeriodRepository.Suggestions(_now,
-				_agentGroupStaffLoader.Load(period, agentGroup)
+			var personIds = agentGroup != null
+				? _agentGroupStaffLoader.LoadPersonIds(period, agentGroup)
+				: _agentGroupStaffLoader.Load(period, null)
 					.FixedStaffPeople.Select(x => x.Id.GetValueOrDefault())
-					.ToList());
+					.ToList();
+			var suggestion = _planningPeriodRepository.Suggestions(_now, personIds);
 			return suggestion;
 		}
 

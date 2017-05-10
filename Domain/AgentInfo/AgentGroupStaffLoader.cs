@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -30,6 +32,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public int NumberOfAgents(DateOnlyPeriod period, IAgentGroup agentGroup)
 		{
 			return agentGroup != null ? _personRepository.CountPeopleInAgentGroup(agentGroup, period) : _personRepository.NumberOfActiveAgents();
+		}
+
+		public IList<Guid> LoadPersonIds(DateOnlyPeriod period, IAgentGroup agentGroup)
+		{
+			if (agentGroup == null) throw new ArgumentNullException(nameof(agentGroup));
+			return _personRepository.FindPeopleIdsInAgentGroup(agentGroup, period);
 		}
 	}
 }

@@ -39,5 +39,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void HardRemove(IPerson person);
 
 		int CountPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period);
+		IList<Guid> FindPeopleIdsInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period);
 	}
 }

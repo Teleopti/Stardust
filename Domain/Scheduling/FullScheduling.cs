@@ -69,16 +69,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			stateHolder.Schedules.ForEach(range => range.Value.Reassociate(uow));
 			//
 			var scheduleOfSelectedPeople = stateHolder.Schedules.Where(x => fixedStaffPeople.Contains(x.Key)).ToList();
-			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
+			var violatedBusinessRules = new List<BusinessRulesValidationResult>();
 
 			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(fixedStaffPeople, period).ToList();
 			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople, schedulePeriodNotInRange, period);
-			voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
-			voilatedBusinessRules.AddRange(daysOffValidationResult);
+			violatedBusinessRules.AddRange(schedulePeriodNotInRange);
+			violatedBusinessRules.AddRange(daysOffValidationResult);
 			return new SchedulingResultModel
 			{
 				ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
-				BusinessRulesValidationResults = voilatedBusinessRules
+				BusinessRulesValidationResults = violatedBusinessRules
 			};
 		}
 
@@ -104,11 +104,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private static bool isAgentScheduled(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
 		{
-			return isAgentFullfillingContractTime(scheduleRange, periodToCheck) &&
+			return isAgentFulfillingContractTime(scheduleRange, periodToCheck) &&
 				   getAgentScheduleDaysWithoutSchedule(scheduleRange, periodToCheck) == 0;
 		}
 
-		private static bool isAgentFullfillingContractTime(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
+		private static bool isAgentFulfillingContractTime(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
 		{
 			var targetSummary = scheduleRange.CalculatedTargetTimeSummary(periodToCheck);
 			var scheduleSummary = scheduleRange.CalculatedCurrentScheduleSummary(periodToCheck);
@@ -126,13 +126,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(
 			IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules,
 			List<BusinessRulesValidationResult> schedulePeriodNotInRange,
-			DateOnlyPeriod periodTocheck)
+			DateOnlyPeriod periodToCheck)
 		{
 			var result = new List<BusinessRulesValidationResult>();
 			foreach (var item in schedules)
 			{
 				if (isAmongInvalidScheduleRange(schedulePeriodNotInRange, item.Key)) continue;
-				if (!_dayOffBusinessRuleValidation.Validate(item.Value, periodTocheck))
+				if (!_dayOffBusinessRuleValidation.Validate(item.Value, periodToCheck))
 				{
 					result.Add(new BusinessRulesValidationResult
 					{
@@ -140,24 +140,24 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						//should be in resource files - not now to prevent translation
 						BusinessRuleCategoryText = "Days off",
 						Message =
-							string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, item.Value.CalculatedTargetScheduleDaysOff(periodTocheck)),
+							string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, item.Value.CalculatedTargetScheduleDaysOff(periodToCheck)),
 						Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
 					});
 				}
-				else if (!isAgentFullfillingContractTime(item.Value, periodTocheck))
+				else if (!isAgentFulfillingContractTime(item.Value, periodToCheck))
 				{
 					result.Add(new BusinessRulesValidationResult
 					{
 						BusinessRuleCategory = BusinessRuleCategory.DayOff,
 						BusinessRuleCategoryText = "Scheduled time",
 						Message =
-							string.Format(UserTexts.Resources.TargetScheduleTimeNotFullfilled, DateHelper.HourMinutesString(item.Value.CalculatedTargetTimeHolder(periodTocheck).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)),
+							string.Format(UserTexts.Resources.TargetScheduleTimeNotFullfilled, DateHelper.HourMinutesString(item.Value.CalculatedTargetTimeHolder(periodToCheck).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)),
 						Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
 					});
 				}
 				else
 				{
-					var agentScheduleDaysWithoutSchedule = getAgentScheduleDaysWithoutSchedule(item.Value, periodTocheck);
+					var agentScheduleDaysWithoutSchedule = getAgentScheduleDaysWithoutSchedule(item.Value, periodToCheck);
 					if (agentScheduleDaysWithoutSchedule > 0)
 					{
 						result.Add(new BusinessRulesValidationResult

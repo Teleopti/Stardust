@@ -283,6 +283,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return FindPeopleInAgentGroup(agentGroup, period).Count;
 		}
 
+		public IList<Guid> FindPeopleIdsInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
+		{
+			return FindPeopleInAgentGroup(agentGroup, period).Select(x => x.Id.GetValueOrDefault()).ToList();
+		}
+
 		public void ReversedOrder()
 		{
 			var allAgents = _storage.LoadAll<IPerson>();
