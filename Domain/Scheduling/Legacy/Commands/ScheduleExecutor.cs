@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 		}
 
-		protected override void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedScheduleDays, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
+		protected override void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, SchedulingOptions schedulingOptions)
 		{
-			_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays, dayOffOptimizationPreferenceProvider);
+			_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
 		}
 	}
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var schedulerStateHolder = _schedulerStateHolder();
 			var schedulingOptions = optimizerOriginalPreferences.SchedulingOptions;
 			schedulingOptions.DayOffTemplate = schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate;
-			bool lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
+			var lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-					DoScheduling(backgroundWorker, selectedScheduleDays, selectedPersons, selectedPeriod.Value, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider, schedulingOptions);
+					DoScheduling(backgroundWorker, selectedPersons, selectedPeriod.Value, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider, schedulingOptions);
 				}
 				else
 				{
@@ -155,14 +155,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		//remove selectedSCheduleDays when 44222 gets a little bit further
-		protected virtual void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedScheduleDays, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
+		protected virtual void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			SchedulingOptions schedulingOptions)
 		{
 			if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 			{
-				_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays,
-					dayOffOptimizationPreferenceProvider);
+				_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
 			}
 			else
 			{
