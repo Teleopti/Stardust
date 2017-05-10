@@ -10,14 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
-    public interface IAdvanceDaysOffSchedulingService
-    {
-        event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
-			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization, DateOnlyPeriod selectedPeriod);
-    }
-
-    public class AdvanceDaysOffSchedulingService : IAdvanceDaysOffSchedulingService
+    public class AdvanceDaysOffSchedulingService
     {
         private readonly IAbsencePreferenceScheduler _absencePreferenceScheduler;
 	    private readonly ITeamDayOffScheduler _teamDayOffScheduler;

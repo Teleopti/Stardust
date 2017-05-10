@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
-		private readonly IAdvanceDaysOffSchedulingService _advanceDaysOffSchedulingService;
+		private readonly AdvanceDaysOffSchedulingService _advanceDaysOffSchedulingService;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
-			IAdvanceDaysOffSchedulingService advanceDaysOffSchedulingService,
+			AdvanceDaysOffSchedulingService advanceDaysOffSchedulingService,
 			IMatrixListFactory matrixListFactory,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
