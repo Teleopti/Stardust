@@ -146,7 +146,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.topPosition = ko.computed(function () {
 			return Math.round(scheduleHeight * self.positionPercentage()) + offset + "px";
 		});
-		self.evenHour = ko.computed(function () {
+		self.isHour = ko.computed(function () {
 			return timeFromMinutes.minute() === 0;
 		});
 	};

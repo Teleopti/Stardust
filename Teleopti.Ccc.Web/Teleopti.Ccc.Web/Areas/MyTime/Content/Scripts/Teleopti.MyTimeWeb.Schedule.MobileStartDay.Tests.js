@@ -70,20 +70,13 @@
 		equal(vm.timeLines()[1].timeText, "07:00");
 	});
 
-	test("should set event hour false for timeline", function () {
+	test("should set hour flag correctly for timeline", function () {
 		setup();
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
-		equal(vm.timeLines()[0].evenHour(), false);
-	});
-
-	test("should set event hour true for timeline", function () {
-		setup();
-		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-
-		equal(vm.timeLines()[1].evenHour(), true);
+		equal(vm.timeLines()[0].isHour(), false);
+		equal(vm.timeLines()[1].isHour(), true);
 	});
 
 	test("should set timeline height", function () {
