@@ -57,13 +57,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 
 		function callback(data) {
+			if (vm === null) return; //Might happen if page is unloaded before this callback is executed
 			vm.setCurrentDate(moment(data.PeriodSelection.Date));
 			_bindData(data);
+
+			if (vm === null) return; //Might happen if page is unloaded before this callback is executed
 			_setTimeIndicator(getCurrentUserDateTime(vm.baseUtcOffsetInMinutes));
 			if (dataHandler != undefined) {
 				dataHandler(data);
 			}
-
 		}
 	}
 
