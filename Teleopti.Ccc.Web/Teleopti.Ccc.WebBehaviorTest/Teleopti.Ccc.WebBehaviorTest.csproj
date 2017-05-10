@@ -248,6 +248,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DayScheduleForStartPage.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\DayScheduleForStartPageStepDefinition.cs" />
     <Compile Include="MyTime\WeekScheduleStaffingProbability.feature.cs">
       <DependentUpon>WeekScheduleStaffingProbability.feature</DependentUpon>
       <AutoGen>True</AutoGen>

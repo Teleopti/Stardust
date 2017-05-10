@@ -385,6 +385,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 					 new WaitUntilCompletelyLoaded());
 		}
 
+		public static void GotoMobileDaySchedulePage(DateTime date)
+		{
+			GoToPage(string.Format("MyTime#Schedule/MobileDay/{0}/{1}/{2}",
+					date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+					 new WaitUntilCompletelyLoaded());
+		}
+
 		public static void GotoMonthSchedulePage()
 		{
 			GoToPage("MyTime#Schedule/Month",
