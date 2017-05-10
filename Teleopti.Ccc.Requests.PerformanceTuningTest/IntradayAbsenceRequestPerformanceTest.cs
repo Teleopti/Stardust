@@ -25,7 +25,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx),Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388), Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_43447)]
+	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx),Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388), Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_43447), Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271)]
 	[RequestPerformanceTuningTest]
 	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		[Test]
 		public void Run200Requests()
 		{
-			Now.Is("2016-03-16 08:00");
+			Now.Is("2016-03-16 07:01");
 
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
