@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I navigate to messages")]
 		public void WhenINavigateToMessages()
 		{
+			Browser.Interactions.AssertUrlContains("Schedule/Week/");
 			Navigation.GotoMessagePage();
 		}
 
