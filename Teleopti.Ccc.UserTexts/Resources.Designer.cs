@@ -6796,7 +6796,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contract Schedule.
+        ///   Looks up a localized string similar to Contract schedule.
         /// </summary>
         public static string ContractSchedule {
             get {
@@ -10091,7 +10091,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Employment Number.
+        ///   Looks up a localized string similar to Employment number.
         /// </summary>
         public static string EmploymentNumber {
             get {
@@ -21798,7 +21798,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Part-Time Percentage.
+        ///   Looks up a localized string similar to Part-Time percentage.
         /// </summary>
         public static string PartTimePercentage {
             get {
@@ -21843,7 +21843,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Part-Time Percentages.
+        ///   Looks up a localized string similar to Part-Time percentages.
         /// </summary>
         public static string PartTimepercentages {
             get {
