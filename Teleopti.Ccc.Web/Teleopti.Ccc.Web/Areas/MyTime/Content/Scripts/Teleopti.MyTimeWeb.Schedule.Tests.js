@@ -240,6 +240,7 @@ $(document).ready(function() {
 	});
 
 	test("should read timelines", function () {
+		initUserTexts();
 		var fakeScheduleData = getFakeScheduleData();
 		//9:30 ~ 17:00 makes 9 timeline points
 		fakeScheduleData.TimeLine = [{
@@ -262,6 +263,18 @@ $(document).ready(function() {
 		equal(timelines.length, 9);
 		equal(timelines[0].minutes, 9.5 * 60 - 15); //9:30 => 9:15
 		equal(timelines[timelines.length - 1].minutes, 16.75 * 60 + 15); //16:45 => 17:00
+	});
+
+	test("should refresh and modify url after changing date", function () {
+		initUserTexts();
+		var fakeScheduleData = getFakeScheduleData();
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+
+		vm.initializeData(fakeScheduleData);
+		vm.nextWeek();
+
+		equal(Teleopti.MyTimeWeb.Portal.ParseHash().hash.indexOf(moment(basedDate).add('days', 7).format('YYYY/MM/DD')) > 0, true);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show no absence possibility if the feature is disabled", function () {
@@ -338,7 +351,7 @@ $(document).ready(function() {
 		equal(Teleopti.MyTimeWeb.Portal.ParseHash({ hash: hash }).probability, constants.probabilityType.absence);
 
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
-	});  
+	});
 
 	test("should keep possibility selection for multiple days when changing date", function () {
 		initUserTexts();

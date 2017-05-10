@@ -280,16 +280,21 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.setCurrentDate = function (selectedDate) {
 			self.selectedDate(selectedDate);
+
+			if (self.selectedDateSubscription)
+				self.selectedDateSubscription.dispose();
+
+			self.selectedDateSubscription = self.selectedDate.subscribe(function (date) {
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(date) + getUrlPartForProbability());
+			});
 		};
 
 		self.previousWeek = function () {
 			self.selectedDate(self.previousWeekDate());
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability());
 		};
 
 		self.nextWeek = function () {
 			self.selectedDate(self.nextWeekDate());
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability());
 		};
 
 		self.today = function () {
