@@ -64,8 +64,7 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
 	self.isOvertimeAvailability = ko.observable(layer.IsOvertimeAvailability);
 	self.isOvertime = layer.IsOvertime;
 
-	var isMobile = Teleopti.MyTimeWeb.Portal.IsMobile(window);
-	var scheduleHeight = isMobile ? Teleopti.MyTimeWeb.Schedule.GetMobileScheduleHeight() : constants.scheduleHeight;
+	var scheduleHeight = Teleopti.MyTimeWeb.Schedule.GetScheduleHeight();
 	self.top = ko.computed(function () {
 		return Math.round(scheduleHeight * self.startPositionPercentage());
 	});

@@ -545,6 +545,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.styles(styleToSet);
 
 		var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
+			// "Week schedule" module will be shown on PC only, so continue apply fixed schedule height
 			return new TimelineViewModel(item, constants.scheduleHeight, timeLineOffset);
 		});
 		self.timeLines(timelines);
@@ -556,8 +557,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 		}
 		self.days(days);
-		if (self.showProbabilityToggle() && (self.selectedProbabilityType == constants.probabilityType.absence || self.selectedProbabilityType == constants.probabilityType.overtime)) {
-
+		if (self.showProbabilityToggle() &&
+			(self.selectedProbabilityType === constants.probabilityType.absence ||
+			self.selectedProbabilityType === constants.probabilityType.overtime)) {
 			self.fetchProbabilityData();
 		}
 	}
@@ -568,7 +570,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return;
 		}
 
-		var timelineHeight = 668;
+		var timelineHeight = Teleopti.MyTimeWeb.Common.Constants.scheduleHeight;
 		var offset = 123;
 		var timeindicatorHeight = 2;
 
@@ -660,7 +662,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		return Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446");
 	}
 
-	function getMobileScheduleHeight() {
+	function getScheduleHeight() {
+		var isMobile = Teleopti.MyTimeWeb.Portal.IsMobile(window);
+		if (!isMobile) {
+			return constants.scheduleHeight;
+		}
+
 		var screenHeight = isNaN(window.innerHeight) ? window.clientHeight : window.innerHeight;
 		var totalToolbarHeight = 185;
 		var validHeightForSchedule = screenHeight - totalToolbarHeight;
@@ -723,7 +730,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_setTimeIndicator(date);
 		},
 		GetCurrentUserDateTime: getCurrentUserDateTime,
-		GetMobileScheduleHeight: getMobileScheduleHeight,
+		GetScheduleHeight: getScheduleHeight,
 		Vm: function () {
 			return vm;
 		}
