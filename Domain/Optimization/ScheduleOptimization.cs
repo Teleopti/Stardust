@@ -116,8 +116,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period,
 					optimizationPreferences, new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);
 
-				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, schedules,
-					schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(), dayOffOptimizationPreferenceProvider);
+				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(), dayOffOptimizationPreferenceProvider);
 			}
 
 			//should maybe happen _after_ all schedules are persisted?

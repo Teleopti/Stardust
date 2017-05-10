@@ -130,20 +130,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				}
 			}
 
-			var selectedScheduleDays = new List<IScheduleDay>();
 			var selectedPeriod = new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly);
-			foreach (var agent in SchedulerStateHolder.SchedulingResultState.PersonsInOrganization)
-			{
-				foreach (var date in selectedPeriod.DayCollection())
-				{
-					selectedScheduleDays.Add(scheduleDictionary[agent].ScheduledDay(date));
-				}
-			}
-
 			var optimizationPref = new OptimizationPreferences();
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
-			Target.Resolve(optimizationPref, selectedPeriod, selectedScheduleDays,
-				SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(), dayOffOptimizationPreferenceProvider);
+			Target.Resolve(optimizationPref, selectedPeriod, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(), dayOffOptimizationPreferenceProvider);
 
 			scheduleDictionary[agent1].ScheduledDay(dateOnly.AddDays(-1)).IsScheduled().Should().Be.False();
 			scheduleDictionary[agent2].ScheduledDay(dateOnly.AddDays(-1)).IsScheduled().Should().Be.False();

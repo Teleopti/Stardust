@@ -33,14 +33,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_userTimeZone = userTimeZone;
 		}
 
-		public void Resolve(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod period, IEnumerable<IScheduleDay> scheduleDays, IList<IPerson> people, 
+		public void Resolve(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod period, IList<IPerson> people, 
 							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
 				_scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
-			var matrixes = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, scheduleDays);
+			var matrixes = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, people, period);
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions,
 				optimizationPreferences, people, rollbackService, resourceCalcDelayer, period, matrixes, new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);

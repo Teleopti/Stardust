@@ -35,12 +35,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimization = resourceOptimization;
 		}
 
-		public void Execute(DateOnlyPeriod period, 
-												IPerson[] agents,
-												bool runResolveWeeklyRestRule)
+		public void Execute(DateOnlyPeriod period, IPerson[] agents, bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, agents);
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			var dayOffPreferencesProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()); //doesn't seem to be used with "real" values when doing intraday optimization
 			var optimizers = _intradayOptimizerCreator.Create(period, agents, optimizationPreferences, dayOffPreferencesProvider);
@@ -52,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				if (runResolveWeeklyRestRule)
 				{
-					_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, schedules, agents, dayOffPreferencesProvider);
+					_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, agents, dayOffPreferencesProvider);
 				}
 			}
 		}
