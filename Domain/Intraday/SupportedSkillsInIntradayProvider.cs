@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public bool CheckSupportedSkill(ISkill skill)
 		{
-			return _skillChecks.Any(s => s.IsSupported(skill));
+			var isMultisiteSkill = skill.GetType() == typeof(MultisiteSkill);
+			return !isMultisiteSkill &&_skillChecks.Any(s => s.IsSupported(skill));
 		}
 	}
 }

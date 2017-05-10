@@ -8,14 +8,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		bool IsSupported(ISkill skill);
 	}
-
-	public class MultisiteSkillSupported : ISupportedSkillCheck
-	{
-		public bool IsSupported(ISkill skill)
-		{
-			return !(skill.GetType() == typeof(MultisiteSkill));
-		}
-	}
+	
 	public class InboundPhoneSkillSupported : ISupportedSkillCheck
 	{
 		public bool IsSupported(ISkill skill)
@@ -24,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		}
 	}
 
-	public class SkillsLikeEmailSupported : ISupportedSkillCheck
+	public class EmailSkillSupported : ISupportedSkillCheck
 	{
 		public bool IsSupported(ISkill skill)
 		{
