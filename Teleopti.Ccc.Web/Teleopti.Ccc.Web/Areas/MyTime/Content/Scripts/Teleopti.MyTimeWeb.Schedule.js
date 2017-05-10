@@ -27,8 +27,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		daylightSavingAdjustment,
 		baseUtcOffsetInMinutes,
 		currentPage = "Teleopti.MyTimeWeb.Schedule",
-		constants = Teleopti.MyTimeWeb.Common.Constants,
-		scheduleDataCache = {};
+		constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	function _bindData(data) {
 		vm.initializeData(data);
@@ -43,28 +42,19 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _fetchData(probabilityType, dataHandler) {
 		var selectedDate = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
-		var scheduleDataCacheKey = constants.probabilityType.none + selectedDate;
-		if (probabilityType === constants.probabilityType.overtime) {
-			scheduleDataCacheKey = constants.probabilityType.overtime + selectedDate;
-		}
 
-		if (scheduleDataCache[scheduleDataCacheKey]) {
-			callback(scheduleDataCache[scheduleDataCacheKey]);
-		} else {
-			ajax.Ajax({
-				url: "../api/Schedule/FetchWeekData",
-				dataType: "json",
-				type: "GET",
-				data: {
-					date: selectedDate,
-					staffingPossiblityType: probabilityType
-				},
-				success: function (data) {
-					callback(data);
-					scheduleDataCache[scheduleDataCacheKey] = data;
-				}
-			});
-		}
+		ajax.Ajax({
+			url: "../api/Schedule/FetchWeekData",
+			dataType: "json",
+			type: "GET",
+			data: {
+				date: selectedDate,
+				staffingPossiblityType: probabilityType
+			},
+			success: function (data) {
+				callback(data);
+			}
+		});
 
 		function callback(data) {
 			vm.setCurrentDate(moment(data.PeriodSelection.Date));
@@ -240,8 +230,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					d.probabilities([]);
 				});
 				self.loadingProbabilityData(false);
-				rebindProbabilityLabel(self); 
-			}  
+				rebindProbabilityLabel(self);
+			}
 		};
 
 		self.fetchProbabilityData = function () {
@@ -453,7 +443,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 
-			scheduleDataCache = {};
 			self.requestViewModel(addOvertimeModel);
 			_fillFormData(data);
 		};
@@ -729,7 +718,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_cleanBindings();
 			ajax.AbortAll();
 			Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
-			scheduleDataCache = {};
 		},
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);
