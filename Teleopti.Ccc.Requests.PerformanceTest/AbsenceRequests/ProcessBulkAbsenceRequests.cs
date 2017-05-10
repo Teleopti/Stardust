@@ -129,30 +129,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			requestStatusesAssert(personReqs, expectedStatuses);
 		}
 
-		[Test, Ignore("for comparing with ShouldProcessMultipleAbsenceRequestsWithIntradayValidator")]
-		public void ShouldProcessMultipleAbsenceRequestsWithIntradayValidatorByOldWay()
-		{
-			var expectedStatuses = new Dictionary<Guid, int>
-			{
-				// people from team 'FL_SaveDesk_Far4_00282' and 'OM_D_SME_MBS_45428'
-				[new Guid("889F7A33-BE61-4FA7-BFAD-A14100FFA30F")] = statusPending,
-				[new Guid("7843C186-3DB9-4D91-9F34-A14100FFA313")] = statusAutoDenied,
-				[new Guid("51552353-F770-4340-88FA-A1CE00B56199")] = statusApproved,
-				[new Guid("C6232E9E-9234-4983-8055-A1AF0090A8D7")] = statusAutoDenied,
-				[new Guid("DD0FE7BF-B56A-4309-BED2-A51A010E01BB")] = statusAutoDenied,
-				[new Guid("189295E6-6AFF-41C5-87CF-A49C01026BD0")] = statusPending,
-				[new Guid("1CFD93FB-7ABF-4839-BBFC-A4C3009216A2")] = statusAutoDenied,
-				[new Guid("C89644EF-371F-45BB-9F01-A47500C13EB4")] = statusPending,
-				[new Guid("3606EB98-53E3-4323-BC47-A3A1009DE023")] = statusApproved,
-				[new Guid("35E1A58D-97CB-4117-B9C3-A141010AA74C")] = statusPending,
-				[new Guid("B94F331B-56C3-4667-85BB-A14100FFA31D")] = statusPending
-			};
-
-			var personReqs = processMultipleAbsenceRequestsByOldWay(expectedStatuses.Keys);
-
-			requestStatusesAssert(personReqs, expectedStatuses);
-		}
-
 		[Test]
 		public void ShouldDenyBecauseOfPersonAccountIsFull()
 		{
@@ -329,30 +305,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				}
 
 				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
-			});
-			return personReqs;
-		}
-
-		private List<IPersonRequest> processMultipleAbsenceRequestsByOldWay(IEnumerable<Guid> personIds)
-		{
-			logonSystem();
-
-			var personReqs = new List<IPersonRequest>();
-			var absenceRequestIds = new List<Guid>();
-
-			WithUnitOfWork.Do(() =>
-			{
-				prepareAbsenceRequests(personIds, personReqs, absenceRequestIds);
-
-				foreach (var absenceRequestId in absenceRequestIds)
-				{
-					var personRequest = PersonRequestRepository.Get(absenceRequestId);
-					var absenceRequest = personRequest.Request as IAbsenceRequest;
-					var validators = AbsenceRequestValidatorProvider.GetValidatorList(personRequest,
-						RequestValidatorsFlag.IntradayValidator);
-					AbsenceRequestProcessor.ApproveAbsenceRequestWithValidators(personRequest, absenceRequest,
-						CurrentUnitOfWork.Current(), validators);
-				}
 			});
 			return personReqs;
 		}

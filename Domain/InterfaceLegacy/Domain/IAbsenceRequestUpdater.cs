@@ -9,10 +9,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			IUnitOfWork unitOfWork,
 			ISchedulingResultStateHolder schedulingResultStateHolder);
 
-		bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest,
-			IUnitOfWork unitOfWork,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IEnumerable<IAbsenceRequestValidator> validators);
-
 	}
 }

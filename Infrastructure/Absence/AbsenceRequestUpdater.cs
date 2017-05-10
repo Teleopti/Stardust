@@ -87,13 +87,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			return processAbsenceRequest(personRequest, absenceRequest, unitOfWork, schedulingResultStateHolder, process, validatorList);
 		}
 
-		public bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork,
-			ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IAbsenceRequestValidator> validators)
-		{
-			var process = new ApproveAbsenceRequestWithValidators();
-			return processAbsenceRequest(personRequest, absenceRequest, unitOfWork, schedulingResultStateHolder, process, validators);
-		}
-
 		private bool processAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validatorList)
 		{

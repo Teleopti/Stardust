@@ -173,7 +173,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Absence\AbsenceRequestProcessor.cs" />
     <Compile Include="Absence\MultiAbsenceRequestsUpdater.cs" />
     <Compile Include="Absence\AbsenceRequestUpdater.cs" />
     <Compile Include="Absence\AbsenceRequestWaitlistProcessor.cs" />
