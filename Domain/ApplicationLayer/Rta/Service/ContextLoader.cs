@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
 	{
-		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor)
-			: base(dataSource, dataSourceMapper, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor)
+		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor, IEventPublisherScope eventPublisherScope, ICurrentEventPublisher eventPublisher) : base(dataSource, dataSourceMapper, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor, eventPublisherScope, eventPublisher)
 		{
 		}
 
@@ -62,8 +61,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly DeadLockRetrier _deadLockRetrier;
 		private readonly IKeyValueStorePersister _keyValues;
 		private readonly AgentStateProcessor _processor;
+		private readonly IEventPublisherScope _eventPublisherScope;
+		private readonly ICurrentEventPublisher _eventPublisher;
 
-		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor)
+		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor, IEventPublisherScope eventPublisherScope, ICurrentEventPublisher eventPublisher)
 		{
 			_dataSource = dataSource;
 			_dataSourceMapper = dataSourceMapper;
@@ -77,6 +78,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_deadLockRetrier = deadLockRetrier;
 			_keyValues = keyValues;
 			_processor = processor;
+			_eventPublisherScope = eventPublisherScope;
+			_eventPublisher = eventPublisher;
 		}
 
 		public void For(StateInputModel input)
@@ -209,7 +212,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				if (Thread.CurrentThread.Name == null)
 					Thread.CurrentThread.Name = $"{strategy.ParentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
 
-				_deadLockRetrier.RetryOnDeadlock(() => { Transaction(tenant, strategy, transaction); });
+				_deadLockRetrier.RetryOnDeadlock(() =>
+				{
+					var eventCollector = new EventCollector(_eventPublisher);
+					using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
+					{
+						Transaction(tenant, strategy, transaction);
+					}
+					eventCollector.Publish();
+				});
+
 			}
 			catch (Exception e)
 			{
@@ -225,7 +237,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			WithUnitOfWork(() =>
 			{
-				return agentStates
+				agentStates
 					.Invoke()
 					.Select(state =>
 						new ProcessInput(

@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly StateEventPublisher _stateEventPublisher;
 		private readonly RuleEventPublisher _ruleEventPublisher;
 		private readonly AdherenceEventPublisher _adherenceEventPublisher;
-		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _eventPublisher;
 
 		public AgentStateProcessor(
@@ -58,7 +57,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateEventPublisher stateEventPublisher,
 			RuleEventPublisher ruleEventPublisher,
 			AdherenceEventPublisher adherenceEventPublisher,
-			IEventPublisherScope eventPublisherScope,
 			ICurrentEventPublisher eventPublisher)
 		{
 			_shiftEventPublisher = shiftEventPublisher;
@@ -66,21 +64,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateEventPublisher = stateEventPublisher;
 			_ruleEventPublisher = ruleEventPublisher;
 			_adherenceEventPublisher = adherenceEventPublisher;
-			_eventPublisherScope = eventPublisherScope;
 			_eventPublisher = eventPublisher;
 		}
 
 		[LogInfo]
 		public virtual ProcessResult Process(ProcessInput input)
 		{
-			AgentState resultState;
-
-			var eventCollector = new EventCollector(_eventPublisher);
-			using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
-			{
-				resultState = processRelevantMoments(input);
-			}
-			eventCollector.Publish();
+			var resultState = processRelevantMoments(input);
 
 			return new ProcessResult
 			{
