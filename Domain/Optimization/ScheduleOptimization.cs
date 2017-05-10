@@ -80,13 +80,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			var period = planningPeriod.Range;
 			var agentGroup = planningPeriod.AgentGroup;
-			IScheduleDay[] schedules;
+			IEnumerable<IPerson> agents;
 			if (agentGroup == null)
 			{
 				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 				
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
-				schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period)).ToArray();
+				agents = schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period);
 			}
 			else
 			{
@@ -98,10 +98,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 					.Select(personSkill => personSkill.Skill)
 					.Select(skill => skill.Id.GetValueOrDefault()));
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period, skills);
-				schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, people.FixedStaffPeople(period)).ToArray();
+				agents = people.FixedStaffPeople(period);
 			}
 
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, schedules);
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, agents, period);
 			var matrixOriginalStateContainerListForDayOffOptimization =
 				matrixListForDayOffOptimization.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
