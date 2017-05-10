@@ -287,7 +287,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				self.selectedDateSubscription.dispose();
 
 			self.selectedDateSubscription = self.selectedDate.subscribe(function (date) {
-				if (self.selectedDate() === date) return;
+				if (selectedDate === date) return;
+
+				selectedDate = date;
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(date) + getUrlPartForProbability());
 			});
 		};
