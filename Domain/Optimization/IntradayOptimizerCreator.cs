@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		}
 
-		public IEnumerable<IIntradayOptimizer2> Create(DateOnlyPeriod period, IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		public IEnumerable<IIntradayOptimizer2> Create(DateOnlyPeriod period, IEnumerable<IPerson> agents, IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var scheduleMatrixes = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, scheduleDays);
+			var scheduleMatrixes = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, agents, period);
 			var scheduleMatrixContainerList = scheduleMatrixes.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)).ToList();
 			var matrixes = scheduleMatrixContainerList.Select(container => container.ScheduleMatrix);
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(matrixes, period);
