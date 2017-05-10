@@ -682,7 +682,8 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
-	test("Should show probability data for multiple upcoming days when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on", function() {
+    test("Should show probability data for multiple upcoming days when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on", function () {
+        Teleopti.MyTimeWeb.Common.SetUserTexts(userTexts);
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
