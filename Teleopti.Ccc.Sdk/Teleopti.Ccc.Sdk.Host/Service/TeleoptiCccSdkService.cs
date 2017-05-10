@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly ITenantPeopleSaver _tenantPeopleSaver;
 		private readonly IChangePassword _changePassword;
-		private ICurrentBusinessUnit _currentBusinessUnit;
 		private static readonly object PayrollExportLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(TeleoptiCccSdkService));
 		private readonly IAuthenticationFactory _authenticationFactory;
@@ -73,7 +72,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			_lifetimeScope = lifetimeScope;
 			_tenantPeopleSaver = tenantPeopleSaver;
 			_changePassword = changePassword;
-			_currentBusinessUnit = currentBusinessUnit;
 			Logger.Info("Creating new instance of the service.");
 		}
 
@@ -643,8 +641,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			using (CreateScheduleDistributionAsyncResult asyncResult =
 				result as CreateScheduleDistributionAsyncResult)
 			{
-				if (asyncResult != null)
-					asyncResult.AsyncWaitHandle.WaitOne();
+				asyncResult?.AsyncWaitHandle.WaitOne();
 			}
 		}
 
@@ -771,7 +768,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 				Note = personDto.Note,
 				TimeZoneId = personDto.TimeZoneId,
 				WorkWeekStart = personDto.FirstDayOfWeek,
-				WorkflowControlSetId = personDto.WorkflowControlSet == null ? null : personDto.WorkflowControlSet.Id,
+				WorkflowControlSetId = personDto.WorkflowControlSet?.Id,
 				IsDeleted = personDto.IsDeleted
 			});
 			if (result.AffectedId != null)
@@ -876,7 +873,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 					foreach (IShiftCategory category in period.RuleSetBag.ShiftCategoriesInBag())
 					{
 						IShiftCategory shiftCategory = category;
-						if (!list.Any(s => s.Id == shiftCategory.Id))
+						if (list.All(s => s.Id != shiftCategory.Id))
 							list.Add(assembler.DomainEntityToDto(shiftCategory));
 					}
 				}
@@ -1044,6 +1041,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 				return adherenceInfoDtos;
 			}
 
+			IScenario defaultScenario;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var personRepository = repositoryFactory.CreatePersonRepository(uow);
@@ -1056,13 +1054,10 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 				{
 					return adherenceInfoDtos;
 				}
-			}
 
-			IScenario defaultScenario;
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
 				defaultScenario = repositoryFactory.CreateScenarioRepository(uow).LoadDefaultScenario();
 			}
+			
 			IStatisticRepository repository = repositoryFactory.CreateStatisticRepository();
 			IList returnValues = repository.LoadAgentStat(defaultScenario.Id.Value, startDate, endDate, timeZoneId, personDto.Id.Value);
 			if (returnValues.Count == 0)
@@ -1091,13 +1086,14 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 				else
 					availableTime = (int)data[5];
 
-				AdherenceInfoDto adherenceInfoDto = new AdherenceInfoDto();
-				adherenceInfoDto.AvailableTime = new TimeSpan(0, 0, availableTime).Ticks;
-				adherenceInfoDto.DateOnlyDto = new DateOnlyDto();
-				adherenceInfoDto.DateOnlyDto.DateTime = dateTime;
-				adherenceInfoDto.IdleTime = new TimeSpan(0, 0, idleTime).Ticks;
-				adherenceInfoDto.LoggedInTime = new TimeSpan(0, 0, loggedInTime).Ticks;
-				adherenceInfoDto.ScheduleWorkCtiTime = new TimeSpan(0, 0, scheduledWorkCtiTime).Ticks;
+				AdherenceInfoDto adherenceInfoDto = new AdherenceInfoDto
+				{
+					AvailableTime = new TimeSpan(0, 0, availableTime).Ticks,
+					DateOnlyDto = new DateOnlyDto {DateTime = dateTime},
+					IdleTime = new TimeSpan(0, 0, idleTime).Ticks,
+					LoggedInTime = new TimeSpan(0, 0, loggedInTime).Ticks,
+					ScheduleWorkCtiTime = new TimeSpan(0, 0, scheduledWorkCtiTime).Ticks
+				};
 				adherenceInfoDtos.Add(adherenceInfoDto);
 			}
 			return adherenceInfoDtos;
@@ -1522,12 +1518,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		public ICollection<SiteDto> GetSites(ApplicationFunctionDto applicationFunction, DateTime utcDateTime)
 		{
 			string func = applicationFunction.FunctionPath;
-			ITeamCollection teamCollection;
 			IList<SiteDto> dtos = new List<SiteDto>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime, TimeZoneHelper.CurrentSessionTimeZone);
-				teamCollection = OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
+				var teamCollection = OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 				foreach (ISite site in teamCollection.AllPermittedSites)
 				{
 					dtos.Add(new SiteDto { DescriptionName = site.Description.Name, Id = site.Id });
@@ -2181,6 +2176,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			{
 				Logger.Info("Disposing the service");
 				//Release managed resources
+				_lifetimeScope.Dispose();
 			}
 			//Release unmanaged resources
 		}

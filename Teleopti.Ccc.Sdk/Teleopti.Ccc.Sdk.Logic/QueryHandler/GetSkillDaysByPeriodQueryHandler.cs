@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 				_resourceCalculationPrerequisitesLoader.Execute();
 
-				var allPeople = _personRepository.FindPeopleInOrganization(dateOnlyPeriodForResourceCalc, true);
+				var allPeople = _personRepository.FindPeopleInOrganization(dateOnlyPeriodForResourceCalc, false);
 
 				_loadSchedulingStateHolderForResourceCalculation.Execute(requestedScenario, periodForResourceCalc, allPeople,
 					_schedulingResultStateHolder);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 						IList<ISkillStaffPeriod> skillStaffPeriods =
 							_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(
-								new List<ISkill> {skill}, dateOnly.ToDateOnlyPeriod().ToDateTimePeriod(timeZoneInfo));
+								new List<ISkill> {skill}, dateOnly.ToDateTimePeriod(timeZoneInfo));
 						skillDayDto.Esl = SkillStaffPeriodHelper.EstimatedServiceLevel(skillStaffPeriods).Value;
 						skillDayDto.SkillId = skill.Id.GetValueOrDefault();
 						skillDayDto.SkillName = skill.Name;
