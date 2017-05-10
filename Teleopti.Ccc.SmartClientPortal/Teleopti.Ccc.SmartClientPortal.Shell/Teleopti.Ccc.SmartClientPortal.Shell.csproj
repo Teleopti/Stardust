@@ -5188,6 +5188,7 @@
     </None>
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="WinCode\Meetings\MeetingsClassDiagram.cd" />
     <None Include="Win\Resources\WFM-People.png" />
