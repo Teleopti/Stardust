@@ -4,7 +4,6 @@ describe('agentGroupFormController', function () {
 		$controller,
 		$state,
 		$injector,
-		$q,
 		agentGroupService,
 		debounceService,
 		stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' };
@@ -13,12 +12,11 @@ describe('agentGroupFormController', function () {
 		module('wfm.resourceplanner');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _$q_, _agentGroupService_, _debounceService_) {
+	beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _agentGroupService_, _debounceService_) {
 		$httpBackend = _$httpBackend_;
 		$controller = _$controller_;
 		agentGroupService = _agentGroupService_;
 		debounceService = _debounceService_;
-		$q = _$q_;
 		$state = _$state_;
 
 		spyOn($state, 'go');

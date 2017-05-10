@@ -27,11 +27,11 @@
 		vm.persist = persist;
 		vm.removeAgentGroup = removeAgentGroup;
 
-		getAgentGroupById(agentGroupId);
+		getAgentGroupById();
 
-		function getAgentGroupById(id) {
-			if (id !== null) {
-				var getAgentGroup = agentGroupService.getAgentGroupById({ id: id });
+		function getAgentGroupById() {
+			if (agentGroupId !== null) {
+				var getAgentGroup = agentGroupService.getAgentGroupById({ id: agentGroupId });
 				return getAgentGroup.$promise.then(function (data) {
 					vm.editAgentGroup = data;
 					vm.deleteAgentGroupText = $translate.instant("AreYouSureYouWantToDeleteTheAgentGroup").replace("{0}", vm.editAgentGroup.Name);

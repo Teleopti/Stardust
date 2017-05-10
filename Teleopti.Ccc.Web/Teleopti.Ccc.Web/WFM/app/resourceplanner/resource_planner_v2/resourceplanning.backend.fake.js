@@ -4,12 +4,10 @@
         .module('wfm.resourceplanner')
         .service('fakeResourcePlanningBackend', function ($httpBackend) {
 
-            var service = {
-                clear : clear,
-            }
-
-            var filterResults = [];
-
+            var LastScheduleResult = {};
+            var LastScheduleStatus = {};
+            var LastIntradayStatus = {};
+            
             var paramsOf = function (url) {
                 var result = {};
                 var queryString = url.split("?")[1];
@@ -35,10 +33,41 @@
                     });
             };
 
-            function clear () {       
-                filterResults = [];
+            this.clear = function () {
+                LastScheduleResult = {};
+                LastScheduleStatus = {};
+                LastIntradayStatus = {};
             };
 
-            return service;
+            fakeGet('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/result',
+                function () {
+                    return [200, LastScheduleResult];
+                });
+
+            fakeGet('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/status',
+                function () {
+                    return [200, LastScheduleStatus];
+                });
+            
+            fakeGet('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/intradaystatus',
+                function () {
+                    return [200, LastIntradayStatus];
+                });
+
+            this.withScheduleResult = function (fakeResult) {
+                LastScheduleResult = fakeResult;
+                return this;
+            };
+
+            this.withScheduleStatus = function (fakeResult) {
+                LastScheduleStatus = fakeResult;
+                return this;
+            }
+
+            this.withIntradayStatus = function (fakeResult) {
+                LastIntradayStatus  = fakeResult;
+                return this;
+            }
+
         });
 })();

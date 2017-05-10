@@ -5,18 +5,16 @@
     .module('wfm.resourceplanner')
     .controller('planningPeriodOverviewController', Controller);
 
-  Controller.$inject = ['$stateParams', 'planningPeriodServiceNew', 'Toggle', 'NoticeService', '$translate', '$interval', '$scope'];
+  Controller.$inject = ['$stateParams', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope'];
 
-  function Controller($stateParams, planningPeriodServiceNew, toggleService, NoticeService, $translate, $interval, $scope) {
+  function Controller($stateParams, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope) {
     var vm = this;
     var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
     var selectedPpId = $stateParams.ppId ? $stateParams.ppId : null;
-    var toggledOptimization = false;
-    var toggledSchedulingOnStardust = false;
     var checkProgressRef;
     var keepAliveRef;
     var preMessage = '';
-    var publishing = false;
+    vm.publishRunning = false;
     vm.agentGroup = {};
     vm.selectedPp = {};
     vm.schedulingPerformed = false;
@@ -42,17 +40,9 @@
       selectedPpId: selectedPpId
     };
 
-    checkToggle();
     destroyCheckState();
     getAgentGroupById();
     getPlanningPeriodByPpId();
-
-    function checkToggle() {
-      toggleService.togglesLoaded.then(function () {
-        toggledOptimization = toggleService.Scheduler_IntradayOptimization_36617;
-        toggledSchedulingOnStardust = toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874;
-      });
-    }
 
     function getAgentGroupById() {
       if (agentGroupId !== null) {
@@ -69,7 +59,7 @@
         var planningPeriod = planningPeriodServiceNew.getPlanningPeriod({ id: selectedPpId });
         return planningPeriod.$promise.then(function (data) {
           vm.selectedPp = data;
-          vm.valData.preValidation = data.ValidationResult.InvalidResources;
+          vm.valData.preValidation = data.ValidationResult.InvalidResources ? data.ValidationResult.InvalidResources : [];
           init();
           return vm.selectedPp;
         });
@@ -104,7 +94,7 @@
     }
 
     function isDisable() {
-      if (vm.schedulingPerformed || vm.optimizeRunning || vm.totalAgents == 0 || vm.isClearing) {
+      if (vm.schedulingPerformed || vm.optimizeRunning || vm.totalAgents == 0 || vm.isClearing || vm.publishRunning) {
         return true;
       }
     }
@@ -156,11 +146,17 @@
                 vm.schedulingPerformed = false;
                 vm.lastJobFail = true;
                 if (result.CurrentStep === 0) {
-                  handleScheduleOrOptimizeError($translate.instant('FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError'));
+                  handleScheduleOrOptimizeError(
+                    $translate.instant('FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError')
+                      .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+                      .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
+                  );
                 } else if (result.CurrentStep === 1) {
-                  handleScheduleOrOptimizeError($translate.instant('FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError'));
-                } else if (result.CurrentStep === 2) {
-                  handleScheduleOrOptimizeError($translate.instant('FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError'));
+                  handleScheduleOrOptimizeError(
+                    $translate.instant('FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError')
+                      .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+                      .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
+                  );
                 }
               } else {
                 vm.schedulingPerformed = true;
@@ -205,10 +201,19 @@
               if (vm.optimizeRunning) {
                 loadLastResult();
                 vm.optimizeRunning = false;
+                NoticeService.success($translate.instant('SuccessfullyIntradayOptimizationPlanningPeriodFromTo')
+                  .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
+                loadLastResult();
               }
             } else if (result.Failed) {
               vm.optimizeRunning = false;
               vm.status = '';
+              handleScheduleOrOptimizeError(
+                $translate.instant('FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError')
+                  .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
+              );
             } else {
               vm.optimizeRunning = true;
               vm.status = $translate.instant('RunningIntradayOptimization');
@@ -219,18 +224,23 @@
     }
 
     function publishSchedule() {
-      if (publishing === true) {
-        NoticeService.warning($translate.instant('PublishingSchedule'), null, true);
+      if (vm.publishRunning === true) {
+        NoticeService.warning(
+          $translate.instant('PublishingScheduleSuccess')
+            .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+            .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
         return;
       }
       if (selectedPpId !== null) {
-        publishing = true;
+        vm.publishRunning = true;
         planningPeriodServiceNew.publishPeriod({ id: selectedPpId }).$promise.then(function () {
-          NoticeService.success($translate.instant('PublishScheduleSuccess'), null, true);
-          publishing = false;
+          NoticeService.success($translate.instant('PublishScheduleSucessForSelectedPlanningPeriod')
+            .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+            .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
+          vm.publishRunning = false;
         });
       }
-    };
+    }
 
     function getTotalAgents() {
       if (vm.selectedPp !== null) {
@@ -245,14 +255,14 @@
       if (selectedPpId !== null) {
         vm.dayNodes = undefined;
         vm.valData.scheduleIssues = [];
-        vm.scheduledAgents = 0;
         planningPeriodServiceNew.lastJobResult({ id: selectedPpId })
           .$promise.then(function (data) {
-            if (data.OptimizationResult) {
-              initResult(data.OptimizationResult, data.ScheduleResult);
-              vm.valData.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults ? data.ScheduleResult.BusinessRulesValidationResults : [];
+            if (data.ScheduleResult) {
+              vm.scheduledAgents = data.ScheduleResult.ScheduledAgentsCount;
+              vm.valData.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults;
+              initResult(data.OptimizationResult);
+              getTotalValidationErrorsNumber(vm.valData.preValidation, vm.valData.scheduleIssues);
             }
-            getTotalValidationErrorsNumber(vm.valData.preValidation, vm.valData.scheduleIssues);
           });
       }
     }
@@ -271,12 +281,13 @@
       return vm.valData.totalValNum += vm.valData.totalPreValNum;
     }
 
-    function initResult(interResult, result) {
-      vm.scheduledAgents = result.ScheduledAgentsCount ? result.ScheduledAgentsCount : 0;
-      vm.dayNodes = interResult.SkillResultList ? interResult.SkillResultList : undefined;
-      parseRelativeDifference(vm.dayNodes);
-      parseWeekends(vm.dayNodes);
-      displayGrid();
+    function initResult(interResult) {
+      if (interResult) {
+        vm.dayNodes = interResult.SkillResultList ? interResult.SkillResultList : undefined;
+        parseRelativeDifference(vm.dayNodes);
+        parseWeekends(vm.dayNodes);
+        displayGrid();
+      }
     }
 
     function parseRelativeDifference(nodes) {

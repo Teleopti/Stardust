@@ -15658,11 +15658,11 @@ Do you want to participate?</value>
     <comment>Failed to load Dayoff Rules.</comment>
   </data>
   <data name="FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
-    <value>Failed to optimize days off for selected planning period due to technical error. Please try again.</value>
+    <value>Failed to optimize days off for planning period {0} - {1} due to technical error. Please try again.</value>
     <comment>Failed to Optimize Dayoff for selected Planning Period due to Technical error.</comment>
   </data>
   <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
-    <value>Failed to schedule for selected planning period due to technical error. Please try again.</value>
+    <value>Failed to schedule for planning period {0} - {1} due to technical error. Please try again.</value>
     <comment>Failed to Schedule for selected Planning Period due to Technical error.</comment>
   </data>
   <data name="OnlySupport" xml:space="preserve">
@@ -16033,7 +16033,7 @@ Do you want to participate?</value>
     <comment>Used in resource planner on web when creating a new planning period</comment>
   </data>
   <data name="SuccessfullyScheduledPlanningPeriodFromTo" xml:space="preserve">
-    <value>Successfully scheduled planning period: {0} - {1}</value>
+    <value>Successfully scheduled planning period {0} - {1}</value>
     <comment>Used in resource planner on the web when a schedule execution is successful for a planning period</comment>
   </data>
   <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
@@ -16067,6 +16067,22 @@ Do you want to participate?</value>
   <data name="SuccessClearPlanningPeriodData" xml:space="preserve">
     <value>Successfully clear schedule result and history data for planning period {0}-{1}</value>
     <comment>SuccessClearPlanningPeriodData</comment>
+  </data>
+  <data name="FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Failed to intraday optimize for planning period {0} - {1} due to technical error. Please try again.</value>
+    <comment>FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError</comment>
+  </data>
+  <data name="PublishingScheduleSuccess" xml:space="preserve">
+    <value>Publishing schedule for planning period  {0} - {1}</value>
+    <comment>PublishingScheduleSuccess</comment>
+  </data>
+  <data name="PublishScheduleSucessForSelectedPlanningPeriod" xml:space="preserve">
+    <value>Successfully publish schedule for planning period  {0} - {1}</value>
+    <comment>PublishingScheduleSucessForSelectedPlanningPeriod</comment>
+  </data>
+  <data name="SuccessfullyIntradayOptimizationPlanningPeriodFromTo" xml:space="preserve">
+    <value>Successfully done intraday optimization for planning period  {0} - {1}</value>
+    <comment>SuccessfullyIntradayOptimizationPlanningPeriodFromTo</comment>
   </data>
   <data name="BadRequest" xml:space="preserve">
     <value>Bad request</value>

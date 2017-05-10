@@ -3,7 +3,6 @@ describe('dayoffRuleOverviewController', function () {
     var $httpBackend,
         $controller,
         $injector,
-        $q,
         dayOffRuleService,
         agentGroupService,
         stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' };
@@ -12,12 +11,11 @@ describe('dayoffRuleOverviewController', function () {
         module('wfm.resourceplanner');
     });
 
-    beforeEach(inject(function (_$httpBackend_, _$controller_, _$q_, _dayOffRuleService_, _agentGroupService_) {
+    beforeEach(inject(function (_$httpBackend_, _$controller_, _dayOffRuleService_, _agentGroupService_) {
         $httpBackend = _$httpBackend_;
         $controller = _$controller_;
         dayOffRuleService = _dayOffRuleService_;
         agentGroupService = _agentGroupService_;
-        $q = _$q_;
 
         $httpBackend.whenGET('../api/ResourcePlanner/AgentGroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
             return [200, {

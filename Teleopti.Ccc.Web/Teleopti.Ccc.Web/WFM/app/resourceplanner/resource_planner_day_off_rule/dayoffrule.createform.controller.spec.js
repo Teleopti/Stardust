@@ -4,7 +4,6 @@ describe('dayoffRuleCreateController', function () {
         $controller,
         $state,
         $injector,
-        $q,
         dayOffRuleService,
         debounceService,
         stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' },
@@ -23,12 +22,11 @@ describe('dayoffRuleCreateController', function () {
         module('wfm.resourceplanner');
     });
 
-    beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _$q_, _dayOffRuleService_, _debounceService_) {
+    beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _dayOffRuleService_, _debounceService_) {
         $httpBackend = _$httpBackend_;
         $controller = _$controller_;
         dayOffRuleService = _dayOffRuleService_;
         debounceService = _debounceService_;
-        $q = _$q_;
         $state = _$state_;
 
         spyOn($state, 'go');

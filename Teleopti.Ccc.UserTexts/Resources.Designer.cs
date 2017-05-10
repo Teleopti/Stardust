@@ -11315,6 +11315,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to intraday optimize for planning period {0} - {1} due to technical error. Please try again..
+        /// </summary>
+        public static string FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError {
+            get {
+                return ResourceManager.GetString("FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to load day off rules..
         /// </summary>
         public static string FailedToLoadDayoffRules {
@@ -11324,7 +11333,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to optimize days off for selected planning period due to technical error. Please try again..
+        ///   Looks up a localized string similar to Failed to optimize days off for planning period {0} - {1} due to technical error. Please try again..
         /// </summary>
         public static string FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError {
             get {
@@ -11342,7 +11351,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to schedule for selected planning period due to technical error. Please try again..
+        ///   Looks up a localized string similar to Failed to schedule for planning period {0} - {1} due to technical error. Please try again..
         /// </summary>
         public static string FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError {
             get {
@@ -23832,6 +23841,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Publishing schedule for planning period  {0} - {1}.
+        /// </summary>
+        public static string PublishingScheduleSuccess {
+            get {
+                return ResourceManager.GetString("PublishingScheduleSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Publish Schedule.
         /// </summary>
         public static string PublishSchedule {
@@ -23864,6 +23882,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PublishScheduleSuccess {
             get {
                 return ResourceManager.GetString("PublishScheduleSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully publish schedule for planning period  {0} - {1}.
+        /// </summary>
+        public static string PublishScheduleSucessForSelectedPlanningPeriod {
+            get {
+                return ResourceManager.GetString("PublishScheduleSucessForSelectedPlanningPeriod", resourceCulture);
             }
         }
         
@@ -31469,7 +31496,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully scheduled planning period: {0} - {1}.
+        ///   Looks up a localized string similar to Successfully done intraday optimization for planning period  {0} - {1}.
+        /// </summary>
+        public static string SuccessfullyIntradayOptimizationPlanningPeriodFromTo {
+            get {
+                return ResourceManager.GetString("SuccessfullyIntradayOptimizationPlanningPeriodFromTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully scheduled planning period {0} - {1}.
         /// </summary>
         public static string SuccessfullyScheduledPlanningPeriodFromTo {
             get {
