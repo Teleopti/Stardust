@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
 			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
 
-		void ScheduleSelectedPersonDays(IEnumerable<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
+		void ScheduleSelectedPersonDays(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, SchedulingOptions schedulingOptions);
 	}
 
@@ -103,17 +103,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public void ScheduleSelectedPersonDays(IEnumerable<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
+		public void ScheduleSelectedPersonDays(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, SchedulingOptions schedulingOptions)
 		{
 			if (matrixList == null) throw new ArgumentNullException(nameof(matrixList));
 
 			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
 
-			var selectedPeriod = allSelectedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
-			var period = new DateOnlyPeriod(selectedPeriod.FirstOrDefault(), selectedPeriod.LastOrDefault());
 			//lock none selected days
-			var matrixUnselectedDaysLocker = new MatrixUnselectedDaysLocker(matrixList, period);
+			var matrixUnselectedDaysLocker = new MatrixUnselectedDaysLocker(matrixList, selectedPeriod);
 			matrixUnselectedDaysLocker.Execute();
 			var unlockedSchedules = (from scheduleMatrixPro in matrixList
 									 from scheduleDayPro in scheduleMatrixPro.UnlockedDays
@@ -122,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (!unlockedSchedules.Any()) return;
 
 			var selectedPersons = matrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
-			schedulingOptions.ConsiderShortBreaks = _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(selectedPersons, period);
+			schedulingOptions.ConsiderShortBreaks = _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(selectedPersons, selectedPeriod);
 
 			var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
 			tagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
@@ -166,7 +164,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_daysOffSchedulingService.DayScheduled -= onDayScheduled;
 
 				IList<IScheduleMatrixOriginalStateContainer> originalStateContainers = new List<IScheduleMatrixOriginalStateContainer>();
-				foreach (IScheduleMatrixPro scheduleMatrixPro in _matrixListFactory.CreateMatrixListForSelection(_resultStateHolder().Schedules, allSelectedSchedules))
+				foreach (IScheduleMatrixPro scheduleMatrixPro in _matrixListFactory.CreateMatrixListForSelection(_resultStateHolder().Schedules, selectedAgents, selectedPeriod))
 					originalStateContainers.Add(new ScheduleMatrixOriginalStateContainer(scheduleMatrixPro, _scheduleDayEquator));
 
 				foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)

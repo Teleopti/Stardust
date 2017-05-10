@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 		}
 
-		protected override void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedScheduleDays, bool runWeeklyRestSolver,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, SchedulingOptions schedulingOptions)
+		protected override void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedScheduleDays, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
+			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, SchedulingOptions schedulingOptions)
 		{
 			_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays, dayOffOptimizationPreferenceProvider);
 		}
@@ -111,6 +111,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var selectedPersons = selectedScheduleDays.Select(x => x.Person).Distinct().ToList();
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedScheduleDays);
+			if (!selectedPeriod.HasValue)
+				return;
 
 #pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true))
@@ -120,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-					DoScheduling(backgroundWorker, selectedScheduleDays, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider, schedulingOptions);
+					DoScheduling(backgroundWorker, selectedScheduleDays, selectedPersons, selectedPeriod.Value, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider, schedulingOptions);
 				}
 				else
 				{
@@ -133,9 +135,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
 					if (schedulingOptions.UseShiftCategoryLimitations)
 					{
-						if (!selectedPeriod.HasValue)
-							return;
-
 						var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedPersons, selectedPeriod.Value);
 						if (matrixesOfSelectedScheduleDays.Count == 0)
 							return;
@@ -155,7 +154,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 
-		protected virtual void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedScheduleDays,
+		//remove selectedSCheduleDays when 44222 gets a little bit further
+		protected virtual void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedScheduleDays, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			SchedulingOptions schedulingOptions)
 		{
@@ -166,8 +166,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 			else
 			{
-				_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedScheduleDays,
-					dayOffOptimizationPreferenceProvider, runWeeklyRestSolver);
+				_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider, runWeeklyRestSolver);
 			}
 		}
 

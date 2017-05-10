@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly Func<IResourceCalculation> _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
 
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IResourceCalculation> resourceOptimizationHelper,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			PeriodExtractorFromScheduleParts periodExtractor,
 			IUserTimeZone userTimeZone,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper)
 		{
@@ -36,16 +34,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_schedulerStateHolder = schedulerStateHolder;
-			_periodExtractor = periodExtractor;
 			_userTimeZone = userTimeZone;
 			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
 		}
 
-		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedSchedules, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, bool runWeeklyRestSolver)
+		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, bool runWeeklyRestSolver)
 		{
-			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
-
-			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedSchedules);
+			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return;
 
@@ -53,38 +48,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (daysOnlyHelper.DaysOnly)
 			{
 				if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
-					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedAgents, selectedPeriod, matrixesOfSelectedScheduleDays,
 						backgroundWorker,
 						daysOnlyHelper.PreferenceOnlyOptions);
 
 				if (schedulingOptions.RotationDaysOnly)
-					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedAgents, selectedPeriod, matrixesOfSelectedScheduleDays,
 						backgroundWorker,
 						daysOnlyHelper.RotationOnlyOptions);
 
 				if (schedulingOptions.AvailabilityDaysOnly)
-					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedAgents, selectedPeriod, matrixesOfSelectedScheduleDays,
 						backgroundWorker,
 						daysOnlyHelper.AvailabilityOnlyOptions);
 
 				if (daysOnlyHelper.UsePreferencesWithNoDaysOnly || daysOnlyHelper.UseRotationsWithNoDaysOnly ||
 					daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
-					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedAgents, selectedPeriod, matrixesOfSelectedScheduleDays,
 						backgroundWorker,
 						daysOnlyHelper.NoOnlyOptions);
 
 			}
 			else
-				_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+				_requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedAgents, selectedPeriod, matrixesOfSelectedScheduleDays,
 					backgroundWorker,
 					schedulingOptions);
 
-			if(runWeeklyRestSolver && selectedPeriod.HasValue)
-				solveWeeklyRest(schedulingOptions, selectedSchedules, _schedulerStateHolder(), selectedPeriod.Value, backgroundWorker, dayOffOptimizationPreferenceProvider);
+			if(runWeeklyRestSolver)
+				solveWeeklyRest(schedulingOptions, selectedAgents, _schedulerStateHolder(), selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 
 
-		private void solveWeeklyRest(SchedulingOptions schedulingOptions, IEnumerable<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, 
+		private void solveWeeklyRest(SchedulingOptions schedulingOptions, IEnumerable<IPerson> selectedPersons, ISchedulerStateHolder schedulerStateHolder, 
 									DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper(), 1, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
@@ -92,8 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
 					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
-			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer,
+			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons.ToList(), rollbackService, resourceCalculateDelayer,
 				selectedPeriod, _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod), backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 	}
