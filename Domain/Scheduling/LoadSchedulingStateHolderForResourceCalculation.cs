@@ -85,9 +85,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     scheduleDictionaryLoadOptions,
 					requestedPersons); //rk - fattar inte, för rörigt. lägger till detta av nån anledning här
 
-			schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
-		
-		    schedulingResultStateHolder.SkillDays =
+			schedulingResultStateHolder.AllPersonAccounts = loadLight
+				? new Dictionary<IPerson, IPersonAccountCollection>()
+				: _personAbsenceAccountRepository.FindByUsers(requestedPersons);
+
+			schedulingResultStateHolder.SkillDays =
 		        _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, scenario);
 		}
 	}
