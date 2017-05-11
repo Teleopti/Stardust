@@ -19,6 +19,7 @@ Scenario: Create Skill Area
 	Then I select to monitor skill area 'my Area'
   And I should monitor 'my Area'
 
+
 Scenario: Remove Skill Area
 	Given there is a Skill Area called 'Area A' that monitors skill 'Skill A'
   And I am viewing intraday page
@@ -54,4 +55,14 @@ Scenario: View staffing for one skill
 	And I should see incoming traffic data in the chart
 	And I am navigating to intraday staffing view
 	Then I should see staffing data in the chart
+
+Scenario: View incoming traffic for one skill for a provided date
+	Given the time is '2016-12-21 14:00'
+	And there is queue statistics for the skill 'Skill A' up until '2016-12-20 17:00'
+	And there is forecast data for skill 'Skill A' for date '2016-12-20'
+	When I am viewing intraday page
+	And I change date to '2016-12-20'
+	Then I should see staffing data in the chart
+
+
 	
