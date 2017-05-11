@@ -58,7 +58,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		function callback(data) {
 			if (vm === null) return; //Might happen if page is unloaded before this callback is executed
-			vm.setCurrentDate(moment(data.PeriodSelection.Date));
 			_bindData(data);
 
 			if (vm === null) return; //Might happen if page is unloaded before this callback is executed
@@ -225,6 +224,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.hideProbabilityEarlierThanNow = true;
 
 		self.switchProbabilityType = function (probabilityType) {
+			if(self.selectedProbabilityType == probabilityType) return;
+
 			self.selectedProbabilityType = probabilityType;
 			reloadSchedule(probabilityType);
 			if (self.selectedProbabilityType === constants.probabilityType.none) {
@@ -280,19 +281,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.loadingProbabilityData(false);
 		};
 
-		self.setCurrentDate = function (selectedDate) {
-			self.selectedDate(selectedDate);
-
+		self.setSelectedDateSubscription = function (selectedDate) {
 			if (self.selectedDateSubscription)
 				self.selectedDateSubscription.dispose();
 
 			self.selectedDateSubscription = self.selectedDate.subscribe(function (date) {
-				if (selectedDate === date) return;
-
-				selectedDate = date;
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(date) + getUrlPartForProbability());
 			});
 		};
+
+		self.setSelectedDateSubscription();
 
 		self.previousWeek = function () {
 			self.selectedDate(self.previousWeekDate());
@@ -537,7 +535,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		if (data.PeriodSelection) {
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
-			self.setCurrentDate(moment(data.PeriodSelection.Date));
+			self.setSelectedDateSubscription(moment(data.PeriodSelection.Date));
 			self.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
 			self.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
 			var minDateArr = data.PeriodSelection.SelectedDateRange.MinDate.split("-");
