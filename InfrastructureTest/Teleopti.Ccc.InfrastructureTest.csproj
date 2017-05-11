@@ -296,6 +296,7 @@
     <Compile Include="Rta\AgentStateReadModelReader\ForOrganizationAndSkill.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForSkill.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\WithNames.cs" />
+    <Compile Include="Rta\PerformanceMeasurement\MeasureHangfireEventPackageTest.cs" />
     <Compile Include="Rta\HistoricalAdherenceReadModelReaderTest.cs" />
     <Compile Include="Rta\HistoricalChangeReadModelReaderTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureClosingSnapshotTest.cs" />

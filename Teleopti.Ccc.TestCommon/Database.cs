@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.TestCommon
 	public class Database
 	{
 		private readonly AnalyticsDatabase _analytics;
-		private readonly IEventPublisher _eventPublisher;
+		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly IPersonAssignmentRepository _assignments;
 		private readonly IPersonRepository _persons;
 		private readonly ISiteRepository _sites;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public Database(
 			AnalyticsDatabase analytics,
-			IEventPublisher eventPublisher,
+			ICurrentEventPublisher eventPublisher,
 			IPersonAssignmentRepository assignments,
 			IPersonRepository persons,
 			ISiteRepository sites,
@@ -575,7 +575,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public Database PublishRecurringEvents()
 		{
-			_eventPublisher.Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
+			_eventPublisher.Current().Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
 			return this;
 		}
 

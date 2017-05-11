@@ -3,19 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
@@ -23,26 +14,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 	[Explicit]
 	[Category("LongRunning")]
 	[PerformanceMeasurementTest]
-	public class MeasureBatchTest : ISetup
+	public class MeasureBatchTest
 	{
 		public Database Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public FakeConfigReader Config;
 		public FakeEventPublisher Publisher;
-		public AgentStateMaintainer Maintainer;
-		public MutableNow Now;
 		public AnalyticsDatabase Analytics;
-		public WithUnitOfWork Uow;
-		public PerformanceMeasurementTestAttribute Attribute;
-		public IPersonRepository Persons;
-		public IScenarioRepository Scenarios;
-		public IActivityRepository Activities;
-		public IPersonAssignmentRepository PersonAssignments;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-		}
+		public PerformanceMeasurementTestAttribute Context;
 
 		private void createData()
 		{
@@ -54,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			stateCodes.ForEach(x => Database.WithStateGroup(x).WithStateCode(x));
 			Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
 
-			Attribute.MakeUsersFaster(userCodes);
+			Context.MakeUsersFaster(userCodes);
 
 			// trigger tick to populate mappings
 			Publisher.Publish(new TenantMinuteTickEvent());
@@ -69,10 +48,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			createData();
 
 			(
-				from parallelTransactions in Attribute.ParallelTransactions()
-				from transactionSize in Attribute.TransactionSize()
-				from batchSize in Attribute.BatchSize()
-				from variation in Attribute.Variation()
+				from parallelTransactions in Context.ParallelTransactions()
+				from transactionSize in Context.TransactionSize()
+				from batchSize in Context.BatchSize()
+				from variation in Context.Variation()
 				select new { parallelTransactions, transactionSize, batchSize, variation }
 			)
 			.Select(x =>

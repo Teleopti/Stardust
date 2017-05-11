@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -18,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
 	public class PerformanceMeasurementTestAttribute : InfrastructureTestAttribute
 	{
-		public FakeEventPublisher Publisher;
+		public FakeEventPublisher FakePublisher;
 		public AnalyticsDatabase Analytics;
 		public WithUnitOfWork Uow;
 		public IPersonRepository Persons;
@@ -28,10 +30,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		public IExternalLogOnRepository ExternalLogOns;
 		public ITeamRepository Teams;
 		public ISiteRepository Sites;
+		public HangfireClientStarter HangfireClientStarter;
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
+
+			if (QueryAllAttributes<RealHangfireAttribute>().Any())
+				system.UseTestDouble<FakeEventPublisher>().For<FakeEventPublisher>();
+			else
+				system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 
 			system.AddService(this);
 		}
@@ -40,13 +48,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		{
 			base.BeforeTest();
 
-			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
-			Publisher.AddHandler<AgentStateMaintainer>();
-			Publisher.AddHandler<MappingReadModelUpdater>();
-			Publisher.AddHandler<ExternalLogonReadModelUpdater>();
-			//Publisher.AddHandler<ProjectionChangedEventPublisher>();
-			//Publisher.AddHandler<ScheduleProjectionReadOnlyUpdater>();
-			Publisher.AddHandler<ScheduleChangeProcessor>();
+			if (QueryAllAttributes<RealHangfireAttribute>().Any())
+				HangfireClientStarter.Start();
+
+			FakePublisher.AddHandler<PersonAssociationChangedEventPublisher>();
+			FakePublisher.AddHandler<AgentStateMaintainer>();
+			FakePublisher.AddHandler<MappingReadModelUpdater>();
+			FakePublisher.AddHandler<ExternalLogonReadModelUpdater>();
+			FakePublisher.AddHandler<ScheduleChangeProcessor>();
 		}
 
 		protected override void AfterTest()
@@ -57,9 +66,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			SetupFixtureForAssembly.RestoreAnalyticsDatabase();
 		}
 
-		//public IEnumerable<int> ParallelTransactions() => new[] {7};
-		//public IEnumerable<int> TransactionSize() => new[] {100};
-		//public IEnumerable<int> BatchSize() => new[] {50, 500, 1000};
 		public IEnumerable<int> ParallelTransactions() => new[] { 5, 6, 7, 8, 9 };
 		public IEnumerable<int> TransactionSize() => new[] { 50, 80, 100, 120, 150 };
 		public IEnumerable<int> BatchSize() => new[] { 50, 250, 500, 750, 1000 };

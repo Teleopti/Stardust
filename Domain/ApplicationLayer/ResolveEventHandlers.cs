@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
@@ -11,10 +12,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	public class ResolveEventHandlers
 	{
 		private readonly IResolve _resolve;
+		private readonly IConfigReader _config;
 
-		public ResolveEventHandlers(IResolve resolve)
+		public ResolveEventHandlers(IResolve resolve, IConfigReader config)
 		{
 			_resolve = resolve;
+			_config = config;
 		}
 
 		[Obsolete("Use the method JobsFor<T> instead")]
@@ -65,15 +68,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			var packages =
 					_resolve.ConcreteTypesFor(typeof(IHandleEvents))
-						.Select(handler =>
+						.SelectMany(handler =>
 						{
 							var registrator = new SubscriptionRegistrator();
 							(_resolve.Resolve(handler) as dynamic).Subscribe(registrator);
-							return new
-							{
-								events = events.Where(x => registrator.SubscribesTo(x.GetType())).ToArray(),
-								handler
-							};
+							var subscribedEvents = events.Where(x => registrator.SubscribesTo(x.GetType())).ToArray();
+							return subscribedEvents
+								.Batch(_config.ReadValue("EventMaxPackageSize", 250))// 250 default is just number, we saw no upper limit, but no performance difference between 1000 and 250 either.
+								.Select(x => new
+								{
+									events = subscribedEvents,
+									handler
+								});
 						})
 						.Where(x => x.events.Any())
 						.Select(x => buildJobInfo(x.handler, typeof(IEnumerable<IEvent>), null, x.events))

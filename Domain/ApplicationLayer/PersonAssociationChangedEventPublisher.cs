@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		IRunOnHangfire
 	{
 		private readonly IPersonRepository _persons;
-		private readonly IEventPublisher _eventPublisher;
+		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly INow _now;
 		private readonly IDistributedLockAcquirer _distributedLock;
 		private readonly IKeyValueStorePersister _keyValueStore;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public PersonAssociationChangedEventPublisher(
 			IPersonRepository persons,
-			IEventPublisher eventPublisher,
+			ICurrentEventPublisher eventPublisher,
 			INow now,
 			IDistributedLockAcquirer distributedLock,
 			IKeyValueStorePersister keyValueStore,
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				CheckSum = currentCheckSum
 			});
 
-			_eventPublisher.Publish(@event);
+			_eventPublisher.Current().Publish(@event);
 		}
 
 		private int calculateCheckSum(PersonAssociationChangedEvent @event)
