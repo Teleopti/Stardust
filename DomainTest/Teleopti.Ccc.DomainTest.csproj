@@ -364,6 +364,7 @@
     <Compile Include="ResourceCalculation\UpdateStaffingReadModelForecastTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
     <Compile Include="SchedulingScenarios\ContractWithMaximumTolerance.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationAgentGroupTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationFakeDecisionMakerTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationNoPeriodValueCalculatorTest.cs" />
