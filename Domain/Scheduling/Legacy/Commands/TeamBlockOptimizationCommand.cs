@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly ITeamBlockMoveTimeBetweenDaysCommand _teamBlockMoveTimeBetweenDaysCommand;
-		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
+		private readonly IntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand,
-			IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
+			IntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
 			IOptimizerHelperHelper optimizerHelper,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,

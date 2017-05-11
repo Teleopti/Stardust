@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class IntraIntervalOptimizationCommand : IIntraIntervalOptimizationCommand
+	public class IntraIntervalOptimizationCommand
 	{
 		private readonly IntraIntervalOptimizationService _intervalOptimizationService;
 		private ISchedulingProgress _backgroundWorker;

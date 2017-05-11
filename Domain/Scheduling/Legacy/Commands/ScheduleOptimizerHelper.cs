@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationServiceFacade;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
-		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
+		private readonly IntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 		private readonly MaxSeatOptimization _maxSeatOptimization;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationServiceFacade,
 				IScheduleDayEquator scheduleDayEquator,
 				ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
-				IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
+				IntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
 				MaxSeatOptimization maxSeatOptimization,
 				IWeeklyRestSolverCommand weeklyRestSolverCommand)
 		{
