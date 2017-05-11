@@ -1556,6 +1556,11 @@ End personal drop down menu
 }
 
 @media (min-width: 768px) {
+	.navbar-nav > li > a{
+		padding-left: 12px;
+		padding-right: 12px;
+	}
+
 	.submenu li {
 		width: auto;
 		padding: 1px;
