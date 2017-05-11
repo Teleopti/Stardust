@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "grunt",
     "test": "grunt test",
-    "continuous": "grunt test:continuous",
+    "continuous": "grunt test-continuous",
     "webpack": ".\\node_modules\\.bin\\webpack"
   },
   "author": "Teleopti",
