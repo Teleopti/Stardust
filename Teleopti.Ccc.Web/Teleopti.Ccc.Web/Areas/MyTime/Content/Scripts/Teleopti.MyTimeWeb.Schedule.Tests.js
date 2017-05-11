@@ -266,14 +266,14 @@ $(document).ready(function() {
 	});
 
 	test("should refresh and modify url after changing date", function () {
+		setupHash();
 		initUserTexts();
 		var fakeScheduleData = getFakeScheduleData();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 
 		vm.initializeData(fakeScheduleData);
 		vm.nextWeek();
-
-		equal(Teleopti.MyTimeWeb.Portal.ParseHash().hash.indexOf(moment(basedDate).add('days', 7).format('YYYY/MM/DD')) > 0, true);
+		equal(hash.indexOf(moment(basedDate).add('days', 7).format('YYYY/MM/DD')) > 0, true);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
