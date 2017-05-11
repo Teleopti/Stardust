@@ -157,10 +157,6 @@
 			"<!-- /ko --></span>");
 		$("body").append(bindElement);
 
-		Teleopti.MyTimeWeb.Request.RequestDetail = {
-			AddTextOrAbsenceRequest: function () { }
-		}
-
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 

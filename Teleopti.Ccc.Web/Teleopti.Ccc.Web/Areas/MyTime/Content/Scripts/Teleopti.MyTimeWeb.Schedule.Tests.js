@@ -847,11 +847,6 @@ $(document).ready(function() {
 			ajax
 		);
 
-		Teleopti.MyTimeWeb.Request.RequestDetail = {
-			AddTextOrAbsenceRequest: function () {
-			}
-		};
-
 		Teleopti.MyTimeWeb.UserInfo = {
 			WhenLoaded: function (whenLoadedCallBack) {
 				var data = { WeekStart: "" };
@@ -1001,11 +996,6 @@ $(document).ready(function() {
 			ajax
 		); 
 
-		Teleopti.MyTimeWeb.Request.RequestDetail = {
-			AddTextOrAbsenceRequest: function () { 
-			}
-		};
-
 		Teleopti.MyTimeWeb.UserInfo = {
 			WhenLoaded: function (whenLoadedCallBack) {
 				var data = { WeekStart: "" };
@@ -1067,11 +1057,6 @@ $(document).ready(function() {
 			function () { },
 			ajax
 		);
-
-		Teleopti.MyTimeWeb.Request.RequestDetail = {
-			AddTextOrAbsenceRequest: function () {
-			}
-		};
 
 		Teleopti.MyTimeWeb.UserInfo = {
 			WhenLoaded: function (whenLoadedCallBack) {
