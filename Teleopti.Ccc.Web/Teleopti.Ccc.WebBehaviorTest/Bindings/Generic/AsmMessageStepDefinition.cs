@@ -115,7 +115,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see a user-friendly message explaining I dont have any messages")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnyMessages()
 		{
-			BrowserInteractionsJQueryExtensions.AssertVisibleUsingJQuery(Browser.Interactions, ".no-messages");
+			Browser.Interactions.TryUntil(
+				() =>
+				{
+					Browser.Interactions.AssertKnockoutContextContains(".no-messages", "shouldShowMessage()", "True");
+				},
+				() => Browser.Interactions.IsVisible(".no-messages"),
+				TimeSpan.FromMilliseconds(2000));
 		}
 
 		[When(@"I enter the text reply '(.*)'")]
