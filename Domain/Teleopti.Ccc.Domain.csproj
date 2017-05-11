@@ -422,7 +422,6 @@
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestIntradayFilter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestOpenPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestPersonAccountValidator.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestProcessor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestSynchronousValidator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestUpdater.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestValidator.cs" />

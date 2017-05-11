@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly SkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
+		private readonly IActivityRepository _activityRepository;
 		private readonly ISmartDeltaDoer _smartDeltaDoer;
 
 		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher,
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 												 ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, 
 												 IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ISkillStaffingIntervalProvider skillStaffingIntervalProvider, 
-												 ISmartDeltaDoer smartDeltaDoer)
+												 ISmartDeltaDoer smartDeltaDoer, IActivityRepository activityRepository)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 			_smartDeltaDoer = smartDeltaDoer;
+			_activityRepository = activityRepository;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
@@ -69,6 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					return;
 				}
 
+				_activityRepository.LoadAll();
 				var allSkills = _skillRepository.LoadAll();
 				var loadSchedulesPeriodToCoverForMidnightShifts = personRequest.Request.Period.ChangeStartTime(TimeSpan.FromDays(-1));
 				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];

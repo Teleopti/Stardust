@@ -82,12 +82,12 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 								  WorkflowControlSetRepository.LoadAll();
 								  AbsenceRepository.LoadAll();
 								  WorkloadRepository.LoadAll();
+								  ActivityRepository.LoadAll();
+								  SkillTypeRepository.LoadAll();
 								  SkillRepository.LoadAllSkills();
 								  ContractRepository.LoadAll();
-								  SkillTypeRepository.LoadAll();
 								  PartTimePercentageRepository.LoadAll();
 								  ContractScheduleRepository.LoadAllAggregate();
-								  ActivityRepository.LoadAll();
 								  DayOffTemplateRepository.LoadAll();
 
 								  UpdateStaffingLevel.Update(period);
