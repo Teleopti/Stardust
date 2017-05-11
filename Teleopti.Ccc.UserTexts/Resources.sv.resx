@@ -14478,4 +14478,163 @@ Vill du registrera dig?</value>
   <data name="FilterSkills" xml:space="preserve">
     <value>Filtrera kompetenser</value>
   </data>
+  <data name="DeletedContractAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Kontraktet {0} som angetts för denna agent har tagits bort</value>
+  </data>
+  <data name="DeletedContractScheduleAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Kontraktsschemat {0} som angetts för denna agent har tagits bort</value>
+  </data>
+  <data name="DeletedPartTimePercentageAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Deltidsprocenten {0} som angetts för denna agent har tagits bort</value>
+  </data>
+  <data name="DeletedShiftBagAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Skiftpåsen {0} som angetts för denna agent har tagits bort</value>
+  </data>
+  <data name="MissingPersonPeriodForPlanningPeriod" xml:space="preserve">
+    <value>Agenten har inte någon personperiod för hela eller delar av planeringsperioden</value>
+  </data>
+  <data name="MissingSchedulePeriodForPlanningPeriod" xml:space="preserve">
+    <value>Agenten har inte någon schemaperiod för planeringsperioden</value>
+  </data>
+  <data name="MissingShiftBagForPlanningPeriod" xml:space="preserve">
+    <value>Agenten har inte någon skiftpåse för hela eller delar av planeringsperioden</value>
+  </data>
+  <data name="MissingSkillsForPlanningPeriod" xml:space="preserve">
+    <value>Agenten har inga kompetenser för hela eller delar av planeringsperioden</value>
+  </data>
+  <data name="NoFullSchedulePeriod" xml:space="preserve">
+    <value>Schemaperioden matchar inte planeringsperioden</value>
+  </data>
+  <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
+    <value>Agenten har {0} dagar utan schema.</value>
+  </data>
+  <data name="AgentsHaveScheduled" xml:space="preserve">
+    <value>agenter har schemalagts</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheAgentGroup" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort agentgruppen '{0}' och de tillhörande inställningarna?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort fridagsregeln {0} och de tillhörande inställningarna?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningPeriod" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort planeringsperioden {0}-{1} och de tillhörande inställningarna?</value>
+  </data>
+  <data name="ChangePlanningDuration" xml:space="preserve">
+    <value>Ändra längden på planeringen</value>
+  </data>
+  <data name="CreateAgentGroup" xml:space="preserve">
+    <value>Skapa agentgrupp</value>
+  </data>
+  <data name="CreateFirstPlanningPeriod" xml:space="preserve">
+    <value>Skapa den första planeringsperioden</value>
+  </data>
+  <data name="CreateNextPp" xml:space="preserve">
+    <value>Skapa nästa planeringsperiod</value>
+  </data>
+  <data name="DayOffRule" xml:space="preserve">
+    <value>Fridagsregel</value>
+  </data>
+  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
+    <value>Följande inställningar gäller för agentgruppen {0}</value>
+  </data>
+  <data name="DayOffRuleSetting" xml:space="preserve">
+    <value>Inställningar för fridagsregler</value>
+  </data>
+  <data name="DeleteAgentGroup" xml:space="preserve">
+    <value>Ta bort agentgrupp</value>
+  </data>
+  <data name="DeleteDayOffRule" xml:space="preserve">
+    <value>Ta bort fridagsregel</value>
+  </data>
+  <data name="DeletePlanningPeriod" xml:space="preserve">
+    <value>Ta bort planeringsperiod</value>
+  </data>
+  <data name="EditAgentGroup" xml:space="preserve">
+    <value>Ändra agentgrupp</value>
+  </data>
+  <data name="NewAgentGroup" xml:space="preserve">
+    <value>Ny agentgrupp</value>
+  </data>
+  <data name="NoAgentsWithinAgentGroup" xml:space="preserve">
+    <value>Det finns inga agenter i den här agentgruppen som kan schemaläggas</value>
+  </data>
+  <data name="NoPreviousScheduleResult" xml:space="preserve">
+    <value>Planeringsperioden har inga tidigare schemaläggningsresultat</value>
+  </data>
+  <data name="NoValidScheduleResult" xml:space="preserve">
+    <value>Den här planeringsperioden har inget giltigt schemaläggningsresultat</value>
+  </data>
+  <data name="ScheduleAgentGroup" xml:space="preserve">
+    <value>Schemalägg agentgrupp</value>
+  </data>
+  <data name="SchedulePageSelectAg" xml:space="preserve">
+    <value>Välj agentgrupp att arbeta med</value>
+  </data>
+  <data name="SearchForAgentGroup" xml:space="preserve">
+    <value>Sök enhet / team / kompetens / kontrakt</value>
+  </data>
+  <data name="SearchForDayOff" xml:space="preserve">
+    <value>Sök enhet / team / kontrakt</value>
+  </data>
+  <data name="SelectedPlanningPeriod" xml:space="preserve">
+    <value>Vald planeringsperiod</value>
+  </data>
+  <data name="SelectPpWorkWith" xml:space="preserve">
+    <value>Välj planeringsperiod att arbeta med</value>
+  </data>
+  <data name="ConfirmToggleAllData" xml:space="preserve">
+    <value>Detta ändrar inställningen för det här objektet och alla objekt under det. Är du säker på att du vill fortsätta?</value>
+  </data>
+  <data name="AnErrorOccurredPleaseTryAgain" xml:space="preserve">
+    <value>Ett fel inträffade. Var god försök igen. </value>
+  </data>
+  <data name="ChangePlanningPeriodDurationColon" xml:space="preserve">
+    <value>Ändra längden på planeringsperioden:</value>
+  </data>
+  <data name="CreatePlanningPeriod" xml:space="preserve">
+    <value>Skapa planeringsperiod</value>
+  </data>
+  <data name="ModifyEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Ändra slutdatum för planeringsperioden.</value>
+  </data>
+  <data name="ModifyStartAndEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Ändra start- och slutdatum för planeringsperioden.</value>
+  </data>
+  <data name="RunningIntradayOptimization" xml:space="preserve">
+    <value>Kör optimering inom dagen</value>
+  </data>
+  <data name="SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot" xml:space="preserve">
+    <value>Välj en föreslagen period att arbeta med eller ange start- och slutdatum.</value>
+  </data>
+  <data name="SuccessfullyScheduledPlanningPeriodFromTo" xml:space="preserve">
+    <value>Schemaläggning av planeringsperioden {0} - {1} lyckades.</value>
+  </data>
+  <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
+    <value>Du behöver en planeringsperiod för att schemalägga dina agenter. Vill du skapa en planeringsperiod?</value>
+  </data>
+  <data name="PublishingSchedule" xml:space="preserve">
+    <value>Publicerar schema</value>
+  </data>
+  <data name="PublishScheduleSuccess" xml:space="preserve">
+    <value>Publicering av schema klar</value>
+  </data>
+  <data name="FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Misslyckades att optimera inom dagen för planeringsperioden {0} - {1} pga. tekniskt fel. Var god försök igen. </value>
+  </data>
+  <data name="PublishingScheduleSuccess" xml:space="preserve">
+    <value>Publicerar schema för planeringsperioden {0} - {1}</value>
+  </data>
+  <data name="PublishScheduleSucessForSelectedPlanningPeriod" xml:space="preserve">
+    <value>Publicering av schema för planeringsperioden {0} - {1} klar</value>
+  </data>
+  <data name="SuccessfullyIntradayOptimizationPlanningPeriodFromTo" xml:space="preserve">
+    <value>Optimering inom dagen för planeringsperioden {0} - {1} klar</value>
+  </data>
+  <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
+    <value>Sluttiden måste vara efter starttiden. </value>
+  </data>
+  <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
+    <value>Fridagsreglerna kommer att användas för alla planeringsperioder</value>
+  </data>
 </root>

@@ -15913,11 +15913,11 @@ Do you want to participate?</value>
     <comment>Filter validation issues</comment>
   </data>
   <data name="HelpCreateAgentGroup" xml:space="preserve">
-    <value>You need an agent group to schdule your agents. Do you want to create agent group?</value>
+    <value>You need an agent group to schedule your agents. Do you want to create an agent group?</value>
     <comment>text for helping information</comment>
   </data>
   <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
-    <value>Dayoff Rules will be applied for all planning periods</value>
+    <value>Day off rules will be applied for all planning periods</value>
     <comment>HelpDayOffForPlanningPeriod</comment>
   </data>
   <data name="Issue" xml:space="preserve">
@@ -15925,7 +15925,7 @@ Do you want to participate?</value>
     <comment>Issue</comment>
   </data>
   <data name="ManageDayOffForAgentGroup" xml:space="preserve">
-    <value>Manage your dayoff rules for agentgroup {0}</value>
+    <value>Manage your day off rules for agent group {0}</value>
     <comment>ManageDayOffForAgentGroup</comment>
   </data>
   <data name="NewAgentGroup" xml:space="preserve">
