@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills, false))
 #pragma warning restore 618
 			{
-				IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedDays);
+				var matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedPersons, selectedPeriod);
 
 				if (optimizationPreferences.General.OptimizationStepTimeBetweenDays)
 				{
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
 						IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization =
-							_matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedDays);
+							_matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedPersons, selectedPeriod);
 						IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization =
 							createMatrixContainerList(matrixListForWorkShiftOptimization);
 
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				}
 
 				continuedStep = runFlexibleTime(optimizationPreferences, continuedStep, selectedPeriod, selectedDays,
-					dayOffOptimizationPreferenceProvider, _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedDays));
+					dayOffOptimizationPreferenceProvider, _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedPersons, selectedPeriod));
 			}
 
 			if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					runIntradayOptimization(
 						optimizationPreferences,
-						selectedDays,
+						selectedPersons,
 						backgroundWorker,
 						selectedPeriod);
 					continuedStep = true;
@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private void runIntradayOptimization(
 			IOptimizationPreferences optimizerPreferences,
-			IEnumerable<IScheduleDay> scheduleDays,
+			IEnumerable<IPerson> scheduleAgents,
 			ISchedulingProgress backgroundWorker,
 			DateOnlyPeriod selectedPeriod)
 		{
@@ -402,7 +402,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (_progressEvent != null && _progressEvent.Cancel) return;
 
-				_optimizeIntradayDesktop.Optimize(scheduleDays.Select(x => x.Person).Distinct(), selectedPeriod, optimizerPreferences, new IntradayOptimizationCallback(_backgroundWorker));
+				_optimizeIntradayDesktop.Optimize(scheduleAgents, selectedPeriod, optimizerPreferences, new IntradayOptimizationCallback(_backgroundWorker));
 			}
 		}
 
