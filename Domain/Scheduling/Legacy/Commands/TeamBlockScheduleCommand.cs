@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_groupPersonBuilderForOptimizationFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 			var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
-			if (matrixesOfSelectedScheduleDays.Count == 0)
+			if (!matrixesOfSelectedScheduleDays.Any())
 				return;
 
 			var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);

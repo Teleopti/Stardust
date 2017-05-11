@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
-						IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization =
+						var matrixListForWorkShiftOptimization =
 							_matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedAgents, selectedPeriod);
 						IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization =
 							createMatrixContainerList(matrixListForWorkShiftOptimization);

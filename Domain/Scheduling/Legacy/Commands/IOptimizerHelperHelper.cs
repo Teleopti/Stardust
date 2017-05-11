@@ -21,6 +21,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IAdvancedPreferences advancedPreferences,
 			DateOnlyPeriod selectedPeriod,
 			ISchedulingResultStateHolder stateHolder,
-			IList<IScheduleMatrixPro> allScheduleMatrixPros);
+			IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros);
 	}
 }

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
 	public interface IMatrixDataListCreator
 	{
-		IList<IMatrixData> Create(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions);
+		IList<IMatrixData> Create(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions);
 	}
 
 	public class MatrixDataListCreator : IMatrixDataListCreator
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			_scheduleDayDataMapper = scheduleDayDataMapper;
 		}
 
-		public IList<IMatrixData> Create(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions)
+		public IList<IMatrixData> Create(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions)
 		{
 			IList<IMatrixData> result = new List<IMatrixData>();
 			foreach (var scheduleMatrixPro in matrixList)

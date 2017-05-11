@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return matrixes;
 		}
 
-		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IScheduleDictionary schedules, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
+		public IEnumerable<IScheduleMatrixPro> CreateMatrixListForSelection(IScheduleDictionary schedules, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
 			var matrixes = createMatrixes(schedules, selectedAgents, selectedPeriod);
 			_matrixUserLockLocker.Execute(matrixes, selectedPeriod);

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	public interface IShiftNudgeManager
 	{
 		bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith, ITeamBlockGenerator teamBlockGenerator,
-			IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulePartModifyAndRollbackService rollbackService,
+			IEnumerable<IScheduleMatrixPro> allPersonMatrixList, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 			SchedulingOptions schedulingOptions,
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		}
 
 		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith,
-			ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList,
+			ITeamBlockGenerator teamBlockGenerator, IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder, DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
     public interface IConstructTeamBlock
     {
-	    IList<ITeamBlockInfo> Construct(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+	    IList<ITeamBlockInfo> Construct(IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 		    IEnumerable<IPerson> selectedPersons,
 	                                    IBlockFinder blockFinder,
 	                                    GroupPageLight groupOnGroupPageForTeamBlockPer);
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             _teamBlockInfoFactory = teamBlockInfoFactory;
         }
 
-        public IList<ITeamBlockInfo> Construct(IList<IScheduleMatrixPro> allPersonMatrixList,
+        public IList<ITeamBlockInfo> Construct(IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
                                                DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons,
 																															 IBlockFinder blockFinder,
 												GroupPageLight groupOnGroupPageForTeamBlockPer)

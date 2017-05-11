@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public interface IWeeklyRestSolverCommand
 	{
 		void Execute(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEnumerable<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
-			IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, 
-			IList<IScheduleMatrixPro> allVisibleMatrixes, ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+			IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod,
+			IEnumerable<IScheduleMatrixPro> allVisibleMatrixes, ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 }

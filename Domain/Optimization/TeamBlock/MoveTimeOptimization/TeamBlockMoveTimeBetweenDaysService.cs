@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 {
 	public interface ITeamBlockMoveTimeBetweenDaysService
 	{
-		void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList,
+		void Execute(IOptimizationPreferences optimizerPreferences, IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IPerson> selectedPersons,
 			DateOnlyPeriod selectedPeriod, IResourceCalculateDelayer resourceCalculateDelayer);
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			_filterForNoneLockedTeamBlocks = filterForNoneLockedTeamBlocks;
 		}
 
-		public void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList,
+		public void Execute(IOptimizationPreferences optimizerPreferences, IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IPerson> selectedPersons,
 			DateOnlyPeriod selectedPeriod, IResourceCalculateDelayer resourceCalculateDelayer)

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         IScheduleResultDataExtractor CreateAllSkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences);
 
-		IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IList<IScheduleMatrixPro> allScheduleMatrixPros );
+		IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros );
 
 		IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder);
     }
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 allSkillExtractor);
         }
 
-		public IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IList<IScheduleMatrixPro> allScheduleMatrixPros)
+		public IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros)
 		{
 			ISkillExtractor primarySkillExtractor = new ScheduleMatrixesPrimarySkillExtractor(allScheduleMatrixPros, _personalSkillsProvider);
 			IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator;

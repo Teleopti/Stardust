@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (backgroundWorker.CancellationPending)
 				return;
 
-			IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedAgents, selectedPeriod);
+			var matrixList = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedAgents, selectedPeriod).ToList();
 			lockDaysForExtendReduceOptimization(matrixList, selectedPeriod, optimizerPreferences.Shifts.SelectedActivities);
 
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForScheduleTag = createMatrixContainerList(matrixList);
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			extendReduceDaysOffOptimizerService.ReportProgress -= optimizerServiceOnReportProgress;
 		}
 
-		private static void lockDaysForExtendReduceOptimization(IList<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod, IList<IActivity> keepActivities )
+		private static void lockDaysForExtendReduceOptimization(IEnumerable<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod, IList<IActivity> keepActivities )
 		{
 			IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
 			matrixOvertimeLocker.Execute();

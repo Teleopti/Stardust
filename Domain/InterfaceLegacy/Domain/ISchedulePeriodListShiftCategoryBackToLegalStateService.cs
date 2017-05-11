@@ -15,6 +15,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="scheduleMatrixList">The schedule matrix list.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <param name="optimizationPreferences">The optimization preferences.</param>
-		void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences);
+		void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixList, SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences);
 	}
 }

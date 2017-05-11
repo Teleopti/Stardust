@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	public interface IMissingDaysOffScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		bool Execute(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
+		bool Execute(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class MissingDaysOffScheduler : IMissingDaysOffScheduler
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			_authorization = authorization;
 		}
 
-		public bool Execute(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
+		public bool Execute(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			var cancel = false;
 			var matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);

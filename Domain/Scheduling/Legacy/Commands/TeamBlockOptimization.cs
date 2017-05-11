@@ -201,8 +201,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private void optimizeMoveTimeBetweenDays(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, SchedulingOptions schedulingOptions,
-			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> matrixesOnSelectedperiod,
-			IList<IScheduleMatrixPro> allMatrixes)
+			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> matrixesOnSelectedperiod,
+			IEnumerable<IScheduleMatrixPro> allMatrixes)
 		{
 			IScheduleResultDataExtractor allSkillsDataExtractor =
 				_optimizerHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,

@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			SchedulingOptions schedulingOptions);
 
 		void RemoveShiftCategoryBackToLegalState(
-			IList<IScheduleMatrixPro> matrixList,
+			IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
 			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
 
-		void ScheduleSelectedPersonDays(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> matrixList,
+		void ScheduleSelectedPersonDays(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, SchedulingOptions schedulingOptions);
 	}
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void RemoveShiftCategoryBackToLegalState(
-			IList<IScheduleMatrixPro> matrixList,
+			IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
 			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
 		{
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public void ScheduleSelectedPersonDays(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> matrixList,
+		public void ScheduleSelectedPersonDays(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, SchedulingOptions schedulingOptions)
 		{
 			if (matrixList == null) throw new ArgumentNullException(nameof(matrixList));

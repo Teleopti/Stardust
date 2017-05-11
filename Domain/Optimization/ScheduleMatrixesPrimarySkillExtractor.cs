@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class ScheduleMatrixesPrimarySkillExtractor : ISkillExtractor
 	{
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
-		private readonly IList<IScheduleMatrixPro> _allScheduleMatrixPros;
+		private readonly IEnumerable<IScheduleMatrixPro> _allScheduleMatrixPros;
 
-		public ScheduleMatrixesPrimarySkillExtractor(IList<IScheduleMatrixPro> allScheduleMatrixPros, PersonalSkillsProvider personalSkillsProvider)
+		public ScheduleMatrixesPrimarySkillExtractor(IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros, PersonalSkillsProvider personalSkillsProvider)
 		{
 			_personalSkillsProvider = personalSkillsProvider;
 			_allScheduleMatrixPros = allScheduleMatrixPros;

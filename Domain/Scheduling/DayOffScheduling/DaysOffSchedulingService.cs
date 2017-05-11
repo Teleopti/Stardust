@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	public interface IDaysOffSchedulingService
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void Execute(IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter);
+		void Execute(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter);
 	}
 
 	public class DaysOffSchedulingService : IDaysOffSchedulingService
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			_missingDaysOffScheduler = missingDaysOffScheduler;
 		}
 
-		public void Execute(IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter)
+		public void Execute(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter)
 		{
 			var cancelMe = false;
 			EventHandler<SchedulingServiceBaseEventArgs> dayScheduled = (sender, e) =>

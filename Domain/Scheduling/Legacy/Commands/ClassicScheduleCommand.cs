@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, bool runWeeklyRestSolver)
 		{
-			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
-			if (matrixesOfSelectedScheduleDays.Count == 0)
+			var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
+			if (!matrixesOfSelectedScheduleDays.Any())
 				return;
 
 			var daysOnlyHelper = new DaysOnlyHelper(schedulingOptions);

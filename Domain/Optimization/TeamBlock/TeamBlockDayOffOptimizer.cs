@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		[TestLog]
 		[RemoveMeWithToggle("Remove if about team + sameDO below", Toggles.ResourcePlanner_TeamSameDayOff_44265)]
 		public virtual void OptimizeDaysOff(
-			IList<IScheduleMatrixPro> allPersonMatrixList,
+			IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,

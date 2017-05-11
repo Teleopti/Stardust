@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					if (schedulingOptions.UseShiftCategoryLimitations)
 					{
 						var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedAgents, selectedPeriod);
-						if (matrixesOfSelectedScheduleDays.Count == 0)
+						if (!matrixesOfSelectedScheduleDays.Any())
 							return;
 
 						_requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		[TestLog]
 		protected virtual void ExecuteWeeklyRestSolverCommand(SchedulingOptions schedulingOptions,
 															IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons,
-															DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays,
+															DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleMatrixPro> matrixesOfSelectedScheduleDays,
 															ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();

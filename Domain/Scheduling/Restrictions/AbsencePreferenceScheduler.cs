@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	public interface IAbsencePreferenceScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions);
+        void AddPreferredAbsence(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions);
 	}
 
 	public class AbsencePreferenceScheduler : IAbsencePreferenceScheduler
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_absencePreferenceFullDayLayerCreator = absencePreferenceFullDayLayerCreator;
 		}
 
-        public void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions)
+        public void AddPreferredAbsence(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions)
         {
             if(matrixList == null) throw new ArgumentNullException(nameof(matrixList));
 

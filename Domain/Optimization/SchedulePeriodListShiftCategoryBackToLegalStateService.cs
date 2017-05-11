@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
+		public void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixList, SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
 		{
 			IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator =
 				BuildScheduleMatrixValueCalculator(
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual IScheduleMatrixValueCalculatorPro BuildScheduleMatrixValueCalculator
 			(IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
-			 IList<IScheduleMatrixPro> scheduleMatrixList,
+			IEnumerable<IScheduleMatrixPro> scheduleMatrixList,
 			 IOptimizationPreferences optimizerPreferences,
 			 ISchedulingResultStateHolder stateHolder)
 		{
