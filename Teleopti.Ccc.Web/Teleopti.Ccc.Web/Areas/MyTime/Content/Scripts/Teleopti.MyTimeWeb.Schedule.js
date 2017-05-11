@@ -316,7 +316,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if (showDayScheduleForStartPage()) {
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay");
 			} else {
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability());
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + getUrlPartForDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash) + getUrlPartForProbability());
 			}
 		};
 
