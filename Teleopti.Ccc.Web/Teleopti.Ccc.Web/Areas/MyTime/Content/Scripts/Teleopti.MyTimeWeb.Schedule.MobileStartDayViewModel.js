@@ -35,6 +35,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	self.absenceRequestPermission = ko.observable();
 	self.absenceReportPermission = ko.observable();
 	self.overtimeAvailabilityPermission = ko.observable();
+	self.shiftTradeRequestPermission = ko.observable();
 	self.shiftExchangePermission = ko.observable();
 	self.personAccountPermission = ko.observable();
 	self.requestPermission = ko.observable();
@@ -90,14 +91,14 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		self.layers(layers);
 
 		if (data.RequestPermission) {
+			self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
+			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
 			self.textRequestPermission(data.RequestPermission.TextRequestPermission);
 			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
-			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
-			self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
+			self.shiftTradeRequestPermission(data.RequestPermission.ShiftTradeRequestPermission);
 			self.shiftExchangePermission(data.RequestPermission.ShiftExchangePermission);
-			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
-			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
 		}
+		self.selectedDate(moment(data.Date));
 	};
 
 	self.setSelectedDateSubscription = function() {
@@ -136,6 +137,16 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		self.selectedDate(previousDate);
 	};
 
+	self.enableMenu = function(){
+		self.menuIsVisible(true);
+		self.menuIconIsVisible(false);
+	};
+
+	self.disableMenu = function(){
+		self.menuIsVisible(false);
+		self.menuIconIsVisible(true);
+	};
+
 	function resetRequestViewModel(){
 		self.requestViewModel(undefined);
 		self.menuIconIsVisible(true);
@@ -146,8 +157,17 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 			model: requestViewModel,
 			CancelAddingNewRequest: cancelAddingNewRequest
 		});
-		self.disableMenu();
+		self.menuIsVisible(false);
+		self.menuIconIsVisible(false);
 	}
+
+	self.showOvertimeAvailabilityForm = function(){
+		setupRequestViewModel(null, null);
+	};
+
+	self.showAbsenceReportingForm = function(){
+		setupRequestViewModel(null, null);
+	};
 
 	self.showAddTextRequestForm = function () {
 		var requestViewModel = new Teleopti.MyTimeWeb.Request
@@ -163,12 +183,17 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		setupRequestViewModel(requestViewModel, resetRequestViewModel);
 	};
 
-	self.enableMenu = function(){
-		self.menuIsVisible(true);
-		self.menuIconIsVisible(false);
+	self.showAddAbsenceRequestForm = function(){
+		//please fill the request view model
+		setupRequestViewModel(null, null);
 	};
 
-	self.disableMenu = function(){
-		self.menuIsVisible(false);
+	self.redirectToTeamSchduleForShiftTradeRequest = function(){
+		//go to TeamSchedule view
+	};
+
+	self.showPostShiftForTradeForm = function(){
+		//please fill the request view model
+		setupRequestViewModel(null, null);
 	};
 };

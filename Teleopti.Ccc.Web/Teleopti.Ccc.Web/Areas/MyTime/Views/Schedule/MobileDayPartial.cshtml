@@ -113,14 +113,29 @@
 	<div class="navbar navbar-teleopti subnavbar" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
 		<ul class="nav navbar-nav navbar-teleopti row submenu" >
 			<li data-bind="if: textRequestPermission" class="col-xs-12 col-sm-4">
-				<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: showAddTextRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+				<a href="#" data-bind="click: showOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
+			</li>
+			<li data-bind="if: absenceReportPermission" class="col-xs-12 col-sm-4">
+				<a href="#" data-bind="click: showAbsenceReportingForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
+			</li>
+			<li data-bind="if: textRequestPermission" class="col-xs-12 col-sm-4">
+				<a href="#" data-bind="click: showAddTextRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+			</li>
+			<li data-bind="if: absenceRequestPermission" class="col-xs-12 col-sm-4">
+				<a href="#" data-bind="click: showAddAbsenceRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+			</li>
+			<li data-bind="if: shiftTradeRequestPermission" class="col-xs-12 col-sm-4">
+				<a href="#" data-bind="click: redirectToTeamSchduleForShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+			</li>
+			<li data-bind="if: shiftExchangePermission" class="col-xs-12 col-sm-4">
+				<a href="#" data-bind="click: showPostShiftForTradeForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
 			</li>
 		</ul>
 	</div>
 	<!-- /ko -->
 
 	<!-- ko with: requestViewModel -->
-	<div data-bind="with: model">
+	<div data-bind="with: model" class="mobile-add-request-form">
 		<div id="Request-add-section" class="well well-sm clearfix">
 			<div data-bind="template: Template">
 			</div>

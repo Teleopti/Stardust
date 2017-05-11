@@ -179,6 +179,50 @@ $(document).ready(function() {
 		equal(viewModel.menuIconIsVisible(), false);
 	});
 
+	test("should not show overtime availability command item without permission", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			},
+			RequestPermission:{
+				OvertimeAvailabilityPermission: false
+			}
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.overtimeAvailabilityPermission(), false);
+	});
+
+	test("should not show absence reporting command item without permission", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			},
+			RequestPermission:{
+				AbsenceReportPermission: false
+			}
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.absenceReportPermission(), false);
+	});
+
 	test("should not show text request command item without permission", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
@@ -198,7 +242,72 @@ $(document).ready(function() {
 			}
 		};
 		viewModel.readData(rawData);
-
 		equal(viewModel.textRequestPermission(), false);
+	});
+
+	test("should not show absence request command item without permission", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			},
+			RequestPermission:{
+				AbsenceRequestPermission: false
+			}
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.absenceRequestPermission(), false);
+	});
+
+	test("should not show shift trade request command item without permission", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			},
+			RequestPermission:{
+				ShiftTradeRequestPermission: false
+			}
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.shiftTradeRequestPermission(), false);
+	});
+
+	test("should not show post shift for trade command item without permission", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			},
+			RequestPermission:{
+				ShiftExchangePermission: false
+			}
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.shiftExchangePermission(), false);
 	});
 });
