@@ -7,6 +7,7 @@
             var LastScheduleResult = {};
             var LastScheduleStatus = {};
             var LastIntradayStatus = {};
+            var planningPeriods = [];
             
             var paramsOf = function (url) {
                 var result = {};
@@ -37,7 +38,13 @@
                 LastScheduleResult = {};
                 LastScheduleStatus = {};
                 LastIntradayStatus = {};
+                planningPeriods = [];
             };
+
+            fakeGet('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/planningperiods',
+                function () {
+                    return [200, planningPeriods];
+                });
 
             fakeGet('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/result',
                 function () {
@@ -53,6 +60,11 @@
                 function () {
                     return [200, LastIntradayStatus];
                 });
+
+            this.withPlanningPeriods = function(planningPeriod) {
+                planningPeriods.push(planningPeriod);
+                return this;
+            };
 
             this.withScheduleResult = function (fakeResult) {
                 LastScheduleResult = fakeResult;
