@@ -54,13 +54,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
-		public void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleDay> selectedDays,
+		public void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, GroupPageLight groupPageLight,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			var stateHolder = _schedulerStateHolder();
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedDays);
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedAgents, selectedPeriod);
 			var matrixContainerList = createMatrixContainerList(matrixListForDayOffOptimization);
 			var matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 

@@ -171,10 +171,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
-				runDayOffOptimization(optimizationPreferences,
-										selectedDays,
-										selectedPeriod,
-										dayOffOptimizationPreferenceProvider);
+				runDayOffOptimization(optimizationPreferences, selectedPersons, selectedPeriod, dayOffOptimizationPreferenceProvider);
 
 				continuedStep = true;
 			}
@@ -449,8 +446,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		private void runDayOffOptimization(IOptimizationPreferences optimizerPreferences, 
-											IEnumerable<IScheduleDay> selectedDays , 
+		private void runDayOffOptimization(IOptimizationPreferences optimizerPreferences,
+			IEnumerable<IPerson> selectedAgents,
 											DateOnlyPeriod selectedPeriod,
 											IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -460,7 +457,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (_progressEvent != null && _progressEvent.Cancel) return;
 			_allResults = () => new WorkShiftFinderResultHolder();
 
-			_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedDays, _backgroundWorker, optimizerPreferences, dayOffOptimizationPreferenceProvider, new GroupPageLight("_", GroupPageType.SingleAgent),  _allResults, resourceOptimizerPersonOptimized);
+			_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedAgents, _backgroundWorker, optimizerPreferences, dayOffOptimizationPreferenceProvider, new GroupPageLight("_", GroupPageType.SingleAgent),  _allResults, resourceOptimizerPersonOptimized);
 		}
 
 		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)

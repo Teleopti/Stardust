@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
 	public interface IDayOffOptimizationDesktop
 	{
-		void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleDay> selectedDays,
+		void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			GroupPageLight groupPageLight,

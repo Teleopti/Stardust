@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		public void Execute(DateOnlyPeriod selectedPeriod, 
-			IEnumerable<IScheduleDay> selectedDays, 
+			IEnumerable<IPerson> selectedAgents, 
 			ISchedulingProgress backgroundWorker,
 			IOptimizationPreferences optimizationPreferences, 
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var stateHolder = _schedulerStateHolder();
 			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true, selectedPeriod.Inflate(1)))
 			{
-				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, filterAgentsWithEmptyDaysIfClassic(optimizationPreferences, selectedDays));
+				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, filterAgentsWithEmptyDaysIfClassic(optimizationPreferences, selectedAgents, selectedPeriod), selectedPeriod);
 				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 				if (optimizationPreferences.Extra.IsClassic())
 				{
@@ -116,14 +116,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
-		private static IEnumerable<IScheduleDay> filterAgentsWithEmptyDaysIfClassic(IOptimizationPreferences optimizationPreferences, IEnumerable<IScheduleDay> selectedDays) 
+		private IEnumerable<IPerson> filterAgentsWithEmptyDaysIfClassic(IOptimizationPreferences optimizationPreferences, IEnumerable<IPerson> agents, DateOnlyPeriod period) 
 		{
 			if (optimizationPreferences.Extra.IsClassic())
 			{
-				var nonFullyScheduledAgents = selectedDays.Where(x => !x.IsScheduled()).Select(x => x.Person).ToArray();
-				return selectedDays.Where(x => !nonFullyScheduledAgents.Contains(x.Person)).ToArray();
+				var scheduleDays = _schedulerStateHolder().Schedules.SchedulesForPeriod(period, agents.ToArray());
+				var nonFullyScheduledAgents = scheduleDays.Where(x => !x.IsScheduled()).Select(x => x.Person);
+				return agents.Except(nonFullyScheduledAgents).ToArray();
 			}
-			return selectedDays;
+			return agents;
 		}
 	}
 }
