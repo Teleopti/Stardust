@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	[DomainTest]
 	public class MatrixListFactoryTest
 	{
-		public IMatrixListFactory Target;
+		public MatrixListFactory Target;
 		public SchedulerStateHolder SchedulerStateHolder;
 
 		[Test]

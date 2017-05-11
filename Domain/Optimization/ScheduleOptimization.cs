@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 			IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, IOptimizationPreferencesProvider optimizationPreferencesProvider,
-			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
+			MatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 			IOptimizerHelperHelper optimizerHelperHelper, CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,

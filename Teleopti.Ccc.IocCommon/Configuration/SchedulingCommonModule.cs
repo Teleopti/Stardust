@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			//change to scope?
 			builder.RegisterType<ScheduleOvertime>();
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
-			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>().InstancePerLifetimeScope();
+			builder.RegisterType<MatrixListFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockScheduleCommand>();
 			builder.RegisterType<TeamBlockOptimization>();
 			builder.RegisterType<TeamBlockDaysOffSameDaysOffLockSyncronizer>().SingleInstance();

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class ClassicScheduleCommand
 	{
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly Func<IResourceCalculation> _resourceOptimizationHelper;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
 
-		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand,
+		public ClassicScheduleCommand(MatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IResourceCalculation> resourceOptimizationHelper,
 			Func<ISchedulerStateHolder> schedulerStateHolder,

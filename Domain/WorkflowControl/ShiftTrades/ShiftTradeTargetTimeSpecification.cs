@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 	public class ShiftTradeTargetTimeSpecification : ShiftTradeSpecification
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IMatrixListFactory _scheduleMatrixListCreator;
+		private readonly MatrixListFactory _scheduleMatrixListCreator;
 		private readonly ISchedulePeriodTargetTimeCalculator _targetTimeTimeCalculator;
 
 		public override string DenyReason => "ShiftTradeTargetTimeDenyReason";
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		public override string Description => Resources.DescriptionOfShiftTradeTargetTimeSpecification;
 		public override string PendingReason => "ShiftTradeTargetTimePendingReason";
 
-		public ShiftTradeTargetTimeSpecification(Func<ISchedulerStateHolder> schedulerStateHolder, IMatrixListFactory scheduleMatrixListCreator, ISchedulePeriodTargetTimeCalculator targetTimeTimeCalculator)
+		public ShiftTradeTargetTimeSpecification(Func<ISchedulerStateHolder> schedulerStateHolder, MatrixListFactory scheduleMatrixListCreator, ISchedulePeriodTargetTimeCalculator targetTimeTimeCalculator)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleMatrixListCreator = scheduleMatrixListCreator;

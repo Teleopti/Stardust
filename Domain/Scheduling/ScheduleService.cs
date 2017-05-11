@@ -14,15 +14,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
     {
 	    private readonly Func<ISchedulerStateHolder> _stateHolder;
 	    private readonly IWorkShiftFinderService _finderService;
-		private readonly IMatrixListFactory _scheduleMatrixListCreator;
+		private readonly MatrixListFactory _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly Dictionary<Tuple<Guid,DateOnly>,WorkShiftFinderResult> _finderResults = new Dictionary<Tuple<Guid, DateOnly>, WorkShiftFinderResult>();
 
         public ScheduleService(
 					Func<ISchedulerStateHolder> stateHolder,
-			IWorkShiftFinderService finderService, 
-            IMatrixListFactory scheduleMatrixListCreator,
+			IWorkShiftFinderService finderService,
+					MatrixListFactory scheduleMatrixListCreator,
             IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, 
             IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {

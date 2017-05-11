@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			IScheduleDayEquator scheduleDayEquator,
-			IOptimizerHelperHelper optimizerHelperHelper, 
-			IMatrixListFactory matrixListFactory,
+			IOptimizerHelperHelper optimizerHelperHelper,
+			MatrixListFactory matrixListFactory,
 			PersonalSkillsProvider personalSkillsProvider,
 			IUserTimeZone userTimeZone,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)

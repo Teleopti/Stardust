@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class MatrixListFactory : IMatrixListFactory
+	public class MatrixListFactory
 	{
 		private readonly IMatrixUserLockLocker _matrixUserLockLocker;
 		private readonly IMatrixNotPermittedLocker _matrixNotPermittedLocker;

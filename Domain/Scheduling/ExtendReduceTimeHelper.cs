@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class ExtendReduceTimeHelper
 	{
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly IScheduleService _scheduleService;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private ISchedulingProgress _backgroundWorker;
 
-		public ExtendReduceTimeHelper(IMatrixListFactory matrixListFactory, 
+		public ExtendReduceTimeHelper(MatrixListFactory matrixListFactory, 
 										IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
 										IScheduleService scheduleService,
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,

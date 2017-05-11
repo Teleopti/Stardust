@@ -522,7 +522,6 @@
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDetailModelTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDetailPresenterTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayDataExtractorTest.cs" />
-    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowCreatorTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsModelTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsNoWorkShiftfFinderTest.cs" />

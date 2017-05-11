@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		private Percent _studentAvailabilityFulfillment;
 
 		public AgentInfoHelper(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder,
-			SchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IMatrixListFactory matrixListFactory)
+			SchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, MatrixListFactory matrixListFactory)
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 			if (person != null)

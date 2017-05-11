@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 	{
 		public TeamBlockDaysOffSameDaysOffLockSyncronizer Target;
 		public IGroupPersonBuilderWrapper GroupPersonBuilderWrapper;
-		public IMatrixListFactory MatrixListFactory;
+		public MatrixListFactory MatrixListFactory;
 		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 

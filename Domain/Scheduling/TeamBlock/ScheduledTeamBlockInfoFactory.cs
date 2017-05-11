@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class ScheduledTeamBlockInfoFactory
 	{
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly LockDaysOnTeamBlockInfos _lockDaysOnTeamBlockInfos;
 
-		public ScheduledTeamBlockInfoFactory(IMatrixListFactory matrixListFactory,
+		public ScheduledTeamBlockInfoFactory(MatrixListFactory matrixListFactory,
 														TeamInfoFactoryFactory teamInfoFactoryFactory,
 														ITeamBlockGenerator teamBlockGenerator,
 														LockDaysOnTeamBlockInfos lockDaysOnTeamBlockInfos)

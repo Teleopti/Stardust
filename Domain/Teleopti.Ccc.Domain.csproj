@@ -2441,7 +2441,6 @@
     <Compile Include="Scheduling\Legacy\Commands\IGroupPageFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IGroupPersonBuilderForOptimizationFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IGroupScheduleGroupPageDataProvider.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\IMatrixListFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\InnerOptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IntraIntervalOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IOptimizerHelperHelper.cs" />

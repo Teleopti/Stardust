@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class TeamBlockOptimization
 	{
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
-			IMatrixListFactory matrixListFactory,
+			MatrixListFactory matrixListFactory,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 			IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
 			ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,

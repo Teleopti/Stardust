@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IBackToLegalShiftService _backToLegalShiftService;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public BackToLegalShiftCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
-			IMatrixListFactory matrixListFactory,
+			MatrixListFactory matrixListFactory,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IBackToLegalShiftService backToLegalShiftService,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,

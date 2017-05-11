@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
 	public class BestShiftChooser
 	{
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly Func<IWorkShiftFinderResultHolder> _allResults;
 
-		public BestShiftChooser(IMatrixListFactory matrixListFactory, IEffectiveRestrictionCreator effectiveRestrictionCreator, Func<IWorkShiftFinderResultHolder> allResults)
+		public BestShiftChooser(MatrixListFactory matrixListFactory, IEffectiveRestrictionCreator effectiveRestrictionCreator, Func<IWorkShiftFinderResultHolder> allResults)
 		{
 			_matrixListFactory = matrixListFactory;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;

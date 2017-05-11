@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IPlanningPeriodRepository planningPeriodRepository,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, 
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
-			IMatrixListFactory matrixListFactory,
+			MatrixListFactory matrixListFactory,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 			IOptimizerHelperHelper optimizerHelperHelper,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffOptimizationDesktopClassic : IDayOffOptimizationDesktop
 	{
 		private readonly ClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public DayOffOptimizationDesktopClassic(ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
-								IMatrixListFactory matrixListFactory,
+			MatrixListFactory matrixListFactory,
 								IOptimizerHelperHelper optimizerHelperHelper,
 								Func<ISchedulerStateHolder> schedulerStateHolder,
 								DaysOffBackToLegalState daysOffBackToLegalState,

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	public class TeamDayOffModifierTest
 	{
 		public ITeamDayOffModifier Target;
-		public IMatrixListFactory MatrixListFactory;
+		public MatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
 
 		[Test]

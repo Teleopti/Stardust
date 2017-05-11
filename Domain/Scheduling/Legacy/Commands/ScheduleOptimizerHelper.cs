@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private Func<IWorkShiftFinderResultHolder> _allResults;
 		private ISchedulingProgress _backgroundWorker;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly MoveTimeOptimizerCreator _moveTimeOptimizerCreator;
 		private readonly IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairnessService;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly MaxSeatOptimization _maxSeatOptimization;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 
-		public ScheduleOptimizerHelper(IMatrixListFactory matrixListFactory,
+		public ScheduleOptimizerHelper(MatrixListFactory matrixListFactory,
 				MoveTimeOptimizerCreator moveTimeOptimizerCreator,
 				IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak,
 				IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairnessService,

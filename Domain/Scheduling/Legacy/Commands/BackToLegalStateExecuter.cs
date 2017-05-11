@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class BackToLegalStateExecuter
 	{
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly ScheduleMatrixOriginalStateContainerCreator _scheduleMatrixOriginalStateContainerCreator;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
 		public BackToLegalStateExecuter(IScheduleDayChangeCallback scheduleDayChangeCallback,
-			IMatrixListFactory matrixListFactory,
+			MatrixListFactory matrixListFactory,
 			PeriodExtractorFromScheduleParts periodExtractor,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			ScheduleMatrixOriginalStateContainerCreator scheduleMatrixOriginalStateContainerCreator,

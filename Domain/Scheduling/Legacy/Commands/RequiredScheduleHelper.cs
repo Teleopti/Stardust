@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWorkShiftFinderResultHolder> _allResults;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly TeamBlockRetryRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
 		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
 
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IDaysOffSchedulingService daysOffSchedulingService, 
 				Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, 
 				IScheduleDayChangeCallback scheduleDayChangeCallback, 
-				IScheduleDayEquator scheduleDayEquator, 
-				IMatrixListFactory matrixListFactory,
+				IScheduleDayEquator scheduleDayEquator,
+			MatrixListFactory matrixListFactory,
 				TeamBlockRetryRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService,
 				INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory)
 		{

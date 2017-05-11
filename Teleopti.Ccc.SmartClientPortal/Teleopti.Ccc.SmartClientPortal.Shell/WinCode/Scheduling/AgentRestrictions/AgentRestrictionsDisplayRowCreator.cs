@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 	public class AgentRestrictionsDisplayRowCreator : IAgentRestrictionsDisplayRowCreator
 	{
 		private readonly ISchedulerStateHolder _stateHolder;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IMatrixUserLockLocker _locker;
 
-		public AgentRestrictionsDisplayRowCreator(ISchedulerStateHolder stateHolder, IMatrixListFactory matrixListFactory, IMatrixUserLockLocker locker)
+		public AgentRestrictionsDisplayRowCreator(ISchedulerStateHolder stateHolder, MatrixListFactory matrixListFactory, IMatrixUserLockLocker locker)
 		{
 			_stateHolder = stateHolder;
 			_matrixListFactory = matrixListFactory;

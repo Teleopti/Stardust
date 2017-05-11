@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class ScheduleExecutor : ScheduleExecutorOld
 	{
-		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, IResourceCalculation resourceOptimizationHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, TeamBlockScheduleCommand teamBlockScheduleCommand, ClassicScheduleCommand classicScheduleCommand, IMatrixListFactory matrixListFactory, Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IWeeklyRestSolverCommand weeklyRestSolverCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IUserTimeZone userTimeZone, DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime) : base(schedulerStateHolder, requiredScheduleOptimizerHelper, resourceOptimizationHelper, scheduleDayChangeCallback, teamBlockScheduleCommand, classicScheduleCommand, matrixListFactory, resourceOptimizationHelperExtended, weeklyRestSolverCommand, resourceCalculationContextFactory, userTimeZone, doFullResourceOptimizationOneTime)
+		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, IResourceCalculation resourceOptimizationHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, TeamBlockScheduleCommand teamBlockScheduleCommand, ClassicScheduleCommand classicScheduleCommand, MatrixListFactory matrixListFactory, Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IWeeklyRestSolverCommand weeklyRestSolverCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IUserTimeZone userTimeZone, DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime) : base(schedulerStateHolder, requiredScheduleOptimizerHelper, resourceOptimizationHelper, scheduleDayChangeCallback, teamBlockScheduleCommand, classicScheduleCommand, matrixListFactory, resourceOptimizationHelperExtended, weeklyRestSolverCommand, resourceCalculationContextFactory, userTimeZone, doFullResourceOptimizationOneTime)
 		{
 		}
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		protected readonly TeamBlockScheduleCommand _teamBlockScheduleCommand;
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		private readonly ClassicScheduleCommand _classicScheduleCommand;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			TeamBlockScheduleCommand teamBlockScheduleCommand,
 			ClassicScheduleCommand classicScheduleCommand,
-			IMatrixListFactory matrixListFactory,
+			MatrixListFactory matrixListFactory,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,

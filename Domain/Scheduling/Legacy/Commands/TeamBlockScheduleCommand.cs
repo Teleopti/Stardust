@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly AdvanceDaysOffSchedulingService _advanceDaysOffSchedulingService;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private ISchedulingProgress _backgroundWorker;
 		private int _scheduledCount;
 		private SchedulingOptions _schedulingOptions;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 			AdvanceDaysOffSchedulingService advanceDaysOffSchedulingService,
-			IMatrixListFactory matrixListFactory,
+			MatrixListFactory matrixListFactory,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IResourceCalculation resourceCalculation,

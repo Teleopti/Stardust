@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class ExtendReduceDaysOffHelper 
 	{
 		private readonly Func<IWorkShiftFinderResultHolder> _allResults;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly IScheduleService _scheduleService;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
 		public ExtendReduceDaysOffHelper(Func<IWorkShiftFinderResultHolder> allResults,
-										IMatrixListFactory matrixListFactory,
+			MatrixListFactory matrixListFactory,
 										IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
 										IScheduleService scheduleService,
 										IDeleteAndResourceCalculateService deleteAndResourceCalculateService,

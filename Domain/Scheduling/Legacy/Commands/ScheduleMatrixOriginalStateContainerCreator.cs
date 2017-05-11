@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class ScheduleMatrixOriginalStateContainerCreator
 	{
 		private readonly IScheduleDayEquator _scheduleDayEquator;
-		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly MatrixListFactory _matrixListFactory;
 
-		public ScheduleMatrixOriginalStateContainerCreator(IScheduleDayEquator scheduleDayEquator, IMatrixListFactory matrixListFactory)
+		public ScheduleMatrixOriginalStateContainerCreator(IScheduleDayEquator scheduleDayEquator, MatrixListFactory matrixListFactory)
 		{
 			_scheduleDayEquator = scheduleDayEquator;
 			_matrixListFactory = matrixListFactory;

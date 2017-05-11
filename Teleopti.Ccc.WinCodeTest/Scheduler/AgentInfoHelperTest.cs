@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
     public class AgentInfoHelperTest
     {
         private AgentInfoHelper _target;
-		private IMatrixListFactory _matrixListFactory;
+		private MatrixListFactory _matrixListFactory;
         private IPerson _person;
         private TimeZoneInfo _timeZoneInfo;
         private DateTime _dateTime;

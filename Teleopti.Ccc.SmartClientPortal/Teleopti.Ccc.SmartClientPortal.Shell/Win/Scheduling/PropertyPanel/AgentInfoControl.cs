@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
                                                            UseStudentAvailability = false,
                                                            UseRotations = true
                                                        };
-            var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime, _container.Resolve<IMatrixListFactory>());
+            var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime, _container.Resolve<MatrixListFactory>());
 			if(helper.HasMatrix)
 				helper.SetRestrictionFullfillment();
 			var period = person.Period(helper.SelectedDate);
@@ -380,7 +380,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
                 UseStudentAvailability = true,
                 UseRotations = true
             };
-			var helper = new AgentInfoHelper(person, date, _stateHolder.SchedulingResultState, schedulingOptions, _workShiftWorkTime, _container.Resolve<IMatrixListFactory>());
+			var helper = new AgentInfoHelper(person, date, _stateHolder.SchedulingResultState, schedulingOptions, _workShiftWorkTime, _container.Resolve<MatrixListFactory>());
 
             helper.SchedulePeriodData(false);
 
@@ -679,7 +679,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 				UseRotations = true
 			};
 
-			var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime, _container.Resolve<IMatrixListFactory>());
+			var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime, _container.Resolve<MatrixListFactory>());
 			helper.SchedulePeriodData(calculateLegalState);
 			if (nullOrZeroPeriod(helper.Period))
 			{
