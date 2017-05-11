@@ -109,7 +109,7 @@
 
 	<!-- ko if: isCommandEnable -->
 	<div class="close-fab-overlay" data-bind="visible: menuIsVisible, click: disableMenu"></div>
-	<div class="fab" data-bind="visible: !menuIsVisible(), click: enableMenu" tabindex="0"></div>
+	<div class="fab" data-bind="visible: menuIconIsVisible, click: enableMenu" tabindex="0"></div>
 	<div class="navbar navbar-teleopti subnavbar" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
 		<ul class="nav navbar-nav navbar-teleopti row submenu" >
 			<li data-bind="if: textRequestPermission" class="col-xs-12 col-sm-4">

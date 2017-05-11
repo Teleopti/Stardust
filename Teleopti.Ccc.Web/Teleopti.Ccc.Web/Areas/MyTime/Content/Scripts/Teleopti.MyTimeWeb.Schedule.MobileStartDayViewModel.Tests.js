@@ -172,11 +172,14 @@ $(document).ready(function() {
 		equal(viewModel.menuIsVisible(), false);
 	});
 
+	test("should hide plus icon after calling out menu list", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		viewModel.enableMenu();
+
+		equal(viewModel.menuIconIsVisible(), false);
+	});
+
 	test("should not show text request command item without permission", function () {
-		Teleopti.MyTimeWeb.Common.SetupCalendar({
-			DateFormat: "DD/MM/YYYY",
-			UseJalaaliCalendar: true
-		});
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {

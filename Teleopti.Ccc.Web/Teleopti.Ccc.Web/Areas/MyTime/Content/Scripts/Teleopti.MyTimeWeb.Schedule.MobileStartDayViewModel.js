@@ -39,6 +39,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	self.personAccountPermission = ko.observable();
 	self.requestPermission = ko.observable();
 	self.menuIsVisible = ko.observable(false);
+	self.menuIconIsVisible = ko.observable(true);
 
 	self.selectedProbabilityType = constants.probabilityType.none;
 
@@ -135,9 +136,18 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		self.selectedDate(previousDate);
 	};
 
-	var cancelAddingNewRequest = function () {
+	function resetRequestViewModel(){
 		self.requestViewModel(undefined);
-	};
+		self.menuIconIsVisible(true);
+	}
+
+	function setupRequestViewModel(requestViewModel, cancelAddingNewRequest){
+		self.requestViewModel({
+			model: requestViewModel,
+			CancelAddingNewRequest: cancelAddingNewRequest
+		});
+		self.disableMenu();
+	}
 
 	self.showAddTextRequestForm = function () {
 		var requestViewModel = new Teleopti.MyTimeWeb.Request
@@ -148,17 +158,14 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		requestViewModel.AddRequestCallback = function (data) {
 			var count = self.requestCount() + 1;
 			self.requestCount(count); 
-			cancelAddingNewRequest();
+			resetRequestViewModel();
 		};
-
-		self.requestViewModel({
-			model: requestViewModel,
-			CancelAddingNewRequest: cancelAddingNewRequest
-		});
+		setupRequestViewModel(requestViewModel, resetRequestViewModel);
 	};
 
 	self.enableMenu = function(){
 		self.menuIsVisible(true);
+		self.menuIconIsVisible(false);
 	};
 
 	self.disableMenu = function(){
