@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
-						runFairness(tagSetter, selectedAgents.ToArray(), schedulingOptions, selectedPeriod, optimizationPreferences,
+						runFairness(tagSetter, selectedAgents, schedulingOptions, selectedPeriod, optimizationPreferences,
 							dayOffOptimizationPreferenceProvider);
 						continuedStep = true;
 					}
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		private void runFairness(IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
+		private void runFairness(IScheduleTagSetter tagSetter, IEnumerable<IPerson> selectedPersons,
 			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)

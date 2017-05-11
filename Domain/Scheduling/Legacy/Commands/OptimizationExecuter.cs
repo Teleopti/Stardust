@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
 			{
-				_teamBlockOptimization.Execute(backgroundWorker, selectedPeriod, selectedAgents.ToArray(),
+				_teamBlockOptimization.Execute(backgroundWorker, selectedPeriod, selectedAgents,
 						optimizationPreferences, rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
 			}
 			else
