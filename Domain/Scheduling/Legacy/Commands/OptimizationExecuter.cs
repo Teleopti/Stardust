@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly ITeamBlockOptimizationCommand _teamBlockOptimizationCommand;
+		private readonly TeamBlockOptimizationCommand _teamBlockOptimizationCommand;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 			IResourceCalculation resourceOptimizationHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			ITeamBlockOptimizationCommand teamBlockOptimizationCommand,
+			TeamBlockOptimizationCommand teamBlockOptimizationCommand,
 			PeriodExtractorFromScheduleParts periodExtractor,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IPersonListExtractorFromScheduleParts personExtractor,

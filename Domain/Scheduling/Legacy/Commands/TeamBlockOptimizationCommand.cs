@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
+	public class TeamBlockOptimizationCommand
 	{
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
