@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -26,18 +25,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
-			ISchedulingProgress backgroundWorker, IEnumerable<IScheduleDay> selectedScheduleDays,
+			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences,
 			IDaysOffPreferences dayOffsPreferences)
 		{
-			_scheduleExecutor.Execute(optimizerOriginalPreferences, backgroundWorker, selectedScheduleDays,
-				optimizationPreferences, true,
-				new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+			_scheduleExecutor.Execute(optimizerOriginalPreferences, backgroundWorker, selectedAgents, selectedPeriod,
+				optimizationPreferences, true, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
 
-			//TODO: (probably) enough to shovel resources here (if cascading is turned on) - no need to do res calc
 			var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(_schedulerStateHolder().ConsiderShortBreaks, false);
-			selectedScheduleDays.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct()
-				.ForEach(x => _resouceResourceOptimizationHelper.ResourceCalculate(x, resCalcData));
+			_resouceResourceOptimizationHelper.ResourceCalculate(selectedPeriod, resCalcData);
 		}
 	}
 }

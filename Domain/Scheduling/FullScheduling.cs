@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (stateHolder.Schedules.Any())
 			{
 				_scheduleExecutor.Execute(new OptimizerOriginalPreferences(_schedulingOptionsProvider.Fetch()), _schedulingProgress,
-					stateHolder.Schedules.SchedulesForPeriod(period, stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period)).ToArray(), 
+					stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period,
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			}
 		}

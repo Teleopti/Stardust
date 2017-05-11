@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				}
 			};
 
-			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), stateholder.Schedules.SchedulesForPeriod(period, agent), new OptimizationPreferences(), null);
+			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), new[] { agent }, period, new OptimizationPreferences(), null);
 
 			stateholder.Schedules[agent]
 				.ScheduledDayCollection(period)

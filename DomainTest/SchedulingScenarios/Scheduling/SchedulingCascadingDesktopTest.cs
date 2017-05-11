@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), agents, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
 			
 			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),
-				new NoSchedulingProgress(),
-				schedulerStateHolder.Schedules.SchedulesForPeriod(date.ToDateOnlyPeriod(), schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod())).ToArray(),
+				new NoSchedulingProgress(), 
+				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
 				new OptimizationPreferences(),
 				new DaysOffPreferences()
 				);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(new OptimizerOriginalPreferences(options),
 				new NoSchedulingProgress(),
-				schedulerStateHolder.Schedules.SchedulesForPeriod(date.ToDateOnlyPeriod(), schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod())).ToArray(),
+				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
 				new OptimizationPreferences(),
 				new DaysOffPreferences()
 				);
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),
 				new NoSchedulingProgress(),
-				schedulerStateHolder.Schedules.SchedulesForPeriod(date.ToDateOnlyPeriod(), schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod())).ToArray(),
+				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
 				new OptimizationPreferences(),
 				new DaysOffPreferences()
 				);
@@ -162,7 +162,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),
 				new NoSchedulingProgress(),
-				stateHolder.Schedules.SchedulesForPeriod(period, agent).ToArray(),
+				new[] {agent},
+				period,
 				new OptimizationPreferences(),
 				new DaysOffPreferences()
 				);
