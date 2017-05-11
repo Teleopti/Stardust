@@ -35,7 +35,7 @@ describe('agentGroupFormController', function () {
 			}], {}];
 		});
 
-		$httpBackend.whenGET('../api/ResourcePlanner/AgentGroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
+		$httpBackend.whenGET('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
 			return [200, {
 				Id: "aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
 				Name: "Agent Group 2",
@@ -47,11 +47,11 @@ describe('agentGroupFormController', function () {
 			}, {}];
 		});
 
-		$httpBackend.whenDELETE('../api/ResourcePlanner/AgentGroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
+		$httpBackend.whenDELETE('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
 			return [200, true];
 		});
 
-		$httpBackend.whenPOST('../api/ResourcePlanner/AgentGroup').respond(function (method, url, data, headers) {
+		$httpBackend.whenPOST('../api/resourceplanner/agentgroup').respond(function (method, url, data, headers) {
 			return [200, true];
 		});		
 	}));

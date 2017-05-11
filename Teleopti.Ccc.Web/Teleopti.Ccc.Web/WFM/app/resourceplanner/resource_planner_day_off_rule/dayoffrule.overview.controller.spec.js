@@ -17,7 +17,7 @@ describe('dayoffRuleOverviewController', function () {
         dayOffRuleService = _dayOffRuleService_;
         agentGroupService = _agentGroupService_;
 
-        $httpBackend.whenGET('../api/ResourcePlanner/AgentGroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
+        $httpBackend.whenGET('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
             return [200, {
                 Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 Name: "Agent Group Test",

@@ -15,7 +15,7 @@
     var keepAliveRef;
     var preMessage = '';
     vm.publishRunning = false;
-    vm.agentGroup = {};
+    vm.agentGroup = {}; //get data from dayOff directive 
     vm.selectedPp = {};
     vm.schedulingPerformed = false;
     vm.optimizeRunning = false;
@@ -41,18 +41,7 @@
     };
 
     destroyCheckState();
-    getAgentGroupById();
     getPlanningPeriodByPpId();
-
-    function getAgentGroupById() {
-      if (agentGroupId !== null) {
-        var getAgentGroup = planningPeriodServiceNew.getAgentGroupById({ agentGroupId: agentGroupId });
-        return getAgentGroup.$promise.then(function (data) {
-          vm.agentGroup = data;
-          return vm.agentGroup;
-        });
-      }
-    }
 
     function getPlanningPeriodByPpId() {
       if (selectedPpId !== null) {

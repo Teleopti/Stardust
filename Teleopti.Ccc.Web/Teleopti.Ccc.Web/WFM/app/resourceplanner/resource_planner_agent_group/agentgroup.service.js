@@ -9,7 +9,7 @@
 
 	function factory($resource) {
 
-		var agentGroup = $resource('../api/ResourcePlanner/AgentGroup/:id', { id: "@id" });
+		var agentGroup = $resource('../api/resourceplanner/agentgroup/:id', { id: "@id" });
 		var filterResult = $resource('../api/filtersagentgroup', {searchString: '@searchString', maxHits: 100});
 
 		var service = {
@@ -19,7 +19,7 @@
 			getFilterData: filterResult.query,
 			removeAgentGroup: agentGroup.remove
 		};
-		
+
 		return service;
 	}
 })();

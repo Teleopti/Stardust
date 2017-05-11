@@ -12,7 +12,6 @@
 		var vm = this;
 
 		vm.dayOffRules = [];
-		vm.agentGroup = {};
 		vm.textManageDoRule = '';
 		vm.textDeleteDoRule = '';
 		vm.textDoRuleAppliedFilter = '';
@@ -27,14 +26,15 @@
 
 		function getAgentGroupById() {
 			if ($stateParams.groupId) {
+				vm.agentGroup = {};
 				var getAgentGroup = agentGroupService.getAgentGroupById({ id: $stateParams.groupId });
 				return getAgentGroup.$promise.then(function (data) {
 					vm.agentGroup = data;
-					vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", vm.agentGroup.Name);
-					vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", vm.agentGroup.Name);
+					textForAgentGroup();
 					return vm.agentGroup;
 				});
 			}
+
 		}
 
 		function getDayOffRules() {
@@ -47,6 +47,11 @@
 			}
 		}
 
+		function textForAgentGroup() {
+			vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", vm.agentGroup.Name);
+			vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", vm.agentGroup.Name);
+		}
+
 		function getDoRuleInfo(dayOffRule) {
 			vm.textDeleteDoRule = $translate.instant("AreYouSureYouWantToDeleteTheDayOffRule").replace("{0}", dayOffRule.Name);
 		}
@@ -54,9 +59,9 @@
 		function deleteDoRule(dayOffRule) {
 			if (!dayOffRule.Default) {
 				var deleteDayOffRule = dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id });
-				return deleteDayOffRule.$promise.then(function() {
+				return deleteDayOffRule.$promise.then(function () {
 					var index = vm.dayOffRules.indexOf(dayOffRule);
-					vm.dayOffRules.splice(index,1);
+					vm.dayOffRules.splice(index, 1);
 				});
 			}
 		}
@@ -86,7 +91,8 @@
 		var directive = {
 			restrict: 'EA',
 			scope: {
-				isDisable: '='
+				isDisable: '=',
+				agentGroup: '='
 			},
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
 			controller: 'dayoffRuleOverviewController as vm',
