@@ -4,6 +4,7 @@
 	var dataService;
 	var startDayData;
 	var requestAjax;
+	var dayDataAjax;
 
 	test("should navigate to next date when swiping left", function () {
 		setup();
@@ -168,8 +169,7 @@
 	});
 
 	test("should add text request", function () {
-		setup();
-		setupRequestAjax();
+		setup(); 
 
 		var bindElement = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
 			"<div data-bind='with: model'><div><div data-bind='template: Template'></div></div></div>" +
@@ -200,13 +200,92 @@
 		equal(vm.requestCount(), 1);
 
 		bindElement.remove();
+	}); 
+
+	test("should show add absence request form", function () {
+		setup();
+
+		var bindElement = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
+			"<div data-bind='with: model'><div><div data-bind='template: Template'></div></div></div>" +
+			"<!-- /ko --></span>");
+		$("body").append(bindElement);
+
+		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = { defaultFulldayStartTime: "" };
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+
+		vm.showAddAbsenceRequestForm();
+
+		equal(vm.requestViewModel().model.Template(), "add-new-request-detail-template");
+
+		equal(true, vm.requestViewModel().model.ShowAbsencesCombo());
+
+		bindElement.remove();
 	});
+
+	test("should display personal account in absence request form", function () {
+		setup(); 
+
+		var bindElement = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
+			"<div data-bind='with: model'><div><div data-bind='template: Template'></div></div></div>" +
+			"<!-- /ko --></span>");
+		$("body").append(bindElement);
+
+		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = { defaultFulldayStartTime: "" };
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
+
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+
+		vm.showAddAbsenceRequestForm(); 
+
+		var requestViewModel = vm.requestViewModel().model;
+		requestViewModel.SetAjax(requestAjax);
+
+		requestViewModel.AbsenceId("2"); 
+
+		equal(requestViewModel.Template(), "add-new-request-detail-template");
+
+		equal(true, requestViewModel.ShowAbsenceAccount());
+
+		bindElement.remove();
+	});
+	
 
 	function fakeCompletelyLoadedCallback() { }
 
 	function fakeReadyForInteractionCallback() { }
 
-	function setup() {
+	function setup() {  
+		setupDayDataAjax();
+		setupRequestAjax();
+		dataService = new Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService(dayDataAjax);
+		this.crossroads = {
+			addRoute: function () { }
+		};
+		this.hasher = {
+			initialized: {
+				add: function () { }
+			},
+			changed: {
+				add: function () { }
+			},
+			init: function () { },
+			setHash: function (data) { hash = data; }
+		};
+
+		initPortal();
+
+		Teleopti.MyTimeWeb.UserInfo = {
+			WhenLoaded: function (whenLoadedCallBack) {
+				var data = { WeekStart: "" };
+				whenLoadedCallBack(data);
+			}
+		};
+	}
+
+	function setupDayDataAjax() {
 		startDayData = {
 			"UnReadMessageCount": 2,
 			"Date": "2017-04-28",
@@ -450,44 +529,32 @@
 			"Possibilities": [],
 			"SiteOpenHourIntradayPeriod": null
 		};
-		var ajax = {
+		dayDataAjax = {
 			Ajax: function (options) {
 				if (options.url === "../api/Schedule/FetchDayData") {
 					options.success(startDayData);
 				}
 			}
 		};
-		dataService = new Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService(ajax);
-		this.crossroads = {
-			addRoute: function () { }
-		};
-		this.hasher = {
-			initialized: {
-				add: function () { }
-			},
-			changed: {
-				add: function () { }
-			},
-			init: function () { },
-			setHash: function (data) { hash = data; }
-		};
-
-		initPortal();
-
-		Teleopti.MyTimeWeb.UserInfo = {
-			WhenLoaded: function (whenLoadedCallBack) {
-				var data = { WeekStart: "" };
-				whenLoadedCallBack(data);
-			}
-		};
 	}
 
 	function setupRequestAjax() {
-		var data;
+		
 		requestAjax = {
 			Ajax: function (options) {
 				if (options.url === "Requests/TextRequest") {
+					var data= {};
 					options.success(data);
+				}
+				if (options.url === "Requests/FetchAbsenceAccount") {
+					var absenceAccountData = {
+						TrackerType: "Days", 
+						PeriodStart: "08:00",
+						PeriodEnd: "09:00",
+						Remaining: "1",
+						Used: "2"
+					};
+					options.success(absenceAccountData);
 				}
 			}
 		};

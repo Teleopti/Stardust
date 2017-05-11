@@ -21,7 +21,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstD
 		urlDate = urlDate.replace(/\//g, "-");
 	}
 
-	self.DateFrom = ko.observable(urlDate && moment(urlDate).isValid()? moment(urlDate).startOf('day') : moment().startOf('day'));
+	self.DateFrom = ko.observable(urlDate && moment(urlDate).isValid() ? moment(urlDate).startOf('day') : moment().startOf('day'));
 	self.DateTo = ko.observable(urlDate && moment(urlDate).isValid() ? moment(urlDate).startOf('day') : moment().startOf('day'));
 
 	self.PreviousDateTo = ko.observable(moment());
@@ -238,7 +238,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstD
 		self.IsNewInProgress(true);
 		self.TypeEnum(1);
 		self.IsFullDay(true);
-
 		self.onLoadComplete();
 	};
 
@@ -246,5 +245,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstD
 
 		self.IsNewInProgress(false);
 	};
+
+	self.SetAjax = function (ajaxobj) { ajax = ajaxobj; }
 
 };

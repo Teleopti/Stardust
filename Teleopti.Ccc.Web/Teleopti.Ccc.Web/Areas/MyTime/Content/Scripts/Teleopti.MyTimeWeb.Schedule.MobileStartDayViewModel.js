@@ -97,6 +97,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
 			self.shiftTradeRequestPermission(data.RequestPermission.ShiftTradeRequestPermission);
 			self.shiftExchangePermission(data.RequestPermission.ShiftExchangePermission);
+			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
 		}
 		self.selectedDate(moment(data.Date));
 	};
@@ -180,13 +181,30 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 			self.requestCount(count); 
 			resetRequestViewModel();
 		};
+
+		requestViewModel.AddTextRequest(false);
+
 		setupRequestViewModel(requestViewModel, resetRequestViewModel);
 	};
 
-	self.showAddAbsenceRequestForm = function(){
-		//please fill the request view model
-		setupRequestViewModel(null, null);
-	};
+	self.showAddAbsenceRequestForm = function () {
+		var requestViewModel = new Teleopti.MyTimeWeb.Request
+			.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest,
+				weekStart,
+				Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
+
+		requestViewModel.AddRequestCallback = function (data) {
+			var count = self.requestCount() + 1;
+			self.requestCount(count);
+			resetRequestViewModel();
+		};
+
+		requestViewModel.readPersonalAccountPermission(self.personAccountPermission());
+
+		requestViewModel.AddAbsenceRequest(false);
+
+		setupRequestViewModel(requestViewModel, resetRequestViewModel);
+	}
 
 	self.redirectToTeamSchduleForShiftTradeRequest = function(){
 		//go to TeamSchedule view
