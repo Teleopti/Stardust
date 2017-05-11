@@ -45,7 +45,7 @@
 		MyTimeWeb_PreferencePerformanceForMultipleUsers_43322,
 		MyTimeWeb_DayScheduleForStartPage_43446,
 		MyTimeWeb_DayScheduleForStartPage_Command_44209,
-		MyTimeWeb_DownloadAppGuide_43848,
+		MyTimeWeb_ViewWFMAppGuide_43848,
 
 		Backlog_Module_23980,
 

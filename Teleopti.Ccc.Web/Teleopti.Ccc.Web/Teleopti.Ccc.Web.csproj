@@ -514,6 +514,7 @@
     <Compile Include="Areas\MultiTenancy\Controllers\TenantAdminInfoController.cs" />
     <Compile Include="Areas\MultiTenancy\MultiTenancyAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\UseGuideController.cs" />
     <Compile Include="Areas\MyTime\Controllers\WidgetController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\ExtendedPreferenceTemplateMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMapper.cs" />
@@ -554,6 +555,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Models\ScheduleStaffingPossibility\StaffingPossibilityViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\UseGuide\WFMAppGuideViewModel.cs" />
     <Compile Include="Areas\Options\IoC\OptionsAreaModule.cs" />
     <Compile Include="Areas\Options\SiteOpenHourController.cs" />
     <Compile Include="Areas\People\Controllers\ApplySmartPropertyModel.cs" />
@@ -1508,6 +1510,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\MyTime\Views\Schedule\MobileDayPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\UseGuide\WFMAppPartial.cshtml" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
     <Content Include="WFM\app\permissions\refact\functionsrefact\permissions-function-tree.html" />

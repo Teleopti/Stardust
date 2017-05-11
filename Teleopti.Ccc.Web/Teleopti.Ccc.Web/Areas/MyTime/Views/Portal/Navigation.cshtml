@@ -125,11 +125,16 @@
 						{
 							<li><a href="#" id="change-your-password" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
 						}
+						@if (Model.ShowWFMAppGuide)
+						{
+							<li><a href="#" data-mytime-action="UseGuide/WFMApp">@Resources.TeleoptiWFMApp</a></li>
+						}
 						@if (Model.HasAsmPermission)
 						{
 							<li class="divider"></li>
 							<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
 						}
+
 						<li class="divider"></li>
 						<li>@Html.ActionLink(@Resources.SignOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
 					</ul>

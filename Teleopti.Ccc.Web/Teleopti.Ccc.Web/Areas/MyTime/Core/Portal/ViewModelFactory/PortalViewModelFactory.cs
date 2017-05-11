@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		public PortalViewModel CreatePortalViewModel()
 		{
-			var navigationItems = new List<NavigationItem> {createWeekScheduleNavigationItem()};
+			var navigationItems = new List<NavigationItem> { createWeekScheduleNavigationItem() };
 
 			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
 			var useJalaaliCalendar = culture.IetfLanguageTag == "fa-IR";
@@ -98,6 +98,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				CustomerName = customerName,
 				CurrentLogonAgentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name),
 				ShowChangePassword = showChangePassword(),
+				ShowWFMAppGuide = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration)
+				&& _toggleManager.IsEnabled(Toggles.MyTimeWeb_ViewWFMAppGuide_43848),
 				HasAsmPermission =
 					_permissionProvider.HasApplicationFunctionPermission(
 						DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
@@ -128,7 +130,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				navigationItems.Add(createStudentAvailabilityNavigationItem());
 			}
 			if (
-				(!useJalaaliCalendar || _toggleManager.IsEnabled(Toggles.MyTimeWeb_PreferenceForJalaliCalendar_42965 )) &&
+				(!useJalaaliCalendar || _toggleManager.IsEnabled(Toggles.MyTimeWeb_PreferenceForJalaliCalendar_42965)) &&
 				(_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
 				 _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)))
 			{

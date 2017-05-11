@@ -16092,4 +16092,8 @@ Do you want to participate?</value>
     <value>The end time should occur after start time.</value>
     <comment>The end time should occur after start time.</comment>
   </data>
+  <data name="TeleoptiWFMApp" xml:space="preserve">
+    <value>Teleopti WFM app</value>
+    <comment>Teleopti WFM app</comment>
+  </data>
 </root>

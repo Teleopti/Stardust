@@ -32235,6 +32235,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Teleopti WFM app.
+        /// </summary>
+        public static string TeleoptiWFMApp {
+            get {
+                return ResourceManager.GetString("TeleoptiWFMApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Template.
         /// </summary>
         public static string Template {
