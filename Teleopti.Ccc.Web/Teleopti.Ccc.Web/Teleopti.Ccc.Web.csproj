@@ -1543,6 +1543,7 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.select.controller.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.select.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.select.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.service.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.validation.controller.js" />

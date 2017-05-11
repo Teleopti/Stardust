@@ -250,8 +250,8 @@
               vm.scheduledAgents = data.ScheduleResult.ScheduledAgentsCount;
               vm.valData.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults;
               initResult(data.OptimizationResult);
-              getTotalValidationErrorsNumber(vm.valData.preValidation, vm.valData.scheduleIssues);
             }
+            getTotalValidationErrorsNumber(vm.valData.preValidation, vm.valData.scheduleIssues);
           });
       }
     }
