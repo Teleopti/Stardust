@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		public static void GotoAnApplicationPage()
 		{
 			GotoWeekSchedulePage();
-			Browser.Interactions.AssertUrlContains("MyTime#Schedule/Week/");
+			Browser.Interactions.AssertUrlContains("MyTime#Schedule/Week");
 		}
 
 		public static void GotoWeekSchedulePage()
