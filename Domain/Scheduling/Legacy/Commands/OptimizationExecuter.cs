@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly TeamBlockOptimizationCommand _teamBlockOptimizationCommand;
+		private readonly TeamBlockOptimization _teamBlockOptimization;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 			IResourceCalculation resourceOptimizationHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			TeamBlockOptimizationCommand teamBlockOptimizationCommand,
+			TeamBlockOptimization teamBlockOptimization,
 			PeriodExtractorFromScheduleParts periodExtractor,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IPersonListExtractorFromScheduleParts personExtractor,
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_teamBlockOptimizationCommand = teamBlockOptimizationCommand;
+			_teamBlockOptimization = teamBlockOptimization;
 			_periodExtractor = periodExtractor;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_personExtractor = personExtractor;
@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
 			{
-				_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod.Value, _personExtractor.ExtractPersons(selectedScheduleDays),
-						optimizationPreferences, rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, selectedScheduleDays, dayOffOptimizationPreferenceProvider);
+				_teamBlockOptimization.Execute(backgroundWorker, selectedPeriod.Value, _personExtractor.ExtractPersons(selectedScheduleDays),
+						optimizationPreferences, rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
 			}
 			else
 			{

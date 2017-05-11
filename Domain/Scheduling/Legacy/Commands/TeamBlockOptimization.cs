@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class TeamBlockOptimizationCommand
+	public class TeamBlockOptimization
 	{
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly MaxSeatOptimization _maxSeatOptimization;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
-		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
+		public TeamBlockOptimization(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
@@ -106,7 +106,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, IScheduleTagSetter tagSetter,
 			SchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			IList<IScheduleDay> selectedSchedules,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_backgroundWorker = backgroundWorker;
@@ -143,7 +142,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (optimizationPreferences.General.OptimizationStepTimeBetweenDays &&
 						!(optimizationPreferences.Extra.UseBlockSameShift && optimizationPreferences.Extra.UseTeamBlockOption))
 				{
-					var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedSchedules);
+					var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedPersons, selectedPeriod);
 					optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
 						rollbackServiceWithResourceCalculation, schedulingOptions, resourceCalculateDelayer, matrixesOnSelectedperiod,
 						allMatrixes);

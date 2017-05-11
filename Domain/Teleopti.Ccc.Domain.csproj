@@ -2460,7 +2460,7 @@
     <Compile Include="Scheduling\Legacy\Commands\SchedulerStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\SchedulerStateScheduleDayChangedCallback.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TeamBlockMoveTimeBetweenDaysCommand.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\TeamBlockOptimizationCommand.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\TeamBlockOptimization.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TeamBlockScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\WeeklyRestSolverCommand.cs" />
     <Compile Include="Scheduling\MatrixUnselectedDaysLocker.cs" />

@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
 			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockScheduleCommand>();
-			builder.RegisterType<TeamBlockOptimizationCommand>();
+			builder.RegisterType<TeamBlockOptimization>();
 			builder.RegisterType<TeamBlockDaysOffSameDaysOffLockSyncronizer>().SingleInstance();
 			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects();
 			builder.RegisterType<BackToLegalShiftCommand>();
