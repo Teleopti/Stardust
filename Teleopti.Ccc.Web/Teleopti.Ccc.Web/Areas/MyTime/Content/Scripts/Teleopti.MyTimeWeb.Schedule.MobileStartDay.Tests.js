@@ -1,14 +1,26 @@
-﻿$(document).ready(function () {
-	module("Teleopti.MyTimeWeb.Schedule.MobileStartDay");
+﻿$(document).ready(function () { 
 	var hash = "";
 	var dataService;
 	var startDayData;
 	var requestAjax;
 	var dayDataAjax;
+	var templates = [];
 
-	test("should navigate to next date when swiping left", function () {
-		setup();
+	module("Teleopti.MyTimeWeb.Schedule.MobileStartDay",
+		{
+			setup: function () {
+				setup();
+			},
+			teardown: function () {
+				templates.forEach(function(template) {
+					if (template) {
+						template.remove();
+					}
+				});
+			}
+		});
 
+	test("should navigate to next date when swiping left", function () {  
 		$("body").addClass("mobile-start-day-body");
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
@@ -19,9 +31,7 @@
 
 	});
 
-	test("should navigate to previous date when swiping right", function () {
-		setup();
-
+	test("should navigate to previous date when swiping right", function () { 
 		$("body").addClass("mobile-start-day-body");
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
@@ -31,9 +41,7 @@
 		equal(vm.selectedDate().format("MMM Do YY"), moment(currentDate).add(-1, 'days').format("MMM Do YY"));
 	});
 
-	test("should go back to current date after clicking 'home' icon", function () {
-		setup();
-
+	test("should go back to current date after clicking 'home' icon", function () { 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		var currentDate = vm.selectedDate().format('YYYY-MM-DD');
@@ -49,7 +57,7 @@
 	});
 
 	test("should set timelines", function () {
-		setup();
+		
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
@@ -57,7 +65,7 @@
 	});
 
 	test("should set top position for timeline", function () {
-		setup();
+		
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
@@ -65,7 +73,7 @@
 	});
 
 	test("should set display time for timeline", function () {
-		setup();
+		
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
@@ -73,7 +81,6 @@
 	});
 
 	test("should set hour flag correctly for timeline", function () {
-		setup();
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
@@ -82,16 +89,13 @@
 	});
 
 	test("should set timeline height", function () {
-		setup();
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
 		equal(vm.scheduleHeight(), "668px"); // Not mobile, applied constants.scheduleHeight
 	});
 
-	test("should set unreadMessage", function () {
-		setup();
-
+	test("should set unreadMessage", function () { 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		equal(vm.unreadMessageCount(), 2);
@@ -101,9 +105,7 @@
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_DayScheduleForStartPage_43446") return true;
 			return false;
-		};
-
-		setup();
+		}; 
 
 		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow());
 
@@ -115,21 +117,18 @@
 	});
 
 	test("should show request link for current day when there are requests", function () {
-		setup();
 		startDayData.Schedule.TextRequestCount = 1;
 
-		$("body").append("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestCount() > 0'>test</span>");
+		setupRequestCountTemplate();
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		equal(vm.requestCount(), 1);
 
 		equal(1, $("#page:visible").length);
-		$("#page").remove();
 	});
 
 	test("should navigate to requests", function () {
-		setup();
 		startDayData.Schedule.TextRequestCount = 1;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
@@ -138,44 +137,28 @@
 	});
 
 	test("should hide request link for current day when there are no requests", function () {
-		setup();
-
-		$("body").append("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestCount > 0'></span>");
+		setupRequestCountTemplate();
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		equal(vm.requestCount(), 0);
 
 		equal(0, $("#page:visible").length);
-		$("#page").remove();
 	});
 
-	test("should show add text request form", function () {
-		setup();
-
-		var bindElement = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
-			"<div data-bind='with: model'><div><div data-bind='template: Template'></div></div></div>" +
-			"<!-- /ko --></span>");
-		$("body").append(bindElement);
+	test("should show add text request form", function () { 
+		setupAddRequestTemplate();
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
 		vm.showAddTextRequestForm();
 
-		equal("add-new-request-detail-template", vm.requestViewModel().model.Template());
-
-		bindElement.remove();
+		equal("add-new-request-detail-template", vm.requestViewModel().model.Template()); 
 	});
 
 	test("should add text request", function () {
-		setup(); 
-
-		var bindElement = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
-			"<div data-bind='with: model'><div><div data-bind='template: Template'></div></div></div>" +
-			"<!-- /ko --></span>");
-		$("body").append(bindElement);
-
+		setupAddRequestTemplate(); 
 
 		Teleopti.MyTimeWeb.Request.RequestDetail.Init(requestAjax);
 
@@ -197,20 +180,11 @@
 
 		equal(requestViewModel.Template(), "add-new-request-detail-template");
 
-		equal(vm.requestCount(), 1);
-
-		bindElement.remove();
+		equal(vm.requestCount(), 1); 
 	}); 
 
 	test("should show add absence request form", function () {
-		setup();
-
-		var bindElement = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
-			"<div data-bind='with: model'><div><div data-bind='template: Template'></div></div></div>" +
-			"<!-- /ko --></span>");
-		$("body").append(bindElement);
-
-		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = { defaultFulldayStartTime: "" };
+		setupAddRequestTemplate();
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
@@ -219,20 +193,11 @@
 
 		equal(vm.requestViewModel().model.Template(), "add-new-request-detail-template");
 
-		equal(true, vm.requestViewModel().model.ShowAbsencesCombo());
-
-		bindElement.remove();
+		equal(true, vm.requestViewModel().model.ShowAbsencesCombo()); 
 	});
 
 	test("should display personal account in absence request form", function () {
-		setup(); 
-
-		var bindElement = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
-			"<div data-bind='with: model'><div><div data-bind='template: Template'></div></div></div>" +
-			"<!-- /ko --></span>");
-		$("body").append(bindElement);
-
-		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = { defaultFulldayStartTime: "" };
+		setupAddRequestTemplate();
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 
@@ -247,11 +212,50 @@
 
 		equal(requestViewModel.Template(), "add-new-request-detail-template");
 
-		equal(true, requestViewModel.ShowAbsenceAccount());
-
-		bindElement.remove();
+		equal(true, requestViewModel.ShowAbsenceAccount()); 
 	});
-	
+
+	test("should add absence request", function () {
+		setupAddRequestTemplate();
+
+		Teleopti.MyTimeWeb.Request.RequestDetail.Init(requestAjax);
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.showAddAbsenceRequestForm();
+
+		var requestViewModel = vm.requestViewModel().model;
+		requestViewModel.SetAjax(requestAjax);
+
+		requestViewModel.DateFrom(moment("11/05/2017"));
+		requestViewModel.TimeFrom("08:00");
+		requestViewModel.DateTo(moment("11/05/2017"));
+		requestViewModel.TimeTo("09:10");
+		requestViewModel.Subject("subject");
+		requestViewModel.Message("msg");
+		requestViewModel.IsFullDay(false);
+		requestViewModel.AbsenceId("2");
+
+		requestViewModel.AddRequest();
+
+		equal(requestViewModel.Template(), "add-new-request-detail-template");
+
+		equal(vm.requestCount(), 1); 
+	});
+
+	function setupRequestCountTemplate() {
+		var template = $("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestCount() > 0'></span>");
+		$("body").append(template);
+		templates.push(template);
+	}
+
+	function setupAddRequestTemplate() {
+		var addRequestTemplate = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
+			"<div data-bind='with: model'><div><div data-bind='template: Template'></div></div></div>" +
+			"<!-- /ko --></span>");
+		$("body").append(addRequestTemplate);
+		templates.push(addRequestTemplate);
+	} 
 
 	function fakeCompletelyLoadedCallback() { }
 
@@ -283,6 +287,8 @@
 				whenLoadedCallBack(data);
 			}
 		};
+
+		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = { defaultFulldayStartTime: "" };
 	}
 
 	function setupDayDataAjax() {
@@ -539,12 +545,10 @@
 	}
 
 	function setupRequestAjax() {
-		
 		requestAjax = {
 			Ajax: function (options) {
 				if (options.url === "Requests/TextRequest") {
-					var data= {};
-					options.success(data);
+					options.success({});
 				}
 				if (options.url === "Requests/FetchAbsenceAccount") {
 					var absenceAccountData = {
@@ -555,6 +559,9 @@
 						Used: "2"
 					};
 					options.success(absenceAccountData);
+				}
+				if (options.url === "Requests/AbsenceRequest") {
+					options.success({});
 				}
 			}
 		};
