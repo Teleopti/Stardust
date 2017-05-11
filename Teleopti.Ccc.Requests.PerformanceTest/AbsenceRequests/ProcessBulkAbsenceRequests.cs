@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
-		public IAbsenceRequestProcessor AbsenceRequestProcessor;
 		public IAbsenceRequestValidatorProvider AbsenceRequestValidatorProvider;
 
 		[SetUp]
