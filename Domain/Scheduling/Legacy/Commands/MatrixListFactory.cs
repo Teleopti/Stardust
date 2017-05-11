@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var selectedPeriod = _periodExtractor.ExtractPeriod(scheduleDays);
 			if (!selectedPeriod.HasValue)
-				return new List<IScheduleMatrixPro>();
+				return Enumerable.Empty<IScheduleMatrixPro>();
 
 			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);
 
