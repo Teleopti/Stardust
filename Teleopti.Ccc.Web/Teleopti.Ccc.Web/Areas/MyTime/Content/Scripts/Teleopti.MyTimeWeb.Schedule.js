@@ -309,7 +309,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.month = function () {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability());
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + getUrlPartForDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash) + getUrlPartForProbability());
 		};
 
 		self.mobile = function () {
