@@ -498,7 +498,7 @@
     <comment>Contract</comment>
   </data>
   <data name="ContractSchedule" xml:space="preserve">
-    <value>Contract schedule</value>
+    <value>Contract Schedule</value>
     <comment>Contract schedule ribbon item</comment>
   </data>
   <data name="ContractScheduledTime" xml:space="preserve">
@@ -1402,12 +1402,12 @@ Date</value>
     <comment>Page setup</comment>
   </data>
   <data name="PartTimePercentage" xml:space="preserve">
-    <value>Part-Time percentage</value>
-    <comment>Part-Time percentage ribbon item</comment>
+    <value>Part-Time Percentage</value>
+    <comment>Part time percentage ribbon item</comment>
   </data>
   <data name="PartTimepercentages" xml:space="preserve">
-    <value>Part-Time percentages</value>
-    <comment>Part-Time percentages</comment>
+    <value>Part-Time Percentages</value>
+    <comment>Part time percentages</comment>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
@@ -15075,7 +15075,7 @@ These options are activated:
     <comment>used in MyTime Request, one of the option that how to show requests in request list</comment>
   </data>
   <data name="EmploymentNumber" xml:space="preserve">
-    <value>Employment number</value>
+    <value>Employment Number</value>
     <comment>Employment Number field on advanced search</comment>
   </data>
   <data name="Organization" xml:space="preserve">
