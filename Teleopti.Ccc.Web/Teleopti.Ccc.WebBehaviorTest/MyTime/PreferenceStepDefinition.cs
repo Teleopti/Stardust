@@ -152,22 +152,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenThePreferenceCalendarShouldNotBeEditable()
 		{
 			var amount = Convert.ToInt32(Browser.Interactions.Javascript("return $('li[data-mytime-date]').length;"));
-			for (int i = 0; i < amount; i++)
+			for (var i = 0; i < amount; i++)
 			{
-				var cell = string.Format("li[data-mytime-date]:nth({0})", i);
-				Browser.Interactions.AssertNotExistsUsingJQuery(cell, string.Format("{0}.{1}", cell, "ui-selectee"));
+				var cell = $"li[data-mytime-date]:nth({i})";
+				Browser.Interactions.AssertNotExistsUsingJQuery(cell, $"{cell}.ui-selectee");
 				Browser.Interactions.ClickUsingJQuery(cell);
-				Browser.Interactions.AssertNotExistsUsingJQuery(cell, string.Format("{0}.{1}", cell, "ui-selected"));
+				Browser.Interactions.AssertNotExistsUsingJQuery(cell, $"{cell}.ui-selected");
 			}
 		}
 
 		[Then(@"the preference calendar should be editable")]
 		public void ThenThePreferenceCalendarShouldBeEditable()
 		{
-			var date = "2014-05-03";
-			var cell = CalendarCells.DateSelector(date);
-			Browser.Interactions.Click(cell);
-			Browser.Interactions.AssertExists(string.Format("{0}.{1}", cell, "ui-selected"));
+			var cell = CalendarCells.DateSelector("2014-05-03");
+			Browser.Interactions.AssertExists($"{cell}.editable");
 		}
 
 		[Then(@"I should not be able to see preferences link")]
