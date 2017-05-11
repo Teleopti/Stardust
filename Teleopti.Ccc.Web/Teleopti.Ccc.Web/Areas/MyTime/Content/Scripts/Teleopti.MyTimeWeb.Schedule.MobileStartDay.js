@@ -74,7 +74,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 
 	function fetchDataSuccessCallback(data) {
 		vm.readData(data);
-		vm.setCurrentDate(moment(data.Date));
 		completelyLoaded();
 		if (!subscribed) subscribeForChanges();
 	}

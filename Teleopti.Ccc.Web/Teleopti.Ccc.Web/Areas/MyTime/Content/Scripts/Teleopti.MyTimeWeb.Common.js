@@ -13,8 +13,8 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Common = (function ($) {
-    var _settings = {},
-        _ajax,
+	var _settings = {},
+		_ajax,
 		_userData = null,
 		_userTexts = null,
 		_userDataCallQueue = [],
@@ -55,7 +55,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 		if (_settings.baseUrl == undefined) {
 			throw "you cannot ask toggle before you initialize it!";
-        }
+		}
 
 		_ajax.Ajax({
 			url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
@@ -81,7 +81,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			callback: options.successCallback,
 			errCallback: options.errorCallback,
 			domainType: options.domainType,
-            page: options.page
+			page: options.page
 		});
 	};
 
@@ -97,7 +97,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			return;
 		};
 
-        _userDataFetchInProgress = true;
+		_userDataFetchInProgress = true;
 
 		_ajax.Ajax({
 			url: 'UserData/FetchUserData',
@@ -111,7 +111,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 				}
 			}
 		});
-    };
+	};
 
 	function _subscribeToMessageBroker(options) {
 		_ajax = _ajax || new Teleopti.MyTimeWeb.Ajax();
@@ -304,11 +304,11 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 	return {
 		Init: function (settings, ajax) {
-            _settings = settings;
-            _ajax = ajax ? ajax : new Teleopti.MyTimeWeb.Ajax();
+			_settings = settings;
+			_ajax = ajax ? ajax : new Teleopti.MyTimeWeb.Ajax();
 		},
 		PartialInit: function () {
-            Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
+			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 		},
 		AjaxFailed: function (jqXHR, noIdea, title) {
 			var msg = $.parseJSON(jqXHR.responseText);
@@ -334,7 +334,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			_log(logmessage);
 		},
 		SetUserTexts: function(userTexts) {
-            _userTexts = userTexts;
+			_userTexts = userTexts;
 		},
 		SetupCalendar: function (options) {
 			_setupCalendar(options);
@@ -409,10 +409,10 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		Constants: constants,
 		SubscribeToMessageBroker: _subscribeToMessageBroker,
 		GetUserData: _getUserData,
-        IsToggleEnabled: isToggleEnabled,
-        GetUserTexts: function () {
-            return _userTexts;
-        },
+		IsToggleEnabled: isToggleEnabled,
+		GetUserTexts: function () {
+			return _userTexts;
+		},
 		ShowAgentScheduleMessenger: function () {
 			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)").show();
 			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)").show();

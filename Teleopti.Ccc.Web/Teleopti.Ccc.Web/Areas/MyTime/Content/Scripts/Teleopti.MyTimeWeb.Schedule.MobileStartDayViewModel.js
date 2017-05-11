@@ -9,7 +9,8 @@
 Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	var self = this;
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
-	var probabilityType = constants.probabilityType;
+
+	self.isCommandEnable = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_Command_44209");
 
 	self.displayDate = ko.observable();
 	self.selectedDate = ko.observable(moment().startOf("day"));
@@ -30,6 +31,16 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	self.probabilities = ko.observableArray([]);
 	self.requestCount = ko.observable(0);
 	self.requestViewModel = ko.observable();
+	self.textRequestPermission = ko.observable();
+	self.absenceRequestPermission = ko.observable();
+	self.absenceReportPermission = ko.observable();
+	self.overtimeAvailabilityPermission = ko.observable();
+	self.shiftExchangePermission = ko.observable();
+	self.personAccountPermission = ko.observable();
+	self.requestPermission = ko.observable();
+	self.menuIsVisible = ko.observable(false);
+
+	self.selectedProbabilityType = constants.probabilityType.none;
 
 	var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
@@ -76,20 +87,38 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 			return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self);
 		});
 		self.layers(layers);
+
+		if (data.RequestPermission) {
+			self.textRequestPermission(data.RequestPermission.TextRequestPermission);
+			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
+			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
+			self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
+			self.shiftExchangePermission(data.RequestPermission.ShiftExchangePermission);
+			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
+			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
+		}
 	};
 
-	self.setCurrentDate = function (date) {
+	self.setSelectedDateSubscription = function() {
 		if (self.selectedDateSubscription)
 			self.selectedDateSubscription.dispose();
-		self.selectedDate(date);
-		var probabilityUrlPart = self.selectedProbabilityOptionValue() !== probabilityType.none && self.selectedProbabilityOptionValue()
-			? "/Probability/" + self.selectedProbabilityOptionValue()
-			: "";
-		self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" +
-				Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format("YYYY-MM-DD")) + probabilityUrlPart);
-		});
+
+		self.selectedDateSubscription = self.selectedDate.subscribe(function (date) {
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + getUrlPartForDate(date) + getUrlPartForProbability());
+			});
 	};
+
+	function getUrlPartForDate(date) {
+		return Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD"));
+	}
+
+	function getUrlPartForProbability() {
+		return (self.selectedProbabilityType !== constants.probabilityType.none && self.selectedProbabilityType)
+			? "/Probability/" + self.selectedProbabilityType
+			: "";
+	}
+
+	self.setSelectedDateSubscription();
 
 	self.today = function () {
 		self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime()).startOf("day"));
@@ -108,7 +137,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 
 	var cancelAddingNewRequest = function () {
 		self.requestViewModel(undefined);
-	}
+	};
 
 	self.showAddTextRequestForm = function () {
 		var requestViewModel = new Teleopti.MyTimeWeb.Request
@@ -126,5 +155,13 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 			model: requestViewModel,
 			CancelAddingNewRequest: cancelAddingNewRequest
 		});
-	}
+	};
+
+	self.enableMenu = function(){
+		self.menuIsVisible(true);
+	};
+
+	self.disableMenu = function(){
+		self.menuIsVisible(false);
+	};
 };

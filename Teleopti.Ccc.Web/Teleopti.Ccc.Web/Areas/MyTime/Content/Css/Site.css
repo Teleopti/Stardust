@@ -1641,9 +1641,8 @@ End personal drop down menu
 }
 
 .menu-focusing {
-	padding: 15px;
+	padding: 0 15px 1px 15px;
 	position: fixed;
-	width: 100%;
 	height: auto;
 	left: 0;
 	bottom: 0;
@@ -1651,4 +1650,22 @@ End personal drop down menu
 	border-radius: 0;
 	border: none;
 	z-index: 1001;
+}
+
+.menu-focusing .navbar-nav{
+	margin: 0;
+}
+
+.menu-focusing li{
+	padding: 0;
+	border-bottom: 1px solid #dfdfdf;
+}
+
+.close-fab-overlay{
+	position: fixed;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	z-index: 1000;
 }

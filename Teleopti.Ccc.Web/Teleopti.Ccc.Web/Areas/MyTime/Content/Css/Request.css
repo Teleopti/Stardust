@@ -698,24 +698,12 @@ input[type=search]::-ms-clear {
 
 /*Mobile tweaks*/
 @media only screen and (max-width : 768px) {
-	.requests-wrapper .navbar-teleopti{
-		
-	}
 	.hide-requests-on-phone{
 		display: none!important;
 	}
 	.hide-fab-on-phone{
 		display: none!important;
 	}
-	.close-fab-overlay{
-		position: fixed;
-		top:0;
-		bottom:0;
-		left:0;
-		right:0;
-		z-index: 1000;
-	}
-
 	.purest-green{
 		background-color: #9ccc33!important;
 		border-color: #8cbc23!;

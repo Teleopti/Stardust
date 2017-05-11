@@ -5,12 +5,10 @@
 $(document).ready(function() {
 	module("Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel");
 
-	test("should set current date", function () {
+	test("should get current date", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
-		viewModel.setCurrentDate(moment().format('YYYY-MM-DD'));
-
-		equal(viewModel.selectedDate(), moment().format('YYYY-MM-DD'));
+		equal(viewModel.selectedDate().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 	});
 
 	test("should set display date", function () {
@@ -156,5 +154,48 @@ $(document).ready(function() {
 		viewModel.previousDay();
 
 		equal(viewModel.selectedDate().format("YYYY-MM-DD"), moment(today).add(-1, 'days').format("YYYY-MM-DD"));
+	});
+
+	test("should call out menu list when clicking plus icon at bottom right", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		viewModel.enableMenu();
+
+		equal(viewModel.menuIsVisible(), true);
+	});
+
+	test("should hide menu list when clicking on menu item or outside", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		viewModel.enableMenu();
+
+		viewModel.disableMenu();
+
+		equal(viewModel.menuIsVisible(), false);
+	});
+
+	test("should not show text request command item without permission", function () {
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			DateFormat: "DD/MM/YYYY",
+			UseJalaaliCalendar: true
+		});
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			},
+			RequestPermission:{
+				TextRequestPermission: false
+			}
+		};
+		viewModel.readData(rawData);
+
+		equal(viewModel.textRequestPermission(), false);
 	});
 });
