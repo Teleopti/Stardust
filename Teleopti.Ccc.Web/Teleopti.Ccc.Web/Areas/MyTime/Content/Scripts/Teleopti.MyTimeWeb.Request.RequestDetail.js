@@ -8,8 +8,22 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.AbsenceRequestDetailViewModel.js"/>
 
+if (typeof (Teleopti) === "undefined") {
+	Teleopti = {};
+}
+
+if (typeof (Teleopti.MyTimeWeb) === "undefined") {
+	Teleopti.MyTimeWeb = {};
+}
+
+if (typeof (Teleopti.MyTimeWeb.UserInfo) === "undefined") {
+	Teleopti.MyTimeWeb.UserInfo = {
+		WhenLoaded: function () { }
+	};
+}
+
 Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
-	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var ajax = new Teleopti.MyTimeWeb.Ajax();;
 	var parentViewModel = null;
 	var defaultDateTimes = null;
 	var weekStart = 3;
@@ -156,7 +170,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-				
+
 				if (errorCallback != undefined) {
 					errorCallback(jqXHR, textStatus, errorThrown);
 				}
@@ -221,7 +235,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	return {
-		Init: function () {
+		Init: function (ajaxobj) {
+			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
 			parentViewModel = new RequestDetailParentViewModel();
 			_databindModel(parentViewModel);
 		},

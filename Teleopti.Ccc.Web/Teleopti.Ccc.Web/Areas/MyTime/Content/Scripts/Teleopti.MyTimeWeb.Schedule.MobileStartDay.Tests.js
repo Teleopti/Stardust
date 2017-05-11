@@ -3,6 +3,7 @@
 	var hash = "";
 	var dataService;
 	var startDayData;
+	var requestAjax;
 
 	test("should navigate to next date when swiping left", function () {
 		setup();
@@ -36,7 +37,7 @@
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		var currentDate = vm.selectedDate().format('YYYY-MM-DD');
 
-		Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime = function(){
+		Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime = function () {
 			return currentDate;
 		}
 
@@ -103,14 +104,14 @@
 
 		setup();
 
-		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow()); 
+		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow());
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm(); 
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.navigateToMessages();
-		 
+
 		equal(hash, "MessageTab");
-	}); 
+	});
 
 	test("should show request link for current day when there are requests", function () {
 		setup();
@@ -128,15 +129,15 @@
 
 	test("should navigate to requests", function () {
 		setup();
-		startDayData.Schedule.TextRequestCount = 1; 
+		startDayData.Schedule.TextRequestCount = 1;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.navigateToRequests();
-		equal(hash, "Requests/Index"); 
+		equal(hash, "Requests/Index");
 	});
 
 	test("should hide request link for current day when there are no requests", function () {
-		setup(); 
+		setup();
 
 		$("body").append("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestCount > 0'></span>");
 
@@ -148,7 +149,7 @@
 		$("#page").remove();
 	});
 
-	test("should show add text request form", function() {
+	test("should show add text request form", function () {
 		setup();
 
 		var bindElement = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
@@ -163,9 +164,43 @@
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
-		vm.showAddTextRequestForm(); 
+		vm.showAddTextRequestForm();
 
 		equal("add-new-request-detail-template", vm.requestViewModel().model.Template());
+
+		bindElement.remove();
+	});
+
+	test("should add text request", function () {
+		setup();
+		setupRequestAjax();
+
+		var bindElement = $("<script type='text/html' id='add-new-request-detail-template'><div></div></script ><span id='page'><!-- ko with: requestViewModel -->" +
+			"<div data-bind='with: model'><div><div data-bind='template: Template'></div></div></div>" +
+			"<!-- /ko --></span>");
+		$("body").append(bindElement);
+
+
+		Teleopti.MyTimeWeb.Request.RequestDetail.Init(requestAjax);
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, dataService);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.showAddTextRequestForm();
+
+		var requestViewModel = vm.requestViewModel().model;
+
+		requestViewModel.DateFrom("11/05/2017");
+		requestViewModel.TimeFrom("08:00");
+		requestViewModel.DateTo("11/05/2017");
+		requestViewModel.TimeTo("09:10");
+		requestViewModel.Subject("subject");
+		requestViewModel.Message("msg");
+		requestViewModel.IsFullDay(false);
+		requestViewModel.AddRequest();
+
+		equal(vm.requestViewModel().model.Template(), "add-new-request-detail-template");
+
+		equal(vm.requestCount(), 1);
 
 		bindElement.remove();
 	});
@@ -446,6 +481,17 @@
 			WhenLoaded: function (whenLoadedCallBack) {
 				var data = { WeekStart: "" };
 				whenLoadedCallBack(data);
+			}
+		};
+	}
+
+	function setupRequestAjax() {
+		var data;
+		requestAjax = {
+			Ajax: function (options) {
+				if (options.url === "Requests/TextRequest") {
+					options.success(data);
+				}
 			}
 		};
 	}

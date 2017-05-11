@@ -115,6 +115,13 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 			.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest,
 			weekStart,
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
+
+		requestViewModel.AddRequestCallback = function (data) {
+			var count = self.requestCount() + 1;
+			self.requestCount(count); 
+			cancelAddingNewRequest();
+		};
+
 		self.requestViewModel({
 			model: requestViewModel,
 			CancelAddingNewRequest: cancelAddingNewRequest
