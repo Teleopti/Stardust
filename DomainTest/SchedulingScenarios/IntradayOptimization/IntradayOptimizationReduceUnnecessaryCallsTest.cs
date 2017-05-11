@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			};
 			InitMaxSeatForStateHolder.Execute(15); //causes maxskills from other sites to be included in stateholder
 
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optPreferences, null);
 
 			var maxSeatSkillDaysUsedOnCurrentDate = WorkShiftSelector.SkillDaysAsParameter.Where(x => x.Skill is MaxSeatSkill && x.CurrentDate == dateOnly);
 			maxSeatSkillDaysUsedOnCurrentDate.Count().Should().Be.EqualTo(1);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			};
 			InitMaxSeatForStateHolder.Execute(15); //causes maxskills to be included in stateholder
 
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optPreferences, null);
 
 			var maxSeatSkillDaysUsedOnCurrentDate = WorkShiftSelector.SkillDaysAsParameter.Where(x => x.Skill is MaxSeatSkill && x.CurrentDate == dateOnly);
 			maxSeatSkillDaysUsedOnCurrentDate.Count().Should().Be.EqualTo(1);

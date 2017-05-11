@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			{
 				Target.Execute(new NoSchedulingProgress(),
 					schedulerStateHolderFrom,
-					new List<IScheduleDay> { schedulerStateHolderFrom.Schedules[agent].ScheduledDay(dateOnly) },
+					new[] { agent }, dateOnly.ToDateOnlyPeriod(),
 					optimizationPreferences,
 					new FixedDayOffOptimizationPreferenceProvider(daysOffPreferences));
 			});
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) }
 			};
 
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optPreferences, null);
 
 			stateHolder.DaysToRecalculate
 				.Should().Have.SameValuesAs(dateOnly);
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) }
 			};
 
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optPreferences, null);
 
 			stateHolder.DaysToRecalculate
 				.Should().Be.Empty();
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) }
 			};
 
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optPreferences, null);
 
 			stateHolder.DaysToRecalculate
 				.Should().Have.SameValuesAs(dateOnly);
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) }
 			};
 
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optPreferences, null);
 
 			stateHolder.DaysToRecalculate
 				.Should().Be.Empty();

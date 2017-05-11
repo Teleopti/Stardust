@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			};
 			Target.Execute(
 				new NoSchedulingProgress(), StateHolder,
-				new[] { dictionary[person].ScheduledDay(date), dictionary[person2].ScheduledDay(date) },
+				new[] { person, person2 }, date.ToDateOnlyPeriod(),
 					OptimizationPreferences, 
 					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 

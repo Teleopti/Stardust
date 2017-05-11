@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Assert.DoesNotThrow(() =>
 			{
-				Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, optPreferences, null);
+				Target.Execute(new NoSchedulingProgress(), stateHolder, new[]{agent}, dateOnly.ToDateOnlyPeriod(), optPreferences, null);
 			});
 		}
 

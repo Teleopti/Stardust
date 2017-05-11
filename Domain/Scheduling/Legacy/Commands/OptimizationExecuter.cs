@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
@@ -53,14 +55,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void Execute(ISchedulingProgress backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, 
-			IList<IScheduleDay> selectedScheduleDays,
+			IEnumerable<IPerson> selectedAgents,
+			DateOnlyPeriod selectedPeriod, 
 			IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedScheduleDays);
-			if (!selectedPeriod.HasValue)
-				return;
-
 			var lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 
@@ -81,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
 			{
-				_teamBlockOptimization.Execute(backgroundWorker, selectedPeriod.Value, _personExtractor.ExtractPersons(selectedScheduleDays),
+				_teamBlockOptimization.Execute(backgroundWorker, selectedPeriod, selectedAgents.ToArray(),
 						optimizationPreferences, rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
 			}
 			else
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					schedulerStateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection(), _groupScheduleGroupPageDataProvider, optimizationPreferences.Extra.TeamGroupPage);
 
 				_groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
-				_scheduleOptimizerHelper.ReOptimize(backgroundWorker, _personExtractor.ExtractPersons(selectedScheduleDays), new PeriodExtractorFromScheduleParts().ExtractPeriod(selectedScheduleDays).Value , schedulingOptions,
+				_scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedAgents, selectedPeriod, schedulingOptions,
 					dayOffOptimizationPreferenceProvider, optimizationPreferences, resourceCalculateDelayer, rollbackService);
 			}
 

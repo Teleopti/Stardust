@@ -3530,10 +3530,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			else
 			{
+				var selectedPeriod = new PeriodExtractorFromScheduleParts().ExtractPeriod(argument.SelectedScheduleDays).Value;
+				var selectedAgents = argument.SelectedScheduleDays.Select(x => x.Person).Distinct();
 				_container.Resolve<OptimizationExecuter>().Execute(
 					new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
 					_schedulerState,
-					argument.SelectedScheduleDays,
+					selectedAgents,
+					selectedPeriod,
 					_optimizationPreferences, 
 					dayOffOptimizationPreferenceProvider);
 			}
