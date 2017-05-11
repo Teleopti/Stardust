@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -91,10 +92,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
 			var agentGroup = planningPeriod.AgentGroup;
+			IEnumerable<IPerson> agents;
 			if (agentGroup == null)
 			{
 				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
+				agents = schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period);
 			}
 			else
 			{
@@ -106,9 +109,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 					.Select(personSkill => personSkill.Skill)
 					.Select(skill => skill.Id.GetValueOrDefault()));
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period, skills);
+				agents = people.FixedStaffPeople(period);
 			}
 
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, period); 
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, agents, period); 
 
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
 
@@ -120,18 +124,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_resourceCalculation.ResourceCalculate(period.Inflate(1), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, false));
 				_teamBlockDayOffOptimizer.OptimizeDaysOff(
 					matrixListForDayOffOptimization, period,
-					schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(),
+					agents.ToList(),
 					optimizationPreferences,
 					schedulingOptions,
 					resourceCalcDelayer, 
 					dayOffOptimizationPreferenceProvider,
-					_teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer),
+					_teamInfoFactoryFactory.Create(agents, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer),
 					new NoSchedulingProgress());
 
 				_weeklyRestSolverExecuter.Resolve(
 					optimizationPreferences, 
 					period,
-					schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(), 
+					agents.ToList(), 
 					dayOffOptimizationPreferenceProvider);
 			}
 
