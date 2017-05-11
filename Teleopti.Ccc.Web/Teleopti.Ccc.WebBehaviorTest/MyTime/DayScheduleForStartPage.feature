@@ -39,7 +39,7 @@ Scenario: View day schedule after login
 	When I am viewing mobile view for date '2017-04-21'
 	Then I should see my day view schedule with
 		| Field          | Value             |
-		| Date           | 4/21/2017        |
+		| Date           | 4/21/2017         |
 		| Time span      | 9:00 AM - 6:00 PM |
 		| Shift category | Early             |
 		| Week day       | Friday            |
@@ -58,7 +58,7 @@ Scenario: Should view schedule for tomorrow
 	And I navigate to next day
 	Then I should see my day view schedule with
 		| Field          | Value             |
-		| Date           | 4/22/2017        |
+		| Date           | 4/22/2017         |
 		| Time span      | 9:00 AM - 6:00 PM |
 		| Shift category | Early             |
 		| Week day       | Saturday          |
@@ -77,7 +77,7 @@ Scenario: Should view schedule for the day before
 	And I navigate to previous day
 	Then I should see my day view schedule with
 		| Field          | Value             |
-		| Date           | 4/22/2017        |
+		| Date           | 4/22/2017         |
 		| Time span      | 9:00 AM - 6:00 PM |
 		| Shift category | Early             |
 		| Week day       | Saturday          |
@@ -98,29 +98,35 @@ Scenario: Should view today schedule from other day
 	And I click today button
 	Then I should see my day view schedule with
 		| Field          | Value             |
-		| Date           | 4/21/2017        |
+		| Date           | 4/21/2017         |
 		| Time span      | 9:00 AM - 6:00 PM |
 		| Shift category | Early             |
 		| Week day       | Friday            |
 
-@ignore
-Scenario: Should see the count of requests in today
+@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
+Scenario: Should see the brief request in today
 	Given I have the role 'Full access to mytime'
-	And today is '2017-04-21'
-	And I have an intraday absence request
-	When I'm viewing at '2017-04-21'
-	Then I should see the number of Count of requests is '1'
-	When I click the count of request icon
-	Then I should see the request page
+	And 'I' has an existing absence request with
+	| Field       | Value            |
+	| StartTime   | 2017-04-21 10:00 |
+	| End Time    | 2017-04-21 14:00 |
+	| Update Time | 2017-04-21 08:00 |
+	| Status      | Pending          |
+	When I am viewing mobile view for date '2017-04-21'
+	Then I should see the request icon
+	When I click the request icon
+	Then I should see it go to request page
 
-@ignore
+@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should see unread messages
 	Given I have the role 'Full access to mytime'
-	And I have 2 unread messages
-	When I login my time
-	Then I should see I have '2' unread messages
+	And I have an unread message with
+	| Field | Value       |
+	| Title | New message |
+	When I am viewing mobile view for date '2017-04-23'
+	Then I should see I have '1' unread message(s)
 	When I click the message icon
-	Then I could see the message page
+	Then I could see the message with title 'New message'
 
 @ignore
 Scenario: Should see the absence probability

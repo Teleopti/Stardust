@@ -56,12 +56,12 @@
 				<li class="mobile-message" data-bind="click: navigateToMessages">
 					<a>
 						<i class="glyphicon glyphicon-envelope"></i>
-						<span class="badge badge-important" data-bind="text: unreadMessageCount">
+						<span id="MobileDayView-message" class="badge" data-bind="text: unreadMessageCount">
 						</span>
 					</a>
 				</li>
 				<li class="mobile-request" data-bind="click: function(e, d){ if(requestCount() > 0){navigateToRequests();}}">
-					<a data-bind="visible: requestCount() > 0">
+					<a id="MobileDayView-request" data-bind="visible: requestCount() > 0">
 						<i class="glyphicon glyphicon-comment"></i>
 					</a>
 				</li>
