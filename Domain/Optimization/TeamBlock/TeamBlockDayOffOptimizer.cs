@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public virtual void OptimizeDaysOff(
 			IList<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
-			IList<IPerson> selectedPersons,
+			IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			SchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer,

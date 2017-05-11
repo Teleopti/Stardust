@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
@@ -6,13 +7,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface IAllTeamMembersInSelectionSpecification
 	{
-		bool IsSatifyBy(ITeamInfo teamInfo, IList<IPerson> selectedPersons);
+		bool IsSatifyBy(ITeamInfo teamInfo, IEnumerable<IPerson> selectedPersons);
 	}
 
 	public class AllTeamMembersInSelectionSpecification : IAllTeamMembersInSelectionSpecification
 	{
 		
-		public bool IsSatifyBy(ITeamInfo teamInfo, IList< IPerson> selectedPersons)
+		public bool IsSatifyBy(ITeamInfo teamInfo, IEnumerable< IPerson> selectedPersons)
 		{
 			foreach (var groupMember in teamInfo.GroupMembers)
 			{

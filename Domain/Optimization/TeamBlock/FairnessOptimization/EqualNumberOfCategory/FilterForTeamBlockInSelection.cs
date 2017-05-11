@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -7,13 +8,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IFilterForTeamBlockInSelection
 	{
-		IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockList, IList<IPerson> selectedPersons,
+		IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockList, IEnumerable<IPerson> selectedPersons,
 		                             DateOnlyPeriod selectedPeriod);
 	}
 
 	public class FilterForTeamBlockInSelection : IFilterForTeamBlockInSelection
 	{
-		public IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockList, IList<IPerson> selectedPersons, 
+		public IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockList, IEnumerable<IPerson> selectedPersons, 
 		                                    DateOnlyPeriod selectedPeriod)
 		{
 			var teamBlockListInSelection = new List<ITeamBlockInfo>();

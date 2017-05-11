@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, IScheduleTagSetter tagSetter,
 			SchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		private void optimizeMoveTimeBetweenDays(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod,
-			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
+			IEnumerable<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, SchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> matrixesOnSelectedperiod,
 			IList<IScheduleMatrixPro> allMatrixes)
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_schedulerStateHolder().SchedulingResultState, matrixesOnSelectedperiod);
 		}
 
-		private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+		private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService,
 			IList<IScheduleMatrixPro> allMatrixes,
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod,
-			IList<IPerson> selectedPersons,
+			IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			IList<IScheduleMatrixPro> allMatrixes,
 			SchedulingOptions schedulingOptions,
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_backgroundWorker);
 		}
 
-		private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+		private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			IList<IScheduleMatrixPro> allMatrixes,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,

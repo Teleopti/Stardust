@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		void Optimize(IList<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
-			IList<IPerson> selectedPersons,
+			IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public void Optimize(IList<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
-			IList<IPerson> selectedPersons,
+			IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,

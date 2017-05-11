@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
 	public interface IWeeklyRestSolverService
 	{
-		void Execute(IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator,
+		void Execute(IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList,
 			IOptimizationPreferences optimizationPreferences, SchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			return new CancelSignal();
 		}
 
-		public void Execute(IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
+		public void Execute(IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
 			ITeamBlockGenerator teamBlockGenerator, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IList<IScheduleMatrixPro> allPersonMatrixList, IOptimizationPreferences optimizationPreferences,
@@ -172,8 +172,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 		}
 
-		private bool isFullTeamSelected(IList<IPerson> selectedPersons, IPerson person, ITeamBlockGenerator teamBlockGenerator,
-			SchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod week, IEnumerable<IPerson> personsInOrganisation)
+		private bool isFullTeamSelected(IEnumerable<IPerson> selectedPersons, IPerson person, ITeamBlockGenerator teamBlockGenerator,
+			SchedulingOptions schedulingOptions, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod week, IEnumerable<IPerson> personsInOrganisation)
 		{
 			var teamBlockInfo =
 				teamBlockGenerator.Generate(personsInOrganisation, allPersonMatrixList, week, new List<IPerson> {person}, schedulingOptions).First();

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 	{
 		void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList,
 			ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator,
-			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IPerson> selectedPersons,
+			ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IPerson> selectedPersons,
 			DateOnlyPeriod selectedPeriod, IResourceCalculateDelayer resourceCalculateDelayer);
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 
 		public void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList,
 			ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator,
-			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IPerson> selectedPersons,
+			ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IPerson> selectedPersons,
 			DateOnlyPeriod selectedPeriod, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			var blocksToWorkWith = _constructTeamBlock.Construct(matrixList, selectedPeriod, selectedPersons,

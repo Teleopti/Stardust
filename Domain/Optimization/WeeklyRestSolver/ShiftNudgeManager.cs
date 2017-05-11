@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith, ITeamBlockGenerator teamBlockGenerator,
 			IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
+			DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder, DateOnlyPeriod selectedPeriod,
-			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
+			IEnumerable<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             return false;
 	    }
 
-		private void lockUnSelectedInTeamBlock(ITeamBlockInfo teamBlockInfo, IList<IPerson> selectedPersons,
+		private void lockUnSelectedInTeamBlock(ITeamBlockInfo teamBlockInfo, IEnumerable<IPerson> selectedPersons,
 			DateOnlyPeriod selectedPeriod)
 		{
 			var blockInfo = teamBlockInfo.BlockInfo;
