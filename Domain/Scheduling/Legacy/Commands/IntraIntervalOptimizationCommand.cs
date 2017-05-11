@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void Execute(IOptimizationPreferences optimizationPreferences,
-			DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, 
+			DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents, ISchedulingResultStateHolder schedulingResultStateHolder, 
 			IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, 
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingProgress backgroundWorker)
 		{
 			_backgroundWorker = backgroundWorker;
 			_intervalOptimizationService.ReportProgress += intervalOptimizationServiceReportProgress;
-			_intervalOptimizationService.Execute(optimizationPreferences, selectedPeriod, selectedSchedules, schedulingResultStateHolder, allScheduleMatrixPros, rollbackService, resourceCalculateDelayer);
-			_intervalOptimizationService.Execute(optimizationPreferences, selectedPeriod, selectedSchedules, schedulingResultStateHolder, allScheduleMatrixPros, rollbackService, resourceCalculateDelayer);
+			_intervalOptimizationService.Execute(optimizationPreferences, selectedPeriod, selectedAgents, schedulingResultStateHolder, allScheduleMatrixPros, rollbackService, resourceCalculateDelayer);
+			_intervalOptimizationService.Execute(optimizationPreferences, selectedPeriod, selectedAgents, schedulingResultStateHolder, allScheduleMatrixPros, rollbackService, resourceCalculateDelayer);
 			_intervalOptimizationService.ReportProgress -= intervalOptimizationServiceReportProgress;
 		}
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -26,17 +27,11 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
-		public void Execute(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules,
+		public void Execute(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-			var personHashSet = new HashSet<IPerson>();
 			var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-			
-			foreach (var selectedSchedule in selectedSchedules)
-			{
-				personHashSet.Add(selectedSchedule.Person);
-			}
 
 			foreach (var skill in schedulingResultStateHolder.Skills)
 			{
@@ -60,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						if (cancel) return;
 						var person = scheduleDay.Person;
 
-						if (!personHashSet.Contains(person)) continue;
+						if (!selectedAgents.Contains(person)) continue;
 
 						var progressPerson = person.Name.ToString();
 						schedulingOptions.ClearNotAllowedShiftProjectionCaches();
@@ -83,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						if (cancel) return;
 						var person = scheduleDay.Person;
 
-						if (!personHashSet.Contains(person)) continue;
+						if (!selectedAgents.Contains(person)) continue;
 
 						var progressPerson = person.Name.ToString();
 						schedulingOptions.ClearNotAllowedShiftProjectionCaches();

@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					recalculateIfContinuedStep(continuedStep, selectedPeriod);
 					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
-						runIntraInterval(schedulingOptions, optimizationPreferences, selectedPeriod, selectedDays, tagSetter);
+						runIntraInterval(schedulingOptions, optimizationPreferences, selectedPeriod, selectedPersons, tagSetter);
 					}
 				}
 
@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		private void runIntraInterval(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
-			DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter)
+			DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents, IScheduleTagSetter tagSetter)
 		{
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, Resources.CollectingData, optimizationPreferences.Advanced.RefreshScreenInterval);
 			_backgroundWorker.ReportProgress(1, args);
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 				schedulingOptions.ConsiderShortBreaks, _stateHolder(), _userTimeZone);
-			_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedDays,
+			_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedAgents,
 				_schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer,
 				_backgroundWorker);
 		}

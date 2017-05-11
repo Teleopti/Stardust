@@ -782,7 +782,6 @@
     <Compile Include="Optimization\GroupPersonBuilderWrapperTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssueCalculatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssuesTest.cs" />
-    <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationServiceTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ScheduleDayIntraIntervalIssueExtractorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ShiftProjectionCacheIntraIntervalValueCalculatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ShiftProjectionIntraIntervalBestFitCalculatorTest.cs" />

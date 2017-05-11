@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (optimizationPreferences.General.OptimizationStepIntraInterval)
 				{
-					_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedSchedules,
+					_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedPersons,
 						_schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation,
 						resourceCalculateDelayer, _backgroundWorker);
 				}
