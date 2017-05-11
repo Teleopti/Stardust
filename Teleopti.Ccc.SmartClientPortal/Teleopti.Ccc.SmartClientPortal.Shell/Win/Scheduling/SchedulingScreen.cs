@@ -3420,11 +3420,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			schedulingOptions.DayOffTemplate = _schedulerState.CommonStateHolder.DefaultDayOffTemplate;
 			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
-			//if (lastCalculationState)
-			//{
-			//	_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling), true);
-			//}
-
 			_totalScheduled = 0;
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 
@@ -3432,9 +3427,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			var scheduleDays = argument.SelectedScheduleDays;
 
-			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays =
-				_container.Resolve<MatrixListFactory>().CreateMatrixListForSelection(_schedulerState.Schedules, scheduleDays);
-			if (matrixesOfSelectedScheduleDays.Count == 0)
+			var matrixesOfSelectedScheduleDays = _container.Resolve<MatrixListFactory>().CreateMatrixListForSelection(_schedulerState.Schedules, scheduleDays);
+			if (!matrixesOfSelectedScheduleDays.Any())
 				return;
 
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);

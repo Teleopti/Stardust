@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		public IWorkShiftFinderResultHolder ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+		public IWorkShiftFinderResultHolder ScheduleSelected(IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 	                                 IList<IPerson> selectedPersons,
 	                                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 	                                 IResourceCalculateDelayer resourceCalculateDelayer,
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return workShiftFinderResultHolder;
 	    }
 
-	    private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
+	    private void runSchedulingForAllTeamInfoOnStartDate(IEnumerable<IScheduleMatrixPro> allPersonMatrixList, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
                                      ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
                                      IEnumerable<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
 									 IResourceCalculateDelayer resourceCalculateDelayer,
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             }
         }
 
-        private HashSet<ITeamInfo> getAllTeamInfoList(ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamInfoFactory teamInfoFactory)
+        private HashSet<ITeamInfo> getAllTeamInfoList(ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamInfoFactory teamInfoFactory)
         {
             var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
             foreach (var selectedPerson in selectedPersons)

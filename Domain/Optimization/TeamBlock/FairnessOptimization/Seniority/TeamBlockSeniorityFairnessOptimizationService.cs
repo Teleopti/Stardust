@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface ITeamBlockSeniorityFairnessOptimizationService
     {
-        void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions, 
+        void Execute(IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions, 
 					IList<IShiftCategory> shiftCategories, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, 
 					IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         }
 
 
-	    public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+	    public void Execute(IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 		    IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
 		    IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
 		    IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)

@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
 					optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, false);
-				IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedScheduleDays);
+				var matrixList = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedScheduleDays);
 
 				backToLegalState(matrixList, schedulerStateHolder, optimizationPreferences, backgroundWorker,
 					optimizerOriginalPreferences.SchedulingOptions, selectedPeriod.Value);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 
-		private void backToLegalState(IList<IScheduleMatrixPro> matrixList,
+		private void backToLegalState(IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulerStateHolder schedulerStateHolder,
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulingProgress backgroundWorker,

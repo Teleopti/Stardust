@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void Execute(IOptimizationPreferences optimizationPreferences,
-			DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents, ISchedulingResultStateHolder schedulingResultStateHolder, 
-			IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, 
+			DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents, ISchedulingResultStateHolder schedulingResultStateHolder,
+			IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, 
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingProgress backgroundWorker)
 		{
 			_backgroundWorker = backgroundWorker;

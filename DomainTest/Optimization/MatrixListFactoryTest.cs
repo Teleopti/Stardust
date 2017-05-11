@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -43,12 +44,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var scheduleDay = scheduleDictionary[agent].ScheduledDay(new DateOnly(2015, 10, 12));
 			var matrixList = Target.CreateMatrixListForSelection(scheduleDictionary, new List <IScheduleDay>{scheduleDay});
 
-			matrixList.Count.Should().Not.Be.GreaterThan(1);
+			matrixList.Count().Should().Not.Be.GreaterThan(1);
 
 			scheduleDay = scheduleDictionary[agent].ScheduledDay(new DateOnly(2015, 10, 25));
 			matrixList = Target.CreateMatrixListForSelection(scheduleDictionary, new List <IScheduleDay> { scheduleDay });
 
-			matrixList.Count.Should().Not.Be.GreaterThan(1);
+			matrixList.Count().Should().Not.Be.GreaterThan(1);
 		}
 
 		[Test]
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
 
-			matrixList.Count.Should().Be.GreaterThan(1);
+			matrixList.Count().Should().Be.GreaterThan(1);
 		}
 
 		[Test]
@@ -98,8 +99,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
 
-			matrixList[0].UnlockedDays.Length.Should().Be.EqualTo(1);
-			matrixList[0].UnlockedDays[0].Day.Should().Be.EqualTo(new DateOnly(2015, 10, 12));
+			matrixList.First().UnlockedDays.Length.Should().Be.EqualTo(1);
+			matrixList.First().UnlockedDays[0].Day.Should().Be.EqualTo(new DateOnly(2015, 10, 12));
 		}
 
 		[Test]
@@ -138,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var scheduleDay2 = scheduleDictionary[agent1].ScheduledDay(new DateOnly(2016, 2, 28));
 			var scheduleDay3 = scheduleDictionary[agent2].ScheduledDay(new DateOnly(2016, 1, 4));
 			var scheduleDay4 = scheduleDictionary[agent2].ScheduledDay(new DateOnly(2016, 2, 28));
-			var matrixList = Target.CreateMatrixListForSelection(scheduleDictionary, new List<IScheduleDay> { scheduleDay1, scheduleDay2, scheduleDay3, scheduleDay4});
+			var matrixList = Target.CreateMatrixListForSelection(scheduleDictionary, new List<IScheduleDay> { scheduleDay1, scheduleDay2, scheduleDay3, scheduleDay4}).ToList();
 
 			matrixList.Count.Should().Be.EqualTo(3);
 			matrixList[0].Person.Should().Be.EqualTo(agent1);

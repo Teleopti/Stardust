@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService,
-			IList<IScheduleMatrixPro> allMatrixes,
+			IEnumerable<IScheduleMatrixPro> allMatrixes,
 			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
-			IList<IScheduleMatrixPro> allMatrixes,
+			IEnumerable<IScheduleMatrixPro> allMatrixes,
 			SchedulingOptions schedulingOptions,
 			ITeamInfoFactory teamInfoFactory,
 			IResourceCalculateDelayer resourceCalculateDelayer,
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
-			IList<IScheduleMatrixPro> allMatrixes,
+			IEnumerable<IScheduleMatrixPro> allMatrixes,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ITeamBlockGenerator teamBlockGenerator)

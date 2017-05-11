@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IFilterPersonsForTotalDistribution
 	{
-		IEnumerable<IPerson> Filter(IList<IScheduleMatrixPro> allPersonMatrixList);
+		IEnumerable<IPerson> Filter(IEnumerable<IScheduleMatrixPro> allPersonMatrixList);
 	}
 
 	public class FilterPersonsForTotalDistribution : IFilterPersonsForTotalDistribution
 	{
 
-		public IEnumerable<IPerson> Filter(IList<IScheduleMatrixPro> allPersonMatrixList)
+		public IEnumerable<IPerson> Filter(IEnumerable<IScheduleMatrixPro> allPersonMatrixList)
 		{
 			var personListForTotalDistribution = new HashSet<IPerson>();
 			foreach (var scheduleMatrixPro in allPersonMatrixList)

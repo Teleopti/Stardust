@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 {
                     _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, person, scheduleDateOnly);
 
-                    IList<IScheduleMatrixPro> matrixList = _scheduleMatrixListCreator.CreateMatrixListForSelection(_stateHolder().Schedules, new List <IScheduleDay> { schedulePart });
+                    var matrixList = _scheduleMatrixListCreator.CreateMatrixListForSelection(_stateHolder().Schedules, new List <IScheduleDay> { schedulePart }).ToList();
                     if (matrixList.Count == 0)
                         return false;
                     IScheduleMatrixPro matrix = matrixList[0];

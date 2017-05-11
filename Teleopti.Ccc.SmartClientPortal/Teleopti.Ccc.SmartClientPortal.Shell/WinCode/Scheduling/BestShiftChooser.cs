@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 						using (PerformanceOutput.ForOperation("Finding the best shift"))
 						{
 							IScheduleMatrixPro matrix =
-								_matrixListFactory.CreateMatrixListForSelection(schedulePart.Owner, new List<IScheduleDay> {schedulePart})[0];
+								_matrixListFactory.CreateMatrixListForSelection(schedulePart.Owner, new List<IScheduleDay> {schedulePart}).First();
 
 							var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 							cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);

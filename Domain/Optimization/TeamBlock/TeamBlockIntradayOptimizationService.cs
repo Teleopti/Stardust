@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockIntradayOptimizationService
 	{
-		void Optimize(IList<IScheduleMatrixPro> allPersonMatrixList,
+		void Optimize(IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		public void Optimize(IList<IScheduleMatrixPro> allPersonMatrixList,
+		public void Optimize(IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,

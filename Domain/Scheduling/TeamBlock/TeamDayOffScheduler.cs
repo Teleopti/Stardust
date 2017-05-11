@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
+		void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
 		                      ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
 							  IGroupPersonBuilderWrapper groupPersonBuilderForOptimization);
 	}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_authorization = authorization;
 		}
 
-		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
+		public void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
 		                             ISchedulePartModifyAndRollbackService rollbackService,
 		                             SchedulingOptions schedulingOptions,
 									 IGroupPersonBuilderWrapper groupPersonBuilderForOptimization)

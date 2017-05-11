@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface IDayOffStep2
     {
-        void PerformStep2(SchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons, 
+        void PerformStep2(SchedulingOptions schedulingOptions, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons, 
 						ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IDictionary<DayOfWeek, 
 						int> weekDayPoints, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
         event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _teamBlockSeniorityValidator = teamBlockSeniorityValidator;
         }
 
-        public void PerformStep2(SchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons, 
+        public void PerformStep2(SchedulingOptions schedulingOptions, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons, 
 								ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, 
 								IDictionary<DayOfWeek, int> weekDayPoints, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
         {
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                                                daysToGiveAway, dayOffOptimizationPreferenceProvider);
         }
 
-        private IList<ITeamBlockInfo> stepAConstructTeamBlock(SchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList,
+        private IList<ITeamBlockInfo> stepAConstructTeamBlock(SchedulingOptions schedulingOptions, IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
                                                             DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons)
         {
             return _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions.BlockFinder(), schedulingOptions.GroupOnGroupPageForTeamBlockPer);

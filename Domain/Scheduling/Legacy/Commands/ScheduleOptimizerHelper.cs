@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
-								IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService,
+			IEnumerable<IScheduleMatrixPro> allMatrixes, IEnumerable<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService,
 								IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingProgress backgroundWorker,
 								IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{

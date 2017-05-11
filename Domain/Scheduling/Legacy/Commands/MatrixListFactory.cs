@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_periodExtractor = periodExtractor;
 		}
 
-		public IList<IScheduleMatrixPro> CreateMatrixListAllForLoadedPeriod(IScheduleDictionary schedules, IEnumerable<IPerson> personsInOrganization, DateOnlyPeriod selectedPeriod)
+		public IEnumerable<IScheduleMatrixPro> CreateMatrixListAllForLoadedPeriod(IScheduleDictionary schedules, IEnumerable<IPerson> personsInOrganization, DateOnlyPeriod selectedPeriod)
 		{
 			var period = schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TimeZoneInfo.Utc).Inflate(10);
 			var matrixes = createMatrixes(schedules, personsInOrganization, period);
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return matrixes;
 		}
 
-		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IScheduleDictionary schedules, IEnumerable<IScheduleDay> scheduleDays)
+		public IEnumerable<IScheduleMatrixPro> CreateMatrixListForSelection(IScheduleDictionary schedules, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var selectedPeriod = _periodExtractor.ExtractPeriod(scheduleDays);
 			if (!selectedPeriod.HasValue)
