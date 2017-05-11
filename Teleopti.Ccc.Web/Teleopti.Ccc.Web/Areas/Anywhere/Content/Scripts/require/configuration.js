@@ -58,7 +58,7 @@ var requireconfiguration = {
 		'timepicker': ['bootstrap', 'knockoutBindings'],
 		'signalr': ['jquery'],
 		'momentLanguages': ['moment'],
-		'momentDatepicker': ['momentLanguages'],
+		'momentDatepicker': ['momentLanguages', 'jquery'],
 		'momentDatepickerKo': ['momentDatepicker'],
 		'swipeListener': ['jquery'],
 		'justgage': {
