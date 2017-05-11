@@ -223,6 +223,36 @@ $(document).ready(function() {
 		equal(viewModel.absenceReportPermission(), false);
 	});
 
+	test("should not show absence reporting command item if selected date is neigther today nor tomorrow", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			},
+			RequestPermission:{
+				AbsenceReportPermission: true
+			}
+		};
+		viewModel.readData(rawData);
+
+		equal(viewModel.absenceReportPermission(), true);
+		equal(viewModel.showAbsenceReportingCommandItem(), true);
+
+		rawData.Date = moment().add('day', 3).format('YYYY-MM-DD');
+		viewModel.readData(rawData);
+
+		equal(viewModel.absenceReportPermission(), true);
+		equal(viewModel.showAbsenceReportingCommandItem(), false);
+	});
+
 	test("should not show text request command item without permission", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 

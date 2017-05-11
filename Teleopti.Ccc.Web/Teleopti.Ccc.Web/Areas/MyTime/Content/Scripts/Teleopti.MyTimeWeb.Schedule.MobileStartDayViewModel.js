@@ -39,6 +39,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	self.shiftExchangePermission = ko.observable();
 	self.personAccountPermission = ko.observable();
 	self.requestPermission = ko.observable();
+	self.showAbsenceReportingCommandItem = ko.observable();
 	self.menuIsVisible = ko.observable(false);
 	self.menuIconIsVisible = ko.observable(true);
 
@@ -99,7 +100,13 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 			self.shiftExchangePermission(data.RequestPermission.ShiftExchangePermission);
 			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
 		}
+
 		self.selectedDate(moment(data.Date));
+
+		var dateDiff = self.selectedDate().startOf('day').diff(moment().startOf('day'), 'days');
+		var isTodayOrTomorrow =  dateDiff === 0 || dateDiff === 1;
+
+		self.showAbsenceReportingCommandItem(self.absenceReportPermission() && isTodayOrTomorrow);
 	};
 
 	self.setSelectedDateSubscription = function() {
