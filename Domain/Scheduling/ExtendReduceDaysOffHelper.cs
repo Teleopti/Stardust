@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		public void RunExtendReduceDayOffOptimization(IOptimizationPreferences optimizerPreferences,
-			ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays,
+			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents,
 			ISchedulerStateHolder schedulerStateHolder,
 			DateOnlyPeriod selectedPeriod,
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForMoveMax,
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (backgroundWorker.CancellationPending)
 				return;
 
-			IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedDays);
+			IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedAgents, selectedPeriod);
 			lockDaysForExtendReduceOptimization(matrixList, selectedPeriod, optimizerPreferences.Shifts.SelectedActivities);
 
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForScheduleTag = createMatrixContainerList(matrixList);

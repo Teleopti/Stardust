@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					schedulerStateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection(), _groupScheduleGroupPageDataProvider, optimizationPreferences.Extra.TeamGroupPage);
 
 				_groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
-				_scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedScheduleDays, schedulingOptions,
+				_scheduleOptimizerHelper.ReOptimize(backgroundWorker, _personExtractor.ExtractPersons(selectedScheduleDays), new PeriodExtractorFromScheduleParts().ExtractPeriod(selectedScheduleDays).Value , schedulingOptions,
 					dayOffOptimizationPreferenceProvider, optimizationPreferences, resourceCalculateDelayer, rollbackService);
 			}
 

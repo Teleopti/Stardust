@@ -22,9 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private ISchedulingProgress _backgroundWorker;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly MoveTimeOptimizerCreator _moveTimeOptimizerCreator;
-		private readonly PeriodExtractorFromScheduleParts _periodExtractorFromScheduleParts;
 		private readonly IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
-		private readonly IPersonListExtractorFromScheduleParts _personListExtractorFromScheduleParts;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairnessService;
 		private readonly OptimizeIntradayIslandsDesktop _optimizeIntradayDesktop;
 		private readonly ExtendReduceTimeHelper _extendReduceTimeHelper;
@@ -48,9 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public ScheduleOptimizerHelper(IMatrixListFactory matrixListFactory,
 				MoveTimeOptimizerCreator moveTimeOptimizerCreator,
-				PeriodExtractorFromScheduleParts periodExtractorFromScheduleParts,
 				IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak,
-				IPersonListExtractorFromScheduleParts personListExtractorFromScheduleParts,
 				IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairnessService,
 				OptimizeIntradayIslandsDesktop optimizeIntradayIslandsDesktop,
 				Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
@@ -73,9 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			_matrixListFactory = matrixListFactory;
 			_moveTimeOptimizerCreator = moveTimeOptimizerCreator;
-			_periodExtractorFromScheduleParts = periodExtractorFromScheduleParts;
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
-			_personListExtractorFromScheduleParts = personListExtractorFromScheduleParts;
 			_equalNumberOfCategoryFairnessService = equalNumberOfCategoryFairnessService;
 			_optimizeIntradayDesktop = optimizeIntradayIslandsDesktop;
 			_allResults = workShiftFinderResultHolder;
@@ -127,10 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			service.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
-		public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder
-		{
-			get { return _allResults(); }
-		}
+		public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder => _allResults();
 
 		public void ResetWorkShiftFinderResults()
 		{
@@ -151,7 +142,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_daysOffBackToLegalState.Execute(matrixOriginalStateContainers, _backgroundWorker, dayOffTemplate,schedulingOptions, dayOffOptimizationPreferenceProvider, optimizationPreferences, _allResults, resourceOptimizerPersonOptimized);
 		}
 
-		public void ReOptimize(ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays,
+		public void ReOptimize(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			SchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
 			IOptimizationPreferences optimizationPreferences, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService)
 		{
@@ -159,19 +150,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_progressEvent = null;
 			var onlyShiftsWhenUnderstaffed = optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
 
-			var selectedPeriod = _periodExtractorFromScheduleParts.ExtractPeriod(selectedDays).Value;
-
 			optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
 			var tagSetter = new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag);
-			var selectedPersons = _personListExtractorFromScheduleParts.ExtractPersons(selectedDays);
 
-			optimizationPreferences.Rescheduling.ConsiderShortBreaks = _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(selectedPersons, selectedPeriod);
+			optimizationPreferences.Rescheduling.ConsiderShortBreaks = _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(selectedAgents, selectedPeriod);
 		
 			var continuedStep = false;
 
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
-				runDayOffOptimization(optimizationPreferences, selectedPersons, selectedPeriod, dayOffOptimizationPreferenceProvider);
+				runDayOffOptimization(optimizationPreferences, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
 
 				continuedStep = true;
 			}
@@ -180,7 +168,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills, false))
 #pragma warning restore 618
 			{
-				var matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedPersons, selectedPeriod);
+				var matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedAgents, selectedPeriod);
 
 				if (optimizationPreferences.General.OptimizationStepTimeBetweenDays)
 				{
@@ -189,7 +177,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
 						IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization =
-							_matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedPersons, selectedPeriod);
+							_matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedAgents, selectedPeriod);
 						IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization =
 							createMatrixContainerList(matrixListForWorkShiftOptimization);
 
@@ -204,8 +192,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					}
 				}
 
-				continuedStep = runFlexibleTime(optimizationPreferences, continuedStep, selectedPeriod, selectedDays,
-					dayOffOptimizationPreferenceProvider, _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedPersons, selectedPeriod));
+				continuedStep = runFlexibleTime(optimizationPreferences, continuedStep, selectedPeriod, selectedAgents,
+					dayOffOptimizationPreferenceProvider, _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedAgents, selectedPeriod));
 			}
 
 			if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
@@ -216,7 +204,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					runIntradayOptimization(
 						optimizationPreferences,
-						selectedPersons,
+						selectedAgents,
 						backgroundWorker,
 						selectedPeriod);
 					continuedStep = true;
@@ -233,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
-						runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod, optimizationPreferences,
+						runFairness(tagSetter, selectedAgents.ToArray(), schedulingOptions, selectedPeriod, optimizationPreferences,
 							dayOffOptimizationPreferenceProvider);
 						continuedStep = true;
 					}
@@ -244,7 +232,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					recalculateIfContinuedStep(continuedStep, selectedPeriod);
 					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
-						runIntraInterval(schedulingOptions, optimizationPreferences, selectedPeriod, selectedPersons, tagSetter);
+						runIntraInterval(schedulingOptions, optimizationPreferences, selectedPeriod, selectedAgents, tagSetter);
 					}
 				}
 
@@ -253,10 +241,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_stateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
 				runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes,
-					selectedPersons, rollbackService, resourceCalculateDelayer, backgroundWorker,
+					selectedAgents.ToArray(), rollbackService, resourceCalculateDelayer, backgroundWorker,
 					dayOffOptimizationPreferenceProvider);
 
-				_maxSeatOptimization.Optimize(backgroundWorker, selectedPeriod, selectedPersons, _stateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.AllSkillDays(), optimizationPreferences, new DesktopMaxSeatCallback(_schedulerStateHolder()));
+				_maxSeatOptimization.Optimize(backgroundWorker, selectedPeriod, selectedAgents, _stateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.AllSkillDays(), optimizationPreferences, new DesktopMaxSeatCallback(_schedulerStateHolder()));
 			}
 		}
 
@@ -273,7 +261,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		private bool runFlexibleTime(IOptimizationPreferences optimizerPreferences, bool continuedStep,
-			DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedDays,
+			DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IEnumerable<IScheduleMatrixPro> matrixListForIntradayOptimization)
 		{
@@ -292,7 +280,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (_progressEvent == null || !_progressEvent.Cancel)
 				{
 					_extendReduceTimeHelper.RunExtendReduceTimeOptimization(optimizerPreferences, _backgroundWorker,
-						selectedDays, _stateHolder(),
+						selectedAgents, _stateHolder(),
 						selectedPeriod,
 						matrixOriginalStateContainerListForMoveMax, dayOffOptimizationPreferenceProvider);
 
@@ -307,7 +295,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (_progressEvent == null || !_progressEvent.Cancel)
 				{
 					_extendReduceDaysOffHelper.RunExtendReduceDayOffOptimization(optimizerPreferences, _backgroundWorker,
-						selectedDays, _schedulerStateHolder(),
+						selectedAgents, _schedulerStateHolder(),
 						selectedPeriod,
 						matrixOriginalStateContainerListForMoveMax,
 						dayOffOptimizationPreferenceProvider);
