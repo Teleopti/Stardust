@@ -10,8 +10,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	var self = this;
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
-	self.isCommandEnable = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_Command_44209");
-
 	self.displayDate = ko.observable();
 	self.selectedDate = ko.observable(moment().startOf("day"));
 	self.selectedDateSubscription = null;
@@ -21,7 +19,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	self.summaryTime = ko.observable();
 	self.dayOfWeek = ko.observable();
 	self.isDayOff = ko.observable(false);
-	self.hasShift = ko.observable(false);
 	self.summaryVisible = ko.observable(false);
 	self.hasOvertime = ko.observable(false);
 	self.timeLines = ko.observableArray();
@@ -31,6 +28,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	self.probabilities = ko.observableArray([]);
 	self.requestCount = ko.observable(0);
 	self.requestViewModel = ko.observable();
+
 	self.textRequestPermission = ko.observable();
 	self.absenceRequestPermission = ko.observable();
 	self.absenceReportPermission = ko.observable();
@@ -40,8 +38,10 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	self.personAccountPermission = ko.observable();
 	self.requestPermission = ko.observable();
 	self.showAbsenceReportingCommandItem = ko.observable();
+
 	self.menuIsVisible = ko.observable(false);
 	self.menuIconIsVisible = ko.observable(true);
+	self.isCommandEnable = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_Command_44209");
 
 	self.selectedProbabilityType = constants.probabilityType.none;
 
@@ -65,7 +65,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		self.isDayOff(data.Schedule.IsDayOff);
 		self.unreadMessageCount(data.UnReadMessageCount);
 
-		self.hasShift(data.Schedule.HasMainShift || data.Schedule.HasOvertime);
 		self.hasOvertime(data.Schedule.HasOvertime);
 		self.requestCount(data.Schedule.TextRequestCount);
 
@@ -190,7 +189,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		};
 
 		requestViewModel.AddTextRequest(false);
-
 		setupRequestViewModel(requestViewModel, resetRequestViewModel);
 	};
 
@@ -207,9 +205,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		};
 
 		requestViewModel.readPersonalAccountPermission(self.personAccountPermission());
-
 		requestViewModel.AddAbsenceRequest(false);
-
 		setupRequestViewModel(requestViewModel, resetRequestViewModel);
 	}
 
