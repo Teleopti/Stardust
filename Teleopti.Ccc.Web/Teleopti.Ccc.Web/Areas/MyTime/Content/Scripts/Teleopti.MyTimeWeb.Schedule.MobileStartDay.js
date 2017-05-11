@@ -55,14 +55,14 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			$(".moment-datepicker").attr("data-bind",
 				"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'right', autoHide: true, weekStart: " + data.WeekStart + "}");
 
-			initViewModel();
+			initViewModel(data.WeekStart);
 
 			fetchData();
 		});
 	}
 
-	function initViewModel() {
-		vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+	function initViewModel(weekStart) {
+		vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(weekStart);
 		applyBindings();
 	}
 
