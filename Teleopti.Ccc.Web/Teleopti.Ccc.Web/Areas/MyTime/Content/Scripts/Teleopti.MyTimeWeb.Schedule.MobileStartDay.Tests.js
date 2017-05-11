@@ -196,9 +196,10 @@
 		requestViewModel.Subject("subject");
 		requestViewModel.Message("msg");
 		requestViewModel.IsFullDay(false);
+
 		requestViewModel.AddRequest();
 
-		equal(vm.requestViewModel().model.Template(), "add-new-request-detail-template");
+		equal(requestViewModel.Template(), "add-new-request-detail-template");
 
 		equal(vm.requestCount(), 1);
 
