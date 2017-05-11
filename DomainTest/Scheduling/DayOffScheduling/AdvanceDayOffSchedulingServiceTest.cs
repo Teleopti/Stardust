@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 				Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
 				Expect.Call(() => _absencePreferenceScheduler.AddPreferredAbsence(_matrixList, _schedulingOptions))
-					.Callback(new Func<IList<IScheduleMatrixPro>, SchedulingOptions, bool>((a, b) =>
+					.Callback(new Func<IEnumerable<IScheduleMatrixPro>, SchedulingOptions, bool>((a, b) =>
 					{
 						eventRaiser.Raise(null, args);
 						return true;
