@@ -292,8 +292,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 		};
 
-		self.setSelectedDateSubscription();
-
 		self.previousWeek = function () {
 			self.selectedDate(self.previousWeekDate());
 		};
