@@ -242,6 +242,7 @@ StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388 = true # don't 
 Staffing_ReadModel_Update14Days_43840 = true # don't enable without StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388
 Staffing_ReadModel_BetterAccuracy_43447 = RC
 Staffing_ReadModel_BetterAccuracy_Step2_44271 = RC
+Staffing_ReadModel_BetterAccuracy_Step3_44331 = DEV
 
 QRCodeForMobileApps_42695 = RC
 ConfigQRCodeURLForMobileApps_43224 = RC

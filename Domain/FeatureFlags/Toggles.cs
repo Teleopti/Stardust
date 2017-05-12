@@ -237,7 +237,8 @@
 		WFM_ReportHierarchy_43002,
 		MyTimeWeb_MobileResponsive_43826,
 		Staffing_ReadModel_BetterAccuracy_43447,
-		Staffing_ReadModel_BetterAccuracy_Step2_44271
+		Staffing_ReadModel_BetterAccuracy_Step2_44271,
+		Staffing_ReadModel_BetterAccuracy_Step3_44331
 		// ReSharper restore InconsistentNaming
 	}
 }

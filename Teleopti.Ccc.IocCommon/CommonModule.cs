@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new ShiftTradeModule(_configuration));
 			builder.RegisterModule<BadgeCalculationModule>();
 			builder.RegisterModule<CommandDispatcherModule>();
-			builder.RegisterModule<CommandHandlersModule>();
+			builder.RegisterModule(new CommandHandlersModule(_configuration));
 			builder.RegisterModule<PeopleAreaModule>();
 		}
 
