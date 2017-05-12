@@ -1567,7 +1567,7 @@ End personal drop down menu
 	}
 }
 
-@media (max-width: 370px) {
+@media (max-width: 300px) {
 	#BadgePanel {
 		display: none;
 	}
