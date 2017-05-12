@@ -11,6 +11,25 @@ $(document).ready(function() {
 		equal(viewModel.selectedDate().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 	});
 
+	test("should set selected date from data.Date", function () {
+		var rawData = {
+			Date: moment().add('days', 1).format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			}
+		};
+
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		viewModel.setSelectedDateSubscription(rawData.Date);
+		equal(viewModel.selectedDate().format('YYYY-MM-DD'), rawData.Date);
+	});
+
 	test("should set display date", function () {
 		 Teleopti.MyTimeWeb.Common.SetupCalendar({
 			DateFormat: "DD/MM/YYYY",

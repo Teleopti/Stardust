@@ -103,7 +103,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
 		}
 
-		self.selectedDate(moment(data.Date));
+		self.setSelectedDateSubscription(data.Date);
 
 		var dateDiff = self.selectedDate().startOf('day').diff(moment().startOf('day'), 'days');
 		var isTodayOrTomorrow = dateDiff === 0 || dateDiff === 1;
@@ -111,7 +111,9 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.showAbsenceReportingCommandItem(self.absenceReportPermission() && isTodayOrTomorrow);
 	};
 
-	self.setSelectedDateSubscription = function () {
+	self.setSelectedDateSubscription = function (date) {
+		self.selectedDate(moment(date));
+
 		if (self.selectedDateSubscription)
 			self.selectedDateSubscription.dispose();
 
@@ -129,8 +131,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			? "/Probability/" + self.selectedProbabilityType
 			: "";
 	}
-
-	self.setSelectedDateSubscription();
 
 	self.today = function () {
 		self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime()).startOf("day"));
