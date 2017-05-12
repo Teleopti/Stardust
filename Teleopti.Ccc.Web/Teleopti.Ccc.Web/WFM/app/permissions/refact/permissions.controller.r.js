@@ -6,7 +6,7 @@
 		.controller('PermissionsRefactController', PermissionsCtrl);
 
 	PermissionsCtrl.$inject = ['$filter', '$location', 'PermissionsServiceRefact', 'permissionsDataService', 'localeLanguageSortingService'];
-	
+
 	function PermissionsCtrl($filter, $location, PermissionsServiceRefact, permissionsDataService, localeLanguageSortingService) {
 		var vm = this;
 		vm.showCreateModal;
@@ -14,7 +14,7 @@
 		vm.isAllFunctionSelected = false;
 		var url = $location.search().open;
 		vm.roleOptionsOpen = url ? true : false;
-		
+
 		fetchData();
 		vm.createRole = createRole;
 		vm.editRole = editRole;
@@ -66,10 +66,10 @@
           Id: data.Id
         }).$promise.then(function(data) {
           	vm.selectedRole = data;
+						vm.showCreateModal = false;
+						vm.roleName = '';
         });
 			});
-			vm.showCreateModal = false;
-			vm.roleName = '';
 			toggleSelection(vm.applicationFunctions, false);
 
 			if (vm.organizationSelection !== null && vm.organizationSelection.BusinessUnit !== null) {

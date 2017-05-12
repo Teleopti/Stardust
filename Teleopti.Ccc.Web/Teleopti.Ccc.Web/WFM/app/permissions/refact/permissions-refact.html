@@ -11,6 +11,7 @@
 </div>
 
 <modal-dialog show='vm.showCreateModal' ng-cloak>
+
 	<form ng-submit="vm.createRole(vm.roleName)">
 		<h1 class="modal-title">{{'AddRole'|translate}}</h1>
 		<div class="modal-inner-content">
@@ -18,20 +19,23 @@
 				<div class="con-flex">
 					<label for="createRole" class="input-icon">
 						<i class="mdi mdi-account-key">
-							<input type="text" id="createRole" autocomplete="off" ng-model="vm.roleName" placeholder="{{'Role'|translate}}" autofocus>
+							<input type="text" id="createRole" autocomplete="off" minlength="1" maxlength="50" required ng-model="vm.roleName" placeholder="{{'Role'|translate}}" autofocus>
 							<md-tooltip>{{'Name'|translate}}</md-tooltip>
 						</i>
 					</label>
 				</div>
 			</div>
 		</div>
+
 		<div class="modal-actions">
 			<aside>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.showCreateModal = false" type="submit" name="button">{{'Add'|translate}}</button>
+				<input type="submit" class="wfm-btn wfm-btn-invis-primary" id="submit" value="{{'Add'|translate}}" />
 			</aside>
 		</div>
+
 	</form>
 </modal-dialog>
+
 <div class="con-row">
 	<div class="con-flex">
 		<div class="panel material-depth-1">
