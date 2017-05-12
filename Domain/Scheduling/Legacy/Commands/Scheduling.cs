@@ -79,10 +79,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
-			var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
-			if (!matrixesOfSelectedScheduleDays.Any())
-				return;
-
 			var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
 
 			_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
@@ -93,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			_teamBlockSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 			var workShiftFinderResultHolder = _teamBlockSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
-				matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(),
+				selectedAgents.ToArray(),
 				rollbackService, resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState, schedulingOptions,
 				teamInfoFactory);
