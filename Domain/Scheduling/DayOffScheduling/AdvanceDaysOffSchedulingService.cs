@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	        _missingDaysOffScheduler = missingDaysOffScheduler;
         }
 
-		public void Execute(IEnumerable<IScheduleMatrixPro> allMatrixList, IEnumerable<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
+		public void Execute(IEnumerable<IScheduleMatrixPro> matrixes, IEnumerable<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
 			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization, DateOnlyPeriod selectedPeriod)
 		{
 			var cancelMe = false;
@@ -43,19 +43,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 				if (eventArgs.Cancel) cancelMe = true; 
 			};
             _absencePreferenceScheduler.DayScheduled += dayScheduled;
-            _absencePreferenceScheduler.AddPreferredAbsence(allMatrixList, schedulingOptions);
+            _absencePreferenceScheduler.AddPreferredAbsence(matrixes, schedulingOptions);
             _absencePreferenceScheduler.DayScheduled -= dayScheduled;
             
 			if (cancelMe)return;
 
 			_teamDayOffScheduler.DayScheduled += dayScheduled;
-			_teamDayOffScheduler.DayOffScheduling(allMatrixList, selectedPersons, rollbackService, schedulingOptions, groupPersonBuilderForOptimization);
+			_teamDayOffScheduler.DayOffScheduling(matrixes, selectedPersons, rollbackService, schedulingOptions, groupPersonBuilderForOptimization);
 			_teamDayOffScheduler.DayScheduled -= dayScheduled;
             
 			if (cancelMe)return;
 
 			var selectedMatrixes = new List<IScheduleMatrixPro>();
-			foreach (var scheduleMatrixPro in allMatrixList)
+			foreach (var scheduleMatrixPro in matrixes)
 			{
 				if(selectedPersons.Contains(scheduleMatrixPro.Person) && scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue)
 					selectedMatrixes.Add(scheduleMatrixPro);

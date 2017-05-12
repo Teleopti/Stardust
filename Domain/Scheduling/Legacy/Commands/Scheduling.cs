@@ -77,23 +77,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
-			var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
+			//can we use fewer also with team? what happens if AgentA and AgentB have different scheduleperiods? (does it even matter?)
+			var matrixes = schedulingOptions.UseTeam ? 
+				_matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod) : 
+				_matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
+
 
 			_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-			_advanceDaysOffSchedulingService.Execute(allVisibleMatrixes, selectedAgents,
+			_advanceDaysOffSchedulingService.Execute(matrixes, selectedAgents,
 				schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions,
 				_groupPersonBuilderWrapper, selectedPeriod);
 			_advanceDaysOffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
 			_teamBlockSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-			var workShiftFinderResultHolder = _teamBlockSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
+			var workShiftFinderResultHolder = _teamBlockSchedulingService.ScheduleSelected(matrixes, selectedPeriod,
 				selectedAgents, rollbackService, resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState, schedulingOptions,
 				teamInfoFactory);
 			_teamBlockSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents, rollbackService, resourceCalculateDelayer,
-				selectedPeriod, allVisibleMatrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
+				selectedPeriod, matrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
 
 			_workShiftFinderResultHolder()
 				.AddResults(workShiftFinderResultHolder.GetResults(), DateTime.Today);

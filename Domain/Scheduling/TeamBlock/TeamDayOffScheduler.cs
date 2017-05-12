@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixListAll, IEnumerable<IPerson> selectedPersons,
+		void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixes, IEnumerable<IPerson> selectedPersons,
 		                      ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
 							  IGroupPersonBuilderWrapper groupPersonBuilderForOptimization);
 	}
@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_authorization = authorization;
 		}
 
-		public void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixListAll, IEnumerable<IPerson> selectedPersons,
+		public void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixes, IEnumerable<IPerson> selectedPersons,
 		                             ISchedulePartModifyAndRollbackService rollbackService,
 		                             SchedulingOptions schedulingOptions,
 									 IGroupPersonBuilderWrapper groupPersonBuilderForOptimization)
 		{
-			var matrixDataList = _matrixDataListCreator.Create(matrixListAll, schedulingOptions);
+			var matrixDataList = _matrixDataListCreator.Create(matrixes, schedulingOptions);
 			var matrixDataForSelectedPersons = new List<IMatrixData>();
 			foreach (var matrixData in matrixDataList)
 			{
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				{
 					var scheduleDate = scheduleDayPro.Day;
 					IEffectiveRestriction restriction;
-					var selectedMatrixesForTeam = getMatrixesAndRestriction(matrixListAll, selectedPersons, schedulingOptions,
+					var selectedMatrixesForTeam = getMatrixesAndRestriction(matrixes, selectedPersons, schedulingOptions,
 					                                                        groupPersonBuilderForOptimization, person, scheduleDate,
 					                                                        out restriction);
 					var canceled = addDaysOffForTeam(selectedMatrixesForTeam, schedulingOptions, rollbackService, scheduleDate, restriction);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				{
 					var scheduleDate = scheduleDayPro.Day;
 					IEffectiveRestriction restriction;
-					var selectedMatrixesForTeam = getMatrixesAndRestriction(matrixListAll, selectedPersons, schedulingOptions,
+					var selectedMatrixesForTeam = getMatrixesAndRestriction(matrixes, selectedPersons, schedulingOptions,
 					                                                        groupPersonBuilderForOptimization, person, scheduleDate,
 					                                                        out restriction);
 					var canceled = addContractDaysOffForTeam(selectedMatrixesForTeam, schedulingOptions, rollbackService);
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 		}
 
-		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixListAll, IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions,
+		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixes, IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions,
 							  IGroupPersonBuilderWrapper groupPersonBuilderForOptimization,
 		                      IPerson person, DateOnly scheduleDate,
 		                      out IEffectiveRestriction restriction)
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var group = groupPersonBuilderForOptimization.ForOptimization().BuildGroup(_schedulingResultStateHolder().PersonsInOrganization, person, scheduleDate);
 
 			List<IScheduleMatrixPro> matrixesOfOneTeam;
-			restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, group, scheduleDate, out matrixesOfOneTeam, person);
+			restriction = getMatrixOfOneTeam(matrixes, schedulingOptions, group, scheduleDate, out matrixesOfOneTeam, person);
 
 			foreach (var scheduleMatrixPro in matrixesOfOneTeam)
 			{
@@ -128,14 +128,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return selectedMatrixesForOnePerson;
 		}
 
-		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixListAll, SchedulingOptions schedulingOptions, Group group, DateOnly scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, IPerson person)
+		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixes, SchedulingOptions schedulingOptions, Group group, DateOnly scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, IPerson person)
 	    {
 	        var scheduleDictionary = _schedulingResultStateHolder().Schedules;
 			var groupMembers = group.GroupMembers.ToList();
 			var restriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson( person,
 	                                                                               scheduleDate, schedulingOptions,
 	                                                                               scheduleDictionary);
-			var matrixesOfOne = matrixListAll.Where(x => groupMembers.Contains(x.Person)).ToList();
+			var matrixesOfOne = matrixes.Where(x => groupMembers.Contains(x.Person)).ToList();
 			matrixesOfOneTeam = new List<IScheduleMatrixPro>();
 			
 			foreach (var scheduleMatrixPro in matrixesOfOne)
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        return restriction;
 	    }
 
-		private bool addDaysOffForTeam(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions,
+		private bool addDaysOffForTeam(IEnumerable<IScheduleMatrixPro> matrixes, SchedulingOptions schedulingOptions,
 		                               ISchedulePartModifyAndRollbackService rollbackService,
 		                               DateOnly scheduleDate,
 		                               IEffectiveRestriction restriction)
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return false;
 
 			var cancel = false;
-			foreach (var scheduleMatrixPro in matrixList)
+			foreach (var scheduleMatrixPro in matrixes)
 			{
 				var part = scheduleMatrixPro.GetScheduleDayByKey(scheduleDate).DaySchedulePart();
 				if (part.IsScheduled())
