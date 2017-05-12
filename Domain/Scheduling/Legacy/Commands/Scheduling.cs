@@ -139,6 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
+		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly AdvanceDaysOffSchedulingService _advanceDaysOffSchedulingService;
 		private readonly MatrixListFactory _matrixListFactory;
 		private ISchedulingProgress _backgroundWorker;
@@ -149,25 +150,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamBlockSchedulingService _teamBlockSchedulingService;
-		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
 		public TeamBlockSchedulingOLD(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
+			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 			AdvanceDaysOffSchedulingService advanceDaysOffSchedulingService,
 			MatrixListFactory matrixListFactory,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IResourceCalculation resourceCalculation,
 			IUserTimeZone userTimeZone,
-			TeamBlockSchedulingService teamBlockSchedulingService,
-			TeamInfoFactoryFactory teamInfoFactoryFactory)
+			TeamBlockSchedulingService teamBlockSchedulingService)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
+			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_advanceDaysOffSchedulingService = advanceDaysOffSchedulingService;
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
@@ -175,7 +176,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceCalculation = resourceCalculation;
 			_userTimeZone = userTimeZone;
 			_teamBlockSchedulingService = teamBlockSchedulingService;
-			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
 		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
@@ -197,7 +197,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(),
 					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
-			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+			_groupPersonBuilderWrapper.Reset();
+			var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
+			if (groupPageType == GroupPageType.SingleAgent)
+				_groupPersonBuilderWrapper.SetSingleAgentTeam();
+			else
+				_groupPersonBuilderForOptimizationFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 			var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
 			if (!matrixesOfSelectedScheduleDays.Any())
@@ -216,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(),
 				rollbackService, resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState, schedulingOptions,
-				teamInfoFactory);
+				new TeamInfoFactory(_groupPersonBuilderWrapper));
 			_teamBlockSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents.ToArray(), rollbackService, resourceCalculateDelayer,
@@ -242,6 +247,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 	}
-#endregion
+
+	#endregion
 
 }
