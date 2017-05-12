@@ -42,15 +42,19 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.requestPermission = ko.observable();
 	self.showAbsenceReportingCommandItem = ko.observable();
 
+	self.overtimeAvailabililty = null;
+
 	self.menuIsVisible = ko.observable(false);
 	self.menuIconIsVisible = ko.observable(true);
 	self.isCommandEnable = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_Command_44209");
 
 	self.selectedProbabilityType = constants.probabilityType.none;
 
+	self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
+
 	var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
-
+	
 	self.navigateToMessages = function () {
 		Teleopti.MyTimeWeb.Portal.NavigateTo("MessageTab");
 	};
@@ -60,6 +64,9 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	};
 
 	self.readData = function (data) {
+
+		self.overtimeAvailabililty = data.Schedule.OvertimeAvailabililty; 
+
 		self.displayDate(moment(data.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
 		self.summaryColor(data.Schedule.Summary.Color);
 		self.summaryName(data.Schedule.Summary.Title);
@@ -132,6 +139,12 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			: "";
 	}
 
+	function fillOverTimeAvailabilityFormData() { 
+		var requestViewModel = self.requestViewModel().model; 
+		requestViewModel.LoadRequestData(self.overtimeAvailabililty); 
+	}
+
+
 	self.today = function () {
 		self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime()).startOf("day"));
 		self.selectedDate(self.currentUserDate());
@@ -167,12 +180,21 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			model: requestViewModel,
 			CancelAddingNewRequest: cancelAddingNewRequest
 		});
+		if (requestViewModel.DateFormat) {
+			requestViewModel.DateFormat(self.datePickerFormat());
+		}
 		self.menuIsVisible(false);
 		self.menuIconIsVisible(false);
 	}
 
-	self.showOvertimeAvailabilityForm = function () {
-		setupRequestViewModel(null, null);
+	self.showOvertimeAvailabilityForm = function () { 
+		var requestViewModel = new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(parent.Ajax(), function (data) {
+			parent.ReloadSchedule(data);
+			resetRequestViewModel();
+		});
+		setupRequestViewModel(requestViewModel, resetRequestViewModel);
+
+		fillOverTimeAvailabilityFormData();
 	};
 
 	self.showAbsenceReportingForm = function () {

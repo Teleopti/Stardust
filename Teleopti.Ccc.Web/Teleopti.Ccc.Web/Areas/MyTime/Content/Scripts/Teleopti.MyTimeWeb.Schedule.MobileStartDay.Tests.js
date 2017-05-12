@@ -7,7 +7,8 @@
 
 	var templateConfig= {
 		default: "add-new-request-detail-template",
-		absenceReporting: "add-absence-report-detail-template"
+		absenceReporting: "add-absence-report-detail-template",
+		overtimeAvailability:"add-overtime-availability-template"
 	}
 
 	module("Teleopti.MyTimeWeb.Schedule.MobileStartDay",
@@ -274,6 +275,65 @@
 		requestViewModel.SaveAbsenceReport();
 
 		equal(requestViewModel.Template, templateConfig.absenceReporting);
+
+		equal(fetchDayDataRequestCount, 2);
+
+		equal(vm.requestViewModel(), undefined);
+	});
+
+	test("should show overtime availability form with default value when no overtime availability", function () {
+		setupAddRequestTemplate(templateConfig.overtimeAvailability);
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+
+		vm.showOvertimeAvailabilityForm(vm);
+
+		equal(vm.requestViewModel().model.StartTime(), startDayData.Schedule.OvertimeAvailabililty.DefaultStartTime);
+
+		equal(vm.requestViewModel().model.EndTime(), startDayData.Schedule.OvertimeAvailabililty.DefaultEndTime);
+
+		equal(vm.requestViewModel().model.EndTimeNextDay(), startDayData.Schedule.OvertimeAvailabililty.DefaultEndTimeNextDay);
+
+		equal(vm.requestViewModel().model.Template, templateConfig.overtimeAvailability);
+	});
+
+	test("should show overtime availability form with specific value when  overtime availability is available", function () {
+
+		setupAddRequestTemplate(templateConfig.overtimeAvailability);
+
+		startDayData.Schedule.OvertimeAvailabililty.HasOvertimeAvailability = true;
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+
+		vm.showOvertimeAvailabilityForm(vm);
+
+		equal(vm.requestViewModel().model.StartTime(), startDayData.Schedule.OvertimeAvailabililty.StartTime);
+
+		equal(vm.requestViewModel().model.EndTime(), startDayData.Schedule.OvertimeAvailabililty.EndTime);
+
+		equal(vm.requestViewModel().model.EndTimeNextDay(), startDayData.Schedule.OvertimeAvailabililty.EndTimeNextDay);
+
+		equal(vm.requestViewModel().model.Template, templateConfig.overtimeAvailability);
+	});
+
+	test("should add overtime availability", function () {
+		setupAddRequestTemplate(templateConfig.overtimeAvailability);
+		startDayData.Schedule.OvertimeAvailabililty.HasOvertimeAvailability = true;
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.showOvertimeAvailabilityForm();
+
+		var requestViewModel = vm.requestViewModel().model; 
+		requestViewModel.DateFrom(moment("11/05/2017"));
+		requestViewModel.StartTime("08:00");
+		requestViewModel.EndTime("15:00");
+		requestViewModel.EndTimeNextDay(false);
+		requestViewModel.SetOvertimeAvailability(vm);
+
+		equal(requestViewModel.Template, templateConfig.overtimeAvailability);
 
 		equal(fetchDayDataRequestCount, 2);
 
@@ -601,6 +661,9 @@
 				if (options.url === "Schedule/ReportAbsence") {
 					options.success({});
 				}
+				if (options.url === "Schedule/OvertimeAvailability") {
+					options.success({});
+				} 
 			}
 		};
 	} 
