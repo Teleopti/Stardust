@@ -68,6 +68,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 	{
 		public override RouteData GetRouteData(HttpContextBase httpContext)
 		{
+			if (httpContext.Request.Url == null)
+			{
+				return null;
+			}
 			var url = httpContext.Request.Url.ToString();
 
 			if (Regex.IsMatch(url.ToLower(), @"/mytime/static/.*\.(html|htm)"))
