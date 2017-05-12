@@ -13251,7 +13251,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You need an agent group to schdule your agents. Do you want to create agent group?.
+        ///   Looks up a localized string similar to You need an agent group to schedule your agents. Do you want to create an agent group?.
         /// </summary>
         public static string HelpCreateAgentGroup {
             get {
@@ -13260,7 +13260,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dayoff Rules will be applied for all planning periods.
+        ///   Looks up a localized string similar to Day off rules will be applied for all planning periods.
         /// </summary>
         public static string HelpDayOffForPlanningPeriod {
             get {
@@ -15925,7 +15925,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage your dayoff rules for agentgroup {0}.
+        ///   Looks up a localized string similar to Manage your day off rules for agent group {0}.
         /// </summary>
         public static string ManageDayOffForAgentGroup {
             get {
@@ -32235,7 +32235,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teleopti WFM app.
+        ///   Looks up a localized string similar to Teleopti WFM App.
         /// </summary>
         public static string TeleoptiWFMApp {
             get {
@@ -35526,6 +35526,51 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Welcome {
             get {
                 return ResourceManager.GetString("Welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step 1:.
+        /// </summary>
+        public static string WFMAppGuideStep1 {
+            get {
+                return ResourceManager.GetString("WFMAppGuideStep1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download and install the Teleopti WFM app by clicking on a suitable button or by scanning the QR code below..
+        /// </summary>
+        public static string WFMAppGuideStep1Description {
+            get {
+                return ResourceManager.GetString("WFMAppGuideStep1Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step 2:.
+        /// </summary>
+        public static string WFMAppGuideStep2 {
+            get {
+                return ResourceManager.GetString("WFMAppGuideStep2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure the Teleopti WFM app. Launch the app and then scan the QR code below or input.
+        /// </summary>
+        public static string WFMAppGuideStep2Description {
+            get {
+                return ResourceManager.GetString("WFMAppGuideStep2Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guide for Teleopti WFM App.
+        /// </summary>
+        public static string WFMAppGuideTitle {
+            get {
+                return ResourceManager.GetString("WFMAppGuideTitle", resourceCulture);
             }
         }
         

@@ -1406,6 +1406,8 @@
   <ItemGroup>
     <Content Include="appdownload.html" />
     <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
+    <Content Include="Areas\MyTime\Content\Images\download-on-the-app-store.png" />
+    <Content Include="Areas\MyTime\Content\Images\google-play-badge.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Views\Static\appdownload.html" />
     <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />

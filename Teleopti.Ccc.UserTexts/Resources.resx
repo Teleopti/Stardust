@@ -16093,7 +16093,27 @@ Do you want to participate?</value>
     <comment>The end time should occur after start time.</comment>
   </data>
   <data name="TeleoptiWFMApp" xml:space="preserve">
-    <value>Teleopti WFM app</value>
-    <comment>Teleopti WFM app</comment>
+    <value>Teleopti WFM App</value>
+    <comment>Teleopti WFM App</comment>
+  </data>
+  <data name="WFMAppGuideStep1" xml:space="preserve">
+    <value>Step 1:</value>
+    <comment>Step 1:</comment>
+  </data>
+  <data name="WFMAppGuideStep1Description" xml:space="preserve">
+    <value>Download and install the Teleopti WFM app by clicking on a suitable button or by scanning the QR code below.</value>
+    <comment>Download and install the Teleopti WFM app by clicking on a suitable button or by scanning the QR code below.</comment>
+  </data>
+  <data name="WFMAppGuideStep2" xml:space="preserve">
+    <value>Step 2:</value>
+    <comment>Step 2:</comment>
+  </data>
+  <data name="WFMAppGuideStep2Description" xml:space="preserve">
+    <value>Configure the Teleopti WFM app. Launch the app and then scan the QR code below or input</value>
+    <comment>Configure the Teleopti WFM app. Launch the app and then scan the QR code below or input</comment>
+  </data>
+  <data name="WFMAppGuideTitle" xml:space="preserve">
+    <value>Guide for Teleopti WFM App</value>
+    <comment>Guide for Teleopti WFM App</comment>
   </data>
 </root>
