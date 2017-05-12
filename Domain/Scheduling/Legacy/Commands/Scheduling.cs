@@ -13,14 +13,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-	public interface IScheduling
-	{
-		void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-	}
-
 	public class Scheduling : IScheduling
 	{
 		private readonly IFixedStaffSchedulingService _fixedStaffSchedulingService;
@@ -131,6 +123,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 	}
 
+#region Remove me with toggle
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public interface IScheduling
+	{
+		void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
+			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class TeamBlockSchedulingOLD : IScheduling
 	{
 		private readonly IFixedStaffSchedulingService _fixedStaffSchedulingService;
@@ -240,4 +242,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 	}
+#endregion
+
 }

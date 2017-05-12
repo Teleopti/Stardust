@@ -266,6 +266,7 @@
     <Compile Include="ResourceCalculation\GuidCombinationKey.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCategorizeFinderService.cs" />
     <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\Scheduling.cs" />
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\SchedulingOptionsProviderForTeamPerfTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftsFromMasterActivityBaseActivityService.cs" />
@@ -2459,7 +2460,6 @@
     <Compile Include="Scheduling\Legacy\Commands\SchedulerStateScheduleDayChangedCallback.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TeamBlockMoveTimeBetweenDaysCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TeamBlockOptimization.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\TeamBlockScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\WeeklyRestSolverCommand.cs" />
     <Compile Include="Scheduling\MatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\NextPlanningPeriodProvider.cs" />
