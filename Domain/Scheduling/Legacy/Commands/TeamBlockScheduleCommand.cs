@@ -14,14 +14,14 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-	public interface IScheduleCommand
+	public interface IScheduling
 	{
 		void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
-	public class ScheduleCommand : IScheduleCommand
+	public class Scheduling : IScheduling
 	{
 		private readonly IFixedStaffSchedulingService _fixedStaffSchedulingService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly TeamBlockSchedulingService _teamBlockSchedulingService;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
-		public ScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
+		public Scheduling(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 	}
 
-	public class TeamBlockScheduleCommand : IScheduleCommand
+	public class TeamBlockSchedulingOLD : IScheduling
 	{
 		private readonly IFixedStaffSchedulingService _fixedStaffSchedulingService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly TeamBlockSchedulingService _teamBlockSchedulingService;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
-		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
+		public TeamBlockSchedulingOLD(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,

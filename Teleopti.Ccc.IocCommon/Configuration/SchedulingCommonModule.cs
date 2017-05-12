@@ -129,12 +129,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
 			{
 				builder.RegisterType<ScheduleExecutor>().As<IScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();
-				builder.RegisterType<ScheduleCommand>().As<IScheduleCommand>().InstancePerLifetimeScope();
+				builder.RegisterType<Scheduling>().As<IScheduling>().InstancePerLifetimeScope();
 			}
 			else
 			{
 				builder.RegisterType<ScheduleExecutorOld>().As<IScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();
-				builder.RegisterType<TeamBlockScheduleCommand>().As<IScheduleCommand>().InstancePerLifetimeScope();
+				builder.RegisterType<TeamBlockSchedulingOLD>().As<IScheduling>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();

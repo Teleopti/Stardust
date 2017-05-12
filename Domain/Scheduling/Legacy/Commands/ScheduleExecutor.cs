@@ -25,15 +25,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class ScheduleExecutor : ScheduleExecutorOld
 	{
-		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, IScheduleCommand teamBlockScheduleCommand, ClassicScheduleCommand classicScheduleCommand, MatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation) 
-			: base(schedulerStateHolder, requiredScheduleOptimizerHelper, scheduleDayChangeCallback, teamBlockScheduleCommand, classicScheduleCommand, matrixListFactory, weeklyRestSolverCommand, resourceCalculationContextFactory, userTimeZone, resourceCalculation)
+		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, IScheduling teamBlockScheduling, ClassicScheduleCommand classicScheduleCommand, MatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation) 
+			: base(schedulerStateHolder, requiredScheduleOptimizerHelper, scheduleDayChangeCallback, teamBlockScheduling, classicScheduleCommand, matrixListFactory, weeklyRestSolverCommand, resourceCalculationContextFactory, userTimeZone, resourceCalculation)
 		{
 		}
 
 		protected override void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, SchedulingOptions schedulingOptions)
 		{
-			_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
+			TeamBlockScheduling.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
 		}
 	}
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-		protected readonly IScheduleCommand _teamBlockScheduleCommand;
+		protected readonly IScheduling TeamBlockScheduling;
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		private readonly ClassicScheduleCommand _classicScheduleCommand;
 		private readonly MatrixListFactory _matrixListFactory;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public ScheduleExecutorOld(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
-			IScheduleCommand teamBlockScheduleCommand,
+			IScheduling teamBlockScheduling,
 			ClassicScheduleCommand classicScheduleCommand,
 			MatrixListFactory matrixListFactory,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_schedulerStateHolder = schedulerStateHolder;
 			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_teamBlockScheduleCommand = teamBlockScheduleCommand;
+			TeamBlockScheduling = teamBlockScheduling;
 			_classicScheduleCommand = classicScheduleCommand;
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 			{
-				_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
+				TeamBlockScheduling.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
 			}
 			else
 			{
