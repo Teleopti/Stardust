@@ -281,7 +281,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.loadingProbabilityData(false);
 		};
 
-		self.setSelectedDateSubscription = function (selectedDate) {
+		self.setSelectedDateSubscription = function (date) {
+			self.selectedDate(date);
+
 			if (self.selectedDateSubscription)
 				self.selectedDateSubscription.dispose();
 
