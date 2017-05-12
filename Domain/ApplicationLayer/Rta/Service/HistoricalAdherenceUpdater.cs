@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
 			registrator.SubscribeTo<PersonInAdherenceEvent>();
 			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
-			registrator.SubscribeTo<PersonStateChangedEvent>();
-			registrator.SubscribeTo<PersonRuleChangedEvent>();
+			//registrator.SubscribeTo<PersonStateChangedEvent>();
+			//registrator.SubscribeTo<PersonRuleChangedEvent>();
 		}
 
 		[ReadModelUnitOfWork]
