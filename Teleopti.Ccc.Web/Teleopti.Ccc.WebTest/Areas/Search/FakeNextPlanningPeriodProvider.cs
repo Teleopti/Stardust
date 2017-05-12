@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.WebTest.Areas.ResourcePlanner;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Search
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		}
 		public IPlanningPeriod Current(IAgentGroup agentGroup)
 		{
-			return new FakePlanningPeriod(Guid.NewGuid(),new DateOnlyPeriod(2015,06,10,2015,07,10));
+			return new PlanningPeriod(new DateOnlyPeriod(2015,06,10,2015,07,10)).WithId();
 		}
 
 		public IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, IAgentGroup agentGroup)

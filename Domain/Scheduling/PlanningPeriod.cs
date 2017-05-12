@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -15,12 +14,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class PlanningPeriod : NonversionedAggregateRootWithBusinessUnit, IPlanningPeriod
 	{
 		private DateOnlyPeriod _range;
-		private static readonly SchedulePeriodRangeCalculator _calculator = new SchedulePeriodRangeCalculator();
+		private static readonly SchedulePeriodRangeCalculator calculator = new SchedulePeriodRangeCalculator();
 		private SchedulePeriodType _periodType;
 		private  int _number;
 		private PlanningPeriodState _state;
+		private readonly ISet<IJobResult> _jobResults;
 		private readonly IAgentGroup _agentGroup;
-		private ISet<IJobResult> _jobResults;
 
 		protected PlanningPeriod()
 		{
@@ -48,32 +47,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 		}
 
-		public PlanningPeriod(DateOnlyPeriod range, IAgentGroup agentGroup) : this()
+		public PlanningPeriod(DateOnlyPeriod range, IAgentGroup agentGroup=null) : this()
 		{
 			_range = range;
 			updateChangeFromDayType(_range);
 			_agentGroup = agentGroup;
 		}
 
-		public virtual DateOnlyPeriod Range
-		{
-			get { return _range;  }
-		}
+		public virtual DateOnlyPeriod Range => _range;
 
-		public virtual PlanningPeriodState State
-		{
-			get { return _state; }
-		}
+		public virtual PlanningPeriodState State => _state;
 
-		public virtual IAgentGroup AgentGroup
-		{
-			get { return _agentGroup; }
-		}
+		public virtual IAgentGroup AgentGroup => _agentGroup;
 
-		public virtual ISet<IJobResult> JobResults
-		{
-			get { return _jobResults; }
-		}
+		public virtual ISet<IJobResult> JobResults => _jobResults;
 
 		public virtual void Scheduled()
 		{
@@ -82,24 +69,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, bool updateTypeAndNumber = false)
 		{
-			_range = _calculator.PeriodForType(schedulePeriodForRangeCalculation.StartDate, schedulePeriodForRangeCalculation);
-			if (updateTypeAndNumber)
+			_range = calculator.PeriodForType(schedulePeriodForRangeCalculation.StartDate, schedulePeriodForRangeCalculation);
+			if (!updateTypeAndNumber) return;
+			_periodType = schedulePeriodForRangeCalculation.PeriodType;
+			_number = schedulePeriodForRangeCalculation.Number;
+			if (schedulePeriodForRangeCalculation.PeriodType == SchedulePeriodType.Day)
 			{
-				_periodType = schedulePeriodForRangeCalculation.PeriodType;
-				_number = schedulePeriodForRangeCalculation.Number;
-				if (schedulePeriodForRangeCalculation.PeriodType == SchedulePeriodType.Day)
-				{
-					updateChangeFromDayType(_range);
-					//if (schedulePeriodForRangeCalculation.Number % 7 == 0)
-					//{
-					//	_periodType = SchedulePeriodType.Week;
-					//	_number = schedulePeriodForRangeCalculation.Number / 7;
-					//} else if (_range.StartDate.Day == 1 && _range.EndDate.Month != _range.EndDate.AddDays(1).Month)
-					//{
-					//	_periodType = SchedulePeriodType.Month;
-					//	_number = 12 * (_range.EndDate.Year - _range.StartDate.Year) + (_range.EndDate.Month - _range.StartDate.Month) + 1;
-					//}
-				}
+				updateChangeFromDayType(_range);
 			}
 		}
 
@@ -136,18 +112,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual IPlanningPeriod NextPlanningPeriod(IAgentGroup agentGroup)
 		{
 			var nextPlanningPeriodStartDate = _range.EndDate.AddDays(1);
-			var range = _calculator.PeriodForType(nextPlanningPeriodStartDate, new SchedulePeriodForRangeCalculation
+			var range = calculator.PeriodForType(nextPlanningPeriodStartDate, new SchedulePeriodForRangeCalculation
 			{
 				Culture = CultureInfo.CurrentCulture,
 				Number = _number,
 				PeriodType = _periodType,
 				StartDate = nextPlanningPeriodStartDate
 			});
-			if (agentGroup != null)
-			{
-				return new PlanningPeriod(agentGroup) {_range = range, _number = _number, _periodType = _periodType};
-			}
-			return new PlanningPeriod { _range = range, _number = _number, _periodType = _periodType };
+			return new PlanningPeriod(agentGroup) { _range = range, _number = _number, _periodType = _periodType };
 		}
 
 		public virtual IJobResult GetLastSchedulingJob()

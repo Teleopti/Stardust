@@ -1,23 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
-									 assembly="Teleopti.Ccc.Domain"
-									 namespace="Teleopti.Ccc.Domain.Scheduling"
-									 default-access="field.camelcase-underscore">
+					assembly="Teleopti.Ccc.Domain"
+					namespace="Teleopti.Ccc.Domain.Scheduling"
+					default-access="field.camelcase-underscore">
 	<class name="PlanningPeriod">
 		<!--IEntity-->
-		<id name="Id"
-						type="guid"
-			 access="nosetter.camelcase-underscore"
-						unsaved-value="null">
+		<id name="Id" type="guid" access="nosetter.camelcase-underscore" unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
-		<many-to-one name="UpdatedBy"
-								 class="Teleopti.Ccc.Domain.Common.Person"
-								 not-null="true"
-								 foreign-key="FK_PlanningPeriod_Person_UpdatedBy" />
-		<property name="UpdatedOn"
-							type="UtcDateTime"
-							not-null="true"/>
+		<many-to-one name="UpdatedBy" class="Teleopti.Ccc.Domain.Common.Person" not-null="true" foreign-key="FK_PlanningPeriod_Person_UpdatedBy" />
+		<property name="UpdatedOn" type="UtcDateTime" not-null="true"/>
 		<!--IEntity-->
 
 		<component name="Range" class="Teleopti.Interfaces.Domain.DateOnlyPeriod, Teleopti.Interfaces">
@@ -27,37 +19,20 @@
 			</component>
 		</component>
 
-		<property name="_periodType"
-						access="field"
-							column="PeriodType"
-				  not-null="true" />
+		<property name="_periodType" access="field" column="PeriodType" not-null="true" />
 
-		<property name="_number"
-							column="Number"
-						access="field"
-				  not-null="true"/>
+		<property name="_number" column="Number" access="field" not-null="true"/> 
 
-		<property name="_state"
-							column="State"
-						access="field"
-				  not-null="true"/>
+		<property name="_state" column="State" access="field" not-null="true"/>
 
-    <many-to-one name="AgentGroup"
-					 class="Teleopti.Ccc.Domain.Optimization.AgentGroup"
-						access="nosetter.camelcase-underscore"
-					 foreign-key="FK_PlanningPeriod_AgentGroup"/>
-    
-    <set name="JobResults" table="PlanningPeriodJobResult">
-        <key column="PlanningPeriod" foreign-key="FK_PlanningPeriodJobResult_PlanningPeriod" />
-        <many-to-many column="JobResult" class="Teleopti.Ccc.Domain.Common.JobResult" foreign-key="FK_PlanningPeriodJobResult_JobResult" />
-    </set>
+		<many-to-one name="AgentGroup" class="Teleopti.Ccc.Domain.Optimization.AgentGroup" access="nosetter.camelcase-underscore" foreign-key="FK_PlanningPeriod_AgentGroup"/>
 
+		<set name="JobResults" table="PlanningPeriodJobResult">
+			<key column="PlanningPeriod" foreign-key="FK_PlanningPeriodJobResult_PlanningPeriod" />
+			<many-to-many column="JobResult" class="Teleopti.Ccc.Domain.Common.JobResult" foreign-key="FK_PlanningPeriodJobResult_JobResult" />
+		</set>
 
-		<many-to-one name="BusinessUnit"
-					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
-						access="nosetter.camelcase-underscore"
-					 not-null="true" foreign-key="FK_PlanningPeriod_BusinessUnit"/>
-		<filter name="businessUnitFilter"
-				condition=":businessUnitParameter = BusinessUnit" />
+		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="nosetter.camelcase-underscore" not-null="true" foreign-key="FK_PlanningPeriod_BusinessUnit"/>
+		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit" />
 	</class>
 </hibernate-mapping>

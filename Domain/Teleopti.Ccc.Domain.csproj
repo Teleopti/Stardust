@@ -3884,7 +3884,9 @@
     <EmbeddedResource Include="Scheduling\ScheduleTagging\ScheduleTag.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\ScheduleTagging\AgentDayScheduleTag.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\ScheduleTagging\AgentDayScheduleTag.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Security\LicenseStatus.hbm.xml" />
