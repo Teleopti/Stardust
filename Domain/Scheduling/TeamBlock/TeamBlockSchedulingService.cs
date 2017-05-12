@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public IWorkShiftFinderResultHolder ScheduleSelected(IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
-	                                 IList<IPerson> selectedPersons,
+	                                 IEnumerable<IPerson> selectedPersons,
 	                                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 	                                 IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return workShiftFinderResultHolder;
 	    }
 
-	    private void runSchedulingForAllTeamInfoOnStartDate(IEnumerable<IScheduleMatrixPro> allPersonMatrixList, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
+	    private void runSchedulingForAllTeamInfoOnStartDate(IEnumerable<IScheduleMatrixPro> allPersonMatrixList, IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
                                      ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
                                      IEnumerable<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
 									 IResourceCalculateDelayer resourceCalculateDelayer,
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             }
         }
 
-		private void verifyScheduledTeamBlock(IList<IPerson> selectedPersons,
+		private void verifyScheduledTeamBlock(IEnumerable<IPerson> selectedPersons,
                                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
                                               DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo, Func<bool> isCancelled,
 			SchedulingOptions schedulingOption)
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             }
         }
 
-        private HashSet<ITeamInfo> getAllTeamInfoList(ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamInfoFactory teamInfoFactory)
+        private HashSet<ITeamInfo> getAllTeamInfoList(ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons, ITeamInfoFactory teamInfoFactory)
         {
             var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
             foreach (var selectedPerson in selectedPersons)

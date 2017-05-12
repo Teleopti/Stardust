@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -88,8 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			_teamBlockSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 			var workShiftFinderResultHolder = _teamBlockSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
-				selectedAgents.ToArray(),
-				rollbackService, resourceCalculateDelayer,
+				selectedAgents, rollbackService, resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState, schedulingOptions,
 				teamInfoFactory);
 			_teamBlockSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
