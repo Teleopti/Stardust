@@ -294,8 +294,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	};
 
 	self.showAbsenceReportingForm = function () {
-		var requestViewModel = new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(parent.Ajax(), function (data) {
-			parent.ReloadSchedule(data);
+		var requestViewModel = new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(parent.Ajax(), function () {
 			resetRequestViewModel();
 		});
 		setupRequestViewModel(requestViewModel, resetRequestViewModel);
@@ -307,7 +306,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			weekStart,
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
 
-		requestViewModel.AddRequestCallback = function (data) {
+		requestViewModel.AddRequestCallback = function () {
 			var count = self.requestCount() + 1;
 			self.requestCount(count);
 			resetRequestViewModel();

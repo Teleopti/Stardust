@@ -276,7 +276,7 @@
 
 		equal(requestViewModel.Template, templateConfig.absenceReporting);
 
-		equal(fetchDayDataRequestCount, 2);
+		equal(fetchDayDataRequestCount, 1);
 
 		equal(vm.requestViewModel(), undefined);
 	});
