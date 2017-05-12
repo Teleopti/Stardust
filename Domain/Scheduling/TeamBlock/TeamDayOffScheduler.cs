@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
+		void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixListAll, IEnumerable<IPerson> selectedPersons,
 		                      ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
 							  IGroupPersonBuilderWrapper groupPersonBuilderForOptimization);
 	}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_authorization = authorization;
 		}
 
-		public void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
+		public void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixListAll, IEnumerable<IPerson> selectedPersons,
 		                             ISchedulePartModifyAndRollbackService rollbackService,
 		                             SchedulingOptions schedulingOptions,
 									 IGroupPersonBuilderWrapper groupPersonBuilderForOptimization)
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 		}
 
-		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons, SchedulingOptions schedulingOptions,
+		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixListAll, IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions,
 							  IGroupPersonBuilderWrapper groupPersonBuilderForOptimization,
 		                      IPerson person, DateOnly scheduleDate,
 		                      out IEffectiveRestriction restriction)

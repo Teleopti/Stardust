@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -82,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
 
 			_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-			_advanceDaysOffSchedulingService.Execute(allVisibleMatrixes, selectedAgents.ToArray(),
+			_advanceDaysOffSchedulingService.Execute(allVisibleMatrixes, selectedAgents,
 				schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions,
 				_groupPersonBuilderWrapper, selectedPeriod);
 			_advanceDaysOffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				teamInfoFactory);
 			_teamBlockSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
-			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents.ToArray(), rollbackService, resourceCalculateDelayer,
+			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents, rollbackService, resourceCalculateDelayer,
 				selectedPeriod, allVisibleMatrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
 
 			_workShiftFinderResultHolder()

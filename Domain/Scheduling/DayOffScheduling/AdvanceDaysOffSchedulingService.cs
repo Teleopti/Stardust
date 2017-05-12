@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	        _missingDaysOffScheduler = missingDaysOffScheduler;
         }
 
-		public void Execute(IEnumerable<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
+		public void Execute(IEnumerable<IScheduleMatrixPro> allMatrixList, IEnumerable<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
 			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization, DateOnlyPeriod selectedPeriod)
 		{
 			var cancelMe = false;
