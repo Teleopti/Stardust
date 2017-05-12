@@ -455,7 +455,10 @@ $(document).ready(function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 		};
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var fakeParent = {
+			ReloadSchedule:function(){}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(null, fakeParent, null);
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
 			Schedule: {
