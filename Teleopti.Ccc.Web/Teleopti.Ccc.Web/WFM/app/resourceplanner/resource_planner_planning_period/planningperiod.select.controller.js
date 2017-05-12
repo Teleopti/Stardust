@@ -136,12 +136,19 @@
         function createFirstPp() {
             if (agentGroupId !== null) {
                 vm.openCreatePpModal = false;
-                vm.displayButton = false;
-                var nextPlanningPeriod = planningPeriodServiceNew.nextPlanningPeriod({ agentGroupId: agentGroupId });
-                nextPlanningPeriod.$promise.then(function () {
-                    changeDateForPp(vm.selectedSuggestion);
-                    vm.show = false;
-                });
+				vm.displayButton = false;
+
+				var startDate = moment(vm.selectedSuggestion.startDate).format('YYYY-MM-DD');
+				var newEndDate = moment(vm.selectedSuggestion.endDate).format('YYYY-MM-DD');
+
+	            return planningPeriodServiceNew
+		            .firstPlanningPeriod({ agentGroupId: agentGroupId, startDate: startDate, endDate: newEndDate }).$promise
+					.then(function (data) {
+						vm.show = false;
+			            vm.planningPeriods.push(data);
+			            vm.displayButton = true;
+			            return vm.planningPeriods;
+		            });
             }
         }
 

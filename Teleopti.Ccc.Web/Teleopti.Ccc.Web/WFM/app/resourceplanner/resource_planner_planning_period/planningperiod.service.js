@@ -30,7 +30,8 @@
 				nextPlanningPeriod: { method: 'POST', params: { agentGroupId: "@agentGroupId" }, url: agentGroupBaseUrl + '/nextplanningperiod' },
 				getPlanningPeriods: { method: 'GET', params: { agentGroupId: "@agentGroupId" }, isArray: true, url: agentGroupBaseUrl + '/planningperiods' },
 				deleteLastPlanningPeriod: { method: 'DELETE', params: { agentGroupId: "@agentGroupId" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' },
-				changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { agentGroupId: "@agentGroupId", startDate: "@startDate", endDate: "@endDate" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' }
+				changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { agentGroupId: "@agentGroupId", startDate: "@startDate", endDate: "@endDate" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' },
+				firstPlanningPeriod: { method: 'POST', params: { agentGroupId: "@agentGroupId", startDate: "@startDate", endDate: "@endDate" }, url: agentGroupBaseUrl + '/firstplanningperiod' }
 			});
 
 		var service = {
@@ -42,6 +43,7 @@
 			changeEndDateForLastPlanningPeriod: agentGroup.changeEndDateForLastPlanningPeriod,
 			getPlanningPeriod: planningPeriod.get,
 			getPlanningPeriodSuggestions: getPlanningPeriodSuggestions.query,
+			firstPlanningPeriod: agentGroup.firstPlanningPeriod,
 			// PlanningPeriod.Overview
 			getNumberOfAgents: planningPeriod.getAgentCount,
 			lastJobResult: planningPeriod.lastJobResult,

@@ -48,6 +48,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 		}
 
+		public PlanningPeriod(DateOnlyPeriod range, IAgentGroup agentGroup) : this()
+		{
+			_range = range;
+			updateChangeFromDayType(_range);
+			_agentGroup = agentGroup;
+		}
+
 		public virtual DateOnlyPeriod Range
 		{
 			get { return _range;  }
@@ -78,21 +85,41 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_range = _calculator.PeriodForType(schedulePeriodForRangeCalculation.StartDate, schedulePeriodForRangeCalculation);
 			if (updateTypeAndNumber)
 			{
-				if (schedulePeriodForRangeCalculation.PeriodType == SchedulePeriodType.Day && schedulePeriodForRangeCalculation.Number % 7 == 0)
+				_periodType = schedulePeriodForRangeCalculation.PeriodType;
+				_number = schedulePeriodForRangeCalculation.Number;
+				if (schedulePeriodForRangeCalculation.PeriodType == SchedulePeriodType.Day)
 				{
-					_periodType = SchedulePeriodType.Week;
-					_number = schedulePeriodForRangeCalculation.Number / 7;
+					updateChangeFromDayType(_range);
+					//if (schedulePeriodForRangeCalculation.Number % 7 == 0)
+					//{
+					//	_periodType = SchedulePeriodType.Week;
+					//	_number = schedulePeriodForRangeCalculation.Number / 7;
+					//} else if (_range.StartDate.Day == 1 && _range.EndDate.Month != _range.EndDate.AddDays(1).Month)
+					//{
+					//	_periodType = SchedulePeriodType.Month;
+					//	_number = 12 * (_range.EndDate.Year - _range.StartDate.Year) + (_range.EndDate.Month - _range.StartDate.Month) + 1;
+					//}
 				}
-				else if (schedulePeriodForRangeCalculation.PeriodType == SchedulePeriodType.Day && _range.StartDate.Day == 1 && _range.EndDate.Month != _range.EndDate.AddDays(1).Month)
-				{
-					_periodType = SchedulePeriodType.Month;
-					_number = 12 * (_range.EndDate.Year - _range.StartDate.Year) + (_range.EndDate.Month - _range.StartDate.Month) + 1;
-				}
-				else
-				{
-					_periodType = schedulePeriodForRangeCalculation.PeriodType;
-					_number = schedulePeriodForRangeCalculation.Number;
-				}
+			}
+		}
+
+		private void updateChangeFromDayType(DateOnlyPeriod period)
+		{
+			var numberOfDays = period.DayCount();
+			if (numberOfDays % 7 == 0)
+			{
+				_periodType = SchedulePeriodType.Week;
+				_number = numberOfDays / 7;
+			}
+			else if (_range.StartDate.Day == 1 && _range.EndDate.Month != _range.EndDate.AddDays(1).Month)
+			{
+				_periodType = SchedulePeriodType.Month;
+				_number = 12 * (_range.EndDate.Year - _range.StartDate.Year) + (_range.EndDate.Month - _range.StartDate.Month) + 1;
+			}
+			else
+			{
+				_periodType = SchedulePeriodType.Day;
+				_number = numberOfDays;
 			}
 		}
 

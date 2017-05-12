@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -231,6 +232,24 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetNextPlanningPeriod()
 		{
 			return nextPlanningPeriod(null);
+		}
+
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/agentgroup/{agentGroupId}/firstplanningperiod")]
+		public virtual IHttpActionResult CreateFirstPlanningPeriod(Guid agentGroupId, DateTime endDate, DateTime startDate)
+		{
+			var agentGroup = _agentGroupRepository.Get(agentGroupId);
+			if (agentGroup == null)
+				return BadRequest("Invalid agentGroupId");
+
+			var firstPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)), agentGroup);
+			_planningPeriodRepository.Add(firstPeriod);
+			var validationResults = _basicSchedulingValidator.Validate(new ValidationParameters
+			{
+				Period = firstPeriod.Range,
+				People = _agentGroupStaffLoader.Load(firstPeriod.Range, agentGroup).AllPeople.ToList()
+			});
+
+			return Created($"{Request.RequestUri}/{firstPeriod.Id.GetValueOrDefault()}", createPlanningPeriodModel(firstPeriod, validationResults));
 		}
 
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/agentgroup/{agentGroupId}/nextplanningperiod")]
