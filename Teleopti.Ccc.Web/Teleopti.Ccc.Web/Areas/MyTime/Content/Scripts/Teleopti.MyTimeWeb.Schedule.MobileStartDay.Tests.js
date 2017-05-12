@@ -284,10 +284,15 @@
 	test("should show overtime availability form with default value when no overtime availability", function () {
 		setupAddRequestTemplate(templateConfig.overtimeAvailability);
 
+		Teleopti.MyTimeWeb.Common.DateFormat = "DD/MM/YYYY";
+
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
-		vm.showOvertimeAvailabilityForm(vm);
+		vm.showOvertimeAvailabilityForm(vm);  
+
+		equal(vm.requestViewModel().model.DateFrom().format(vm.datePickerFormat()), startDayData.Schedule.Date);
 
 		equal(vm.requestViewModel().model.StartTime(), startDayData.Schedule.OvertimeAvailabililty.DefaultStartTime);
 
@@ -301,6 +306,7 @@
 	test("should show overtime availability form with specific value when  overtime availability is available", function () {
 
 		setupAddRequestTemplate(templateConfig.overtimeAvailability);
+		Teleopti.MyTimeWeb.Common.DateFormat = "DD/MM/YYYY";
 
 		startDayData.Schedule.OvertimeAvailabililty.HasOvertimeAvailability = true;
 
@@ -308,6 +314,8 @@
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
 		vm.showOvertimeAvailabilityForm(vm);
+
+		equal(vm.requestViewModel().model.DateFrom().format(vm.datePickerFormat()), startDayData.Schedule.Date);
 
 		equal(vm.requestViewModel().model.StartTime(), startDayData.Schedule.OvertimeAvailabililty.StartTime);
 

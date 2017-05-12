@@ -51,6 +51,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.selectedProbabilityType = constants.probabilityType.none;
 
 	self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
+	self.requestDay = null;
 
 	var initializeProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
 	self.selectedProbabilityOptionValue = ko.observable(initializeProbabilityType);
@@ -64,6 +65,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	};
 
 	self.readData = function (data) {
+
+		self.requestDay = moment(data.Date);
 
 		self.overtimeAvailabililty = data.Schedule.OvertimeAvailabililty; 
 
@@ -140,7 +143,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	}
 
 	function fillOverTimeAvailabilityFormData() { 
-		var requestViewModel = self.requestViewModel().model; 
+		var requestViewModel = self.requestViewModel().model;
+		requestViewModel.DateFrom(self.requestDay);
 		requestViewModel.LoadRequestData(self.overtimeAvailabililty); 
 	}
 
