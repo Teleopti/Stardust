@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
 			builder.RegisterType<ExtractDayOffFromGivenWeek>().As<IExtractDayOffFromGivenWeek>();
 			builder.RegisterType<ScheduleDayWorkShiftTimeExtractor>().As<IScheduleDayWorkShiftTimeExtractor>();
-			builder.RegisterType<WeeklyRestSolverService>().As<IWeeklyRestSolverService>();
+			builder.RegisterType<WeeklyRestSolverService>();
 			builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().SingleInstance();
 			builder.RegisterType<IdentifyDayOffWithHighestSpan>();
 			builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();

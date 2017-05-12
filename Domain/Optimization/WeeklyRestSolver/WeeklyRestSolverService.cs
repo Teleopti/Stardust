@@ -10,17 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
-	public interface IWeeklyRestSolverService
-	{
-		void Execute(IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator,
-			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
-			ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
-			IOptimizationPreferences optimizationPreferences, SchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-
-		event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
-	}
-
-	public class WeeklyRestSolverService : IWeeklyRestSolverService
+	public class WeeklyRestSolverService
 	{
 		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
 		private readonly IEnsureWeeklyRestRule _ensureWeeklyRestRule;

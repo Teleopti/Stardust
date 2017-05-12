@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Autofac
 			_containerBuilder.RegisterModule<WeeklyRestSolverModule>();
 			using (var container = _containerBuilder.Build())
 			{
-				container.Resolve<IWeeklyRestSolverService>()
+				container.Resolve<WeeklyRestSolverService>()
 								 .Should().Not.Be.Null();
 			}
 		}
