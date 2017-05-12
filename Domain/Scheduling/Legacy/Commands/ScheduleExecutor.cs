@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-		protected readonly TeamBlockScheduleCommand _teamBlockScheduleCommand;
+		protected readonly IScheduleCommand _teamBlockScheduleCommand;
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		private readonly ClassicScheduleCommand _classicScheduleCommand;
 		private readonly MatrixListFactory _matrixListFactory;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public ScheduleExecutorOld(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
-			TeamBlockScheduleCommand teamBlockScheduleCommand,
+			IScheduleCommand teamBlockScheduleCommand,
 			ClassicScheduleCommand classicScheduleCommand,
 			MatrixListFactory matrixListFactory,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
