@@ -10,15 +10,16 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.UseGuide;
+using Teleopti.Ccc.Web.Areas.MyTime.Models;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.AppGuide;
 using Teleopti.Ccc.WebTest.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
-	[TestFixture][MyTimeWebTest]
-	public class UseGuideControllerTest : ISetup
+	[TestFixture, MyTimeWebTest]
+	public class AppGuideControllerTest : ISetup
 	{
-		public UseGuideController Target;
+		public AppGuideController Target;
 		public FakeLoggedOnUser User;
 		public FindPersonInfoFake FindPerson;
 		public IHashFunction Hash;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnUrlForConfiguration()
 		{
 			var result = Target.WFMApp();
-			
+
 			(result.Model as WFMAppGuideViewModel).UrlForMyTimeWeb.Should().Be
 				.EqualTo(CurrentTenant.Current()
 				.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl));

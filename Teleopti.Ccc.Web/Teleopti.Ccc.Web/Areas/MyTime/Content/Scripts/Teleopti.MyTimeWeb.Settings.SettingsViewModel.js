@@ -149,7 +149,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 
 	self.featureCheck = function () {
 		self.isSetAgentDescriptionEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("Settings_SetAgentDescription_23257"));
-		self.isQRCodeForMobileAppsEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("QRCodeForMobileApps_42695") && self.hasPermissionToViewQRCode());
+		self.isQRCodeForMobileAppsEnabled(!Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewWFMAppGuide_43848") && Teleopti.MyTimeWeb.Common.IsToggleEnabled("QRCodeForMobileApps_42695") && self.hasPermissionToViewQRCode());
 		self.customMobileAppBaseUrl(self.hasPermissionToViewQRCode() && Teleopti.MyTimeWeb.Common.IsToggleEnabled("ConfigQRCodeURLForMobileApps_43224"));
 	};
 

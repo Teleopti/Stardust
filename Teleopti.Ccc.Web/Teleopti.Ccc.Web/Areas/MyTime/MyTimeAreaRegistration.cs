@@ -1,4 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime
 {
@@ -8,6 +12,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
+			context.Routes.Add(new StaticHtmlRoutesHandler());
+			
+
 			var mapRoute = context.MapRoute(
 				"MyTime-authentication",
 				"MyTime/Authentication/{action}",
@@ -37,15 +44,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 			context.MapRoute(
 				"MyTime-date-route",
 				"MyTime/{controller}/{action}/{year}/{month}/{day}",
-				new {},
-				new {year = @"\d{4}", month = @"\d{2}", day = @"\d{2}"}
+				new { },
+				new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
 				);
 
 			context.MapRoute(
 				"MyTime-date-id-route",
 				"MyTime/{controller}/{action}/{year}/{month}/{day}/{id}",
-				new {id = UrlParameter.Optional},
-				new {year = @"\d{4}", month = @"\d{2}", day = @"\d{2}", id = new GuidConstraint()}
+				new { id = UrlParameter.Optional },
+				new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}", id = new GuidConstraint() }
 				);
 
 			context.MapRoute(
@@ -54,6 +61,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 				new { controller = "Portal", action = "Index", id = UrlParameter.Optional }
 				);
 
+		}
+	}
+
+	public class StaticHtmlRoutesHandler : RouteBase
+	{
+		public override RouteData GetRouteData(HttpContextBase httpContext)
+		{
+			var url = httpContext.Request.Url.ToString();
+
+			if (Regex.IsMatch(url.ToLower(), @"/mytime/static/.*\.(html|htm)"))
+			{
+				httpContext.Response.ContentType = "text/html";
+				httpContext.Response.TransmitFile($"~/Areas/MyTime/Views/Static/{httpContext.Request.Url.Segments.Last()}");
+				httpContext.Response.End();
+			}
+			return null;
+		}
+
+		public override VirtualPathData GetVirtualPath(RequestContext requestContext,
+			RouteValueDictionary values)
+		{
+			return null;
 		}
 	}
 }

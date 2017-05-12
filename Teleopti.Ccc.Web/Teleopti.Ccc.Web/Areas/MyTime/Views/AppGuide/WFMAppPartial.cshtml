@@ -1,0 +1,32 @@
+﻿@model Teleopti.Ccc.Web.Areas.MyTime.Models.AppGuide.WFMAppGuideViewModel
+
+<div class="container guide-container well well-sm">
+	<h4><b>Guide for Teleopti WFM App</b></h4>
+
+	<div class="row">
+		<div class="col-lg-12">
+			<b>Step 1:</b>
+			Download and install Teleopti WFM app by clicking on <a data-bind="attr:{href: iOSAppLink()}" target="_blank">here</a> for iPhone
+			or <a data-bind="attr:{href: androidAppLink()}" target="_blank">here</a> for android
+			or scanning QR code below.
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-11 col-lg-offset-1" data-bind="html: appQRCode()">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12">
+			<b>Step 2:</b>
+			Configure Teleopti WFM App.
+			Launch the app and input <a href="javascript:;"><i data-bind="text: myTimeWebBaseUrl()"></i></a> or scan QR code below.
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-11 col-lg-offset-1" data-bind="html: myTimeQRCode()">
+		</div>
+	</div>
+
+	<div id="customUrlForMyTime" class="hidden">@Model.UrlForMyTimeWeb</div>
+</div>

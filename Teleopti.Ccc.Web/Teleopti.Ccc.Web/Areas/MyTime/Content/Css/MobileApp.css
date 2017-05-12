@@ -1,0 +1,13 @@
+﻿.guide-container {
+	font-size: 15px;
+}
+
+	.guide-container .row {
+		line-height: 30px
+	}
+
+		.guide-container .row b {
+			font-size: 18px;
+		}
+
+		

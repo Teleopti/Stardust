@@ -24,6 +24,7 @@ $(function() {
 
 	Teleopti.MyTimeWeb.Settings.Init();
 	Teleopti.MyTimeWeb.Password.Init();
+	Teleopti.MyTimeWeb.AppGuide.WFMApp.Init();
 	Teleopti.MyTimeWeb.MyReport.Init();
 	Teleopti.MyTimeWeb.BadgeLeaderBoardReport.Init();
 	Teleopti.MyTimeWeb.MyAdherence.Init();

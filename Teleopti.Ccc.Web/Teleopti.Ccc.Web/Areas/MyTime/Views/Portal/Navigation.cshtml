@@ -1,9 +1,7 @@
 ﻿@using System.Web.Mvc.Html
 @using Teleopti.Ccc.Domain.InterfaceLegacy.Domain
-@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
-@using Teleopti.Interfaces.Domain
 @model PortalViewModel
 
 <script>
@@ -127,7 +125,7 @@
 						}
 						@if (Model.ShowWFMAppGuide)
 						{
-							<li><a href="#" data-mytime-action="UseGuide/WFMApp">@Resources.TeleoptiWFMApp</a></li>
+							<li><a href="#" data-mytime-action="AppGuide/WFMApp">@Resources.TeleoptiWFMApp</a></li>
 						}
 						@if (Model.HasAsmPermission)
 						{

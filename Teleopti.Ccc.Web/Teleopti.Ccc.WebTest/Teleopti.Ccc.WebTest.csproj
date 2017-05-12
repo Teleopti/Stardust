@@ -272,7 +272,7 @@
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerTimeLineTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerTest.cs" />
-    <Compile Include="Areas\MyTime\Controllers\UseGuideControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\AppGuideControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\SiteProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\SiteViewModelFactoryTest.cs" />

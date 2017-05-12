@@ -514,7 +514,7 @@
     <Compile Include="Areas\MultiTenancy\Controllers\TenantAdminInfoController.cs" />
     <Compile Include="Areas\MultiTenancy\MultiTenancyAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityController.cs" />
-    <Compile Include="Areas\MyTime\Controllers\UseGuideController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\AppGuideController.cs" />
     <Compile Include="Areas\MyTime\Controllers\WidgetController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\ExtendedPreferenceTemplateMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMapper.cs" />
@@ -1404,6 +1404,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="appdownload.html" />
+    <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.Tests.js" />
+    <Content Include="Areas\MyTime\Views\Static\appdownload.html" />
     <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileDayView.css" />
     <Content Include="Areas\MyTime\Content\Images\logo.png" />
@@ -1430,7 +1434,10 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ViewModels.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ViewModels.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMApp.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
+    <None Include="Areas\MyTime\Content\Scripts\_references.js" />
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
     <Content Include="Areas\SSO\Content\Images\bg.png" />
@@ -1510,7 +1517,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\MyTime\Views\Schedule\MobileDayPartial.cshtml" />
-    <Content Include="Areas\MyTime\Views\UseGuide\WFMAppPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
     <Content Include="WFM\app\permissions\refact\functionsrefact\permissions-function-tree.html" />

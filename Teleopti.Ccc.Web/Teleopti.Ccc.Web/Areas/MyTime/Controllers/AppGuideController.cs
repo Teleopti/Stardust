@@ -1,21 +1,22 @@
 ﻿using System.Web.Mvc;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.UseGuide;
+using Teleopti.Ccc.Web.Areas.MyTime.Models;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.AppGuide;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	public class UseGuideController : Controller
+	public class AppGuideController : Controller
 	{
 		private readonly ICurrentTenant _currentTenant;
 
-		public UseGuideController(ICurrentTenant currentTenant)
+		public AppGuideController(ICurrentTenant currentTenant)
 		{
 			_currentTenant = currentTenant;
 		}
 
 		[TenantUnitOfWork]
-		public PartialViewResult WFMApp()
+		public virtual PartialViewResult WFMApp()
 		{
 			var url = _currentTenant.Current().GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl);
 			return PartialView("WFMAppPartial", new WFMAppGuideViewModel

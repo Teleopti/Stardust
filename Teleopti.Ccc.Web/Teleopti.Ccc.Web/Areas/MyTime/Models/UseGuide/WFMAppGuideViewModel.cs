@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Web.Areas.MyTime.Models.UseGuide
+﻿namespace Teleopti.Ccc.Web.Areas.MyTime.Models.AppGuide
 {
 	public class WFMAppGuideViewModel
 	{
