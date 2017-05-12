@@ -170,8 +170,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (agentGroup == null)
 				return BadRequest($"Invalid {nameof(agentGroupId)}");
 			var suggestion = getSuggestion(agentGroup);
-			var planningPeriod = new PlanningPeriod(suggestion, agentGroup);
-			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
+			var result = suggestion.SuggestedPeriods(new DateOnly(_now.UtcDateTime()));
 			return Ok(result.Select(r => new SuggestedPlanningPeriodRangeModel
 			{
 				PeriodType = r.PeriodType.ToString(),

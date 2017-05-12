@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var result =
 				(OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)
 					Target.GetPlanningPeriodSuggestionsForAgentGroup(agentGroup.Id.GetValueOrDefault());
-			result.Content.Count().Should().Be.EqualTo(10);
+			result.Content.Count().Should().Be.EqualTo(6);
 		}
 
 		[Test]
