@@ -30,7 +30,7 @@
 		<script type="text/javascript" src="qrcode.js"></script>
 
 		<%
-		    var version = 1;
+		    var version = DateTime.UtcNow.Ticks;
 		%>
 		
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.js?bust=<%=version%>"></script>
