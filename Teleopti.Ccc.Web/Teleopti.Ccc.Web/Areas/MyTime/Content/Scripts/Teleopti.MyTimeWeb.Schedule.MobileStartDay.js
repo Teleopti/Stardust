@@ -18,12 +18,13 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === "undefined") {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
+Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) { 
 	var vm;
 	var completelyLoaded;
 	var currentPage = "Teleopti.MyTimeWeb.Schedule";
 	var subscribed = false;
 	var dataService;
+	var ajax;
 
 	function cleanBinding() {
 		ko.cleanNode($("#page")[0]);
@@ -46,7 +47,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			swipeRight: function () {
 				vm.previousDay();
 			},
-			preventDefaultEvents:false
+			preventDefaultEvents: false
 		});
 	}
 
@@ -62,7 +63,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 	}
 
 	function initViewModel(weekStart) {
-		vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(weekStart);
+		vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(weekStart, Teleopti.MyTimeWeb.Schedule.MobileStartDay);
 		applyBindings();
 	}
 
@@ -90,13 +91,13 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 					Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialDispose);
 			}
 		},
-		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, dataServiceInstance) {
-			dataService = dataServiceInstance ||
-				new Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService(new Teleopti.MyTimeWeb.Ajax());
+		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxobj) {
+			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
+			dataService = new Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService(ajax);
 			completelyLoaded = completelyLoadedCallback;
 			registerUserInfoLoadedCallback();
 			registerSwipeEvent();
-			Teleopti.MyTimeWeb.Common.HideAgentScheduleMessenger(); 
+			Teleopti.MyTimeWeb.Common.HideAgentScheduleMessenger();
 			readyForInteractionCallback();
 		},
 		ReloadScheduleListener: function (notification) {
@@ -113,6 +114,12 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		},
 		Vm: function () {
 			return vm;
-		}
+		},
+		ReloadSchedule: function () {
+			dataService.fetchData(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash,
+				vm.selectedProbabilityOptionValue(),
+				function (data) { vm.readData(data); });
+		},
+		Ajax: function() { return ajax; }
 	};
 })(jQuery);

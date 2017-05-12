@@ -5,9 +5,12 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.LayerViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel.js" />
 
-Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
+
+Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, parent) { 
 	var self = this;
+
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	self.displayDate = ko.observable();
@@ -103,18 +106,18 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		self.selectedDate(moment(data.Date));
 
 		var dateDiff = self.selectedDate().startOf('day').diff(moment().startOf('day'), 'days');
-		var isTodayOrTomorrow =  dateDiff === 0 || dateDiff === 1;
+		var isTodayOrTomorrow = dateDiff === 0 || dateDiff === 1;
 
 		self.showAbsenceReportingCommandItem(self.absenceReportPermission() && isTodayOrTomorrow);
 	};
 
-	self.setSelectedDateSubscription = function() {
+	self.setSelectedDateSubscription = function () {
 		if (self.selectedDateSubscription)
 			self.selectedDateSubscription.dispose();
 
 		self.selectedDateSubscription = self.selectedDate.subscribe(function (date) {
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + getUrlPartForDate(date) + getUrlPartForProbability());
-			});
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + getUrlPartForDate(date) + getUrlPartForProbability());
+		});
 	};
 
 	function getUrlPartForDate(date) {
@@ -144,22 +147,22 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		self.selectedDate(previousDate);
 	};
 
-	self.enableMenu = function(){
+	self.enableMenu = function () {
 		self.menuIsVisible(true);
 		self.menuIconIsVisible(false);
 	};
 
-	self.disableMenu = function(){
+	self.disableMenu = function () {
 		self.menuIsVisible(false);
 		self.menuIconIsVisible(true);
 	};
 
-	function resetRequestViewModel(){
+	function resetRequestViewModel() {
 		self.requestViewModel(undefined);
 		self.menuIconIsVisible(true);
 	}
 
-	function setupRequestViewModel(requestViewModel, cancelAddingNewRequest){
+	function setupRequestViewModel(requestViewModel, cancelAddingNewRequest) {
 		self.requestViewModel({
 			model: requestViewModel,
 			CancelAddingNewRequest: cancelAddingNewRequest
@@ -168,12 +171,16 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		self.menuIconIsVisible(false);
 	}
 
-	self.showOvertimeAvailabilityForm = function(){
+	self.showOvertimeAvailabilityForm = function () {
 		setupRequestViewModel(null, null);
 	};
 
-	self.showAbsenceReportingForm = function(){
-		setupRequestViewModel(null, null);
+	self.showAbsenceReportingForm = function () {
+		var requestViewModel = new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(parent.Ajax(), function (data) {
+			parent.ReloadSchedule(data);
+			resetRequestViewModel();
+		});
+		setupRequestViewModel(requestViewModel, resetRequestViewModel);
 	};
 
 	self.showAddTextRequestForm = function () {
@@ -184,7 +191,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 
 		requestViewModel.AddRequestCallback = function (data) {
 			var count = self.requestCount() + 1;
-			self.requestCount(count); 
+			self.requestCount(count);
 			resetRequestViewModel();
 		};
 
@@ -195,8 +202,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 	self.showAddAbsenceRequestForm = function () {
 		var requestViewModel = new Teleopti.MyTimeWeb.Request
 			.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest,
-				weekStart,
-				Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
+			weekStart,
+			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
 
 		requestViewModel.AddRequestCallback = function (data) {
 			var count = self.requestCount() + 1;
@@ -209,11 +216,11 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart) {
 		setupRequestViewModel(requestViewModel, resetRequestViewModel);
 	}
 
-	self.redirectToTeamSchduleForShiftTradeRequest = function(){
+	self.redirectToTeamSchduleForShiftTradeRequest = function () {
 		//go to TeamSchedule view
 	};
 
-	self.showPostShiftForTradeForm = function(){
+	self.showPostShiftForTradeForm = function () {
 		//please fill the request view model
 		setupRequestViewModel(null, null);
 	};
