@@ -11,8 +11,8 @@
 		<button ng-if="!vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.startNextPlanningPeriod()">{{'CreateNextPp' | translate}}</button>
 		<button ng-if="vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.getSuggestionsForFirstPp()">{{'CreateFirstPlanningPeriod' | translate}}</button>
 		<div class="line-right pp-color-label" ng-if="!vm.isNonePp() && vm.displayButton">
-			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>{{'ScheduledSucceeded' | translate}}</span>
-			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>{{'ScheduledFailed' | translate}}</span>
+			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>{{'SchedulingSucceeded' | translate}}</span>
+			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>{{'SchedulingFailed' | translate}}</span>
 		</div>
 	</div>
 </div>
@@ -90,8 +90,8 @@
 									<i class="mdi mdi-information-outline"></i> {{'ModifyEndDateForThisPlanningPeriodDot' | translate}}</label>
 								<label ng-if="!vm.dateIsChanged && vm.planningPeriods.length == 1"><i class="mdi mdi-information-outline"></i> {{'ModifyStartAndEndDateForThisPlanningPeriodDot' | translate}}</label>
 								<label ng-if="vm.dateIsChanged" class="text-warning">
-									<i class="mdi mdi-alert"></i>
-									{{'YouAreGoingToChangeThisPlanningPeriodFrom' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate | amDateFormat:"L"}} {{'ToText' | translate}} {{vm.lastPp.startDate | amDateFormat:"L"}} - {{vm.lastPp.endDate | amDateFormat:"L"}}
+								    <i class="mdi mdi-alert"></i>
+									{{vm.youAreGoingToChangeThisPlanningPeriodMessage()}}
 								</label>
 							</div>
 							<div class="con-row">
@@ -134,9 +134,9 @@
 								</div>
 							</div>
 							<div class="con-row" ng-show="vm.selectedSuggestion.endDate">
-								<label class="text-warning">
-									<i class="mdi mdi-alert"></i>{{'YouAreGoingToCreateAPlanningPeriodFrom' | translate}} {{vm.selectedSuggestion.startDate | amDateFormat:"L"}} {{'ToText' | translate}} {{vm.selectedSuggestion.endDate | amDateFormat:"L"}}
-								</label>
+							    <label class="text-warning">
+							        {{vm.youAreGoingToCreateAPlanningPeriodMessage()}}
+							    </label>
 							</div>
 							<div class="con-row">
 								<date-range-picker class="pp-datepicker" ng-model="vm.selectedSuggestion"></date-range-picker>

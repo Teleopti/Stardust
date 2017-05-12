@@ -3052,7 +3052,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to clear schedule result and history data for planning period {0}-{1} ?.
+        ///   Looks up a localized string similar to Are you sure you want to clear scheduled shifts and days off for the planning period {0}-{1} ?.
         /// </summary>
         public static string AreYouSureYouWantToClearPlanningPeriodData {
             get {
@@ -6146,7 +6146,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear planning period data.
+        ///   Looks up a localized string similar to Clear scheduled shifts and days off for the planning period.
         /// </summary>
         public static string ClearPlanningPeriod {
             get {
@@ -6155,7 +6155,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear schedule result and history data.
+        ///   Looks up a localized string similar to Clear scheduled shifts and days off.
         /// </summary>
         public static string ClearScheduleResultAndHistoryData {
             get {
@@ -13251,7 +13251,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You need an agent group to schedule your agents. Do you want to create an agent group?.
+        ///   Looks up a localized string similar to An agent group is needed to be able to schedule. Do you want to create an agent group?.
         /// </summary>
         public static string HelpCreateAgentGroup {
             get {
@@ -15925,7 +15925,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage your day off rules for agent group {0}.
+        ///   Looks up a localized string similar to Manage day off rules for the agent group {0}.
         /// </summary>
         public static string ManageDayOffForAgentGroup {
             get {
@@ -24364,7 +24364,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refresh Pre-scheduling Validation issues.
+        ///   Looks up a localized string similar to Refresh pre-scheduling validation issues.
         /// </summary>
         public static string RefreshPreSchedulingValidationIssues {
             get {
@@ -27012,15 +27012,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scheduled Failed.
-        /// </summary>
-        public static string ScheduledFailed {
-            get {
-                return ResourceManager.GetString("ScheduledFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Scheduled heads.
         /// </summary>
         public static string ScheduledHeads {
@@ -27062,15 +27053,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ScheduledStaff {
             get {
                 return ResourceManager.GetString("ScheduledStaff", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Scheduled Succeeded.
-        /// </summary>
-        public static string ScheduledSucceeded {
-            get {
-                return ResourceManager.GetString("ScheduledSucceeded", resourceCulture);
             }
         }
         
@@ -27436,6 +27418,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduling failed.
+        /// </summary>
+        public static string SchedulingFailed {
+            get {
+                return ResourceManager.GetString("SchedulingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scheduling Options.
         /// </summary>
         public static string SchedulingOptionMessageBox {
@@ -27486,6 +27477,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SchedulingSessionOptions {
             get {
                 return ResourceManager.GetString("SchedulingSessionOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scheduling succeeded.
+        /// </summary>
+        public static string SchedulingSucceeded {
+            get {
+                return ResourceManager.GetString("SchedulingSucceeded", resourceCulture);
             }
         }
         
@@ -31451,7 +31451,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully clear schedule result and history data for planning period {0}-{1}.
+        ///   Looks up a localized string similar to Successfully cleared scheduled shifts and days off for the planning period {0}-{1}.
         /// </summary>
         public static string SuccessClearPlanningPeriodData {
             get {
@@ -31928,7 +31928,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target of {0} scheduled time is not fulfilled.
+        ///   Looks up a localized string similar to Target of {0} contract time is not fulfilled.
         /// </summary>
         public static string TargetScheduleTimeNotFullfilled {
             get {
@@ -36136,7 +36136,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are going to change this planning period from.
+        ///   Looks up a localized string similar to You are going to change this planning period from {0}-{1} to {2}-{3}..
         /// </summary>
         public static string YouAreGoingToChangeThisPlanningPeriodFrom {
             get {
@@ -36145,7 +36145,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are going to create a planning period from.
+        ///   Looks up a localized string similar to You are going to create a planning period from {0} to {1}..
         /// </summary>
         public static string YouAreGoingToCreateAPlanningPeriodFrom {
             get {

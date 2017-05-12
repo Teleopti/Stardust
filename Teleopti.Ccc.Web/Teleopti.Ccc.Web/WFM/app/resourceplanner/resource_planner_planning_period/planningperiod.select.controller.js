@@ -38,9 +38,25 @@
         vm.resetSelectedSuggestion = resetSelectedSuggestion;
         vm.getPpInfo = getPpInfo;
         vm.isNonePp = isNonePp;
+        vm.youAreGoingToChangeThisPlanningPeriodMessage = youAreGoingToChangeThisPlanningPeriodMessage;
+        vm.youAreGoingToCreateAPlanningPeriodMessage = youAreGoingToCreateAPlanningPeriodMessage;
 
         getAgentGroupById();
         getPlanningPeriod();
+
+        function youAreGoingToChangeThisPlanningPeriodMessage() {
+            return $translate.instant("YouAreGoingToChangeThisPlanningPeriodFrom")
+                .replace("{0}", moment(vm.originLastPp.startDate).format('L'))
+                .replace("{1}", moment(vm.originLastPp.endDate).format('L'))
+                .replace("{2}", moment(vm.lastPp.startDate).format('L'))
+                .replace("{3}", moment(vm.lastPp.endDate).format('L'));
+        }
+
+        function youAreGoingToCreateAPlanningPeriodMessage() {
+            return $translate.instant("YouAreGoingToCreateAPlanningPeriodFrom")
+                .replace("{0}", moment(vm.selectedSuggestion.startDate).format('L'))
+                .replace("{1}", moment(vm.selectedSuggestion.endDate).format('L'));
+        }
 
         function getAgentGroupById() {
             if (agentGroupId !== null) {

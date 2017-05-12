@@ -15841,7 +15841,7 @@ Do you want to participate?</value>
     <comment>Used in Web resource planner</comment>
   </data>
   <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
-    <value>Target of {0} scheduled time is not fulfilled</value>
+    <value>Target of {0} contract time is not fulfilled</value>
     <comment>Used in Web resource planner </comment>
   </data>
   <data name="EmailSkillSelected" xml:space="preserve">
@@ -15913,7 +15913,7 @@ Do you want to participate?</value>
     <comment>Filter validation issues</comment>
   </data>
   <data name="HelpCreateAgentGroup" xml:space="preserve">
-    <value>You need an agent group to schedule your agents. Do you want to create an agent group?</value>
+    <value>An agent group is needed to be able to schedule. Do you want to create an agent group?</value>
     <comment>text for helping information</comment>
   </data>
   <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
@@ -15925,7 +15925,7 @@ Do you want to participate?</value>
     <comment>Issue</comment>
   </data>
   <data name="ManageDayOffForAgentGroup" xml:space="preserve">
-    <value>Manage your day off rules for agent group {0}</value>
+    <value>Manage day off rules for the agent group {0}</value>
     <comment>ManageDayOffForAgentGroup</comment>
   </data>
   <data name="NewAgentGroup" xml:space="preserve">
@@ -15953,23 +15953,23 @@ Do you want to participate?</value>
     <comment>Pre-scheduling validation issues</comment>
   </data>
   <data name="RefreshPreSchedulingValidationIssues" xml:space="preserve">
-    <value>Refresh Pre-scheduling Validation issues</value>
+    <value>Refresh pre-scheduling validation issues</value>
     <comment>Refresh Pre-scheduling Validation issues</comment>
   </data>
   <data name="ScheduleAgentGroup" xml:space="preserve">
     <value>Schedule Agent Group</value>
     <comment>ScheduleAgentGroup</comment>
   </data>
-  <data name="ScheduledFailed" xml:space="preserve">
-    <value>Scheduled Failed</value>
+  <data name="SchedulingFailed" xml:space="preserve">
+    <value>Scheduling failed</value>
     <comment>Scheduled Failed</comment>
   </data>
   <data name="ScheduledIssues" xml:space="preserve">
     <value>Issues during last scheduling</value>
     <comment>Issues during last scheduling</comment>
   </data>
-  <data name="ScheduledSucceeded" xml:space="preserve">
-    <value>Scheduled Succeeded</value>
+  <data name="SchedulingSucceeded" xml:space="preserve">
+    <value>Scheduling succeeded</value>
     <comment>Scheduled Succeeded</comment>
   </data>
   <data name="SchedulePageSelectAg" xml:space="preserve">
@@ -16009,7 +16009,7 @@ Do you want to participate?</value>
     <comment>Used in resource planner on web when modifying planning period</comment>
   </data>
   <data name="ClearScheduleResultAndHistoryData" xml:space="preserve">
-    <value>Clear schedule result and history data</value>
+    <value>Clear scheduled shifts and days off</value>
     <comment>Used in resource planner as a hint text to clear schedules action button</comment>
   </data>
   <data name="CreatePlanningPeriod" xml:space="preserve">
@@ -16037,11 +16037,11 @@ Do you want to participate?</value>
     <comment>Used in resource planner on the web when a schedule execution is successful for a planning period</comment>
   </data>
   <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
-    <value>You are going to change this planning period from</value>
+    <value>You are going to change this planning period from {0}-{1} to {2}-{3}.</value>
     <comment>Used in resource planner when modifying planning period</comment>
   </data>
   <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
-    <value>You are going to create a planning period from</value>
+    <value>You are going to create a planning period from {0} to {1}.</value>
     <comment>Used in resource planner on web as a confirmation message when creating a new planning period</comment>
   </data>
   <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
@@ -16049,11 +16049,11 @@ Do you want to participate?</value>
     <comment>Help text in resource planner to show that you need to create a planning period</comment>
   </data>
   <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
-    <value>Are you sure you want to clear schedule result and history data for planning period {0}-{1} ?</value>
+    <value>Are you sure you want to clear scheduled shifts and days off for the planning period {0}-{1} ?</value>
     <comment>AreYouSureYouWantToClearPlaningPeriodData</comment>
   </data>
   <data name="ClearPlanningPeriod" xml:space="preserve">
-    <value>Clear planning period data</value>
+    <value>Clear scheduled shifts and days off for the planning period</value>
     <comment>Clear planning period</comment>
   </data>
   <data name="PublishingSchedule" xml:space="preserve">
@@ -16065,7 +16065,7 @@ Do you want to participate?</value>
     <comment>Published schedule success</comment>
   </data>
   <data name="SuccessClearPlanningPeriodData" xml:space="preserve">
-    <value>Successfully clear schedule result and history data for planning period {0}-{1}</value>
+    <value>Successfully cleared scheduled shifts and days off for the planning period {0}-{1}</value>
     <comment>SuccessClearPlanningPeriodData</comment>
   </data>
   <data name="FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
