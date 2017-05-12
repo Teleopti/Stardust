@@ -5,9 +5,9 @@
     .module('wfm.resourceplanner')
     .controller('planningPeriodOverviewController', Controller);
 
-  Controller.$inject = ['$stateParams', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope'];
+  Controller.$inject = ['$stateParams', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope', '$timeout'];
 
-  function Controller($stateParams, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope) {
+  function Controller($stateParams, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope, $timeout) {
     var vm = this;
     var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
     var selectedPpId = $stateParams.ppId ? $stateParams.ppId : null;
@@ -15,7 +15,7 @@
     var keepAliveRef;
     var preMessage = '';
     vm.publishRunning = false;
-    vm.agentGroup = {}; //get data from dayOff directive 
+    vm.agentGroup = {};
     vm.selectedPp = {};
     vm.schedulingPerformed = false;
     vm.optimizeRunning = false;
@@ -40,7 +40,7 @@
       selectedPpId: selectedPpId
     };
 
-    destroyCheckState();
+    checkState();
     getPlanningPeriodByPpId();
 
     function getPlanningPeriodByPpId() {
@@ -56,19 +56,14 @@
     }
 
     function init() {
-      checkState();
       getTotalAgents();
       loadLastResult();
     }
 
     $scope.$on('$destroy', function () {
-      destroyCheckState();
-    });
-
-    function destroyCheckState() {
       $interval.cancel(checkProgressRef);
       $interval.cancel(keepAliveRef);
-    }
+    });
 
     function checkState(pp) {
       checkProgress();
@@ -81,6 +76,8 @@
         checkIntradayOptimizationProgress();
       }, 10000);
     }
+
+
 
     function isDisable() {
       if (vm.schedulingPerformed || vm.optimizeRunning || vm.totalAgents == 0 || vm.isClearing || vm.publishRunning) {
@@ -244,6 +241,7 @@
       if (selectedPpId !== null) {
         vm.dayNodes = undefined;
         vm.valData.scheduleIssues = [];
+        vm.scheduledAgents = 0;
         planningPeriodServiceNew.lastJobResult({ id: selectedPpId })
           .$promise.then(function (data) {
             if (data.ScheduleResult) {

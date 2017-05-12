@@ -15,21 +15,22 @@
         vm.planningPeriods = [];
         vm.originLastPp = undefined;
         vm.lastPp = undefined;
-        vm.selectedSuggestion = {
-            startDate: null,
-            endDate: null
-        };
+        vm.selectedSuggestion = undefined;
         vm.show = false;
         vm.displayButton = false;
         vm.openCreatePpModal = false;
         vm.modifyLastPpModal = false;
         vm.confirmDeletePpModal = false;
-        vm.dateIsChanged = undefined;
+        vm.dateIsChanged = false;
+        vm.selectedIsChanged = false;
         vm.textForDeletePp = '';
+        vm.textForChangeThisPpMeg = '';
+        vm.textForCreatePpMeg = '';
         vm.startNextPlanningPeriod = startNextPlanningPeriod;
         vm.getLastPp = getLastPp;
         vm.selectPp = selectPp;
         vm.isDateChanged = isDateChanged;
+        vm.isSelectedChanged = isSelectedChanged;
         vm.changeDateForLastPp = changeDateForLastPp;
         vm.deleteLastPp = deleteLastPp;
         vm.getSuggestionsForFirstPp = getSuggestionsForFirstPp;
@@ -38,24 +39,26 @@
         vm.resetSelectedSuggestion = resetSelectedSuggestion;
         vm.getPpInfo = getPpInfo;
         vm.isNonePp = isNonePp;
-        vm.youAreGoingToChangeThisPlanningPeriodMessage = youAreGoingToChangeThisPlanningPeriodMessage;
-        vm.youAreGoingToCreateAPlanningPeriodMessage = youAreGoingToCreateAPlanningPeriodMessage;
 
         getAgentGroupById();
         getPlanningPeriod();
 
         function youAreGoingToChangeThisPlanningPeriodMessage() {
-            return $translate.instant("YouAreGoingToChangeThisPlanningPeriodFrom")
-                .replace("{0}", moment(vm.originLastPp.startDate).format('L'))
-                .replace("{1}", moment(vm.originLastPp.endDate).format('L'))
-                .replace("{2}", moment(vm.lastPp.startDate).format('L'))
-                .replace("{3}", moment(vm.lastPp.endDate).format('L'));
+            if (vm.originLastPp.startDate && vm.lastPp.startDate) {
+                return vm.textForChangeThisPpMeg = $translate.instant("YouAreGoingToChangeThisPlanningPeriodFrom")
+                    .replace("{0}", moment(vm.originLastPp.startDate).format('L'))
+                    .replace("{1}", moment(vm.originLastPp.endDate).format('L'))
+                    .replace("{2}", moment(vm.lastPp.startDate).format('L'))
+                    .replace("{3}", moment(vm.lastPp.endDate).format('L'));
+            }
         }
 
         function youAreGoingToCreateAPlanningPeriodMessage() {
-            return $translate.instant("YouAreGoingToCreateAPlanningPeriodFrom")
-                .replace("{0}", moment(vm.selectedSuggestion.startDate).format('L'))
-                .replace("{1}", moment(vm.selectedSuggestion.endDate).format('L'));
+            if (vm.selectedSuggestion.startDate) {
+                return vm.textForCreatePpMeg = $translate.instant("YouAreGoingToCreateAPlanningPeriodFrom")
+                    .replace("{0}", moment(vm.selectedSuggestion.startDate).format('L'))
+                    .replace("{1}", moment(vm.selectedSuggestion.endDate).format('L'));
+            }
         }
 
         function getAgentGroupById() {
@@ -123,32 +126,40 @@
         }
 
         function isDateChanged() {
-            var diffStartDate = moment(vm.originLastPp.startDate).diff(vm.lastPp.startDate, 'days');
-            var diffEndDate = moment(vm.originLastPp.endDate).diff(vm.lastPp.endDate, 'days');
-            if (diffStartDate !== 0 || diffEndDate !== 0) {
-                return vm.dateIsChanged = true;
+            if (vm.lastPp !== undefined) {
+                var diffStartDate = moment(vm.originLastPp.startDate).diff(vm.lastPp.startDate, 'days');
+                var diffEndDate = moment(vm.originLastPp.endDate).diff(vm.lastPp.endDate, 'days');
+                if (diffStartDate !== 0 || diffEndDate !== 0) {
+                    youAreGoingToChangeThisPlanningPeriodMessage();
+                    return vm.dateIsChanged = true;
+                }
             }
-            else {
-                return vm.dateIsChanged = false;
+            return vm.dateIsChanged = false;
+        }
+
+        function isSelectedChanged() {
+            if (vm.selectedSuggestion !== undefined) {
+                youAreGoingToCreateAPlanningPeriodMessage();
+                return vm.selectedIsChanged = true;
             }
+            return vm.selectedIsChanged = false;
         }
 
         function createFirstPp() {
             if (agentGroupId !== null) {
                 vm.openCreatePpModal = false;
-				vm.displayButton = false;
+                vm.displayButton = false;
 
-				var startDate = moment(vm.selectedSuggestion.startDate).format('YYYY-MM-DD');
-				var newEndDate = moment(vm.selectedSuggestion.endDate).format('YYYY-MM-DD');
+                var startDate = moment(vm.selectedSuggestion.startDate).format('YYYY-MM-DD');
+                var newEndDate = moment(vm.selectedSuggestion.endDate).format('YYYY-MM-DD');
 
-	            return planningPeriodServiceNew
-		            .firstPlanningPeriod({ agentGroupId: agentGroupId, startDate: startDate, endDate: newEndDate }).$promise
-					.then(function (data) {
-						vm.show = false;
-			            vm.planningPeriods.push(data);
-			            vm.displayButton = true;
-			            return vm.planningPeriods;
-		            });
+                var firstPp = planningPeriodServiceNew.firstPlanningPeriod({ agentGroupId: agentGroupId, startDate: startDate, endDate: newEndDate });
+                return firstPp.$promise.then(function (data) {
+                    vm.show = false;
+                    vm.planningPeriods.push(data);
+                    vm.displayButton = true;
+                    return vm.planningPeriods;
+                });
             }
         }
 
@@ -208,6 +219,7 @@
                 startDate: moment(s.StartDate).toDate(),
                 endDate: moment(s.EndDate).toDate()
             };
+
             return vm.selectedSuggestion;
         }
 
