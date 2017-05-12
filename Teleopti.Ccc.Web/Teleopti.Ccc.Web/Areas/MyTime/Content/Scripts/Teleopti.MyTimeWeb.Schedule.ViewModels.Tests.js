@@ -8,6 +8,28 @@ $(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.DayViewModel");
 	
 	Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+	Teleopti.MyTimeWeb.Common.GetUserTexts = function(){
+		return {XRequests: 'XRequests',
+				SubjectColon: 'SubjectColon',
+				LocationColon: 'LocationColon',
+				DescriptionColon: 'DescriptionColon',
+				ChanceOfGettingAbsenceRequestGranted: 'ChanceOfGettingAbsenceRequestGranted',
+				SeatBookings: 'SeatBookings',
+				YouHaveNotBeenAllocatedSeat: 'YouHaveNotBeenAllocatedSeat',
+				Fair: 'Fair',
+				Poor: 'Poor',
+				Good: 'Good',
+				High: 'High',
+				Low: 'Low',
+				ProbabilityToGetAbsenceColon: 'ProbabilityToGetAbsenceColon',
+				ProbabilityToGetOvertimeColon: 'ProbabilityToGetOvertimeColon',
+				HideStaffingInfo: 'HideStaffingInfo',
+				ShowAbsenceProbability: 'ShowAbsenceProbability',
+				ShowOvertimeProbability: 'ShowOvertimeProbability',
+				StaffingInfo: 'StaffingInfo'
+			};
+	};
+
 	var fakeAddRequestViewModel = function() {
 		return {
 			DateFormat: function() {
@@ -137,7 +159,7 @@ $(document).ready(function () {
 		week.initializeData(fakeScheduleData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeData.Days[0], week);
 
-		equal(vm.isDayOff, true);
+		equal(vm.isDayOff(), true);
 	});
 
 	test("should indicate has shift", function () {

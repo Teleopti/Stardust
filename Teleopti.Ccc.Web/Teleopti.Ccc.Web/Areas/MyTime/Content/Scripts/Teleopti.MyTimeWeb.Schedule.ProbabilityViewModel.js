@@ -3,18 +3,13 @@
 		intervalLengthVal,
 		constants = Teleopti.MyTimeWeb.Common.Constants;
 
-	var probabilityLevel = {
-		low: 0,
-		high: 1
-	};
-
 	var startOfToday = moment(rawProbabilityCellData.startTimeMoment).startOf("day");
 
 	function generateCssClass() {
 		var cssClass = "";
-		if (rawProbabilityCellData.possibility === probabilityLevel.low)
+		if (rawProbabilityCellData.possibility === constants.probabilityLevel.low)
 			cssClass = constants.probabilityClass.lowProbabilityClass;
-		else if (rawProbabilityCellData.possibility === probabilityLevel.high)
+		else if (rawProbabilityCellData.possibility === constants.probabilityLevel.high)
 			cssClass = constants.probabilityClass.highProbabilityClass;
 
 		if (parent.userNowInMinute() < rawProbabilityCellData.endTimeInMinutes) {
@@ -62,9 +57,9 @@
 				tooltipTitle = getTooltipsTitle(),
 				intervalTimeSpanText = generateIntervalTimeSpanText(rawProbabilityCellData.startTimeMoment, rawProbabilityCellData.endTimeMoment);
 
-			if (rawProbabilityCellData.possibility === probabilityLevel.low)
+			if (rawProbabilityCellData.possibility === constants.probabilityLevel.low)
 				label = userTexts.Low;
-			else if (rawProbabilityCellData.possibility === probabilityLevel.high)
+			else if (rawProbabilityCellData.possibility === constants.probabilityLevel.high)
 				label = userTexts.High;
 
 			return "<div>" +

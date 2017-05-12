@@ -35,6 +35,10 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 				absence: 1,
 				overtime: 2,
 			},
+			probabilityLevel: {
+				low: 0,
+				high: 1
+			},
 			probabilityClass: {
 				lowProbabilityClass: "probability-low",
 				highProbabilityClass: "probability-high",

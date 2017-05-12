@@ -38,13 +38,13 @@
 				</li>
 			</ul>
 			<!-- ko if: showProbabilityOptionsToggleIcon-->
-			<div class="action-menu-container">
+			<span class="probability-toggle-container">
 				<a class="btn btn-default" data-bind="click: toggleProbabilityOptionsPanel">
 					<!-- ko if: loadingProbabilityData() -->
-					<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="...">
+					<span><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..."></span>
 					<!-- /ko -->
 					<!-- ko ifnot: showingAbsenceProbability() || showingOvertimeProbability() || loadingProbabilityData() -->
-					<i class="glyphicon glyphicon-eye-close"></i>
+					<span><i class="glyphicon glyphicon-eye-close"></i></span>
 					<!-- /ko -->
 					<!-- ko if: showingAbsenceProbability() && !loadingProbabilityData()-->
 					<span class="absence-probability-label"></span>
@@ -53,7 +53,7 @@
 					<span class="overtime-probability-label"></span>
 					<!-- /ko -->
 				</a>
-			</div>
+			</span>
 			<!-- /ko -->
 		</div>
 	</div>

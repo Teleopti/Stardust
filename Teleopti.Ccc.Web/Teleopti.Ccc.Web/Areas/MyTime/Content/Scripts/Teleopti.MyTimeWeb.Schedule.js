@@ -204,7 +204,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				arr[0].textRequestCount(arr[0].textRequestCount() + 1);
 			}
 		};
-
+		
 		var validProbabilitiesTypes = [
 			self.userTexts.HideStaffingInfo,
 			self.userTexts.ShowAbsenceProbability,

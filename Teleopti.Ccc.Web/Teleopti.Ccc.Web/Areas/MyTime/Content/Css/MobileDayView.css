@@ -70,6 +70,12 @@
 	width: 100%;
 	text-align: center;
 }
+.mobile-start-day .probability-toggle-container{
+	margin-right: 4px;
+}
+.mobile-start-day .probability-toggle-container a.btn{
+	padding: 0;
+}
 .mobile-start-day .mobile-timeline {
 	width: 32px;
 	background: transparent;
@@ -98,6 +104,12 @@
 }
 .mobile-start-day .mobile-schedule-layer {
 	min-width: 130px;
+}
+.mobile-start-day .probability-vertical-bar{
+	position: absolute;
+	height: 100%;
+	right: 0;
+	width: 28px;
 }
 .mobile-add-request-form{
 	box-shadow: 0 -8px 17px 0 rgba(0,0,0,.2);

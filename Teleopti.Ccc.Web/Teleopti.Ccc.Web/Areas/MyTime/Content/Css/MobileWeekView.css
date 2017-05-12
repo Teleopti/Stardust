@@ -19,26 +19,33 @@
 	max-width: 329px;
 	flex-grow: 1;
 }
-.weekview-mobile .mobile-weekview-nav .action-menu-container{
-	margin: 0;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+.weekview-mobile .probability-toggle-container{
+	margin: 5px;
 }
-.weekview-mobile .mobile-weekview-nav .action-menu-container > a.btn{
+.probability-toggle-container{
+	display: inline-block;
+}
+.probability-toggle-container > a.btn{
+	background: transparent;
+	border-color: transparent;
+	border-radius: 4px;
+	color: black;
 	margin: 0;
 	padding: 10px;
 	display: flex;
 }
-.weekview-mobile .mobile-weekview-nav .action-menu-container .absence-probability-label,
-.weekview-mobile .mobile-weekview-nav .action-menu-container .overtime-probability-label {
+.probability-toggle-container > a > span{
+	min-width: 20px;
+}
+.probability-toggle-container .absence-probability-label,
+.probability-toggle-container .overtime-probability-label {
 	box-shadow: 0 0 1px 2px #888;
 	color:black;
 }
-.weekview-mobile .container.probability-option-container .well{
+.probability-option-container .well{
 	margin-bottom: 0;
 }
-.weekview-mobile .mobile-weekview-nav .action-menu-container i {
+.probability-toggle-container i {
 	width: 20px;
 	height: 20px;
 }
@@ -81,9 +88,6 @@
 }
 .weekview-mobile .dropdown-menu{
 	overflow-y: auto;
-}
-.weekview-mobile .action-menu-container {
-	margin: 0 5px 5px 15px;
 }
 .weekview-mobile .action-button, .weekview-mobile .probability-icon, .weekview-mobile .background-transparent {
 	padding: 6.5px 10px;

@@ -183,7 +183,7 @@ $(document).ready(function () {
 	test("Should not create probability if set to show absence probability but is full day absence", function () {
 		var scheduleDay = {
 			isFullDayAbsence: true,
-			isDayOff: false,
+			isDayOff: function(){ return false},
 			fixedDate: function () { },
 			periods: [
 				{
@@ -211,7 +211,7 @@ $(document).ready(function () {
 	test("Should not create probability if set to show absence probability but is dayoff", function () {
 		var scheduleDay = {
 			isFullDayAbsence: false,
-			isDayOff: true,
+			isDayOff: function(){ return true},
 			fixedDate: function () { },
 			periods: [
 				{
@@ -239,7 +239,7 @@ $(document).ready(function () {
 	test("Should create probability for schedule starts from yesterday even today is dayoff", function() {
 		var scheduleDay = {
 			isFullDayAbsence: false,
-			isDayOff: true,
+			isDayOff: function() { return true},
 			fixedDate: function () { return baseDate },
 			periods: [
 				{
@@ -263,7 +263,7 @@ $(document).ready(function () {
 		var scheduleDay = {
 			fixedDate: function () { return baseDate },
 			isFullDayAbsence: false,
-			isDayOff: false,
+			isDayOff: function() { return false},
 			periods: [
 				{
 					"StartTime": yesterday + "T20:00:00",
@@ -306,7 +306,7 @@ $(document).ready(function () {
 		var scheduleDay = {
 			fixedDate: function () { return baseDate },
 			isFullDayAbsence: false,
-			isDayOff: false,
+			isDayOff: function() { return false},
 			periods: [
 				{
 					"StartTime": baseDate + "T02:45:00",
@@ -347,7 +347,7 @@ $(document).ready(function () {
 		var scheduleDay = {
 			fixedDate: function () { return baseDate },
 			isFullDayAbsence: false,
-			isDayOff: false,
+			isDayOff: function() { return false},
 			periods: [
 				{
 					"StartTime": baseDate + "T02:45:00",
@@ -390,7 +390,7 @@ $(document).ready(function () {
 		var scheduleDay = {
 			fixedDate: function () { return baseDate },
 			isFullDayAbsence: false,
-			isDayOff: false,
+			isDayOff: function(){ return false},
 			periods: [
 	 			{
 	 				"StartTime": baseDate + "T06:00:00",
@@ -457,7 +457,7 @@ $(document).ready(function () {
 		var scheduleDay = {
 			fixedDate: function () { return baseDate },
 			isFullDayAbsence: false,
-			isDayOff: false,
+			isDayOff: function(){ return false},
 			periods: [
 	 			{
 	 				"StartTime": baseDate + "T00:00:00",
@@ -531,7 +531,7 @@ $(document).ready(function () {
 		var scheduleDay = { 
 			fixedDate: function () { return baseDate },
 			isFullDayAbsence: false,
-			isDayOff: false,
+			isDayOff: function(){ return false},
 			periods: [
 	 			{
 	 				"StartTime": baseDate + "T00:00:00",

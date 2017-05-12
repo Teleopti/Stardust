@@ -85,7 +85,7 @@
 		if (options.probabilityType === constants.probabilityType.absence) {
 			if (dayViewModel.isFullDayAbsence)
 				return [];
-			if (dayViewModel.isDayOff && !existsScheduleFromYesterday(dayViewModel))
+			if (dayViewModel.isDayOff() && !existsScheduleFromYesterday(dayViewModel))
 				return [];
 		}
 

@@ -12,6 +12,7 @@ Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (dayViewModel, timeli
 
 	var timelineStartMinutes = timelines[0].minutes;
 	var timelineEndMinutes = timelines[timelines.length - 1].minutes;
+
 	if (timelineEndMinutes === constants.totalMinutesOfOneDay - 1) {
 		timelineEndMinutes = constants.totalMinutesOfOneDay;
 	}

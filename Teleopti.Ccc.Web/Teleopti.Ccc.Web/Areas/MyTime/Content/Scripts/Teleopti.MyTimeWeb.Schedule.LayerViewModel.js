@@ -6,7 +6,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
 
-Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
+Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMobile) {
 	var self = this;
 	var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
@@ -77,7 +77,7 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
 		return self.top() + "px";
 	});
 	self.widthPx = ko.computed(function () {
-		return getWidth(layer.IsOvertimeAvailability, parent.probabilities());
+		return getWidth(layer.IsOvertimeAvailability, parent.probabilities(), layersOnMobile);
 	});
 	self.heightPx = ko.computed(function () {
 		return self.height() + "px";
@@ -134,12 +134,12 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent) {
 	});
 };
 
-function getWidth(isOvertimeAvailability, probabilities) {
+function getWidth(isOvertimeAvailability, probabilities, layersOnMobile) {
 	var width;
 	if (isOvertimeAvailability) {
 		width = 20 + "%";
-	} else if (probabilities && probabilities.length > 0) {
-		width = 100 + "%";
+	} else if (probabilities && probabilities.length > 0 && layersOnMobile) {
+		width = "calc(100% - 28px)";//MobileDayView.css .mobile-start-day .probability-vertical-bar{width: 28px;}
 	} else {
 		width = "calc(" + 100 + "%" + " - 2px)";
 	}

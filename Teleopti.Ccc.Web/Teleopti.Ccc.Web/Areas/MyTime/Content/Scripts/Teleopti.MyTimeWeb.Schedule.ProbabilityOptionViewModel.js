@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel = function (selectedOptionValue, weekViewModelParent) {
+﻿Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel = function (selectedOptionValue, parent) {
 	var probabilityType = Teleopti.MyTimeWeb.Common.Constants.probabilityType;
 
 	this.Template = "probability-options-template";
@@ -10,9 +10,9 @@
 
 	this.onOptionSelected = function (opValue) {
 		this.checkedProbability(opValue);
-		weekViewModelParent.OnProbabilityOptionSelectCallback(parseInt(this.checkedProbability()));
+		parent.onProbabilityOptionSelectCallback(parseInt(this.checkedProbability()));
 	};
 	this.absenceProbabilityEnabled = ko.computed(function() {
-		return weekViewModelParent.absenceProbabilityEnabled();
+		return parent.absenceProbabilityEnabled();
 	});
 }

@@ -10,7 +10,7 @@
 		height: calc(100% - 21px);
 	}
 	.mobile-start-day-body {
-		height: calc(100% - 73px);
+		height: calc(100% - 53px);
 		overflow-y: auto;
 	}
 	.datepicker.dropdown-menu{
@@ -30,6 +30,9 @@
 </script>
 <script type="text/html" id="add-overtime-availability-template">
 	@Html.Partial("AddOvertimeAvailabilityPartial")
+</script>
+<script type="text/html" id="probability-options-template">
+	@Html.Partial("ProbabilityOptionsPartial")
 </script>
 
 <div class="mobile-start-day">
@@ -55,7 +58,7 @@
 					</div>
 				</li>
 				<li class="mobile-today">
-					<a href="#Schedule/MobileDay">
+					<a data-bind="attr:{href: '#Schedule/MobileDay' + getUrlPartForProbability()}">
 						<i class="glyphicon glyphicon-home"></i>
 					</a>
 				</li>
@@ -85,6 +88,25 @@
 			<!-- ko if: hasOvertime-->
 			<span>@Resources.Overtime</span>
 			<!-- /ko -->
+
+			<!-- ko if: showProbabilityOptionsToggleIcon-->
+			<span class="probability-toggle-container pull-right">
+				<a class="btn btn-default" data-bind="click: toggleProbabilityOptionsPanel">
+					<!-- ko if: loadingProbabilityData -->
+					<span><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..."></span>
+					<!-- /ko -->
+					<!-- ko ifnot: showingAbsenceProbability() || showingOvertimeProbability() || loadingProbabilityData() -->
+					<span><i class="glyphicon glyphicon-eye-close"></i></span>
+					<!-- /ko -->
+					<!-- ko if: showingAbsenceProbability() && !loadingProbabilityData()-->
+					<span class="absence-probability-label"></span>
+					<!-- /ko -->
+					<!-- ko if: showingOvertimeProbability() && !loadingProbabilityData() -->
+					<span class="overtime-probability-label"></span>
+					<!-- /ko -->
+				</a>
+			</span>
+			<!-- /ko -->
 		</div>
 		
 		<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleHeight}">
@@ -110,12 +132,19 @@
 				</div>
 			</div>
 			<!-- /ko -->
+			<!-- ko if: showProbabilityOptionsToggleIcon || probabilities().length > 0 -->
+				<div class="probability-vertical-bar">
+					<!--ko foreach: probabilities-->
+					<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
+					<!-- /ko -->
+				</div>
+			<!-- /ko -->
 		</div>
 	</div>
 
 	<!-- ko if: isCommandEnable -->
-	<div class="close-fab-overlay" data-bind="visible: menuIsVisible, click: disableMenu"></div>
-	<div class="fab" data-bind="visible: menuIconIsVisible, click: enableMenu" tabindex="0"></div>
+	<div class="close-fab-overlay" data-bind="visible: menuIsVisible() || focusingRequestForm(), click: hideMenuAndRequestForm"></div>
+	<div class="fab" data-bind="visible: menuIconIsVisible, click: showMenu" tabindex="0"></div>
 	<div class="navbar navbar-teleopti subnavbar" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
 		<ul class="nav navbar-nav navbar-teleopti row submenu" >
 			<li data-bind="visible: textRequestPermission" class="col-xs-12 col-sm-4">

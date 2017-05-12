@@ -162,7 +162,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData, bl
 	var probabilityOptionModel = {
 		model: new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self),
 		type: function () { return "probabilityOptions" },
-		OnProbabilityOptionSelectCallback: function (selectedOptionValue) { self.OnProbabilityOptionSelectCallback(selectedOptionValue); }
+		OnProbabilityOptionSelectCallback: function (selectedOptionValue) { self.onProbabilityOptionSelectCallback(selectedOptionValue); }
 	};
 
 	self.toggleProbabilityOptionsPanel = function (data) {
@@ -186,7 +186,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData, bl
 			&& self.requestViewModel().type() === probabilityOptionModel.type();
 	});
 
-	self.OnProbabilityOptionSelectCallback = function (selectedOptionValue) {
+	self.onProbabilityOptionSelectCallback = function (selectedOptionValue) {
 		if (selectedOptionValue === self.selectedProbabilityOptionValue()) {
 			self.requestViewModel(undefined);
 			return;
