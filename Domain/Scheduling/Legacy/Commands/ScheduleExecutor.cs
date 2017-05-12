@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class ScheduleExecutor : ScheduleExecutorOld
 	{
-		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, TeamBlockScheduleCommand teamBlockScheduleCommand, ClassicScheduleCommand classicScheduleCommand, MatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation) 
+		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, IScheduleCommand teamBlockScheduleCommand, ClassicScheduleCommand classicScheduleCommand, MatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation) 
 			: base(schedulerStateHolder, requiredScheduleOptimizerHelper, scheduleDayChangeCallback, teamBlockScheduleCommand, classicScheduleCommand, matrixListFactory, weeklyRestSolverCommand, resourceCalculationContextFactory, userTimeZone, resourceCalculation)
 		{
 		}
