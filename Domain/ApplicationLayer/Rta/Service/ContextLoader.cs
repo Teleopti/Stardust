@@ -249,6 +249,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						.Where(x => x.Processed)
 						.ForEach(x => _agentStatePersister.Update(x.State));
 				}
+				// have to publish events inside the transaction with the person lock
+				// because AgentStateReadModelUpdater, which is run in memory, does not handle the concurrency
 				eventCollector.Publish();
 			});
 
