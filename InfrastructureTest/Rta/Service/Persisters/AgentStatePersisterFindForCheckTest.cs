@@ -5,9 +5,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 {
 	[TestFixture]
 	[UnitOfWorkTest]

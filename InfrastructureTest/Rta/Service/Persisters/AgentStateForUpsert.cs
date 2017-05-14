@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 {
 	public static class AgentStatePersisterUpsert
 	{

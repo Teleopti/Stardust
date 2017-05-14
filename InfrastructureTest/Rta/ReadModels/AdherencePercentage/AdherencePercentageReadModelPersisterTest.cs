@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
+namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AdherencePercentage
 {
 	[TestFixture]
 	[ReadModelUnitOfWorkTest]

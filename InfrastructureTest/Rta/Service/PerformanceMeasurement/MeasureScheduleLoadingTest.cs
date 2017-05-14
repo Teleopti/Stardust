@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 {
 	[TestFixture]
 	[Explicit]

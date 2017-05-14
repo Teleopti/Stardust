@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 {
 	[TestFixture]
 	[MultiDatabaseTest]

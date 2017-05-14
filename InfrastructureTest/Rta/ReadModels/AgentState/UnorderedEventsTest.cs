@@ -14,7 +14,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta
+namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
 	[TestFixture]
 	[DatabaseTest]
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 						SiteId = siteId,
 						SiteName = "london",
 						Timestamp = "2017-04-12 08:00:00".Utc(),
-						ExternalLogons = new []{new ExternalLogon { DataSourceId = 1, UserCode = "roger"} }
+						ExternalLogons = new []{new Domain.ApplicationLayer.Events.ExternalLogon { DataSourceId = 1, UserCode = "roger"} }
 					},
 					new PersonEmploymentNumberChangedEvent
 					{

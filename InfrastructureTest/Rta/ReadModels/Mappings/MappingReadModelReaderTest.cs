@@ -15,9 +15,8 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta
+namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.Mappings
 {
 	[TestFixture]
 	[DatabaseTest]

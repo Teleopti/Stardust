@@ -1,5 +1,4 @@
 using System.Linq;
-using Castle.Core.Configuration;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -8,7 +7,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
+namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.Schedules
 {
 	[TestFixture]
 	[DatabaseTest]

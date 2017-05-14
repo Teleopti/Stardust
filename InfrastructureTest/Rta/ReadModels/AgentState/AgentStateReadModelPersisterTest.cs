@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
+namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
 	[TestFixture]
 	[UnitOfWorkTest]

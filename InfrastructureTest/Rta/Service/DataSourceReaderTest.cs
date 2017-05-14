@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 {
 	[TestFixture]
 	[AnalyticsDatabaseTest]

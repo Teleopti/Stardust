@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 {
 	public class PerformanceMeasurementTestAttribute : InfrastructureTestAttribute
 	{

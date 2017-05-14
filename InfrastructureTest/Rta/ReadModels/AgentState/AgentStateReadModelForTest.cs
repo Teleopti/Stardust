@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta
+namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
 	public class AgentStateReadModelForTest : AgentStateReadModel
 	{

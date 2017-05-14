@@ -6,12 +6,11 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 {
 	[Toggle(Toggles.RTA_SpreadTransactionLocksStrategy_41823)]
 	[Toggle(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]

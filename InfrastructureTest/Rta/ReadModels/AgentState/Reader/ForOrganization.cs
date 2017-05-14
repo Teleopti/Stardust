@@ -9,10 +9,8 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
+namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 {
 	[TestFixture]
 	[UnitOfWorkTest]

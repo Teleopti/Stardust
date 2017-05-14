@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 {
 	[TestFixture]
 	[Explicit]
