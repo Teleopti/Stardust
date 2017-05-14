@@ -212,15 +212,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				if (Thread.CurrentThread.Name == null)
 					Thread.CurrentThread.Name = $"{strategy.ParentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
 
-				_deadLockRetrier.RetryOnDeadlock(() =>
-				{
-					var eventCollector = new EventCollector(_eventPublisher);
-					using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
-					{
-						Transaction(tenant, strategy, transaction);
-					}
-					eventCollector.Publish();
-				});
+				_deadLockRetrier.RetryOnDeadlock(() => Transaction(tenant, strategy, transaction));
 
 			}
 			catch (Exception e)
@@ -237,22 +229,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			WithUnitOfWork(() =>
 			{
-				agentStates
-					.Invoke()
-					.Select(state =>
-						new ProcessInput(
-							strategy.CurrentTime,
-							strategy.DeadLockVictim,
-							strategy.GetInputFor(state),
-							state,
-							_scheduleCache.Read(state.PersonId),
-							_stateMapper,
-							_appliedAlarm
+				var eventCollector = new EventCollector(_eventPublisher);
+				using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
+				{
+					agentStates
+						.Invoke()
+						.Select(state =>
+							new ProcessInput(
+								strategy.CurrentTime,
+								strategy.DeadLockVictim,
+								strategy.GetInputFor(state),
+								state,
+								_scheduleCache.Read(state.PersonId),
+								_stateMapper,
+								_appliedAlarm
+							)
 						)
-					)
-					.Select(x => _processor.Process(x))
-					.Where(x => x.Processed)
-					.ForEach(x => _agentStatePersister.Update(x.State));
+						.Select(x => _processor.Process(x))
+						.Where(x => x.Processed)
+						.ForEach(x => _agentStatePersister.Update(x.State));
+				}
+				eventCollector.Publish();
 			});
 
 		}
