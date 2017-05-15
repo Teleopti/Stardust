@@ -13,34 +13,34 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class ScheduleOvertime
 	{
-		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
-		private readonly FullResourceCalculation _fullResourceCalculation;
+		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public ScheduleOvertime(Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
+		public ScheduleOvertime(Func<ISchedulerStateHolder> schedulerStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
-																	FullResourceCalculation fullResourceCalculation,
 																	IResourceCalculation resourceOptimizationHelper,
-																	IUserTimeZone userTimeZone)
+																	IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation)
 		{
-			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
-			_fullResourceCalculation = fullResourceCalculation;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_userTimeZone = userTimeZone;
+			_resourceCalculation = resourceCalculation;
 		}
 
 		public void Execute(IOvertimePreferences overtimePreferences, 
 										ISchedulingProgress backgroundWorker, 
 										IList<IScheduleDay> selectedSchedules)
 		{
-			_fullResourceCalculation.Execute();
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, _schedulingResultStateHolder(), _userTimeZone);
+			var stateholder = _schedulerStateHolder();
+			_resourceCalculation.ResourceCalculate(stateholder.RequestedPeriod.DateOnlyPeriod, stateholder.SchedulingResultState.ToResourceOptimizationData(stateholder.ConsiderShortBreaks, false));
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, stateholder.SchedulingResultState, _userTimeZone);
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			var cancel = false;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					if (cancel || checkIfCancelPressed(backgroundWorker)) return;
 
-					var scheduleDay = _schedulingResultStateHolder().Schedules[person].ScheduledDay(dateOnly);
+					var scheduleDay = _schedulerStateHolder().Schedules[person].ScheduledDay(dateOnly);
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
 					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter);
 					_scheduleOvertimeOnNonScheduleDays.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer);

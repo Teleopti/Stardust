@@ -1427,7 +1427,6 @@
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\CascadingResourceCalculationContextFactory.cs" />
     <Compile Include="ResourceCalculation\ExtractSkillStaffDataForResourceCalculation.cs" />
-    <Compile Include="ResourceCalculation\FullResourceCalculation.cs" />
     <Compile Include="ResourceCalculation\PersonalSkills.cs" />
     <Compile Include="ResourceCalculation\PersonalSkillsProvider.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationCurrent.cs" />

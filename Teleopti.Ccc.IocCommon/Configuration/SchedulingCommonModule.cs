@@ -102,7 +102,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AddResourcesToSubSkillsOld>().As<IAddResourcesToSubSkills>().SingleInstance();
 				builder.RegisterType<PrimarySkillOverstaffOld>().As<PrimarySkillOverstaff>().SingleInstance();
 			}
-			builder.RegisterType<FullResourceCalculation>().InstancePerLifetimeScope();
 			builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
