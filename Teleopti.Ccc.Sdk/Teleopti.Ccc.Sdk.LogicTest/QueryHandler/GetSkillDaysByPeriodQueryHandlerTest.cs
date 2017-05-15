@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			                                              skillRepository, resourceCalculationPrerequisitesLoader,
 			                                              new FakeCurrentUnitOfWorkFactory(), resourceOptimizationHelper,
 			                                              loadSchedulingStateHolderForResourceCalculation,
-			                                              schedulingResultStateHolder);
+			                                              schedulingResultStateHolder, new FakeActivityRepository());
 		}
 
 		[Test]
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 														  skillRepository, resourceCalculationPrerequisitesLoader,
 														  new FakeCurrentUnitOfWorkFactory(), resourceOptimizationHelper,
 														  loadSchedulingStateHolderForResourceCalculation,
-														  schedulingResultStateHolder);
+														  schedulingResultStateHolder, new FakeActivityRepository());
 
 			target.Handle(new GetSkillDaysByPeriodQueryDto
 			{

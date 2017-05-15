@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IActivityRepository _activityRepository;
 
 		public GetSkillDaysByPeriodQueryHandler(IDateTimePeriodAssembler dateTimePeriodAssembler,
 			IAssembler<ISkillStaffPeriod, SkillDataDto> skillDataAssembler, ICurrentScenario scenarioRepository,
@@ -36,7 +38,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			IResourceCalculation resourceOptimizationHelper,
 			ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IActivityRepository activityRepository)
 		{
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
 			_skillDataAssembler = skillDataAssembler;
@@ -48,6 +51,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_activityRepository = activityRepository;
 		}
 
 		public ICollection<SkillDayDto> Handle(GetSkillDaysByPeriodQueryDto query)
@@ -57,10 +61,15 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				throw new FaultException();
 			ICollection<SkillDayDto> returnList = new List<SkillDayDto>();
 			TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId);
-			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var requestedScenario = _scenarioRepository.Current();
-				_skillRepository.LoadAll();
+
+				using (uow.DisableFilter(QueryFilter.Deleted))
+				{
+					_skillRepository.LoadAll();
+					_activityRepository.LoadAll();
+				}
 
 				var period = dateOnlyPeriod.ToDateTimePeriod(timeZoneInfo);
 				var periodForResourceCalc = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
