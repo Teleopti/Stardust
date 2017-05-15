@@ -4,16 +4,19 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
 	public class StateController : ApiController
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
+		private readonly INow _now;
 
-		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta)
+		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, INow now)
 		{
 			_rta = rta;
+			_now = now;
 		}
 
 		[HttpPost, Route("Rta/State/Change")]
@@ -25,7 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				{
 					AuthenticationKey = input.AuthenticationKey,
 					SourceId = input.SourceId,
-					SnapshotId = parseSnapshotId(input.SnapshotId),
 					States = new[]
 					{
 						new BatchStateInputModel
@@ -69,7 +71,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				{
 					AuthenticationKey = input.AuthenticationKey,
 					SourceId = input.SourceId,
-					SnapshotId = parseSnapshotId(input.SnapshotId),
+					SnapshotId = input.IsSnapshot ? _now.UtcDateTime() : null as DateTime?,
+					CloseSnapshot = input.IsSnapshot,
 					States = input.States.Select(i => new BatchStateInputModel
 						{
 							UserCode = i.UserCode,
@@ -101,19 +104,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 			return Ok();
 		}
-
-		[HttpPost, Route("Rta/State/CloseSnapshot")]
-		public void CloseSnapshot([FromBody]ExternalCloseSnapshotWebModel input)
-		{
-			_rta.SaveStateBatch(new BatchInputModel
-			{
-				AuthenticationKey = input.AuthenticationKey,
-				SourceId = input.SourceId,
-				SnapshotId = input.SnapshotId,
-				CloseSnapshot = true
-			});
-		}
-
+		
 		private static DateTime? parseSnapshotId(string snapshotId)
 		{
 			DateTime parsed;

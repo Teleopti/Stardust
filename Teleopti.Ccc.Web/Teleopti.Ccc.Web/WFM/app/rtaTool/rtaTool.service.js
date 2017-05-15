@@ -13,8 +13,7 @@
 			getStateCodes: getStateCodes,
 			getAgents: getAgents,
 			sendState: sendState,
-			sendBatch: sendBatch,
-			closeSnapshot: closeSnapshot
+			sendBatch: sendBatch
 		}
 
 		return service;
@@ -34,13 +33,6 @@
 		function sendBatch(batch) {
 			return $resource('../Rta/State/Batch', {}, { query: { method: 'POST', }, }).query(batch).$promise;
 		}
-
-		function closeSnapshot(data) {
-			return $resource('../Rta/State/CloseSnapshot',
-				{},
-				{ query: { method: 'POST', }, }
-			).query(data).$promise;
-
-		}
+		
 	};
 })();

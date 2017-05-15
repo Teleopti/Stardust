@@ -130,15 +130,11 @@
 				var batch = {
 					AuthenticationKey: vm.authKey,
 					SourceId: d,
-					SnapshotId: snapshotId,
+					IsSnapshot: vm.snapshot,
 					States: states
 				};
 
-				rtaToolService.sendBatch(batch)
-					.then(function () {
-						if (vm.snapshot)
-							closeSnapshot(vm.authKey, d, snapshotId);
-					});
+				rtaToolService.sendBatch(batch);
 			});
 		}
 
@@ -146,32 +142,26 @@
 			var stateCode = vm.stateCodes
 				.filter(function (s) { return s.Name == displayName; })
 				.map(function (s) { return s.Code; })[0];
-			var state = {
+
+			var batch = {
 				AuthenticationKey: vm.authKey,
-				UserCode: userCode,
-				StateCode: stateCode,
 				SourceId: dataSource,
-				SnapshotId: now()
+				IsSnapshot: vm.snapshot,
+				States: [
+					{
+						UserCode: userCode,
+						StateCode: stateCode
+					}
+				]
 			};
-			rtaToolService.sendState(state)
-				.then(function () {
-					if (vm.snapshot)
-						closeSnapshot(vm.authKey, dataSource, now())
-				});
+
+			rtaToolService.sendBatch(batch);
 		}
 
 		function now() {
 			return moment.utc().format('YYYY-MM-DD HH:mm:ss');
 		}
-
-		function closeSnapshot(authKey, dataSource, snapshotId) {
-			rtaToolService.closeSnapshot({
-				AuthenticationKey: authKey,
-				SourceId: dataSource,
-				SnapshotId: snapshotId
-			});
-		}
-
+		
 		function startSendingBatchWithRandomStates() {
 			sendingBatchWithRandomStatesTrigger = $interval(function () {
 				vm.sendRandom();

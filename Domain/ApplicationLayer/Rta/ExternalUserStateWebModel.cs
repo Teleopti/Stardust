@@ -9,14 +9,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public string SourceId { get; set; }
 		public string UserCode { get; set; }
 		public string StateCode { get; set; }
-		public string SnapshotId { get; set; }
 	}
 
 	public class ExternalUserBatchWebModel
 	{
 		public string AuthenticationKey { get; set; }
 		public string SourceId { get; set; }
-		public string SnapshotId { get; set; }
+		public bool IsSnapshot { get; set; }
 		public IEnumerable<ExternalUserBatchStateWebModel> States { get; set; }
 	}
 
@@ -25,11 +24,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public string UserCode { get; set; }
 		public string StateCode { get; set; }
 	}
-
-	public class ExternalCloseSnapshotWebModel
-	{
-		public string AuthenticationKey { get; set; }
-		public string SourceId { get; set; }
-		public DateTime SnapshotId { get; set; }
-	}
+	
 }
