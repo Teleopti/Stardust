@@ -227,7 +227,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				// because AgentStateReadModelUpdater, which is run in memory, does not handle the concurrency
 				eventCollector.Publish();
 			});
-
 		}
 		
 		[ReadModelUnitOfWork]

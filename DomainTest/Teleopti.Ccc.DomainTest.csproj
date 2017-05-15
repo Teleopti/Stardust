@@ -213,6 +213,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\CaseInsensitiveTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\MeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonRuleChangedEventTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelBatchTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftMeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\AgentStateNameTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ExcludePhoneStateTest.cs" />

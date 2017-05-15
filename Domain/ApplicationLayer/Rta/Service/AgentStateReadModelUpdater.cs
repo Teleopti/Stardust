@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					var model = _persister.Load(eventsForPerson.Key.Value) ?? new AgentStateReadModel();
 					if (model.IsDeleted) return;
 
-					events.ForEach(e => handle(model, (dynamic) e));
+					eventsForPerson.ForEach(e => handle(model, (dynamic) e));
 
 					if (model.OutOfAdherences != null)
 						model.OutOfAdherences = model.OutOfAdherences
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_persister.Persist(model);
 				});
 		}
-		
+
 		private static void handle(AgentStateReadModel model, AgentStateChangedEvent @event)
 		{
 			model.ReceivedTime = @event.Time;
