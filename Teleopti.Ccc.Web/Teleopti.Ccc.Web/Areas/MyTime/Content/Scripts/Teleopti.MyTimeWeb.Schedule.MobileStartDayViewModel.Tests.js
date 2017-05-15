@@ -213,6 +213,35 @@ $(document).ready(function() {
 		equal(viewModel.menuIconIsVisible(), false);
 	});
 
+	test("should reset form and menu status after click 'Cancel' in request forms", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		viewModel.showAddTextRequestForm();
+		equal(viewModel.requestViewModel() != undefined, true);
+		equal(viewModel.menuIconIsVisible(), false);
+		equal(viewModel.focusingRequestForm(), true);
+
+		viewModel.requestViewModel().CancelAddingNewRequest();
+		equal(viewModel.requestViewModel(), undefined);
+		equal(viewModel.menuIconIsVisible(), true);
+		equal(viewModel.focusingRequestForm(), false);
+	});
+
+	test("should reset form and menu status after click 'Add' in request forms", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		viewModel.showAddTextRequestForm();
+		equal(viewModel.requestViewModel() != undefined, true);
+		equal(viewModel.menuIconIsVisible(), false);
+		equal(viewModel.focusingRequestForm(), true);
+
+		viewModel.requestViewModel().model.AddRequestCallback();
+		equal(viewModel.requestCount(), 1);
+		equal(viewModel.requestViewModel(), undefined);
+		equal(viewModel.menuIconIsVisible(), true);
+		equal(viewModel.focusingRequestForm(), false);
+	});
+
 	test("should not show overtime availability command item without permission", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 

@@ -118,7 +118,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		ReloadSchedule: function () {
 			dataService.fetchData(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash,
 				vm.selectedProbabilityOptionValue(),
-				function (data) { vm.readData(data); });
+					function (data) { //vm.readData(data); 
+				});
 		},
 		Ajax: function() { return ajax; }
 	};

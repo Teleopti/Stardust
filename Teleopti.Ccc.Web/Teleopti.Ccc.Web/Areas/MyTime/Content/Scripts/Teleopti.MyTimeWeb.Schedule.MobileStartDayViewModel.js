@@ -268,6 +268,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	function resetRequestViewModel() {
 		self.requestViewModel(undefined);
 		self.menuIconIsVisible(true);
+		self.focusingRequestForm(false);
 	}
 
 	function setupRequestViewModel(requestViewModel, cancelAddingNewRequest) {
