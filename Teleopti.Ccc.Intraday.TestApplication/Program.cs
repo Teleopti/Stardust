@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				DateTime date;
 				if (DateTime.TryParseExact(input, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
 				{
-					return new DateTime(date.Year, date.Month, date.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+					return date.Add(DateTime.Now.TimeOfDay);
 				}
 
 				Console.WriteLine("Invalid date format.");
