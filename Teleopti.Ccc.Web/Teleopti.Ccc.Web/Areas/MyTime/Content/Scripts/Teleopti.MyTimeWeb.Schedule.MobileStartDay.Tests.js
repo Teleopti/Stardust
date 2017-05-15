@@ -409,6 +409,14 @@
 		equal(requestViewModel.Template(), templateConfig.default);
 
 		equal(vm.requestCount(), 0);
+    });
+
+	test("should navigate to team schedule", function () {
+		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow());
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.redirectToShiftTradeRequest();
+		equal(hash, "Requests/Index/ShiftTrade/" + vm.requestDay.format("YYYYMMDD"));
 	});
 
 

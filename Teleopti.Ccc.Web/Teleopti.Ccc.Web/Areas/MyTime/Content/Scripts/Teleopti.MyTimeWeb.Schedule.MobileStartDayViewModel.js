@@ -345,8 +345,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		resetRequestViewModel();
 	}
 
-	self.redirectToTeamSchduleForShiftTradeRequest = function () {
-		//go to TeamSchedule view
+	self.redirectToShiftTradeRequest = function () {
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/ShiftTrade/" + self.requestDay.format("YYYYMMDD"));
 	};
 
 	self.showPostShiftForTradeForm = function () {
