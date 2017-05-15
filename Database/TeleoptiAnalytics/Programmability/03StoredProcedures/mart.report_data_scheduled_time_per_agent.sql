@@ -59,7 +59,9 @@ CREATE TABLE #fact_schedule(
 	[scheduled_contract_time_absence_m] [int] NULL,
 	[scheduled_work_time_m] [int] NULL,
 	[scheduled_over_time_m] [int] NULL,
-	[scheduled_paid_time_m] [int] NULL
+	[scheduled_paid_time_m] [int] NULL,
+	[overtime_id] [int] NULL,
+	[planned_overtime_m] [int] NULL
 )
 CREATE TABLE #result(
 	date_id int,
@@ -75,6 +77,7 @@ CREATE TABLE #result(
 	scheduled_over_time_m int,
 	scheduled_absence_time_m int,
 	scheduled_time_m int,--regardless of contract time
+	planned_overtime_m int,
 	hide_time_zone bit
 )
 
@@ -104,14 +107,14 @@ SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_i
 
 /*Snabba upp fraga mot fact_schedule*/
 INSERT INTO #fact_schedule
-SELECT shift_startdate_local_id,schedule_date_id, person_id, interval_id, scenario_id, activity_id, absence_id, scheduled_time_m, scheduled_contract_time_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_over_time_m, scheduled_paid_time_m
+SELECT shift_startdate_local_id,schedule_date_id, person_id, interval_id, scenario_id, activity_id, absence_id, scheduled_time_m, scheduled_contract_time_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_over_time_m, scheduled_paid_time_m, overtime_id, planned_overtime_m
 FROM mart.fact_schedule fs WITH (NOLOCK)
 --WHERE schedule_date_id in (select b.date_id from mart.bridge_time_zone b INNER JOIN mart.dim_date d 	
 --							ON b.local_date_id = d.date_id where d.date_date BETWEEN  @date_from AND @date_to AND b.time_zone_id=@time_zone_id)
 WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
 
 /* Get all schedele time for all activites */
-INSERT #result(date_id,date,team_name,person_id,person_name,activity_absence_name,is_activity,scheduled_contract_time_m,scheduled_work_time_m,paid_time_m,scheduled_over_time_m,scheduled_absence_time_m,scheduled_time_m,hide_time_zone)
+INSERT #result(date_id,date,team_name,person_id,person_name,activity_absence_name,is_activity,scheduled_contract_time_m,scheduled_work_time_m,paid_time_m,scheduled_over_time_m,scheduled_absence_time_m,scheduled_time_m, planned_overtime_m,hide_time_zone)
 SELECT	d.date_id,
 		d.date_date,
 		p.team_name,
@@ -125,6 +128,7 @@ SELECT	d.date_id,
 		sum(ISNULL(scheduled_over_time_m,0)),
 		0,
 		sum(ISNULL(scheduled_time_m,0)),
+		sum(ISNULL(planned_overtime_m,0)),
 		@hide_time_zone
 FROM 
 	#fact_schedule f
@@ -153,7 +157,7 @@ GROUP BY d.date_id,	d.date_date,p.team_name,p.person_code,p.person_name,act.acti
 
 /*Sen all schemalagd tid for absences*/
 
-INSERT #result(date_id,date,team_name,person_id,person_name,activity_absence_name,is_activity,scheduled_contract_time_m,scheduled_work_time_m,paid_time_m,scheduled_over_time_m,scheduled_absence_time_m,scheduled_time_m,hide_time_zone)
+INSERT #result(date_id,date,team_name,person_id,person_name,activity_absence_name,is_activity,scheduled_contract_time_m,scheduled_work_time_m,paid_time_m,scheduled_over_time_m,scheduled_absence_time_m,scheduled_time_m,planned_overtime_m,hide_time_zone)
 SELECT	d.date_id,
 		d.date_date,
 		p.team_name,
@@ -167,6 +171,7 @@ SELECT	d.date_id,
 		0,
 		sum(ISNULL(scheduled_contract_time_absence_m,0)),--eg samma som scheduled_contract_time_m
 		sum(ISNULL(scheduled_time_m,0)),
+		sum(ISNULL(planned_overtime_m,0)),
 		@hide_time_zone
 FROM 
 	#fact_schedule f

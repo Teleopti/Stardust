@@ -67,7 +67,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					new SqlParameter("@scheduled_paid_time_absence_m", SqlDbType.Int, 4, table.Columns[32].ColumnName),
 					new SqlParameter("@business_unit_id", SqlDbType.Int, 4, table.Columns[33].ColumnName),
 					new SqlParameter("@datasource_update_date", SqlDbType.SmallDateTime, 4, table.Columns[37].ColumnName),
-					new SqlParameter("@overtime_id", SqlDbType.Int, 4, table.Columns[38].ColumnName)
+					new SqlParameter("@overtime_id", SqlDbType.Int, 4, table.Columns[38].ColumnName),
+					new SqlParameter("@planned_overtime_m", SqlDbType.Int, 4, table.Columns[39].ColumnName)
 				}
 			};
 
@@ -118,13 +119,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					row.TimePart.WorkTimeActivityMinutes,
 					row.TimePart.WorkTimeAbsenceMinutes,
 					row.TimePart.OverTimeMinutes,
-					row.TimePart.ReadyTimeMinues,
+					row.TimePart.ReadyTimeMinutes,
 					row.TimePart.PaidTimeMinutes,
 					row.TimePart.PaidTimeActivityMinutes,
 					row.TimePart.PaidTimeAbsenceMinutes,
 					row.PersonPart.BusinessUnitId,
 					getSqlDateCompatibleOrDefault(row.DatePart.DatasourceUpdateDate, () => DateTime.UtcNow),
-					row.TimePart.OverTimeId);
+					row.TimePart.OverTimeId,
+					row.TimePart.PlannedOvertimeMinutes);
 			}
 
 			return table;

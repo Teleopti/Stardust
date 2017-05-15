@@ -17,10 +17,11 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics
 		int WorkTimeActivityMinutes { get; set; } 
 		int WorkTimeAbsenceMinutes	{ get; set; } 
 		int OverTimeMinutes { get; set; }  
-		int ReadyTimeMinues { get; set; }  
+		int ReadyTimeMinutes { get; set; }  
 		int PaidTimeMinutes { get; set; }  
 		int PaidTimeActivityMinutes { get; set; }
 		int PaidTimeAbsenceMinutes { get; set; }
 		int ShiftLengthId { get; set; }
+		int PlannedOvertimeMinutes { get; set; }
 	}
 }

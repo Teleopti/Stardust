@@ -1907,6 +1907,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Planned Overtime (hh:mm).
+        /// </summary>
+        public static string ResPlannedOvertimeH {
+            get {
+                return ResourceManager.GetString("ResPlannedOvertimeH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preference Category.
         /// </summary>
         public static string ResPreferenceCategory {

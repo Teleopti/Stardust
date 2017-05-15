@@ -105,7 +105,8 @@ INSERT INTO mart.fact_schedule
 	business_unit_id,
 	datasource_id, 
 	datasource_update_date,
-	overtime_id
+	overtime_id,
+	planned_overtime_m
 	)
 
 SELECT * FROM Stage.v_stg_Schedule_load

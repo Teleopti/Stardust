@@ -1010,7 +1010,7 @@
         <Top>0.25cm</Top>
         <Left>0.25cm</Left>
         <Height>7.8cm</Height>
-        <Width>25.12209cm</Width>
+        <Width>27cm</Width>
         <Style />
       </Tablix>
       <Tablix Name="table2">
@@ -1023,22 +1023,25 @@
               <Width>3.30392cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.87313cm</Width>
+              <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.87313cm</Width>
+              <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.87313cm</Width>
+              <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.87313cm</Width>
+              <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.87313cm</Width>
+              <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.87313cm</Width>
+              <Width>2.5cm</Width>
+            </TablixColumn>
+			<TablixColumn>
+              <Width>2.5cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1283,6 +1286,39 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Parameters!ResScheduledTimeH.Value</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <ZIndex>48</ZIndex>
+                      <Style>
+                        <BackgroundColor>White</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+				<TablixCell>
+                  <CellContents>
+                    <Textbox Name="textbox680">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Parameters!ResPlannedOvertimeH.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -1633,6 +1669,47 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+				<TablixCell>
+                  <CellContents>
+                    <Textbox Name="textbox690">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Code.TimeString(sum(Fields!planned_overtime_m.Value))</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <ZIndex>40</ZIndex>
+                      <Style>
+                        <Border>
+                          <Color>DimGray</Color>
+                        </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </BottomBorder>
+                        <BackgroundColor>White</BackgroundColor>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -1873,6 +1950,39 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+				<TablixCell>
+                  <CellContents>
+                    <Textbox Name="textbox700">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Code.TimeString(sum(Fields!planned_overtime_m.Value))</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <ZIndex>32</ZIndex>
+                      <Style>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -2078,6 +2188,37 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Code.TimeString(sum(Fields!scheduled_time_m.Value))</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <ZIndex>24</ZIndex>
+                      <Style>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+				<TablixCell>
+                  <CellContents>
+                    <Textbox Name="textbox710">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Code.TimeString(sum(Fields!planned_overtime_m.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
@@ -2350,6 +2491,40 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Code.TimeString(sum(Fields!scheduled_time_m.Value))</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <ZIndex>16</ZIndex>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+				 <TablixCell>
+                  <CellContents>
+                    <Textbox Name="textbox720">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Code.TimeString(sum(Fields!planned_overtime_m.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
@@ -2650,6 +2825,43 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Code.TimeString(Fields!scheduled_time_m.Value)</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <Visibility>
+                        <ToggleItem>textbox35</ToggleItem>
+                      </Visibility>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+				<TablixCell>
+                  <CellContents>
+                    <Textbox Name="textbox730">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Code.TimeString(Fields!planned_overtime_m.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
@@ -2995,6 +3207,46 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+				<TablixCell>
+                  <CellContents>
+                    <Textbox Name="textbox740">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Code.TimeString(sum(Fields!planned_overtime_m.Value))</Value>
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <ZIndex>8</ZIndex>
+                      <Style>
+                        <Border>
+                          <Color>DimGray</Color>
+                        </Border>
+                        <TopBorder>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </TopBorder>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
           </TablixRows>
@@ -3009,6 +3261,7 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
+			<TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -3093,7 +3346,7 @@
         <Top>8.71875cm</Top>
         <Left>0.25002cm</Left>
         <Height>4.4938cm</Height>
-        <Width>25.12207cm</Width>
+        <Width>27cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
@@ -3101,7 +3354,7 @@
     <Height>13.35103cm</Height>
     <Style />
   </Body>
-  <Width>25.55729cm</Width>
+  <Width>27.5cm</Width>
   <Page>
     <PageHeader>
       <Height>1.56703cm</Height>
@@ -3386,6 +3639,10 @@
           <DataField>scheduled_time_m</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+		<Field Name="planned_overtime_m">
+          <DataField>planned_overtime_m</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="hide_time_zone">
           <DataField>hide_time_zone</DataField>
           <rd:TypeName>System.Bool</rd:TypeName>
@@ -3503,6 +3760,11 @@
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ResScheduledTimeH</Prompt>
+    </ReportParameter>
+	<ReportParameter Name="ResPlannedOvertimeH">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResPlannedOvertimeH</Prompt>
     </ReportParameter>
     <ReportParameter Name="ResDate">
       <DataType>String</DataType>

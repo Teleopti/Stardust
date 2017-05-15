@@ -43,7 +43,8 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_insert]
 	@scheduled_paid_time_absence_m int,
 	@business_unit_id int,
 	@datasource_update_date smalldatetime,
-	@overtime_id int
+	@overtime_id int,
+	@planned_overtime_m int
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -84,7 +85,8 @@ BEGIN
            ,scheduled_paid_time_absence_m
            ,business_unit_id
            ,datasource_update_date
-           ,overtime_id)
+           ,overtime_id,
+		   planned_overtime_m)
      VALUES
            (@shift_startdate_local_id,
 			@schedule_date_id,
@@ -121,7 +123,8 @@ BEGIN
 			@scheduled_paid_time_absence_m,
 			@business_unit_id,
 			@datasource_update_date,
-			@overtime_id)
+			@overtime_id,
+			@planned_overtime_m)
 END
 
 GO

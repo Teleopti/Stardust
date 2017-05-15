@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(10),
 			};
-			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
+			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength, TimeSpan.Zero);
 
 			result.AbsenceId.Should().Be.EqualTo(-1);
 			result.ActivityId.Should().Be.EqualTo(1);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			result.ContractTimeMinutes.Should().Be.EqualTo(10);
 			result.ContractTimeActivityMinutes.Should().Be.EqualTo(10);
 			result.ContractTimeAbsenceMinutes.Should().Be.EqualTo(0);
-			result.ReadyTimeMinues.Should().Be.EqualTo(0);
+			result.ReadyTimeMinutes.Should().Be.EqualTo(0);
 			result.OverTimeId.Should().Be.EqualTo(-1);
 			result.ScenarioId.Should().Be.EqualTo(22);
 			result.ShiftCategoryId.Should().Be.EqualTo(12);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(12)
 			};
-			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
+			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength, TimeSpan.Zero);
 
 			result.AbsenceId.Should().Be.EqualTo(-1);
 			result.ActivityId.Should().Be.EqualTo(3);
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			result.PaidTimeActivityMinutes.Should().Be.EqualTo(12);
 			result.PaidTimeAbsenceMinutes.Should().Be.EqualTo(0);
 
-			result.ReadyTimeMinues.Should().Be.EqualTo(12);
+			result.ReadyTimeMinutes.Should().Be.EqualTo(12);
 			result.OverTimeId.Should().Be.EqualTo(-1);
 		}
 
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(10)
 			};
-			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
+			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength, TimeSpan.Zero);
 
 			result.ShiftCategoryId.Should().Be.EqualTo(-1);
 			result.AbsenceId.Should().Be.EqualTo(1);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			result.ContractTimeMinutes.Should().Be.EqualTo(10);
 			result.ContractTimeActivityMinutes.Should().Be.EqualTo(0);
 			result.ContractTimeAbsenceMinutes.Should().Be.EqualTo(10);
-			result.ReadyTimeMinues.Should().Be.EqualTo(0);
+			result.ReadyTimeMinutes.Should().Be.EqualTo(0);
 			result.OverTimeId.Should().Be.EqualTo(-1);
 			result.OverTimeMinutes.Should().Be.EqualTo(0);
 		}
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				EndDateTime = start.AddMinutes(10)
 			};
 
-			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
+			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength, TimeSpan.Zero);
 
 			result.OverTimeMinutes.Should().Be.EqualTo(10);
 			result.OverTimeId.Should().Be.EqualTo(_overtimes[0].OvertimeId);

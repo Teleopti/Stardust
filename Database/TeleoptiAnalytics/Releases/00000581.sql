@@ -7,4 +7,3 @@ create table RTA.StateQueue (
 		Id ASC
 	)
 ) ON [PRIMARY]
-

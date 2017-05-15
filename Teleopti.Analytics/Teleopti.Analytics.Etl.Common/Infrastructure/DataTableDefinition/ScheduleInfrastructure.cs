@@ -57,6 +57,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition
 			table.Columns.Add("update_date", typeof(DateTime));
 			table.Columns.Add("datasource_update_date", typeof(DateTime));
 			table.Columns.Add("overtime_code", typeof(Guid));
+			table.Columns.Add("planned_overtime_m", typeof(int));
 		}
 	}
 }

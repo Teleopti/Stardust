@@ -142,7 +142,7 @@ INNER JOIN mart.fact_schedule_convert conv
 	AND new.schedule_date_id = conv.schedule_date_id
 
 INSERT INTO mart.fact_schedule
-SELECT * FROM mart.fact_schedule_convert
+SELECT *, 0 FROM mart.fact_schedule_convert
 
 --check tempdb after
 IF  (SELECT [dbo].[IsAzureDB] ()) <> 1 AND @is_delayed_job=0

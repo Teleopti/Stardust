@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics.Tables
 			table.Columns.Add("update_date", typeof(DateTime));
 			table.Columns.Add("datasource_update_date", typeof(DateTime));
 			table.Columns.Add("overtime_id", typeof(int));
+			table.Columns.Add("planned_overtime_m", typeof(int));
 			return table;
 		}
 
@@ -88,7 +89,8 @@ namespace Teleopti.Ccc.Infrastructure.Analytics.Tables
 			int scheduled_paid_time_absence_m,
 			int business_unit_id,
 			DateTime datasource_update_date,
-			int overtime_id = -1)
+			int overtime_id = -1,
+			int planned_overtime_m = 0)
 		{
 			var row = dataTable.NewRow();
 
@@ -131,6 +133,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics.Tables
 			row["update_date"] = DateTime.Now;
 			row["datasource_update_date"] = datasource_update_date;
 			row["overtime_id"] = overtime_id;
+			row["planned_overtime_m"] = planned_overtime_m;
 			dataTable.Rows.Add(row);
 		}
 	}

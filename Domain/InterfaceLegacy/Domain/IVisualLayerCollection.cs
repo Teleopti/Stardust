@@ -168,6 +168,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		TimeSpan PaidTime(DateTimePeriod filterPeriod);
 		TimeSpan WorkTime(DateTimePeriod filterPeriod);
+		TimeSpan PlannedOvertime(DateTimePeriod filterPeriod);
 	}
 
 	///<summary>

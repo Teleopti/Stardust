@@ -176,6 +176,22 @@ namespace Teleopti.Ccc.Domain.Collection
 			return ret;
 		}
 
+		public TimeSpan PlannedOvertime(DateTimePeriod filterPeriod)
+		{
+			var ret = TimeSpan.Zero;
+			foreach (VisualLayer layer in UnMergedCollection)
+			{
+				var sharedPeriod = layer.Period.Intersection(filterPeriod);
+				if (!sharedPeriod.HasValue) continue;
+
+				if (layer.DefinitionSet != null && layer.HighestPriorityActivity.InWorkTime)
+				{
+					ret = ret.Add(sharedPeriod.Value.ElapsedTime());
+				}
+			}
+			return ret;
+		}
+
 		//borde göras om till en IProjectionMerger
 		public IFilteredVisualLayerCollection FilterLayers(IPayload payloadToSearch)
 		{

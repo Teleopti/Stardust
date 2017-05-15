@@ -40,7 +40,8 @@ SELECT
 	business_unit_id					= dp.business_unit_id,
 	datasource_id						= f.datasource_id, 
 	datasource_update_date				= f.datasource_update_date,
-	overtime_id							= ot.overtime_id
+	overtime_id							= ot.overtime_id,
+	planned_overtime_m					= f.planned_overtime_m
 FROM Stage.stg_schedule f
 INNER JOIN
 	mart.dim_person		dp WITH (NOLOCK)

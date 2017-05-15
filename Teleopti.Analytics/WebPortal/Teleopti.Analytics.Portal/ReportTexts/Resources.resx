@@ -652,6 +652,10 @@
     <value>Scheduled Time (hh:mm)</value>
     <comment>Scheduled Time (hh:mm)</comment>
   </data>
+  <data name="ResPlannedOvertimeH" xml:space="preserve">
+    <value>Planned Overtime (hh:mm)</value>
+    <comment>Planned Overtime (hh:mm)</comment>
+  </data>
   <data name="ResStandardDeviation" xml:space="preserve">
     <value>Standard Deviation</value>
     <comment>Standard Deviation</comment>

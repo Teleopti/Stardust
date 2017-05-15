@@ -122,14 +122,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 			else
 				row["datasource_update_date"] = personAssignmentUpdateOn;
 
-			if (timeInfo.OverTime.Time > 0)
-			{
-				row["overtime_code"] = layer.DefinitionSet.Id;
-			}
-			else
-			{
-				row["overtime_code"] = nullGuid;
-			}
+			row["overtime_code"] = layer.DefinitionSet?.Id ?? nullGuid;
+			row["planned_overtime_m"] = (int)layerCollection.PlannedOvertime(layer.Period).TotalMinutes;
 
 			return row;
 		}

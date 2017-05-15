@@ -27,10 +27,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		public int WorkTimeActivityMinutes { get; set; }
 		public int WorkTimeAbsenceMinutes { get; set; }
 		public int OverTimeMinutes { get; set; }
-		public int ReadyTimeMinues { get; set; }
+		public int ReadyTimeMinutes { get; set; }
 		public int PaidTimeMinutes { get; set; }
 		public int PaidTimeActivityMinutes { get; set; }
 		public int PaidTimeAbsenceMinutes { get; set; }
 		public int ShiftLengthId { get; set; }
+		public int PlannedOvertimeMinutes { get; set; }
 	}
 }

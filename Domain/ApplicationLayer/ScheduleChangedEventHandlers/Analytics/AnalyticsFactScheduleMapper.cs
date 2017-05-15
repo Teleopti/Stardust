@@ -56,19 +56,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					if (datePart == null)
 						return null;
 					var dateTimePeriod = new DateTimePeriod(layer.StartDateTime, layer.EndDateTime);
+					var plannedOvertime = TimeSpan.Zero;
 					if (projection != null)
 					{
 						layer.ContractTime = projection.ContractTime(dateTimePeriod);
 						layer.WorkTime = projection.WorkTime(dateTimePeriod);
 						layer.Overtime = projection.Overtime(dateTimePeriod);
 						layer.PaidTime = projection.PaidTime(dateTimePeriod);
+						plannedOvertime = projection.PlannedOvertime(dateTimePeriod);
 					}
 
 					var factScheduleRow = new FactScheduleRow
 					{
 						PersonPart = personPart,
 						DatePart = datePart,
-						TimePart = _timeMapper.Handle(layer, shiftCategoryId, scenarioId, shiftLength)
+						TimePart = _timeMapper.Handle(layer, shiftCategoryId, scenarioId, shiftLength, plannedOvertime)
 					};
 					scheduleRows.Add(factScheduleRow);
 				}

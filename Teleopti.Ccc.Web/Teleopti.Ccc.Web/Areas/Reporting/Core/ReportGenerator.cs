@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using Microsoft.Reporting.WebForms;
 using Teleopti.Analytics.ReportTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 {
@@ -19,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			_pathProvider = pathProvider;
 		}
 
-		public GeneratedReport GenerateReport(Guid reportId, string connectionString, IList<SqlParameter> parameters, IList<string> paramtersText, Guid userCode, Guid businessUnitCode, ReportFormat format, TimeZoneInfo userTimeZone)
+		public GeneratedReport GenerateReport(Guid reportId, string connectionString, IList<SqlParameter> parameters, IList<string> parametersText, Guid userCode, Guid businessUnitCode, ReportFormat format, TimeZoneInfo userTimeZone)
 		{
 			using (var commonReports = new CommonReports(connectionString, reportId))
 			{
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 						}
 						if (param.ParameterName.ToLower(CultureInfo.CurrentCulture) == "@" + repInfo.Name.ToLower(CultureInfo.CurrentCulture))
 						{
-							@params.Add(new ReportParameter(repInfo.Name, truncateTextParameter(paramtersText[i]), false));
+							@params.Add(new ReportParameter(repInfo.Name, truncateTextParameter(parametersText[i]), false));
 							added = true;
 						}
 						if (!added && repInfo.Name == "culture")
