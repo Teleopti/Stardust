@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
@@ -40,6 +39,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			});
 		}
 
+		public static void CloseSnapshot(this Domain.ApplicationLayer.Rta.Service.Rta rta, CloseSnapshotForTest input)
+		{
+			rta.SaveStateBatch(new BatchInputModel
+			{
+				AuthenticationKey = input.AuthenticationKey,
+				SourceId = input.SourceId,
+				SnapshotId = input.SnapshotId,
+				CloseSnapshot = true
+			});
+		}
+
 	}
 
 	public class StateForTest
@@ -60,15 +70,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 	}
 
-	public class CloseSnapshotForTest : CloseSnapshotInputModel
+	public class CloseSnapshotForTest
 	{
+		public string AuthenticationKey { get; set; }
+		public string SourceId { get; set; }
+		public DateTime SnapshotId { get; set; }
+
 		public CloseSnapshotForTest()
 		{
 			AuthenticationKey = LegacyAuthenticationKey.TheKey;
 			SourceId = "sourceId";
 		}
 	}
-	
+
 	public class BatchForTest : BatchInputModel
 	{
 		public BatchForTest()

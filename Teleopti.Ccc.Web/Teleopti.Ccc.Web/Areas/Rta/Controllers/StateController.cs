@@ -77,7 +77,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						})
 						.ToArray()
 				});
-
 			}
 			catch (InvalidAuthenticationKeyException e)
 			{
@@ -106,11 +105,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[HttpPost, Route("Rta/State/CloseSnapshot")]
 		public void CloseSnapshot([FromBody]ExternalCloseSnapshotWebModel input)
 		{
-			_rta.CloseSnapshot(new CloseSnapshotInputModel
+			_rta.SaveStateBatch(new BatchInputModel
 			{
 				AuthenticationKey = input.AuthenticationKey,
 				SourceId = input.SourceId,
-				SnapshotId = input.SnapshotId
+				SnapshotId = input.SnapshotId,
+				CloseSnapshot = true
 			});
 		}
 

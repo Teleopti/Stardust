@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_externalLogonMapper.Refresh();
 			_matches = _batch.States
+				.EmptyIfNull()
 				.SelectMany(state =>
 				{
 					var personIds = _externalLogonMapper.PersonIdsFor(_dataSourceId, state.UserCode);

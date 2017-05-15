@@ -10,25 +10,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		string AuthenticationKey { get; set; }
 		string SourceId { get; set; }
 	}
-
-	public class CloseSnapshotInputModel : IValidatable
-	{
-		public string AuthenticationKey { get; set; }
-		public string SourceId { get; set; }
-		public DateTime SnapshotId { get; set; }
-
-		// for logging
-		public override string ToString()
-		{
-			return $"AuthenticationKey: {AuthenticationKey}, SourceId: {SourceId}, SnapshotId: {SnapshotId}";
-		}
-	}
-
+	
 	public class BatchInputModel : IValidatable
 	{
 		public string AuthenticationKey { get; set; }
 		public string SourceId { get; set; }
 		public DateTime? SnapshotId { get; set; }
+		public bool CloseSnapshot { get; set; }
 		public IEnumerable<BatchStateInputModel> States { get; set; }
 
 		// for logging

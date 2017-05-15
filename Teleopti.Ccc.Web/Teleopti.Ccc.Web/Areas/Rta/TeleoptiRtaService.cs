@@ -43,11 +43,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				stateCode = fixStateCode(stateCode, platformTypeId, isLoggedOn);
 				if (isClosingSnapshot(userCode, isSnapshot))
 				{
-					_rta.CloseSnapshot(new CloseSnapshotInputModel
+					_rta.SaveStateBatch(new BatchInputModel
 					{
 						AuthenticationKey = authenticationKey,
+						SourceId = sourceId,
 						SnapshotId = batchId,
-						SourceId = sourceId
+						CloseSnapshot = true
 					});
 				}
 				else
@@ -96,16 +97,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					AuthenticationKey = authenticationKey,
 					SourceId = sourceId,
 					SnapshotId = fixSnapshotId(externalUserStateBatch.First().BatchId, isSnapshot),
+					CloseSnapshot = closeSnapshot,
 					States = states
 				});
-
-				if (closeSnapshot)
-					_rta.CloseSnapshot(new CloseSnapshotInputModel
-					{
-						AuthenticationKey = authenticationKey,
-						SnapshotId = mayCloseSnapshot.BatchId,
-						SourceId = sourceId
-					});
 			});
 		}
 
