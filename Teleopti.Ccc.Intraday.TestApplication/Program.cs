@@ -52,9 +52,11 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			}
 
 			var timeZoneIntervalLength = timeZoneprovider.Provide(userTimezone.TimeZoneId);
-			Console.WriteLine($"Using timezone {timeZoneIntervalLength.TimeZoneId}");
+			var date = getDateInput();
 
-			var time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, DateTime.Now);
+			Console.WriteLine($"Using timezone '{timeZoneIntervalLength.TimeZoneId}' and date '{date.ToShortDateString()}'");
+			
+			var time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, date);
 			Console.WriteLine("");
 			Console.WriteLine("");
 			Console.WriteLine("Stats will be generated up until {0}. Enter other time if needed.", time.ToShortTimeString());
@@ -72,7 +74,6 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			}
 
 			Console.WriteLine("We're doing stuff. Please hang around...");
-
 			var timeUtc = TimeZoneInfo.Local.SafeConvertTimeToUtc(DateTime.SpecifyKind(time, DateTimeKind.Unspecified));
 			var currentIntervalUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, timeUtc);
 
@@ -134,6 +135,28 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.WriteLine("");
 			Console.WriteLine("We're done! Press any key to exit.");
 			Console.ReadKey();
+		}
+
+		private static DateTime getDateInput()
+		{
+			while (true)
+			{
+				Console.Write("Stats will be generated for today. Specify other date if needed (yyyyMMdd): ");
+				var input = Console.ReadLine();
+
+				if (string.IsNullOrEmpty(input))
+				{
+					return DateTime.Now;
+				}
+
+				DateTime date;
+				if (DateTime.TryParseExact(input, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+				{
+					return new DateTime(date.Year, date.Month, date.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+				}
+
+				Console.WriteLine("Invalid date format.");
+			}
 		}
 
 		private static UserTimeZoneInfo getTimeZoneForUser(UserTimeZoneProvider userTimeZoneProvider)
