@@ -91,7 +91,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				_http.PostJson("Rta/State/Change", new ExternalUserStateWebModel
 				{
 					AuthenticationKey = batch.AuthenticationKey,
-					SnapshotId = batch.SnapshotId,
 					SourceId = batch.SourceId,
 					StateCode = batch.States.Single().StateCode,
 					UserCode = batch.States.Single().UserCode
