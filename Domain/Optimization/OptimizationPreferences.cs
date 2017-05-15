@@ -87,8 +87,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class ExtraPreferences : IExtraPreferences
 	{
-		public BlockFinderType BlockFinderTypeValue { get; set; }
-
 		public bool UseTeams { get; set; }
 		public bool UseTeamSameDaysOff { get; set; }
 		public GroupPageLight TeamGroupPage { get; set; }
