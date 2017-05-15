@@ -227,7 +227,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if(self.selectedProbabilityType == probabilityType) return;
 
 			self.selectedProbabilityType = probabilityType;
-			reloadSchedule(probabilityType);
+
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability())
+
 			if (self.selectedProbabilityType === constants.probabilityType.none) {
 				self.days().forEach(function (d) {
 					d.probabilities([]);
