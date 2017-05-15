@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				UseStudentAvailability = false,
 				DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate,
 				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			};
 		}

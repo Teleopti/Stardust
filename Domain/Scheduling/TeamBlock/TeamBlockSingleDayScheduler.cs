@@ -122,10 +122,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> {person}, day, teamBlockSingleDayInfo, schedulingOptions))
 					continue;
 
-				var isSingleAgentTeamAndBlockWithSameShift = (!schedulingOptions.UseTeam && schedulingOptions.UseBlock &&
-															  schedulingOptions.BlockSameShift) ||
-															 (schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SingleDay &&
-															  schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type == GroupPageType.SingleAgent);
+				var isSingleAgentTeamAndBlockWithSameShift = !schedulingOptions.UseTeam && schedulingOptions.UseBlock && schedulingOptions.BlockSameShift ||
+							schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SingleDay && schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type == GroupPageType.SingleAgent;
 				if (!isSingleAgentTeamAndBlockWithSameShift || schedulingOptions.ShiftBagBackToLegal)
 				{
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedules, schedulingOptions, teamBlockInfo, day, person, roleModelShift);
