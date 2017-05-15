@@ -167,9 +167,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var values = table.CreateInstance<AddActivityFormInfo>();
 
-			Browser.Interactions.SelectOptionByTextUsingJQuery(".activity-form .activity-type", values.Activity);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".activity-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".activity-form .end-time", values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.TryUntil(
+				() =>
+				{
+					Browser.Interactions.SelectOptionByTextUsingJQuery(".activity-form .activity-type", values.Activity);
+					Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".activity-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+					Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".activity-form .end-time", values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+				},
+				() => Browser.Interactions.IsExists(".person-schedule.is-view-ready"),
+				TimeSpan.FromMilliseconds(1000));
+		
 		}
 
 		[Then(@"I should see an absence in the absence list with")]
