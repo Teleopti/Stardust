@@ -228,7 +228,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.showingAbsenceProbability(self.selectedProbabilityOptionValue() === constants.probabilityType.absence);
 		self.showingOvertimeProbability(self.selectedProbabilityOptionValue() === constants.probabilityType.overtime);
 
-		parent.ReloadSchedule();
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + getUrlPartForDate(self.selectedDate()) + self.getUrlPartForProbability());
 	};
 
 	self.reloadProbabilityData = function() {
