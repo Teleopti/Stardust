@@ -3,7 +3,8 @@
 	Layout = null;
 }
 
-<div style="position: relative;">
+<div class="request-add-container">
+	<div class="request-add-body">
 	<div class="posting-mask" data-bind="visible: IsPostingData">
 		<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Saving..." />
 	</div>
@@ -125,6 +126,7 @@
 		@Resources.FullDay
 	</label>
 	<div class="request-new-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />
+	</div>
 	<div class="pull-right">
 		<button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>
 		<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, enable: !IsPostingData()">@Resources.Save</button>

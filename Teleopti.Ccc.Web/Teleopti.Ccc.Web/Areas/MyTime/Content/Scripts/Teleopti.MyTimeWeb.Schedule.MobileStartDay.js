@@ -54,7 +54,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 	function registerUserInfoLoadedCallback() {
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 			$(".moment-datepicker").attr("data-bind",
-				"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'right', autoHide: true, weekStart: " + data.WeekStart + "}");
+				"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'center', autoHide: true, weekStart: " + data.WeekStart + "}");
 
 			initViewModel(data.WeekStart);
 

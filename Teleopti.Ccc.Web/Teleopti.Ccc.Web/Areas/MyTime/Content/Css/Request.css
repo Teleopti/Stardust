@@ -655,10 +655,6 @@ input[type=search]::-ms-clear {
 	white-space: pre-wrap;
 }
 
-.full-day-label {
-	max-width: 70px;
-}
-
 .shift-trade-request-my-schedule {
 	width: 100px;
 	display: inline-block;
@@ -669,14 +665,16 @@ input[type=search]::-ms-clear {
 	.request-edit .col-xs-8 {
 		width: 100%;
 	}
-
-	.full-day-label {
-		max-width: 100px;
-	}
 }
 
 .filter-row {
 	margin: 0 !important;
+}
+
+.request-add-container{
+	position: relative;
+}
+.request-add-body{
 }
 
 .posting-mask {
@@ -712,3 +710,4 @@ input[type=search]::-ms-clear {
 		background: red !important;
 	}*/
 }
+
