@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -756,6 +757,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var result = Target.FetchDayData(null);
 			result.RequestPermission.ShiftTradeRequestPermission.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldMapShiftTradeRequestSetting()
+		{
+			var workflowControlSet = new WorkflowControlSet { ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 99) };
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+			var localDateOnly = Now.LocalDateOnly();
+
+			var shiftTradeRequestSetting = Target.FetchDayData(null).ShiftTradeRequestSetting;
+			shiftTradeRequestSetting.Should().Not.Be(null);
+
+			shiftTradeRequestSetting.NowDay.Should().Be(localDateOnly.Date.Day);
+			shiftTradeRequestSetting.NowMonth.Should().Be(localDateOnly.Date.Month);
+			shiftTradeRequestSetting.NowYear.Should().Be(localDateOnly.Date.Year);
+
+			shiftTradeRequestSetting.OpenPeriodRelativeStart.Should().Be(1);
+			shiftTradeRequestSetting.OpenPeriodRelativeEnd.Should().Be(99);
 		}
 	}
 }
