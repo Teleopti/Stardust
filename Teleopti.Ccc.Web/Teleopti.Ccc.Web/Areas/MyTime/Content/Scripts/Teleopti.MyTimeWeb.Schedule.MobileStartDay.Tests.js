@@ -5,6 +5,7 @@
 	var templates = [];
 	var fetchDayDataRequestCount;
 	var requestSuccessData;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	var templateConfig = {
 		default: "add-new-request-detail-template",
@@ -51,16 +52,16 @@
 	test("should go back to current date after clicking 'home' icon", function () {
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		var currentDate = vm.selectedDate().format('YYYY-MM-DD');
+		var currentDate = vm.selectedDate().format(constants.dateOnlyFormat);
 
 		Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime = function () {
 			return currentDate;
 		}
 
 		vm.nextDay();
-		equal(vm.selectedDate().format('YYYY-MM-DD'), moment(currentDate).add('days', 1).format("YYYY-MM-DD"));
+		equal(vm.selectedDate().format(constants.dateOnlyFormat), moment(currentDate).add('days', 1).format(constants.dateOnlyFormat));
 		vm.today();
-		equal(vm.selectedDate().format('YYYY-MM-DD'), moment(currentDate).format("YYYY-MM-DD"));
+		equal(vm.selectedDate().format(constants.dateOnlyFormat), moment(currentDate).format(constants.dateOnlyFormat));
 	});
 
 	test("should set timelines", function () {
@@ -183,7 +184,6 @@
 		requestViewModel.Message("msg");
 		requestViewModel.IsFullDay(false);
 
-		requestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth:28};
 		requestViewModel.AddRequest();
 
 		equal(vm.requestViewModel(), undefined);
@@ -247,7 +247,6 @@
 		requestViewModel.AbsenceId("2");
 
 
-		requestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth: 28 };
 		requestViewModel.AddRequest();
 
 		equal(vm.requestViewModel(), undefined);
@@ -368,7 +367,6 @@
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.showPostShiftForTradeForm();
 
-		requestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth: 28 };
 
 		var requestViewModel = vm.requestViewModel().model;
 		requestViewModel.DateTo("2017-04-28");
@@ -437,36 +435,53 @@
 
 	function setup() {
 		fetchDayDataRequestCount = 0;
-
 		setupAjax();
-
-		this.crossroads = {
-			addRoute: function () { }
-		};
-		this.hasher = {
-			initialized: {
-				add: function () { }
-			},
-			changed: {
-				add: function () { }
-			},
-			init: function () { },
-			setHash: function (data) { hash = data; }
-		};
-
-		initPortal();
-
-		Teleopti.MyTimeWeb.UserInfo = {
-			WhenLoaded: function (whenLoadedCallBack) {
-				var data = { WeekStart: "" };
-				whenLoadedCallBack(data);
-			}
-		};
-
-		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = { defaultFulldayStartTime: "" };
+		initContext();
 	}
 
 	function setupAjax() {
+		setupDayData();
+		setupRequestSuccessData();
+
+		var requestUrls = ['Requests/TextRequest', 'Requests/AbsenceRequest', 'Schedule/ReportAbsence', 'Schedule/OvertimeAvailability'
+			, 'ShiftExchange/NewOffer', 'Requests/ShiftTradeRequestPeriod', 'ShiftExchange/GetAllWishShiftOptions'];
+
+		ajax = {
+			Ajax: function (options) {
+				if (options.url === "../api/Schedule/FetchDayData") {
+					fetchDayDataCallback(options);
+				}
+				else if (options.url === "Requests/FetchAbsenceAccount") {
+					fetchAbsenceAccountCallback(options);
+				}
+				else if (requestUrls.indexOf(options.url) > -1) {
+					requestSuccessCallback(options);
+				}
+			}
+		};
+
+		function fetchDayDataCallback(options) {
+			fetchDayDataRequestCount++;
+			options.success(startDayData);
+		}
+
+		function fetchAbsenceAccountCallback(options) {
+			var absenceAccountData = {
+				TrackerType: "Days",
+				PeriodStart: "08:00",
+				PeriodEnd: "09:00",
+				Remaining: "1",
+				Used: "2"
+			};
+			options.success(absenceAccountData);
+		}
+
+		function requestSuccessCallback(options) {
+			options.success(requestSuccessData);
+		}
+	}
+
+	function setupDayData() {
 		startDayData = {
 			"UnReadMessageCount": 2,
 			"Date": "2017-04-28",
@@ -710,59 +725,33 @@
 			"Possibilities": [],
 			"SiteOpenHourIntradayPeriod": null
 		};
-		ajax = {
-			Ajax: function (options) {
-				if (options.url === "../api/Schedule/FetchDayData") {
-					fetchDayDataRequestCount++;
-					options.success(startDayData);
-				}
-				if (options.url === "Requests/TextRequest") { 
-					options.success(requestSuccessData);
-				}
-				if (options.url === "Requests/FetchAbsenceAccount") {
-					var absenceAccountData = {
-						TrackerType: "Days",
-						PeriodStart: "08:00",
-						PeriodEnd: "09:00",
-						Remaining: "1",
-						Used: "2"
-					};
-					options.success(absenceAccountData);
-				}
-				if (options.url === "Requests/AbsenceRequest") {
-					options.success(requestSuccessData);
-				}
-				if (options.url === "Schedule/ReportAbsence") {
-					options.success({});
-				}
-				if (options.url === "Schedule/OvertimeAvailability") {
-					options.success({});
-				}
-				if (options.url === "ShiftExchange/GetAllWishShiftOptions") {
-					options.success({});
-				}
-				if (options.url === "Requests/ShiftTradeRequestPeriod") {
-					options.success({});
-				}
-				if (options.url === "ShiftExchange/NewOffer") {
-					options.success(requestSuccessData);
-				}
-			}
-		};
 	}
 
-	function initPortal() {
+	function setupRequestSuccessData() {
+		requestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth: 28 };
+	}
+
+	function initContext() {
 		this.crossroads = {
 			addRoute: function () { }
 		};
-
-		var setting = getDefaultSetting();
-		var fakeWindow = getFakeWindow();
-		var commonAjax = {
-			Ajax: function (options) {
+		this.hasher = {
+			initialized: {
+				add: function () { }
+			},
+			changed: {
+				add: function () { }
+			},
+			init: function () { },
+			setHash: function (data) { hash = data; }
+		};
+		Teleopti.MyTimeWeb.UserInfo = {
+			WhenLoaded: function (whenLoadedCallBack) {
+				var data = { WeekStart: "" };
+				whenLoadedCallBack(data);
 			}
 		};
-		Teleopti.MyTimeWeb.Portal.Init(setting, fakeWindow, commonAjax);
+		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = { defaultFulldayStartTime: "" };
 	}
 
 	function getDefaultSetting() {

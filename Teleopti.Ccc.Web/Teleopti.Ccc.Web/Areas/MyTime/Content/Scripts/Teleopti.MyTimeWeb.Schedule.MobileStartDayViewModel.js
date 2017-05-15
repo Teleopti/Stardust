@@ -12,8 +12,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	var self = this;
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
-	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	var layersOnMobile = true;
 
 	self.displayDate = ko.observable();
 	self.selectedDate = ko.observable(moment().startOf("day"));
@@ -114,7 +112,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.timeLines(timelines);
 
 		var layers = ko.utils.arrayMap(rawPeriods, function (item) {
-			return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, layersOnMobile);
+			return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, true);
 		});
 		self.layers(layers);
 
@@ -151,7 +149,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	};
 
 	function getUrlPartForDate(date) {
-		return Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD"));
+		return Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format(constants.dateOnlyFormat));
 	}
 
 	self.getUrlPartForProbability = function () {
@@ -338,8 +336,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		if (data) {
 			var count = self.requestCount();
 			var date = moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth));
-			var formattedDate = date.format("YYYY-MM-DD");
-			if (self.requestDay.format("YYYY-MM-DD") === formattedDate) {
+			var formattedDate = date.format(constants.dateOnlyFormat);
+			if (self.requestDay.format(constants.dateOnlyFormat) === formattedDate) {
 				count++;
 			}
 			self.requestCount(count);
