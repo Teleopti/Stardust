@@ -74,6 +74,12 @@
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights.Log4NetAppender, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.Log4NetAppender.2.2.0\lib\net45\Microsoft.ApplicationInsights.Log4NetAppender.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Owin.Host.HttpListener.3.0.1\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
       <Private>True</Private>
@@ -139,6 +145,9 @@
       <Link>RequestQueue.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -153,7 +162,8 @@
     <PreBuildEvent>if not exist "$(TargetDir)Payroll" mkdir "$(TargetDir)Payroll"
 if not exist "$(TargetDir)Payroll.DeployNew" mkdir "$(TargetDir)Payroll.DeployNew"
 powershell -Command "(gc $(ProjectDir)..\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config) -replace '#VERSION#', '1.0.0.0' | set-content $(ProjectDir)..\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config" -force
-if not exist "$(ProjectDir)log4net.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBuslog4net.config" "$(ProjectDir)log4net.config"</PreBuildEvent>
+if not exist "$(ProjectDir)log4net.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBuslog4net.config" "$(ProjectDir)log4net.config"
+if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\..\BuildArtifacts\AppApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll"  "$(TargetDir)Payroll.DeployNew\" /y</PostBuildEvent>
