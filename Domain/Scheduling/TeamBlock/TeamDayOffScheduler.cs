@@ -121,6 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			foreach (var scheduleMatrixPro in matrixesOfOneTeam)
 			{
 				var currentPerson = scheduleMatrixPro.Person;
+				// why this fuzz about matrixesOfOneTeam above if filtering on person below? Must be unnecesary...
 				if (selectedPersons.Contains(currentPerson) && currentPerson == person)
 					selectedMatrixesForOnePerson.Add(scheduleMatrixPro);
 			}
