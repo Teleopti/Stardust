@@ -125,8 +125,6 @@ namespace Teleopti.Ccc.Domain.Notification
 
 			setting.RemoveToken(invalidTokens.ToArray());
 
-			((ISettingValue)setting).SetOwner(new PersonalSettingData(UserDevices.Key, person));
-
 			_personalSettingDataRepository.PersistSettingValue(UserDevices.Key, setting);
 		}
 
