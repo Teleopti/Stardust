@@ -4,7 +4,7 @@
 	var ajax;
 	var templates = [];
 	var fetchDayDataRequestCount;
-	var textOrAbsenceRequestSuccessData;
+	var requestSuccessData;
 
 	var templateConfig = {
 		default: "add-new-request-detail-template",
@@ -183,7 +183,7 @@
 		requestViewModel.Message("msg");
 		requestViewModel.IsFullDay(false);
 
-		textOrAbsenceRequestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth:28};
+		requestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth:28};
 		requestViewModel.AddRequest();
 
 		equal(vm.requestViewModel(), undefined);
@@ -247,7 +247,7 @@
 		requestViewModel.AbsenceId("2");
 
 
-		textOrAbsenceRequestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth: 28 };
+		requestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth: 28 };
 		requestViewModel.AddRequest();
 
 		equal(vm.requestViewModel(), undefined);
@@ -362,6 +362,27 @@
 		equal(vm.requestViewModel().model.Template, templateConfig.postShiftForTrade);
 	});
 
+	test("should post shift for trade", function() {
+		setupAddRequestTemplate(templateConfig.postShiftForTrade);
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.showPostShiftForTradeForm();
+
+		requestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth: 28 };
+
+		var requestViewModel = vm.requestViewModel().model;
+		requestViewModel.DateTo("2017-04-28");
+		requestViewModel.OfferValidTo("2017-04-27");
+		requestViewModel.startTimeInternal();
+		requestViewModel.endTimeInternal();
+		requestViewModel.EndTimeNextDay();
+		requestViewModel.WishShiftTypeOption("Working Day");
+		requestViewModel.SaveShiftExchangeOffer();
+
+		equal(vm.requestCount(), 1);
+		equal(requestViewModel.Template, templateConfig.postShiftForTrade);
+	});
+
 	test("should not add request count if request day is not equal to current day", function () {
 		setupAddRequestTemplate();
 
@@ -381,7 +402,7 @@
 		requestViewModel.Message("msg");
 		requestViewModel.IsFullDay(false);
 
-		textOrAbsenceRequestSuccessData = { DateFromYear: 2017, DateFromMonth: 5, DateFromDayOfMonth: 11 };
+		requestSuccessData = { DateFromYear: 2017, DateFromMonth: 5, DateFromDayOfMonth: 11 };
 
 		requestViewModel.AddRequest();
 
@@ -696,7 +717,7 @@
 					options.success(startDayData);
 				}
 				if (options.url === "Requests/TextRequest") { 
-					options.success(textOrAbsenceRequestSuccessData);
+					options.success(requestSuccessData);
 				}
 				if (options.url === "Requests/FetchAbsenceAccount") {
 					var absenceAccountData = {
@@ -709,7 +730,7 @@
 					options.success(absenceAccountData);
 				}
 				if (options.url === "Requests/AbsenceRequest") {
-					options.success(textOrAbsenceRequestSuccessData);
+					options.success(requestSuccessData);
 				}
 				if (options.url === "Schedule/ReportAbsence") {
 					options.success({});
@@ -722,7 +743,10 @@
 				}
 				if (options.url === "Requests/ShiftTradeRequestPeriod") {
 					options.success({});
-				} 
+				}
+				if (options.url === "ShiftExchange/NewOffer") {
+					options.success(requestSuccessData);
+				}
 			}
 		};
 	}

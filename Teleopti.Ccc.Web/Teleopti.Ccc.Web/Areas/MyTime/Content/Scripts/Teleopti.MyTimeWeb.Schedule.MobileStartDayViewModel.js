@@ -352,7 +352,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	};
 
 	self.showPostShiftForTradeForm = function () {
-		var requestViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(parent.Ajax())
+		var requestViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(parent.Ajax(), addRequestCallBack)
 			.Create(Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
 
 		setupRequestViewModel(requestViewModel, resetRequestViewModel);
