@@ -81,33 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_eventPublisherScope = eventPublisherScope;
 			_eventPublisher = eventPublisher;
 		}
-
-		public void For(StateInputModel input)
-		{
-			Process(new BatchStrategy(
-				new BatchInputModel
-				{
-					AuthenticationKey = input.AuthenticationKey,
-					SnapshotId = input.SnapshotId,
-					SourceId = input.SourceId,
-					States = new[]
-					{
-						new BatchStateInputModel
-						{
-							StateCode = input.StateCode,
-							StateDescription = input.StateDescription,
-							UserCode = input.UserCode
-						}
-					}
-				},
-				_now.UtcDateTime(),
-				_config,
-				_agentStatePersister,
-				_dataSourceMapper,
-				_externalLogonMapper
-			));
-		}
-
+		
 		public void ForBatch(BatchInputModel batch)
 		{
 			Process(new BatchStrategy(batch, _now.UtcDateTime(), _config, _agentStatePersister, _dataSourceMapper, _externalLogonMapper));

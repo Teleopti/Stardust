@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 			Database.PublishRecurringEvents();
 			Context.Logout();
 
-			Target.SaveState(new StateInputModel
+			Target.SaveState(new StateForTest
 			{
 				AuthenticationKey = "!#¤atAbgT%",
 				StateCode = "InCall",

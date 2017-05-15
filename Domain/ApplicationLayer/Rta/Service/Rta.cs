@@ -31,14 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[LogInfo]
 		[TenantScope]
-		public virtual void SaveState(StateInputModel input)
-		{
-			validateAuthenticationKey(input);
-			_contextLoader.For(input);
-		}
-		
-		[LogInfo]
-		[TenantScope]
 		public virtual void CloseSnapshot(CloseSnapshotInputModel input)
 		{
 			validateAuthenticationKey(input);

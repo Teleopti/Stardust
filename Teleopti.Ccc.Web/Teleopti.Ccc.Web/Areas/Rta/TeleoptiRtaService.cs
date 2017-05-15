@@ -52,14 +52,20 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				}
 				else
 				{
-					_rta.SaveState(new StateInputModel
+					_rta.SaveStateBatch(new BatchInputModel
 					{
 						AuthenticationKey = authenticationKey,
-						UserCode = userCode,
-						StateCode = stateCode,
-						StateDescription = stateDescription,
 						SourceId = sourceId,
-						SnapshotId = fixSnapshotId(batchId, isSnapshot)
+						SnapshotId = fixSnapshotId(batchId, isSnapshot),
+						States = new[]
+						{
+							new BatchStateInputModel
+							{
+								StateCode = stateCode,
+								StateDescription = stateDescription,
+								UserCode = userCode
+							}
+						}
 					});
 				}
 			});

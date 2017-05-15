@@ -21,15 +21,20 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			try
 			{
-				_rta.SaveState(
-					new StateInputModel
+				_rta.SaveStateBatch(new BatchInputModel
+				{
+					AuthenticationKey = input.AuthenticationKey,
+					SourceId = input.SourceId,
+					SnapshotId = parseSnapshotId(input.SnapshotId),
+					States = new[]
 					{
-						AuthenticationKey = input.AuthenticationKey,
-						SourceId = input.SourceId,
-						UserCode = input.UserCode,
-						StateCode = input.StateCode,
-						SnapshotId = parseSnapshotId(input.SnapshotId),
-					});
+						new BatchStateInputModel
+						{
+							StateCode = input.StateCode,
+							UserCode = input.UserCode
+						}
+					}
+				});
 			}
 			catch (InvalidAuthenticationKeyException e)
 			{

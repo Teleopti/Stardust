@@ -14,6 +14,52 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
+	public static class RtaExtensions
+	{
+		public static void CheckForActivityChanges(this Domain.ApplicationLayer.Rta.Service.Rta rta, string tenant, Guid personId)
+		{
+			rta.CheckForActivityChanges(tenant);
+		}
+
+		public static void SaveState(this Domain.ApplicationLayer.Rta.Service.Rta rta, StateForTest input)
+		{
+			rta.SaveStateBatch(new BatchInputModel
+			{
+				AuthenticationKey = input.AuthenticationKey,
+				SourceId = input.SourceId,
+				SnapshotId = input.SnapshotId,
+				States = new[]
+				{
+					new BatchStateInputModel
+					{
+						StateCode = input.StateCode,
+						StateDescription = input.StateDescription,
+						UserCode = input.UserCode
+					}
+				}
+			});
+		}
+
+	}
+
+	public class StateForTest
+	{
+		public string AuthenticationKey { get; set; }
+		public string SourceId { get; set; }
+		public string UserCode { get; set; }
+		public string StateCode { get; set; }
+		public string StateDescription { get; set; }
+		public DateTime? SnapshotId { get; set; }
+
+		public StateForTest()
+		{
+			AuthenticationKey = LegacyAuthenticationKey.TheKey;
+			SourceId = "sourceId";
+			UserCode = "8808";
+			StateCode = "AUX2";
+		}
+	}
+
 	public class CloseSnapshotForTest : CloseSnapshotInputModel
 	{
 		public CloseSnapshotForTest()
@@ -36,17 +82,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	{
 		public BatchStateForTest()
 		{
-			UserCode = "8808";
-			StateCode = "AUX2";
-		}
-	}
-
-	public class StateForTest : StateInputModel
-	{
-		public StateForTest()
-		{
-			AuthenticationKey = LegacyAuthenticationKey.TheKey;
-			SourceId = "sourceId";
 			UserCode = "8808";
 			StateCode = "AUX2";
 		}
