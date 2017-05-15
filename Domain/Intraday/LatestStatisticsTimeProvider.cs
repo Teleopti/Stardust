@@ -26,8 +26,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public LatestStatitsticsTimeModel Get(Guid[] skillIdList)
 		{
-			var usersToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone()));
-			var intervalId = _latestStatisticsIntervalIdLoader.Load(skillIdList, usersToday, _userTimeZone.TimeZone());
+			return Get(skillIdList, _now.UtcDateTime());
+		}
+
+		public LatestStatitsticsTimeModel Get(Guid[] skillIdList, DateTime dateUtc)
+		{
+			var userTime = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateUtc, _userTimeZone.TimeZone()));
+			var intervalId = _latestStatisticsIntervalIdLoader.Load(skillIdList, userTime, _userTimeZone.TimeZone());
 			if (!intervalId.HasValue)
 				return null;
 
@@ -39,5 +44,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				EndTime = DateTime.MinValue.AddMinutes((intervalId.Value + 1) * minutesPerInterval)
 			};
 		}
+
+
 	}
 }

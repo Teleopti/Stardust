@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -10,9 +11,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		private IList<IncomingIntervalModel> _intervals;
 		private IList<Guid> _skills;
+		public bool ShouldCompareDate { get; set; }
 
 		public IList<IncomingIntervalModel> Load(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
 		{
+			if (ShouldCompareDate && _intervals.Any() && new DateOnly(_intervals[0].IntervalDate) != today)
+				return new List<IncomingIntervalModel>();
+
 			Skills = skillList;
 			return intervals;
 		}

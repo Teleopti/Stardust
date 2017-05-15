@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
@@ -478,6 +479,37 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			IntradayMonitorDataLoader.Skills.Count.Should().Be.EqualTo(1);
 			IntradayMonitorDataLoader.Skills.Should().Contain(phoneSkill.Id.Value);
+		}
+
+		[Test]
+		public void ShouldLoadDataForSpecifiedDate()
+		{
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			IntradayMonitorDataLoader.ShouldCompareDate = true;
+
+			var viewModel = Target.Load(new[] { Guid.NewGuid() }, _firstInterval.IntervalDate);
+			viewModel.LatestActualIntervalStart.Should().Not.Be.EqualTo(null);
+			viewModel.LatestActualIntervalEnd.Should().Not.Be.EqualTo(null);
+
+			var startDate = new DateOnly(viewModel.LatestActualIntervalStart.Value);
+			var endDate = new DateOnly(viewModel.LatestActualIntervalEnd.Value);
+
+			startDate.Should().Be.EqualTo(new DateOnly(_firstInterval.IntervalDate));
+			endDate.Should().Be.EqualTo(new DateOnly(_firstInterval.IntervalDate));
+		}
+
+		[Test]
+		public void ShouldNotLoadDataForInvalidSpecifiedDate()
+		{
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			IntradayMonitorDataLoader.ShouldCompareDate = true;
+
+			var viewModel = Target.Load(new[] { Guid.NewGuid() }, new DateTime(2017, 1, 1));
+			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(null);
 		}
 	}
 }

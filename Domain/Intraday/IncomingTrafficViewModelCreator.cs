@@ -27,11 +27,17 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public IntradayIncomingViewModel Load(Guid[] skillIdList)
 		{
+			return Load(skillIdList, _now.UtcDateTime());
+		}
+
+		public IntradayIncomingViewModel Load(Guid[] skillIdList, DateTime utcDate)
+		{
 			var supportedSkills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 
 			var intervals = _intradayMonitorDataLoader.Load(supportedSkills.Select(x => x.Id.Value).ToArray(),
 				_userTimeZone.TimeZone(),
-				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone())));
+				new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDate, _userTimeZone.TimeZone())));
+
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
 
 			var summary = new IntradayIncomingSummary();
