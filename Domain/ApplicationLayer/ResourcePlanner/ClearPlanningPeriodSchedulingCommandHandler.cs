@@ -38,15 +38,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				foreach (var personAssignment in _personAssignmentRepository.Find(batch, planningPeriod.Range, scenario))
 				{
-					if (personAssignment.PersonalActivities().Any())
-					{
-						personAssignment.ClearMainActivities();
-						personAssignment.SetDayOff(null);
-					}
-					else
-					{
+					personAssignment.ClearMainActivities(false);
+					personAssignment.SetDayOff(null);
+
+					if (!personAssignment.PersonalActivities().Any())
 						_personAssignmentRepository.Remove(personAssignment);
-					}
 				}
 				_currentUnitOfWork.Current().PersistAll();
 			}

@@ -114,7 +114,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dateOnly, dateOnly), scenario);
 			var scheduleDay = schedule.SchedulesForDay(dateOnly).FirstOrDefault();
 			if (scheduleDay == null)
+			{
+				_analyticsScheduleRepository.DeleteFactSchedule(dateId, person.Id.GetValueOrDefault(), scenarioId);
 				return;
+			}
+				
 			var currentEventScheduleDay = _projectionChangedEventBuilder.BuildEventScheduleDay(scheduleDay);
 			if (currentEventScheduleDay == null)
 				throw new Exception("No schedule");
