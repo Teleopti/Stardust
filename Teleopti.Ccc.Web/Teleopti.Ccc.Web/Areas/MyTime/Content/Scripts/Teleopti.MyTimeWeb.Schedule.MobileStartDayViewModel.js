@@ -8,7 +8,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel.js" />
 
 
-Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, parent, dataService) { 
+Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, parent, dataService) {
 	var self = this;
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
@@ -69,7 +69,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.probabilities = ko.observableArray();
 	self.userNowInMinute = ko.observable(0);
 	self.userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
-	
+
 	self.navigateToMessages = function () {
 		Teleopti.MyTimeWeb.Portal.NavigateTo("MessageTab");
 	};
@@ -79,10 +79,9 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	};
 
 	self.readData = function (data) {
-
 		self.requestDay = moment(data.Date);
 
-		self.overtimeAvailabililty = data.Schedule.OvertimeAvailabililty; 
+		self.overtimeAvailabililty = data.Schedule.OvertimeAvailabililty;
 
 		self.displayDate(moment(data.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
 		self.summaryColor(data.Schedule.Summary.Color);
@@ -136,7 +135,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 		self.showAbsenceReportingCommandItem(self.absenceReportPermission() && isTodayOrTomorrow);
 		setStaffingProbabilityToggleStates(data);
-		if(self.showProbabilityOptionsToggleIcon() && (self.selectedProbabilityOptionValue() == constants.probabilityType.absence || self.selectedProbabilityOptionValue() == constants.probabilityType.overtime))
+		if (self.showProbabilityOptionsToggleIcon() && (self.selectedProbabilityOptionValue() == constants.probabilityType.absence || self.selectedProbabilityOptionValue() == constants.probabilityType.overtime))
 			self.reloadProbabilityData();
 	};
 
@@ -155,18 +154,23 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		return Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD"));
 	}
 
-	self.getUrlPartForProbability = function() {
+	self.getUrlPartForProbability = function () {
 		return (self.selectedProbabilityOptionValue() !== constants.probabilityType.none && self.selectedProbabilityOptionValue())
 			? "/Probability/" + self.selectedProbabilityOptionValue()
 			: "";
 	}
 
-	function fillOverTimeAvailabilityFormData() { 
+	function fillOverTimeAvailabilityFormData() {
 		var requestViewModel = self.requestViewModel().model;
 		requestViewModel.DateFrom(self.requestDay);
-		requestViewModel.LoadRequestData(self.overtimeAvailabililty); 
+		requestViewModel.LoadRequestData(self.overtimeAvailabililty);
 	}
 
+	function fillPostShiftForTradeFormData() {
+		var requestViewModel = self.requestViewModel().model;
+		requestViewModel.DateFrom();
+		requestViewModel.DateTo(self.requestDay);
+	}
 
 	self.today = function () {
 		self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime()).startOf("day"));
@@ -183,7 +187,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.selectedDate(previousDate);
 	};
 
-	function setStaffingProbabilityToggleStates(data){
+	function setStaffingProbabilityToggleStates(data) {
 		self.staffingProbabilityOnMobileEnabled(data.ViewPossibilityPermission
 			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913"));
 
@@ -205,7 +209,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		OnProbabilityOptionSelectCallback: function (selectedOptionValue) { self.onProbabilityOptionSelectCallback(selectedOptionValue); }
 	};
 
-	self.toggleProbabilityOptionsPanel = function(){
+	self.toggleProbabilityOptionsPanel = function () {
 		probabilityOptionModel.model = new Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel(self.selectedProbabilityOptionValue(), self);
 
 		if (self.requestViewModel() && self.requestViewModel().type() === probabilityOptionModel.type()) {
@@ -231,13 +235,13 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + getUrlPartForDate(self.selectedDate()) + self.getUrlPartForProbability());
 	};
 
-	self.reloadProbabilityData = function() {
+	self.reloadProbabilityData = function () {
 		self.loadingProbabilityData(true);
 		dataService.fetchProbabilityData(self.selectedDate().format('YYYY-MM-DD'), self.selectedProbabilityOptionValue(), self.updateProbabilityData);
 	};
 
-	self.updateProbabilityData = function(rawProbabilities){
-		if(!self.staffingProbabilityOnMobileEnabled()) return;
+	self.updateProbabilityData = function (rawProbabilities) {
+		if (!self.staffingProbabilityOnMobileEnabled()) return;
 		var options = {
 			probabilityType: self.selectedProbabilityOptionValue(),
 			layoutDirection: constants.layoutDirection.vertical,
@@ -284,7 +288,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.focusingRequestForm(true);
 	}
 
-	self.showOvertimeAvailabilityForm = function () { 
+	self.showOvertimeAvailabilityForm = function () {
 		var requestViewModel = new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(parent.Ajax(), function (data) {
 			parent.ReloadSchedule(data);
 			resetRequestViewModel();
@@ -307,10 +311,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			weekStart,
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
 
-		requestViewModel.AddRequestCallback = function () {
-			var count = self.requestCount() + 1;
-			self.requestCount(count);
-			resetRequestViewModel();
+		requestViewModel.AddRequestCallback = function (data) {
+			addRequestCallBack(data);
 		};
 
 		requestViewModel.AddTextRequest(false);
@@ -324,9 +326,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
 
 		requestViewModel.AddRequestCallback = function (data) {
-			var count = self.requestCount() + 1;
-			self.requestCount(count);
-			resetRequestViewModel();
+			addRequestCallBack(data);
 		};
 
 		requestViewModel.readPersonalAccountPermission(self.personAccountPermission());
@@ -334,12 +334,28 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		setupRequestViewModel(requestViewModel, resetRequestViewModel);
 	}
 
+	function addRequestCallBack(data) { 
+		if (data) {
+			var count = self.requestCount();
+			var date = moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth));
+			var formattedDate = date.format("YYYY-MM-DD");
+			if (self.requestDay.format("YYYY-MM-DD") === formattedDate) {
+				count++;
+			}
+			self.requestCount(count);
+		}
+		resetRequestViewModel();
+	}
+
 	self.redirectToTeamSchduleForShiftTradeRequest = function () {
 		//go to TeamSchedule view
 	};
 
 	self.showPostShiftForTradeForm = function () {
-		//please fill the request view model
-		setupRequestViewModel(null, null);
+		var requestViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(parent.Ajax())
+			.Create(Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
+
+		setupRequestViewModel(requestViewModel, resetRequestViewModel);
+		fillPostShiftForTradeFormData();
 	};
 };

@@ -249,7 +249,7 @@ $(document).ready(function() {
 		equal(viewModel.focusingRequestForm(), true);
 
 		viewModel.requestViewModel().model.AddRequestCallback();
-		equal(viewModel.requestCount(), 1);
+
 		equal(viewModel.requestViewModel(), undefined);
 		equal(viewModel.menuIconIsVisible(), true);
 		equal(viewModel.focusingRequestForm(), false);

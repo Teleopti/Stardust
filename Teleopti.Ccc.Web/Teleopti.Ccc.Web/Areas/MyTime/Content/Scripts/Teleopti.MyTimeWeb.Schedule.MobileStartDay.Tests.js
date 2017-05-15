@@ -1,14 +1,16 @@
 ﻿$(document).ready(function () {
-	var hash = ""; 
+	var hash = "";
 	var startDayData;
-	var ajax; 
+	var ajax;
 	var templates = [];
 	var fetchDayDataRequestCount;
+	var textOrAbsenceRequestSuccessData;
 
-	var templateConfig= {
+	var templateConfig = {
 		default: "add-new-request-detail-template",
 		absenceReporting: "add-absence-report-detail-template",
-		overtimeAvailability:"add-overtime-availability-template"
+		postShiftForTrade: "shift-exchange-offer-template",
+		overtimeAvailability: "add-overtime-availability-template"
 	}
 
 	module("Teleopti.MyTimeWeb.Schedule.MobileStartDay",
@@ -173,19 +175,20 @@
 
 		var requestViewModel = vm.requestViewModel().model;
 
-		requestViewModel.DateFrom("11/05/2017");
+		requestViewModel.DateFrom("28/04/2017");
 		requestViewModel.TimeFrom("08:00");
-		requestViewModel.DateTo("11/05/2017");
+		requestViewModel.DateTo("28/04/2017");
 		requestViewModel.TimeTo("09:10");
 		requestViewModel.Subject("subject");
 		requestViewModel.Message("msg");
 		requestViewModel.IsFullDay(false);
 
+		textOrAbsenceRequestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth:28};
 		requestViewModel.AddRequest();
 
 		equal(vm.requestViewModel(), undefined);
 
-		equal(requestViewModel.Template(),templateConfig.default);
+		equal(requestViewModel.Template(), templateConfig.default);
 
 		equal(vm.requestCount(), 1);
 	});
@@ -234,15 +237,17 @@
 		var requestViewModel = vm.requestViewModel().model;
 		requestViewModel.SetAjax(ajax);
 
-		requestViewModel.DateFrom(moment("11/05/2017"));
+		requestViewModel.DateFrom(moment("28/04/2017"));
 		requestViewModel.TimeFrom("08:00");
-		requestViewModel.DateTo(moment("11/05/2017"));
+		requestViewModel.DateTo(moment("28/04/2017"));
 		requestViewModel.TimeTo("09:10");
 		requestViewModel.Subject("subject");
 		requestViewModel.Message("msg");
 		requestViewModel.IsFullDay(false);
 		requestViewModel.AbsenceId("2");
 
+
+		textOrAbsenceRequestSuccessData = { DateFromYear: 2017, DateFromMonth: 4, DateFromDayOfMonth: 28 };
 		requestViewModel.AddRequest();
 
 		equal(vm.requestViewModel(), undefined);
@@ -271,7 +276,7 @@
 
 		var requestViewModel = vm.requestViewModel().model;
 		requestViewModel.AbsenceId("1");
-		requestViewModel.DateFrom(moment("11/05/2017")); 
+		requestViewModel.DateFrom(moment("11/05/2017"));
 		requestViewModel.SaveAbsenceReport();
 
 		equal(requestViewModel.Template, templateConfig.absenceReporting);
@@ -290,7 +295,7 @@
 
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
-		vm.showOvertimeAvailabilityForm(vm);  
+		vm.showOvertimeAvailabilityForm(vm);
 
 		equal(vm.requestViewModel().model.DateFrom().format(vm.datePickerFormat()), startDayData.Schedule.Date);
 
@@ -334,7 +339,7 @@
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.showOvertimeAvailabilityForm();
 
-		var requestViewModel = vm.requestViewModel().model; 
+		var requestViewModel = vm.requestViewModel().model;
 		requestViewModel.DateFrom(moment("11/05/2017"));
 		requestViewModel.StartTime("08:00");
 		requestViewModel.EndTime("15:00");
@@ -347,6 +352,46 @@
 
 		equal(vm.requestViewModel(), undefined);
 	});
+
+	test("should show post shift for trade form", function () {
+		setupAddRequestTemplate(templateConfig.postShiftForTrade);
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.showPostShiftForTradeForm();
+
+		equal(vm.requestViewModel().model.Template, templateConfig.postShiftForTrade);
+	});
+
+	test("should not add request count if request day is not equal to current day", function () {
+		setupAddRequestTemplate();
+
+		Teleopti.MyTimeWeb.Request.RequestDetail.Init(ajax);
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.showAddTextRequestForm();
+
+		var requestViewModel = vm.requestViewModel().model;
+
+		requestViewModel.DateFrom("11/05/2017");
+		requestViewModel.TimeFrom("08:00");
+		requestViewModel.DateTo("11/05/2017");
+		requestViewModel.TimeTo("09:10");
+		requestViewModel.Subject("subject");
+		requestViewModel.Message("msg");
+		requestViewModel.IsFullDay(false);
+
+		textOrAbsenceRequestSuccessData = { DateFromYear: 2017, DateFromMonth: 5, DateFromDayOfMonth: 11 };
+
+		requestViewModel.AddRequest();
+
+		equal(vm.requestViewModel(), undefined);
+
+		equal(requestViewModel.Template(), templateConfig.default);
+
+		equal(vm.requestCount(), 0);
+	});
+
 
 	function setupRequestCountTemplate() {
 		var template = $("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestCount() > 0'></span>");
@@ -650,8 +695,8 @@
 					fetchDayDataRequestCount++;
 					options.success(startDayData);
 				}
-				if (options.url === "Requests/TextRequest") {
-					options.success({});
+				if (options.url === "Requests/TextRequest") { 
+					options.success(textOrAbsenceRequestSuccessData);
 				}
 				if (options.url === "Requests/FetchAbsenceAccount") {
 					var absenceAccountData = {
@@ -664,17 +709,23 @@
 					options.success(absenceAccountData);
 				}
 				if (options.url === "Requests/AbsenceRequest") {
-					options.success({});
+					options.success(textOrAbsenceRequestSuccessData);
 				}
 				if (options.url === "Schedule/ReportAbsence") {
 					options.success({});
 				}
 				if (options.url === "Schedule/OvertimeAvailability") {
 					options.success({});
+				}
+				if (options.url === "ShiftExchange/GetAllWishShiftOptions") {
+					options.success({});
+				}
+				if (options.url === "Requests/ShiftTradeRequestPeriod") {
+					options.success({});
 				} 
 			}
 		};
-	} 
+	}
 
 	function initPortal() {
 		this.crossroads = {
