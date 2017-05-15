@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public string Date { get; set; }
 		public bool IsToday { get; set; }
 		public DayViewModel Schedule { get; set; }
+	    public ShiftTradeRequestsPeriodViewModel ShiftTradeRequestSetting { get; set; }
 	}
 
 	public class WeekScheduleViewModel : BaseScheduleViewModel

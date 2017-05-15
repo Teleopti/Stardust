@@ -14,7 +14,9 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Core.Extensions;
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly INow _now;
 		private readonly CommonViewModelMapper _commonMapper;
 		private readonly OvertimeAvailabilityViewModelMapper _overtimeMapper;
+		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 
 		public WeekScheduleViewModelMapper(IPeriodSelectionViewModelFactory periodSelectionViewModelFactory,
 			IPeriodViewModelFactory periodViewModelFactory,
@@ -39,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			IScheduleColorProvider scheduleColorProvider,
 			ILoggedOnUser loggedOnUser, INow now,
 			CommonViewModelMapper commonMapper,
-			OvertimeAvailabilityViewModelMapper overtimeMapper)
+			OvertimeAvailabilityViewModelMapper overtimeMapper, IRequestsViewModelFactory requestsViewModelFactory)
 		{
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
 			_periodViewModelFactory = periodViewModelFactory;
@@ -49,6 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_now = now;
 			_commonMapper = commonMapper;
 			_overtimeMapper = overtimeMapper;
+		    _requestsViewModelFactory = requestsViewModelFactory;
 		}
 
 		public WeekScheduleViewModel Map(WeekScheduleDomainData s)
@@ -105,7 +109,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				AsmPermission = s.AsmPermission,
 				IsToday = s.IsCurrentDay,
 				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, s.Date),
-				UnReadMessageCount = s.UnReadMessageCount
+				UnReadMessageCount = s.UnReadMessageCount,
+				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel()
 			};
 		}
 
