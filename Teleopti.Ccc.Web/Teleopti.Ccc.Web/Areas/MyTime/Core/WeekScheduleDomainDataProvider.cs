@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				ShiftExchangePermission = periodSchedule.ShiftExchangePermission,
 				ShiftTradeBulletinBoardPermission = periodSchedule.ShiftTradeBulletinBoardPermission,
 				PersonAccountPermission = periodSchedule.PersonAccountPermission,
+				ShiftTradeRequestPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
 				ViewPossibilityPermission = periodSchedule.ViewPossibilityPermission,
 				IsCurrentDay = date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone()))
 			};

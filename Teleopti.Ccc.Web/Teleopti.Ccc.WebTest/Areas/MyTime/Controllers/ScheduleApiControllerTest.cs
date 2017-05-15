@@ -1742,6 +1742,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.DatePickerFormat.Should().Be.EqualTo(expectedFormat);
 		}
 
+		[Test]
+		public void ShouldHasShiftTradeRequestPermission()
+		{
+			var result = Target.FetchDayData(null);
+			result.RequestPermission.ShiftTradeRequestPermission.Should().Be(true);
+		}
 		#endregion
 	}
 }

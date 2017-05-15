@@ -91,13 +91,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			var daylightModel = daylightSavingAdjustment != null
 				? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment)
 				: null;
+
 			return new DayScheduleViewModel
 			{
 				Date = s.Date.ToFixedClientDateOnlyFormat(),
 				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
 				DaylightSavingTimeAdjustment = daylightModel,
 				TimeLine = createTimeLine(s.MinMaxTime).ToArray(),
-				RequestPermission = map(s),
+				RequestPermission = mapDaySchedulePermission(s),
 				ViewPossibilityPermission = s.ViewPossibilityPermission,
 				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
 				Schedule = createDayViewModel(s.ScheduleDay),
@@ -179,6 +180,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				ShiftExchangePermission = s.ShiftExchangePermission,
 				TextRequestPermission = s.TextRequestPermission
 			};
+		}
+
+		private RequestPermission mapDaySchedulePermission(DayScheduleDomainData s)
+		{
+			var permission = map(s);
+			permission.ShiftTradeRequestPermission = s.ShiftTradeRequestPermission;
+			return permission;
 		}
 
 		private IEnumerable<StyleClassViewModel> map(IEnumerable<Color> colors)
@@ -277,66 +285,66 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			switch (significantPart)
 			{
 				case SchedulePartView.ContractDayOff:
-				{
-					var personAbsence = s.ScheduleDay.PersonAbsenceCollection()
-						.OrderBy(a => a.Layer.Payload.Priority)
-						.ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a))
-						.First();
-					var periodViewModel = new FullDayAbsencePeriodViewModel
 					{
-						Title = personAbsence.Layer.Payload.Description.Name,
-						Summary = toFormattedTimeSpan(s.Projection.ContractTime()),
-						StyleClassName = personAbsence.Layer.Payload.DisplayColor.ToStyleClass(),
-						Color = toRgbColor(personAbsence.Layer.Payload.DisplayColor)
-					};
+						var personAbsence = s.ScheduleDay.PersonAbsenceCollection()
+							.OrderBy(a => a.Layer.Payload.Priority)
+							.ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a))
+							.First();
+						var periodViewModel = new FullDayAbsencePeriodViewModel
+						{
+							Title = personAbsence.Layer.Payload.Description.Name,
+							Summary = toFormattedTimeSpan(s.Projection.ContractTime()),
+							StyleClassName = personAbsence.Layer.Payload.DisplayColor.ToStyleClass(),
+							Color = toRgbColor(personAbsence.Layer.Payload.DisplayColor)
+						};
 
-					periodViewModel.StyleClassName += " " + StyleClasses.Striped;
-					return periodViewModel;
-				}
+						periodViewModel.StyleClassName += " " + StyleClasses.Striped;
+						return periodViewModel;
+					}
 				case SchedulePartView.DayOff:
-				{
-					return new PersonDayOffPeriodViewModel
 					{
-						Title = s.ScheduleDay?.PersonAssignment()?.DayOff()?.Description.Name,
-						StyleClassName = StyleClasses.DayOff + " " + StyleClasses.Striped
-					};
-				}
+						return new PersonDayOffPeriodViewModel
+						{
+							Title = s.ScheduleDay?.PersonAssignment()?.DayOff()?.Description.Name,
+							StyleClassName = StyleClasses.DayOff + " " + StyleClasses.Striped
+						};
+					}
 				case SchedulePartView.MainShift:
-				{
-					var personAssignment = s.ScheduleDay?.PersonAssignment();
-					var shiftCategory = personAssignment?.ShiftCategory;
-					return new PersonAssignmentPeriodViewModel
 					{
-						Title = shiftCategory?.Description.Name,
-						Summary = toFormattedTimeSpan(s.Projection.ContractTime()),
-						TimeSpan = personAssignment?.PeriodExcludingPersonalActivity()
-							.TimePeriod(s.ScheduleDay?.TimeZone)
-							.ToShortTimeString(),
-						StyleClassName = shiftCategory?.DisplayColor.ToStyleClass(),
-						Color = toRgbColor(shiftCategory?.DisplayColor)
-					};
-				}
+						var personAssignment = s.ScheduleDay?.PersonAssignment();
+						var shiftCategory = personAssignment?.ShiftCategory;
+						return new PersonAssignmentPeriodViewModel
+						{
+							Title = shiftCategory?.Description.Name,
+							Summary = toFormattedTimeSpan(s.Projection.ContractTime()),
+							TimeSpan = personAssignment?.PeriodExcludingPersonalActivity()
+								.TimePeriod(s.ScheduleDay?.TimeZone)
+								.ToShortTimeString(),
+							StyleClassName = shiftCategory?.DisplayColor.ToStyleClass(),
+							Color = toRgbColor(shiftCategory?.DisplayColor)
+						};
+					}
 				case SchedulePartView.FullDayAbsence:
-				{
-					var personAbsence = s.ScheduleDay.PersonAbsenceCollection()
-						.OrderBy(a => a.Layer.Payload.Priority)
-						.ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a))
-						.First();
-					return new FullDayAbsencePeriodViewModel
 					{
-						Title = personAbsence.Layer.Payload.Description.Name,
-						Summary = toFormattedTimeSpan(s.Projection.ContractTime()),
-						StyleClassName = personAbsence.Layer.Payload.DisplayColor.ToStyleClass(),
-						Color = toRgbColor(personAbsence.Layer.Payload.DisplayColor)
-					};
-				}
+						var personAbsence = s.ScheduleDay.PersonAbsenceCollection()
+							.OrderBy(a => a.Layer.Payload.Priority)
+							.ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a))
+							.First();
+						return new FullDayAbsencePeriodViewModel
+						{
+							Title = personAbsence.Layer.Payload.Description.Name,
+							Summary = toFormattedTimeSpan(s.Projection.ContractTime()),
+							StyleClassName = personAbsence.Layer.Payload.DisplayColor.ToStyleClass(),
+							Color = toRgbColor(personAbsence.Layer.Payload.DisplayColor)
+						};
+					}
 				default:
-				{
-					return new PeriodViewModel
 					{
-						Title = Resources.NotScheduled
-					};
-				}
+						return new PeriodViewModel
+						{
+							Title = Resources.NotScheduled
+						};
+					}
 			}
 		}
 
