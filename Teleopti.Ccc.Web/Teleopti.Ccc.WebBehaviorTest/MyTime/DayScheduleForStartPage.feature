@@ -14,10 +14,15 @@ Given there is a role with
 	| Field | Value |
 	| Name  | Early |
 	| Color | Green |
+	And there is an absence with
+	| Field | Value    |
+	| Name  | Vacation |
+	| Color | Red      |
 	And there is a workflow control set with
-	| Field                                 | Value              |
-	| Name                                  | Published schedule |
-	| Schedule published to date            | 2018-02-01         |
+	| Field                      | Value              |
+	| Name                       | Published schedule |
+	| Schedule published to date | 2059-02-01         |
+	| ReportableAbsence          | Vacation           |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2013-08-19 |
@@ -28,11 +33,11 @@ Given there is a role with
 	| Start date | 2013-08-19 |
 	And I have the role 'Full access to mytime'
 	And I am englishspeaking swede
+	And I have the workflow control set 'Published schedule'
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: View day schedule after login
-	Given I have the workflow control set 'Published schedule'
-	And I have a shift with
+	Given I have a shift with
 	| Field          | Value            |
 	| StartTime      | 2017-04-21 09:00 |
 	| EndTime        | 2017-04-21 18:00 |
@@ -48,8 +53,7 @@ Scenario: View day schedule after login
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should view schedule for tomorrow
-	Given I have the workflow control set 'Published schedule'
-	And I am american
+	Given I am american
 	And I have a shift with
 	| Field          | Value            |
 	| StartTime      | 2017-04-22 09:00 |
@@ -66,8 +70,7 @@ Scenario: Should view schedule for tomorrow
 	
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should view schedule for the day before
-	Given I have the workflow control set 'Published schedule'
-	And I am american
+	Given I am american
 	And I have a shift with
 	| Field          | Value            |
 	| StartTime      | 2017-04-22 09:00 |
@@ -85,8 +88,7 @@ Scenario: Should view schedule for the day before
 @ignore
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should view today schedule from other day
-	Given I have the workflow control set 'Published schedule'
-	And I am american
+	Given I am american
 	And I have a shift with
 	| Field          | Value            |
 	| StartTime      | 2017-04-21 09:00 |
@@ -153,15 +155,23 @@ Scenario: Probability setting should be kept when date changed
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
 Scenario: Could add overtime Availability
-Given I have the workflow control set 'Published schedule'
-And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 2017-04-21 09:00 |
-	| EndTime        | 2017-04-21 18:00 |
-	| Shift category | Early            |
 When I am viewing mobile view for date '2017-04-21'
 When I click the menu button in start page
 And I click menu Overtime Availability
 And I input '18:00' as overtime startTime and '19:00' as overtime endTime
 And I click save Overtime Availability
-Then I should see '18:00 - 19:00' Overtime Availability in schedule
+Then I should see '18:00 - 19:00' 'Overtime Availability' in schedule
+
+@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
+Scenario: Could add absence report
+Given I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2017-05-16 09:00 |
+	| EndTime        | 2017-05-16 18:00 |
+	| Shift category | Early            |
+When I am viewing mobile view for date '2017-04-21'
+And I click today button
+When I click the menu button in start page
+And I click menu menu Absence Reporting
+And I click save Absence Report
+Then I should see '09:00 - 18:00' 'Vacation' in schedule

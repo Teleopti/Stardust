@@ -95,6 +95,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.ClickContaining("li>a", "Overtime Availability");
 		}
 
+		[When(@"I click menu menu Absence Reporting")]
+		public void WhenIClickMenuMenuAbsenceReport()
+		{
+			Browser.Interactions.ClickContaining("li>a", "Absence Reporting");
+		}
+
 		[When(@"I input '(.*)' as overtime startTime and '(.*)' as overtime endTime")]
 		public void WhenIInputAsOvertimeStartTimeAndAsOvertimeEndTime(string startTime, string endTime)
 		{
@@ -108,9 +114,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Click("div.mobile-start-day button.request-new-send");
 		}
 
-		[Then(@"I should see '(.*)' Overtime Availability in schedule")]
-		public void ThenIShouldSeeOvertimeAvailabilityInSchedule(string timeSpan)
+		[When(@"I click save Absence Report")]
+		public void WhenIClickSaveAbsenceReport()
 		{
+			Browser.Interactions.Click("div.mobile-start-day button.absence-report-send");
+			Browser.Interactions.Javascript("window.setTimeout(function(){ window.location.reload();}, 1000);");
+		}
+
+		[Then(@"I should see '(.*)' '(.*)' in schedule")]
+		public void ThenIShouldSeeInSchedule(string timeSpan, string absenceType)
+		{
+			Browser.Interactions.AssertAnyContains("div>strong", absenceType);
 			Browser.Interactions.AssertAnyContains("span.displayblock", timeSpan);
 		}
 
