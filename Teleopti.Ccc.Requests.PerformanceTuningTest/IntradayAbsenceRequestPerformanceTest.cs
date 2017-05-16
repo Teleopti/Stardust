@@ -114,128 +114,62 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 							  });
 		}
 
-		[Test]
-		public void AbsencesWithUpdateReadModelDeadLock()
+		private void onTimedEvent(Object source, ElapsedEventArgs e)
 		{
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
+			_nowDateTime = _nowDateTime.AddSeconds(1);
 			Now.Is(_nowDateTime);
-			var startDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
-			var resolution = 15;
-			var periods = new List<DateTime>();
-			foreach (var intervalIndex in Enumerable.Range(0, 9))
-			{
-				periods.Add(startDateTime);
-				startDateTime = startDateTime.AddMinutes(resolution);
-			}
-			var taskList = new List<Task>();
-			var r2 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
-			{
-				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
-			}));
-			foreach (var intervalIndex in Enumerable.Range(0,9))
-			{
-				taskList.Add(Task.Factory.StartNew(() =>
-				{
-					WithUnitOfWork.Do(() =>
-					{
-						foreach (var request in requests)
-						{
-							AbsencePersister.PersistIntradayAbsence(new AddIntradayAbsenceCommand
-							{
-								AbsenceId = ((IAbsenceRequest)request.Request).Absence.Id.GetValueOrDefault(),
-								EndTime = periods[intervalIndex].AddMinutes(resolution),
-								StartTime = periods[intervalIndex],
-								PersonId = request.Person.Id.GetValueOrDefault()
-							});
-						}
-					});
-				}));
-			}
-			
-
-			var r3 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
-			{
-				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
-			}));
-			taskList.Add(r3);
-			taskList.Add(r2);
-			Task.WaitAll(taskList.ToArray());
 		}
 
 		[Test, Ignore("Can not provoke daed locks, but leave the code for the future")]
-		public void AbsencesWithUpdateReadModelAndAbsenceRequestDeadLock()
+		public void Run200RequestsPossibleDeadLock()
 		{
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
 			Now.Is(_nowDateTime);
-			var startDateTime = new DateTime(2016, 03, 17, 7, 0, 0).Utc();
-			var resolution = 15;
-			var periods = new List<DateTime>();
-			foreach (var intervalIndex in Enumerable.Range(0, 9))
-			{
-				periods.Add(startDateTime);
-				startDateTime = startDateTime.AddMinutes(resolution);
-			}
-			var taskList = new List<Task>();
+			var nowTimer = new Timer(1000);
+			nowTimer.Elapsed += onTimedEvent;
+			nowTimer.AutoReset = true;
+			nowTimer.Enabled = true;
+			
+
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			
+			StardustJobFeedback.SendProgress($"Will process {requests.Count} requests");
+			var r1 = Task.Factory.StartNew(() =>
+											   WithUnitOfWork.Do(() =>
+												   {
+													   foreach (var request in requests.Take(100))
+													   {
+														   AbsencePersister.PersistIntradayAbsence(new AddIntradayAbsenceCommand
+														   {
+															   AbsenceId = ((IAbsenceRequest) request.Request).Absence.Id.GetValueOrDefault(),
+															   EndTime = request.Request.Period.EndDateTime,
+															   StartTime = request.Request.Period.StartDateTime,
+															   PersonId = request.Person.Id.GetValueOrDefault()
+														   });
+													   }
+												   }
+											   )
+			);
+
+	
 			var r2 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
-			{
-				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
-			}));
-
-			IList<IPerson> allPersons = new List<IPerson>();
-			WithUnitOfWork.Do(() =>
-			{
-				allPersons = PersonRepository.LoadAll();
-			});
-			var absenceId = new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E");
-			foreach (var intervalIndex in Enumerable.Range(0, 9))
-			{
-				taskList.Add(Task.Factory.StartNew(() =>
-				{
-					WithUnitOfWork.Do(() =>
-					{
-						foreach (var person in allPersons)
-						{
-							AbsencePersister.PersistIntradayAbsence(new AddIntradayAbsenceCommand
-							{
-								AbsenceId = absenceId,
-								EndTime = periods[intervalIndex].AddMinutes(resolution),
-								StartTime = periods[intervalIndex],
-								PersonId = person.Id.GetValueOrDefault()
-							});
-						}
-					});
-				}));
-			}
-
-			taskList.Add(Task.Factory.StartNew(() =>
-			{
-				foreach (var request in requests)
-				{
-					WithUnitOfWork.Do(() =>
-					{
-						AbsenceRequestIntradayFilter.Process(request);
-					});
-				}
-			}));
-
-			var r4 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
 			{
 				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
 			}));
 
 			var r3 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
 			{
-				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
+				AbsenceRequestIntradayFilter.Process(requests.Reverse().Take(100).First());
 			}));
-			taskList.Add(r3);
-			taskList.Add(r2);
-			taskList.Add(r4);
-			Task.WaitAll(taskList.ToArray());
-		}
+			var r4 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			{
+				AbsenceRequestIntradayFilter.Process(requests.Reverse().Take(100).Second());
+			}));
 
+			Task.WaitAll(r1, r2, r3, r4);
+			nowTimer.Stop();
+			nowTimer.Dispose();
+		}
 	}
 }
