@@ -105,12 +105,5 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			return Ok();
 		}
 		
-		private static DateTime? parseSnapshotId(string snapshotId)
-		{
-			DateTime parsed;
-			DateTime.TryParse(snapshotId, out parsed);
-			return parsed == DateTime.MinValue ? (DateTime?)null : parsed;
-		}
-
 	}
 }
