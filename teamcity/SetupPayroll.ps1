@@ -13,11 +13,11 @@ $ScheduleExePath = "C:\Temp\ServiceInstall\AirproFi.ScheduleChangeListener\Sched
 $ShiftExePath = "C:\Temp\ServiceInstall\AirproFi.ShiftAndPersAccHandler\ShiftAndPersAccHandler.exe"
 
 #Schedule
-$ScheduleSource = "C:\Temp\Teleopti.Ccc.Payroll.Customers.AirproFi.ScheduleChangeListener\bin\Release\*"
+$ScheduleSource = "$PSScriptroot\..\Teleopti.Ccc.Payroll.Customers.AirproFi.ScheduleChangeListener\bin\Release\*"
 $ScheduleDestination = "\\$TargetServer\c$\temp\ServiceInstall\AirproFi.ScheduleChangeListener"
 
 #Shift
-$ShiftSource = "C:\Temp\Teleopti.Ccc.Payroll.Customers.AirproFi.ShiftAndPersAccHandler\bin\Release\*"
+$ShiftSource = "$PSScriptroot\..\Teleopti.Ccc.Payroll.Customers.AirproFi.ShiftAndPersAccHandler\bin\Release\*"
 $ShiftDestination = "\\$TargetServer\c$\temp\ServiceInstall\AirproFi.ShiftAndPersAccHandler"
 
 #Service names
