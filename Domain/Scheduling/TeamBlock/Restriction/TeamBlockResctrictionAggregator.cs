@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			                                                                      new WorkTimeLimitation(), null, null, null,
 			                                                                      new List<IActivityRestriction>());
 
-			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, person, schedulingOptions,
+			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestriction(_effectiveRestrictionCreator, person, schedulingOptions,
 													  scheduleDictionary), dateOnlyList, matrixList, effectiveRestriction);
 
-			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, groupMembers, schedulingOptions,
+			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestriction(_effectiveRestrictionCreator, groupMembers, schedulingOptions,
 													  scheduleDictionary), datePointer, matrixList, effectiveRestriction);
 			
 

@@ -2596,7 +2596,7 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftCategoryRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameStartTimeRestriction.cs" />
-    <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcition.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryPeriodRemover.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryWeekRemover.cs" />

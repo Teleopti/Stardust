@@ -6,14 +6,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
-	public class TeamBlockEffectiveRestrcition : IScheduleRestrictionStrategy
+	public class TeamBlockEffectiveRestriction : IScheduleRestrictionStrategy
 	{
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IEnumerable<IPerson> _persons;
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly SchedulingOptions _schedulingOptions;
 
-		public TeamBlockEffectiveRestrcition(IEffectiveRestrictionCreator effectiveRestrictionCreator,
+		public TeamBlockEffectiveRestriction(IEffectiveRestrictionCreator effectiveRestrictionCreator,
 		                                     IPerson person, SchedulingOptions schedulingOptions,
 		                                     IScheduleDictionary scheduleDictionary)
 			: this(effectiveRestrictionCreator, new List<IPerson> {person}, schedulingOptions, scheduleDictionary)
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 
 		}
 
-		public TeamBlockEffectiveRestrcition(IEffectiveRestrictionCreator effectiveRestrictionCreator,
+		public TeamBlockEffectiveRestriction(IEffectiveRestrictionCreator effectiveRestrictionCreator,
 											 IEnumerable<IPerson> persons, SchedulingOptions schedulingOptions,
 											 IScheduleDictionary scheduleDictionary)
 		{
