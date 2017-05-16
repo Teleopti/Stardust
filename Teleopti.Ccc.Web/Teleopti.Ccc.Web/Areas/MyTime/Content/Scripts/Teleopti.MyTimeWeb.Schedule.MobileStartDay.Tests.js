@@ -409,7 +409,7 @@
 		equal(requestViewModel.Template(), templateConfig.default);
 
 		equal(vm.requestCount(), 0);
-    });
+	});
 
 	test("should navigate to team schedule", function () {
 		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow());
@@ -731,7 +731,15 @@
 			"BaseUtcOffsetInMinutes": 60.0,
 			"CheckStaffingByIntraday": false,
 			"Possibilities": [],
-			"SiteOpenHourIntradayPeriod": null
+			"SiteOpenHourIntradayPeriod": null,
+			"ShiftTradeRequestSetting": {
+				"HasWorkflowControlSet": true,
+				"NowDay": moment().format('D'),
+				"NowMonth": moment().format('M'),
+				"NowYear": moment().format('YYYY'),
+				"OpenPeriodRelativeEnd": 99,
+				"OpenPeriodRelativeStart": 1
+			}
 		};
 	}
 

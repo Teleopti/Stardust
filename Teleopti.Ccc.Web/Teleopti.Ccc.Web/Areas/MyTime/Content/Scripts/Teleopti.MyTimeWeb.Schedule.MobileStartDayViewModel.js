@@ -39,10 +39,10 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.absenceReportPermission = ko.observable();
 	self.overtimeAvailabilityPermission = ko.observable();
 	self.shiftTradeRequestPermission = ko.observable();
-	self.shiftExchangePermission = ko.observable();
 	self.personAccountPermission = ko.observable();
 	self.requestPermission = ko.observable();
 	self.showAbsenceReportingCommandItem = ko.observable();
+	self.showPostShiftTradeMenu = ko.observable(false);
 
 	self.overtimeAvailabililty = null;
 
@@ -122,7 +122,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			self.textRequestPermission(data.RequestPermission.TextRequestPermission);
 			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
 			self.shiftTradeRequestPermission(data.RequestPermission.ShiftTradeRequestPermission);
-			self.shiftExchangePermission(data.RequestPermission.ShiftExchangePermission);
 			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
 		}
 
@@ -133,9 +132,27 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 		self.showAbsenceReportingCommandItem(self.absenceReportPermission() && isTodayOrTomorrow);
 		setStaffingProbabilityToggleStates(data);
-		if (self.showProbabilityOptionsToggleIcon() && (self.selectedProbabilityOptionValue() == constants.probabilityType.absence || self.selectedProbabilityOptionValue() == constants.probabilityType.overtime))
+		if (self.showProbabilityOptionsToggleIcon() && (self.selectedProbabilityOptionValue() === constants.probabilityType.absence || self.selectedProbabilityOptionValue() == constants.probabilityType.overtime))
 			self.reloadProbabilityData();
+
+		setPostShiftTradeMenuVisibility(data);
 	};
+
+	function setPostShiftTradeMenuVisibility(data) {
+		if (!data.RequestPermission) {
+			return;
+		}
+		if (!data.RequestPermission.ShiftExchangePermission) {
+			self.showPostShiftTradeMenu(false);
+			return;
+		}
+		var shiftTradeRequestSetting = data.ShiftTradeRequestSetting;
+		var shiftExchangeOfferViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel();
+		shiftExchangeOfferViewModel.DateTo(self.requestDay);
+		shiftExchangeOfferViewModel.OpenPeriodRelativeStart(shiftTradeRequestSetting.OpenPeriodRelativeStart);
+		shiftExchangeOfferViewModel.OpenPeriodRelativeEnd(shiftTradeRequestSetting.OpenPeriodRelativeEnd);
+		self.showPostShiftTradeMenu(shiftExchangeOfferViewModel.IsSelectedDateInShiftTradePeriod());
+	}
 
 	self.setSelectedDateSubscription = function (date) {
 		self.selectedDate(moment(date));

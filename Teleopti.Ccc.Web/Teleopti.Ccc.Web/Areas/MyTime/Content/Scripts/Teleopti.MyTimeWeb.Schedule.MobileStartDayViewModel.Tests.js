@@ -226,6 +226,64 @@ $(document).ready(function() {
 		equal(viewModel.menuIconIsVisible(), false);
 	});
 
+	test("should hide post shift trade menu if viewing day is out of open period", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null }
+			},
+			ShiftTradeRequestSetting: {
+				HasWorkflowControlSet: true,
+				NowDay: moment().format('D'),
+				NowMonth: moment().format('M'),
+				NowYear: moment().format('YYYY'),
+				OpenPeriodRelativeEnd: 99,
+				OpenPeriodRelativeStart: 1
+			},
+			RequestPermission: {
+				ShiftExchangePermission: true
+			}
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.showPostShiftTradeMenu(), false);
+	});
+
+	test("should show post shift trade menu when viewing day is in open period", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment().add('days', 1).format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null }
+			},
+			ShiftTradeRequestSetting: {
+				HasWorkflowControlSet: true,
+				NowDay: moment().format('D'),
+				NowMonth: moment().format('M'),
+				NowYear: moment().format('YYYY'),
+				OpenPeriodRelativeEnd: 99,
+				OpenPeriodRelativeStart: 1
+			},
+			RequestPermission: {
+				ShiftExchangePermission: true
+			}
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.showPostShiftTradeMenu(), true);
+	});
+
 	test("should reset form and menu status after click 'Cancel' in request forms", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
@@ -414,7 +472,7 @@ $(document).ready(function() {
 			}
 		};
 		viewModel.readData(rawData);
-		equal(viewModel.shiftExchangePermission(), false);
+		equal(viewModel.showPostShiftTradeMenu(), false);
 	});
 
 	test("should not show probability option icon without toggle on", function () {
@@ -519,14 +577,14 @@ $(document).ready(function() {
 	});
 
 	 test("should change probability option value to absence(1) after selecting 'Show absence probability' ", function () {
-	 	//fake ajax fn to avoid ajax call for test
-	 	Teleopti.MyTimeWeb.Ajax = function(){
-	 		return {
-	 			Ajax: function(option){
-	 				//do nothing
-	 			}
-	 		};
-	 	};
+		//fake ajax fn to avoid ajax call for test
+		Teleopti.MyTimeWeb.Ajax = function(){
+			return {
+				Ajax: function(option){
+					//do nothing
+				}
+			};
+		};
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 		};
