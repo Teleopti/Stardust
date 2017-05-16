@@ -25,26 +25,25 @@
 		getAgentGroupById();
 
 		function getAgentGroupById() {
-			if ($stateParams.groupId) {
-				vm.agentGroup = {};
-				var getAgentGroup = agentGroupService.getAgentGroupById({ id: $stateParams.groupId });
-				return getAgentGroup.$promise.then(function (data) {
-					vm.agentGroup = data;
-					textForAgentGroup();
-					return vm.agentGroup;
-				});
-			}
-
+			if (!$stateParams.groupId)
+				return;
+			vm.agentGroup = {};
+			var getAgentGroup = agentGroupService.getAgentGroupById({ id: $stateParams.groupId });
+			return getAgentGroup.$promise.then(function (data) {
+				vm.agentGroup = data;
+				textForAgentGroup();
+				return vm.agentGroup;
+			});
 		}
 
 		function getDayOffRules() {
-			if ($stateParams.groupId) {
-				var dayOffRule = dayOffRuleService.getDayOffRulesByAgentGroupId({ agentGroupId: $stateParams.groupId });
-				return dayOffRule.$promise.then(function (data) {
-					vm.dayOffRules = data;
-					return vm.dayOffRules;
-				});
-			}
+			if (!$stateParams.groupId)
+				return;
+			var dayOffRule = dayOffRuleService.getDayOffRulesByAgentGroupId({ agentGroupId: $stateParams.groupId });
+			return dayOffRule.$promise.then(function (data) {
+				vm.dayOffRules = data;
+				return vm.dayOffRules;
+			});
 		}
 
 		function textForAgentGroup() {
@@ -57,13 +56,13 @@
 		}
 
 		function deleteDoRule(dayOffRule) {
-			if (!dayOffRule.Default) {
-				var deleteDayOffRule = dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id });
-				return deleteDayOffRule.$promise.then(function () {
-					var index = vm.dayOffRules.indexOf(dayOffRule);
-					vm.dayOffRules.splice(index, 1);
-				});
-			}
+			if (dayOffRule.Default)
+				return;
+			var deleteDayOffRule = dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id });
+			return deleteDayOffRule.$promise.then(function () {
+				var index = vm.dayOffRules.indexOf(dayOffRule);
+				vm.dayOffRules.splice(index, 1);
+			});
 		}
 
 		function goEditDoRule(dayOffRule) {

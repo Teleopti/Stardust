@@ -96,26 +96,24 @@
         }
 
         function inputFilterData() {
-            if (vm.searchString !== '') {
-                var filters = dayOffRuleService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
-                    removeSelectedFiltersInList(data, vm.selectedResults);
-                    return vm.filterResults = data;
-                });
-                return filters;
-            } else {
+            if (vm.searchString == '')
                 return [];
-            }
+            var filters = dayOffRuleService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
+                removeSelectedFiltersInList(data, vm.selectedResults);
+                return vm.filterResults = data;
+            });
+            return filters;
         }
 
         function removeSelectedFiltersInList(filters, selectedFilters) {
-            if (selectedFilters.length > 0) {
-                for (var i = filters.length - 1; i >= 0; i--) {
-                    angular.forEach(selectedFilters, function (selectedItem) {
-                        if (filters[i].Id === selectedItem.Id) {
-                            filters.splice(i, 1);
-                        }
-                    });
-                }
+            if (selectedFilters.length == 0)
+                return;
+            for (var i = filters.length - 1; i >= 0; i--) {
+                angular.forEach(selectedFilters, function (selectedItem) {
+                    if (filters[i].Id === selectedItem.Id) {
+                        filters.splice(i, 1);
+                    }
+                });
             }
         }
 
@@ -151,7 +149,7 @@
         }
 
         function isInteger(value) {
-            return typeof value === "number" &&
+            return angular.isNumber(value) &&
                 isFinite(value) &&
                 Math.floor(value) === value;
         }
@@ -175,9 +173,8 @@
         }
 
         function selectResultItem(item) {
-            if (item === null) {
+            if (item === null)
                 return;
-            }
             if (isValidUnit(item)) {
                 vm.selectedResults.push(item);
                 vm.clearInput();
@@ -201,33 +198,33 @@
         }
 
         function persist() {
-            if (vm.isValid()) {
-                vm.isEnabled = false;
-                dayOffRuleService.saveDayOffRule({
-                    MinDayOffsPerWeek: vm.dayOffsPerWeek.MinDayOffsPerWeek,
-                    MaxDayOffsPerWeek: vm.dayOffsPerWeek.MaxDayOffsPerWeek,
-                    MinConsecutiveWorkdays: vm.consecWorkDays.MinConsecWorkDays,
-                    MaxConsecutiveWorkdays: vm.consecWorkDays.MaxConsecWorkDays,
-                    MinConsecutiveDayOffs: vm.consecDaysOff.MinConsecDaysOff,
-                    MaxConsecutiveDayOffs: vm.consecDaysOff.MaxConsecDaysOff,
-                    Id: vm.filterId,
-                    Name: vm.name,
-                    Default: vm.default,
-                    Filters: vm.selectedResults,
-                    AgentGroupId: $stateParams.groupId
-                }).$promise.then(function () {
-                    returnFromCreate();
-                });
-            }
+            if (!vm.isValid())
+                return;
+            vm.isEnabled = false;
+            dayOffRuleService.saveDayOffRule({
+                MinDayOffsPerWeek: vm.dayOffsPerWeek.MinDayOffsPerWeek,
+                MaxDayOffsPerWeek: vm.dayOffsPerWeek.MaxDayOffsPerWeek,
+                MinConsecutiveWorkdays: vm.consecWorkDays.MinConsecWorkDays,
+                MaxConsecutiveWorkdays: vm.consecWorkDays.MaxConsecWorkDays,
+                MinConsecutiveDayOffs: vm.consecDaysOff.MinConsecDaysOff,
+                MaxConsecutiveDayOffs: vm.consecDaysOff.MaxConsecDaysOff,
+                Id: vm.filterId,
+                Name: vm.name,
+                Default: vm.default,
+                Filters: vm.selectedResults,
+                AgentGroupId: $stateParams.groupId
+            }).$promise.then(function () {
+                returnFromCreate();
+            });
         }
 
         function returnFromCreate() {
-            if ($stateParams.groupId) {
-                $state.go('resourceplanner.dayoffrulesoverview',
-                    {
-                        groupId: $stateParams.groupId
-                    });
-            }
+            if (!$stateParams.groupId)
+                return;
+            $state.go('resourceplanner.dayoffrulesoverview',
+                {
+                    groupId: $stateParams.groupId
+                });
         }
     }
 })();

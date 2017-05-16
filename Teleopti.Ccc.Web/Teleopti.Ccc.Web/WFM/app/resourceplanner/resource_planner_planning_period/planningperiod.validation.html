@@ -9,7 +9,7 @@
             <div tabindex="0">
                 <span><i class="mdi"></i>
                      {{'PreSchedulingValidationIssues' | translate}}
-                    <div tabindex=0 class="context-menu card-context" ng-click="vm.updatePreValidation();$event.stopPropagation();"> 
+                    <div tabindex=0 class="context-menu card-context" ng-click="vm.getValidationByPpId();$event.stopPropagation();"> 
                         <i class="mdi mdi-refresh"></i>
                         <md-tooltip> {{'RefreshPreSchedulingValidationIssues' | translate}}</md-tooltip>
                     </div>
@@ -61,7 +61,7 @@
             <div tabindex="0">
                 <span><i class="mdi"></i>{{'ScheduledIssues' | translate}}</span> 
                 <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
-                <span class="pull-right">{{vm.valData.scheduleIssues.length}}{{'IssuesText' | translate}}</span>
+                <span class="pull-right">{{vm.valData.scheduleIssues.length}} {{'IssuesText' | translate}}</span>
             </div>
         </card-header>
         <card-body class="panel">

@@ -1,5 +1,5 @@
 'use strict';
-describe('planningPeriodOverviewController', function () {
+xdescribe('planningPeriodOverviewController', function () {
     var $httpBackend,
         $controller,
         $injector,

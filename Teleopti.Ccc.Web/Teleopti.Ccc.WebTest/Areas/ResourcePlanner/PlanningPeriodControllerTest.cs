@@ -114,9 +114,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			PersonRepository.Has(person);
 			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
 
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(planningPeriod.Id.GetValueOrDefault());
+			dynamic result = Target.GetValidation(planningPeriod.Id.GetValueOrDefault());
 
-			result.Content.ValidationResult.InvalidResources.Should().Be.Empty();
+			result.ValidationResult.InvalidResources.Should().Be.Empty();
 		}
 
 		[Test]
@@ -142,9 +142,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				}
 			};
 
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(planningPeriod.Id.GetValueOrDefault());
+			dynamic result = Target.GetPlanningPeriod(planningPeriod.Id.GetValueOrDefault());
 
-			result.Content.ValidationResult.InvalidResources.Should().Not.Be.Empty();
+			result.ValidationResult.InvalidResources.Should().Not.Be.Empty();
 		}
 
 		[Test]

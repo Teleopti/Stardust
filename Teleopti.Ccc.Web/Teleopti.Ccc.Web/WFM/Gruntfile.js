@@ -395,7 +395,14 @@ module.exports = function (grunt) {
                     '!app/rta/rta.faketime.service.js'
                 ]
             },
-
+            schedule: {
+                src: [
+                    'app/resourceplanner/resource_planner_agent_group/**/*.js',
+                    'app/resourceplanner/resource_planner_day_off_rule/**/*.js',
+                    'app/resourceplanner/resource_planner_planning_period/**/*.js',
+                    'app/resourceplanner/resource_planner_v2/**/*.js'
+                ]
+            },
             dev: {
                 src: [
                     //add your path to module here
@@ -427,8 +434,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks("grunt-image-embed");
-
-
 
     // Default task(s).
     grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes

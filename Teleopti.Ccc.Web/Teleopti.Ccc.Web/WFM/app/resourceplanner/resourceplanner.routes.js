@@ -81,6 +81,13 @@
 			params: {
 				groupId: '',
 				ppId: ''
+			},
+			resolve: {
+				selectedPp: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
+					return planningPeriodServiceNew.getPlanningPeriod({ id: $stateParams.ppId }).$promise.then(function (data) {
+						return data;
+					});
+				}]
 			}
 		}).state('resourceplanner.dayoffrulesoverview', {
 			params: {

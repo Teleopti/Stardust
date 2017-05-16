@@ -19,7 +19,7 @@
 				publishPeriod: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/publish' },
 				schedule: { method: 'POST', params: { id: "@id", runAsynchronously: function (d) { return d.runAsynchronously } }, url: planningPeriodBaseUrl + '/schedule' },
 				intraOptimize: { method: 'POST', params: { id: '@id', runAsynchronously: function (d) { return d.runAsynchronously } }, url: planningPeriodBaseUrl + '/optimizeintraday' },
-				getAgentCount: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/countagents' },
+				getValidation: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/validation' },
 				clear: { method: 'DELETE', params: { id: "@id" }, url: planningPeriodBaseUrl + '/schedule' },
 
 			});
@@ -45,7 +45,7 @@
 			getPlanningPeriodSuggestions: getPlanningPeriodSuggestions.query,
 			firstPlanningPeriod: agentGroup.firstPlanningPeriod,
 			// PlanningPeriod.Overview
-			getNumberOfAgents: planningPeriod.getAgentCount,
+			getValidation: planningPeriod.getValidation,
 			lastJobResult: planningPeriod.lastJobResult,
 			lastJobStatus: planningPeriod.lastJobStatus,
 			lastIntradayOptimizationJobStatus: planningPeriod.lastIntradayOptimizationJobStatus,

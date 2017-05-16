@@ -12,31 +12,39 @@
         var vm = this;
 
         vm.message = "";
-        vm.updatePreValidation = updatePreValidation;
+        vm.valData = {
+            totalValNum: 0,
+            totalPreValNum: 0,
+            scheduleIssues: [],
+            preValidation: []
+        };
+        vm.getValidationByPpId = getValidationByPpId;
 
-        function updatePreValidation() {
-            var preValidation = planningPeriodServiceNew.getPlanningPeriod({ id: vm.valData.selectedPpId });
-            return preValidation.$promise.then(function (data) {
-                vm.valData.preValidation = data.ValidationResult.InvalidResources;
-                getTotalValidationErrorsNumber(vm.valData.preValidation, vm.valData.scheduleIssues);
-                vm.message = $translate.instant("UpdatedValidation");
-                $timeout(function () {
-                    vm.message = "";
-                }, 5000);
-                return vm.valData;
-            });
+        getValidationByPpId();
+
+        function getValidationByPpId() {
+            if ($stateParams.ppId == null)
+                return;
+            planningPeriodServiceNew.getValidation({ id: $stateParams.ppId })
+                .$promise.then(function (data) {
+                    vm.valData.preValidation = data.ValidationResult.InvalidResources;
+                    getTotalValidationErrorsNumber();
+                });
         }
 
-        function getTotalValidationErrorsNumber(pre, after) {
+        function getTotalValidationErrorsNumber() {
             vm.valData.totalValNum = 0;
             vm.valData.totalPreValNum = 0;
+            var pre = vm.valData.preValidation;
+            var after = vm.valData.scheduleIssues;
+
             if (pre.length > 0) {
                 angular.forEach(pre, function (item) {
                     vm.valData.totalPreValNum += item.ValidationErrors.length;
                 });
             }
             if (after.length > 0) {
-                vm.valData.totalValNum += vm.valData.scheduleIssues.length;
+                vm.valData.totalValNum += after.length;
             }
             return vm.valData.totalValNum += vm.valData.totalPreValNum;
         }

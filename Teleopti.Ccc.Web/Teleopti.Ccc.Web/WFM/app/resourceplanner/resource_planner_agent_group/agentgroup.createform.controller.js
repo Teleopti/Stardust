@@ -30,47 +30,44 @@
 		getAgentGroupById();
 
 		function getAgentGroupById() {
-			if (agentGroupId !== null) {
-				var getAgentGroup = agentGroupService.getAgentGroupById({ id: agentGroupId });
-				return getAgentGroup.$promise.then(function (data) {
-					vm.editAgentGroup = data;
-					vm.deleteAgentGroupText = $translate.instant("AreYouSureYouWantToDeleteTheAgentGroup").replace("{0}", vm.editAgentGroup.Name);
-					vm.name = data.Name;
-					vm.selectedResults = data.Filters;
-					return vm.editAgentGroup;
-				});
-			}
+			if (agentGroupId == null)
+				return;
+			var getAgentGroup = agentGroupService.getAgentGroupById({ id: agentGroupId });
+			return getAgentGroup.$promise.then(function (data) {
+				vm.editAgentGroup = data;
+				vm.deleteAgentGroupText = $translate.instant("AreYouSureYouWantToDeleteTheAgentGroup").replace("{0}", vm.editAgentGroup.Name);
+				vm.name = data.Name;
+				vm.selectedResults = data.Filters;
+				return vm.editAgentGroup;
+			});
 		}
 
 		function inputFilterData() {
-			if (vm.searchString !== '') {
-				var filters = agentGroupService.getFilterData({ searchString: vm.searchString });
-				filters.$promise.then(function (data) {
-					removeSelectedFiltersInList(data, vm.selectedResults);
-					return vm.filterResults = data;
-				});
-				return filters;
-			} else {
+			if (vm.searchString == '')
 				return [];
-			}
+			var filters = agentGroupService.getFilterData({ searchString: vm.searchString });
+			filters.$promise.then(function (data) {
+				removeSelectedFiltersInList(data, vm.selectedResults);
+				return vm.filterResults = data;
+			});
+			return filters;
 		}
 
 		function removeSelectedFiltersInList(filters, selectedFilters) {
-			if (selectedFilters.length > 0) {
-				for (var i = filters.length - 1; i >= 0; i--) {
-					angular.forEach(selectedFilters, function (selectedItem) {
-						if (filters[i].Id === selectedItem.Id) {
-							filters.splice(i, 1);
-						}
-					});
-				}
+			if (selectedFilters.length == 0)
+				return;
+			for (var i = filters.length - 1; i >= 0; i--) {
+				angular.forEach(selectedFilters, function (selectedItem) {
+					if (filters[i].Id === selectedItem.Id) {
+						filters.splice(i, 1);
+					}
+				});
 			}
 		}
 
 		function selectResultItem(item) {
-			if (item == null) {
+			if (item == null)
 				return;
-			}
 			if (isValidUnit(item)) {
 				vm.selectedResults.push(item);
 				clearInput();
@@ -101,9 +98,8 @@
 		}
 
 		function isValid() {
-			if (isValidFilters() && isValidName()) {
+			if (isValidFilters() && isValidName())
 				return true;
-			}
 		}
 
 		function isValidFilters() {
@@ -115,21 +111,18 @@
 		}
 
 		function persist() {
-			var id = vm.editAgentGroup ? vm.editAgentGroup.Id : null;
-			if (isValid()) {
-				agentGroupService.saveAgentGroup({
-					Id: id,
-					Name: vm.name,
-					Filters: vm.selectedResults
-				}).$promise.then(function () {
-					vm.editAgentGroup = {};
-					$state.go('resourceplanner.newoverview');
-				});
-			}
 			if (!isValid()) {
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 				return;
 			}
+			agentGroupService.saveAgentGroup({
+				Id: vm.editAgentGroup.Id,
+				Name: vm.name,
+				Filters: vm.selectedResults
+			}).$promise.then(function () {
+				vm.editAgentGroup = {};
+				$state.go('resourceplanner.newoverview');
+			});
 		}
 
 		function cancel() {
@@ -138,6 +131,7 @@
 		}
 
 		function removeAgentGroup(id) {
+			if (!id) return;
 			agentGroupService.removeAgentGroup({ id: id }).$promise.then(function () {
 				vm.editAgentGroup = {};
 				$state.go('resourceplanner.newoverview');

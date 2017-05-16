@@ -292,31 +292,7 @@ background-color: #cacaca;
 	cursor: not-allowed !important;
 }
 
-.agent-group-chip {
-	border-left-style: solid; 
-	border-left-color: tomato; 
-	word-wrap: break-word
-}
-
-.agent-group-chip > span {
-	margin: 10px;
-}
-
-.agent-edit-active
-{
-	border-left: 10px solid $blue-500;
-}
-
-.ag-header {
-	position: relative;
-}
-
-.ag-header-menu {
-	position: absolute; 
-	top: 8px; 
-	right: 8px; 
-}
-
+//for new rescource planning
 .wfm-tip {
 	text-align: center;
 	border-radius: 6px;
@@ -333,193 +309,187 @@ background-color: #cacaca;
 .ag-pp {
 	margin: 3px;
 }
-//need to clean up later
 
 .pp-inner-card {
-		padding: 4px;
-	}
+	padding: 4px;
+}
 
-		.pp-fix {
-		margin-top: 10px;
-	}
-	
-	.pp-panel {
-		padding: 10px;
-		margin: 10px;
-	}
-	
-	.pp-agentnumber {
-		font-weight: bold;
-	}
-	
-	table.overview {
-		table-layout: fixed;
-		width: auto;
-		margin-top: 25px;
-	}
-	
-	.tabledate {
-		transform: rotate(-45deg);
-		position: relative;
-		margin-top: -25px;
-		z-index: 2;
-		margin-left: -10px;
-		left: 37px;
-		font-weight: normal;
-	}
-	
-	.resourceplanner-box {
-		width: 20px;
-		height: 20px;
-	}
-	
-	.resourceplanner-box:hover {
-		outline: 3px rgba(0, 0, 0, 0.54) solid;
-	}
-	
-	md-tooltip .md-content {
-		height: auto;
-	}
-	
-	.grid-scroll-wrap {
-		width: auto;
-		overflow-x: scroll;
-		overflow-y: visible;
-		padding-bottom: 1px;
-		min-height: 100px;
-		margin-left: 175px;
-		margin-top: 20px;
-		overflow: auto;
-	}
-	
-	.skillname {
-		position: absolute;
-		left: 0;
-		text-overflow: ellipsis;
-		overflow: visible;
-		margin-left: 13px;
-		padding-left: 20px;
-	}
-	
-	.long {
-		letter-spacing: 1em;
-	}
-	
-	.result-container .legends {
-		padding: 10px;
-		border-bottom: 1px solid $gray026 ;
-		border-top: 1px solid $gray026 ;
-	}
-	
-	.pp-validation {
-		position: absolute;
-		top: 11px;
-		z-index: 3;
-		background-color: $orange-400 ;
-		color: #FFF;
-		right: 6px;
-		padding: 4px 0;
-		border-radius: 50%;
-		width: auto;
-		min-width: 14px;
-		max-width: 24px;
-		height: 14px;
-		line-height: 0.5;
-		font-size: 12px;
-		box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.27);
-		font-weight: bold;
-	}
-	
-	.pp-scheduled {
-		background-color: $green-100  !important;
-	}
+.pp-fix {
+	margin-top: 10px;
+}
 
-	.pp-scheduled-failed {
-		background-color: $orange-400  !important;
-	}
+.pp-agentnumber {
+	font-weight: bold;
+}
 
-	.pp-scheduled-label {
-		color: $green-100  !important;
-	}
+table.overview {
+	table-layout: fixed;
+	width: auto;
+	margin-top: 25px;
+}
 
-	.pp-scheduled-failed-label {
-		color: $orange-400  !important;
-	}
-	
-	.pp-color-label {
-		display: inline-block;
-		margin: 10px 10px 0 0;
-		padding: 5px 10px;
-	}
-	
-	.pp-status {
-		padding: 6px;
-		background-color: $orange-500 ;
-		border-radius: 3px;
-	}
+.tabledate {
+	transform: rotate(-45deg);
+	position: relative;
+	margin-top: -25px;
+	z-index: 2;
+	margin-left: -10px;
+	left: 37px;
+	font-weight: normal;
+}
 
-		.pp-datepicker {
-		margin: auto;
-	}
-	
-	.pp-modal>.modal-box .modalbg .dialog {
-		max-height: 90%;
-		overflow-y: auto!important;
-	}
-	
-	@media (min-width: 768px) and (max-width: 1199px) {
-		.pp-modal>.modal-box .dialog,
-		.modal-box .dialog-mini {
-			width: 80%;
-		}
-	}
-	
-	@media (min-width: 1200px) {
-		.pp-modal>.modal-box .dialog,
-		.modal-box .dialog-mini {
-			width: 60%;
-		}
-	}
-	
-	.pp-modal>.modal-box .modal-inner-content {
-		max-height: 80%;
-	}
-	
-	.pp-startDate-picker,
-	.pp-startDate-picker button {
-		pointer-events: none;
-	}
+.resourceplanner-box {
+	width: 20px;
+	height: 20px;
+}
 
-	.pp-progress {
-		margin-bottom: -10px;
-		margin-top:5px;
-	}
+.resourceplanner-box:hover {
+	outline: 3px rgba(0, 0, 0, 0.54) solid;
+}
 
-	.pp-sub-title {
-		margin: 0 0 10px;
-	}
+md-tooltip .md-content {
+	height: auto;
+}
 
-	.pp-filter-chip-wrap {
-		margin:0 !important;
-	}
+.grid-scroll-wrap {
+	width: auto;
+	overflow-x: scroll;
+	overflow-y: visible;
+	padding-bottom: 1px;
+	min-height: 100px;
+	margin-left: 175px;
+	margin-top: 20px;
+	overflow: auto;
+}
 
-	.mini-schedule {
-		color: rgba(0,0,0,.26)!important;
-		background-color: rgba(0,0,0,.06);
-		box-shadow: none !important;
-	    cursor: not-allowed;
-	}
+.skillname {
+	position: absolute;
+	left: 0;
+	text-overflow: ellipsis;
+	overflow: visible;
+	margin-left: 13px;
+	padding-left: 20px;
+}
 
-	.pp-clear-parent {
-		position:relative;
-	}
+.long {
+	letter-spacing: 1em;
+}
 
-	.pp-clear-spinner {
-		position: absolute;
-		top: -8px;
-		left: -8px;
-		z-index: 3;
+.result-container .legends {
+	padding: 10px;
+	border-bottom: 1px solid $gray026 ;
+	border-top: 1px solid $gray026 ;
+}
+
+.pp-validation {
+	position: absolute;
+	top: 11px;
+	z-index: 3;
+	background-color: $orange-400 ;
+	color: #FFF;
+	right: 6px;
+	padding: 4px 0;
+	border-radius: 50%;
+	width: auto;
+	min-width: 14px;
+	max-width: 24px;
+	height: 14px;
+	line-height: 0.5;
+	font-size: 12px;
+	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.27);
+	font-weight: bold;
+}
+
+.pp-scheduled {
+	background-color: $green-100  !important;
+}
+
+.pp-scheduled-failed {
+	background-color: $orange-400  !important;
+}
+
+.pp-scheduled-label {
+	color: $green-100  !important;
+}
+
+.pp-scheduled-failed-label {
+	color: $orange-400  !important;
+}
+
+.pp-color-label {
+	display: inline-block;
+	margin: 10px 10px 0 0;
+	padding: 5px 10px;
+}
+
+.pp-status {
+	padding: 6px;
+	background-color: $orange-500 ;
+	border-radius: 3px;
+}
+
+.pp-datepicker {
+	margin: auto;
+}
+
+.pp-modal>.modal-box .modalbg .dialog {
+	max-height: 90%;
+	overflow-y: auto!important;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+	.pp-modal>.modal-box .dialog,
+	.modal-box .dialog-mini {
+		width: 80%;
 	}
+}
+
+@media (min-width: 1200px) {
+	.pp-modal>.modal-box .dialog,
+	.modal-box .dialog-mini {
+		width: 60%;
+	}
+}
+
+.pp-modal>.modal-box .modal-inner-content {
+	max-height: 80%;
+}
+
+.pp-startDate-picker,
+.pp-startDate-picker button {
+	pointer-events: none;
+}
+
+.pp-progress {
+	margin-bottom: -10px;
+	margin-top:5px;
+}
+
+.pp-sub-title {
+	margin: 0 0 10px;
+}
+
+.pp-filter-chip-wrap {
+	margin:0 !important;
+}
+
+.mini-schedule {
+	color: rgba(0,0,0,.26)!important;
+	background-color: rgba(0,0,0,.06);
+	box-shadow: none !important;
+	cursor: not-allowed;
+}
+
+.pp-clear-parent {
+	position:relative;
+}
+
+.pp-clear-spinner {
+	position: absolute;
+	top: -8px;
+	left: -8px;
+	z-index: 3;
+}
 
 	
 
