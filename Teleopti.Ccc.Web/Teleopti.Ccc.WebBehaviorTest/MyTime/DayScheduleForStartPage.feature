@@ -151,6 +151,7 @@ Scenario: Probability setting should be kept when date changed
 	And change date back to '2017-04-21'
 	Then I should see the absence probability in schedule
 
+@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
 Scenario: Could add overtime Availability
 Given I have the workflow control set 'Published schedule'
 And I have a shift with
