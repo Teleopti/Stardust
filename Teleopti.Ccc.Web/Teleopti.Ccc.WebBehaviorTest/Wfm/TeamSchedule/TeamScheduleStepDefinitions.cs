@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
 				() =>
 				{
-					Browser.Interactions.FillWith("input.advanced-input", string.Format("\"{0}\"", keyword));
+					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.searchEnabled", true);
+					Browser.Interactions.FillWith("input.advanced-input", $"\"{keyword}\"");
 					Browser.Interactions.PressEnter("input.advanced-input");
 				});
 		}
