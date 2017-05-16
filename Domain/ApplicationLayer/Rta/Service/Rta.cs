@@ -1,20 +1,9 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Aop;
+﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public interface IStateQueueWriter
-	{
-		void Enqueue(DateTime time, BatchInputModel model);
-	}
-
-	public interface IStateQueueReader
-	{
-		BatchInputModel Dequeue();
-	}
-	
 	public class Rta
 	{
 		public static string LogOutBySnapshot = "CCC Logged out";

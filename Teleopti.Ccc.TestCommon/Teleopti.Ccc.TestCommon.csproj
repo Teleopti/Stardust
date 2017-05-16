@@ -358,6 +358,7 @@
     <Compile Include="IoC\AllTogglesOnAttribute.cs" />
     <Compile Include="FakeRepositories\FakeLicenseRepository.cs" />
     <Compile Include="FakeData\FakeCurrentAnalyticsUnitOfWorkFactory.cs" />
+    <Compile Include="FakeRepositories\FakeStateQueue.cs" />
     <Compile Include="IoC\InfrastructureTestAttribute.cs" />
     <Compile Include="IoC\IntegrationIoCTest.cs" />
     <Compile Include="IoC\IoCTestService.cs" />

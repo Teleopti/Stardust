@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
-		public FakeStateQueueWriter Queue;
+		public FakeStateQueue Queue;
 		public FakeEventPublisher Publisher;
 
 		[Test]
