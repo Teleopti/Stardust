@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IPerson person)
 		{
 			IList<IWorkShiftCalculationResultHolder> resultList = new List<IWorkShiftCalculationResultHolder>();
+			//TODO: should probably consider "IsClassic" here...
 			var isSingleAgentTeamAndBlockWithSameShift = !schedulingOptions.UseTeam && schedulingOptions.UseBlock &&
 															 schedulingOptions.BlockSameShift;
 			if (isSingleAgentTeamAndBlockWithSameShift)
