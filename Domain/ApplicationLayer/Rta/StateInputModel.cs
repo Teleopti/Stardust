@@ -22,9 +22,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		// for logging
 		public override string ToString()
 		{
-			var states = States.EmptyIfNull()
-				.Select(x => x.ToString())
-				.Aggregate((current, next) => current + ", " + next);
+			var states =
+				States.EmptyIfNull().Any()
+					? States.EmptyIfNull()
+						.Select(x => x.ToString())
+						.Aggregate((current, next) => current + ", " + next)
+					: "";
 			return $"AuthenticationKey: {AuthenticationKey}, SourceId: {SourceId}, SnapshotId: {SnapshotId}, States: {states}";
 		}
 

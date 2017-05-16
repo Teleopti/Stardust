@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 {
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 			});
 
 			var actual = Queue.Items().Single();
-			actual.Time.Should().Be("2017-05-12 17:00".Utc());
 			actual.Model.SourceId.Should().Be("source");
 			actual.Model.SnapshotId.Should().Be("2017-05-12 17:00".Utc());
 			actual.Model.CloseSnapshot.Should().Be(true);

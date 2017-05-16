@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Enqueue(BatchInputModel batch)
 		{
 			validateAuthenticationKey(batch);
-			_queueWriter.Enqueue(_now.UtcDateTime(), batch);
+			_queueWriter.Enqueue(batch);
 		}
 
 		[LogInfo]

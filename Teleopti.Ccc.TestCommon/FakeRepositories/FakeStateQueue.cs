@@ -19,12 +19,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_dataSource = dataSource;
 		}
 
-		public void Enqueue(DateTime time, BatchInputModel model)
+		public void Enqueue(BatchInputModel model)
 		{
 			_items.Enqueue(new QueueItemInfo
 			{
 				OnTenant = _dataSource.CurrentName(),
-				Time = time,
 				Model = model
 			});
 		}
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public class QueueItemInfo
 		{
 			public string OnTenant { get; set; }
-			public DateTime Time { get; set; }
 			public BatchInputModel Model { get; set; }
 		}
 
