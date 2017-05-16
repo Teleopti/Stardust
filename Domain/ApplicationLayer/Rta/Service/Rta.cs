@@ -54,7 +54,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[TenantScope]
 		public virtual void QueueIteration(string tenant)
 		{
-			process(_queueReader.Dequeue());
+			var input = _queueReader.Dequeue();
+			if (input != null)
+				process(input);
 		}
 
 		[LogInfo]

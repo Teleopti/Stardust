@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
+			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ExternalLogonMapper>().SingleInstance().ApplyAspects();
@@ -46,7 +47,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.CacheByClassProxy<TenantLoader>().ApplyAspects().SingleInstance();
 
 			builder.RegisterType<AgentStateReadModelPersister>().As<IAgentStateReadModelPersister>().SingleInstance().ApplyAspects();
-			//builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelLegacyReader>().As<IAgentStateReadModelLegacyReader>().SingleInstance().ApplyAspects();
 

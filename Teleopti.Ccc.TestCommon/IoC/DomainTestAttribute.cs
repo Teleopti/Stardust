@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		public BatchInputModel Dequeue()
 		{
-			return _items.Dequeue()?.Model;
+			return _items.IsEmpty() ? null : _items.Dequeue()?.Model;
 		}
 	}
 

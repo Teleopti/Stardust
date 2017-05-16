@@ -2,10 +2,12 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -19,7 +21,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
-		public FakeStateQueueWriter QueueWriter;
+		public FakeStateQueueWriter Queue;
+		public FakeEventPublisher Publisher;
 
 		[Test]
 		public void ShouldEnqueueBatch()
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 				}
 			});
 
-			var actual = QueueWriter.Items().Single();
+			var actual = Queue.Items().Single();
 			actual.Time.Should().Be("2017-05-12 17:00".Utc());
 			actual.Model.SourceId.Should().Be("source");
 			actual.Model.SnapshotId.Should().Be("2017-05-12 17:00".Utc());
@@ -55,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 			Database.WithTenant("tenant", "key");
 			Target.Enqueue(new BatchForTest { AuthenticationKey = "key" });
 
-			QueueWriter.Items().Single().OnTenant.Should().Be("tenant");
+			Queue.Items().Single().OnTenant.Should().Be("tenant");
 		}
 
 		[Test]
@@ -67,18 +70,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 					AuthenticationKey = "key"
 				}));
 
-			QueueWriter.Items().Should().Be.Empty();
+			Queue.Items().Should().Be.Empty();
 		}
-
 
 		[Test]
 		public void ShouldProcessQueue()
 		{
-			var personId = Guid.NewGuid();
-			var stateGroupId = Guid.NewGuid();
+			var state = Guid.NewGuid();
 			Database
-				.WithAgent("usercode", personId)
-				.WithStateGroup(stateGroupId, "phone")
+				.WithAgent("usercode")
+				.WithStateGroup(state, "phone")
 				.WithStateCode("phone")
 				;
 			Target.Enqueue(new BatchForTest
@@ -93,10 +94,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 				}
 			});
 
-
 			Target.QueueIteration(Database.TenantName());
-			
-			Database.PersistedReadModel.StateGroupId.Should().Be(stateGroupId);
+
+			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().StateGroupId.Should().Be(state);
+		}
+
+		[Test]
+		public void ShouldProcessEmptyQueue()
+		{
+			Publisher.Clear();
+			Target.QueueIteration(Database.TenantName());
+
+			Publisher.PublishedEvents.Should().Be.Empty();
 		}
 	}
 
