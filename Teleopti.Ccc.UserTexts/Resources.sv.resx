@@ -14637,4 +14637,40 @@ Vill du registrera dig?</value>
   <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
     <value>Fridagsreglerna kommer att användas för alla planeringsperioder</value>
   </data>
+  <data name="HelpCreateAgentGroup" xml:space="preserve">
+    <value>En agentgrupp krävs för att kunna schemalägga. Vill du skapa en agentgrupp?</value>
+  </data>
+  <data name="ManageDayOffForAgentGroup" xml:space="preserve">
+    <value>Hantera fridagsregler för agentgruppen {0}</value>
+  </data>
+  <data name="SchedulingFailed" xml:space="preserve">
+    <value>Schemaläggningen misslyckades</value>
+  </data>
+  <data name="SchedulingSucceeded" xml:space="preserve">
+    <value>Schemaläggningen lyckades</value>
+  </data>
+  <data name="ClearScheduleResultAndHistoryData" xml:space="preserve">
+    <value>Rensa schemalagda skift och fridagar</value>
+  </data>
+  <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
+    <value>Är du säker på att du vill rensa schemalagda skift och fridagar för planeringsperioden {0}-{1}?</value>
+  </data>
+  <data name="ClearPlanningPeriod" xml:space="preserve">
+    <value>Rensa schemalagda skift och fridagar för planeringsperioden</value>
+  </data>
+  <data name="SuccessClearPlanningPeriodData" xml:space="preserve">
+    <value>Rensning av schemalagda skift och fridagar för planeringsperioden {0}-{1} lyckades</value>
+  </data>
+  <data name="TeleoptiWFMApp" xml:space="preserve">
+    <value>Teleopti WFM app</value>
+  </data>
+  <data name="WFMAppGuideStep1" xml:space="preserve">
+    <value>Steg 1:</value>
+  </data>
+  <data name="WFMAppGuideStep2" xml:space="preserve">
+    <value>Steg 2:</value>
+  </data>
+  <data name="WFMAppGuideTitle" xml:space="preserve">
+    <value>Guide för Teleopti WFM app</value>
+  </data>
 </root>
