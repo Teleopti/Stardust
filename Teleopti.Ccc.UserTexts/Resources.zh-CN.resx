@@ -301,7 +301,7 @@
     <comment>Add new contract schedule</comment>
   </data>
   <data name="AddNewOptionalColumn" xml:space="preserve">
-    <value>添加新的自定义列</value>
+    <value>添加新的自定义栏位</value>
     <comment>Add New Optional Column</comment>
   </data>
   <data name="AddNewScenario" xml:space="preserve">
@@ -332,7 +332,7 @@
     <comment>Add open hours</comment>
   </data>
   <data name="AddOptionalColumn" xml:space="preserve">
-    <value>添加自定义列</value>
+    <value>添加自定义栏位</value>
     <comment>Add Optional Column</comment>
   </data>
   <data name="AddOutlierThreeDots" xml:space="preserve">
@@ -937,7 +937,7 @@
     <comment>Change Interval menu item</comment>
   </data>
   <data name="ChangeOptionalColumn" xml:space="preserve">
-    <value>更改自定义列</value>
+    <value>更改自定义栏位</value>
     <comment>Change Optional Column</comment>
   </data>
   <data name="ChangeYourAvailabilities" xml:space="preserve">
@@ -1005,7 +1005,7 @@
     <comment>Choose grouping to change</comment>
   </data>
   <data name="ChooseOptionalColumnToChange" xml:space="preserve">
-    <value>选择自定义列进行更改</value>
+    <value>选择自定义栏位进行更改</value>
     <comment>Choose Optional Column To Change</comment>
   </data>
   <data name="ChoosePartTimePercentageDefinitionToChange" xml:space="preserve">
@@ -1445,7 +1445,7 @@
     <comment>Delete Limitation</comment>
   </data>
   <data name="DeleteOptionalColumn" xml:space="preserve">
-    <value>删除自定义列</value>
+    <value>删除自定义栏位</value>
     <comment>Delete optional column</comment>
   </data>
   <data name="DeletePersonalShift" xml:space="preserve">
@@ -1890,6 +1890,10 @@
   <data name="Filters" xml:space="preserve">
     <value>筛选</value>
     <comment>Filters</comment>
+  </data>
+  <data name="FilterTeams" xml:space="preserve">
+    <value>筛选小组</value>
+    <comment>Filter Teams</comment>
   </data>
   <data name="FinAmpersandd" xml:space="preserve">
     <value>查找(&amp;D)</value>
@@ -2624,7 +2628,7 @@
     <comment>Toolstrip menu item in Forecaster</comment>
   </data>
   <data name="ManageOptionalColumns" xml:space="preserve">
-    <value>管理自定义列</value>
+    <value>管理自定义栏位</value>
     <comment>Manage Optional Columns</comment>
   </data>
   <data name="ManagePartTimePercentages" xml:space="preserve">
@@ -2992,7 +2996,7 @@
     <comment>New multisite skill...</comment>
   </data>
   <data name="NewOptionalColumn" xml:space="preserve">
-    <value>新建自定义列</value>
+    <value>新建自定义栏位</value>
     <comment>New Optional Column</comment>
   </data>
   <data name="NewOutlier" xml:space="preserve">
@@ -3179,7 +3183,7 @@
     <comment>None</comment>
   </data>
   <data name="NoOptionalColumnIsSelected" xml:space="preserve">
-    <value>没有选择自定义列！</value>
+    <value>没有选择自定义栏位！</value>
     <comment>No optional column is selected</comment>
   </data>
   <data name="NoPeopleAvailable" xml:space="preserve">
@@ -3355,11 +3359,11 @@
     <comment>Optional</comment>
   </data>
   <data name="OptionalColumn" xml:space="preserve">
-    <value>自定义列</value>
+    <value>自定义栏位</value>
     <comment>Optional column</comment>
   </data>
   <data name="OptionalColumnColon" xml:space="preserve">
-    <value>自定义列：</value>
+    <value>自定义栏位：</value>
     <comment>Caption of the optiona column field of the Optional column setting page</comment>
   </data>
   <data name="OptionalColumnName" xml:space="preserve">
@@ -3368,7 +3372,7 @@
   </data>
   <data name="OptionalColumns" xml:space="preserve">
     <value>自定义
-列</value>
+栏位</value>
     <comment>OptionalColumns ribbon item</comment>
   </data>
   <data name="Options" xml:space="preserve">
@@ -5962,7 +5966,7 @@ Periods</comment>
     <value>您确定想要删除 '{0}' 休息日吗？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteOptionalColumn" xml:space="preserve">
-    <value>您确定想要删除 ‘{0}’ 自定义列吗？</value>
+    <value>您确定想要删除 ‘{0}’ 自定义栏位吗？</value>
   </data>
   <data name="ShortNameColon" xml:space="preserve">
     <value>缩写：</value>
@@ -6830,7 +6834,7 @@ Periods</comment>
     <value>保持开始和结束时间</value>
   </data>
   <data name="SelectOptionalColumn" xml:space="preserve">
-    <value>&lt;选择自定义列&gt;</value>
+    <value>&lt;选择自定义栏位&gt;</value>
   </data>
   <data name="BuildInStandardAgentRole" xml:space="preserve">
     <value>座席代表</value>
@@ -11360,6 +11364,9 @@ Teleopti R&amp;D</value>
   <data name="CreateNewRole" xml:space="preserve">
     <value>创建新的角色</value>
   </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>数据筛选器...</value>
+  </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
     <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
   </data>
@@ -11410,6 +11417,12 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>禁用项目</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>权限筛选器...</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>角色筛选器...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>启用项目</value>
@@ -11719,6 +11732,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>座席代表</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>筛选地点</value>
   </data>
   <data name="SeatPlanReport" xml:space="preserve">
     <value>排座报表</value>
@@ -12324,6 +12340,9 @@ Teleopti R&amp;D</value>
   <data name="AddAbsenceTotalResult" xml:space="preserve">
     <value>已成功添加 {0} 个缺勤。 {1} 个缺勤无法被添加。</value>
   </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>筛选角色</value>
+  </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>无效的尺寸！要求图像小于2000x4000。</value>
   </data>
@@ -12688,6 +12707,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="FailedMessageForUndoSchedule" xml:space="preserve">
     <value>撤销选定座席代表的班表变更失败</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>筛选报表</value>
   </data>
   <data name="FirstComeFirstServed" xml:space="preserve">
     <value>先到先得</value>
@@ -13415,5 +13437,174 @@ Teleopti R&amp;D</value>
   </data>
   <data name="MultipleTeams" xml:space="preserve">
     <value>多个小组</value>
+  </data>
+  <data name="NoInput" xml:space="preserve">
+    <value>无输入</value>
+  </data>
+  <data name="OptionalColumnRemoveGroupPageQuestion" xml:space="preserve">
+    <value>这将移除自定义栏位的分组页面，同时您也将无法根据其生成报表。您想要继续吗？</value>
+  </data>
+  <data name="RequireXCellFormat" xml:space="preserve">
+    <value>单元格无法被解析，需要 {0} 格式化的数值</value>
+  </data>
+  <data name="OptionalColumnCreateGroupPageQuestion" xml:space="preserve">
+    <value>这将为此自定义栏位创建一个分组页面，以便您能够根据其生成报表。您想要继续吗？</value>
+  </data>
+  <data name="Maximum5OptionalColumns" xml:space="preserve">
+    <value>*最多能将５个自定义栏位用于创建分组页面。.</value>
+  </data>
+  <data name="AvailableAsGroupPage" xml:space="preserve">
+    <value>可用于作为分组页面:*</value>
+  </data>
+  <data name="SuccessfullyImportedAgents" xml:space="preserve">
+    <value>已成功导入 {0} 个座席代表</value>
+  </data>
+  <data name="FailedToImportAgents" xml:space="preserve">
+    <value>{0} 个座席代表导入失败</value>
+  </data>
+  <data name="OutOfIndexRange" xml:space="preserve">
+    <value>超出索引范围 {0} - {1}</value>
+  </data>
+  <data name="Rule" xml:space="preserve">
+    <value>规则</value>
+  </data>
+  <data name="AvailableForALimitedTimeOnly" xml:space="preserve">
+    <value>仅在有限时间内可用！</value>
+  </data>
+  <data name="OldIntraday" xml:space="preserve">
+    <value>旧版的当日</value>
+  </data>
+  <data name="BeforeShiftStart" xml:space="preserve">
+    <value>班次开始之前</value>
+  </data>
+  <data name="TryingToResolveShiftCategoryLimitationsDotDotDot" xml:space="preserve">
+    <value>正在尝试解决班次类别限制...</value>
+  </data>
+  <data name="OptimizingMaxSeats" xml:space="preserve">
+    <value>正在优化最大席位数</value>
+  </data>
+  <data name="OnlySupport" xml:space="preserve">
+    <value>仅支持: {0}</value>
+  </data>
+  <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>由于技术性错误，选定周期的排班失败.. 请重试。</value>
+  </data>
+  <data name="FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>由于技术性错误，选定周期的休息日优化失败.. 请重试。</value>
+  </data>
+  <data name="FailedToLoadDayoffRules" xml:space="preserve">
+    <value>加载休息日规则失败。</value>
+  </data>
+  <data name="FailedToCreateSchedulingJobForSelectedPlanningPeriod" xml:space="preserve">
+    <value>为选定周期创建排班任务失败。</value>
+  </data>
+  <data name="ShiftBag" xml:space="preserve">
+    <value>班次包</value>
+  </data>
+  <data name="NewImport" xml:space="preserve">
+    <value>新建导入</value>
+  </data>
+  <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
+    <value>{0} 已固定回退值</value>
+  </data>
+  <data name="EnterANumber" xml:space="preserve">
+    <value>输入一个数字</value>
+  </data>
+  <data name="SetFallbackValuesToReplaceInvalidOnes" xml:space="preserve">
+    <value>设定回退值以替换无效的</value>
+  </data>
+  <data name="DownloadTemplate" xml:space="preserve">
+    <value>下载模板</value>
+  </data>
+  <data name="ViewStaffingInfo" xml:space="preserve">
+    <value>查看人力信息</value>
+  </data>
+  <data name="ShowAbsenceProbability" xml:space="preserve">
+    <value>显示缺勤可能性</value>
+  </data>
+  <data name="InvalidColumn" xml:space="preserve">
+    <value>无效的 {0} : {1}</value>
+  </data>
+  <data name="DoNotBreakMaxSeatDotDotDot" xml:space="preserve">
+    <value>不要打破最大席位数限制...</value>
+  </data>
+  <data name="ImportAgents" xml:space="preserve">
+    <value>导入座席代表</value>
+  </data>
+  <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>无法在另一时区为坐席代表添加缺勤</value>
+  </data>
+  <data name="ProbabilityToGetAbsenceColon" xml:space="preserve">
+    <value>获得缺勤批准的可能性: </value>
+  </data>
+  <data name="NoShift" xml:space="preserve">
+    <value>无班次</value>
+  </data>
+  <data name="AskMeLater" xml:space="preserve">
+    <value>稍后询问我</value>
+  </data>
+  <data name="AfterShiftEnd" xml:space="preserve">
+    <value>班次结束之后</value>
+  </data>
+  <data name="ProbabilityToGetOvertimeColon" xml:space="preserve">
+    <value>获得加班批准的可能性: </value>
+  </data>
+  <data name="AdherenceFor" xml:space="preserve">
+    <value>遵时</value>
+  </data>
+  <data name="MissingColumn" xml:space="preserve">
+    <value>缺失栏位</value>
+  </data>
+  <data name="SchedulePeriodType" xml:space="preserve">
+    <value>排班周期类型</value>
+  </data>
+  <data name="TeleoptiCustomerWeb" xml:space="preserve">
+    <value>Teleopti用户页面</value>
+  </data>
+  <data name="LatestScheduleResult" xml:space="preserve">
+    <value>最新班表结果</value>
+  </data>
+  <data name="ShowOvertimeProbability" xml:space="preserve">
+    <value>显示加班可能性</value>
+  </data>
+  <data name="DataProtectionQuestion" xml:space="preserve">
+    <value>请加入到Teleopti用户页面。您将可以访问使用的提示及技巧，博客文章，教程视频以及其他有帮助的信息。为此目的，Teleopti需要收集您的以下信息以能够让您访问Teleopti用户页面。&lt;br&gt;&lt;br&gt;
+电子邮件: &lt;b&gt;{0}&lt;/b&gt;&lt;br&gt;
+名字: &lt;b&gt;{1}&lt;/b&gt;&lt;br&gt;
+姓氏: &lt;b&gt;{2}&lt;/b&gt;&lt;br&gt;
+语言: &lt;b&gt;{3}&lt;/b&gt;&lt;br&gt;
+公司: &lt;b&gt;{4}&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+这些信息将确保您可自动登录到Teleopti用户页面并能够访问相关材料。&lt;br&gt;&lt;br&gt;
+您希望加入进来吗?</value>
+  </data>
+  <data name="MonitorUpToXAgents" xml:space="preserve">
+    <value>监控最多５０个坐席代表</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>不需要</value>
+  </data>
+  <data name="UseTeleoptiMobileAppToScanThisQRCode" xml:space="preserve">
+    <value>使用Teleopti手机应用以扫描此二维码</value>
+  </data>
+  <data name="ViewQRCodeForConfiguration" xml:space="preserve">
+    <value>查看二维码以进行配置</value>
+  </data>
+  <data name="TeleoptiMobileApp" xml:space="preserve">
+    <value>Teleopti手机应用</value>
+  </data>
+  <data name="DenyReasonTechnicalIssues" xml:space="preserve">
+    <value>由于技术问题您的申请已被拒绝。请稍后重试。</value>
+  </data>
+  <data name="EmptyFile" xml:space="preserve">
+    <value>空文件</value>
+  </data>
+  <data name="StaffingInfo" xml:space="preserve">
+    <value>人力信息</value>
+  </data>
+  <data name="WarnImportedAgents" xml:space="preserve">
+    <value>已导入的 {0} 个座席代表包含警告</value>
+  </data>
+  <data name="HideStaffingInfo" xml:space="preserve">
+    <value>隐藏人力信息</value>
   </data>
 </root>

@@ -301,7 +301,7 @@
     <comment>Add new contract schedule</comment>
   </data>
   <data name="AddNewOptionalColumn" xml:space="preserve">
-    <value>添加新的自訂列</value>
+    <value>添加新的自訂欄位</value>
     <comment>Add New Optional Column</comment>
   </data>
   <data name="AddNewScenario" xml:space="preserve">
@@ -332,7 +332,7 @@
     <comment>Add open hours</comment>
   </data>
   <data name="AddOptionalColumn" xml:space="preserve">
-    <value>添加自訂列</value>
+    <value>添加自訂欄位</value>
     <comment>Add Optional Column</comment>
   </data>
   <data name="AddOutlierThreeDots" xml:space="preserve">
@@ -937,7 +937,7 @@
     <comment>Change Interval menu item</comment>
   </data>
   <data name="ChangeOptionalColumn" xml:space="preserve">
-    <value>更改自訂列</value>
+    <value>更改自訂欄位</value>
     <comment>Change Optional Column</comment>
   </data>
   <data name="ChangeYourAvailabilities" xml:space="preserve">
@@ -1005,7 +1005,7 @@
     <comment>Choose grouping to change</comment>
   </data>
   <data name="ChooseOptionalColumnToChange" xml:space="preserve">
-    <value>選擇自訂列進行更改</value>
+    <value>選擇自訂欄位進行更改</value>
     <comment>Choose Optional Column To Change</comment>
   </data>
   <data name="ChoosePartTimePercentageDefinitionToChange" xml:space="preserve">
@@ -1445,7 +1445,7 @@
     <comment>Delete Limitation</comment>
   </data>
   <data name="DeleteOptionalColumn" xml:space="preserve">
-    <value>刪除自訂列</value>
+    <value>刪除自訂欄位</value>
     <comment>Delete optional column</comment>
   </data>
   <data name="DeletePersonalShift" xml:space="preserve">
@@ -1890,6 +1890,10 @@
   <data name="Filters" xml:space="preserve">
     <value>篩選</value>
     <comment>Filters</comment>
+  </data>
+  <data name="FilterTeams" xml:space="preserve">
+    <value>篩選小組</value>
+    <comment>Filter Teams</comment>
   </data>
   <data name="FinAmpersandd" xml:space="preserve">
     <value>查找(&amp;D)</value>
@@ -2624,7 +2628,7 @@
     <comment>Toolstrip menu item in Forecaster</comment>
   </data>
   <data name="ManageOptionalColumns" xml:space="preserve">
-    <value>管理自訂列</value>
+    <value>管理自訂欄位</value>
     <comment>Manage Optional Columns</comment>
   </data>
   <data name="ManagePartTimePercentages" xml:space="preserve">
@@ -2992,7 +2996,7 @@
     <comment>New multisite skill...</comment>
   </data>
   <data name="NewOptionalColumn" xml:space="preserve">
-    <value>新建自訂列</value>
+    <value>新建自訂欄位</value>
     <comment>New Optional Column</comment>
   </data>
   <data name="NewOutlier" xml:space="preserve">
@@ -3179,7 +3183,7 @@
     <comment>None</comment>
   </data>
   <data name="NoOptionalColumnIsSelected" xml:space="preserve">
-    <value>沒有選擇自訂列！</value>
+    <value>沒有選擇自訂欄位！</value>
     <comment>No optional column is selected</comment>
   </data>
   <data name="NoPeopleAvailable" xml:space="preserve">
@@ -3355,11 +3359,11 @@
     <comment>Optional</comment>
   </data>
   <data name="OptionalColumn" xml:space="preserve">
-    <value>自訂列</value>
+    <value>自訂欄位</value>
     <comment>Optional column</comment>
   </data>
   <data name="OptionalColumnColon" xml:space="preserve">
-    <value>自訂列：</value>
+    <value>自訂欄位：</value>
     <comment>Caption of the optiona column field of the Optional column setting page</comment>
   </data>
   <data name="OptionalColumnName" xml:space="preserve">
@@ -3368,7 +3372,7 @@
   </data>
   <data name="OptionalColumns" xml:space="preserve">
     <value>自訂
-列</value>
+欄位</value>
     <comment>OptionalColumns ribbon item</comment>
   </data>
   <data name="Options" xml:space="preserve">
@@ -4155,7 +4159,7 @@ Periods</comment>
     <comment>Scheduled hours</comment>
   </data>
   <data name="ScheduledStaff" xml:space="preserve">
-    <value>已排定的座席代表數量</value>
+    <value>已排定的座席代表數</value>
     <comment>Scheduled staff</comment>
   </data>
   <data name="ScheduledTime" xml:space="preserve">
@@ -5962,7 +5966,7 @@ Periods</comment>
     <value>您確定想要刪除 '{0}' 休息日嗎？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteOptionalColumn" xml:space="preserve">
-    <value>您確定想要刪除 ‘{0}’ 自訂列嗎？</value>
+    <value>您確定想要刪除 ‘{0}’ 自訂欄位嗎？</value>
   </data>
   <data name="ShortNameColon" xml:space="preserve">
     <value>縮寫：</value>
@@ -6352,7 +6356,7 @@ Periods</comment>
     <value>到崗的相對差異</value>
   </data>
   <data name="ScheduledAgentsIncoming" xml:space="preserve">
-    <value>已排定的到崗座席代表數量</value>
+    <value>已排定的到崗座席代表數</value>
   </data>
   <data name="ScheduledHoursIncoming" xml:space="preserve">
     <value>已排定的到崗小時數</value>
@@ -6830,7 +6834,7 @@ Periods</comment>
     <value>保持開始和結束時間</value>
   </data>
   <data name="SelectOptionalColumn" xml:space="preserve">
-    <value>&lt;選擇自訂列&gt;</value>
+    <value>&lt;選擇自訂欄位&gt;</value>
   </data>
   <data name="BuildInStandardAgentRole" xml:space="preserve">
     <value>座席代表</value>
@@ -8332,7 +8336,7 @@ Teleopti R&amp;D</value>
     <value>差異 (%)</value>
   </data>
   <data name="ForecastedStaff" xml:space="preserve">
-    <value>預測的員工數</value>
+    <value>預測的座席代表數</value>
   </data>
   <data name="FulltimeEquivalentHoursPerDay" xml:space="preserve">
     <value>FTE 小時/天</value>
@@ -9461,7 +9465,7 @@ Teleopti R&amp;D</value>
     <value>自訂報表</value>
   </data>
   <data name="DoNotBreakMaximumSeats" xml:space="preserve">
-    <value>不要打破最大席位數</value>
+    <value>不要超過最大席位數</value>
   </data>
   <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
     <value>在指定週期中的班表已經包含缺席</value>
@@ -9620,7 +9624,7 @@ Teleopti R&amp;D</value>
     <value>預測客戶數：</value>
   </data>
   <data name="ForecastedEmployees" xml:space="preserve">
-    <value>預測員工數</value>
+    <value>預測的員工數</value>
   </data>
   <data name="OfferedCustomers" xml:space="preserve">
     <value>客戶</value>
@@ -9881,7 +9885,7 @@ Teleopti R&amp;D</value>
     <value>僅排定必須有的偏好</value>
   </data>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
-    <value>已排定的和實際的座席代表數量</value>
+    <value>已排定的和實際的座席代表數</value>
   </data>
   <data name="ScheduledEmployeesIncoming" xml:space="preserve">
     <value>已排定的到崗員工數</value>
@@ -11360,6 +11364,9 @@ Teleopti R&amp;D</value>
   <data name="CreateNewRole" xml:space="preserve">
     <value>創建新的角色</value>
   </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>數據篩選器...</value>
+  </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
     <value>親，您獲得了一枚銀色徽章！您在{1:yyyy-MM-dd}的應答量超過了{0}。繼續加油哦～</value>
   </data>
@@ -11410,6 +11417,12 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>禁用項目</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>許可權篩選器...</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>角色篩選器...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>啟用項目</value>
@@ -11719,6 +11732,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>座席代表</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>篩選地點</value>
   </data>
   <data name="SeatPlanReport" xml:space="preserve">
     <value>排座報表</value>
@@ -12227,7 +12243,7 @@ Teleopti R&amp;D</value>
     <value>平均處理時間</value>
   </data>
   <data name="IntradayIntroText" xml:space="preserve">
-    <value>再次您可以監控當日數值，通過選擇一個技能或區域開始</value>
+    <value>在此您可以監控當日數值，通過選擇一個技能或技能區域開始</value>
   </data>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>流入量</value>
@@ -12323,6 +12339,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="AddAbsenceTotalResult" xml:space="preserve">
     <value>已成功添加 {0} 個缺勤。 {1} 個缺勤無法被添加。</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>篩選角色</value>
   </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>無效的尺寸！要求圖像小於2000x4000。</value>
@@ -12597,7 +12616,7 @@ Teleopti R&amp;D</value>
     <value>撤銷</value>
   </data>
   <data name="BrokenRules" xml:space="preserve">
-    <value>打破的規則</value>
+    <value>違反的規則</value>
   </data>
   <data name="BySeniority" xml:space="preserve">
     <value>根據年資</value>
@@ -12688,6 +12707,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="FailedMessageForUndoSchedule" xml:space="preserve">
     <value>撤銷選定座席代表的班表變更失敗</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>篩選報表</value>
   </data>
   <data name="FirstComeFirstServed" xml:space="preserve">
     <value>先到先得</value>
@@ -12804,7 +12826,7 @@ Teleopti R&amp;D</value>
     <value>夜間休息時間</value>
   </data>
   <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
-    <value>夜間休息時間被打破</value>
+    <value>違反夜間休息時間規則</value>
   </data>
   <data name="NewNightlyRestRuleName" xml:space="preserve">
     <value>夜間休息時間</value>
@@ -13084,10 +13106,10 @@ Teleopti R&amp;D</value>
     <value>個人帳戶超過了積值</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
-    <value>週期內班次類別限制規則被打破</value>
+    <value>違反週期內班次類別限制規則</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
-    <value>周中班次類別限制規則被打破</value>
+    <value>違反周中班次類別限制規則</value>
   </data>
   <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
     <value>該周沒有規定的每週休息時間</value>
@@ -13275,110 +13297,134 @@ Teleopti R&amp;D</value>
   <data name="DenyDueToTechnicalProblems" xml:space="preserve">
     <value>人力資訊沒有在系統中更新。請聯繫系統管理員。</value>
   </data>
-  <data name="Staffing" xml:space="preserve">
-    <value>人力</value>
-  </data>
-  <data name="TimeOOA" xml:space="preserve">
-    <value>未遵循時間</value>
-  </data>
-  <data name="ShowFilter" xml:space="preserve">
-    <value>顯示篩選欄</value>
-  </data>
-  <data name="FavoriteSearch" xml:space="preserve">
-    <value>喜愛的搜索</value>
-  </data>
   <data name="FilterThreeDots" xml:space="preserve">
-    <value>篩選...</value>
-  </data>
-  <data name="UpdateConfirmation" xml:space="preserve">
-    <value>更新確認</value>
-  </data>
-  <data name="UpdateResourceCalculations" xml:space="preserve">
-    <value>更新資源計算</value>
-  </data>
-  <data name="FullAllowance" xml:space="preserve">
-    <value>完整配額</value>
-  </data>
-  <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">
-    <value>"{0}" 已存在。請確認是否覆蓋?</value>
-  </data>
-  <data name="DescriptionOfShiftTradeTargetTimeSpecification" xml:space="preserve">
-    <value>合同時間容差</value>
-  </data>
-  <data name="ConfigureSkillPriorities" xml:space="preserve">
-    <value>配置技能優先順序</value>
+    <value>篩選條件...</value>
   </data>
   <data name="HideFilter" xml:space="preserve">
     <value>隱藏篩選欄</value>
   </data>
-  <data name="ClearAll" xml:space="preserve">
-    <value>清除所有</value>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>顯示篩選欄</value>
   </data>
-  <data name="IncludeAgentsInStatesColon" xml:space="preserve">
-    <value>顯示在以下狀態中的座席代表：</value>
-  </data>
-  <data name="UseSkillsColon" xml:space="preserve">
-    <value>使用技能：</value>
-  </data>
-  <data name="UsedBy" xml:space="preserve">
-    <value>{0} 已使用</value>
+  <data name="UpdateResourceCalculations" xml:space="preserve">
+    <value>更新資源計算</value>
   </data>
   <data name="UsedTotal" xml:space="preserve">
     <value>合計已使用</value>
   </data>
-  <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
-    <value>只能最多查看 {0} 個座席代表。"報警" 開關僅在座席代表數不超過 {1} 時有效。</value>
+  <data name="UsedBy" xml:space="preserve">
+    <value>{0} 已使用</value>
   </data>
-  <data name="WebStaffing" xml:space="preserve">
-    <value>人力</value>
+  <data name="RequestDenyReasonAutoPurge" xml:space="preserve">
+    <value>由於請求未被及時處理而清除的。</value>
   </data>
-  <data name="ServiceLevel" xml:space="preserve">
-    <value>服務水準</value>
-  </data>
-  <data name="PleaseChooseADate" xml:space="preserve">
-    <value>請選擇一個日期</value>
-  </data>
-  <data name="SignInWithNoColon" xml:space="preserve">
-    <value>簽入以</value>
-  </data>
-  <data name="Performance" xml:space="preserve">
-    <value>效能</value>
-  </data>
-  <data name="MyOwn" xml:space="preserve">
-    <value>我自己</value>
-  </data>
-  <data name="SetAsDefault" xml:space="preserve">
-    <value>設為默認</value>
-  </data>
-  <data name="SearchASiteOrTeam" xml:space="preserve">
-    <value>查詢站點或小組</value>
-  </data>
-  <data name="SelectOrganization" xml:space="preserve">
-    <value>選擇組織</value>
-  </data>
-  <data name="MultipleSites" xml:space="preserve">
-    <value>多個站點</value>
-  </data>
-  <data name="MultipleTeams" xml:space="preserve">
-    <value>多個小組</value>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>完整配額</value>
   </data>
   <data name="ShrinkedAllowance" xml:space="preserve">
     <value>閾值後的配額</value>
   </data>
-  <data name="NeedToSelectARoleFirst" xml:space="preserve">
-    <value>請先選擇一個角色</value>
+  <data name="SearchASiteOrTeam" xml:space="preserve">
+    <value>查詢網站或小組</value>
+  </data>
+  <data name="SeveralTeamsSelected" xml:space="preserve">
+    <value>已選擇{0}個小組</value>
+  </data>
+  <data name="ServiceLevel" xml:space="preserve">
+    <value>服務水準</value>
+  </data>
+  <data name="UseSkillsColon" xml:space="preserve">
+    <value>使用技能：</value>
+  </data>
+  <data name="AgentsInAlarm" xml:space="preserve">
+    <value>處於告警狀態的座席代表</value>
+  </data>
+  <data name="IncludeAgentsInStatesColon" xml:space="preserve">
+    <value>顯示在以下狀態中的座席代表：</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>效能</value>
+  </data>
+  <data name="Staffing" xml:space="preserve">
+    <value>人力</value>
+  </data>
+  <data name="NoBudgetGroupFound" xml:space="preserve">
+    <value>未找到預算組</value>
   </data>
   <data name="SelectABudgetGroupThreeDots" xml:space="preserve">
     <value>選擇一個預算組...</value>
   </data>
+  <data name="DescriptionOfShiftTradeTargetTimeSpecification" xml:space="preserve">
+    <value>合同時間容差</value>
+  </data>
+  <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">
+    <value>"{0}" 已存在。請確認是否覆蓋?</value>
+  </data>
+  <data name="UpdateConfirmation" xml:space="preserve">
+    <value>更新確認</value>
+  </data>
+  <data name="RemoveDefault" xml:space="preserve">
+    <value>移除默認</value>
+  </data>
+  <data name="SetAsDefault" xml:space="preserve">
+    <value>設為默認</value>
+  </data>
   <data name="MyBusinessUnit" xml:space="preserve">
     <value>我的業務單元</value>
+  </data>
+  <data name="MyOwn" xml:space="preserve">
+    <value>我自己</value>
+  </data>
+  <data name="MySite" xml:space="preserve">
+    <value>我的網站</value>
+  </data>
+  <data name="NeedToSelectARoleFirst" xml:space="preserve">
+    <value>請先選擇一個角色</value>
+  </data>
+  <data name="WebStaffing" xml:space="preserve">
+    <value>人力</value>
+  </data>
+  <data name="RemoveOvertime" xml:space="preserve">
+    <value>移除加班</value>
+  </data>
+  <data name="SaveFavoriteSearch" xml:space="preserve">
+    <value>保存喜愛的搜索</value>
+  </data>
+  <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
+    <value>沒有許可權為座席代表移除加班活動</value>
+  </data>
+  <data name="PleaseChooseADate" xml:space="preserve">
+    <value>請選擇一個日期</value>
+  </data>
+  <data name="PleaseInputStartTime" xml:space="preserve">
+    <value>請輸入開始時間</value>
+  </data>
+  <data name="PleaseInputEndTime" xml:space="preserve">
+    <value>請輸入結束時間</value>
   </data>
   <data name="ShiftTradeTargetTimePendingReason" xml:space="preserve">
     <value>已超出班表合同時間容差範圍</value>
   </data>
-  <data name="MySite" xml:space="preserve">
-    <value>我的站點</value>
+  <data name="SignInWithNoColon" xml:space="preserve">
+    <value>簽入以</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>選擇組織</value>
+  </data>
+  <data name="TimeOOA" xml:space="preserve">
+    <value>未遵循時間</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>清除所有</value>
+  </data>
+  <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
+    <value>只能最多查看 {0} 個座席代表。"報警" 開關僅在座席代表數不超過 {1} 時有效。</value>
+  </data>
+  <data name="FavoriteSearch" xml:space="preserve">
+    <value>喜愛的搜索</value>
+  </data>
+  <data name="ConfigureSkillPriorities" xml:space="preserve">
+    <value>配置技能優先順序</value>
   </data>
   <data name="NoSkillAreasFound" xml:space="preserve">
     <value>未找到技能區域</value>
@@ -13386,34 +13432,179 @@ Teleopti R&amp;D</value>
   <data name="NoSkillFound" xml:space="preserve">
     <value>未找到技能</value>
   </data>
-  <data name="SaveFavoriteSearch" xml:space="preserve">
-    <value>保存喜愛的搜索</value>
+  <data name="MultipleSites" xml:space="preserve">
+    <value>多個網站</value>
   </data>
-  <data name="NoBudgetGroupFound" xml:space="preserve">
-    <value>未找到預算組</value>
+  <data name="MultipleTeams" xml:space="preserve">
+    <value>多個小組</value>
   </data>
-  <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
-    <value>沒有許可權為座席代表移除加班活動</value>
+  <data name="NoInput" xml:space="preserve">
+    <value>無輸入</value>
   </data>
-  <data name="SeveralTeamsSelected" xml:space="preserve">
-    <value>已選擇{0}個小組</value>
+  <data name="OptionalColumnRemoveGroupPageQuestion" xml:space="preserve">
+    <value>這將移除自訂欄位元的分組頁面，同時您也將無法根據其生成報表。您想要繼續嗎？</value>
   </data>
-  <data name="RequestDenyReasonAutoPurge" xml:space="preserve">
-    <value>由於請求未被及時處理而清除的。</value>
+  <data name="RequireXCellFormat" xml:space="preserve">
+    <value>儲存格無法被解析，需要 {0} 格式化的數值</value>
   </data>
-  <data name="RemoveOvertime" xml:space="preserve">
-    <value>移除加班</value>
+  <data name="OptionalColumnCreateGroupPageQuestion" xml:space="preserve">
+    <value>這將為此自訂欄位元創建一個分組頁面，以便您能夠根據其生成報表。您想要繼續嗎？</value>
   </data>
-  <data name="RemoveDefault" xml:space="preserve">
-    <value>移除默認</value>
+  <data name="Maximum5OptionalColumns" xml:space="preserve">
+    <value>*最多能將５個自訂欄位元用於創建分組頁面。.</value>
   </data>
-  <data name="PleaseInputEndTime" xml:space="preserve">
-    <value>請輸入開始時間</value>
+  <data name="AvailableAsGroupPage" xml:space="preserve">
+    <value>可用于作為分組頁面:*</value>
   </data>
-  <data name="PleaseInputStartTime" xml:space="preserve">
-    <value>請輸入結束時間</value>
+  <data name="SuccessfullyImportedAgents" xml:space="preserve">
+    <value>已成功導入 {0} 個座席代表</value>
   </data>
-  <data name="AgentsInAlarm" xml:space="preserve">
-    <value>處於告警狀態的座席代表</value>
+  <data name="FailedToImportAgents" xml:space="preserve">
+    <value>{0} 個座席代表導入失敗</value>
+  </data>
+  <data name="OutOfIndexRange" xml:space="preserve">
+    <value>超出索引範圍 {0} - {1}</value>
+  </data>
+  <data name="Rule" xml:space="preserve">
+    <value>規則</value>
+  </data>
+  <data name="AvailableForALimitedTimeOnly" xml:space="preserve">
+    <value>僅在有限時間內可用！</value>
+  </data>
+  <data name="OldIntraday" xml:space="preserve">
+    <value>舊版的當日</value>
+  </data>
+  <data name="BeforeShiftStart" xml:space="preserve">
+    <value>班次開始之前</value>
+  </data>
+  <data name="TryingToResolveShiftCategoryLimitationsDotDotDot" xml:space="preserve">
+    <value>正在嘗試解決班次類別限制...</value>
+  </data>
+  <data name="OptimizingMaxSeats" xml:space="preserve">
+    <value>正在優化最大席位數</value>
+  </data>
+  <data name="OnlySupport" xml:space="preserve">
+    <value>僅支持: {0}</value>
+  </data>
+  <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>由於技術性錯誤，選定週期的排班失敗.. 請重試。</value>
+  </data>
+  <data name="FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>由於技術性錯誤，選定週期的休息日優化失敗.. 請重試。</value>
+  </data>
+  <data name="FailedToLoadDayoffRules" xml:space="preserve">
+    <value>載入休息日規則失敗。</value>
+  </data>
+  <data name="FailedToCreateSchedulingJobForSelectedPlanningPeriod" xml:space="preserve">
+    <value>為選定週期創建排班任務失敗。</value>
+  </data>
+  <data name="ShiftBag" xml:space="preserve">
+    <value>班次包</value>
+  </data>
+  <data name="NewImport" xml:space="preserve">
+    <value>新建導入</value>
+  </data>
+  <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
+    <value>{0} 已固定回退值</value>
+  </data>
+  <data name="EnterANumber" xml:space="preserve">
+    <value>輸入一個數字</value>
+  </data>
+  <data name="SetFallbackValuesToReplaceInvalidOnes" xml:space="preserve">
+    <value>設定回退值以替換無效的</value>
+  </data>
+  <data name="DownloadTemplate" xml:space="preserve">
+    <value>下載範本</value>
+  </data>
+  <data name="ViewStaffingInfo" xml:space="preserve">
+    <value>查看人力信息</value>
+  </data>
+  <data name="ShowAbsenceProbability" xml:space="preserve">
+    <value>顯示缺勤可能性</value>
+  </data>
+  <data name="InvalidColumn" xml:space="preserve">
+    <value>無效的 {0} : {1}</value>
+  </data>
+  <data name="DoNotBreakMaxSeatDotDotDot" xml:space="preserve">
+    <value>不要打破最大席位數限制...</value>
+  </data>
+  <data name="ImportAgents" xml:space="preserve">
+    <value>導入座席代表</value>
+  </data>
+  <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>無法在另一時區為坐席代表添加缺勤</value>
+  </data>
+  <data name="ProbabilityToGetAbsenceColon" xml:space="preserve">
+    <value>獲得缺勤批准的可能性: </value>
+  </data>
+  <data name="NoShift" xml:space="preserve">
+    <value>無班次</value>
+  </data>
+  <data name="AskMeLater" xml:space="preserve">
+    <value>稍後詢問我</value>
+  </data>
+  <data name="AfterShiftEnd" xml:space="preserve">
+    <value>班次結束之後</value>
+  </data>
+  <data name="ProbabilityToGetOvertimeColon" xml:space="preserve">
+    <value>獲得加班批准的可能性: </value>
+  </data>
+  <data name="AdherenceFor" xml:space="preserve">
+    <value>遵時</value>
+  </data>
+  <data name="MissingColumn" xml:space="preserve">
+    <value>缺失欄位</value>
+  </data>
+  <data name="SchedulePeriodType" xml:space="preserve">
+    <value>排班週期類型</value>
+  </data>
+  <data name="TeleoptiCustomerWeb" xml:space="preserve">
+    <value>Teleopti使用者頁面</value>
+  </data>
+  <data name="LatestScheduleResult" xml:space="preserve">
+    <value>最新班表結果</value>
+  </data>
+  <data name="ShowOvertimeProbability" xml:space="preserve">
+    <value>顯示加班可能性</value>
+  </data>
+  <data name="DataProtectionQuestion" xml:space="preserve">
+    <value>請加入到Teleopti使用者頁面。您將可以訪問使用的提示及技巧，博客文章，教程視頻以及其他有説明的資訊。為此目的，Teleopti需要收集您的以下資訊以能夠讓您訪問Teleopti使用者頁面。&lt;br&gt;&lt;br&gt;
+電子郵件: &lt;b&gt;{0}&lt;/b&gt;&lt;br&gt;
+名字: &lt;b&gt;{1}&lt;/b&gt;&lt;br&gt;
+姓氏: &lt;b&gt;{2}&lt;/b&gt;&lt;br&gt;
+語言: &lt;b&gt;{3}&lt;/b&gt;&lt;br&gt;
+公司: &lt;b&gt;{4}&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+這些資訊將確保您可自動登錄到Teleopti使用者頁面並能夠訪問相關材料。&lt;br&gt;&lt;br&gt;
+您希望加入進來嗎?</value>
+  </data>
+  <data name="MonitorUpToXAgents" xml:space="preserve">
+    <value>監控最多５０個坐席代表</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>不需要</value>
+  </data>
+  <data name="UseTeleoptiMobileAppToScanThisQRCode" xml:space="preserve">
+    <value>使用Teleopti手機應用以掃描此二維碼</value>
+  </data>
+  <data name="ViewQRCodeForConfiguration" xml:space="preserve">
+    <value>查看二維碼以進行配置</value>
+  </data>
+  <data name="TeleoptiMobileApp" xml:space="preserve">
+    <value>Teleopti手機應用</value>
+  </data>
+  <data name="DenyReasonTechnicalIssues" xml:space="preserve">
+    <value>由於技術問題您的申請已被拒絕。請稍後重試。</value>
+  </data>
+  <data name="EmptyFile" xml:space="preserve">
+    <value>空文件</value>
+  </data>
+  <data name="StaffingInfo" xml:space="preserve">
+    <value>人力信息</value>
+  </data>
+  <data name="WarnImportedAgents" xml:space="preserve">
+    <value>已導入的 {0} 個座席代表包含警告</value>
+  </data>
+  <data name="HideStaffingInfo" xml:space="preserve">
+    <value>隱藏人力信息</value>
   </data>
 </root>
