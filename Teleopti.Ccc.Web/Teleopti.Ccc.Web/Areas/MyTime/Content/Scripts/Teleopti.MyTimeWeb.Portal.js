@@ -264,7 +264,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _isMobile(mywindow) {
 		var ua = mywindow.navigator.userAgent;
-		if (ua.match(/Android/i) || ua.match(/webOS/i) || ua.match(/iPhone/i) || ua.match(/iPod/i)) {
+		if (ua.match(/Android/i) && ua.match(/Mobile/i) || ua.match(/webOS/i) || ua.match(/iPhone/i) || ua.match(/iPod/i)) {
 			return true;
 		}
 		return false;
