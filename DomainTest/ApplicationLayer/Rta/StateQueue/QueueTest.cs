@@ -105,6 +105,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 
 			Publisher.PublishedEvents.Should().Be.Empty();
 		}
+
+		[Test]
+		public void ShouldIndicateIteration()
+		{
+			Target.Enqueue(new BatchForTest());
+
+			Target.QueueIteration(Database.TenantName()).Should().Be.True();
+		}
+
+
+		[Test]
+		public void ShouldIndicateEmptyQueue()
+		{
+			Target.QueueIteration(Database.TenantName()).Should().Be.False();
+		}
 	}
 
 }

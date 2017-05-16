@@ -260,6 +260,7 @@
     <Compile Include="Hangfire\IgnoreRetryWarningsFromSpecifiedPrimaryKeys.cs" />
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
+    <Compile Include="Rta\StateQueueWorker.cs" />
     <Compile Include="MultiTenancy\IPersonInfoHelper.cs" />
     <Compile Include="MultiTenancy\IPersonInfoMapper.cs" />
     <Compile Include="MultiTenancy\PersonInfoHelper.cs" />
@@ -468,7 +469,8 @@
     <Compile Include="Rta\Persisters\SiteInAlarmReader.cs" />
     <Compile Include="Rta\Persisters\TeamInAlarmReader.cs" />
     <Compile Include="Rta\SelectionInfos.cs" />
-    <Compile Include="Rta\StateQueueReader.cs" />
+    <Compile Include="Rta\StateQueue.cs" />
+    <Compile Include="Rta\StateQueueUtilities.cs" />
     <Compile Include="SeatManagement\PersonScheduleWithSeatBooking.cs" />
     <Compile Include="Repositories\PlanningPeriodRepository.cs" />
     <Compile Include="Repositories\PlanningPeriodSuggestions.cs" />

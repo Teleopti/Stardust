@@ -50,6 +50,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 						StateCode = stateCode,
 						SourceId = SourceId
 					});
+			LocalSystem.StateQueue.WaitForQueue();
+			LocalSystem.Hangfire.WaitForQueue();
 		}
 
 	}

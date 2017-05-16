@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Rta.Persisters;
 
@@ -24,6 +25,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
+			builder.RegisterType<StateQueueWorker>().ApplyAspects().SingleInstance();
+			builder.RegisterType<StateQueueTenants>().SingleInstance();
+			builder.RegisterType<StateQueueUtilities>().SingleInstance();
 			builder.RegisterType<AgentStateProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ExternalLogonMapper>().SingleInstance().ApplyAspects();

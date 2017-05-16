@@ -234,6 +234,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueWriter.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoLoggedOutStateGroupsException.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\StateQueueTenants.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkillsOld.cs" />
     <Compile Include="Cascading\PrimarySkillOverstaffOld.cs" />
     <Compile Include="Cascading\ShovelResourcesStateOld.cs" />

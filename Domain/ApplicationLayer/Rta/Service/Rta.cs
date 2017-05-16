@@ -1,5 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
@@ -12,27 +12,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly TenantLoader _tenantLoader;
 		private readonly ActivityChangeChecker _checker;
 		private readonly IContextLoader _contextLoader;
-		private readonly INow _now;
 		private readonly IStateQueueWriter _queueWriter;
 		private readonly IStateQueueReader _queueReader;
-		private readonly WithAnalyticsUnitOfWork _witUnitOfWork;
+		private readonly WithAnalyticsUnitOfWork _analytics;
+		private readonly StateQueueTenants _tenants;
 
 		public Rta(
 			TenantLoader tenantLoader,
 			ActivityChangeChecker checker,
 			IContextLoader contextLoader,
-			INow now,
 			IStateQueueWriter queueWriter,
 			IStateQueueReader queueReader,
-			WithAnalyticsUnitOfWork witUnitOfWork)
+			WithAnalyticsUnitOfWork analytics,
+			StateQueueTenants tenants)
 		{
 			_tenantLoader = tenantLoader;
 			_checker = checker;
 			_contextLoader = contextLoader;
-			_now = now;
 			_queueWriter = queueWriter;
 			_queueReader = queueReader;
-			_witUnitOfWork = witUnitOfWork;
+			_analytics = analytics;
+			_tenants = tenants;
 		}
 
 		[LogInfo]
@@ -40,16 +40,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Enqueue(BatchInputModel batch)
 		{
 			validateAuthenticationKey(batch);
-			_witUnitOfWork.Do(() => _queueWriter.Enqueue(batch));
+			_tenants.Poke();
+			_analytics.Do(() => _queueWriter.Enqueue(batch));
 		}
 
 		[LogInfo]
 		[TenantScope]
-		public virtual void QueueIteration(string tenant)
+		public virtual bool QueueIteration(string tenant)
 		{
-			var input = _witUnitOfWork.Get(() => _queueReader.Dequeue());
-			if (input != null)
-				process(input);
+			var input = _analytics.Get(() => _queueReader.Dequeue());
+			if (input == null) return false;
+			process(input);
+			return true;
 		}
 
 		[LogInfo]

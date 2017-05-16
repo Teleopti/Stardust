@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IEventPublisher EventPublisher;
 		public static ITenantUnitOfWork TenantUnitOfWork;
 		public static ICurrentTenantSession CurrentTenantSession;
+		public static StateQueueUtilities StateQueue;
 
 		public static void Setup()
 		{
@@ -45,6 +47,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			DefaultDataCreator = IntegrationIoCTest.Container.Resolve<DefaultDataCreator>();
 			DefaultAnalyticsDataCreator = IntegrationIoCTest.Container.Resolve<DefaultAnalyticsDataCreator>();
+
+			StateQueue = IntegrationIoCTest.Container.Resolve<StateQueueUtilities>();
 		}
 
 		public static void Start()

@@ -32,12 +32,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public BatchInputModel Dequeue()
 		{
-			var result =  _unitOfWork.Current().Session()
+			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"DELETE TOP (1) FROM RTA.StateQueue OUTPUT DELETED.Model")
 				.List<string>()
 				.Select(x => _deserializer.DeserializeObject<BatchInputModel>(x))
 				.SingleOrDefault();
-			return result;
 		}
 	}
 }
