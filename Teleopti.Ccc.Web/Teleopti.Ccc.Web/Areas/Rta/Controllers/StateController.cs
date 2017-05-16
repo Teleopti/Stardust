@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			try
 			{
-				_rta.SaveStateBatch(new BatchInputModel
+				_rta.Process(new BatchInputModel
 				{
 					AuthenticationKey = input.AuthenticationKey,
 					SourceId = input.SourceId,
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			try
 			{
-				_rta.SaveStateBatch(new BatchInputModel
+				_rta.Process(new BatchInputModel
 				{
 					AuthenticationKey = input.AuthenticationKey,
 					SourceId = input.SourceId,

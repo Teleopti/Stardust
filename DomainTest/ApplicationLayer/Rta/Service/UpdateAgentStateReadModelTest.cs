@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode")
 				.WithStateCode("phone");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("user", Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "state"
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMappedRule("statecode", activityId, "my state");
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 11:00");
 			Now.Is("2014-10-20 10:01");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMappedRule("phone");
 			var stateGroupId = StateGroups.LoadAll().Single().Id;
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"

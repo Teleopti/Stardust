@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Now.Is("2015-10-05 9:30");
 			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-10-08 8:00");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"

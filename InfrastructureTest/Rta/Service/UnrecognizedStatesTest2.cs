@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 				.PublishRecurringEvents();
 			Context.Logout();
 
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2016-05-18 08:00".Utc(),
 				States = new[]
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 				SnapshotId = "2016-05-18 08:00".Utc()
 			});
 
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2016-05-18 08:05".Utc(),
 				States = new[]

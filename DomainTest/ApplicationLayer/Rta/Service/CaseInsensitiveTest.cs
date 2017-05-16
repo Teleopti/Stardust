@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("USERCODE");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				StateCode = "somethin",
 				UserCode = "usercode"
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithStateGroup(stateGroupId,null)
 				.WithStateCode("STATECODE");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				StateCode = "statecode",
 				UserCode = "usercode"

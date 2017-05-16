@@ -1,8 +1,20 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using System;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	public interface IStateQueueWriter
+	{
+		void Enqueue(DateTime time, BatchInputModel model);
+	}
+
+	public interface IStateQueueReader
+	{
+		BatchInputModel Dequeue();
+	}
+	
 	public class Rta
 	{
 		public static string LogOutBySnapshot = "CCC Logged out";
@@ -10,20 +22,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly TenantLoader _tenantLoader;
 		private readonly ActivityChangeChecker _checker;
 		private readonly IContextLoader _contextLoader;
+		private readonly INow _now;
+		private readonly IStateQueueWriter _queueWriter;
+		private readonly IStateQueueReader _queueReader;
 
 		public Rta(
 			TenantLoader tenantLoader,
 			ActivityChangeChecker checker,
-			IContextLoader contextLoader)
+			IContextLoader contextLoader,
+			INow now,
+			IStateQueueWriter queueWriter,
+			IStateQueueReader queueReader)
 		{
 			_tenantLoader = tenantLoader;
 			_checker = checker;
 			_contextLoader = contextLoader;
+			_now = now;
+			_queueWriter = queueWriter;
+			_queueReader = queueReader;
 		}
-		
+
 		[LogInfo]
 		[TenantScope]
-		public virtual void SaveStateBatch(BatchInputModel batch)
+		public virtual void Enqueue(BatchInputModel batch)
+		{
+			validateAuthenticationKey(batch);
+			_queueWriter.Enqueue(_now.UtcDateTime(), batch);
+		}
+
+		[LogInfo]
+		[TenantScope]
+		public virtual void QueueIteration(string tenant)
+		{
+			process(_queueReader.Dequeue());
+		}
+
+		[LogInfo]
+		[TenantScope]
+		public virtual void Process(BatchInputModel batch)
+		{
+			process(batch);
+		}
+
+		private void process(BatchInputModel batch)
 		{
 			validateAuthenticationKey(batch);
 			_contextLoader.ForBatch(batch);

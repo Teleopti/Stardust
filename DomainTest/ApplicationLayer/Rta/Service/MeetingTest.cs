@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Publisher.Clear();
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "training"

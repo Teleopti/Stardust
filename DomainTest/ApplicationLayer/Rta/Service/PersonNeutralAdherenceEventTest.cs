@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMappedRule("admin", admin, 0, Adherence.Neutral);
 			Now.Is("2015-03-10 8:30");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin"
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.Clear();
 			Now.Is("2015-03-10 8:30");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.Clear();
 			Now.Is("2015-03-10 8:30");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "break"
@@ -104,13 +104,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-03-10 8:05");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin1"
 			});
 			Now.Is("2015-03-10 9:05");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin2"
@@ -131,12 +131,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMappedRule("phone", phone, 0, Adherence.In)
 				;
 			Now.Is("2015-03-19 8:01");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "someOtherCode"
@@ -158,12 +158,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMappedRule("phone", phone, 0, Adherence.In)
 				;
 			Now.Is("2015-03-19 8:01");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "someOtherCode"
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMappedRule("admin", admin, 0, Adherence.Neutral);
 			Now.Is("2014-10-20 9:05");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin"
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.Clear();
 			Now.Is("2014-10-20 9:05");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin"
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2015-03-10 8:00");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin"
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMappedRule("admin", admin, 0, Adherence.Neutral);
 			Now.Is("2015-03-10 8:30");
 			
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin"
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMappedRule("phone", null, +1, Adherence.Neutral)
 				;
 			Now.Is("2015-11-25 8:00");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMappedRule("logged off", null, 0, Adherence.In)
 				;
 			Now.Is("2015-11-25 11:55");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "logged off"
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.Clear();
 
 			Now.Is("2015-11-25 12:01");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"

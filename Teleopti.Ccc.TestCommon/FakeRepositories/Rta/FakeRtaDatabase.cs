@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			rta.CheckForActivityChanges(tenant);
 		}
 
-		public static void SaveState(this Domain.ApplicationLayer.Rta.Service.Rta rta, StateForTest input)
+		public static void ProcessState(this Domain.ApplicationLayer.Rta.Service.Rta rta, StateForTest input)
 		{
-			rta.SaveStateBatch(new BatchInputModel
+			rta.Process(new BatchInputModel
 			{
 				AuthenticationKey = input.AuthenticationKey,
 				SourceId = input.SourceId,
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public static void CloseSnapshot(this Domain.ApplicationLayer.Rta.Service.Rta rta, CloseSnapshotForTest input)
 		{
-			rta.SaveStateBatch(new BatchInputModel
+			rta.Process(new BatchInputModel
 			{
 				AuthenticationKey = input.AuthenticationKey,
 				SourceId = input.SourceId,

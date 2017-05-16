@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldThrowIfNoSourceId()
 		{
 			Assert.Throws<InvalidSourceException>(() =>
-				Target.SaveState(new StateForTest
+				Target.ProcessState(new StateForTest
 				{
 					SourceId = string.Empty
 				})
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldThrowIfNoPerson()
 		{
 			Assert.Throws<InvalidUserCodeException>(() =>
-				Target.SaveState(new StateForTest
+				Target.ProcessState(new StateForTest
 				{
 					UserCode = "unknown"
 				})

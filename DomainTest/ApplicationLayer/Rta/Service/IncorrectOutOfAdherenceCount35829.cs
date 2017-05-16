@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-11-25 13:55");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "1"

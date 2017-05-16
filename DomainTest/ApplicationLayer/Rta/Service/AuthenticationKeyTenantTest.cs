@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("user")
 				.WithTenant("tenant", "key");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "user",
 				AuthenticationKey = "key"
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldNotAcceptAuthenticationKeyWithoutTenant()
 		{
 			Assert.Throws(typeof (InvalidAuthenticationKeyException),
-				() => Target.SaveState(new StateForTest
+				() => Target.ProcessState(new StateForTest
 				{
 					AuthenticationKey = "key"
 				}));
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("user")
 				.WithTenant("tenant", LegacyAuthenticationKey.TheKey);
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "user",
 				AuthenticationKey = LegacyAuthenticationKey.TheKey
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithTenant("tenant2", "key");
 
 			Assert.Throws(typeof (LegacyAuthenticationKeyException),
-				() => Target.SaveState(new StateForTest
+				() => Target.ProcessState(new StateForTest
 				{
 					AuthenticationKey = LegacyAuthenticationKey.TheKey
 				}));
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("user")
 				.WithTenant("tenant", LegacyAuthenticationKey.TheKey);
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "user",
 				AuthenticationKey = LegacyAuthenticationKey.TheKey.Remove(2, 2).Insert(2, "_")
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.WithTenant("tenant2", "key");
 
 			Assert.Throws(typeof (LegacyAuthenticationKeyException),
-				() => Target.SaveState(new StateForTest
+				() => Target.ProcessState(new StateForTest
 				{
 					UserCode = "user",
 					AuthenticationKey = LegacyAuthenticationKey.TheKey.Remove(2, 2).Insert(2, "_")
@@ -109,13 +109,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldThrowInvalidAuthenticationKeyExceptionWithPriorState()
 		{
 			Database.WithAgent("user");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "user"
 			});
 
 			Assert.Throws(typeof (InvalidAuthenticationKeyException),
-				() => Target.SaveState(new StateForTest
+				() => Target.ProcessState(new StateForTest
 				{
 					AuthenticationKey = "key",
 					UserCode = "user"

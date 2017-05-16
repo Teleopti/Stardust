@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode", person1)
 				.WithAgent("usercode", person2);
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
@@ -54,19 +54,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2016-08-29 09:55");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode1",
 				StateCode = "loggedOut"
 			});
 			Now.Is("2016-08-29 10:05");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode2",
 				StateCode = "phone"
 			});
 			Now.Is("2016-08-29 10:30");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode1",
 				StateCode = "loggedOut"
@@ -98,19 +98,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2016-08-29 09:55");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode1",
 				StateCode = "loggedOut"
 			});
 			Now.Is("2016-08-29 10:05");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode2",
 				StateCode = "phone"
 			});
 			Now.Is("2016-08-29 10:45");
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode3",
 				StateCode = "loggedOut"

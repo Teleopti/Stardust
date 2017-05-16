@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 							StateCode = stateCodes.Randomize().First()
 						}).ToArray()
 				}).ToArray();
-			batches.ForEach(Rta.SaveStateBatch);
+			batches.ForEach(Rta.Process);
 		}
 
 		private void sendSingles(int states, IEnumerable<string> users, IEnumerable<string> stateCodes)
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 					UserCode = users.Randomize().First(),
 					StateCode = stateCodes.Randomize().First()
 				}).ToArray();
-			singles.ForEach(Rta.SaveState);
+			singles.ForEach(Rta.ProcessState);
 		}
 
 		[Test]

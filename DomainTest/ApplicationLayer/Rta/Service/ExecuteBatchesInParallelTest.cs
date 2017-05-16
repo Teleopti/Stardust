@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("user1", personId)
 				.WithStateCode("phone");
 
-			Assert.Throws<AggregateException>(() => Target.SaveStateBatch(new BatchForTest
+			Assert.Throws<AggregateException>(() => Target.Process(new BatchForTest
 			{
 				States = new[]
 				{
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithMappedRule("ready")
 				.WithMappedRule("phone")
 				;
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2016-07-11 08:00".Utc(),
 				States = new[]
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2016-07-11 08:10".Utc(),
 				States = new[]
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			100.Times(() =>
 			{
-				var result = Assert.Throws<AggregateException>(() => Target.SaveStateBatch(new BatchForTest
+				var result = Assert.Throws<AggregateException>(() => Target.Process(new BatchForTest
 				{
 					States = states
 				}));

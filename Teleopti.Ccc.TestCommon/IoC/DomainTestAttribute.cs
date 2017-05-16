@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
@@ -95,6 +97,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Rta
 			system.AddService<FakeDataSources>();
 			system.AddService<FakeRtaDatabase>();
+			system.UseTestDouble<FakeStateQueueWriter>().For<IStateQueueWriter, IStateQueueReader>();
 
 			system.UseTestDouble<FakeDataSourceReader>().For<IDataSourceReader>();
 			system.UseTestDouble<FakeExternalLogonReadModelPersister>().For<IExternalLogonReader, IExternalLogonReadModelPersister>();
@@ -268,4 +271,41 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_authorizationScope?.Dispose();
 		}
 	}
+
+
+	public class QueueItemInfo
+	{
+		public string OnTenant { get; set; }
+		public DateTime Time { get; set; }
+		public BatchInputModel Model { get; set; }
+	}
+
+	public class FakeStateQueueWriter : IStateQueueWriter, IStateQueueReader
+	{
+		private readonly ICurrentDataSource _dataSource;
+		private readonly Queue<QueueItemInfo> _items = new Queue<QueueItemInfo>();
+
+		public IEnumerable<QueueItemInfo> Items() => _items;
+
+		public FakeStateQueueWriter(ICurrentDataSource dataSource)
+		{
+			_dataSource = dataSource;
+		}
+
+		public void Enqueue(DateTime time, BatchInputModel model)
+		{
+			_items.Enqueue(new QueueItemInfo
+			{
+				OnTenant = _dataSource.CurrentName(),
+				Time = time,
+				Model = model
+			});
+		}
+
+		public BatchInputModel Dequeue()
+		{
+			return _items.Dequeue()?.Model;
+		}
+	}
+
 }

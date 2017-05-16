@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				stateCode = fixStateCode(stateCode, platformTypeId, isLoggedOn);
 				if (isClosingSnapshot(userCode, isSnapshot))
 				{
-					_rta.SaveStateBatch(new BatchInputModel
+					_rta.Process(new BatchInputModel
 					{
 						AuthenticationKey = authenticationKey,
 						SourceId = sourceId,
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				}
 				else
 				{
-					_rta.SaveStateBatch(new BatchInputModel
+					_rta.Process(new BatchInputModel
 					{
 						AuthenticationKey = authenticationKey,
 						SourceId = sourceId,
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				if (closeSnapshot)
 					states = states.Take(externalUserStateBatch.Count - 1);
 
-				_rta.SaveStateBatch(new BatchInputModel
+				_rta.Process(new BatchInputModel
 				{
 					AuthenticationKey = authenticationKey,
 					SourceId = sourceId,

@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 				.PublishRecurringEvents()
 				;
 			var person = WithUnitOfWork.Get(() => Persons.LoadAll().Single(x => x.Name.FirstName == "user2"));
-			Rta.SaveStateBatch(new BatchForTest
+			Rta.Process(new BatchForTest
 			{
 				SnapshotId = "2016-04-07 08:00".Utc(),
 				States = new[]
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 				SnapshotId = "2016-04-07 08:00".Utc()
 			});
 
-			Rta.SaveStateBatch(new BatchForTest
+			Rta.Process(new BatchForTest
 			{
 				SnapshotId = "2016-04-07 08:10".Utc(),
 				States = new[]

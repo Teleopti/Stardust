@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 						UserCode = y,
 						StateCode = "phone"
 					}).ToArray()
-				}).ForEach(Rta.SaveStateBatch);
+				}).ForEach(Rta.Process);
 		}
 
 		private static IEnumerable<string> userCodes => Enumerable.Range(0, 3000).Select(x => $"user{x}").ToArray();
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 							UserCode = y,
 							StateCode = "phone"
 						}).ToArray()
-					}).ForEach(Rta.SaveStateBatch);
+					}).ForEach(Rta.Process);
 
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();

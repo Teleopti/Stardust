@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 			Database.PublishRecurringEvents();
 			Context.Logout();
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				AuthenticationKey = "!#¤atAbgT%",
 				StateCode = "InCall",
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 			Database.PublishRecurringEvents();
 			Context.Logout();
 
-			Target.SaveStateBatch(new BatchInputModel
+			Target.Process(new BatchInputModel
 			{
 				AuthenticationKey = "!#¤atAbgT%",
 				SourceId = "-1",

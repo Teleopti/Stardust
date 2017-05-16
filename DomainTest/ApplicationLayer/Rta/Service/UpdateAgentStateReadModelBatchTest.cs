@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2017-05-15 13:00");
 
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				States = users.Select(x => new BatchStateInputModel
 				{

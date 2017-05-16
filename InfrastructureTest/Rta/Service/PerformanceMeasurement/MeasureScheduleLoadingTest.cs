@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
-				batches.ForEach(Rta.SaveStateBatch);
+				batches.ForEach(Rta.Process);
 				stopwatch.Stop();
 
 				return new

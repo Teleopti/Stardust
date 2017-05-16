@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2014-10-20 10:00");
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2014-10-20 10:00".Utc(),
 				States = new[]
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SnapshotId = "2014-10-20 10:00".Utc()
 			});
 
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2014-10-20 10:05".Utc(),
 				States = new[]
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithStateCode("statecode")
 				;
 			Now.Is("2014-10-20 10:00");
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2014-10-20 10:00".Utc(),
 				SourceId = "source1",
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SourceId = "source1",
 				SnapshotId = "2014-10-20 10:00".Utc()
 			});
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2014-10-20 10:00".Utc(),
 				SourceId = "source2",
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SnapshotId = "2014-10-20 10:00".Utc()
 			});
 
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2014-10-20 10:05".Utc(),
 				SourceId = "source1",
@@ -170,21 +170,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode1",
 				SourceId = "source1",
 				StateCode = "statecode1"
 			});
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode2",
 				SourceId = "source1",
 				StateCode = "statecode1",
 			});
 
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2014-10-20 10:00".Utc(),
 				SourceId = "source1",
@@ -226,21 +226,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode1",
 				SourceId = "source1",
 				StateCode = "statecode1"
 			});
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode2",
 				SourceId = "source2",
 				StateCode = "statecode1",
 			});
 
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2014-10-20 10:05".Utc(),
 				SourceId = "source1",
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithStateCode("statecode")
 				;
 			Now.Is("2014-10-20 10:00");
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2014-10-20 10:00".Utc(),
 				States = new[]
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			Now.Is("2014-10-20 10:05");
-			Target.SaveStateBatch(new BatchForTest
+			Target.Process(new BatchForTest
 			{
 				SnapshotId = "2014-10-20 10:05".Utc(),
 				States = new[]
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithStateCode("statecode")
 				;
 
-			Target.SaveState(new StateForTest
+			Target.ProcessState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "statecode"
