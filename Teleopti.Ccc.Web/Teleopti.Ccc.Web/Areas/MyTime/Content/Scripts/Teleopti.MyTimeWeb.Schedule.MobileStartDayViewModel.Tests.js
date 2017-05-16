@@ -5,7 +5,7 @@
 $(document).ready(function() {
 	module("Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel");
 
-	var internalHash, constants = Teleopti.MyTimeWeb.Common.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	function fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(formattedDate){
 		var result = [];
@@ -18,19 +18,6 @@ $(document).ready(function() {
 			});
 		}
 		return result;
-	}
-
-	function setupHash() {
-		this.hasher = {
-			initialized: {
-				add: function () { }
-			},
-			changed: {
-				add: function () { }
-			},
-			init: function () { },
-			setHash: function (data) { internalHash = "#"+data; }
-		};
 	}
 
 	test("should get current date", function () {
@@ -541,39 +528,6 @@ $(document).ready(function() {
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
 		equal(viewModel.absenceProbabilityEnabled(), false);
-	});
-
-	test("should change url after switching selected probability type", function () {
-		setupHash();
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
-		var rawData = {
-			Date: moment().format('YYYY-MM-DD'),
-			Schedule: {
-				FixedDate: null,
-				Summary: {
-					Color: null,
-					Title: null,
-					TimeSpan: null
-				},
-				Header:{Title: null},
-			},
-			ViewPossibilityPermission: true,
-			CheckStaffingByIntraday: true
-		};
-		viewModel.readData(rawData);
-		viewModel.selectedProbabilityOptionValue(constants.probabilityType.none);
-
-		viewModel.onProbabilityOptionSelectCallback(constants.probabilityType.absence);
-		equal(Teleopti.MyTimeWeb.Portal.ParseHash({hash: internalHash}).hash.indexOf('Probability/' + constants.probabilityType.absence)> -1, true);
-
-		viewModel.onProbabilityOptionSelectCallback(constants.probabilityType.overtime);
-		equal(Teleopti.MyTimeWeb.Portal.ParseHash({hash: internalHash}).hash.indexOf('Probability/' + constants.probabilityType.overtime)> -1, true);
-
-		viewModel.onProbabilityOptionSelectCallback(constants.probabilityType.none);
-		equal(Teleopti.MyTimeWeb.Portal.ParseHash({hash: internalHash}).hash.indexOf('Probability')> -1, false);
 	});
 
 	 test("should change probability option value to absence(1) after selecting 'Show absence probability' ", function () {
