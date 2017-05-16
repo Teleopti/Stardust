@@ -155,10 +155,10 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	}
 
 	self.setSelectedDateSubscription = function (date) {
-		self.selectedDate(moment(date));
-
 		if (self.selectedDateSubscription)
 			self.selectedDateSubscription.dispose();
+
+		self.selectedDate(moment(date));
 
 		self.selectedDateSubscription = self.selectedDate.subscribe(function (date) {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + getUrlPartForDate(date) + self.getUrlPartForProbability());
