@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeMyDayViewScheduleWith(Table table)
 		{
 			var content = table.CreateInstance<MobileDayScheduleContentItem>();
-		    var date = "return $(\".date-input-style\").val()";
-		    
+			var date = "return $(\".date-input-style\").val()";
+
 			Browser.Interactions.AssertAnyContains(".mobile-summary-content", content.WeekDay);
 			Browser.Interactions.AssertAnyContains(".mobile-summary-content", content.ShiftCategory);
 			Browser.Interactions.AssertAnyContains(".mobile-summary-content", content.TimeSpan);
@@ -83,9 +83,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertUrlContains("MyTime#Requests/");
 		}
 
+		[When(@"I click the menu button in start page")]
+		public void WhenIClickTheMenuButton()
+		{
+			Browser.Interactions.Click("div.mobile-start-day div.fab");
+		}
+
+		[When(@"I click menu Overtime Availability")]
+		public void WhenIClickMenuOvertimeAvailability()
+		{
+			Browser.Interactions.ClickContaining("li>a", "Overtime Availability");
+		}
+
+		[When(@"I input '(.*)' as overtime startTime and '(.*)' as overtime endTime")]
+		public void WhenIInputAsOvertimeStartTimeAndAsOvertimeEndTime(string startTime, string endTime)
+		{
+			Browser.Interactions.FillWith("input.overtime-availability-start-time", startTime);
+			Browser.Interactions.FillWith("input.overtime-availability-end-time", endTime);
+		}
+
+		[When(@"I click save Overtime Availability")]
+		public void WhenIClickSaveOvertimeAvailability()
+		{
+			Browser.Interactions.Click("div.mobile-start-day button.request-new-send");
+		}
+
+		[Then(@"I should see '(.*)' Overtime Availability in schedule")]
+		public void ThenIShouldSeeOvertimeAvailabilityInSchedule(string timeSpan)
+		{
+			Browser.Interactions.AssertAnyContains("span.displayblock", timeSpan);
+		}
+
+
 		public class MobileDayScheduleContentItem
-	    {
-	        public string Date { get; set; }
+		{
+			public string Date { get; set; }
 			public string ShiftCategory { get; set; }
 			public string TimeSpan { get; set; }
 			public string WeekDay { get; set; }

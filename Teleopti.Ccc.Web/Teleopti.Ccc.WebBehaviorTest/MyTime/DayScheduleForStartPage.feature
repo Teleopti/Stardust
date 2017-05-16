@@ -7,8 +7,9 @@
 
 Background: 
 Given there is a role with
-	| Field | Value                 |
-	| Name  | Full access to mytime | 
+	| Field                        | Value                 |
+	| Name                         | Full access to mytime |
+	| AccessToOvertimeAvailability | true                  |
 	And there is a shift category with 
 	| Field | Value |
 	| Name  | Early |
@@ -25,6 +26,7 @@ Given there is a role with
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2013-08-19 |
+	And I am englishspeaking swede
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: View day schedule after login
@@ -157,3 +159,17 @@ Scenario: Probability setting should be kept when date changed
 	When I'm viewing at '2017-04-22'
 	And change date back to '2017-04-21'
 	Then I should see the absence probability in schedule
+
+Scenario: Could add overtime Availability
+Given I have the workflow control set 'Published schedule'
+And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2017-04-21 09:00 |
+	| EndTime        | 2017-04-21 18:00 |
+	| Shift category | Early            |
+When I am viewing mobile view for date '2017-04-21'
+When I click the menu button in start page
+And I click menu Overtime Availability
+And I input '18:00' as overtime startTime and '19:00' as overtime endTime
+And I click save Overtime Availability
+Then I should see '18:00 - 19:00' Overtime Availability in schedule
