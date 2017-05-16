@@ -33990,7 +33990,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The validation issues are up-to-date.
+        ///   Looks up a localized string similar to The validation issues have been updated.
         /// </summary>
         public static string UpdatedValidation {
             get {
@@ -36136,7 +36136,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are going to change this planning period from {0}-{1} to {2}-{3}..
+        ///   Looks up a localized string similar to You are going to change this planning period to {0} - {1}..
         /// </summary>
         public static string YouAreGoingToChangeThisPlanningPeriodFrom {
             get {

@@ -15993,7 +15993,7 @@ Do you want to participate?</value>
     <comment>Select planning period to work with</comment>
   </data>
   <data name="UpdatedValidation" xml:space="preserve">
-    <value>The validation issues are up-to-date</value>
+    <value>The validation issues have been updated</value>
     <comment>The validation issues are up-to-date</comment>
   </data>
   <data name="ConfirmToggleAllData" xml:space="preserve">
@@ -16037,7 +16037,7 @@ Do you want to participate?</value>
     <comment>Used in resource planner on the web when a schedule execution is successful for a planning period</comment>
   </data>
   <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
-    <value>You are going to change this planning period from {0}-{1} to {2}-{3}.</value>
+    <value>You are going to change this planning period to {0} - {1}.</value>
     <comment>Used in resource planner when modifying planning period</comment>
   </data>
   <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
