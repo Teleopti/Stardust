@@ -16,7 +16,8 @@
 	.datepicker.dropdown-menu{
 		z-index: 1003;
 	}
-	.tooltip.top{
+	.tooltip{
+		z-index: initial;
 		margin: 0;
 	}
 </style>
@@ -120,7 +121,7 @@
 		
 		<div class="mobile-schedule-container relative" data-bind="style: {height: scheduleHeight}">
 			<!-- ko foreach: layers -->
-			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime &amp;&amp; overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime &amp;&amp; overTimeDarkerBackgroundStyle}">
+			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle}">
 				<div data-bind="visible: showTitle()">
 					<strong data-bind="text: title()"></strong>
 					<!-- ko if: hasMeeting -->
@@ -137,7 +138,7 @@
 			<!-- ko if: showProbabilityOptionsToggleIcon || probabilities().length > 0 -->
 				<div class="probability-vertical-bar">
 					<!--ko foreach: probabilities-->
-					<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
+					<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, placement: 'left'}, style: styleJson"></div>
 					<!-- /ko -->
 				</div>
 			<!-- /ko -->
