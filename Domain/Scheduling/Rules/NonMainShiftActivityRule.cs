@@ -31,12 +31,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var assignment = scheduleDay?.PersonAssignment();
 				if (assignment == null) continue;
 
-				var hasMainShiftMeeting = isMeetingOverSchedule(scheduleDay);
+				var overtimeActivities = assignment.OvertimeActivities();
 				var hasMainShiftActivity = isPersonalActivityOverSchedule(assignment);
-				var hasOvertimeActivity = assignment.OvertimeActivities() != null && assignment.OvertimeActivities().Any();
+				var hasMainShiftMeeting = isMeetingOverSchedule(scheduleDay);
+				var hasOvertimeActivity = overtimeActivities != null && overtimeActivities.Any();
 				if (!hasMainShiftActivity && !hasMainShiftMeeting && !hasOvertimeActivity) continue;
 
 				var person = scheduleDay.Person;
+
+				// To fix part of bug #44168: Hangfire error: ShiftTradeRequestHandler got AcceptShiftTradeEvent on Teleopti WFM
+				// Sometimes "NullReferenceException" will be thrown in this method, person==null is the only possible reason.
+				// So I added this check but no test case for it since ScheduleParameter does not allow null value for parameter person.
+				if (person == null) continue;
+
 				var assignmentDate = assignment.Date;
 				var message = string.Format(currentUiCulture, Resources.HasNonMainShiftActivityErrorMessage, person.Name,
 					assignmentDate.Date.ToShortDateString());
