@@ -26,12 +26,12 @@ Given there is a role with
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2013-08-19 |
+	And I have the role 'Full access to mytime'
 	And I am englishspeaking swede
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: View day schedule after login
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Published schedule'
+	Given I have the workflow control set 'Published schedule'
 	And I have a shift with
 	| Field          | Value            |
 	| StartTime      | 2017-04-21 09:00 |
@@ -48,8 +48,7 @@ Scenario: View day schedule after login
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should view schedule for tomorrow
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Published schedule'
+	Given I have the workflow control set 'Published schedule'
 	And I am american
 	And I have a shift with
 	| Field          | Value            |
@@ -67,8 +66,7 @@ Scenario: Should view schedule for tomorrow
 	
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should view schedule for the day before
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Published schedule'
+	Given I have the workflow control set 'Published schedule'
 	And I am american
 	And I have a shift with
 	| Field          | Value            |
@@ -87,8 +85,7 @@ Scenario: Should view schedule for the day before
 @ignore
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should view today schedule from other day
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Published schedule'
+	Given I have the workflow control set 'Published schedule'
 	And I am american
 	And I have a shift with
 	| Field          | Value            |
@@ -107,8 +104,7 @@ Scenario: Should view today schedule from other day
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should see the brief request in today
-	Given I have the role 'Full access to mytime'
-	And 'I' has an existing absence request with
+	Given 'I' has an existing absence request with
 	| Field       | Value            |
 	| StartTime   | 2017-04-21 10:00 |
 	| End Time    | 2017-04-21 14:00 |
@@ -121,8 +117,7 @@ Scenario: Should see the brief request in today
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should see unread messages
-	Given I have the role 'Full access to mytime'
-	And I have an unread message with
+	Given I have an unread message with
 	| Field | Value       |
 	| Title | New message |
 	When I am viewing mobile view for date '2017-04-23'
@@ -132,21 +127,18 @@ Scenario: Should see unread messages
 
 @ignore
 Scenario: Should see the absence probability
-	Given I have the role 'Full access to mytime'
 	When I'm viewing at '2017-04-21'
 	And I click show probability button and choose to show absence probability
 	Then I should see the absnece probability in schedule
 	
 @ignore
 Scenario: Should see the overtime probability
-	Given I have the role 'Full access to mytime'
 	When I'm viewing at '2017-04-21'
 	And I click show probability button and choose to show overtime probability
 	Then I should see the overtime probability in schedule
 	
 @ignore
 Scenario: Should hide staffing probability
-	Given I have the role 'Full access to mytime'
 	And I could see absence probability
 	When I'm viewing at '2017-04-21'
 	And I click show probability button and choose to hide staffing probability
@@ -154,7 +146,6 @@ Scenario: Should hide staffing probability
 
 @ignore
 Scenario: Probability setting should be kept when date changed
-	Given I have the role 'Full access to mytime'
 	And I could see absence probability for date '2017-04-21'
 	When I'm viewing at '2017-04-22'
 	And change date back to '2017-04-21'
