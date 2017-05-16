@@ -1,6 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly INow _now;
 		private readonly IStateQueueWriter _queueWriter;
 		private readonly IStateQueueReader _queueReader;
+		private readonly WithAnalyticsUnitOfWork _witUnitOfWork;
 
 		public Rta(
 			TenantLoader tenantLoader,
@@ -21,7 +23,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IContextLoader contextLoader,
 			INow now,
 			IStateQueueWriter queueWriter,
-			IStateQueueReader queueReader)
+			IStateQueueReader queueReader,
+			WithAnalyticsUnitOfWork witUnitOfWork)
 		{
 			_tenantLoader = tenantLoader;
 			_checker = checker;
@@ -29,6 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_now = now;
 			_queueWriter = queueWriter;
 			_queueReader = queueReader;
+			_witUnitOfWork = witUnitOfWork;
 		}
 
 		[LogInfo]
@@ -36,14 +40,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Enqueue(BatchInputModel batch)
 		{
 			validateAuthenticationKey(batch);
-			_queueWriter.Enqueue(batch);
+			_witUnitOfWork.Do(() => _queueWriter.Enqueue(batch));
 		}
 
 		[LogInfo]
 		[TenantScope]
 		public virtual void QueueIteration(string tenant)
 		{
-			var input = _queueReader.Dequeue();
+			var input = _witUnitOfWork.Get(() => _queueReader.Dequeue());
 			if (input != null)
 				process(input);
 		}

@@ -323,6 +323,7 @@
     <Compile Include="Rta\ReadModels\Mappings\MappingReadModelPersisterTest.cs" />
     <Compile Include="Rta\ReadModels\Mappings\MappingReadModelUpdaterTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\UnorderedEventsTest.cs" />
+    <Compile Include="Rta\Service\QueueueueueeTest.cs" />
     <Compile Include="Rta\Service\ScheduleCacheTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\SiteInAlarmForSkillTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\SiteInAlarmReaderTest.cs" />
