@@ -28,12 +28,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeMyDayViewScheduleWith(Table table)
 		{
 			var content = table.CreateInstance<MobileDayScheduleContentItem>();
-			var date = "return $(\".date-input-style\").val()";
 
-			Browser.Interactions.AssertAnyContains(".mobile-summary-content", content.WeekDay);
 			Browser.Interactions.AssertAnyContains(".mobile-summary-content", content.ShiftCategory);
 			Browser.Interactions.AssertAnyContains(".mobile-summary-content", content.TimeSpan);
-			Browser.Interactions.AssertJavascriptResultContains(date, content.Date);
 		}
 
 		[When(@"I navigate to next day")]

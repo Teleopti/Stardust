@@ -85,24 +85,20 @@ Scenario: Should view schedule for the day before
 		| Shift category | Early             |
 		| Week day       | Saturday          |
 
-@ignore
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should view today schedule from other day
 	Given I am american
 	And I have a shift with
 	| Field          | Value            |
-	| StartTime      | 2017-04-21 09:00 |
-	| EndTime        | 2017-04-21 18:00 |
+	| StartTime      | 09:00 |
+	| EndTime        | 18:00 |
 	| Shift category | Early            |
-	And today is '2017-04-21'
 	When I am viewing mobile view for date '2017-04-23'
 	And I click today button
 	Then I should see my day view schedule with
 		| Field          | Value             |
-		| Date           | 4/21/2017         |
 		| Time span      | 9:00 AM - 6:00 PM |
 		| Shift category | Early             |
-		| Week day       | Friday            |
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should see the brief request in today
