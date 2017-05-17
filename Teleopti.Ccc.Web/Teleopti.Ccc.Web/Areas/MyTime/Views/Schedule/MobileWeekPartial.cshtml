@@ -114,7 +114,7 @@
 						</div>
 						<!-- /ko -->
 						<!-- ko ifnot: isOvertimeAvailability() -->
-						<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle}">
+						<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle}, hideTooltipAfterMouseLeave: true">
 							<div>
 								<strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
 								<!-- ko if: hasMeeting -->
@@ -134,7 +134,7 @@
 				<!-- ko if: showStaffingProbabilityBar() && probabilities().length > 0-->
 				<div class="probability-horizontal-bar">
 					<!--ko foreach: probabilities-->
-					<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
+					<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, trigger: 'click'}, style: styleJson, hideTooltipAfterMouseLeave: true"></div>
 					<!-- /ko -->
 				</div>
 				<!-- /ko -->
