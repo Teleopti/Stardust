@@ -15,9 +15,10 @@ Given there is a role with
 	| Name  | Early |
 	| Color | Green |
 	And there is an absence with
-	| Field | Value    |
-	| Name  | Vacation |
-	| Color | Red      |
+	| Field       | Value    |
+	| Name        | Vacation |
+	| Color       | Red      |
+	| Requestable | true     |
 	And there is a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
@@ -165,3 +166,13 @@ When I click the menu button in start page
 And I click menu menu Absence Reporting
 And I click save Absence Report
 Then I should see '08:00 - 16:00' 'Vacation' in schedule
+
+@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
+Scenario: Could add absence request
+When I am viewing mobile view for date '2017-04-22'
+When I click the menu button in start page
+And I click menu Absence Request
+And I input 'subject demo' as subject and 'test message' as message
+And I click save Absence Request
+Then I should see the request icon
+
