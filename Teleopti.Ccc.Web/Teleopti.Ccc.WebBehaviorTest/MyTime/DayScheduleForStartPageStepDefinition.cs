@@ -112,6 +112,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		}
 
+		[When(@"I click menu Text Request")]
+		public void WhenIClickMenuTextRequest()
+		{
+			Browser.Interactions.ClickContaining("li>a", "Text Request");
+		}
+
+		[When(@"I input '(.*)' as subject")]
+
 
 		[When(@"I input '(.*)' as overtime startTime and '(.*)' as overtime endTime")]
 		public void WhenIInputAsOvertimeStartTimeAndAsOvertimeEndTime(string startTime, string endTime)
@@ -126,6 +134,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.FillWith("input.request-new-subject", subject);
 			Browser.Interactions.FillWith("textarea.request-new-message", message);
 		}
+
+		[When(@"I input '(.*)' as subject")]
+		public void WhenIInputAsSubject(string subject)
+		{
+			Browser.Interactions.FillWith("input.request-new-subject", subject);
+		}
+
 
 		[When(@"I click save Overtime Availability")]
 		public void WhenIClickSaveOvertimeAvailability()

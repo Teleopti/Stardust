@@ -172,7 +172,15 @@ Scenario: Could add absence request
 When I am viewing mobile view for date '2017-04-22'
 When I click the menu button in start page
 And I click menu Absence Request
-And I input 'subject demo' as subject and 'test message' as message
+And I input 'subject 2017-04-22' as subject and 'message 2017-04-22' as message
 And I click save Absence Request
 Then I should see the request icon
 
+@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
+Scenario: Could add text request
+When I am viewing mobile view for date '2017-04-23'
+When I click the menu button in start page
+And I click menu Text Request
+And I input 'subject 2017-04-23' as subject and 'message 2017-04-23' as message
+And I click save Absence Request
+Then I should see the request icon
