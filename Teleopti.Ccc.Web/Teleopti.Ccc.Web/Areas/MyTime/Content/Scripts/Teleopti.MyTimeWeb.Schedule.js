@@ -33,6 +33,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		vm.initializeData(data);
 		daylightSavingAdjustment = data.DaylightSavingTimeAdjustment;
 		baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
+		
 		_initTimeIndicator();
 		$(".body-weekview-inner").show();
 		if (completelyLoaded && $.isFunction(completelyLoaded)) {
@@ -113,6 +114,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
 
 	function getCurrentUserDateTime(utcOffsetInMinutes) {
+		if (!utcOffsetInMinutes) return undefined;
 		var currentUserDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
 			? stripTeleoptiTimeToUTCForScenarioTest().zone(-utcOffsetInMinutes)
 			: moment().zone(-utcOffsetInMinutes);//work in user timezone, just make life easier
@@ -500,6 +502,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function initializeWeekViewModel(data) {
 		var self = this;
+		self.baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
 		var currentUserDate = getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format("YYYY-MM-DD");
 		self.isCurrentWeek(data.IsCurrentWeek);
 
@@ -590,7 +593,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		var timelineStartMinutes = getMinutes(".weekview-timeline", true);
 		var timelineEndMinutes = getMinutes(".weekview-timeline", false);
-
 		var division = (clientNowMinutes - timelineStartMinutes) / (timelineEndMinutes - timelineStartMinutes);
 		var position = Math.round(timelineHeight * division) - Math.round(timeindicatorHeight / 2);
 		if (position === -1) {
