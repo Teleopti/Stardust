@@ -83,6 +83,11 @@
 		startPosition: startPositionVal,
 		intervalLength: intervalLengthVal,
 		cssClass: generateCssClass,
-		tooltips: generateTooltips
+		tooltips: generateTooltips,
+		toggleTooltip: function(e){
+			$(e.currentTarget).mouseout(function(event) {
+				$(this).tooltip('hide');
+			});
+		},
 	};
 };

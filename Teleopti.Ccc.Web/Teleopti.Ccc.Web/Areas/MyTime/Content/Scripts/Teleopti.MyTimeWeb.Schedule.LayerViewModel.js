@@ -132,6 +132,11 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMo
 	self.showDetail = ko.computed(function () {
 		return self.heightDouble() > constants.pixelToDisplayAll;
 	});
+	self.toggleTooltip = function(e){
+		$(e.currentTarget).mouseout(function(event) {
+			$(this).tooltip('hide');
+		});
+	};
 };
 
 function getWidth(isOvertimeAvailability, probabilities, layersOnMobile) {
