@@ -161,6 +161,9 @@
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
 		vm.showAddTextRequestForm();
+		var requestViewModel = vm.requestViewModel().model;
+		equal(requestViewModel.DateTo(), vm.requestDay);
+		equal(requestViewModel.DateFrom(), vm.requestDay);
 
 		equal(templateConfig.default, vm.requestViewModel().model.Template());
 	});
@@ -200,8 +203,11 @@
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
 		vm.showAddAbsenceRequestForm();
+		var requestViewModel = vm.requestViewModel().model;
 
 		equal(vm.requestViewModel().model.Template(), templateConfig.default);
+		equal(requestViewModel.DateTo(), vm.requestDay);
+		equal(requestViewModel.DateFrom(), vm.requestDay);
 
 		equal(true, vm.requestViewModel().model.ShowAbsencesCombo());
 	});
@@ -262,6 +268,9 @@
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.showAbsenceReportingForm();
+
+		var requestViewModel = vm.requestViewModel().model;
+		equal(requestViewModel.DateTo(), vm.requestDay);
 
 		equal(vm.requestViewModel().model.Template, templateConfig.absenceReporting);
 	});
