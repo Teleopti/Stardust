@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldOneDayDataIfOnlyThisDateIsTrue()
+		public void ShouldOnlyGetOneDayDataIfReturnOneWeekDataIsFalse()
 		{
 			setupSiteOpenHour();
 			setupTestDataForOneSkill();
