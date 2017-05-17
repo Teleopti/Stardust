@@ -375,6 +375,7 @@
 		requestViewModel.endTimeInternal();
 		requestViewModel.EndTimeNextDay();
 		requestViewModel.WishShiftTypeOption("Working Day");
+		startDayData.Date = "2017-04-28";
 		requestViewModel.SaveShiftExchangeOffer();
 
 		equal(vm.requestCount(), 1);
@@ -470,6 +471,9 @@
 
 		function fetchDayDataCallback(options) {
 			fetchDayDataRequestCount++;
+			if (options.data.date) {
+				startDayData.Date = moment(options.data.date).format("YYYY-MM-DD");
+			}
 			options.success(startDayData);
 		}
 
@@ -768,6 +772,7 @@
 			}
 		};
 		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = { defaultFulldayStartTime: "" };
+		Teleopti.MyTimeWeb.Common.Init(null, ajax);
 	}
 
 	function getDefaultSetting() {

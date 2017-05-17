@@ -168,26 +168,6 @@ $(document).ready(function() {
 		viewModel.readData(rawData);
 
 		equal(viewModel.isDayOff(), rawData.Schedule.IsDayOff);
-	}); 
-
-	test("should set to next date", function () {
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
-		var today = moment().format('YYYY-MM-DD');
-		viewModel.selectedDate(today);
-
-		viewModel.nextDay();
-
-		equal(viewModel.selectedDate().format("YYYY-MM-DD"), moment(today).add(1, 'days').format("YYYY-MM-DD"));
-	});
-
-	test("should set to previous date", function () {
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
-		var today = moment().format('YYYY-MM-DD');
-		viewModel.selectedDate(today);
-
-		viewModel.previousDay();
-
-		equal(viewModel.selectedDate().format("YYYY-MM-DD"), moment(today).add(-1, 'days').format("YYYY-MM-DD"));
 	});
 
 	test("should call out menu list when clicking plus icon at bottom right", function () {
@@ -530,77 +510,78 @@ $(document).ready(function() {
 		equal(viewModel.absenceProbabilityEnabled(), false);
 	});
 
-	test("should hide probability after selecting 'Hide probability' ", function () {
-		//fake ajax fn to avoid ajax call for test
-		Teleopti.MyTimeWeb.Ajax = function(){
-			return {
-				Ajax: function(option){
-					//do nothing
-				}
-			};
-		};
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
-		var fakeParent = {
-			ReloadSchedule:function(){}
-		};
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(null, fakeParent, null);
-		var rawData = {
-			Date: moment().format('YYYY-MM-DD'),
-			Schedule: {
-				FixedDate: null,
-				Summary: {
-					Color: null,
-					Title: null,
-					TimeSpan: null
-				},
-				Header:{Title: null},
-				Periods: [{
-						Title: 'Phone',
-						TimeSpan: '09:30 - 16:45',
-						StartTime: moment().startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						EndTime: moment().add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
-						Summary: '7:15',
-						StyleClassName: 'color_80FF80',
-						Meeting: null,
-						StartPositionPercentage: 0.1896551724137931034482758621,
-						EndPositionPercentage: 1,
-						Color: '128,255,128',
-						IsOvertime: false
-					}]
-			},
-			RequestPermission:{
-				ShiftExchangePermission: false
-			},
-			ViewPossibilityPermission: true,
-			TimeLine: [{
-				Time: "09:15:00",
-				TimeLineDisplay: "09:15",
-				PositionPercentage: 0,
-				TimeFixedFormat: null
-			},
-			{
-				Time: "17:00:00",
-				TimeLineDisplay: "17:00",
-				PositionPercentage: 1,
-				TimeFixedFormat: null
-			}]
-		};
-		viewModel.readData(rawData);
+	//test("should hide probability after selecting 'Hide probability' ", function () {
+	//	//fake ajax fn to avoid ajax call for test
+	//	Teleopti.MyTimeWeb.Ajax = function(){
+	//		return {
+	//			Ajax: function(option){
+	//				//do nothing
+	//				console.log(option);
+	//			}
+	//		};
+	//	};
+	//	Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+	//		if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+	//	};
+	//	var fakeParent = {
+	//		ReloadSchedule:function(){}
+	//	};
+	//	var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(null, fakeParent, null);
+	//	var rawData = {
+	//		Date: moment().format('YYYY-MM-DD'),
+	//		Schedule: {
+	//			FixedDate: null,
+	//			Summary: {
+	//				Color: null,
+	//				Title: null,
+	//				TimeSpan: null
+	//			},
+	//			Header:{Title: null},
+	//			Periods: [{
+	//					Title: 'Phone',
+	//					TimeSpan: '09:30 - 16:45',
+	//					StartTime: moment().startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+	//					EndTime: moment().add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+	//					Summary: '7:15',
+	//					StyleClassName: 'color_80FF80',
+	//					Meeting: null,
+	//					StartPositionPercentage: 0.1896551724137931034482758621,
+	//					EndPositionPercentage: 1,
+	//					Color: '128,255,128',
+	//					IsOvertime: false
+	//				}]
+	//		},
+	//		RequestPermission:{
+	//			ShiftExchangePermission: false
+	//		},
+	//		ViewPossibilityPermission: true,
+	//		TimeLine: [{
+	//			Time: "09:15:00",
+	//			TimeLineDisplay: "09:15",
+	//			PositionPercentage: 0,
+	//			TimeFixedFormat: null
+	//		},
+	//		{
+	//			Time: "17:00:00",
+	//			TimeLineDisplay: "17:00",
+	//			PositionPercentage: 1,
+	//			TimeFixedFormat: null
+	//		}]
+	//	};
+	//	viewModel.readData(rawData);
 
-		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(viewModel.selectedDate().format('YYYY-MM-DD'));
-		viewModel.toggleProbabilityOptionsPanel();
-		viewModel.requestViewModel().model.onOptionSelected(constants.probabilityType.overtime);
-		viewModel.updateProbabilityData(fakeProbabilityData);
-		equal(viewModel.selectedProbabilityOptionValue(), constants.probabilityType.overtime);
-		equal(viewModel.probabilities().length, 2);
+	//	var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(viewModel.selectedDate().format('YYYY-MM-DD'));
+	//	viewModel.toggleProbabilityOptionsPanel();
+	//	viewModel.requestViewModel().model.onOptionSelected(constants.probabilityType.overtime);
+	//	viewModel.updateProbabilityData(fakeProbabilityData);
+	//	equal(viewModel.selectedProbabilityOptionValue(), constants.probabilityType.overtime);
+	//	equal(viewModel.probabilities().length, 2);
 
-		viewModel.toggleProbabilityOptionsPanel();
-		viewModel.requestViewModel().model.onOptionSelected(constants.probabilityType.none);
-		equal(viewModel.selectedProbabilityOptionValue(), constants.probabilityType.none);
-		equal(viewModel.probabilities().length, 0);
-	});
+	//	viewModel.toggleProbabilityOptionsPanel();
+	//	viewModel.requestViewModel().model.onOptionSelected(constants.probabilityType.none);
+	//	equal(viewModel.selectedProbabilityOptionValue(), constants.probabilityType.none);
+	//	equal(viewModel.probabilities().length, 0);
+	//});
 
 	test("should change probability option value to absence(1) after selecting 'Show absence probability' ", function () {
 		//fake ajax fn to avoid ajax call for test
