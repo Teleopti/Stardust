@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private ShiftTradeStatus shiftTradeStatus = ShiftTradeStatus.OkByMe;
 		private string _typeDescription;
 		private IList<IPerson> _receiverOfNotification = new List<IPerson>();
-
+		private IShiftExchangeOffer _offer;
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ShiftTradeRequest"/> class.
 		/// </summary>
@@ -404,7 +404,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public override RequestType RequestType => RequestType.ShiftTradeRequest;
 
-		public virtual IShiftExchangeOffer Offer { get; set; }
+		public virtual IShiftExchangeOffer Offer
+		{
+			get { return _offer; }
+			set { _offer = value; }
+		}
 
 		public override Description RequestPayloadDescription => new Description();
 
