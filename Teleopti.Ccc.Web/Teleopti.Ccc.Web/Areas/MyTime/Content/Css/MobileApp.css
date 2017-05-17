@@ -10,12 +10,14 @@
 		.guide-container .row .img-row {
 			margin-bottom: 30px;
 		}
-
-			.guide-container .row .img-row a {
-				width: 200px;
-				display: inline-block;
-				vertical-align: top;
-			}
+		.guide-container .row .mytime-url a {
+			word-wrap: break-word;
+		}
+		.guide-container .row .img-row a {
+			width: 200px;
+			display: inline-block;
+			vertical-align: top;
+		}
 
 				.guide-container .row .img-row a:first-child {
 					margin-bottom: 15px;
