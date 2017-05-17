@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 								_scheduledStaffingProvider.StaffingPerSkill(skills, resolution, day, useShrinkage)
 									.ToLookup(x => new {x.StartDateTime, x.Id}),
 								Forecasted =
-								_forecastedStaffingProvider.StaffingPerSkill(skills, skillDays.Where(s => s.CurrentDate == day).ToArray(),
+								_forecastedStaffingProvider.StaffingPerSkill(skills, skillDays.Where(s => s.CurrentDate >= day.AddDays(-1) && s.CurrentDate <= day.AddDays(1)).ToArray(),
 									resolution, day,
 									useShrinkage).ToLookup(x => new {x.StartTime, x.SkillId})
 							});
@@ -84,8 +84,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				from time in times
 				from skill in skills
 				let scheduleds = dayStaffingData.Scheduled[new {StartDateTime = time, Id = skill.Id.GetValueOrDefault()}]
-				let forecasteds =
-				dayStaffingData.Forecasted[new {StartTime = time, SkillId = skill.Id.GetValueOrDefault()}]
+				let forecasteds = dayStaffingData.Forecasted[new {StartTime = time, SkillId = skill.Id.GetValueOrDefault()}]
 				select new SkillStaffingData
 				{
 					Resolution = resolution,
