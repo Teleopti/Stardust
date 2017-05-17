@@ -28,12 +28,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork, Route("api/ScheduleStaffingPossibility"), HttpGet]
 		public virtual IEnumerable<PeriodStaffingPossibilityViewModel> GetIntradayAbsencePossibility(
 			[ModelBinder(typeof(DateOnlyModelBinder))] DateOnly? date,
-			StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None)
+			StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None,
+			bool returnOneWeekData = true)
 		{
 			var showForDate = date ?? _now.LocalDateOnly();
 			return
 				_staffingPossibilityViewModelFactory.CreatePeriodStaffingPossibilityViewModels(
-					date.GetValueOrDefault(showForDate), staffingPossiblityType);
+					date.GetValueOrDefault(showForDate), staffingPossiblityType, returnOneWeekData);
 		}
 	}
 }

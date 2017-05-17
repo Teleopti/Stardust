@@ -362,6 +362,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(2, possibilities.Count);
 		}
 
+		[Test]
+		public void ShouldOneDayDataIfOnlyThisDateIsTrue()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill();
+			setupWorkFlowControlSet();
+			var result = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence, false).ToList();
+			result.Count.Should().Be.EqualTo(2);
+		}
+
 		private void setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod

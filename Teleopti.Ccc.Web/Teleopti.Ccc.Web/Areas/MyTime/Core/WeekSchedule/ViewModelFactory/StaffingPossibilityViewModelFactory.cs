@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		}
 
 		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
-			StaffingPossiblityType staffingPossiblityType)
+			StaffingPossiblityType staffingPossiblityType, bool returnOneWeekData)
 		{
-			var period = getAvailablePeriod(startDate);
+			var period = getAvailablePeriod(startDate, returnOneWeekData);
 			if (!period.HasValue) return new PeriodStaffingPossibilityViewModel[] { };
 			switch (staffingPossiblityType)
 			{
@@ -61,9 +61,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return periodStaffingPossibilityViewModels;
 		}
 
-		private DateOnlyPeriod? getAvailablePeriod(DateOnly date)
+		private DateOnlyPeriod? getAvailablePeriod(DateOnly date, bool returnOneWeekData)
 		{
-			var weekPeriod = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
+			var period = date.ToDateOnlyPeriod();
+			if (returnOneWeekData)
+			{
+				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
+			}
 			var today = _now.LocalDateOnly();
 			var maxEndDate = today;
 			if (_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880))
@@ -71,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				maxEndDate = today.AddDays(ScheduleStaffingPossibilityConsts.MaxAvailableDays);
 			}
 			var availablePeriod = new DateOnlyPeriod(today, maxEndDate);
-			return availablePeriod.Intersection(weekPeriod);
+			return availablePeriod.Intersection(period);
 		}
 	}
 }

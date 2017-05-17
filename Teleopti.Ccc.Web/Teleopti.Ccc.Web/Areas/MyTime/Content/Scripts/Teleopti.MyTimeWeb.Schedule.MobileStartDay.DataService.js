@@ -22,7 +22,8 @@
 			type: "GET",
 			data: {
 				date: date,
-				staffingPossiblityType: staffingPossiblityType
+				staffingPossiblityType: staffingPossiblityType,
+				returnOneWeekData: false
 			},
 			success: function (data) {
 				successCallback && successCallback(data);
