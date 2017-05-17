@@ -170,4 +170,12 @@ ko.bindingHandlers.selected = {
     }
 };
 
-
+ko.bindingHandlers.hideTooltipAfterMouseLeave = {
+	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+		if(valueAccessor()){
+			$(element).mouseleave(function(event) {
+				$(this).tooltip('hide');
+			});
+		}
+	}
+};
