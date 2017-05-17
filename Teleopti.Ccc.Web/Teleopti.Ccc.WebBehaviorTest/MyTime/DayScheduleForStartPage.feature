@@ -164,14 +164,8 @@ Then I should see '18:00 - 19:00' 'Overtime Availability' in schedule
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
 Scenario: Could add absence report
-Given I have a shift with
-	| Field          | Value            |
-	| StartTime      | 2017-05-16 09:00 |
-	| EndTime        | 2017-05-16 18:00 |
-	| Shift category | Early            |
-When I am viewing mobile view for date '2017-04-21'
-And I click today button
+When I am viewing mobile view for today
 When I click the menu button in start page
 And I click menu menu Absence Reporting
 And I click save Absence Report
-Then I should see '09:00 - 18:00' 'Vacation' in schedule
+Then I should see '08:00 - 16:00' 'Vacation' in schedule

@@ -17,6 +17,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Navigation.GotoMobileDaySchedulePage(date);
 		}
 
+		[When(@"I am viewing mobile view for today")]
+		public void WhenIAmViewingMobileViewForToday()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoMobileDaySchedulePage(DateTime.Now.Date);
+		}
+
 		[Then(@"I should see my day view schedule with")]
 		public void ThenIShouldSeeMyDayViewScheduleWith(Table table)
 		{
