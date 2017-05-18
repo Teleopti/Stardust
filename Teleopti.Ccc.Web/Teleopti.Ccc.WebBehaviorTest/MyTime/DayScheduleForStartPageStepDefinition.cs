@@ -17,6 +17,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Navigation.GotoMobileDaySchedulePage(date);
 		}
 
+		[When(@"I am viewing mobile view for tomorrow")]
+		public void WhenIAmViewingMobileViewForTomorrow()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoMobileDaySchedulePage(DateTime.Now.AddDays(1));
+		}
+
+
 		[When(@"I am viewing mobile view for today")]
 		public void WhenIAmViewingMobileViewForToday()
 		{
@@ -75,6 +83,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			BrowserInteractionsJQueryExtensions.AssertVisibleUsingJQuery(Browser.Interactions, "#MobileDayView-request");
 		}
 
+		[Then(@"I should see shift trade request page on date '(.*)'")]
+		public void ThenIShouldSeeShiftTradeRequestPageOnDate(string date)
+		{
+			Browser.Interactions.AssertUrlContains("Requests/Index/ShiftTrade/" + date);
+		}
+
 		[When(@"I click the request icon")]
 		public void WhenIClickTheRequestIcon()
 		{
@@ -118,7 +132,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.ClickContaining("li>a", "Text Request");
 		}
 
-		[When(@"I input '(.*)' as subject")]
+		[When(@"I click menu Shift Trade Request")]
+		public void WhenIClickMenuShiftTradeRequest()
+		{
+			Browser.Interactions.ClickContaining("li>a", "Shift Trade Request");
+		}
+
+		[When(@"I click menu Post Shift for Trade")]
+		public void WhenIClickMenuPostShiftForTrade()
+		{
+			Browser.Interactions.ClickContaining("li>a", "Post Shift for Trade");
+		}
 
 
 		[When(@"I input '(.*)' as overtime startTime and '(.*)' as overtime endTime")]
@@ -142,11 +166,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 
-		[When(@"I click save Overtime Availability")]
-		public void WhenIClickSaveOvertimeAvailability()
-		{
-			Browser.Interactions.Click("div.mobile-start-day button.request-new-send");
-		}
+	 
 
 		[When(@"I click save Absence Report")]
 		public void WhenIClickSaveAbsenceReport()
@@ -155,14 +175,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Javascript("window.setTimeout(function(){ window.location.reload();}, 1000);");
 		}
 
-		[When(@"I click save Absence Request")]
-		public void WhenIClickSaveAbsenceRequest()
-		{
-			Browser.Interactions.Click("div.mobile-start-day button.request-new-send");
-		}
-
-		[When(@"I click save Text Request")]
-		public void WhenIClickSaveTextRequest()
+		[When(@"I click save request")]
+		public void WhenIClickSaveRequest()
 		{
 			Browser.Interactions.Click("div.mobile-start-day button.request-new-send");
 		}

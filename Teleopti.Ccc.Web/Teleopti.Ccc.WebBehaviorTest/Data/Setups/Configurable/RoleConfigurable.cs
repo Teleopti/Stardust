@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToStudentAvailability { get; set; }
 		public bool AccessToCalendarLink { get; set; }
 		public bool AccessToOvertimeAvailability { get; set; }
+		public bool AccessToPostShiftForTrade { get; set; }
+
 		public bool AccessToMyReport { get; set; }
 		public bool AccessToPreferences { get; set; }
 		public bool AccessToRealTimeAdherenceOverview { get; set; }
@@ -107,6 +109,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToViewAllGroupPages = false;
 			AccessToCalendarLink = false;
 			AccessToOvertimeAvailability = false;
+			AccessToPostShiftForTrade = false;
 			AccessToMyReport = true;
 			AccessToPreferences = true;
 			AccessToRealTimeAdherenceOverview = true;
@@ -259,6 +262,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AccessToOvertimeAvailability)
 				applicationFunctions = from f in applicationFunctions
 					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb
+					select f;
+			if (!AccessToPostShiftForTrade)
+				applicationFunctions = from f in applicationFunctions
+					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests
 					select f;
 			if (!AccessToPreferences)
 				applicationFunctions = from f in applicationFunctions

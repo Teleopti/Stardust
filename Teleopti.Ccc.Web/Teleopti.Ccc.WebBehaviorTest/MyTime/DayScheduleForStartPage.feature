@@ -10,6 +10,8 @@ Given there is a role with
 	| Field                        | Value                 |
 	| Name                         | Full access to mytime |
 	| AccessToOvertimeAvailability | true                  |
+	| AccessToPostShiftForTrade    | true                  |
+	
 	And there is a shift category with 
 	| Field | Value |
 	| Name  | Early |
@@ -20,10 +22,13 @@ Given there is a role with
 	| Color       | Red      |
 	| Requestable | true     |
 	And there is a workflow control set with
-	| Field                      | Value              |
-	| Name                       | Published schedule |
-	| Schedule published to date | 2059-02-01         |
-	| ReportableAbsence          | Vacation           |
+	| Field                       | Value              |
+	| Name                        | Published schedule |
+	| Schedule published to date  | 2059-02-01         |
+	| ReportableAbsence           | Vacation           |
+	| ShiftTradeSlidingPeriodStart| 1                  |
+	| ShiftTradeSlidingPeriodEnd  | 99                 |
+	
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2013-08-19 |
@@ -156,7 +161,7 @@ When I am viewing mobile view for date '2017-04-21'
 When I click the menu button in start page
 And I click menu Overtime Availability
 And I input '18:00' as overtime startTime and '19:00' as overtime endTime
-And I click save Overtime Availability
+And I click save request
 Then I should see '18:00 - 19:00' 'Overtime Availability' in schedule
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
@@ -173,7 +178,7 @@ When I am viewing mobile view for date '2017-04-22'
 When I click the menu button in start page
 And I click menu Absence Request
 And I input 'subject 2017-04-22' as subject and 'message 2017-04-22' as message
-And I click save Absence Request
+And I click save request
 Then I should see the request icon
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
@@ -182,5 +187,20 @@ When I am viewing mobile view for date '2017-04-23'
 When I click the menu button in start page
 And I click menu Text Request
 And I input 'subject 2017-04-23' as subject and 'message 2017-04-23' as message
-And I click save Text Request
+And I click save request
+Then I should see the request icon
+
+@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
+Scenario: Could redirect to shift trade request
+When I am viewing mobile view for date '2017-04-24'
+When I click the menu button in start page
+And I click menu Shift Trade Request
+Then I should see shift trade request page on date '20170424'
+
+@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
+Scenario: Could post shift for trade
+When I am viewing mobile view for tomorrow
+When I click the menu button in start page
+And I click menu Post Shift for Trade
+And I click save request
 Then I should see the request icon
