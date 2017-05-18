@@ -290,6 +290,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 	}
 
 	function _getTextColorBasedOnBackgroundColor(backgroundColor) {
+		if(typeof backgroundColor != 'string' || backgroundColor.length == 0) return 'black';
 		backgroundColor = backgroundColor.slice(backgroundColor.indexOf('(') + 1, backgroundColor.indexOf(')'));
 
 		var backgroundColorArr = backgroundColor.split(',');

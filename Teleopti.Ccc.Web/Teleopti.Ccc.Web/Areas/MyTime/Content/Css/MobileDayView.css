@@ -68,7 +68,12 @@
 	padding: 5px 0;
 	margin: 10px 0;
 	width: 100%;
+	display: inline-block;
 	text-align: center;
+}
+.mobile-start-day .mobile-summary-content-text {
+	letter-spacing: -1px;
+	display: inline-block;
 }
 .mobile-start-day .probability-toggle-container{
 	margin-right: 4px;

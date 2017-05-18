@@ -19,6 +19,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.selectedDateSubscription = null;
 
 	self.summaryColor = ko.observable();
+	self.textColor = ko.observable();
 	self.summaryName = ko.observable();
 	self.summaryTime = ko.observable();
 	self.dayOfWeek = ko.observable();
@@ -83,6 +84,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 		self.displayDate(moment(data.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
 		self.summaryColor(data.Schedule.Summary.Color);
+		self.textColor(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.summaryColor()));
 		self.summaryName(data.Schedule.Summary.Title);
 		self.summaryVisible(true);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);

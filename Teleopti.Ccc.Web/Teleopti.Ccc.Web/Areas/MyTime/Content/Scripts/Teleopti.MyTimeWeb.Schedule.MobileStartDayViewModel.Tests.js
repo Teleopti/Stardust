@@ -93,6 +93,42 @@ $(document).ready(function() {
 		equal(viewModel.summaryColor(), rawData.Schedule.Summary.Color);
 	});
 
+	test("should set text color to white or black according to summary color", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		var rawData = {
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: "rgb(0,128,128)",	//deep cobalt blue
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			}
+		};
+		viewModel.readData(rawData);
+
+		equal(viewModel.summaryColor(), rawData.Schedule.Summary.Color);
+		equal(viewModel.textColor(), 'white');
+
+		rawData = {
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: "rgb(159,224,35)",	//light green
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			}
+		};
+		viewModel.readData(rawData);
+
+		equal(viewModel.summaryColor(), rawData.Schedule.Summary.Color);
+		equal(viewModel.textColor(), 'black');
+	});
+
 	test("should set summary name", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 

@@ -82,19 +82,21 @@
 	</div>
 
 	<div class="mobile-start-day-body container">
-		<div class="mobile-summary-content" data-bind="style: { backgroundColor: summaryColor, color: 255 }, css: {'dayoff': isDayOff}">
-			<span data-bind="text: dayOfWeek"></span>
-			<span data-bind="visible: summaryVisible" >(</span>
-			<span data-bind="text: summaryName"></span>
-			<span data-bind="text: summaryTime"></span>
-			<span data-bind="visible: summaryVisible">)</span>
-			<!-- ko if: hasOvertime-->
-			<span>@Resources.Overtime</span>
-			<!-- /ko -->
+		<div class="mobile-summary-content" data-bind="style: { backgroundColor: summaryColor, color: textColor }, css: {'dayoff': isDayOff}">
+			<div class="mobile-summary-content-text">
+				<span data-bind="text: dayOfWeek"></span>
+				<span data-bind="visible: summaryVisible">(</span>
+				<span data-bind="text: summaryName"></span>
+				<span data-bind="text: summaryTime"></span>
+				<span data-bind="visible: summaryVisible">)</span>
+				<!-- ko if: hasOvertime-->
+				<span>@Resources.Overtime</span>
+				<!-- /ko -->
+			</div>
 
 			<!-- ko if: showProbabilityOptionsToggleIcon-->
 			<span class="probability-toggle-container pull-right">
-				<a class="btn btn-default" data-bind="click: toggleProbabilityOptionsPanel">
+				<a class="btn btn-default" data-bind="style: {color: textColor}, click: toggleProbabilityOptionsPanel">
 					<!-- ko if: loadingProbabilityData -->
 					<span><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..."></span>
 					<!-- /ko -->
