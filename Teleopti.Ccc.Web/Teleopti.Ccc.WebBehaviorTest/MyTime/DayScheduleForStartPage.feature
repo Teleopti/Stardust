@@ -10,7 +10,6 @@ Given there is a role with
 	| Field                        | Value                 |
 	| Name                         | Full access to mytime |
 	| AccessToOvertimeAvailability | true                  |
-	| AccessToPostShiftForTrade    | true                  |
 	
 	And there is a shift category with 
 	| Field | Value |
