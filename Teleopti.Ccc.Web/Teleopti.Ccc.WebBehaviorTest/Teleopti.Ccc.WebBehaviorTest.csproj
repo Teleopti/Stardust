@@ -249,6 +249,11 @@
       <DependentUpon>DayScheduleForStartPage.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\DayScheduleForStartPageStepDefinition.cs" />
+    <Compile Include="MyTime\DayScheduleProbabilityForStartPage.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DayScheduleProbabilityForStartPage.feature</DependentUpon>
+    </Compile>
     <Compile Include="MyTime\WeekScheduleStaffingProbability.feature.cs">
       <DependentUpon>WeekScheduleStaffingProbability.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1207,6 +1212,10 @@
     <None Include="MyTime\DayScheduleForStartPage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DayScheduleForStartPage.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\DayScheduleProbabilityForStartPage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>DayScheduleProbabilityForStartPage.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\WeekScheduleStaffingProbability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

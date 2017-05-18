@@ -1,7 +1,6 @@
 ﻿Feature: Day Schedule For Start Page
 	As an agent I need to see the Day schedule as start page in my mobile,
 	I need to see the summary info for today's schedule and do some actions for it, such as add absence request, overtime etc.
-	I need to see probability for both absence and overtime for a specific day,
 	I need to see count of requests and unread messages etc. for the day I choose,
 	So that I can easlily get information and make a plan just in my mobile.
 
@@ -129,89 +128,6 @@ Scenario: Should see unread messages
 	Then I should see I have '1' unread message(s)
 	When I click the message icon
 	Then I could see the message with title 'New message'
-
-Scenario: Should see the absence probability
-	Given There is a skill to monitor called 'Phone'
-	And there is queue statistics for the skill 'Phone' up until '19:00'
-	And there is forecast data for skill 'Phone' for date 'today'
-	And there are scheduled agents for 'Phone' for date 'today'
-	And 'I' have a person period with
-		| Field                | Value                |
-		| Skill                | Phone                |
-		| Start date           | 2017-01-01           |
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 09:00 |
-	| EndTime        | 18:00 |
-	| Shift category | Early            |
-	| Activity       | activity1        |
-	When I am viewing mobile view for today
-	And I click show probability toggle
-	And I click show absence probability
-	Then I should see the probability in schedule
-	
-Scenario: Should see the overtime probability
-	Given There is a skill to monitor called 'Phone'
-	And there is queue statistics for the skill 'Phone' up until '19:00'
-	And there is forecast data for skill 'Phone' for date 'today'
-	And there are scheduled agents for 'Phone' for date 'today'
-	And 'I' have a person period with
-		| Field                | Value                |
-		| Skill                | Phone                |
-		| Start date           | 2017-01-01           |
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 09:00 |
-	| EndTime        | 18:00 |
-	| Shift category | Early            |
-	| Activity       | activity1        |
-	When I am viewing mobile view for today
-	And I click show probability toggle
-	And I click show overtime probability
-	Then I should see the probability in schedule
-	
-Scenario: Should hide staffing probability
-	Given There is a skill to monitor called 'Phone'
-	And there is queue statistics for the skill 'Phone' up until '19:00'
-	And there is forecast data for skill 'Phone' for date 'today'
-	And there are scheduled agents for 'Phone' for date 'today'
-	And 'I' have a person period with
-		| Field                | Value                |
-		| Skill                | Phone                |
-		| Start date           | 2017-01-01           |
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 09:00 |
-	| EndTime        | 18:00 |
-	| Shift category | Early            |
-	| Activity       | activity1        |
-	When I am viewing mobile view for today
-	And I click show probability toggle
-	And I click show overtime probability
-	And I click show probability toggle
-	And I click hide probability
-	Then I should not see the probability in schedule
-
-Scenario: Probability setting should be kept when date changed
-	Given There is a skill to monitor called 'Phone'
-	And there is queue statistics for the skill 'Phone' up until '19:00'
-	And there is forecast data for skill 'Phone' for date 'today'
-	And there are scheduled agents for 'Phone' for date 'today'
-	And 'I' have a person period with
-		| Field                | Value                |
-		| Skill                | Phone                |
-		| Start date           | 2017-01-01           |
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 09:00 |
-	| EndTime        | 18:00 |
-	| Shift category | Early            |
-	| Activity       | activity1        |
-	When I am viewing mobile view for today
-	And I click show probability toggle
-	And I click show overtime probability
-	And I change date to tomorrow
-	Then I should see the selected probability toggle is Overtime Probability
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
 Scenario: Could add overtime Availability
