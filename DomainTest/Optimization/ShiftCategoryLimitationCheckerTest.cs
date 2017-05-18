@@ -177,18 +177,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _shiftCategoryLimitation.Weekly = true;
             _shiftCategoryLimitation.MaxNumberOf = 1;
-            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(new SchedulingOptions())
-                                                     	{
-                                                     		SchedulingOptions = {UseShiftCategoryLimitations = false}
-                                                     	};
+	        var preferences = new SchedulingOptions
+		        {UseShiftCategoryLimitations = false};
 
             mockExpections();
 
 	        using (_mocks.Playback())
 	        {
-		        _target.SetBlockedShiftCategories(preferences.SchedulingOptions, _person, new DateOnly(2010, 1, 1));
+		        _target.SetBlockedShiftCategories(preferences, _person, new DateOnly(2010, 1, 1));
 
-		        Assert.AreEqual(0, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
+		        Assert.AreEqual(0, preferences.NotAllowedShiftCategories.Count);
 	        }
         }
 
@@ -197,18 +195,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _shiftCategoryLimitation.Weekly = true;
             _shiftCategoryLimitation.MaxNumberOf = 1;
-            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(new SchedulingOptions())
-                                                     	{
-                                                     		SchedulingOptions = {UseShiftCategoryLimitations = true}
-                                                     	};
+	        var preferences = new SchedulingOptions
+		        { UseShiftCategoryLimitations = true };
 
-            mockExpections();
+			mockExpections();
 
 	        using (_mocks.Playback())
 	        {
-		        _target.SetBlockedShiftCategories(preferences.SchedulingOptions, _person, new DateOnly(2010, 1, 1));
+		        _target.SetBlockedShiftCategories(preferences, _person, new DateOnly(2010, 1, 1));
 
-		        Assert.AreEqual(1, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
+		        Assert.AreEqual(1, preferences.NotAllowedShiftCategories.Count);
 	        }
         }
 
@@ -217,18 +213,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _shiftCategoryLimitation.Weekly = false;
             _shiftCategoryLimitation.MaxNumberOf = 1;
-            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(new SchedulingOptions())
-                                                     	{
-                                                     		SchedulingOptions = {UseShiftCategoryLimitations = true}
-                                                     	};
+	        var preferences = new SchedulingOptions
+		        { UseShiftCategoryLimitations = true };
 
-            mockExpections();
+			mockExpections();
 
         	using (_mocks.Playback())
         	{
-				_target.SetBlockedShiftCategories(preferences.SchedulingOptions, _person, new DateOnly(2010, 1, 1));
+				_target.SetBlockedShiftCategories(preferences, _person, new DateOnly(2010, 1, 1));
 
-				Assert.AreEqual(1, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
+				Assert.AreEqual(1, preferences.NotAllowedShiftCategories.Count);
         	}
         }
 

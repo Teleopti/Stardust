@@ -1198,7 +1198,6 @@
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFilterTest.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHelperTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSetZeroValues.cs" />
-    <Compile Include="ResourceCalculation\ResourceOptimizerPreferencesTest.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceTest.cs" />
     <Compile Include="RealTimeAdherence\RtaMapTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorTest.cs" />

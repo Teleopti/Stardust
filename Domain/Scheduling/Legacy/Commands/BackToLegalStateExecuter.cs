@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_doFullResourceOptimizationOneTime = doFullResourceOptimizationOneTime;
 		}
 
-		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
+		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
 			IOptimizationPreferences optimizationPreferences, 
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
@@ -74,15 +74,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_scheduleMatrixOriginalStateContainerCreator.CreateScheduleMatrixOriginalStateContainers(schedulerStateHolder.Schedules, selectedScheduleDays, selectedPeriod.Value);
 				IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
 				_scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
-					backgroundWorker, displayList[0], optimizerOriginalPreferences.SchedulingOptions,
+					backgroundWorker, displayList[0], schedulingOptions,
 					dayOffOptimizationPreferenceProvider, optimizationPreferences);
 
 				_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
-					optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, false);
+					schedulingOptions.ConsiderShortBreaks, false);
 				var matrixList = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedScheduleDays);
 
 				backToLegalState(matrixList, schedulerStateHolder, optimizationPreferences, backgroundWorker,
-					optimizerOriginalPreferences.SchedulingOptions, selectedPeriod.Value);
+					schedulingOptions, selectedPeriod.Value);
 			}
 
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;

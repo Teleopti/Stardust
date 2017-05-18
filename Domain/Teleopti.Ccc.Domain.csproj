@@ -621,7 +621,6 @@
     <Compile Include="InterfaceLegacy\Domain\IOpenAbsenceRequestPeriodExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOpenAbsenceRequestPeriodProjection.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOptimizationPreferences.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IOptimizerOriginalPreferences.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOptionalColumn.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOptionalColumnValue.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOriginator.cs" />
@@ -2821,7 +2820,6 @@
     <Compile Include="ResourceCalculation\AffectedPersonSkillService.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsCalculator.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsData.cs" />
-    <Compile Include="ResourceCalculation\OptimizerOriginalPreferences.cs" />
     <Compile Include="ResourceCalculation\PersonSkillPeriodsDataHolderManager.cs" />
     <Compile Include="ResourceCalculation\PopulationStatisticsData.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusChecker.cs" />

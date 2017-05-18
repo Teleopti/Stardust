@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private SchedulerMessageBrokerHandler _schedulerMessageBrokerHandler;
 		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
 		private readonly ContextMenuStrip _contextMenuSkillGrid = new ContextMenuStrip();
-		private readonly IOptimizerOriginalPreferences _optimizerOriginalPreferences;
+		private readonly SchedulingOptions _schedulingOptions;
 		private readonly IOptimizationPreferences _optimizationPreferences;
 		private readonly IBudgetPermissionService _budgetPermissionService;
 		private readonly IRestrictionExtractor _restrictionExtractor;
@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu
 			};
-			_optimizerOriginalPreferences = new OptimizerOriginalPreferences(new SchedulingOptions());
+			_schedulingOptions = new SchedulingOptions();
 			_optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
 			_daysOffPreferences = _container.Resolve<IDaysOffPreferences>();
 			_overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
@@ -1125,7 +1125,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				return;
 
 			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
-			using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions,
+			using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 					daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories,
 					true, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptions",
 					_schedulerState.CommonStateHolder.ActiveActivities))
@@ -2247,7 +2247,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (!_scheduleOptimizerHelper.WorkShiftFinderResultHolder.LastResultIsSuccessful)
 			{
 				var workShiftFinderResultHolder = _scheduleOptimizerHelper.WorkShiftFinderResultHolder;
-				if (_optimizerOriginalPreferences.SchedulingOptions.ShowTroubleshot ||
+				if (_schedulingOptions.ShowTroubleshot ||
 					workShiftFinderResultHolder.AlwaysShowTroubleshoot)
 					new SchedulingResult(workShiftFinderResultHolder, true, _schedulerState.CommonNameDescription).Show(this);
 				else
@@ -3015,8 +3015,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (!selectedSchedules.Any())
 					return;
 
-				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff;
-				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption =
+				_schedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff;
+				_schedulingOptions.WorkShiftLengthHintOption =
 					WorkShiftLengthHintOption.AverageWorkTime;
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
 				try
@@ -3031,7 +3031,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						return;
 					}
 
-					using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions,
+					using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 							daysOffPreferences,
 							_schedulerState.CommonStateHolder.ActiveShiftCategories,
 							false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags,
@@ -3068,17 +3068,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (!selectedSchedules.Any())
 					return;
 
-				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.HourlyStaff;
-				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
+				_schedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.HourlyStaff;
+				_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
 				using (
-					var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions,
+					var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 						new DaysOffPreferences(), _schedulerState.CommonStateHolder.ActiveShiftCategories,
 						false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptionsActivities",
 						_schedulerState.CommonStateHolder.ActiveActivities))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
-						_optimizerOriginalPreferences.SchedulingOptions.OnlyShiftsWhenUnderstaffed = true;
+						_schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
 						Refresh();
 						startBackgroundScheduleWork(_backgroundWorkerScheduling,
 							new SchedulingAndOptimizeArgument(selectedSchedules), true);
@@ -3196,10 +3196,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
 			var selectedPeriod = new PeriodExtractorFromScheduleParts().ExtractPeriod(scheduleDays).Value;
-			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
-			_optimizerOriginalPreferences.SchedulingOptions.NotAllowedShiftCategories.Clear();
+			turnOffCalculateMinMaxCacheIfNeeded(_schedulingOptions);
+			_schedulingOptions.NotAllowedShiftCategories.Clear();
 
-			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
+			AdvanceLoggingService.LogSchedulingInfo(_schedulingOptions,
 				scheduleDays.Select(x => x.Person).Distinct().Count(),
 				selectedPeriod.DayCount(),
 				() => runBackgroundWorkerScheduling(e));
@@ -3221,7 +3221,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var desktopScheduling = _container.Resolve<DesktopScheduling>();
 				var selectedPeriod = new PeriodExtractorFromScheduleParts().ExtractPeriod(argument.SelectedScheduleDays).Value;
 				var selectedAgents = argument.SelectedScheduleDays.Select(x => x.Person).Distinct();
-				desktopScheduling.Execute(_optimizerOriginalPreferences.SchedulingOptions, new BackgroundWorkerWrapper(_backgroundWorkerScheduling), selectedAgents, selectedPeriod,
+				desktopScheduling.Execute(_schedulingOptions, new BackgroundWorkerWrapper(_backgroundWorkerScheduling), selectedAgents, selectedPeriod,
 					_optimizationPreferences, _daysOffPreferences);
 			}
 		}
@@ -3416,7 +3416,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void backgroundWorkerOvertimeSchedulingDoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			var schedulingOptions = _optimizerOriginalPreferences.SchedulingOptions;
+			var schedulingOptions = _schedulingOptions;
 			schedulingOptions.DayOffTemplate = _schedulerState.CommonStateHolder.DefaultDayOffTemplate;
 			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
@@ -3515,7 +3515,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (argument.OptimizationMethod == OptimizationMethod.BackToLegalState)
 			{
 				_container.Resolve<BackToLegalStateExecuter>().Execute(
-					_optimizerOriginalPreferences,
+					_schedulingOptions,
 					new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
 					_schedulerState,
 					argument.SelectedScheduleDays,
