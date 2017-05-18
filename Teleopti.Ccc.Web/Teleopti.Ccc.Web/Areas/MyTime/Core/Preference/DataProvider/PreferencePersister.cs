@@ -52,10 +52,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		public IDictionary<DateOnly, PreferenceDayViewModel> PersistMultiDays(MultiPreferenceDaysInput input)
 		{
 			var ret = new Dictionary<DateOnly, PreferenceDayViewModel>();
-
-		    foreach (var date in input.Dates)
+			if (input?.Dates == null || !input.Dates.Any())
 			{
-				var dayInput = new PreferenceDayInput()
+				return ret;
+			}
+
+			foreach (var date in input.Dates)
+			{
+				var dayInput = new PreferenceDayInput
 				{
 					PreferenceId = input.PreferenceId,
 					TemplateName = input.TemplateName,
@@ -76,8 +80,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 					MinimumWorkTime = input.MinimumWorkTime,
 					MaximumWorkTime = input.MaximumWorkTime
 				};
-			    var preferenceVM = Persist(dayInput);
-				ret.Add(date, preferenceVM);
+				var preferenceVm = Persist(dayInput);
+				ret.Add(date, preferenceVm);
 			}
 
 			return ret;
@@ -90,16 +94,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		private static void clearExtendedAndMustHave(IPreferenceDay preferenceDay)
 		{
-			if (preferenceDay.Restriction != null)
-			{
-				preferenceDay.Restriction.StartTimeLimitation = new StartTimeLimitation();
-				preferenceDay.Restriction.EndTimeLimitation = new EndTimeLimitation();
-				preferenceDay.Restriction.WorkTimeLimitation = new WorkTimeLimitation();
-				preferenceDay.Restriction.MustHave = false;
-				preferenceDay.TemplateName = null;
-			}
-		}
+			if (preferenceDay.Restriction == null) { return; }
 
+			preferenceDay.Restriction.StartTimeLimitation = new StartTimeLimitation();
+			preferenceDay.Restriction.EndTimeLimitation = new EndTimeLimitation();
+			preferenceDay.Restriction.WorkTimeLimitation = new WorkTimeLimitation();
+			preferenceDay.Restriction.MustHave = false;
+			preferenceDay.TemplateName = null;
+		}
 
 		private IList<IPreferenceDay> deleteOrphanPreferenceDays(IList<IPreferenceDay> preferenceDays)
 		{
@@ -131,7 +133,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 	        }
 	        return preferenceDayViewModel;
-
 	    }
 	}
 }
