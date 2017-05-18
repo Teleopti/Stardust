@@ -15841,7 +15841,7 @@ Do you want to participate?</value>
     <comment>Used in Web resource planner</comment>
   </data>
   <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
-    <value>Target of {0} contract time is not fulfilled</value>
+    <value>Contract time target ({0}) is not fulfilled</value>
     <comment>Used in Web resource planner </comment>
   </data>
   <data name="EmailSkillSelected" xml:space="preserve">

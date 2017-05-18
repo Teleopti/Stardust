@@ -31928,7 +31928,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target of {0} contract time is not fulfilled.
+        ///   Looks up a localized string similar to Contract time target ({0}) is not fulfilled.
         /// </summary>
         public static string TargetScheduleTimeNotFullfilled {
             get {
