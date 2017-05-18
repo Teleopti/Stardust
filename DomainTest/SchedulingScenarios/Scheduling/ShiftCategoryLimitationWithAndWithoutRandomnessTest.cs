@@ -20,14 +20,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	[TestFixture(true, true, true)]
-	[TestFixture(false, true, true)]
-	[TestFixture(true, false, true)]
-	[TestFixture(false, false, true)]
-	[TestFixture(true, true, false)]
-	[TestFixture(false, true, false)]
-	[TestFixture(true, false, false)]
-	[TestFixture(false, false, false)]
+	[TestFixture(true, true)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(false, false)]
 	public class ShiftCategoryLimitationWithAndWithoutRandomnessTest : SchedulingScenario, ISetup
 	{
 		private readonly bool _fakeRandomness;

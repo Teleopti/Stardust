@@ -62,42 +62,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
         [Test]
-        public void ShouldReturnSamePeriodAsSchedulePeriodIfBlockFinderTypeIsSchedulePeriod()
-        {
-
-			using (_mock.Record())
-			{
-				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date)).Return(new List<IScheduleMatrixPro> { _matrixPro });
-				Expect.Call(_matrixPro.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date, _date));
-			}
-
-			using (_mock.Playback())
-			{
-                DateOnlyPeriod result = _target.ExtractBlockInfo(_date, _teamInfo, new SchedulePeriodBlockFinder()).BlockPeriod;
-				Assert.AreEqual(new DateOnlyPeriod(_date, _date), result);
-			}
-      
-        }
-
-		[Test]
-		public void ShouldReturnCorrectBlockPeriodIfMoreThanOneMatrixIsOnTheMembersInTeamInfo()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date.AddDays(1))).Return(new List<IScheduleMatrixPro> { _matrixPro, _matrixPro2 });
-				Expect.Call(_matrixPro.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(1)));
-			}
-
-			using (_mock.Playback())
-			{
-                DateOnlyPeriod result = _target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, new SchedulePeriodBlockFinder()).BlockPeriod;
-				Assert.AreEqual(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(1)), result);
-			}
-		}
-
-        [Test]
         public void ShouldReturnNullIfIfNoMatrixFound()
         {
             using (_mock.Record())
