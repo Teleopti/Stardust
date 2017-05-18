@@ -159,10 +159,11 @@
 
 .weekview-timeline {
 	width: 31px;
-	height: 792px;
+	height: 796px;
 	background: transparent;
 	border-right: 1px solid #dfdfdf;
 	position: relative;
+	margin-bottom: 20px;
 }
 
 .weekview-timeline-label {
