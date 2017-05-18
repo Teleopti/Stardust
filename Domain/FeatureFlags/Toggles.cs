@@ -163,7 +163,6 @@
 		ResourcePlanner_TeamBlockDayOffForIndividuals_37998,
 		ResourcePlanner_CascadingSkillsGUI_40018,
 		ResourcePlanner_HideSkillPrioSliders_41312,
-		ResourcePlanner_TeamBlockPeriod_42836,
 		ResourcePlanner_CategorizeShiftSelection_xx,
 		ResourcePlanner_EvenRelativeDiff_44091,
 		ResourcePlanner_MasterActivityBaseLayer_44134,

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class ReturnPeriodBasedOnDayBlockFinder : IBlockFinder
 	{
-		public IBlockInfo Find(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly blockOnDate, bool TEMPTOGGLE)
+		public IBlockInfo Find(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly blockOnDate)
 		{
 			return new BlockInfo(new DateOnlyPeriod(blockOnDate, blockOnDate));
 		}

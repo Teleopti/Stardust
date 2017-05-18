@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		public ShiftCategoryLimitationWithAndWithoutRandomnessTest(bool resourcePlannerTeamBlockPeriod42836, bool resourcePlannerMergeTeamblockClassicScheduling44289, bool fakeRandomness) : base(resourcePlannerTeamBlockPeriod42836, resourcePlannerMergeTeamblockClassicScheduling44289)
+		public ShiftCategoryLimitationWithAndWithoutRandomnessTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool fakeRandomness) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
 		{
 			_fakeRandomness = fakeRandomness;
 		}

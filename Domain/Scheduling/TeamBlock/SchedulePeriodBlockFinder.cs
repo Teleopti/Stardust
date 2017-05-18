@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -8,20 +6,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class SchedulePeriodBlockFinder : IBlockFinder
 	{
-		public IBlockInfo Find(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly blockOnDate, bool TEMPTOGGLE)
+		public IBlockInfo Find(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly blockOnDate)
 		{
-			if (!TEMPTOGGLE)
-				return findRemoveMe(matrixes);
-
 			return new BlockInfoFactory().Execute(matrixes, blockOnDate, 
 				(scheduleMatrixPro, date) => scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod);
-		}
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamBlockPeriod_42836)]
-		private static IBlockInfo findRemoveMe(IEnumerable<IScheduleMatrixPro> matrixes)
-		{
-			var roleModelMatrix = matrixes.First();
-			return new BlockInfo(roleModelMatrix.SchedulePeriod.DateOnlyPeriod);
 		}
 	}
 }
