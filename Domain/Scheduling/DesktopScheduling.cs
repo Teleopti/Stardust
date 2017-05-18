@@ -24,12 +24,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_resouceResourceOptimizationHelper = resouceResourceOptimizationHelper;
 		}
 
-		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
+		public void Execute(SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences,
 			IDaysOffPreferences dayOffsPreferences)
 		{
-			_scheduleExecutor.Execute(optimizerOriginalPreferences, backgroundWorker, selectedAgents, selectedPeriod,
+			_scheduleExecutor.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod,
 				optimizationPreferences, true, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
 
 			var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(_schedulerStateHolder().ConsiderShortBreaks, false);

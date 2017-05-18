@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public interface IScheduleExecutor
 	{
-		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
+		void Execute(SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
@@ -77,14 +77,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		[TestLog]
-		public virtual void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
+		public virtual void Execute(SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			var schedulingOptions = optimizerOriginalPreferences.SchedulingOptions;
 			schedulingOptions.DayOffTemplate = schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate;
 			var lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;

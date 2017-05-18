@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent }, Enumerable.Empty<IPersonAssignment>(), new[] { skillDay });
 			var schedulingOptions = new SchedulingOptions { UseAvailability = true };
 
-			Target.Execute(new OptimizerOriginalPreferences(schedulingOptions),
+			Target.Execute(schedulingOptions,
 				new NoSchedulingProgress(),
 				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
 				new OptimizationPreferences(),

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), agents, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
 			
-			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),
+			Target.Execute(new SchedulingOptions(),
 				new NoSchedulingProgress(), 
 				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
 				new OptimizationPreferences(),
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			if (resourceCalculationHasBeenMade)
 				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 
-			Target.Execute(new OptimizerOriginalPreferences(options),
+			Target.Execute(options,
 				new NoSchedulingProgress(),
 				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
 				new OptimizationPreferences(),
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneDay(date);
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent}, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
 
-			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),
+			Target.Execute(new SchedulingOptions(),
 				new NoSchedulingProgress(),
 				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
 				new OptimizationPreferences(),
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			agent.SchedulePeriod(date).SetDaysOff(2);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IScheduleData>(), skillDaysA.Union(skillDaysB));
 
-			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),
+			Target.Execute(new SchedulingOptions(),
 				new NoSchedulingProgress(),
 				new[] {agent},
 				period,

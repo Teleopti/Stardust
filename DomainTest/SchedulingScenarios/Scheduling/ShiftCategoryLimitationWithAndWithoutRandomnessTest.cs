@@ -66,18 +66,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				},
 				skillDays
 			);
-			var optimizerOriginalPreferences = new OptimizerOriginalPreferences
+			var schedulingOptions = new SchedulingOptions
 			{
-				SchedulingOptions =
-				{
-					UseBlock = true,
-					UseShiftCategoryLimitations = true,
-					BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
-					BlockSameShiftCategory = true
-				}
+				UseBlock = true,
+				UseShiftCategoryLimitations = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
+				BlockSameShiftCategory = true
 			};
 
-			Target.Execute(optimizerOriginalPreferences, new NoSchedulingProgress(), new[] { agent }, period, new OptimizationPreferences(), null);
+			Target.Execute(schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period, new OptimizationPreferences(), null);
 
 			stateholder.Schedules[agent]
 				.ScheduledDayCollection(period)
