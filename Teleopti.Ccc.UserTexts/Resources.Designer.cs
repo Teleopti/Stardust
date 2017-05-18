@@ -34981,7 +34981,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View QR Code for Configuration.
+        ///   Looks up a localized string similar to View Guide for WFM App.
         /// </summary>
         public static string ViewQRCodeForConfiguration {
             get {

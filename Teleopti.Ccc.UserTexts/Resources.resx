@@ -15577,8 +15577,8 @@ Do you want to participate?</value>
     <comment>Tips of QRCode on settings page in MyTime web</comment>
   </data>
   <data name="ViewQRCodeForConfiguration" xml:space="preserve">
-    <value>View QR Code for Configuration</value>
-    <comment>Used in MyTimeWeb, permission of viewing the QR code  to configure mobile App</comment>
+    <value>View Guide for WFM App</value>
+    <comment>Used in MyTimeWeb, permission of viewing the guide view for mobile App</comment>
   </data>
   <data name="MonitorUpToXAgents" xml:space="preserve">
     <value>Monitor up to 50 agents</value>

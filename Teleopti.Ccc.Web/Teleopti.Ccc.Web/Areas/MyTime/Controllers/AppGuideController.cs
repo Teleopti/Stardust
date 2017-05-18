@@ -1,11 +1,13 @@
 ﻿using System.Web.Mvc;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Web.Areas.MyTime.Models;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.AppGuide;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration)]
 	public class AppGuideController : Controller
 	{
 		private readonly ICurrentTenant _currentTenant;
