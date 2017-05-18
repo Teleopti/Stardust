@@ -6,38 +6,28 @@ namespace Teleopti.Ccc.Domain.Common
 {
     public class PersonProvider : IPersonProvider
     {
-        private readonly IList<IPerson> _innerPersons = new List<IPerson>();
-        private readonly IPersonRepository _personRepository;
+        private readonly List<IPerson> _innerPersons = new List<IPerson>();
 
-        public PersonProvider(IEnumerable<IPerson> persons)
+	    public PersonProvider(IEnumerable<IPerson> persons)
         {
             SetInnerPersons(persons);
         }
 
         public PersonProvider(IPersonRepository personRepository)
         {
-            _personRepository = personRepository;
+            PersonRepository = personRepository;
         }
 
-        protected IList<IPerson> InnerPersons
+        protected IList<IPerson> InnerPersons => _innerPersons;
+
+	    protected void SetInnerPersons(IEnumerable<IPerson> persons)
         {
-            get { return _innerPersons; }
+			_innerPersons.AddRange(persons);
         }
 
-        protected void SetInnerPersons(IEnumerable<IPerson> persons)
-        {
-            foreach (IPerson person in persons)
-            {
-                _innerPersons.Add(person);
-            }
-        }
+        protected IPersonRepository PersonRepository { get; }
 
-        protected IPersonRepository PersonRepository
-        {
-            get { return _personRepository; }
-        }
-
-        public virtual IList<IPerson> GetPersons()
+	    public virtual IList<IPerson> GetPersons()
         {
             if(PersonRepository!=null)
                 SetInnerPersons(PersonRepository.FindAllSortByName());

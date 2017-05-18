@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			{
 				jobLockTimer.Start();
 				_jobStartTimeRepository.UpdateLockTimestamp(@event.LogOnBusinessUnitId);
-				var period = new DateTimePeriod(_now.UtcDateTime().AddDays(-1).AddHours(-1), _now.UtcDateTime().AddDays(@event.Days).AddHours(1));
+				var now = _now.UtcDateTime();
+				var period = new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(@event.Days).AddHours(1));
 
 				_updateStaffingLevelReadModel.Update(period);
 
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 			finally
 			{
+				jobLockTimer.Elapsed -= updateJobLock;
 				jobLockTimer.Dispose();
 			}
 		}
