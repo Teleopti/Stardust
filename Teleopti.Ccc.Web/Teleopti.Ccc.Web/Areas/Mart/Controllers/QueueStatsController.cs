@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Http;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 using Teleopti.Ccc.Web.Filters;
@@ -17,12 +16,10 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 	public class QueueStatsController : ApiController
 	{
 		private readonly IQueueStatHandler _queueStatHandler;
-		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 
-		public QueueStatsController(IQueueStatHandler queueStatHandler, IMessagePopulatingServiceBusSender serviceBusSender)
+		public QueueStatsController(IQueueStatHandler queueStatHandler)
 		{
 			_queueStatHandler = queueStatHandler;
-			_serviceBusSender = serviceBusSender;
 		}
 
 		[Route("api/Mart/QueueStats/PostIntervalsCompleted")]
