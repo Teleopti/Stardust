@@ -189,6 +189,53 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertAnyContains("span.displayblock", timeSpan);
 		}
 
+		[When(@"I click show probability toggle")]
+		public void WhenIClickShowProbabilityToggle()
+		{
+			Browser.Interactions.Click("span.probability-toggle-container>a");
+		}
+
+		[When(@"I click show absence probability")]
+		public void WhenIClickShowAbsenceProbability()
+		{
+			Browser.Interactions.Click("input[name='probabilityRadios'][value='1']");
+		}
+
+		[When(@"I click show overtime probability")]
+		public void WhenIClickShowOvertimeProbability()
+		{
+			Browser.Interactions.Click("input[name='probabilityRadios'][value='2']");
+		}
+
+		[When(@"I click hide probability")]
+		public void WhenIClickHideProbability()
+		{
+			Browser.Interactions.Click("input[name='probabilityRadios'][value='0']");
+		}
+
+		[Then(@"I should see the probability in schedule")]
+		public void ThenIShouldSeeTheProbabilityInSchedule()
+		{
+			Browser.Interactions.AssertExists("div.probability-cell");
+		}
+
+		[Then(@"I should not see the probability in schedule")]
+		public void ThenIShouldNotSeeTheProbabilityInSchedule()
+		{
+			Browser.Interactions.AssertNotExists("div.mobile-schedule-container", "div.probability-cell");
+		}
+
+		[When(@"I change date to tomorrow")]
+		public void WhenIChangeDateToTomorrow()
+		{
+			Browser.Interactions.Click("button>i.glyphicon-chevron-right");
+		}
+
+		[Then(@"I should see the selected probability toggle is Overtime Probability")]
+		public void ThenIShouldSeeTheSelectedProbabilityToggleIsOvertimeProbability()
+		{
+			Browser.Interactions.AssertExists("span.overtime-probability-label");
+		}
 
 		public class MobileDayScheduleContentItem
 		{

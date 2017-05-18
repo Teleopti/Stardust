@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"there is forecast data for skill '(.*)' for date '(.*)'")]
 		public void GivenThereIsForecastDataForSkillForDate(string skillName, string date)
 		{
-			var theDate = DateTime.Parse(date);
+			var theDate = date == "today" ? DateTime.Now.Date : DateTime.Parse(date);
 
 			DataMaker.Data().Apply(new ForecastConfigurable(skillName, theDate));
 		}
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"there are scheduled agents for '(.*)' for date '(.*)'")]
 		public void GivenThereAreScheduledAgentsForForDate(string skill, string date)
 		{
-			var theDate = DateTime.Parse(date);
+			var theDate = date == "today" ? DateTime.Now.Date : DateTime.Parse(date);
 			DataMaker.Data().Apply(new ScheduleForecastSkillReadModelConfigurable(skill, theDate));
 		}
 

@@ -21,13 +21,15 @@ Given there is a role with
 	| Color       | Red      |
 	| Requestable | true     |
 	And there is a workflow control set with
-	| Field                       | Value              |
-	| Name                        | Published schedule |
-	| Schedule published to date  | 2059-02-01         |
-	| ReportableAbsence           | Vacation           |
-	| ShiftTradeSlidingPeriodStart| 1                  |
-	| ShiftTradeSlidingPeriodEnd  | 99                 |
-	
+	| Field                        | Value              |
+	| Name                         | Published schedule |
+	| Schedule published to date   | 2059-02-01         |
+	| ReportableAbsence            | Vacation           |
+	| ShiftTradeSlidingPeriodStart | 1                  |
+	| ShiftTradeSlidingPeriodEnd   | 99                 |
+	| AvailableAbsence             | Vacation           |
+	| StaffingCheck                | intraday           |
+
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2013-08-19 |
@@ -128,31 +130,88 @@ Scenario: Should see unread messages
 	When I click the message icon
 	Then I could see the message with title 'New message'
 
-@ignore
 Scenario: Should see the absence probability
-	When I'm viewing at '2017-04-21'
-	And I click show probability button and choose to show absence probability
-	Then I should see the absnece probability in schedule
+	Given There is a skill to monitor called 'Phone'
+	And there is queue statistics for the skill 'Phone' up until '19:00'
+	And there is forecast data for skill 'Phone' for date 'today'
+	And there are scheduled agents for 'Phone' for date 'today'
+	And 'I' have a person period with
+		| Field                | Value                |
+		| Skill                | Phone                |
+		| Start date           | 2017-01-01           |
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 09:00 |
+	| EndTime        | 18:00 |
+	| Shift category | Early            |
+	| Activity       | activity1        |
+	When I am viewing mobile view for today
+	And I click show probability toggle
+	And I click show absence probability
+	Then I should see the probability in schedule
 	
-@ignore
 Scenario: Should see the overtime probability
-	When I'm viewing at '2017-04-21'
-	And I click show probability button and choose to show overtime probability
-	Then I should see the overtime probability in schedule
+	Given There is a skill to monitor called 'Phone'
+	And there is queue statistics for the skill 'Phone' up until '19:00'
+	And there is forecast data for skill 'Phone' for date 'today'
+	And there are scheduled agents for 'Phone' for date 'today'
+	And 'I' have a person period with
+		| Field                | Value                |
+		| Skill                | Phone                |
+		| Start date           | 2017-01-01           |
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 09:00 |
+	| EndTime        | 18:00 |
+	| Shift category | Early            |
+	| Activity       | activity1        |
+	When I am viewing mobile view for today
+	And I click show probability toggle
+	And I click show overtime probability
+	Then I should see the probability in schedule
 	
-@ignore
 Scenario: Should hide staffing probability
-	And I could see absence probability
-	When I'm viewing at '2017-04-21'
-	And I click show probability button and choose to hide staffing probability
-	Then I should not see the absence probability in schedule
+	Given There is a skill to monitor called 'Phone'
+	And there is queue statistics for the skill 'Phone' up until '19:00'
+	And there is forecast data for skill 'Phone' for date 'today'
+	And there are scheduled agents for 'Phone' for date 'today'
+	And 'I' have a person period with
+		| Field                | Value                |
+		| Skill                | Phone                |
+		| Start date           | 2017-01-01           |
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 09:00 |
+	| EndTime        | 18:00 |
+	| Shift category | Early            |
+	| Activity       | activity1        |
+	When I am viewing mobile view for today
+	And I click show probability toggle
+	And I click show overtime probability
+	And I click show probability toggle
+	And I click hide probability
+	Then I should not see the probability in schedule
 
-@ignore
 Scenario: Probability setting should be kept when date changed
-	And I could see absence probability for date '2017-04-21'
-	When I'm viewing at '2017-04-22'
-	And change date back to '2017-04-21'
-	Then I should see the absence probability in schedule
+	Given There is a skill to monitor called 'Phone'
+	And there is queue statistics for the skill 'Phone' up until '19:00'
+	And there is forecast data for skill 'Phone' for date 'today'
+	And there are scheduled agents for 'Phone' for date 'today'
+	And 'I' have a person period with
+		| Field                | Value                |
+		| Skill                | Phone                |
+		| Start date           | 2017-01-01           |
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 09:00 |
+	| EndTime        | 18:00 |
+	| Shift category | Early            |
+	| Activity       | activity1        |
+	When I am viewing mobile view for today
+	And I click show probability toggle
+	And I click show overtime probability
+	And I change date to tomorrow
+	Then I should see the selected probability toggle is Overtime Probability
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
 Scenario: Could add overtime Availability
