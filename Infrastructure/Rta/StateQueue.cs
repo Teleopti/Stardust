@@ -1,4 +1,5 @@
 using System.Linq;
+using NHibernate;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"INSERT INTO RTA.StateQueue VALUES (:model)")
-				.SetParameter("model", _serializer.SerializeObject(model))
+				.SetParameter("model", _serializer.SerializeObject(model), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 

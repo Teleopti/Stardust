@@ -24,6 +24,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 		}
 
 		[Test]
+		public void ShouldEnqueueBiiiiiiiiiiiiiiiiiiiiiiiiiiiiiigBatch()
+		{
+			Assert.DoesNotThrow(() =>
+			{
+				Writer.Enqueue(
+					new BatchForTest
+					{
+						States = Enumerable.Range(0, 1000)
+							.Select(i => new BatchStateInputModel
+							{
+								StateCode = "state",
+								UserCode = $"user{i}"
+							})
+					});
+			});
+		}
+
+		[Test]
 		public void ShouldDequeue()
 		{
 			Writer.Enqueue(new BatchForTest());
