@@ -278,6 +278,7 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\SiteProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\SiteViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestCheckerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMapperTest.cs" />
     <Compile Include="Areas\People\ImportAgentControllerTest.cs" />
     <Compile Include="Areas\People\IoC\WebPeopleTestAttribute.cs" />

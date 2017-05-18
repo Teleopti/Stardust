@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
 	public class PreferenceNightRestChecker : IPreferenceNightRestChecker
 	{
-		private readonly IPersonPreferenceDayOccupationFactory _personPreferenceDayOccupationFactory;
+		private readonly IPersonPreferenceDayOccupationFactory _occupationFactory;
 		private readonly IToggleManager _toggleManager;
 
-		public PreferenceNightRestChecker(IPersonPreferenceDayOccupationFactory personPreferenceDayOccupationFactory,
+		public PreferenceNightRestChecker(IPersonPreferenceDayOccupationFactory occupationFactory,
 			IToggleManager toggleManager)
 		{
-			_personPreferenceDayOccupationFactory = personPreferenceDayOccupationFactory;
+			_occupationFactory = occupationFactory;
 			_toggleManager = toggleManager;
 		}
 
@@ -26,52 +26,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				return CheckNightRestViolation(person, date.ToDateOnlyPeriod())[date];
 			}
 
-			var period = person.Period(date);
-			var result = new PreferenceNightRestCheckResult
-			{
-				ExpectedNightRest = period?.PersonContract.Contract.WorkTimeDirective.NightlyRest ?? TimeSpan.Zero
-			};
+			var personPeriod = person.Period(date);
+			var result = initCheckResult(personPeriod);
 
-			var previousDay = date.AddDays(-1);
-			var nextDay = date.AddDays(1);
-
-			var previousDayOccupation = _personPreferenceDayOccupationFactory.GetPreferenceDayOccupation(person, previousDay);
-			var nextDayOccupation = _personPreferenceDayOccupationFactory.GetPreferenceDayOccupation(person, nextDay);
-			var thisDayOccupation = _personPreferenceDayOccupationFactory.GetPreferenceDayOccupation(person, date);
-
-			if (!thisDayOccupation.HasPreference)
+			var currentDayOccupation = _occupationFactory.GetPreferenceDayOccupation(person, date);
+			if (!currentDayOccupation.HasPreference)
 			{
 				return result;
 			}
 
-			if ((previousDayOccupation.HasPreference || previousDayOccupation.HasShift) &&
-				!(previousDayOccupation.HasDayOff || previousDayOccupation.HasFullDayAbsence) &&
-				previousDayOccupation.EndTimeLimitation.StartTime.HasValue &&
-				thisDayOccupation.StartTimeLimitation.EndTime.HasValue)
-			{
-				var compareDate1 = previousDay.Date.Add(previousDayOccupation.EndTimeLimitation.StartTime.Value);
-				var compareDate2 = date.Date.Add(thisDayOccupation.StartTimeLimitation.EndTime.Value);
+			var previousDay = date.AddDays(-1);
+			var nextDay = date.AddDays(1);
+			var previousDayOccupation = _occupationFactory.GetPreferenceDayOccupation(person, previousDay);
+			var nextDayOccupation = _occupationFactory.GetPreferenceDayOccupation(person, nextDay);
 
-				result.RestTimeToPreviousDay = compareDate2 - compareDate1;
-				if (result.RestTimeToPreviousDay < result.ExpectedNightRest)
-				{
-					result.HasViolationToPreviousDay = true;
-				}
-			}
-
-			if ((nextDayOccupation.HasPreference || nextDayOccupation.HasShift) &&
-				!(nextDayOccupation.HasDayOff || nextDayOccupation.HasFullDayAbsence) &&
-				nextDayOccupation.StartTimeLimitation.EndTime.HasValue && thisDayOccupation.EndTimeLimitation.StartTime.HasValue)
-			{
-				var compareDate1 = nextDay.Date.Add(nextDayOccupation.StartTimeLimitation.EndTime.Value);
-				var compareDate2 = date.Date.Add(thisDayOccupation.EndTimeLimitation.StartTime.Value);
-
-				result.RestTimeToNextDay = compareDate1 - compareDate2;
-				if (result.RestTimeToNextDay < result.ExpectedNightRest)
-				{
-					result.HasViolationToNextDay = true;
-				}
-			}
+			checkRestViolationForPreviousDay(previousDayOccupation, currentDayOccupation, date, result);
+			checkRestViolationForNextDay(currentDayOccupation, nextDayOccupation, date, result);
 
 			return result;
 		}
@@ -80,64 +50,84 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			DateOnlyPeriod periods)
 		{
 			var result = new Dictionary<DateOnly, PreferenceNightRestCheckResult>();
-			
-			var preferenceDayOccupations = _personPreferenceDayOccupationFactory.GetPreferencePeriodOccupation(person, periods.Inflate(1));
+			var preferenceDayOccupations = _occupationFactory.GetPreferencePeriodOccupation(person, periods.Inflate(1));
 
 			foreach (var currentDate in periods.DayCollection())
 			{
 				var personPeriod = person.Period(currentDate);
+				var checkResult = initCheckResult(personPeriod);
 
-				var checkResult = new PreferenceNightRestCheckResult
-				{
-					ExpectedNightRest = personPeriod?.PersonContract.Contract.WorkTimeDirective.NightlyRest ?? TimeSpan.Zero
-				};
-
-				var previousDay = currentDate.AddDays(-1);
-				var nextDay = currentDate.AddDays(1);
-
-				var previousDayOccupation = preferenceDayOccupations[previousDay];
-				var nextDayOccupation = preferenceDayOccupations[nextDay];
-				var thisDayOccupation = preferenceDayOccupations[currentDate];
-
-				if (!thisDayOccupation.HasPreference)
+				var currentDayOccupation = preferenceDayOccupations[currentDate];
+				if (!currentDayOccupation.HasPreference)
 				{
 					result.Add(currentDate, checkResult);
 					continue;
 				}
 
-				if ((previousDayOccupation.HasPreference || previousDayOccupation.HasShift) &&
-					!(previousDayOccupation.HasDayOff || previousDayOccupation.HasFullDayAbsence) &&
-					previousDayOccupation.EndTimeLimitation.StartTime.HasValue &&
-					thisDayOccupation.StartTimeLimitation.EndTime.HasValue)
-				{
-					var compareDate1 =
-						previousDay.Date.AddMinutes(previousDayOccupation.EndTimeLimitation.StartTime.Value.TotalMinutes);
-					var compareDate2 = currentDate.Date.AddMinutes(thisDayOccupation.StartTimeLimitation.EndTime.Value.TotalMinutes);
+				var previousDate = currentDate.AddDays(-1);
+				var nextDate = currentDate.AddDays(1);
+				var previousDayOccupation = preferenceDayOccupations[previousDate];
+				var nextDayOccupation = preferenceDayOccupations[nextDate];
 
-					checkResult.RestTimeToPreviousDay = compareDate2 - compareDate1;
-					if (checkResult.RestTimeToPreviousDay < checkResult.ExpectedNightRest)
-					{
-						checkResult.HasViolationToPreviousDay = true;
-					}
-				}
-
-				if ((nextDayOccupation.HasPreference || nextDayOccupation.HasShift) &&
-					!(nextDayOccupation.HasDayOff || nextDayOccupation.HasFullDayAbsence) &&
-					nextDayOccupation.StartTimeLimitation.EndTime.HasValue && thisDayOccupation.EndTimeLimitation.StartTime.HasValue)
-				{
-					var compareDate1 = nextDay.Date.AddMinutes(nextDayOccupation.StartTimeLimitation.EndTime.Value.TotalMinutes);
-					var compareDate2 = currentDate.Date.AddMinutes(thisDayOccupation.EndTimeLimitation.StartTime.Value.TotalMinutes);
-
-					checkResult.RestTimeToNextDay = compareDate1 - compareDate2;
-					if (checkResult.RestTimeToNextDay < checkResult.ExpectedNightRest)
-					{
-						checkResult.HasViolationToNextDay = true;
-					}
-				}
+				checkRestViolationForPreviousDay(previousDayOccupation, currentDayOccupation, currentDate, checkResult);
+				checkRestViolationForNextDay(currentDayOccupation, nextDayOccupation, currentDate, checkResult);
 
 				result.Add(currentDate, checkResult);
 			}
 			return result;
+		}
+
+		private static void checkRestViolationForNextDay(PersonPreferenceDayOccupation currentDayOccupation,
+			PersonPreferenceDayOccupation nextDayOccupation, DateOnly currentDate,
+			PreferenceNightRestCheckResult checkResult)
+		{
+			var currentEndLimitStartTime = currentDayOccupation.EndTimeLimitation.StartTime;
+			var nextDayStartLimitEndTime = nextDayOccupation.StartTimeLimitation.EndTime;
+			if (!hasValidSchedule(nextDayOccupation) || !nextDayStartLimitEndTime.HasValue || !currentEndLimitStartTime.HasValue)
+			{
+				return;
+			}
+
+			var restTime = getRestTime(currentDate, currentEndLimitStartTime.Value, nextDayStartLimitEndTime.Value);
+			checkResult.RestTimeToNextDay = restTime;
+			checkResult.HasViolationToNextDay = restTime < checkResult.ExpectedNightRest;
+		}
+
+		private static void checkRestViolationForPreviousDay(PersonPreferenceDayOccupation previousDayOccupation,
+			PersonPreferenceDayOccupation currentDayOccupation, DateOnly currentDate,
+			PreferenceNightRestCheckResult checkResult)
+		{
+			var previousEndLimitStartTime = previousDayOccupation.EndTimeLimitation.StartTime;
+			var currentStartLimitEndTime = currentDayOccupation.StartTimeLimitation.EndTime;
+			if (!hasValidSchedule(previousDayOccupation) || !previousEndLimitStartTime.HasValue ||
+				!currentStartLimitEndTime.HasValue)
+			{
+				return;
+			}
+
+			var restTime = getRestTime(currentDate.AddDays(-1), previousEndLimitStartTime.Value, currentStartLimitEndTime.Value);
+			checkResult.RestTimeToPreviousDay = restTime;
+			checkResult.HasViolationToPreviousDay = restTime < checkResult.ExpectedNightRest;
+		}
+
+		private static PreferenceNightRestCheckResult initCheckResult(IPersonPeriod period)
+		{
+			return new PreferenceNightRestCheckResult
+			{
+				ExpectedNightRest = period?.PersonContract.Contract.WorkTimeDirective.NightlyRest ?? TimeSpan.Zero
+			};
+		}
+
+		private static TimeSpan getRestTime(DateOnly date, TimeSpan firstTimeSpan, TimeSpan secondTimeSpan)
+		{
+			var firstTimePoint = date.Date.Add(firstTimeSpan);
+			var secondTimePoint = date.AddDays(1).Date.Add(secondTimeSpan);
+			return secondTimePoint - firstTimePoint;
+		}
+
+		private static bool hasValidSchedule(PersonPreferenceDayOccupation occupation)
+		{
+			return (occupation.HasPreference || occupation.HasShift) && !(occupation.HasDayOff || occupation.HasFullDayAbsence);
 		}
 	}
 }
