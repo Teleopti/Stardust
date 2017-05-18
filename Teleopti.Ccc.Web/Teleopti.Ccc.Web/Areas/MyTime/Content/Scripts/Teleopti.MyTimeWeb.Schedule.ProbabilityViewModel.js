@@ -23,17 +23,10 @@
 		var styleJson = {};
 		var startPositionProperty = layoutDirection === constants.layoutDirection.horizontal ? "left" : "top";
 		var lengthProperty = layoutDirection === constants.layoutDirection.horizontal ? "width" : "height";
+		var percentagePerMinute = boundaries.lengthPercentagePerMinute;
 
-		startPositionVal = (Math.ceil(boundaries.lengthPercentagePerMinute *
-				(rawProbabilityCellData.startTimeInMinutes - boundaries.timelineStartMinutes) *
-				10000) /
-			100).toFixed(2);
-
-		var percentagePerMinute = Math.ceil(boundaries.lengthPercentagePerMinute * 10000) / 10000;
-		intervalLengthVal = (Math.ceil(percentagePerMinute *
-				(rawProbabilityCellData.endTimeInMinutes - rawProbabilityCellData.startTimeInMinutes) *
-				10000) /
-			100).toFixed(2);
+		startPositionVal = (percentagePerMinute * (rawProbabilityCellData.startTimeInMinutes - boundaries.timelineStartMinutes + 0.1) * 100).toFixed(2);
+		intervalLengthVal = (percentagePerMinute * (rawProbabilityCellData.endTimeInMinutes - rawProbabilityCellData.startTimeInMinutes + 0.1) * 100).toFixed(2);
 
 		styleJson[startPositionProperty] = startPositionVal + "%";
 		styleJson[lengthProperty] = intervalLengthVal + "%";
