@@ -166,7 +166,7 @@ MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 = RC
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
 MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = true
 MyTimeWeb_DayScheduleForStartPage_43446 = RC
-MyTimeWeb_DayScheduleForStartPage_Command_44209 = DEV
+MyTimeWeb_DayScheduleForStartPage_Command_44209 = RC
 MyTimeWeb_ViewWFMAppGuide_43848 = RC
 
 Scheduler_IntradayOptimization_36617 = true
