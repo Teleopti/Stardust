@@ -178,7 +178,12 @@
 				.$promise.then(function(result) {
 					getAutoCompleteControls();
 					$scope.skillAreas = $filter('orderBy')(result.SkillAreas, 'Name');
-					if (isNew) $scope.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
+					if (isNew){
+						$scope.latest = $filter('orderBy')(result.SkillAreas, 'Name');
+						//TO DO: get a date to filter by
+						// $scope.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
+						// console.log($scope.latest);
+					}
 					$scope.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
 
 					intradayService.getSkills.query()
