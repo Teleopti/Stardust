@@ -529,6 +529,67 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
 			result.DataSeries.EstimatedServiceLevels.First().Should().Be.GreaterThan(0d);
 		}
+		
+		[Test]
+		public void ShouldReturnPerformanceDataForSpecifiedDate()
+		{
+			DateTime testDate = new DateTime(2016, 8, 26, 0, 30, 0, DateTimeKind.Utc);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 0, 30), false);
+			var latestStatsTime = new DateTime(2016, 8, 26, 0, 0, 0, DateTimeKind.Utc);
+			var skillDay = createSkillDay(skill, testDate, new TimePeriod(0, 0, 0, 30), true);
+
+			var scheduledStaffingList = createScheduledStaffing(skillDay);
+
+			IntradayMonitorDataLoader.ShouldCompareDate = true;
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
+				CalculatedCalls = 22,
+				ForecastedCalls = 20
+			});
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Add(skillDay);
+			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value }, testDate);
+
+			result.Should().Not.Be.Null();
+			result.LatestActualIntervalStart.Should().Have.Value();
+			result.LatestActualIntervalStart.Should().Be.EqualTo(latestStatsTime);
+			
+		}
+
+		[Test]
+		public void ShouldNotReturnPerformanceDataForSpecifiedDate()
+		{
+			DateTime testDate = new DateTime(2016, 8, 26, 0, 30, 0, DateTimeKind.Utc);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 0, 30), false);
+			var latestStatsTime = new DateTime(2016, 8, 26, 0, 0, 0, DateTimeKind.Utc);
+			var skillDay = createSkillDay(skill, testDate, new TimePeriod(0, 0, 0, 30), true);
+
+			var scheduledStaffingList = createScheduledStaffing(skillDay);
+
+			IntradayMonitorDataLoader.ShouldCompareDate = true;
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
+				CalculatedCalls = 22,
+				ForecastedCalls = 20
+			});
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Add(skillDay);
+			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value }, testDate.AddDays(+1));
+
+			result.LatestActualIntervalStart.Should().Not.Have.Value();
+		}
 
 		private double calculateEsl(IList<SkillStaffingInterval> scheduledStaffingList, ISkillDay skillDay, double forecastedCallsSkill, int intervalPosition)
 		{
