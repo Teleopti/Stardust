@@ -2,31 +2,24 @@
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
 	[TestFixture]
 	public class ImportForecastsFileCommandHandlerTest
 	{
-		private IMessagePopulatingServiceBusSender _busSender;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IJobResultRepository _jobResultRepository;
 		private ImportForecastsFileCommandHandler _target;
@@ -36,32 +29,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private ImportForecastsFileCommandDto _importForecastsFileCommandDto;
 		private IJobResult _jobResult;
 		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private IPostHttpRequest _postHttpRequest;
-		private IToggleManager _toggleManager;
-		private IJsonSerializer _jsonSer;
 		private ICurrentBusinessUnit _currentBu;
 		private IStardustSender _stardustSender;
 
 		[SetUp]
 		public void Setup()
 		{
-			_busSender = MockRepository.GenerateStrictMock<IMessagePopulatingServiceBusSender>();
 			_unitOfWorkFactory = MockRepository.GenerateStrictMock<IUnitOfWorkFactory>();
 			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			_jobResultRepository = MockRepository.GenerateStrictMock<IJobResultRepository>();
-			_postHttpRequest = MockRepository.GenerateMock<IPostHttpRequest>();
-			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			_jsonSer = MockRepository.GenerateMock<IJsonSerializer>();
 			_currentBu = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			_stardustSender = MockRepository.GenerateMock<IStardustSender>();
-			_target = new ImportForecastsFileCommandHandler(_busSender, _currentUnitOfWorkFactory, _jobResultRepository,
-				_postHttpRequest, _toggleManager, _jsonSer, _currentBu, _stardustSender);
+			_target = new ImportForecastsFileCommandHandler(_currentUnitOfWorkFactory, _jobResultRepository, _currentBu, _stardustSender);
 
-			_person = PersonFactory.CreatePerson("test");
-			_person.SetId(Guid.NewGuid());
-
-			_targetSkill = SkillFactory.CreateSkill("Test Skills");
-			_targetSkill.SetId(Guid.NewGuid());
+			_person = PersonFactory.CreatePerson("test").WithId();
+			_targetSkill = SkillFactory.CreateSkill("Test Skills").WithId();
 
 			_fileId = Guid.NewGuid();
 			_importForecastsFileCommandDto = new ImportForecastsFileCommandDto
@@ -93,7 +75,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_jobResultRepository.Stub(x => x.Add(_jobResult)).IgnoreArguments();
 			unitOfWork.Stub(x => x.PersistAll());
 			unitOfWork.Stub(x => x.Dispose());
-			_busSender.Stub(x => x.Send(new ImportForecastsFileToSkillEvent(), true)).IgnoreArguments();
 
 			_target.Handle(_importForecastsFileCommandDto);
 		}

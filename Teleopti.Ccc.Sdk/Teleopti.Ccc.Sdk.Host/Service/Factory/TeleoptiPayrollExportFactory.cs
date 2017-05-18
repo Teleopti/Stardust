@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 
 			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var personList = _personRepository.FindPeople(personCollection.Select(p => p.Id.GetValueOrDefault())).ToList();
+				var personList = _personRepository.FindPeople(personCollection.Select(p => p.Id.GetValueOrDefault()).ToArray());
 				var scheduleDictionary =
 					_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 						personList,
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 						_scenarioRepository.Current()
 						);
 
-				var exportDtos = getExportDtosForPersons(personList, scheduleDictionary, datePeriod, buildExportFunction).ToList();
+				var exportDtos = getExportDtosForPersons(personList, scheduleDictionary, datePeriod, buildExportFunction).ToArray();
 				if (exportDtos.Any())
 					payrollTimeExportDataList.AddRange(exportDtos);
 			}

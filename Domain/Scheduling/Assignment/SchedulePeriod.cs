@@ -216,21 +216,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			while (startDate <= endDate)
 			{
-				if (CurrentPerson != null)
+				var personPeriod = CurrentPerson?.Period(startDate);
+				if (personPeriod?.PersonContract?.ContractSchedule != null)
 				{
-					IPersonPeriod personPeriod = CurrentPerson.Period(startDate);
-					if (personPeriod != null)
-					{
-						if (personPeriod.PersonContract != null)
-						{
-							if (personPeriod.PersonContract.ContractSchedule != null)
-							{
 
-								if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(period.Value.StartDate, startDate))
-									daysOff++;
-							}
-						}
-					}
+					if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(period.Value.StartDate, startDate))
+						daysOff++;
 				}
 				startDate = startDate.AddDays(1);
 			}
@@ -251,7 +242,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			int totalPeriodLength = totalPeriod.DayCount();
 			int periodLength = contractPeriod(dateFrom);
 
-			return (double)periodLength/(double)totalPeriodLength;
+			return periodLength/(double)totalPeriodLength;
 		}
 
 		private int contractPeriod(DateOnly dateFrom)
@@ -271,19 +262,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			int days = 0;
 			while (startDate <= endDate)
 			{
-				if (CurrentPerson != null)
+				IPersonPeriod personPeriod = CurrentPerson?.Period(startDate);
+				if (personPeriod?.PersonContract?.ContractSchedule != null)
 				{
-					IPersonPeriod personPeriod = CurrentPerson.Period(startDate);
-					if (personPeriod != null)
-					{
-						if (personPeriod.PersonContract != null)
-						{
-							if (personPeriod.PersonContract.ContractSchedule != null)
-							{
-								days++;
-							}
-						}
-					}
+					days++;
 				}
 				startDate = startDate.AddDays(1);
 			}

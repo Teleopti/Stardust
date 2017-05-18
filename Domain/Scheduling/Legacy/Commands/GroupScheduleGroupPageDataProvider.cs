@@ -234,13 +234,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	        }
         }
 
-		public DateOnlyPeriod SelectedPeriod
-		{
-			//never call this when using this instance
-			get { return new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MinValue);}
-		}
+		public DateOnlyPeriod SelectedPeriod => new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MinValue);
 
-		public IList<ISkill> SkillCollection
+	    public IList<ISkill> SkillCollection
         {
             get
             {
@@ -259,12 +255,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             }
         }
 
-		public IList<IOptionalColumn> OptionalColumnCollectionAvailableAsGroupPage
-		{
-			get { return new List<IOptionalColumn>(); }
-		}
+		public IList<IOptionalColumn> OptionalColumnCollectionAvailableAsGroupPage => new List<IOptionalColumn>();
 
-		public IEnumerable<IPerson> AllLoadedPersons
+	    public IEnumerable<IPerson> AllLoadedPersons
 		{
 			get {
 				lock (_lockObject)

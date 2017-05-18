@@ -181,10 +181,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return null;
 		}
 
-		public ISkillSkillStaffPeriodExtendedDictionary SkillSkillStaffPeriodDictionary
-		{
-			get { return _internalDictionary; }
-		}
+		public ISkillSkillStaffPeriodExtendedDictionary SkillSkillStaffPeriodDictionary => _internalDictionary;
 
 		private void CreateInternalDictionary(IEnumerable<KeyValuePair<ISkill, IEnumerable<ISkillDay>>> skillDays)
 		{
@@ -266,7 +263,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IList<ISkillStaffPeriod> SkillStaffPeriodList(IAggregateSkill skill, DateTimePeriod utcPeriod)
 		{
-			int minimumResolution = getMinimumResolution(skill);
+			var minimumResolution = (double)getMinimumResolution(skill);
 
 			lock (Locker)
 			{
@@ -280,7 +277,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					{
 						var relevantSkillStaffPeriodList = content.Where(c => utcPeriod.Contains(c.Key)).Select(c => c.Value);
 						var skillStaffPeriodsSplitList = new List<ISkillStaffPeriod>();
-						double factor = (double)minimumResolution / aggregateSkill.DefaultResolution;
+						double factor = minimumResolution / aggregateSkill.DefaultResolution;
 						foreach (ISkillStaffPeriod skillStaffPeriod in relevantSkillStaffPeriodList)
 						{
 							skillStaffPeriodsSplitList.AddRange(SplitSkillStaffPeriod(skillStaffPeriod, factor, TimeSpan.FromMinutes(minimumResolution)));

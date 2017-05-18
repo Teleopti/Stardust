@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 				}
 
 				var personAssignmentDto = schedulePartDto.PersonAssignmentCollection.FirstOrDefault();
-				if (personAssignmentDto != null && personAssignmentDto.MainShift != null)
+				if (personAssignmentDto?.MainShift != null)
 					payrollTimeExportDataDto.ShiftCategoryName =
 						personAssignmentDto.MainShift.ShiftCategoryName;
                 if (schedulePartDto.ProjectedLayerCollection != null && schedulePartDto.ProjectedLayerCollection.Count > 0)
@@ -192,7 +192,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 
 		private static PayrollBaseExportDto createDtoWithPersonData(IPerson person, DateOnly dateOnly)
 		{
-
 			var personPeriod = person.Period(dateOnly);
 			var payrollBaseExportDto = new PayrollBaseExportDto
 				{
@@ -205,7 +204,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 					ContractName = personPeriod.PersonContract.Contract.Description.Name,
 					PartTimePercentageName = personPeriod.PersonContract.PartTimePercentage.Description.Name,
 					PartTimePercentageNumber =
-						fiveDigitPartTimePercentage(person.Period(dateOnly).PersonContract.PartTimePercentage.Percentage.Value),
+						fiveDigitPartTimePercentage(personPeriod.PersonContract.PartTimePercentage.Percentage.Value),
 					Date = dateOnly.Date
 				};
 			return payrollBaseExportDto;

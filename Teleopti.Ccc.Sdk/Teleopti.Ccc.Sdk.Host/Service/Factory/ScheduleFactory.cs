@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
             
             using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
-                IList<IPerson> personList = _personRepository.FindPeople(personCollection.Select(p => p.Id.GetValueOrDefault())).ToList();
+                var personList = _personRepository.FindPeople(personCollection.Select(p => p.Id.GetValueOrDefault()).ToArray());
 				IScheduleDictionary scheduleDictonary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false), period, _scenarioRepository.Current());
 
                 //rk don't know if I break stuff here...
@@ -52,16 +52,15 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
                 foreach (IPerson person in personList)
                 {
                     IScheduleRange scheduleRange = scheduleDictonary[person];
-                    foreach (DateOnly dateOnly in datePeriod.DayCollection())
+                    foreach (var scheduleDay in scheduleRange.ScheduledDayCollection(datePeriod))
                     {
-                        var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
-                        var multiplicatorProjectionService = new MultiplicatorProjectionService(scheduleDay, dateOnly);
+                        var multiplicatorProjectionService = new MultiplicatorProjectionService(scheduleDay, scheduleDay.DateOnlyAsPeriod.DateOnly);
                         //Create Activity Layers
                         foreach (IMultiplicatorLayer layer in multiplicatorProjectionService.CreateProjection())
                         {
                             var multiplicatorDataDto = new MultiplicatorDataDto
                                                            {
-                                                               Date = dateOnly.Date,
+                                                               Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date,
                                                                ActualDate =
                                                                    layer.Period.StartDateTimeLocal(scheduleDay.TimeZone)
                                                                    .Date,

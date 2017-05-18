@@ -172,8 +172,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 ((ScheduleRange)retDic[availabilityDay.Person]).Add(availabilityDay);
             }
         }
-
-
+		
         public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null)
         {
             IList<IPerson> people = new List<IPerson> {person};
@@ -216,9 +215,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			    IEnumerable<IPerson> visiblePersons)
 	    {
-		    if (period == null) throw new ArgumentNullException("period");
-		    if (personsProvider == null) throw new ArgumentNullException("personsProvider");
-		    if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
+		    if (period == null) throw new ArgumentNullException(nameof(period));
+		    if (personsProvider == null) throw new ArgumentNullException(nameof(personsProvider));
+		    if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException(nameof(scheduleDictionaryLoadOptions));
 
 		    var scheduleDictionary = new ScheduleDictionary(scenario, period,
 			    new DifferenceEntityCollectionService<IPersistableScheduleData>(), _dataPermissionChecker);

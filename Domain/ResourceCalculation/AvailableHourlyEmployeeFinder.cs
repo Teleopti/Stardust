@@ -143,10 +143,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private bool isHourly(IPerson person)
 		{
 			IPersonPeriod period = person.Period(_dateOnly);
-			if (period == null)
-				return false;
-
-			return period.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff;
+			return period?.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff;
 		}
 
 		private bool hasMatchingAvailibility(IScheduleDay targetScheduleDay)
