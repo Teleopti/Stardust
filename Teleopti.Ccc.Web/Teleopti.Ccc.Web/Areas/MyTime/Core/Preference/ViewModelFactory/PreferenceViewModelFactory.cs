@@ -87,15 +87,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 			};
 		}
 
-		public IDictionary<DateOnly, PreferenceWeeklyWorkTimeViewModel> CreatePreferenceWeeklyWorkTimeViewModels(IEnumerable<DateOnly> dates)
+		public IDictionary<DateOnly, PreferenceWeeklyWorkTimeViewModel> CreatePreferenceWeeklyWorkTimeViewModels(
+			IEnumerable<DateOnly> dates)
 		{
-			var result = new Dictionary<DateOnly, PreferenceWeeklyWorkTimeViewModel>(); 
-			foreach (var date in dates)
-			{
-				result.Add(date, CreatePreferenceWeeklyWorkTimeViewModel(date));
-			}
-
-			return result;
+			return dates.Distinct().ToDictionary(date => date, CreatePreferenceWeeklyWorkTimeViewModel);
 		}
 	}
 }

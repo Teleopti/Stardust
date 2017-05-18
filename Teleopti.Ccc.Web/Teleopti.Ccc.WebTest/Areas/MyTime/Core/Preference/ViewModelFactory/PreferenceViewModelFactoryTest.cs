@@ -29,12 +29,42 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldGetPreferenceWeeklyWorkTimeVMWithDates()
+		public void ShouldGetPreferenceWeeklyWorkTimeVmWithDates()
 		{
 			var date = new DateOnly(2017, 4, 1);
-			var dates = new List<DateOnly> {date, date.AddDays(7), date.AddDays(14)};
+			var dates = new List<DateOnly>
+			{
+				date,
+				date.AddDays(7),
+				date.AddDays(14)
+			};
+			getPreferenceWeeklyWorkTimeVmWithDatesCommonTests(date, dates, 3);
+		}
+
+		[Test]
+		public void ShouldGetPreferenceWeeklyWorkTimeVmWithDuplicateDates()
+		{
+			var date = new DateOnly(2017, 4, 1);
+			var dates = new List<DateOnly>
+			{
+				date,
+				date,
+				date,
+				date.AddDays(7),
+				date.AddDays(7),
+				date.AddDays(14),
+				date.AddDays(14),
+				date.AddDays(15)
+			};
+			getPreferenceWeeklyWorkTimeVmWithDatesCommonTests(date, dates, 4);
+		}
+
+		private static void getPreferenceWeeklyWorkTimeVmWithDatesCommonTests(DateOnly date, IEnumerable<DateOnly> dates,
+			int expectedResultCount)
+		{
 			var weeklyWorkTimeProvider = MockRepository.GenerateMock<IPreferenceWeeklyWorkTimeSettingProvider>();
-			var target = new PreferenceViewModelFactory(null, null, null, weeklyWorkTimeProvider, null, null, null, null, null, null);
+			var target = new PreferenceViewModelFactory(null, null, null, weeklyWorkTimeProvider, null, null, null, null, null,
+				null);
 
 			var weeklyWorkTimeSetting = new WeeklyWorkTimeSetting
 			{
@@ -45,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 
 			var result = target.CreatePreferenceWeeklyWorkTimeViewModels(dates);
 
-			result.Count.Should().Be.EqualTo(dates.Count);
+			result.Count.Should().Be.EqualTo(expectedResultCount);
 			result[date].MaxWorkTimePerWeekMinutes.Should().Be.EqualTo(360);
 			result[date].MinWorkTimePerWeekMinutes.Should().Be.EqualTo(120);
 		}
