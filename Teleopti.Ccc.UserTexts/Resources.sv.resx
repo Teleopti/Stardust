@@ -14673,4 +14673,22 @@ Vill du registrera dig?</value>
   <data name="WFMAppGuideTitle" xml:space="preserve">
     <value>Guide för Teleopti WFM app</value>
   </data>
+  <data name="Purged" xml:space="preserve">
+    <value>Bortrensad</value>
+  </data>
+  <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
+    <value>Du ändrar nu planeringsperioden till {0} - {1}.</value>
+  </data>
+  <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
+    <value>Du skapar nu en planeringsperiod från {0} till {1}.</value>
+  </data>
+  <data name="WFMAppGuideStep1Description" xml:space="preserve">
+    <value>Ladda ner och installera appen för Teleopti WFM genom att klicka på lämplig knapp eller genom att scanna QR-koden nedan.</value>
+  </data>
+  <data name="EmailSkillSelected" xml:space="preserve">
+    <value>En emailkompetens är vald. Därför kan inte andel tappade visas.</value>
+  </data>
+  <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
+    <value>Målet för kontraktstiden ({0}) är inte uppfyllt</value>
+  </data>
 </root>

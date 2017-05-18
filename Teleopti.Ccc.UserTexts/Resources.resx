@@ -15845,7 +15845,7 @@ Do you want to participate?</value>
     <comment>Used in Web resource planner </comment>
   </data>
   <data name="EmailSkillSelected" xml:space="preserve">
-    <value>There is currently an email skill selected, abandoned rate cannot be shown</value>
+    <value>An email skill is currently selected. Therefore abandoned rate cannot be shown.</value>
     <comment>warning in web intraday if a skill or skill area contains a skill of type email</comment>
   </data>
   <data name="AgentsHaveScheduled" xml:space="preserve">
