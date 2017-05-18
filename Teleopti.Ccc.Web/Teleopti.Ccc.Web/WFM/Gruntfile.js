@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         watch: {
@@ -83,7 +83,7 @@ module.exports = function(grunt) {
             options: {
                 mergeIntoShorthands: false,
                 roundingPrecision: -1,
-                level:1
+                level: 1
             },
             target: {
                 files: {
@@ -302,7 +302,7 @@ module.exports = function(grunt) {
                     cwd: 'dist',
                     src: ['*.css', '!*.min.css'],
                     dest: 'dist/',
-                    rename: function(dest, src) {
+                    rename: function (dest, src) {
                         return dest + src.replace('.css', '.min.css')
                     }
                 }, {
@@ -310,7 +310,7 @@ module.exports = function(grunt) {
                     cwd: 'css',
                     src: '*.css',
                     dest: 'dist/',
-                    rename: function(dest, src) {
+                    rename: function (dest, src) {
                         return dest + src.replace('.css', '.min.css')
                     }
                 }]
@@ -336,6 +336,15 @@ module.exports = function(grunt) {
                     dest: 'dist/',
                     filter: 'isFile'
                 }]
+            },
+            bootstrap: {
+                files: [{
+                    expand: true,
+                    cwd: 'node_modules/bootstrap/fonts',
+                    src: ['*.ttf', '*.woff', '*.eot'],
+                    dest: 'dist/',
+                    filter: 'isFile'
+                }]
             }
         },
         clean: {
@@ -356,18 +365,18 @@ module.exports = function(grunt) {
 
         imageEmbed: {
             distDark: {
-                src: [ "css/style_dark.css" ],
+                src: ["css/style_dark.css"],
                 dest: "dist/style_dark.css",
                 options: {
-                deleteAfterEncoding : false,
-                preEncodeCallback: function (filename) { return true; }
+                    deleteAfterEncoding: false,
+                    preEncodeCallback: function (filename) { return true; }
                 }
             },
             distClassic: {
-                src: [ "css/style_classic.css" ],
+                src: ["css/style_classic.css"],
                 dest: "dist/style_classic.css",
                 options: {
-                deleteAfterEncoding : false
+                    deleteAfterEncoding: false
                 }
             }
         },
@@ -386,7 +395,7 @@ module.exports = function(grunt) {
                     '!app/rta/rta.faketime.service.js'
                 ]
             },
-            
+
             dev: {
                 src: [
                     //add your path to module here
@@ -425,7 +434,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
     grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
-    grunt.registerTask('devDist', ['ngtemplates', 'sass','imageEmbed', 'concat:distModules', 'concat:devJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'copy:devCss', 'newer:copy', 'generateIndexDev']);
+    grunt.registerTask('devDist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:devJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'copy:devCss', 'newer:copy', 'generateIndexDev']);
     grunt.registerTask('test-continuous', ['ngtemplates', 'karma:continuous']);
     grunt.registerTask('nova', ['devDist', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('build', ['msbuild:build']); // build the solution
@@ -434,7 +443,7 @@ module.exports = function(grunt) {
     grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
     grunt.registerTask('eslint-beta', ['eslint']);
     grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
-    grunt.registerTask('dist', ['ngtemplates', 'sass','imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist','copy:extras', 'generateIndex', 'clean:dist', 'cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
+    grunt.registerTask('dist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:extras','copy:bootstrap', 'generateIndex', 'clean:dist', 'cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
 
     // for desktop client
     grunt.registerTask('buildForDesktop', ['copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:dist']);
