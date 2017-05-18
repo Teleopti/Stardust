@@ -182,5 +182,5 @@ When I am viewing mobile view for date '2017-04-23'
 When I click the menu button in start page
 And I click menu Text Request
 And I input 'subject 2017-04-23' as subject and 'message 2017-04-23' as message
-And I click save Absence Request
+And I click save Text Request
 Then I should see the request icon

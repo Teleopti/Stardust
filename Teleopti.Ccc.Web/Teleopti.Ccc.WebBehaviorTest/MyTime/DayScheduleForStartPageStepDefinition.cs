@@ -161,6 +161,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Click("div.mobile-start-day button.request-new-send");
 		}
 
+		[When(@"I click save Text Request")]
+		public void WhenIClickSaveTextRequest()
+		{
+			Browser.Interactions.Click("div.mobile-start-day button.request-new-send");
+		}
+
 
 		[Then(@"I should see '(.*)' '(.*)' in schedule")]
 		public void ThenIShouldSeeInSchedule(string timeSpan, string absenceType)
