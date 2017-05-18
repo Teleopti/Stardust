@@ -372,6 +372,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Count.Should().Be.EqualTo(2);
 		}
 
+		[Test]
+		[SetCulture("en-US")]
+		public void ShouldGetPossibilitiesAccordingToAgentTimeZone()
+		{
+			Now.Is(Now.UtcDateTime().Date.AddHours(2));
+
+			setupSiteOpenHour();
+			setupTestDataForOneSkill();
+			setupWorkFlowControlSet();
+
+			var timeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
+
+			var result = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence).ToList();
+			result.FirstOrDefault()?.Date.Should().Be(Now.LocalDateOnly().AddDays(-1).ToFixedClientDateOnlyFormat());
+			result.Count.Should().Be.EqualTo(8);
+		}
+
 		private void setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
@@ -443,7 +461,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		private DateOnlyPeriod getAvailablePeriod()
 		{
 			var today = Now.LocalDateOnly();
-			var period = new DateOnlyPeriod(today, today.AddDays(13));
+			var period = new DateOnlyPeriod(today, today.AddDays(13)).Inflate(1);
 			return period;
 		}
 

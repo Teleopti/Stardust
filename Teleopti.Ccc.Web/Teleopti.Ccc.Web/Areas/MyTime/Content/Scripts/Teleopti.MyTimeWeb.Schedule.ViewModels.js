@@ -16,7 +16,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 	self.formattedFixedDate = ko.computed(function () {
 		return moment(self.fixedDate()).format("YYYY-MM-DD");
 	});
-	self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime()).startOf("day"));
+	self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(parent.baseUtcOffsetInMinutes)).startOf("day"));
 	self.formatedCurrentUserDate = ko.computed(function () {
 		return moment(self.currentUserDate()).format("YYYY-MM-DD");
 	});

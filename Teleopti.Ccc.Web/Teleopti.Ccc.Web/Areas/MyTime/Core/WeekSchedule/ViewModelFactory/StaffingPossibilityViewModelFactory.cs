@@ -15,13 +15,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly IScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
 		private readonly INow _now;
 		private readonly IToggleManager _toggleManager;
+		private readonly ILoggedOnUser _user;
 
 		public StaffingPossibilityViewModelFactory(
-			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, INow now, IToggleManager toggleManager)
+			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, INow now, IToggleManager toggleManager, ILoggedOnUser user)
 		{
 			_scheduleStaffingPossibilityCalculator = scheduleStaffingPossibilityCalculator;
 			_now = now;
 			_toggleManager = toggleManager;
+			_user = user;
 		}
 
 		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			{
 				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
 			}
-			var today = _now.LocalDateOnly();
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),_user.CurrentUser().PermissionInformation.DefaultTimeZone()));
 			var maxEndDate = today;
 			if (_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880))
 			{
