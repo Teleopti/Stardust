@@ -238,7 +238,8 @@
 		MyTimeWeb_MobileResponsive_43826,
 		Staffing_ReadModel_BetterAccuracy_43447,
 		Staffing_ReadModel_BetterAccuracy_Step2_44271,
-		Staffing_ReadModel_BetterAccuracy_Step3_44331
+		Staffing_ReadModel_BetterAccuracy_Step3_44331,
+		WFM_Intraday_ShowSatsForOtherDays
 		// ReSharper restore InconsistentNaming
 	}
 }

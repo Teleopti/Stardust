@@ -63,13 +63,14 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			var timeText = Console.ReadLine();
 			if (!string.IsNullOrEmpty(timeText))
 			{
-				if (!DateTime.TryParse(timeText, Thread.CurrentThread.CurrentCulture, DateTimeStyles.None, out time))
+				DateTime temp;
+				if (!DateTime.TryParse(timeText, Thread.CurrentThread.CurrentCulture, DateTimeStyles.None, out temp))
 				{
 					Console.WriteLine("{0} is not a valid time. Press any key to exit.", timeText);
 					Console.ReadKey();
 					return;
 				}
-
+				time = time.AddHours(temp.Hour -time.Hour).AddMinutes(temp.Minute - time.Minute);
 				time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, time);
 			}
 
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 
 			foreach (var workloadInfo in workloads)
 			{
-				var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId, currentIntervalUtc);
+				var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId, currentIntervalUtc, timeUtc);
 
 				if (forecastIntervals.Count == 0 || Math.Abs(forecastIntervals.Sum(x => x.Calls)) < 0.001)
 					continue;
