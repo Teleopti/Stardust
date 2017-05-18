@@ -133,10 +133,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 																 period.EndDateTime);
 			_messageBroker.RegisterEventSubscription(OnEventMeetingMessageHandler,
 																  typeof(IMeetingChangedEntity));
-			_messageBroker.RegisterEventSubscription(OnEventForecastDataMessageHandler,
-																 typeof(IForecastData),
-																 period.StartDateTime,
-																 period.EndDateTime);
 		}
 
 		public void OnEventActualAgentStateMessageHandler(object sender, EventMessageArgs e)

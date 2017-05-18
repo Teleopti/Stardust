@@ -37,16 +37,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 
             ForecastPeriod = new DateOnlyPeriod(DateTime.Today.Year, 1, 1, DateTime.Today.Year, 12, 31);
 
-            _navigator = new NavigationControl(this, ForecastPeriod);
-            _navigator.Dock = DockStyle.Fill;
-            _smartPartModel = new SmartPartModel();
+	        _navigator = new NavigationControl(this, ForecastPeriod) {Dock = DockStyle.Fill};
+	        _smartPartModel = new SmartPartModel();
             _drawSmartPart = new DrawSmartPart();
         }
-
-        //private void DetailedSmartPart_Load(object sender, EventArgs e)
-        //{
-        //    RegisterForMessageBrokerEvents(typeof(IForecastData));
-        //}
 
         public override void OnBackgroundProcess(DoWorkEventArgs e)
         {

@@ -122,11 +122,6 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Client
 
 			aggregateRoots.Add(typeof (Scenario), new List<Type> {typeof (IScenario)});
 
-			aggregateRoots.Add(typeof (Skill), new List<Type> {typeof (IForecastData)});
-			aggregateRoots.Add(typeof (Workload), new List<Type> {typeof (IForecastData)});
-			aggregateRoots.Add(typeof (SkillDay), new List<Type> {typeof (IForecastData)});
-			aggregateRoots.Add(typeof (MultisiteDay), new List<Type> {typeof (IForecastData)});
-
 			aggregateRoots.Add(typeof(Note), new List<Type> { typeof(IPersistableScheduleData), typeof(INote)});
 			aggregateRoots.Add(typeof(AgentDayScheduleTag), new List<Type> { typeof(IPersistableScheduleData), typeof(IAgentDayScheduleTag) });
 
