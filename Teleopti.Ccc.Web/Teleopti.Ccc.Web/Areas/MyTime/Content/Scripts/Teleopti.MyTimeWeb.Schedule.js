@@ -114,7 +114,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
 
 	function getCurrentUserDateTime(utcOffsetInMinutes) {
-		if (!utcOffsetInMinutes) return undefined;
 		var currentUserDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
 			? stripTeleoptiTimeToUTCForScenarioTest().zone(-utcOffsetInMinutes)
 			: moment().zone(-utcOffsetInMinutes);//work in user timezone, just make life easier
