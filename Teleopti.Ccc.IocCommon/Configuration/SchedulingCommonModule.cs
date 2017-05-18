@@ -681,14 +681,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
 			builder.RegisterType<RuleSetBagExtractorProvider>().SingleInstance();
 			builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_MasterActivity_42795))
-			{
-				builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<RuleSetSkillActivityCheckerOLD>().As<IRuleSetSkillActivityChecker>().SingleInstance();
-			}
+			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>().SingleInstance();
 			builder.RegisterType<PersonalShiftAndMeetingFilter>().As<IPersonalShiftAndMeetingFilter>();
 			builder.RegisterType<PersonalShiftMeetingTimeChecker>().As<IPersonalShiftMeetingTimeChecker>().SingleInstance();
 			builder.RegisterType<DisallowedShiftProjectionCachesFilter>().As<IDisallowedShiftProjectionCachesFilter>().SingleInstance();

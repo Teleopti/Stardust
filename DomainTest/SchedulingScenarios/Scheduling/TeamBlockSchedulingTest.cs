@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -394,7 +393,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Toggle(Toggles.ResourcePlanner_MasterActivity_42795)]
 		public void ShouldHandleMasterActivity()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
@@ -424,7 +422,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
 
-		[Toggle(Toggles.ResourcePlanner_MasterActivity_42795)]
 		[TestCase(true)] //not included because agent doesn't know skill
 		[TestCase(false)] //not included because filtered in ShiftFromMasterActivityService (not sure it's correct but that's current impl)
 		public void ShouldHandleMasterActivityAsBaseActivity_RequiresSkill_AgentDoesntKnowActivity(bool masterActivityActivityRequiresSkill)
@@ -460,7 +457,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Toggle(Toggles.ResourcePlanner_MasterActivity_42795)]
 		public void ShouldHandleMasterActivityOnExtendedActivity()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
@@ -494,7 +490,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
 
-		[Toggle(Toggles.ResourcePlanner_MasterActivity_42795)]
 		[TestCase(true)] //not included because agent doesn't know skill
 		[TestCase(false)] //not included because filtered in ShiftFromMasterActivityService (not sure it's correct but that's current impl)
 		public void ShouldHandleMasterActivityAsExtendedActivity_RequiresSkill_AgentDoesntKnowActivity(bool masterActivityActivityRequiresSkill)
@@ -531,7 +526,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Toggle(Toggles.ResourcePlanner_MasterActivity_42795)]
 		public void ShouldBePossibleToHaveSkillAgentDoesntKnowIfNotRequiresSkillAndNotMasterSkill()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
@@ -561,7 +555,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Toggle(Toggles.ResourcePlanner_MasterActivity_42795)]
 		public void ShouldBePossibleToHaveSkillInExtenderAgentDoesntKnowIfNotRequiresSkillAndNotMasterSkill()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
