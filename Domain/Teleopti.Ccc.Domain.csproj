@@ -552,7 +552,6 @@
     <Compile Include="InterfaceLegacy\Domain\IExtractBudgetGroupPeriods.cs" />
     <Compile Include="InterfaceLegacy\Domain\IExtractedRestrictionResult.cs" />
     <Compile Include="InterfaceLegacy\Domain\IFilterOnPeriodOptimizer.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IForecastData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IForecastDayTemplate.cs" />
     <Compile Include="InterfaceLegacy\Domain\IForecastingTarget.cs" />
     <Compile Include="InterfaceLegacy\Domain\IForecastProcessReport.cs" />

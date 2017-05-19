@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// Created by: robink
     /// Created date: 2008-10-23
     /// </remarks>
-    public interface IMultisiteDay : IRestrictionChecker<IMultisiteDay>, ITemplateDay, IForecastData, ICloneableEntity<IMultisiteDay>
+    public interface IMultisiteDay : IRestrictionChecker<IMultisiteDay>, ITemplateDay, IAggregateRoot, IChangeInfo, ICloneableEntity<IMultisiteDay>
     {
         /// <summary>
         /// Creates from template.

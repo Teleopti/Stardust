@@ -6,9 +6,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// <summary>
     /// A forecast
     /// </summary>
-    public interface IWorkload : IForecastData, 
-                                ICloneableEntity<IWorkload>, 
-                                IForecastTemplateOwner,
+    public interface IWorkload : ICloneableEntity<IWorkload>, IAggregateRoot, IChangeInfo,
+								IForecastTemplateOwner,
                                 IBelongsToBusinessUnit
     {
         /// <summary>

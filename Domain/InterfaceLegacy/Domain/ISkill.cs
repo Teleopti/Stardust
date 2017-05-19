@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// <summary>
     /// Represents a skill.
     /// </summary>
-    public interface ISkill : IForecastData, 
-                                IRestrictionChecker<ISkill>, 
+    public interface ISkill : IAggregateRoot, IChangeInfo,
+								IRestrictionChecker<ISkill>, 
                                 IForecastTemplateOwner,
                                 IBelongsToBusinessUnit,
                                 ICloneableEntity<ISkill>, IAggregateSkill
