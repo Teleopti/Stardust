@@ -203,7 +203,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		}
 	}
 
-	function setSelectedDatesPreferences(postDates, preference, validationErrorCallback, cb){
+	function setSelectedDatesPreferences(postDates, preference, validationErrorCallback, cb) {
+		if (postDates == null || postDates.length === 0) {
+			var errorMessage = Teleopti.MyTimeWeb.Common.GetUserTexts().NoDateIsSelected;
+			addExtendedPreferenceFormViewModel.ValidationError(errorMessage);
+			return;
+		}
+
 		preference.Dates = postDates;
 		ajax.Ajax({
 			url: "Preference/ApplyPreferences",
