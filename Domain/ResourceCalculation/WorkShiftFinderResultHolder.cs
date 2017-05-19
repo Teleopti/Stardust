@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         IList<WorkShiftFinderResult> GetResults(bool latestOnly);
         IList<WorkShiftFinderResult> GetResults(bool latestOnly, bool notSuccessfulOnly);
         void AddFilterToResult(IPerson person, DateOnly theDate, string message);
-        void AddFilterToResult(IPerson person, DateOnly theDate, string message, Guid key);
-        void AddFilterToResult(IPerson person, DateOnly theDate, string message, Guid key, int shiftsBefore, int shiftsAfter);
+        void AddFilterToResult(IPerson person, DateOnly theDate, string message, int shiftsBefore, int shiftsAfter);
         void SetResultSuccessful(IPerson person, DateOnly theDate, string newMessage);
         void Clear();
         void Clear(IPerson person, DateOnly theDate);
@@ -102,19 +101,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void AddFilterToResult(IPerson person, DateOnly theDate, string message)
 		{
-			AddFilterToResult(person, theDate, message, Guid.NewGuid());
-		}
-		
-		public void AddFilterToResult(IPerson person, DateOnly theDate, string message, Guid key)
-		{
-			AddFilterToResult(person, theDate, message, key, 0, 0);
+			AddFilterToResult(person, theDate, message, 0, 0);
 		}
 
-		public void AddFilterToResult(IPerson person, DateOnly theDate, string message, Guid key, int shiftsBefore, int shiftsAfter)
+		public void AddFilterToResult(IPerson person, DateOnly theDate, string message, int shiftsBefore, int shiftsAfter)
     	{
     		var result = getResultForPersonAndDate(person, theDate);
 
-			result.AddFilterResults(new WorkShiftFilterResult(message, shiftsBefore, shiftsAfter, key));
+			result.AddFilterResults(new WorkShiftFilterResult(message, shiftsBefore, shiftsAfter));
     	}
 
 		public void SetResultSuccessful(IPerson person, DateOnly theDate, string newMessage)

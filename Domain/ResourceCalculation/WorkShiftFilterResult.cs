@@ -1,20 +1,15 @@
-﻿
-using System;
+﻿using System;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class WorkShiftFilterResult
     {
 	    public WorkShiftFilterResult(string message, int workShiftsBefore, int workShiftsAfter)
-			:this(message,workShiftsBefore,workShiftsAfter,Guid.NewGuid())
-		{}
-        
-		public WorkShiftFilterResult(string message, int workShiftsBefore, int workShiftsAfter, Guid key)
 		{
 			Message = message;
 			WorkShiftsBefore = workShiftsBefore;
 			WorkShiftsAfter = workShiftsAfter;
-			Key = key;
+			Key = Guid.NewGuid();
 		}
 		
         public string Message { get; }
