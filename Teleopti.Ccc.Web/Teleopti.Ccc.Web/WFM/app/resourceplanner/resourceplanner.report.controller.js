@@ -50,7 +50,7 @@
 
 				function initResult(interResult, result, planningPeriod) {
 					if (planningPeriod != undefined) {
-						planningPeriodService.getNumberOfAgents({ id: planningPeriodId, startDate: planningPeriod.StartDate, endDate: planningPeriod.EndDate })
+						planningPeriodService.getPlanningPeriod({ id: planningPeriodId })
 							.$promise.then(function (data) {
 								$scope.totalAgents = data.TotalAgents;
 							});

@@ -20,7 +20,6 @@
 			changeRange: { method: 'PUT', params: { id: "@id" } },
 			schedule: { method: 'POST', params: { id: "@id", runAsynchronously: function (d) { return d.runAsynchronously } }, url: planningPeriodBaseUrl + '/schedule' },
 			optimize: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/optimize' },
-			getAgentCount: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/countagents' },
 			clear: { method: 'DELETE', params: { id: "@id" }, url: planningPeriodBaseUrl + '/schedule' }
 		});
 
@@ -57,7 +56,6 @@
 			changeRange: planningPeriod.changeRange,
 			getSuggestions: planningPeriod.getSuggestions,
 			publishPeriod: planningPeriod.publishPeriod,
-			getNumberOfAgents: planningPeriod.getAgentCount,
 			// Scheduling
 			launchScheduling: planningPeriod.schedule,
 			launchOptimization: planningPeriod.optimize,
