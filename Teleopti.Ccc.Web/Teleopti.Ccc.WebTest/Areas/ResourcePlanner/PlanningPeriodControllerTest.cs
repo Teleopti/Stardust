@@ -22,6 +22,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
+using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
@@ -114,9 +115,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			PersonRepository.Has(person);
 			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
 
-			dynamic result = Target.GetValidation(planningPeriod.Id.GetValueOrDefault());
+			var result = (OkNegotiatedContentResult<ValidationResult>)Target.GetValidation(planningPeriod.Id.GetValueOrDefault());
 
-			result.ValidationResult.InvalidResources.Should().Be.Empty();
+			result.Content.InvalidResources.Should().Be.Empty();
 		}
 
 		[Test]
@@ -142,9 +143,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				}
 			};
 
-			dynamic result = Target.GetPlanningPeriod(planningPeriod.Id.GetValueOrDefault());
+			var result = (OkNegotiatedContentResult<ValidationResult>)Target.GetValidation(planningPeriod.Id.GetValueOrDefault());
 
-			result.ValidationResult.InvalidResources.Should().Not.Be.Empty();
+			result.Content.InvalidResources.Should().Not.Be.Empty();
 		}
 
 		[Test]

@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public int NumberOfActiveAgents()
 		{
-			throw new NotImplementedException();
+			return _storage.LoadAll<IPerson>().Count();
 		}
 
 		public IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)

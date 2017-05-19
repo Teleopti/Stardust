@@ -27,7 +27,7 @@
                 return;
             planningPeriodServiceNew.getValidation({ id: $stateParams.ppId })
                 .$promise.then(function (data) {
-                    vm.valData.preValidation = data.ValidationResult.InvalidResources;
+                    vm.valData.preValidation = data.InvalidResources;
                     getTotalValidationErrorsNumber();
                 });
         }

@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					People = _agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup).AllPeople.ToList()
 				});
 			}
-			return Ok(new { ValidationResult = validationResult});
+			return Ok(validationResult);
 		}
 
 		[UnitOfWork, HttpPut, Route("api/resourceplanner/planningperiod/{planningPeriodId}")]
