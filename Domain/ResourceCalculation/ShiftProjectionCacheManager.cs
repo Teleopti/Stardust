@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    return ret;
 	    }
 
-	    public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<IWorkShiftRuleSet> ruleSets,
-		    bool forRestrictionsOnly, bool checkExcluded)
+	    public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<IWorkShiftRuleSet> ruleSets, bool checkExcluded)
 	    {
 		    var shiftProjectionCaches = ruleSets.Where(ruleSet =>
 		    {
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			    return new List<ShiftProjectionCache>();
 		    var ruleSets =
 			    bag.RuleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions == forRestrictionsOnly);
-		    return ShiftProjectionCachesFromRuleSets(dateOnlyAsDateTimePeriod, ruleSets, forRestrictionsOnly, checkExcluded);
+		    return ShiftProjectionCachesFromRuleSets(dateOnlyAsDateTimePeriod, ruleSets, checkExcluded);
 	    }
 
 	    private IEnumerable<ShiftProjectionCache> getShiftsForRuleSet(IWorkShiftRuleSet ruleSet)

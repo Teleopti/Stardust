@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(getWorkShifts()).Repeat.Once();
 			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
 
-			var ret = _target.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(dateOnly, timeZoneInfo), new [] {workShiftRuleSet}, false, true);
+			var ret = _target.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(dateOnly, timeZoneInfo), new [] {workShiftRuleSet}, true);
 			Assert.IsNotNull(ret);
 			Assert.AreEqual(3, ret.Count);
 		}
