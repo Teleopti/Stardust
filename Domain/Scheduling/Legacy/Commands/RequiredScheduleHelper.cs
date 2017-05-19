@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -76,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		public void RemoveShiftCategoryBackToLegalState(
 			IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
@@ -103,6 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		public void ScheduleSelectedPersonDays(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, SchedulingOptions schedulingOptions)
 		{

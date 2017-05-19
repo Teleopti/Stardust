@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -9,15 +10,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public interface IFixedStaffSchedulingService
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public interface IFixedStaffSchedulingService
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         IList<WorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
 		bool DoTheScheduling(IList<IScheduleDay> selectedParts, SchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
     }
-
-    public class FixedStaffSchedulingService : IFixedStaffSchedulingService
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class FixedStaffSchedulingService : IFixedStaffSchedulingService
     {
 	    private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 	    private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
