@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -9,6 +11,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -18,6 +21,9 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 	[StaffingPerformanceTest]
 	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
 	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
+	[Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_43447)]
+	[Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271)]
+	[Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step3_44331)]
 	public class AddOverTimePerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
@@ -60,14 +66,14 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			WithUnitOfWork.Do(() =>
+			WithUnitOfWork.Do(uow =>
 			{
-				var resultModel = AddOverTime.GetSuggestion(new OverTimeSuggestionModel
-										  {
-											  SkillIds = skillIds.ToList(),
-											  TimeSerie = timeSerie
-										  });
-				AddOverTime.Apply(resultModel.OverTimeModels);
+				var resultModels = AddOverTime.GetSuggestionOld(new OverTimeSuggestionModel
+				{
+					SkillIds = skillIds.ToList(),
+					TimeSerie = timeSerie
+				});
+				AddOverTime.Apply(resultModels.OverTimeModels);
 			});
 
 		}

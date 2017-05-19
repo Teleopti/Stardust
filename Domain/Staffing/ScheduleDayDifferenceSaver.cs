@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public interface IScheduleDayDifferenceSaver
 	{
-		void SaveDifferences(IScheduleRange scheduleRange);
+		IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange);
+		IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange);
 	}
 
 	public class ScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
@@ -29,7 +30,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_staffingSettingsReader = staffingSettingsReader;
 		}
 
-		public void SaveDifferences(IScheduleRange scheduleRange)
+		public IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange)
+		{
+			var skillCombinationResourceDeltas = GetDifferences(scheduleRange).ToList();
+			_skillCombinationResourceRepository.PersistChanges(skillCombinationResourceDeltas);
+			return skillCombinationResourceDeltas;
+		}
+
+		public IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange)
 		{
 			var snapshot = ((ScheduleRange)scheduleRange).Snapshot;
 			var skillCombinationResourceDeltas = new List<SkillCombinationResource>();
@@ -38,15 +46,20 @@ namespace Teleopti.Ccc.Domain.Staffing
 			{
 				skillCombinationResourceDeltas.AddRange(_compareProjection.Compare(snapShotDay, scheduleRange.ScheduledDay(snapShotDay.DateOnlyAsPeriod.DateOnly)));
 			}
-			_skillCombinationResourceRepository.PersistChanges(skillCombinationResourceDeltas);
+			return skillCombinationResourceDeltas;
 		}
 	}
 
 	public class EmptyScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
 	{
-		public void SaveDifferences(IScheduleRange scheduleRange)
+		public IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange)
 		{
-			//do nothing
+			return new List<SkillCombinationResource>(); //do nothing
+		}
+
+		public IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange)
+		{
+			return new List<SkillCombinationResource>();
 		}
 	}
 

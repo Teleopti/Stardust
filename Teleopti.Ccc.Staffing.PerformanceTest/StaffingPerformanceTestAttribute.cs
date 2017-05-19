@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
@@ -33,8 +34,10 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<MutableNow>().For<INow>();
 			system.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
+			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
+			system.AddModule(new RuleSetModule(configuration,false));
 		}
 
 		protected override void Startup(IComponentContext container)
