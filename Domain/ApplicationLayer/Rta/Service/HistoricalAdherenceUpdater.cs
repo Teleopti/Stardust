@@ -9,14 +9,67 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	[EnabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
-	public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdaterImpl, 
-		IHandleEvents,
+	public class HistoricalAdherenceMaintainer :
 		IHandleEvent<TenantDayTickEvent>,
 		IRunOnHangfire
 	{
-		public HistoricalAdherenceUpdaterWithPackages(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister, INow now) :
-			base(adherencePersister, historicalChangePersister, now)
+		private readonly IHistoricalAdherenceReadModelPersister _adherencePersister;
+		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
+		private readonly INow _now;
+
+		public HistoricalAdherenceMaintainer(
+			IHistoricalAdherenceReadModelPersister adherencePersister,
+			IHistoricalChangeReadModelPersister historicalChangePersister,
+			INow now)
+		{
+			_adherencePersister = adherencePersister;
+			_historicalChangePersister = historicalChangePersister;
+			_now = now;
+		}
+
+		[ReadModelUnitOfWork]
+		[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
+		public virtual void Handle(TenantDayTickEvent tenantDayTickEvent)
+		{
+			_adherencePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
+			_historicalChangePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
+		}
+
+	}
+
+	[EnabledBy(Toggles.RTA_AsyncOptimization_43924)]
+	public class HistoricalAdherenceUpdaterInSync : HistoricalAdherenceUpdaterImpl,
+		IHandleEvents,
+		IRunInSync
+	{
+		public HistoricalAdherenceUpdaterInSync(IHistoricalAdherenceReadModelPersister adherencePersister,
+			IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
+		{
+		}
+
+		public void Subscribe(SubscriptionRegistrator registrator)
+		{
+			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
+			registrator.SubscribeTo<PersonInAdherenceEvent>();
+			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
+			registrator.SubscribeTo<PersonStateChangedEvent>();
+			registrator.SubscribeTo<PersonRuleChangedEvent>();
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(IEnumerable<IEvent> events)
+		{
+			events.ForEach(e => handle((dynamic) e));
+		}
+	}
+
+	[EnabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
+	[DisabledBy(Toggles.RTA_AsyncOptimization_43924)]
+	public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdaterImpl, 
+		IHandleEvents,
+		IRunOnHangfire
+	{
+		public HistoricalAdherenceUpdaterWithPackages(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
 		{
 		}
 
@@ -42,12 +95,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonNeutralAdherenceEvent>,
 		IHandleEvent<PersonStateChangedEvent>,
-		IHandleEvent<PersonRuleChangedEvent>,
-		IHandleEvent<TenantDayTickEvent>,
-		IRunOnHangfire
+		IHandleEvent<PersonRuleChangedEvent>
 	{
-		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister, INow now)
-			: base(adherencePersister, historicalChangePersister, now)
+		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister)
+			: base(adherencePersister, historicalChangePersister)
 		{
 		}
 
@@ -91,15 +142,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IHistoricalAdherenceReadModelPersister _adherencePersister;
 		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
-		private readonly INow _now;
 
 		protected HistoricalAdherenceUpdaterImpl(
 			IHistoricalAdherenceReadModelPersister adherencePersister, 
-			IHistoricalChangeReadModelPersister historicalChangePersister, 
-			INow now)
+			IHistoricalChangeReadModelPersister historicalChangePersister)
 		{
 			_adherencePersister = adherencePersister;
-			_now = now;
 			_historicalChangePersister = historicalChangePersister;
 		}
 
@@ -168,14 +216,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-		}
-
-		[ReadModelUnitOfWork]
-		[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
-		public virtual void Handle(TenantDayTickEvent tenantDayTickEvent)
-		{
-			_adherencePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
-			_historicalChangePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
 		}
 
 	}
