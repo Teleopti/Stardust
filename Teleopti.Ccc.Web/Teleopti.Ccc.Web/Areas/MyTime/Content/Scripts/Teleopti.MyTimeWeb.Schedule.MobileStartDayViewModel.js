@@ -44,6 +44,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.requestPermission = ko.observable();
 	self.showAbsenceReportingCommandItem = ko.observable();
 	self.showPostShiftTradeMenu = ko.observable(false);
+	self.baseUtcOffsetInMinutes = 0;
 
 	self.overtimeAvailabililty = null;
 
@@ -95,6 +96,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 		self.hasOvertime(data.Schedule.HasOvertime);
 		self.requestCount(data.Schedule.TextRequestCount);
+		self.baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
 
 		if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
 			var dayDate = moment(data.Schedule.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
@@ -181,8 +183,13 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		}
 	}
 
+	function getCurrentUserDate() {
+		var startOfDay = moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(self.baseUtcOffsetInMinutes)).startOf("day").format(constants.dateOnlyFormat);
+		return moment(startOfDay);
+	}
+
 	self.today = function () {
-		self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime()).startOf("day"));
+		self.currentUserDate = ko.observable(getCurrentUserDate());
 		parent.ReloadSchedule(self.currentUserDate());
 	};
 
@@ -208,7 +215,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			self.showingOvertimeProbability(false);
 		}
 
-		var withinProbabilityDisplayPeriod = self.selectedDate() >= moment().startOf('day') && self.selectedDate() < moment().add('day', constants.maximumDaysDisplayingProbability).startOf('day');
+		var withinProbabilityDisplayPeriod = self.selectedDate() >= getCurrentUserDate() && self.selectedDate() < getCurrentUserDate().add('day', constants.maximumDaysDisplayingProbability).startOf('day');
 		self.showProbabilityOptionsToggleIcon(self.staffingProbabilityOnMobileEnabled() && withinProbabilityDisplayPeriod);
 	}
 

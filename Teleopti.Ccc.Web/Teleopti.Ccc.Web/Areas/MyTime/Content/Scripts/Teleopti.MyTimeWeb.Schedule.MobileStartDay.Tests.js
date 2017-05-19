@@ -50,18 +50,13 @@
 	});
 
 	test("should go back to current date after clicking 'home' icon", function () {
+		startDayData.Date = moment().format(constants.dateOnlyFormat);
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		var currentDate = vm.selectedDate().format(constants.dateOnlyFormat);
-
-		Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime = function () {
-			return currentDate;
-		}
-
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm(); 
 		vm.nextDay();
-		equal(vm.selectedDate().format(constants.dateOnlyFormat), moment(currentDate).add('days', 1).format(constants.dateOnlyFormat));
+		equal(vm.selectedDate().format(constants.dateOnlyFormat), moment().add('days', 1).format(constants.dateOnlyFormat));
 		vm.today();
-		equal(vm.selectedDate().format(constants.dateOnlyFormat), moment(currentDate).format(constants.dateOnlyFormat));
+		equal(vm.selectedDate().format(constants.dateOnlyFormat), moment().format(constants.dateOnlyFormat));
 	});
 
 	test("should set timelines", function () {
@@ -429,6 +424,26 @@
 		equal(hash, "Requests/Index/ShiftTrade/" + vm.requestDay.format("YYYYMMDD"));
 	});
 
+	test("should get today by agent's timezone", function () {
+		startDayData.BaseUtcOffsetInMinutes = -600;
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.today();
+		equal(vm.currentUserDate().format("YYYY-MM-DD"), moment().add(-1, 'days').format("YYYY-MM-DD"));
+	});
+
+	test("should show probability toggle by agent's timezone", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			return false;
+		};
+
+		startDayData.BaseUtcOffsetInMinutes = -600;
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.today();
+		equal(vm.showProbabilityOptionsToggleIcon(), true);
+	});
 
 	function setupRequestCountTemplate() {
 		var template = $("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestCount() > 0'></span>");
@@ -465,6 +480,7 @@
 			, 'ShiftExchange/NewOffer', 'Requests/ShiftTradeRequestPeriod', 'ShiftExchange/GetAllWishShiftOptions'];
 
 		ajax = {
+			aa:"c",
 			Ajax: function (options) {
 				if (options.url === "../api/Schedule/FetchDayData") {
 					fetchDayDataCallback(options);
@@ -734,7 +750,7 @@
 				}
 			],
 			"AsmPermission": true,
-			"ViewPossibilityPermission": false,
+			"ViewPossibilityPermission": true,
 			"DatePickerFormat": "dd/MM/yyyy",
 			"DaylightSavingTimeAdjustment": {
 				"StartDateTime": "2017-03-26T01:00:00",
