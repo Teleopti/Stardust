@@ -6,6 +6,7 @@
 	var fetchDayDataRequestCount;
 	var requestSuccessData;
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
+	var propabilities = [];
 
 	var templateConfig = {
 		default: "add-new-request-detail-template",
@@ -445,6 +446,28 @@
 		equal(vm.showProbabilityOptionsToggleIcon(), true);
 	});
 
+	test("should show overtime probability by site open hour period", function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			return false;
+		};
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+		startDayData.Date = moment().format(constants.dateOnlyFormat);
+		startDayData.Schedule.SiteOpenHourPeriod = { EndTime: "13:00:00", StartTime: "08:00:00" };
+		propabilities = [
+			{ Date: "2017-05-19", StartTime: "2017-05-19T12:00:00", EndTime: "2017-05-19T12:15:00", Possibility: 1 },
+			{ Date: "2017-05-19", StartTime: "2017-05-19T15:00:00", EndTime: "2017-05-19T15:15:00", Possibility: 1 }
+		];
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.onProbabilityOptionSelectCallback(constants.probabilityType.overtime);
+		var probabilities = vm.probabilities();
+		var lastTooltips = probabilities[probabilities.length - 1].tooltips();
+		console.log(lastTooltips)
+		ok(lastTooltips.indexOf("12:00 - 12:15") > -1, "expect contains 12:00 - 12:15 but it is " + lastTooltips);
+	});
+
 	function setupRequestCountTemplate() {
 		var template = $("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestCount() > 0'></span>");
 		$("body").append(template);
@@ -480,7 +503,6 @@
 			, 'ShiftExchange/NewOffer', 'Requests/ShiftTradeRequestPeriod', 'ShiftExchange/GetAllWishShiftOptions'];
 
 		ajax = {
-			aa:"c",
 			Ajax: function (options) {
 				if (options.url === "../api/Schedule/FetchDayData") {
 					fetchDayDataCallback(options);
@@ -490,6 +512,9 @@
 				}
 				else if (requestUrls.indexOf(options.url) > -1) {
 					requestSuccessCallback(options);
+				}
+				else if (options.url === "../api/ScheduleStaffingPossibility") {
+					scheduleStaffingPossibilityCallback(options);
 				}
 			}
 		};
@@ -515,6 +540,10 @@
 
 		function requestSuccessCallback(options) {
 			options.success(requestSuccessData);
+		}
+
+		function scheduleStaffingPossibilityCallback(options) {
+			options.success(propabilities);
 		}
 	}
 
@@ -760,7 +789,7 @@
 			"BaseUtcOffsetInMinutes": 60.0,
 			"CheckStaffingByIntraday": false,
 			"Possibilities": [],
-			"SiteOpenHourIntradayPeriod": null,
+			"SiteOpenHourPeriod": null,
 			"ShiftTradeRequestSetting": {
 				"HasWorkflowControlSet": true,
 				"NowDay": moment().format('D'),
