@@ -3042,6 +3042,9 @@
   <data name="NoChartDataRowsEnabled" xml:space="preserve">
     <value>Aucun diagramme de données validé</value>
   </data>
+  <data name="FilterTeams" xml:space="preserve">
+    <value>Filtrer équipes</value>
+  </data>
   <data name="ManageMultisiteDistributions" xml:space="preserve">
     <value>Gérer distribution multisite</value>
   </data>
@@ -6143,6 +6146,9 @@
   </data>
   <data name="Optimisation" xml:space="preserve">
     <value>Optimisation</value>
+  </data>
+  <data name="OverStaff" xml:space="preserve">
+    <value>Trop de personnel</value>
   </data>
   <data name="UnderStaff" xml:space="preserve">
     <value>Sous-dimensionnement</value>
@@ -10057,6 +10063,9 @@ Ces options sont actives:
   <data name="CreateNewRole" xml:space="preserve">
     <value>Créer un nouveau rôle</value>
   </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>Filtre données...</value>
+  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Duplicata</value>
   </data>
@@ -10068,6 +10077,12 @@ Ces options sont actives:
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Objets désactivés</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Filtre permissions...</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Filtre rôle...</value>
   </data>
   <data name="SelectedItems" xml:space="preserve">
     <value>Objets activés</value>
@@ -10248,6 +10263,9 @@ Ces options sont actives:
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>agents</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>Filtrer les emplacements</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Statut de chargement sur le plan de postes.</value>
@@ -10784,6 +10802,9 @@ Aidez-nous à améliorer votre expérience en envoyant un rapport d'erreur.</val
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
     <value>Fuseau horaire de la demande</value>
   </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Filtrer rôles</value>
+  </data>
   <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
     <value>Dimensions invalides! S'attend à une image plus petite que 2000x4000</value>
   </data>
@@ -11007,7 +11028,7 @@ Aidez-nous à améliorer votre expérience en envoyant un rapport d'erreur.</val
     <value>Traffic entrant</value>
   </data>
   <data name="IntradayIntroText" xml:space="preserve">
-    <value>Vous pouvez ici surveiller les indicateurs d'intrajournalier, commencez par sélectionner une compétence ou une zone</value>
+    <value>Vous pouvez ici surveiller les indicateurs d'intra-journalier, commencez par sélectionner une compétence ou une zone</value>
   </data>
   <data name="OfferedAverageHandleTime" xml:space="preserve">
     <value>Temps de traitement moyen offert</value>
@@ -11091,7 +11112,7 @@ Aidez-nous à améliorer votre expérience en envoyant un rapport d'erreur.</val
     <value>Vous ne pouvez pas ajouter une activité à {0} pour le jour suivant sans quart.</value>
   </data>
   <data name="PreviewTheNewIntradayTool" xml:space="preserve">
-    <value>Nouvel outil Intrajournalier en avant-première!</value>
+    <value>Nouvel outil Intra-journalier en avant-première!</value>
   </data>
   <data name="ExtendExistingShift" xml:space="preserve">
     <value>Étendre l'horaire existant</value>
@@ -11204,6 +11225,9 @@ Version majeure: {4}
 Le schéma de clé d'activation produit est "{2}".
 Ces options sont activées:
 {3}</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>Filtrer les rapports</value>
   </data>
   <data name="AbandonedRate" xml:space="preserve">
     <value>Taux d'abandon</value>
@@ -11578,7 +11602,7 @@ Ces options sont activées:
     <value>L'autre agent n'a pas la permission d'échanger avec vous.</value>
   </data>
   <data name="IntradayWithShrinkage" xml:space="preserve">
-    <value>Intrajournalier avec réduction</value>
+    <value>Intra-journalier avec réduction</value>
   </data>
   <data name="ForecastOverrideMsg" xml:space="preserve">
     <value>Supplanter les valeurs prévues</value>
@@ -12234,5 +12258,308 @@ Souhaitez-vous participer?</value>
   </data>
   <data name="NoInput" xml:space="preserve">
     <value>Pas d'entrée</value>
+  </data>
+  <data name="ColumnCanNotBeEmpty" xml:space="preserve">
+    <value>La colonne '{0}' ne peut pas être vide</value>
+  </data>
+  <data name="ANewImportJobHasBeenCreatedFor" xml:space="preserve">
+    <value>Une nouvelle tâche d'import a été créée pour '{0}'</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForFullSuccess" xml:space="preserve">
+    <value>{0} importés. Succès pour tous.</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForNonfullSuccess" xml:space="preserve">
+    <value>{0} importés. {1} échecs</value>
+  </data>
+  <data name="ImportJob" xml:space="preserve">
+    <value>Tâche importante</value>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>En cours</value>
+  </data>
+  <data name="TimeStarted" xml:space="preserve">
+    <value>Heure de début:</value>
+  </data>
+  <data name="InvalidParameters" xml:space="preserve">
+    <value>Paramètres invalides</value>
+  </data>
+  <data name="NumberOfRowsExceedsTheMaximum" xml:space="preserve">
+    <value>Le nombre de rangées excède ({0}).</value>
+  </data>
+  <data name="DynamicGroupPageColon" xml:space="preserve">
+    <value>Page de groupe dynamique*:</value>
+  </data>
+  <data name="ForecastedVolume" xml:space="preserve">
+    <value>Volume prévu</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="ExceedsMaximumUploadFileSize" xml:space="preserve">
+    <value>Excède la taille maximum de volume de téléchargement</value>
+  </data>
+  <data name="ActualVolume" xml:space="preserve">
+    <value>Volume réel</value>
+  </data>
+  <data name="ForecastedAverageHandlingTime" xml:space="preserve">
+    <value>Durée de traitement moyenne prévue</value>
+  </data>
+  <data name="ErrorOccurredWhenGeneratingQrcode" xml:space="preserve">
+    <value>Une erreur est survenue lors de la génération du code QR</value>
+  </data>
+  <data name="ActualAverageHandlingTime" xml:space="preserve">
+    <value>Durée de traitement moyenne réelle</value>
+  </data>
+  <data name="FilterRtaFull" xml:space="preserve">
+    <value>Filtrer les noms d'agents / sites / équipes / règles / statuts / activités courantess</value>
+  </data>
+  <data name="FilterRtaShort" xml:space="preserve">
+    <value>Filtrer les noms d'agents / statuts / ...</value>
+  </data>
+  <data name="FilterSites" xml:space="preserve">
+    <value>Filtrer sites</value>
+  </data>
+  <data name="FilterSkills" xml:space="preserve">
+    <value>Filtrer compétences</value>
+  </data>
+  <data name="Purged" xml:space="preserve">
+    <value>Purgé</value>
+  </data>
+  <data name="DeletedContractAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Le contrat {0} assigné à cet agent a été supprimé</value>
+  </data>
+  <data name="DeletedContractScheduleAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Le planning contrat {0} assigné à cet agent a été supprimé</value>
+  </data>
+  <data name="DeletedPartTimePercentageAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Le pourcentage de temps partiel {0} assigné à cet agent a été supprimé</value>
+  </data>
+  <data name="DeletedShiftBagAssignedForPlanningPeriod" xml:space="preserve">
+    <value>La banque de quarts {0} assignée à cet agent a été supprimée</value>
+  </data>
+  <data name="MissingPersonPeriodForPlanningPeriod" xml:space="preserve">
+    <value>L'agent n'a pas de période de planification pour toute ou une partie de la période planifiée</value>
+  </data>
+  <data name="MissingSchedulePeriodForPlanningPeriod" xml:space="preserve">
+    <value>L'agent n'a aucune période de planification pour la période planifiée</value>
+  </data>
+  <data name="MissingShiftBagForPlanningPeriod" xml:space="preserve">
+    <value>L'agent n'a pas de banque de quarts pour toute ou une partie de la période planifiée</value>
+  </data>
+  <data name="MissingSkillsForPlanningPeriod" xml:space="preserve">
+    <value>L'agent n'a pas de compétence pour toute ou une partie de la période planifiée</value>
+  </data>
+  <data name="NoFullSchedulePeriod" xml:space="preserve">
+    <value>La période de planification ne correspond pas avec la période planifiée</value>
+  </data>
+  <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
+    <value>L'agent a {0} jours sans aucun planning.</value>
+  </data>
+  <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
+    <value>La cible de temps contrat ({0}) n'est pas remplie</value>
+  </data>
+  <data name="EmailSkillSelected" xml:space="preserve">
+    <value>Une compétence de type courriel est sélectionnée. De ce fait le taux d'abandons ne peut pas être montrée.</value>
+  </data>
+  <data name="AgentsHaveScheduled" xml:space="preserve">
+    <value>agents ont été planifiés</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheAgentGroup" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer le groupe d'agents '{0}' et ses paramètres relatifs?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer la règle de jours libres {0} et ses paramètres relatifs?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningPeriod" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer la période planning {0}-{1} et ses paramètres relatifs?</value>
+  </data>
+  <data name="ChangePlanningDuration" xml:space="preserve">
+    <value>Changer la durée de planification</value>
+  </data>
+  <data name="CreateAgentGroup" xml:space="preserve">
+    <value>Créer groupe d'agents</value>
+  </data>
+  <data name="CreateFirstPlanningPeriod" xml:space="preserve">
+    <value>Créer la première période de planification</value>
+  </data>
+  <data name="CreateNextPp" xml:space="preserve">
+    <value>Créer la prochaine période de planification</value>
+  </data>
+  <data name="DayOffRule" xml:space="preserve">
+    <value>Règle de jour libre</value>
+  </data>
+  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
+    <value>Les paramètres suivants sont appliqués au groupe d'agents {0}</value>
+  </data>
+  <data name="DayOffRuleSetting" xml:space="preserve">
+    <value>Paramètres de règles de jours libres</value>
+  </data>
+  <data name="DeleteAgentGroup" xml:space="preserve">
+    <value>Supprimer groupe d'agents</value>
+  </data>
+  <data name="DeleteDayOffRule" xml:space="preserve">
+    <value>Supprimer règle de jours libres</value>
+  </data>
+  <data name="DeletePlanningPeriod" xml:space="preserve">
+    <value>Supprimer période de planification</value>
+  </data>
+  <data name="EditAgentGroup" xml:space="preserve">
+    <value>Editer groupe d'agents </value>
+  </data>
+  <data name="FilterValidationIssues" xml:space="preserve">
+    <value>Filtrer les problèmes de validation</value>
+  </data>
+  <data name="HelpCreateAgentGroup" xml:space="preserve">
+    <value>Un groupe d'agent est nécessaire pour pouvoir planifier. Voulez-vous créer un groupe d'agents?</value>
+  </data>
+  <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
+    <value>Les règles de jours libres vont être appliquées pour toutes les périodes de planification</value>
+  </data>
+  <data name="Issue" xml:space="preserve">
+    <value>Problème</value>
+  </data>
+  <data name="ManageDayOffForAgentGroup" xml:space="preserve">
+    <value>Gérer les règles de jours libres pour le groupe d'agents {0}</value>
+  </data>
+  <data name="NewAgentGroup" xml:space="preserve">
+    <value>Nouveau groupe d'agents</value>
+  </data>
+  <data name="NoAgentsWithinAgentGroup" xml:space="preserve">
+    <value>Il n'y a pas d'agents pouvant être planifiés dans ce groupe d'agents</value>
+  </data>
+  <data name="NoPreviousScheduleResult" xml:space="preserve">
+    <value>La période de planification n'a pas de résultat de planification précédent</value>
+  </data>
+  <data name="NoValidIssuesForPp" xml:space="preserve">
+    <value>Il n'y a aucun problème de validation pour cette période de planification</value>
+  </data>
+  <data name="NoValidScheduleResult" xml:space="preserve">
+    <value>La période de planification n'a pas de résultat de planification valide</value>
+  </data>
+  <data name="PreSchedulingValidationIssues" xml:space="preserve">
+    <value>Problèmes de validation pre-planification</value>
+  </data>
+  <data name="RefreshPreSchedulingValidationIssues" xml:space="preserve">
+    <value>Rafraîchir les problèmes de pre-planification</value>
+  </data>
+  <data name="ScheduleAgentGroup" xml:space="preserve">
+    <value>Planifier groupe d'agents</value>
+  </data>
+  <data name="SchedulingFailed" xml:space="preserve">
+    <value>Echec de planification</value>
+  </data>
+  <data name="ScheduledIssues" xml:space="preserve">
+    <value>Problèmes durant la dernière planification</value>
+  </data>
+  <data name="SchedulingSucceeded" xml:space="preserve">
+    <value>Planification réussie</value>
+  </data>
+  <data name="SchedulePageSelectAg" xml:space="preserve">
+    <value>Sélectionner un groupe d'agents avec lequel travailler</value>
+  </data>
+  <data name="SearchForAgentGroup" xml:space="preserve">
+    <value>Rechercher Site / Equipe / Compétence / Contrat</value>
+  </data>
+  <data name="SearchForDayOff" xml:space="preserve">
+    <value>Rechercher Site / Equipe / Contrat</value>
+  </data>
+  <data name="SelectedPlanningPeriod" xml:space="preserve">
+    <value>Sélectionner période de planification</value>
+  </data>
+  <data name="SelectPpWorkWith" xml:space="preserve">
+    <value>Sélectionner période à planifier</value>
+  </data>
+  <data name="UpdatedValidation" xml:space="preserve">
+    <value>Les problèmes de validation ont été mis à jour</value>
+  </data>
+  <data name="ConfirmToggleAllData" xml:space="preserve">
+    <value>Ceci va activer cet item et tous les items sous-jacents, êtes vous sûr de vouloir procéder?</value>
+  </data>
+  <data name="AnErrorOccurredPleaseTryAgain" xml:space="preserve">
+    <value>Un erreur est survenue. Merci de ré-essayer.</value>
+  </data>
+  <data name="ChangePlanningPeriodDurationColon" xml:space="preserve">
+    <value>Changer la durée de la période de plannification:</value>
+  </data>
+  <data name="ClearScheduleResultAndHistoryData" xml:space="preserve">
+    <value>Supprimer les quarts planifiés et jours libres</value>
+  </data>
+  <data name="CreatePlanningPeriod" xml:space="preserve">
+    <value>Créer période de planification</value>
+  </data>
+  <data name="ModifyEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Modifier la date de fin pour cette période de planification</value>
+  </data>
+  <data name="ModifyStartAndEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Modifier la date de début et date de fin pour cette période de planification.</value>
+  </data>
+  <data name="RunningIntradayOptimization" xml:space="preserve">
+    <value>Lancer l'optimisation de l'intra-journalier</value>
+  </data>
+  <data name="SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot" xml:space="preserve">
+    <value>Sélectionner une période suggérée pour travailler ou choisir directement une date de début et de fin.</value>
+  </data>
+  <data name="SuccessfullyScheduledPlanningPeriodFromTo" xml:space="preserve">
+    <value>A planifié la période de planification {0} - {1} avec succès</value>
+  </data>
+  <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
+    <value>Vous êtes sur le point de changer cette période de planification pour {0} - {1}.</value>
+  </data>
+  <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
+    <value>Vous êtes sur le point de créer une période de planification de {0} à {1}.</value>
+  </data>
+  <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
+    <value>Vous avez besoin d'une période de planification pour planifier vos agents. Voulez-vous créer une période de planification?</value>
+  </data>
+  <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer les quarts planifiés et jours libres pour la période {0}-{1} ?</value>
+  </data>
+  <data name="ClearPlanningPeriod" xml:space="preserve">
+    <value>Supprimer les quarts planifiés et les jours libres pour la période de planification</value>
+  </data>
+  <data name="PublishingSchedule" xml:space="preserve">
+    <value>Publie les emplois du temps</value>
+  </data>
+  <data name="PublishScheduleSuccess" xml:space="preserve">
+    <value>Publication des emplois du temps réussie</value>
+  </data>
+  <data name="SuccessClearPlanningPeriodData" xml:space="preserve">
+    <value>A supprimé avec succès les quarts planifiés et jours libres pour la période {0}-{1}</value>
+  </data>
+  <data name="FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>A échoué l'optimization de l'intra-journalier pour la période de planification {0} - {1} suite à une erreur technique. Merci de ré-essayer ultérieurement.</value>
+  </data>
+  <data name="PublishingScheduleSuccess" xml:space="preserve">
+    <value>Publie les emplois du temps pour la période de planification {0} - {1}</value>
+  </data>
+  <data name="PublishScheduleSucessForSelectedPlanningPeriod" xml:space="preserve">
+    <value>A publié avec succès les emplois du temps pour la période de planification {0} - {1}</value>
+  </data>
+  <data name="SuccessfullyIntradayOptimizationPlanningPeriodFromTo" xml:space="preserve">
+    <value>A réalisé avec succès l'optimisation de l'intra-journalier pour la période de planification {0} - {1}</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>Mauvaise requête.</value>
+  </data>
+  <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
+    <value>L'heure de fin doit être après l'heure de début.</value>
+  </data>
+  <data name="TeleoptiWFMApp" xml:space="preserve">
+    <value>App Teleopti WFM</value>
+  </data>
+  <data name="WFMAppGuideStep1" xml:space="preserve">
+    <value>Etape 1:</value>
+  </data>
+  <data name="WFMAppGuideStep1Description" xml:space="preserve">
+    <value>Téléchargez et installez l'app Teleopti WFM en cliquant sur un bouton approprié ou en scannant le code QR ci-dessous.</value>
+  </data>
+  <data name="WFMAppGuideStep2" xml:space="preserve">
+    <value>Etape 2:</value>
+  </data>
+  <data name="WFMAppGuideStep2Description" xml:space="preserve">
+    <value>Configurez l'app Teleopti WFM. Lancer l'app et ensuite scannez le code QR ci-dessous ou entrez</value>
+  </data>
+  <data name="WFMAppGuideTitle" xml:space="preserve">
+    <value>Guide pour l'app Teleopti WFM.</value>
   </data>
 </root>
