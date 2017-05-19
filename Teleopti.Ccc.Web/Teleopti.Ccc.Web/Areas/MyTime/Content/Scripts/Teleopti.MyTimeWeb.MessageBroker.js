@@ -1,5 +1,5 @@
 /// <reference path="~/Content/signalr/broker-hubs.js" />
-/// <reference path="~/Content/signalr/jquery.signalR-2.2.0.js" />
+/// <reference path="~/Content/signalr/jquery.signalR-2.2.2.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
 
 Teleopti.MyTimeWeb.MessageBroker = (function () {

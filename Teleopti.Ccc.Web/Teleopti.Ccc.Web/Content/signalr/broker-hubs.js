@@ -1,10 +1,9 @@
 ﻿/*!
- * ASP.NET SignalR JavaScript Library v2.1.2
+ * ASP.NET SignalR JavaScript Library v2.2.2
  * http://signalr.net/
  *
- * Copyright Microsoft Open Technologies, Inc. All rights reserved.
- * Licensed under the Apache 2.0
- * https://github.com/SignalR/SignalR/blob/master/LICENSE.md
+ * Copyright (c) .NET Foundation. All rights reserved.
+ * Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
  *
  */
 
@@ -78,12 +77,9 @@
 			registerHubProxies(proxies, false);
 		});
 
-		proxies['groupScheduleHub'] = this.createHubProxy('groupScheduleHub');
-		proxies['groupScheduleHub'].client = {};
-		proxies['groupScheduleHub'].server = {
-			subscribeGroupSchedule: function (groupId, dateInUserTimeZone) {
-				return proxies['groupScheduleHub'].invoke.apply(proxies['groupScheduleHub'], $.merge(["SubscribeGroupSchedule"], $.makeArray(arguments)));
-			}
+		proxies['backportableHub'] = this.createHubProxy('backportableHub');
+		proxies['backportableHub'].client = {};
+		proxies['backportableHub'].server = {
 		};
 
 		proxies['MessageBrokerHub'] = this.createHubProxy('MessageBrokerHub');
@@ -93,7 +89,7 @@
 				return proxies['MessageBrokerHub'].invoke.apply(proxies['MessageBrokerHub'], $.merge(["AddSubscription"], $.makeArray(arguments)));
 			},
 
-			notifyClients: function (notification) {
+			notifyClients: function (message) {
 				return proxies['MessageBrokerHub'].invoke.apply(proxies['MessageBrokerHub'], $.merge(["NotifyClients"], $.makeArray(arguments)));
 			},
 
@@ -112,19 +108,6 @@
 			removeSubscription: function (route) {
 				return proxies['MessageBrokerHub'].invoke.apply(proxies['MessageBrokerHub'], $.merge(["RemoveSubscription"], $.makeArray(arguments)));
 			}
-		};
-
-		proxies['personScheduleHub'] = this.createHubProxy('personScheduleHub');
-		proxies['personScheduleHub'].client = {};
-		proxies['personScheduleHub'].server = {
-			personSchedule: function (personId, date) {
-				return proxies['personScheduleHub'].invoke.apply(proxies['personScheduleHub'], $.merge(["PersonSchedule"], $.makeArray(arguments)));
-			}
-		};
-
-		proxies['testableHub'] = this.createHubProxy('testableHub');
-		proxies['testableHub'].client = {};
-		proxies['testableHub'].server = {
 		};
 
 		return proxies;
