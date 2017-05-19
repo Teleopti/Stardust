@@ -33,24 +33,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	        var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(teamBlockInfo.BlockInfo.BlockPeriod,
 	                                                                        extractedRuleSetBags);
 			filteredList = filterForSkillActivity(filteredList, teamBlockInfo, groupPersonSkillAggregator);
-		    if (!useShiftsForRestrictions)
-			    filteredList = filterForShiftsForRestrictions(filteredList);
+		    filteredList = filterForShiftsForRestrictions(filteredList, useShiftsForRestrictions);
 
             return filteredList;
         }
 
-	    private IEnumerable<IWorkShiftRuleSet> filterForShiftsForRestrictions(IEnumerable<IWorkShiftRuleSet> filteredList)
+	    private IEnumerable<IWorkShiftRuleSet> filterForShiftsForRestrictions(IEnumerable<IWorkShiftRuleSet> filteredList, bool useShiftsForRestrictions)
 	    {
-		    var result = filteredList.Where(w => !w.OnlyForRestrictions);
-		    return result;
+		    return useShiftsForRestrictions ? 
+				filteredList : 
+				filteredList.Where(w => !w.OnlyForRestrictions);
 	    }
 
 	    public IEnumerable<IWorkShiftRuleSet> FilterForTeamMember(IPerson person, DateOnly explicitDateToCheck, SchedulingOptions schedulingOptions, bool useShiftsForRestrictions)
         {
 	        var extractedRuleSetBags = new[] { _ruleSetBagExtractorProvider.Fetch(schedulingOptions).GetRuleSetBagForTeamMember(person, explicitDateToCheck)};
 			var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(explicitDateToCheck.ToDateOnlyPeriod(), extractedRuleSetBags);
-			if (!useShiftsForRestrictions)
-				filteredList = filterForShiftsForRestrictions(filteredList);
+			filteredList = filterForShiftsForRestrictions(filteredList, useShiftsForRestrictions);
 
 			return filteredList;
         }
