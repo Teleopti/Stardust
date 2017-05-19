@@ -30,7 +30,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastedStaffingToDataSeries>().SingleInstance();
 			builder.RegisterType<ReforecastedStaffingProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.Wfm_Intraday_SupportSkillTypeWebChat_42591))
-				builder.RegisterType<SupportedSkillsInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
+			{
+				if (_configuration.Toggle(Toggles.WFM_Intraday_SupportMultisiteSkill_43874))
+				{
+					builder.RegisterType<SupportSkillsWithMultiskillInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
+				}
+				else
+				{
+					builder.RegisterType<SupportedSkillsInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
+				}
+			}
 			else
 				builder.RegisterType<SupportedLimitedSkillsInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
 			builder.RegisterType<TaskPeriodsProvider>().SingleInstance();

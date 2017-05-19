@@ -160,5 +160,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skills.Last().DoDisplayData.Should().Be.EqualTo(true);
 		}
 
+		[Test]
+		public void ShouldMarkMultisiteSkillForDisplay()
+		{
+			ISkillTypePhone skillTypePhone = new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony);
+			var multiSiteSkill = SkillFactory.CreateMultisiteSkill("Multisite", skillTypePhone, 15);
+			var activity = new Activity("dummyActivity");
+			multiSiteSkill.Activity = activity;
+			var queueSourceHelpdesk = QueueSourceFactory.CreateQueueSourceHelpdesk();
+
+			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
+			PersistAndRemoveFromUnitOfWork(skillTypePhone);
+			PersistAndRemoveFromUnitOfWork(activity);
+			PersistAndRemoveFromUnitOfWork(multiSiteSkill);
+			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
+
+			var workloadEmail = WorkloadFactory.CreateWorkload(multiSiteSkill);
+			workloadEmail.AddQueueSource(queueSourceHelpdesk);
+			PersistAndRemoveFromUnitOfWork(workloadEmail);
+
+			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportSkillsWithMultiskillInIntradayProvider(null));
+			var skills = target.Skills().ToList();
+			skills.Count().Should().Be.EqualTo(1);
+			skills.First().Name.Should().Be.EqualTo(multiSiteSkill.Name);
+			skills.First().DoDisplayData.Should().Be.EqualTo(true);
+		}
 	}
 }

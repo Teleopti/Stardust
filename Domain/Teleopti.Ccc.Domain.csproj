@@ -251,6 +251,7 @@
     <Compile Include="Intraday\ForecastedStaffingToDataSeries.cs" />
     <Compile Include="Intraday\IStaffingViewModelCreator.cs" />
     <Compile Include="Intraday\ScheduledStaffingToDataSeries.cs" />
+    <Compile Include="Intraday\SupportSkillsWithMultiskillInIntradayProvider.cs" />
     <Compile Include="MultiTenancy\DuplicateApplicationLogonNameException.cs" />
     <Compile Include="MultiTenancy\DuplicateIdentityException.cs" />
     <Compile Include="MultiTenancy\PasswordStrengthException.cs" />
