@@ -411,7 +411,10 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		},
 		InitPeriodSelection: function (rangeSelectorId, periodData, actionSuffix) {
 		},
-		IsMobile: function () { return _isMobile(window); }
+		IsMobile: function (mywindow) { 
+			mywindow = mywindow || window;
+			return _isMobile(mywindow); 
+		}
 	};
 })(jQuery);
 

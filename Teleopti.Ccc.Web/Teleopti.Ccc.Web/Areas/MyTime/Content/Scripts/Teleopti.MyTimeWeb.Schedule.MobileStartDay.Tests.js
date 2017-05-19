@@ -29,6 +29,44 @@
 			}
 		});
 
+	test("should navigate to default start date when clicking logo", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle){
+			if(toggle == 'MyTimeWeb_DayScheduleForStartPage_43446')
+				return true;
+		};
+
+		var brandEle = document.createElement('div');
+		brandEle.innerHTML = '<div class="navbar-header pull-left fake-navbar-brand">'
+							+ '<button id="mainNavbarToggler" type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-offcanvas">'
+							+ 	'<span class="icon-bar"></span>'
+							+ 	'<span class="icon-bar"></span>'
+							+ 	'<span class="icon-bar"></span>'
+							+'</button>'
+
+							+'<a class="navbar-brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>'
+						+ '</div>';
+
+		$("body").append(brandEle);
+		var fakeWindow = {
+			navigator: {
+				appVersion: '5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
+				userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
+			}
+		};
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, fakeWindow);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		var currentDate = vm.selectedDate();
+		vm.nextDay();
+
+		equal(vm.selectedDate().format('YYYY-MM-DD'), currentDate.add(1, 'days').format('YYYY-MM-DD'));
+		equal($('a.navbar-brand').attr('href'), '#Schedule/MobileDay');
+		$('a.navbar-brand').click();
+
+		equal(vm.selectedDate().format('YYYY-MM-DD'), vm.currentUserDate().format('YYYY-MM-DD'));
+
+		$('.fake-navbar-brand').remove();
+	});
+
 	test("should navigate to next date when swiping left", function () {
 		$("body").addClass("mobile-start-day-body");
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);

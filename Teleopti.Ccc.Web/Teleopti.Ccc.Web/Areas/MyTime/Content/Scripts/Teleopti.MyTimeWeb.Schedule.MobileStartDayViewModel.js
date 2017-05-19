@@ -15,6 +15,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 	self.displayDate = ko.observable();
 	self.selectedDate = ko.observable(moment().startOf("day"));
+	self.currentUserDate = ko.observable();
 	self.isToday = ko.observable(false);
 	self.selectedDateSubscription = null;
 
@@ -147,6 +148,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			self.reloadProbabilityData();
 
 		setPostShiftTradeMenuVisibility(data);
+		self.currentUserDate(getCurrentUserDate());
 	};
 
 	function setPostShiftTradeMenuVisibility(data) {

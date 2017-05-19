@@ -83,6 +83,26 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		ko.applyBindings(vm, $("#page")[0]);
 	}
 
+	function setUpLogoClickFn(mywindow) {
+		if(Teleopti.MyTimeWeb.Portal.IsMobile(mywindow) && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446")){
+			var brand = $('a.navbar-brand');
+			if(brand.data('events') && brand.data('events')['click'])
+				brand.unbind('click');
+
+			brand.attr({
+					href:'#Schedule/MobileDay'
+				})
+				.click(function(){
+					if(!vm.selectedDate().isSame(vm.currentUserDate().format('YYYY-MM-DD'), 'day'))
+						vm.today();
+				});
+
+			$('a[href="#ScheduleTab"]').attr({
+				href: '#Schedule/MobileDay',
+			});
+		}
+	}
+
 	return {
 		Init: function () {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
@@ -91,13 +111,15 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 					Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialDispose);
 			}
 		},
-		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxobj) {
+		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxobj, mywindow) {
 			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
 			dataService = new Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService(ajax);
 			completelyLoaded = completelyLoadedCallback;
 			registerUserInfoLoadedCallback();
 			registerSwipeEvent();
 			Teleopti.MyTimeWeb.Common.HideAgentScheduleMessenger();
+			mywindow = mywindow || window;
+			setUpLogoClickFn(mywindow);
 			readyForInteractionCallback();
 		},
 		ReloadScheduleListener: function (notification) {
