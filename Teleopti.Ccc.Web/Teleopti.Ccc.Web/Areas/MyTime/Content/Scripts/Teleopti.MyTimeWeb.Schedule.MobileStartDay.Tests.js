@@ -464,7 +464,6 @@
 		vm.onProbabilityOptionSelectCallback(constants.probabilityType.overtime);
 		var probabilities = vm.probabilities();
 		var lastTooltips = probabilities[probabilities.length - 1].tooltips();
-		console.log(lastTooltips)
 		ok(lastTooltips.indexOf("12:00 - 12:15") > -1, "expect contains 12:00 - 12:15 but it is " + lastTooltips);
 	});
 
