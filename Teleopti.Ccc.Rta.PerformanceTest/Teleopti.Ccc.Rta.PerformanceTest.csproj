@@ -70,7 +70,7 @@
     <Compile Include="Code\RtaPerformanceTestAttribute.cs" />
     <Compile Include="NUnitSetup.cs" />
     <Compile Include="Code\TestConfiguration.cs" />
-    <Compile Include="SendSingleStatesTest.cs" />
+    <Compile Include="QueueWorkSmallBatchesTest.cs" />
     <Compile Include="Code\StatesSender.cs" />
     <Compile Include="Code\StateChange.cs" />
     <Compile Include="Service References\TeleoptiRtaService\Reference.cs" />
