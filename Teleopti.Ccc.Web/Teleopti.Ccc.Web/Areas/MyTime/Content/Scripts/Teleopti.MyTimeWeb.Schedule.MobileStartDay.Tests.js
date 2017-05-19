@@ -430,7 +430,7 @@
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.today();
-		equal(vm.currentUserDate().format("YYYY-MM-DD"), moment().add(-1, 'days').format("YYYY-MM-DD"));
+		equal(vm.currentUserDate().format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"));
 	});
 
 	test("should show probability toggle by agent's timezone", function () {
