@@ -28,5 +28,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.Where(x => x.PersonId == personId && x.Timestamp >= startTime && x.Timestamp <= endTime)
 				.ToArray();
 		}
+
+		public void Remove(DateTime until)
+		{
+		}
 	}
 }

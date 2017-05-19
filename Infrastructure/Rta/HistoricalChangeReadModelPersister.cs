@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
@@ -51,5 +52,14 @@ INSERT INTO [ReadModel].[HistoricalChange] (
 				.ExecuteUpdate();
 		}
 
+		public void Remove(DateTime until)
+		{
+			_unitOfWork.Current()
+				   .CreateSqlQuery(@"
+DELETE FROM [ReadModel].[HistoricalChange] WHERE Timestamp < :ts")
+				   .SetParameter("ts", until)
+				   .ExecuteUpdate();
+
+		}
 	}
 }

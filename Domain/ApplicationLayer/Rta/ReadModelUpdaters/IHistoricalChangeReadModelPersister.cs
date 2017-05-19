@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 	public interface IHistoricalChangeReadModelPersister
 	{
 		void Persist(HistoricalChangeReadModel model);
+		void Remove(DateTime until);
 	}
 
 	public interface IHistoricalChangeReadModelReader

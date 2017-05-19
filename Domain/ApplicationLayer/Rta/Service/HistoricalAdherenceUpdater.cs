@@ -175,6 +175,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Handle(TenantDayTickEvent tenantDayTickEvent)
 		{
 			_adherencePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
+			_historicalChangePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
 		}
 
 	}
