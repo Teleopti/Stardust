@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		public IBusinessUnitRepository BusinessUnits;
 		public HangfireClientStarter HangfireClientStarter;
 		public HangfireUtilities Hangfire;
+		public StateQueueUtilities StateQueue;
 
 		protected override void BeforeTest()
 		{
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			base.AfterTest();
 
 			Hangfire.WaitForQueue();
+			StateQueue.WaitForQueue();
 
 			TestSiteConfigurationSetup.TearDown();
 
