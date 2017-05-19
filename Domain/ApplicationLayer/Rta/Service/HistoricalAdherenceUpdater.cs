@@ -9,34 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class HistoricalAdherenceMaintainer :
-		IHandleEvent<TenantDayTickEvent>,
-		IRunOnHangfire
-	{
-		private readonly IHistoricalAdherenceReadModelPersister _adherencePersister;
-		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
-		private readonly INow _now;
-
-		public HistoricalAdherenceMaintainer(
-			IHistoricalAdherenceReadModelPersister adherencePersister,
-			IHistoricalChangeReadModelPersister historicalChangePersister,
-			INow now)
-		{
-			_adherencePersister = adherencePersister;
-			_historicalChangePersister = historicalChangePersister;
-			_now = now;
-		}
-
-		[ReadModelUnitOfWork]
-		[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
-		public virtual void Handle(TenantDayTickEvent tenantDayTickEvent)
-		{
-			_adherencePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
-			_historicalChangePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
-		}
-
-	}
-
 	[EnabledBy(Toggles.RTA_AsyncOptimization_43924)]
 	public class HistoricalAdherenceUpdaterInSync : HistoricalAdherenceUpdaterImpl,
 		IHandleEvents,

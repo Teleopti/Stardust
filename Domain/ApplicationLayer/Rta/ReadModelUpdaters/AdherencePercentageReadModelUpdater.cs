@@ -10,6 +10,59 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
+	[EnabledBy(Toggles.RTA_AsyncOptimization_43924)]
+	public class AdherencePercentageReadModelUpdaterInSync : AdherencePercentageReadModelUpdaterImpl,
+		IHandleEvents,
+		IRunInSync
+	{
+		public AdherencePercentageReadModelUpdaterInSync(IAdherencePercentageReadModelPersister persister) : base(persister)
+		{
+		}
+
+		public virtual void Subscribe(SubscriptionRegistrator registrator)
+		{
+			registrator.SubscribeTo<PersonInAdherenceEvent>();
+			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
+			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
+			registrator.SubscribeTo<PersonShiftStartEvent>();
+			registrator.SubscribeTo<PersonShiftEndEvent>();
+			registrator.SubscribeTo<PersonDeletedEvent>();
+
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(IEnumerable<IEvent> events)
+		{
+			events.ForEach(e => handle((dynamic) e));
+		}
+	}
+
+	[EnabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
+	[DisabledBy(Toggles.RTA_AsyncOptimization_43924)]
+	public class AdherencePercentageReadModelUpdaterWithPackages : AdherencePercentageReadModelUpdaterImpl, IHandleEvents, IRunOnHangfire
+	{
+		public AdherencePercentageReadModelUpdaterWithPackages(IAdherencePercentageReadModelPersister persister) : base(persister)
+		{
+		}
+
+		public virtual void Subscribe(SubscriptionRegistrator registrator)
+		{
+			registrator.SubscribeTo<PersonInAdherenceEvent>();
+			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
+			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
+			registrator.SubscribeTo<PersonShiftStartEvent>();
+			registrator.SubscribeTo<PersonShiftEndEvent>();
+			registrator.SubscribeTo<PersonDeletedEvent>();
+
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(IEnumerable<IEvent> events)
+		{
+			events.ForEach(e => handle((dynamic)e));
+		}
+	}
+
 	[DisabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
 	public class AdherencePercentageReadModelUpdater : AdherencePercentageReadModelUpdaterImpl,
 		IHandleEvent<PersonInAdherenceEvent>,
@@ -58,31 +111,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
 			handle(@event);
-		}
-	}
-
-	[EnabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
-	public class AdherencePercentageReadModelUpdaterWithPackages : AdherencePercentageReadModelUpdaterImpl, IHandleEvents, IRunOnHangfire
-	{
-		public AdherencePercentageReadModelUpdaterWithPackages(IAdherencePercentageReadModelPersister persister) : base(persister)
-		{
-		}
-
-		public virtual void Subscribe(SubscriptionRegistrator registrator)
-		{
-			registrator.SubscribeTo<PersonInAdherenceEvent>();
-			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
-			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
-			registrator.SubscribeTo<PersonShiftStartEvent>();
-			registrator.SubscribeTo<PersonShiftEndEvent>();
-			registrator.SubscribeTo<PersonDeletedEvent>();
-
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(IEnumerable<IEvent> events)
-		{
-			events.ForEach(e => handle((dynamic) e));
 		}
 	}
 
