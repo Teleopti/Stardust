@@ -205,21 +205,27 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				arr[0].textRequestCount(arr[0].textRequestCount() + 1);
 			}
 		};
-		
-		var validProbabilitiesTypes = [
-			self.userTexts.HideStaffingInfo,
-			self.userTexts.ShowAbsenceProbability,
-			self.userTexts.ShowOvertimeProbability
-		];
 
-		self.selectedProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
 		self.probabilityTypes = constants.probabilityType;
+		self.selectedProbabilityType = Teleopti.MyTimeWeb.Portal.ParseHash().probability;
 		self.probabilityLabel = function () {
-			var selectedProbabilityType = validProbabilitiesTypes[self.selectedProbabilityType];
-			if (!selectedProbabilityType) {
+			if (self.selectedProbabilityType == undefined) {
 				return self.userTexts.StaffingInfo;
 			}
-			return selectedProbabilityType;
+
+			var selectedProbabilityTypeLabel;
+			switch(self.selectedProbabilityType){
+				case constants.probabilityType.none: selectedProbabilityTypeLabel = self.userTexts.HideStaffingInfo
+					break;
+				case constants.probabilityType.absence: selectedProbabilityTypeLabel = self.userTexts.ShowAbsenceProbability
+					break;
+				case constants.probabilityType.overtime: selectedProbabilityTypeLabel = self.userTexts.ShowOvertimeProbability
+					break;
+			}
+
+			var tempEle = document.createElement('p');
+			tempEle.innerHTML = selectedProbabilityTypeLabel;
+			return tempEle.textContent;
 		};
 		self.mergeIdenticalProbabilityIntervals = false;
 		self.hideProbabilityEarlierThanNow = true;
@@ -328,9 +334,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		function getUrlPartForProbability() {
-			return (self.selectedProbabilityType !== constants.probabilityType.none && self.selectedProbabilityType)
-				? "/Probability/" + self.selectedProbabilityType
-				: "";
+			return self.selectedProbabilityType != undefined ? "/Probability/" + self.selectedProbabilityType: "";
 		}
 
 		self.isWithinSelected = function (startDate, endDate) {

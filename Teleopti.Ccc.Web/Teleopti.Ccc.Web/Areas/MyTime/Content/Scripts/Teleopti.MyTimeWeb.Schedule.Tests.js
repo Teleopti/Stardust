@@ -354,7 +354,7 @@ $(document).ready(function() {
 		equal(Teleopti.MyTimeWeb.Portal.ParseHash({hash: hash}).hash.indexOf('Probability/' + constants.probabilityType.overtime)> -1, true);
 
 		week.switchProbabilityType(constants.probabilityType.none);
-		equal(Teleopti.MyTimeWeb.Portal.ParseHash({hash: hash}).hash.indexOf('Probability')> -1, false);
+		equal(Teleopti.MyTimeWeb.Portal.ParseHash({hash: hash}).hash.indexOf('Probability/' + constants.probabilityType.none)> -1, true);
 	});
 
 	test("should keep possibility selection for today when changing date", function () {
@@ -382,6 +382,45 @@ $(document).ready(function() {
 		equal(Teleopti.MyTimeWeb.Portal.ParseHash({ hash: hash }).probability, constants.probabilityType.absence);
 
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
+	test("should display selected probability label correctly on page", function () {
+		var fakeUserTextsInSwedish = {
+			ChanceOfGettingAbsenceRequestGranted: "Chans att f&#229; fr&#229;nvarof&#246;rfr&#229;gan godk&#228;nd:",
+			DescriptionColon: "Beskrivning:",
+			Fair: "M&#246;jlig",
+			Good: "God",
+			HideStaffingInfo: "D&#246;lj bemanningsinfo",
+			High: "H&#246;g",
+			LocationColon: "Lokal:",
+			Low: "L&#229;g",
+			Poor: "D&#229;lig",
+			ProbabilityToGetAbsenceColon: "Sannolikhet att f&#229; fr&#229;nvaro godk&#228;nd:",
+			ProbabilityToGetOvertimeColon: "Sannolikhet att f&#229; &#246;vertid:",
+			SeatBookings: "Sittplatsbokningar",
+			ShowAbsenceProbability: "Visa sannolikhet f&#246;r fr&#229;nvaro",
+			ShowOvertimeProbability: "Visa sannolikhet f&#246;r &#246;vertid",
+			StaffingInfo: "Bemanningsinfo",
+			SubjectColon: "&#196;mne:",
+			XRequests: "{0} f&#246;rfr&#229;gning(ar)",
+			YouHaveNotBeenAllocatedSeat: "{0} har du inte n&#229;gon tilldelad sittplats."
+		};
+
+		setupHash();
+
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+		};
+		var fakeScheduleData = getFakeScheduleData();
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		week.userTexts = fakeUserTextsInSwedish;
+		week.initializeData(fakeScheduleData);
+		week.selectedProbabilityType = constants.probabilityType.absence;
+
+		equal(week.selectedProbabilityType, constants.probabilityType.absence);
+
+		week.switchProbabilityType(constants.probabilityType.overtime);
+		equal(week.probabilityLabel(), 'Visa sannolikhet för övertid');
 	});
 
 	test("should keep possibility selection for multiple days when changing date", function () {
@@ -872,7 +911,7 @@ $(document).ready(function() {
 
 		var fakeScheduleData = getFakeScheduleData();
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
-		week.initializeData(fakeScheduleData); 
+		week.initializeData(fakeScheduleData);
 
 		week.switchProbabilityType(constants.probabilityType.absence);
 		week.switchProbabilityType(constants.probabilityType.none);
