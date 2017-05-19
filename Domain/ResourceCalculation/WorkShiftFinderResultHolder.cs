@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         void AddResults(IList<WorkShiftFinderResult> results, DateTime theDateTime);
         IList<WorkShiftFinderResult> GetResults();
         bool LastResultIsSuccessful { get; }
-        IList<WorkShiftFinderResult> GetResults(bool latestOnly);
         IList<WorkShiftFinderResult> GetResults(bool latestOnly, bool notSuccessfulOnly);
         void AddFilterToResult(IPerson person, DateOnly theDate, string message);
         void AddFilterToResult(IPerson person, DateOnly theDate, string message, int shiftsBefore, int shiftsAfter);
@@ -65,10 +64,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public bool LastResultIsSuccessful => GetResults(true, true).Count == 0;
 
-	    public IList<WorkShiftFinderResult> GetResults(bool latestOnly)
-        {
-            return GetResults(latestOnly, false);
-        }
 
         public IList<WorkShiftFinderResult> GetResults(bool latestOnly, bool notSuccessfulOnly)
         {

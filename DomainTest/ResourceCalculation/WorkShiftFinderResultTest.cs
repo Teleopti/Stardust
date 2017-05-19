@@ -81,9 +81,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var result2 = new WorkShiftFinderResult(_person, theDate2);
             holder.AddResults(new List<WorkShiftFinderResult> { result2 }, theDate2.Date);
 
-            Assert.IsNotNull(holder.GetResults(true));
-            Assert.AreEqual(1,holder.GetResults(true).Count);
-            Assert.AreEqual(2, holder.GetResults(false).Count);
+            Assert.IsNotNull(holder.GetResults(true, false));
+            Assert.AreEqual(1,holder.GetResults(true, false).Count);
+            Assert.AreEqual(2, holder.GetResults(false, false).Count);
         }
 
         [Test]
@@ -99,9 +99,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             holder.AddResults(new List<WorkShiftFinderResult> { result2 }, theDate2.Date);
 
-            Assert.IsNotNull(holder.GetResults(true));
-            Assert.AreEqual(1, holder.GetResults(true).Count);
-            Assert.AreEqual(2, holder.GetResults(false).Count);
+            Assert.IsNotNull(holder.GetResults(true, false));
+            Assert.AreEqual(1, holder.GetResults(true, false).Count);
+            Assert.AreEqual(2, holder.GetResults(false, false).Count);
             Assert.AreEqual(1, holder.GetResults(false,true).Count);
             Assert.AreEqual(0, holder.GetResults(true, true).Count);
 
