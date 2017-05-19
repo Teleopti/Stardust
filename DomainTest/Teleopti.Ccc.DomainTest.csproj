@@ -416,6 +416,7 @@
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTeamTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTest.cs" />
     <Compile Include="SchedulingScenarios\PeriodValueCalculatorProviderThatReturnsCalculatorThatReturnsWrongValue.cs" />
+    <Compile Include="SchedulingScenarios\ResourceCalculationWithCount.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationClosedSkillsTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationEvenRelativeDifferenceTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationScenario.cs" />
@@ -424,6 +425,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\PerformanceTestHackTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingTrackResourceCalculationsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\ShiftCategoryLimitationWithAndWithoutRandomnessTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\TeamBlockPeriodSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\TakeShiftWithLatestShiftStartIfSameShiftValue.cs" />

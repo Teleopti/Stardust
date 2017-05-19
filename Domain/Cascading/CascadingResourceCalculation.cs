@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			_shovelResources = shovelResources;
 		}
 
-		public void ResourceCalculate(DateOnlyPeriod period, ResourceCalculationData resourceCalculationData, Func< IDisposable> getResourceCalculationContext = null )
+		public virtual void ResourceCalculate(DateOnlyPeriod period, ResourceCalculationData resourceCalculationData, Func< IDisposable> getResourceCalculationContext = null )
 		{
 			foreach (var date in period.DayCollection())
 			{
