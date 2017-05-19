@@ -11,7 +11,7 @@
 
 		public bool Verify(string password, string hash)
 		{
-			return BCrypt.Net.BCrypt.Verify(password, hash);
+			return !string.IsNullOrEmpty(password) && BCrypt.Net.BCrypt.Verify(password, hash);
 		}
 
 		public bool IsGeneratedByThisFunction(string hash)

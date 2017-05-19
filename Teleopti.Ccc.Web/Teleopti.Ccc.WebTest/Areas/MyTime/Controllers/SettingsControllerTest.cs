@@ -2,6 +2,7 @@
 using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
@@ -126,6 +128,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldHandleUndefinedOldPasswordError()
+		{
+			var currentContext = new FakeHttpContext("/calendarlink");
+			currentContext.SetRequest(new FakeHttpRequest("/calendarlink", new Uri("http://localhost/Settings/CalendarLinkStatus"), new Uri("http://localhost/schedule/")));
+
+			HttpContext.SetContext(currentContext);
+
+			var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
+			FindPerson.Add(personInfo);
+			var result =
+				Target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new" })
+					.Data as ChangePasswordResultInfo;
+			result.IsSuccessful.Should().Be.False();
+		}
+		
+		[Test]
 		public void ShouldGetMobileQRCodeUrl()
 		{
 			CurrentTenant.Current().SetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString(),"http://qrcode");
@@ -133,5 +152,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 	}
 
-	
+	[RemoveMeWithToggle(Toggles.NewPasswordHash_40460)]
+	[Toggle(Toggles.NewPasswordHash_40460)]
+	[MyTimeWebTest]
+	public class SettingsControllerWithBCryptHashingEnabled
+	{
+		public FakeLoggedOnUser User;
+		public SettingsController Target;
+		public FindPersonInfoFake FindPerson;
+		public IHashFunction Hash;
+		public FakePersonalSettingDataRepository PersonalSettings;
+		public MutableFakeCurrentHttpContext HttpContext;
+		public CurrentTenantFake CurrentTenant;
+
+		[Test]
+		public void ShouldHandleEmptyOldPassword()
+		{
+			var currentContext = new FakeHttpContext("/calendarlink");
+			currentContext.SetRequest(new FakeHttpRequest("/calendarlink", new Uri("http://localhost/Settings/CalendarLinkStatus"), new Uri("http://localhost/schedule/")));
+
+			HttpContext.SetContext(currentContext);
+
+			var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
+			FindPerson.Add(personInfo);
+			var result =
+				Target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new" })
+					.Data as ChangePasswordResultInfo;
+			result.IsSuccessful.Should().Be.False();
+		}
+	}
 }
