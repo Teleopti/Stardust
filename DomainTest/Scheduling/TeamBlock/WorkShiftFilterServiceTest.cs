@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedules = MockRepository.GenerateMock<IScheduleDictionary>();
 			_schedules.Expect(x => x[_person].ScheduledDay(_dateOnly)).Return(new SchedulePartFactoryForDomain().CreatePart());
 			var validDateTimePeriodShiftFilter = new ValidDateTimePeriodShiftFilter(new FakeTimeZoneGuard(_timeZoneInfo), new UserCulture(CurrentTeleoptiPrincipal.Make()));
-			_target = new WorkShiftFilterService(new ActivityRestrictionsShiftFilter(),
+			_target = new WorkShiftFilterServiceOLD(new ActivityRestrictionsShiftFilter(),
 				new BusinessRulesShiftFilter(validDateTimePeriodShiftFilter,
 					new LongestPeriodForAssignmentCalculator()),
 				new CommonMainShiftFilter(new ScheduleDayEquator(new EditableShiftMapper())),

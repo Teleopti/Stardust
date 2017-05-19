@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
@@ -14,8 +15,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		IList<ShiftProjectionCache> FilterForTeamMember(IScheduleDictionary schedules, DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions, WorkShiftFinderResult finderResult, bool useShiftsForRestrictions);
 	}
 
+	[RemoveMeWithToggle("Remove this and rename back old type", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class WorkShiftFilterService : WorkShiftFilterServiceOLD
+	{
+		public WorkShiftFilterService(ActivityRestrictionsShiftFilter activityRestrictionsShiftFilter, BusinessRulesShiftFilter businessRulesShiftFilter, CommonMainShiftFilter commonMainShiftFilter, IContractTimeShiftFilter contractTimeShiftFilter, IDisallowedShiftCategoriesShiftFilter disallowedShiftCategoriesShiftFilter, IEffectiveRestrictionShiftFilter effectiveRestrictionShiftFilter, IMainShiftOptimizeActivitiesSpecificationShiftFilter mainShiftOptimizeActivitiesSpecificationShiftFilter, INotOverWritableActivitiesShiftFilter notOverWritableActivitiesShiftFilter, IPersonalShiftsShiftFilter personalShiftsShiftFilter, IShiftCategoryRestrictionShiftFilter shiftCategoryRestrictionShiftFilter, ITimeLimitsRestrictionShiftFilter timeLimitsRestrictionShiftFilter, IWorkTimeLimitationShiftFilter workTimeLimitationShiftFilter, IShiftLengthDecider shiftLengthDecider, IWorkShiftMinMaxCalculator minMaxCalculator, CommonActivityFilter commonActivityFilter, IRuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter, IShiftProjectionCacheManager shiftProjectionCacheManager, IRuleSetPersonalSkillsActivityFilter ruleSetPersonalSkillsActivityFilter, IDisallowedShiftProjectionCachesFilter disallowedShiftProjectionCachesFilter, ActivityRequiresSkillProjectionFilter activityRequiresSkillProjectionFilter, OpenHoursFilter openHoursFilter) : base(activityRestrictionsShiftFilter, businessRulesShiftFilter, commonMainShiftFilter, contractTimeShiftFilter, disallowedShiftCategoriesShiftFilter, effectiveRestrictionShiftFilter, mainShiftOptimizeActivitiesSpecificationShiftFilter, notOverWritableActivitiesShiftFilter, personalShiftsShiftFilter, shiftCategoryRestrictionShiftFilter, timeLimitsRestrictionShiftFilter, workTimeLimitationShiftFilter, shiftLengthDecider, minMaxCalculator, commonActivityFilter, ruleSetAccordingToAccessabilityFilter, shiftProjectionCacheManager, ruleSetPersonalSkillsActivityFilter, disallowedShiftProjectionCachesFilter, activityRequiresSkillProjectionFilter, openHoursFilter)
+		{
+		}
 
-	public class WorkShiftFilterService : IWorkShiftFilterService
+		protected override bool allowanceToUseBlackList(IList<ShiftProjectionCache> shiftList, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction)
+		{
+			return false;
+		}
+	}
+
+	public class WorkShiftFilterServiceOLD : IWorkShiftFilterService
 	{
 		private readonly ActivityRestrictionsShiftFilter _activityRestrictionsShiftFilter;
 		private readonly BusinessRulesShiftFilter _businessRulesShiftFilter;
@@ -39,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ActivityRequiresSkillProjectionFilter _activityRequiresSkillProjectionFilter;
 		private readonly OpenHoursFilter _openHoursFilter;
 
-		public WorkShiftFilterService(ActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
+		public WorkShiftFilterServiceOLD(ActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			BusinessRulesShiftFilter businessRulesShiftFilter,
 			CommonMainShiftFilter commonMainShiftFilter,
 			IContractTimeShiftFilter contractTimeShiftFilter,
@@ -184,7 +197,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return shiftList.Count == 0 ? null : shiftList;
 		}
 
-		private bool allowanceToUseBlackList(IList<ShiftProjectionCache> shiftList, SchedulingOptions schedulingOptions,
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+		protected virtual bool allowanceToUseBlackList(IList<ShiftProjectionCache> shiftList, SchedulingOptions schedulingOptions,
 			IEffectiveRestriction effectiveRestriction)
 		{
 			if (shiftList == null || shiftList.Count == 0)

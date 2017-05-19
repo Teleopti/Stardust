@@ -279,7 +279,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DeleteAndResourceCalculateService>().As<IDeleteAndResourceCalculateService>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleDayService>().As<IScheduleDayService>().InstancePerLifetimeScope();
 			builder.RegisterType<IntervalDataMedianCalculator>().As<IIntervalDataCalculator>().SingleInstance();
-			builder.RegisterType<WorkShiftFilterService>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
+			{
+				builder.RegisterType<WorkShiftFilterService>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<WorkShiftFilterServiceOLD>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
+			}
 			builder.RegisterType<ScheduleDayEquator>().As<IScheduleDayEquator>().SingleInstance();
 
 			builder.RegisterType<WorkShiftFinderResultHolder>().As<IWorkShiftFinderResultHolder>().InstancePerLifetimeScope();
