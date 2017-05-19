@@ -25,7 +25,7 @@
 				function getDayOffRules() {
 					var agentGroupId = $scope.planningPeriod.AgentGroupId;
 					if (agentGroupId != undefined) {
-						dayOffRuleService.getDayOffRulesForAgentGroup({ agentGroupId: agentGroupId }).$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
+						dayOffRuleService.getDayOffRulesByAgentGroupId({ agentGroupId: agentGroupId }).$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
 					} else {
 						dayOffRuleService.getDayOffRules().$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
 					}
