@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpGet]
 		public virtual ViewResult SetCurrentTime(long? ticks, string time)
 		{
-			setCurrentTime(ticks, time);
+			setCurrentTime(ticks, time, true);
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -226,12 +226,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[TestLog]
 		[HttpPost]
 		[ActionName("SetCurrentTime")]
-		public virtual void SetCurrentTimePost(long? ticks, string time)
+		public virtual void SetCurrentTimePost(long? ticks, string time, bool waitForQueue = true)
 		{
-			setCurrentTime(ticks, time);
+			setCurrentTime(ticks, time, waitForQueue);
 		}
 
-		private void setCurrentTime(long? ticks, string time)
+		private void setCurrentTime(long? ticks, string time, bool waitForQueue)
 		{
 			var oldNow = _now.UtcDateTime();
 			if (ticks.HasValue)
@@ -247,7 +247,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				timePassed.IfHourPassed(_hangfire.TriggerHourlyRecurringJobs);
 				timePassed.IfMinutePassed(_hangfire.TriggerMinutelyRecurringJobs);
 			});
-			_hangfire.WaitForQueue();
+
+			if(waitForQueue)
+				_hangfire.WaitForQueue();
 		}
 
 	}
