@@ -4,7 +4,9 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
@@ -12,11 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private readonly INow _now;
+		private readonly IToggleManager _toggles;
 
-		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, INow now)
+		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, INow now, IToggleManager toggles)
 		{
 			_rta = rta;
 			_now = now;
+			_toggles = toggles;
 		}
 
 		[HttpPost, Route("Rta/State/Change")]
@@ -24,19 +28,34 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			try
 			{
-				_rta.Enqueue(new BatchInputModel
-				{
-					AuthenticationKey = input.AuthenticationKey,
-					SourceId = input.SourceId,
-					States = new[]
+				if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
+					_rta.Enqueue(new BatchInputModel
 					{
-						new BatchStateInputModel
+						AuthenticationKey = input.AuthenticationKey,
+						SourceId = input.SourceId,
+						States = new[]
 						{
-							StateCode = input.StateCode,
-							UserCode = input.UserCode
+							new BatchStateInputModel
+							{
+								StateCode = input.StateCode,
+								UserCode = input.UserCode
+							}
 						}
-					}
-				});
+					});
+				else
+					_rta.Process(new BatchInputModel
+					{
+						AuthenticationKey = input.AuthenticationKey,
+						SourceId = input.SourceId,
+						States = new[]
+						{
+							new BatchStateInputModel
+							{
+								StateCode = input.StateCode,
+								UserCode = input.UserCode
+							}
+						}
+					});
 			}
 			catch (InvalidAuthenticationKeyException e)
 			{
@@ -67,19 +86,34 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			try
 			{
-				_rta.Enqueue(new BatchInputModel
-				{
-					AuthenticationKey = input.AuthenticationKey,
-					SourceId = input.SourceId,
-					SnapshotId = input.IsSnapshot ? _now.UtcDateTime() : null as DateTime?,
-					CloseSnapshot = input.IsSnapshot,
-					States = input.States.Select(i => new BatchStateInputModel
-						{
-							UserCode = i.UserCode,
-							StateCode = i.StateCode
-						})
-						.ToArray()
-				});
+				if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
+					_rta.Enqueue(new BatchInputModel
+					{
+						AuthenticationKey = input.AuthenticationKey,
+						SourceId = input.SourceId,
+						SnapshotId = input.IsSnapshot ? _now.UtcDateTime() : null as DateTime?,
+						CloseSnapshot = input.IsSnapshot,
+						States = input.States.Select(i => new BatchStateInputModel
+							{
+								UserCode = i.UserCode,
+								StateCode = i.StateCode
+							})
+							.ToArray()
+					});
+				else
+					_rta.Process(new BatchInputModel
+					{
+						AuthenticationKey = input.AuthenticationKey,
+						SourceId = input.SourceId,
+						SnapshotId = input.IsSnapshot ? _now.UtcDateTime() : null as DateTime?,
+						CloseSnapshot = input.IsSnapshot,
+						States = input.States.Select(i => new BatchStateInputModel
+							{
+								UserCode = i.UserCode,
+								StateCode = i.StateCode
+							})
+							.ToArray()
+					});
 			}
 			catch (InvalidAuthenticationKeyException e)
 			{
