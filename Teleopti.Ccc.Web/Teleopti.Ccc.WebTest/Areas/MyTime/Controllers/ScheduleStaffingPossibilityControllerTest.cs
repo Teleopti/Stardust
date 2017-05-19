@@ -386,7 +386,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 
 			var result = Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence).ToList();
-			result.FirstOrDefault()?.Date.Should().Be(Now.LocalDateOnly().AddDays(-1).ToFixedClientDateOnlyFormat());
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(Now.UtcDateTime(), User.CurrentUser().PermissionInformation.DefaultTimeZone()));
+			result.FirstOrDefault()?.Date.Should().Be(today.ToFixedClientDateOnlyFormat());
 			result.Count.Should().Be.EqualTo(8);
 		}
 
