@@ -74,11 +74,12 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		{
 			base.AfterTest();
 
+			Hangfire.WaitForQueue();
+
 			TestSiteConfigurationSetup.TearDown();
 
 			Impersonate?.EndImpersonation();
 
-			Hangfire.WaitForQueue();
 		}
 	}
 }
