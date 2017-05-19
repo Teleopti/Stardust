@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
@@ -13,7 +14,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public void WaitForQueue()
+		[TestLog]
+		public virtual void WaitForQueue()
 		{
 			_unitOfWork.Do(uow =>
 			{

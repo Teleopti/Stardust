@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
-			builder.RegisterType<StateQueueWorker>().ApplyAspects().SingleInstance();
+			builder.RegisterType<StateQueueWorker>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueTenants>().SingleInstance();
-			builder.RegisterType<StateQueueUtilities>().SingleInstance();
+			builder.RegisterType<StateQueueUtilities>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ExternalLogonMapper>().SingleInstance().ApplyAspects();
