@@ -99,6 +99,7 @@ namespace Teleopti.Ccc.TestCommon.PerformanceTest
 			var tooltipIndex = headers.IndexOf("tooltip");
 			var agentIndex = headers.IndexOf("agent");
 			var durationIndex = headers.IndexOf("duration");
+			var commentIndex = headers.IndexOf("comment");
 
 			var newRow = new object[20];
 			newRow[startIndex] = startTime.ToString("yyyy-MM-dd HH:mm");
@@ -108,6 +109,7 @@ namespace Teleopti.Ccc.TestCommon.PerformanceTest
 			newRow[tooltipIndex] = templateRow[tooltipIndex];
 			newRow[agentIndex] = Environment.MachineName;
 			newRow[durationIndex] = elapsed;
+			newRow[commentIndex] = templateRow[commentIndex]; ;
 
 			var appendRequest = service.Spreadsheets.Values
 				.Append(new ValueRange
