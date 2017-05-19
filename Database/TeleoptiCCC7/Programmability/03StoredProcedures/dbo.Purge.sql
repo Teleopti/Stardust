@@ -421,9 +421,6 @@ begin
 		return
 end
 
-delete ReadModel.AdherenceDetails
-where BelongsToDate < dateadd(day,-3,getdate())
-
 --schedule related read models
 select @KeepUntil = DATEADD(day, -1*(select isnull(Value, 30) from PurgeSetting where [Key] = 'DaysToKeepReadmodels'), GETDATE())
 
