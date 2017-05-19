@@ -49,13 +49,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private void addTime(IEnumerable<AbsenceAgents> target, DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
 		{
 			if (budgetGroup == null) return;
-			
-			fillAbsenceTimeInformationOnAbsenceAgents(target, getAbsenceTimes(period, budgetGroup, scenario));
+
+			var absenceTimes = getAbsenceTimes(period, budgetGroup, scenario);
+			if (fillAbsenceTimeInformationOnAbsenceAgents(target, absenceTimes))
+			{
+				var absenceAgentsDaysStr = $"period from {target.First().Date.ToShortDateString()} {target.First().Date.Kind} to {target.Last().Date.ToShortDateString()} {target.Last().Date.Kind}";
+				var payloadWorkTimeStr = String.Join(", ", absenceTimes.Select(p => p.BelongsToDate.ToShortDateString()+" "+p.BelongsToDate.Kind));
+				Logger.Warn($"Date mismatch: {absenceAgentsDaysStr} <-> {payloadWorkTimeStr} for budgetGroup: {budgetGroup.Id} and person: {_loggedOnUser.CurrentUser().Id} on scenario: {scenario.Id}");
+			}
 		}
 
-		private static void fillAbsenceTimeInformationOnAbsenceAgents(IEnumerable<AbsenceAgents> target, IEnumerable<PayloadWorkTime> absenceTime)
+		private static bool fillAbsenceTimeInformationOnAbsenceAgents(IEnumerable<AbsenceAgents> target, IEnumerable<PayloadWorkTime> absenceTime)
 		{
-			if (absenceTime == null) return;
+			var hasMismatch = false;
+			if (absenceTime == null) return false;
+
 
 			var absenceAgentses = target as IList<AbsenceAgents> ?? target.ToList();
 			foreach (var payloadWorkTime in absenceTime)
@@ -63,14 +71,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				var absenceAgent = absenceAgentses.FirstOrDefault(a => a.Date == payloadWorkTime.BelongsToDate);
 				if (absenceAgent == null)
 				{
-					var absenceAgentsDaysStr = String.Join(", ", absenceAgentses.Select(a => "" + a.Date.Day + " " + a.Date.Kind));
-					var payloadWorkTimeStr = payloadWorkTime.BelongsToDate.Day + " " + payloadWorkTime.BelongsToDate.Kind;
-					Logger.Warn($"Date mismatch: {absenceAgentsDaysStr} <-> {payloadWorkTimeStr}");
+					hasMismatch = true;
 					continue;
 				}
 				absenceAgent.AbsenceTime += TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes;
 				absenceAgent.HeadCounts += payloadWorkTime.HeadCounts;
 			}
+			return hasMismatch;
 		}
 
 		private IEnumerable<PayloadWorkTime> getAbsenceTimes(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
