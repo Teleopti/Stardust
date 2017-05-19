@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class Scheduling : IScheduling
 	{
-		private readonly IFixedStaffSchedulingService _fixedStaffSchedulingService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
@@ -29,8 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly TeamBlockSchedulingService _teamBlockSchedulingService;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
-		public Scheduling(IFixedStaffSchedulingService fixedStaffSchedulingService,
-			Func<ISchedulerStateHolder> schedulerStateHolder,
+		public Scheduling(Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			AdvanceDaysOffSchedulingService advanceDaysOffSchedulingService,
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			TeamBlockSchedulingService teamBlockSchedulingService,
 			TeamInfoFactoryFactory teamInfoFactoryFactory)
 		{
-			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
@@ -69,7 +66,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			_schedulingOptions = schedulingOptions;
 			_backgroundWorker = backgroundWorker;
-			_fixedStaffSchedulingService.ClearFinderResults();
 
 			var schedulePartModifyAndRollbackServiceForContractDaysOff =
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(),
