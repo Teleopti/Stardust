@@ -685,7 +685,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TimeLimitsRestrictionShiftFilter>().As<ITimeLimitsRestrictionShiftFilter>().SingleInstance();
 			builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>().SingleInstance();
 			builder.RegisterType<CommonActivityFilter>().SingleInstance();
-			builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
+			{
+				builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
+			}
+			else
+			{
+				builder.RegisterType<RuleSetAccordingToAccessabilityFilterOLD>().As<IRuleSetAccordingToAccessabilityFilter>();
+			}
 			builder.RegisterType<RuleSetBagExtractorProvider>().SingleInstance();
 			builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>().SingleInstance();
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>().SingleInstance();

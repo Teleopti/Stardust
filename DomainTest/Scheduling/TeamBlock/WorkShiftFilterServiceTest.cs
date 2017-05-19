@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractorForTest(),
 					new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(8))), new WorkShiftWeekMinMaxCalculator()),
 				new CommonActivityFilter(),
-				new RuleSetAccordingToAccessabilityFilter(new RuleSetBagExtractorProvider(),
+				new RuleSetAccordingToAccessabilityFilterOLD(new RuleSetBagExtractorProvider(),
 					new TeamBlockIncludedWorkShiftRuleFilter(), new RuleSetSkillActivityChecker()),
 				new ShiftProjectionCacheManager(new ShiftFromMasterActivityService(), new RuleSetDeletedActivityChecker(),
 					new RuleSetDeletedShiftCategoryChecker(),
