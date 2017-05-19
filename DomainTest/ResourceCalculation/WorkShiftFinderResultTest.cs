@@ -219,18 +219,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldNotHaveFilterResultsWithSameKey()
-		{
-			var filter1 = new WorkShiftFilterResult("Message 1", 0, 0);
-			var filter2 = new WorkShiftFilterResult("Message 1", 0, 0);
-
-			var result = new WorkShiftFinderResult(_person, _theDate);
-			result.AddFilterResults(filter1);
-			result.AddFilterResults(filter2);
-			Assert.That(result.FilterResults.Count, Is.EqualTo(1));
-		}
-
-		[Test]
 		public void EqualsOnFilterShouldReturnFalseIfNull()
 		{
 			Assert.IsFalse(_filter.Equals(null));
