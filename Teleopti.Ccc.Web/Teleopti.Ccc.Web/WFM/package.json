@@ -6,7 +6,9 @@
     "dev": "grunt",
     "test": "grunt test",
     "continuous": "grunt test-continuous",
-    "webpack": ".\\node_modules\\.bin\\webpack"
+    "webpack": ".\\node_modules\\.bin\\webpack",
+    "iis": " c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
+    "start": "start http://localhost:52858/TeleoptiWFM/Web/ && npm run iis"
   },
   "author": "Teleopti",
   "license": "ISC",
