@@ -67,7 +67,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonNeutralAdherenceEvent>,
 		IHandleEvent<PersonStateChangedEvent>,
-		IHandleEvent<PersonRuleChangedEvent>
+		IHandleEvent<PersonRuleChangedEvent>,
+		IRunOnHangfire
 	{
 		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister)
 			: base(adherencePersister, historicalChangePersister)
