@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 {
 	[Toggle(Toggles.RTA_SpreadTransactionLocksStrategy_41823)]
 	[Toggle(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
-	[Toggle(Toggles.RTA_EventPackagesExperiment_43924)]
+	[Toggle(Toggles.RTA_EventPackagesOptimization_43924)]
 	[RealHangfire]
 	[TestFixture]
 	[Explicit]

@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	[EnabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
+	[EnabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
 	public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdaterImpl, 
 		IHandleEvents,
 		IHandleEvent<TenantDayTickEvent>,
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 	}
 
-	[DisabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
+	[DisabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
 	public class HistoricalAdherenceUpdater : HistoricalAdherenceUpdaterImpl, 
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonInAdherenceEvent>,

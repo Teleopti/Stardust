@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	[DisabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
+	[DisabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
 	public class AdherencePercentageReadModelUpdater : AdherencePercentageReadModelUpdaterImpl,
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonOutOfAdherenceEvent>,
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		}
 	}
 
-	[EnabledBy(Toggles.RTA_EventPackagesExperiment_43924)]
+	[EnabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
 	public class AdherencePercentageReadModelUpdaterWithPackages : AdherencePercentageReadModelUpdaterImpl, IHandleEvents, IRunOnHangfire
 	{
 		public AdherencePercentageReadModelUpdaterWithPackages(IAdherencePercentageReadModelPersister persister) : base(persister)

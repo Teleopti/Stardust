@@ -25,7 +25,7 @@
 		RTA_MonitorAgentsInPermittedOrganizationOnly_40660,
 		RTA_SolidProofWhenManagingAgentAdherence_39351,
 		RTA_SnappierDisplayOfOverview_43568,
-		RTA_EventPackagesExperiment_43924,
+		RTA_EventPackagesOptimization_43924,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
