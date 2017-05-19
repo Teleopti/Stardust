@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Threading;
 using Autofac;
-using log4net;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
 	public class RunRequestWaitlistStardustHandler : IHandle<RunRequestWaitlistEvent>, IRunOnStardust
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(RunRequestWaitlistStardustHandler));
 		private readonly IComponentContext _componentContext;
+		private readonly IStardustJobFeedback _stardustJobFeedback;
 
-		public RunRequestWaitlistStardustHandler(IComponentContext componentContext)
+		public RunRequestWaitlistStardustHandler(IComponentContext componentContext, IStardustJobFeedback stardustJobFeedback)
 		{
 			_componentContext = componentContext;
+			_stardustJobFeedback = stardustJobFeedback;
 		}
 
 		[AsSystem]
@@ -24,16 +25,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			CancellationTokenSource cancellationTokenSource,
 			Action<string> sendProgress)
 		{
-			if (Logger.IsDebugEnabled)
-			{
-				Logger.Debug(
-					"Consuming event for running request waitlist with "
-					+ $"StarTime=\"{@event.StartTime}\", EndTime=\"{@event.EndTime}\" "
-					+ $"(Message timestamp=\"{@event.Timestamp}\")");
-			}
-			
+			_stardustJobFeedback.SendProgress = sendProgress;
+
 			var theRealOne = _componentContext.Resolve<IHandleEvent<RunRequestWaitlistEvent>>();
 			theRealOne.Handle(@event);
+
+			_stardustJobFeedback.SendProgress = null;
 		}
 	}
 }

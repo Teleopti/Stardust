@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<Guid> GetWaitlistRequests(DateTimePeriod dateTimePeriod)
 		{
-			throw new NotImplementedException();
+			return RequestRepository.Where(request => request.IsWaitlisted && request.Request.Period.Intersect(dateTimePeriod)).Select(r => r.Id.GetValueOrDefault()).ToList();
 		}
 
 	    public IList<IPersonRequest> FindPersonRequestWithinPeriod(DateTimePeriod period)

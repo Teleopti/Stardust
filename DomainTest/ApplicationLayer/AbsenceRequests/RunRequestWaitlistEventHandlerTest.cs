@@ -1,75 +1,85 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Absence;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
-    [TestFixture]
-    public class RunRequestWaitlistEventHandlerTest
+    [DomainTest]
+    public class RunRequestWaitlistEventHandlerTest : ISetup
     {
-        private IWorkflowControlSet wcs1;
-        private IWorkflowControlSet wcs2;
-        private IUnitOfWork uow;
-        private IAbsenceRequestWaitlistProcessor processor;
-        private RunRequestWaitlistEventHandler target;
-        private IWorkflowControlSetRepository wcsRepository;
+        public RunRequestWaitlistEventHandler Target;
+        public MessageBrokerCompositeDummy Sender;
+	    public MutableNow Now;
+	    public FakeScenarioRepository ScenarioRepository;
+	    public FakePersonAssignmentRepository PersonAssignmentRepository;
+	    public FakePersonRequestRepository PersonRequestRepository;
+	    public DenyRequestCommandHandler DenyRequestCommandHandler;
+	    public FakeLoggedOnUser LoggedOnUser;
 
 
-        private FakeMessageBrokerComposite _sender;
-        private FakeCurrentUnitOfWorkFactory _unitOfWorkFactory;
-        private IAbsenceRequestWaitlistProcessor _absenceRequestWaitlistProcessor;
-        private IWorkflowControlSetRepository _workflowControlSetRepository;
+	    public void Setup(ISystem system, IIocConfiguration configuration)
+	    {
+		   system.UseTestDouble<MessageBrokerCompositeDummy>().For<IMessageBrokerComposite>();
+		   system.UseTestDouble<RunRequestWaitlistEventHandler>().For<IHandleEvent<RunRequestWaitlistEvent>>(); //skip attributes
+		   system.UseTestDouble<DenyRequestCommandHandler>().For<IHandleCommand<DenyRequestCommand>>();
+		   system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+	    }
 
-        [SetUp]
-        public void Setup()
-        {
-            wcs1 = new WorkflowControlSet();
-            wcs2 = new WorkflowControlSet();
-            wcsRepository = MockRepository.GenerateMock<IWorkflowControlSetRepository>();
-            wcsRepository.Stub(x => x.LoadAll()).Return(new[] { wcs1, wcs2 });
+		[Test]
+		public void ShouldTriggerWaitlistProcessing()
+		{
+			Now.Is("2017-05-19 08:00");
+		
+			var scenario = ScenarioRepository.Has("scnearioName");
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
 
-            uow = new FakeUnitOfWork();
-            var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
-            currentUnitOfWork.Stub(x => x.Current()).Return(uow);
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new StaffingThresholdWithShrinkageValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				Period = new DateOnlyPeriod(2010, 12, 1, 2099, 12, 2),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2010, 11, 1, 2099, 11, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			wfcs.AbsenceRequestWaitlistEnabled = true;
+			var person = PersonFactory.CreatePerson(wfcs).WithId();
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 
-            var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-            currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-            _sender = new FakeMessageBrokerComposite();
-            processor = MockRepository.GenerateMock<IAbsenceRequestWaitlistProcessor>();
-            target = new RunRequestWaitlistEventHandler(currentUnitOfWorkFactory, processor, wcsRepository, _sender);
-        }
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2017, 05, 20, 12, 2017, 05, 20, 13))).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+			DenyRequestCommandHandler.Handle(new DenyRequestCommand{PersonRequestId = personRequest.Id.GetValueOrDefault()});
+			personRequest.IsWaitlisted.Should().Be.True();
 
-        [Test]
-        public void ShouldTriggerWaitlistProcessing()
-        {
-            var period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
-            target.Handle(new RunRequestWaitlistEvent
-            {
-                StartTime = period.StartDateTime,
-                EndTime = period.EndDateTime
-            });
-            processor.AssertWasCalled(x => x.ProcessAbsenceRequestWaitlist(uow, period, wcs1));
-            processor.AssertWasCalled(x => x.ProcessAbsenceRequestWaitlist(uow, period, wcs2));
-        }
+			Target.Handle(new RunRequestWaitlistEvent
+			{
+				StartTime = DateTime.MinValue.Utc(),
+				EndTime = DateTime.MaxValue.Utc()
+			});
+			personRequest.IsWaitlisted.Should().Be.False();
+			personRequest.IsApproved.Should().Be.True();
+		}
 
-        [Test]
+		[Test]
         public void SHouldSendMessageAfterRunRequestWaitlistEventHandling()
         {
 
@@ -86,23 +96,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
                 Timestamp = DateTime.UtcNow,
                 CommandId = Guid.Empty
             };
-            _sender = new FakeMessageBrokerComposite();
-            var target = createRunRequestWaitlistEventHandler(_sender);
 
-            target.Handle(@event);
+            Target.Handle(@event);
 
-            _sender.SentCount().Should().Be(1);
-
+            Sender.SentCount().Should().Be(1);
         }
 
-        private IHandleEvent<RunRequestWaitlistEvent> createRunRequestWaitlistEventHandler(IMessageBrokerComposite sender)
-        {
-            _unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-            _absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(null, () => new FakeSchedulingResultStateHolder(), new AbsenceRequestWaitlistProvider(null));
-            _workflowControlSetRepository = new FakeWorkflowControlSetRepository();
-
-            var target = new RunRequestWaitlistEventHandler(_unitOfWorkFactory, _absenceRequestWaitlistProcessor, _workflowControlSetRepository, sender);
-            return target;
-        }
+	   
     }
 }

@@ -20,7 +20,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Absence
@@ -57,8 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
-		private readonly IToggleManager _toggleManager;
-		
+
 
 		private IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> _absenceRequestValidators;
 
@@ -89,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IActivityRepository activityRepository, 
 			IAbsenceRepository absenceRepository, 
 			IPersonRequestRepository personRequestRepository, 
-			IDayOffTemplateRepository dayOffTemplateRepository, IToggleManager toggleManager)
+			IDayOffTemplateRepository dayOffTemplateRepository)
 		{
 			_scenarioRepository = scenarioRepository;
 			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
@@ -118,7 +116,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_absenceRepository = absenceRepository;
 			_personRequestRepository = personRequestRepository;
 			_dayOffTemplateRepository = dayOffTemplateRepository;
-			_toggleManager = toggleManager;
 		}
 
 		public void UpdateAbsenceRequest(IList<Guid> personRequestsIds)

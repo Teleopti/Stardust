@@ -16,37 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-	 public class StaffingThresholdValidatorCascadingSkills : StaffingThresholdValidator
-	 {
-		  public override IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
-		  {
-				var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
-				var culture = absenceRequest.Person.PermissionInformation.Culture();
-				var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
-				var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCount();
-
-				var underStaffingResultDict = GetUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest, new CascadingPersonSkillProvider());
-
-				if (underStaffingResultDict.IsNotUnderstaffed())
-				{
-					 return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
-				}
-				string validationError = numberOfRequestedDays > 1
-					 ? GetUnderStaffingDateString(underStaffingResultDict, culture, uiCulture)
-					 : GetUnderStaffingPeriodsString(underStaffingResultDict, culture, uiCulture, timeZone);
-				return new ValidatedRequest
-				{
-					 IsValid = false,
-					 ValidationErrors = validationError
-				};
-		  }
-
-		  public override IAbsenceRequestValidator CreateInstance()
-		  {
-				return new StaffingThresholdValidatorCascadingSkills();
-		  }
-	 }
-
 	public class StaffingThresholdValidator : IAbsenceRequestValidator
 	{
 		private static readonly ILog requestsLogger = LogManager.GetLogger("Teleopti.Requests");

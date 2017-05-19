@@ -551,7 +551,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			underStaffDict.AddUnderstaffingPeriod(new DateTimePeriod(new DateTime(2017, 4, 1, 12, 45, 0, DateTimeKind.Utc), new DateTime(2017, 4, 1, 13, 0, 0, DateTimeKind.Utc)));
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			var target = new StaffingThresholdValidatorCascadingSkills();
+			var target = new StaffingThresholdWithShrinkageValidator();
 			var result = target.GetUnderStaffingPeriodsString(underStaffDict, new CultureInfo(1033), new CultureInfo(1033), timeZone);
 
 			result.Length.Should().Be.GreaterThan(100);
