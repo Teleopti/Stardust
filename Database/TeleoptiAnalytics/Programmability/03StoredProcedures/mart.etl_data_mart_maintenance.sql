@@ -59,10 +59,6 @@ BEGIN
 	DELETE FROM mart.etl_jobstep_error
 	WHERE insert_date < dateadd(day, -@daysToKeepETLError, getdate())
 	
-	-- Delete RTA events history older than x days
-	DELETE FROM RTA.ExternalAgentState
-	WHERE TimestampValue < dateadd(day, -@daysToKeepRTAEvents, getdate())
-
 	--------------- Fact tables ---------------------
 	SELECT @minDimDate =  MIN(date_date) FROM mart.dim_date WHERE date_id>-1
 
