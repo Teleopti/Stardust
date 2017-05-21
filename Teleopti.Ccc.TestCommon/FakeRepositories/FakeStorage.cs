@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeStorage
 	{
-		private readonly IList<IAggregateRoot> _legacy = new List<IAggregateRoot>();
+		private readonly List<IAggregateRoot> _legacy = new List<IAggregateRoot>();
 
-		private readonly IList<IAggregateRoot> _added = new List<IAggregateRoot>();
-		private readonly IList<IAggregateRoot> _removed = new List<IAggregateRoot>();
-		private readonly IList<IAggregateRoot> _comitted = new List<IAggregateRoot>();
+		private readonly List<IAggregateRoot> _added = new List<IAggregateRoot>();
+		private readonly List<IAggregateRoot> _removed = new List<IAggregateRoot>();
+		private readonly List<IAggregateRoot> _comitted = new List<IAggregateRoot>();
+
+		private static readonly object CommitLock = new object();
 
 		public void Add(IAggregateRoot entity)
 		{
@@ -44,24 +44,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IRootChangeInfo> Commit()
 		{
-			var adds = _added
-				.Select(x => new RootChangeInfo(x, DomainUpdateType.Insert))
-				.ToArray();
-			_added.ForEach(_comitted.Add);
-			_added.Clear();
+			RootChangeInfo[] updates;
+			RootChangeInfo[] removals;
+			RootChangeInfo[] adds;
+			lock (CommitLock)
+			{
+				adds = _added
+					.Select(x => new RootChangeInfo(x, DomainUpdateType.Insert))
+					.ToArray();
+				_comitted.AddRange(_added);
+				_added.Clear();
 
-			var removals = _removed
-				.Select(x => new RootChangeInfo(x, DomainUpdateType.Delete))
-				.ToArray();
-			_removed.ForEach(x => _comitted.Remove(x));
-			_removed.Clear();
+				removals = _removed
+					.Select(x => new RootChangeInfo(x, DomainUpdateType.Delete))
+					.ToArray();
+				_removed.ForEach(x => _comitted.Remove(x));
+				_removed.Clear();
 
-			var updates = _comitted
-				.OfType<IAggregateRootWithEvents>()
-				.Where(x => x.HasEvents())
-				.Select(x => new RootChangeInfo(x, DomainUpdateType.Update))
-				.ToArray();
-
+				updates = _comitted
+					.OfType<IAggregateRootWithEvents>()
+					.Where(x => x.HasEvents())
+					.Select(x => new RootChangeInfo(x, DomainUpdateType.Update))
+					.ToArray();
+			}
 			return adds
 				.Concat(removals)
 				.Concat(updates)
