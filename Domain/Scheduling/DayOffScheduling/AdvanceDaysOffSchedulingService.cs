@@ -15,17 +15,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
     {
         private readonly AbsencePreferenceScheduling _absencePreferenceScheduling;
 	    private readonly TeamDayOffScheduling _teamDayOffScheduling;
-	    private readonly ITeamBlockMissingDayOffHandler _missingDaysOffScheduler;
-        
-        public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+	    private readonly TeamBlockMissingDayOffHandling _missingDayOffHandling;
+
+	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
         public AdvanceDaysOffSchedulingService(AbsencePreferenceScheduling absencePreferenceScheduling,
 	        TeamDayOffScheduling teamDayOffScheduling,
-            ITeamBlockMissingDayOffHandler missingDaysOffScheduler)
+            TeamBlockMissingDayOffHandling missingDayOffHandling)
         {
 	        _absencePreferenceScheduling = absencePreferenceScheduling;
 	        _teamDayOffScheduling = teamDayOffScheduling;
-	        _missingDaysOffScheduler = missingDaysOffScheduler;
+	        _missingDayOffHandling = missingDayOffHandling;
         }
 
 		public void Execute(IEnumerable<IScheduleMatrixPro> matrixes, IEnumerable<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions,
@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 					selectedMatrixes.Add(scheduleMatrixPro);
 			}
 
-            _missingDaysOffScheduler.DayScheduled += dayScheduled;
-			_missingDaysOffScheduler.Execute(selectedMatrixes, schedulingOptions, rollbackService);
-            _missingDaysOffScheduler.DayScheduled -= dayScheduled;
+			_missingDayOffHandling.DayScheduled += dayScheduled;
+			_missingDayOffHandling.Execute(selectedMatrixes, schedulingOptions, rollbackService);
+			_missingDayOffHandling.DayScheduled -= dayScheduled;
         }
 
         protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)

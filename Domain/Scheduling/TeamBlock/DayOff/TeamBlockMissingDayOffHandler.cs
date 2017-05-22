@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -9,13 +10,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 {
-    public interface ITeamBlockMissingDayOffHandler
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public interface ITeamBlockMissingDayOffHandler
     {
         void Execute(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
     }
 
-    public class TeamBlockMissingDayOffHandler : ITeamBlockMissingDayOffHandler
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class TeamBlockMissingDayOffHandler : ITeamBlockMissingDayOffHandler
     {
 	    private readonly IMissingDayOffBestSpotDecider _missingDayOffBestSpotDecider;
 	    private readonly IMatrixDataListCreator _matrixDataListCreator;

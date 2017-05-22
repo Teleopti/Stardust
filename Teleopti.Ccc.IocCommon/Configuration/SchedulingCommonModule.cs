@@ -135,6 +135,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AdvanceDaysOffSchedulingService>();
 				builder.RegisterType<AbsencePreferenceScheduling>().InstancePerDependency();
 				builder.RegisterType<TeamDayOffScheduling>().InstancePerDependency();
+				builder.RegisterType<TeamBlockMissingDayOffHandling>();
 			}
 			else
 			{
@@ -144,6 +145,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<WorkShiftFilterServiceOLD>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
 				builder.RegisterType<AdvanceDaysOffSchedulingServiceOLD>();
 				builder.RegisterType<TeamDayOffScheduler>().As<ITeamDayOffScheduler>().InstancePerDependency();
+				builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();
 			}
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();
@@ -603,7 +605,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamMatrixChecker>().As<ITeamMatrixChecker>().SingleInstance();
 
 			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>().SingleInstance();
-			builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();
 			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().SingleInstance();
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>().InstancePerLifetimeScope();
