@@ -31,7 +31,6 @@
 			inject(function (CurrentUserInfo) {
 				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
-				$httpBackend.expectGET("../api/BusinessUnit").respond(200, 'mock');
 				var request = CurrentUserInfo.getCurrentUserFromServer();
 
 				request.success(function (result) {
