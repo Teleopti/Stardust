@@ -127,11 +127,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ClassicScheduleCommand>().InstancePerLifetimeScope();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
 			{
+				//TODO: look over registrations when events and crap are gone
 				builder.RegisterType<ScheduleExecutor>().As<IScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<Scheduling>().As<IScheduling>().InstancePerLifetimeScope();
 				builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
 				builder.RegisterType<WorkShiftFilterService>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
 				builder.RegisterType<AdvanceDaysOffSchedulingService>();
+				builder.RegisterType<AbsencePreferenceScheduling>().InstancePerDependency();
 			}
 			else
 			{
