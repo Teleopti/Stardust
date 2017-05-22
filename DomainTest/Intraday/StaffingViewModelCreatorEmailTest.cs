@@ -19,6 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
+	[Ignore("Under Developement")]
 	public class StaffingViewModelCreatorEmailTest : ISetup
 	{
 		public MutableNow Now;
@@ -52,9 +53,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
-			var skill = StaffingViewModelCreatorTestHelper.CreateEmailSkill(_skillResolution, "skill", new TimePeriod(8, 0, 8, 45));
+			var skill = StaffingViewModelCreatorTestHelper.CreateEmailSkill(_skillResolution, "skill", new TimePeriod(8, 0, 9, 0));
 			
-			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 45), false, _slaTwoHours);
+			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours,false);
 			var skillStats = new List<SkillIntervalStatistics>
 			{
 				new SkillIntervalStatistics
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
-			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(3);
+			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(4);
 			vm.DataSeries.ActualStaffing.First().Should().Be.GreaterThan(0d);
 			vm.DataSeries.ActualStaffing[1].Should().Be.EqualTo(null);
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
@@ -139,6 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ForecastedStaffing.Last().Should().Not.Be.EqualTo(forecastedAgentsEnd);
 		}
 
+
 		[Test]
 		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldUseEmailsBacklogFromYesterdayForRequiredAgents()
@@ -152,12 +154,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillEmail = StaffingViewModelCreatorTestHelper.CreateEmailSkill(_skillResolution, "skill", openHours);
 			SkillRepository.Has(skillEmail);
 
-			//var skillDayYesterday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(-1), openHours, false, _slaTwoHours);
 			var skillDayToday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, openHours, false, _slaTwoHours, false);
 			var skillDayCalculator = new SkillDayCalculator(skillEmail,
 				new List<ISkillDay>() { skillDayToday},
-				new DateOnlyPeriod(new DateOnly(userNow.AddDays(-1)), new DateOnly(userNow.AddDays(1))));
-			//skillDayYesterday.SkillDayCalculator = skillDayCalculator;
+				new DateOnlyPeriod(new DateOnly(userNow), new DateOnly(userNow)));
 			skillDayToday.SkillDayCalculator = skillDayCalculator;
 			SkillDayRepository.Has(skillDayToday);
 
@@ -173,10 +173,15 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var vm = Target.Load(new[] { skillEmail.Id.Value });
 
+			var clonedSkillDay = skillDayToday.NoneEntityClone();
+			clonedSkillDay.WorkloadDayCollection.First().TaskPeriodList.First().SetTasks(200);
+			clonedSkillDay.WorkloadDayCollection.First().TaskPeriodList.First().AverageTaskTime = TimeSpan.FromSeconds(320);
+			clonedSkillDay.SkillStaffPeriodCollection.First().FStaff.Should().Be.EqualTo(forecastedAgentsStart);
+
 			vm.DataSeries.Should().Not.Be.EqualTo(null);
 			vm.StaffingHasData.Should().Be.EqualTo(true);
 			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(88);
-			vm.DataSeries.ActualStaffing.First().Should().Be.GreaterThan(forecastedAgentsStart);
+			vm.DataSeries.ActualStaffing.First().Should().Be.GreaterThan(vm.DataSeries.ForecastedStaffing.First());
 			vm.DataSeries.ActualStaffing[4].Should().Be.GreaterThan(forecastedAgentsSecondInterval);
 			vm.DataSeries.ActualStaffing[8].Should().Be.EqualTo(forecastedAgentsThirdInterval);
 			vm.DataSeries.ActualStaffing[12].Should().Be.EqualTo(null);
@@ -195,6 +200,23 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			}
 
 			return backLogStats;
+		}
+
+		private double getActualStaffing(ISkillDay skillDay, IList<SkillIntervalStatistics> actualCalls)
+		{
+			var calculatorService = new StaffingCalculatorServiceFacade();
+			var skillData = skillDay.SkillDataPeriodCollection.First().ServiceAgreement;
+			var actualStaffingSkill1 = calculatorService.AgentsUseOccupancy(
+				skillData.ServiceLevel.Percent.Value,
+				(int)skillData.ServiceLevel.Seconds,
+				60,
+				actualCalls.First().AverageHandleTime,
+				TimeSpan.FromMinutes(15),
+				skillData.MinOccupancy.Value,
+				skillData.MaxOccupancy.Value,
+				skillDay.Skill.MaxParallelTasks);
+
+			return actualStaffingSkill1;
 		}
 	}
 }

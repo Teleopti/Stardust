@@ -105,12 +105,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var forecastedIntervalCalls in forecastedCallsPerSkillDictionary[skillId])
 			{
-				var actualIntervalCalls = actualStats.SingleOrDefault(x => x.StartTime == forecastedIntervalCalls.StartTime);
+				var actualIntervalCalls = actualStats.Where(x => x.StartTime == forecastedIntervalCalls.StartTime);
 				if (actualIntervalCalls == null)
 					continue;
 				if (Math.Abs(forecastedIntervalCalls.Calls) < 0.1)
 					continue;
-				listDeviationFactorPerInterval.Add(actualIntervalCalls.Calls/forecastedIntervalCalls.Calls);
+				listDeviationFactorPerInterval.Add(actualIntervalCalls.Sum(x => x.Calls)/forecastedIntervalCalls.Calls);
 			}
 			
 			if (listDeviationFactorPerInterval.Any())

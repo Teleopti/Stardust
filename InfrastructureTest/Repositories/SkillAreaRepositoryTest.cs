@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override SkillArea CreateAggregateWithCorrectBusinessUnit()
 		{
-			var skills = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null)).Skills();
+			var skills = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, new List<ISupportedSkillCheck>() { })).Skills();
 
 			return new SkillArea
 			{

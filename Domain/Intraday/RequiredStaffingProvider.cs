@@ -28,89 +28,150 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var skill in skills)
 			{
-				var actualStatsPerInterval = actualStatistics.Where(s => s.SkillId == skill.Id).ToList();
+				var actualStatsPerSkillInterval = actualStatistics.Where(s => s.SkillId == skill.Id).ToList();
 				var skillDaysForSkill = skillDays.Where(x => x.Skill.Id.Value == skill.Id.Value).ToList();
 				if (!skillDaysForSkill.Any())
 					continue;
-
 				foreach (var skillDay in skillDaysForSkill)
 				{
-					var skillDayStats = GetSkillDayStatistics(skillDayStatsRange, skill, skillDay,actualStatsPerInterval);
-
-					actualStaffingIntervals.AddRange(GetRequiredStaffing(resolution, skillDayStats, skillDay));
+					var skillDayStats = GetSkillDayStatistics(skillDayStatsRange, skill, skillDay.CurrentDate, actualStatsPerSkillInterval, resolution);
+					if (!skillDayStats.Any())
+						continue;
+					var clonedSkillDay = skillDay.NoneEntityClone();
+					mapWorkloadIds(clonedSkillDay, skillDay);
+					assignActualWorkloadToClonedSkillDay(clonedSkillDay, skillDayStats);
+					actualStaffingIntervals.AddRange(GetRequiredStaffing(resolution, skillDayStats, clonedSkillDay));
+					reset(clonedSkillDay, skillDay);
 				}
 			}
+
 
 			return actualStaffingIntervals;
 		}
 
-		private IList<StaffingIntervalModel> GetRequiredStaffing(TimeSpan resolution, IList<SkillIntervalStatistics> skillDayStats, ISkillDay skillDay)
+		private void mapWorkloadIds(ISkillDay clonedSkillDay, ISkillDay skillDay)
 		{
-			var staffingCalculatorService = new StaffingCalculatorServiceFacade();
-			var actualStaffingIntervals = new List<StaffingIntervalModel>();
+			var index = 0;
+			foreach (var workloadDay in skillDay.WorkloadDayCollection)
+			{
+				clonedSkillDay.WorkloadDayCollection[index].Workload.SetId(workloadDay.Workload.Id.Value);
+				index++;
+			}
+		}
 
+		private void assignActualWorkloadToClonedSkillDay(ISkillDay clonedSkillDay, IList<SkillIntervalStatistics> skillDayStats)
+		{
+			foreach (var workloadDay in clonedSkillDay.WorkloadDayCollection)
+			{
+				foreach (var taskPeriod in workloadDay.TaskPeriodList)
+				{
+					var statInterval = skillDayStats
+						.FirstOrDefault(x => TimeZoneHelper.ConvertToUtc(x.StartTime, _timeZone.TimeZone()) == taskPeriod.Period.StartDateTime &&
+																		  x.WorkloadId == workloadDay.Workload.Id.Value);
+					if (statInterval == null)
+					{
+						taskPeriod.SetTasks(0);
+						taskPeriod.AverageTaskTime = TimeSpan.Zero;
+						continue;
+					}
+					taskPeriod.SetTasks(statInterval.Calls);
+					taskPeriod.AverageTaskTime = TimeSpan.FromSeconds(statInterval.AverageHandleTime);
+					taskPeriod.AverageAfterTaskTime = TimeSpan.Zero;
+				}
+			}
+		}
+
+		private void reset(ISkillDay clonedSkillDay, ISkillDay skillday)
+		{
+			foreach (var workloadDay in clonedSkillDay.WorkloadDayCollection)
+			{
+				foreach (var taskPeriod in workloadDay.TaskPeriodList)
+				{
+					//var statInterval = skillday.WorkloadDayCollection.First().TaskPeriodList.Where(x => x.Period.StartDateTime == taskPeriod.Period.StartDateTime);
+					var statInterval = skillday.WorkloadDayCollection.FirstOrDefault(x => x.Workload.Id.Value == workloadDay.Workload.Id.Value)
+						.TaskPeriodList.First(x => x.Period.StartDateTime == taskPeriod.Period.StartDateTime);
+
+					taskPeriod.SetTasks(statInterval.Tasks);
+					taskPeriod.AverageTaskTime = statInterval.Task.AverageTaskTime;
+					taskPeriod.AverageAfterTaskTime = statInterval.Task.AverageAfterTaskTime;
+				}
+			}
+		}
+
+		private IList<StaffingIntervalModel> GetRequiredStaffing(TimeSpan resolution, IList<SkillIntervalStatistics> skillDayStats, 
+			ISkillDay skillDay)
+		{
+			var actualStaffingIntervals = new List<StaffingIntervalModel>();
+			var staffing = skillDay.SkillStaffPeriodViewCollection(resolution, false);
 			foreach (var actualInterval in skillDayStats)
 			{
-				var actualStatsStartTimeUtc = TimeZoneHelper.ConvertToUtc(actualInterval.StartTime, _timeZone.TimeZone());
+				var staffingInterval = staffing
+					.FirstOrDefault(x => x.Period.StartDateTime == TimeZoneHelper.ConvertToUtc(actualInterval.StartTime, _timeZone.TimeZone()));
 
-				var skillData =
-					skillDay.SkillDataPeriodCollection
-					.FirstOrDefault(skillDataPeriod => skillDataPeriod.Period.StartDateTime <= actualStatsStartTimeUtc &&
-										   skillDataPeriod.Period.EndDateTime > actualStatsStartTimeUtc);
-
-				if (skillData == null)
+				if(staffingInterval == null)
 					continue;
-
-				var efficencyPerSkillList = skillDay.SkillStaffPeriodCollection
-					.Where(x => x.Period.StartDateTime <= actualStatsStartTimeUtc && x.Period.EndDateTime > actualStatsStartTimeUtc)
-					.ToList();
-
-				if (!efficencyPerSkillList.Any())
-					continue;
-				var efficencyPerSkillInterval = efficencyPerSkillList.Select(s => s.Payload.Efficiency).First();
-				var efficiencyFactor = (1/efficencyPerSkillInterval.Value);
-
-				var agents = staffingCalculatorService.AgentsUseOccupancy(
-								 skillData.ServiceAgreement.ServiceLevel.Percent.Value,
-								 (int) skillData.ServiceAgreement.ServiceLevel.Seconds,
-								 actualInterval.Calls,
-								 actualInterval.AverageHandleTime,
-								 resolution,
-								 skillData.ServiceAgreement.MinOccupancy.Value,
-								 skillData.ServiceAgreement.MaxOccupancy.Value,
-								 skillDay.Skill.MaxParallelTasks)*efficiencyFactor;
 
 				actualStaffingIntervals.Add(new StaffingIntervalModel()
 				{
 					SkillId = skillDay.Skill.Id.Value,
 					StartTime = actualInterval.StartTime,
-					Agents = agents
+					Agents = staffingInterval.FStaff
 				});
 			}
 
 			return actualStaffingIntervals;
 		}
 
-		private IList<SkillIntervalStatistics> GetSkillDayStatistics(IList<SkillDayStatsRange> skillDayStatsRange, ISkill skill, ISkillDay skillDay,
-			List<SkillIntervalStatistics> actualStatsPerInterval)
-		{
+		private IList<SkillIntervalStatistics> GetSkillDayStatistics(IList<SkillDayStatsRange> skillDayStatsRange, ISkill skill, DateOnly skillDayDate, List<SkillIntervalStatistics> actualStatsPerInterval, TimeSpan resolution)
+		{			
 			var rangeStartUtc = skillDayStatsRange
-				.FirstOrDefault(x => x.skillId == skill.Id.Value && x.skillDayId == skillDay.Id.Value)?
+				.FirstOrDefault(x => x.SkillId == skill.Id.Value && x.SkillDayDate == skillDayDate)?
 				.RangePeriod.StartDateTime;
 			if (!rangeStartUtc.HasValue)
 				return new List<SkillIntervalStatistics>();
 			var rangeEndUtc = skillDayStatsRange
-				.FirstOrDefault(x => x.skillId == skill.Id.Value && x.skillDayId == skillDay.Id.Value)?
+				.FirstOrDefault(x => x.SkillId == skill.Id.Value && x.SkillDayDate == skillDayDate)?
 				.RangePeriod.EndDateTime;
 			var rangeStartLocal = TimeZoneHelper.ConvertFromUtc(rangeStartUtc.Value, _timeZone.TimeZone());
 			var rangeEndLocal = TimeZoneHelper.ConvertFromUtc(rangeEndUtc.Value, _timeZone.TimeZone());
 
-			return actualStatsPerInterval
+			var retList = actualStatsPerInterval
 				.Where(x => x.StartTime >= rangeStartLocal && x.StartTime < rangeEndLocal)
 				.ToList();
+
+			if (skill.DefaultResolution == resolution.TotalMinutes)
+				return retList;
+
+			var intervalsInResolution = skill.DefaultResolution / resolution.TotalMinutes;
+			var mergedStats = new List<SkillIntervalStatistics>();
+			for (var interval = rangeStartLocal; interval < rangeEndLocal; interval = interval.AddMinutes(skill.DefaultResolution))
+			{
+				var statsPerWorkload = retList
+					.Where(x => x.StartTime >= interval && x.StartTime < interval.AddMinutes(skill.DefaultResolution))
+					.GroupBy(x => x.WorkloadId);
+				foreach (var item in statsPerWorkload)
+				{
+					var averageCalls = item.Sum(x => x.Calls) / item.Count();
+					var averageAht = item.Sum(x => x.HandleTime) / item.Sum(x => x.AnsweredCalls);
+
+					foreach (var statInterval in item)
+					{
+						mergedStats.Add(new SkillIntervalStatistics()
+						{
+							Calls = averageCalls * intervalsInResolution,
+							AverageHandleTime = averageAht,
+							SkillId = skill.Id.Value,
+							StartTime = statInterval.StartTime,
+							WorkloadId = item.Key
+						});
+					}
+				}
+
+			}
+			return mergedStats;
 		}
 
-		public double?[] DataSeries(IList<StaffingIntervalModel> requiredStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, DateTime[] timeSeries)
+		public double?[] DataSeries(IList<StaffingIntervalModel> requiredStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, DateTime[] timeSeries, int skillCount)
 		{
 			var returnValue = new List<double?>();
 
@@ -120,7 +181,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			foreach (var interval in timeSeries)
 			{
 				var requiredStaffingInterval = requiredStaffingPerSkill.Where(x => x.StartTime == interval).ToList();
-				if (requiredStaffingInterval.Any())
+				if (requiredStaffingInterval.Any() && requiredStaffingInterval.Count == skillCount)
 					returnValue.Add(requiredStaffingInterval.Sum(a => a.Agents));
 				else
 					returnValue.Add(null);

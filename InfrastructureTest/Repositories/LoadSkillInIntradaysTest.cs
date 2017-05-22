@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workload.AddQueueSource(queueSourceHelpdesk);
 			PersistAndRemoveFromUnitOfWork(workload);
 
-			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null));
+			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, new List<ISupportedSkillCheck>() { }));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 			skills.First().Name.Should().Be.EqualTo(skillWithQueue.Name);
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workload.AddQueueSource(queue2);
 			PersistAndRemoveFromUnitOfWork(workload);
 
-			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null));
+			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, new List<ISupportedSkillCheck>() { }));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 		}
@@ -111,16 +112,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(workloadEmail);
 			PersistAndRemoveFromUnitOfWork(workloadChat);
 
-			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null));
+			var target = new LoadSkillInIntradays(CurrUnitOfWork,
+				new SupportedSkillsInIntradayProvider(null,
+					new List<ISupportedSkillCheck>()
+					{
+						new InboundPhoneSkillSupported(),
+						new OtherSkillsLikePhoneSupported()
+					}
+				));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(3);
 			skills.First().Name.Should().Be.EqualTo(chatSkill.Name);
-			skills[1].Name.Should().Be.EqualTo(emailSkill.Name);
 			skills.First().DoDisplayData.Should().Be.EqualTo(true);
-			skills[1].DoDisplayData.Should().Be.EqualTo(false);
-			skills.Last().DoDisplayData.Should().Be.EqualTo(true);
 			skills.First().SkillType.Should().Be.EqualTo(skillTypeChat.Description.Name);
+			skills[1].Name.Should().Be.EqualTo(emailSkill.Name);
+			skills[1].DoDisplayData.Should().Be.EqualTo(false);
 			skills[1].SkillType.Should().Be.EqualTo(skillTypeEmail.Description.Name);
+			skills.Last().DoDisplayData.Should().Be.EqualTo(true);
 			skills.Last().SkillType.Should().Be.EqualTo(skillTypePhone.Description.Name);
 		}
 
@@ -152,7 +160,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(workloadPhone);
 			PersistAndRemoveFromUnitOfWork(workloadEmail);
 
-			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null));
+			var target = new LoadSkillInIntradays(CurrUnitOfWork,
+				new SupportedSkillsInIntradayProvider(null,
+					new List<ISupportedSkillCheck>()
+					{
+						new InboundPhoneSkillSupported()
+					}
+				));
+
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(2);
 			skills.First().Name.Should().Be.EqualTo(multiSiteSkill.Name);

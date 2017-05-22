@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				{
 					TimeZone = TimeZoneInfo.Utc
 				}.WithId();
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+			IWorkload workload = WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+			workload.SetId(Guid.NewGuid());
 
 			return skill;
 		}
@@ -108,12 +109,18 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				intervalTime <= latestStatsTime;
 				intervalTime = intervalTime.AddMinutes(minutesPerInterval))
 			{
+				var calls = random.Next(5, 50);
+				var answeredCalls = (int)(calls * 0.8);
 				skillStats.Add(new SkillIntervalStatistics
 				{
 					SkillId = skillDay.Skill.Id.Value,
+					WorkloadId = skillDay.WorkloadDayCollection.First().Workload.Id.Value,
 					StartTime = TimeZoneHelper.ConvertFromUtc(intervalTime, timezone),
-					Calls = random.Next(5, 50),
-					AverageHandleTime = 40d
+					Calls = calls,
+					AnsweredCalls = answeredCalls,
+					HandleTime = 120,
+					AverageHandleTime = 120d / answeredCalls,
+
 				});
 			}
 			return skillStats;
@@ -132,7 +139,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var doSplit = skillDay.Skill.DefaultResolution != minutesPerInterval;
 
-			var forecastedTasks = skillDay.WorkloadDayCollection.First().TaskPeriodList
+			var workloadDay = skillDay.WorkloadDayCollection.First();
+			var forecastedTasks = workloadDay.TaskPeriodList
 				.Where(x => x.Period.StartDateTime >= shiftStartTime && x.Period.EndDateTime <= latestStatsTime)
 				.ToList();
 			var skillId = skillDay.Skill.Id.Value;
@@ -144,25 +152,34 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					IList<ITemplateTaskPeriodView> splittedTaskPeriods = taskPeriod.Split(TimeSpan.FromMinutes(minutesPerInterval));
 					foreach (var splittedTaskPeriod in splittedTaskPeriods)
 					{
-						skillStats.Add(getStatsInterval(splittedTaskPeriod.Period.StartDateTime, splittedTaskPeriod.TotalTasks, splittedTaskPeriod.TotalAverageTaskTime.TotalSeconds + splittedTaskPeriod.AverageAfterTaskTime.TotalSeconds, timezone, skillId));
+						skillStats.Add(getStatsInterval(splittedTaskPeriod.Period.StartDateTime, 
+							splittedTaskPeriod.TotalTasks, 
+							splittedTaskPeriod.TotalAverageTaskTime.TotalSeconds + splittedTaskPeriod.AverageAfterTaskTime.TotalSeconds, 
+							timezone, 
+							skillId,
+							workloadDay.Workload.Id.Value));
 					}
 					continue;
 				}
 				
-				skillStats.Add(getStatsInterval(taskPeriod.Period.StartDateTime, taskPeriod.TotalTasks, taskPeriod.TotalAverageTaskTime.TotalSeconds + taskPeriod.TotalAverageAfterTaskTime.TotalSeconds, timezone, skillId));
+				skillStats.Add(getStatsInterval(taskPeriod.Period.StartDateTime, 
+					taskPeriod.TotalTasks, 
+					taskPeriod.TotalAverageTaskTime.TotalSeconds + taskPeriod.TotalAverageAfterTaskTime.TotalSeconds, 
+					timezone, skillId,
+					workloadDay.Workload.Id.Value));
 			}
 			return skillStats;
 		}
 
-		private static SkillIntervalStatistics getStatsInterval(DateTime startDateTime, double totalTasks, 
-			double totalHandlingTime, TimeZoneInfo timezone, Guid skillId)
+		private static SkillIntervalStatistics getStatsInterval(DateTime startDateTime, double totalTasks, double totalHandlingTime, TimeZoneInfo timezone, Guid skillId, Guid workloadId)
 		{
 			return new SkillIntervalStatistics
 			{
 				SkillId = skillId,
+				WorkloadId = workloadId,
 				StartTime = TimeZoneHelper.ConvertFromUtc(startDateTime, timezone),
 				Calls = totalTasks,
-				AverageHandleTime = totalHandlingTime
+				AverageHandleTime = totalHandlingTime,
 			};
 		}
 	}

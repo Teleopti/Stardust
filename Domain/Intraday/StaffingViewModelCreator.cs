@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skills, skillDays, minutesPerInterval, dateOnly, useShrinkage);
 
-			var actualCallsPerSkillInterval = _intradayQueueStatisticsLoader.LoadActualCallPerSkillInterval(skills, _timeZone.TimeZone(), userDateOnly);
-			var latestStatsTime = getLastestStatsTime(actualCallsPerSkillInterval);
+			var actualVolumePerWorkloadInterval = _intradayQueueStatisticsLoader.LoadActualCallPerSkillInterval(skills, _timeZone.TimeZone(), userDateOnly);
+			var latestStatsTime = getLastestStatsTime(actualVolumePerWorkloadInterval);
 			
 			var forecastedCallsModel = _forecastedCallsProvider.Load(skills, skillDays, latestStatsTime, minutesPerInterval);
 			var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills, minutesPerInterval, dateOnly, useShrinkage);
@@ -89,13 +89,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval);
 			var updatedForecastedSeries = _reforecastedStaffingProvider.DataSeries(
 				forecastedStaffing,
-				actualCallsPerSkillInterval,
+				actualVolumePerWorkloadInterval,
 				forecastedCallsModel.CallsPerSkill,
 				latestStatsTime,
 				minutesPerInterval,
 				timeSeries
 			);
-			var requiredStaffingPerSkill = _requiredStaffingProvider.Load(actualCallsPerSkillInterval, 
+			var requiredStaffingPerSkill = _requiredStaffingProvider.Load(actualVolumePerWorkloadInterval, 
 				skills, 
 				skillDays,
 				forecastedStaffing, 
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					Time = timeSeries,
 					ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing,timeSeries),
 					UpdatedForecastedStaffing = updatedForecastedSeries,
-					ActualStaffing = _requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, timeSeries),
+					ActualStaffing = _requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, timeSeries, skills.Count),
 					ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, timeSeries)
 				},
 				StaffingHasData = forecastedStaffing.Any()

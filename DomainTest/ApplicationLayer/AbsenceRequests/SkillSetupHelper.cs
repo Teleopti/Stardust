@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					TimeZone = TimeZoneInfo.Utc
 				}.WithId();
 			if (isClosedOnWeekends)
-				WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, openHours);
+				WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, openHours).WithId(Guid.NewGuid());
 			else
-				WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+				WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours).WithId(Guid.NewGuid());
 			skill.Activity = activity;
 			return skill;
 		}
@@ -48,23 +48,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				{
 					TimeZone = TimeZoneInfo.Utc
 				}.WithId();
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours).WithId(Guid.NewGuid());
 
 			return skill;
 		}
 
-		public static ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, bool addSkillDataPeriodDuplicate)
+		public static ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, bool addSkillDataPeriodDuplicate, bool giveDemand = true)
 		{
+			var demand = 3;
+			if (!giveDemand)
+				demand = -1;
+
 			var random = new Random();
 			ISkillDay skillDay;
 			if (addSkillDataPeriodDuplicate)
 				skillDay =
 					skill.CreateSkillDayWithDemandOnIntervalWithSkillDataPeriodDuplicate(scenario, new DateOnly(userNow), 3,
-						new Tuple<TimePeriod, double>(openHours, 3)).WithId();
+						new Tuple<TimePeriod, double>(openHours, demand)).WithId();
 			else
 				skillDay =
 					skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, ServiceAgreement.DefaultValues(),
-						new Tuple<TimePeriod, double>(openHours, 3)).WithId();
+						new Tuple<TimePeriod, double>(openHours, demand)).WithId();
 
 			var index = 0;
 
@@ -100,6 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				skillStats.Add(new SkillIntervalStatistics
 				{
 					SkillId = skillDay.Skill.Id.GetValueOrDefault(),
+					WorkloadId = skillDay.WorkloadDayCollection.First().Workload.Id.Value,
 					StartTime = TimeZoneHelper.ConvertFromUtc(intervalTime, timeZone.TimeZone()),
 					Calls = random.Next(5, 50),
 					AverageHandleTime = 40d

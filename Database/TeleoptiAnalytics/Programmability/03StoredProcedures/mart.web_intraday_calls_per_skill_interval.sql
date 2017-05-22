@@ -7,7 +7,7 @@ GO
 -- Create date: 2016-09-05
 -- Description:	Get the offered calls & aht per skill for the given day. 
 -- =============================================
--- EXEC [mart].[web_intraday_calls_per_skill_interval] 'W. Europe Standard Time', '2017-01-13', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
+-- EXEC [mart].[web_intraday_calls_per_skill_interval] 'W. Europe Standard Time', '2013-02-02', 'C5FFFC8F-BCD6-47F7-9352-9F0800E39578'
 CREATE PROCEDURE [mart].[web_intraday_calls_per_skill_interval]
 @time_zone_code nvarchar(100),
 @today smalldatetime,
@@ -24,6 +24,7 @@ BEGIN
 	CREATE TABLE #skills(id uniqueidentifier)	
 	CREATE TABLE #queues(
 		skill_code uniqueidentifier,
+		workload_code uniqueidentifier,
 		queue_id int,
 		percentage_offered float,
 		percentage_overflow_in float,
@@ -35,6 +36,7 @@ BEGIN
 		)
 	CREATE TABLE #queue_stats(
 		skill_code uniqueidentifier,
+		workload_code uniqueidentifier,
 		date_id int, 
 		utc_interval_id smallint,
 		calculated_calls int,
@@ -57,6 +59,7 @@ BEGIN
 	INSERT INTO #queues
 	SELECT 
 		ds.skill_code,
+		w.workload_code,
 		qw.queue_id,
 		w.percentage_offered,
 		percentage_overflow_in,
@@ -78,6 +81,7 @@ BEGIN
 	INSERT INTO #queue_stats
 	SELECT 
 		skill_code = q.skill_code,
+		workload_code = q.workload_code,
 		date_id = fq.date_id,
 		utc_interval_id = interval_id,
 		calculated_calls = mart.CalculateQueueStatistics(
@@ -109,6 +113,7 @@ BEGIN
 			)
 	SELECT
 		qs.skill_code AS SkillId,
+		qs.workload_code AS WorkloadId,
 		DATEADD(mi, DATEDIFF(MINUTE, DATEADD(DAY, DATEDIFF(DAY, 0, i.interval_start), 0), i.interval_start), d.date_date) AS StartTime,
 		SUM(qs.calculated_calls) AS Calls,
 		CASE SUM(qs.answered_calls)
@@ -116,7 +121,9 @@ BEGIN
 					0 THEN 0
 				ELSE 
 					SUM(qs.handle_time) / SUM(qs.answered_calls)
-			END AS AverageHandleTime
+			END AS AverageHandleTime,
+		SUM(qs.answered_calls) AS AnsweredCalls,
+		SUM(qs.handle_time) AS HandleTime
 	FROM
 		#queue_stats qs
 		INNER JOIN mart.bridge_time_zone bz ON qs.date_id = bz.date_id AND qs.utc_interval_id = bz.interval_id
@@ -127,6 +134,7 @@ BEGIN
 		AND d.date_date = @today
 	GROUP BY
 		qs.skill_code,
+		qs.workload_code,
 		d.date_date,
 		i.interval_start
 	ORDER BY

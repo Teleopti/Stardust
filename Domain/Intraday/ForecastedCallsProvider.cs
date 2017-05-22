@@ -88,8 +88,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			return new SkillDayStatsRange()
 			{
-				skillId = skill.Id.Value,
-				skillDayId = skillDay.Id.Value,
+				SkillId = skill.Id.Value,
+				SkillDayDate = skillDay.CurrentDate,
 				RangePeriod = new DateTimePeriod(
 					templateTaskPeriods.Min(t => t.Period.StartDateTime),
 					templateTaskPeriods.Max(t => t.Period.EndDateTime))

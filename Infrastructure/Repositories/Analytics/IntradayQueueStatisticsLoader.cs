@@ -29,9 +29,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			            .CreateSQLQuery(
 			                @"mart.web_intraday_calls_per_skill_interval @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
 			            .AddScalar("SkillId", NHibernateUtil.Guid)
+			            .AddScalar("WorkloadId", NHibernateUtil.Guid)
 			            .AddScalar("StartTime", NHibernateUtil.DateTime)
 			            .AddScalar("Calls", NHibernateUtil.Double)
 			            .AddScalar("AverageHandleTime", NHibernateUtil.Double)
+			            .AddScalar("AnsweredCalls", NHibernateUtil.Int32)
+			            .AddScalar("HandleTime", NHibernateUtil.Double)
 			            .SetString("TimeZone", timeZone.Id)
 			            .SetString("Today", today.ToShortDateString(CultureInfo.InvariantCulture))
 			            .SetString("SkillList", skillIdString)

@@ -5,8 +5,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class SkillDayStatsRange
 	{
-		public Guid skillId { get; set; }
-		public Guid skillDayId { get; set; }
+		public Guid SkillId { get; set; }
+		public DateOnly SkillDayDate { get; set; }
 		public DateTimePeriod RangePeriod { get; set; }
 
 	}
