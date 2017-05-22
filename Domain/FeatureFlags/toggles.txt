@@ -177,10 +177,10 @@ WfmGlobalLayout_personalOptions_37114 = true
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = true
 ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI until we have a proper UI
 ResourcePlanner_CategorizeShiftSelection_xx = false
-ResourcePlanner_MasterActivityBaseLayer_44134 = RC
+ResourcePlanner_MasterActivityBaseLayer_44134 = true
 ResourcePlanner_EvenRelativeDiff_44091 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
-ResourcePlanner_TeamSameDayOff_44265 = RC
+ResourcePlanner_TeamSameDayOff_44265 = true
 ResourcePlanner_MergeTeamblockClassicScheduling_44289 = false #Keep this false until we get further so we dont mess with perf tests
 
 Wfm_DisplayOnlineHelp_39402 = RC
@@ -244,12 +244,12 @@ Staffing_ReadModel_BetterAccuracy_Step2_44271 = RC
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = DEV
 
 QRCodeForMobileApps_42695 = RC
-ConfigQRCodeURLForMobileApps_43224 = RC
+ConfigQRCodeURLForMobileApps_43224 = true
 
 ETL_SpeedUpNightlyDayOff_38213 = true
 WFM_ImproveIntradaySkillArea_37291 = RC
 Wfm_Intraday_SupportSkillTypeWebChat_42591 = true
 MyTimeWeb_MobileResponsive_43826 = true
-WFM_ReportHierarchy_43002 = RC
+WFM_ReportHierarchy_43002 = true
 WFM_Intraday_Show_For_Other_Days_43504 = DEV
 WFM_Intraday_SupportMultisiteSkill_43874 = DEV
