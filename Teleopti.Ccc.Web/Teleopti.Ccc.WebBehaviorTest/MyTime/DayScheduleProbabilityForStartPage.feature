@@ -77,6 +77,7 @@ Scenario: Should hide staffing probability
 
 @OnlyRunIfEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')
 Scenario: Probability setting should be kept when date changed
+	Given tomorrow I have a full day absence
 	When I am viewing mobile view for today
 	And I click show probability toggle
 	And I click show overtime probability

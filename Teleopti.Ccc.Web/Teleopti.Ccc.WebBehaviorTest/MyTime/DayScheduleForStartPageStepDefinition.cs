@@ -1,9 +1,12 @@
 ﻿using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
@@ -235,6 +238,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheSelectedProbabilityToggleIsOvertimeProbability()
 		{
 			Browser.Interactions.AssertExists("span.overtime-probability-label");
+		}
+
+		[Given(@"tomorrow (I) have a full day absence")]
+		public void GivenIHaveATomorrowShiftWith(string person)
+		{
+			DataMaker.Person(person).Apply(new FullDayAbsenceConfigurable
+			{
+				Scenario = DefaultScenario.Scenario.Description.Name,
+				Name = "Vacation",
+				Date = DateTime.Today.AddDays(1)
+			});
 		}
 
 		public class MobileDayScheduleContentItem
