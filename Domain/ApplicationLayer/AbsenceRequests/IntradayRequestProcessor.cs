@@ -213,17 +213,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var skillCombinationResourceByAgentAndLayer =
 				combinationResources.Single(
 					x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
-						 && (layer.Period.StartDateTime >= x.StartDateTime && layer.Period.EndDateTime <= x.EndDateTime));
-
+						 && layer.Period.StartDateTime >= x.StartDateTime && layer.Period.EndDateTime <= x.EndDateTime);
 
 			var part = layer.Period.ElapsedTime().TotalMinutes / skillCombinationResourceByAgentAndLayer.GetTimeSpan().TotalMinutes;
-			skillCombinationResourceByAgentAndLayer.Resource -= 1 * part;
+			var resource = skillCombinationResourceByAgentAndLayer.Resource - part;
+			if (resource < 0) resource = 0;
+
+			skillCombinationResourceByAgentAndLayer.Resource = resource;
 			var skillCombinationChange = new SkillCombinationResource
 			{
 				StartDateTime = skillCombinationResourceByAgentAndLayer.StartDateTime,
 				EndDateTime = skillCombinationResourceByAgentAndLayer.EndDateTime,
 				SkillCombination = skillCombinationResourceByAgentAndLayer.SkillCombination,
-				Resource = -1 * part
+				Resource = -part
 			};
 			return skillCombinationChange;
 		}

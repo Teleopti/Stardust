@@ -87,6 +87,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault()});
 		}
 
+		[Test]
+		public void ShouldDenyIfStaffingIsZero()
+		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 0)
+			});
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 0.1));
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+			
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
+			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
+			denyCommand.DenyReason.Should().StartWith(UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingHours", agent.PermissionInformation.UICulture()).Substring(0, 10));
+			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First();
+			skillCombinations.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
+			skillCombinations.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
+			skillCombinations.Resource.Should().Be.EqualTo(0);
+			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] { skill.Id.GetValueOrDefault() });
+		}
+
 		private static void createWfcs(WorkflowControlSet wfcs, IAbsence absence)
 		{
 			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
