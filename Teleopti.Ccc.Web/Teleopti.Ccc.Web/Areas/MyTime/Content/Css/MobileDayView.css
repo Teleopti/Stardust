@@ -114,6 +114,7 @@
 	position: absolute;
 	height: 100%;
 	right: 0;
+	top: 1px;
 	width: 28px;
 }
 .mobile-start-day .probability-vertical-bar .probability-cell:first-child{
