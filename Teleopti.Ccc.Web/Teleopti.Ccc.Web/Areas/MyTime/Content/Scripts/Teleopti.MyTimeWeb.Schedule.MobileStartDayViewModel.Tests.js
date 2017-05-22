@@ -758,5 +758,59 @@ $(document).ready(function() {
 		equal(viewModel.probabilities()[0].tooltips().indexOf("00:00 - 12:00") > -1, true);
 		equal(viewModel.probabilities()[1].tooltips().indexOf("12:00 - 16:45") > -1, true);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+    });
+
+	test("should show probability icon when scheduled", function() {
+        Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+            if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+            return false;
+        };
+
+        var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+        var rawData = {
+            Date: moment().format('YYYY-MM-DD'),
+            Schedule: {
+                FixedDate: null,
+                Summary: {
+                    Color: null,
+                    Title: null,
+                    TimeSpan: null
+                },
+                Header: { Title: null },
+                HasNotScheduled: false
+            },
+            ViewPossibilityPermission: true,
+            CheckStaffingByIntraday: true
+        };
+        viewModel.readData(rawData);
+
+	    equal(viewModel.showProbabilityOptionsToggleIcon(), true);
+    });
+
+    test("should not show probability icon when not scheduled", function () {
+        Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+            if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+            return false;
+        };
+
+        var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+        var rawData = {
+            Date: moment().format('YYYY-MM-DD'),
+            Schedule: {
+                FixedDate: null,
+                Summary: {
+                    Color: null,
+                    Title: null,
+                    TimeSpan: null
+                },
+                Header: { Title: null },
+                HasNotScheduled: true
+            },
+            ViewPossibilityPermission: true,
+            CheckStaffingByIntraday: true
+        };
+        viewModel.readData(rawData);
+
+	    equal(viewModel.showProbabilityOptionsToggleIcon(), false);
 	});
 });

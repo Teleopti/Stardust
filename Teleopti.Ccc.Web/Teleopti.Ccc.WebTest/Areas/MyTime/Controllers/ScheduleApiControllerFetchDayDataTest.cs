@@ -776,5 +776,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			shiftTradeRequestSetting.OpenPeriodRelativeStart.Should().Be(1);
 			shiftTradeRequestSetting.OpenPeriodRelativeEnd.Should().Be(99);
 		}
+
+	    [Test]
+	    public void ShouldMapHasNotScheduledAsTrueWhenNoScheduled()
+	    {
+			var date = new DateOnly(2014, 12, 18);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date).Schedule;
+			result.HasNotScheduled.Should().Be.True();
+		}
+
+		[Test]
+	    public void ShouldMapHasNotScheduledAsFalseWhenHasScheduled()
+	    {
+			var date = new DateOnly(2017, 05, 22);
+			var timePeriod = new DateTimePeriod(2017, 05, 22, 8, 2017, 05, 22, 17);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var phoneActivity = new Activity("Phone")
+			{
+				InContractTime = true
+			};
+			assignment.AddActivity(phoneActivity, timePeriod, true);
+			assignment.SetShiftCategory(new ShiftCategory("sc") { DisplayColor = Color.Red });
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date).Schedule;
+			result.HasNotScheduled.Should().Be.False();
+		}
 	}
 }

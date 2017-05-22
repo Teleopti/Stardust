@@ -96,6 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public string ProbabilityText { get; set; }
 		public IList<OccupancyViewModel> SeatBookings { get; set; }
 		public TimePeriod? SiteOpenHourPeriod { get; set; }
+		public bool HasNotScheduled { get; set; }
 	}
 
 	public class OvertimeAvailabilityViewModel

@@ -16,7 +16,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Core.Extensions;
@@ -138,7 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		{
 			var personAssignment = s.ScheduleDay?.PersonAssignment();
 			var significantPartForDisplay = s.ScheduleDay?.SignificantPartForDisplay();
-			return new DayViewModel
+			var dayViewModel =  new DayViewModel
 			{
 				Date = s.Date.ToShortDateString(),
 				FixedDate = s.Date.ToFixedClientDateOnlyFormat(),
@@ -162,6 +161,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Availability = s.Availability,
 				SiteOpenHourPeriod = getSiteOpenHourPeriod(s.Date)
 			};
+		    dayViewModel.HasNotScheduled = dayViewModel.Summary.Title == Resources.NotScheduled;
+
+			return dayViewModel;
 		}
 
 		private NoteViewModel map(ReadOnlyCollection<IPublicNote> s)
@@ -282,7 +284,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		{
 			if (s.ScheduleDay == null)
 			{
-				return new PeriodViewModel();
+				return new PeriodViewModel
+				{
+					Title = Resources.NotScheduled
+				};
 			}
 
 			var significantPart = s.ScheduleDay.SignificantPartForDisplay();
