@@ -196,7 +196,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 	self.today = function () {
 		self.currentUserDate = ko.observable(getCurrentUserDate());
-		console.log('today', self.currentUserDate());
 		parent.ReloadSchedule(self.currentUserDate());
 	};
 
