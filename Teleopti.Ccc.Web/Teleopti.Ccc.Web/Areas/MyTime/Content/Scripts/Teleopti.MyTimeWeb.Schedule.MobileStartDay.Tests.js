@@ -89,13 +89,15 @@
 	});
 
 	test("should go back to current date after clicking 'home' icon", function () {
-		startDayData.Date = moment().format(constants.dateOnlyFormat);
+		var currentUserDate = moment().zone(-startDayData.BaseUtcOffsetInMinutes);
+		startDayData.Date = currentUserDate.format(constants.dateOnlyFormat);
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm(); 
+
 		vm.nextDay();
-		equal(vm.selectedDate().format(constants.dateOnlyFormat), moment().add('days', 1).format(constants.dateOnlyFormat));
+		equal(vm.selectedDate().format(constants.dateOnlyFormat), currentUserDate.add('days', 1).format(constants.dateOnlyFormat));
 		vm.today();
-		equal(vm.selectedDate().format(constants.dateOnlyFormat), moment().format(constants.dateOnlyFormat));
+		equal(vm.selectedDate().format(constants.dateOnlyFormat), currentUserDate.subtract('days', 1).format(constants.dateOnlyFormat));
 	});
 
 	test("should set timelines", function () {
@@ -490,9 +492,9 @@
 			return false;
 		};
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		startDayData.Date = moment().format(constants.dateOnlyFormat);
+		startDayData.Date = moment().zone(-startDayData.BaseUtcOffsetInMinutes).format(constants.dateOnlyFormat);
 		startDayData.Schedule.SiteOpenHourPeriod = { EndTime: "13:00:00", StartTime: "08:00:00" };
-		propabilities = createPropabilities(["12:00:00", "15:00:00"]);
+		propabilities = createPropabilities(["12:00:00", "15:00:00"], startDayData.Date);
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
@@ -502,9 +504,8 @@
 		ok(lastTooltips.indexOf("12:00 - 12:15") > -1, "expect contains 12:00 - 12:15 but it is " + lastTooltips);
 	});
 
-	function createPropabilities(periods) {
+	function createPropabilities(periods, date) {
 		var values = [];
-		var date = moment().format(constants.dateOnlyFormat);
 		periods.forEach(function(period) {
 			values
 				.push({ Date: date, StartTime: moment(date + " " + period), EndTime: moment(date + " " + period).add(15, 'minute'), Possibility: 1 });

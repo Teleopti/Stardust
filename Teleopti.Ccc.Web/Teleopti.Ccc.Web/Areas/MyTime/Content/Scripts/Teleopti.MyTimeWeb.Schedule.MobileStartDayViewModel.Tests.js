@@ -509,7 +509,7 @@ $(document).ready(function() {
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
-			Date: moment().format('YYYY-MM-DD'),
+			Date: moment.utc().zone(-60).format('YYYY-MM-DD'),
 			Schedule: {
 				FixedDate: null,
 				Summary: {

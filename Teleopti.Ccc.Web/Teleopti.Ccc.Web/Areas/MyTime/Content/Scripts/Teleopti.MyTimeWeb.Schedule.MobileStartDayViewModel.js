@@ -190,8 +190,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	}
 
 	function getCurrentUserDate() {
-		var startOfDay = Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(self.baseUtcOffsetInMinutes).startOf("day").format(constants.dateOnlyFormat);
-		return moment(startOfDay);
+		var day = Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(self.baseUtcOffsetInMinutes).format(constants.dateOnlyFormat);
+		return moment(day);
 	}
 
 	self.today = function () {
@@ -223,9 +223,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		}
 
 		var withinProbabilityDisplayPeriod = self.selectedDate() >= getCurrentUserDate() && self.selectedDate() < getCurrentUserDate().add('day', constants.maximumDaysDisplayingProbability).startOf('day');
-
-		console.log(self.selectedDate(), getCurrentUserDate(), constants.maximumDaysDisplayingProbability,
-			getCurrentUserDate().add('day', constants.maximumDaysDisplayingProbability).startOf('day'));
+		self.showProbabilityOptionsToggleIcon(self.staffingProbabilityOnMobileEnabled() && withinProbabilityDisplayPeriod && self.hasScheduled());
 	}
 
 	var probabilityOptionModel = {
