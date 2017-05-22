@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		{
 			using (var browserActivator = new CoypuChromeActivator())
 			{
-				browserActivator.Start(TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(500));
+				//long timeout for now due to slow loading of planning period view on large dbs. Could be lowered when fixed
+				browserActivator.Start(TimeSpan.FromSeconds(90), TimeSpan.FromMilliseconds(500));
 				var browserInteractions = browserActivator.GetInteractions();
 
 				WebAction.Logon(browserInteractions, AppConfigs.BusinessUnitName, AppConfigs.UserName, AppConfigs.Password);
