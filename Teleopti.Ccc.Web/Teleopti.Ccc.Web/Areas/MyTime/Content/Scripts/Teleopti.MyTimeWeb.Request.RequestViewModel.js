@@ -5,9 +5,11 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 
-Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstDayOfWeek, defaultDateTimes) {
+Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstDayOfWeek, defaultDateTimes, mywindow) {
 	var self = this;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	mywindow = mywindow || window;
+
 	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template", "shiftexchangeoffer-request-detail-template"];
 	self.IsFullDay = ko.observable(false);
 	self.IsUpdate = ko.observable(false);
@@ -72,10 +74,11 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstD
 	self.WaitlistPosition = ko.observable();
 	self.DenyReason = ko.observable();
 	self.IsEditable = ko.observable(true);
+	self.IsDateInputEditable = !Teleopti.MyTimeWeb.Portal.IsMobile(mywindow);
 	self.IsNewInProgress = ko.observable(false);
 	self.weekStart = ko.observable(firstDayOfWeek);
-	self.IsTimeInputEnabled = ko.computed(function () {
-		return !self.IsFullDay() && self.IsEditable();
+	self.IsTimeInputEditable = ko.computed(function () {
+		return !self.IsFullDay() && !Teleopti.MyTimeWeb.Portal.IsMobile(mywindow);
 	});
 	self.IsTimeInputVisible = ko.computed(function () {
 		return !self.IsFullDay();

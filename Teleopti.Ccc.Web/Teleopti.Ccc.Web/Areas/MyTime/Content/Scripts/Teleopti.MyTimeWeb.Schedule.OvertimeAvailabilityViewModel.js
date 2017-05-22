@@ -4,9 +4,10 @@
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="~/Content/moment/moment.js" />
 
-Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability) {
+Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability, mywindow) {
 	var self = this;
-	
+	mywindow = mywindow || window;
+
 	this.Template = "add-overtime-availability-template";
 
 	this.HasOvertimeAvailability = ko.observable(false);
@@ -27,6 +28,7 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		return self.ErrorMessage() !== undefined && self.ErrorMessage() !== '';
 	});
 
+	self.IsTimeInputEditable = !Teleopti.MyTimeWeb.Portal.IsMobile(mywindow);
 	self.IsPostingData = ko.observable(false);
 
 	this.SetOvertimeAvailability = function () {

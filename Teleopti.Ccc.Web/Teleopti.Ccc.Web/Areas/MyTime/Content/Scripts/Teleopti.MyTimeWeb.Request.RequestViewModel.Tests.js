@@ -73,4 +73,19 @@
 		equal(vm.DateTo().isValid(), true);
 		
 	});
+
+	test("should make date and time input non-editable on mobile", function() {
+		var fakeMobileWindow = {
+			navigator: {
+				appVersion: '5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
+				userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
+			}
+		};
+
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel(null, null, null, fakeMobileWindow);
+		equal(vm.IsDateInputEditable, false);
+
+		vm.IsFullDay(false);
+		equal(vm.IsTimeInputEditable(), false);
+	});
 });
