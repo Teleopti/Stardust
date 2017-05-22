@@ -4,10 +4,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Timers;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -17,6 +15,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -25,7 +24,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx),Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388), Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_43447), Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271)]
+	//[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx),Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388), Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_43447), Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271)]
+	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx),Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388), 
+		Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_43447), Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271), Toggle(Toggles.overtim)]
 	[RequestPerformanceTuningTest]
 	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public IDayOffTemplateRepository DayOffTemplateRepository;
 		public IActivityRepository ActivityRepository;
 		public IAbsencePersister AbsencePersister;
+		public IAddOverTime AddOverTime;
 
 		private IList<IPersonRequest> requests;
 		private DateTime _nowDateTime;
@@ -114,62 +116,211 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 							  });
 		}
 
-		private void onTimedEvent(Object source, ElapsedEventArgs e)
+		[Test]
+		public void AbsencesWithUpdateReadModelDeadLock()
 		{
-			_nowDateTime = _nowDateTime.AddSeconds(1);
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
 			Now.Is(_nowDateTime);
+			var startDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
+			var resolution = 15;
+			var periods = new List<DateTime>();
+			foreach (var intervalIndex in Enumerable.Range(0, 9))
+			{
+				periods.Add(startDateTime);
+				startDateTime = startDateTime.AddMinutes(resolution);
+			}
+			var taskList = new List<Task>();
+			var r2 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			{
+				StardustJobFeedback.SendProgress($"Starting processing for update readmodel R2");
+				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
+				StardustJobFeedback.SendProgress($"Finised processing for update readmodel R2");
+			}));
+			foreach (var intervalIndex in Enumerable.Range(0,9))
+			{
+				taskList.Add(Task.Factory.StartNew(() =>
+				{
+					WithUnitOfWork.Do(() =>
+					{
+						StardustJobFeedback.SendProgress($"Starting processing for period start " + periods[intervalIndex].ToLongDateString());
+						foreach (var request in requests)
+						{
+							AbsencePersister.PersistIntradayAbsence(new AddIntradayAbsenceCommand
+							{
+								AbsenceId = ((IAbsenceRequest)request.Request).Absence.Id.GetValueOrDefault(),
+								EndTime = periods[intervalIndex].AddMinutes(resolution),
+								StartTime = periods[intervalIndex],
+								PersonId = request.Person.Id.GetValueOrDefault()
+							});
+						}
+						StardustJobFeedback.SendProgress($"Processing finished for period start " + periods[intervalIndex].ToLongDateString());
+					});
+				}));
+			}
+			
+
+			var r3 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			{
+				StardustJobFeedback.SendProgress($"Starting processing for update readmodel R3");
+				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
+				StardustJobFeedback.SendProgress($"Finised processing for update readmodel R3");
+			}));
+			taskList.Add(r3);
+			taskList.Add(r2);
+			Task.WaitAll(taskList.ToArray());
 		}
 
 		[Test, Ignore("Can not provoke daed locks, but leave the code for the future")]
-		public void Run200RequestsPossibleDeadLock()
+		public void AbsencesWithUpdateReadModelAndOvertimeDeadLock()
 		{
-			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
-			Now.Is(_nowDateTime);
-			var nowTimer = new Timer(1000);
-			nowTimer.Elapsed += onTimedEvent;
-			nowTimer.AutoReset = true;
-			nowTimer.Enabled = true;
-			
-
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			
-			StardustJobFeedback.SendProgress($"Will process {requests.Count} requests");
-			var r1 = Task.Factory.StartNew(() =>
-											   WithUnitOfWork.Do(() =>
-												   {
-													   foreach (var request in requests.Take(100))
-													   {
-														   AbsencePersister.PersistIntradayAbsence(new AddIntradayAbsenceCommand
-														   {
-															   AbsenceId = ((IAbsenceRequest) request.Request).Absence.Id.GetValueOrDefault(),
-															   EndTime = request.Request.Period.EndDateTime,
-															   StartTime = request.Request.Period.StartDateTime,
-															   PersonId = request.Person.Id.GetValueOrDefault()
-														   });
-													   }
-												   }
-											   )
-			);
+			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
+			Now.Is(_nowDateTime);
+			var startDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
+			var resolution = 15;
+			var periods = new List<DateTime>();
+			foreach (var intervalIndex in Enumerable.Range(0, 9))
+			{
+				periods.Add(startDateTime);
+				startDateTime = startDateTime.AddMinutes(resolution);
+			}
+			var taskList = new List<Task>();
+			//var r2 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			//{
+			//	StardustJobFeedback.SendProgress($"Starting processing for update readmodel R2");
+			//	UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
+			//	StardustJobFeedback.SendProgress($"Finised processing for update readmodel R2");
+			//}));
+			//foreach (var intervalIndex in Enumerable.Range(0, 9))
+			//{
+			//	taskList.Add(Task.Factory.StartNew(() =>
+			//	{
+			//		WithUnitOfWork.Do(() =>
+			//		{
+			//			StardustJobFeedback.SendProgress($"Starting processing for period start " + periods[intervalIndex].ToLongDateString());
+			//			foreach (var request in requests)
+			//			{
+			//				AbsencePersister.PersistIntradayAbsence(new AddIntradayAbsenceCommand
+			//				{
+			//					AbsenceId = ((IAbsenceRequest)request.Request).Absence.Id.GetValueOrDefault(),
+			//					EndTime = periods[intervalIndex].AddMinutes(resolution),
+			//					StartTime = periods[intervalIndex],
+			//					PersonId = request.Person.Id.GetValueOrDefault()
+			//				});
+			//			}
+			//			StardustJobFeedback.SendProgress($"Processing finished for period start " + periods[intervalIndex].ToLongDateString());
+			//		});
+			//	}));
+			//}
 
-	
+			var overtimeStartDateTime = new DateTime(2016, 03, 16, 17, 0, 0).Utc();
+			WithUnitOfWork.Do(() =>
+			{
+				IList<OverTimeModel> overTimeModels = new List<OverTimeModel>(){new OverTimeModel()
+				{
+					StartDateTime = overtimeStartDateTime,
+					EndDateTime = overtimeStartDateTime.AddMinutes(15),
+					ActivityId = ActivityRepository.LoadAll().First().Id.Value,
+					PersonId = requests.First().Person.Id.Value,
+					Deltas = new List<SkillCombinationResource>(){new SkillCombinationResource()
+					{
+						StartDateTime = overtimeStartDateTime,
+						EndDateTime = overtimeStartDateTime.AddMinutes(15),
+						Resource = 1,
+						SkillCombination = new List<Guid>(){Guid.NewGuid(),Guid.NewGuid()}
+					} }
+
+				}};
+				AddOverTime.Apply(overTimeModels);
+			});
+
+
+			var r3 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			{
+				StardustJobFeedback.SendProgress($"Starting processing for update readmodel R3");
+				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
+				StardustJobFeedback.SendProgress($"Finised processing for update readmodel R3");
+			}));
+			taskList.Add(r3);
+			//taskList.Add(r2);
+			Task.WaitAll(taskList.ToArray());
+		}
+
+		[Test, Ignore("Can not provoke daed locks, but leave the code for the future")]
+		public void AbsencesWithUpdateReadModelAndAbsenceRequestDeadLock()
+		{
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
+			Now.Is(_nowDateTime);
+			var startDateTime = new DateTime(2016, 03, 17, 7, 0, 0).Utc();
+			var resolution = 15;
+			var periods = new List<DateTime>();
+			foreach (var intervalIndex in Enumerable.Range(0, 9))
+			{
+				periods.Add(startDateTime);
+				startDateTime = startDateTime.AddMinutes(resolution);
+			}
+			var taskList = new List<Task>();
 			var r2 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			{
+				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
+			}));
+
+			IList<IPerson> allPersons = new List<IPerson>();
+			WithUnitOfWork.Do(() =>
+			{
+				allPersons = PersonRepository.LoadAll();
+			});
+			var absenceId = new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E");
+			foreach (var intervalIndex in Enumerable.Range(0, 9))
+			{
+				taskList.Add(Task.Factory.StartNew(() =>
+				{
+					WithUnitOfWork.Do(() =>
+					{
+						foreach (var person in allPersons)
+						{
+							AbsencePersister.PersistIntradayAbsence(new AddIntradayAbsenceCommand
+							{
+								AbsenceId = absenceId,
+								EndTime = periods[intervalIndex].AddMinutes(resolution),
+								StartTime = periods[intervalIndex],
+								PersonId = person.Id.GetValueOrDefault()
+							});
+						}
+					});
+				}));
+			}
+
+			taskList.Add(Task.Factory.StartNew(() =>
+			{
+				foreach (var request in requests)
+				{
+					WithUnitOfWork.Do(() =>
+					{
+						AbsenceRequestIntradayFilter.Process(request);
+					});
+				}
+			}));
+
+			var r4 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
 			{
 				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
 			}));
 
 			var r3 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
 			{
-				AbsenceRequestIntradayFilter.Process(requests.Reverse().Take(100).First());
+				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
 			}));
-			var r4 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
-			{
-				AbsenceRequestIntradayFilter.Process(requests.Reverse().Take(100).Second());
-			}));
-
-			Task.WaitAll(r1, r2, r3, r4);
-			nowTimer.Stop();
-			nowTimer.Dispose();
+			taskList.Add(r3);
+			taskList.Add(r2);
+			taskList.Add(r4);
+			Task.WaitAll(taskList.ToArray());
 		}
+
 	}
 }
