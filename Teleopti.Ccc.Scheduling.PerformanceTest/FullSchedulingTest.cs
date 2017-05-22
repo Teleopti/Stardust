@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		{
 			using (var browserActivator = new CoypuChromeActivator())
 			{
-				browserActivator.Start(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(500));
+				browserActivator.Start(TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(500));
 				var browserInteractions = browserActivator.GetInteractions();
 
 				WebAction.Logon(browserInteractions, AppConfigs.BusinessUnitName, AppConfigs.UserName, AppConfigs.Password);
