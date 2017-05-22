@@ -204,29 +204,26 @@
                 }
                 $scope.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
 
-					intradayService.getSkills.query()
-					.$promise.then(function(result) {
-						$scope.skills = result;
-						if ($scope.skillAreas.length === 0) {
-							$scope.selectedItem = $scope.selectedItem = $scope.skills.find(isSupported);;
-							if (autocompleteSkill) {
-								autocompleteSkill.selectedSkill = $scope.selectedItem;
-							}
-						}
-						if ($scope.skillAreas.length > 0) {
-							if (isNew) {
-								$scope.selectedItem = $scope.latest[0];
-								if (autocompleteSkillArea)
-								autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
-							} else {
-								$scope.selectedItem = $scope.skillAreas[0];
-								if (autocompleteSkillArea)
-								autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
-							}
-						}
-					});
-				});
-			};
+                intradayService.getSkills.query().$promise.then(function(result) {
+                    $scope.skills = result;
+                    if ($scope.skillAreas.length === 0) {
+                        $scope.selectedItem = $scope.selectedItem = $scope.skills.find(isSupported);
+                        if (autocompleteSkill) {
+                            autocompleteSkill.selectedSkill = $scope.selectedItem;
+                        }
+                    }
+                    if ($scope.skillAreas.length > 0) {
+                        if (isNew) {
+                            $scope.selectedItem = $scope.latest[0];
+                            if (autocompleteSkillArea) autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
+                        } else {
+                            $scope.selectedItem = $scope.skillAreas[0];
+                            if (autocompleteSkillArea) autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
+                        }
+                    }
+                });
+            });
+        };
 
         var checkUnsupported = function(item) {
             for (var i = 0; i < item.Skills.length; i++) {

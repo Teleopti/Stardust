@@ -106,6 +106,8 @@
 				};
 			};
 
+
+//Modify, add toggle and use chosenDate           
 			service.pollSkillData = function (selectedItem) {
 				trafficData.waitingForData = true;
 				intradayService.getSkillMonitorStatistics.query(
