@@ -364,6 +364,7 @@
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingReadModelForecastTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
+    <Compile Include="SchedulingScenarios\CancelSchedulingCallback.cs" />
     <Compile Include="SchedulingScenarios\ContractWithMaximumTolerance.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationAgentGroupTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingTest.cs" />
@@ -422,6 +423,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingWithCategorizedShiftSelectionResultTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingResultTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\PerformanceTestHackTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingTrackResourceCalculationsDesktopTest.cs" />
@@ -504,6 +506,7 @@
     <Compile Include="SchedulingScenarios\TrackOptimizeDaysForAgents.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizerTest.cs" />
     <Compile Include="ResourceCalculation\DoubleMatrixExtensions.cs" />
+    <Compile Include="SchedulingScenarios\TrackSchedulingCallback.cs" />
     <Compile Include="Scheduling\AbsenceRequestValidatorProviderTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceSkipResCalcTest.cs" />
     <Compile Include="Scheduling\Assignment\ResourceCalculateAfterDeleteDeciderTest.cs" />

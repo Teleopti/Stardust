@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public interface IScheduleExecutor
 	{
-		void Execute(SchedulingOptions schedulingOptions,
+		void Execute(ISchedulingCallback schedulingCallback, 
+			SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
@@ -30,10 +31,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 		}
 
-		protected override void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
+		protected override void DoScheduling(ISchedulingCallback schedulingCallback, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, SchedulingOptions schedulingOptions)
 		{
-			TeamBlockScheduling.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
+			TeamBlockScheduling.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
 		}
 	}
 
@@ -77,7 +78,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		[TestLog]
-		public virtual void Execute(SchedulingOptions schedulingOptions,
+		public virtual void Execute(ISchedulingCallback schedulingCallback, 
+			SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
@@ -98,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-					DoScheduling(backgroundWorker, selectedAgents, selectedPeriod, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider, schedulingOptions);
+					DoScheduling(schedulingCallback, backgroundWorker, selectedAgents, selectedPeriod, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider, schedulingOptions);
 				}
 				else
 				{
@@ -132,13 +134,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 
-		protected virtual void DoScheduling(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
+		protected virtual void DoScheduling(ISchedulingCallback schedulingCallback, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			SchedulingOptions schedulingOptions)
 		{
 			if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 			{
-				TeamBlockScheduling.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
+				TeamBlockScheduling.Execute(new NoSchedulingCallback(), schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffOptimizationPreferenceProvider);
 			}
 			else
 			{

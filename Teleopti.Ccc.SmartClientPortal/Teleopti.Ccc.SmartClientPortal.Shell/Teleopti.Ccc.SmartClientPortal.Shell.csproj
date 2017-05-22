@@ -3398,6 +3398,7 @@
     </Compile>
     <Compile Include="Win\Scheduling\ScheduleTimeType.cs" />
     <Compile Include="Win\Scheduling\ScheduleViewBase.cs" />
+    <Compile Include="Win\Scheduling\SchedulingCallbackForDesktop.cs" />
     <Compile Include="Win\Scheduling\SchedulingResult.cs">
       <SubType>Form</SubType>
     </Compile>

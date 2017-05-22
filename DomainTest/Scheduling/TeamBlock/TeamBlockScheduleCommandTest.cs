@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 	
 			var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
-			Target.Execute(schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 }, period, dayOffOptimizePreferenceProvider);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 }, period, dayOffOptimizePreferenceProvider);
 			WorkShiftFinderResultHolder().GetResults(true, true).Count.Should().Be.EqualTo(0);
 		}
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			};
 
 			var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
-			Target.Execute(schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 }, period, dayOffOptimizePreferenceProvider);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 }, period, dayOffOptimizePreferenceProvider);
 
 			var schedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
 			schedules[0].PersonAssignment().AssignedWithDayOff(dayOffTemplate).Should().Be.True();

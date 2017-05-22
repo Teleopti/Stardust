@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				BlockSameShiftCategory = true
 			};
 
-			Target.Execute(schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period, new OptimizationPreferences(), null);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period, new OptimizationPreferences(), null);
 
 			stateholder.Schedules[agent]
 				.ScheduledDayCollection(period)

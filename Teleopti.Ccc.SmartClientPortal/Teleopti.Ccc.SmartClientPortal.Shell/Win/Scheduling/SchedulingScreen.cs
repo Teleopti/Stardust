@@ -3221,7 +3221,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var desktopScheduling = _container.Resolve<DesktopScheduling>();
 				var selectedPeriod = new PeriodExtractorFromScheduleParts().ExtractPeriod(argument.SelectedScheduleDays).Value;
 				var selectedAgents = argument.SelectedScheduleDays.Select(x => x.Person).Distinct();
-				desktopScheduling.Execute(_schedulingOptions, new BackgroundWorkerWrapper(_backgroundWorkerScheduling), selectedAgents, selectedPeriod,
+				desktopScheduling.Execute(new SchedulingCallbackForDesktop(), _schedulingOptions, new BackgroundWorkerWrapper(_backgroundWorkerScheduling), selectedAgents, selectedPeriod,
 					_optimizationPreferences, _daysOffPreferences);
 			}
 		}

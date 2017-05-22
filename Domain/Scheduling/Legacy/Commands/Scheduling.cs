@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -53,7 +54,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
-		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
+		[RemoveMeWithToggle("Remove param backgroundworker", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_workShiftFinderResultHolder().Clear();
@@ -98,7 +100,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_workShiftFinderResultHolder()
 				.AddResults(workShiftFinderResultHolder.GetResults(), DateTime.Today);
 		}
-
 
 		private void schedulingServiceDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{

@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			if (stateHolder.Schedules.Any())
 			{
-				_scheduleExecutor.Execute(_schedulingOptionsProvider.Fetch(), _schedulingProgress,
+				_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
 					stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period,
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			}

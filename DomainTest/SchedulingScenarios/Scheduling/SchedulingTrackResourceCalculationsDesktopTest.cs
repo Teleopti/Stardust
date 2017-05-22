@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulingOptions.ResourceCalculateFrequency = 100;
 			SchedulingOptionsProvider.SetFromTest(schedulingOptions);
 
-			Target.Execute(schedulingOptions, new NoSchedulingProgress(), agents, period, new OptimizationPreferences(), new DaysOffPreferences());
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), agents, period, new OptimizationPreferences(), new DaysOffPreferences());
 
 			ResourceCalculation.NumberOfCalculationsOnSingleDay
 				.Should().Be.LessThan(20); //the lowest, in theory would be 7

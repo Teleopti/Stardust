@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public interface IScheduling
 	{
-		void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
+		void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockSchedulingService = teamBlockSchedulingService;
 		}
 
-		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
+		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_workShiftFinderResultHolder().Clear();
