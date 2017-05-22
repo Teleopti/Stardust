@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 			subscriptionsRegistrator.SubscribesTo(typeof(PersonInAdherenceEvent)).Should().Be(true);
 			subscriptionsRegistrator.SubscribesTo(typeof(PersonOutOfAdherenceEvent)).Should().Be(true);
 			subscriptionsRegistrator.SubscribesTo(typeof(PersonNeutralAdherenceEvent)).Should().Be(true);
-			subscriptionsRegistrator.SubscribesTo(typeof(PersonStateChangedEvent)).Should().Be(true);
-			subscriptionsRegistrator.SubscribesTo(typeof(PersonRuleChangedEvent)).Should().Be(true);
 		}
 
 		[Test]
@@ -95,46 +93,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 			});
 
 			AdherencePersister.Read(personId, "2017-05-03".Date()).Last().Timestamp.Should().Be("2017-05-03 12:15".Utc());
-		}
-
-		[Test]
-		public void ShouldAddRuleChange()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new[]
-			{
-				new PersonRuleChangedEvent
-			{
-				PersonId = personId,
-				Timestamp = "2017-03-07 10:00".Utc(),
-				StateName = "phone"
-			}
-			});
-
-			var change = ChangePersister.Read(personId, "2017-03-07".Date()).Single();
-			change.PersonId.Should().Be(personId);
-			change.StateName.Should().Be("phone");
-		}
-
-		[Test]
-		public void ShouldAddStateChange()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new[]
-			{
-				new PersonStateChangedEvent
-				{
-					PersonId = personId,
-					Timestamp = "2017-03-07 10:00".Utc(),
-					StateName = "phone"
-				}
-			});
-
-			var change = ChangePersister.Read(personId, "2017-03-07".Date()).Single();
-			change.PersonId.Should().Be(personId);
-			change.StateName.Should().Be("phone");
 		}
 
 		[Test]

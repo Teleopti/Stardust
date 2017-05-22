@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -20,19 +21,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 	[Toggle(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
 	public class HistoricalRuleChangeUpdaterTest
 	{
-		public HistoricalAdherenceUpdater Target;
+		public HistoricalAdherenceWithProofUpdater Target;
 		public FakeHistoricalChangeReadModelPersister Persister;
+		
+		[Test]
+		public void ShouldSubscribe()
+		{
+			var subscriptionsRegistrator = new SubscriptionRegistrator();
+
+			Target.Subscribe(subscriptionsRegistrator);
+
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonRuleChangedEvent)).Should().Be(true);
+		}
 
 		[Test]
 		public void ShouldAddRuleChange()
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Handle(new PersonRuleChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = personId,
-				Timestamp = "2017-03-07 10:00".Utc(),
-				StateName = "phone"
+				new PersonRuleChangedEvent
+				{
+					PersonId = personId,
+					Timestamp = "2017-03-07 10:00".Utc(),
+					StateName = "phone"
+				}
 			});
 
 			var change = Persister.Read(personId, "2017-03-07".Date()).Single();
@@ -46,18 +60,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 			var personId = Guid.NewGuid();
 			var state = Guid.NewGuid();
 
-			Target.Handle(new PersonRuleChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = personId,
-				BelongsToDate = "2017-03-07".Date(),
-				Timestamp = "2017-03-07 10:00".Utc(),
-				StateName = "ready",
-				StateGroupId = state,
-				ActivityName = "phone",
-				ActivityColor = Color.DarkGoldenrod.ToArgb(),
-				RuleName = "in",
-				RuleColor = Color.Azure.ToArgb(),
-				Adherence = EventAdherence.In
+				new PersonRuleChangedEvent
+				{
+					PersonId = personId,
+					BelongsToDate = "2017-03-07".Date(),
+					Timestamp = "2017-03-07 10:00".Utc(),
+					StateName = "ready",
+					StateGroupId = state,
+					ActivityName = "phone",
+					ActivityColor = Color.DarkGoldenrod.ToArgb(),
+					RuleName = "in",
+					RuleColor = Color.Azure.ToArgb(),
+					Adherence = EventAdherence.In
+				}
 			});
 
 			var change = Persister.Read(personId, "2017-03-07".Date()).Single();

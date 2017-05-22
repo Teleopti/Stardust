@@ -9,39 +9,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	[EnabledBy(Toggles.RTA_AsyncOptimization_43924)]
-	public class HistoricalAdherenceUpdaterInSync : HistoricalAdherenceUpdaterImpl,
+
+	[EnabledBy(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
+	public class HistoricalAdherenceWithProofUpdater : HistoricalAdherenceUpdaterImpl,
 		IHandleEvents,
 		IRunInSync
 	{
-		public HistoricalAdherenceUpdaterInSync(IHistoricalAdherenceReadModelPersister adherencePersister,
-			IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
-		{
-		}
-
-		public void Subscribe(SubscriptionRegistrator registrator)
-		{
-			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
-			registrator.SubscribeTo<PersonInAdherenceEvent>();
-			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
-			registrator.SubscribeTo<PersonStateChangedEvent>();
-			registrator.SubscribeTo<PersonRuleChangedEvent>();
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(IEnumerable<IEvent> events)
-		{
-			events.ForEach(e => handle((dynamic) e));
-		}
-	}
-
-	[EnabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
-	[DisabledBy(Toggles.RTA_AsyncOptimization_43924)]
-	public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdaterImpl, 
-		IHandleEvents,
-		IRunOnHangfire
-	{
-		public HistoricalAdherenceUpdaterWithPackages(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
+		public HistoricalAdherenceWithProofUpdater(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
 		{
 		}
 
@@ -61,13 +35,61 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 	}
 
+	[DisabledBy(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
+	[EnabledBy(Toggles.RTA_AsyncOptimization_43924)]
+	public class HistoricalAdherenceUpdaterInSync : HistoricalAdherenceUpdaterImpl,
+		IHandleEvents,
+		IRunInSync
+	{
+		public HistoricalAdherenceUpdaterInSync(IHistoricalAdherenceReadModelPersister adherencePersister,
+			IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
+		{
+		}
+
+		public void Subscribe(SubscriptionRegistrator registrator)
+		{
+			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
+			registrator.SubscribeTo<PersonInAdherenceEvent>();
+			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(IEnumerable<IEvent> events)
+		{
+			events.ForEach(e => handle((dynamic) e));
+		}
+	}
+
+	[DisabledBy(Toggles.RTA_AsyncOptimization_43924)]
+	[EnabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
+	public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdaterImpl, 
+		IHandleEvents,
+		IRunOnHangfire
+	{
+		public HistoricalAdherenceUpdaterWithPackages(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
+		{
+		}
+
+		public void Subscribe(SubscriptionRegistrator registrator)
+		{
+			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
+			registrator.SubscribeTo<PersonInAdherenceEvent>();
+			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(IEnumerable<IEvent> events)
+		{
+			events.ForEach(e => handle((dynamic)e));
+		}
+	}
+
 	[DisabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
+	[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 	public class HistoricalAdherenceUpdater : HistoricalAdherenceUpdaterImpl, 
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonNeutralAdherenceEvent>,
-		IHandleEvent<PersonStateChangedEvent>,
-		IHandleEvent<PersonRuleChangedEvent>,
 		IRunOnHangfire
 	{
 		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister)
@@ -76,36 +98,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[ReadModelUnitOfWork]
-		[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
 			handle(@event);
 		}
 
 		[ReadModelUnitOfWork]
-		[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
 			handle(@event);
 		}
 
 		[ReadModelUnitOfWork]
-		[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 		public virtual void Handle(PersonNeutralAdherenceEvent @event)
-		{
-			handle(@event);
-		}
-
-		[ReadModelUnitOfWork]
-		[EnabledBy(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
-		public virtual void Handle(PersonStateChangedEvent @event)
-		{
-			handle(@event);
-		}
-
-		[ReadModelUnitOfWork]
-		[EnabledBy(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
-		public virtual void Handle(PersonRuleChangedEvent @event)
 		{
 			handle(@event);
 		}
