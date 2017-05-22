@@ -155,7 +155,10 @@
 				if (!skill.DoDisplayData) {
 					return "mdi mdi-alert";
 				}
-
+				
+				if (skill.IsMultisiteSkill) {
+					return "mdi mdi-hexagon-multiple";
+				}
 				if (skill.SkillType === 'SkillTypeChat') {
 					return "mdi mdi-message-text-outline";
 				}

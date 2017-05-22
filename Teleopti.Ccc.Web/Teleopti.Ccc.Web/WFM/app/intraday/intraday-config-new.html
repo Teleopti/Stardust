@@ -75,7 +75,8 @@
 									{{skill.Name}}
 								</span>
 								<md-tooltip>
-									<span ng-if="skill.DoDisplayData">{{skill.SkillType | translate}}</span>
+									<span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
+									<span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
 									<span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
 								</md-tooltip>
 							</span>

@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Name = skill.Name,
 					IsDeleted = ((Skill) skill).IsDeleted,
 					DoDisplayData = _supportedSkillsInIntradayProvider.CheckSupportedSkill(skill),
-					SkillType = skill.SkillType.Description.Name
+					SkillType = skill.SkillType.Description.Name,
+					IsMultisiteSkill = skill is MultisiteSkill
 			})
 				.OrderBy(s => s.Name)
 				.ToList();

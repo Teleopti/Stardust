@@ -24,21 +24,28 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var skillAreas = _skillAreaRepository.LoadAll()
 				.OrderBy(x => x.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
 			var skills = _loadAllSkillInIntradays.Skills().ToDictionary(x => x.Id, x => x);
-			
-			return skillAreas.Select(skillArea => new SkillAreaViewModel
-			{
-				Id = skillArea.Id.Value,
-				Name = skillArea.Name,
-				Skills = skillArea.Skills.Select(skill => new SkillInIntradayViewModel
-				{
-					Id = skill.Id,
-					Name = skill.Name,
-					IsDeleted = skill.IsDeleted,
-					SkillType = skills.ContainsKey(skill.Id) ? skills[skill.Id].SkillType: null,
-					DoDisplayData = skills.ContainsKey(skill.Id) && skills[skill.Id].DoDisplayData
-				}).ToArray()
-			})
-			.ToArray();
+
+			return skillAreas.Select(skillArea =>
+					new SkillAreaViewModel
+					{
+						Id = skillArea.Id.Value,
+						Name = skillArea.Name,
+						Skills = skillArea.Skills.Select(skill =>
+							{
+								var skillInIntraday = skills.ContainsKey(skill.Id) ? skills[skill.Id] : null;
+								return new SkillInIntradayViewModel
+								{
+									Id = skill.Id,
+									Name = skill.Name,
+									IsDeleted = skill.IsDeleted,
+									SkillType = skillInIntraday?.SkillType,
+									DoDisplayData = skillInIntraday != null && skillInIntraday.DoDisplayData,
+									IsMultisiteSkill = skillInIntraday != null && skillInIntraday.IsMultisiteSkill,
+								};
+							})
+							.ToArray()
+					})
+				.ToArray();
 		}
 
 		public SkillAreaViewModel Get(Guid skillAreaId)

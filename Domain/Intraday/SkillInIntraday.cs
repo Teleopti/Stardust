@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private bool _isDeleted;
 		private bool _doDisplayData;
 		private string _skillType;
+		private bool _isMultisiteSkill;
 
 		public virtual string Name
 		{
@@ -38,6 +39,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			get { return _skillType; }
 			set { _skillType = value; }
+		}
+
+		public virtual bool IsMultisiteSkill
+		{
+			get { return _isMultisiteSkill; }
+			set { _isMultisiteSkill = value; }
 		}
 	}
 }

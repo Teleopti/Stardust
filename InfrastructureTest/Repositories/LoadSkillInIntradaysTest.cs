@@ -185,5 +185,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skills.First().Name.Should().Be.EqualTo(multiSiteSkill.Name);
 			skills.First().DoDisplayData.Should().Be.EqualTo(true);
 		}
+
+		[Test]
+		public void ShouldMarkMultisiteSkillAsIsMulisiteSkill()
+		{
+			ISkillTypePhone skillTypePhone = new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony);
+			var phoneSkill = SkillFactory.CreateSkill("Phone", skillTypePhone, 15);
+			var multiSiteSkill = SkillFactory.CreateMultisiteSkill("Multisite", skillTypePhone, 15);
+			var activity = new Activity("dummyActivity");
+			phoneSkill.Activity = activity;
+			multiSiteSkill.Activity = activity;
+			var queueSourceHelpdesk = QueueSourceFactory.CreateQueueSourceHelpdesk();
+
+			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
+
+			PersistAndRemoveFromUnitOfWork(skillTypePhone);
+
+			PersistAndRemoveFromUnitOfWork(activity);
+			PersistAndRemoveFromUnitOfWork(phoneSkill);
+			PersistAndRemoveFromUnitOfWork(multiSiteSkill);
+
+			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
+
+			var workloadPhone = WorkloadFactory.CreateWorkload(phoneSkill);
+			var workloadEmail = WorkloadFactory.CreateWorkload(multiSiteSkill);
+			workloadPhone.AddQueueSource(queueSourceHelpdesk);
+			workloadEmail.AddQueueSource(queueSourceHelpdesk);
+			PersistAndRemoveFromUnitOfWork(workloadPhone);
+			PersistAndRemoveFromUnitOfWork(workloadEmail);
+
+			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null));
+			var skills = target.Skills().ToList();
+			
+			skills.First().IsMultisiteSkill.Should().Be.True();
+			skills.Last().IsMultisiteSkill.Should().Be.False();
+		}
 	}
 }
