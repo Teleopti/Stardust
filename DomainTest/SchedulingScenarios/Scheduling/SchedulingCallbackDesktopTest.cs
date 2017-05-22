@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-	[Ignore("To be fixed")]
 	public class SchedulingCallbackTest
 	{
 		public DesktopScheduling Target;
