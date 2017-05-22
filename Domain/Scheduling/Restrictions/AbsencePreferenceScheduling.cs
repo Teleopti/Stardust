@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -13,8 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		private readonly Func<ISchedulePartModifyAndRollbackService> _schedulePartModifyAndRollbackService;
 		private readonly IAbsencePreferenceFullDayLayerCreator _absencePreferenceFullDayLayerCreator;
 
-		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-
 		public AbsencePreferenceScheduling(IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			Func<ISchedulePartModifyAndRollbackService> schedulePartModifyAndRollbackService,
 			IAbsencePreferenceFullDayLayerCreator absencePreferenceFullDayLayerCreator)
@@ -24,11 +21,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_absencePreferenceFullDayLayerCreator = absencePreferenceFullDayLayerCreator;
 		}
 
-		public void AddPreferredAbsence(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions)
+		public void AddPreferredAbsence(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions)
 		{
 			if (matrixList == null) throw new ArgumentNullException(nameof(matrixList));
 
-			var cancel = false;
 			foreach (var scheduleMatrixPro in matrixList)
 			{
 				foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
@@ -45,22 +41,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 					part.CreateAndAddAbsence(layer);
 					_schedulePartModifyAndRollbackService().Modify(part);
 
-					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part, () => cancel = true);
-					var progressResult = onDayScheduled(eventArgs);
-					if (cancel || progressResult.ShouldCancel) return;
+					schedulingCallback.Scheduled(new SchedulingCallbackInfo(part, true));
+					if (schedulingCallback.IsCancelled) return;
 				}
 			}
-		}
-
-		private CancelSignal onDayScheduled(SchedulingServiceBaseEventArgs args)
-		{
-			var handler = DayScheduled;
-			if (handler != null)
-			{
-				handler(this, args);
-				if (args.Cancel) return new CancelSignal { ShouldCancel = true };
-			}
-			return new CancelSignal();
 		}
 	}
 }

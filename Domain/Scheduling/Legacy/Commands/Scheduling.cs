@@ -19,9 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly AdvanceDaysOffSchedulingService _advanceDaysOffSchedulingService;
 		private readonly MatrixListFactory _matrixListFactory;
-		private ISchedulingProgress _backgroundWorker;
-		private int _scheduledCount;
-		private SchedulingOptions _schedulingOptions;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IResourceCalculation _resourceCalculation;
@@ -66,9 +63,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
-			_schedulingOptions = schedulingOptions;
-			_backgroundWorker = backgroundWorker;
-
 			var schedulePartModifyAndRollbackServiceForContractDaysOff =
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(),
 					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
@@ -80,41 +74,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod) : 
 				_matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
 
-
-			_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-			_advanceDaysOffSchedulingService.Execute(matrixes, selectedAgents,
+			_advanceDaysOffSchedulingService.Execute(schedulingCallback, matrixes, selectedAgents,
 				schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions,
 				_groupPersonBuilderWrapper, selectedPeriod);
-			_advanceDaysOffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
-			_teamBlockScheduleSelected.DayScheduled += schedulingServiceDayScheduled;
-			var workShiftFinderResultHolder = _teamBlockScheduleSelected.ScheduleSelected(matrixes, selectedPeriod,
+			var workShiftFinderResultHolder = _teamBlockScheduleSelected.ScheduleSelected(schedulingCallback, matrixes, selectedPeriod,
 				selectedAgents, rollbackService, resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState, schedulingOptions,
 				teamInfoFactory);
-			_teamBlockScheduleSelected.DayScheduled -= schedulingServiceDayScheduled;
 
 			//TODO: get rid of _backgroundWorker here...
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents, rollbackService, resourceCalculateDelayer,
-				selectedPeriod, matrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
+				selectedPeriod, matrixes, backgroundWorker, dayOffOptimizationPreferenceProvider);
 
 			_workShiftFinderResultHolder()
 				.AddResults(workShiftFinderResultHolder.GetResults(), DateTime.Today);
-		}
-
-		private void schedulingServiceDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
-		{
-			if (_backgroundWorker.CancellationPending)
-			{
-				e.Cancel = true;
-			}
-			if (e.IsSuccessful)
-				_scheduledCount++;
-			if (_scheduledCount >= _schedulingOptions.RefreshRate)
-			{
-				_backgroundWorker.ReportProgress(1, e);
-				_scheduledCount = 0;
-			}
 		}
 	}
 }

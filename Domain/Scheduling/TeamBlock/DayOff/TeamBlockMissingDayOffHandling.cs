@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
@@ -16,8 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 		private readonly IMatrixDataWithToFewDaysOff _matrixDataWithToFewDaysOff;
 		private readonly ISplitSchedulePeriodToWeekPeriod _splitSchedulePeriodToWeekPeriod;
 
-		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-
 		public TeamBlockMissingDayOffHandling(IMissingDayOffBestSpotDecider missingDayOffBestSpotDecider, IMatrixDataListCreator matrixDataListCreator, IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff, ISplitSchedulePeriodToWeekPeriod splitSchedulePeriodToWeekPeriod)
 		{
 			_missingDayOffBestSpotDecider = missingDayOffBestSpotDecider;
@@ -26,38 +22,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 			_splitSchedulePeriodToWeekPeriod = splitSchedulePeriodToWeekPeriod;
 		}
 
-		public void Execute(IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
+		public void Execute(ISchedulingCallback schedulingCallback, IList<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			var matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
-			var cancel = false;
 			IList<IMatrixData> workingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
 			foreach (var workingItem in workingList)
 			{
-				if (cancel) return;
-				fixThisMatrix(workingItem, schedulingOptions, rollbackService, () => cancel = true);
+				if (schedulingCallback.IsCancelled) return;
+				fixThisMatrix(schedulingCallback, workingItem, schedulingOptions, rollbackService);
 			}
 		}
 
-		private void fixThisMatrix(IMatrixData workingItem, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, Action cancelAction)
+		private void fixThisMatrix(ISchedulingCallback schedulingCallback, IMatrixData workingItem, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			var tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(new List<IMatrixData> { workingItem });
 			var matrix = tempWorkingList[0].Matrix;
 			var splitedWeeksFromSchedulePeriod = _splitSchedulePeriodToWeekPeriod.Split(matrix.SchedulePeriod.DateOnlyPeriod, matrix.Person.FirstDayOfWeek);
 			var alreadyAnalyzedDates = new List<DateOnly>();
-			var cancel = false;
 			while (tempWorkingList.Count > 0)
 			{
-				if (cancel) return;
+				if (schedulingCallback.IsCancelled) return;
 
 				var resultingDate = _missingDayOffBestSpotDecider.Find(workingItem, splitedWeeksFromSchedulePeriod, alreadyAnalyzedDates);
 				if (!resultingDate.HasValue)
 					break;
 
-				var schedulingResult = assignDayOff(resultingDate.Value, tempWorkingList[0], schedulingOptions.DayOffTemplate, rollbackService, () =>
-				{
-					cancel = true;
-					cancelAction();
-				});
+				var schedulingResult = assignDayOff(schedulingCallback, resultingDate.Value, tempWorkingList[0], schedulingOptions.DayOffTemplate, rollbackService);
 				if (!schedulingResult)
 					alreadyAnalyzedDates.Add(resultingDate.Value);
 				else
@@ -70,30 +60,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 			}
 		}
 
-		private bool assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService, Action cancelAction)
+		private bool assignDayOff(ISchedulingCallback schedulingCallback, DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			var scheduleDayPro = matrixData.Matrix.GetScheduleDayByKey(date);
 			if (!matrixData.Matrix.UnlockedDays.Contains(scheduleDayPro)) return false;
 			IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
 			scheduleDay.CreateAndAddDayOff(dayOffTemplate);
 			rollbackService.Modify(scheduleDay);
-			var eventArgs = new SchedulingServiceSuccessfulEventArgs(scheduleDay, cancelAction);
-			var progressResult = onDayScheduled(eventArgs);
-			if (progressResult.ShouldCancel)
+			schedulingCallback.Scheduled(new SchedulingCallbackInfo(scheduleDay, true));
+			if (schedulingCallback.IsCancelled)
 				return false;
 
 			return true;
-		}
-
-		private CancelSignal onDayScheduled(SchedulingServiceBaseEventArgs args)
-		{
-			var handler = DayScheduled;
-			if (handler != null)
-			{
-				handler(this, args);
-				if (args.Cancel) return new CancelSignal { ShouldCancel = true };
-			}
-			return new CancelSignal();
 		}
 	}
 }
