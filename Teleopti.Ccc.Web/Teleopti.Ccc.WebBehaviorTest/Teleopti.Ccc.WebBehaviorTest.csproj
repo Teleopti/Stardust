@@ -844,6 +844,11 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Wfm\Permissions\PermissionsStepDefinitionsNew.cs" />
+    <Compile Include="Wfm\RealTimeAdherence\RtaTool.feature.cs">
+      <DependentUpon>RtaTool.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\ResourcePlanner\PlanningPeriod.feature.cs">
       <DependentUpon>PlanningPeriod.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1436,6 +1441,10 @@
     <None Include="Wfm\Permissions\PermissionsNew.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PermissionsNew.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\RealTimeAdherence\RtaTool.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RtaTool.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\ResourcePlanner\PlanningPeriod.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

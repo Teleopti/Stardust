@@ -210,14 +210,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GoToHealthCheck();
 		}
-
-		[When(@"I am viewing the RTA Tool")]
-		public void WhenIAmViewingTheRtaTool()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GoToRtaTool();
-		}
-
+		
 		[Given(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view group schedules staffing metrics for '([0-9\-\\\/]*)'")]
@@ -537,6 +530,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoRealTimeAdherenceForTeams(idsForTeams(teams));
 		}
 
+		[Given(@"I am viewing the rta tool")]
+		public void WhenIAmViewingTheRtaTool()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToRtaTool();
+		}
 
 		[When(@"I view manage adherence view for agent '(.*)'")]
 		public void WhenIViewManageAdherenceViewForAgent(string name)

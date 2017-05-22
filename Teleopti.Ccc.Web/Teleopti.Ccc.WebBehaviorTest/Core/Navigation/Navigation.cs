@@ -441,7 +441,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GoToRtaTool()
 		{
-			GoToPage("RtaTool");
+			GoToPage("wfm/#/rtaTool");
 		}
 		
 		public static void GoToWfmLandingPage()

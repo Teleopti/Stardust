@@ -12,15 +12,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			DataMaker.Data().Apply(new StateGroupConfigurable{ Name = name, PhoneState = name});
 		}
-
-		[Given(@"there are (.*) rta state codes and state code groups")]
-		public void GivenThereAreRtaStateCodesAndStateCodeGroups(int count)
-		{
-			for (var i = 0; i < count; i++)
-			{
-				var state = "State" + i;
-				DataMaker.Data().Apply(new StateGroupConfigurable {Name = state, PhoneState = state});
-			}
-		}
 	}
 }
