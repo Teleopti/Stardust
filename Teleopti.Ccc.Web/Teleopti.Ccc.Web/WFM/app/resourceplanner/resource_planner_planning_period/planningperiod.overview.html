@@ -2,15 +2,15 @@
 	<div class="view-title">
 		<h1><i class="mdi mdi-calendar"></i> {{'ScheduleAgentGroup' | translate}} - {{vm.agentGroup.Name}}</h1>
 		<div class="pp-sub-title">
-			<span ng-show="vm.selectedPp">{{'SelectedPlanningPeriod' | translate}}: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
-			<span ng-if="vm.isDisable() && vm.totalAgents > 0 && !vm.isClearing" ng-bind="vm.status" class="pp-status"></span>
+			<span>{{'SelectedPlanningPeriod' | translate}}: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
+			<span ng-if="vm.isDisable() && !vm.clearRunning" ng-bind="vm.status" class="pp-status"></span>
 		</div>
 	</div>
 </div>
-<div ng-if="vm.isDisable() && vm.totalAgents > 0 && !vm.isClearing" class="pp-progress test-schedule-is-running">
+<div ng-if="vm.isDisable() && !vm.clearRunning" class="pp-progress test-schedule-is-running">
 	<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 </div>
-<div class="panel material-depth-1 pp-fix" ng-show="vm.selectedPp">
+<div class="panel material-depth-1 pp-fix">
 	<div class="wfm-slide-tabs tabbed-panel">
 		<md-content class="md-padding">
 			<md-tabs md-dynamic-height md-border-bottom>
@@ -22,7 +22,7 @@
 								<button class="wfm-btn material-depth-1" ng-click="!vm.isDisable() && vm.intraOptimize()" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(),'wfm-btn-primary':!vm.isDisable()}">{{'IntraOptimize' | translate }}</button>
 								<button class="wfm-fab material-depth-1 mini pp-clear-parent" ng-click="!vm.isDisable() && vm.openModal()" ng-class="{'mini-schedule': vm.isDisable()}"><i class="mdi mdi-delete-forever"></i>
 									<md-tooltip>{{'ClearScheduleResultAndHistoryData' | translate}}</md-tooltip>
-									<span class="pp-clear-spinner" ng-if="vm.isClearing">
+									<span class="pp-clear-spinner" ng-if="vm.clearRunning">
 										<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 									</span>
 								</button>

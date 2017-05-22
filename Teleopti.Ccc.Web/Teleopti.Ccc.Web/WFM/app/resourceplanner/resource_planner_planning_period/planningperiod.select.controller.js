@@ -5,19 +5,17 @@
         .module('wfm.resourceplanner')
         .controller('planningPeriodSelectController', Controller);
 
-    Controller.$inject = ['$state', '$stateParams', '$translate', 'planningPeriodServiceNew'];
+    Controller.$inject = ['$state', '$stateParams', '$translate', 'planningPeriodServiceNew', 'agentGroupInfo', 'planningPeriods'];
 
-    function Controller($state, $stateParams, $translate, planningPeriodServiceNew) {
+    function Controller($state, $stateParams, $translate, planningPeriodServiceNew, agentGroupInfo, planningPeriods) {
         var vm = this;
         var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
-        vm.agentGroup = {};
+        vm.agentGroup = agentGroupInfo;
+        vm.planningPeriods = planningPeriods;
         vm.suggestions = [];
-        vm.planningPeriods = [];
         vm.originLastPp = undefined;
         vm.lastPp = undefined;
         vm.selectedSuggestion = undefined;
-        vm.show = false;
-        vm.displayButton = false;
         vm.openCreatePpModal = false;
         vm.modifyLastPpModal = false;
         vm.confirmDeletePpModal = false;
@@ -33,15 +31,13 @@
         vm.isSelectedChanged = isSelectedChanged;
         vm.changeDateForLastPp = changeDateForLastPp;
         vm.deleteLastPp = deleteLastPp;
-        vm.getSuggestionsForFirstPp = getSuggestionsForFirstPp;
         vm.selectSuggestion = selectSuggestion;
         vm.createFirstPp = createFirstPp;
         vm.resetSelectedSuggestion = resetSelectedSuggestion;
         vm.getPpInfo = getPpInfo;
         vm.isNonePp = isNonePp;
 
-        getAgentGroupById();
-        getPlanningPeriod();
+        getSuggestionsForFirstPp();
 
         function youAreGoingToChangeThisPlanningPeriodMessage() {
             if (!vm.originLastPp.startDate && !vm.lastPp.startDate)
@@ -61,25 +57,12 @@
                 .replace("{1}", moment(vm.selectedSuggestion.endDate).format('L'));
         }
 
-        function getAgentGroupById() {
-            if (agentGroupId == null)
-                return;
-            var getAgentGroup = planningPeriodServiceNew.getAgentGroupById({ agentGroupId: agentGroupId });
-            return getAgentGroup.$promise.then(function (data) {
-                vm.agentGroup = data;
-                return vm.agentGroup;
-            });
-        }
-
-        function getPlanningPeriod() {
-            if (agentGroupId == null)
-                return;
-            var query = planningPeriodServiceNew.getPlanningPeriodsForAgentGroup({ agentGroupId: agentGroupId });
-            return query.$promise.then(function (data) {
-                vm.planningPeriods = data;
-                vm.displayButton = true;
-                return vm.planningPeriods;
-            });
+        function isNonePp() {
+            if (vm.planningPeriods.length == 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         function startNextPlanningPeriod() {
@@ -147,16 +130,11 @@
             if (agentGroupId == null)
                 return;
             vm.openCreatePpModal = false;
-            vm.displayButton = false;
-
             var startDate = moment(vm.selectedSuggestion.startDate).format('YYYY-MM-DD');
             var newEndDate = moment(vm.selectedSuggestion.endDate).format('YYYY-MM-DD');
-
             var firstPp = planningPeriodServiceNew.firstPlanningPeriod({ agentGroupId: agentGroupId, startDate: startDate, endDate: newEndDate });
             return firstPp.$promise.then(function (data) {
-                vm.show = false;
                 vm.planningPeriods.push(data);
-                vm.displayButton = true;
                 return vm.planningPeriods;
             });
         }
@@ -178,7 +156,6 @@
             var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({ agentGroupId: agentGroupId, startDate: startDate, endDate: newEndDate });
             return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
                 vm.planningPeriods = data;
-                vm.displayButton = true;
                 vm.dateIsChanged = undefined;
                 return vm.planningPeriods;
             });
@@ -199,7 +176,8 @@
         function getSuggestionsForFirstPp() {
             if (agentGroupId == null)
                 return;
-            vm.openCreatePpModal = true;
+            if (vm.planningPeriods.length > 0)
+                return;
             vm.suggestions = [];
             var suggestionsForFirstPp = planningPeriodServiceNew.getPlanningPeriodSuggestions({ agentGroupId: agentGroupId });
             return suggestionsForFirstPp.$promise.then(function (data) {
@@ -207,7 +185,6 @@
                 if (data.length > 0) {
                     selectSuggestion(vm.suggestions[0]);
                 }
-                vm.show = true;
                 return vm.suggestions;
             });
         }
@@ -222,11 +199,7 @@
 
         function resetSelectedSuggestion() {
             vm.openCreatePpModal = false;
-            vm.selectedSuggestion = {
-                startDate: null,
-                endDate: null
-            };
-            vm.show = false;
+            selectSuggestion(vm.suggestions[0]);
         }
 
         function getPpInfo(p) {
@@ -234,14 +207,6 @@
             vm.textForDeletePp = $translate.instant("AreYouSureYouWantToDeleteThePlanningPeriod")
                 .replace("{0}", moment(p.StartDate).format('L'))
                 .replace("{1}", moment(p.EndDate).format('L'));
-        }
-
-        function isNonePp() {
-            if (vm.planningPeriods.length == 0) {
-                return true;
-            } else {
-                return false;
-            }
         }
     }
 })();

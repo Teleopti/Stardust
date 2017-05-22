@@ -1556,8 +1556,6 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.validation.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.validation.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_v2\resourceplanning.backend.fake.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_v2\resourceplanning.overview.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_v2\resourceplanning.overview.html" />
     <Content Include="WFM\app\rtaTool\rtaTool.controller.js" />
     <Content Include="WFM\app\rtaTool\rtaTool.html" />
     <Content Include="WFM\app\rtaTool\rtaTool.service.js" />

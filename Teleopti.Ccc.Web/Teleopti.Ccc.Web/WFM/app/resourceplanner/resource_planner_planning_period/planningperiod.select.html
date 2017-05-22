@@ -8,9 +8,8 @@
 </div>
 <div class="con-row">
 	<div class="con-flex">
-		<button ng-if="!vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.startNextPlanningPeriod()">{{'CreateNextPp' | translate}}</button>
-		<button ng-if="vm.isNonePp() && vm.displayButton" class="wfm-btn wfm-btn-default" ng-click="vm.getSuggestionsForFirstPp()">{{'CreateFirstPlanningPeriod' | translate}}</button>
-		<div class="line-right pp-color-label" ng-if="!vm.isNonePp() && vm.displayButton">
+		<button ng-if="!vm.isNonePp()" class="wfm-btn wfm-btn-default" ng-click="vm.startNextPlanningPeriod()">{{'CreateNextPp' | translate}}</button>
+		<div class="line-right pp-color-label" ng-if="!vm.isNonePp()">
 			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>{{'SchedulingSucceeded' | translate}}</span>
 			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>{{'SchedulingFailed' | translate}}</span>
 		</div>
@@ -65,14 +64,14 @@
 		</div>
 	</div>
 </div>
-<div class="con-row" ng-if="vm.isNonePp() && vm.displayButton">
+<div class="con-row" ng-if="vm.isNonePp()">
 	<div class="con-flex">
 		<div class="panel wfm-tip">
 			<div class="sub-header wfm-tip-header">
 				<h2><i class="mdi mdi-information-outline"></i>{{'YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion' | translate}}</h2>
 			</div>
-			<div class="con-footer">
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.getSuggestionsForFirstPp()" translate>CreatePlanningPeriod</button>
+			<div class="line-center">
+				<button class="wfm-btn wfm-btn-primary" ng-click="vm.openCreatePpModal = true;" translate>CreatePlanningPeriod</button>
 			</div>
 		</div>
 	</div>
@@ -117,7 +116,7 @@
 <div class="con-row">
 	<div class="con-flex pp-modal">
 		<div ng-cloak class="modal-box">
-			<div ng-cloak ng-show="vm.openCreatePpModal && vm.show == true">
+			<div ng-cloak ng-show="vm.openCreatePpModal">
 				<div class="modalbg">
 					<div class="dialog material-depth-1">
 						<div class="modal-inner-content">

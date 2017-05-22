@@ -3,53 +3,23 @@
 
 	angular
 		.module('wfm.resourceplanner')
-		.controller('dayoffRuleOverviewController', Controller)
+		.controller('dayoffRuleOverviewController', overviewController)
+		.controller('dayoffRuleDirectiveOverviewController', directiveController)
 		.directive('dayoffRules', dayoffRulesDirective);
 
-	Controller.$inject = ['$state', '$stateParams', '$translate', 'dayOffRuleService', 'agentGroupService'];
+	overviewController.$inject = ['$state', '$stateParams', '$translate', 'dayOffRuleService', 'agentGroupInfo', 'dayOffRulesInfo'];
 
-	function Controller($state, $stateParams, $translate, dayOffRuleService, agentGroupService) {
+	function overviewController($state, $stateParams, $translate, dayOffRuleService, agentGroupInfo, dayOffRulesInfo) {
 		var vm = this;
 
-		vm.dayOffRules = [];
-		vm.textManageDoRule = '';
+		vm.dayOffRules = dayOffRulesInfo ? dayOffRulesInfo : [];
 		vm.textDeleteDoRule = '';
-		vm.textDoRuleAppliedFilter = '';
+		vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", agentGroupInfo.Name);
+		vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", agentGroupInfo.Name);
 		vm.getDoRuleInfo = getDoRuleInfo;
 		vm.deleteDoRule = deleteDoRule;
 		vm.goEditDoRule = goEditDoRule;
 		vm.goCreateDoRule = goCreateDoRule;
-		vm.goDoRulesSetting = goDoRulesSetting;
-
-		getDayOffRules();
-		getAgentGroupById();
-
-		function getAgentGroupById() {
-			if (!$stateParams.groupId)
-				return;
-			vm.agentGroup = {};
-			var getAgentGroup = agentGroupService.getAgentGroupById({ id: $stateParams.groupId });
-			return getAgentGroup.$promise.then(function (data) {
-				vm.agentGroup = data;
-				textForAgentGroup();
-				return vm.agentGroup;
-			});
-		}
-
-		function getDayOffRules() {
-			if (!$stateParams.groupId)
-				return;
-			var dayOffRule = dayOffRuleService.getDayOffRulesByAgentGroupId({ agentGroupId: $stateParams.groupId });
-			return dayOffRule.$promise.then(function (data) {
-				vm.dayOffRules = data;
-				return vm.dayOffRules;
-			});
-		}
-
-		function textForAgentGroup() {
-			vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", vm.agentGroup.Name);
-			vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", vm.agentGroup.Name);
-		}
 
 		function getDoRuleInfo(dayOffRule) {
 			vm.textDeleteDoRule = $translate.instant("AreYouSureYouWantToDeleteTheDayOffRule").replace("{0}", dayOffRule.Name);
@@ -78,6 +48,23 @@
 				groupId: $stateParams.groupId
 			});
 		}
+	}
+
+	function directiveController($state, $stateParams, $translate, dayOffRuleService) {
+		var vm = this;
+
+		vm.dayOffRules = [];
+		vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", vm.agentGroup.Name);
+		vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", vm.agentGroup.Name);
+		vm.goDoRulesSetting = goDoRulesSetting;
+
+		getDayOffRules();
+
+		function getDayOffRules() {
+			return dayOffRuleService.getDayOffRulesByAgentGroupId({ agentGroupId: $stateParams.groupId }).$promise.then(function (data) {
+				return vm.dayOffRules = data;
+			});
+		}
 
 		function goDoRulesSetting() {
 			$state.go('resourceplanner.dayoffrulesoverview', {
@@ -94,7 +81,7 @@
 				agentGroup: '='
 			},
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
-			controller: 'dayoffRuleOverviewController as vm',
+			controller: 'dayoffRuleDirectiveOverviewController as vm',
 			bindToController: true
 		};
 		return directive;

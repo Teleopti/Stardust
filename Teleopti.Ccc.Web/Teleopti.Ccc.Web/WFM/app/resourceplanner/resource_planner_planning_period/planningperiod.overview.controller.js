@@ -5,44 +5,47 @@
     .module('wfm.resourceplanner')
     .controller('planningPeriodOverviewController', Controller);
 
-  Controller.$inject = ['$stateParams', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope', '$timeout', 'selectedPp'];
+  Controller.$inject = ['$stateParams', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope', '$timeout', 'selectedPp', 'agentGroupInfo'];
 
-  function Controller($stateParams, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope, $timeout, selectedPp) {
+  function Controller($stateParams, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope, $timeout, selectedPp, agentGroupInfo) {
     var vm = this;
-    var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
     var selectedPpId = $stateParams.ppId ? $stateParams.ppId : null;
     var checkProgressRef;
     var keepAliveRef;
     var preMessage = '';
-    vm.publishRunning = false;
-    vm.agentGroup = {};
+    vm.agentGroup = agentGroupInfo ? agentGroupInfo : null;
     vm.selectedPp = selectedPp ? selectedPp : {};
-    vm.schedulingPerformed = false;
-    vm.optimizeRunning = false;
-    vm.status = '';
-    vm.dayNodes = undefined;
-    vm.gridOptions = {};
     vm.totalAgents = selectedPp ? selectedPp.TotalAgents : 0;
     vm.scheduledAgents = 0;
+    vm.publishRunning = false;
+    vm.schedulingPerformed = false;
+    vm.optimizeRunning = false;
+    vm.dayNodes = undefined;
     vm.isDisableDo = true;
-    vm.isClearing = false;
+    vm.clearRunning = false;
+    vm.isScheduled = false;
+    vm.status = '';
+    vm.gridOptions = {};
+    vm.valData = {
+      scheduleIssues: []
+    };
     vm.launchSchedule = launchSchedule;
     vm.intraOptimize = intraOptimize;
     vm.publishSchedule = publishSchedule;
     vm.clearSchedules = clearSchedules;
     vm.isDisable = isDisable;
     vm.openModal = openModal;
-    vm.valData = {
-      scheduleIssues: []
-    };
-
-    checkState();
-    loadLastResult();
+    vm.textForClearPp = $translate.instant("AreYouSureYouWantToClearPlanningPeriodData")
+      .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+      .replace('{1}', moment(vm.selectedPp.EndDate).format('L'));
 
     $scope.$on('$destroy', function () {
       $interval.cancel(checkProgressRef);
       $interval.cancel(keepAliveRef);
     });
+
+    checkState();
+    loadLastResult();
 
     function checkState(pp) {
       checkProgress();
@@ -57,23 +60,20 @@
     }
 
     function isDisable() {
-      if (vm.schedulingPerformed || vm.optimizeRunning || vm.totalAgents == 0 || vm.isClearing || vm.publishRunning) {
+      if (vm.schedulingPerformed || vm.optimizeRunning || vm.totalAgents == 0 || vm.clearRunning || vm.publishRunning)
         return true;
-      }
     }
 
     function openModal() {
-      vm.textForClearPp = $translate.instant("AreYouSureYouWantToClearPlanningPeriodData")
-        .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-        .replace('{1}', moment(vm.selectedPp.EndDate).format('L'));
       return vm.confirmModal = true;
     }
 
     function clearSchedules() {
       if (selectedPpId !== null) {
-        vm.isClearing = true;
+        vm.clearRunning = true;
         planningPeriodServiceNew.clearSchedules({ id: selectedPpId }).$promise.then(function () {
-          vm.isClearing = false;
+          vm.clearRunning = false;
+          vm.isScheduled = false;
           init();
           NoticeService.success($translate.instant('SuccessClearPlanningPeriodData')
             .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
@@ -162,7 +162,6 @@
           } else {
             if (result.Successful) {
               if (vm.optimizeRunning) {
-                loadLastResult();
                 vm.optimizeRunning = false;
                 NoticeService.success($translate.instant('SuccessfullyIntradayOptimizationPlanningPeriodFromTo')
                   .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
@@ -206,19 +205,22 @@
     }
 
     function loadLastResult() {
-      if (selectedPpId !== null) {
-        vm.dayNodes = undefined;
-        vm.valData.scheduleIssues = [];
-        vm.scheduledAgents = 0;
-        planningPeriodServiceNew.lastJobResult({ id: selectedPpId })
-          .$promise.then(function (data) {
-            if (data.ScheduleResult) {
-              vm.scheduledAgents = data.ScheduleResult.ScheduledAgentsCount;
-              vm.valData.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults;
-              initResult(data.OptimizationResult);
-            }
-          });
-      }
+      if (selectedPpId == null)
+        return;
+      vm.valData.scheduleIssues = [];
+      vm.scheduledAgents = 0;
+      planningPeriodServiceNew.lastJobResult({ id: selectedPpId })
+        .$promise.then(function (data) {
+          if (data.ScheduleResult) {
+            vm.isScheduled = true;
+            vm.scheduledAgents = data.ScheduleResult.ScheduledAgentsCount;
+            vm.valData.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults;
+            initResult(data.OptimizationResult);
+            return data;
+          } else {
+            return vm.isScheduled = false;
+          }
+        });
     }
 
     function initResult(interResult) {

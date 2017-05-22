@@ -1,5 +1,5 @@
 'use strict';
-describe('agentGroupFormController', function () {
+xdescribe('agentGroupFormController', function () {
 	var $httpBackend,
 		$controller,
 		$state,
@@ -53,7 +53,7 @@ describe('agentGroupFormController', function () {
 
 		$httpBackend.whenPOST('../api/resourceplanner/agentgroup').respond(function (method, url, data, headers) {
 			return [200, true];
-		});		
+		});
 	}));
 
 	afterEach(function () {
@@ -144,9 +144,9 @@ describe('agentGroupFormController', function () {
 		spyOn(agentGroupService, 'saveAgentGroup').and.callThrough();
 		var vm = $controller('agentGroupFormController', { $stateParams: stateparams });
 		$httpBackend.flush();
-		
+
 		var id = vm.editAgentGroup.Id;
-		var filter = vm.editAgentGroup.Filters;		
+		var filter = vm.editAgentGroup.Filters;
 		vm.name = 'Agent Group 3';
 		vm.persist();
 		$httpBackend.flush();
@@ -159,9 +159,9 @@ describe('agentGroupFormController', function () {
 		spyOn(agentGroupService, 'removeAgentGroup').and.callThrough();
 		var vm = $controller('agentGroupFormController', { $stateParams: stateparams });
 		$httpBackend.flush();
-		
+
 		var id = vm.editAgentGroup.Id;
-		var filter = vm.editAgentGroup.Filters;		
+		var filter = vm.editAgentGroup.Filters;
 		vm.name = 'Agent Group 3';
 		vm.removeAgentGroup(id);
 		$httpBackend.flush();
