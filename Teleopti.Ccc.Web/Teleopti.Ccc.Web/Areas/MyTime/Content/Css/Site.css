@@ -96,7 +96,7 @@
 	visibility: hidden;
 }
 
-.visible{
+.visible {
 	visibility: visible;
 }
 /* Hide visually and from screenreaders, but maintain layout */
@@ -1299,7 +1299,7 @@ select.time-input {
 }
 
 .rtl .row {
-	margin-right: 0 !important; 	
+	margin-right: 0 !important;
 }
 
 /*
@@ -1528,6 +1528,7 @@ End personal drop down menu
 .pagebody {
 	margin-top: 10px;
 }
+
 .m-b-10 {
 	margin-bottom: 10px;
 }
@@ -1536,7 +1537,7 @@ End personal drop down menu
 	margin-bottom: 5px;
 }
 
-.navbar-teleopti{
+.navbar-teleopti {
 	margin-bottom: 0;
 }
 
@@ -1556,7 +1557,7 @@ End personal drop down menu
 }
 
 @media (min-width: 768px) {
-	.navbar-nav > li > a{
+	.navbar-nav > li > a {
 		padding-left: 12px;
 		padding-right: 12px;
 	}
@@ -1594,22 +1595,27 @@ End personal drop down menu
 		display: none !important;
 	}
 
-	.cal-month-day  .label-default {
+	.cal-month-day .label-default {
 		background-color: transparent !important;
 		border: none;
 	}
 
 	.cal-month-day .label {
-		color: black !important;		
+		color: black !important;
 	}
 
 	.cal-month-day span {
-		opacity: 1 !important;	
+		opacity: 1 !important;
 	}
-	*{transition:none!important}
+
+	* {
+		transition: none !important
+	}
+
 	.cal-month-day .date-number {
 		color: #000 !important;
 	}
+
 	.label-default {
 		background-color: transparent !important;
 	}
@@ -1628,16 +1634,17 @@ End personal drop down menu
 	box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
 	outline: none;
 }
-.fab:before {
-	content: '+';
-	position: absolute;
-	top: 0;
-	left: calc(25px - 10px);
-	color: white;
-	font-size: 240%;
-	font-weight: bold;
-	z-index: 115;
-}
+
+	.fab:before {
+		content: '+';
+		position: absolute;
+		top: 0;
+		left: calc(25px - 10px);
+		color: white;
+		font-size: 240%;
+		font-weight: bold;
+		z-index: 115;
+	}
 
 .menu-focusing {
 	padding: 0 15px 1px 15px;
@@ -1651,20 +1658,29 @@ End personal drop down menu
 	z-index: 1001;
 }
 
-.menu-focusing .navbar-nav{
-	margin: 0;
-}
+	.menu-focusing .navbar-nav {
+		margin: 0;
+	}
 
-.menu-focusing li{
-	padding: 0;
-	border-bottom: 1px solid #dfdfdf;
-}
+	.menu-focusing li {
+		padding: 0;
+		border-bottom: 1px solid #dfdfdf;
+	}
 
-.close-fab-overlay{
+.close-fab-overlay {
 	position: fixed;
-	top:0;
-	bottom:0;
-	left:0;
-	right:0;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	z-index: 1000;
 }
+
+/*override bootstrap modal header */
+.modal .modal-header {
+	background: rgba(0, 127, 255, .9);
+}
+
+	.modal .modal-header .close {
+		color: #ffffff;
+	}

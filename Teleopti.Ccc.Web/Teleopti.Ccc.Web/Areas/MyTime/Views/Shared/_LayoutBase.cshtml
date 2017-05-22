@@ -1,14 +1,14 @@
 ﻿@using System.Web.Optimization
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Core.Startup.InitializeApplication
-@using Teleopti.Ccc.UserTexts 
+@using Teleopti.Ccc.UserTexts
 
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html @Html.LayoutBase().FullLangAttribute()@Html.LayoutBase().FullDirAttribute() class="no-js ie8"> <![endif]-->
 <!--[if (gt IE 8)|!(IE)]><!-->
-<html @Html.LayoutBase().FullLangAttribute()@Html.LayoutBase().FullDirAttribute() class="no-js ">
+<html @Html.LayoutBase().FullLangAttribute() @Html.LayoutBase().FullDirAttribute() class="no-js ">
 <!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
@@ -30,17 +30,17 @@
 	<![endif]-->
 	@if (ViewBag.LayoutBase.FixedDate != null)
 	{
-	DateTime date = ViewBag.LayoutBase.FixedDate;
-	<script type="text/javascript">
+		DateTime date = ViewBag.LayoutBase.FixedDate;
+		<script type="text/javascript">
 		$(function () {
 			Date.prototype.getTeleoptiTime = function () { return new Date(@(date.Year), @(date.Month -1), @(date.Day), @(date.Hour), @(date.Minute), @(date.Second)).getTime(); };
 			Date.prototype.getTeleoptiTimeInUserTimezone = Date.prototype.getTeleoptiTime;  // We don't touch scenario tests
 		});
-	</script>
+		</script>
 	}
 	else
 	{
-	<script type="text/javascript">
+		<script type="text/javascript">
 		$(function () {
 			Date.prototype.getTeleoptiTime = function () { return new Date().getTime(); };
 			Date.prototype.getTeleoptiTimeInUserTimezone = Teleopti.MyTimeWeb.Common.SetupTeleoptiTime(
@@ -50,10 +50,10 @@
 					DayLightSavingStart: '@(ViewBag.LayoutBase.DayLightSavingStart)',
 					DayLightSavingEnd: '@(ViewBag.LayoutBase.DayLightSavingEnd)',
 					DayLightSavingAdjustmentInMinute:@(ViewBag.LayoutBase.DayLightSavingAdjustmentInMinute)
-				}	
-			);			
+				}
+			);
 		});
-	</script>
+		</script>
 	}
 
 	<script>
@@ -85,7 +85,7 @@
 
 	@RenderSection("head", required: false)
 </head>
-<body ontouchstart="" @Html.LayoutBase().FullDirClass()@Html.LayoutBase().FullDirAttribute()>
+<body ontouchstart="" @Html.LayoutBase().FullDirClass() @Html.LayoutBase().FullDirAttribute()>
 	@RenderSection("header", required: false)
 	@RenderBody()
 	<footer class="col-1">
@@ -93,7 +93,18 @@
 		<p>@ViewBag.LayoutBase.Footer</p>
 
 	</footer>
-	<div id="dialog-modal">
+	<div id="dialog-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h3 id="dialog-modal-header"></h3>
+				</div>
+				<div id="dialog-modal-body" class="modal-body">
+
+				</div>
+			</div>
+		</div>
 	</div>
 	<div id="dialog">
 	</div>

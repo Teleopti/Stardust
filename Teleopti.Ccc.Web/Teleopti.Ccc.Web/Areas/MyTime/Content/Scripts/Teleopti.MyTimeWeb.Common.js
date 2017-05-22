@@ -315,25 +315,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 		},
-		AjaxFailed: function (jqXHR, noIdea, title) {
-			var msg = $.parseJSON(jqXHR.responseText);
-			$('#dialog-modal').attr('title', 'Error: ' + msg.ShortMessage);
-			$('#dialog-modal').dialog({
-				width: 800,
-				height: 500,
-				position: 'center',
-				modal: true,
-				create: function (event, ui) {
-					var responseText = msg.Message;
-					$(this).html(responseText);
-
-					var closeBtn = $('.ui-dialog-titlebar-close');
-					closeBtn.addClass('ui-state-default');
-					closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>');
-				}
-			});
-			
-			_log("Method Failed" + jqXHR + noIdea + title);
+		AjaxFailed: function (jqXHR, status, title) {
+			Teleopti.MyTimeWeb.Ajax.UI.ShowErrorDialog(jqXHR, status, title);
 		},
 		Log: function (logmessage) {
 			_log(logmessage);

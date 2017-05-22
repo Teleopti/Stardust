@@ -81,7 +81,7 @@ Teleopti.MyTimeWeb.Ajax = function () {
 		if (options.headers) {
 			options.headers['X-Use-GregorianCalendar'] = true;
 		} else {
-			options.headers = { 'X-Use-GregorianCalendar': true }
+			options.headers = { 'X-Use-GregorianCalendar': true };
 		}
 	}
 
@@ -135,43 +135,49 @@ Teleopti.MyTimeWeb.Ajax = function () {
 Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '' };
 
 Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
-	function _ajaxErrorBody(jqXHR, textStatus, errorThrown) {
-		var message = 'An error has occurred ' + ((errorThrown && errorThrown.length > 0) ? '(' + errorThrown + ')' : '');
-		var htmlString = '<h4 style="text-align:center;">' + message + '</h4>';
-		htmlString += '<p style="text-align:center;"><a href="javascript:window.location.reload()">Refresh</a></p>';
+	function _getErrorMessage(jqXHR) {
+		var errorMessage = "An error has occurred, please try again.";
+		if (jqXHR) {
+			try {
+				var response = JSON.parse(jqXHR.responseText);
+				if (response.Message) {
+					errorMessage = response.Message;
+				}
+			} catch (e) { }
+		}
+		return errorMessage;
+	}
+
+	function _ajaxErrorBody(jqXHR) {
+		var htmlString = '<h4 style="text-align:center;">' + _getErrorMessage(jqXHR) + '</h4>';
+		htmlString += '<p style="text-align:center;"><a href="javascript:window.location.reload()" class="btn btn-primary">Refresh</a></p>';
 		$('#body-inner').html('<div id="error-panel">' + htmlString + '</div>');
 	}
 
-	function _ajaxErrorDialog(jqXHR, textStatus, errorThrown) {
-		$('#dialog-modal').attr('title', errorThrown);
-		$('#dialog-modal').dialog({
-			width: 800,
-			height: 500,
-			position: 'center',
-			modal: true,
-			create: function (event, ui) {
-				var responseText = jqXHR.responseText;
-				try {
-					var message = $.parseJSON(responseText);
-					if (message.Message) $(this).html(message.Message);
-					else {
-						$(this).html(responseText);
-					}
-				} catch (e) {
-					$(this).html(responseText);
-				}
+	function _ajaxErrorDialog(jqXHR) {
+		$('#dialog-modal .modal-body').html(_getErrorMessage(jqXHR));
+		$('#dialog-modal').modal("show");
 
-				var closeBtn = $('.ui-dialog-titlebar-close');
-				closeBtn.addClass('ui-state-default');
-				closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>');
-			}
-		});
+	}
+
+	function _logError(jqXHR, textStatus, errorThrown) {
+		if (console && console.error)
+			console.error("Method Failed: " + (jqXHR ? jqXHR.responseText : "") + textStatus + errorThrown);
 	}
 
 	return {
 		ShowAjaxError: function (jqXHR, textStatus, errorThrown) {
-			_ajaxErrorBody(jqXHR, textStatus, errorThrown);
-			_ajaxErrorDialog(jqXHR, textStatus, errorThrown);
+			if (!!$('#body-inner').length) {
+				_ajaxErrorBody(jqXHR);
+			}
+			else {
+				_ajaxErrorDialog(jqXHR);
+			}
+			_logError(jqXHR, textStatus, errorThrown);
+		},
+		ShowErrorDialog: function (jqXHR, textStatus, errorThrown) {
+			_ajaxErrorDialog(jqXHR);
+			_logError(jqXHR, textStatus, errorThrown);
 		}
 	};
 })(jQuery);

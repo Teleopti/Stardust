@@ -92,23 +92,10 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 				options.errormessage(response.ModelState.Error[0]);
 				return;
 			}
-			try {
-				var json = JSON.parse(jqXHR.responseText);
-				$('#body-inner').html('<h2>Error: ' + jqXHR.status + '</h2>');
-				$('#dialog-modal-header').text(errorThrown);
-				$('#dialog-modal-body').html(json.Message);
-				$('#dialog-modal').modal({
-					show: true
-				});
-			}
-			catch (e) {
-				$('#body-inner').html('<h2>Error: ' + jqXHR.status + '</h2>');
-				$('#dialog-modal-header').text(errorThrown);
-				$('#dialog-modal-body').html(jqXHR.responseText);
-				$('#dialog-modal').modal({
-					show: true
-				});
-			}
+
+			options.errormessage("An error has occurred, please try again.");
+			if (console && console.error)
+				console.error("Method Failed: " + jqXHR.responseText + textStatus + errorThrown);
 		};
 
 		$.extend(options, {
