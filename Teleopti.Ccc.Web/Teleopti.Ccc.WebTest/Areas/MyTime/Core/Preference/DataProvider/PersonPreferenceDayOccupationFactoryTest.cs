@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 	[TestFixture]
 	public class PersonPreferenceDayOccupationFactoryTest
 	{
+		FakeScheduleProvider scheduleProvider;
 		[SetUp]
 		public void Init()
 		{
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			var pa2 = new PersonAssignment(schedule2.Person, schedule2.Scenario, date2);
 			schedule2.Add(pa2);
-			var scheduleProvider = new FakeScheduleProvider(schedule, schedule2, schedule3);
+			scheduleProvider = new FakeScheduleProvider(schedule, schedule2, schedule3);
 
 			var preferenceRestriction1 = new PreferenceRestriction
 			{
@@ -159,6 +160,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var period = new DateOnlyPeriod(new DateOnly(2029, 1, 1), new DateOnly(2029, 1, 7));
 			var occupations = target.GetPreferencePeriodOccupation(person, period);
 
+			Assert.IsTrue(scheduleProvider.LatestScheduleLoadOptions.LoadRestrictions);
+
 			occupations.Count.Should().Be.EqualTo(7);
 			shouldBeOccupationWithShift(occupations[new DateOnly(2029, 1, 1)]);
 			shouldBeOccupationWithoutScheduleNorPreference(occupations[new DateOnly(2029, 1, 2)]);
@@ -173,6 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldReturnCorrectOccupationWithPreferenceThatHasNoStartTimeAndEndTimeLimitations()
 		{
 			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 5));
+			Assert.IsTrue(scheduleProvider.LatestScheduleLoadOptions.LoadRestrictions);
 			shouldBeOccupationHasNoStartTimeAndEndTimeLimitations(occupation);
 		}
 
@@ -180,6 +184,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldReturnCorrectOccupationWithPreferenceWhenEmptySchedule()
 		{
 			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 3));
+			Assert.IsTrue(scheduleProvider.LatestScheduleLoadOptions.LoadRestrictions);
 			shouldBeOccupationWithEmptySchedule(occupation);
 		}
 
@@ -187,6 +192,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldReturnCorrectOccupationWithPreferenceWhenNoSchedule()
 		{
 			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 7));
+			Assert.IsTrue(scheduleProvider.LatestScheduleLoadOptions.LoadRestrictions);
 			shouldBeOccupationWithNoSchedule(occupation);
 		}
 
@@ -194,6 +200,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldReturnCorrectOccupationWithShift()
 		{
 			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 1));
+			Assert.IsTrue(scheduleProvider.LatestScheduleLoadOptions.LoadRestrictions);
 			shouldBeOccupationWithShift(occupation);
 		}
 
@@ -201,6 +208,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldReturnCorrectOccupationWithWithoutScheduleNorPreference()
 		{
 			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 2));
+			Assert.IsTrue(scheduleProvider.LatestScheduleLoadOptions.LoadRestrictions);
 			shouldBeOccupationWithoutScheduleNorPreference(occupation);
 		}
 	}

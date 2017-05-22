@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -40,7 +41,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				return GetPreferencePeriodOccupation(person, date.ToDateOnlyPeriod())[date];
 			}
 
-			var schedule = _scheduleProvider.GetScheduleForPersons(date, new List<IPerson> {person}).FirstOrDefault();
+			var loadOptions = new ScheduleDictionaryLoadOptions(true, false);
+			var schedule = _scheduleProvider.GetScheduleForPersonsWithOptions(date, new List<IPerson> {person}, loadOptions)
+				.FirstOrDefault();
 
 			var personPreferenceDayOccupation = new PersonPreferenceDayOccupation();
 			var personAssignment = schedule?.PersonAssignment();
@@ -109,7 +112,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			DateOnlyPeriod period)
 		{
 			var result = new Dictionary<DateOnly, PersonPreferenceDayOccupation>();
-			var schedules = _scheduleProvider.GetScheduleForPersonsInPeriod(period, new List<IPerson> {person})
+			var loadOptions = new ScheduleDictionaryLoadOptions(true, false);
+			var schedules = _scheduleProvider.GetScheduleForPersonsInPeriod(period, new List<IPerson> {person}, loadOptions)
 				.ToDictionary(d => d.DateOnlyAsPeriod.DateOnly);
 
 			var ruleSetBags = _personRuleSetBagProvider.ForPeriod(person, period);

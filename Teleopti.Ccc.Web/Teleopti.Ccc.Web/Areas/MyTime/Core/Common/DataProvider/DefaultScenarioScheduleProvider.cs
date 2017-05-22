@@ -37,31 +37,47 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return getSchedule(period, options, ScheduleVisibleReasons.StudentAvailability);
 		}
 
-		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons, bool loadNotes = false)
+		public IEnumerable<IScheduleDay> GetScheduleForPersonsWithOptions(DateOnly date, IEnumerable<IPerson> persons, IScheduleDictionaryLoadOptions options = null)
 		{
-			var defaultScenario = _scenarioRepository.Current();
+			if (options == null)
+			{
+				options = new ScheduleDictionaryLoadOptions(true, true);
+			}
 
+			var defaultScenario = _scenarioRepository.Current();
 			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-				persons, 
-				new ScheduleDictionaryLoadOptions(false, loadNotes),
+				persons,
+				options,
 				date.ToDateOnlyPeriod(),
-			    defaultScenario);
+				defaultScenario);
 
 			return dictionary.SchedulesForDay(date);
 		}
 
-		public IEnumerable<IScheduleDay> GetScheduleForPersonsInPeriod(DateOnlyPeriod period,IEnumerable<IPerson> persons)
+		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons, bool loadNotes = false)
 		{
+			var options = new ScheduleDictionaryLoadOptions(false, loadNotes);
+			return GetScheduleForPersonsWithOptions(date, persons, options);
+		}
+
+		public IEnumerable<IScheduleDay> GetScheduleForPersonsInPeriod(DateOnlyPeriod period, IEnumerable<IPerson> persons,
+			IScheduleDictionaryLoadOptions options = null)
+		{
+			if (options == null)
+			{
+				options = new ScheduleDictionaryLoadOptions(false, false);
+			}
+
 			var defaultScenario = _scenarioRepository.Current();
 
 			var people = persons.ToArray();
 			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				people,
-				new ScheduleDictionaryLoadOptions(false,false),
+				options,
 				period,
 				defaultScenario);
 
-			return dictionary.SchedulesForPeriod(period,people);
+			return dictionary.SchedulesForPeriod(period, people);
 		}
 
 		private IEnumerable<IScheduleDay> getSchedule(DateOnlyPeriod period,

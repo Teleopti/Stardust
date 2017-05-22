@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			scheduleRange.Stub(x => x.ScheduledDayCollection(period)).Return(new[] { scheduleDay, scheduleDay });
 
 			var result = _target.GetScheduleForPeriod(period).ToList();
-			result.Count().Should().Be.EqualTo(2);
+			result.Count.Should().Be.EqualTo(2);
 			result.Any(r => r == null).Should().Be.False();
 		}
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			scheduleRange.Stub(x => x.ScheduledDayCollectionForStudentAvailability(period)).Return(new[] { scheduleDay, scheduleDay });
 
 			var result = _target.GetScheduleForStudentAvailability(period).ToList();
-			result.Count().Should().Be.EqualTo(2);
+			result.Count.Should().Be.EqualTo(2);
 			result.Any(r => r == null).Should().Be.False();
 		}
 
