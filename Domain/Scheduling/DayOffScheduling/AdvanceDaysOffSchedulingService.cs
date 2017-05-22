@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
     public class AdvanceDaysOffSchedulingService
     {
         private readonly AbsencePreferenceScheduling _absencePreferenceScheduling;
-	    private readonly ITeamDayOffScheduler _teamDayOffScheduler;
-        private readonly ITeamBlockMissingDayOffHandler _missingDaysOffScheduler;
+	    private readonly TeamDayOffScheduling _teamDayOffScheduling;
+	    private readonly ITeamBlockMissingDayOffHandler _missingDaysOffScheduler;
         
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
         public AdvanceDaysOffSchedulingService(AbsencePreferenceScheduling absencePreferenceScheduling,
-			ITeamDayOffScheduler teamDayOffScheduler,
+	        TeamDayOffScheduling teamDayOffScheduling,
             ITeamBlockMissingDayOffHandler missingDaysOffScheduler)
         {
 	        _absencePreferenceScheduling = absencePreferenceScheduling;
-	        _teamDayOffScheduler = teamDayOffScheduler;
+	        _teamDayOffScheduling = teamDayOffScheduling;
 	        _missingDaysOffScheduler = missingDaysOffScheduler;
         }
 
@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             
 			if (cancelMe)return;
 
-			_teamDayOffScheduler.DayScheduled += dayScheduled;
-			_teamDayOffScheduler.DayOffScheduling(matrixes, selectedPersons, rollbackService, schedulingOptions, groupPersonBuilderForOptimization);
-			_teamDayOffScheduler.DayScheduled -= dayScheduled;
+			_teamDayOffScheduling.DayScheduled += dayScheduled;
+			_teamDayOffScheduling.DayOffScheduling(matrixes, selectedPersons, rollbackService, schedulingOptions, groupPersonBuilderForOptimization);
+			_teamDayOffScheduling.DayScheduled -= dayScheduled;
             
 			if (cancelMe)return;
 
