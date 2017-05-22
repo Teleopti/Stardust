@@ -273,7 +273,9 @@
     <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\Scheduling.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TeamBlockSchedulingOLD.cs" />
+    <Compile Include="Scheduling\Overtime\ScheduleOvertimeServiceWithoutStateholder.cs" />
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
+    <Compile Include="Scheduling\ResourceCalculateDelayerWithoutStateHolder.cs" />
     <Compile Include="Scheduling\SchedulingOptionsProviderForTeamPerfTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftsFromMasterActivityBaseActivityService.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />
