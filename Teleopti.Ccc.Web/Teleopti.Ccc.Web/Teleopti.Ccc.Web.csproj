@@ -513,9 +513,13 @@
     <Compile Include="Areas\MyTime\Controllers\WidgetController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\ExtendedPreferenceTemplateMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IScheduleMinMaxTimeSiteOpenHourCalculator.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IScheduledSkillOpenHourProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IScheduleMinMaxTimeCalculator.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ISiteOpenHourProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IStaffingPossibilityViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ScheduleMinMaxTimeSiteOpenHourCalculator.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ScheduledSkillOpenHourProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ScheduleMinMaxTimeCalculator.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\SiteOpenHourProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\StaffingPossibilityViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\GuidConstraint.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\RequestListFilter.cs" />

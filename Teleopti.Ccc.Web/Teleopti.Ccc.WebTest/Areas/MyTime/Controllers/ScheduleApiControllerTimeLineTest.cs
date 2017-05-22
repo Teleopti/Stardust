@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -10,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -403,5 +406,209 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(15);
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldAdjustTimeLineBySkillOpenHourWhenSiteOpenHourIsNotAvailableDaySchedule()
+		{
+			var skill = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(18));
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team); 
+			personPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(1)));
+			User.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+
+			assignment.AddActivity(skill.Activity, period);
+			
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(null, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(18);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotAdjustTimeLineBySkillOpenHourWhenSchedulePeriodContainsSkillOpenHour()
+		{
+			var skill = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(18));
+
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team); 
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			User.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 6, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 18, 45, 0, DateTimeKind.Utc));
+			assignment.AddActivity(skill.Activity, period);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(null, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(6);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(19);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldAdjustTimeLineBySkillOpenHourWhenSiteOpenHourIsNotAvailableWeekSchedule()
+		{
+			var skill = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(18));
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			User.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+
+			assignment.AddActivity(skill.Activity, period);
+
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(18);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldAdjustTimeLineByFullDaySkillOpenHourWhenSiteOpenHourIsNotAvailableWeekSchedule()
+		{
+			var skill = createSkillWithOpenHours(TimeSpan.Zero, TimeSpan.FromDays(1));
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			User.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+
+			assignment.AddActivity(skill.Activity, period);
+
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(0);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Days.Should().Be.EqualTo(1);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldAdjustTimeLineByMultipleDaySkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
+		{
+			var skill1 = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
+			var skill2 = createSkillWithOpenHours(TimeSpan.FromHours(8), TimeSpan.FromHours(19));
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill1, new Percent(1)));
+			personPeriod.AddPersonSkill(new PersonSkill(skill2, new Percent(1)));
+			User.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+			var period1 = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+			var period2 = new DateTimePeriod(new DateTime(2014, 12, 18, 10, 00, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 11, 00, 0, DateTimeKind.Utc));
+			assignment.AddActivity(skill1.Activity, period1);
+			assignment.AddActivity(skill2.Activity, period2);
+
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(19);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldNotAdjustTimeLineByNonInBoundPhoneSkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
+		{
+			var skill = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
+			skill.SkillType.Description = new Description("test");
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			User.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+			var period1 = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+			assignment.AddActivity(skill.Activity, period1);
+
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(9);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldNotAdjustTimeLineBySkillOpenHoursWhenNoSkillAreScheduled()
+		{
+			var skill = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			User.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+			var period1 = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+			assignment.AddActivity(new Activity(), period1);
+
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(9);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
+
+		private static ISkill createSkillWithOpenHours(TimeSpan start, TimeSpan end)
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			skill.Activity.InWorkTime = true;
+			skill.Activity.RequiresSkill = true;
+			skill.SkillType.Description = new Description("SkillTypeInboundTelephony");
+
+			foreach (var workload in skill.WorkloadCollection)
+			{
+				foreach (var templateWeek in workload.TemplateWeekCollection)
+				{
+					templateWeek.Value.ChangeOpenHours(new List<TimePeriod>
+					{
+						new TimePeriod(start, end)
+					});
+				}
+			}
+			return skill;
+		}
+
 	}
 }

@@ -976,6 +976,12 @@ $(document).ready(function() {
 		equal("#Schedule/MobileDay", hash);
 	});
 
+	test("should get correct minutes when there is full day time line", function () {
+		var timeline = { Time: "1.00:00:00", TimeLineDisplay: "00:00", PositionPercentage: 1, TimeFixedFormat: null };
+		var timelineViewModel = new Teleopti.MyTimeWeb.Schedule.TimelineViewModel(timeline, 100, 0);
+		equal(timelineViewModel.minutes, 1440);
+	});
+
 	function setupHash() {
 		this.hasher = {
 			initialized: {

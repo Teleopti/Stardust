@@ -76,7 +76,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<FakeNameFormatSettingProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
 			system.UseTestDouble<FakePushMessageProvider>().For<IPushMessageProvider>(); 
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			system.UseTestDouble<ScheduleMinMaxTimeSiteOpenHourCalculator>().For<IScheduleMinMaxTimeSiteOpenHourCalculator>();
+			system.UseTestDouble<ScheduleMinMaxTimeCalculator>().For<IScheduleMinMaxTimeCalculator>();
+			system.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();
+			system.UseTestDouble<ScheduledSkillOpenHourProvider>().For<IScheduledSkillOpenHourProvider>();
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
-	public interface IScheduleMinMaxTimeSiteOpenHourCalculator
+	public interface IScheduleMinMaxTimeCalculator
 	{
 		void AdjustScheduleMinMaxTime(WeekScheduleDomainData weekDomainData);
 

@@ -27,7 +27,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		daylightSavingAdjustment,
 		baseUtcOffsetInMinutes,
 		currentPage = "Teleopti.MyTimeWeb.Schedule",
-		constants = Teleopti.MyTimeWeb.Common.Constants;
+		constants = Teleopti.MyTimeWeb.Common.Constants,
+		fullDayHour = "1.00";
 
 	function _bindData(data) {
 		vm.initializeData(data);
@@ -140,7 +141,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var self = this;
 		self.positionPercentage = ko.observable(rawTimeline.PositionPercentage);
 		var hourMinuteSecond = rawTimeline.Time.split(":");
-		self.minutes = hourMinuteSecond[0] * 60 + parseInt(hourMinuteSecond[1]);
+		var hour = hourMinuteSecond[0];
+		if (hour.toString() === fullDayHour) {
+			self.minutes = constants.totalMinutesOfOneDay;
+		} else {
+			self.minutes = hourMinuteSecond[0] * 60 + parseInt(hourMinuteSecond[1]);
+		}
+		
 		var timeFromMinutes = moment().startOf("day").add("minutes", self.minutes);
 
 		self.timeText = rawTimeline.TimeLineDisplay;

@@ -257,8 +257,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<WeekScheduleDomainDataProvider>().As<IWeekScheduleDomainDataProvider>().SingleInstance();
 			builder.RegisterType<MonthScheduleDomainDataProvider>().As<IMonthScheduleDomainDataProvider>().SingleInstance();
 			builder.RegisterType<StaffingPossibilityViewModelFactory>().As<IStaffingPossibilityViewModelFactory>().SingleInstance();
-			builder.RegisterType<ScheduleMinMaxTimeSiteOpenHourCalculator>().As<IScheduleMinMaxTimeSiteOpenHourCalculator>().SingleInstance();
-			
+			builder.RegisterType<ScheduleMinMaxTimeCalculator>().As<IScheduleMinMaxTimeCalculator>().SingleInstance();
+			builder.RegisterType<SiteOpenHourProvider>().As<ISiteOpenHourProvider>().SingleInstance(); ;
+			builder.RegisterType<ScheduledSkillOpenHourProvider>().As<IScheduledSkillOpenHourProvider>().SingleInstance(); ;
 		}
 
 		private static void registerTeamScheduleTypes(ContainerBuilder builder)

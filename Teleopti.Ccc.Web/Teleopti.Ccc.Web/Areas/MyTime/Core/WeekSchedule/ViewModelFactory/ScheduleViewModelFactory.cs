@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly IWeekScheduleDomainDataProvider _weekScheduleDomainDataProvider;
 		private readonly IMonthScheduleDomainDataProvider _monthScheduleDomainDataProvider;
 		private readonly IPushMessageProvider _pushMessageProvider;
-		private readonly IScheduleMinMaxTimeSiteOpenHourCalculator _scheduleMinMaxTimeSiteOpenHourCalculator;
+		private readonly IScheduleMinMaxTimeCalculator _scheduleMinMaxTimeCalculator;
 
 
 		public ScheduleViewModelFactory(MonthScheduleViewModelMapper monthMapper,
@@ -29,14 +29,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider,
 			IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider,
 			IPushMessageProvider pushMessageProvider,
-			IScheduleMinMaxTimeSiteOpenHourCalculator scheduleMinMaxTimeSiteOpenHourCalculator)
+			IScheduleMinMaxTimeCalculator scheduleMinMaxTimeCalculator)
 		{
 			_monthMapper = monthMapper;
 			_scheduleViewModelMapper = scheduleViewModelMapper;
 			_weekScheduleDomainDataProvider = weekScheduleDomainDataProvider;
 			_monthScheduleDomainDataProvider = monthScheduleDomainDataProvider;
 			_pushMessageProvider = pushMessageProvider;
-			_scheduleMinMaxTimeSiteOpenHourCalculator = scheduleMinMaxTimeSiteOpenHourCalculator;
+			_scheduleMinMaxTimeCalculator = scheduleMinMaxTimeCalculator;
 		}
 
 		public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var weekDomainData = _weekScheduleDomainDataProvider.GetWeekSchedule(date);
 			if (staffingPossiblityType == StaffingPossiblityType.Overtime)
 			{
-				_scheduleMinMaxTimeSiteOpenHourCalculator.AdjustScheduleMinMaxTime(weekDomainData);
+				_scheduleMinMaxTimeCalculator.AdjustScheduleMinMaxTime(weekDomainData);
 			}
 
 			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			{
 				if (staffingPossiblityType == StaffingPossiblityType.Overtime)
 				{
-					_scheduleMinMaxTimeSiteOpenHourCalculator.AdjustScheduleMinMaxTime(daySchedule);
+					_scheduleMinMaxTimeCalculator.AdjustScheduleMinMaxTime(daySchedule);
 				}
 			}
 			else
