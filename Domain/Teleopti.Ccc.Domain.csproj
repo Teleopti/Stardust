@@ -270,6 +270,7 @@
     <Compile Include="ResourceCalculation\DoubleGuidCombinationKey.cs" />
     <Compile Include="ResourceCalculation\GuidCombinationKey.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCategorizeFinderService.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\AdvanceDaysOffSchedulingServiceOLD.cs" />
     <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\ISchedulingCallback.cs" />
     <Compile Include="Scheduling\Legacy\Commands\Scheduling.cs" />

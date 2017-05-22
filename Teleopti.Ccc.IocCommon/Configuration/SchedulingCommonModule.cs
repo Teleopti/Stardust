@@ -131,6 +131,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<Scheduling>().As<IScheduling>().InstancePerLifetimeScope();
 				builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
 				builder.RegisterType<WorkShiftFilterService>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
+				builder.RegisterType<AdvanceDaysOffSchedulingService>();
 			}
 			else
 			{
@@ -138,6 +139,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<TeamBlockSchedulingOLD>().As<IScheduling>().InstancePerLifetimeScope();
 				builder.RegisterType<RuleSetAccordingToAccessabilityFilterOLD>().As<IRuleSetAccordingToAccessabilityFilter>();
 				builder.RegisterType<WorkShiftFilterServiceOLD>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
+				builder.RegisterType<AdvanceDaysOffSchedulingServiceOLD>();
 			}
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();
@@ -271,9 +273,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftProjectionCacheFilter>().As<IShiftProjectionCacheFilter>().InstancePerLifetimeScope();
 
 			//OptimizationCommand
-
-
-			builder.RegisterType<AdvanceDaysOffSchedulingService>();
 			builder.RegisterType<SkillResolutionProvider>().As<ISkillResolutionProvider>().SingleInstance();
 			builder.RegisterType<SkillIntervalDataDivider>().As<ISkillIntervalDataDivider>().SingleInstance();
 			builder.RegisterType<SkillStaffPeriodToSkillIntervalDataMapper>().As<ISkillStaffPeriodToSkillIntervalDataMapper>().SingleInstance();

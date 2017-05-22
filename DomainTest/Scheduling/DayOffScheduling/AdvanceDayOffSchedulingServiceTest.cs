@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
@@ -14,10 +15,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 {
     [TestFixture]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class AdvanceDaysOffSchedulingServiceTest
     {
         private MockRepository _mock;
-        private AdvanceDaysOffSchedulingService _target;
+        private AdvanceDaysOffSchedulingServiceOLD _target;
         private IAbsencePreferenceScheduler _absencePreferenceScheduler;
         private ITeamBlockMissingDayOffHandler _teamBlockMissingDayOffHandler;
         private ISchedulePartModifyAndRollbackService _rollbackService;
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             _absencePreferenceScheduler = _mock.StrictMock<IAbsencePreferenceScheduler>();
             _teamBlockMissingDayOffHandler = _mock.StrictMock<ITeamBlockMissingDayOffHandler>();
             _teamDayOffScheduler = _mock.StrictMock<ITeamDayOffScheduler>();
-            _target = new AdvanceDaysOffSchedulingService(_absencePreferenceScheduler, _teamDayOffScheduler, _teamBlockMissingDayOffHandler);
+            _target = new AdvanceDaysOffSchedulingServiceOLD(_absencePreferenceScheduler, _teamDayOffScheduler, _teamBlockMissingDayOffHandler);
             _rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
             _matrixList = new List<IScheduleMatrixPro>();
             _schedulingOptions = new SchedulingOptions();
