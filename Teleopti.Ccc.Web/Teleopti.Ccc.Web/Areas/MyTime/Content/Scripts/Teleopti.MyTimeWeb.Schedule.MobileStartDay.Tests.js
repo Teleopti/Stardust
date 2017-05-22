@@ -463,13 +463,13 @@
 		equal(hash, "Requests/Index/ShiftTrade/" + vm.requestDay.format("YYYYMMDD"));
 	});
 
-	//test("should get today by agent's timezone", function () {
-	//	startDayData.BaseUtcOffsetInMinutes = -600;
-	//	Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
-	//	var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-	//	vm.today();
-	//	equal(vm.currentUserDate().format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"));
-	//});
+	test("should get today by agent's timezone", function () {
+		startDayData.BaseUtcOffsetInMinutes = -600;
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.today();
+		equal(vm.currentUserDate().format("YYYY-MM-DD"), moment().zone(-startDayData.BaseUtcOffsetInMinutes).format("YYYY-MM-DD"));
+	});
 
 	test("should show probability toggle by agent's timezone", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
