@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly TeamBlockSchedulingService _teamBlockSchedulingService;
+		private readonly TeamBlockScheduleSelected _teamBlockScheduleSelected;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
 		public Scheduling(Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IResourceCalculation resourceCalculation,
 			IUserTimeZone userTimeZone,
-			TeamBlockSchedulingService teamBlockSchedulingService,
+			TeamBlockScheduleSelected teamBlockScheduleSelected,
 			TeamInfoFactoryFactory teamInfoFactoryFactory)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_resourceCalculation = resourceCalculation;
 			_userTimeZone = userTimeZone;
-			_teamBlockSchedulingService = teamBlockSchedulingService;
+			_teamBlockScheduleSelected = teamBlockScheduleSelected;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
@@ -87,13 +87,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_groupPersonBuilderWrapper, selectedPeriod);
 			_advanceDaysOffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
-			_teamBlockSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-			var workShiftFinderResultHolder = _teamBlockSchedulingService.ScheduleSelected(matrixes, selectedPeriod,
+			_teamBlockScheduleSelected.DayScheduled += schedulingServiceDayScheduled;
+			var workShiftFinderResultHolder = _teamBlockScheduleSelected.ScheduleSelected(matrixes, selectedPeriod,
 				selectedAgents, rollbackService, resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState, schedulingOptions,
 				teamInfoFactory);
-			_teamBlockSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
+			_teamBlockScheduleSelected.DayScheduled -= schedulingServiceDayScheduled;
 
+			//TODO: get rid of _backgroundWorker here...
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents, rollbackService, resourceCalculateDelayer,
 				selectedPeriod, matrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
 

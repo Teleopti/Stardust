@@ -136,6 +136,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AbsencePreferenceScheduling>().InstancePerDependency();
 				builder.RegisterType<TeamDayOffScheduling>().InstancePerDependency();
 				builder.RegisterType<TeamBlockMissingDayOffHandling>();
+				builder.RegisterType<TeamBlockScheduleSelected>().InstancePerLifetimeScope();
 			}
 			else
 			{
@@ -146,6 +147,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AdvanceDaysOffSchedulingServiceOLD>();
 				builder.RegisterType<TeamDayOffScheduler>().As<ITeamDayOffScheduler>().InstancePerDependency();
 				builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();
+				builder.RegisterType<TeamBlockSchedulingService>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();

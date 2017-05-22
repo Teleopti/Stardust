@@ -285,6 +285,7 @@
     <Compile Include="Scheduling\ShiftCreator\ShiftsFromMasterActivityBaseActivityService.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\TeamBlockMissingDayOffHandling.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockScheduleSelected.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamDayOffScheduling.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoExtensions.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftProjectionCachesFilter.cs" />
