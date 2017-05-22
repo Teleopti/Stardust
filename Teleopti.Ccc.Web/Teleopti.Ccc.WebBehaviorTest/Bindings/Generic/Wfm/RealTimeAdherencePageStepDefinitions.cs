@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 	}
 
+	[Binding]
 	public class RealTimeAdherencePageStepDefinitions
 	{
 		[When(@"I click( the)? ([a-z-]*|[a-z]* [a-z]*) of '(.*)'")]
