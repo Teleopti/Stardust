@@ -2,7 +2,7 @@
 {
 	public class NoSchedulingCallback : ISchedulingCallback
 	{
-		public void Scheduling(SchedulingCallbackInfo schedulingCallbackInfo)
+		public void Scheduled(SchedulingCallbackInfo schedulingCallbackInfo)
 		{
 		}
 

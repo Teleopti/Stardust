@@ -2,7 +2,7 @@
 {
 	public interface ISchedulingCallback
 	{
-		void Scheduling(SchedulingCallbackInfo schedulingCallbackInfo);
+		void Scheduled(SchedulingCallbackInfo schedulingCallbackInfo);
 		bool IsCancelled { get; }
 	}
 }

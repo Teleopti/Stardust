@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 	{
 		private readonly IList<SchedulingCallbackInfo> callbacks = new List<SchedulingCallbackInfo>();
 
-		public void Scheduling(SchedulingCallbackInfo callbackInfo)
+		public void Scheduled(SchedulingCallbackInfo callbackInfo)
 		{
 			callbacks.Add(callbackInfo);
 		}

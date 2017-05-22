@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public class SchedulingCallbackForDesktop : ISchedulingCallback
 	{
-		public void Scheduling(SchedulingCallbackInfo schedulingCallbackInfo)
+		public void Scheduled(SchedulingCallbackInfo schedulingCallbackInfo)
 		{
 			//To be fixed
 		}

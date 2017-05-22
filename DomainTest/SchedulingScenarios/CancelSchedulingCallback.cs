@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
 	public class CancelSchedulingCallback : ISchedulingCallback
 	{
-		public void Scheduling(SchedulingCallbackInfo schedulingCallbackInfo)
+		public void Scheduled(SchedulingCallbackInfo schedulingCallbackInfo)
 		{
 			NumberOfScheduleAttempts++;
 		}
