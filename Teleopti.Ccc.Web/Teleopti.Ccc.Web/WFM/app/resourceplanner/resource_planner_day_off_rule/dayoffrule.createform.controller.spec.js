@@ -1,5 +1,5 @@
 'use strict';
-xdescribe('dayoffRuleCreateController', function () {
+describe('dayoffRuleCreateController', function () {
     var $httpBackend,
         $controller,
         $state,

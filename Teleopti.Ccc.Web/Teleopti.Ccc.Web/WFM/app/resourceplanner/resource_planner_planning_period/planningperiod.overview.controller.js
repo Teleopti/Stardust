@@ -27,7 +27,10 @@
     vm.status = '';
     vm.gridOptions = {};
     vm.valData = {
-      scheduleIssues: []
+      totalValNum: 0,
+      totalPreValNum: 0,
+      scheduleIssues: [],
+      preValidation: []
     };
     vm.launchSchedule = launchSchedule;
     vm.intraOptimize = intraOptimize;
@@ -35,6 +38,7 @@
     vm.clearSchedules = clearSchedules;
     vm.isDisable = isDisable;
     vm.openModal = openModal;
+    vm.valNumber = getTotalValidationErrorsNumber;
     vm.textForClearPp = $translate.instant("AreYouSureYouWantToClearPlanningPeriodData")
       .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
       .replace('{1}', moment(vm.selectedPp.EndDate).format('L'));
@@ -74,7 +78,8 @@
         planningPeriodServiceNew.clearSchedules({ id: selectedPpId }).$promise.then(function () {
           vm.clearRunning = false;
           vm.isScheduled = false;
-          init();
+          vm.scheduledAgents = 0;
+          vm.dayNodes = undefined;
           NoticeService.success($translate.instant('SuccessClearPlanningPeriodData')
             .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
             .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), 20000, true);
@@ -215,12 +220,29 @@
             vm.isScheduled = true;
             vm.scheduledAgents = data.ScheduleResult.ScheduledAgentsCount;
             vm.valData.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults;
+            getTotalValidationErrorsNumber();
             initResult(data.OptimizationResult);
             return data;
           } else {
             return vm.isScheduled = false;
           }
         });
+    }
+
+    function getTotalValidationErrorsNumber() {
+      vm.valData.totalValNum = 0;
+      vm.valData.totalPreValNum = 0;
+      var pre = vm.valData.preValidation;
+      var after = vm.valData.scheduleIssues;
+      if (pre.length > 0) {
+        angular.forEach(pre, function (item) {
+          vm.valData.totalPreValNum += item.ValidationErrors.length;
+        });
+      }
+      if (after.length > 0) {
+        vm.valData.totalValNum += after.length;
+      }
+      return vm.valData.totalValNum += vm.valData.totalPreValNum;
     }
 
     function initResult(interResult) {

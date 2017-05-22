@@ -293,15 +293,6 @@ background-color: #cacaca;
 }
 
 //for new rescource planning
-.wfm-tip {
-	text-align: center;
-	border-radius: 6px;
-}
-
-.wfm-tip-header {
-	padding-top: 27px;
-}
-
 .ag-chip {
 	pointer-events: none;
 }
@@ -379,6 +370,15 @@ md-tooltip .md-content {
 	padding: 10px;
 	border-bottom: 1px solid $gray026 ;
 	border-top: 1px solid $gray026 ;
+}
+
+.pp-validation-loading {
+	position: absolute;
+    top: 0;
+}
+
+.pp-validation-loading-text {
+	color: $gray026;
 }
 
 .pp-validation {

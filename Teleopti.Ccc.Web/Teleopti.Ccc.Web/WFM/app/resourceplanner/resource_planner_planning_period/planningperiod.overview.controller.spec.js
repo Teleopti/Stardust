@@ -1,5 +1,5 @@
 'use strict';
-xdescribe('planningPeriodOverviewController', function () {
+describe('planningPeriodOverviewController', function () {
     var $httpBackend,
         $controller,
         $injector,
@@ -10,7 +10,23 @@ xdescribe('planningPeriodOverviewController', function () {
         planningPeriodServiceNew,
         scope,
         vm,
-        stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', ppId: 'a557210b-99cc-4128-8ae0-138d812974b6' };
+        stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', ppId: 'a557210b-99cc-4128-8ae0-138d812974b6' },
+        agentGroupInfo = {
+            Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            Name: "Agent Group Test",
+            Filters: []
+        },
+        selectedPp = {
+            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            StartDate: "2018-06-18T00:00:00",
+            EndDate: "2018-07-15T00:00:00",
+            HasNextPlanningPeriod: true,
+            Id: 'a557210b-99cc-4128-8ae0-138d812974b6',
+            State: "Scheduled",
+            ValidationResult: {
+                InvalidResources: []
+            }
+        };
 
     beforeEach(function () {
         module('wfm.resourceplanner');
@@ -30,31 +46,9 @@ xdescribe('planningPeriodOverviewController', function () {
         spyOn(planningPeriodServiceNew, 'lastJobStatus').and.callThrough();
         spyOn(planningPeriodServiceNew, 'lastIntradayOptimizationJobStatus').and.callThrough();
 
-        $httpBackend.whenGET('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
-            return [200, {
-                Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-                Name: "Agent Group Test",
-                Filters: []
-            }];
-        });
-
         $httpBackend.whenGET('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/countagents?endDate=2018-07-15T00:00:00&startDate=2018-06-18T00:00:00').respond(function (method, url, data, headers) {
             return [200, {
                 TotalAgents: 50
-            }];
-        });
-
-        $httpBackend.whenGET('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6').respond(function (method, url, data, headers) {
-            return [200, {
-                AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-                StartDate: "2018-06-18T00:00:00",
-                EndDate: "2018-07-15T00:00:00",
-                HasNextPlanningPeriod: true,
-                Id: 'a557210b-99cc-4128-8ae0-138d812974b6',
-                State: "Scheduled",
-                ValidationResult: {
-                    InvalidResources: []
-                }
             }];
         });
 
@@ -75,7 +69,7 @@ xdescribe('planningPeriodOverviewController', function () {
         });
 
         scope = $rootScope.$new();
-        vm = $controller('planningPeriodOverviewController as ctrl', { $scope: scope, $stateParams: stateparams });
+        vm = $controller('planningPeriodOverviewController as ctrl', { $scope: scope, $stateParams: stateparams, selectedPp: selectedPp, agentGroupInfo: agentGroupInfo });
         scope.$destroy();
     }));
 
@@ -84,7 +78,7 @@ xdescribe('planningPeriodOverviewController', function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('should cancel the auto statue check when needed', function () {
+    xit('should cancel the auto statue check when needed', function () {
         var result = {}
         fakeBackend.withScheduleResult(result);
         fakeBackend.withIntradayStatus(result);

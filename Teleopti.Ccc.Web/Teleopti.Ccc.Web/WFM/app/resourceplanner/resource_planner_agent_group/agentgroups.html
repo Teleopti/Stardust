@@ -11,13 +11,10 @@
 </div>
 <div class="con-row" ng-if="!vm.hasAg() && vm.agentGroups !== undefined">
 	<div class="con-flex">
-		<div class="panel wfm-tip">
-			<div class="sub-header wfm-tip-header">
-				<h2><i class="mdi mdi-information-outline"></i>{{'HelpCreateAgentGroup' | translate}}</h2>
-			</div>
-			<div class="line-center">
-				<button class="wfm-btn wfm-btn-primary" ng-click="vm.goForm(); start = 1">{{'CreateAgentGroup' | translate}}</button>
-			</div>
+		<div class="line-center">
+			<i class="mdi mdi-information-outline huge-icon line-center"></i>
+			<h2>{{'HelpCreateAgentGroup' | translate}}</h2>
+			<button class="wfm-btn wfm-btn-primary" ng-click="vm.goForm()">{{'CreateAgentGroup' | translate}}</button>
 		</div>
 	</div>
 </div>

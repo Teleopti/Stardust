@@ -1,12 +1,45 @@
 'use strict';
-xdescribe('planningPeriodSelectController', function () {
+describe('planningPeriodSelectController', function () {
     var $httpBackend,
         $controller,
         $injector,
         fakeBackend,
         planningPeriodServiceNew,
         vm,
-        stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' };
+        stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' },
+        agentGroupInfo = {
+            Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            Name: "Agent Group Test",
+            Filters: []
+        },
+        planningPeriods = [{
+            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            StartDate: "2018-07-16T00:00:00",
+            EndDate: "2018-08-04T00:00:00",
+            HasNextPlanningPeriod: false,
+            Id: '3ccd5519-8c92-4c2b-a75c-793ec9f7da56',
+            State: "New",
+            ValidationResult: null
+        }, {
+            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            StartDate: "2018-06-18T00:00:00",
+            EndDate: "2018-07-15T00:00:00",
+            HasNextPlanningPeriod: true,
+            Id: 'a557210b-99cc-4128-8ae0-138d812974b6',
+            State: "Scheduled",
+            ValidationResult: {
+                InvalidResources: []
+            }
+        }],
+        planningPeriodOnlyFirst = [{
+            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            StartDate: "2018-07-16T00:00:00",
+            EndDate: "2018-08-04T00:00:00",
+            HasNextPlanningPeriod: false,
+            Id: '3ccd5519-8c92-4c2b-a75c-793ec9f7da56',
+            State: "New",
+            ValidationResult: null
+        }];
 
     beforeEach(function () {
         module('wfm.resourceplanner');
@@ -20,18 +53,9 @@ xdescribe('planningPeriodSelectController', function () {
 
         fakeBackend.clear();
 
-        spyOn(planningPeriodServiceNew, 'getPlanningPeriodsForAgentGroup').and.callThrough();
         spyOn(planningPeriodServiceNew, 'nextPlanningPeriod').and.callThrough();
         spyOn(planningPeriodServiceNew, 'deleteLastPlanningPeriod').and.callThrough();
         spyOn(planningPeriodServiceNew, 'changeEndDateForLastPlanningPeriod').and.callThrough();
-
-        $httpBackend.whenGET('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
-            return [200, {
-                Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-                Name: "Agent Group Test",
-                Filters: []
-            }];
-        });
 
         $httpBackend.whenPUT('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-09-30&startDate=2018-09-01').respond(function (method, url, data, headers) {
             return [200, [{
@@ -65,8 +89,7 @@ xdescribe('planningPeriodSelectController', function () {
             return [200, []];
         });
 
-        vm = $controller('planningPeriodSelectController', { $stateParams: stateparams });
-
+        vm = $controller('planningPeriodSelectController', { $stateParams: stateparams, agentGroupInfo: agentGroupInfo, planningPeriods: planningPeriods });
     }));
 
     afterEach(function () {
@@ -74,29 +97,7 @@ xdescribe('planningPeriodSelectController', function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('should get planning periods by agent group id', function () {
-        fakeBackend.withPlanningPeriods({
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            StartDate: "2018-06-18T00:00:00",
-            EndDate: "2018-07-15T00:00:00",
-            HasNextPlanningPeriod: true,
-            Id: 'a557210b-99cc-4128-8ae0-138d812974b6',
-            State: "Scheduled",
-            ValidationResult: {
-                InvalidResources: []
-            }
-        }).withPlanningPeriods({
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            StartDate: "2018-07-16T00:00:00",
-            EndDate: "2018-08-04T00:00:00",
-            HasNextPlanningPeriod: false,
-            Id: '3ccd5519-8c92-4c2b-a75c-793ec9f7da56',
-            State: "New",
-            ValidationResult: null
-        });
-        $httpBackend.flush();
-
-        expect(planningPeriodServiceNew.getPlanningPeriodsForAgentGroup).toHaveBeenCalledWith({ agentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' });
+    it('should get planning periods by agent group id before controller is loaded', function () {
         expect(vm.planningPeriods.length).toEqual(2);
     });
 
@@ -115,25 +116,21 @@ xdescribe('planningPeriodSelectController', function () {
     });
 
     it('should modify date for last planning period and only planning period', function () {
-        fakeBackend.withPlanningPeriods({
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            StartDate: "2018-07-16T00:00:00",
-            EndDate: "2018-08-04T00:00:00",
-            HasNextPlanningPeriod: false,
-            Id: '3ccd5519-8c92-4c2b-a75c-793ec9f7da56',
-            State: "New",
-            ValidationResult: null
+        vm = $controller('planningPeriodSelectController', {
+            $stateParams: stateparams,
+            agentGroupInfo: agentGroupInfo,
+            planningPeriods: planningPeriodOnlyFirst
         });
-        $httpBackend.flush();
-
         vm.getLastPp(vm.planningPeriods[0]);
         vm.lastPp = {
             startDate: moment('2018-09-01T00:00:00').toDate(),
             endDate: moment('2018-09-30T00:00:00').toDate()
         };
         vm.changeDateForLastPp(vm.lastPp);
+
         $httpBackend.flush();
 
+        expect(vm.planningPeriods.length).toEqual(1);
         expect(planningPeriodServiceNew.changeEndDateForLastPlanningPeriod).toHaveBeenCalledWith({
             agentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             startDate: '2018-09-01',
@@ -142,27 +139,6 @@ xdescribe('planningPeriodSelectController', function () {
     });
 
     it('should modify date for last planning period and it is not the only planning period', function () {
-        fakeBackend.withPlanningPeriods({
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            StartDate: "2018-06-18T00:00:00",
-            EndDate: "2018-07-15T00:00:00",
-            HasNextPlanningPeriod: true,
-            Id: 'a557210b-99cc-4128-8ae0-138d812974b6',
-            State: "Scheduled",
-            ValidationResult: {
-                InvalidResources: []
-            }
-        }).withPlanningPeriods({
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            StartDate: "2018-07-16T00:00:00",
-            EndDate: "2018-08-04T00:00:00",
-            HasNextPlanningPeriod: false,
-            Id: '3ccd5519-8c92-4c2b-a75c-793ec9f7da56',
-            State: "New",
-            ValidationResult: null
-        });
-        $httpBackend.flush();
-
         vm.getLastPp(vm.planningPeriods[1]);
         vm.lastPp = {
             startDate: moment('2018-07-16T00:00:00').toDate(),
@@ -173,7 +149,7 @@ xdescribe('planningPeriodSelectController', function () {
 
         expect(planningPeriodServiceNew.changeEndDateForLastPlanningPeriod).toHaveBeenCalledWith({
             agentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            startDate: null, 
+            startDate: null,
             endDate: '2018-07-30'
         });
     });

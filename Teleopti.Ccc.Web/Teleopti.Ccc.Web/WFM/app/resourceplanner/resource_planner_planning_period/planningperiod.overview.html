@@ -88,11 +88,12 @@
 				</md-tab>
 				<md-tab>
 					<md-tab-label>
-						<span translate>Validation</span>
+						<span class="pp-validation-loading" ng-if="vm.valLoading"><md-progress-circular md-mode="indeterminate"></md-progress-circular></span>
+						<span translate ng-class="{'pp-validation-loading-text':vm.valLoading}">Validation</span>
 						<span class="pp-validation" ng-if="vm.valData.totalValNum > 0" ng-bind="vm.valData.totalValNum"></span>
 					</md-tab-label>
 					<md-tab-body class="md-padding">
-						<div pp-validation val-data="vm.valData"></div>
+						<div pp-validation val-data="vm.valData" val-loading="vm.valLoading" val-number="vm.valNumber()"></div>
 					</md-tab-body>
 				</md-tab>
 				<md-tab>
@@ -135,4 +136,3 @@
 		</div>
 	</div>
 </div>
-

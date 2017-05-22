@@ -1,6 +1,10 @@
-<div class="con-row" ng-show="vm.valData.preValidation.length == 0 && vm.valData.scheduleIssues.length == 0 ">
+<div class="con-row" ng-show="vm.valData.totalValNum == 0 ">
     <div class="con-flex">
-        <span><i class="mdi mdi-information-outline"></i>{{'NoValidIssuesForPp' | translate}}</span>
+        <span ng-if="!vm.valLoading"><i class="mdi mdi-information-outline"></i>{{'NoValidIssuesForPp' | translate}}</span>
+        <span ng-if="vm.valLoading" class="text-warning">
+            <i class="mdi mdi-alert"></i>
+            Loading validation issues...
+        </span>
     </div>
 </div>
 <wfm-card-list multi-select>
@@ -13,10 +17,6 @@
                         <i class="mdi mdi-refresh"></i>
                         <md-tooltip> {{'RefreshPreSchedulingValidationIssues' | translate}}</md-tooltip>
                     </div>
-                </span>
-                <span ng-if="vm.message" class="text-warning">
-                    <i class="mdi mdi-alert"></i>
-                    {{vm.message}}
                 </span>
                 <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
                 <span class="pull-right">{{vm.valData.totalPreValNum}} {{'IssuesText' | translate}}</span>
@@ -59,7 +59,7 @@
     <wfm-card ng-show="vm.valData.scheduleIssues.length > 0">
         <card-header tabindex="-1" ng-click="vm.scheduleIssuesFilter = ''">
             <div tabindex="0">
-                <span><i class="mdi"></i>{{'ScheduledIssues' | translate}}</span> 
+                <span><i class="mdi"></i>{{'ScheduledIssues' | translate}}</span>
                 <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
                 <span class="pull-right">{{vm.valData.scheduleIssues.length}} {{'IssuesText' | translate}}</span>
             </div>
