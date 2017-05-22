@@ -21,7 +21,6 @@
 				async-datasource="vm.sitesAndTeamsAsync()"
 				class="organization-picker-container"
 				on-open="vm.searchOptions.focusingSearch = false"
-				on-init-async="vm.onSelectedTeamsInitDefer"
 				on-pick="vm.onSelectedTeamsChanged(teams)"
 				preselected-team-ids="vm.selectedTeamIds"></organization-picker>
 

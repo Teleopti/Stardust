@@ -366,29 +366,36 @@
 		};
 
 		vm.boostrap = bootstrapCommon.ready();
-		vm.onSelectedTeamsInitDefer = $q.defer();
+		var loggedonUsersTeamId = $q.defer();
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
 		var asyncData = {
 			pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
-			defaultTeams: vm.onSelectedTeamsInitDefer.promise,
+			loggedonUsersTeamId: loggedonUsersTeamId.promise,
 			defaultFavoriteSearch: vm.onFavoriteSearchInitDefer.promise
 		};
 
 		if (!vm.searchEnabled) {
-			vm.onSelectedTeamsInitDefer.resolve();
+			loggedonUsersTeamId.resolve(null);
 			vm.onFavoriteSearchInitDefer.resolve();
 		}
 		if (!(vm.toggles.SaveFavoriteSearchesEnabled)) {
 			vm.onFavoriteSearchInitDefer.resolve();
 		}
 		if (!vm.toggles.DisplayScheduleOnBusinessHierachyEnabled) {
-			vm.onSelectedTeamsInitDefer.resolve();
+			loggedonUsersTeamId.resolve(null);
 		}
 
 		vm.sitesAndTeamsAsync = function () {
-			return (vm._sitesAndTeamsPromise ||
-				(vm._sitesAndTeamsPromise = teamScheduleSvc.hierarchy(moment(vm.scheduleDate).format('YYYY-MM-DD'))));
+			vm._sitesAndTeamsPromise = vm._sitesAndTeamsPromise || $q(function (resolve, reject) {
+				var date = moment(vm.scheduleDate).format('YYYY-MM-DD');
+				teamScheduleSvc.hierarchy(date)
+					.then(function (data) {
+						resolve(data);
+						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
+					});
+			});
+			return vm._sitesAndTeamsPromise;
 		};
 
 		$q.all(asyncData).then(function init(data) {
@@ -397,14 +404,16 @@
 			}
 
 			var defaultFavoriteSearch = data.defaultFavoriteSearch;
-			var defaultTeams = data.defaultTeams;
+			var loggedonUsersTeamId = data.loggedonUsersTeamId;
 
-			if (!$stateParams.do && defaultFavoriteSearch) {
-				vm.selectedTeamIds = defaultFavoriteSearch.TeamIds;
-				vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
-				vm.selectedFavorite = defaultFavoriteSearch;
-			} else if (!$stateParams.do && defaultTeams) {
-				vm.selectedTeamIds = defaultTeams;
+			if (!$stateParams.do) {
+				if (defaultFavoriteSearch) {
+					vm.selectedTeamIds = defaultFavoriteSearch.TeamIds;
+					vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
+					vm.selectedFavorite = defaultFavoriteSearch;
+				} else if (loggedonUsersTeamId && vm.selectedTeamIds.length === 0) {
+					vm.selectedTeamIds = [loggedonUsersTeamId];
+				}
 			}
 
 			vm.resetSchedulePage();

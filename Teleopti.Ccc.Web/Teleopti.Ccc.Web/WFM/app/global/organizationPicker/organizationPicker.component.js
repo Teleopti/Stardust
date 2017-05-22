@@ -17,7 +17,6 @@
 				preselectedTeamIds: '<?',
 				onOpen: '&',
 				onPick: '&',
-				onInitAsync: '<?',
 				asyncDatasource: '&',
 			}
 		});
@@ -59,14 +58,6 @@
 					ctrl.selectedTeamIds = angular.copy(ctrl.preselectedTeamIds);
 
 					updateAllSiteSelection();
-
-					if (ctrl.onInitAsync) {
-						if (ctrl.selectedTeamIds.length > 0) {
-							ctrl.onInitAsync.resolve(angular.copy(ctrl.selectedTeamIds));
-						} else {
-							ctrl.onInitAsync.resolve();
-						}
-					}
 
 				});
 		};

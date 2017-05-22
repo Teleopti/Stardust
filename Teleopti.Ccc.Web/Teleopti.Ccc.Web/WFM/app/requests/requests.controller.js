@@ -38,22 +38,28 @@
 		var absenceRequestTabIndex = 0;
 		var shiftTradeRequestTabIndex = 1;
 		vm.selectedTeamIds = [];
-		vm.defaultTeamLoadedDefer = $q.defer();
+		var loggedonUsersTeamId = $q.defer();
 		if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
-			vm.defaultTeamLoadedDefer.resolve();
+			loggedonUsersTeamId.resolve(null);
 		}
 
 		vm.sitesAndTeamsAsync = function () {
-			return (vm._sitesAndTeamsPromise ||
-				(vm._sitesAndTeamsPromise = requestsDataService.hierarchy(moment().format('YYYY-MM-DD'))));
+			vm._sitesAndTeamsPromise = vm._sitesAndTeamsPromise || $q(function (resolve, reject) {
+				var date = moment().format('YYYY-MM-DD');
+				requestsDataService.hierarchy(date).then(function (data) {
+					resolve(data);
+					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
+				});
+			});
+			return vm._sitesAndTeamsPromise;
 		};
 
 		$q.all([toggleService.togglesLoaded])
 			.then(FavoriteSearchSvc.hasPermission().then(function(response){
 				vm.hasFavoriteSearchPermission = response.data;
 			}))
-			.then(vm.defaultTeamLoadedDefer.promise.then(function (defaultTeam) {
-				vm.selectedTeamIds = defaultTeam || [];
+			.then(loggedonUsersTeamId.promise.then(function (defaultTeam) {
+				vm.selectedTeamIds = (angular.isString(defaultTeam) && defaultTeam.length > 0) ? [defaultTeam] : [];
 				if(vm.businessHierarchyToggleEnabled && (!vm.saveFavoriteSearchesToggleEnabled || !vm.hasFavoriteSearchPermission)){
 					$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword});
 				}
