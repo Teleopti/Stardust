@@ -9,7 +9,7 @@
     "webpack": ".\\node_modules\\.bin\\webpack",
     "iis": " c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
     "start": "start http://localhost:52858/TeleoptiWFM/Web/ && npm run iis",
-    "ng-templates": "nghtml2js -m wfm.templates -o ./dist/templates.js --no-new-module -f [[app/**/*.html],[html/**/*.html]]"
+    "ng-templates": "nghtml2js -m wfm.templates -o ./dist/templates.js -f [[app/**/*.html],[html/**/*.html]]"
   },
   "author": "Teleopti",
   "license": "ISC",
