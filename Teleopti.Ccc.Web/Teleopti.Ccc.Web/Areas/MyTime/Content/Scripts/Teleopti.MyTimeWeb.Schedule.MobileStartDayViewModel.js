@@ -124,9 +124,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		if(rawPeriods && rawPeriods.length > 0){
 			var layers = rawPeriods.map(function (item, index) {
 				var layer = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, true);
-				layer.isLastLayer = false;
-				if(index == rawPeriods.length - 1)
-					layer.isLastLayer = true;
+				layer.isLastLayer = index == rawPeriods.length - 1;
 				return layer;
 			});
 			self.layers(layers);

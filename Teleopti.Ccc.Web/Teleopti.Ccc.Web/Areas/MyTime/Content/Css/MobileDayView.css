@@ -147,7 +147,7 @@
 	cursor: pointer;
 	z-index: 1002;
 	max-height: 100%;
-	overflow-y: scroll;
+	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 }
 .mobile-add-request-form .well{
