@@ -1806,7 +1806,7 @@
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <Import Project="$(SolutionDir)packages\SpecFlow.2.1.0\tools\TechTalk.SpecFlow.targets"/>
+  <Import Project="$(SolutionDir)\packages\SpecFlow.2.1.0\tools\TechTalk.SpecFlow.targets"/>
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)Teleopti.Ccc.TestCommon\Web\WebInteractions\iisexpress.config" "$(TargetDir)iisexpress.config"
 copy "$(SolutionDir)packages\Selenium.WebDriver.2.53.0\lib\net40\webdriver.dll" "$(TargetDir)webdriver.dll"
