@@ -713,6 +713,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
 		}
 
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldNotAdjustTimeLineBySkillOpenHoursWhenStaffingDataIsNotAvailableForTheDay()
+		{
+			var skill = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			User.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var assignmentDate = new DateOnly(2015, 1, 2);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), assignmentDate);
+			var period1 = new DateTimePeriod(new DateTime(2015, 1, 2, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2015, 1, 2, 9, 45, 0, DateTimeKind.Utc));
+			assignment.AddActivity(skill.Activity, period1);
+
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(assignmentDate, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(9);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+		}
 
 		private static ISkill createSkillWithOpenHours(TimeSpan start, TimeSpan end)
 		{

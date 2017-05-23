@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
 using Teleopti.Interfaces.Domain;
 
@@ -13,23 +10,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	public class StaffingPossibilityViewModelFactory : IStaffingPossibilityViewModelFactory
 	{
 		private readonly IScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
-		private readonly INow _now;
-		private readonly IToggleManager _toggleManager;
-		private readonly ILoggedOnUser _user;
+		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
 
 		public StaffingPossibilityViewModelFactory(
-			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator, INow now, IToggleManager toggleManager, ILoggedOnUser user)
+			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator,
+			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider)
 		{
 			_scheduleStaffingPossibilityCalculator = scheduleStaffingPossibilityCalculator;
-			_now = now;
-			_toggleManager = toggleManager;
-			_user = user;
+			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
 		}
 
 		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
 			StaffingPossiblityType staffingPossiblityType, bool returnOneWeekData)
 		{
-			var period = getAvailablePeriod(startDate, returnOneWeekData);
+			var period = _staffingDataAvailablePeriodProvider.GetPeriod(startDate, returnOneWeekData);
 			if (!period.HasValue) return new PeriodStaffingPossibilityViewModel[] { };
 			switch (staffingPossiblityType)
 			{
@@ -61,23 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					}).OrderBy(x => x.StartTime));
 			}
 			return periodStaffingPossibilityViewModels;
-		}
-
-		private DateOnlyPeriod? getAvailablePeriod(DateOnly date, bool returnOneWeekData)
-		{
-			var period = date.ToDateOnlyPeriod();
-			if (returnOneWeekData)
-			{
-				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
-			}
-			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),_user.CurrentUser().PermissionInformation.DefaultTimeZone()));
-			var maxEndDate = today;
-			if (_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880))
-			{
-				maxEndDate = today.AddDays(ScheduleStaffingPossibilityConsts.MaxAvailableDays);
-			}
-			var availablePeriod = new DateOnlyPeriod(today, maxEndDate);
-			return availablePeriod.Intersection(period);
 		}
 	}
 }
