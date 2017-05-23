@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
-		[RemoveMeWithToggle("Remove param backgroundworker", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
