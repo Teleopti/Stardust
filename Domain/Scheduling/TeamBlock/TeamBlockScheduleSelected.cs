@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public IWorkShiftFinderResultHolder ScheduleSelected(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+		public void ScheduleSelected(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedPersons,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
@@ -46,8 +46,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			SchedulingOptions schedulingOption,
 			ITeamInfoFactory teamInfoFactory)
 		{
-			var workShiftFinderResultHolder = new WorkShiftFinderResultHolder();
-
 			void DayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 			{
 				schedulingCallback.Scheduled(new SchedulingCallbackInfo(e.SchedulePart, e.IsSuccessful));
@@ -66,14 +64,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				var checkedTeams = _teamMatrixChecker.CheckTeamList(allTeamInfoListOnStartDate, selectedPeriod);
 
-				foreach (var teamInfo in checkedTeams.BannedList)
-				{
-					foreach (var member in teamInfo.GroupMembers)
-					{
-						workShiftFinderResultHolder.AddFilterToResult(member, datePointer, Resources.AllTeamMembersMustBeLoaded);
-					}
-				}
-
 				runSchedulingForAllTeamInfoOnStartDate(schedulingCallback, allPersonMatrixList, selectedPersons, selectedPeriod,
 					schedulePartModifyAndRollbackService,
 					checkedTeams.OkList, datePointer, dateOnlySkipList,
@@ -81,7 +71,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 
 			_teamBlockScheduler.DayScheduled -= DayScheduled;
-			return workShiftFinderResultHolder;
 		}
 
 		private void runSchedulingForAllTeamInfoOnStartDate(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
