@@ -124,27 +124,32 @@
 		</div>
 		
 		<div class="mobile-schedule-container relative" data-bind="style: {height: scheduleHeight}">
-			<!-- ko foreach: layers -->
-			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
-				<div data-bind="visible: showTitle()">
-					<strong data-bind="text: title()"></strong>
-					<!-- ko if: hasMeeting -->
-					<div class="meeting floatright">
-						<i class="meeting-icon mr10">
-							<i class="glyphicon glyphicon-user ml10"></i>
-						</i>
-					</div>
-					<!-- /ko -->
-					<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
-				</div>
-			</div>
+			<!-- ko if: isLoading -->
+			<img class="data-loading-gif" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="...">
 			<!-- /ko -->
-			<!-- ko if: showProbabilityOptionsToggleIcon || probabilities().length > 0 -->
-			<div class="probability-vertical-bar">
-				<!--ko foreach: probabilities-->
-				<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, placement: 'left', trigger: 'click'}, style: styleJson, hideTooltipAfterMouseLeave: true"></div>
+			<!-- ko if: !isLoading() -->
+				<!-- ko foreach: layers-->
+				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
+					<div data-bind="visible: showTitle()">
+						<strong data-bind="text: title()"></strong>
+						<!-- ko if: hasMeeting -->
+						<div class="meeting floatright">
+							<i class="meeting-icon mr10">
+								<i class="glyphicon glyphicon-user ml10"></i>
+							</i>
+						</div>
+						<!-- /ko -->
+						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
+					</div>
+				</div>
 				<!-- /ko -->
-			</div>
+				<!-- ko if: showProbabilityOptionsToggleIcon || probabilities().length > 0 -->
+				<div class="probability-vertical-bar">
+					<!--ko foreach: probabilities-->
+					<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, placement: 'left', trigger: 'click'}, style: styleJson, hideTooltipAfterMouseLeave: true"></div>
+					<!-- /ko -->
+				</div>
+				<!-- /ko -->
 			<!-- /ko -->
 		</div>
 	</div>

@@ -100,6 +100,10 @@
 	display: inline-block;
 	width: calc(100% - 36px);
 }
+.mobile-schedule-container  .data-loading-gif{
+	margin: 100px auto;
+	display: block;
+}
 .mobile-start-day .mobile-schedule-layer {
 	text-align: center;
 	overflow: hidden;

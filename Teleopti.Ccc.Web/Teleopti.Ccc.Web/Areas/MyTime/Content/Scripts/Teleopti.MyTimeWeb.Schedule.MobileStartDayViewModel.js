@@ -72,6 +72,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.userNowInMinute = ko.observable(0);
 	self.userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 	self.siteOpenHourPeriod = null;
+	self.isLoading = ko.observable(false);
 
 	self.navigateToMessages = function () {
 		Teleopti.MyTimeWeb.Portal.NavigateTo("MessageTab");
@@ -157,6 +158,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 		setPostShiftTradeMenuVisibility(data);
 		self.currentUserDate(getCurrentUserDate());
+		self.isLoading(false);
 	};
 
 	function setPostShiftTradeMenuVisibility(data) {

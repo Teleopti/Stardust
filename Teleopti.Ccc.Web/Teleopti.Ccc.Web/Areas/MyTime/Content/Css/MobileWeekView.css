@@ -35,7 +35,8 @@
 	display: flex;
 }
 .probability-toggle-container > a > span{
-	min-width: 20px;
+	height: 20px;
+	width: 20px;
 }
 .probability-toggle-container .absence-probability-label,
 .probability-toggle-container .overtime-probability-label {
