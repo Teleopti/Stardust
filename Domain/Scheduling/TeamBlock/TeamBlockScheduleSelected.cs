@@ -48,14 +48,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ITeamInfoFactory teamInfoFactory)
 		{
 			var workShiftFinderResultHolder = new WorkShiftFinderResultHolder();
-			var cancelMe = false;
-			EventHandler<SchedulingServiceBaseEventArgs> dayScheduled = (sender, e) =>
+
+			void DayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 			{
 				schedulingCallback.Scheduled(new SchedulingCallbackInfo(e.SchedulePart, e.IsSuccessful));
-				cancelMe = schedulingCallback.IsCancelled;
-			};
+			}
 
-			_teamBlockScheduler.DayScheduled += dayScheduled;
+			_teamBlockScheduler.DayScheduled += DayScheduled;
 			if (schedulePartModifyAndRollbackService == null)
 			{
 				return workShiftFinderResultHolder;
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var dateOnlySkipList = new List<DateOnly>();
 			foreach (var datePointer in selectedPeriod.DayCollection())
 			{
-				if (cancelMe) break;
+				if (schedulingCallback.IsCancelled) break;
 
 				if (dateOnlySkipList.Contains(datePointer))
 					continue;
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption);
 			}
 
-			_teamBlockScheduler.DayScheduled -= dayScheduled;
+			_teamBlockScheduler.DayScheduled -= DayScheduled;
 			return workShiftFinderResultHolder;
 		}
 
