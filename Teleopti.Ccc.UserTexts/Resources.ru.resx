@@ -11673,10 +11673,10 @@ Teleopti R&amp;D</value>
     <value>Для этих навыков отсутствует прогноз</value>
   </data>
   <data name="NextPlanningPeriodMessage" xml:space="preserve">
-    <value>Следующий период планирования будет с</value>
+    <value>Следующий планируемый период будет с</value>
   </data>
   <data name="PlanningPeriodMissingMessage" xml:space="preserve">
-    <value>Следующие требования отсутствуют для планирования периода:</value>
+    <value>Следующие требования отсутствуют для планируемого периода:</value>
   </data>
   <data name="showMoreHeaderFields" xml:space="preserve">
     <value>Больше заголовков</value>
@@ -11685,10 +11685,10 @@ Teleopti R&amp;D</value>
     <value>Соблюдение графика не может быть пустым</value>
   </data>
   <data name="NextPlanningPeriod" xml:space="preserve">
-    <value>Следующий период планирования</value>
+    <value>Следующий планируемый период</value>
   </data>
   <data name="PlanningPeriod" xml:space="preserve">
-    <value>Период планирования</value>
+    <value>Планируемый период</value>
   </data>
   <data name="DaysAreScheduled" xml:space="preserve">
     <value>дни запланированы</value>
@@ -11733,7 +11733,7 @@ Teleopti R&amp;D</value>
     <value>Прогнозируемый период не может быть более 1 года</value>
   </data>
   <data name="ChangePlanningPeriodTo" xml:space="preserve">
-    <value>Изменить период планирования на</value>
+    <value>Изменить планируемый период на</value>
   </data>
   <data name="HavingRangeOf" xml:space="preserve">
     <value>имеющий диапазон в </value>
@@ -12240,7 +12240,7 @@ Teleopti R&amp;D</value>
     <value>Доступ запрещен!</value>
   </data>
   <data name="CreateAndManagePlanningPeriods" xml:space="preserve">
-    <value>Создать и настроить разные периоды планирования</value>
+    <value>Создать и настроить разные планируемые периоды</value>
   </data>
   <data name="Default" xml:space="preserve">
     <value>По умолчанию</value>
@@ -12249,7 +12249,7 @@ Teleopti R&amp;D</value>
     <value>Период запланирован</value>
   </data>
   <data name="PlanningPeriods" xml:space="preserve">
-    <value>Периоды планирования</value>
+    <value>Планируемые периоды</value>
   </data>
   <data name="SelectedFiltersColon" xml:space="preserve">
     <value>Выбранные фильтры:</value>
@@ -12531,7 +12531,7 @@ Teleopti R&amp;D</value>
     <value>Неверные размеры! Предполагается изображение меньше, чем 2000х4000.</value>
   </data>
   <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
-    <value>Период планирования будет с</value>
+    <value>Планируемый период будет с</value>
   </data>
   <data name="AppliedFilters" xml:space="preserve">
     <value>Настройки применены для:</value>
@@ -13809,5 +13809,302 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   </data>
   <data name="NoInput" xml:space="preserve">
     <value>Нет исходных данных</value>
+  </data>
+  <data name="ColumnCanNotBeEmpty" xml:space="preserve">
+    <value>Столбец '{0}' не может быть пустым</value>
+  </data>
+  <data name="ANewImportJobHasBeenCreatedFor" xml:space="preserve">
+    <value>Была создана новая задача импорта для '{0}'</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForFullSuccess" xml:space="preserve">
+    <value>{0} импортировано успешно.</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForNonfullSuccess" xml:space="preserve">
+    <value>{0} импортировано. {1} не удалось.</value>
+  </data>
+  <data name="ImportJob" xml:space="preserve">
+    <value>Задача импорта</value>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>В процессе</value>
+  </data>
+  <data name="TimeStarted" xml:space="preserve">
+    <value>Время начала</value>
+  </data>
+  <data name="InvalidParameters" xml:space="preserve">
+    <value>Неверные параметры</value>
+  </data>
+  <data name="NumberOfRowsExceedsTheMaximum" xml:space="preserve">
+    <value>Количество строк превышает максимум ({0}).</value>
+  </data>
+  <data name="DynamicGroupPageColon" xml:space="preserve">
+    <value>Динамическое группирование*:</value>
+  </data>
+  <data name="ForecastedVolume" xml:space="preserve">
+    <value>Спрогнозированный объем</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Объем</value>
+  </data>
+  <data name="ExceedsMaximumUploadFileSize" xml:space="preserve">
+    <value>Загружаемый файл превышает максимальный объем</value>
+  </data>
+  <data name="ActualVolume" xml:space="preserve">
+    <value>Фактический объем</value>
+  </data>
+  <data name="ForecastedAverageHandlingTime" xml:space="preserve">
+    <value>Спрогнозированное среднее время обработки</value>
+  </data>
+  <data name="ErrorOccurredWhenGeneratingQrcode" xml:space="preserve">
+    <value>Произошла ошибка при создании QR-кода</value>
+  </data>
+  <data name="ActualAverageHandlingTime" xml:space="preserve">
+    <value>Фактическое среднее время обработки</value>
+  </data>
+  <data name="FilterRtaFull" xml:space="preserve">
+    <value>Фильтр имен / сайтов / групп / правил / состояний / текущих активностей</value>
+  </data>
+  <data name="FilterRtaShort" xml:space="preserve">
+    <value>Фильтр имен / состояний / ...</value>
+  </data>
+  <data name="FilterSites" xml:space="preserve">
+    <value>Фильтр сайтов</value>
+  </data>
+  <data name="FilterSkills" xml:space="preserve">
+    <value>Фильтр навыков</value>
+  </data>
+  <data name="Purged" xml:space="preserve">
+    <value>Очищено</value>
+  </data>
+  <data name="DeletedContractAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Контракт {0}, присвоенный этому оператору, был удален</value>
+  </data>
+  <data name="DeletedContractScheduleAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Расписание по контракту {0}, присвоенное этому оператору, было удалено</value>
+  </data>
+  <data name="DeletedPartTimePercentageAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Процент неполной занятости {0}, присвоенный этому оператору, был удален</value>
+  </data>
+  <data name="DeletedShiftBagAssignedForPlanningPeriod" xml:space="preserve">
+    <value>Контейнер смен {0}, присвоенный этому оператору, был удален</value>
+  </data>
+  <data name="MissingPersonPeriodForPlanningPeriod" xml:space="preserve">
+    <value>Этот оператор не имеет персонального периода на часть или полный период планирования</value>
+  </data>
+  <data name="MissingSchedulePeriodForPlanningPeriod" xml:space="preserve">
+    <value>Этот оператор не имеет периода планирования</value>
+  </data>
+  <data name="MissingShiftBagForPlanningPeriod" xml:space="preserve">
+    <value>Этот оператор не имеет контейнера смен на часть или весь планируемый период</value>
+  </data>
+  <data name="MissingSkillsForPlanningPeriod" xml:space="preserve">
+    <value>Этот оператор не имеет навыков на часть или весь планируемый период</value>
+  </data>
+  <data name="NoFullSchedulePeriod" xml:space="preserve">
+    <value>Период планирования не соответствует текущему</value>
+  </data>
+  <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
+    <value>Оператор имеет {0} дня(-дней) без расписания.</value>
+  </data>
+  <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
+    <value>Целевое время контракта {0} не выполнено</value>
+  </data>
+  <data name="EmailSkillSelected" xml:space="preserve">
+    <value>Сейчас выбран навык email. Поэтому % потерянных не может быть отображен.</value>
+  </data>
+  <data name="AgentsHaveScheduled" xml:space="preserve">
+    <value>операторы запланированы</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheAgentGroup" xml:space="preserve">
+    <value>Удалить группирование '{0}' и все его настройки?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
+    <value>Удалить правило выходных дней {0} и все его настройки?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningPeriod" xml:space="preserve">
+    <value>Удалить планируемый период {0}-{1} и все его настройки?</value>
+  </data>
+  <data name="ChangePlanningDuration" xml:space="preserve">
+    <value>Изменить продолжительность периода</value>
+  </data>
+  <data name="CreateAgentGroup" xml:space="preserve">
+    <value>Создать группу операторов</value>
+  </data>
+  <data name="CreateFirstPlanningPeriod" xml:space="preserve">
+    <value>Создать первый планируемый период</value>
+  </data>
+  <data name="CreateNextPp" xml:space="preserve">
+    <value>Создать следующий планируемый период</value>
+  </data>
+  <data name="DayOffRule" xml:space="preserve">
+    <value>Правило выходных дней</value>
+  </data>
+  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
+    <value>Следующие настройки применены к группе операторов {0}</value>
+  </data>
+  <data name="DayOffRuleSetting" xml:space="preserve">
+    <value>Настройки правил выходных дней</value>
+  </data>
+  <data name="DeleteAgentGroup" xml:space="preserve">
+    <value>Удалить группу операторов</value>
+  </data>
+  <data name="DeleteDayOffRule" xml:space="preserve">
+    <value>Удалить правило выходных дней</value>
+  </data>
+  <data name="DeletePlanningPeriod" xml:space="preserve">
+    <value>Удалить планируемый период</value>
+  </data>
+  <data name="EditAgentGroup" xml:space="preserve">
+    <value>Изменить группу операторов</value>
+  </data>
+  <data name="FilterValidationIssues" xml:space="preserve">
+    <value>Фильтр ошибок проверки</value>
+  </data>
+  <data name="HelpCreateAgentGroup" xml:space="preserve">
+    <value>Требуется группа операторов для планирования. Создать?</value>
+  </data>
+  <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
+    <value>Правила выходных дней будут применены ко всем планируемым периодам</value>
+  </data>
+  <data name="Issue" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="ManageDayOffForAgentGroup" xml:space="preserve">
+    <value>Управление правилами выходных дней для группы операторов {0}</value>
+  </data>
+  <data name="NewAgentGroup" xml:space="preserve">
+    <value>Новая группа операторов</value>
+  </data>
+  <data name="NoAgentsWithinAgentGroup" xml:space="preserve">
+    <value>В этой группе нет операторов, которые могут быть запланированы</value>
+  </data>
+  <data name="NoPreviousScheduleResult" xml:space="preserve">
+    <value>Этот планируемый период не имеет предыдущего результата</value>
+  </data>
+  <data name="NoValidIssuesForPp" xml:space="preserve">
+    <value>Для этого планируемого периода нет ошибок проверки</value>
+  </data>
+  <data name="NoValidScheduleResult" xml:space="preserve">
+    <value>Этот планируемый период не имеет правильного расписания</value>
+  </data>
+  <data name="ScheduleAgentGroup" xml:space="preserve">
+    <value>Запланировать группу операторов</value>
+  </data>
+  <data name="SchedulingFailed" xml:space="preserve">
+    <value>Планирование не удалось</value>
+  </data>
+  <data name="ScheduledIssues" xml:space="preserve">
+    <value>Ошибки последнего планирования</value>
+  </data>
+  <data name="SchedulingSucceeded" xml:space="preserve">
+    <value>Планирование успешно выполнено</value>
+  </data>
+  <data name="SchedulePageSelectAg" xml:space="preserve">
+    <value>Выберите группу операторов для работы</value>
+  </data>
+  <data name="SearchForAgentGroup" xml:space="preserve">
+    <value>Поиск сайта / группы / навыка / контракта</value>
+  </data>
+  <data name="SearchForDayOff" xml:space="preserve">
+    <value>Поиск сайта / группы / контракта</value>
+  </data>
+  <data name="SelectedPlanningPeriod" xml:space="preserve">
+    <value>Выбранный планируемый период</value>
+  </data>
+  <data name="SelectPpWorkWith" xml:space="preserve">
+    <value>Выберите планируемый период для работы</value>
+  </data>
+  <data name="UpdatedValidation" xml:space="preserve">
+    <value>Ошибки проверки обновлены</value>
+  </data>
+  <data name="ConfirmToggleAllData" xml:space="preserve">
+    <value>Переключить это и все, что ниже?</value>
+  </data>
+  <data name="AnErrorOccurredPleaseTryAgain" xml:space="preserve">
+    <value>Произошла ошибка. Попробуйте еще раз.</value>
+  </data>
+  <data name="ChangePlanningPeriodDurationColon" xml:space="preserve">
+    <value>Изменить продолжительность планируемого периода:</value>
+  </data>
+  <data name="ClearScheduleResultAndHistoryData" xml:space="preserve">
+    <value>Очистить запланированные смены и выходные дни</value>
+  </data>
+  <data name="CreatePlanningPeriod" xml:space="preserve">
+    <value>Создать планируемый период</value>
+  </data>
+  <data name="ModifyEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Изменить дату завершения этого планируемого периода.</value>
+  </data>
+  <data name="ModifyStartAndEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Изменить дату начала и завершения этого планируемого периода.</value>
+  </data>
+  <data name="RunningIntradayOptimization" xml:space="preserve">
+    <value>Оптимизация внутри дня</value>
+  </data>
+  <data name="SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot" xml:space="preserve">
+    <value>Выберите предложенный период для работы или выберите даты начала и окончания.</value>
+  </data>
+  <data name="SuccessfullyScheduledPlanningPeriodFromTo" xml:space="preserve">
+    <value>Период {0} - {1} удачно запланирован</value>
+  </data>
+  <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
+    <value>Вы собираетесь изменить этот планирумый период на {0} - {1}.</value>
+  </data>
+  <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
+    <value>Вы собираетесь создать планирумый период {0} - {1}.</value>
+  </data>
+  <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
+    <value>Необходим планируемый период. Создать?</value>
+  </data>
+  <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
+    <value>Удалить запланированные смены и выходные дни для планируемого периода {0}-{1}?</value>
+  </data>
+  <data name="ClearPlanningPeriod" xml:space="preserve">
+    <value>Удалить запланированные смены и выходные дни для планируемого периода</value>
+  </data>
+  <data name="PublishingSchedule" xml:space="preserve">
+    <value>Публикация расписания</value>
+  </data>
+  <data name="PublishScheduleSuccess" xml:space="preserve">
+    <value>Раписание опубликовано</value>
+  </data>
+  <data name="SuccessClearPlanningPeriodData" xml:space="preserve">
+    <value>Запланированные смены и выходные дни для планируемого периода {0}-{1} удалены</value>
+  </data>
+  <data name="FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Оптимизация внутри дня не удалась для планируемого периода {0} - {1} по причине технической ошибки. Попробуйте еще раз.</value>
+  </data>
+  <data name="PublishingScheduleSuccess" xml:space="preserve">
+    <value>Публикация раcписания для планируемого периода {0} - {1}</value>
+  </data>
+  <data name="PublishScheduleSucessForSelectedPlanningPeriod" xml:space="preserve">
+    <value>Расписание опубликовано для планируемого периода {0} - {1}</value>
+  </data>
+  <data name="SuccessfullyIntradayOptimizationPlanningPeriodFromTo" xml:space="preserve">
+    <value>Оптимизация внутри дня успешно выполнена для планируемого периода {0} - {1}</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>Неправильный запрос</value>
+  </data>
+  <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
+    <value>Время окончания должно быть после времени начала.</value>
+  </data>
+  <data name="TeleoptiWFMApp" xml:space="preserve">
+    <value>Приложение Teleopti WFM</value>
+  </data>
+  <data name="WFMAppGuideStep1" xml:space="preserve">
+    <value>Шаг 1:</value>
+  </data>
+  <data name="WFMAppGuideStep1Description" xml:space="preserve">
+    <value>Скачайте и установите приложение Teleopti WFM. Нажав на кнопку или сканируя QR код ниже.</value>
+  </data>
+  <data name="WFMAppGuideStep2" xml:space="preserve">
+    <value>Шаг 2:</value>
+  </data>
+  <data name="WFMAppGuideStep2Description" xml:space="preserve">
+    <value>Настройте приложение Teleopti WFM. Откройте приложение, затем отсканируйте QR код ниже или введите</value>
+  </data>
+  <data name="WFMAppGuideTitle" xml:space="preserve">
+    <value>Инструкция к приложению Teleopti WFM</value>
   </data>
 </root>
