@@ -41,11 +41,10 @@ $(NEXT_ACTIVITY_TIME_TO_STAY)|30
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 <compilation targetFramework="4.5"|<compilation debug="true" targetFramework="4.5"
 $(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding
-$(WEB_DEPLOY)|false
+$(WEB_DEPLOY)|true
 $(HSTS_HEADER)|
 $(CSP_PARENT_URL)|
 _replace_|c:\InfraTest.ini
 #VERSION#|1.0.0.0
 $(InstrumentationKey)|
-$(UseRelativeConfiguration)|true
-$(CustomEndpointHost)|http://localhost:52858/
+$(DNS_ALIAS)|http://localhost:52858/
