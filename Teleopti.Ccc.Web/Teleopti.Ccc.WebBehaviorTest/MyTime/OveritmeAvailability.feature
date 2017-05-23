@@ -133,6 +133,7 @@ Scenario: Add invalid overtime availability
 	Then I should see the 'overtime availability error' 'End time'
 	And I should not see an overtime availability symbol for date '2013-08-20'
 
+@ignore
 Scenario: See existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
@@ -152,6 +153,7 @@ Scenario: See existing overtime availability
 	| Start time | 16:30      |
 	| End time   | 17:30      |
 
+@ignore
 Scenario: See existing overtime availability over midnight
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
