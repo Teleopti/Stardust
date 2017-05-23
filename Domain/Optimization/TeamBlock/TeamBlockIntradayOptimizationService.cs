@@ -14,23 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public interface ITeamBlockIntradayOptimizationService
-	{
-		void Optimize(IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
-			DateOnlyPeriod selectedPeriod,
-			IEnumerable<IPerson> selectedPersons,
-			IOptimizationPreferences optimizationPreferences,
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer,
-			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
-			IScheduleDictionary scheduleDictionary,
-			IEnumerable<IPerson> personsInOrganization,
-			INewBusinessRuleCollection businessRuleCollection);
-
-		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-	}
-
-	public class TeamBlockIntradayOptimizationService : ITeamBlockIntradayOptimizationService
+	public class TeamBlockIntradayOptimizationService
 	{
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;

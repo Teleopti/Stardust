@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ITeamBlockGenerator teamBlockGenerator)
 		{
-			ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
+			var teamBlockIntradayOptimizationService =
 				new TeamBlockIntradayOptimizationService(
 					teamBlockGenerator,
 					_teamBlockScheduler,
