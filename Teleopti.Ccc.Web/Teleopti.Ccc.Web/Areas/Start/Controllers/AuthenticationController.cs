@@ -21,25 +21,25 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IAuthenticationModule _authenticationModule;
 		private readonly ICurrentHttpContext _currentHttpContext;
-		private readonly ILoadAllTenantsUsers _loadAllTenantsUsers;
+		private readonly ICheckTenantUserExists _checkTenantUserExists;
 
 		public AuthenticationController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
 			IFormsAuthentication formsAuthentication, ISessionSpecificDataProvider sessionSpecificDataProvider,
 			IAuthenticationModule authenticationModule, ICurrentHttpContext currentHttpContext,
-			ILoadAllTenantsUsers loadAllTenantsUsers)
+			ICheckTenantUserExists checkTenantUserExists)
 		{
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_formsAuthentication = formsAuthentication;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticationModule = authenticationModule;
 			_currentHttpContext = currentHttpContext;
-			_loadAllTenantsUsers = loadAllTenantsUsers;
+			_checkTenantUserExists = checkTenantUserExists;
 
 		}
 
 		public ActionResult Index()
 		{
-			if (!_loadAllTenantsUsers.TenantUsers().Any())
+			if (!_checkTenantUserExists.Exists())
 				return Redirect("MultiTenancy/TenantAdminInfo");
 			
 			return RedirectToAction("", "Authentication");

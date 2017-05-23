@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldReturnRedirectResultWhenGenericPrincipal()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(),new LoadAllTenatsUsersFake());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(),new CheckTenantUserExistsFake());
 			var filterTester = new FilterTester();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test, Ignore("Should work without other handling")]
 		public void ShouldRedirectToStartAuthenticationSignIn()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new LoadAllTenatsUsersFake());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new CheckTenantUserExistsFake());
 			var filterTester = new FilterTester();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		{
 			var identityProviderProvider = MockRepository.GenerateMock<IIdentityProviderProvider>();
 			identityProviderProvider.Stub(x => x.DefaultProvider()).Return("urn:ProviderX");
-			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), identityProviderProvider, new LoadAllTenatsUsersFake());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), identityProviderProvider, new CheckTenantUserExistsFake());
 			var filterTester = new FilterTester();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldRedirectToAreasAuthenticationSignIn()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new LoadAllTenatsUsersFake());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new CheckTenantUserExistsFake());
 			var filterTester = new FilterTester();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 			filterTester.AddRouteDataToken("area", "MyTime");
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldReturnActionsResultWhenAuthenticated()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new LoadAllTenatsUsersFake());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new CheckTenantUserExistsFake());
 			var filterTester = new FilterTester();
 			filterTester.ActionMethod(() => new ViewResult());
 			filterTester.IsUser(new TeleoptiPrincipal(new TeleoptiIdentity("_", null, null, null, null), null));
@@ -82,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldReturnViewResultWithGenericPrincipalWhenExcluded()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new LoadAllTenatsUsersFake(), new[] {typeof (FilterTester.TestController)});
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new CheckTenantUserExistsFake(), new[] {typeof (FilterTester.TestController)});
 			var filterTester = new FilterTester();
 			filterTester.ActionMethod(() => new ViewResult());
 
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldBeAbleAccessControllersExcludedByBaseType()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new LoadAllTenatsUsersFake(), new[] { typeof(FilterTester.TestController) });
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new CheckTenantUserExistsFake(), new[] { typeof(FilterTester.TestController) });
 			var filterTester = new FilterTester();
 			filterTester.UseController(new TestControllerProxy(() => new ViewResult()));
 
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldReturnHttp403ForbiddenResultWhenAjax()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new LoadAllTenatsUsersFake());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new CheckTenantUserExistsFake());
 			var filterTester = new FilterTester();
 			filterTester.IsAjaxRequest();
 
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldRedirectToTenantInfoWhenNoTenantAdminUsers()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new LoadAllTenatsUsersFake(true));
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new CheckTenantUserExistsFake(true));
 			var filterTester = new FilterTester();
 
 			var result = filterTester.InvokeFilter(target) as RedirectResult;
@@ -139,25 +138,22 @@ namespace Teleopti.Ccc.WebTest.Filters
 				return new Uri("http://myissuer");
 			}
 
-			public string Realm { get { return "http://mytime"; } }
+			public string Realm => "http://mytime";
 		}
 	}
 
-	public class LoadAllTenatsUsersFake : ILoadAllTenantsUsers
+	public class CheckTenantUserExistsFake : ICheckTenantUserExists
 	{
 		private readonly bool _returnEmpty;
 
-		public LoadAllTenatsUsersFake(bool returnEmpty = false)
+		public CheckTenantUserExistsFake(bool returnEmpty = false)
 		{
 			_returnEmpty = returnEmpty;
 		}
 
-		public IEnumerable<TenantAdminUser> TenantUsers()
+		public bool Exists()
 		{
-			if (_returnEmpty)
-				return new List<TenantAdminUser>();
-
-			return new List<TenantAdminUser> { new TenantAdminUser() };
+			return !_returnEmpty;
 		}
 	}
 }

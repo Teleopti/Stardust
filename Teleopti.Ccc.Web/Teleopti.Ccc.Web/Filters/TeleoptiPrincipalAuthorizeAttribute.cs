@@ -23,18 +23,18 @@ namespace Teleopti.Ccc.Web.Filters
 	{
 		private readonly IAuthenticationModule _authenticationModule;
 		private readonly IIdentityProviderProvider _identityProviderProvider;
-		private readonly ILoadAllTenantsUsers _loadAllTenantsUsers;
+		private readonly ICheckTenantUserExists _checkTenantUserExists;
 		private readonly IEnumerable<Type> _excludeControllerTypes;
 
 		public string Realm { get; set; }
 
 		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule,
-			IIdentityProviderProvider identityProviderProvider, ILoadAllTenantsUsers loadAllTenantsUsers,
+			IIdentityProviderProvider identityProviderProvider, ICheckTenantUserExists checkTenantUserExists,
 			IEnumerable<Type> excludeControllerTypes = null)
 		{
 			_authenticationModule = authenticationModule;
 			_identityProviderProvider = identityProviderProvider;
-			_loadAllTenantsUsers = loadAllTenantsUsers;
+			_checkTenantUserExists = checkTenantUserExists;
 			Order = 2;
 			_excludeControllerTypes = excludeControllerTypes ?? new List<Type>();
 		}
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Filters
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
 		{
-			if (!_loadAllTenantsUsers.TenantUsers().Any())
+			if (!_checkTenantUserExists.Exists())
 			{
 				filterContext.Result = new RedirectResult("MultiTenancy/TenantAdminInfo");
 				return;

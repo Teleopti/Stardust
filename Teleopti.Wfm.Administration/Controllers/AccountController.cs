@@ -303,7 +303,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		private bool hasUser()
 		{
-			return _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().Count > 0;
+			return _currentTenantSession.CurrentSession().GetNamedQuery("loadNumberOfTenantUsers").UniqueResult<long>() > 0L;
 		}
 
 		[OverrideAuthentication]

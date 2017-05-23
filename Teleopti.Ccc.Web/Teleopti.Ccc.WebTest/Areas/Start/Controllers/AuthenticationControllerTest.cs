@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void DefaultActionShouldRenderDefaultView()
 		{
-			var target = new AuthenticationController(null, null, null, null,null, new LoadAllTenatsUsersFake());
+			var target = new AuthenticationController(null, null, null, null,null, new CheckTenantUserExistsFake());
 			var result = target.Index() as RedirectToRouteResult;
 			result.RouteName.Should().Be.EqualTo(string.Empty);
 		}
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldRedirectIfNoAdminUsers()
 		{
-			var target = new AuthenticationController(null, null, null, null, null, new LoadAllTenatsUsersFake(true));
+			var target = new AuthenticationController(null, null, null, null, null, new CheckTenantUserExistsFake(true));
 			var result = target.Index() as RedirectResult;
 			result.Url.Should().Be.EqualTo("MultiTenancy/TenantAdminInfo");
 		}

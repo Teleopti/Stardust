@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();
 			builder.RegisterType<PersistTenant>().SingleInstance();
 			builder.RegisterType<DeleteTenant>().SingleInstance();
-			builder.RegisterType<LoadAllTenantsUsers>().As<ILoadAllTenantsUsers>().SingleInstance();
+			builder.RegisterType<CheckTenantUserExists>().As<ICheckTenantUserExists>().SingleInstance();
 		}
 	}
 }
