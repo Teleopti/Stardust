@@ -1801,12 +1801,12 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
- <PropertyGroup>
+  <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\Teleopti.Ccc.WebbehaviorTest.config" "$(ProjectDir)App.config"
+"$(SolutionDir)packages\SpecFlow.2.1.0\tools\specflow.exe" generateall "$(ProjectDir)Teleopti.Ccc.WebBehaviorTest.csproj"
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <Import Project="$(SolutionDir)\packages\SpecFlow.2.1.0\tools\TechTalk.SpecFlow.targets"/>
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)Teleopti.Ccc.TestCommon\Web\WebInteractions\iisexpress.config" "$(TargetDir)iisexpress.config"
 copy "$(SolutionDir)packages\Selenium.WebDriver.2.53.0\lib\net40\webdriver.dll" "$(TargetDir)webdriver.dll"
