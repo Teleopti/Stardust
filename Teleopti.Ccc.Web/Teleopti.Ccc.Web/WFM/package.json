@@ -2,20 +2,6 @@
   "name": "WFM",
   "version": "0.0.0",
   "description": "",
-  "scripts": {
-    "pretest": "npm run ng-templates",
-    "test": "karma start karma.conf.js",
-    "devTest": "npm test -- --reporters dots --no-single-run --autoWatchBatchDelay 1000",
-    "continuous": "grunt test-continuous",
-    "webpack": ".\\node_modules\\.bin\\webpack",
-    "iis": " c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
-    "start": "start http://localhost:52858/TeleoptiWFM/Web/ && npm run iis",
-    "ng-templates": "nghtml2js -m wfm.templates -o ./dist/templates.js -f [[app/**/*.html],[html/**/*.html]]",
-    "minify:css": ".\\node_modules\\.bin\\cleancss --source-map -o ./dist/modules.min.css ",
-    "sass:classic": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/style.scss > ./css/style_classic.css",
-    "sass:dark": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/darkstyle.scss > ./css/style_dark.css",
-    "sass":"npm run sass:classic && npm run sass:dark"
-  },
   "author": "Teleopti",
   "license": "ISC",
   "dependencies": {
@@ -81,5 +67,25 @@
     "ngstorage": "0.3.9",
     "teleopti-styleguide": "1.8.14",
     "webpack": "2.2.1"
+  },
+   "scripts": {
+    "pretest": "npm run ng-templates",
+    "test": "karma start karma.conf.js",
+    "devTest": "npm test -- --reporters dots --no-single-run --autoWatchBatchDelay 1000",
+
+    "prebuild":"echo prebuild",
+    "build": "echo build",
+
+    "prestart": "start http://localhost:52858/TeleoptiWFM/Web/",
+    "start": "npm run iis",
+    "webpack": ".\\node_modules\\.bin\\webpack",
+    "iis": " c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
+    
+    "ng-templates": "nghtml2js -m wfm.templates -o ./dist/templates.js -f [[app/**/*.html],[html/**/*.html]]",
+    
+    "sass": "npm run sass:classic && npm run sass:dark",
+    "minify:css": ".\\node_modules\\.bin\\cleancss --source-map './css/style_classic.css' -o ./dist/dist.min.css",
+    "sass:classic": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/style.scss > ./css/style_classic.css",
+    "sass:dark": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/darkstyle.scss > ./css/style_dark.css"
   }
 }
