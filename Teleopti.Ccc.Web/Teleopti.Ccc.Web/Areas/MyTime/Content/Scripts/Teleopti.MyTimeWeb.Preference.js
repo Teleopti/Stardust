@@ -506,7 +506,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			});
 
 			var from = $('li[data-mytime-date]').first().data('mytime-date');
-			var to = $('li[data-mytime-date]').last().data('mytime-date');
+            var to = $('li[data-mytime-date]').last().data('mytime-date');
+			if (from === undefined || from === null) {
+				$(document).ready(function() {
+					from = $('li[data-mytime-date]').first().data('mytime-date');
+					to = $('li[data-mytime-date]').last().data('mytime-date');
+				});
+			}
 
 			preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference
 				.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
