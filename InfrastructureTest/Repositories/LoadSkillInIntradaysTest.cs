@@ -40,7 +40,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workload.AddQueueSource(queueSourceHelpdesk);
 			PersistAndRemoveFromUnitOfWork(workload);
 
-			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, new List<ISupportedSkillCheck>() { }));
+			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, 
+				new List<ISupportedSkillCheck>() { },
+				new MultisiteSkillSupportedCheck()));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 			skills.First().Name.Should().Be.EqualTo(skillWithQueue.Name);
@@ -69,7 +71,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workload.AddQueueSource(queue2);
 			PersistAndRemoveFromUnitOfWork(workload);
 
-			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, new List<ISupportedSkillCheck>() { }));
+			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, 
+				new List<ISupportedSkillCheck>() { },
+				new MultisiteSkillSupportedCheck()));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 		}
@@ -118,7 +122,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					{
 						new InboundPhoneSkillSupported(),
 						new OtherSkillsLikePhoneSupported()
-					}
+					},
+					new MultisiteSkillSupportedCheck()
 				));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(3);
@@ -165,7 +170,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new List<ISupportedSkillCheck>()
 					{
 						new InboundPhoneSkillSupported()
-					}
+					},
+					new MultisiteSkillSupportedCheck()
 				));
 
 			var skills = target.Skills().ToList();
@@ -194,7 +200,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workloadEmail.AddQueueSource(queueSourceHelpdesk);
 			PersistAndRemoveFromUnitOfWork(workloadEmail);
 
-			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportSkillsWithMultiskillInIntradayProvider(null));
+			var target = new LoadSkillInIntradays(CurrUnitOfWork,
+				new SupportedSkillsInIntradayProvider(null,
+					new List<ISupportedSkillCheck>()
+					{
+						new InboundPhoneSkillSupported()
+					},
+					new MultisiteSkillSupportedCheckAlwaysTrue()
+				));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 			skills.First().Name.Should().Be.EqualTo(multiSiteSkill.Name);

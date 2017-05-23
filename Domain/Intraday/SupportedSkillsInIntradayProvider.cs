@@ -11,11 +11,15 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly ISkillRepository _skillRepository;
 		private readonly IEnumerable<ISupportedSkillCheck> _skillChecks;
+		private readonly IMultisiteSkillSupportedCheck _multisiteSkillSupportedCheck;
 
-		public SupportedSkillsInIntradayProvider(ISkillRepository skillRepository, IEnumerable<ISupportedSkillCheck> skillChecks)
+		public SupportedSkillsInIntradayProvider(ISkillRepository skillRepository, 
+			IEnumerable<ISupportedSkillCheck> skillChecks,
+			IMultisiteSkillSupportedCheck multisiteSkillSupportedCheck)
 		{
 			_skillRepository = skillRepository;
 			_skillChecks = skillChecks;
+			_multisiteSkillSupportedCheck = multisiteSkillSupportedCheck;
 		}
 
 		public IList<ISkill> GetSupportedSkills(Guid[] skillIdList)
@@ -28,8 +32,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public bool CheckSupportedSkill(ISkill skill)
 		{
-			var isMultisiteSkill = skill.GetType() == typeof(MultisiteSkill);
-			return !isMultisiteSkill &&_skillChecks.Any(s => s.IsSupported(skill));
+			var isMultisiteSkillSupported = _multisiteSkillSupportedCheck.Check(skill);
+			return isMultisiteSkillSupported &&_skillChecks.Any(s => s.IsSupported(skill));
 		}
 	}
 }

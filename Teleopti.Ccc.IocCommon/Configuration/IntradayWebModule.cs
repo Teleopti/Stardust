@@ -35,6 +35,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<OtherSkillsLikePhoneSupported>().As<ISupportedSkillCheck>();
 			if (_configuration.Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002))
 				builder.RegisterType<EmailSkillSupported>().As<ISupportedSkillCheck>();
+			if (_configuration.Toggle(Toggles.WFM_Intraday_SupportMultisiteSkill_43874))
+				builder.RegisterType<MultisiteSkillSupportedCheckAlwaysTrue>().As<IMultisiteSkillSupportedCheck>();
+			else
+				builder.RegisterType<MultisiteSkillSupportedCheck>().As<IMultisiteSkillSupportedCheck>();
 
 			builder.RegisterType<TaskPeriodsProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();

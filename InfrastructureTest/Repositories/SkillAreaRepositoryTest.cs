@@ -9,8 +9,6 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -42,7 +40,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override SkillArea CreateAggregateWithCorrectBusinessUnit()
 		{
-			var skills = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, new List<ISupportedSkillCheck>() { })).Skills();
+			var skills = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null,
+					new List<ISupportedSkillCheck>() { },
+					new MultisiteSkillSupportedCheckAlwaysTrue()))
+				.Skills();
 
 			return new SkillArea
 			{

@@ -246,13 +246,13 @@
     <Compile Include="Helper\CellExtensions.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
     <Compile Include="InterfaceLegacy\Messages\InputWithLogOnContext.cs" />
+    <Compile Include="Intraday\IMultisiteSkillSupportedCheck.cs" />
     <Compile Include="Intraday\ISupportedSkillCheck.cs" />
     <Compile Include="Intraday\ISupportedSkillsInIntradayProvider.cs" />
     <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />
     <Compile Include="Intraday\ForecastedStaffingToDataSeries.cs" />
     <Compile Include="Intraday\IStaffingViewModelCreator.cs" />
     <Compile Include="Intraday\ScheduledStaffingToDataSeries.cs" />
-    <Compile Include="Intraday\SupportSkillsWithMultiskillInIntradayProvider.cs" />
     <Compile Include="MultiTenancy\DuplicateApplicationLogonNameException.cs" />
     <Compile Include="MultiTenancy\DuplicateIdentityException.cs" />
     <Compile Include="MultiTenancy\PasswordStrengthException.cs" />
