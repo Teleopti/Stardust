@@ -110,7 +110,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			self.dayOfWeek(data.Schedule.Header.Title);
 		}
 
-		var rawPeriods = data.Schedule.Periods;
 		var scheduleHeight = Teleopti.MyTimeWeb.Schedule.GetScheduleHeight();
 		self.scheduleHeight(scheduleHeight + "px");
 
@@ -120,14 +119,17 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		});
 		self.timeLines(timelines);
 
-		var layers = rawPeriods.map(function (item, index) {
-			var layer = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, true);
-			layer.isLastLayer = false;
-			if(index == rawPeriods.length - 1)
-				layer.isLastLayer = true;
-			return layer;
-		});
-		self.layers(layers);
+		var rawPeriods = data.Schedule.Periods;
+		if(rawPeriods && rawPeriods.length > 0){
+			var layers = rawPeriods.map(function (item, index) {
+				var layer = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, true);
+				layer.isLastLayer = false;
+				if(index == rawPeriods.length - 1)
+					layer.isLastLayer = true;
+				return layer;
+			});
+			self.layers(layers);
+		}
 
 		if (data.RequestPermission) {
 			self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
