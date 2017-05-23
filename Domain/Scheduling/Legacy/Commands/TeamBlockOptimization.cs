@@ -263,7 +263,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var teamBlockIntradayOptimizationService =
 				new TeamBlockIntradayOptimizationService(
-					teamBlockGenerator,
 					_teamBlockScheduler,
 					_schedulingOptionsCreator,
 					_safeRollbackAndResourceCalculation,
@@ -288,7 +287,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_schedulerStateHolder().SchedulingResultState.SkillDays,
 				_schedulerStateHolder().Schedules,
 				_schedulerStateHolder().SchedulingResultState.PersonsInOrganization,
-				NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState));
+				NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState),
+				teamBlockGenerator);
 			teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 

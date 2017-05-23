@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly ITeamBlockClearer _teamBlockClearer;
-		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
@@ -29,8 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly SetMainShiftOptimizeActivitySpecificationForTeamBlock _setMainShiftOptimizeActivitySpecificationForTeamBlock;
 
-		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
-			ITeamBlockScheduler teamBlockScheduler,
+		public TeamBlockIntradayOptimizationService(ITeamBlockScheduler teamBlockScheduler,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
@@ -53,7 +51,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_setMainShiftOptimizeActivitySpecificationForTeamBlock = setMainShiftOptimizeActivitySpecificationForTeamBlock;
-			_teamBlockGenerator = teamBlockGenerator;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -67,13 +64,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
 			IScheduleDictionary scheduleDictionary,
 			IEnumerable<IPerson> personsInOrganization,
-			INewBusinessRuleCollection businessRuleCollection)
+			INewBusinessRuleCollection businessRuleCollection,
+			ITeamBlockGenerator teamBlockGenerator)
 		{
 			var cancelMe = false;
 			var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.CollectingData, optimizationPreferences.Advanced.RefreshScreenInterval, ()=>cancelMe=true));
 			if (progressResult.ShouldCancel) cancelMe = true;
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-			var teamBlocks = _teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
+			var teamBlocks = teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 			var remainingInfoList = new List<ITeamBlockInfo>(teamBlocks);
 
 			while (remainingInfoList.Count > 0)
