@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			Target.ChangeLastPeriod(agentGroupId, periodStart.Date + TimeSpan.FromDays(14));
 
 			Target.Request = new HttpRequestMessage();
-			var lastPeriod = (CreatedNegotiatedContentResult<PlanningPeriodModel>) Target.GetNextPlanningPeriod(agentGroupId);
+			var lastPeriod = (CreatedAtRouteNegotiatedContentResult<PlanningPeriodModel>) Target.GetNextPlanningPeriod(agentGroupId);
 
 			var periods = PlanningPeriodRepository.LoadForAgentGroup(agentGroup).OrderBy(period => period.Range.StartDate);
 

@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, false);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}", Name = "GetPlanningPeriod")]
 		public virtual IHttpActionResult GetPlanningPeriod(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
@@ -229,8 +229,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			var firstPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)), agentGroup);
 			_planningPeriodRepository.Add(firstPeriod);
-
-			return Created($"{Request.RequestUri}/{firstPeriod.Id.GetValueOrDefault()}", createPlanningPeriodModel(firstPeriod));
+			
+			return planningPeriodCreatedResponse(firstPeriod);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/agentgroup/{agentGroupId}/nextplanningperiod")]
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				: last.NextPlanningPeriod(agentGroup);
 			_planningPeriodRepository.Add(nextPeriod);
 
-			return Created($"{Request.RequestUri}/{nextPeriod.Id.GetValueOrDefault()}", createPlanningPeriodModel(nextPeriod));
+			return planningPeriodCreatedResponse(nextPeriod);
 		}
 
 		private IHttpActionResult buildPlanningPeriodViewModels(
@@ -344,6 +344,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				TotalAgents = numberOfAgents,
 				AgentGroupId = planningPeriod.AgentGroup?.Id
 			};
+		}
+
+		private IHttpActionResult planningPeriodCreatedResponse(IPlanningPeriod planningPeriod)
+		{
+			return CreatedAtRoute("GetPlanningPeriod", new { planningPeriodId = planningPeriod.Id.GetValueOrDefault() }, createPlanningPeriodModel(planningPeriod));
 		}
 
 		private bool hasNextPlanningPeriod(DateOnly dateOnly)
