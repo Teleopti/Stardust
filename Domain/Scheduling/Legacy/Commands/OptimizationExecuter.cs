@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -18,9 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly TeamBlockOptimization _teamBlockOptimization;
-		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
-		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 		private readonly ScheduleOptimizerHelper _scheduleOptimizerHelper;
@@ -31,9 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceCalculation resourceOptimizationHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			TeamBlockOptimization teamBlockOptimization,
-			PeriodExtractorFromScheduleParts periodExtractor,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
-			IPersonListExtractorFromScheduleParts personExtractor,
 			IUserTimeZone userTimeZone,
 			IGroupPagePerDateHolder groupPagePerDateHolder,
 			ScheduleOptimizerHelper scheduleOptimizerHelper,
@@ -44,9 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_teamBlockOptimization = teamBlockOptimization;
-			_periodExtractor = periodExtractor;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
-			_personExtractor = personExtractor;
 			_userTimeZone = userTimeZone;
 			_groupPagePerDateHolder = groupPagePerDateHolder;
 			_scheduleOptimizerHelper = scheduleOptimizerHelper;
