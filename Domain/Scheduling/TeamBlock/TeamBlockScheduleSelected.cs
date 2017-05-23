@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -55,11 +54,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 
 			_teamBlockScheduler.DayScheduled += DayScheduled;
-			if (schedulePartModifyAndRollbackService == null)
-			{
-				return workShiftFinderResultHolder;
-			}
-
 			var dateOnlySkipList = new List<DateOnly>();
 			foreach (var datePointer in selectedPeriod.DayCollection())
 			{
