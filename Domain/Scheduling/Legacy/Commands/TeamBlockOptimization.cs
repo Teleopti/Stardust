@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly MaxSeatOptimization _maxSeatOptimization;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+		private readonly SetMainShiftOptimizeActivitySpecificationForTeamBlock _setMainShiftOptimizeActivitySpecificationForTeam;
+
 
 		public TeamBlockOptimization(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -72,7 +74,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IWorkShiftSelector workShiftSelector,
 			MaxSeatOptimization maxSeatOptimization,
-			IGroupPersonSkillAggregator groupPersonSkillAggregator)
+			IGroupPersonSkillAggregator groupPersonSkillAggregator,
+			SetMainShiftOptimizeActivitySpecificationForTeamBlock setMainShiftOptimizeActivitySpecificationForTeam)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -100,6 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_workShiftSelector = workShiftSelector;
 			_maxSeatOptimization = maxSeatOptimization;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+			_setMainShiftOptimizeActivitySpecificationForTeam = setMainShiftOptimizeActivitySpecificationForTeam;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons,
@@ -269,7 +273,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockSteadyStateValidator,
 					_teamBlockShiftCategoryLimitationValidator,
 					_workShiftSelector,
-					_groupPersonSkillAggregator
+					_groupPersonSkillAggregator,
+					_setMainShiftOptimizeActivitySpecificationForTeam
 					);
 
 			teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
