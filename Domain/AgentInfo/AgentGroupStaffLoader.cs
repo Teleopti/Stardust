@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public int NumberOfAgents(DateOnlyPeriod period, IAgentGroup agentGroup)
 		{
-			return agentGroup != null ? _personRepository.CountPeopleInAgentGroup(agentGroup, period) : _personRepository.NumberOfActiveAgents();
+			return agentGroup != null ? _personRepository.CountPeopleInAgentGroup(agentGroup, period) : 0;
 		}
 
 		public IList<Guid> LoadPersonIds(DateOnlyPeriod period, IAgentGroup agentGroup)
