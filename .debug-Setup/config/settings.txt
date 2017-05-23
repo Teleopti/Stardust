@@ -28,9 +28,9 @@ $(WEB_BROKER)|http://localhost:52858/TeleoptiWFM/Web/
 $(WEB_BROKER_BACKPLANE)|
 $(STARDUST)|http://localhost/
 $(DEFAULT_IDENTITY_PROVIDER)|Teleopti
-$(URL_WINDOWS_IDENTITY_PROVIDER)|http://localhost:52859/
-$(WindowsClaimProvider)|<add identifier="urn:Windows" displayName="Windows" url="http://localhost:52859/" protocolHandler="OpenIdHandler" />
-$(TeleoptiClaimProvider)|<add identifier="urn:Teleopti" displayName="Teleopti" url="http://localhost:52858/TeleoptiWFM/Web/sso/" protocolHandler="OpenIdHandler" />
+$(URL_WINDOWS_IDENTITY_PROVIDER)|http://localhost:52858/TeleoptiWFM/WindowsIdentityProvider/
+$(WindowsClaimProvider)|<add identifier="urn:Windows" displayName="Windows" url="http://localhost:52858/TeleoptiWFM/WindowsIdentityProvider/" protocolHandler="RelativeOpenIdHandler" />
+$(TeleoptiClaimProvider)|<add identifier="urn:Teleopti" displayName="Teleopti" url="http://localhost:52858/TeleoptiWFM/Web/sso/" protocolHandler="RelativeOpenIdHandler" />
 $(UrlAuthenticationBridge)|http://localhost:52858/TeleoptiWFM/AuthenticationBridge/
 $(URL)|http://localhost:52858/TeleoptiWFM/Web/
 $(CONFIGURATION_FILES_PATH)|c:\nhib
@@ -47,3 +47,5 @@ $(CSP_PARENT_URL)|
 _replace_|c:\InfraTest.ini
 #VERSION#|1.0.0.0
 $(InstrumentationKey)|
+$(UseRelativeConfiguration)|true
+$(CustomEndpointHost)|http://localhost:52858/
