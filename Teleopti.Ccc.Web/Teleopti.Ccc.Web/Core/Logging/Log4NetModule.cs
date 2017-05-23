@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Core.Logging
 	{
 		public const string LogMessageException = "Log4NetModule caught an unhandled exception";
 		public const string LogMessage404 = "A 404 occurred";
-		private static readonly object _applicationStartLock = new object();
+		private static readonly object applicationStartLock = new object();
 		private static bool _applicationStarted;
 		private readonly Action _configureLogging;
 		private readonly Func<Exception> _getServerError;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Core.Logging
 		{
 			if (!_applicationStarted)
 			{
-				lock (_applicationStartLock)
+				lock (applicationStartLock)
 				{
 					if (!_applicationStarted)
 					{
