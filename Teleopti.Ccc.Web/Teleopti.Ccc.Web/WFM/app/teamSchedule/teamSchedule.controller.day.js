@@ -82,6 +82,16 @@
 			});
 
 
+		vm.scheduleDate = $stateParams.selectedDate || new Date();
+		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
+		vm.searchOptions = {
+			keyword: $stateParams.keyword || '',
+			searchKeywordChanged: false,
+			focusingSearch: false
+		};
+		vm.selectedFavorite = $stateParams.do ? $stateParams.selectedFavorite : null;
+
+
 		vm.openSettingsPanel = function () {
 			closeAllCommandSidenav();
 			$mdSidenav(settingsContainerId).toggle();
@@ -320,15 +330,6 @@
 		};
 
 		vm.toggles = teamsToggles.all();
-
-		vm.scheduleDate = $stateParams.selectedDate || new Date();
-		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
-		vm.searchOptions = {
-			keyword: $stateParams.keyword || '',
-			searchKeywordChanged: false,
-			focusingSearch: false
-		};
-		vm.selectedFavorite = $stateParams.do? $stateParams.selectedFavorite: null;
 
 		vm.validateWarningEnabled = false;
 
