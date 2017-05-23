@@ -142,6 +142,9 @@
 	height: auto;
 	cursor: pointer;
 	z-index: 1002;
+	max-height: 100%;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
 }
 .mobile-add-request-form .well{
 	margin: 0;
