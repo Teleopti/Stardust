@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -53,10 +54,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ScheduleData.Add(assignment);
 
 			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
-			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
-			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(17);
-			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
 		}
 
 		[Test]
@@ -153,10 +154,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ScheduleData.Add(assignment);
 
 			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
-			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
-			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(6);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(18);
-			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
 		}
 
 		[Test]
@@ -191,8 +192,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ScheduleData.Add(assignment);
 
 			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
-			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(1);
-			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(0);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(23);
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(59);
 		}
@@ -229,8 +230,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ScheduleData.Add(assignment);
 
 			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
-			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
-			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(6);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(23);
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(59);
 		}
@@ -295,10 +296,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ScheduleData.Add(assignment);
 
 			var result = Target.FetchDayData(date, StaffingPossiblityType.Overtime);
-			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
-			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(17);
-			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
 		}
 
 		[Test]
@@ -426,10 +427,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchDayData(null, StaffingPossiblityType.Overtime);
 
-			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
-			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(6);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(18);
-			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
 		}
 
 		[Test]
@@ -476,10 +477,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
 
-			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
-			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(6);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(18);
-			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
 		}
 
 		[Test]
@@ -504,9 +505,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(0);
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
-			result.TimeLine.Last().Time.Days.Should().Be.EqualTo(1);
-			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(0);
-			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Days.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(23);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(59);
 		}
 
 		[Test]
@@ -533,10 +534,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
 
-			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
-			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(6);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(19);
-			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
 		}
 
 		[Test]
@@ -589,6 +590,129 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(10);
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldInflateMinMaxTimeAfterAdjustBySkillOpenHourDaySchedule()
+		{
+			var skill = createSkillWithOpenHours(TimeSpan.FromHours(8), TimeSpan.FromHours(18));
+
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			User.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 11, 0, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 20, 0, 0, DateTimeKind.Utc));
+			assignment.AddActivity(skill.Activity, period);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(null, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(20);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldInflateMinMaxTimeAfterAdjustBySkillOpenHourWeekSchedule()
+		{
+			var skill1 = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill1, new Percent(1)));
+			User.CurrentUser().AddPersonPeriod(personPeriod); 
+
+			var day = DateHelper.GetFirstDateInWeek(Now.UtcDateTime().Date,CultureInfo.CurrentCulture);
+			
+			for (int i = 0; i < 7; i++)
+			{
+				var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly()); 
+				day = day.AddDays(i);
+
+				var period = new DateTimePeriod(day.AddHours(6).AddMinutes(15),
+					day.AddHours(9).AddMinutes(45));
+
+				assignment.AddActivity(skill1.Activity, period);
+				ScheduleData.Add(assignment);
+			} 
+
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(6);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(15);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
+		}
+
+		[Test]
+		public void ShouldInflateMinMaxTimeAfterAdjustBySiteOpenHourDaySchedule()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var timePeriod = new TimePeriod(8, 0, 17, 0);
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = timePeriod,
+				IsClosed = false,
+				WeekDay = DayOfWeek.Thursday
+			});
+			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+
+			var activity = new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue };
+			assignment.AddActivity(activity, period);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date, StaffingPossiblityType.Overtime);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(7);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(45);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(17);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldInflateMinMaxTimeAfterAdjustBySiteOpenHourWeekSchedule()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var timePeriod = new TimePeriod(8, 0, 17, 0);
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = timePeriod,
+				IsClosed = false,
+				WeekDay = DayOfWeek.Thursday
+			});
+			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			var day = DateHelper.GetFirstDateInWeek(Now.UtcDateTime().Date, CultureInfo.CurrentCulture);
+			var activity = new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue };
+			for (int i = 0; i < 7; i++)
+			{
+				var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
+				day = day.AddDays(i);
+
+				var period = new DateTimePeriod(day.AddHours(6).AddMinutes(15),
+					day.AddHours(9).AddMinutes(45));
+
+				assignment.AddActivity(activity, period);
+				ScheduleData.Add(assignment);
+			}
+
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(6);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(00);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(17);
+			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(15);
+		}
+
 
 		private static ISkill createSkillWithOpenHours(TimeSpan start, TimeSpan end)
 		{

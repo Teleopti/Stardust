@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 {
 	public class WeekScheduleDomainDataProvider : IWeekScheduleDomainDataProvider
 	{
-		private const int timelineMarginInMinute = 15;
 
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IProjectionProvider _projectionProvider;
@@ -329,7 +328,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				late = earliest;
 			}
 
-			var margin = TimeSpan.FromMinutes(timelineMarginInMinute);
+			var margin = TimeSpan.FromMinutes(ScheduleConsts.TimelineMarginInMinute);
 			early = early.Ticks > TimeSpan.Zero.Add(margin).Ticks ? early.Subtract(margin) : TimeSpan.Zero;
 			late = late.Ticks < new TimeSpan(23, 59, 59).Subtract(margin).Ticks ? late.Add(margin) : new TimeSpan(23, 59, 59);
 

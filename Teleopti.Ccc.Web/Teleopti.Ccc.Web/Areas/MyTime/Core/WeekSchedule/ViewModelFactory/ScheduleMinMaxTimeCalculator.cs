@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly IToggleManager _toggles;
 		private readonly INow _now;
 		private readonly ISiteOpenHourProvider _siteOpenHourProvider;
-		private readonly IScheduledSkillOpenHourProvider _scheduledSkillOpenHourProvider;
+		private readonly IScheduledSkillOpenHourProvider _scheduledSkillOpenHourProvider; 
 
 		public ScheduleMinMaxTimeCalculator(IToggleManager toggles, INow now, ISiteOpenHourProvider siteOpenHourProvider, IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider)
 		{
@@ -110,18 +110,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return siteOpenHourPeriod;
 		}
 
-		private static TimePeriod getTimelinePeriod(BaseScheduleDomainData scheduleDomainData, TimePeriod siteOpenHourPeriod)
+		private static TimePeriod getTimelinePeriod(BaseScheduleDomainData scheduleDomainData, TimePeriod openHourPeriod)
 		{
 			var scheduleMinMaxTime = scheduleDomainData.MinMaxTime;
 			var minTime = scheduleMinMaxTime.StartTime;
 			var maxTime = scheduleMinMaxTime.EndTime;
-			if (siteOpenHourPeriod.StartTime < minTime)
+
+			var margin = TimeSpan.FromMinutes(ScheduleConsts.TimelineMarginInMinute);
+			var early = openHourPeriod.StartTime.Ticks > TimeSpan.Zero.Add(margin).Ticks ? openHourPeriod.StartTime.Subtract(margin) : TimeSpan.Zero;
+			var late = openHourPeriod.EndTime.Ticks < new TimeSpan(23, 59, 59).Subtract(margin).Ticks ? openHourPeriod.EndTime.Add(margin) : new TimeSpan(23, 59, 59);
+
+			var adjustedOpenHourPeriod = new TimePeriod(early, late);
+			if (adjustedOpenHourPeriod.StartTime < minTime)
 			{
-				minTime = siteOpenHourPeriod.StartTime;
+				minTime = adjustedOpenHourPeriod.StartTime;
 			}
-			if (siteOpenHourPeriod.EndTime > maxTime)
+			if (adjustedOpenHourPeriod.EndTime > maxTime)
 			{
-				maxTime = siteOpenHourPeriod.EndTime;
+				maxTime = adjustedOpenHourPeriod.EndTime;
 			}
 
 			return minTime == scheduleMinMaxTime.StartTime && maxTime == scheduleMinMaxTime.EndTime

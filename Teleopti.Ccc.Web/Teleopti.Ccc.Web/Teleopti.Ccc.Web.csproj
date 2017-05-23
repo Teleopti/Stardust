@@ -513,6 +513,7 @@
     <Compile Include="Areas\MyTime\Controllers\WidgetController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\ExtendedPreferenceTemplateMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\ScheduleConst.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IScheduledSkillOpenHourProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IScheduleMinMaxTimeCalculator.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ISiteOpenHourProvider.cs" />
