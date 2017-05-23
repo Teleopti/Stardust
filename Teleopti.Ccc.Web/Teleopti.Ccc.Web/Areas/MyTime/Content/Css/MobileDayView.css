@@ -149,7 +149,8 @@
 .mobile-add-request-form div.pull-right{
 	margin-top: 20px;
 }
-.mobile-add-request-form .checkbox{
+.mobile-add-request-form label.checkbox{
+	display: inline-block;
 	padding-left: 25px;
 }
 .mobile-add-request-form button.btn.request-new-cancel,
