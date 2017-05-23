@@ -36,12 +36,15 @@
                 return;
               });
             }
-          };
+          }
 
           service.getLatestTime = function(selectedItem) {
             pollTime(selectedItem);
             var timeData = startTime + ' - ' + endTime;
             return timeData;
+          }
+
+          service.getLatestTimeByDate = function(selectedItem, utcDate){
           }
 
           return service;

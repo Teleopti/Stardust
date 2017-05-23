@@ -163,6 +163,52 @@
                     );
             };
 
+            service.pollSkillDataByDate = function(selectedItem, toggles, utcDate) {
+                staffingData.waitingForData = true;
+                intradayService.getSkillStaffingDataByDate
+                    .get({
+                        SkillId: selectedItem.Id,
+                        DateTime: utcDate,
+                        UseShrinkage: false
+                    })
+                    .$promise.then(
+                        function(result) {
+                            staffingData.waitingForData = false;
+                            return service.setStaffingData(
+                                result,
+                                toggles.showOptimalStaffing,
+                                toggles.showScheduledStaffing
+                            );
+                        },
+                        function(error) {
+                            staffingData.hasMonitorData = false;
+                        }
+                    );
+            };
+
+            service.pollSkillAreaDataByDate = function(selectedItem, toggles, utcDate) {
+                staffingData.waitingForData = true;
+                intradayService.getSkillAreaStaffingDataByDate
+                    .get({
+                        SkillAreaId: selectedItem.Id,
+                        DateTime: utcDate,
+                        UseShrinkage: false
+                    })
+                    .$promise.then(
+                        function(result) {
+                            staffingData.waitingForData = false;
+                            return service.setStaffingData(
+                                result,
+                                toggles.showOptimalStaffing,
+                                toggles.showScheduledStaffing
+                            );
+                        },
+                        function(error) {
+                            staffingData.hasMonitorData = false;
+                        }
+                    );
+            };
+
             service.loadStaffingChart = function(staffingData) {
                 var staffingChart = c3.generate({
                     bindto: '#staffingChart',

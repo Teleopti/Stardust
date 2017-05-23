@@ -106,8 +106,6 @@
 				};
 			};
 
-
-//Modify, add toggle and use chosenDate           
 			service.pollSkillData = function (selectedItem) {
 				trafficData.waitingForData = true;
 				intradayService.getSkillMonitorStatistics.query(
@@ -119,9 +117,24 @@
                 trafficData.waitingForData = true;
                 var data = intradayService.getSkillMonitorStatistics
                 	 .query({
-                        id: selectedItem.Id,
+                        id: selectedItem.Id
                         dayOffset: dayOffset
                     })
+                    .$promise.then(
+                        function(result) {
+                            trafficData.waitingForData = false;
+                            service.setTrafficData(result);
+                        },
+                        function(error) {
+                            trafficData.hasMonitorData = false;
+                        }
+                    );
+            };
+
+            service.pollSkillDataByDate = function(selectedItem, toggles, date) {
+                trafficData.waitingForData = true;
+                var data = intradayService.getSkillMonitorStatisticsByDate
+                    .get({id: selectedItem.Id, dateUtc: date})
                     .$promise.then(
                         function(result) {
                             trafficData.waitingForData = false;

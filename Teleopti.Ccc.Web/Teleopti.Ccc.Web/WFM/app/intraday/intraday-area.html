@@ -155,17 +155,7 @@
 											<div class="wfm-chart intraday-chart" id="trafficChart"></div>
 										</div>
 									</div>
-									<div ng-if="toggles.showOtherDay" class="con-row full-padding" layout="row" layout-align="center center">
-										<div class="con-flex" ng-repeat="item in dayOffsets">
-											<div class="wfm-radio">
-												<label>
-														<input type="radio" name="chooseDayOffset" ng-model="chosenOffset.value" ng-value="item.value"/>
-														<span class="wfm-radio-toggle"></span>
-														<span class="wfm-radio-label">{{item.text}}</span>
-												</label>
-											</div>
-										</div>
-									</div>
+									<date-offset ng-if="toggles.showOtherDay" chosen-offset="$scope.chosenOffset"></date-offset>
 									<div class="con-row full-padding">
 										<div class="con-flex">
 											<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
@@ -214,12 +204,19 @@
 									</div>
 								</md-content>
 								<md-content class="md-padding" ng-show="viewObj.hasMonitorData">
+									<div class="con-row full-padding" ng-if="toggles.showOtherDay">
+										<div layout="row" layout-align="center center">
+											<div>
+												<h2>Showing data for {{getLocalDate(chosenOffset.value)}}</h2>
+											</div>
+										</div>
+									</div>
 									<div class="con-row">
 										<div class="con-flex">
 										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
 											<div class="wfm-chart intraday-chart" id="performanceChart"></div>
 										</div>
-
+										<date-offset ng-if="toggles.showOtherDay" chosen-offset="$scope.chosenOffset"></date-offset>
 										<div class="con-row full-padding">
 											<div class="con-flex"></div>
 											<div class="con-flex">
@@ -271,11 +268,20 @@
 									</div>
 								</md-content>
 								<md-content class="md-padding" ng-show="viewObj.hasMonitorData && !viewObj.waitingForData">
+									<div class="con-row full-padding" ng-if="toggles.showOtherDay">
+										<div layout="row" layout-align="center center">
+											<div>
+												<h2>Showing data for {{getLocalDate(chosenOffset.value)}}</h2>
+											</div>
+										</div>
+									</div>
 									<div class="con-row">
 										<div class="con-flex">
 										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
 											<div class="wfm-chart intraday-chart" id="staffingChart"></div>
 										</div>
+									</div>
+									<date-offset ng-if="toggles.showOtherDay" chosen-offset="$scope.chosenOffset"></date-offset>
 								</md-content>
 								<md-content ng-cloak class="md-padding" ng-if="!viewObj.waitingForData && !viewObj.hasMonitorData">
 									<div class="con-row">
@@ -288,11 +294,11 @@
 						</md-tabs>
 					</md-content>
 					</div>
-					</div>
 				</div>
 			</div>
+		</div>
 
-			<!-- <div class="con-row no-data-available" ng-cloak ng-hide="selectedSkill.Name || selectedSkillArea.Name">
+		<!-- <div class="con-row no-data-available" ng-cloak ng-hide="selectedSkill.Name || selectedSkillArea.Name">
 <div class="con-flex">
 <div class="panel full-padding material-depth-1">
 <i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}} {{'NoDataAvailable'|translate}}</span>
@@ -302,21 +308,21 @@
 <div class="con-flex"></div>
 </div> -->
 
-			<div ng-cloak class="modal-box">
-				<div ng-cloak ng-show="DeleteSkillAreaModal">
-					<div class="modalbg">
-						<div class="dialog-mini">
-							<div class="modal-inner-content">
-								<h3>{{selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
-							</div>
-							<div class="modal-actions">
-								<aside>
-									<button ng-click="toggleModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-									<button ng-click='deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
-								</aside>
-							</div>
+		<div ng-cloak class="modal-box">
+			<div ng-cloak ng-show="DeleteSkillAreaModal">
+				<div class="modalbg">
+					<div class="dialog-mini">
+						<div class="modal-inner-content">
+							<h3>{{selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
+						</div>
+						<div class="modal-actions">
+							<aside>
+								<button ng-click="toggleModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+								<button ng-click='deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
+							</aside>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>

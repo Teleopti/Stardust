@@ -96,10 +96,10 @@
                     id: '@id',
                     dayOffset: '@dayOffset'
                 },
-                {
+                 {
                     query: {
                         method: 'GET',
-                        params: {},
+                        //params: {id: '@id', dateUtc: '@date'},
                         isArray: false
                     }
                 }
