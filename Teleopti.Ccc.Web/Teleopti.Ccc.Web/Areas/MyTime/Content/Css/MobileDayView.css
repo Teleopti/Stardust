@@ -65,6 +65,7 @@
 	min-width: 35px;
 }
 .mobile-start-day .mobile-summary-content {
+	border-radius: 3px;
 	padding: 5px 0;
 	margin: 10px 0;
 	width: 100%;
@@ -101,14 +102,19 @@
 }
 .mobile-start-day .mobile-schedule-layer {
 	text-align: center;
-	border-radius: 2px;
-	border-left: 0;
 	overflow: hidden;
+	border-left: 0;
 	border-top: 1px solid #DFDFDF;
 	border-bottom: 1px solid #DFDFDF;
-}
-.mobile-start-day .mobile-schedule-layer {
 	min-width: 130px;
+}
+.mobile-start-day .mobile-schedule-layer:first-of-type{
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+}
+.mobile-start-day .mobile-schedule-layer.last-layer{
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
 }
 .mobile-start-day .probability-vertical-bar{
 	position: absolute;
@@ -117,14 +123,14 @@
 	top: 1px;
 	width: 28px;
 }
-.mobile-start-day .probability-vertical-bar .probability-cell:first-child{
-	border-top-left-radius: 2px;
-	border-top-right-radius: 2px;
+.mobile-start-day .probability-vertical-bar .probability-cell:first-of-type{
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
 	border-top: 1px solid #DFDFDF;
 }
-.mobile-start-day .probability-vertical-bar .probability-cell:last-child{
-	border-bottom-right-radius: 2px;
-	border-bottom-left-radius: 2px;
+.mobile-start-day .probability-vertical-bar .probability-cell:last-of-type{
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
 	border-bottom: 1px solid #DFDFDF;
 }
 .mobile-add-request-form{
@@ -138,4 +144,19 @@
 }
 .mobile-add-request-form .well{
 	margin: 0;
+}
+.mobile-add-request-form div.pull-right{
+	margin-top: 20px;
+}
+.mobile-add-request-form .checkbox{
+	padding-left: 25px;
+}
+.mobile-add-request-form button.btn.request-new-cancel,
+.mobile-add-request-form button.btn.absence-report-cancel{
+	border: 1px solid #cccccc;
+}
+.mobile-add-request-form input[type='checkbox'], 
+.mobile-add-request-form i.glyphicon, 
+.mobile-add-request-form input.overtime-availability-next-day{
+	transform: scale(1.5);
 }

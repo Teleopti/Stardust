@@ -120,8 +120,12 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		});
 		self.timeLines(timelines);
 
-		var layers = ko.utils.arrayMap(rawPeriods, function (item) {
-			return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, true);
+		var layers = rawPeriods.map(function (item, index) {
+			var layer = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, true);
+			layer.isLastLayer = false;
+			if(index == rawPeriods.length - 1)
+				layer.isLastLayer = true;
+			return layer;
 		});
 		self.layers(layers);
 
