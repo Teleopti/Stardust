@@ -61,6 +61,7 @@
     <Compile Include="PerformanceTestWithOneTimeSetup.cs" />
     <Compile Include="PerformanceTuningTest.cs" />
     <Compile Include="RequestPerformanceTestAttribute.cs" />
+    <Compile Include="StaffingReadModelLocksTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
