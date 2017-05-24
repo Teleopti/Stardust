@@ -242,7 +242,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(workloadPhone);
 			PersistAndRemoveFromUnitOfWork(workloadEmail);
 
-			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null));
+			var target = new LoadSkillInIntradays(CurrUnitOfWork,
+				new SupportedSkillsInIntradayProvider(null,
+					new List<ISupportedSkillCheck>()
+					{
+						new InboundPhoneSkillSupported()
+					},
+					new MultisiteSkillSupportedCheckAlwaysTrue()
+				));
 			var skills = target.Skills().ToList();
 			
 			skills.First().IsMultisiteSkill.Should().Be.True();
