@@ -136,7 +136,7 @@ When I click the menu button in start page
 And I click menu Overtime Availability
 And I input '18:00' as overtime startTime and '19:00' as overtime endTime
 And I click save request
-Then I should see '18:00 - 19:00' 'Overtime Availability' in schedule
+Then I should see '18:00 - 19:00' Overtime Availability in schedule
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209')
 Scenario: Could add absence report

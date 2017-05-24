@@ -192,6 +192,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertAnyContains("span.displayblock", timeSpan);
 		}
 
+		[Then(@"I should see '(.*)' Overtime Availability in schedule")]
+		public void ThenIShouldSeeOvertimeAvailabilityInSchedule(string timeSpan)
+		{
+			Browser.Interactions.Click("div>i.glyphicon-time");
+			Browser.Interactions.AssertAnyContains("div.tooltip-inner", timeSpan);
+		}
+
+
 		[When(@"I click show probability toggle")]
 		public void WhenIClickShowProbabilityToggle()
 		{
