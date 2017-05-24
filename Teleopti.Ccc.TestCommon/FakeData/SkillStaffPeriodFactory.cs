@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             ISkillStaffPeriod skillStaffPeriod = mockRepository.StrictMock<ISkillStaffPeriod>();
             Expect.Call(skillStaffPeriod.IsAvailable).Return(true).Repeat.Any();
+            Expect.Call(skillStaffPeriod.DateTimePeriod).Return(period).Repeat.Any();
             Expect.Call(skillStaffPeriod.Period).Return(period).Repeat.Any();
             return skillStaffPeriod;
         }
