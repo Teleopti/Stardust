@@ -39,7 +39,7 @@
 			date: null,
 			status: 'full'
 		}
-		
+
 		getSkills();
 		getSkillAreas();
 		checkToggles();
@@ -89,12 +89,12 @@
 		}
 
 		function getSkillStaffingByDate(skillId, date, shrinkage) {
-			var data = { SkillId: skillId, DateTime: date, UseShrinkage: shrinkage};
+			var data = { SkillId: skillId, DateTime: date, UseShrinkage: shrinkage };
 			return staffingService.getSkillStaffingByDate.get(data);
 		}
 
 		function getSkillAreaStaffingByDate(skillId, date, shrinkage) {
-			var data = { SkillId: skillId, DateTime: date, UseShrinkage: shrinkage};
+			var data = { SkillId: skillId, DateTime: date, UseShrinkage: shrinkage };
 			return staffingService.getSkillAreaStaffingByDate.get(data);
 		}
 
@@ -182,7 +182,7 @@
 			generateChart(skill, null);
 			selectSkillOrArea(skill, null);
 		}
-		
+
 		function selectedAreaChange(area) {
 			if (area == null) return;
 			generateChart(null, area);
@@ -258,10 +258,39 @@
 			NoticeService.success('ResourceCalculation Triggered', 5000, true);
 		};
 
-		function generateChartForView() {
+		function generateObject() {
+			var types = {};
+			var scheduleColorKey = staffingData.scheduledStaffing[0];
+			var absoluteColorKey = staffingData.absData[0]
+			types[scheduleColorKey] = '#009688';
+			types[absoluteColorKey] = '#66C2FF';
+			types
+			return types;
+		}
+
+		function calculateDifference() {
+			var forcasted = staffingData.forcastedStaffing;
+			var scheduled = staffingData.scheduledStaffing;
+			staffingData.absData = [];
+			staffingData.absData.unshift('Absolute');
+			for (var index = 1; index <= scheduled.length; index++) {
+				var value = forcasted[index] - scheduled[index];
+				// if (value < 0) {
+				// 	staffingData.scheduledStaffing[index] = scheduled[index] + value;
+				// }
+				staffingData.absData.push(Math.abs(value));
+			}
+
+		}
+
+		function generateChartForView(input) {
+			calculateDifference();
+			var chartColors = generateObject();
 			c3.generate({
 				bindto: '#staffingChart',
 				data: {
+					order: 'null',
+					type: 'bar',
 					selection: {
 						enabled: vm.draggable,
 						draggable: vm.draggable,
@@ -270,12 +299,30 @@
 
 					},
 					x: "x",
+					colors: chartColors,
 					columns: [
 						staffingData.time,
-						staffingData.forcastedStaffing,
 						staffingData.scheduledStaffing,
-						staffingData.suggestedStaffing
+						staffingData.absData,
 					],
+					groups: [
+						[staffingData.absData[0], staffingData.scheduledStaffing[0]]
+					],
+					color: function (color, d) {
+						// d will be 'id' when called for legends¨
+						if (d.id && d.id === staffingData.absData[0]) {
+							/*if (staffingData.forcastedStaffing[d.index+1] - staffingData.scheduledStaffing[d.index+1] <= 0) {
+								console.log(d,staffingData.forcastedStaffing[d.index+1]- staffingData.scheduledStaffing[d.index+1]);  
+								return d3.color('#D32F2F');
+							}*/
+							console.log(d);
+							if (d.value > 3) {
+								return d3.rgb('#D32F2F');
+							}
+						}
+						return color;
+					}
+
 				},
 				axis: {
 					x: {
