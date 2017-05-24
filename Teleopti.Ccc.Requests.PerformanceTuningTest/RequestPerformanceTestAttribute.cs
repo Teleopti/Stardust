@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			system.AddModule(new TenantServerModule(configuration));
 			system.AddModule(new AnywhereAreaModule(configuration));
 			system.AddModule(new TeamScheduleAreaModule());
-			system.AddModule(new CommonModule(configuration));
 			system.AddModule(new RuleSetModule(configuration,true));
 		}
 
