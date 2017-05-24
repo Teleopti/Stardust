@@ -188,7 +188,6 @@
     <Compile Include="NodeHandlers\IndexMaintenanceHandler.cs" />
     <Compile Include="NodeHandlers\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="NodeHandlers\PersonAbsenceRemovedHandler.cs" />
-    <Compile Include="NodeHandlers\RequestPersonAbsenceRemovedHandler.cs" />
     <Compile Include="NodeHandlers\UpdateStaffingLevelReadModel2WeeksHandler.cs" />
     <Compile Include="NodeHandlers\UpdateStaffingLevelReadModelHandler.cs" />
     <Compile Include="NodeHandlers\RunRequestWaitlistStardustHandler.cs" />
