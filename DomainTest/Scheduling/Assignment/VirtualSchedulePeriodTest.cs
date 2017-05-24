@@ -405,14 +405,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		    Assert.That(ret.EndDate, Is.EqualTo(new DateOnly(2010, 10, 26)));
 	    }
 
-	    [Test]
-        public void NoIntersectionWithOriginalShouldReturnZeroPercent()
-        {
-            var originalPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 31);
-            var ret = _target.GetPercentageWorkdaysOfOriginalPeriod(originalPeriod, null);
-            Assert.That(ret, Is.EqualTo(new Percent(0)));
-        }
-
         [Test]
         public void ShouldReturnTrueIfPeriodIsFirst()
         {

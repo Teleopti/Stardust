@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-    public class VirtualSchedulePeriod : IVirtualSchedulePeriod
+	public class VirtualSchedulePeriod : IVirtualSchedulePeriod
     {
         private readonly SchedulePeriod _schedulePeriod;
         private readonly IPerson _person;
@@ -254,56 +254,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return currentPeriod;
         }
 
-        public Percent GetPercentageWorkdaysOfOriginalPeriod(DateOnlyPeriod originalPeriod, ISchedulePeriod schedulePeriod)
-        {
-            var intersection = DateOnlyPeriod.Intersection(originalPeriod);
-            if (intersection == null)
-                return new Percent(0);
+	    private double percentOfOrginalPeriod()
+	    {
+			if (_contractSchedule == null || !IsValid)
+				return 0;
 
-            var originalWorkDays = (double)((SchedulePeriod)schedulePeriod).GetWorkdays();
-            if (originalWorkDays == 0)
-                return new Percent(0);
-            var currentWorkDays = (double)Workdays();
+			var originalPeriod = GetOriginalStartPeriodForType(_schedulePeriod, _person.PermissionInformation.Culture());
+		    var intersection = DateOnlyPeriod.Intersection(originalPeriod);
+		    if (intersection == null)
+			    return 0;
 
-            return new Percent(Math.Round((currentWorkDays / originalWorkDays), 2));
-        }
+			var originalWorkDays = (double)_schedulePeriod.GetWorkdays();
+		    if (originalWorkDays == 0)
+			    return 0;
+		    var currentWorkDays = (double)Workdays();
+		    return Math.Round(currentWorkDays / originalWorkDays, 2);
+		}
 
-        private TimeSpan percentOfOriginalPeriod(TimeSpan originaTimeSpan)
-        {
-            if (!IsValid)
-                return TimeSpan.Zero;
+	    public virtual TimeSpan BalanceIn => TimeSpan.FromMinutes(_schedulePeriod.BalanceIn.TotalMinutes * percentOfOrginalPeriod());
 
-            if (_contractSchedule == null) return TimeSpan.Zero;
+	    public virtual TimeSpan Extra => TimeSpan.FromMinutes(_schedulePeriod.Extra.TotalMinutes * percentOfOrginalPeriod());
 
-            var originalPeriod = GetOriginalStartPeriodForType(_schedulePeriod, _person.PermissionInformation.Culture());
-            var percent = GetPercentageWorkdaysOfOriginalPeriod(originalPeriod, _schedulePeriod);
-            return TimeSpan.FromMinutes(originaTimeSpan.TotalMinutes * percent.Value);
-        }
+		public virtual Percent Seasonality => _schedulePeriod.Seasonality;
 
-        public virtual TimeSpan BalanceIn
-        {
-            get { return percentOfOriginalPeriod(_schedulePeriod.BalanceIn); }
-        }
+	    public virtual TimeSpan BalanceOut => TimeSpan.FromMinutes(_schedulePeriod.BalanceOut.TotalMinutes * percentOfOrginalPeriod());
 
-        public virtual TimeSpan Extra
-        {
-            get { return percentOfOriginalPeriod(_schedulePeriod.Extra); }
-        }
-
-        public virtual Percent Seasonality
-        {
-            get
-            {
-                return _schedulePeriod.Seasonality;
-            }
-        }
-
-        public virtual TimeSpan BalanceOut
-        {
-            get { return percentOfOriginalPeriod(_schedulePeriod.BalanceOut); }
-        }
-
-        public override bool Equals(object obj)
+		public override bool Equals(object obj)
         {
             var casted = obj as VirtualSchedulePeriod;
             if (obj == null || casted == null)
