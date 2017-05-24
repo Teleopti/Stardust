@@ -29,9 +29,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		private const string tenantName = "Teleopti WFM";
 		private readonly Guid businessUnitId = new Guid("1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B");
 		private readonly DateTime baseDate = new DateTime(2016, 03, 16, 07, 00, 00, DateTimeKind.Utc);
-
-		//private ScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
-
+		
 		public MutableNow Now;
 		public FakeConfigReader ConfigReader;
 
@@ -73,12 +71,11 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		[Test]
 		public void ShouldProcessCalculationOfAbsencePossibilitiesIntradayForMultipleAgents()
 		{
-			intial();
+			initialise();
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
 			updateStaffingLevel(period);
 			var personIds = loadPersonIds();
-			//var personIds = new[] { new Guid("0b4390a8-2128-4550-8d03-a14100f34ea1") };
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
@@ -96,7 +93,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		[Test]
 		public void ShouldProcessCalculationOfAbsencePossibilitiesByPeriodForMultipleAgents()
 		{
-			intial();
+			initialise();
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(13));
 			updateStaffingLevel(period);
@@ -167,7 +164,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			return stopwatch.ElapsedMilliseconds;
 		}
 
-		private void intial()
+		private void initialise()
 		{
 			logonSystem();
 			Now.Is(baseDate);
