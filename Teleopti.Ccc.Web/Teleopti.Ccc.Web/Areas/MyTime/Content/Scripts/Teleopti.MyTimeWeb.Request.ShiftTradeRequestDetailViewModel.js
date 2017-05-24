@@ -82,7 +82,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		self.PrefixAgentNameToMessage();
 
 		self.ajax.Ajax({
-			url: "Requests/ApproveShiftTrade/",
+			url: "Requests/ApproveShiftTrade",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: "POST",
@@ -103,7 +103,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		self.PrefixAgentNameToMessage();
 
 		self.ajax.Ajax({
-			url: "Requests/DenyShiftTrade/",
+			url: "Requests/DenyShiftTrade",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: "POST",

@@ -34,7 +34,6 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
@@ -603,8 +602,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
-				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons) { DoLoadByPerson = true };
-				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
+				var personsInOrganizationProvider = new PersonsInOrganizationProvider(persons) { DoLoadByPerson = true };
+				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
 
 				var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
 				var schedulesDictionary = scheduleRepository.FindSchedulesForPersons(scheduleDateTimePeriod, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, persons);

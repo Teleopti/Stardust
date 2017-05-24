@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
-																		   IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+																		   ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 																		   DateTimePeriod dateTimePeriod, IScenario scenario)
 		{
 			if (!_data.Any())
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period, IScenario scenario)
 		{
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons,
-																			IScheduleDictionaryLoadOptions
+																			ScheduleDictionaryLoadOptions
 																				scheduleDictionaryLoadOptions, DateOnlyPeriod period,
 																			IScenario scenario)
 		{
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario,
 														   IPersonProvider personsProvider,
-														   IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+														   ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 														   IEnumerable<IPerson> visiblePersons)
 		{
 			var dateTimePeriod = period.VisiblePeriod;

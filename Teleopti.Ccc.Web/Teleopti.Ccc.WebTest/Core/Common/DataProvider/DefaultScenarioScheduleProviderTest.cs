@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
 			_scheduleStorage.Stub(x => x.FindSchedulesForPersonsOnlyInGivenPeriod(
 				Arg<IEnumerable<IPerson>>.Matches(o => o.Single() == user),
-				Arg<IScheduleDictionaryLoadOptions>.Is.Anything,
+				Arg<ScheduleDictionaryLoadOptions>.Is.Anything,
 				Arg<DateOnlyPeriod>.Is.Equal(period),
 				Arg<IScenario>.Is.Equal(scenario)))
 				.Return(scheduleDictionary);

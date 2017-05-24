@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		private void initializeSchedules(IUnitOfWork uow, IScheduleDateTimePeriod scheduleDateTimePeriod)
 		{
 			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_schedulerState.SchedulingResultState.PersonsInOrganization);
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 			IScheduleStorage scheduleStorage = _scheduleStorageFactory.Create(uow);
 
 			using (PerformanceOutput.ForOperation("Loading schedules"))

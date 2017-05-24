@@ -108,13 +108,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		public static void CreateScheduledTimeVersusTargetData(IUnitOfWork unitOfWork, ReportSettingsScheduleTimeVersusTargetTimeModel model, Dictionary<string, IList<IScheduledTimeVersusTargetTimeReportData>> data, TimeZoneInfo timeZoneInfo, CommonNameDescriptionSetting commonNameDescriptionSetting)
 		{
 			if (model == null)
-				throw new ArgumentNullException("model");
+				throw new ArgumentNullException(nameof(model));
 
 			if (data == null)
-				throw new ArgumentNullException("data");
+				throw new ArgumentNullException(nameof(data));
 
 			if (commonNameDescriptionSetting == null)
-				throw new ArgumentNullException("commonNameDescriptionSetting");
+				throw new ArgumentNullException(nameof(commonNameDescriptionSetting));
 
 			data.Clear();
 
@@ -183,10 +183,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 		private static void loadSchedules(IUnitOfWork unitOfWork, IEnumerable<IPerson> persons, ISchedulerStateHolder stateHolder)
 		{
-			if (stateHolder == null) throw new ArgumentNullException("stateHolder");
+			if (stateHolder == null) throw new ArgumentNullException(nameof(stateHolder));
 			var period = new ScheduleDateTimePeriod(stateHolder.RequestedPeriod.Period(), stateHolder.SchedulingResultState.PersonsInOrganization);
 			IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons) { DoLoadByPerson = true};
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
+			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 			unitOfWork.Reassociate(persons);
 			var repositoryFactory = new RepositoryFactory();
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		public static IList<IReportDataParameter> CreateScheduleAuditingParameters(ReportSettingsScheduleAuditingModel model, IFormatProvider culture)
 		{
 			if(model == null)
-				throw new ArgumentNullException("model");
+				throw new ArgumentNullException(nameof(model));
 
 			IList<IReportDataParameter> parameters = new List<IReportDataParameter>();
 			parameters.Add(new ReportDataParameter("param_audit_owner", model.ModifiedByNameCommaSeparated()));
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		public static IList<IReportDataParameter> CreateScheduledTimeVersusTargetParameters(ReportSettingsScheduleTimeVersusTargetTimeModel model, IFormatProvider culture)
 		{
 			if(model == null)
-				throw new ArgumentNullException("model");
+				throw new ArgumentNullException(nameof(model));
 
 			IList<IReportDataParameter> parameters = new List<IReportDataParameter>
 														{

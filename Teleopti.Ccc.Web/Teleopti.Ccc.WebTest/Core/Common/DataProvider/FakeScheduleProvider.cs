@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 	public class FakeScheduleProvider : IScheduleProvider
 	{
 		private readonly List<IScheduleDay> _scheduleDays;
-		public IScheduleDictionaryLoadOptions LatestScheduleLoadOptions;
+		public ScheduleDictionaryLoadOptions LatestScheduleLoadOptions;
 
 		public FakeScheduleProvider(params IScheduleDay[] scheduleDays)
 		{
@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			}			
 		}
 
-		public IEnumerable<IScheduleDay> GetScheduleForPeriod(DateOnlyPeriod period, IScheduleDictionaryLoadOptions options = null)
+		public IEnumerable<IScheduleDay> GetScheduleForPeriod(DateOnlyPeriod period, ScheduleDictionaryLoadOptions options = null)
 		{
 			LatestScheduleLoadOptions = options;
 			return _scheduleDays.Where(sd => period.Contains(sd.DateOnlyAsPeriod.DateOnly));
 		}
 
-		public IEnumerable<IScheduleDay> GetScheduleForStudentAvailability(DateOnlyPeriod period, IScheduleDictionaryLoadOptions options = null)
+		public IEnumerable<IScheduleDay> GetScheduleForStudentAvailability(DateOnlyPeriod period, ScheduleDictionaryLoadOptions options = null)
 		{
 			LatestScheduleLoadOptions = options;
 			return _scheduleDays;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		}
 
 		public IEnumerable<IScheduleDay> GetScheduleForPersonsWithOptions(DateOnly date, IEnumerable<IPerson> persons,
-			IScheduleDictionaryLoadOptions options = null)
+			ScheduleDictionaryLoadOptions options = null)
 		{
 			LatestScheduleLoadOptions = options;
 			return _scheduleDays.Where(sd =>
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		}
 
 		public IEnumerable<IScheduleDay> GetScheduleForPersonsInPeriod(DateOnlyPeriod period, IEnumerable<IPerson> persons,
-			IScheduleDictionaryLoadOptions options)
+			ScheduleDictionaryLoadOptions options)
 		{
 			LatestScheduleLoadOptions = options;
 			return _scheduleDays.Where(sd =>

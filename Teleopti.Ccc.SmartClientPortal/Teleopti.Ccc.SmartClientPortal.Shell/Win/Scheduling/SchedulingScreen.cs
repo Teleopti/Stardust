@@ -3834,7 +3834,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				// so that a criteria for that is used later when loading schedules.
 				var loaderSpecification = new LoadScheduleByPersonSpecification();
 				personsInOrganizationProvider.DoLoadByPerson = loaderSpecification.IsSatisfiedBy(getDeciderResult());
-				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true)
+				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true)
 				{
 					LoadDaysAfterLeft = true
 				};

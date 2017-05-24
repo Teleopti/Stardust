@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core
         {
             var today = DateOnly.Today;
 	        scheduleProvider
-		        .Stub(sp => sp.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+		        .Stub(sp => sp.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 		        .Return(new List<IScheduleDay>());
 
 			var result = target.Get(today);
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core
         {
             var date = new DateOnly(2014,1,11);
 			scheduleProvider
-				.Stub(sp => sp.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+				.Stub(sp => sp.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new List<IScheduleDay>());
 
 			target.Get(date);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -12,19 +13,19 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
 			IPerson person,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateTimePeriod dateTimePeriod,
 			IScenario scenario);
 
 		IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
 			IPerson person,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period,
 			IScenario scenario);
 
 		IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(
 			IEnumerable<IPerson> persons,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period,
 			IScenario scenario);
 
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			IScheduleDateTimePeriod period,
 			IScenario scenario,
 			IPersonProvider personsProvider,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			IEnumerable<IPerson> visiblePersons);
 
 		IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 	public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateTimePeriod dateTimePeriod, IScenario scenario)
 		{
 			ThePeriodThatWasUsedForFindingSchedules = dateTimePeriod;
@@ -72,16 +73,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-			DateOnlyPeriod period, IScenario scenario)
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario)
 		{
 			return FindSchedulesForPersonOnlyInGivenPeriod (person, scheduleDictionaryLoadOptions, period.ToDateTimePeriod (TimeZoneInfo.Utc), scenario);
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons,
-			IScheduleDictionaryLoadOptions
-				scheduleDictionaryLoadOptions, DateOnlyPeriod period,
-			IScenario scenario)
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario)
 		{
 			var thePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(period.StartDate, period.EndDate.AddDays(1), TimeZoneInfo.Utc);
 			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, thePeriod, _data.Where(d => d.BelongsToScenario(scenario)&& persons.Contains(d.Person)).ToArray());
@@ -104,7 +102,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario,
 			IPersonProvider personsProvider,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			IEnumerable<IPerson> visiblePersons)
 		{
 			var dateTimePeriod = period.VisiblePeriod;

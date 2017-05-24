@@ -19,7 +19,6 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -144,7 +143,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			IList<IPerson> persons = new List<IPerson>();
 			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longDateOnlyPeriod);
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 			IScheduleDictionary retDic;
 
@@ -237,7 +236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			peopleInOrganization.Add(person2);
 			peopleInOrganization.Add(person3);
 			IPersonProvider personsProvider = new PersonsInOrganizationProvider(peopleInOrganization) { DoLoadByPerson = true };
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 			person3.TerminatePerson(new DateOnly(2000, 1, 8), new PersonAccountUpdaterDummy());
 			var pAss1 = addPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
@@ -288,7 +287,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			peopleInOrganization.Add(person2);
 			peopleInOrganization.Add(person3);
 			IPersonProvider personsProvider = new PersonsInOrganizationProvider(peopleInOrganization) { DoLoadByPerson = true };
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true)
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true)
 			{
 				LoadDaysAfterLeft = true
 			};
@@ -336,7 +335,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson person3 = PersonFactory.CreatePerson("xxxxxx").WithId();
 			peopleInOrganization.Add(person3);
 			IPersonProvider personsProvider = new PersonsInOrganizationProvider(peopleInOrganization) { DoLoadByPerson = true };
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 			person3.TerminatePerson(new DateOnly(2000, 1, 8), new PersonAccountUpdaterDummy());
 			var pAss2 = addPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
@@ -478,7 +477,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IList<IPerson> persons = new List<IPerson>();
 
 			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longDateOnlyPeriod);
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 			IScheduleDictionary retDic;
 
@@ -799,15 +798,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldThrowExceptionOnNullPeriod()
 		{
 			var personProvider = _mocks.StrictMock<IPersonProvider>();
-			var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
-			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersons(null, _scenario, personProvider, scheduleDictionaryLoadOptions, new List<IPerson>()));
+			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersons(null, _scenario, personProvider, new ScheduleDictionaryLoadOptions(true,true), new List<IPerson>()));
 		}
 
 		[Test]
 		public void ShouldThrowExceptionOnNullPersonProvider()
 		{
-			var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
-			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersons(_schedPeriod, _scenario, null, scheduleDictionaryLoadOptions, new List<IPerson>()));
+			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersons(_schedPeriod, _scenario, null, new ScheduleDictionaryLoadOptions(true, true), new List<IPerson>()));
 		}
 
 		[Test]
@@ -820,8 +817,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldThrowExceptionOnNullPersonProviderInGivenPeriod()
 		{
-			var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
-			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersonsOnlyInGivenPeriod(null, scheduleDictionaryLoadOptions, _longDateOnlyPeriod, _scenario));
+			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersonsOnlyInGivenPeriod(null, new ScheduleDictionaryLoadOptions(true, true), _longDateOnlyPeriod, _scenario));
 		}
 
 		[Test]

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.ViewModelFactory
 			var expectedPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 3);
 
 			pushMessageProvider.Expect(p => p.UnreadMessageCount).Return(2);
-			scheduleProvider.Expect(s => s.GetScheduleForPeriod(expectedPeriod)).Return(scheduleDays);
+			scheduleProvider.Expect(s => s.GetScheduleForPeriod(expectedPeriod,null)).IgnoreArguments().Return(scheduleDays);
 			mapper.Expect(m => m.Map(asmZero, scheduleDays, 2)).Return(viewModel);
 
 			var target = new AsmViewModelFactory(scheduleProvider, mapper, pushMessageProvider, permissionProvider);

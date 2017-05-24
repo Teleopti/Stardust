@@ -1,8 +1,6 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-
-namespace Teleopti.Ccc.Domain.Common
+﻿namespace Teleopti.Ccc.Domain.Common
 {
-	public class ScheduleDictionaryLoadOptions : IScheduleDictionaryLoadOptions
+	public class ScheduleDictionaryLoadOptions
 	{
 		public bool LoadRestrictions { get; set; }
 		public bool LoadNotes { get; set; }

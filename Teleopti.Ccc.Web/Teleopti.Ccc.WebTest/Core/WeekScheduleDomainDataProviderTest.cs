@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 			var projection = new StubFactory().ProjectionStub();
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 			var projection = new StubFactory().ProjectionStub();
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var projection = new StubFactory().ProjectionStub();
 			var datesInWeek = (from d in firstDayOfWeek.Date.DateRange(7) select new DateOnly(d)).ToList();
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 			var projection = new StubFactory().ProjectionStub();
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
 							 .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> { overtimeAvailability }));
 			var projection = new StubFactory().ProjectionStub();
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 			var projection = new StubFactory().ProjectionStub();
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
 			var projection = new StubFactory().ProjectionStub(new[] { layer });
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -412,7 +412,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
 			var projection = new StubFactory().ProjectionStub(new[] { layer });
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -436,7 +436,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
 			var projection = new StubFactory().ProjectionStub(new[] { layer });
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -519,7 +519,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.Period()).Return(null);
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -545,7 +545,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.Period()).Return(null);
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetWeekSchedule(date);
@@ -729,7 +729,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var projection = new StubFactory().ProjectionStub();
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything,
-					Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+					Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
@@ -744,7 +744,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 			var projection = new StubFactory().ProjectionStub();
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<IScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
 			var result = target.GetDaySchedule(date);
@@ -774,7 +774,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var projection = new StubFactory().ProjectionStub();
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything,
-					Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+					Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
@@ -812,7 +812,7 @@ namespace Teleopti.Ccc.WebTest.Core
 				.Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> { overtimeAvailability }));
 			var projection = new StubFactory().ProjectionStub();
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything,
-					Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+					Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
@@ -1036,7 +1036,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var projection = new StubFactory().ProjectionStub();
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything,
-					Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+					Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
@@ -1059,7 +1059,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var projection = new StubFactory().ProjectionStub(new[] { layer });
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything,
-					Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+					Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
@@ -1085,7 +1085,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var projection = new StubFactory().ProjectionStub(new[] { layer });
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything,
-					Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+					Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
@@ -1111,7 +1111,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var projection = new StubFactory().ProjectionStub(new[] { layer });
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything,
-					Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+					Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
@@ -1192,7 +1192,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			projection.Stub(x => x.Period()).Return(null);
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything,
-					Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+					Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 
@@ -1220,7 +1220,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			projection.Stub(x => x.Period()).Return(null);
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything,
-					Arg<IScheduleDictionaryLoadOptions>.Is.Anything))
+					Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 

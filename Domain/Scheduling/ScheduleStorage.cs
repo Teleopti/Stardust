@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
 			IPerson person,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateTimePeriod dateTimePeriod,
 			IScenario scenario
 			)
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
 			IPerson person,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period,
 			IScenario scenario
 			)
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	    public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(
 			IEnumerable<IPerson> persons, 
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
 			DateOnlyPeriod period, 
 			IScenario scenario)
 	    {
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private IScheduleDictionary findSchedulesOnlyInGivenPeriod(
 			IEnumerable<IPerson> people, 
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
 			DateOnlyPeriod period, 
 			DateTimePeriod dictionaryPeriod, 
 			IScenario scenario)
@@ -212,7 +213,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    IScheduleDateTimePeriod period,
 			    IScenario scenario,
 			    IPersonProvider personsProvider,
-			    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			    ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			    IEnumerable<IPerson> visiblePersons)
 	    {
 		    if (period == null) throw new ArgumentNullException(nameof(period));
@@ -261,12 +262,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    return scheduleDictionary;
 	    }
 
-	    protected virtual void LoadSchedulesByPersons(IScenario scenario, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, IScheduleDateTimePeriod period, IEnumerable<IPerson> personsInOrganization, IEnumerable<IPerson> selectedPersons)
+	    protected virtual void LoadSchedulesByPersons(IScenario scenario, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, IScheduleDateTimePeriod period, IEnumerable<IPerson> personsInOrganization, IEnumerable<IPerson> selectedPersons)
 	    {
 		    DoLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary, period.LongLoadedDateOnlyPeriod(), personsInOrganization);
 	    }
 
-	    protected void DoLoadSchedulesPerPersons(IScenario scenario, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> personsToLoad)
+	    protected void DoLoadSchedulesPerPersons(IScenario scenario, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> personsToLoad)
 	    {
 		    var uow = _currentUnitOfWork.Current();
 			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(personsToLoad, longDateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc), scenario), scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
@@ -284,12 +285,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    }
 	    }
 
-	    protected virtual void LoadScheduleForAll(IScenario scenario, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, IScheduleDateTimePeriod period, IEnumerable<IPerson> selectedPersons)
+	    protected virtual void LoadScheduleForAll(IScenario scenario, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, IScheduleDateTimePeriod period, IEnumerable<IPerson> selectedPersons)
 	    {
 		    DoLoadScheduleForAll(scenario, scheduleDictionary, period.LongLoadedDateOnlyPeriod(), scheduleDictionaryLoadOptions);
 	    }
 
-	    protected void DoLoadScheduleForAll(IScenario scenario, IScheduleDictionary scheduleDictionary, DateOnlyPeriod dateOnlyPeriod, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions)
+	    protected void DoLoadScheduleForAll(IScenario scenario, IScheduleDictionary scheduleDictionary, DateOnlyPeriod dateOnlyPeriod, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions)
 	    {
 		    var longPeriod = dateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc);
 		    var uow = _currentUnitOfWork.Current();

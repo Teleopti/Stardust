@@ -19,7 +19,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             IScheduleDictionary scheduleDictionary = new ScheduleDictionary(ScenarioFactory.CreateScenarioAggregate(),period, _permissionChecker);
             var scheduleStorage = mocks.StrictMock<IFindSchedulesForPersons>();
             IPersonProvider personsProvider = mocks.StrictMock<IPersonProvider>();
-            IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = mocks.StrictMock<IScheduleDictionaryLoadOptions>();
+            var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
             using(mocks.Record())
             {
                 Expect.Call(scheduleStorage.FindSchedulesForPersons(scheduleDictionary.Period, target.RequestedScenario, personsProvider, scheduleDictionaryLoadOptions, selectedPersons))
@@ -409,7 +408,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void ShouldThrowExceptionOnNullScheduleRepository()
         {
             var personProvider = mocks.StrictMock<IPersonProvider>();
-            var scheduleDictionaryLoadOptions = mocks.StrictMock<IScheduleDictionaryLoadOptions>();
+            var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
             var scheduleDateTimePeriod = mocks.StrictMock<IScheduleDateTimePeriod>();
 			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(null, personProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod));
         }
@@ -418,7 +417,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void ShouldThrowExceptionOnNullPeriod()
         {
             var personProvider = mocks.StrictMock<IPersonProvider>();
-            var scheduleDictionaryLoadOptions = mocks.StrictMock<IScheduleDictionaryLoadOptions>();
+            var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
             var scheduleRepository = mocks.StrictMock<IFindSchedulesForPersons>();
 			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(scheduleRepository, personProvider, scheduleDictionaryLoadOptions, null));
         }

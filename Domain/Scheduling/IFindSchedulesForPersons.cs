@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IScheduleDateTimePeriod period,
 			IScenario scenario,
 			IPersonProvider personsProvider,
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			IEnumerable<IPerson> visiblePersons);
 	}
 }

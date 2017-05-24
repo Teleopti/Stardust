@@ -301,8 +301,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 												  {
 													  DoLoadByPerson = true
 												  };
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,
-																											 false);
+			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 			var data = new Dictionary<string, IList<IReportData>>();
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

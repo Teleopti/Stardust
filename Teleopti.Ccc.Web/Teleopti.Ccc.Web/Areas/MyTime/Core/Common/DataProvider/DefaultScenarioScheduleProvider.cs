@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_scenarioRepository = scenarioRepository;
 		}
 
-		public IEnumerable<IScheduleDay> GetScheduleForPeriod(DateOnlyPeriod period, IScheduleDictionaryLoadOptions options = null)
+		public IEnumerable<IScheduleDay> GetScheduleForPeriod(DateOnlyPeriod period, ScheduleDictionaryLoadOptions options = null)
 		{
 			return getSchedule(period, options);
 		}
@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		/// It should only be used to get schedule to retrieve student availability.
 		/// Refer to bug #33327: Agents can no longer see Availability they entered for dates that have not been published.
 		/// </summary>
-		public IEnumerable<IScheduleDay> GetScheduleForStudentAvailability(DateOnlyPeriod period, IScheduleDictionaryLoadOptions options = null)
+		public IEnumerable<IScheduleDay> GetScheduleForStudentAvailability(DateOnlyPeriod period, ScheduleDictionaryLoadOptions options = null)
 		{
 			return getSchedule(period, options, ScheduleVisibleReasons.StudentAvailability);
 		}
 
-		public IEnumerable<IScheduleDay> GetScheduleForPersonsWithOptions(DateOnly date, IEnumerable<IPerson> persons, IScheduleDictionaryLoadOptions options = null)
+		public IEnumerable<IScheduleDay> GetScheduleForPersonsWithOptions(DateOnly date, IEnumerable<IPerson> persons, ScheduleDictionaryLoadOptions options = null)
 		{
 			if (options == null)
 			{
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		public IEnumerable<IScheduleDay> GetScheduleForPersonsInPeriod(DateOnlyPeriod period, IEnumerable<IPerson> persons,
-			IScheduleDictionaryLoadOptions options = null)
+			ScheduleDictionaryLoadOptions options = null)
 		{
 			if (options == null)
 			{
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		private IEnumerable<IScheduleDay> getSchedule(DateOnlyPeriod period,
-			IScheduleDictionaryLoadOptions options = null,
+			ScheduleDictionaryLoadOptions options = null,
 			ScheduleVisibleReasons visibleReason = ScheduleVisibleReasons.Published)
 		{
 			options = options ?? new ScheduleDictionaryLoadOptions(true, true);

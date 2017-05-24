@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			IPerson person = PersonFactory.CreatePerson();
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			var personsInOrganizationProvider = MockRepository.GenerateMock<IPersonProvider>();
-			var scheduleDictionaryLoadOptions = MockRepository.GenerateMock<IScheduleDictionaryLoadOptions>();
+			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
 
 			var skills = new List<ISkill> {SkillFactory.CreateSkill("test")};
 			var requestedPeople = new List<IPerson> {person};
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				o =>
 					o.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Same(scenario),
 						Rhino.Mocks.Constraints.Is.Anything(),
-						new Rhino.Mocks.Constraints.PredicateConstraint<IScheduleDictionaryLoadOptions>(
+						new Rhino.Mocks.Constraints.PredicateConstraint<ScheduleDictionaryLoadOptions>(
 							x => x.LoadNotes == false && x.LoadRestrictions == false), Rhino.Mocks.Constraints.Is.Anything()));
 		}
 
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			IPerson person = PersonFactory.CreatePerson();
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			var personsInOrganizationProvider = MockRepository.GenerateMock<IPersonProvider>();
-			var scheduleDictionaryLoadOptions = MockRepository.GenerateMock<IScheduleDictionaryLoadOptions>();
+			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
 
 			var skills = new List<ISkill> {SkillFactory.CreateSkill("test")};
 			var requestedPeople = new List<IPerson> {person};

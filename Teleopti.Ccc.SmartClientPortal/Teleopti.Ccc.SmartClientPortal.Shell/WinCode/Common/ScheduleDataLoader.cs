@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			IList<IPerson> persons = new List<IPerson> { person };
 			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(dateTimePeriod, persons);
 			IPersonProvider personProvider = new PersonsInOrganizationProvider(persons);
-		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 			var repositoryFactory = new RepositoryFactory();
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));

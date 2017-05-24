@@ -1,13 +1,12 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		private IPerson _person;
 		private IFindSchedulesForPersons _scheduleStorage;
 		private IPersonProvider _personProvider;
-	    private IScheduleDictionaryLoadOptions _scheduleDictionaryLoadOptions;
+	    private ScheduleDictionaryLoadOptions _scheduleDictionaryLoadOptions;
 		private IScheduleDateTimePeriod _scheduleDateTimePeriod;
 
 		[SetUp]
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_person = _mockRepository.StrictMock<IPerson>();
 			_scheduleStorage = _mockRepository.StrictMock<IFindSchedulesForPersons> ();
 			_personProvider = _mockRepository.StrictMock<IPersonProvider>();
-		    _scheduleDictionaryLoadOptions = _mockRepository.StrictMock<IScheduleDictionaryLoadOptions>();
+		    _scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
 			_scheduleDateTimePeriod = _mockRepository.StrictMock<IScheduleDateTimePeriod>();
 		}
 

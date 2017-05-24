@@ -11,8 +11,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {

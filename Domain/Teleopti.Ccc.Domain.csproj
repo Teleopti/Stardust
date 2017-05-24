@@ -771,7 +771,6 @@
     <Compile Include="InterfaceLegacy\Domain\IScheduleDayService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleDayStudentAvailabilityRestrictionExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleDictionary.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleDictionaryLoadOptions.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleHistoryRepository.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleIsInvalidSpecification.cs" />
