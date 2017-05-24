@@ -1,9 +1,8 @@
 (function() {
     'use strict';
-
     function IntradayDateOffsetController() {
         var ctrl = this;
-        ctrl.dayOffsets= [
+        ctrl.dayOffsets = [
             {text: '-7 days', value: -7},
             {text: '-6 days', value: -6},
             {text: '-5 days', value: -5},
@@ -15,21 +14,29 @@
             {text: 'Tomorrow', value: 1}
         ];
 
-        ctrl.$onInit = function(){
-            console.log('init');
-        }
+        ctrl.selOffset = {value: 0};
 
-        ctrl.$onChange = function(){
-            console.log('change');
-        }
+        ctrl.$onInit = function() {
+            ctrl.selOffset = {value: 0};
+        };
+
+        ctrl.$onChanges = function(changesObj) {
+            if (changesObj.chosenOffset.currentValue.value !== changesObj.chosenOffset.previousValue.value) {
+                ctrl.selOffset = changesObj.chosenOffset.currentValue;
+            }
+        };
+
+        ctrl.dateChange = function(val) {
+            ctrl.onDateChange({value: val});
+        };
     }
-
 
     angular.module('wfm.dateOffset').component('dateOffset', {
         templateUrl: 'app/intraday/components/intradayDateOffset.html',
         controller: IntradayDateOffsetController,
         bindings: {
-            chosenOffset: '='
+            chosenOffset: '<',
+            onDateChange: '&'
         }
     });
 })();

@@ -69,7 +69,6 @@
 				$scope.toggles.showEmailSkill = toggleSvc.Wfm_Intraday_SupportSkillTypeEmail_44002;
         });
 
-
 			var getAutoCompleteControls = function() {
 				var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
 				autocompleteSkill = angular.element(autocompleteSkillDOM).scope();

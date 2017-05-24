@@ -155,7 +155,7 @@
 											<div class="wfm-chart intraday-chart" id="trafficChart"></div>
 										</div>
 									</div>
-									<date-offset ng-if="toggles.showOtherDay" chosen-offset="$scope.chosenOffset"></date-offset>
+									<date-offset ng-if="toggles.showOtherDay" on-date-change="changeChosenOffset(value)" chosen-offset="chosenOffset"></date-offset>
 									<div class="con-row full-padding">
 										<div class="con-flex">
 											<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
@@ -216,7 +216,7 @@
 										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
 											<div class="wfm-chart intraday-chart" id="performanceChart"></div>
 										</div>
-										<date-offset ng-if="toggles.showOtherDay" chosen-offset="$scope.chosenOffset"></date-offset>
+									<date-offset ng-if="toggles.showOtherDay" on-date-change="changeChosenOffset(value)" chosen-offset="chosenOffset"></date-offset>
 										<div class="con-row full-padding">
 											<div class="con-flex"></div>
 											<div class="con-flex">
@@ -281,7 +281,7 @@
 											<div class="wfm-chart intraday-chart" id="staffingChart"></div>
 										</div>
 									</div>
-									<date-offset ng-if="toggles.showOtherDay" chosen-offset="$scope.chosenOffset"></date-offset>
+									<date-offset ng-if="toggles.showOtherDay" on-date-change="changeChosenOffset(value)" chosen-offset="chosenOffset"></date-offset>
 								</md-content>
 								<md-content ng-cloak class="md-padding" ng-if="!viewObj.waitingForData && !viewObj.hasMonitorData">
 									<div class="con-row">

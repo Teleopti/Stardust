@@ -2,7 +2,7 @@
     <div class="con-flex" ng-repeat="item in $ctrl.dayOffsets">
         <div class="wfm-radio">
             <label>
-                <input type="radio" name="chooseDayOffset" ng-model="$ctrl.chosenOffset.value" ng-value="item.value"/>
+                <input type="radio" name="chooseDayOffset" ng-checked="{{$ctrl.selOffset.value == item.value}}" ng-click="$ctrl.dateChange(item.value)"  value={{item.value}} />
                 <span class="wfm-radio-toggle"></span>
                 <span class="wfm-radio-label">{{item.text}}</span>
             </label>
