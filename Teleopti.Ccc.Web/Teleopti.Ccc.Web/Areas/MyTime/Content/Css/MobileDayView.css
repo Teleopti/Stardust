@@ -110,7 +110,6 @@
 	border-left: 0;
 	border-top: 1px solid #DFDFDF;
 	border-bottom: 1px solid #DFDFDF;
-	min-width: 130px;
 }
 .mobile-start-day .mobile-schedule-layer:first-of-type{
 	border-top-left-radius: 3px;
