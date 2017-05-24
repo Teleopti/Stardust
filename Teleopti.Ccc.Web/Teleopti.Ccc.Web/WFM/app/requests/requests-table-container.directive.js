@@ -1,14 +1,17 @@
 ﻿'use strict';
 
 (function () {
-
 	angular.module('wfm.requests')
 		.controller('requestsTableContainerCtrl', requestsTableContainerController)
 		.directive('requestsTableContainer', requestsTableContainerDirective);
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants', '$injector', 'TeamSchedule', 'GroupScheduleFactory', '$window', 'RequestGridStateService'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions',
+		'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants', '$injector',
+		'TeamSchedule', 'GroupScheduleFactory', '$window', 'RequestGridStateService'];
 
-	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder, CurrentUserInfo, requestFilterSvc, requestsDataSvc, uiGridConstants, $injector, teamScheduleSvc, groupScheduleFactory, $window, requestGridStateService) {
+	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions,
+		requestCommandParamsHolder, CurrentUserInfo, requestFilterSvc, requestsDataSvc, uiGridConstants, $injector,
+		teamScheduleSvc, groupScheduleFactory, $window, requestGridStateService) {
 		var vm = this;
 
 		vm.getGridOptions = getGridOptions;
@@ -33,7 +36,6 @@
 		vm.definitionsLoadComplete = false;
 
 		vm.setDefaultStatuses = function () {
-
 			if (!vm.showRequestsInDefaultStatus || vm.defaultStatusesLoaded) {
 				return;
 			}
@@ -49,7 +51,6 @@
 				});
 
 				vm.defaultStatusesLoaded = true;
-
 			}
 		}
 
@@ -102,14 +103,16 @@
 		}
 
 		function setupShiftTradeVisualisation(requests) {
-			if (vm.shiftTradeView && vm.shiftTradeRequestDateSummary) {
-				vm.shiftTradeDayViewModels = vm.gridConfigurationService.getDayViewModels(requests, vm.shiftTradeRequestDateSummary, vm.isUsingRequestSubmitterTimeZone);
-				vm.shiftTradeScheduleViewModels = vm.gridConfigurationService.getShiftTradeScheduleViewModels(requests, vm.shiftTradeRequestDateSummary, vm.isUsingRequestSubmitterTimeZone);
-			}
+			if (!vm.shiftTradeView || !vm.shiftTradeRequestDateSummary) return;
+
+			vm.shiftTradeDayViewModels = vm.gridConfigurationService.getDayViewModels(requests,
+				vm.shiftTradeRequestDateSummary, vm.isUsingRequestSubmitterTimeZone);
+
+			vm.shiftTradeScheduleViewModels = vm.gridConfigurationService.getShiftTradeScheduleViewModels(requests,
+				vm.shiftTradeRequestDateSummary, vm.isUsingRequestSubmitterTimeZone);
 		}
 
 		function setupColumnDefinitions(requests) {
-
 			if (!vm.gridConfigurationService) {
 				var configurationService = vm.shiftTradeView ? 'ShiftTradeGridConfiguration' : 'TextAndAbsenceGridConfiguration';
 				vm.gridConfigurationService = $injector.get(configurationService);
@@ -127,8 +130,6 @@
 			vm.gridOptions.useExternalFiltering = filteringEnabled;
 
 			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL); // ROBTODO really needed?
-
-
 		}
 
 		function clearAllFilters() {
@@ -196,7 +197,6 @@
 			vm.filters = vm.requestFiltersMgr.Filters;
 		}
 
-
 		function getGridOptions() {
 			var options = {
 				appScopeProvider: vm,
@@ -215,7 +215,8 @@
 
 					vm.gridApi = gridApi;
 					gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-						vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder).filter(function (x) { return x !== null; });
+						vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder)
+							.filter(function(x) { return x !== null; });
 					});
 					gridApi.grid.clearAllFilters = clearAllFilters;
 					gridApi.selection.on.rowSelectionChanged($scope, onSelectionChanged);
@@ -288,13 +289,15 @@
 			});
 		}
 
-		function formatToTimespan(length, isFullDay) {
-			var days = moment.duration(length, 'seconds')._data.days;
-			var hours = moment.duration(length, 'seconds')._data.hours;
-			var minutes = moment.duration(length, 'seconds')._data.minutes == 0 ? '00' : moment.duration(length, 'seconds')._data.minutes;
-			var totalHours = hours + days * 24 == 0 ? '00' : hours + days * 24;
-			if (isFullDay) return totalHours + 1 + ':' + '00';
-			else return totalHours + ':' + minutes;
+		function formatToTimespan(lengthInSecond, isFullDay) {
+			var durationData = moment.duration(lengthInSecond, "seconds")._data;
+			var days = durationData.days;
+			var hours = durationData.hours;
+			var minutes = durationData.minutes === 0 ? "00" : durationData.minutes;
+			var totalHours = hours + days * 24 === 0 ? "00" : hours + days * 24;
+			return isFullDay
+				? totalHours + 1 + ":" + "00"
+				: totalHours + ":" + minutes;
 		}
 
 		function initialiseGridStateHandling() {
@@ -307,7 +310,6 @@
 		}
 
 		function prepareComputedColumns(requests) {
-
 			vm.definitionsLoadComplete = false;
 
 			vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
@@ -435,19 +437,14 @@
 			scope.requestsTableContainer.gridOptions = requestsTableContainerCtrl.getGridOptions([]);
 
 			scope.$watch(function () {
-
 				return {
 					requests: scope.requestsTableContainer.requests,
 					shiftTradeRequestDateSummary: scope.requestsTableContainer.shiftTradeRequestDateSummary
-
 				}
 			}, function (requestWatch) {
 				var requests = requestWatch.requests;
-
 				requestsTableContainerCtrl.prepareComputedColumns(requests);
 				requestsTableContainerCtrl.reselectRequests();
-
-
 			}, true);
 
 			scope.$watch(function () {
@@ -475,8 +472,6 @@
 				function handleFilterEnabledChanged(newValue, oldValue) {
 					requestsTableContainerCtrl.setFilterEnabled(newValue);
 				});
-
-
 		}
 	}
 })();

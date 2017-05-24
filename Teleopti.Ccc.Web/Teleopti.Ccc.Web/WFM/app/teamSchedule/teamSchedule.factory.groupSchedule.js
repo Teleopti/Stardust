@@ -8,12 +8,12 @@ function GroupScheduleFactoryFn(timeLineFactory, personSchedule) {
 		Create: create
 	};
 
-	function create(groupSchedules, queryDateMoment, useNextDayScheduleData) {
+	function create(groupSchedules, queryDateMoment, useNextDayScheduleData, maxPeriodInHour) {
 		var maximumViewRange = {
 			startMoment: queryDateMoment.clone().startOf('day'),
-			endMoment: queryDateMoment.clone().startOf('day').add(30, 'hour')
+			endMoment: queryDateMoment.clone().startOf('day').add(maxPeriodInHour ? maxPeriodInHour : 30, 'hour')
 		};
-
+		
 		var schedulesInRange = groupSchedules.filter(function(schedule) {
 			return isScheduleWithinViewRange(schedule, queryDateMoment, maximumViewRange, useNextDayScheduleData);
 		});
@@ -21,7 +21,7 @@ function GroupScheduleFactoryFn(timeLineFactory, personSchedule) {
 		var extraSchedules = groupSchedules.filter(function(schedule) {
 			return schedulesInRange.indexOf(schedule) < 0;
 		});
-
+		
 		var timeLine = timeLineFactory.Create(schedulesInRange, queryDateMoment, maximumViewRange);
 		return {
 			TimeLine: timeLine,

@@ -1,7 +1,7 @@
 ﻿(function () {
 	'use strict';
 
-	describe('Requests overview directive', function () {
+	describe('[Requests overview directive]', function () {
 		var $compile, $rootScope, requestsDataService, requestsDefinitions, $injector, requestsFilterService;
 
 		var targetElement, targetScope;
@@ -278,10 +278,9 @@
 			var targets = element.find('requests-table-container');
 			return angular.element(targets[0]).scope();
 		}
-		
 	});
 
-	describe('requests table container directive', function () {
+	describe('[requests table container directive]', function () {
 		var $compile, $rootScope, requestsDefinitions, $filter, teamSchedule, currentUserInfo;
 
 		beforeEach(module('wfm.templates'));
@@ -379,7 +378,6 @@
 			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = false;
 			test.scope.$digest();
 			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T05:00:00'));
-			
 
 			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
 			test.scope.$digest();
@@ -435,10 +433,8 @@
 
 			expect(shiftTradeDaysViewModels[0].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 2 +'px'); // starts two days after start of period.
 			expect(shiftTradeDaysViewModels[1].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 3 + 'px');
-
 		});
 
-		
 		it('should select default status filter', function () {
 			var test = setUpTarget();
 			var status0 = " 79";
@@ -565,7 +561,9 @@
 			test.scope.requests = [
 			{
 				Id: 1,
-				PeriodStartTime: '2017-01-09T00:00:00', PeriodEndTime: '2017-01-09T23:59:00', CreatedTime: '2017-01-03T05:54:12',
+				PeriodStartTime: '2017-01-09T00:00:00',
+				PeriodEndTime: '2017-01-09T23:59:00',
+				CreatedTime: '2017-01-03T05:54:12',
 				TimeZone: submitterTimezone, UpdatedTime: '2017-01-03T05:54:50',
 				ShiftTradeDays: [
 					{
@@ -589,10 +587,72 @@
 
 			var shiftTradeDayViewModels = isolatedScope.requestsTableContainer.shiftTradeDayViewModels;
 			var shiftTradeScheduleViewModels = isolatedScope.requestsTableContainer.shiftTradeScheduleViewModels;
-			var length = shiftTradeDayViewModels.length;
-			expect(shiftTradeDayViewModels[0].dayNumber).toEqual("01");
-			expect(shiftTradeDayViewModels[length - 1].dayNumber).toEqual("08");
-			expect(shiftTradeScheduleViewModels[1][0].dayNumber).toEqual("08");
+			
+			var expectedTimezone = "Atlantic/Reykjavik";
+			var expectedDate = moment("2017-01-01T16:00:00.000Z"); // "2017-01-02T00:00:00" in timezone "Atlantic/Reykjavik"
+			
+			for (var i = 0; i < shiftTradeDayViewModels.length - 1; i++) {
+				var dayViewModel = shiftTradeDayViewModels[i];
+				expect(dayViewModel.originalDate).toEqual(expectedDate.toDate());
+				expect(dayViewModel.targetTimezone).toEqual(expectedTimezone);
+				expect(dayViewModel.dayNumber).toEqual("0" + (i + 1));
+				expectedDate.add(1, "days");
+			}
+
+			var scheduleViewModel = shiftTradeScheduleViewModels[1][0];
+			expect(scheduleViewModel.originalDate).toEqual(expectedDate.toDate());
+			expect(scheduleViewModel.targetTimezone).toEqual(expectedTimezone);
+			expect(scheduleViewModel.dayNumber).toEqual("08");
+		});
+
+		it('should get dayViewModels according to requester timezone', function () {
+			var submitterTimezone = 'Europe/Berlin';
+			var test = setUpTarget();
+			test.scope.requests = [
+				{
+					Id: 1,
+					PeriodStartTime: '2017-01-09T00:00:00',
+					PeriodEndTime: '2017-01-09T23:59:00',
+					CreatedTime: '2017-01-03T05:54:12',
+					TimeZone: submitterTimezone, UpdatedTime: '2017-01-03T05:54:50',
+					ShiftTradeDays: [
+						{
+							Date: "2017-01-09T00:00:00",
+							FromScheduleDayDetail: { Name: "Day", Type: 1, ShortName: "DY", Color: "#FFC080" },
+							ToScheduleDayDetail: { Name: "Day", Type: 1, ShortName: "DY", Color: "#FFC080" }
+						}
+					]
+				}];
+			test.scope.shiftTradeRequestDateSummary = {
+				Minimum: '2017-01-02T00:00:00',
+				Maximum: '2017-01-09T22:59:00',
+				FirstDayOfWeek: 1
+			};
+			test.scope.shiftTradeView = true;
+			test.scope.$digest();
+
+			var isolatedScope = test.target.isolateScope();
+			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
+			test.scope.$digest();
+
+			var shiftTradeDayViewModels = isolatedScope.requestsTableContainer.shiftTradeDayViewModels;
+			var shiftTradeScheduleViewModels = isolatedScope.requestsTableContainer.shiftTradeScheduleViewModels;
+
+			var expectedTimezone = "Europe/Berlin";
+			var expectedDate = moment("2017-01-01T16:00:00.000Z");
+
+			for (var i = 0; i < shiftTradeDayViewModels.length - 1; i++) {
+				var dayViewModel = shiftTradeDayViewModels[i];
+				expect(dayViewModel.originalDate).toEqual(expectedDate.toDate());
+				expect(dayViewModel.targetTimezone).toEqual(expectedTimezone);
+				expect(dayViewModel.dayNumber).toEqual("0" + (i + 2));
+				expectedDate.add(1, "days");
+			}
+
+			var scheduleViewModel = shiftTradeScheduleViewModels[1][0];
+			expect(scheduleViewModel.originalDate).toEqual(expectedDate.toDate());
+			expect(scheduleViewModel.targetTimezone).toEqual(expectedTimezone);
+			expect(scheduleViewModel.dayNumber).toEqual("09");
 		});
 
 		it('should clear subject and message filters', function() {
