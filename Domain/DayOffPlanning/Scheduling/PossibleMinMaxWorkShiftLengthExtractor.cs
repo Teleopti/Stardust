@@ -50,15 +50,18 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 				IWorkTimeMinMax ret = null;
 				var person = matrix.Person;
 			    var personPeriod = person.Period(dateOnly);
-				var schedulePeriodStartDate = person.SchedulePeriodStartDate(dateOnly);
 
-				if (restriction != null && restriction.Absence != null && schedulePeriodStartDate.HasValue)
+				if (restriction?.Absence != null)
                 {
-					if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, dateOnly) || !restriction.Absence.InContractTime)
-                        return new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero);
+	                var schedulePeriodStartDate = person.SchedulePeriodStartDate(dateOnly);
+	                if (schedulePeriodStartDate.HasValue)
+	                {
+		                if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, dateOnly) || !restriction.Absence.InContractTime)
+			                return new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero);
 
-                    return new MinMax<TimeSpan>(personPeriod.PersonContract.AverageWorkTimePerDay, personPeriod.PersonContract.AverageWorkTimePerDay);
-                }
+		                return new MinMax<TimeSpan>(personPeriod.PersonContract.AverageWorkTimePerDay, personPeriod.PersonContract.AverageWorkTimePerDay);
+					}
+				}
 				var ruleSetBag = _ruleSetBagExtractorProvider.Fetch(schedulingOptions)
 					.GetRuleSetBagForTeamMember(person, dateOnly);
 
