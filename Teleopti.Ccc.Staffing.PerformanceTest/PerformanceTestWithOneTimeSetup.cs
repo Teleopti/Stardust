@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
-
+			system.AddModule(new RuleSetModule(configuration, false));
 		}
 	}
 }
