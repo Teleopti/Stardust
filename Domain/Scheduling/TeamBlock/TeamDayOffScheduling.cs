@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					matrixDataForSelectedPersons.Add(matrixData);
 			}
 
-			var cancelPressed = false;
 			foreach (var matrixData in matrixDataForSelectedPersons)
 			{
 				var matrix = matrixData.Matrix;
@@ -73,24 +72,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						return;
 					}
 				}
-				foreach (var scheduleDayPro in unlockedMatrixDays)
-				{
-					var scheduleDate = scheduleDayPro.Day;
-					IEffectiveRestriction restriction;
-					var selectedMatrixesForTeam = getMatrixesAndRestriction(matrixes, selectedPersons, schedulingOptions,
-						groupPersonBuilderForOptimization, person, scheduleDate,
-						out restriction);
-					var canceled = addContractDaysOffForTeam(schedulingCallback, selectedMatrixesForTeam, schedulingOptions, rollbackService);
-					if (canceled)
-					{
-						cancelPressed = true;
-						break;
-					}
-				}
-
-				if (cancelPressed)
-					break;
 			}
+
+			addContractDaysOffForTeam(schedulingCallback, matrixDataForSelectedPersons.Select(x => x.Matrix), schedulingOptions, rollbackService);
 		}
 
 		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixes, IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions,
@@ -162,7 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return false;
 		}
 
-		private bool addContractDaysOffForTeam(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions,
+		private void addContractDaysOffForTeam(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions,
 			ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			foreach (var matrix in matrixList)
@@ -179,6 +163,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (currentDaysOff >= targetDaysOff)
 					continue;
 
+				var unlockedDates = matrix.UnlockedDays.Select(sdp => sdp.Day).ToList();
 				var foundSpot = true;
 
 				while (currentOffDaysList.Count < targetDaysOff && foundSpot)
@@ -189,9 +174,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					foreach (var dayOffOnPeriod in sortedWeeks)
 					{
 						if (schedulingCallback.IsCancelled)
-							return true;
+							return;
 						var bestScheduleDay = dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, schedulingOptions);
 						if (bestScheduleDay == null) continue;
+						if (!unlockedDates.Contains(bestScheduleDay.DateOnlyAsPeriod.DateOnly))
+							continue;
 						try
 						{
 							bestScheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
@@ -208,7 +195,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						}
 						schedulingCallback.Scheduled(new SchedulingCallbackInfo(bestScheduleDay, true));
 						if (schedulingCallback.IsCancelled)
-							return true;
+							return;
 
 						break;
 					}
@@ -216,8 +203,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out currentOffDaysList);
 				}
 			}
-
-			return false;
 		}
 	}
 }
