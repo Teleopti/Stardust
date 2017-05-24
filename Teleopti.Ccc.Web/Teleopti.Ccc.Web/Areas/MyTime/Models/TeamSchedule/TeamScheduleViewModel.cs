@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public int Total { get; set; }
 		public string DayOffName { get; set; }
 		public double ContractTimeInMinute { get; set; }
+		public bool IsNotScheduled { get; set; }
 	}
 
 	public class LayerViewModel

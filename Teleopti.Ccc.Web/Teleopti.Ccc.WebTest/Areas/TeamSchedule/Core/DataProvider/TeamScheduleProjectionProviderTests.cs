@@ -628,6 +628,18 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			Assert.AreEqual(expectedContactTime, result.ContractTimeInMinute);
 		}
 
+		[Test]
+		public void ShouldSetIsNotScheduledToTrueWhenScheduleDayIsNullInTeamScheduleViewModel()
+		{
+			const string firstName = "Sherlock";
+			const string lastName = "Holmes";
+
+			var person = PersonFactory.CreatePersonWithGuid(firstName, lastName);
+			var result = target.MakeScheduleReadModel(person, null, false);
+
+			Assert.AreEqual(result.IsNotScheduled, true);
+		}
+
 		private double getTimeSpanInMinutesFromPeriod(DateTimePeriod period)
 		{
 			return (period.EndDateTime - period.StartDateTime).TotalMinutes;

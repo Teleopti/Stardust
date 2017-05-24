@@ -42,7 +42,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 
 
 			if (personSchedule.Schedule == null)
+			{
+				ret.IsNotScheduled = true;
 				return ret;
+			}
 
 			var teamScheduleReadModel = personSchedule.Schedule.Model != null
 				? JsonConvert.DeserializeObject<Model>(personSchedule.Schedule.Model)

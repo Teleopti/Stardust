@@ -195,6 +195,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			if (scheduleDay == null)
 			{
+				ret.IsNotScheduled = true;
 				return ret;
 			}
 
