@@ -326,7 +326,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimeLineByFullDaySkillOpenHourWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
-			addPersonPeriod();
 			var skill = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
@@ -341,7 +340,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimeLineByMultipleDaySkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
-			addPersonPeriod();
 			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			var skill2 = addSkill(TimeSpan.FromHours(8), TimeSpan.FromHours(19));
 			var period1 = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
@@ -360,7 +358,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldNotAdjustTimeLineByNonInBoundPhoneSkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
-			addPersonPeriod();
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			skill.SkillType.Description = new Description("test");
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
@@ -376,7 +373,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldNotAdjustTimeLineBySkillOpenHoursWhenNoSkillAreScheduled()
 		{
-			addPersonPeriod();
 			addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
@@ -390,7 +386,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldInflateMinMaxTimeAfterAdjustBySkillOpenHourDaySchedule()
 		{
-			addPersonPeriod();
 			var skill = addSkill(TimeSpan.FromHours(8), TimeSpan.FromHours(18));
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 11, 0, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 20, 0, 0, DateTimeKind.Utc));
@@ -405,7 +400,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldInflateMinMaxTimeAfterAdjustBySkillOpenHourWeekSchedule()
 		{
-			addPersonPeriod();
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			var day = DateHelper.GetFirstDateInWeek(Now.UtcDateTime().Date, CultureInfo.CurrentCulture);
 			for (var i = 0; i < 7; i++)
@@ -458,7 +452,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldNotAdjustTimeLineBySkillOpenHoursWhenStaffingDataIsNotAvailableForTheDay()
 		{
-			addPersonPeriod();
 			addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			var assignmentDate = new DateOnly(2015, 1, 2);
 			var period1 = new DateTimePeriod(new DateTime(2015, 1, 2, 9, 15, 0, DateTimeKind.Utc),
@@ -468,6 +461,45 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchDayData(assignmentDate, StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldAdjustTimelineBySiteOpenHourAndSkillOpenHourWeekSchedule()
+		{
+			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
+			addSiteOpenHour();
+
+			var day = DateHelper.GetFirstDateInWeek(Now.UtcDateTime().Date, CultureInfo.CurrentCulture);
+			for (var i = 0; i < 7; i++)
+			{
+				day = day.AddDays(i);
+				var period = new DateTimePeriod(day.AddHours(8).AddMinutes(15),
+					day.AddHours(9).AddMinutes(45));
+				addAssignment(new DateOnly(day), new activityDto { Period = period, Activity = skill.Activity });
+			}
+
+			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 17, 15);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldAdjustTimeLineBySkillOpenHoursOnlyWithDayWhenStaffingDataIsAvailable()
+		{
+			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
+			var skill2 = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
+			var period1 = new DateTimePeriod(new DateTime(2014, 12, 31, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 31, 9, 45, 0, DateTimeKind.Utc));
+			var period2 = new DateTimePeriod(new DateTime(2015, 1, 1, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2015, 1, 1, 9, 45, 0, DateTimeKind.Utc));
+			addAssignment(new DateOnly(2014, 12, 31), new activityDto {Activity = skill1.Activity, Period = period1});
+			addAssignment(new DateOnly(2015, 1, 1), new activityDto {Activity = skill2.Activity, Period = period2});
+
+			var result = Target.FetchWeekData(new DateOnly(2014, 12, 31), StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 15, 15);
 		}
 
 		private void AssertTimeLine(IList<TimeLineViewModel> timeLine, int startHour, int startMinute, int endHour, int endMinute)
@@ -498,28 +530,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return skill;
 		}
 
-		private void addPersonPeriod()
-		{
-			var team = TeamFactory.CreateTeam("team1", "site1");
-			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 1, 1), team);
-			User.CurrentUser().AddPersonPeriod(personPeriod);
-		}
-
 		private ISkill addSkill()
 		{
 			var skill = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(18));
-			var team = TeamFactory.CreateTeam("team1", "site1");
-			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 1, 1), team);
+			var personPeriod = getOrAddPersonPeriod();
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
-			User.CurrentUser().AddPersonPeriod(personPeriod);
 			return skill;
 		}
 
 		private ISkill addSkill(TimeSpan openHourStart, TimeSpan openHourEnd)
 		{
 			var skill = createSkillWithOpenHours(openHourStart, openHourEnd);
-			((PersonPeriod)User.CurrentUser().PersonPeriods(new DateOnly(2014, 1, 1).ToDateOnlyPeriod()).First()).AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			getOrAddPersonPeriod().AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			return skill;
+		}
+
+		private PersonPeriod getOrAddPersonPeriod()
+		{
+			var personPeriod = (PersonPeriod)User.CurrentUser().PersonPeriods(new DateOnly(2014, 1, 1).ToDateOnlyPeriod()).FirstOrDefault();
+			if (personPeriod != null) return personPeriod;
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 1, 1), team);
+			User.CurrentUser().AddPersonPeriod(personPeriod);
+			return personPeriod;
 		}
 
 		private void addAssignment(DateTimePeriod period, DateOnly? belongsToDate = null)
@@ -551,25 +584,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		private void addSiteOpenHour()
 		{
+			var personPeriod = getOrAddPersonPeriod();
 			var timePeriod = new TimePeriod(8, 0, 17, 0);
-			var team = TeamFactory.CreateTeam("team1", "site1");
+			var team = personPeriod.Team;
 			team.Site.AddOpenHour(new SiteOpenHour
 			{
 				TimePeriod = timePeriod,
 				IsClosed = false,
 				WeekDay = DayOfWeek.Thursday
 			});
-			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 1, 1), team));
 		}
 
 		private void addSiteOpenHour(params SiteOpenHour[] siteOpenHours)
 		{
-			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = getOrAddPersonPeriod();
+			var team = personPeriod.Team;
 			foreach (var siteOpenHour in siteOpenHours)
 			{
 				team.Site.AddOpenHour(siteOpenHour);
 			}
-			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 1, 1), team));
 		}
 
 	}

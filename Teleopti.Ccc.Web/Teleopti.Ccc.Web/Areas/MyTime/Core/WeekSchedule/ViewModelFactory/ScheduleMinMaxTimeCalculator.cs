@@ -72,23 +72,46 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		private bool fixWeekScheduleMinMaxTime(WeekScheduleDomainData scheduleDomainData)
 		{ 
-			var openHourPeriod = getSiteOpenHourPeriod(scheduleDomainData);
-			if (!openHourPeriod.HasValue)
-			{
-				openHourPeriod =
+			var siteOpenHourPeriod = getSiteOpenHourPeriod(scheduleDomainData);
+			
+			var	skillOpenHourPeriod =
 					_scheduledSkillOpenHourProvider.GetMergedSkillOpenHourPeriod(
 						scheduleDomainData.Days.Select(a => a.ScheduleDay).ToList());
+
+			if (!siteOpenHourPeriod.HasValue && !skillOpenHourPeriod.HasValue)
+			{
+				return false;
 			}
 
-			if (!openHourPeriod.HasValue)
-				return false;
-			var newTimelinePeriod = getTimelinePeriod(scheduleDomainData,openHourPeriod.Value);
+			var openHourPeriod = mergeOpenHourPeriod(siteOpenHourPeriod, skillOpenHourPeriod);
+
+			var newTimelinePeriod = getTimelinePeriod(scheduleDomainData, openHourPeriod);
 			if (scheduleDomainData.MinMaxTime == newTimelinePeriod)
 			{
 				return false;
 			}
 			scheduleDomainData.MinMaxTime = newTimelinePeriod;
 			return true;
+		}
+
+		private static TimePeriod mergeOpenHourPeriod(TimePeriod? siteOpenHourPeriod, TimePeriod? skillOpenHourPeriod)
+		{
+			TimePeriod openHourPeriod;
+			if (!siteOpenHourPeriod.HasValue)
+			{
+				openHourPeriod = skillOpenHourPeriod.Value;
+			}
+			else if (!skillOpenHourPeriod.HasValue)
+			{
+				openHourPeriod = siteOpenHourPeriod.Value;
+			}
+			else
+			{
+				var minStartTime = new TimeSpan[] {siteOpenHourPeriod.Value.StartTime, skillOpenHourPeriod.Value.StartTime}.Min();
+				var maxEndTime = new TimeSpan[] {siteOpenHourPeriod.Value.EndTime, skillOpenHourPeriod.Value.EndTime}.Max();
+				openHourPeriod = new TimePeriod(minStartTime, maxEndTime);
+			}
+			return openHourPeriod;
 		}
 
 		private TimePeriod? getSiteOpenHourPeriod(WeekScheduleDomainData scheduleDomainData)

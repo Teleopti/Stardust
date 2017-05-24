@@ -13,11 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
+		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
 
-		public ScheduledSkillOpenHourProvider(ILoggedOnUser loggedOnUser, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
+		public ScheduledSkillOpenHourProvider(ILoggedOnUser loggedOnUser, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider, IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider)
 		{
 			_loggedOnUser = loggedOnUser;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
+			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
 		}
 
 		public TimePeriod? GetSkillOpenHourPeriod(IScheduleDay scheduleDay)
@@ -29,8 +31,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public TimePeriod? GetMergedSkillOpenHourPeriod(IList<IScheduleDay> scheduleDays)
 		{
-			var days = scheduleDays.OrderBy(s => s.DateOnlyAsPeriod.DateOnly).Select(s => s.DateOnlyAsPeriod.DateOnly)
-				.ToArray();
+			var staffingDataAvailablePeriod = _staffingDataAvailablePeriodProvider.GetPeriod(scheduleDays.First().DateOnlyAsPeriod.DateOnly, true);
+			if (!staffingDataAvailablePeriod.HasValue)
+				return null;
+			var validScheduleDays = scheduleDays.OrderBy(s => s.DateOnlyAsPeriod.DateOnly)
+				.Where(s => staffingDataAvailablePeriod.Value.Contains(s.DateOnlyAsPeriod.DateOnly)).ToList();
+			var days = validScheduleDays.Select(s => s.DateOnlyAsPeriod.DateOnly).ToArray();
+
 			var period = new DateOnlyPeriod(days.First(), days.Last());
 			var personSkills = getPersonSkills(period);
 			if (personSkills == null || !personSkills.Any())
@@ -38,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 			TimeSpan? startTime = null;
 			TimeSpan? endTime = null;
-			foreach (var scheduleDay in scheduleDays)
+			foreach (var scheduleDay in validScheduleDays)
 			{
 				var result = GetSkillOpenHourPeriodByDate(personSkills, scheduleDay);
 				if (result == null) continue;
