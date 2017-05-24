@@ -187,6 +187,26 @@ $(document).ready(function() {
 		equal(viewModel.isDayOff(), rawData.Schedule.IsDayOff);
 	});
 
+	test("should set empty layers when there is no period", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null },
+				IsDayOff: true,
+				Periods: []
+			}
+		};
+		viewModel.readData(rawData);
+
+		equal(viewModel.layers().length, 0);
+	});
+
 	test("should call out menu list when clicking plus icon at bottom right", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		viewModel.showMenu();

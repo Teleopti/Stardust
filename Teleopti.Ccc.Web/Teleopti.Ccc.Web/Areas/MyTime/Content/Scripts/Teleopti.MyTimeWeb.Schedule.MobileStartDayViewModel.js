@@ -120,15 +120,14 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		});
 		self.timeLines(timelines);
 
-		var rawPeriods = data.Schedule.Periods;
-		if(rawPeriods && rawPeriods.length > 0){
-			var layers = rawPeriods.map(function (item, index) {
-				var layer = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, true);
-				layer.isLastLayer = index == rawPeriods.length - 1;
-				return layer;
-			});
-			self.layers(layers);
-		}
+		var rawPeriods = data.Schedule.Periods || [];
+		var layers = rawPeriods.map(function (item, index) {
+			var layer = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, true);
+			layer.isLastLayer = index == rawPeriods.length - 1;
+			return layer;
+		});
+		self.layers(layers);
+
 
 		if (data.RequestPermission) {
 			self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
