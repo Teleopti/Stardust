@@ -10001,7 +10001,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is currently an email skill selected, abandoned rate cannot be shown.
+        ///   Looks up a localized string similar to An email skill is currently selected. Therefore abandoned rate cannot be shown..
         /// </summary>
         public static string EmailSkillSelected {
             get {
@@ -15727,7 +15727,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show time in my Time zone.
+        ///   Looks up a localized string similar to Show time in my time zone.
         /// </summary>
         public static string LogonUserTimeZone {
             get {

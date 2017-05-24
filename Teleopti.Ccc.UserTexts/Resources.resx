@@ -13992,7 +13992,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>unexpected error message on the web ui</comment>
   </data>
   <data name="LogonUserTimeZone" xml:space="preserve">
-    <value>Show time in my Time zone</value>
+    <value>Show time in my time zone</value>
     <comment>Current user's timezone</comment>
   </data>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
