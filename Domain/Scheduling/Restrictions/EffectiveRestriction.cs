@@ -353,8 +353,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         
         public IList<IActivityRestriction> ActivityRestrictionCollection => _activityRestrictionCollection;
 
-	    public bool MustHave { get; set; }
-
 		public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layers)
         {
 			if (scheduleDayDateOnly == ExitDate)
@@ -459,7 +457,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				   restriction.IsRestriction == IsRestriction &&
 				   restriction.IsRotationDay == IsRotationDay &&
 				   restriction.IsStudentAvailabilityDay == IsStudentAvailabilityDay &&
-				   restriction.MustHave == MustHave &&
 				   restriction.NotAllowedForDayOffs == NotAllowedForDayOffs &&
 				   restriction.NotAvailable == NotAvailable &&
 				   (restriction.ShiftCategory?.Equals(ShiftCategory) ?? restriction.ShiftCategory == null && ShiftCategory == null) &&
