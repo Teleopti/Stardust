@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml;
 using NUnit.Framework;
@@ -238,18 +237,12 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 
-			using (var writer = new StreamWriter(new MemoryStream()))
-			{
-				writer.Write("detgickintebra");
-				writer.Flush();
-				writer.BaseStream.Position = 0;
-				_notificationClient.Stub(x => x.MakeRequest(_notificationConfigReader.Data))
-								.IgnoreArguments()
-						.Return(writer.BaseStream);
+			_notificationClient.Stub(x => x.MakeRequest(_notificationConfigReader.Data))
+							.IgnoreArguments()
+					.Return("detgickintebra");
 
-				_target.SetConfigReader(_notificationConfigReader);
-				Assert.Throws<SendNotificationException>(() => _target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" }));
-			}
+			_target.SetConfigReader(_notificationConfigReader);
+			Assert.Throws<SendNotificationException>(() => _target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" }));
 		}
 
 		[Test]
@@ -285,18 +278,12 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 
-			using (var writer = new StreamWriter(new MemoryStream()))
-			{
-				writer.Write("fault");
-				writer.Flush();
-				writer.BaseStream.Position = 0;
-				_notificationClient.Stub(x => x.MakeRequest(_notificationConfigReader.Data))
-						.IgnoreArguments()
-						.Return(writer.BaseStream);
+			_notificationClient.Stub(x => x.MakeRequest(_notificationConfigReader.Data))
+					.IgnoreArguments()
+					.Return("fault");
 
-				_target.SetConfigReader(_notificationConfigReader);
-				Assert.Throws<SendNotificationException>(() => _target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" }));
-			}
+			_target.SetConfigReader(_notificationConfigReader);
+			Assert.Throws<SendNotificationException>(() => _target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" }));
 		}
 
 		private class TestNotificationConfigReader : NotificationConfigReader

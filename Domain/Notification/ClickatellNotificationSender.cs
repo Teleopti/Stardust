@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Notification
 			//var smsMessage = message.Subject;
 
 			// list for messages receiver send
-			var containUnicode = message.Subject.Any(t => char.GetUnicodeCategory(t) == UnicodeCategory.OtherLetter);
+			var containUnicode = containsUnicode(message.Subject) || message.Messages.Any(containsUnicode);
 			IList<string> messagesToSendList = GetSmsMessagesToSend(message, containUnicode);
 
 			foreach (var msg in messagesToSendList)
@@ -102,25 +102,21 @@ namespace Teleopti.Ccc.Domain.Notification
 					var data = client.MakeRequest(msgData);
 					if (data != null)
 					{
-						var reader = new StreamReader(data);
-						var s = reader.ReadToEnd();
-						data.Close();
-						reader.Close();
 						if (_notificationConfigReader.SkipSearch) return;
 						if (_notificationConfigReader.FindSuccessOrError.Equals("Error"))
 						{
-							if (s.Contains(_notificationConfigReader.ErrorCode))
+							if (data.Contains(_notificationConfigReader.ErrorCode))
 							{
-								Logger.Error($"Error occurred sending SMS: {s}");
-								throw new SendNotificationException($"Error occurred sending SMS: {s}");
+								Logger.Error($"Error occurred sending SMS: {data}");
+								throw new SendNotificationException($"Error occurred sending SMS: {data}");
 							}
 						}
 						else
 						{
-							if (!s.Contains(_notificationConfigReader.SuccessCode))
+							if (!data.Contains(_notificationConfigReader.SuccessCode))
 							{
-								Logger.Error($"Error occurred sending SMS: {s}");
-								throw new SendNotificationException($"Error occurred sending SMS: {s}");
+								Logger.Error($"Error occurred sending SMS: {data}");
+								throw new SendNotificationException($"Error occurred sending SMS: {data}");
 							}
 						}
 					}
@@ -136,6 +132,11 @@ namespace Teleopti.Ccc.Domain.Notification
 		public void SetConfigReader(INotificationConfigReader notificationConfigReader)
 		{
 			_notificationConfigReader = notificationConfigReader;
+		}
+
+		private static bool containsUnicode(string s)
+		{
+			return s.Any(t => char.GetUnicodeCategory(t) == UnicodeCategory.OtherLetter);
 		}
 	}
 }

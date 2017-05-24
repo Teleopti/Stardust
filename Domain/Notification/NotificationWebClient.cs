@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net;
+using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Notification
@@ -23,9 +25,12 @@ namespace Teleopti.Ccc.Domain.Notification
             _client.Dispose();
         }
 
-        public Stream MakeRequest(string queryStringData)
+        public string MakeRequest(string queryStringData)
         {
-            return _client.OpenRead(_url + queryStringData);
+	        var result = _client.UploadValues(_url, "POST",
+		        new NameValueCollection {{"data", queryStringData}});
+
+	        return Encoding.UTF8.GetString(result);
         }
     }
 }
