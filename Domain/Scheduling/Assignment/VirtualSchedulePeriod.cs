@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private readonly TimeSpan _minTimeSchedulePeriod = TimeSpan.Zero;
 		private static readonly PeriodIncrementorFactory _periodIncrementorFactory = new PeriodIncrementorFactory();
+	    private readonly Lazy<double> percentageInternal;
 	    
 	    public VirtualSchedulePeriod(IPerson person, DateOnly dateOnly, IVirtualSchedulePeriodSplitChecker splitChecker) : this(person,dateOnly,person.Period(dateOnly),person.SchedulePeriod(dateOnly),splitChecker)
         {
@@ -61,7 +62,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					Number = _thePeriodWithTheDateIn.DayCount();
 				}
 			}
-	    }
+		    percentageInternal = new Lazy<double>(() =>
+		    {
+				if (_contractSchedule == null || !IsValid)
+				    return 0;
+
+			    var originalPeriod = GetOriginalStartPeriodForType(_schedulePeriod, _person.PermissionInformation.Culture());
+			    var intersection = DateOnlyPeriod.Intersection(originalPeriod);
+			    if (intersection == null)
+				    return 0;
+
+			    var originalWorkDays = (double)_schedulePeriod.GetWorkdays();
+			    if (originalWorkDays == 0)
+				    return 0;
+			    var currentWorkDays = (double)Workdays();
+			    return Math.Round(currentWorkDays / originalWorkDays, 2);
+			});
+		}
 
 	    private DateOnlyPeriod getRolledDateOnlyPeriodForSchedulePeriod(DateOnly requestedDateTime, ISchedulePeriod thePeriod, CultureInfo cultureInfo)
         {
@@ -254,30 +271,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return currentPeriod;
         }
 
-	    private double percentOfOrginalPeriod()
-	    {
-			if (_contractSchedule == null || !IsValid)
-				return 0;
+	    public virtual TimeSpan BalanceIn => TimeSpan.FromMinutes(_schedulePeriod.BalanceIn.TotalMinutes * percentageInternal.Value);
 
-			var originalPeriod = GetOriginalStartPeriodForType(_schedulePeriod, _person.PermissionInformation.Culture());
-		    var intersection = DateOnlyPeriod.Intersection(originalPeriod);
-		    if (intersection == null)
-			    return 0;
-
-			var originalWorkDays = (double)_schedulePeriod.GetWorkdays();
-		    if (originalWorkDays == 0)
-			    return 0;
-		    var currentWorkDays = (double)Workdays();
-		    return Math.Round(currentWorkDays / originalWorkDays, 2);
-		}
-
-	    public virtual TimeSpan BalanceIn => TimeSpan.FromMinutes(_schedulePeriod.BalanceIn.TotalMinutes * percentOfOrginalPeriod());
-
-	    public virtual TimeSpan Extra => TimeSpan.FromMinutes(_schedulePeriod.Extra.TotalMinutes * percentOfOrginalPeriod());
+	    public virtual TimeSpan Extra => TimeSpan.FromMinutes(_schedulePeriod.Extra.TotalMinutes * percentageInternal.Value);
 
 		public virtual Percent Seasonality => _schedulePeriod.Seasonality;
 
-	    public virtual TimeSpan BalanceOut => TimeSpan.FromMinutes(_schedulePeriod.BalanceOut.TotalMinutes * percentOfOrginalPeriod());
+	    public virtual TimeSpan BalanceOut => TimeSpan.FromMinutes(_schedulePeriod.BalanceOut.TotalMinutes * percentageInternal.Value);
 
 		public override bool Equals(object obj)
         {
