@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var commandResult = _cancelAbsenceRequestCommandProvider.CancelAbsenceRequest(id);
 
 			var result = new RequestCommandHandlingResult(
-				commandResult.AffectedRequestId.HasValue ? new List<Guid> { commandResult.AffectedRequestId.Value } : null,
+				commandResult.AffectedRequestId.HasValue ? new [] { commandResult.AffectedRequestId.Value } : null,
 				commandResult.ErrorMessages);
 
 			if (result.Success)

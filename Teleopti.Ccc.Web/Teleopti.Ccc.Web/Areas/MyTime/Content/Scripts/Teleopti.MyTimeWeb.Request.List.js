@@ -242,12 +242,15 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 		self.Cancel = function (requestItemViewModel) {
 			var selectedViewModel = requestItemViewModel;
+			var requestId = requestItemViewModel.Id();
+			if (!requestId) return;
+
 			ajax.Ajax({
-				url: "Requests/CancelRequest/",
+				url: "Requests/CancelRequest",
 				dataType: "json",
 				contentType: 'application/json; charset=utf-8',
 				type: "PUT",
-				data: JSON.stringify({ id: requestItemViewModel.Id() }),
+				data: JSON.stringify({ id: requestId }),
 				success: function (result) {
 					if (result.Success) {
 						self.Requests.remove(requestItemViewModel);
