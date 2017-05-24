@@ -210,8 +210,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public double AbsoluteDifferenceMinStaffBoosted()
         {
-            if (Payload.SkillPersonData.MinimumPersons > 0 && Payload.CalculatedLoggedOn < Payload.SkillPersonData.MinimumPersons)
-                return (Payload.CalculatedLoggedOn - Payload.SkillPersonData.MinimumPersons)* 10000 + AbsoluteDifference;
+            if (Payload.SkillPersonData.MinimumPersons > 0 && CalculatedLoggedOn < Payload.SkillPersonData.MinimumPersons)
+                return (CalculatedLoggedOn - Payload.SkillPersonData.MinimumPersons)* 10000 + AbsoluteDifference;
 
             return AbsoluteDifference;
         }
@@ -219,8 +219,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public double AbsoluteDifferenceMaxStaffBoosted()
         {
 
-            if (Payload.SkillPersonData.MaximumPersons > 0 && Payload.CalculatedLoggedOn > Payload.SkillPersonData.MaximumPersons)
-                return (Payload.CalculatedLoggedOn - Payload.SkillPersonData.MaximumPersons) * 10000 + AbsoluteDifference;
+            if (Payload.SkillPersonData.MaximumPersons > 0 && CalculatedLoggedOn > Payload.SkillPersonData.MaximumPersons)
+                return (CalculatedLoggedOn - Payload.SkillPersonData.MaximumPersons) * 10000 + AbsoluteDifference;
 
             return AbsoluteDifference;
         }
@@ -228,10 +228,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public double AbsoluteDifferenceBoosted()
         {
             double ret = 0;
-            if (Payload.SkillPersonData.MinimumPersons > 0 && Payload.CalculatedLoggedOn < Payload.SkillPersonData.MinimumPersons)
-                ret= (Payload.CalculatedLoggedOn - Payload.SkillPersonData.MinimumPersons) * 10000;
-            if (Payload.SkillPersonData.MaximumPersons > 0 && Payload.CalculatedLoggedOn > Payload.SkillPersonData.MaximumPersons)
-                ret = (Payload.CalculatedLoggedOn - Payload.SkillPersonData.MaximumPersons) * 10000;
+            if (Payload.SkillPersonData.MinimumPersons > 0 && CalculatedLoggedOn < Payload.SkillPersonData.MinimumPersons)
+                ret= (CalculatedLoggedOn - Payload.SkillPersonData.MinimumPersons) * 10000;
+            if (Payload.SkillPersonData.MaximumPersons > 0 && CalculatedLoggedOn > Payload.SkillPersonData.MaximumPersons)
+                ret = (CalculatedLoggedOn - Payload.SkillPersonData.MaximumPersons) * 10000;
 
             return ret + AbsoluteDifference;
         }
@@ -247,8 +247,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public double RelativeDifferenceMaxStaffBoosted()
         {
-            if (Payload.SkillPersonData.MaximumPersons > 0 && Payload.CalculatedLoggedOn > Payload.SkillPersonData.MaximumPersons)
-                return (Payload.CalculatedLoggedOn - Payload.SkillPersonData.MaximumPersons) * 10000 + RelativeDifference;
+            if (Payload.SkillPersonData.MaximumPersons > 0 && CalculatedLoggedOn > Payload.SkillPersonData.MaximumPersons)
+                return (CalculatedLoggedOn - Payload.SkillPersonData.MaximumPersons) * 10000 + RelativeDifference;
 
             return RelativeDifference;
         }
@@ -256,10 +256,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public double RelativeDifferenceBoosted()
         {
             double ret = 0;
-            if (Payload.SkillPersonData.MinimumPersons > 0 && Payload.CalculatedLoggedOn < Payload.SkillPersonData.MinimumPersons)
-                ret = (Payload.CalculatedLoggedOn - Payload.SkillPersonData.MinimumPersons) * 10000;
-            if (Payload.SkillPersonData.MaximumPersons > 0 && Payload.CalculatedLoggedOn > Payload.SkillPersonData.MaximumPersons)
-                ret = (Payload.CalculatedLoggedOn - Payload.SkillPersonData.MaximumPersons) * 10000;
+            if (Payload.SkillPersonData.MinimumPersons > 0 && CalculatedLoggedOn < Payload.SkillPersonData.MinimumPersons)
+                ret = (CalculatedLoggedOn - Payload.SkillPersonData.MinimumPersons) * 10000;
+            if (Payload.SkillPersonData.MaximumPersons > 0 && CalculatedLoggedOn > Payload.SkillPersonData.MaximumPersons)
+                ret = (CalculatedLoggedOn - Payload.SkillPersonData.MaximumPersons) * 10000;
 
             return ret + RelativeDifference;
         }

@@ -38,12 +38,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public static IList<double> SkillStaffPeriodsAbsoluteDifferenceHours(IEnumerable<ISkillStaffPeriod> skillStaffPeriods, bool considerMinStaffing, bool considerMaxStaffing)
         {
             if(considerMinStaffing && considerMaxStaffing)
-                return skillStaffPeriods.Select(s => s.AbsoluteDifferenceBoosted() * s.Period.ElapsedTime().TotalHours).ToList();
+                return skillStaffPeriods.Select(s => s.AbsoluteDifferenceBoosted() * s.DateTimePeriod.ElapsedTime().TotalHours).ToList();
             if(considerMinStaffing)
-                return skillStaffPeriods.Select(s => s.AbsoluteDifferenceMinStaffBoosted() * s.Period.ElapsedTime().TotalHours).ToList();
+                return skillStaffPeriods.Select(s => s.AbsoluteDifferenceMinStaffBoosted() * s.DateTimePeriod.ElapsedTime().TotalHours).ToList();
             if (considerMaxStaffing)
-                return skillStaffPeriods.Select(s => s.AbsoluteDifferenceMaxStaffBoosted() * s.Period.ElapsedTime().TotalHours).ToList();
-            return skillStaffPeriods.Select(s => s.AbsoluteDifference * s.Period.ElapsedTime().TotalHours).ToList();
+                return skillStaffPeriods.Select(s => s.AbsoluteDifferenceMaxStaffBoosted() * s.DateTimePeriod.ElapsedTime().TotalHours).ToList();
+            return skillStaffPeriods.Select(s => s.AbsoluteDifference * s.DateTimePeriod.ElapsedTime().TotalHours).ToList();
         }
 
         /// <summary>

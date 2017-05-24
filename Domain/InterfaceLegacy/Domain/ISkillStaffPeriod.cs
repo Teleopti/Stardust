@@ -170,24 +170,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         void Reset();
 
-        /// <summary>
-        /// Gets the deviation in period.
-        /// </summary>
-        /// <value>The deviation in period.</value>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-10-27    
-        /// /// </remarks>
-        double IntraIntervalDeviation { get; }
-
-        /// <summary>
-        /// Gets the intra interval root mean square.
-        /// </summary>
-        /// <value>The intra interval root mean square.</value>
-        double IntraIntervalRootMeanSquare { get;  }
-
-        /// <summary>
+ /// <summary>
         /// Gets the scheduled against incoming forecast65.
         /// </summary>
         /// <value>The scheduled against incoming forecast65.</value>

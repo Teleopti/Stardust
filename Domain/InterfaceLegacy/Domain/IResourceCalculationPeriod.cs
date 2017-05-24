@@ -15,5 +15,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		double FStaff { get; }
 		void ClearIntraIntervalDistribution();
 		void SetDistributionValues(IPopulationStatisticsCalculatedValues calculatedValues, IPeriodDistribution periodDistribution);
+		double IntraIntervalDeviation { get; }
+		double IntraIntervalRootMeanSquare { get; }
 	}
 }

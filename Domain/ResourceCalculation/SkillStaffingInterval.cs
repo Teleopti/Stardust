@@ -82,12 +82,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void ClearIntraIntervalDistribution()
 		{
-			throw new NotImplementedException();
+			IntraIntervalDeviation = 0;
+			IntraIntervalRootMeanSquare = 0;
 		}
 
 		public void SetDistributionValues(IPopulationStatisticsCalculatedValues calculatedValues,
 			IPeriodDistribution periodDistribution)
 		{
+			IntraIntervalDeviation = calculatedValues.StandardDeviation;
+			IntraIntervalRootMeanSquare = calculatedValues.RootMeanSquare;
 		}
+
+		public double IntraIntervalDeviation { get; private set; }
+		public double IntraIntervalRootMeanSquare { get; private set; }
 	}
 }
