@@ -667,7 +667,7 @@
     <comment>Average facsimiles</comment>
   </data>
   <data name="AverageACW" xml:space="preserve">
-    <value>平均后处理时长</value>
+    <value>平均后处理时长平均值</value>
     <comment>Average ACW</comment>
   </data>
   <data name="AverageAEW" xml:space="preserve">
@@ -687,7 +687,7 @@
     <comment>Average ATW</comment>
   </data>
   <data name="AverageCalls" xml:space="preserve">
-    <value>平均电话量</value>
+    <value>来电量平均值</value>
     <comment>Average calls</comment>
   </data>
   <data name="AverageEmails" xml:space="preserve">
@@ -707,7 +707,7 @@
     <comment>Average speed of answer</comment>
   </data>
   <data name="AverageTalkTime" xml:space="preserve">
-    <value>平均通话时长</value>
+    <value>平均通话时长平均值</value>
     <comment>Average talk time</comment>
   </data>
   <data name="AverageTasks" xml:space="preserve">
@@ -1345,7 +1345,7 @@
     <comment>Day Off Reoptimizer options</comment>
   </data>
   <data name="DayOffShortName" xml:space="preserve">
-    <value>DO</value>
+    <value>休息</value>
     <comment>DO</comment>
   </data>
   <data name="DayOfWeek" xml:space="preserve">
@@ -2418,7 +2418,7 @@
     <comment>Last name</comment>
   </data>
   <data name="LastUpdated" xml:space="preserve">
-    <value>最后的更新</value>
+    <value>上次更新</value>
     <comment>Last updated</comment>
   </data>
   <data name="Late" xml:space="preserve">
@@ -4731,7 +4731,7 @@ Periods</comment>
     <comment>(agents are available for taking calls)</comment>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>状况</value>
+    <value>状态</value>
     <comment>Status</comment>
   </data>
   <data name="Subject" xml:space="preserve">
@@ -5124,7 +5124,7 @@ Periods</comment>
     <comment>Use average</comment>
   </data>
   <data name="UseAverageOnDeviatingDays" xml:space="preserve">
-    <value>在偏差日期使用平均</value>
+    <value>在偏差日期使用平均值</value>
     <comment>Use average on deviating days</comment>
   </data>
   <data name="UseConsecutiveDaysOff" xml:space="preserve">
@@ -5636,7 +5636,7 @@ Periods</comment>
     <value>每周休息时间不能长于168个小时</value>
   </data>
   <data name="LastUpdateColonParameter0" xml:space="preserve">
-    <value>上次更新：{0}</value>
+    <value>最近一次更新：{0}</value>
   </data>
   <data name="LicensedToColon" xml:space="preserve">
     <value>授权给：</value>
@@ -5726,7 +5726,7 @@ Periods</comment>
     <value>计划分组的名称无效</value>
   </data>
   <data name="LessThanPlanningGroupNameGreaterThan" xml:space="preserve">
-    <value>&lt;计划分组的名称&gt;</value>
+    <value>&lt;计划分组名称&gt;</value>
   </data>
   <data name="AddDayOffThreeDots" xml:space="preserve">
     <value>添加休息日…</value>
@@ -7661,7 +7661,7 @@ Teleopti R&amp;D</value>
     <value>{0} -&gt; {1}</value>
   </data>
   <data name="ExportValidationLine" xml:space="preserve">
-    <value>{0}：{1}</value>
+    <value>{0}: {1}</value>
   </data>
   <data name="ExportNoOfAgentInfo" xml:space="preserve">
     <value> {0} 座席代表所选择的区域</value>
@@ -8799,7 +8799,7 @@ Teleopti R&amp;D</value>
     <value>活跃的</value>
   </data>
   <data name="MyTimeWeb" xml:space="preserve">
-    <value>MyTimeWeb</value>
+    <value>MyTime</value>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>注销</value>
@@ -12246,7 +12246,7 @@ Teleopti R&amp;D</value>
     <value>在此您可以监控当日数值，通过选择一个技能或技能区域开始</value>
   </data>
   <data name="IncomingTraffic" xml:space="preserve">
-    <value>流入量</value>
+    <value>进线量</value>
   </data>
   <data name="ShowRightPanel" xml:space="preserve">
     <value>显示右侧面板</value>
@@ -12365,7 +12365,7 @@ Teleopti R&amp;D</value>
     <value>需要一个Teleopti WFM 8版的产品激活密钥才能运行系统，请联系服务中心或您的客户经理申请一个新的PAK。</value>
   </data>
   <data name="FinishedSwapShifts" xml:space="preserve">
-    <value>班表交换成功完成。</value>
+    <value>班次交换成功完成。</value>
   </data>
   <data name="LoadImage" xml:space="preserve">
     <value>加载图像</value>
@@ -12508,7 +12508,7 @@ Teleopti R&amp;D</value>
     <value>缺勤申请： {0} 至 {1} 当前无法被批准，已候补。</value>
   </data>
   <data name="SwapShifts" xml:space="preserve">
-    <value>班表交换</value>
+    <value>班次交换</value>
   </data>
   <data name="WeekendColon" xml:space="preserve">
     <value>周末：</value>
@@ -13606,5 +13606,311 @@ Teleopti R&amp;D</value>
   </data>
   <data name="HideStaffingInfo" xml:space="preserve">
     <value>隐藏人力信息</value>
+  </data>
+  <data name="InternalErrorMsg" xml:space="preserve">
+    <value>出现一个内部错误。</value>
+  </data>
+  <data name="ColumnCanNotBeEmpty" xml:space="preserve">
+    <value>栏位'{0}'不能为空</value>
+  </data>
+  <data name="ANewImportJobHasBeenCreatedFor" xml:space="preserve">
+    <value>一个新的导入任务'{0}'已被创建</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForFullSuccess" xml:space="preserve">
+    <value>{0}已导入。全部成功。</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForNonfullSuccess" xml:space="preserve">
+    <value>{0}已导入，{1}失败。 </value>
+  </data>
+  <data name="ImportJob" xml:space="preserve">
+    <value>导入任务</value>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>正在处理</value>
+  </data>
+  <data name="TimeStarted" xml:space="preserve">
+    <value>开始时间</value>
+  </data>
+  <data name="InvalidParameters" xml:space="preserve">
+    <value>无效的参数</value>
+  </data>
+  <data name="NumberOfRowsExceedsTheMaximum" xml:space="preserve">
+    <value>行数超过最大值({0})。</value>
+  </data>
+  <data name="DynamicGroupPageColon" xml:space="preserve">
+    <value>动态页面分组*：</value>
+  </data>
+  <data name="ForecastedVolume" xml:space="preserve">
+    <value>预测量</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>量</value>
+  </data>
+  <data name="ExceedsMaximumUploadFileSize" xml:space="preserve">
+    <value>超过最大上传文件大小</value>
+  </data>
+  <data name="ActualVolume" xml:space="preserve">
+    <value>实际量</value>
+  </data>
+  <data name="ForecastedAverageHandlingTime" xml:space="preserve">
+    <value>预测的平均处理时间</value>
+  </data>
+  <data name="ErrorOccurredWhenGeneratingQrcode" xml:space="preserve">
+    <value>生成二维码时出现错误</value>
+  </data>
+  <data name="ActualAverageHandlingTime" xml:space="preserve">
+    <value>实际平均处理时间</value>
+  </data>
+  <data name="FilterRtaFull" xml:space="preserve">
+    <value>筛选座席姓名 / 站点 / 小组 / 规则 / 状态 / 当前活动</value>
+  </data>
+  <data name="FilterRtaShort" xml:space="preserve">
+    <value>筛选座席姓名 / 状态 /...</value>
+  </data>
+  <data name="FilterSites" xml:space="preserve">
+    <value>筛选站点</value>
+  </data>
+  <data name="FilterSkills" xml:space="preserve">
+    <value>筛选技能</value>
+  </data>
+  <data name="Purged" xml:space="preserve">
+    <value>已清除</value>
+  </data>
+  <data name="DeletedContractAssignedForPlanningPeriod" xml:space="preserve">
+    <value>分配给此座席代表的合同 {0} 已被删除</value>
+  </data>
+  <data name="DeletedContractScheduleAssignedForPlanningPeriod" xml:space="preserve">
+    <value>分配给此座席代表的班表合同 {0} 已被删除</value>
+  </data>
+  <data name="DeletedPartTimePercentageAssignedForPlanningPeriod" xml:space="preserve">
+    <value>分配给此座席代表的兼职时间百分比 {0} 已被删除</value>
+  </data>
+  <data name="DeletedShiftBagAssignedForPlanningPeriod" xml:space="preserve">
+    <value>分配给此座席代表的班次包 {0} 已被删除</value>
+  </data>
+  <data name="MissingPersonPeriodForPlanningPeriod" xml:space="preserve">
+    <value>此座席代表在全部或部分排班周期内没有设置人员周期</value>
+  </data>
+  <data name="MissingSchedulePeriodForPlanningPeriod" xml:space="preserve">
+    <value>此座席代表在排班周期内没有设置班表周期</value>
+  </data>
+  <data name="MissingShiftBagForPlanningPeriod" xml:space="preserve">
+    <value>此座席代表在排班周期内没有设置班次包</value>
+  </data>
+  <data name="MissingSkillsForPlanningPeriod" xml:space="preserve">
+    <value>此座席代表在全部或部分排班周期内没有设置技能</value>
+  </data>
+  <data name="NoFullSchedulePeriod" xml:space="preserve">
+    <value>班表周期与排班周期不匹配</value>
+  </data>
+  <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
+    <value>座席代表有 {0} 天没有班表</value>
+  </data>
+  <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
+    <value>合同时间目标 ({0}) 未满足</value>
+  </data>
+  <data name="EmailSkillSelected" xml:space="preserve">
+    <value>已选择一个电子邮件技能，因此将不显示放弃率。</value>
+  </data>
+  <data name="AgentsHaveScheduled" xml:space="preserve">
+    <value>座席代表已排班</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheAgentGroup" xml:space="preserve">
+    <value>您确定想要删除座席分组 '{0}' 及相关设定吗？</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
+    <value>您确定想要删除休息日规则 '{0}' 及相关设定吗？</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningPeriod" xml:space="preserve">
+    <value>您确定想要删除排班周期 {0}-{1} 及相关设定吗？</value>
+  </data>
+  <data name="ChangePlanningDuration" xml:space="preserve">
+    <value>更改排班时间</value>
+  </data>
+  <data name="CreateAgentGroup" xml:space="preserve">
+    <value>创建座席分组</value>
+  </data>
+  <data name="CreateFirstPlanningPeriod" xml:space="preserve">
+    <value>创建第一个排班周期</value>
+  </data>
+  <data name="CreateNextPp" xml:space="preserve">
+    <value>创建下一个排班周期</value>
+  </data>
+  <data name="DayOffRule" xml:space="preserve">
+    <value>休息日规则</value>
+  </data>
+  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
+    <value>以下设置被应用于以下座席分组 {0}</value>
+  </data>
+  <data name="DayOffRuleSetting" xml:space="preserve">
+    <value>休息日规则设置</value>
+  </data>
+  <data name="DeleteAgentGroup" xml:space="preserve">
+    <value>删除座席分组</value>
+  </data>
+  <data name="DeleteDayOffRule" xml:space="preserve">
+    <value>删除休息日规则</value>
+  </data>
+  <data name="DeletePlanningPeriod" xml:space="preserve">
+    <value>删除排班周期</value>
+  </data>
+  <data name="EditAgentGroup" xml:space="preserve">
+    <value>编辑座席分组</value>
+  </data>
+  <data name="FilterValidationIssues" xml:space="preserve">
+    <value>筛选有效性问题</value>
+  </data>
+  <data name="HelpCreateAgentGroup" xml:space="preserve">
+    <value>需要一个座席分组以能够排班。您想创建一个座席分组吗？</value>
+  </data>
+  <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
+    <value>休息日规则将会应用于所有排班周期</value>
+  </data>
+  <data name="Issue" xml:space="preserve">
+    <value>问题</value>
+  </data>
+  <data name="ManageDayOffForAgentGroup" xml:space="preserve">
+    <value>为座席分组 {0} 管理休息日规则。</value>
+  </data>
+  <data name="NewAgentGroup" xml:space="preserve">
+    <value>新建座席分组</value>
+  </data>
+  <data name="NoAgentsWithinAgentGroup" xml:space="preserve">
+    <value>此座席分组中没有座席代表能够被排班</value>
+  </data>
+  <data name="NoPreviousScheduleResult" xml:space="preserve">
+    <value>此排班周期没有以前的班表结果</value>
+  </data>
+  <data name="NoValidIssuesForPp" xml:space="preserve">
+    <value>此排班周期无有效性问题</value>
+  </data>
+  <data name="NoValidScheduleResult" xml:space="preserve">
+    <value>此排班周期无有效的班表结果</value>
+  </data>
+  <data name="PreSchedulingValidationIssues" xml:space="preserve">
+    <value>排班前的有效性问题</value>
+  </data>
+  <data name="RefreshPreSchedulingValidationIssues" xml:space="preserve">
+    <value>刷新排班前的有效性问题</value>
+  </data>
+  <data name="ScheduleAgentGroup" xml:space="preserve">
+    <value>为座席分组排班</value>
+  </data>
+  <data name="SchedulingFailed" xml:space="preserve">
+    <value>排班失败</value>
+  </data>
+  <data name="ScheduledIssues" xml:space="preserve">
+    <value>最近一次排班中的问题</value>
+  </data>
+  <data name="SchedulingSucceeded" xml:space="preserve">
+    <value>排班成功</value>
+  </data>
+  <data name="SchedulePageSelectAg" xml:space="preserve">
+    <value>选择座席分组以开始工作</value>
+  </data>
+  <data name="SearchForAgentGroup" xml:space="preserve">
+    <value>搜索站点 / 小组 / 技能 / 合同</value>
+  </data>
+  <data name="SearchForDayOff" xml:space="preserve">
+    <value>搜索站点 / 小组 / 合同</value>
+  </data>
+  <data name="SelectedPlanningPeriod" xml:space="preserve">
+    <value>已选定的排班周期</value>
+  </data>
+  <data name="SelectPpWorkWith" xml:space="preserve">
+    <value>选择排班周期以开始工作</value>
+  </data>
+  <data name="UpdatedValidation" xml:space="preserve">
+    <value>有效性问题已更新</value>
+  </data>
+  <data name="ConfirmToggleAllData" xml:space="preserve">
+    <value>这将切换此项及以下所有项，您确定想要继续操作吗？</value>
+  </data>
+  <data name="AnErrorOccurredPleaseTryAgain" xml:space="preserve">
+    <value>出现错误，请重试。</value>
+  </data>
+  <data name="ChangePlanningPeriodDurationColon" xml:space="preserve">
+    <value>更改排班周期时间</value>
+  </data>
+  <data name="ClearScheduleResultAndHistoryData" xml:space="preserve">
+    <value>清除排定的班次和休息日</value>
+  </data>
+  <data name="CreatePlanningPeriod" xml:space="preserve">
+    <value>创建排班周期</value>
+  </data>
+  <data name="ModifyEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>为此排班周期修改结束日期</value>
+  </data>
+  <data name="ModifyStartAndEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>为此排班周期修改开始和结束日期</value>
+  </data>
+  <data name="RunningIntradayOptimization" xml:space="preserve">
+    <value>运行当日优化</value>
+  </data>
+  <data name="SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot" xml:space="preserve">
+    <value>选择一个建议的周期以开始工作，或直接选取开始和结束日期。</value>
+  </data>
+  <data name="SuccessfullyScheduledPlanningPeriodFromTo" xml:space="preserve">
+    <value>成功为排班周期 {0} - {1} 创建班表</value>
+  </data>
+  <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
+    <value>您将更改次排班周期到 {0} - {1}.</value>
+  </data>
+  <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
+    <value>您将创建一个排班周期从 {0} 到 {1}.</value>
+  </data>
+  <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
+    <value>您需要建立一个排班周期以为座席代表排班。您想要创建一个排班周期吗？</value>
+  </data>
+  <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
+    <value>您确定想要清除排班周期 {0}-{1} 中已排定的班次和休息日吗?</value>
+  </data>
+  <data name="ClearPlanningPeriod" xml:space="preserve">
+    <value>清除此排班周期中已排定的班次和休息日</value>
+  </data>
+  <data name="PublishingSchedule" xml:space="preserve">
+    <value>发布班表</value>
+  </data>
+  <data name="PublishScheduleSuccess" xml:space="preserve">
+    <value>已成功发布班表</value>
+  </data>
+  <data name="SuccessClearPlanningPeriodData" xml:space="preserve">
+    <value>已成功为此排班周期 {0}-{1} 清除已排定的班次和休息日</value>
+  </data>
+  <data name="FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>由于技术错误，为排班周期 {0} - {1} 进行当日优化失败。请重试。</value>
+  </data>
+  <data name="PublishingScheduleSuccess" xml:space="preserve">
+    <value>为排班周期  {0} - {1} 发布班表</value>
+  </data>
+  <data name="PublishScheduleSucessForSelectedPlanningPeriod" xml:space="preserve">
+    <value>已成功为排班周期  {0} - {1} 发布班表</value>
+  </data>
+  <data name="SuccessfullyIntradayOptimizationPlanningPeriodFromTo" xml:space="preserve">
+    <value>已成功为排班周期  {0} - {1} 完成当日优化</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>错误的申请</value>
+  </data>
+  <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
+    <value>结束时间应晚于开始时间</value>
+  </data>
+  <data name="TeleoptiWFMApp" xml:space="preserve">
+    <value>Teleopti WFM 手机应用</value>
+  </data>
+  <data name="WFMAppGuideStep1" xml:space="preserve">
+    <value>步骤１：</value>
+  </data>
+  <data name="WFMAppGuideStep1Description" xml:space="preserve">
+    <value>通过点击合适的按钮或扫描以下二维码来下载并安装Teleopti WFM 手机应用。</value>
+  </data>
+  <data name="WFMAppGuideStep2" xml:space="preserve">
+    <value>步骤２：</value>
+  </data>
+  <data name="WFMAppGuideStep2Description" xml:space="preserve">
+    <value>配置Teleopti WFM 手机应用。打开应用并扫描以下二维码或输入</value>
+  </data>
+  <data name="WFMAppGuideTitle" xml:space="preserve">
+    <value>Teleopti WFM 手机应用</value>
   </data>
 </root>
