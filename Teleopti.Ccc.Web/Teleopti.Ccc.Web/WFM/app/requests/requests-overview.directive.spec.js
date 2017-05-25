@@ -589,7 +589,7 @@
 			var shiftTradeScheduleViewModels = isolatedScope.requestsTableContainer.shiftTradeScheduleViewModels;
 			
 			var expectedTimezone = "Atlantic/Reykjavik";
-			var expectedDate = moment("2017-01-01T16:00:00.000Z"); // "2017-01-02T00:00:00" in timezone "Atlantic/Reykjavik"
+			var expectedDate = moment(test.scope.shiftTradeRequestDateSummary.Minimum);
 			
 			for (var i = 0; i < shiftTradeDayViewModels.length - 1; i++) {
 				var dayViewModel = shiftTradeDayViewModels[i];
@@ -639,7 +639,7 @@
 			var shiftTradeScheduleViewModels = isolatedScope.requestsTableContainer.shiftTradeScheduleViewModels;
 
 			var expectedTimezone = "Europe/Berlin";
-			var expectedDate = moment("2017-01-01T16:00:00.000Z");
+			var expectedDate = moment(test.scope.shiftTradeRequestDateSummary.Minimum);
 
 			for (var i = 0; i < shiftTradeDayViewModels.length - 1; i++) {
 				var dayViewModel = shiftTradeDayViewModels[i];
