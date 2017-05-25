@@ -493,7 +493,7 @@
 		};
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 		startDayData.Date = moment().zone(-startDayData.BaseUtcOffsetInMinutes).format(constants.dateOnlyFormat);
-		startDayData.Schedule.SiteOpenHourPeriod = { EndTime: "13:00:00", StartTime: "08:00:00" };
+		startDayData.Schedule.OpenHourPeriod = { EndTime: "13:00:00", StartTime: "08:00:00" };
 		propabilities = createPropabilities(["12:00:00", "15:00:00"], startDayData.Date);
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);

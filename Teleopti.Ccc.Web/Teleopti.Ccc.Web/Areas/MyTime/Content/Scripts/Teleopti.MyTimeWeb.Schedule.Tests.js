@@ -630,7 +630,7 @@ $(document).ready(function() {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
-		fakeScheduleData.Days[0].SiteOpenHourPeriod = {
+		fakeScheduleData.Days[0].OpenHourPeriod = {
 			StartTime: '10:00:00',
 			EndTime: '15:00:00'
 		};
@@ -656,7 +656,7 @@ $(document).ready(function() {
 		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
-		fakeScheduleData.Days[0].SiteOpenHourPeriod = {
+		fakeScheduleData.Days[0].OpenHourPeriod = {
 			StartTime: '10:00:00',
 			EndTime: '15:00:00'
 		};

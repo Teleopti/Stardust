@@ -72,7 +72,7 @@ $(document).ready(function() {
 						'Color': '128,255,128',
 						'IsOvertime': false
 					}],
-					SiteOpenHourPeriod: {
+					OpenHourPeriod: {
 						EndTime: "15:00:00",
 						StartTime: "10:00:00"
 					}
