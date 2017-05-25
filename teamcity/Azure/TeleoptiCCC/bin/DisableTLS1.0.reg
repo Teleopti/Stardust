@@ -1,6 +1,0 @@
-Windows Registry Editor Version 5.00
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\tls 1.0]
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\tls 1.0\client]
-"enabled"=dword:00000000
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\tls 1.0\server]
-"enabled"=dword:00000000
