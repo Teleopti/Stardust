@@ -222,7 +222,7 @@
 							<td class="shift-trade-agent-name">@Resources.MySchedule</td>
 							<td class="shift-trade-my-schedule">
 								<!-- ko if: mySchedule().isNotScheduled -->
-									<div>@Resources.NotScheduled</div>
+									<div class="not-scheduled-text">@Resources.NotScheduled</div>
 								<!-- /ko -->
 								<!--ko if:mySchedule().isFullDayAbsence-->
 								<div data-bind="foreach: mySchedule().layers">
@@ -260,7 +260,7 @@
 							<td id="shift-trade-agent-name" class="shift-trade-agent-name floatleft " data-bind="text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></td>
 							<td class="shift-trade-possible-trade-schedule">
 								<!-- ko if: $data.isNotScheduled -->
-									<div>@Resources.NotScheduled</div>
+									<div class="not-scheduled-text">@Resources.NotScheduled</div>
 								<!-- /ko -->
 								<!--ko if:isFullDayAbsence -->
 								<div data-bind="foreach: $data.layers">
@@ -303,7 +303,7 @@
 									</div>
 								</div>
 								<!-- ko if: $data.isNotScheduled -->
-									<div>@Resources.NotScheduled</div>
+									<div class="not-scheduled-text">@Resources.NotScheduled</div>
 								<!-- /ko -->
 								<!--ko if:isDayOff-->
 								<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
