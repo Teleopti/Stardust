@@ -418,7 +418,7 @@ Teleopti.MyTimeWeb.Common.ServiceDateFormat = 'YYYY-MM-DD';
 Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 	return {
 		ActivatePlaceHolder: function () {
-			$('textarea, :text, :password').placeholder();
+			$('textarea[placeholder][placeholder!=""], :text[placeholder][placeholder!=""], :password[placeholder][placeholder!=""]').placeholder();
 		},
 
 		Init: function () {

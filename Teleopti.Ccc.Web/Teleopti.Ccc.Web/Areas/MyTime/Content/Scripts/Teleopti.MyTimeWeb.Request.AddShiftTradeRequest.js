@@ -30,6 +30,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 				var ajax = new Teleopti.MyTimeWeb.Ajax();
 				vm = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
 				vm.featureCheck();
+				ko.cleanNode(elementToBind);
 				ko.applyBindings(vm, elementToBind);
 			}
 			if (vm.subject() != undefined) {
@@ -57,6 +58,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 			if ((vmBulletin || '') == '') {
 				var ajax = new Teleopti.MyTimeWeb.Ajax();
 				vmBulletin = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel(ajax);
+				ko.cleanNode(elementToBind);
 				ko.applyBindings(vmBulletin, elementToBind);
 			}
 			if (vmBulletin.subject() != undefined) {

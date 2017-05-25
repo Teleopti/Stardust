@@ -18,8 +18,8 @@
 			<div>
 				<div class="input-group schedule-filter-component">
 					<span class="input-group-btn">
-						<button class="previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateEnable">
-							<i class="glyphicon glyphicon-chevron-left" data-bind="enable: !IsLoading()"></i>
+						<button class="previous-date btn" data-bind="click: previousDate, enable: previousDateEnable">
+							<i class="glyphicon glyphicon-chevron-left"></i>
 						</button>
 					</span>
 					<![if (!IE)|(gt IE 8)]>
@@ -32,8 +32,8 @@
 						<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
-						<button class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateEnable">
-							<i class="glyphicon glyphicon-chevron-right" data-bind="enable: !IsLoading()"></i>
+						<button class="next-date btn" data-bind="click: nextDate, enable: nextDateEnable">
+							<i class="glyphicon glyphicon-chevron-right"></i>
 						</button>
 					</span>
 				</div>

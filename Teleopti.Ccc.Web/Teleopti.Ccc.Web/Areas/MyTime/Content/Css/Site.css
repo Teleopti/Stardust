@@ -1633,18 +1633,17 @@ End personal drop down menu
 	overflow: hidden;
 	box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
 	outline: none;
+	border: none;
+	cursor: pointer;
+	line-height: 100%;
+	font-size: 240%;
+	font-weight: bold;
+	color: #ffffff;
+	text-align: center;
 }
-
-	.fab:before {
-		content: '+';
-		position: absolute;
-		top: 0;
-		left: calc(25px - 10px);
-		color: white;
-		font-size: 240%;
-		font-weight: bold;
-		z-index: 115;
-	}
+.fab:before {
+	content: "+";
+}
 
 .menu-focusing {
 	padding: 0 15px 1px 15px;
@@ -1675,6 +1674,10 @@ End personal drop down menu
 	left: 0;
 	right: 0;
 	z-index: 1000;
+	width: 100%;
+	background: transparent;
+	border: none;
+	cursor: pointer;
 }
 
 /*override bootstrap modal header */

@@ -97,7 +97,11 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
 	function _initNavigationViewModel() {
 		requestNavigationViewModel = new RequestNavigationViewModel();
-		ko.applyBindings(requestNavigationViewModel, $('div.navbar-container')[0]);
+		var elementToBind = $('div.navbar-container')[0];
+		if (elementToBind) {
+			ko.cleanNode(elementToBind);
+		}
+		ko.applyBindings(requestNavigationViewModel, elementToBind);
 	}
 
 	return {

@@ -35,8 +35,8 @@
 </div>
 
 <div data-bind="if: showFabButton, css: { 'hide-fab-on-phone': hideFab}">
-	<div class="close-fab-overlay" data-bind="visible: menuIsVisible,css: { 'hide-fab-on-phone': hideFab}, click: disableMenu"></div>
-	<div class="fab" data-bind="click: enableMenu" tabindex="0"></div>
+	<button class="close-fab-overlay" data-bind="visible: menuIsVisible,css: { 'hide-fab-on-phone': hideFab}, click: disableMenu"></button>
+	<button class="fab" data-bind="click: enableMenu" tabindex="0"></button>
 	<div class="navbar navbar-teleopti subnavbar" data-bind="css: { 'menu-focusing': menuIsVisible}, visible: menuIsVisible" >
 		<ul class="nav navbar-nav navbar-teleopti row submenu ts-menu">
 			@if (Model.ShiftTradePermisssion)
@@ -68,8 +68,8 @@
 				<div class="col-sm-6 col-md-6 col-lg-3">
 					<div id="ScheduleDatePicker" class="input-group schedule-filter-component">
 						<span class="input-group-btn">
-							<button disabled="disabled" class="previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
-								<i class="glyphicon glyphicon-chevron-left" data-bind="disable: isLocked"></i>
+							<button disabled="disabled" class="previous-date btn" data-bind="click: previousDate, enable: previousDateValid">
+								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
 						</span>
 						<![if (!IE)|(gt IE 8)]>
@@ -83,8 +83,8 @@
 							<button disabled="disabled" class="btn moment-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }, disable: isLoading">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
-							<button disabled="disabled" class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
-								<i class="glyphicon glyphicon-chevron-right" data-bind="disable: isLoading"></i>
+							<button disabled="disabled" class="next-date btn" data-bind="click: nextDate, enable: nextDateValid">
+								<i class="glyphicon glyphicon-chevron-right"></i>
 							</button>
 						</span>
 						<!-- /ko -->
