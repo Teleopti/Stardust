@@ -24,13 +24,15 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.AgentInfo;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
-	public class ScheduleApiControllerTest
+	public class ScheduleApiControllerFetchWeekDataTest
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
@@ -40,7 +42,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeUserTimeZone TimeZone;
 		public FakePersonRequestRepository PersonRequestRepository;
 
-		#region Test cases for FetchWeekData()
 		[Test]
 		public void ShouldMap()
 		{
@@ -814,7 +815,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(Now.LocalDateOnly(), team));
 
 			var result = Target.FetchWeekData(null).Days.ElementAt(3);
-			result.SiteOpenHourPeriod.Equals(timePeriod).Should().Be.True();
+			result.OpenHourPeriod.Equals(timePeriod).Should().Be.True();
 		}
 
 		[Test]
@@ -849,184 +850,70 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
 			var result = Target.FetchWeekData(null);
-			result.Days.ElementAt(3).SiteOpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(9));
-			result.Days.ElementAt(3).SiteOpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(10));
-			result.Days.ElementAt(4).SiteOpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(10));
-			result.Days.ElementAt(4).SiteOpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(11));
-		}
-		#endregion
-
-		#region Test cases for FetchMonthData()
-		[Test]
-		public void ShouldHaveTheFirstDayOfTheFirstWeekInMonth()
-		{
-			Now.Is(new DateTime(2014, 11, 30, 20, 0, 0, DateTimeKind.Utc));
-			TimeZone.IsSweden();
-
-			var result = Target.FetchMonthData(null);
-			result.CurrentDate.Date.Should().Be.EqualTo(new DateTime(2014, 11, 30));
-			result.ScheduleDays.First().Date.Should().Be.EqualTo(new DateTime(2014, 10, 27));
-			result.ScheduleDays.First().FixedDate.Should().Be.EqualTo(new DateOnly(2014, 10, 27).ToFixedClientDateOnlyFormat());
+			result.Days.ElementAt(3).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(9));
+			result.Days.ElementAt(3).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(10));
+			result.Days.ElementAt(4).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(10));
+			result.Days.ElementAt(4).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(11));
 		}
 
 		[Test]
-		public void ShouldHaveCorrectNumberOfDaysAccordingToMonth()
+		public void ShouldGetSkillOpenHourPeriodForDayView()
 		{
-			var result = Target.FetchMonthData(null);
-			result.ScheduleDays.Count().Should().Be.EqualTo(35);
-		}
+			var skill = addSkill();
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+			addAssignment(period, skill.Activity);
 
-		[Test]
-		public void ShouldCreateModelForWeekScheduleWithSevenDays()
-		{
 			var result = Target.FetchWeekData(null);
-			result.Days.Count().Should().Be.EqualTo(7);
+			result.Days.ElementAt(3).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(7));
+			result.Days.ElementAt(3).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(18));
 		}
 
-		[Test]
-		public void ShouldMapCurrentDate()
+		private void addAssignment(DateTimePeriod period, IActivity activity)
 		{
-			var result = Target.FetchMonthData(null);
-			var localDateOnly = Now.LocalDateOnly();
-			result.CurrentDate.Should().Be.EqualTo(localDateOnly.Date);
-			result.FixedDate.Should().Be.EqualTo(localDateOnly.ToFixedClientDateOnlyFormat());
-		}
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());
 
-		[Test]
-		[SetUICulture("de-DE")]
-		[SetCulture("en-GB")]
-		public void ShouldMapDayHeaderOfWeek()
-		{
-			var result = Target.FetchMonthData(null);
+			assignment.AddActivity(activity, period);
 
-			result.DayHeaders.First().Name.Should().Be.EqualTo("Montag");
-			result.DayHeaders.First().ShortName.Should().Be.EqualTo("Mo");
-		}
-
-		[Test]
-		public void ShouldMapAbsenceName()
-		{
-			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-				new AbsenceLayer(new Absence { Description = new Description("Illness", "IL") }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
-
-			var result = Target.FetchMonthData(null);
-
-			result.ScheduleDays.First().Absence.Name.Should().Be.EqualTo("Illness");
-			result.ScheduleDays.First().Absence.ShortName.Should().Be.EqualTo("IL");
-		}
-
-		[Test]
-		public void ShouldMapAbsenceRespectingPriority()
-		{
-			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-							new AbsenceLayer(new Absence { Description = new Description("a", "IL"), Priority = 1 }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
-
-			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-							new AbsenceLayer(new Absence { Description = new Description("a", "HO"), Priority = 100 }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
-
-			var result = Target.FetchMonthData(null);
-			result.ScheduleDays.First().Absence.ShortName.Should().Be.EqualTo("IL");
-		}
-
-		[Test]
-		public void ShouldMapIsFullDayAbsence()
-		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
-			assignment.AddActivity(new Activity("Phone"), new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17), true);
 			ScheduleData.Add(assignment);
-			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-				new AbsenceLayer(new Absence { Description = new Description("Illness", "IL") }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
-
-			var result = Target.FetchMonthData(null);
-			result.ScheduleDays.First().Absence.IsFullDayAbsence.Should().Be.True();
 		}
 
-		[Test]
-		public void ShouldMapIsDayOff()
+		private static ISkill createSkillWithOpenHours(TimeSpan start, TimeSpan end)
 		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
-			assignment.SetDayOff(new DayOffTemplate(new Description("Day off", "DO")), true);
-			ScheduleData.Add(assignment);
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			skill.Activity.InWorkTime = true;
+			skill.Activity.RequiresSkill = true;
+			skill.SkillType.Description = new Description("SkillTypeInboundTelephony");
 
-			var result = Target.FetchMonthData(null);
-			result.ScheduleDays.First().IsDayOff.Should().Be.True();
+			foreach (var workload in skill.WorkloadCollection)
+			{
+				foreach (var templateWeek in workload.TemplateWeekCollection)
+				{
+					templateWeek.Value.ChangeOpenHours(new List<TimePeriod>
+					{
+						new TimePeriod(start, end)
+					});
+				}
+			}
+			return skill;
 		}
 
-		[Test]
-		public void ShouldMapIsNotDayOffForWorkingDay()
+		private ISkill addSkill()
 		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
-			assignment.AddActivity(new Activity("Phone"), new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17), true);
-			ScheduleData.Add(assignment);
-
-			var result = Target.FetchMonthData(null);
-			result.ScheduleDays.First().IsDayOff.Should().Be.False();
+			var skill = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(18));
+			var personPeriod = getOrAddPersonPeriod();
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			return skill;
 		}
 
-		[Test]
-		public void ShouldMapIsDayOffForContractDayOff()
+		private PersonPeriod getOrAddPersonPeriod()
 		{
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 1, 1));
-			var contractScheduleWeek = new ContractScheduleWeek();
-			contractScheduleWeek.Add(DayOfWeek.Saturday, false);
-			personPeriod.PersonContract.ContractSchedule.AddContractScheduleWeek(contractScheduleWeek);
+			var personPeriod = (PersonPeriod)User.CurrentUser().PersonPeriods(new DateOnly(2014, 1, 1).ToDateOnlyPeriod()).FirstOrDefault();
+			if (personPeriod != null) return personPeriod;
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 1, 1), team);
 			User.CurrentUser().AddPersonPeriod(personPeriod);
-
-			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-				new AbsenceLayer(new Absence { Description = new Description("Illness", "IL") }, new DateTimePeriod(2014, 12, 6, 8, 2014, 12, 6, 17))));
-
-			var result = Target.FetchMonthData(null);
-			result.ScheduleDays.ElementAt(5).IsDayOff.Should().Be.True();
+			return personPeriod;
 		}
-
-		[Test]
-		[SetCulture("en-US")]
-		public void ShouldMapTimeSpanForWorkingDay()
-		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
-			assignment.AddActivity(new Activity("Phone") { InWorkTime = true }, new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16), true);
-			assignment.SetShiftCategory(new ShiftCategory("Late") { Description = new Description("Late", "PM"), DisplayColor = Color.Green });
-			ScheduleData.Add(assignment);
-
-			var result = Target.FetchMonthData(null).ScheduleDays.ElementAt(1);
-
-			result.Shift.Should().Not.Be.Null();
-			result.Shift.TimeSpan.Should().Be.EqualTo(assignment.Period.TimePeriod(TimeZone.TimeZone()).ToShortTimeString());
-			result.Shift.Color.Should().Be.EqualTo("rgb(0,128,0)");
-			result.Shift.Name.Should().Be.EqualTo("Late");
-			result.Shift.ShortName.Should().Be.EqualTo("PM");
-		}
-
-		[Test]
-		[SetCulture("en-US")]
-		public void ShouldMapTimeSpanForWorkingDayExcludingPersonalActivity()
-		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
-			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
-			assignment.AddActivity(new Activity("a") { InWorkTime = true }, period);
-			assignment.SetShiftCategory(new ShiftCategory("sc"));
-			assignment.AddPersonalActivity(new Activity("b") { InWorkTime = true }, period.MovePeriod(TimeSpan.FromHours(-2)));
-			ScheduleData.Add(assignment);
-
-			var result = Target.FetchMonthData(null).ScheduleDays.ElementAt(1);
-			result.Shift.Should().Not.Be.Null();
-			result.Shift.TimeSpan.Should().Be.EqualTo(period.TimePeriod(TimeZone.TimeZone()).ToShortTimeString());
-		}
-
-		[Test]
-		[SetCulture("en-US")]
-		public void ShouldMapWorkingHoursForWorkingDay()
-		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
-			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
-			assignment.AddActivity(new Activity("a") { InWorkTime = true, InContractTime = true }, period);
-			assignment.SetShiftCategory(new ShiftCategory("sc"));
-			ScheduleData.Add(assignment);
-
-			var result = Target.FetchMonthData(null).ScheduleDays.ElementAt(1);
-			result.Shift.WorkingHours.Should().Be(TimeHelper.GetLongHourMinuteTimeString(TimeSpan.FromHours(9), CultureInfo.CurrentUICulture));
-		}
-
-		#endregion
 	}
 }

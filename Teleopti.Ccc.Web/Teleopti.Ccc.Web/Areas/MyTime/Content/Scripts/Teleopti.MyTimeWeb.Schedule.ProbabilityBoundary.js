@@ -71,9 +71,9 @@ Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (dayViewModel, timeli
 
 	var openPeriodStartMinutes = -1;
 	var openPeriodEndMinutes = constants.totalMinutesOfOneDay + 1;
-	if (probabilityType === constants.probabilityType.overtime && dayViewModel.siteOpenHourPeriod != undefined) {
-		openPeriodStartMinutes = moment.duration(dayViewModel.siteOpenHourPeriod.StartTime).asMinutes();
-		openPeriodEndMinutes = moment.duration(dayViewModel.siteOpenHourPeriod.EndTime).asMinutes();
+	if (probabilityType === constants.probabilityType.overtime && dayViewModel.openHourPeriod != undefined) {
+		openPeriodStartMinutes = moment.duration(dayViewModel.openHourPeriod.StartTime).asMinutes();
+		openPeriodEndMinutes = moment.duration(dayViewModel.openHourPeriod.EndTime).asMinutes();
 	}
 
 	var startTimeCandidates = [

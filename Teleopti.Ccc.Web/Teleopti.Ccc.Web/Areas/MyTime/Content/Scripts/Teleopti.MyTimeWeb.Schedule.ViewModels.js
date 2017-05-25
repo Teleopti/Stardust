@@ -27,7 +27,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 	self.isFullDayAbsence = scheduleDay.IsFullDayAbsence;
 	self.isDayOff = ko.observable(scheduleDay.IsDayOff);
 	self.periods = scheduleDay.Periods;
-	self.siteOpenHourPeriod = scheduleDay.SiteOpenHourPeriod;
+	self.openHourPeriod = scheduleDay.OpenHourPeriod;
 
 	var dayDescription = "";
 	var dayNumberDisplay = "";

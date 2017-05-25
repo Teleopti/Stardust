@@ -34,6 +34,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly CommonViewModelMapper _commonMapper;
 		private readonly OvertimeAvailabilityViewModelMapper _overtimeMapper;
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
+		private readonly ISiteOpenHourProvider _siteOpenHourProvider;
+		private readonly IScheduledSkillOpenHourProvider _scheduledSkillOpenHourProvider;
 
 		public WeekScheduleViewModelMapper(IPeriodSelectionViewModelFactory periodSelectionViewModelFactory,
 			IPeriodViewModelFactory periodViewModelFactory,
@@ -41,7 +43,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			IScheduleColorProvider scheduleColorProvider,
 			ILoggedOnUser loggedOnUser, INow now,
 			CommonViewModelMapper commonMapper,
-			OvertimeAvailabilityViewModelMapper overtimeMapper, IRequestsViewModelFactory requestsViewModelFactory)
+			OvertimeAvailabilityViewModelMapper overtimeMapper,
+			IRequestsViewModelFactory requestsViewModelFactory,
+			ISiteOpenHourProvider siteOpenHourProvider,
+			IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider)
 		{
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
 			_periodViewModelFactory = periodViewModelFactory;
@@ -51,7 +56,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_now = now;
 			_commonMapper = commonMapper;
 			_overtimeMapper = overtimeMapper;
-		    _requestsViewModelFactory = requestsViewModelFactory;
+			_requestsViewModelFactory = requestsViewModelFactory;
+			_siteOpenHourProvider = siteOpenHourProvider;
+			_scheduledSkillOpenHourProvider = scheduledSkillOpenHourProvider;
 		}
 
 		public WeekScheduleViewModel Map(WeekScheduleDomainData s)
@@ -137,7 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		{
 			var personAssignment = s.ScheduleDay?.PersonAssignment();
 			var significantPartForDisplay = s.ScheduleDay?.SignificantPartForDisplay();
-			var dayViewModel =  new DayViewModel
+			var dayViewModel = new DayViewModel
 			{
 				Date = s.Date.ToShortDateString(),
 				FixedDate = s.Date.ToFixedClientDateOnlyFormat(),
@@ -159,9 +166,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				IsDayOff = significantPartForDisplay == SchedulePartView.DayOff,
 				OvertimeAvailabililty = overtimeAvailability(s),
 				Availability = s.Availability,
-				SiteOpenHourPeriod = getSiteOpenHourPeriod(s.Date)
+				OpenHourPeriod = getOpenHourPeriod(s)
 			};
-		    dayViewModel.HasNotScheduled = dayViewModel.Summary.Title == Resources.NotScheduled;
+			dayViewModel.HasNotScheduled = dayViewModel.Summary.Title == Resources.NotScheduled;
 
 			return dayViewModel;
 		}
@@ -363,14 +370,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			return TimeHelper.GetLongHourMinuteTimeString(timespan, CultureInfo.CurrentUICulture);
 		}
 
-		private TimePeriod? getSiteOpenHourPeriod(DateOnly date)
+		private TimePeriod? getOpenHourPeriod(WeekScheduleDayDomainData weekScheduleDayDomainData)
 		{
-			var siteOpenHour = _loggedOnUser.CurrentUser().SiteOpenHour(date);
-			if (siteOpenHour == null || siteOpenHour.IsClosed)
+			var openHour = _siteOpenHourProvider.GetSiteOpenHourPeriod(weekScheduleDayDomainData.Date);
+			if (!openHour.HasValue)
 			{
-				return null;
+				openHour = _scheduledSkillOpenHourProvider.GetSkillOpenHourPeriod(weekScheduleDayDomainData.ScheduleDay);
 			}
-			return siteOpenHour.TimePeriod;
+			return openHour;
 		}
 
 		private static string toRgbColor(Color? color)

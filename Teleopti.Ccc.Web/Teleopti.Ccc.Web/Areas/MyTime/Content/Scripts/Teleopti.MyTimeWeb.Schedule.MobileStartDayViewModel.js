@@ -71,7 +71,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.probabilities = ko.observableArray();
 	self.userNowInMinute = ko.observable(0);
 	self.userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
-	self.siteOpenHourPeriod = null;
+	self.openHourPeriod = null;
 	self.isLoading = ko.observable(false);
 
 	self.navigateToMessages = function () {
@@ -98,7 +98,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
 		self.periods = data.Schedule.Periods;
 		self.unreadMessageCount(data.UnReadMessageCount);
-		self.siteOpenHourPeriod = data.Schedule.SiteOpenHourPeriod;
+		self.openHourPeriod = data.Schedule.OpenHourPeriod;
 
 		self.hasOvertime(data.Schedule.HasOvertime);
 		self.requestCount(data.Schedule.TextRequestCount);
