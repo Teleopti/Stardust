@@ -253,7 +253,8 @@
 	cursor: pointer;
 }
 
-#team-schedule-table > tbody > tr:nth-child(2n + 1) > td.shift-trade-agent-name {
+#team-schedule-table > tbody > tr:nth-child(2n + 1) > td.shift-trade-agent-name,
+#team-schedule-table > tbody > tr:nth-child(2n + 1) > td.shift-trade-possible-trade-schedule {
 	color: #9E9E9E;
 }
 

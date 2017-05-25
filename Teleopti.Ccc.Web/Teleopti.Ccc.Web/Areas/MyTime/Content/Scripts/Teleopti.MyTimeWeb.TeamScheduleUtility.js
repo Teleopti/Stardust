@@ -265,7 +265,9 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 				null,
 				personSchedule.IsFullDayAbsence,
 				null,
-				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute));
+				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute),
+				personSchedule.IsNotScheduled
+				);
 		} else {
 			var scheduleStartTime = moment(layers[0].Start);
 			var scheduleEndTime = moment(layers[layers.length - 1].End);
@@ -289,7 +291,8 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 				null,
 				personSchedule.IsFullDayAbsence,
 				null,
-				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute)
+				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute),
+				personSchedule.IsNotScheduled
 				);
 		}
 		return model;
