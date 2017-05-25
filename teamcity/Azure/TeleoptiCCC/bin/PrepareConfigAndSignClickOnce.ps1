@@ -317,6 +317,7 @@ Try
 
     $CNAME = $DataSourceName + ".teleopticloud.com"
     & "$directory\Add-Hostname.cmd" $CNAME
+    & regedit.exe /S "$directory\DisableTLS1.0.reg"
 	
 	Remove-Item "$fullPathsettingsFile"
 	if (Test-Path "$fullPathsettingsFile") {
