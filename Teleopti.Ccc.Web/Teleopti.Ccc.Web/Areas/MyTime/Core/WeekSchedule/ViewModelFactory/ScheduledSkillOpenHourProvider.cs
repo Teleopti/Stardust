@@ -82,17 +82,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		public TimePeriod? GetSkillOpenHourPeriodByDate(IPersonSkill[] personSkills, IScheduleDay scheduleDay)
 		{
 			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			var personAssignment = scheduleDay.PersonAssignment();
-			if (personAssignment == null || personAssignment.ShiftLayers.IsEmpty())
-				return null;
+			IList<ISkill> skills;
+			if (scheduleDay.SignificantPartForDisplay()!= SchedulePartView.DayOff)
+			{
+				var personAssignment = scheduleDay.PersonAssignment();
+				if (personAssignment == null || personAssignment.ShiftLayers.IsEmpty())
+					return null;
 
-			if (personSkills == null || !personSkills.Any())
-				return null;
+				if (personSkills == null || !personSkills.Any())
+					return null;
 
-			var scheduledActivities = personAssignment.MainActivities().Select(m => m.Payload).Where(p => p.RequiresSkill).ToList();
-			if (!scheduledActivities.Any())
-				return null;
-			var skills = personSkills.Where(m => scheduledActivities.Contains(m.Skill.Activity)).Select(m => m.Skill).Distinct();
+				var scheduledActivities =
+					personAssignment.MainActivities().Select(m => m.Payload).Where(p => p.RequiresSkill).ToList();
+				if (!scheduledActivities.Any())
+					return null;
+				skills = personSkills.Where(m => scheduledActivities.Contains(m.Skill.Activity)).Select(m => m.Skill).Distinct().ToList();
+			}
+			else
+			{
+				skills = personSkills.Select(m => m.Skill).Distinct().ToList(); 
+			}
+
 			var openHourList = new List<TimePeriod>();
 			foreach (var skill in skills)
 			{

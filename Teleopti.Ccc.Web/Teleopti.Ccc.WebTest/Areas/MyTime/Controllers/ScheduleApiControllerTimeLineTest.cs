@@ -502,6 +502,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 15, 15);
 		}
 
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		public void ShouldAdjustTimeLineBySkillOpenHoursOnlyWithDayOff()
+		{
+			addSkill();
+			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly(), DayOffFactory.CreateDayOff(new Description("Dayoff")));
+			ScheduleData.Add(dayOffAssignment);
+
+			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 18, 15);
+		}
+
 		private void AssertTimeLine(IList<TimeLineViewModel> timeLine, int startHour, int startMinute, int endHour, int endMinute)
 		{
 			timeLine.First().Time.Hours.Should().Be.EqualTo(startHour);

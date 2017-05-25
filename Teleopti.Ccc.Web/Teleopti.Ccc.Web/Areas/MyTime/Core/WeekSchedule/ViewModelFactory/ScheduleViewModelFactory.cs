@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				_scheduleMinMaxTimeCalculator.AdjustScheduleMinMaxTime(weekDomainData);
 			}
 
-			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData);
+			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData, staffingPossiblityType == StaffingPossiblityType.Overtime);
 			return weekScheduleViewModel;
 		}
 
@@ -63,14 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var daySchedule = _weekScheduleDomainDataProvider.GetDaySchedule(date);
 			var hasVisualSchedule = hasAnyVisualSchedule(date, daySchedule);
 
-			if (hasVisualSchedule)
-			{
-				if (needAdjustTimeline(staffingPossiblityType, date, false))
-				{
-					_scheduleMinMaxTimeCalculator.AdjustScheduleMinMaxTime(daySchedule);
-				}
-			}
-			else
+			if (!hasVisualSchedule)
 			{
 				// Set timeline to 8:00-15:00 if no schedule
 				// Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.ShiftTradeTimeLineHoursViewModelMapper.getTimeLinePeriod()
@@ -79,12 +72,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				daySchedule.ScheduleDay.MinMaxTime = defaultTimeLinePeriod;
 			}
 
+			if (needAdjustTimeline(staffingPossiblityType, date, false))
+			{
+				_scheduleMinMaxTimeCalculator.AdjustScheduleMinMaxTime(daySchedule);
+			}
+
 			daySchedule.UnReadMessageCount = _pushMessageProvider.UnreadMessageCount;
 
-			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule);
+			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule, staffingPossiblityType == StaffingPossiblityType.Overtime);
 			return dayScheduleViewModel;
 		}
-		
+
 		private bool periodIsVisible(DateTimePeriod? period, DateOnly date, TimeZoneInfo timeZone)
 		{
 			if (period == null) return false;
@@ -98,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		{
 			var dayDomainData = daySchedule.ScheduleDay;
 			var timeZone = dayDomainData.ScheduleDay?.TimeZone;
-			
+
 			var hasVisualLayerToday = dayDomainData.Projection.Any(p => periodIsVisible(p.Period, date, timeZone));
 			var hasVisualLayerYesterday = dayDomainData.ProjectionYesterday.Any(p => periodIsVisible(p.Period, date, timeZone));
 
