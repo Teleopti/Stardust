@@ -34,3 +34,45 @@ datepicker.place = function() {
         });
     }
 }
+
+datepicker.show = function (e) {
+    if (this.isInput && this.element.is(':disabled')) { return; }
+
+    else if (this.element.children('input').is(':disabled')) { return; }
+
+    if(this.picker.isOpened){
+        this.picker.hide();
+        return;
+    }else{
+        this.picker.show();
+        this.picker.isOpened = true;
+    }
+    this.height = (this.component && this.component.outerHeight()) || this.element.outerHeight();
+    this.place();
+    $(window).on('resize', $.proxy(this.place, this));
+    if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+    if (!this.isInput) {
+        $(document).on('click', $.proxy(this.hide, this));
+    }
+    this.element.trigger({
+        type: 'show'
+    });
+};
+
+datepicker.hide = function () {
+    this.picker.hide();
+    $(window).off('resize', this.place);
+    this.viewMode = this.startViewMode;
+    this.showMode();
+    if (!this.isInput) {
+        $(document).off('click', this.hide);
+    }
+    this.refresh();
+    this.element.trigger({
+        type: 'hide'
+    });
+    this.picker.isOpened = false;
+};
