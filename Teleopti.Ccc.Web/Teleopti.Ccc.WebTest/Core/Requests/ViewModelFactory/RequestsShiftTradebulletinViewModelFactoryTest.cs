@@ -9,12 +9,14 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public IPersonRequestRepository PersonRequestRepository;
+		public ISettingsPersisterAndProvider<NameFormatSettings> Settings;
 
 		private IScenario scenario;
 		private ITeam team;
@@ -370,6 +373,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			setUpOffer(personWithMainShift);
 			setUpOffer(personWithoutSchedule, ShiftExchangeLookingForDay.EmptyDay);
 
+			Settings.Persist(new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
+
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
@@ -416,6 +421,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			setUpOffer(person1);
 			setUpOffer(person2);
 			setUpOffer(person3);
+
+			Settings.Persist(new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
 
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
@@ -473,6 +480,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			setUpOffer(person3);
 			setUpOffer(person3);
 
+			Settings.Persist(new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
+
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
@@ -521,6 +530,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			setUpOffer(person1);
 			setUpOffer(person2);
 			setUpOffer(person3);
+
+			Settings.Persist(new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
 
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
@@ -576,6 +587,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			setUpOffer(person3);
 			setUpOffer(person3);
+
+			Settings.Persist(new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
 
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{

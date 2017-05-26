@@ -8,8 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 	public class NameFormatSettingsPersisterAndProvider : ISettingsPersisterAndProvider<NameFormatSettings>
 	{
 		private readonly IPersonalSettingDataRepository _personalSettingDataRepository;
-		private const string nameFormatKey = "NameFormatSettings";
-
+		
 		public NameFormatSettingsPersisterAndProvider(IPersonalSettingDataRepository personalSettingDataRepository)
 		{
 			_personalSettingDataRepository = personalSettingDataRepository;
@@ -17,20 +16,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 
 		public NameFormatSettings Persist(NameFormatSettings nameFormatSettings)
 		{
-			var setting = _personalSettingDataRepository.FindValueByKey(nameFormatKey, new NameFormatSettings());
+			var setting = _personalSettingDataRepository.FindValueByKey(NameFormatSettings.Key, new NameFormatSettings());
 			setting.NameFormatId = nameFormatSettings.NameFormatId;
-			_personalSettingDataRepository.PersistSettingValue(setting);
+			_personalSettingDataRepository.PersistSettingValue(NameFormatSettings.Key, setting);
 			return setting;
 		}
 
 		public NameFormatSettings Get()
 		{
-			return _personalSettingDataRepository.FindValueByKey(nameFormatKey, new NameFormatSettings());
+			return _personalSettingDataRepository.FindValueByKey(NameFormatSettings.Key, new NameFormatSettings());
 		}
 
 		public NameFormatSettings GetByOwner(IPerson person)
 		{
-			return _personalSettingDataRepository.FindValueByKeyAndOwnerPerson(nameFormatKey, person, new NameFormatSettings());
+			return _personalSettingDataRepository.FindValueByKeyAndOwnerPerson(NameFormatSettings.Key , person, new NameFormatSettings());
 		}
 	}
 }

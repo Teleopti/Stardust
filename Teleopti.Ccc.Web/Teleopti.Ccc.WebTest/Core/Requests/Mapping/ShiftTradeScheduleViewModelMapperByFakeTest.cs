@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map(data);
 
 			result.PossibleTradeSchedules.Count().Should().Be(2);
-			result.PossibleTradeSchedules.First().Name.Should().Be("1 person");
+			result.PossibleTradeSchedules.First().Name.Should().Be("person 1");
 		}
 
 		
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				SearchNameText = "1"
 			});
 
-			result.PossibleTradeSchedules.Single().Name.Should().Be("1 person");
+			result.PossibleTradeSchedules.Single().Name.Should().Be("person 1");
 		}
 
 		[Test]

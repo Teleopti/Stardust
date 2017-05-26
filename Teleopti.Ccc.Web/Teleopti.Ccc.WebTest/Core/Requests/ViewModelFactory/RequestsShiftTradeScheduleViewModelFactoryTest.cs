@@ -18,7 +18,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
-			system.UseTestDouble<FakeNameFormatSettingProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
 		}
 	}
 
@@ -50,6 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public ISettingsPersisterAndProvider<NameFormatSettings> Settings;
 
 		[Test]
 		public void ShouldRetrieveMyScheduleFromRawScheduleDataWhenPublished()
@@ -588,6 +587,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, new DateOnly(2016, 1, 16), new DayOffTemplate());
 			ScheduleStorage.Add(personWithDayoffAss);
 
+			Settings.Persist(new NameFormatSettings {NameFormatId = (int) NameFormatSetting.LastNameThenFirstName});
+
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
@@ -669,6 +670,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, new DateOnly(2016, 1, 16), new DayOffTemplate());
 			ScheduleStorage.Add(personWithDayoffAss);
 
+			Settings.Persist(new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
+
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
@@ -713,6 +716,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
 			ScheduleStorage.Add(meAss);
+
+			Settings.Persist(new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -783,8 +788,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(2);
 			var possibleSchedules = result.PossibleTradeSchedules.ToList();
 
-			possibleSchedules[0].Name.Should().Be.EqualTo("dayoff person3");
-			possibleSchedules[1].Name.Should().Be.EqualTo("empty person4");
+			possibleSchedules[0].Name.Should().Be.EqualTo("person3 dayoff");
+			possibleSchedules[1].Name.Should().Be.EqualTo("person4 empty");
 		}
 
 		[Test]

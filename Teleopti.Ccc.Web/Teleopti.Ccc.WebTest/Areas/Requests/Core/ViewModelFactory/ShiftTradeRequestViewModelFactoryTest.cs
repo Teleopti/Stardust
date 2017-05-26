@@ -12,9 +12,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
@@ -28,7 +30,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
 	[TestFixture, RequestsTest]
-	public class ShiftTradeRequestViewModelFactoryTest
+	public class ShiftTradeRequestViewModelFactoryTest : ISetup
 	{
 		public ICurrentScenario Scenario;
 		public IShiftTradeRequestViewModelFactory ShiftTradeRequestViewModelFactory;
@@ -39,14 +41,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IScheduleStorage ScheduleStorage;
 		public IShiftTradeRequestStatusChecker ShiftTradeRequestStatusChecker;
 		public IUserCulture UserCulture;
-		
-		[SetUp]
-		public void Setup()
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			setupStateHolderProxy();
-
+			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 		}
-
+		
 		[Test]
 		public void ShouldGetNothingWhenSelectNoTeam()
 		{

@@ -18,6 +18,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -51,10 +52,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personForScheduleFinder = MockRepository.GenerateMock<IPersonForScheduleFinder>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Expect(l => loggedOnUser.CurrentUser()).Return(currentUser);
-		    nameFormatSettingsProvider = new FakeNameFormatSettingProvider();
+			var loggedOnUser = new FakeLoggedOnUser(currentUser);
 			peopleForShiftTradeFinder = MockRepository.GenerateMock<IPeopleForShiftTradeFinder>();
+			nameFormatSettingsProvider = new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository());
 
 			target = new PossibleShiftTradePersonsProvider(nameFormatSettingsProvider, new ShiftTradePersonProvider (personRepository, shiftTradeValidator, permissionProvider, personForScheduleFinder, loggedOnUser, peopleForShiftTradeFinder)
 				,new FakeToggleManager());
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
                 TeamIdList = new List<Guid> { myTeam.Id.GetValueOrDefault() }
             };
 
-            (nameFormatSettingsProvider as FakeNameFormatSettingProvider).SetNameFormat(NameFormatSetting.LastNameThenFirstName);
+            nameFormatSettingsProvider.Persist(new NameFormatSettings{ NameFormatId = (int)NameFormatSetting.LastNameThenFirstName});
 
             personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText, NameFormatSetting.LastNameThenFirstName ))
                                             .Return(new List<IPersonAuthorization> { currentUserGuids });

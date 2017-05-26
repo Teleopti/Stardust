@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		{
 			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 		}
 
 		[Test]

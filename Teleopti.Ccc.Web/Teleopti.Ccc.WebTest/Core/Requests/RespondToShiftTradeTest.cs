@@ -12,12 +12,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
-using Teleopti.Ccc.WebTest.Core.Common;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests
 {
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 		    var eventSync = MockRepository.GenerateMock<IEventSyncronization>();
 			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum,
 				personRequestCheckAuthorization, loggedOnUser, eventPublisher, MockRepository.GenerateMock<INow>(),
-				dataSource, currentBu, eventSync, null, new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+				dataSource, currentBu, eventSync, null, new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 			
 			currentBu.Stub(x => x.Current()).Return(new BusinessUnit("new"));
 			dataSource.Stub(x => x.CurrentName()).Return("name");
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var eventSync = MockRepository.GenerateMock<IEventSyncronization>();
             var target = new RespondToShiftTrade(personRequestRepository, null, personRequestCheckAuthorization, loggedOnUser,
 				null, null, MockRepository.GenerateMock<ICurrentDataSource>(),
-				MockRepository.GenerateMock<ICurrentBusinessUnit>(), eventSync, null, new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+				MockRepository.GenerateMock<ICurrentBusinessUnit>(), eventSync, null, new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 
 			personRequestRepository.Expect(p => p.Find(shiftTradeId)).Return(personRequest);
 			loggedOnUser.Expect(l => l.CurrentUser()).Return(loggedOnPerson);
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			personRequestRepository.Expect(p => p.Find(id)).Return(null);
 			var target = new RespondToShiftTrade(personRequestRepository, null, null, null, null, null,
-				MockRepository.GenerateMock<ICurrentDataSource>(), MockRepository.GenerateMock<ICurrentBusinessUnit>(), MockRepository.GenerateMock<IEventSyncronization>(), null, new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(), new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+				MockRepository.GenerateMock<ICurrentDataSource>(), MockRepository.GenerateMock<ICurrentBusinessUnit>(), MockRepository.GenerateMock<IEventSyncronization>(), null, new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(), new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 			Assert.That(target.OkByMe(id, ""),Is.Not.Null);
 		}
 
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			personRequestRepository.Expect(p => p.Find(id)).Return(null);
 			var target = new RespondToShiftTrade(personRequestRepository, null, null, null, null, null,
-				MockRepository.GenerateMock<ICurrentDataSource>(), MockRepository.GenerateMock<ICurrentBusinessUnit>(), MockRepository.GenerateMock<IEventSyncronization>(), null, new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(), new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+				MockRepository.GenerateMock<ICurrentDataSource>(), MockRepository.GenerateMock<ICurrentBusinessUnit>(), MockRepository.GenerateMock<IEventSyncronization>(), null, new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(), new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 			Assert.That(target.Deny(id, ""), Is.Not.Null);
 		}
 	}

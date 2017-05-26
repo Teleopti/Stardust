@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -39,10 +40,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakePersonRequestRepository PersonRequestRepository;
+		public FakePushMessageDialogueRepository PushMessageDialogueRepository;
 
 		[Test, SetCulture("sv-SE")]
 		public void ShouldGetUnReadMessageCountOnFetchDayData()
 		{
+			PushMessageDialogueRepository.Add(new PushMessageDialogue(new PushMessage(), User.CurrentUser()));
 			var result = Target.FetchDayData(null);
 			result.UnReadMessageCount.Should().Be.GreaterThan(0);
 		}

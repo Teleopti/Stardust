@@ -3,19 +3,19 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		private TeamScheduleDomainData data;
 		private FakeUserTimeZone userTimeZone;
 		private TeamScheduleViewModelMapper target;
-		private FakePersonNameProvider personNameProvider;
+		private PersonNameProvider personNameProvider;
 
 		[SetUp]
 		public void SetUp()
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			
 			userTimeZone = new FakeUserTimeZone(TimeZoneInfo.Utc);
 
-			personNameProvider = new FakePersonNameProvider();
+			personNameProvider = new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()));
 			target = new TeamScheduleViewModelMapper(userTimeZone, new CreateHourText(userTimeZone, new SwedishCulture()), personNameProvider);
 		}
 		

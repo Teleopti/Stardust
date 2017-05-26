@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
-using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
@@ -17,17 +17,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
     public class TeamSchedulePersonsProviderTest
     {
         private TeamSchedulePersonsProvider _target;
-        private FakeNameFormatSettingProvider _nameFormatSettingProvider;
+        private ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettingProvider;
         private IPersonForScheduleFinder _personForScheduleFinder;
 
         [SetUp]
         public void Setup()
         {
             var permissionProvider = new FakePermissionProvider();
-            _personForScheduleFinder = MockRepository.GenerateMock<IPersonForScheduleFinder>();
-            var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-            _nameFormatSettingProvider = new FakeNameFormatSettingProvider();
+			var personRepository = new FakePersonRepository(new FakeStorage());
 
+	        _nameFormatSettingProvider = new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository());
+			_personForScheduleFinder = MockRepository.GenerateMock<IPersonForScheduleFinder>();
+            
             _target = new TeamSchedulePersonsProvider(permissionProvider, _personForScheduleFinder, personRepository, _nameFormatSettingProvider);           
         }
 
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
                 SearchNameText = "aa"
             };
 
-            _nameFormatSettingProvider.SetNameFormat(NameFormatSetting.LastNameThenFirstName);
+            _nameFormatSettingProvider.Persist(new NameFormatSettings{NameFormatId = (int)NameFormatSetting.LastNameThenFirstName});
           
             _personForScheduleFinder.Stub(rep => rep.GetPersonFor(input.ScheduleDate, input.TeamIdList, input.SearchNameText, NameFormatSetting.LastNameThenFirstName))
                                             .Return(new List<IPersonAuthorization> ());

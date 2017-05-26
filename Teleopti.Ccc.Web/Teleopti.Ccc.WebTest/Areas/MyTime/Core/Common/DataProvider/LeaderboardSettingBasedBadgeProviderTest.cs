@@ -165,13 +165,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			teamRepository = MockRepository.GenerateMock<ITeamRepository>();
 			groupingRepository = MockRepository.GenerateMock<IGroupingReadOnlyRepository>();
 			agentBadgeTransactionRepository = new FakeAgentBadgeTransactionRepository();
-			agentBadgeWithRankTransactionRepository = new FakeAgentBadgeWithRankTransactionRepository(); 
+			agentBadgeWithRankTransactionRepository = new FakeAgentBadgeWithRankTransactionRepository();
 
-			var nameProvider =
-				new PersonNameProvider(new FakeNameFormatSettingsPersisterAndProvider(new NameFormatSettings {NameFormatId = 0}));
+			var personalSettingDataRepository = new FakePersonalSettingDataRepository();
+			personalSettingDataRepository.PersistSettingValue(NameFormatSettings.Key, new NameFormatSettings {NameFormatId = 0});
+			var nameFormatSettingsPersisterAndProvider = new NameFormatSettingsPersisterAndProvider(personalSettingDataRepository);
+			var nameProvider = new PersonNameProvider(nameFormatSettingsPersisterAndProvider);
 			target = new LeaderboardSettingBasedBadgeProvider(agentBadgeRepository, agentBadgeWithRankRepository,
 				permissionProvider, nameProvider, siteRepository, teamRepository, groupingRepository,
-				teamSettingRepository, personRepository, new FakeNameFormatSettingsPersisterAndProvider(new NameFormatSettings { NameFormatId = 0 }),agentBadgeTransactionRepository,agentBadgeWithRankTransactionRepository);
+				teamSettingRepository, personRepository, nameFormatSettingsPersisterAndProvider,agentBadgeTransactionRepository,agentBadgeWithRankTransactionRepository);
 		}
 
 		[Test]
@@ -514,31 +516,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.Single().Bronze.Should().Be(6);
 		}
 
-	}
-
-	public class FakeNameFormatSettingsPersisterAndProvider : ISettingsPersisterAndProvider<NameFormatSettings>
-	{
-		private NameFormatSettings _setting;
-
-		public FakeNameFormatSettingsPersisterAndProvider(NameFormatSettings setting)
-		{
-			_setting = setting;
-		}
-
-		public NameFormatSettings Persist(NameFormatSettings isActive)
-		{
-			_setting = isActive;
-			return isActive;
-		}
-
-		public NameFormatSettings Get()
-		{
-			return _setting;
-		}
-
-		public NameFormatSettings GetByOwner(IPerson person)
-		{
-			return _setting;
-		}
 	}
 }

@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -21,11 +22,11 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
@@ -47,7 +48,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<ScheduleValidationProvider>().For<IScheduleValidationProvider>();
-			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeWriteSideRepository<IAbsence>>().For<IProxyForId<IAbsence>>();
@@ -55,6 +55,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<AbsenceCommandConverter>().For<IAbsenceCommandConverter>();
 			system.UseTestDouble<PersonAccountUpdaterDummy>().For<IPersonAccountUpdater>();
+			system.UseTestDouble<PersonNameProvider>().For<IPersonNameProvider>();
+			system.UseTestDouble<NameFormatSettingsPersisterAndProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
+			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 
 			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();

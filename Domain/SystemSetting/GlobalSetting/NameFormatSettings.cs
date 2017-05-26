@@ -11,7 +11,9 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 	    {
 	        return (NameFormatSetting) NameFormatId;
 	    }
-    }
+
+		public const string Key = "NameFormatSettings";
+	}
 
     public enum NameFormatSetting
     {

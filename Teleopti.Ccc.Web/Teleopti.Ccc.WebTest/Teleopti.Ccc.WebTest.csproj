@@ -418,8 +418,6 @@
     <Compile Include="Core\Common\DataProvider\FakeScheduleProvider.cs" />
     <Compile Include="Core\Common\DataProvider\FakeScheduleResourceProvider.cs" />
     <Compile Include="Core\Common\DataProvider\ShiftCategoryProviderTest.cs" />
-    <Compile Include="Core\Common\FakeNameFormatSettingProvider.cs" />
-    <Compile Include="Core\Common\FakePersonNameProvider.cs" />
     <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Core\MonthScheduleDomainDataProviderTest.cs" />
     <Compile Include="Core\NoCacheFilterTests.cs" />

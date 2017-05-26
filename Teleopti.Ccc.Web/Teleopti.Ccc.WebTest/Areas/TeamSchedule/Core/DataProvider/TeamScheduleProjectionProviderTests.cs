@@ -16,12 +16,12 @@ using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Ccc.WebTest.Areas.Global;
-using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
@@ -43,9 +43,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			fakeGlobalSettingRepo.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting("{FirstName}{LastName}"));
 			_commonAgentNameProvider = new CommonAgentNameProvider(fakeGlobalSettingRepo);
 			_toggleManager = new FakeToggleManager();
+			var nameFormatSettingsPersisterAndProvider = new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository());
+			nameFormatSettingsPersisterAndProvider.Persist(
+				new NameFormatSettings {NameFormatId = (int) NameFormatSetting.LastNameThenFirstName});
 			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, _toggleManager,
 				new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()),
-				new FakeIanaTimeZoneProvider(), new FakePersonNameProvider());
+				new FakeIanaTimeZoneProvider(), new PersonNameProvider(nameFormatSettingsPersisterAndProvider));
 		}
 
 		[Test]
@@ -562,8 +565,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var testAbsence = AbsenceFactory.CreateAbsence("TestAbsence");
 			var absenceLayer = new AbsenceLayer(testAbsence, absencePeriod);
-			var personAbsence = scheduleDay.CreateAndAddAbsence(absenceLayer);
-			personAbsence.SetId(Guid.NewGuid());
+			var personAbsence = scheduleDay.CreateAndAddAbsence(absenceLayer).WithId();
 
 			var timeSpanForPhoneActivityPeriod = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod);
 			var timeSpanForAbsencePeriod = getTimeSpanInMinutesFromPeriod(absencePeriod);

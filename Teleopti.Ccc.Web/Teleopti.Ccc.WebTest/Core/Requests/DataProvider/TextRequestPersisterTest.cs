@@ -10,10 +10,12 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.WebTest.Core.Common;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
@@ -25,12 +27,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldAddTextRequest()
 		{ 
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
 			var timeZone = new FakeUserTimeZone();
 			var loggedOnUser = new FakeLoggedOnUser();
 			var target = new TextRequestPersister(personRequestRepository,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new TextRequestFormMapper(loggedOnUser, timeZone,
 					new DateTimePeriodFormMapper(timeZone)));
 			var form = new TextRequestForm();
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var timeZone = new FakeUserTimeZone();
 			var loggedOnUser = new FakeLoggedOnUser();
 			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new TextRequestFormMapper(loggedOnUser, timeZone,
 					new DateTimePeriodFormMapper(timeZone)));
 			var personRequest = new PersonRequest(new Person());
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var timeZone = new FakeUserTimeZone();
 			var loggedOnUser = new FakeLoggedOnUser();
 			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new TextRequestFormMapper(loggedOnUser, timeZone,
 					new DateTimePeriodFormMapper(timeZone)));
 			var personRequest = new PersonRequest(new Person());
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var timeZone = new FakeUserTimeZone();
 			var loggedOnUser = new FakeLoggedOnUser();
 			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new TextRequestFormMapper(loggedOnUser, timeZone,
 					new DateTimePeriodFormMapper(timeZone)));
 			var personRequest = new PersonRequest(new Person());
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var timeZone = new FakeUserTimeZone();
 			var loggedOnUser = new FakeLoggedOnUser();
 			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new TextRequestFormMapper(loggedOnUser, timeZone,
 					new DateTimePeriodFormMapper(timeZone)));
 			var personRequest = new PersonRequest(new Person());
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var timeZone = new FakeUserTimeZone();
 			var loggedOnUser = new FakeLoggedOnUser();
 			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new TextRequestFormMapper(loggedOnUser, timeZone,
 					new DateTimePeriodFormMapper(timeZone)));
 			var id = Guid.NewGuid();
@@ -163,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var timeZone = new FakeUserTimeZone();
 			var loggedOnUser = new FakeLoggedOnUser();
 			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new TextRequestFormMapper(loggedOnUser, timeZone,
 					new DateTimePeriodFormMapper(timeZone)));
 			var personRequest = new PersonRequest(new Person());
@@ -186,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var personRequest = new PersonRequest(loggedOnUser.CurrentUser(),
 				new TextRequest(new DateTimePeriod(2017, 1, 1, 2017, 1, 1)));
 			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new TextRequestFormMapper(loggedOnUser, timeZone,
 					new DateTimePeriodFormMapper(timeZone)));
 			var form = new TextRequestForm {Message = "test"};

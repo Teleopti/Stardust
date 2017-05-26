@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			system.UseTestDouble<FakeShiftTradeLightValidator>().For<IShiftTradeLightValidator>();
@@ -73,8 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
-			system.UseTestDouble<FakeNameFormatSettingProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
-			system.UseTestDouble<FakePushMessageProvider>().For<IPushMessageProvider>(); 
+			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>(); 
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<ScheduleMinMaxTimeCalculator>().For<IScheduleMinMaxTimeCalculator>();
 			system.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();

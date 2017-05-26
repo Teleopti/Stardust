@@ -5,7 +5,9 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.Reporting.Controllers;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
@@ -42,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 				Analytics = new FakeAnalyticsUnitOfWorkFactory { ConnectionString = ""}
 
 			}, null, null, null), person);
-			var target = new ReportController(reportsNavigationProvider, new FakePersonNameProvider(), new FakeLoggedOnUser(person), currentBusinessUnit, new TrueToggleManager(), analyticsPermissionsUpdater, new FakeCommonReportsFactory());
+			var target = new ReportController(reportsNavigationProvider, new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeLoggedOnUser(person), currentBusinessUnit, new TrueToggleManager(), analyticsPermissionsUpdater, new FakeCommonReportsFactory());
 
 			target.Index(reportId);
 

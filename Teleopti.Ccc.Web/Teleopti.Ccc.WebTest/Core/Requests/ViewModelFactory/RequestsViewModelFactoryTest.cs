@@ -21,9 +21,10 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.WebTest.Core.Common;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -46,11 +47,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new FakePermissionProvider(), null, null, null, null,
 				loggedOnUser, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 
 			var result = target.CreatePageViewModel();
 			var expectedFormat = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
@@ -76,11 +77,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(null, absenceTypesProvider, new FakePermissionProvider(), null, null, null,
 			                                          null, loggedOnUser, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 
 			var result = target.CreatePageViewModel();
 
@@ -110,11 +111,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(null, absenceTypesProvider, new FakePermissionProvider(), null, null,
 				null, null, loggedOnUser, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 
 			var result = target.GetAbsenceAccountViewModel(Guid.NewGuid(), new DateOnly(2013, 1, 1));
 			result.Should().Be.Null();
@@ -139,11 +140,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(null, absenceTypesProvider, new FakePermissionProvider(), null, null,
 				null, null, loggedOnUser, null, new AbsenceAccountProvider(loggedOnUser,new FakePersonAbsenceAccountRepository()), new FakePersonRequestRepository(), 
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 
 			var result = target.GetAbsenceAccountViewModel(absence.Id.Value, new DateOnly(2013, 1, 1));
 			result.Should().Be.Null();
@@ -167,11 +168,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser), new FakePermissionProvider(), null, null, null,
 				null, loggedOnUser, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 
 			var result = target.CreatePageViewModel();
 
@@ -203,11 +204,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(null, absenceTypesProvider, permissionProvider, null, null, null,
 				null, loggedOnUser, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 			var result = target.CreatePageViewModel();
 
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
@@ -228,11 +229,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser), permissionProvider, null, null, null, null,
 				loggedOnUser, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 			var result = target.CreatePageViewModel();
 
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
@@ -247,11 +248,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(personRequestProvider, null,
 				null, null, null, null, null, null, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 			var paging = new Paging();
 			var filter = new RequestListFilter { HideOldRequest = false, IsSortByUpdateDate = true };
 			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, filter)).Return(new IPersonRequest[] { });
@@ -271,11 +272,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(personRequestProvider,null,
 				null, null, null, null, null, null, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 			var paging = new Paging();
 			var filter = new RequestListFilter() { HideOldRequest = true, IsSortByUpdateDate = true };
 			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, filter)).Return(new IPersonRequest[] { });
@@ -297,11 +298,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(personRequestProvider, null, null,
 				null, null, null, null, null, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 			var result = target.CreatePagingViewModel(paging, filter);
 
 			result.Count().Should().Be.EqualTo(1);
@@ -315,11 +316,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var provider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			var target = new RequestsViewModelFactory(provider, null, null, null, null, null, null, null, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(), 
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 			var personRequest = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
 			var id = Guid.NewGuid();
 			
@@ -340,11 +341,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var now = MockRepository.GenerateMock<INow>();
 			var target = new RequestsViewModelFactory(null, null, null, provider, mapper, null, now, null, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(), 
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel();
 			var workflowControlSet = new WorkflowControlSet();
 
@@ -369,11 +370,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			requestRepository.Stub(x => x.Find(new Guid())).IgnoreArguments().Return(new PersonRequest(new Person()){Request = shiftTradeRequest});
 			var target = new RequestsViewModelFactory(null, null, null, provider, mapper, null, now, null, null, null, requestRepository,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel {MiscSetting = new ShiftTradeRequestMiscSetting{AnonymousTrading = true}};
 			var workflowControlSet = new WorkflowControlSet();
 
@@ -400,11 +401,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			                                          MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
 													  MockRepository.GenerateMock<INow>(), null, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(), 
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 
 			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(myTeamId.ToString());
 		}
@@ -423,11 +424,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			                                          MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
 													  MockRepository.GenerateMock<INow>(), null, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(), 
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 
 			target.CreateShiftTradeMySiteIdViewModel(shiftTradeDate).Should().Be.EqualTo(mySiteId.ToString());
 		}
@@ -445,11 +446,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 													  MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
 													  MockRepository.GenerateMock<INow>(), null, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(), 
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 
 			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(string.Empty);
 		}
@@ -467,11 +468,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 													  MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
 													  MockRepository.GenerateMock<INow>(), null, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(), 
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 
 			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(string.Empty);
 		}
@@ -484,11 +485,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var mapper = MockRepository.GenerateMock<IShiftTradeScheduleViewModelMapper>();
 			var target = new RequestsViewModelFactory(null, null, null, null, null, null, null, null, mapper, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 			var viewModel = new ShiftTradeScheduleViewModel();
 			var teamId = Guid.NewGuid();
 			var data = new ShiftTradeScheduleViewModelData
@@ -521,11 +522,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(personRequestProvider, null, null, null, null, requestCheckSum,
 			                                          null, loggedOnUser, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 
 			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
 		    shiftTrade.Stub(x => x.ShiftTradeSwapDetails).Return(details);
@@ -535,44 +536,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = target.CreateShiftTradeRequestSwapDetails(personRequestId);
 			result.Count.Should().Be.EqualTo(1);
 		}
-
-		[Test, Ignore("Robin will have a look at this one")]
-		public void ShouldSetMinutesSinceTimelineStartOnShiftTradeSwapDetailsBasedOnTheTimelinesStartDateTime()
-		{
-			var timelineStartTime = new DateTime(2001, 10, 10, 1, 0, 0, DateTimeKind.Utc);
-			var startTimeFromSchedule = timelineStartTime.Add(TimeSpan.FromMinutes(20));
-			var startTimeToSchedule = timelineStartTime.Add(TimeSpan.FromMinutes(180));
-
-			var requestCheckSum = MockRepository.GenerateStub<IShiftTradeRequestStatusChecker>();
-			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			var shiftTrade = MockRepository.GenerateStub<IShiftTradeRequest>();
-			var personRequest = MockRepository.GenerateStub<IPersonRequest>();
-			personRequest.Request = shiftTrade;
-			
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var detail = MockRepository.GenerateMock<IShiftTradeSwapDetail>();
-            var details = new ReadOnlyCollection<IShiftTradeSwapDetail>(new List<IShiftTradeSwapDetail> { detail });
-			detail.Stub(x => x.Parent).Return(shiftTrade);
-		    shiftTrade.Stub(x => x.ShiftTradeSwapDetails).Return(details);
-			shiftTrade.Stub(x => x.Period).Return(new DateTimePeriod(startTimeFromSchedule, startTimeToSchedule));
-			var loggedOnUser = new FakeLoggedOnUser(new Person());
-			var target = new RequestsViewModelFactory(personRequestProvider, null, null, null, null, requestCheckSum,
-			                                          null, loggedOnUser, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
-
-			personRequestProvider.Expect(p => p.RetrieveRequest(new Guid())).IgnoreArguments().Return(personRequest);
-			
-			var result = target.CreateShiftTradeRequestSwapDetails(new Guid());
-			Assert.That(result.First().From.MinutesSinceTimeLineStart, Is.EqualTo(20));
-			Assert.That(result.First().To.MinutesSinceTimeLineStart, Is.EqualTo(180));
-		}
-
+		
 		[Test]
 		public void ShouldRetrieveIsMyScheduleForLoggedOnUser()
 		{
@@ -594,11 +558,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(personRequestProvider, null, null, null, null, requestCheckSum,
 													  null, loggedOnUser, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new FakePersonNameProvider()), new PersonAccountViewModelMapper(timeZone));
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone));
 			
 			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
 			requestCheckSum.Expect(s => s.Check(shiftTrade));

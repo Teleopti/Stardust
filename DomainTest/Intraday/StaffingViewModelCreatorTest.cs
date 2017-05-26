@@ -455,15 +455,16 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayQueueStatisticsLoader.Has(actualCalls);
 			SkillDayRepository.Has(skillDay);
 
+			var skillIntervalStatistics = actualCalls.First();
 			var actualStaffing = getActualStaffing(skillDay, 
-				new List<SkillIntervalStatistics>() {new SkillIntervalStatistics()
+				new List<SkillIntervalStatistics> {new SkillIntervalStatistics
 				{
-					SkillId = actualCalls.First().SkillId,
-					Calls = actualCalls.First().Calls*2,
-					AnsweredCalls = actualCalls.First().AnsweredCalls*2,
-					HandleTime = actualCalls.First().HandleTime*2,
-					StartTime = actualCalls.First().StartTime,
-					WorkloadId = actualCalls.First().WorkloadId
+					SkillId = skillIntervalStatistics.SkillId,
+					Calls = skillIntervalStatistics.Calls*2,
+					AnsweredCalls = skillIntervalStatistics.AnsweredCalls*2,
+					HandleTime = skillIntervalStatistics.HandleTime*2,
+					StartTime = skillIntervalStatistics.StartTime,
+					WorkloadId = skillIntervalStatistics.WorkloadId
 				}}, 
 				skill.DefaultResolution);
 
@@ -499,15 +500,16 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			actualCallsTotal.AddRange(actualCalls30);
 
 			var actualStaffing15 = getActualStaffing(skillDay15, actualCalls15, skill15.DefaultResolution);
+			var skillIntervalStatistics = actualCalls30.First();
 			var actualStaffing30 = getActualStaffing(skillDay30,
-				new List<SkillIntervalStatistics>() {new SkillIntervalStatistics()
+				new List<SkillIntervalStatistics> {new SkillIntervalStatistics
 				{
-					SkillId = actualCalls30.First().SkillId,
-					Calls = actualCalls30.First().Calls*2,
-					AnsweredCalls = actualCalls30.First().AnsweredCalls*2,
-					HandleTime = actualCalls30.First().HandleTime*2,
-					StartTime = actualCalls30.First().StartTime,
-					WorkloadId = actualCalls30.First().WorkloadId
+					SkillId = skillIntervalStatistics.SkillId,
+					Calls = skillIntervalStatistics.Calls*2,
+					AnsweredCalls = skillIntervalStatistics.AnsweredCalls*2,
+					HandleTime = skillIntervalStatistics.HandleTime*2,
+					StartTime = skillIntervalStatistics.StartTime,
+					WorkloadId = skillIntervalStatistics.WorkloadId
 				}},
 				skill30.DefaultResolution);
 
@@ -854,13 +856,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayQueueStatisticsLoader.Has(actualStatsTotal);
 
 			var actualStaffingSkill1 = getActualStaffing(skillDayPhone, actualPhoneStats, phoneSkill.DefaultResolution);
-			var forecastedStaffing = skillDayPhone.SkillStaffPeriodCollection.First().FStaff;
-
+			
 			var vm = Target.Load(new[] { phoneSkill.Id.Value, emailSkill.Id.Value });
 
 			var deviationWithReforecast = calculateAverageDeviation(actualPhoneStats, skillDayPhone);
 
-			vm.DataSeries.ActualStaffing.First().Should().Be.EqualTo(Math.Round((double)actualStaffingSkill1, 3));
+			vm.DataSeries.ActualStaffing.First().Should().Be.EqualTo(Math.Round(actualStaffingSkill1, 3));
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(skillDayPhone.SkillStaffPeriodCollection.First().FStaff);
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Last() * deviationWithReforecast);

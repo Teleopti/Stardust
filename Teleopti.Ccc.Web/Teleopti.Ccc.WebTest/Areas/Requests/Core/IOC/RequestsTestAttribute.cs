@@ -18,10 +18,8 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.Global;
-using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble(scenario).For<ICurrentScenario>();
 			system.UseTestDouble(principalAuthorization).For<IAuthorization>();
-			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
 			system.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();
 			system.UseTestDouble(new FakeGroupingReadOnlyRepository()).For<IGroupingReadOnlyRepository>();
 			system.UseTestDouble(new FakePersonAbsenceRepositoryLegacy()).For<IPersonAbsenceRepository>();

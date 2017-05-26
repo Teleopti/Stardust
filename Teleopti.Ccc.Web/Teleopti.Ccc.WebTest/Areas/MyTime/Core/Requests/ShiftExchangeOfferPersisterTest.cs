@@ -9,10 +9,12 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.WebTest.Core.Common;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -34,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 
@@ -76,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 
@@ -113,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 
@@ -151,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
@@ -187,7 +189,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()),
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))

@@ -13,13 +13,14 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.WebTest.Core.Common;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
 				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 
 			target.Persist(form);
 
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, null,
 				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 
 			var result = target.Persist(form);
 
@@ -124,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, null,
 				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 
 			var result = target.Persist(form);
 
@@ -155,7 +156,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
 				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 
 			var result = target.Persist(form);
 
@@ -184,7 +185,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
 				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 			var result = target.Persist(form);
 
 			result.Status.Should().Be.EqualTo(Resources.Denied);
@@ -216,7 +217,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
 				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 
 			var result = target.Persist(form);
 
@@ -249,7 +250,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
 				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 			var result = target.Persist(form);
 
 			result.Status.Should().Be.EqualTo(Resources.New);
@@ -271,7 +272,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
 				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 			var result = target.Persist(form);
 
 			result.Status.Should().Be.EqualTo(Resources.New);
@@ -309,7 +310,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
 				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 
 			target.Persist(form);
 
@@ -330,7 +331,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
 				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new FakePersonNameProvider(), new FakeToggleManager()));
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
 			target.Persist(form);
 
 			shiftTradeSetChecksum.AssertWasCalled(x => x.SetChecksum(shiftTradeRequest.Request));
