@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
