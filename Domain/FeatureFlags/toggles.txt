@@ -51,7 +51,7 @@ RTA_AsyncOptimization_43924 = true
 RTA_SolidProofWhenManagingAgentAdherence_39351 = RC
 
 WfmPermission_ReplaceOldPermission_34671 = true
-WfmPermission_RelaseRefactor_43587 = RC
+WfmPermission_RelaseRefactor_43587 = true
 
 WfmTeamSchedule_SetAgentsPerPage_36230 = true
 WfmTeamSchedule_SeeScheduleChangesByOthers_36303 = true
@@ -243,7 +243,7 @@ Staffing_ReadModel_BetterAccuracy_43447 = RC
 Staffing_ReadModel_BetterAccuracy_Step2_44271 = RC
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = DEV
 
-QRCodeForMobileApps_42695 = RC
+QRCodeForMobileApps_42695 = true
 ConfigQRCodeURLForMobileApps_43224 = true
 
 ETL_SpeedUpNightlyDayOff_38213 = true
