@@ -18,17 +18,17 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	{
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 		private readonly IRequeueHangfireRepository _requeueHangfireRepository;
-		private readonly HangfireUtilities _hangfireUtilities;
+		private readonly IRequeueFailedHangfireEvents _requeueFailedHangfireEvents;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IDataSourceScope _dataSourceScope;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ICurrentAnalyticsUnitOfWorkFactory _currentAnalyticsUnitOfWorkFactory;
 
-		public RequeueHangfireEventsTask(IDistributedLockAcquirer distributedLockAcquirer, IRequeueHangfireRepository requeueHangfireRepository, HangfireUtilities hangfireUtilities, ILoadAllTenants loadAllTenants, IDataSourceScope dataSourceScope, ITenantUnitOfWork tenantUnitOfWork, ICurrentAnalyticsUnitOfWorkFactory currentAnalyticsUnitOfWorkFactory)
+		public RequeueHangfireEventsTask(IDistributedLockAcquirer distributedLockAcquirer, IRequeueHangfireRepository requeueHangfireRepository, IRequeueFailedHangfireEvents requeueFailedHangfireEvents, ILoadAllTenants loadAllTenants, IDataSourceScope dataSourceScope, ITenantUnitOfWork tenantUnitOfWork, ICurrentAnalyticsUnitOfWorkFactory currentAnalyticsUnitOfWorkFactory)
 		{
 			_distributedLockAcquirer = distributedLockAcquirer;
 			_requeueHangfireRepository = requeueHangfireRepository;
-			_hangfireUtilities = hangfireUtilities;
+			_requeueFailedHangfireEvents = requeueFailedHangfireEvents;
 			_loadAllTenants = loadAllTenants;
 			_dataSourceScope = dataSourceScope;
 			_tenantUnitOfWork = tenantUnitOfWork;
@@ -37,11 +37,11 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		public Task Execute(IAppBuilder application)
 		{
-			return Task.Factory.StartNew(Something);
+			return Task.Factory.StartNew(OnAllTenants);
 		}
 
 		[TenantUnitOfWork]
-		protected virtual void Something()
+		protected virtual void OnAllTenants()
 		{
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 				{
 					foreach (var command in _requeueHangfireRepository.GetUnhandledRequeueCommands())
 					{
-						_hangfireUtilities.RequeueFailed(command.EventName, command.HandlerName, tenant);
+						_requeueFailedHangfireEvents.RequeueFailed(command.EventName, command.HandlerName, tenant);
 						_requeueHangfireRepository.MarkAsCompleted(command);
 						uow.PersistAll();
 					}

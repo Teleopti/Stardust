@@ -10,11 +10,10 @@ using Hangfire.Storage.Monitoring;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
-using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	public class HangfireUtilities : ICleanHangfire
+	public class HangfireUtilities : ICleanHangfire, IRequeueFailedHangfireEvents
 	{
 		private readonly Lazy<JobStorage> _storage;
 		private readonly Lazy<IBackgroundJobClient> _backgroundJobs;
@@ -252,5 +251,10 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 			toBeRequeued.ForEach(j => backgroundJobs.Requeue(j.Key));
 		}
+	}
+
+	public interface IRequeueFailedHangfireEvents
+	{
+		void RequeueFailed(string eventName, string handlerName, string tenant);
 	}
 }

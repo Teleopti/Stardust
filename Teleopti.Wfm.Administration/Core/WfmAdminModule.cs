@@ -65,7 +65,7 @@ namespace Teleopti.Wfm.Administration.Core
 				.SingleInstance().AsSelf();
 			builder.RegisterType<HangfireRepository>().SingleInstance();
 
-			builder.RegisterType<HangfireUtilities>().AsSelf().SingleInstance();
+			builder.RegisterType<HangfireUtilities>().AsSelf().As<IRequeueFailedHangfireEvents>().SingleInstance();
 			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).SingleInstance();
 
 			builder.Register<Func<ICurrentUnitOfWork, IBusinessUnitRepository>>(context => uow => new BusinessUnitRepository(uow));
