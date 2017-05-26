@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -9,7 +10,9 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
@@ -35,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private const int targetDaysOff = 2;
         private readonly TimeSpan _averageWorkTimePerDay = new TimeSpan(8, 0, 0);
         IScenario _scenario;
-        private IWorkShiftWorkTime _workShiftWorkTime;
+	    private IWorkShiftMinMaxCalculator workShiftMinMaxCalculator;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
 		 SetUp]
@@ -79,10 +82,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_schedulePeriod.SetDaysOff(targetDaysOff);
 			_schedulePeriod.AverageWorkTimePerDayOverride = _averageWorkTimePerDay;
 			_person.AddSchedulePeriod(_schedulePeriod);
-			_workShiftWorkTime =
-				new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
-			_target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions,
-				_workShiftWorkTime, _matrixListFactory);
+			workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractor(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate()))),new RuleSetBagExtractorProvider()),new SchedulePeriodTargetTimeCalculator(), new WorkShiftWeekMinMaxCalculator() );
+			_target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _matrixListFactory, workShiftMinMaxCalculator);
 			_target.SchedulePeriodData(true);
 
 		}
@@ -188,7 +189,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyHandleNullSchedulePeriod()
         {
-			_target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _workShiftWorkTime, _matrixListFactory);
+			_target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _matrixListFactory, workShiftMinMaxCalculator);
             _target.SchedulePeriodData(true);
             Assert.IsFalse(_target.WeekInLegalState);
         }
@@ -197,7 +198,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldReturnStatusOfMatrix()
 		{
 			Assert.IsTrue(_target.HasMatrix);
-			_target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _workShiftWorkTime, _matrixListFactory);	
+			_target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions,  _matrixListFactory, workShiftMinMaxCalculator);	
 			Assert.IsFalse(_target.HasMatrix);
 		}
 
@@ -206,7 +207,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             prepareScheduleDictionary();
 
-			_target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime, _matrixListFactory);
+			_target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _matrixListFactory, workShiftMinMaxCalculator);
             _target.SchedulePeriodData(true);
             _target.SchedulePeriodData(true);
 
@@ -222,7 +223,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             prepareScheduleDictionary();
 
-			_target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime, _matrixListFactory);
+			_target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _matrixListFactory, workShiftMinMaxCalculator);
             _target.SchedulePeriodData(true);
 
             Assert.AreEqual(4, _target.CurrentOccupiedSlots);
@@ -302,7 +303,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyNumberOfWarnings()
         {
-			_target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _workShiftWorkTime, _matrixListFactory)
+			_target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _matrixListFactory, workShiftMinMaxCalculator)
                              {NumberOfWarnings = 5};
             _target.SchedulePeriodData(true);
             Assert.IsTrue(_target.NumberOfWarnings == 5);
@@ -320,14 +321,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPerson person = PersonFactory.CreatePerson("Person");
             person.RemoveAllSchedulePeriods();
             person.AddSchedulePeriod(schedulePeriod);
-			_target = new AgentInfoHelper(person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime, _matrixListFactory);
+			_target = new AgentInfoHelper(person, _dateOnly, _stateHolder, _schedulingOptions, _matrixListFactory, workShiftMinMaxCalculator);
             _target.SchedulePeriodData(true);
             Assert.AreEqual("Day", _target.PeriodType);
 
             person.RemoveAllSchedulePeriods();
             schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(_dateOnly, SchedulePeriodType.Month, 1);
             person.AddSchedulePeriod(schedulePeriod);
-			_target = new AgentInfoHelper(person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime, _matrixListFactory);
+			_target = new AgentInfoHelper(person, _dateOnly, _stateHolder, _schedulingOptions, _matrixListFactory, workShiftMinMaxCalculator);
             _target.SchedulePeriodData(true);
             Assert.AreEqual("Month", _target.PeriodType);
 

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +15,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
 	public class AgentInfoHelper
 	{
-		private readonly IWorkShiftWorkTime _workShiftWorkTime;
+		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IPerson _selectedPerson;
 		private readonly ISchedulingResultStateHolder _stateHolder;
 
@@ -46,9 +44,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		private Percent _studentAvailabilityFulfillment;
 
 		public AgentInfoHelper(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder,
-			SchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, MatrixListFactory matrixListFactory)
+			SchedulingOptions schedulingOptions, MatrixListFactory matrixListFactory,
+			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator)
 		{
-			_workShiftWorkTime = workShiftWorkTime;
+			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			if (person != null)
 			{
 				_selectedPerson = person;
@@ -238,21 +237,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			//TODO kan plockas från AutoFac istället
 			if (calculateLegalState)
 			{
-				ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
-							  new SchedulePeriodTargetTimeCalculator(); //Out
-
-				var restrictionExtractor = new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation());
-
-				IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
-					 new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _workShiftWorkTime, new RuleSetBagExtractorProvider());
-
-				IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
-				IWorkShiftMinMaxCalculator workShiftMinMaxCalculator =
-					 new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor,
-															 schedulePeriodTargetTimeCalculator, workShiftWeekMinMaxCalculator);
-
-				_periodInLegalState = workShiftMinMaxCalculator.IsPeriodInLegalState(_matrix, _schedulingOptions);
-				_weekInLegalState = workShiftMinMaxCalculator.IsWeekInLegalState(_selectedDate, _matrix, _schedulingOptions);
+				_periodInLegalState = _workShiftMinMaxCalculator.IsPeriodInLegalState(_matrix, _schedulingOptions);
+				_weekInLegalState = _workShiftMinMaxCalculator.IsWeekInLegalState(_selectedDate, _matrix, _schedulingOptions);
 			}
 
 		}
