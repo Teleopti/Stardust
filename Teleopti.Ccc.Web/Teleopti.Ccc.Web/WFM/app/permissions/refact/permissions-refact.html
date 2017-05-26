@@ -208,7 +208,7 @@
 									</div>
 									<div class="con-flex split-1-2"></div>
 									<div class="con-flex">
-										<md-select ng-model="model" placeholder="Pick an option" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
+										<md-select ng-model="model" placeholder="{{'AddGlobalAuthorizationLabel'| translate}}" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
 											<h2>{{'AddGlobalAuthorizationLabel'| translate}}</h2>
 											<md-option ng-selected="option.RangeOption == vm.selectedRole.AvailableDataRange" ng-value="option.RangeOption"  ng-repeat="option in vm.organizationSelection.DynamicOptions" ng-click="vm.selectDynamicOption(option)">{{option.Name | translate}}</md-option>
 										</md-select>
