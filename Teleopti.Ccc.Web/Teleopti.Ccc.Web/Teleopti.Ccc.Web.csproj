@@ -1448,6 +1448,7 @@
     <Content Include="Areas\Start\Content\Css\newLogin.css" />
     <Content Include="Areas\Start\Content\Css\main.min.css" />
     <Content Include="Areas\Start\Content\Images\bg.png" />
+    <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
     <Content Include="Content\jqueryui\jquery.ui.dialog.js" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui.css" />

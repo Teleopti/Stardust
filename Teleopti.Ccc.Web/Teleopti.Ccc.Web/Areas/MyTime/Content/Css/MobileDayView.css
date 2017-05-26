@@ -6,9 +6,6 @@
 	display: flex;
 	justify-content: space-between;
 }
-.mobile-start-day .mobile-start-day-nav span.input-group-btn .btn i{
-	transform: scale(1.3);
-}
 .mobile-start-day .mobile-start-day-nav span.input-group-btn .btn.moment-datepicker{
 	padding: 9px 10px;
 	border-right: 2px solid #fff;

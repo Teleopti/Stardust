@@ -115,13 +115,4 @@ input.overtime-availability-next-day, .shift-exchange-offer-next-day{
 	.overtime-availability-next-day-container .input-group{
 		float: right;
 	}
-	.bootstrap-timepicker-widget.dropdown-menu{
-		min-width: initial;
-	}
-}
-.bootstrap-timepicker-widget.dropdown-menu{
-	padding: 0;
-}
-.bootstrap-timepicker-widget table td a{
-	padding: 5px 0;
 }

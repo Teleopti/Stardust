@@ -162,20 +162,6 @@
 }
 
 @media(max-width: 768px) {
-	.bootstrap-timepicker.request-time {
-		margin-top: 5px;
-	}
-
-	.right-align.bootstrap-timepicker-widget.dropdown-menu {
-		left: auto;
-		right: 0 !important;
-	}
-
-	.left-align.bootstrap-timepicker-widget.dropdown-menu {
-		right: auto;
-		left: 0 !important;
-	}
-
 	.shift-trade-timeline {
 		height: 100%;
 		position: absolute;

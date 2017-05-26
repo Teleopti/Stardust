@@ -75,6 +75,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/signalr/broker-hubs.js",
 					"~/Content/select2/select2.js",
 					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker.js",
+					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker-ext.js",
 					"~/Content/scripts/pinify/scripts/jquery.pinify.min.js",
 					"~/Content/jasny-bootstrap/js/jasny-bootstrap.min.js",
 					"~/Content/jqueryui/jquery.ui.dialog.js",
