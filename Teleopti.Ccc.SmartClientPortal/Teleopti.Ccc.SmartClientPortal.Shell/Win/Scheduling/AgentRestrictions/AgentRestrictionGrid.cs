@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 			_agentRestrictionsNoWorkShiftfFinder = container.Resolve<IAgentRestrictionsNoWorkShiftfFinder>();
 			_workShiftMinMaxCalculator = container.Resolve<IWorkShiftMinMaxCalculator>();
-			var locker = container.Resolve<IMatrixUserLockLocker>();
+			var locker = container.Resolve<MatrixUserLockLocker>();
 			var matrixListFactory = container.Resolve<MatrixListFactory>();
 			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, matrixListFactory, locker);
 

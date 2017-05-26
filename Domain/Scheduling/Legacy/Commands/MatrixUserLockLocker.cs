@@ -5,12 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-    public interface IMatrixUserLockLocker
-    {
-        void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixes, DateOnlyPeriod selectedPeriod);
-    }
-
-    public class MatrixUserLockLocker : IMatrixUserLockLocker
+    public class MatrixUserLockLocker
     {
         private readonly Func<IGridlockManager> _gridlockManager;
 
