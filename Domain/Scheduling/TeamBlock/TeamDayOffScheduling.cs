@@ -62,10 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				foreach (var scheduleDayPro in unlockedMatrixDays)
 				{
 					var scheduleDate = scheduleDayPro.Day;
-					IEffectiveRestriction restriction;
-					var selectedMatrixesForTeam = getMatrixesAndRestriction(matrixes, selectedPersons, schedulingOptions,
-						groupPersonBuilderForOptimization, person, scheduleDate,
-						out restriction);
+					var selectedMatrixesForTeam = getMatrixesAndRestriction(matrixes, schedulingOptions, groupPersonBuilderForOptimization, person, scheduleDate, out IEffectiveRestriction restriction);
 					var canceled = addDaysOffForTeam(schedulingCallback, selectedMatrixesForTeam, schedulingOptions, rollbackService, scheduleDate, restriction);
 					if (canceled)
 					{
@@ -77,25 +74,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			addContractDaysOffForTeam(schedulingCallback, matrixDataForSelectedPersons.Select(x => x.Matrix), schedulingOptions, rollbackService);
 		}
 
-		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixes, IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions,
+		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixes, SchedulingOptions schedulingOptions,
 			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization,
 			IPerson person, DateOnly scheduleDate,
 			out IEffectiveRestriction restriction)
 		{
 			var selectedMatrixesForOnePerson = new List<IScheduleMatrixPro>();
 
-
 			var group = groupPersonBuilderForOptimization.ForOptimization().BuildGroup(_schedulingResultStateHolder().PersonsInOrganization, person, scheduleDate);
 
-			List<IScheduleMatrixPro> matrixesOfOneTeam;
-			restriction = getMatrixOfOneTeam(matrixes, schedulingOptions, group, scheduleDate, out matrixesOfOneTeam, person);
+			restriction = getMatrixOfOneTeam(matrixes, schedulingOptions, group, scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, person);
 
 			foreach (var scheduleMatrixPro in matrixesOfOneTeam)
 			{
 				var currentPerson = scheduleMatrixPro.Person;
-				// why this fuzz about matrixesOfOneTeam above if filtering on person below? Must be unnecesary...
-				if (selectedPersons.Contains(currentPerson) && currentPerson == person)
+				if (currentPerson.Equals(person))
+				{
 					selectedMatrixesForOnePerson.Add(scheduleMatrixPro);
+				}
 			}
 
 			return selectedMatrixesForOnePerson;
