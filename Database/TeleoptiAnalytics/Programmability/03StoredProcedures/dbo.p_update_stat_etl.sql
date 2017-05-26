@@ -24,6 +24,8 @@ declare @datasource_id int
 select @datasource_id = datasource_id from mart.sys_datasource where log_object_id=@log_object_id and inactive=0
 if @datasource_id is not null
 begin
+	exec mart.etl_dim_queue_load @datasource_id = @datasource_id
+	exec mart.etl_dim_acd_login_load @datasource_id = @datasource_id
 	exec mart.etl_fact_queue_load_intraday @datasource_id = @datasource_id
 	exec mart.etl_fact_agent_load_intraday @datasource_id = @datasource_id
 	exec mart.etl_fact_agent_queue_load_intraday @datasource_id = @datasource_id
