@@ -52,8 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				{
 					TimeZone = TimeZoneInfo.Utc
 				}.WithId();
-			IWorkload workload = WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
-			workload.SetId(Guid.NewGuid());
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours).WithId();
 
 			return skill;
 		}
@@ -142,32 +141,30 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var workloadDay = skillDay.WorkloadDayCollection.First();
 			var forecastedTasks = workloadDay.TaskPeriodList
 				.Where(x => x.Period.StartDateTime >= shiftStartTime && x.Period.EndDateTime <= latestStatsTime)
-				.ToList();
+				.ToArray();
 			var skillId = skillDay.Skill.Id.Value;
 
-			foreach (var taskPeriod in forecastedTasks)
+			if (doSplit)
 			{
-				if (doSplit)
-				{
-					IList<ITemplateTaskPeriodView> splittedTaskPeriods = taskPeriod.Split(TimeSpan.FromMinutes(minutesPerInterval));
-					foreach (var splittedTaskPeriod in splittedTaskPeriods)
-					{
-						skillStats.Add(getStatsInterval(splittedTaskPeriod.Period.StartDateTime, 
-							splittedTaskPeriod.TotalTasks, 
-							splittedTaskPeriod.TotalAverageTaskTime.TotalSeconds + splittedTaskPeriod.AverageAfterTaskTime.TotalSeconds, 
-							timezone, 
+				skillStats.AddRange(forecastedTasks
+					.SelectMany(taskPeriod => taskPeriod.Split(TimeSpan.FromMinutes(minutesPerInterval))).Select(
+						splittedTaskPeriod => getStatsInterval(splittedTaskPeriod.Period.StartDateTime,
+							splittedTaskPeriod.TotalTasks,
+							splittedTaskPeriod.TotalAverageTaskTime.TotalSeconds + splittedTaskPeriod.AverageAfterTaskTime.TotalSeconds,
+							timezone,
 							skillId,
-							workloadDay.Workload.Id.Value));
-					}
-					continue;
-				}
-				
-				skillStats.Add(getStatsInterval(taskPeriod.Period.StartDateTime, 
-					taskPeriod.TotalTasks, 
-					taskPeriod.TotalAverageTaskTime.TotalSeconds + taskPeriod.TotalAverageAfterTaskTime.TotalSeconds, 
-					timezone, skillId,
-					workloadDay.Workload.Id.Value));
+							workloadDay.Workload.Id.Value)));
 			}
+			else
+			{
+				skillStats.AddRange(forecastedTasks
+					.Select(taskPeriod => getStatsInterval(taskPeriod.Period.StartDateTime,
+						taskPeriod.TotalTasks,
+						taskPeriod.TotalAverageTaskTime.TotalSeconds + taskPeriod.TotalAverageAfterTaskTime.TotalSeconds,
+						timezone, skillId,
+						workloadDay.Workload.Id.Value)));
+			}
+
 			return skillStats;
 		}
 
