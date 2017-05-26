@@ -719,19 +719,5 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>();
 			builder.RegisterType<SwapService>().As<ISwapService>();
 		}
-
-		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)
-			where TToggleOn : T
-			where TToggleOff : T
-		{
-			if (_configuration.Toggle(toggle))
-			{
-				builder.RegisterType<TToggleOn>().As<T>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<TToggleOff>().As<T>().SingleInstance();
-			}
-		}
 	}
 }
