@@ -565,7 +565,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\PersonShiftEndEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonShiftStartEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonStateChangedEventTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\RtaExtensions.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTestAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\SnapshotTests.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UnrecognizedStateTest.cs" />
