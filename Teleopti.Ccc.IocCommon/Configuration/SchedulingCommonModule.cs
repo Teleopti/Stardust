@@ -588,7 +588,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TwoDaysIntervalGenerator>().As<ITwoDaysIntervalGenerator>().SingleInstance();
 			builder.RegisterType<MedianCalculatorForSkillInterval>().As<IMedianCalculatorForSkillInterval>().SingleInstance();
 			builder.RegisterType<SkillIntervalDataOpenHour>().As<ISkillIntervalDataOpenHour>().SingleInstance();
-			builder.RegisterType<SameOpenHoursInTeamBlock>().As<ISameOpenHoursInTeamBlock>().InstancePerLifetimeScope();
+			builder.RegisterType<SameOpenHoursInTeamBlock>().As<ISameOpenHoursInTeamBlock>().SingleInstance();
 			builder.RegisterType<SameEndTimeTeamSpecification>().As<ISameEndTimeTeamSpecification>().SingleInstance();
 			builder.RegisterType<SameShiftCategoryBlockSpecification>().As<ISameShiftCategoryBlockSpecification>().SingleInstance();
 			builder.RegisterType<SameShiftCategoryTeamSpecification>().As<ISameShiftCategoryTeamSpecification>().SingleInstance();

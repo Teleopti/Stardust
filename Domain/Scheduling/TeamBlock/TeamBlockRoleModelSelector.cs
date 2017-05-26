@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			
 			effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
 
+			//TODO: This check could probably be moved "higher up" for perf reasons/fewer calls
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlock.Check(allSkillDays, teamBlockInfo, groupPersonSkillAggregator);
 			var roleModel = filterAndSelect(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, false, groupPersonSkillAggregator, isSameOpenHoursInBlock);
 			if(roleModel == null && effectiveRestriction!= null && effectiveRestriction.IsRestriction)
