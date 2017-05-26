@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 		private IAgentRestrictionsDrawer _availableDrawer;
 		private RestrictionSchedulingOptions _schedulingOptions;
 		private ISchedulerStateHolder _stateHolder;
-		private IWorkShiftWorkTime _workShiftWorkTime;
 		private int _loadedCounter;
 		private IList<IPerson> _persons;
 		private IPerson _selectedPerson;
@@ -38,6 +37,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 		private bool _clearSelection;
 		private IAgentRestrictionsNoWorkShiftfFinder _agentRestrictionsNoWorkShiftfFinder;
 		private IRestrictionExtractor _restrictionExtractor;
+		private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 
 		private delegate void GridDelegate();
 
@@ -171,15 +171,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 		{
 			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 2, 0, 6));
 			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 7, 0, 8));
-			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 9, 0, 12));	
+			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 9, 0, 12));
 		}
 
-		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, RestrictionSchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson, AgentRestrictionsDetailView detailView, IScheduleDay scheduleDay, ILifetimeScope container)
+		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, RestrictionSchedulingOptions schedulingOptions, IPerson selectedPerson, AgentRestrictionsDetailView detailView, IScheduleDay scheduleDay, ILifetimeScope container)
 		{
 			if (stateHolder == null) throw new ArgumentNullException("stateHolder");
 
 			_stateHolder = stateHolder;
-			_workShiftWorkTime = workShiftWorkTime;
 			_schedulingOptions = schedulingOptions;
 			_persons = persons;
 			_selectedPerson = selectedPerson;
@@ -191,6 +190,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			_model.DisplayRows.Clear();
 
 			_agentRestrictionsNoWorkShiftfFinder = container.Resolve<IAgentRestrictionsNoWorkShiftfFinder>();
+			_workShiftMinMaxCalculator = container.Resolve<IWorkShiftMinMaxCalculator>();
 			var locker = container.Resolve<IMatrixUserLockLocker>();
 			var matrixListFactory = container.Resolve<MatrixListFactory>();
 			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, matrixListFactory, locker);
@@ -299,12 +299,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			if (displayRow == null) return;
 			displayRow.State = AgentRestrictionDisplayRowState.Loading;
 
-			IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExtractor, _workShiftWorkTime, new RuleSetBagExtractorProvider());
 			ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-			IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
-			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor, schedulePeriodTargetTimeCalculator,workShiftWeekMinMaxCalculator);
 			var periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
-			var dataExtractor = new AgentRestrictionsDisplayDataExtractor(schedulePeriodTargetTimeCalculator, workShiftMinMaxCalculator, periodScheduledAndRestrictionDaysOff, _agentRestrictionsNoWorkShiftfFinder);
+			var dataExtractor = new AgentRestrictionsDisplayDataExtractor(schedulePeriodTargetTimeCalculator, _workShiftMinMaxCalculator, periodScheduledAndRestrictionDaysOff, _agentRestrictionsNoWorkShiftfFinder);
 
 			dataExtractor.ExtractTo(displayRow, _schedulingOptions); 
 			displayRow.SetWarnings();
