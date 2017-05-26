@@ -15,11 +15,12 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 		{
 		}
 
+		//first copied from base impl
 		protected override MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
 		{
 			var min = TimeSpan.Zero;
 			var max = TimeSpan.Zero;
-			var possibleMinMaxWorkShiftLength = PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions);
+			var possibleMinMaxWorkShiftLength = new Lazy<IDictionary<DateOnly, MinMax<TimeSpan>>>(() => PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions));
 			foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
 			{
 				TimeSpan contractTime;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 					}
 					else
 					{
-						var possibleMinMaxWorkShiftLengthForDate = possibleMinMaxWorkShiftLength[scheduleDayPro.Day];
+						var possibleMinMaxWorkShiftLengthForDate = possibleMinMaxWorkShiftLength.Value[scheduleDayPro.Day];
 						min = min.Add(possibleMinMaxWorkShiftLengthForDate.Minimum);
 						max = max.Add(possibleMinMaxWorkShiftLengthForDate.Maximum);
 					}
