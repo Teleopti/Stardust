@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 
@@ -8,10 +9,12 @@ namespace Teleopti.Wfm.Administration.Controllers
     public class HangfireController : ApiController
 	{
 		private readonly HangfireStatisticsViewModelBuilder _statisticViewModelBuilder;
+		private readonly HangfireUtilities _hangfireUtilities;
 
-		public HangfireController(HangfireStatisticsViewModelBuilder statisticViewModelBuilder)
+		public HangfireController(HangfireStatisticsViewModelBuilder statisticViewModelBuilder, HangfireUtilities hangfireUtilities)
 		{
 			_statisticViewModelBuilder = statisticViewModelBuilder;
+			_hangfireUtilities = hangfireUtilities;
 		}
 
 		[HttpGet, Route("Hangfire/GetUrl")]
@@ -38,6 +41,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public IHttpActionResult HangfireTypesOfFailedEvents()
 		{
 			return Json(_statisticViewModelBuilder.BuildTypesOfEvents("Failed"));
+		}
+
+		[HttpPost, Route("Hangfire/RequeueFailed")]
+		public IHttpActionResult RequeueFailed([FromBody]string eventName)
+		{
+			_hangfireUtilities.RequeueFailed(eventName, null, null);
+			return Ok();
 		}
 	}
 }

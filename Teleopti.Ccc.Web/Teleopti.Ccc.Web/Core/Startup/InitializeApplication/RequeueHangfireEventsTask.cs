@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			{
 				using (var uow = _currentAnalyticsUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
-					foreach (var command in _requeueHangfireRepository.GetRequeueCommands())
+					foreach (var command in _requeueHangfireRepository.GetUnhandledRequeueCommands())
 					{
 						_hangfireUtilities.RequeueFailed(command.EventName, command.HandlerName, tenant);
 						_requeueHangfireRepository.MarkAsCompleted(command);

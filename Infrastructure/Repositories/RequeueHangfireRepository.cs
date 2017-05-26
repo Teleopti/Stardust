@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_now = now;
 		}
 
-		public IList<RequeueCommand> GetRequeueCommands()
+		public IList<RequeueCommand> GetUnhandledRequeueCommands()
 		{
 			return _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery($@"SELECT 
 					 [id]  {nameof(RequeueCommand.Id)}
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	public interface IRequeueHangfireRepository
 	{
-		IList<RequeueCommand> GetRequeueCommands();
+		IList<RequeueCommand> GetUnhandledRequeueCommands();
 		void MarkAsCompleted(RequeueCommand command);
 	}
 
