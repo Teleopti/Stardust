@@ -7,7 +7,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -434,8 +433,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Last() * averageDeviation);
 			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(4);
-			Math.Round((double)vm.DataSeries.ActualStaffing.First(),3).Should().Be.EqualTo(Math.Round((double)actualStaffing,3));
-			Math.Round((double)vm.DataSeries.ActualStaffing[1],3).Should().Be.EqualTo(Math.Round((double)actualStaffing,3));
+
+			Assert.AreEqual(actualStaffing, vm.DataSeries.ActualStaffing.First(), 0.001);
+			Assert.AreEqual(actualStaffing, vm.DataSeries.ActualStaffing.ElementAt(1), 0.001);
 		}
 
 		[Test]
@@ -471,7 +471,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(4);
 			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(4);
-			Math.Round((double)vm.DataSeries.ActualStaffing.First(), 3).Should().Be.EqualTo(Math.Round((double)actualStaffing, 3));
+			Math.Round((double)vm.DataSeries.ActualStaffing.First(), 3).Should().Be.EqualTo(Math.Round(actualStaffing, 3));
 			vm.DataSeries.ActualStaffing[1].Should().Be.EqualTo(null);
 		}
 
@@ -519,7 +519,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(4);
 			Math.Round((double)vm.DataSeries.ActualStaffing.First(),2).
-				Should().Be.EqualTo(Math.Round((double)(actualStaffing15 + actualStaffing30),2));
+				Should().Be.EqualTo(Math.Round(actualStaffing15 + actualStaffing30,2));
 			vm.DataSeries.ActualStaffing[1].Should().Be.EqualTo(null);
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
 		}
