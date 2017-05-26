@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Ccc.WinCodeTest.Helpers;
 using Teleopti.Interfaces.Domain;
@@ -22,31 +21,44 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     [TestFixture]
     public class AbsenceLayerViewModelTest
     {
-        private SchedulePartFactoryForDomain _factory = new SchedulePartFactoryForDomain();
-        private MockRepository _mocks = new MockRepository();
-        private TesterForCommandModels _models = new TesterForCommandModels();
-        private IEventAggregator _eventAggregator = new EventAggregator();
+        private readonly SchedulePartFactoryForDomain _factory = new SchedulePartFactoryForDomain();
+        private readonly TesterForCommandModels _models = new TesterForCommandModels();
+        private readonly IEventAggregator _eventAggregator = new EventAggregator();
 		private AbsenceLayerViewModel _target;
-		private MockRepository mocks;
 		private ILayer<IAbsence> _layerWithPayload;
 		private IScheduleDay scheduleDay;
-		private CrossThreadTestRunner testRunner;
 		private PropertyChangedListener _listener;
 		private IPerson person;
 	    private TesterForCommandModels _testerForCommandModels;
 	    private DateTimePeriod _period;
 	    private bool _expectMovePermitted = true;
-     
-        [Test]
+	    private bool Opaque => false;
+
+	    [SetUp]
+	    public void Setup()
+	    {
+		    _listener = new PropertyChangedListener();
+		    _testerForCommandModels = new TesterForCommandModels();
+		    scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+		    person = PersonFactory.CreatePerson();
+		    _period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
+		    _layerWithPayload = new AbsenceLayer(new Absence(), _period);
+
+		    scheduleDay.Stub(x => x.Person).Return(person);
+		    var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone);
+		    scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
+
+		    _target = new AbsenceLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null);
+	    }
+
+		[Test]
         public void VerifyCannotMoveAbsenceLayerVertical()
         {
-            #region setup
-			LayerViewModelCollection collection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
+	        LayerViewModelCollection collection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
             IScheduleDay part = _factory.CreateSchedulePartWithMainShiftAndAbsence();
             collection.AddFromSchedulePart(part);
-            #endregion
 
-            //Get the first absencelayer:
+	        //Get the first absencelayer:
             ILayerViewModel model = collection.First(l => l is AbsenceLayerViewModel);
             Assert.IsFalse(model.CanMoveUp);
             Assert.IsFalse(model.CanMoveDown);
@@ -55,73 +67,26 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void VerifyDeleteCommandCallsObserver()
         {
-            #region setup
-            var observer = _mocks.StrictMock<ILayerViewModelObserver>();
+	        var observer = MockRepository.GenerateMock<ILayerViewModelObserver>();
          
             IScheduleDay part = _factory.CreateSchedulePartWithMainShiftAndAbsence();
             var absenceLayer = part.PersonAbsenceCollection().First().Layer;
             var model = new AbsenceLayerViewModel(observer, absenceLayer, _eventAggregator);
 
-            #endregion
-            #region expectations
-            using (_mocks.Record())
-            {
-                Expect.Call(() => observer.RemoveAbsence(model,absenceLayer,model.SchedulePart));            
-               
-            }
-            #endregion
+	        _models.ExecuteCommandModel(model.DeleteCommand);
 
-            using (_mocks.Playback())
-            {
-               
-                _models.ExecuteCommandModel(model.DeleteCommand);
-            }
-        }
-
-	
-		[SetUp]
-		public void Setup()
-		{
-			_listener = new PropertyChangedListener();
-			_testerForCommandModels = new TesterForCommandModels();
-			mocks = new MockRepository();
-			scheduleDay = Mocks.StrictMock<IScheduleDay>();
-			person = PersonFactory.CreatePerson();
-			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-			_layerWithPayload = new AbsenceLayer(new Absence(), _period);
-			Expect.Call(scheduleDay.Person).Return(person).Repeat.Any();
-			Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
-
-			Mocks.ReplayAll();
-
-			_target = new AbsenceLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(),_layerWithPayload,null);
-
-			testRunner = new CrossThreadTestRunner();
+	        observer.AssertWasCalled(x => x.RemoveAbsence(model, absenceLayer, model.SchedulePart));
 		}
-
-	
-		private bool Opaque
-		{
-			get { return false; }
-		}
-
-		private MockRepository Mocks
-		{
-			get { return mocks; }
-		}
-
-		[Test]
+		
+	    [Test]
 		public void VerifyCorrectDescription()
 		{
-			
 			Assert.AreEqual(UserTexts.Resources.Absence, _target.LayerDescription);
 		}
-
-
+		
 		[Test]
 		public void VerifyProperties()
 		{
-		
 			_target.SchedulePart = scheduleDay;
 
 			var payloadFromLayer = _layerWithPayload.Payload;
@@ -145,7 +110,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyCanMoveAll()
 		{
-			
 			bool succeeded = false;
 			_target.PropertyChanged += (x, y) =>
 			{
@@ -159,7 +123,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyIsSelected()
 		{
-			
 			Assert.IsFalse(_target.IsSelected);
 
 			_listener.ListenTo(_target);
@@ -172,7 +135,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyCanSetIsChanged()
 		{
-			
 			bool succeeded = false;
 			_target.PropertyChanged += (x, y) =>
 			{
@@ -199,9 +161,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			var layerObserver = MockRepository.GenerateMock<ILayerViewModelObserver>();
 
-			_target = new AbsenceLayerViewModel(layerObserver, _layerWithPayload, new EventAggregator());
-			
-			_target.IsChanged = true;
+			_target = new AbsenceLayerViewModel(layerObserver, _layerWithPayload, new EventAggregator()) {IsChanged = true};
+
 			_target.UpdatePeriod();
 
             layerObserver.AssertWasCalled(l => l.UpdateAllMovedLayers());
@@ -210,6 +171,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyStartTimeChangedWithSchedulePart()
 		{
+			var testRunner = new CrossThreadTestRunner();
 			testRunner.RunInSTA(
 				delegate
 				{
@@ -225,7 +187,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			DateTimePeriodPanel panel = new DateTimePeriodPanel();
 			FieldInfo fieldSize = typeof(UIElement).GetField("_size", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
-			fieldSize.SetValue(panel, new System.Windows.Size(10, 2));
+			fieldSize.SetValue(panel, new Size(10, 2));
 			DateTimePeriodPanel.SetClipPeriod(panel, false);
 			DateTimePeriodPanel.SetDateTimePeriod(panel, _period);
 			return panel;
@@ -234,6 +196,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyEndTimeChangedWithSchedulePart()
 		{
+			var testRunner = new CrossThreadTestRunner();
 			testRunner.RunInSTA(
 				delegate
 				{
@@ -248,6 +211,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyTimeChangedWithSchedulePart()
 		{
+			var testRunner = new CrossThreadTestRunner();
 			testRunner.RunInSTA(
 				delegate
 				{
@@ -262,6 +226,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyStartTimeChangedWithoutSchedulePart()
 		{
+			var testRunner = new CrossThreadTestRunner();
 			testRunner.RunInSTA(
 				delegate
 				{
@@ -275,6 +240,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyEndTimeChangedWithoutSchedulePart()
 		{
+			var testRunner = new CrossThreadTestRunner();
 			testRunner.RunInSTA(
 				delegate
 				{
@@ -288,6 +254,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyTimeChangedWithoutSchedulePart()
 		{
+			var testRunner = new CrossThreadTestRunner();
 			testRunner.RunInSTA(
 				delegate
 				{
@@ -301,7 +268,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyMoveUpDownReturnsFalseIfParentCollectionIsNull()
 		{
-			
 			Assert.IsFalse(_target.CanMoveUp);
 			Assert.IsFalse(_target.CanMoveDown);
 		}
@@ -309,7 +275,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyCanExecuteDeleteCommand()
 		{
-		
 			Assert.AreEqual(_testerForCommandModels.CanExecute(_target.DeleteCommand), _target.IsMovePermitted());
 			Assert.AreEqual(_target.DeleteCommand.Text, UserTexts.Resources.Delete);
 		}
@@ -317,19 +282,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyPeriodElapsedTime()
 		{
-			
 			PropertyChangedListener listener = new PropertyChangedListener().ListenTo(_target);
 			_target.Period = _target.Period.MovePeriod(TimeSpan.FromHours(2));
 			Assert.IsTrue(listener.HasFired("ElapsedTime"));
 			Assert.AreEqual(_target.Period.ElapsedTime(), _target.ElapsedTime);
-
 		}
-
-		[TearDown]
-		public void Teardown()
-		{
-			Mocks.VerifyAll();
-		}
-
     }
 }

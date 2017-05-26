@@ -23,12 +23,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         public LayerGroupViewModel PersonalLayers { get; private set; }
         public LayerGroupViewModel OvertimeLayers { get; private set; }
         public LayerGroupViewModel MainShiftLayers { get; private set; }
-        public ObservableCollection<LayerGroupViewModel> Groups
-        {
-            get { return _groups; }
-        }
-        
-        private ICollectionView _visualLayers;
+        public ObservableCollection<LayerGroupViewModel> Groups => _groups;
+
+	    private ICollectionView _visualLayers;
         private ICollectionView _scheduleLayers;
 
         private TimeSpan _interval = TimeSpan.FromMinutes(15); //Default
@@ -139,8 +136,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         /// <value>The interval.</value>
         public TimeSpan Interval
         {
-            get { return _interval; }
-            set
+            get => _interval;
+	        set
             {
                 if (_interval != value)
                 {
@@ -249,8 +246,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         {
             CreateProjectionViewModels(_schedule);
         }
-
-	   
+		
 	    private ILayerViewModel CreateViewModelFromVisualLayer(IVisualLayer visualLayer)
         {
             ILayerViewModel visualLayerViewModel;
@@ -266,8 +262,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         {
             return !LayersFromProjection(layer);
         }
-
-
+		
         private static bool LayersFromProjection(object layer)
         {
             return ((ILayerViewModel)layer).IsProjectionLayer;
@@ -275,14 +270,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
 	    public void ReplaceActivity(ILayerViewModel sender, ILayer<IActivity> theLayer, IScheduleDay part)
 	    {
-		    if (_replaceService != null)
-				_replaceService.Replace(part, theLayer, sender.Payload as IActivity, sender.Period);
+		    _replaceService?.Replace(part, theLayer, sender.Payload as IActivity, sender.Period);
 	    }
 
 	    public void ReplaceAbsence(ILayerViewModel sender, ILayer<IAbsence> layer, IScheduleDay scheduleDay)
 	    {
-			if (_replaceService != null)
-				_replaceService.Replace(scheduleDay, layer, sender.Payload as IAbsence, sender.Period);
+		    _replaceService?.Replace(scheduleDay, layer, sender.Payload as IAbsence, sender.Period);
 	    }
 
 	    public void UpdateAllMovedLayers()
