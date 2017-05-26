@@ -149,22 +149,3 @@
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 }
-.mobile-add-request-form .well{
-	margin: 0;
-}
-.mobile-add-request-form div.pull-right{
-	margin-top: 20px;
-}
-.mobile-add-request-form label.checkbox{
-	display: inline-block;
-	padding-left: 25px;
-}
-.mobile-add-request-form button.btn.request-new-cancel,
-.mobile-add-request-form button.btn.absence-report-cancel{
-	border: 1px solid #cccccc;
-}
-.mobile-add-request-form input[type='checkbox'], 
-.mobile-add-request-form i.glyphicon, 
-.mobile-add-request-form input.overtime-availability-next-day{
-	transform: scale(1.5);
-}
