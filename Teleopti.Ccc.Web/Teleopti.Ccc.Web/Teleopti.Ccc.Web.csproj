@@ -787,7 +787,6 @@
     <Compile Include="Core\Extensions\DateTimeFormatExtensions.cs" />
     <Compile Include="Core\Startup\CsrfFilter.cs" />
     <Compile Include="Core\Startup\InitializeApplication\PublishStartupJobsTask.cs" />
-    <Compile Include="Core\Startup\InitializeApplication\RequeueHangfireEventsTask.cs" />
     <Compile Include="Core\Startup\NoCacheFilter.cs" />
     <Compile Include="Core\Startup\OriginHandlerPipelineModule.cs" />
     <Compile Include="Core\Startup\TenantStartupTask.cs" />

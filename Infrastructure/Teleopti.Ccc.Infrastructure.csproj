@@ -261,7 +261,6 @@
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
-    <Compile Include="Repositories\RequeueHangfireRepository.cs" />
     <Compile Include="Rta\StateQueueWorker.cs" />
     <Compile Include="MultiTenancy\IPersonInfoHelper.cs" />
     <Compile Include="MultiTenancy\IPersonInfoMapper.cs" />

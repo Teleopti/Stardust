@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		[Attempts(10)]
 		[LogInfo]
-		[UnitOfWork]
 		public virtual void Handle(AnalyticsPersonPeriodRangeChangedEvent @event)
 		{
 			var didRun = false;

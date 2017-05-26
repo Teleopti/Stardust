@@ -120,9 +120,7 @@
 		}
 
 		function requeueFailedEvents(type) {
-			return $http.post("./Hangfire/RequeueFailed",{eventName: type}, tokenHeaderService.getHeaders()).then(function() {
-				getTypesOfFailedEvents();
-			});
+			
 		}
 
 		function poll() {

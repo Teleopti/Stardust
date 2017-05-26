@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Config;
-using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -64,8 +63,7 @@ namespace Teleopti.Wfm.Administration.Core
 				.Register(c => new HangfireStatisticsViewModelBuilder(c.Resolve<HangfireRepository>(), ConfigurationManager.ConnectionStrings["Hangfire"].ConnectionString))
 				.SingleInstance().AsSelf();
 			builder.RegisterType<HangfireRepository>().SingleInstance();
-
-			builder.RegisterType<HangfireUtilities>().AsSelf().As<IRequeueFailedHangfireEvents>().SingleInstance();
+		
 			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).SingleInstance();
 
 			builder.Register<Func<ICurrentUnitOfWork, IBusinessUnitRepository>>(context => uow => new BusinessUnitRepository(uow));

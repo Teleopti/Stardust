@@ -13,7 +13,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	public class HangfireUtilities : ICleanHangfire, IRequeueFailedHangfireEvents
+	public class HangfireUtilities : ICleanHangfire
 	{
 		private readonly Lazy<JobStorage> _storage;
 		private readonly Lazy<IBackgroundJobClient> _backgroundJobs;
@@ -217,44 +217,5 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 					));
 		}
 
-		public void RequeueFailed(string eventName, string handlerName, string tenant)
-		{
-			const int batch = 100;
-			var iteration = 0;
-
-			var toBeRequeued = new Dictionary<string, FailedJobDto>();
-			while (true)
-			{
-				var failedJobs = monitoring.FailedJobs(iteration * batch, batch);
-				failedJobs
-					.Where(x =>
-					{
-						var job = x.Value.Job.Args.OfType<HangfireEventJob>().FirstOrDefault();
-						if (job == null) return false;
-
-						bool match = true;
-						if (eventName != null)
-							match = job.Event.GetType().FullName == eventName;
-						if (handlerName != null)
-							match = match && job.HandlerTypeName == handlerName;
-						if (tenant != null)
-							match = match && job.Tenant == tenant;
-						return match;
-					})
-					.ForEach(x => toBeRequeued[x.Key] = x.Value);
-
-				if (failedJobs.Count < batch)
-					break;
-
-				iteration++;
-			}
-
-			toBeRequeued.ForEach(j => backgroundJobs.Requeue(j.Key));
-		}
-	}
-
-	public interface IRequeueFailedHangfireEvents
-	{
-		void RequeueFailed(string eventName, string handlerName, string tenant);
 	}
 }
