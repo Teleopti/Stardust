@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the menu button in start page")]
 		public void WhenIClickTheMenuButton()
 		{
-			Browser.Interactions.Click("div.mobile-start-day div.fab");
+			Browser.Interactions.Click("div.mobile-start-day button.fab");
 		}
 
 		[When(@"I click menu Overtime Availability")]
