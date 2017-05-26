@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		}
 
 		[Test]
-		[Ignore("fix build")]
 		public void ShouldProcessCalculationOfAbsencePossibilitiesIntradayForMultipleAgents()
 		{
 			initialise();
@@ -92,7 +91,6 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 
 
 		[Test]
-		[Ignore("fix build")]
 		public void ShouldProcessCalculationOfAbsencePossibilitiesByPeriodForMultipleAgents()
 		{
 			initialise();
