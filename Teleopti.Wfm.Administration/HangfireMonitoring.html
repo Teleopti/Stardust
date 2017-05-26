@@ -10,7 +10,7 @@
 			<div class="col-md-6">
 				<div>
 					<h3 class="pull-left">Types of events:</h3>
-					<button class="pull-left" ng-click="vm.getTypesOfEvents()" ng-disabled="vm.isFetching" style="margin-top: 22px; margin-left: 10px;">Refresh</button>
+					<button class="pull-left" ng-click="vm.getTypesOfSucceededEvents()" ng-disabled="vm.isFetching" style="margin-top: 22px; margin-left: 10px;">Refresh</button>
 				</div>
 				<table class="table table-striped">
 					<thead>
@@ -44,6 +44,34 @@
 						<td>{{event.CreatedAt}}</td>
 						<td>{{event.Duration}}</td>
 					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div>
+					<h3 class="pull-left">Types of failed events:</h3>
+					<button class="pull-left" ng-click="vm.getTypesOfFailedEvents()" ng-disabled="vm.isFetching" style="margin-top: 22px; margin-left: 10px;">Refresh</button>
+				</div>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Event</th>
+							<th>Count</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="event in vm.eventCountFailed">
+							<td>{{event.Type}}</td>
+							<td>{{event.Count}}</td>
+							<td>
+								<button ng-click="vm.requeueFailedEvents(event.Type)">
+									Requeue
+								</button>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>

@@ -28,10 +28,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(_statisticViewModelBuilder.Build());
 		}
 
-		[HttpGet, Route("Hangfire/TypesOfEvents")]
-		public IHttpActionResult HangfireTypesOfEvents()
+		[HttpGet, Route("Hangfire/TypesOfSucceededEvents")]
+		public IHttpActionResult HangfireTypesOfSucceededEvents()
 		{
-			return Json(_statisticViewModelBuilder.BuildTypesOfEvents());
+			return Json(_statisticViewModelBuilder.BuildTypesOfEvents("Succeeded"));
+		}
+
+		[HttpGet, Route("Hangfire/TypesOfFailedEvents")]
+		public IHttpActionResult HangfireTypesOfFailedEvents()
+		{
+			return Json(_statisticViewModelBuilder.BuildTypesOfEvents("Failed"));
 		}
 	}
 }

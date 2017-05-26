@@ -34,12 +34,12 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			}
 		}
 
-		public IEnumerable<EventCount> BuildTypesOfEvents()
+		public IEnumerable<EventCount> BuildTypesOfEvents(string stateName)
 		{
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
-				var result = _hangfireRepository.EventCounts(connection);
+				var result = _hangfireRepository.EventCounts(connection, stateName);
 				connection.Close();
 
 				return result;

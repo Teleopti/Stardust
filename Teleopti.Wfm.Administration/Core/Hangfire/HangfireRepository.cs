@@ -35,9 +35,9 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			return ret;
 		}
 
-		public IEnumerable<EventCount> EventCounts(SqlConnection connection)
+		public IEnumerable<EventCount> EventCounts(SqlConnection connection, string stateName)
 		{
-			var selectCommandText = "SELECT Arguments FROM HangFire.Job WITH (NOLOCK) WHERE StateName = 'Succeeded'";
+			var selectCommandText = "SELECT Arguments FROM HangFire.Job WITH (NOLOCK) WHERE StateName = '" + stateName + "'";
 			var jobs = new List<Type>();
 			using (var selectCommand = new SqlCommand(selectCommandText, connection))
 			using (var reader = selectCommand.ExecuteReader())
@@ -51,19 +51,19 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 					}
 
 			return jobs.Aggregate(new Dictionary<Type, EventCount>(), (counts, type) =>
-			{
-				if (counts.ContainsKey(type))
-					counts[type].Count++;
-				else
-					counts[type] = new EventCount
-					{
-						Type = type.ToString(),
-						Count = 1
-					};
+				{
+					if (counts.ContainsKey(type))
+						counts[type].Count++;
+					else
+						counts[type] = new EventCount
+						{
+							Type = type.ToString(),
+							Count = 1
+						};
 
-				return counts;
-			})
-			.Values;
+					return counts;
+				})
+				.Values;
 		}
 
 		public IEnumerable<OldEvent> OldestEvents(SqlConnection connection)

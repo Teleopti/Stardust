@@ -13,7 +13,9 @@
 
 	function hangfireMonitoringController($http, $interval, tokenHeaderService) {
 		var vm = this;
-		vm.getTypesOfEvents = getTypesOfEvents;
+		vm.getTypesOfSucceededEvents = getTypesOfSucceededEvents;
+		vm.getTypesOfFailedEvents = getTypesOfFailedEvents;
+		vm.requeueFailedEvents = requeueFailedEvents;
 		vm.isFetching = false;
 		var chartLabels = [];
 		var datasets = [
@@ -72,7 +74,8 @@
 		});
 
 		setupPolling();
-		getTypesOfEvents();
+		getTypesOfSucceededEvents();
+		getTypesOfFailedEvents();
 
 		function setupPolling() {
 			fetchData()
@@ -98,13 +101,26 @@
 				});
 		}
 
-		function getTypesOfEvents() {
+		function getTypesOfSucceededEvents() {
 			vm.isFetching = true;
-			return $http.get("./Hangfire/TypesOfEvents", tokenHeaderService.getHeaders())
+			return $http.get("./Hangfire/TypesOfSucceededEvents", tokenHeaderService.getHeaders())
 				.then(function (data) {
 					vm.eventCount = data.data.sort(byCount);
 					vm.isFetching = false;
 				});
+		}
+
+		function getTypesOfFailedEvents() {
+			vm.isFetching = true;
+			return $http.get("./Hangfire/TypesOfFailedEvents", tokenHeaderService.getHeaders())
+				.then(function (data) {
+					vm.eventCountFailed = data.data.sort(byCount);
+					vm.isFetching = false;
+				});
+		}
+
+		function requeueFailedEvents(type) {
+			
 		}
 
 		function poll() {
