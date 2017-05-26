@@ -53,16 +53,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			_teamBlockScheduler.DayScheduled += DayScheduled;
 			var dateOnlySkipList = new List<DateOnly>();
+
+			var allTeamInfoListOnStartDate = getAllTeamInfoList(schedulingResultStateHolder, allPersonMatrixList, selectedPeriod, selectedPersons, teamInfoFactory);
+			var checkedTeams = _teamMatrixChecker.CheckTeamList(allTeamInfoListOnStartDate, selectedPeriod);
 			foreach (var datePointer in selectedPeriod.DayCollection())
 			{
 				if (schedulingCallback.IsCancelled) break;
 
 				if (dateOnlySkipList.Contains(datePointer))
 					continue;
-
-				var allTeamInfoListOnStartDate = getAllTeamInfoList(schedulingResultStateHolder, allPersonMatrixList, selectedPeriod, selectedPersons, teamInfoFactory);
-
-				var checkedTeams = _teamMatrixChecker.CheckTeamList(allTeamInfoListOnStartDate, selectedPeriod);
 
 				runSchedulingForAllTeamInfoOnStartDate(schedulingCallback, allPersonMatrixList, selectedPersons, selectedPeriod,
 					schedulePartModifyAndRollbackService,
