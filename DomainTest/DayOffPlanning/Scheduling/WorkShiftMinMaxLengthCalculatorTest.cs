@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
             _workShiftWeekMinMaxCalculator = _mocks.StrictMock<IWorkShiftWeekMinMaxCalculator>();
             _possibleMinMaxWorkShiftLengthExtractorForTest = new PossibleMinMaxWorkShiftLengthExtractorForTest();
             _schedulePeriodTargetTimeCalculatorForTest = new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(55), TimeSpan.FromHours(57)));
-            _target = new WorkShiftMinMaxCalculator(_possibleMinMaxWorkShiftLengthExtractorForTest,
+            _target = new WorkShiftMinMaxCalculatorOLD(_possibleMinMaxWorkShiftLengthExtractorForTest,
                 _schedulePeriodTargetTimeCalculatorForTest,
                 _workShiftWeekMinMaxCalculator);
             _scheduleDayPro0 = _mocks.StrictMock<IScheduleDayPro>();

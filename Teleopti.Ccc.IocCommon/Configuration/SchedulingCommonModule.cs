@@ -136,6 +136,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<TeamDayOffScheduling>().InstancePerLifetimeScope();
 				builder.RegisterType<TeamBlockMissingDayOffHandling>().InstancePerLifetimeScope();
 				builder.RegisterType<TeamBlockScheduleSelected>().InstancePerLifetimeScope();
+				builder.RegisterType<WorkShiftMinMaxCalculator>().As<IWorkShiftMinMaxCalculator>().InstancePerDependency();
 			}
 			else
 			{
@@ -147,6 +148,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<TeamDayOffScheduler>().As<ITeamDayOffScheduler>().InstancePerDependency();
 				builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();
 				builder.RegisterType<TeamBlockSchedulingService>().InstancePerLifetimeScope();
+				builder.RegisterType<WorkShiftMinMaxCalculatorOLD>().As<IWorkShiftMinMaxCalculator>().InstancePerDependency();
 			}
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();
@@ -296,7 +298,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<WorkShiftWeekMinMaxCalculator>().As<IWorkShiftWeekMinMaxCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<PossibleMinMaxWorkShiftLengthExtractor>().As<IPossibleMinMaxWorkShiftLengthExtractor>().InstancePerDependency();
-			builder.RegisterType<WorkShiftMinMaxCalculator>().As<IWorkShiftMinMaxCalculator>().InstancePerDependency();
 			builder.RegisterType<WorkShiftBackToLegalStateBitArrayCreator>().As<IWorkShiftBackToLegalStateBitArrayCreator>().InstancePerLifetimeScope();
 
 			builder.RegisterType<SchedulingStateHolderAllSkillExtractor>().InstancePerDependency();

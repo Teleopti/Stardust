@@ -1,13 +1,69 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 {
-    public class WorkShiftMinMaxCalculator : IWorkShiftMinMaxCalculator
+	[RemoveMeWithToggle("Remove this, rename 'OLD' and copy this impl", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class WorkShiftMinMaxCalculator : WorkShiftMinMaxCalculatorOLD
+	{
+		public WorkShiftMinMaxCalculator(IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor, ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator, IWorkShiftWeekMinMaxCalculator weekCalculator) : base(possibleMinMaxWorkShiftLengthExtractor, schedulePeriodTargetTimeCalculator, weekCalculator)
+		{
+		}
+
+		protected override MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
+		{
+			var min = TimeSpan.Zero;
+			var max = TimeSpan.Zero;
+			var possibleMinMaxWorkShiftLength = PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions);
+			foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
+			{
+				TimeSpan contractTime;
+				if (dayToSchedule.HasValue)
+				{
+					if (scheduleDayPro.Day == dayToSchedule.Value)
+					{
+						contractTime = TimeSpan.Zero;
+						min = min.Add(contractTime);
+						max = max.Add(contractTime);
+						continue;
+					}
+				}
+
+				var part = scheduleDayPro.DaySchedulePart();
+				var significant = part.SignificantPart();
+				if (significant == SchedulePartView.MainShift || significant == SchedulePartView.FullDayAbsence)
+				{
+					contractTime = part.ProjectionService().CreateProjection().ContractTime();
+					min = min.Add(contractTime);
+					max = max.Add(contractTime);
+				}
+				else
+				{
+					if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
+					{
+						contractTime = TimeSpan.Zero;
+						min = min.Add(contractTime);
+						max = max.Add(contractTime);
+					}
+					else
+					{
+						var possibleMinMaxWorkShiftLengthForDate = possibleMinMaxWorkShiftLength[scheduleDayPro.Day];
+						min = min.Add(possibleMinMaxWorkShiftLengthForDate.Minimum);
+						max = max.Add(possibleMinMaxWorkShiftLengthForDate.Maximum);
+					}
+				}
+			}
+
+			return new MinMax<TimeSpan>(min, max);
+		}
+	}
+
+    public class WorkShiftMinMaxCalculatorOLD : IWorkShiftMinMaxCalculator
     {
         private readonly IPossibleMinMaxWorkShiftLengthExtractor _possibleMinMaxWorkShiftLengthExtractor;
         private readonly ISchedulePeriodTargetTimeCalculator _schedulePeriodTargetTimeCalculator;
@@ -15,7 +71,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
         private IDictionary<DateOnly, MinMax<TimeSpan>> _possibleMinMaxWorkShiftLengthState;
 	    private readonly WorkShiftMinMaxCalculatorSkipWeekCheck _workShiftMinMaxCalculatorSkipWeekCheck = new WorkShiftMinMaxCalculatorSkipWeekCheck();
 
-	    public WorkShiftMinMaxCalculator(IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor, 
+	    public WorkShiftMinMaxCalculatorOLD(IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor, 
             ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator, 
             IWorkShiftWeekMinMaxCalculator weekCalculator)
         {
@@ -176,7 +232,8 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 						   v => _possibleMinMaxWorkShiftLengthExtractor.PossibleLengthsForDate(v.Day, matrix, schedulingOptions)));
         }
 
-        private MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
+		[RemoveMeWithToggle("Replace this with overriden method!", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+        protected virtual MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
             TimeSpan min = TimeSpan.Zero;
             TimeSpan max = TimeSpan.Zero;

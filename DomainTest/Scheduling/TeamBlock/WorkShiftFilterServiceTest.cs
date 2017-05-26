@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				new CommonMainShiftFilter(new ScheduleDayEquator(new EditableShiftMapper())),
 				new ContractTimeShiftFilter(
 					() =>
-						new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractorForTest(),
+						new WorkShiftMinMaxCalculatorOLD(new PossibleMinMaxWorkShiftLengthExtractorForTest(),
 							new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(8),TimeSpan.FromHours(8))), new WorkShiftWeekMinMaxCalculator()),
 					new SwedishCulture()),
 				new DisallowedShiftCategoriesShiftFilter(), new EffectiveRestrictionShiftFilter(),
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				new TimeLimitsRestrictionShiftFilter(validDateTimePeriodShiftFilter, new LatestStartTimeLimitationShiftFilter(),
 					new EarliestEndTimeLimitationShiftFilter()), new WorkTimeLimitationShiftFilter(new SwedishCulture()),
 				new ShiftLengthDecider(new DesiredShiftLengthCalculator(new SchedulePeriodTargetTimeCalculator())),
-				new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractorForTest(),
+				new WorkShiftMinMaxCalculatorOLD(new PossibleMinMaxWorkShiftLengthExtractorForTest(),
 					new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(8))), new WorkShiftWeekMinMaxCalculator()),
 				new CommonActivityFilter(),
 				new RuleSetAccordingToAccessabilityFilterOLD(new RuleSetBagExtractorProvider(),
