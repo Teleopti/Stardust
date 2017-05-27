@@ -73,10 +73,7 @@
 						<tr>
 							<td>Organization</td>
 							<td>
-								<!--<md-select class="md-no-underline" placeholder="{{ 'Organization'|translate }}" ng-model="$ctrl.fallbacks.organization">
-										<md-option ng-repeat="(id, name) in $ctrl.fieldOptions.Teams" ng-value="id">{{::name}}</md-option>
-								</md-select>-->
-								<organization-picker date="$ctrl.now" on-pick="$ctrl.setTeam(teams)" single async-datasource="$ctrl.sitesAndTeams()"></organization-picker>
+								<organization-picker single datasource="$ctrl.sitesAndTeams()" selected-team-ids="$ctrl.fallbacks.team"></organization-picker>
 							</td>
 						</tr>
 						<tr>

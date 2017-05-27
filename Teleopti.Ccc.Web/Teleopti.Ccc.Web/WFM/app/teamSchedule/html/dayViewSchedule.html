@@ -19,11 +19,11 @@
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
 			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && vm.searchEnabled"
-				async-datasource="vm.sitesAndTeamsAsync()"
+				datasource="vm.sitesAndTeamsAsync()"
 				class="organization-picker-container inline-block"
 				on-open="vm.searchOptions.focusingSearch = false"
-				on-pick="vm.onSelectedTeamsChanged(teams)"
-				preselected-team-ids="vm.selectedTeamIds"></organization-picker>
+				on-close="vm.onSelectedTeamsChanged()"
+				selected-team-ids="vm.selectedTeamIds"></organization-picker>
 
 			<div class="people-search-container inline-block"
 			     ng-if="vm.searchEnabled"
@@ -63,8 +63,8 @@
 				<i class="mdi mdi-settings"></i>
 			</span>
 
-			<teamschedule-command-menu class="teamschedule-command" 
-									   validate-warning-enabled="vm.validateWarningEnabled"									  
+			<teamschedule-command-menu class="teamschedule-command"
+									   validate-warning-enabled="vm.validateWarningEnabled"
 									   trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
 		</div>
 	</div>
@@ -77,7 +77,7 @@
 			<schedule-table ng-show="vm.scheduleFullyLoaded"
 							select-mode="vm.scheduleTableSelectMode"
 							selected-date="vm.scheduleDate"
-							show-warnings="vm.validateWarningEnabled"							
+							show-warnings="vm.validateWarningEnabled"
 							selected-timezone="vm.currentTimezone"
 			                pagination-options="vm.paginationOptions"/>
 		</div>

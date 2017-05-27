@@ -7,7 +7,10 @@
 		this._translate = $translate;
 		this._toggles = Toggle;
 		this.runImportJobInBackground = this._toggles.Wfm_People_MoveImportJobToBackgroundService_43582;
+
 		this.fallbacks = {};
+		Object.defineProperty(this.fallbacks, 'team', { value: [] });
+
 		this.now = new Date();
 	}
 
@@ -35,10 +38,6 @@
 	WfmImportAgentsCtrl.prototype.onFieldOptionsFetched = function (options) {
 		this.fieldOptions = options;
 		this.fetchingFieldOptions = false;
-	};
-
-	WfmImportAgentsCtrl.prototype.setTeam = function (teamId) {
-		this.fallbacks.team = teamId;
 	};
 
 	WfmImportAgentsCtrl.prototype.noFile = function () {

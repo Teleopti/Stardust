@@ -102,7 +102,7 @@
 				return {
 					StartDate: fields.startDate,
 					RoleIds: angular.isArray(fields.roles) && fields.roles.length > 0 ? fields.roles.join(',') : undefined,
-					TeamId: fields.team,
+					TeamId: angular.isArray(fields.team) ? (fields.team[0] || undefined) : fields.team,
 					SkillIds: angular.isArray(fields.skills) && fields.skills.length > 0 ? fields.skills.join(',') : undefined,
 					ExternalLogonId: fields.externalLogon,
 					ContractId: fields.contract,

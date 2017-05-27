@@ -549,124 +549,6 @@ wfm-multiple-search-input .advanced-input {
 }
 
 
-organization-picker {
-    md-select-value {
-        color: $text-color-standard;
-    }
-    md-select-value.md-select-placeholder {
-        color: $text-color-muted;
-    }
-}
-
-.organization-picker-menu {
-    min-width: 200px !important;
-    margin: -.5em 0 0 2.3em;
-    color: $text-color-standard;
-
-    .must-hide {
-        display: none !important;
-    }
-
-    md-select-menu, md-content._md {
-        width: 100%;
-        max-height: 600px;
-    }
-
-    md-content._md {
-        padding: 0.5em 0;
-    }
-
-    label {
-        display: none !important;
-    }
-
-    .picker-select-header {
-        margin: 0 0.5em;
-        height: 30px;
-        cursor: pointer;
-        position: relative;
-        display: flex;
-        align-items: center;
-        width: auto;
-    }
-
-    .picker-searchbox {
-        border: none;
-        outline: none;
-        height: 100%;
-        width: 100%;
-        padding: 0;
-        background-color: $white;
-    }
-
-    md-optgroup {
-        border-top: 1px solid $text-color-muted;
-        color: inherit;
-
-        .partial-selected {
-
-            .md-icon {
-                background-color: $blue-300;
-                border-color: $blue-300;
-            }
-        }
-
-        md-option[selected] .md-icon,
-        md-checkbox.md-checked .md-icon {
-            background-color: $blue-300;
-            border-color: $blue-300;
-        }
-
-        .site-checked {
-            background-color: $green-100;
-        }
-
-        .group-header {
-            display: flex;
-            width: 100%;
-
-            .title {
-                margin-left: 10px;
-                padding: 5px 0;
-            }
-
-            & > md-checkbox {
-                margin: 0;
-                width: 100%;
-                padding: 5px 0;
-
-                .md-label {
-                    margin: 0 35px;
-                    white-space: nowrap;
-                }
-            }
-
-            span.dropdown-icon {
-                margin: auto;
-                margin-right: 0.5em;
-                margin-left: auto;
-            }
-        }
-
-        div.md-container {
-            left: 10px;
-            transform: scale(0.8, 0.8) translateY(-66%) !important;
-        }
-
-        md-option.md-checkbox-enabled {
-            padding-left: 35px;
-        }
-
-        md-option {
-            margin-left: 1em;
-            color: $gray087;
-
-            & > md-container {
-                margin-left: 10px;
-            }
-        }
-    }
-}
 
 team-schedule-datepicker {
     vertical-align: top;
@@ -1182,3 +1064,165 @@ md-select-menu md-option:first-child:not([disabled]):hover {
         font-size: 12px !important;
     }
 }
+
+/*****************************
+ *    Organization Picker    *
+ *****************************/
+
+organization-picker {
+    md-select-value {
+        color: $text-color-standard;
+    }
+
+    md-select-value.md-select-placeholder {
+        color: $text-color-muted;
+    }
+
+    ._off-screen {
+        visibility: hidden;
+        position: absolute;
+        left: -9999px;
+    }
+
+    .orgpicker-wrapper {
+        $NG-MATERIAL-DEFAULT: rgba(0,0,0,0.12);
+        $DEFAULT-WIDTH: 12em;
+        cursor: pointer;
+
+        .md-select-value {
+            width: $DEFAULT-WIDTH;
+            border-bottom-color: $NG-MATERIAL-DEFAULT;
+        }
+
+        .none-selected {
+            color: $text-color-muted;
+            border-bottom-color: $NG-MATERIAL-DEFAULT;
+        }
+    }
+}
+
+.orgpicker-menu {
+    $PANEL-WIDTH: 270px;
+    $HEADER-HEIGHT: 50px;
+    $REPEATED-ITEM-HEIGHT: 40px;
+    $NUM-OF-VISIBLE-ITEMS: 7;
+	$VIRTUAL-REPEAT-HEIGHT: $NUM-OF-VISIBLE-ITEMS * $REPEATED-ITEM-HEIGHT + 0.6 * $REPEATED-ITEM-HEIGHT;
+    $PD: .2em;
+
+    min-width: $PANEL-WIDTH;
+    width: $PANEL-WIDTH;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+	background-color: $white;
+
+    .virtual-repeat {
+        height: $VIRTUAL-REPEAT-HEIGHT;
+        width: 100%;
+        max-width: $PANEL-WIDTH;
+
+        .repeated-item .match {
+            background-color: $orange-400;
+            border-radius: 2px;
+        }
+
+        .repeated-item .team {
+            padding: 0 1em 0 2em;
+        }
+
+        .repeated-item .md-button {
+            align-items: inherit;
+            border-radius: 0;
+            cursor: pointer;
+            display: block;
+            margin: 0;
+            text-align: left;
+            text-transform: none;
+            white-space: normal;
+            width: 100%;
+            height: 100%;
+        }
+
+        .md-button-toggle {
+            padding: 0 1em;
+        }
+    }
+
+    .repeated-item {
+        height: $REPEATED-ITEM-HEIGHT;
+
+        md-checkbox.md-checked .md-icon {
+            background-color: $blue-300;
+            border-color: $blue-300;
+        }
+
+        .wfm-checkbox {
+            padding: 0px;
+            width: auto;
+
+            .wfm-checkbox-label {
+                line-height: $REPEATED-ITEM-HEIGHT;
+            }
+        }
+
+        .wfm-checkbox.indeterminate {
+            .wfm-checkbox-toggle:after {
+                background-color: $blue-300;
+            }
+        }
+
+        .vertically-centered {
+            line-height: normal;
+            top: 0;
+            bottom: 0;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .wfm-checkbox-toggle:after {
+            @extend .vertically-centered;
+        }
+    }
+
+    .header {
+        padding: 0 $PD;
+        height: $HEADER-HEIGHT;
+        display: flex;
+        align-items: center;
+
+        & > i.mdi {
+            flex: 0 0 auto;
+            margin: 0 4px;
+        }
+
+        .search {
+            flex: 1 1 auto;
+        }
+    }
+
+    .footer {
+        display: flex;
+        justify-content: space-around;
+        padding: $PD;
+
+        button.wfm-btn {
+            flex: 1 1 100%;
+            margin: 0;
+            transition: none;
+        }
+    }
+
+    .md-toggle-icon {
+        margin-left: auto;
+        vertical-align: middle;
+    }
+}
+
+.orgpicker-menu.single-mode {
+    .contains-selected-team {
+        background-color: $green-100;
+    }
+    .selected {
+        background-color: $green-300;
+    }
+}
+
+/* End of Organization Picker */

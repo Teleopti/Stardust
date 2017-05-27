@@ -18,11 +18,11 @@
 				on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
 			<organization-picker ng-if="vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled"
-				async-datasource="vm.sitesAndTeamsAsync()"
+				datasource="vm.sitesAndTeamsAsync()"
 				class="organization-picker-container"
 				on-open="vm.searchOptions.focusingSearch = false"
-				on-pick="vm.onSelectedTeamsChanged(teams)"
-				preselected-team-ids="vm.selectedTeamIds"></organization-picker>
+				on-close="vm.onSelectedTeamsChanged()"
+				selected-team-ids="vm.selectedTeamIds"></organization-picker>
 
 			<div class="people-search-container inline-block"
 			     ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
@@ -58,7 +58,7 @@
 				<tbody>
 					<tr class="weekview-tr" ng-repeat="person in vm.groupWeeks">
 						<td class="weekview-td weekview-person-name">{{person.name}}</td>
-						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color, color: day.contrastFontColor}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">							
+						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color, color: day.contrastFontColor}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">
 							<div class="full-size" ng-click="vm.onCellClick(person.personId, day.date.Date)" ng-class="{'pointer': vm.enableClickableCell}">
 								<div class="summary" title="{{day.summeryTitle}}">{{day.summeryTitle}}</div>
 								<div>{{day.summeryTimeSpan}}</div>

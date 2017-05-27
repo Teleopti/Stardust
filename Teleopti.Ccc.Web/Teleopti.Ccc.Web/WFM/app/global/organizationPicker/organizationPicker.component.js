@@ -1,258 +1,465 @@
-﻿(function () {
+﻿(function (angular) {
 	'use strict';
 
+
 	angular.module('wfm.organizationPicker')
-		.component('organizationPicker',
-		{
+		.component('organizationPicker', {
 			templateUrl: [
 				'$attrs', function ($attrs) {
-					if (checkIsMultiple($attrs)) {
-						return 'app/global/organizationPicker/organizationPicker.tpl.html';
+					if (checkIsSingleMode($attrs)) {
+						return 'app/global/organizationPicker/organizationPicker.single.tpl.html'
 					}
-					return 'app/global/organizationPicker/organizationPicker.single.tpl.html';
+					return 'app/global/organizationPicker/organizationPicker.tpl.html'
 				}
 			],
-			controller: organizationPickerCtrl,
+			controller: OrgPickerController,
 			bindings: {
-				preselectedTeamIds: '<?',
-				onOpen: '&',
-				onPick: '&',
-				asyncDatasource: '&',
+				onOpen: '&?',
+				onClose: '&?',
+				datasource: '&',
+				selectedText: '&?',
+				selectedTeamIds: '<?',
 			}
 		});
 
-	function checkIsMultiple(attrs) {
-		return !('single' in attrs);
+	function checkIsSingleMode(attrs) {
+		return ('single' in attrs)
 	}
 
-	organizationPickerCtrl.$inject = ['$scope', '$translate', '$attrs'];
+	OrgPickerController.$inject = ['$scope', '$translate', '$attrs', '$q', '$element', '$mdPanel'];
 
-	function organizationPickerCtrl($scope, $translate, $attrs) {
-		var ctrl = this,
-			currentSite,
-			initialSelectedTeamIds = [],
-			isMultiple = checkIsMultiple($attrs);
+	function OrgPickerController($scope, $translate, $attrs, $q, $element, $mdPanel) {
+		var singleMode = checkIsSingleMode($attrs)
+		var searchText = ''
+		var searchCache = {}
 
-		ctrl.groupList = [];
-		ctrl.availableTeamIds = [];
-		ctrl.searchTerm = '';
-		ctrl.selectedTeamIds = [];
+		var ctrl = this
 
 		ctrl.$onInit = function () {
-			ctrl.asyncDatasource()
-				.then(function (data) {
-					populateGroupList(data.Children);
-					if (!ctrl.preselectedTeamIds || !ctrl.preselectedTeamIds.length) {
-						ctrl.preselectedTeamIds = [];
-						if (data.LogonUserTeamId) {
-							ctrl.preselectedTeamIds.push(data.LogonUserTeamId);
-						}
+			var menuPosition = $mdPanel.newPanelPosition().relativeTo($element).addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW)
+
+			if (!ctrl.selectedText)
+				ctrl.selectedText = ctrl.defaultSelectedTextFn
+
+			ctrl.menuRef = $mdPanel.create({
+				contentElement: $element.find('orgpicker-menu'),
+				clickOutsideToClose: true,
+				escapeToClose: true,
+				zIndex: 40,
+				attachTo: angular.element(document.body), // must-have for text inputs on ie11
+				position: menuPosition,
+				onOpenComplete: function () {
+					$scope.$broadcast('$md-resize')
+
+					if (singleMode && ctrl.selectedTeamIds[0]) {
+						ctrl.topIndex = findTeamIndexInVirtualRepeatContainerById(ctrl.selectedTeamIds[0])
 					}
-					if (ctrl.preselectedTeamIds.length) {
-						if (!isMultiple) {
-							ctrl.selectedTeamIds = ctrl.preselectedTeamIds[0];
-						} else {
-							ctrl.selectedTeamIds = angular.copy(ctrl.preselectedTeamIds);
-						}
-					}
-					ctrl.selectedTeamIds = angular.copy(ctrl.preselectedTeamIds);
 
-					updateAllSiteSelection();
+					// upon opening the menu, synchronise selected teams:
+					ctrl.updateSelectedTeamsInView();
 
-				});
-		};
+					if (ctrl.onOpen)
+						ctrl.onOpen()
+				},
+				onRemoving: (ctrl.onClose ? function () { ctrl.onClose() } : angular.noop),
+			})
 
-
-		ctrl.$onChanges = function (changesObj) {
-			if (!changesObj.preselectedTeamIds) return;
-			if (changesObj.preselectedTeamIds.currentValue === changesObj.preselectedTeamIds.previousValue) return;
-			ctrl.selectedTeamIds = angular.copy(changesObj.preselectedTeamIds.currentValue);
-			updateAllSiteSelection();
+			$q.when(ctrl.datasource()).then(function (data) {
+				populateGroupListAndNamemap(data.Children)
+				if (!angular.isArray(ctrl.selectedTeamIds)) {
+					ctrl.selectedTeamIds = []
+				}
+				ctrl.orgsInView = ctrl.searchForOrgsByName('')
+			})
 		}
 
-		function populateGroupList(rawSites) {
-			var teamIds = [];
+		ctrl.openMenu = function (event) {
+			ctrl.menuRef.open()
+		}
 
+		function findTeamIndexInVirtualRepeatContainerById(teamId) {
+			var index = -1
+			for (var i = 0; i < ctrl.orgsInView.length; i++) {
+				if (ctrl.orgsInView[i].m.id == teamId) {
+					index = i
+					break
+				}
+			}
+			return index
+		}
+
+		function populateGroupListAndNamemap(rawSites) {
 			ctrl.groupList = rawSites.map(function (rawSite) {
-				return {
-					id: rawSite.Id,
-					name: rawSite.Name,
-					teams: rawSite.Children.map(function (team) {
-						teamIds.push(team.Id);
-						return {
-							id: team.Id,
-							name: team.Name
-						};
-					}),
-					isChecked: false,
-					expanded: false
-				};
+				var site = new Site(rawSite.Id, rawSite.Name)
+				ctrl.nameMap[site.id] = site.name
+				rawSite.Children.forEach(function (team) {
+					var t = new Team(team.Id, team.Name, site)
+					ctrl.nameMap[t.id] = t.name
+					site.teams.push(t);
+				})
+				return site
 			});
-
-			ctrl.availableTeamIds = teamIds;
 		}
 
-		ctrl.formatSelectedDisplayName = function () {
-			if (!ctrl.selectedTeamIds) return '';
-
-			if (isMultiple && ctrl.selectedTeamIds.length > 1) {
-				return $translate.instant("SeveralTeamsSelected").replace("{0}", ctrl.selectedTeamIds.length);
+		Object.defineProperty(this, 'collapseAll', {
+			value: function () {
+				this.orgsInView.forEach(function (slave) {
+					if (slave.m.isSite)
+						slave.collapsed = true
+				})
+				filterCollapsedTeams(this.orgsInView)
 			}
-			for (var i = 0; i < ctrl.groupList.length; i++) {
-				var teams = ctrl.groupList[i].teams;
-				for (var j = 0; j < teams.length; j++) {
-					if (isTeamSelected(teams[j].id)) {
-						return teams[j].name;
+		})
+
+		Object.defineProperties(this, {
+			nameMap: { value: {} },
+			searchText: {
+				get: function () { return searchText },
+				set: function (value) {
+					searchText = value
+					this.orgsInView = this.searchForOrgsByName(searchText)
+					this.updateSelectedTeamsInView();
+				}
+			},
+			defaultSelectedTextFn: {
+				value: function (numOfTeams) {
+					var text = ''
+					switch (numOfTeams - 1) {
+						case -1:
+							text = $translate.instant('SelectOrganization')
+							break;
+						case 0:
+							text = ctrl.nameMap[ctrl.selectedTeamIds[0]]
+							break;
+						default:
+							text = $translate.instant('SeveralTeamsSelected').replace('{0}', ctrl.selectedTeamIds.length)
+							break;
+					}
+					return text
+				}
+			},
+			clearAll: {
+				value: function () {
+					this.selectedTeamIds.splice(0)
+					this.updateSelectedTeamsInView()
+				}
+			},
+			updateSelectedTeamsInView: {
+				value: function () {
+					for (var i = 0; i < this.orgsInView.length; i++) {
+						var slaveSite = this.orgsInView[i]
+
+						if (!slaveSite.m.isSite) {
+							continue
+						}
+
+						slaveSite.selectedTeamIds.splice(0)
+						slaveSite.m.selectedTeamIds.splice(0)
+
+						for (var j = 0; j < slaveSite.teams.length; j++) {
+							var slaveTeam = slaveSite.teams[j]
+							if (this.selectedTeamIds.indexOf(slaveTeam.m.id) > -1) {
+								slaveSite.selectedTeamIds.push(slaveTeam.m.id)
+							}
+						}
+
+						for (var k = 0; k < slaveSite.m.teams.length; k++) {
+							var team = slaveSite.m.teams[k];
+							if (this.selectedTeamIds.indexOf(team.id) > -1) {
+								slaveSite.m.selectedTeamIds.push(team.id)
+							}
+						}
 					}
 				}
-			}
-
-			return $translate.instant("Organization");
-		};
-
-		ctrl.processSearchTermFilter = function (site) {
-			if (site && ctrl.searchTerm.length > 0) {
-				if (site.name.toLowerCase().indexOf(ctrl.searchTerm.toLowerCase()) > -1) {
-					return '';
+			},
+			collapseSite: {
+				value: function (slaveSite) {
+					var index = this.orgsInView.indexOf(slaveSite)
+					if (slaveSite.collapsed) {
+						var args = [index + 1, 0].concat(slaveSite.teams)
+						this.orgsInView.splice.apply(this.orgsInView, args)
+						slaveSite.collapsed = false
+					} else {
+						this.orgsInView.splice(index + 1, slaveSite.teams.length)
+						slaveSite.collapsed = true
+					}
 				}
-				return ctrl.searchTerm;
-			}
-		};
+			},
+			toggleTeam: {
+				value: function (slaveTeam) {
+					slaveTeam.site.toggle(slaveTeam.m.id)
+					slaveTeam.m.site.toggle(slaveTeam.m.id)
 
-		ctrl.showTeamListOfSite = function (site, event) {
-			site.expanded = !site.expanded;
-			event.stopPropagation();
-		};
+					var index = this.selectedTeamIds.indexOf(slaveTeam.m.id)
+					if (index > -1) {
+						this.selectedTeamIds.splice(index, 1)
+					} else {
+						if (singleMode)
+							this.selectedTeamIds.splice(0, 1, slaveTeam.m.id)
+						else
+							this.selectedTeamIds.push(slaveTeam.m.id)
+					}
 
-		ctrl.updateSiteCheck = function (site) {
-			if (site)
-				toggleSiteSelection(site);
-		};
-
-		function toggleSiteSelection(site) {
-			var checked = site.isChecked,
-				index,
-				teamId;
-
-			site.teams.forEach(function (team) {
-				teamId = team.id;
-				index = ctrl.selectedTeamIds.indexOf(teamId);
-				if (checked && index === -1) {
-					ctrl.selectedTeamIds.push(teamId);
+					if (singleMode)
+						this.menuRef.close()
 				}
-				if (!checked && index > -1)
-					ctrl.selectedTeamIds.splice(index, 1);
-			});
+			},
+			toggleSite: {
+				value: function (event, slaveSite) {
+					event.stopPropagation()
 
-		}
-		function isTeamSelected(teamId) {
-			if (isMultiple) {
-				return ctrl.selectedTeamIds.indexOf(teamId) > -1;
-			}
-			return ctrl.selectedTeamIds === teamId;
-		}
+					slaveSite.toggleAll()
 
-		ctrl.partialTeamsSelected = function (site) {
-			if (!site) return false;
-
-			var some = false,
-				all = true;
-
-			site.teams.forEach(function (team) {
-				if (isTeamSelected(team.id)) {
-					some = true;
-				} else {
-					all = false;
+					if (slaveSite.selectedTeamIds.length === slaveSite.teams.length) {
+						slaveSite.selectedTeamIds.forEach(function (id) {
+							if (this.selectedTeamIds.indexOf(id) === -1) {
+								this.selectedTeamIds.push(id)
+							}
+						}, this)
+					} else {
+						slaveSite.teams.forEach(function (slaveTeam) {
+							var index = this.selectedTeamIds.indexOf(slaveTeam.m.id)
+							if (index > -1) {
+								this.selectedTeamIds.splice(index, 1)
+							}
+						}, this)
+					}
 				}
-			});
-
-			return some && !all;
-		};
-
-		ctrl.hasTeamsSelected = function (site) {
-			if (!site) return false;
-			var hasItem = false;
-			site.teams.forEach(function (team) {
-				if (isTeamSelected(team.id)) {
-					hasItem = true;
+			},
+			searchForOrgsByName: {
+				value: function (searchText) {
+					var textIsEmpty = (searchText === '')
+					var cached = searchCache[searchText]
+					if (cached) {
+						cached.filter(function (slave) { return slave.m.isSite })
+							.forEach(function (slaveSite) {
+								slaveSite.updateSelectedTeamIds()
+								if (!textIsEmpty && slaveSite.collapsed) {
+									var index = cached.indexOf(slaveSite)
+									var args = [index+1, 0].concat(slaveSite.teams)
+									cached.splice.apply(cached, args)
+									slaveSite.collapsed = false
+								}
+							})
+						return cached
+					}
+					var ret = []
+					var re = new RegExp(searchText, 'i')
+					this.groupList.forEach(function (site) {
+						var s = new SlaveSite(site)
+						s.collapsed = textIsEmpty
+						var r = [s]
+						var siteNameMatched = site.name.search(re) != -1
+						site.teams.forEach(function (team) {
+							var t
+							if (siteNameMatched || textIsEmpty || team.name.search(re) != -1) {
+								t = new SlaveTeam(team, s)
+								s.addTeam(t)
+								if (!s.collapsed) {
+									r.push(t)
+								}
+							}
+						})
+						if (siteNameMatched || textIsEmpty || r.length > 1) {
+							ret = ret.concat(r)
+						}
+					}, this)
+					searchCache[searchText] = ret
+					return ret
 				}
-			});
-			return hasItem;
-		}
+			},
+		})
 
-		ctrl.setCurrentSiteValue = function (site) {
-			currentSite = site;
-		};
-
-		$scope.$watchCollection(function () {
-			return ctrl.selectedTeamIds;
-		},
-			function (newValue) {
-				if (!newValue) return;
-				updateGroupSelection(currentSite);
-			});
-
-
-		function updateAllSiteSelection() {
-			if (!ctrl.selectedTeamIds || ctrl.selectedTeamIds.length === 0 || !ctrl.groupList || !ctrl.groupList.length) return;
-			ctrl.groupList.forEach(updateGroupSelection);
-		}
-
-		function updateGroupSelection(site) {
-			if (!site) return;
-			if (site.teams &&
-				site.teams.every(function (team) {
-					return isTeamSelected(team.id);
-			}))
-				site.isChecked = true;
-			else
-				site.isChecked = false;
-		}
-
-		ctrl.searchOrganization = function () {
-			if (ctrl.searchTerm.length > 0) {
-				ctrl.groupList.forEach(function (site) {
-					site.expanded = true;
-				});
-			} else {
-				ctrl.groupList.forEach(function (site) {
-					site.expanded = false;
-				});
-			}
-		};
-
-		ctrl.onPickerOpen = function () {
-			ctrl.onOpen();
-			initialSelectedTeamIds = angular.copy(ctrl.selectedTeamIds);
-		};
-
-		ctrl.onPickerClose = function () {
-			ctrl.searchTerm = '';
-
-			if (ctrl.groupList.length > 0) {
-				ctrl.groupList.forEach(function (s) {
-					s.expanded = false;
-				});
-			}
-
-			//load the schedule data when team ids changed
-			if (isMultiple) {
-				if (ctrl.selectedTeamIds.length === initialSelectedTeamIds.length &&
-					ctrl.selectedTeamIds.every(function (id) {
-						return initialSelectedTeamIds.indexOf(id) > -1;
-				})) {
-					return;
-				}
-			} else {
-				if (initialSelectedTeamIds == ctrl.selectedTeamIds) {
-					return;
-				}
-			}
-
-			ctrl.onPick({
-				teams: angular.copy(ctrl.selectedTeamIds)
-			});
-
-		};
 	}
-})();
+
+	function filterCollapsedTeams(slavesArray) {
+		var newArray = []
+		slavesArray.forEach(function (slave) {
+			if (!slave.m.isSite) {
+				return
+			}
+			var length = newArray.push(slave)
+			if (!slave.collapsed) {
+				newArray.splice.apply(newArray, [length, 0].concat(slave.teams))
+			}
+		})
+		var args = [0, slavesArray.length].concat(newArray)
+		slavesArray.splice.apply(slavesArray, args)
+	}
+
+	function Site(id, name) {
+		var checked = false
+		var selectedTeamIds = []
+		var props = {
+			id: { value: id },
+			name: { value: name },
+			isSite: { value: true },
+			index: { writable: true, value: -1 },
+			collapsed: { writable: true, value: true },
+			expanded: { writable: true, value: false },
+			checked: {
+				get: function () { return selectedTeamIds.length === this.teams.length },
+				set: function (value) {
+					if (this.teams.length > 0) {
+						this.teams.forEach(function (t) { t.checked = value })
+					}
+				}
+			},
+			teams: { value: [] },
+			selectedTeamIds: {
+				get: function () { return selectedTeamIds }
+			},
+			isChecked: {
+				value: function () {
+					return selectedTeamIds.length === this.teams.length
+				}
+			},
+			isIndeterminate: {
+				value: function () {
+					return (selectedTeamIds.length !== 0 && selectedTeamIds.length !== this.teams.length)
+				}
+			},
+			toggleAll: {
+				value: function () {
+					if (selectedTeamIds.length === this.teams.length) {
+						selectedTeamIds = []
+					} else if (selectedTeamIds.length === 0 || selectedTeamIds.length > 0) { // warum?
+						selectedTeamIds = []
+						this.teams.forEach(function (team) {
+							selectedTeamIds.push(team.id)
+						})
+					}
+				}
+			},
+			toggle: {
+				value: function (id) {
+					var index = selectedTeamIds.indexOf(id)
+					if (index > -1) {
+						selectedTeamIds.splice(index, 1)
+					} else {
+						selectedTeamIds.push(id)
+					}
+				}
+			},
+			selectTeam: {
+				value: function (teamId) {
+					var index = selectedTeamIds.indexOf(teamId)
+					if (index === -1)
+						selectedTeamIds.push(teamId)
+				}
+			},
+			unselectTeam: {
+				value: function (teamId) {
+					var index = selectedTeamIds.indexOf(teamId)
+					if (index > -1)
+						selectedTeamIds.splice(index, 1)
+				}
+			},
+			checkTeamIsSelected: {
+				value: function (id) {
+					return selectedTeamIds.indexOf(id) > -1
+				}
+			},
+		}
+
+		Object.defineProperties(this, props)
+	}
+
+	function Team(id, name, site) {
+		var checked = false
+		var props = {
+			id: { value: id },
+			name: { value: name },
+			site: { value: site },
+			index: { writable: true, value: -1 },
+			checked: {
+				get: function () { return checked },
+				set: function (value) {
+					checked = value
+					this.site.toggle(this)
+				}
+			}
+		}
+
+		Object.defineProperties(this, props)
+	}
+
+	function SlaveTeam(masterTeam, slaveSite) {
+		var props = {
+			m: { value: masterTeam },
+			site: { value: slaveSite },
+		}
+		Object.defineProperties(this, props)
+	}
+
+	function SlaveSite(masterSite) {
+		var selectedTeamIds = []
+		var props = {
+			m: { value: masterSite },
+			teams: { value: [] },
+			selectedTeamIds: { get: function () { return selectedTeamIds } },
+			collapsed: {
+				value: false, writable: true
+			},
+			toggle: {
+				value: function (id) {
+					var index = selectedTeamIds.indexOf(id)
+					if (index > -1) {
+						selectedTeamIds.splice(index, 1)
+					} else {
+						selectedTeamIds.push(id)
+					}
+				}
+			},
+			toggleAll: {
+				value: function () {
+					if (selectedTeamIds.length === this.teams.length) {
+						selectedTeamIds.splice(0)
+						this.teams.forEach(function (slaveTeam) {
+							this.m.unselectTeam(slaveTeam.m.id)
+						}, this)
+					} else {
+						selectedTeamIds.splice(0)
+						this.teams.forEach(function (slaveTeam) {
+							selectedTeamIds.push(slaveTeam.m.id)
+							this.m.selectTeam(slaveTeam.m.id)
+						}, this)
+					}
+				}
+			},
+			expand: {
+				value: function () {
+					this.collapsed = false
+				}
+			},
+			isChecked: {
+				value: function () { return selectedTeamIds.length === this.teams.length }
+			},
+			isIndeterminate: {
+				value: function () {
+					return (selectedTeamIds.length !== 0 && selectedTeamIds.length !== this.teams.length)
+				}
+			},
+			addTeam: {
+				value: function (slaveTeam) {
+					this.teams.push(slaveTeam)
+					if (this.m.checkTeamIsSelected(slaveTeam.m.id)) {
+						selectedTeamIds.push(slaveTeam.m.id)
+					}
+				}
+			},
+			updateSelectedTeamIds: {
+				value: function () {
+					selectedTeamIds.splice(0)
+					this.teams.forEach(function (slaveTeam) {
+						var id = slaveTeam.m.id
+						if (this.m.checkTeamIsSelected(id))
+							selectedTeamIds.push(id)
+					}, this)
+				}
+			},
+		}
+		Object.defineProperties(this, props)
+	}
+
+})(angular);

@@ -331,6 +331,21 @@
 
 		vm.toggles = teamsToggles.all();
 
+		vm.scheduleDate = $stateParams.selectedDate || new Date();
+
+		Object.defineProperty(this, 'selectedTeamIds', { value: [] });
+
+		if (angular.isArray($stateParams.selectedTeamIds)) {
+			replaceArrayValues($stateParams.selectedTeamIds, vm.selectedTeamIds);
+		}
+
+		vm.searchOptions = {
+			keyword: $stateParams.keyword || '',
+			searchKeywordChanged: false,
+			focusingSearch: false
+		};
+		vm.selectedFavorite = $stateParams.do? $stateParams.selectedFavorite: null;
+
 		vm.validateWarningEnabled = false;
 
 		vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
@@ -343,8 +358,7 @@
 		vm.searchEnabled = $state.current.name !== 'teams.for';
 
 
-		vm.onSelectedTeamsChanged = function (teams) {
-			vm.selectedTeamIds = teams;
+		vm.onSelectedTeamsChanged = function () {
 			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 			personSelectionSvc.clearPersonInfo();
 			vm.searchOptions.focusingSearch = true;
@@ -353,7 +367,7 @@
 
 		vm.applyFavorite = function (currentFavorite) {
 			vm.selectedFavorite = currentFavorite;
-			vm.selectedTeamIds = currentFavorite.TeamIds;
+			replaceArrayValues(currentFavorite.TeamIds, vm.selectedTeamIds);
 			vm.searchOptions.keyword = currentFavorite.SearchTerm;
 			vm.resetSchedulePage();
 		};
@@ -409,11 +423,11 @@
 
 			if (!$stateParams.do) {
 				if (defaultFavoriteSearch) {
-					vm.selectedTeamIds = defaultFavoriteSearch.TeamIds;
+					replaceArrayValues(defaultFavoriteSearch.TeamIds, vm.selectedTeamIds);
 					vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
 					vm.selectedFavorite = defaultFavoriteSearch;
 				} else if (loggedonUsersTeamId && vm.selectedTeamIds.length === 0) {
-					vm.selectedTeamIds = [loggedonUsersTeamId];
+					replaceArrayValues([loggedonUsersTeamId], vm.selectedTeamIds);
 				}
 			}
 
@@ -432,5 +446,10 @@
 				.replace('{3}', '<a href="../Anywhere#teamschedule">' + $translate.instant('TeamSchedule') + '</a>');
 			NoticeService.info(message, null, true);
 		}
+	}
+
+	function replaceArrayValues(from, to) {
+		to.splice(0);
+		from.forEach(function (x) { to.push(x); });
 	}
 } ());

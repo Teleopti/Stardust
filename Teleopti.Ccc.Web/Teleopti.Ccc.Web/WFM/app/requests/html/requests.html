@@ -15,10 +15,10 @@
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
 			<organization-picker ng-if="vm.businessHierarchyToggleEnabled"
-				async-datasource="vm.sitesAndTeamsAsync()"
+				datasource="vm.sitesAndTeamsAsync()"
 				on-open="vm.agentSearchOptions.focusingSearch = false"
-				on-pick="vm.changeSelectedTeams(teams)"
-				preselected-team-ids="vm.selectedTeamIds"
+				on-close="vm.changeSelectedTeams()"
+				selected-team-ids="vm.selectedTeamIds"
 				class="organization-picker-container"></organization-picker>
 
 			<div class="people-search-container"

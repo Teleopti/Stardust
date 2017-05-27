@@ -37,7 +37,9 @@
 		var periodForAbsenceRequest, periodForShiftTradeRequest;
 		var absenceRequestTabIndex = 0;
 		var shiftTradeRequestTabIndex = 1;
-		vm.selectedTeamIds = [];
+
+		Object.defineProperty(this, 'selectedTeamIds', { value: [] });
+
 		var loggedonUsersTeamId = $q.defer();
 		if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
 			loggedonUsersTeamId.resolve(null);
@@ -59,7 +61,8 @@
 				vm.hasFavoriteSearchPermission = response.data;
 			}))
 			.then(loggedonUsersTeamId.promise.then(function (defaultTeam) {
-				vm.selectedTeamIds = (angular.isString(defaultTeam) && defaultTeam.length > 0) ? [defaultTeam] : [];
+				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
+					replaceArrayValues([defaultTeam], vm.selectedTeamIds);
 				if(vm.businessHierarchyToggleEnabled && (!vm.saveFavoriteSearchesToggleEnabled || !vm.hasFavoriteSearchPermission)){
 					$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword});
 				}
@@ -74,14 +77,13 @@
 			}
 		}];
 
-		vm.changeSelectedTeams = function (teams) {
-			vm.selectedTeamIds = teams;
+		vm.changeSelectedTeams = function () {
 			vm.agentSearchOptions.focusingSearch = true;
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 		};
 
 		vm.applyFavorite = function (currentFavorite) {
-			vm.selectedTeamIds = currentFavorite.TeamIds;
+			replaceArrayValues(currentFavorite.TeamIds, vm.selectedTeamIds);
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
 
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
@@ -137,7 +139,7 @@
 
 			vm.onFavoriteSearchInitDefer.promise.then(function(defaultSearch) {
 				if (defaultSearch) {
-					vm.selectedTeamIds = defaultSearch.TeamIds;
+					replaceArrayValues(defaultSearch.TeamIds, vm.selectedTeamIds);
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 				}
 				if(vm.saveFavoriteSearchesToggleEnabled && vm.hasFavoriteSearchPermission){
@@ -278,5 +280,10 @@
 				vm.agentSearchOptions.focusingSearch = false;
 			});
 		});
+	}
+
+	function replaceArrayValues(from, to) {
+		to.splice(0);
+		from.forEach(function (x) { to.push(x); });
 	}
 })();

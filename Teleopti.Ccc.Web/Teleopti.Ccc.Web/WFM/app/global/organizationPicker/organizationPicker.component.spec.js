@@ -1,175 +1,213 @@
-﻿describe('Organization Picker Component',
-	function() {
-		'use strict';
+﻿describe('<organization-picker>', function() {
+	var attachedElements = [];
+	var $componentController, $q, $compile, $rootScope, $document, $material;
 
-		var $componentController, $q, $compile, $rootScope, $document;
+	beforeEach(function () {
+		module('wfm.templates', 'wfm.organizationPicker', 'ngMaterial', 'ngMaterial-mock');
 
-		beforeEach(module('wfm.templates', 'wfm.organizationPicker', 'ngMaterial'));
-
-		beforeEach(inject(function(_$componentController_,
-			_$q_,
-			_$rootScope_,
-			_$compile_,
-			_$document_) {
-			$componentController = _$componentController_;
-			$q = _$q_;
-			$rootScope = _$rootScope_;
-			$compile = _$compile_;
-			$document = _$document_;
-		}));
-
-		it('should populate hierachy list', function () {
-			var bindings = {
-				asyncDatasource: fakeDatasource,
-				onOpen: function () { },
-				onPick: angular.noop
-			};
-
-			var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
-			ctrl.$onInit();
-
-			expect(ctrl.groupList.length).toEqual(2);
-			expect(ctrl.groupList[0].id).toEqual('site1');
-			expect(ctrl.groupList[1].id).toEqual('site2');
-			expect(ctrl.groupList[0].teams.length).toEqual(1);
-			expect(ctrl.groupList[1].teams.length).toEqual(2);
+		inject(function($injector) {
+			$componentController = $injector.get('$componentController');
+			$q = $injector.get('$q');
+			$compile = $injector.get('$compile');
+			$rootScope = $injector.get('$rootScope');
+			$document = $injector.get('$document');
+			$material = $injector.get('$material');
 		});
+	});
 
-		it('should extract the right abbreviation of the selected time zone', function () {
-			var bindings = {
-				asyncDatasource: fakeDatasource,
-				onOpen: function() {},
-				onPick: angular.noop
-			}
+	afterEach(function () {
+		var body = $document[0].body;
+		var children = body.querySelectorAll('.md-select-menu-container');
+		for (var i = 0; i < children.length; i++) {
+			angular.element(children[i]).remove();
+		}
+	});
 
-			var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
-			ctrl.$onInit();
+	afterEach(function () {
+		attachedElements.forEach(function (element) {
+			var scope = element.scope();
 
-			ctrl.onPickerOpen();
-			ctrl.selectedTeamIds = ['team1'];
-			var displayName = ctrl.formatSelectedDisplayName();
-			expect(displayName).toEqual("team1");
-
-			ctrl.selectedTeamIds = [];
-			displayName = ctrl.formatSelectedDisplayName();
-			expect(displayName).toEqual("Organization");
+			scope && scope.$destroy();
+			element.remove();
 		});
+		attachedElements = [];
 
-		it("Should trigger onPick when selection done",
-			function() {
-				var selectedTeams = [];
-				var bindings = {
-					asyncDatasource: fakeDatasource,
-					onOpen: function() {},
-					onPick: function(input) {
-						selectedTeams = input.teams;
-					}
-				}
+		$document.find('md-select-menu').remove();
+		$document.find('md-backdrop').remove();
+	});
 
-				var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
-				ctrl.$onInit();
+	function setupPicker(attrs, scope, optCompileOpts) {
+		var el;
+		var template = '' +
+			'<organization-picker ' + (attrs || '') + '>' +
+			'</organization-picker>';
 
-				ctrl.onPickerOpen();
-				ctrl.selectedTeamIds = ['team1', 'team2'];
-				ctrl.onPickerClose();
-				expect(selectedTeams.length).toEqual(2);
-			});
+		el = $compile(template)(scope || $rootScope);
+		$rootScope.$digest();
+		attachedElements.push(el);
 
-		it("should calculate selected team ids number correctly",
-			function() {
-				var selectedTeams = [];
-				var bindings = {
-					asyncDatasource: fakeDatasource,
-					onOpen: function() {},
-					onPick: function(input) {
-						selectedTeams = input.teams;
-					}
-				}
+		return el;
+	}
 
-				var ctrl = $componentController('organizationPicker', { $attrs: {} }, bindings);
-				ctrl.$onInit();
+	function openPicker(picker) {
+		picker.find('md-select-value').triggerHandler('click');
+		$material.flushInterimElement();
+	}
 
-				ctrl.onPickerOpen();
-				ctrl.selectedTeamIds = ['team1', 'team2'];
-				ctrl.onPickerClose();
-				expect(selectedTeams.length).toEqual(2);
-			});
+	function closePicker(picker) {
+		try {
+			picker.find('div').scope().$ctrl.menuRef.close();
+		} catch (e) {
+			throw e;
+		}
+		$material.flushInterimElement();
+	}
 
-		it("should be the single mode",
-			function() {
-				var scope = $rootScope.$new();
-				var selectedTeams = [];
-				var html = angular.element('<organization-picker async-datasource="datasource()" on-pick="selectTeams(teams)" single></organization-picker>');
-				scope.datasource = fakeDatasource;
-				scope.selectTeams = function(teams) {
-					selectedTeams = teams;
-				}
-				var container = $compile(html)(scope);
-				scope.$digest();
+	function clickSite(index) {
+		expectPickerOpen();
 
-				var select = container.find("md-select");
+		var openPanel = $document.find('orgpicker-menu');
+		var site = openPanel[0].querySelectorAll('.site')[index];
+		if (!site) throw Error('Could not find site');
 
-				select.triggerHandler("click");
+		var siteCheckbox = site.querySelector('.wfm-checkbox input[type=checkbox]');
+		siteCheckbox.click();
+	}
 
-				var openMenu = container.find("md-select-menu");
-				var options = select.find("md-option");
-				var opt = options[0].querySelector("div.md-text");
-				angular.element(openMenu).triggerHandler({
-					type: 'click',
-					target: angular.element(opt),
-					currentTarget: openMenu[0]
-				});
 
-				var ctrl = container.isolateScope().$ctrl;
-				ctrl.onPickerClose();
 
-				expect(selectedTeams).toEqual(angular.element(opt).text());
+	function expectPickerOpen() {
+		var panel = angular.element($document[0].querySelector('.md-panel-outer-wrapper'));
 
-				var opt2 = options[1].querySelector("div.md-text");
-				angular.element(openMenu).triggerHandler({
-					type: 'click',
-					target: angular.element(opt2),
-					currentTarget: openMenu[0]
-				});
-				ctrl.onPickerClose();
-				expect(selectedTeams).toEqual(angular.element(opt2).text());
+		if (!(panel.hasClass('md-panel-is-showing'))) {
+			throw Error('Expected picker panel to be open');
+		}
+	}
 
-			});
+	it('should populate hierachy list correctly', function () {
+		$rootScope.datasource = fakeDatasource;
+		var picker = setupPicker('datasource="datasource()"');
+		var target;
 
-		var data = {
-			Children: [
-				{
-					Id: 'site1',
-					Name: 'site1',
-					Children: [
-						{
-							Id: 'team1',
-							Name: 'team1'
-						}
-					]
-				},
-				{
-					Id: "site2",
-					Name: 'site2',
-					Children: [
-						{
-							Id: 'team2',
-							Name: 'team2'
-						},
-						{
-							Id: 'team3',
-							Name: 'team3'
-						}
-					]
-				}
-			],
-			logonUserTeamId: 'logonUserTeamId'
-		};
-
-		function fakeDatasource() {
-			return {
-				then: function (f) { f(data); },
-			};
+		try {
+			target = picker.find('div').scope().$ctrl.groupList;
+		} catch (e) {
+			throw e;
 		}
 
+		expect(target.length).toEqual(2);
+		expect(target[0].id).toEqual('site1');
+		expect(target[1].id).toEqual('site2');
+		expect(target[0].teams.length).toEqual(1);
+		expect(target[1].teams.length).toEqual(2);
 	});
+
+	it('should have a default function for generating the selected text', function () {
+		var target;
+		$rootScope.datasource = fakeDatasource;
+		var picker = setupPicker('datasource="datasource()"');
+
+		target = picker[0].querySelector('.selected-text');
+		expect(target.innerHTML).toBe('SelectOrganization');
+
+		openPicker(picker);
+		clickSite(0);
+		expect(target.innerHTML).toBe('team1');
+		clickSite(1);
+		expect(target.innerHTML).toBe('SeveralTeamsSelected');
+	});
+
+	it('should trigger on-close when the picker is closed', function() {
+		var changed = false;
+		$rootScope.onClose = function() { changed = true; };
+		$rootScope.datasource = fakeDatasource;
+		$rootScope.selectedTeamIds = [];
+
+		var picker = setupPicker('datasource="datasource()" on-close="onClose()" selected-team-ids="selectedTeamIds"');
+		expect(changed).toBe(false);
+
+		openPicker(picker);
+		clickSite(1);
+		closePicker(picker);
+		expect($rootScope.selectedTeamIds.length).toBe(2);
+		expect(changed).toBe(true);
+	});
+
+	it('should synchronise selected team IDs', function() {
+		$rootScope.teamIds = [];
+		$rootScope.fakeDatasource = fakeDatasource;
+		var picker = setupPicker('selected-team-ids="teamIds" datasource="fakeDatasource()"');
+
+		picker.find('md-select-value').triggerHandler('click');
+		$material.flushInterimElement();
+		clickSite(0);
+
+		expect($rootScope.teamIds.length).toEqual(1);
+		expect($rootScope.teamIds[0]).toEqual('team1');
+	});
+
+	it('should support the single mode', function() {
+		$rootScope.teamIds = [];
+		$rootScope.datasource = fakeDatasource;
+		var p = setupPicker('single selected-team-ids="teamIds" datasource="datasource()"');
+
+		openPicker(p);
+		toggleSite(0);
+		clickTeam(0);
+		expect($rootScope.teamIds.length).toBe(1);
+		expect($rootScope.teamIds[0]).toBe('team1');
+
+		openPicker(p);
+		toggleSite(0);
+		toggleSite(1);
+		clickTeam(0);
+		expect($rootScope.teamIds.length).toBe(1);
+		expect($rootScope.teamIds[0]).toBe('team2');
+	});
+
+	function toggleSite(index) {
+		expectPickerOpen();
+
+		var openPanel = $document.find('orgpicker-menu');
+		var site = openPanel[0].querySelectorAll('.site')[index];
+
+		if (!site) throw Error('Could not find site');
+		site.click();
+	}
+
+	function clickTeam(index) {
+		expectPickerOpen();
+
+		var openPanel = $document.find('orgpicker-menu');
+		var team = openPanel[0].querySelectorAll('.team')[index];
+
+		if (!team) throw Error('Could not find team ' + index);
+
+		team.click();
+	}
+
+	var data = {
+		Children: [
+			{
+				Id: 'site1',
+				Name: 'site1',
+				Children: [
+					{ Id: 'team1', Name: 'team1' }
+				]
+			},
+			{
+				Id: 'site2',
+				Name: 'site2',
+				Children: [
+					{ Id: 'team2', Name: 'team2' },
+					{ Id: 'team3', Name: 'team3' }
+				]
+			}
+		],
+		logonUserTeamId: 'logonUserTeamId'
+	};
+
+	function fakeDatasource() {
+		return data;
+	}
+});

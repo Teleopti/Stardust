@@ -21,7 +21,13 @@
 		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
-		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
+
+		Object.defineProperty(this, 'selectedTeamIds', { value: [] });
+
+		if (angular.isArray($stateParams.selectedTeamIds)) {
+			replaceArrayValues($stateParams.selectedTeamIds, vm.selectedTeamIds);
+		}
+
 		vm.selectedFavorite = $stateParams.do ? $stateParams.selectedFavorite : null;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
@@ -75,7 +81,6 @@
 		};
 
 		vm.onSelectedTeamsChanged = function(teams) {
-			vm.selectedTeamIds = teams;
 			$stateParams.selectedTeamIds = vm.selectedTeamIds;
 			vm.searchOptions.focusingSearch = true;
 			vm.selectedFavorite = false;
@@ -91,7 +96,7 @@
 
 		vm.applyFavorite = function (currentFavorite) {
 			vm.selectedFavorite = currentFavorite;
-			vm.selectedTeamIds = currentFavorite.TeamIds;
+			replaceArrayValues(currentFavorite.TeamIds, vm.selectedTeamIds);
 			vm.searchOptions.keyword = currentFavorite.SearchTerm;
 			vm.resetSchedulePage();
 		};
@@ -147,11 +152,11 @@
 
 			if (!$stateParams.do) {
 				if (defaultFavoriteSearch) {
-					vm.selectedTeamIds = defaultFavoriteSearch.TeamIds;
+					replaceArrayValues(defaultFavoriteSearch.TeamIds, vm.selectedTeamIds);
 					vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
 					vm.selectedFavorite = defaultFavoriteSearch;
 				} else if (loggedonUsersTeamId && vm.selectedTeamIds.length === 0) {
-					vm.selectedTeamIds = [loggedonUsersTeamId];
+					replaceArrayValues([loggedonUsersTeamId], vm.selectedTeamIds);
 				}
 			}
 
@@ -192,5 +197,10 @@
 			$scope.$evalAsync(vm.loadSchedules);
 		}
 
+	}
+
+	function replaceArrayValues(from, to) {
+		to.splice(0);
+		from.forEach(function (x) { to.push(x); });
 	}
 })()

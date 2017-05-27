@@ -6,6 +6,8 @@
 		this._translate = $translate;
 
 		this.fallbacks = {};
+		Object.defineProperty(this.fallbacks, 'team', { value: [] });
+
 		this.now = new Date();
 	}
 
@@ -26,10 +28,6 @@
 
 	Ctrl.prototype.gotoJobList = function () {
 		this.parent.page = '';
-	};
-
-	Ctrl.prototype.setTeam = function (teamId) {
-		this.fallbacks.team = teamId;
 	};
 
 	Ctrl.prototype.invalidFile = function () {

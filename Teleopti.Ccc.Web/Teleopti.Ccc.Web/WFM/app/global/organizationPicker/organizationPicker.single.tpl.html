@@ -1,20 +1,31 @@
-﻿
-<md-select ng-model="$ctrl.selectedTeamIds"
-		   md-on-close="$ctrl.onPickerClose()"
-		   md-on-open="$ctrl.onPickerOpen()"
-		   md-selected-text="$ctrl.formatSelectedDisplayName()"
-		   data-md-container-class="organization-picker-menu">
-	<md-select-header class="picker-select-header">
-		<input ng-model="$ctrl.searchTerm" type="search" placeholder="{{'SearchAnOrganization' | translate}}" class="picker-searchbox md-text" ng-keydown="$ctrl.onSearchOrganization($event)">
-	</md-select-header>
-	<md-optgroup ng-repeat="site in $ctrl.groupList | filter: $ctrl.searchTerm">
-		<div class="group-header pointer" ng-class="{'site-checked':$ctrl.hasTeamsSelected(site)}">
-			<div class="title" style="margin-left: 10px; padding: 5px 0;">{{site.name}}</div>
-			<span class="dropdown-icon" ng-hide="site.teams.length == 0" ng-click="$ctrl.showTeamListOfSite(site, $event)">
-				<i class="mdi" ng-class="site.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
-			</span>
-		</div>
-		<md-option ng-class="{'must-hide': !site.expanded }" ng-value="team.id" ng-click="$ctrl.setCurrentSiteValue(site)" ng-repeat="team in site.teams | filter: $ctrl.processSearchTermFilter(site)">{{team.name}}</md-option>
-	</md-optgroup>
-
-</md-select>
+﻿<div class="orgpicker-wrapper">
+	<md-select-value class="md-select-value" ng-click="$ctrl.openMenu($event)" ng-class="{'none-selected': $ctrl.selectedTeamIds.length == 0}">
+		<span class="selected-text">{{$ctrl.selectedText($ctrl.selectedTeamIds.length)}}</span>
+		<span class="md-select-icon" aria-hidden="true"></span>
+	</md-select-value>
+	<div class="_off-screen">
+		<orgpicker-menu class="orgpicker-menu single-mode">
+			<div class="header">
+				<button type="button" title="Collapse All" ng-click="$ctrl.collapseAll()" class="context-menu card-context collapse-all"><i class="mdi mdi-chevron-double-up"></i></button>
+				<i class="mdi mdi-magnify"></i>
+				<input type="text" class="search md-text" placeholder="{{ 'Search' |translate}}" ng-model="$ctrl.searchText" />
+			</div>
+			<md-virtual-repeat-container class="virtual-repeat" md-top-index="$ctrl.topIndex">
+				<div md-virtual-repeat="o in $ctrl.orgsInView" class="repeated-item" flex>
+					<div ng-click="$ctrl.collapseSite(o)" class="site md-button-toggle md-button md-ink-ripple" ng-if=" o.m.isSite " ng-class="{'contains-selected-team': o.isChecked() || o.isIndeterminate()}">
+						<div flex layout="row">
+							<span ng-bind-html="o.m.name | searchFilter:$ctrl.searchText"></span>
+							<span flex></span>
+							<span class="md-toggle-icon">
+								<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
+							</span>
+						</div>
+					</div>
+					<button type="button" ng-if=" !o.m.isSite " ng-click="$ctrl.toggleTeam(o)" class="team md-button md-ink-ripple" ng-class="{'selected': o.m.site.checkTeamIsSelected(o.m.id)}">
+						<span ng-bind-html="o.m.name | searchFilter:$ctrl.searchText"></span>
+					</button>
+				</div>
+			</md-virtual-repeat-container>
+		</orgpicker-menu>
+	</div>
+</div>
