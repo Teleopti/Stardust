@@ -202,6 +202,7 @@
 
 		QRCodeForMobileApps_42695,
 		ConfigQRCodeURLForMobileApps_43224,
+		MobileApps_EnableMobileNotifications_44476,
 
 		ETL_EventbasedDate_39562,
 		ReadModel_ToHangfire_39147,
