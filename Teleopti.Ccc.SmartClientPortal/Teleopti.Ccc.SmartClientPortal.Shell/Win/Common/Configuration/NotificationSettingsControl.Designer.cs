@@ -43,6 +43,9 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.textBoxEmailFrom = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.tableLayoutSubHeaderMobileNotification = new System.Windows.Forms.TableLayoutPanel();
+			this.labelSubHeaderMobileNotificationSettings = new System.Windows.Forms.Label();
+			this.checkBoxEnableMobileNotification = new System.Windows.Forms.CheckBox();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -56,6 +59,7 @@
 			this.tableLayoutPanelSubHeader3.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxEmailFrom)).BeginInit();
+			this.tableLayoutSubHeaderMobileNotification.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
@@ -72,22 +76,22 @@
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader2, 0, 0);
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader3, 0, 5);
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanel1, 0, 6);
+			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutSubHeaderMobileNotification, 0, 7);
+			this.tableLayoutPanelBody.Controls.Add(this.checkBoxEnableMobileNotification, 0, 8);
 			this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
 			this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
-			this.tableLayoutPanelBody.RowCount = 8;
+			this.tableLayoutPanelBody.RowCount = 10;
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelBody.Size = new System.Drawing.Size(744, 461);
 			this.tableLayoutPanelBody.TabIndex = 55;
 			// 
@@ -296,6 +300,46 @@
 			this.autoLabel1.Text = "xxSendEmailFromColon";
 			this.autoLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// tableLayoutSubHeaderMobileNotification
+			// 
+			this.tableLayoutSubHeaderMobileNotification.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.tableLayoutSubHeaderMobileNotification.ColumnCount = 1;
+			this.tableLayoutSubHeaderMobileNotification.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutSubHeaderMobileNotification.Controls.Add(this.labelSubHeaderMobileNotificationSettings, 0, 0);
+			this.tableLayoutSubHeaderMobileNotification.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutSubHeaderMobileNotification.Location = new System.Drawing.Point(3, 263);
+			this.tableLayoutSubHeaderMobileNotification.Name = "tableLayoutSubHeaderMobileNotification";
+			this.tableLayoutSubHeaderMobileNotification.RowCount = 1;
+			this.tableLayoutSubHeaderMobileNotification.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutSubHeaderMobileNotification.Size = new System.Drawing.Size(738, 34);
+			this.tableLayoutSubHeaderMobileNotification.TabIndex = 20;
+			// 
+			// labelSubHeaderMobileNotificationSettings
+			// 
+			this.labelSubHeaderMobileNotificationSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelSubHeaderMobileNotificationSettings.AutoSize = true;
+			this.labelSubHeaderMobileNotificationSettings.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelSubHeaderMobileNotificationSettings.ForeColor = System.Drawing.Color.GhostWhite;
+			this.labelSubHeaderMobileNotificationSettings.Location = new System.Drawing.Point(3, 7);
+			this.labelSubHeaderMobileNotificationSettings.Name = "labelSubHeaderMobileNotificationSettings";
+			this.labelSubHeaderMobileNotificationSettings.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
+			this.labelSubHeaderMobileNotificationSettings.Size = new System.Drawing.Size(189, 20);
+			this.labelSubHeaderMobileNotificationSettings.TabIndex = 2;
+			this.labelSubHeaderMobileNotificationSettings.Text = "xxMobileNotificationSettings";
+			this.labelSubHeaderMobileNotificationSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// checkBoxEnableMobileNotification
+			// 
+			this.checkBoxEnableMobileNotification.AutoSize = true;
+			this.checkBoxEnableMobileNotification.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.checkBoxEnableMobileNotification.Location = new System.Drawing.Point(6, 303);
+			this.checkBoxEnableMobileNotification.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
+			this.checkBoxEnableMobileNotification.Name = "checkBoxEnableMobileNotification";
+			this.checkBoxEnableMobileNotification.Size = new System.Drawing.Size(735, 29);
+			this.checkBoxEnableMobileNotification.TabIndex = 21;
+			this.checkBoxEnableMobileNotification.Text = "xxEnableMobileNotifications";
+			this.checkBoxEnableMobileNotification.UseVisualStyleBackColor = true;
+			// 
 			// gradientPanelHeader
 			// 
 			this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -351,6 +395,7 @@
 			this.Name = "NotificationSettingsControl";
 			this.Size = new System.Drawing.Size(744, 523);
 			this.tableLayoutPanelBody.ResumeLayout(false);
+			this.tableLayoutPanelBody.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvEmail)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvSMS)).EndInit();
 			this.tableLayoutPanelSubHeader1.ResumeLayout(false);
@@ -365,6 +410,8 @@
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxEmailFrom)).EndInit();
+			this.tableLayoutSubHeaderMobileNotification.ResumeLayout(false);
+			this.tableLayoutSubHeaderMobileNotification.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
 			this.gradientPanelHeader.ResumeLayout(false);
 			this.tableLayoutPanelHeader.ResumeLayout(false);
@@ -393,6 +440,8 @@
 		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxEmailFrom;
 		private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvEmail;
 		private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvSMS;
-
-    }
+		private System.Windows.Forms.TableLayoutPanel tableLayoutSubHeaderMobileNotification;
+		private System.Windows.Forms.Label labelSubHeaderMobileNotificationSettings;
+		private System.Windows.Forms.CheckBox checkBoxEnableMobileNotification;
+	}
 }

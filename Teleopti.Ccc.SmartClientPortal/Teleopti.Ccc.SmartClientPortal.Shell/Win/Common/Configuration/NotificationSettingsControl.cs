@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.UserTexts;
@@ -15,6 +17,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	public partial class NotificationSettingsControl : BaseUserControl, ISettingPage
 	{
+		private readonly IToggleManager _toggleManager;
 		private List<IOptionalColumn> _optionalColumnList;
 		public OptionalColumnRepository Repository { get; private set; }
 		public IUnitOfWork UnitOfWork { get; private set; }
@@ -25,9 +28,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			get { return comboBoxOptionalColumns.SelectedItem as IOptionalColumn; }
 		}
 
-		public NotificationSettingsControl()
+		public NotificationSettingsControl(IToggleManager toggleManager)
 		{
+			_toggleManager = toggleManager;
 			InitializeComponent();
+			if (!_toggleManager.IsEnabled(Toggles.MobileApps_EnableMobileNotifications_44476))
+			{
+				tableLayoutSubHeaderMobileNotification.Hide();
+				checkBoxEnableMobileNotification.Hide();
+				labelSubHeaderMobileNotificationSettings.Hide();
+			}
 		}
 
 		private void setColors()
@@ -41,12 +51,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			tableLayoutPanelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			tableLayoutPanelSubHeader3.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			tableLayoutSubHeaderMobileNotification.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			labelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			labelSubHeader2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelSubHeader3.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			labelSubHeader3.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelSubHeaderMobileNotificationSettings.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			labelSubHeaderMobileNotificationSettings.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			
 		}
 
 		private void loadNotificationSettings()
@@ -213,5 +227,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				return false;
 			}
 		}
+
 	}
 }

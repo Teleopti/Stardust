@@ -16116,4 +16116,10 @@ Do you want to participate?</value>
     <value>Guide for Teleopti WFM App</value>
     <comment>Guide for Teleopti WFM App</comment>
   </data>
+  <data name="EnableMobileNotifications" xml:space="preserve">
+    <value>Enable mobile notifications</value>
+  </data>
+  <data name="MobileNotificationSettings" xml:space="preserve">
+    <value>Mobile Notification Settings</value>
+  </data>
 </root>

@@ -10235,6 +10235,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable mobile notifications.
+        /// </summary>
+        public static string EnableMobileNotifications {
+            get {
+                return ResourceManager.GetString("EnableMobileNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Reporting:.
         /// </summary>
         public static string EnableReportingColon {
@@ -17173,6 +17182,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Mobile {
             get {
                 return ResourceManager.GetString("Mobile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mobile Notification Settings.
+        /// </summary>
+        public static string MobileNotificationSettings {
+            get {
+                return ResourceManager.GetString("MobileNotificationSettings", resourceCulture);
             }
         }
         

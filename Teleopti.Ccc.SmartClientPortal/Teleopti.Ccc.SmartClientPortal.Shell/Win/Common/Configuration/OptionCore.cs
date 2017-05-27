@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				if (!_toggleManager.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444))
 					allSupportedPages.Add(new SmsSettingsControl());
 				else
-					allSupportedPages.Add(new NotificationSettingsControl());
+					allSupportedPages.Add(new NotificationSettingsControl(_toggleManager));
 			}
 
 
