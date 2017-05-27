@@ -74,7 +74,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 							(_resolve.Resolve(handler) as dynamic).Subscribe(registrator);
 							var subscribedEvents = events.Where(x => registrator.SubscribesTo(x.GetType())).ToArray();
 							return subscribedEvents
-								.Batch(_config.ReadValue("EventMaxPackageSize", 250))// 250 default is just number, we saw no upper limit, but no performance difference between 1000 and 250 either.
+								// 250 default is just a number, 
+								// we saw no upper limit, 
+								// but no performance difference between 1000 and 250 either.
+								.Batch(_config.ReadValue("EventMaxPackageSize", 250))
 								.Select(x => new
 								{
 									events = subscribedEvents,
