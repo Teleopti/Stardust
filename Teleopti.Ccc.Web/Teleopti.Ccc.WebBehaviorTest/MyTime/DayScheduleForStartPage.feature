@@ -94,6 +94,7 @@ Scenario: Should view schedule for the day before
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should view today schedule from other day
 	Given I am american
+	And I am located in Stockholm
 	And I have a shift with
 	| Field          | Value            |
 	| StartTime      | 09:00 |
