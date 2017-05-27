@@ -82,6 +82,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 					ret.MinStart = personSchedule.Schedule.MinStart;
 					ret.ScheduleLayers = _layerMapper.Map(dayOffProjection);
 				}
+				if (!teamScheduleReadModel.Shift.Projection.Any() && !ret.IsDayOff)
+				{
+					ret.IsNotScheduled = true;
+				}
 			}
 			return ret;
 		}

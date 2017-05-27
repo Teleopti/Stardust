@@ -642,6 +642,24 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			Assert.AreEqual(result.IsNotScheduled, true);
 		}
 
+		[Test]
+		public void ShouldSetIsNotScheduledToTrueWhenAllActivitiesAreDeletedOnThatScheduleDayInTeamScheduleViewModel()
+		{
+			const string firstName = "Sherlock";
+			const string lastName = "Holmes";
+
+			var baseDate = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid(firstName, lastName);
+			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(baseDate));
+			assignment1Person1.AddActivity(ActivityFactory.CreateActivity("Phone", Color.Blue), new DateTimePeriod(baseDate.AddHours(8), baseDate.AddHours(16)));
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(baseDate), person, scenario);
+
+			scheduleDay.DeleteMainShift();
+			var result = target.MakeScheduleReadModel(person, scheduleDay, false);
+
+			Assert.AreEqual(result.IsNotScheduled, true);
+		}
+
 		private double getTimeSpanInMinutesFromPeriod(DateTimePeriod period)
 		{
 			return (period.EndDateTime - period.StartDateTime).TotalMinutes;

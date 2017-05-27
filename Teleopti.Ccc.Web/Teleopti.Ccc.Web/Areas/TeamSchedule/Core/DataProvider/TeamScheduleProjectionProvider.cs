@@ -209,6 +209,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var dayOff = scheduleDay.PersonAssignment() != null ? scheduleDay.PersonAssignment().DayOff() : null;
 				ret.DayOffName = dayOff != null ? dayOff.Description.Name : "";
 			}
+			if (!projection.Any() && !ret.IsDayOff)
+			{
+				ret.IsNotScheduled = true;
+			}
 
 			var projectionPeriod = projection.Period();
 			if (projectionPeriod != null)
