@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
-
 			budgetDayRepository.Stub(x => x.Find(_scenario, null, period)).Return(new List<IBudgetDay>());
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
@@ -66,7 +65,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -96,7 +94,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(new DateOnly(2001, 3, 1), new DateOnly(2001, 3, 8));
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -130,7 +127,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(startDate, endDate);
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -180,9 +176,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 					new Tuple<DateOnlyPeriod, IBudgetGroup>(period2, budgetGroup2)
 				});
 
-			budgetDayRepo.Expect(b => b.Find(_scenario, budgetGroup1, period1)).Return(new List<IBudgetDay> { budgetDay1 });
-			budgetDayRepo.Expect(b => b.Find(_scenario, budgetGroup2, period2)).Return(new List<IBudgetDay> { budgetDay2 });
-			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository, extractBudgetGroupPeriods, _now);
+			budgetDayRepo.Expect(b => b.Find(_scenario, budgetGroup1, period1)).Return(new List<IBudgetDay> {budgetDay1});
+			budgetDayRepo.Expect(b => b.Find(_scenario, budgetGroup2, period2)).Return(new List<IBudgetDay> {budgetDay2});
+			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository, extractBudgetGroupPeriods,
+				_now);
 
 			var result = target.GetAllowanceForPeriod(period).ToList();
 
@@ -200,8 +197,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
 			var budgetDayRepo = MockRepository.GenerateMock<IBudgetDayRepository>();
 
-			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(),
-				_now);
+			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository,
+				new ExtractBudgetGroupPeriods(), _now);
 
 			var result = target.GetAllowanceForPeriod(period).ToList();
 			verifyThatAllDaysHasZeroAllowance(result);
@@ -214,11 +211,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
 			var budgetDayRepo = MockRepository.GenerateMock<IBudgetDayRepository>();
 
-			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(),
-				_now);
+			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository,
+				new ExtractBudgetGroupPeriods(), _now);
 
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			verifyThatAllDaysHasZeroAllowance(result);
 			verifyThatAllDaysHasZeroAllowance(result);
 			verifyAvailability(result, false);
 		}
@@ -230,7 +226,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -240,7 +235,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			_user.AddPersonPeriod(personPeriod);
 			budgetDayRepository.Expect(x => x.Find(_scenario, budgetGroup, period))
-				.Return(new List<IBudgetDay> { budgetDayWithNegativeValue });
+				.Return(new List<IBudgetDay> {budgetDayWithNegativeValue});
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
@@ -256,7 +251,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -289,15 +283,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Period = _alwaysOpenPeriod
 			});
 
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
-			workflowControlSet.AbsenceRequestOpenPeriods.First().AbsenceRequestProcess = new DenyAbsenceRequest();
+			var openPeriod = workflowControlSet.AbsenceRequestOpenPeriods.First();
+			openPeriod.StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+			openPeriod.AbsenceRequestProcess = new DenyAbsenceRequest();
 
 			_user.WorkflowControlSet = workflowControlSet;
 
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -330,14 +324,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Period = _alwaysOpenPeriod
 			});
 
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator =
+				new BudgetGroupAllowanceValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -369,14 +363,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Period = _alwaysOpenPeriod
 			});
 
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new StaffingThresholdValidator();
+			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator
+				= new StaffingThresholdValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -406,7 +400,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(4), DateOnly.Today.AddDays(4));
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -438,14 +431,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Period = _alwaysOpenPeriod
 			});
 
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
+			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator =
+				new BudgetGroupHeadCountValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -477,14 +470,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Period = _alwaysOpenPeriod
 			});
 
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new AbsenceRequestNoneValidator();
+			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator
+				= new AbsenceRequestNoneValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -512,7 +505,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-7), DateOnly.Today.AddDays(0));
-
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -556,7 +548,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Period = preferencePeriod
 			});
 
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator =
+				new BudgetGroupAllowanceValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 		}
@@ -590,8 +583,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Period = new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.Today.AddDays(7))
 			});
 
-			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
-			workflowControlSet.AbsenceRequestOpenPeriods[1].StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+			var openPeriods = workflowControlSet.AbsenceRequestOpenPeriods;
+			openPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
+			openPeriods[1].StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 		}
@@ -612,8 +606,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Period = new DateOnlyPeriod(DateOnly.Today.AddDays(-7), DateOnly.Today)
 			});
 
-			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
-			workflowControlSet.AbsenceRequestOpenPeriods[1].StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+			var openPeriods = workflowControlSet.AbsenceRequestOpenPeriods;
+			openPeriods[0].StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
+			openPeriods[1].StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 		}
