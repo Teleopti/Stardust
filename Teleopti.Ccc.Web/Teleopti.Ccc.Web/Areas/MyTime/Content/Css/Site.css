@@ -1712,7 +1712,7 @@ button.btn.absence-report-cancel{
 		border-radius: 0;
 	}
 	#Request-add-section span.input-group-btn button.btn{
-		padding: 9px 17px;
+		border:none;
 	}
 }
 
@@ -1734,19 +1734,22 @@ button.btn.absence-report-cancel{
 .bootstrap-timepicker-widget table td a{
 	padding: 5px 0;
 }
+.bootstrap-timepicker.request-time {
+	margin-top: 5px;
+}
+.right-align.bootstrap-timepicker-widget.dropdown-menu {
+	left: auto;
+	right: 0 !important;
+}
+.left-align.bootstrap-timepicker-widget.dropdown-menu {
+	right: auto;
+	left: 0 !important;
+}
 @media(max-width: 768px){
 	.bootstrap-timepicker-widget.dropdown-menu{
-		min-width: initial;
+		min-width: 130px;
 	}
-	.bootstrap-timepicker.request-time {
-		margin-top: 5px;
-	}
-	.right-align.bootstrap-timepicker-widget.dropdown-menu {
-		left: auto;
-		right: 0 !important;
-	}
-	.left-align.bootstrap-timepicker-widget.dropdown-menu {
-		right: auto;
-		left: 0 !important;
+	.bootstrap-timepicker .dropdown-menu {
+		width: initial;
 	}
 }
