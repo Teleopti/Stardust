@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			return id.Substring(0, id.IndexOf(delimiter, StringComparison.Ordinal));
 		}
 
-
 		public string RecurringId()
 		{
 			var hashedHandlerAndEvent = $"{HandlerTypeName}{delimiter}{Event.GetType().Name}".GenerateGuid().ToString("N");
