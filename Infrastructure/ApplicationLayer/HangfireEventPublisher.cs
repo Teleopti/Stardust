@@ -82,14 +82,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void StopPublishingForTenantsExcept(IEnumerable<string> excludedTenants)
 		{
-			var hashed = excludedTenants.Select(x => x.GenerateGuid().ToString("N")).ToList();
+			var prefixesToKeep = excludedTenants
+				.Select(HangfireEventJob.TenantPrefixForTenant)
+				.ToList();
+
 			foreach (var job in _client.GetRecurringJobIds())
 			{
-				var tenantHash = HangfireEventJob.TenantHashForRecurringId(job);
-				if (!string.IsNullOrWhiteSpace(tenantHash) && !hashed.Contains(tenantHash))
-				{
+				var prefix = HangfireEventJob.TenantPrefixForRecurringId(job);
+				if (string.IsNullOrWhiteSpace(prefix))
+					continue;
+				if (!prefixesToKeep.Contains(prefix))
 					_client.RemoveIfExists(job);
-				}
 			}
 		}
 
