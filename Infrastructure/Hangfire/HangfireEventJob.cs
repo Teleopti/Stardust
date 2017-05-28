@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public static string TenantPrefixForTenant(string tenant)
 		{
-			return tenant;
+			return tenant.GenerateGuid().ToString("N");
 		}
 
 		public static string TenantPrefixForRecurringId(string id)
@@ -31,14 +30,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public string RecurringId()
 		{
-			var hash = $"{Tenant}{delimiter}{HandlerTypeName}{delimiter}{Event.GetType().Name}".GetHashCode();
-			var displayFriendlyId = $"{Tenant}{delimiter}{Type.GetType(HandlerTypeName).Name}{delimiter}{Event.GetType().Name}{delimiter}{hash}";
+			var id = $"{Tenant}{delimiter}{HandlerTypeName}{delimiter}{Event.GetType().Name}";
 
-			var maxLength = 100 - "recurring-job:".Length;
-			if (displayFriendlyId.Length > maxLength)
-				displayFriendlyId = displayFriendlyId.Substring(displayFriendlyId.Length - maxLength, maxLength);
-
-			return displayFriendlyId;
+			var hashedHandlerAndEvent = $"{HandlerTypeName}{delimiter}{Event.GetType().Name}".GenerateGuid().ToString("N");
+			var hashedTenant = Tenant?.GenerateGuid().ToString("N") ?? "";
+			return $"{hashedTenant}{delimiter}{hashedHandlerAndEvent}";
 		}
 	}
 }

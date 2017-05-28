@@ -169,16 +169,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			JobClient.RecurringIds.Should().Have.Count.EqualTo(1);
 		}
 
-		[Test]
-		public void ShouldAssignIdNoLongerThanMaxLength()
-		{
-			var maxLength = 100 - "recurring-job:".Length;
-
-			Target.PublishHourly(new LongNameHandlerTestEvent());
-
-			JobClient.RecurringIds.First().Length.Should().Be.LessThanOrEqualTo(maxLength);
-		}
-
 		public class UnknownTestEvent : IEvent
 		{
 		}
