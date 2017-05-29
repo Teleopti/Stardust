@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Owin;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -37,25 +37,19 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		public Task Execute(IAppBuilder application)
 		{
-			return Task.Factory.StartNew(OnAllTenants);
-		}
-
-		[TenantUnitOfWork]
-		protected virtual void OnAllTenants()
-		{
-			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-			{
-				foreach (var tenant in _loadAllTenants.Tenants())
-				{
-					using (_dataSourceScope.OnThisThreadUse(tenant.Name))
-					{
-						RequeueEvents(tenant.Name);
-					}
-				}
-			}
+			return Task.Run(() => onAllTenants());
 		}
 		
-		protected virtual void RequeueEvents(string tenant)
+		private void onAllTenants()
+		{
+			Thread.Sleep(TimeSpan.FromSeconds(20)); // TODO: Remove once License does not need a restart
+			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+				foreach (var tenant in _loadAllTenants.Tenants())
+					using (_dataSourceScope.OnThisThreadUse(tenant.Name))
+						requeueEvents(tenant.Name);
+		}
+		
+		private void requeueEvents(string tenant)
 		{
 			// Only allow one web server to run this
 			_distributedLockAcquirer.TryLockForTypeOf(this, () =>
