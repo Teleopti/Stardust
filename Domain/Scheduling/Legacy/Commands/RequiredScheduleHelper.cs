@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
 			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		void ScheduleSelectedPersonDays(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, SchedulingOptions schedulingOptions);
 	}
@@ -77,7 +78,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		public void RemoveShiftCategoryBackToLegalState(
 			IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
