@@ -8,11 +8,20 @@
   $WaitingTime=1
   )
 
+
+
 function Check-URL ($UrlToCheck)
 {
+    
+    $BailoutTime = "20"
+    $TimeStart = Get-Date
+    $TimeEnd = $timeStart.addminutes($BailoutTime)
+    
     while ($true) {
         
-		$username = 'toptinet\tfsintegration'
+		$TimeNow = Get-Date
+        
+        $username = 'toptinet\tfsintegration'
 		$password = 'm8kemew0rk'
 		Write-Output "Checking if $UrlToCheck is accessible..."
         # Ignore SSL cert 
@@ -37,18 +46,22 @@ function Check-URL ($UrlToCheck)
 
         Write-Output "[$UrlToCheck]`tReturned status $HTTP_Status"
 
+        if ($TimeNow -ge $TimeEnd) {Write-Output "Running for $BailoutTime minutes, quitting";exit 1}
+
         if ($HTTP_Status -eq 200)
         {
             break;
         }
 
         Start-Sleep -Seconds 2
-    }
-
+    } 
+    
+   
     Write-Output "$UrlToCheck is up and running!"
     $HTTP_Response.Close()
 }
 
+<#
 #Waiting for Autodeploy to complete
 $Time=Get-Date
 $DisplayTime = $WaitingTime/60
@@ -66,6 +79,7 @@ foreach($i in (1..$WaitingTime)) {
     Write-Progress -Activity $message -PercentComplete ($percentage * 100)
     Start-Sleep -Seconds 1
 }
+#>
 
 workflow parallelCheckUrl {
 param ($UrlToTest)
