@@ -241,7 +241,8 @@
 		Staffing_ReadModel_BetterAccuracy_Step3_44331,
 		Wfm_Intraday_SupportSkillTypeEmail_44002,
 		WFM_Intraday_Show_For_Other_Days_43504,
-		WFM_Intraday_SupportMultisiteSkill_43874
+		WFM_Intraday_SupportMultisiteSkill_43874,
+		WFM_Forecaster_Refact_44480
 		// ReSharper restore InconsistentNaming
 	}
 }
