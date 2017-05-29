@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
@@ -45,6 +45,7 @@
 		vm.orgDataDescriptionFilter = orgDataDescriptionFilter;
 		vm.isOrgDataSelected = isOrgDataSelected;
 		vm.selectOrgData = selectOrgData;
+		vm.sortByLocaleLanguage = sortByLocaleLanguage;
 
 		var functionsFilter = $filter('functionsFilter');
 		var dataFilter = $filter('dataFilter');
@@ -58,17 +59,17 @@
 			var roleData = {
 				Description: roleName
 			};
-			PermissionsServiceRefact.roles.save(roleData).$promise.then(function(data) {
+			PermissionsServiceRefact.roles.save(roleData).$promise.then(function (data) {
 				vm.roles.unshift(data);
-        refreshRoleSelection();
-        markSelectedRole(data);
-        PermissionsServiceRefact.manage.getRoleInformation({
-          Id: data.Id
-        }).$promise.then(function(data) {
-          	vm.selectedRole = data;
-						vm.showCreateModal = false;
-						vm.roleName = '';
-        });
+				refreshRoleSelection();
+				markSelectedRole(data);
+				PermissionsServiceRefact.manage.getRoleInformation({
+					Id: data.Id
+				}).$promise.then(function (data) {
+					vm.selectedRole = data;
+					vm.showCreateModal = false;
+					vm.roleName = '';
+				});
 			});
 			toggleSelection(vm.applicationFunctions, false);
 
@@ -81,10 +82,10 @@
 			PermissionsServiceRefact.manage.update({
 				Id: role.Id,
 				newDescription: newRoleName
-			}).$promise.then(function() {
-				PermissionsServiceRefact.roles.query().$promise.then(function(data) {
+			}).$promise.then(function () {
+				PermissionsServiceRefact.roles.query().$promise.then(function (data) {
 					vm.roles = data;
-					var selected = data.find(function(r) {
+					var selected = data.find(function (r) {
 						return r.Id === role.Id;
 					});
 					markSelectedRole(selected);
@@ -117,17 +118,17 @@
 		function copyRole(role) {
 			PermissionsServiceRefact.copyRole.copy({
 				Id: role.Id
-			}).$promise.then(function(data) {
+			}).$promise.then(function (data) {
 				vm.roles.unshift(data);
 
 				refreshRoleSelection();
 				markSelectedRole(data);
 
-        PermissionsServiceRefact.manage.getRoleInformation({
-          Id: data.Id
-        }).$promise.then(function(data) {
-            vm.selectedRole = data;
-        });
+				PermissionsServiceRefact.manage.getRoleInformation({
+					Id: data.Id
+				}).$promise.then(function (data) {
+					vm.selectedRole = data;
+				});
 			});
 		}
 
@@ -138,7 +139,7 @@
 
 			PermissionsServiceRefact.manage.getRoleInformation({
 				Id: role.Id
-			}).$promise.then(function(data) {
+			}).$promise.then(function (data) {
 				vm.selectedRole = data;
 				vm.selectedRole.IsMyRole = role.IsMyRole;
 
@@ -188,7 +189,7 @@
 				if (functions == null) {
 					return;
 				}
-				functions.forEach(function(f) {
+				functions.forEach(function (f) {
 					vm.selectedFunctions[f.Id] = true;
 					loop(f.ChildFunctions);
 				});
@@ -278,12 +279,12 @@
 		function matchOrganizationData() {
 			var sites = vm.organizationSelection.BusinessUnit.ChildNodes;
 
-			var selectedOrgData = vm.selectedRole.AvailableTeams.reduce(function(selection, team) {
+			var selectedOrgData = vm.selectedRole.AvailableTeams.reduce(function (selection, team) {
 				selection[team.Id] = true;
 				return selection;
 			}, {});
-			selectedOrgData = sites.reduce(function(selection, site) {
-				var teamIsSelected = site.ChildNodes.some(function(team) {
+			selectedOrgData = sites.reduce(function (selection, site) {
+				var teamIsSelected = site.ChildNodes.some(function (team) {
 					return !!selection[team.Id];
 				});
 				if (teamIsSelected) {
@@ -365,7 +366,7 @@
 				return;
 			}
 			var parents = permissionsDataService.findParentFunctions(vm.applicationFunctions, fn)
-				.map(function(f) {
+				.map(function (f) {
 					return f.FunctionId;
 				});
 			var functions = [];
@@ -374,7 +375,7 @@
 			}
 			createFlatFunctions(vm.applicationFunctions, flatFunctions);
 
-			vm.isAllFunctionSelected = flatFunctions.every(function(func) {
+			vm.isAllFunctionSelected = flatFunctions.every(function (func) {
 				return isFunctionSelected(func);
 			});
 			permissionsDataService.selectFunction(vm.selectedRole, functions, fn);
@@ -399,7 +400,7 @@
 			toggleSelection(vm.applicationFunctions, vm.isAllFunctionSelected);
 
 			if (vm.selectedRole != null) {
-				permissionsDataService.selectAllFunction(vm.selectedRole, vm.applicationFunctions, vm.isAllFunctionSelected).then(function() {
+				permissionsDataService.selectAllFunction(vm.selectedRole, vm.applicationFunctions, vm.isAllFunctionSelected).then(function () {
 					selectRole(vm.selectedRole, true);
 				});
 			}
@@ -448,20 +449,23 @@
 		}
 
 		function fetchData() {
-			PermissionsServiceRefact.roles.query().$promise.then(function(data) {
+			PermissionsServiceRefact.roles.query().$promise.then(function (data) {
 				vm.roles = data;
 			});
-			PermissionsServiceRefact.applicationFunctions.query().$promise.then(function(data) {
+			PermissionsServiceRefact.applicationFunctions.query().$promise.then(function (data) {
 				vm.applicationFunctions = data;
 				listHandler(vm.applicationFunctions);
 				prepareTree(vm.applicationFunctions);
 			});
-			PermissionsServiceRefact.organizationSelection.get().$promise.then(function(data) {
+			PermissionsServiceRefact.organizationSelection.get().$promise.then(function (data) {
 				vm.organizationSelection = data;
 				orgDataHandler(vm.organizationSelection);
 			});
 		}
 
+		function sortByLocaleLanguage(a, b) {
+			return localeLanguageSortingService.sort(a.value, b.value);
+		}
 
 	}
 })();
