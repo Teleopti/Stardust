@@ -303,8 +303,6 @@
             if ($scope.chosenOffset.value === 0) {
                 poll();
             }
-        };
-
         function pollData(activeTab) {
             if ($scope.toggles.showOtherDay) {
                 pollActiveTabDataByDayOffset(activeTab, $scope.chosenOffset.value);
@@ -313,26 +311,8 @@
             }
         }
 
-        function pollActiveTabData(activeTab) {
-            var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-
-            if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
-                if ($scope.selectedItem.Skills) {
-                    services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.toggles);
-                    var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
-                } else {
-                    services[activeTab].pollSkillData($scope.selectedItem, $scope.toggles);
-                    var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
-                }
-                $scope.viewObj = services[activeTab].getData();
-                $scope.latestActualInterval = timeData;
-                $scope.hasMonitorData = $scope.viewObj.hasMonitorData;
-            } else {
-                $timeout(function() {
-                    pollActiveTabData($scope.activeTab);
-                }, 1000);
             }
-        }
+        };
 
         function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
             var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];

@@ -49,15 +49,15 @@
 				</span>
 				<span class="con-flex ">
 					<md-autocomplete id="skill-area-id"
-					class="autocomplete-skillarea"
-					md-input-id="skill-area-input"
-					md-selected-item="selectedSkillArea"
-					md-search-text="searchSkillAreaText"
-					md-selected-item-change="selectedSkillAreaChange(skillArea)"
-					md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
-					md-item-text="skillArea.Name"
-					md-min-length="0"
-					placeholder="{{'SelectSkillArea'|translate}}">
+						class="autocomplete-skillarea"
+						md-input-id="skill-area-input"
+						md-selected-item="selectedSkillArea"
+						md-search-text="searchSkillAreaText"
+						md-selected-item-change="selectedSkillAreaChange(skillArea)"
+						md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
+						md-item-text="skillArea.Name"
+						md-min-length="0"
+						placeholder="{{'SelectSkillArea'|translate}}">
 					<md-item-template>
 						<span md-highlight-text="searchSkillAreaText" md-highlight-flags="^i">{{skillArea.Name}}</span>
 					</md-item-template>
@@ -132,6 +132,25 @@
 			<div class="panel material-depth-1">
 				<div class="wfm-slide-tabs tabbed-panel">
 					<md-content class="md-padding">
+						<div class="con-row full-padding" ng-if="toggles.showOtherDay">
+							<div layout="row" layout-align="center center">
+								<div>
+									<h2>Showing data for {{getLocalDate(chosenOffset.value)}}</h2>
+								</div>
+							</div>
+						</div>
+						<date-offset ng-if="toggles.showOtherDay" on-date-change="changeChosenOffset(value)" chosen-offset="chosenOffset"></date-offset>
+					</md-content>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="con-row" ng-show="selectedSkill.Name || selectedSkillArea.Name">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="wfm-slide-tabs tabbed-panel">
+					<md-content class="md-padding">
 						<md-tabs md-dynamic-height md-selected="activeTab">
 							<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
 								<md-content ng-cloak class="md-padding" ng-if="viewObj.waitingForData">
@@ -141,21 +160,13 @@
 										</div>
 									</div>
 								</md-content>
-								<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
-									<div class="con-row full-padding" ng-if="toggles.showOtherDay">
-										<div layout="row" layout-align="center center">
-											<div>
-												<h2>Showing data for {{getLocalDate(chosenOffset.value)}}</h2>
-											</div>
-										</div>
-									</div>
+								<md-content ng-cloak class="md-padding" ng-show="!viewObj.waitingForData && viewObj.hasMonitorData">
 									<div class="con-row">
 										<div class="con-flex">
 										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
 											<div class="wfm-chart intraday-chart" id="trafficChart"></div>
 										</div>
 									</div>
-									<date-offset ng-if="toggles.showOtherDay" on-date-change="changeChosenOffset(value)" chosen-offset="chosenOffset"></date-offset>
 									<div class="con-row full-padding">
 										<div class="con-flex">
 											<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
@@ -187,7 +198,7 @@
 										<div class="con-flex"></div>
 									</div>
 								</md-content>
-								<md-content ng-cloak class="md-padding" ng-if="!viewObj.waitingForData && !viewObj.hasMonitorData">
+								<md-content ng-show="!viewObj.waitingForData && !viewObj.hasMonitorData">
 									<div class="con-row">
 										<div class="con-flex no-data-available">
 											{{'NoDataAvailable'|translate}}
@@ -203,55 +214,49 @@
 										</div>
 									</div>
 								</md-content>
-								<md-content class="md-padding" ng-show="viewObj.hasMonitorData">
-									<div class="con-row full-padding" ng-if="toggles.showOtherDay">
-										<div layout="row" layout-align="center center">
-											<div>
-												<h2>Showing data for {{getLocalDate(chosenOffset.value)}}</h2>
-											</div>
-										</div>
-									</div>
+								<md-content ng-cloak class="md-padding" ng-show="!viewObj.waitingForData && viewObj.hasMonitorData">
 									<div class="con-row">
 										<div class="con-flex">
 										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
 											<div class="wfm-chart intraday-chart" id="performanceChart"></div>
 										</div>
-									<date-offset ng-if="toggles.showOtherDay" on-date-change="changeChosenOffset(value)" chosen-offset="chosenOffset"></date-offset>
-										<div class="con-row full-padding">
-											<div class="con-flex"></div>
-											<div class="con-flex">
-												<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
-												<table class="wfm-table wfm-filter-options">
-													<thead>
-														<tr>
-															<th></th>
-															<th>{{'Average'|translate}}</th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>{{'ServiceLevel'|translate}}</td>
-															<td class="number-cell service-level">{{viewObj.summary.summaryServiceLevel}} %</td>
-														</tr>
-														<tr ng-if="toggles.showEsl">
-															<td>{{'ESL'|translate}}</td>
-															<td class="number-cell esl">{{viewObj.summary.summaryEstimatedServiceLevel}} %</td>
-														</tr>
-														<tr ng-if="!viewObj.hasEmailSkill">
-															<td>{{'AbandonedRate'|translate}}</td>
-															<td class="number-cell abandoned-rate">{{viewObj.summary.summaryAbandonedRate}} %</td>
-														</tr>
-														<tr>
-															<td>{{'AverageSpeedOfAnswer'|translate}}</td>
-															<td class="number-cell average-speed-of-answer">{{viewObj.summary.summaryAverageSpeedOfAnswer}} {{'SecondShort'|translate}}</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-											<div class="con-flex"></div>
+									</div>
+									
+									<div class="con-row full-padding">
+										<div class="con-flex"></div>
+										<div class="con-flex">
+											<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
+											<table class="wfm-table wfm-filter-options">
+												<thead>
+													<tr>
+														<th></th>
+														<th>{{'Average'|translate}}</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{'ServiceLevel'|translate}}</td>
+														<td class="number-cell service-level">{{viewObj.summary.summaryServiceLevel}} %</td>
+													</tr>
+													<tr ng-if="toggles.showEsl">
+														<td>{{'ESL'|translate}}</td>
+														<td class="number-cell esl">{{viewObj.summary.summaryEstimatedServiceLevel}} %</td>
+													</tr>
+													<tr ng-if="!viewObj.hasEmailSkill">
+														<td>{{'AbandonedRate'|translate}}</td>
+														<td class="number-cell abandoned-rate">{{viewObj.summary.summaryAbandonedRate}} %</td>
+													</tr>
+													<tr>
+														<td>{{'AverageSpeedOfAnswer'|translate}}</td>
+														<td class="number-cell average-speed-of-answer">{{viewObj.summary.summaryAverageSpeedOfAnswer}} {{'SecondShort'|translate}}</td>
+													</tr>
+												</tbody>
+											</table>
 										</div>
+										<div class="con-flex"></div>
+									</div>
 								</md-content>
-								<md-content ng-cloak class="md-padding" ng-if="!viewObj.waitingForData && !viewObj.hasMonitorData">
+								<md-content ng-show="!viewObj.waitingForData && !viewObj.hasMonitorData">
 									<div class="con-row">
 										<div class="con-flex no-data-available">
 											{{'NoDataAvailable'|translate}}
@@ -266,24 +271,17 @@
 											<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 										</div>
 									</div>
+
 								</md-content>
-								<md-content class="md-padding" ng-show="viewObj.hasMonitorData && !viewObj.waitingForData">
-									<div class="con-row full-padding" ng-if="toggles.showOtherDay">
-										<div layout="row" layout-align="center center">
-											<div>
-												<h2>Showing data for {{getLocalDate(chosenOffset.value)}}</h2>
-											</div>
-										</div>
-									</div>
+								<md-content class="md-padding" ng-show="!viewObj.waitingForData && viewObj.hasMonitorData">
 									<div class="con-row">
 										<div class="con-flex">
 										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
 											<div class="wfm-chart intraday-chart" id="staffingChart"></div>
 										</div>
 									</div>
-									<date-offset ng-if="toggles.showOtherDay" on-date-change="changeChosenOffset(value)" chosen-offset="chosenOffset"></date-offset>
 								</md-content>
-								<md-content ng-cloak class="md-padding" ng-if="!viewObj.waitingForData && !viewObj.hasMonitorData">
+								<md-content ng-show="!viewObj.waitingForData && !viewObj.hasMonitorData">
 									<div class="con-row">
 										<div class="con-flex no-data-available">
 											{{'NoDataAvailable'|translate}}
@@ -293,12 +291,12 @@
 							</md-tab>
 						</md-tabs>
 					</md-content>
-					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<!-- <div class="con-row no-data-available" ng-cloak ng-hide="selectedSkill.Name || selectedSkillArea.Name">
+	<!-- <div class="con-row no-data-available" ng-cloak ng-hide="selectedSkill.Name || selectedSkillArea.Name">
 <div class="con-flex">
 <div class="panel full-padding material-depth-1">
 <i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}} {{'NoDataAvailable'|translate}}</span>
@@ -308,21 +306,21 @@
 <div class="con-flex"></div>
 </div> -->
 
-		<div ng-cloak class="modal-box">
-			<div ng-cloak ng-show="DeleteSkillAreaModal">
-				<div class="modalbg">
-					<div class="dialog-mini">
-						<div class="modal-inner-content">
-							<h3>{{selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
-						</div>
-						<div class="modal-actions">
-							<aside>
-								<button ng-click="toggleModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-								<button ng-click='deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
-							</aside>
-						</div>
+	<div ng-cloak class="modal-box">
+		<div ng-cloak ng-show="DeleteSkillAreaModal">
+			<div class="modalbg">
+				<div class="dialog-mini">
+					<div class="modal-inner-content">
+						<h3>{{selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
+					</div>
+					<div class="modal-actions">
+						<aside>
+							<button ng-click="toggleModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+							<button ng-click='deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
+						</aside>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
