@@ -16,86 +16,68 @@
 
 		vm.pause = true;
 		vm.sendInterval = { time: 5 };
-		vm.stateCodes = [];
 		vm.snapshot = false;
 		vm.authKey = "!#¤atAbgT%";
-		vm.selectedAgentsArray = [];
+		vm.agents = [];
+		vm.stateCodes = [];
 
 		var sendingBatchWithRandomStatesTrigger = null;
-
-		vm.tableData = [];
 
 		(function init() {
 			rtaToolService.getStateCodes()
 				.then(function (states) {
-					vm.stateCodes = states;
-				})
-				.then(rtaToolService.getAgents)
-				.then(function (agents) {
-					vm.agents = agents;
-
-					vm.agents.forEach(function (a) {
-						vm.stateCodes.forEach(function (s) {
-							a[s.Code] = s.Code;
-						})
+					vm.stateCodes = states.map(function (state) {
+						state.sendBatch = function () {
+							sendBatch(state.Code);
+						};
+						return state;
 					});
 				})
-				.then(function () {
-					vm.tableData = vm.agents;
+				.then(rtaToolService.getAgents)
+				.then(function (_agents) {
+					vm.agents = _agents.map(function (agent) {
+						agent.selectAgent = function () {
+							agent.isSelected = !agent.isSelected;
+						}
+						agent.StateCodes = vm.stateCodes;
+						agent.sendState = function (state) {
+							sendState(agent, state);
+						};
+						return agent;
+					});
 				});
 		})();
 
-		vm.sendBatches = function (stateCode) {
-			sendBatch(stateCode);
-		}
-		var toggledAgents = false;
-		vm.toggleAllAgents = function () {
-			if (!toggledAgents || vm.selectedAgentsArray.length == 0) {
-				toggledAgents = true;
-				vm.gridOptions.data.forEach(function (data) {
-					data.selectedRow = true;
-					vm.selectedAgentsArray.push(data);
-				});
-			} else {
-				vm.gridOptions.data.forEach(function (data) {
-					data.selectedRow = false;
-				});
-				toggledAgents = false;
-				vm.selectedAgentsArray = [];
-			}
-		}
 
-		vm.selectAgent = function (agent) {
-			if (agent.selectedRow) {
-				agent.selectedRow = false;
-				var agentToRemove = vm.selectedAgentsArray.find(function (a) {
-					return agent.UserCode === a.UserCode;
-				});
+		vm.toggleAgents = function () {
+			var selectedAgents = findSelectedAgents();
+			var shouldSelectAll = selectedAgents.length != vm.agents.length;
 
-				var index = vm.selectedAgentsArray.indexOf(agentToRemove);
-
-				vm.selectedAgentsArray.splice(index, 1);
-			} else {
-				agent.selectedRow = true;
-
-				vm.selectedAgentsArray.push(agent);
-			}
+			vm.agents.forEach(function (agent) {
+				agent.isSelected = shouldSelectAll;
+			});
 		}
 
 		vm.sendRandom = function () {
-			var selectedAgents = vm.selectedAgentsArray;
-			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents
+			var selectedAgents = findSelectedAgents();
+			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents;
+
 			var randomAgent = selectedAgents[Math.floor(Math.random() * selectedAgents.length)];
-			var stateName = vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)].Name;
-			vm.sendState(randomAgent.UserCode, randomAgent.DataSource, stateName);
+			var state = vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)];
+			randomAgent.sendState(state);
+
+		}
+
+		 function findSelectedAgents() {
+			return vm.agents.filter(function (a) {
+				return a.isSelected;
+			});
 		}
 
 		function sendBatch(stateCode) {
-			var selectedAgents = vm.selectedAgentsArray;
-			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents
-
+			var selectedAgents = findSelectedAgents();
+			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents;
 			var snapshotId = now();
-
 			var distinctDatasources = selectedAgents
 				.map(function (s) {
 					return s.DataSource
@@ -110,7 +92,7 @@
 
 				var states = selectedAgents
 					.filter(function (s) {
-						return s.DataSource == d
+						return s.DataSource == d;
 					})
 					.reduce(function (groups, s) {
 						if (!(groups.find(function (g) { return g.DataSource == s.DataSource && g.UserCode == s.UserCode; }))) {
@@ -136,23 +118,18 @@
 			});
 		}
 
-		vm.sendState = function (userCode, dataSource, displayName) {
-			var stateCode = vm.stateCodes
-				.filter(function (s) { return s.Name == displayName; })
-				.map(function (s) { return s.Code; })[0];
-
-			var batch = {
+		function sendState(agent, state) {
+			rtaToolService.sendBatch({
 				AuthenticationKey: vm.authKey,
-				SourceId: dataSource,
+				SourceId: agent.DataSource,
 				IsSnapshot: vm.snapshot,
 				States: [
 					{
-						UserCode: userCode,
-						StateCode: stateCode
+						UserCode: agent.UserCode,
+						StateCode: state.Code
 					}
 				]
-			};
-			rtaToolService.sendBatch(batch);
+			});
 		}
 
 		function now() {
@@ -170,17 +147,14 @@
 				$interval.cancel(sendingBatchWithRandomStatesTrigger);
 		}
 
-		$scope.$watch(function () {
-			return vm.pause;
-		}, function () {
-			if (vm.pause)
-				stopSendingBatchWithRandomStates();
-			else
-				startSendingBatchWithRandomStates();
-		});
-
 		vm.togglePause = function () {
 			vm.pause = !vm.pause;
+			if (vm.pause) {
+				stopSendingBatchWithRandomStates();
+			} else {
+				startSendingBatchWithRandomStates();
+			}
 		}
+
 	};
 })();

@@ -1,3 +1,3 @@
 (function() {
-	angular.module('wfm.rtaTool', []);
+	angular.module('wfm.rtaTool', ['wfm.rta']);
 })();

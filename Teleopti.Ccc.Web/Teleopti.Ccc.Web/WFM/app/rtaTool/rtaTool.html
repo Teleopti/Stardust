@@ -31,13 +31,13 @@
 						</div>
 					</div>
 					<div class="con-row">
-						<div class="con-flex" ng-if="vm.stateCodes.length<=9">
-							<span ng-repeat="state in vm.stateCodes"><button ng-click="vm.sendBatches(state.Code)" class="sendbatch wfm-btn wfm-btn-primary" style="margin-bottom: 20px; width: 120px;">{{state.Name}}</button> </span>
+						<div class="con-flex" ng-if="vm.stateCodes.length < 9">
+							<span ng-repeat="state in vm.stateCodes"><button ng-click="state.sendBatch()" class="sendbatch wfm-btn wfm-btn-primary" style="margin-bottom: 20px; width: 120px;">{{state.Name}}</button> </span>
 						</div>
 
-						<div class="con-flex" ng-if="vm.stateCodes.length > 9">
-							<md-select ng-model="pickedStateCode" placeholder="Pick a state" ng-change="vm.sendBatches(pickedStateCode)">
-								<md-option ng-repeat="state in vm.stateCodes" ng-value="state.Code"><span ng-bind="state.Name"></span></md-option>
+						<div class="con-flex" ng-if="vm.stateCodes.length >= 9">
+							<md-select ng-model="pickedStateCode" placeholder="Pick a state" ng-change="pickedStateCode.sendBatch()">
+								<md-option ng-repeat="state in vm.stateCodes" ng-value="state"><span ng-bind="state.Name"></span></md-option>
 							</md-select>
 						</div>
 
@@ -83,14 +83,15 @@
 									}
 								</style>
 
-								<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.toggleAllAgents()">Toggle all agents</button>
+								<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.toggleAgents()">Toggle all agents</button>
+								<button class="wfm-btn wfm-btn-invis-default">Fetch all agents</button>
 
 								<tbody>
-									<tr ng-repeat="row in vm.tableData | filter:filterAgents" ng-click="vm.selectAgent(row)" style="cursor: pointer;">
-										<td ng-class="{'selected-row':row.selectedRow}">{{row.Name}}</td>
-										<td ng-class="{'selected-row':row.selectedRow}">{{row.DataSource}} _ {{row.UserCode}} </td>
+									<tr ng-repeat="agent in vm.agents | filter:filterAgents" ng-click="agent.selectAgent()" style="cursor: pointer;">
+										<td ng-class="{'selected-row':agent.isSelected}">{{agent.Name}}</td>
+										<td ng-class="{'selected-row':agent.isSelected}">{{agent.DataSource}} _ {{agent.UserCode}} </td>
 										<td ng-click="$event.stopPropagation();">
-											<md-select ng-model="pickedStateCode" placeholder="Pick a state" ng-change="vm.sendState(row.UserCode, row.DataSource, pickedStateCode.Name)">
+											<md-select ng-model="pickedStateCode" placeholder="Pick a state" ng-change="agent.sendState(pickedStateCode)">
 												<md-option ng-repeat="state in vm.stateCodes" ng-value="state"><span ng-bind="state.Name"></span></md-option>
 											</md-select>
 										</td>
