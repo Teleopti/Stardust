@@ -170,6 +170,7 @@
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_TeamSameDayOff_44265,
 		ResourcePlanner_MergeTeamblockClassicScheduling_44289,
+		ResourcePlanner_RemoveBackToLegalStateGui_44333,
 
 		Wfm_DisplayOnlineHelp_39402,
 
