@@ -3605,7 +3605,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					var options = new SchedulingOptions();
 					optimizerHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.PersonsInOrganization,
-						SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>());
+						SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container.Resolve<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>());
 					SchedulerState.ConsiderShortBreaks = options.ConsiderShortBreaks;
 				}
 				else

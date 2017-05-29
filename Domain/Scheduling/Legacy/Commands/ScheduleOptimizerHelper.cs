@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private ISchedulingProgress _backgroundWorker;
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly MoveTimeOptimizerCreator _moveTimeOptimizerCreator;
-		private readonly IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
+		private readonly RuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairnessService;
 		private readonly OptimizeIntradayIslandsDesktop _optimizeIntradayDesktop;
 		private readonly ExtendReduceTimeHelper _extendReduceTimeHelper;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public ScheduleOptimizerHelper(MatrixListFactory matrixListFactory,
 				MoveTimeOptimizerCreator moveTimeOptimizerCreator,
-				IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak,
+				RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak,
 				IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairnessService,
 				OptimizeIntradayIslandsDesktop optimizeIntradayIslandsDesktop,
 				Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,

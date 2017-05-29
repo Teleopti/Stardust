@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public class RuleSetBagsOfGroupOfPeopleCanHaveShortBreak : IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak
+    public class RuleSetBagsOfGroupOfPeopleCanHaveShortBreak
     {
         private readonly IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader _loader;
         

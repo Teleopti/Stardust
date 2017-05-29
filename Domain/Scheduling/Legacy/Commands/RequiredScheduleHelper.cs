@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class RequiredScheduleHelper : IRequiredScheduleHelper
 	{
 		private readonly ISchedulePeriodListShiftCategoryBackToLegalStateService _shiftCategoryBackToLegalState;
-		private readonly IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
+		private readonly RuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
 		private readonly IStudentSchedulingService _studentSchedulingService;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
 
 		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, 
-				IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, 
+				RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, 
 				Func<ISchedulingResultStateHolder> resultStateHolder, 
 				Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, 
 				IStudentSchedulingService studentSchedulingService, 

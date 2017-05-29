@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DailySkillForecastAndScheduledValueCalculator>().As<IDailySkillForecastAndScheduledValueCalculator>().InstancePerDependency();
 
 			builder.RegisterType<RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader>().As<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader>().SingleInstance();
-			builder.RegisterType<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>().As<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>().InstancePerLifetimeScope();
+			builder.RegisterType<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>().InstancePerLifetimeScope();
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixNotPermittedLocker>().As<IMatrixNotPermittedLocker>().SingleInstance();

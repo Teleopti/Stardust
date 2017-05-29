@@ -2346,7 +2346,6 @@
     <Compile Include="Optimization\DayOffOptimizerConflictHandler.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidator.cs" />
     <Compile Include="Optimization\IPersonListExtractorFromScheduleParts.cs" />
-    <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />
     <Compile Include="Optimization\IWorkRuleSetExtractorForGroupOfPeople.cs" />
     <Compile Include="Optimization\IWorkShiftRuleSetCanHaveShortBreak.cs" />
