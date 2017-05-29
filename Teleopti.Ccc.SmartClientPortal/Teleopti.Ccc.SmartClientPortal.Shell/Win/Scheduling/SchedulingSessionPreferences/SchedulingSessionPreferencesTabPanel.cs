@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			if (!DesignMode) SetTexts();
 		}
 
+		[RemoveMeWithToggle("Remove backToLegalState, replace with false",Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
 		public void Initialize(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, bool backToLegalStateDialog, ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
 		{
 			_groupPagesProvider = groupPagesProvider;

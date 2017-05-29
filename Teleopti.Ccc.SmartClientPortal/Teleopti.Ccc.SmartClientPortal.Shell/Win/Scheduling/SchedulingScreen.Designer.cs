@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes;
@@ -3569,6 +3570,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private System.ComponentModel.BackgroundWorker backgroundWorkerLoadData;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExGridRowInChartButtons;
         private System.Windows.Forms.ToolStripButton toolStripButtonGridInChart;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBackToLegalState;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExEdit2;
 		private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemChart;

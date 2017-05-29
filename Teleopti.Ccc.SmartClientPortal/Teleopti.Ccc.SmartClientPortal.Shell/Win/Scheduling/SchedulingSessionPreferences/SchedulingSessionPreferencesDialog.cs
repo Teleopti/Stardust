@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private readonly SchedulingOptions _schedulingOptions;
 		private readonly IDaysOffPreferences _daysOffPreferences;
 		private readonly IEnumerable<IShiftCategory> _shiftCategories;
+		[RemoveMeWithToggle("Should be replaced with false", Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
 		private readonly bool _backToLegalStateDialog;
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
 		private readonly IList<GroupPageLight> _groupPages;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
 		private SchedulingOptionsDayOffPlannerPersonalSettings _defaultDayOffPlannerSettings;
 
+		[RemoveMeWithToggle("Remove daysOffPreferences, backToLegalStateDialog", Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
 		public SchedulingSessionPreferencesDialog(
 			SchedulingOptions schedulingOptions, 
 			IDaysOffPreferences daysOffPreferences, 

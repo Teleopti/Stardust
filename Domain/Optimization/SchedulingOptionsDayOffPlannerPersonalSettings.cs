@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
@@ -6,6 +7,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	[Serializable]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
 	public class SchedulingOptionsDayOffPlannerPersonalSettings : SettingValue
 	{
 		private bool _useDaysOffPerWeek = true;

@@ -1112,6 +1112,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		#region Toolstrip events
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
 		private void toolStripMenuItemBackToLegalStateClick(object sender, EventArgs e)
 		{
 			if (_backgroundWorkerRunning)
@@ -3508,11 +3509,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_undoRedo.CommitBatch();
 		}
 
+		[RemoveMeWithToggle("Remove argument.OptimizationMethod == OptimizationMethod.BackToLegalState", Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(argument.DaysOffPreferences);
-
 			if (argument.OptimizationMethod == OptimizationMethod.BackToLegalState)
 			{
 				_container.Resolve<BackToLegalStateExecuter>().Execute(
@@ -4391,6 +4392,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_gridChartManager.Create();
 			ColorHelper.SetRibbonQuickAccessTexts(ribbonControlAdv1);
 			ribbonControlAdv1.MenuButtonText = Resources.File;
+
+
+			if(_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333))
+				toolStripMenuItemBackToLegalState.Visible = false;
 		}
 
 		private void ribbonTemplatePanelsClose()

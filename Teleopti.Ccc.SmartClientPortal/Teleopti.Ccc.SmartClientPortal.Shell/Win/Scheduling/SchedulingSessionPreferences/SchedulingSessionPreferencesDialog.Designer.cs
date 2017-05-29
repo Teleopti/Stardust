@@ -1,4 +1,5 @@
-﻿using SchedulingSessionPreferencesPanel=
+﻿using Teleopti.Ccc.Domain.FeatureFlags;
+using SchedulingSessionPreferencesPanel=
 	Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionPreferences.SchedulingSessionPreferencesTabPanel;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionPreferences
@@ -249,7 +250,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private Syncfusion.Windows.Forms.ButtonAdv buttonCancel;
 		  private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlTopLevel;
 		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageSchedulingOptions;
-		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageDayOffPlanningOptions;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
+		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageDayOffPlanningOptions;
 		private ResourceOptimizerDayOffPreferencesPanel dayOffPreferencesPanel1;
 		private System.Windows.Forms.ImageList imageList1;
 		private SchedulingSessionPreferencesTabPanel schedulingSessionPreferencesTabPanel1;
