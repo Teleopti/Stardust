@@ -45,7 +45,7 @@ RTA_SeeAllOutOfAdherencesToday_39146 = true
 RTA_SpreadTransactionLocksStrategy_41823 = true
 RTA_FasterAgentsView_42039 = true
 RTA_MonitorAgentsInPermittedOrganizationOnly_40660 = false
-RTA_SnappierDisplayOfOverview_43568 = RC
+RTA_SnappierDisplayOfOverview_43568 = true
 RTA_EventPackagesOptimization_43924 = true
 RTA_AsyncOptimization_43924 = true
 RTA_SolidProofWhenManagingAgentAdherence_39351 = RC
@@ -166,7 +166,7 @@ MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = RC #Do not release yet
 MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 = RC
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
 MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = true
-MyTimeWeb_DayScheduleForStartPage_43446 = RC
+MyTimeWeb_DayScheduleForStartPage_43446 = true
 MyTimeWeb_DayScheduleForStartPage_Command_44209 = RC
 MyTimeWeb_ViewWFMAppGuide_43848 = RC
 
