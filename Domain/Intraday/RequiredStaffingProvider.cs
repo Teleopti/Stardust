@@ -16,38 +16,44 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_timeZone = timeZone;
 		}
 
-		public IList<StaffingIntervalModel> Load(IList<SkillIntervalStatistics> actualStatistics, 
-			IList<ISkill> skills, 
-			ICollection<ISkillDay> skillDays, 
-			IList<StaffingIntervalModel> forecastedStaffingIntervals, 
-			TimeSpan resolution, 
+		public IList<StaffingIntervalModel> Load(IList<SkillIntervalStatistics> actualStatistics,
+			IList<ISkill> skills,
+			ICollection<ISkillDay> skillDays,
+			IList<StaffingIntervalModel> forecastedStaffingIntervals,
+			TimeSpan resolution,
 			IList<SkillDayStatsRange> skillDayStatsRange)
 		{
 
 			var actualStaffingIntervals = new List<StaffingIntervalModel>();
 
+			var skillDaysBySkill = skillDays.Select(s => new {Original = s, Clone = s.NoneEntityClone()})
+				.ToLookup(s => s.Original.Skill.Id.Value);
+			var actualStatisticsBySkill = actualStatistics.ToLookup(s => s.SkillId);
 			foreach (var skill in skills)
 			{
-				var actualStatsPerSkillInterval = actualStatistics.Where(s => s.SkillId == skill.Id).ToList();
-				var skillDaysForSkill = skillDays.Where(x => x.Skill.Id.Value == skill.Id.Value).ToList();
-				if (!skillDaysForSkill.Any())
-					continue;
+				var actualStatsPerSkillInterval = actualStatisticsBySkill[skill.Id.Value].ToList();
+				var skillDaysForSkill = skillDaysBySkill[skill.Id.Value].ToArray();
+				new SkillDayCalculator(skill, skillDaysForSkill.Select(s => s.Clone), new DateOnlyPeriod());
+
 				foreach (var skillDay in skillDaysForSkill)
 				{
-					var skillDayStats = GetSkillDayStatistics(skillDayStatsRange, skill, skillDay.CurrentDate, actualStatsPerSkillInterval, resolution);
+					var skillDayStats = GetSkillDayStatistics(skillDayStatsRange, skill, skillDay.Original.CurrentDate,
+						actualStatsPerSkillInterval, resolution);
+
 					if (!skillDayStats.Any())
 						continue;
-					var clonedSkillDay = skillDay.NoneEntityClone();
-					mapWorkloadIds(clonedSkillDay, skillDay);
-					assignActualWorkloadToClonedSkillDay(clonedSkillDay, skillDayStats);
-					actualStaffingIntervals.AddRange(GetRequiredStaffing(resolution, skillDayStats, clonedSkillDay));
-					reset(clonedSkillDay, skillDay);
+					mapWorkloadIds(skillDay.Clone, skillDay.Original);
+					assignActualWorkloadToClonedSkillDay(skillDay.Clone, skillDayStats);
+					skillDay.Clone.RecalculateDailyTasks();
+					actualStaffingIntervals.AddRange(GetRequiredStaffing(resolution, skillDayStats, skillDay.Clone));
+					reset(skillDay.Clone, skillDay.Original);
 				}
 			}
 
 
 			return actualStaffingIntervals;
 		}
+
 
 		private void mapWorkloadIds(ISkillDay clonedSkillDay, ISkillDay skillDay)
 		{

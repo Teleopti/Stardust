@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -1244,7 +1245,58 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.StaffingHasData.Should().Be.EqualTo(true);
 			vm.DataSeries.ScheduledStaffing.IsEmpty().Should().Be.EqualTo(true);
 		}
-		
+
+		[Test]
+		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeWebChat_42591)]
+		public void ShouldReturnActualStaffingDifferentFromForecastedForChatSkill()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skill = createChatSkill(15, "skill", new TimePeriod(8, 0, 8, 30), false, 0);
+			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), false);
+
+			var actualCalls = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
+
+			SkillRepository.Has(skill);
+			IntradayQueueStatisticsLoader.Has(actualCalls);
+			SkillDayRepository.Has(skillDay);
+
+			var forecastedAgents = skillDay.SkillStaffPeriodCollection.First().FStaff;
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(forecastedAgents);
+			Math.Round((double)vm.DataSeries.ActualStaffing.First(), 3)
+				.Should().Not.Be.EqualTo(Math.Round((double)vm.DataSeries.ForecastedStaffing.First(), 3));
+			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
+		}
+
+
+
+		private ISkill createChatSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, int midnigthBreakOffset)
+		{
+			var skill =
+				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypePhone(new Description("SkillTypeChat"), ForecastSource.Chat))
+				{
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			if (midnigthBreakOffset != 0)
+			{
+				skill.MidnightBreakOffset = TimeSpan.FromHours(midnigthBreakOffset);
+			}
+
+			IWorkload workload;
+			if (isClosedOnWeekends)
+				workload = WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, openHours);
+			else
+				workload = WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+			workload.SetId(Guid.NewGuid());
+
+			return skill;
+		}
+
 		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, int midnigthBreakOffset)
 		{
 			var skill =
