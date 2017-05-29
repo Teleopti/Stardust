@@ -19,17 +19,11 @@
 		vm.stateCodes = [];
 		vm.snapshot = false;
 		vm.authKey = "!#¤atAbgT%";
+		vm.selectedAgentsArray = [];
 
 		var sendingBatchWithRandomStatesTrigger = null;
 
-		vm.gridOptions = {
-			rowHeight: 60,
-			enableGridMenu: true
-		};
-
-		vm.gridOptions.onRegisterApi = function (gridApi) {
-			vm.gridApi = gridApi.grid.api;
-		};
+		vm.tableData = [];
 
 		(function init() {
 			rtaToolService.getStateCodes()
@@ -39,6 +33,7 @@
 				.then(rtaToolService.getAgents)
 				.then(function (agents) {
 					vm.agents = agents;
+
 					vm.agents.forEach(function (a) {
 						vm.stateCodes.forEach(function (s) {
 							a[s.Code] = s.Code;
@@ -46,46 +41,49 @@
 					});
 				})
 				.then(function () {
-					vm.gridOptions = {
-						columnDefs: buildColumnDefinitionsFromStateCodes(vm.stateCodes),
-						rowHeight: 60,
-						enableGridMenu: true
-					};
-
-					vm.gridOptions.data = vm.agents;
+					vm.tableData = vm.agents;
 				});
 		})();
-
-		function buildColumnDefinitionsFromStateCodes(stateCodes) {
-			return [{
-				field: 'Name',
-				displayName: 'Name',
-				sort: {
-					direction: 'asc'
-				},
-				width: '10%'
-			}, {
-				field: 'UserCode',
-				displayName: 'User Code',
-				cellTemplate: '<div style="margin: 0 auto; text-align: center">{{row.entity.DataSource}}_{{row.entity.UserCode}}</div>',
-				width: '8%'
-			}].concat(stateCodes
-				.map(function (s) {
-					return {
-						field: s.Code,
-						displayName: s.Name,
-						cellTemplate: 'app/rtaTool/rtaTool.statesCellTemplate.html',
-						enableSorting: false
-					}
-				}));
-		}
 
 		vm.sendBatches = function (stateCode) {
 			sendBatch(stateCode);
 		}
+		var toggledAgents = false;
+		vm.toggleAllAgents = function () {
+			if (!toggledAgents || vm.selectedAgentsArray.length == 0) {
+				toggledAgents = true;
+				vm.gridOptions.data.forEach(function (data) {
+					data.selectedRow = true;
+					vm.selectedAgentsArray.push(data);
+				});
+			} else {
+				vm.gridOptions.data.forEach(function (data) {
+					data.selectedRow = false;
+				});
+				toggledAgents = false;
+				vm.selectedAgentsArray = [];
+			}
+		}
+
+		vm.selectAgent = function (agent) {
+			if (agent.selectedRow) {
+				agent.selectedRow = false;
+				var agentToRemove = vm.selectedAgentsArray.find(function (a) {
+					return agent.UserCode === a.UserCode;
+				});
+
+				var index = vm.selectedAgentsArray.indexOf(agentToRemove);
+
+				vm.selectedAgentsArray.splice(index, 1);
+			} else {
+				agent.selectedRow = true;
+
+				vm.selectedAgentsArray.push(agent);
+			}
+		}
 
 		vm.sendRandom = function () {
-			var selectedAgents = vm.gridApi.selection.getSelectedRows();
+			var selectedAgents = vm.selectedAgentsArray;
 			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents
 			var randomAgent = selectedAgents[Math.floor(Math.random() * selectedAgents.length)];
 			var stateName = vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)].Name;
@@ -93,7 +91,7 @@
 		}
 
 		function sendBatch(stateCode) {
-			var selectedAgents = vm.gridApi.selection.getSelectedRows();
+			var selectedAgents = vm.selectedAgentsArray;
 			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents
 
 			var snapshotId = now();
@@ -107,7 +105,7 @@
 						groups.push(s)
 					return groups;
 				}, []);
-				
+
 			distinctDatasources.forEach(function (d) {
 
 				var states = selectedAgents
@@ -154,14 +152,13 @@
 					}
 				]
 			};
-
 			rtaToolService.sendBatch(batch);
 		}
 
 		function now() {
 			return moment.utc().format('YYYY-MM-DD HH:mm:ss');
 		}
-		
+
 		function startSendingBatchWithRandomStates() {
 			sendingBatchWithRandomStatesTrigger = $interval(function () {
 				vm.sendRandom();
