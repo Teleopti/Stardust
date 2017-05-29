@@ -1,10 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Services;
-using System.Linq;
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;
@@ -61,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			var signInReply = new SignInRequestMessage(issuerUrl, _authenticationModule.Realm)
 			{
-				Context = "ru=" + url.AbsoluteUri.Remove(url.AbsoluteUri.IndexOf("Authentication/SignOut", StringComparison.OrdinalIgnoreCase)),
+				Context = "ru=" + url.AbsolutePath.Remove(url.AbsolutePath.IndexOf("Authentication/SignOut", StringComparison.OrdinalIgnoreCase)),
 			};
 
 			var signOut = new SignOutRequestMessage(issuerUrl, signInReply.WriteQueryString());
