@@ -29,12 +29,16 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 				if (groups.ContainsKey(columnValue.Description))
 					groups[columnValue.Description].Add(person);
 				else
-					groups.Add(columnValue.Description, new List<IPerson>() {person});
+					groups.Add(columnValue.Description, new List<IPerson> {person});
 			}
 
 			foreach (var group in groups)
 			{
-				IRootPersonGroup rootGroup = new RootPersonGroup(group.Key)
+				var groupName = group.Key.Length > 50
+					? group.Key.Substring(0, 48) + ".."
+					: group.Key;
+
+				IRootPersonGroup rootGroup = new RootPersonGroup(groupName)
 				{
 					Entity = optionalColumn
 				};

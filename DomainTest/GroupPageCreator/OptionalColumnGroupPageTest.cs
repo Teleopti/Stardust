@@ -24,23 +24,23 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		}
 
 		[Test]
-		public void	ShouldCreateGroupPageForGivenOptionalColumn()
+		public void ShouldCreateGroupPageForGivenOptionalColumn()
 		{
 			var person1 = new Person().WithId();
 			person1.AddOptionalColumnValue(new OptionalColumnValue("group 1"), _optionalColumn);
 			var person2 = new Person().WithId();
 			person2.AddOptionalColumnValue(new OptionalColumnValue("group 2"), _optionalColumn);
-			var persons = new [] { person1, person2 };
-			
+			var persons = new[] { person1, person2 };
+
 			var options = new GroupPageOptions(persons) { CurrentGroupPageName = _optionalColumn.Name };
-			var groupPage = _target.CreateGroupPage(new[] {_optionalColumn}, options);
+			var groupPage = _target.CreateGroupPage(new[] { _optionalColumn }, options);
 
 			groupPage.Description.Name.Should().Be.EqualTo(_optionalColumn.Name);
 			groupPage.DescriptionKey.Should().Be.EqualTo(null);
 			groupPage.Id.Should().Be.EqualTo(_optionalColumn.Id.Value);
 			groupPage.RootGroupCollection.Count.Should().Be.EqualTo(2);
 			var group1 = groupPage.RootGroupCollection.SingleOrDefault(x => x.Description.Name == "group 1");
-			var group2 = groupPage.RootGroupCollection.SingleOrDefault(x => x.Description.Name == "group 2");			
+			var group2 = groupPage.RootGroupCollection.SingleOrDefault(x => x.Description.Name == "group 2");
 			group1.PersonCollection.Should().Contain(person1);
 			group2.PersonCollection.Should().Contain(person2);
 			group1.Id.Should().Not.Be.EqualTo(null);
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 			group1.PersonCollection.First().Should().Be.SameInstanceAs(person1);
 		}
 
-		
+
 
 		[Test]
 		public void ShouldHandleEmptyEntityList()
@@ -101,6 +101,25 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 			var groupPage = _target.CreateGroupPage(new[] { _optionalColumn }, options);
 
 			groupPage.Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldTruncateLongGroupPageNames()
+		{
+			var person1 = new Person().WithId();
+			person1.AddOptionalColumnValue(new OptionalColumnValue("this group name is longer than 50 characters by just a bit"), _optionalColumn);
+
+			var options = new GroupPageOptions(new[] { person1 }) { CurrentGroupPageName = _optionalColumn.Name };
+			var groupPage = _target.CreateGroupPage(new[] { _optionalColumn }, options);
+
+			groupPage.Description.Name.Should().Be.EqualTo(_optionalColumn.Name);
+			groupPage.DescriptionKey.Should().Be.EqualTo(null);
+			groupPage.Id.Should().Be.EqualTo(_optionalColumn.Id.Value);
+			groupPage.RootGroupCollection.Count.Should().Be.EqualTo(1);
+			var group1 = groupPage.RootGroupCollection.SingleOrDefault(x => x.Description.Name == "this group name is longer than 50 characters by ..");
+			group1.PersonCollection.Should().Contain(person1);
+			group1.Id.Should().Not.Be.EqualTo(null);
+			group1.Entity.Should().Be.SameInstanceAs(_optionalColumn);
 		}
 	}
 }
