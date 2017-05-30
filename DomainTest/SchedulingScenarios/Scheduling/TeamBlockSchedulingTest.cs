@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakePreferenceDayRepository PreferenceDayRepository;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
+		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -583,6 +585,38 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoScheduling(period);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
+		}
+
+		[Test]
+		[Ignore("#44536")]
+		public void ShouldNotPlaceShiftOutsideOpenSkill()
+		{
+			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = ActivityRepository.Has("_");
+			var closedSkill = SkillRepository.Has("_", activity, new TimePeriod(10, 19));
+			var openSkill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var team = new Team().WithDescription(new Description("team")).WithId();
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), new ShiftCategory("_").WithId()));
+			PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, openSkill, closedSkill);
+			var agentOnlyKnowingClosedSkill = PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, closedSkill);
+			SkillDayRepository.Has(closedSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			SkillDayRepository.Has(openSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+				UseTeam = true,
+				TeamSameShiftCategory = true
+			});
+
+			Target.DoScheduling(period);
+
+			AssignmentRepository.Find(new[] {agentOnlyKnowingClosedSkill}, period, scenario).Any(x => x.ShiftLayers.Any())
+				.Should().Be.False();
 		}
 
 		public TeamBlockSchedulingTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
