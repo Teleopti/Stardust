@@ -1,4 +1,4 @@
-function PermissionsTreeController(permissionsDataService, localeLanguageSortingService, NoticeService, $translate) {
+function PermissionsTreeController(permissionsDataService, NoticeService, $translate) {
 	var ctrl = this;
 
 	ctrl.toggleFunction = toggleFunction;
@@ -8,11 +8,6 @@ function PermissionsTreeController(permissionsDataService, localeLanguageSorting
 	ctrl.openFunctions = {};
 	ctrl.isFunctionOpen = isFunctionOpen;
 	ctrl.shouldFunctionBeSelected = shouldFunctionBeSelected;
-	ctrl.sortByLocaleLanguage = sortByLocaleLanguage;
-	
-	function sortByLocaleLanguage (a, b){
-		return localeLanguageSortingService.sort(a.value, b.value);
-	}
 
 	function isFunctionOpen(func) {
 		if (func.FunctionDescription === 'xxOpenRaptorApplication') {
