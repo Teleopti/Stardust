@@ -3,15 +3,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 {
-	public interface IDayValueUnlockedIndexSorter
+	public class DayValueUnlockedIndexSorter
 	{
-		IList<int> SortAscending(ILockableBitArray lockableBitArray, IList<double?> values);
-		IList<int> SortDescending(ILockableBitArray lockableBitArray, IList<double?> values);
-	}
-
-	public class DayValueUnlockedIndexSorter : IDayValueUnlockedIndexSorter
-	{
-		public IList<int> SortAscending(ILockableBitArray lockableBitArray, IList<double?> values)
+		public IEnumerable<int> SortAscending(ILockableBitArray lockableBitArray, IList<double?> values)
 		{
 			var test = new List<KeyValuePair<int, double>>();
 
@@ -32,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			return ret;
 		}
 
-		public IList<int> SortDescending(ILockableBitArray lockableBitArray, IList<double?> values)
+		public IEnumerable<int> SortDescending(ILockableBitArray lockableBitArray, IList<double?> values)
 		{
 			//should be an unlocked no day off
 			var test = new List<KeyValuePair<int, double>>();

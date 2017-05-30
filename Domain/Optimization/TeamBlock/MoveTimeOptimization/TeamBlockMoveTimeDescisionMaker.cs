@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 
 	public class TeamBlockMoveTimeDescisionMaker : ITeamBlockMoveTimeDescisionMaker
 	{
-		private readonly IDayValueUnlockedIndexSorter _dayValueUnlockedIndexSorter;
+		private readonly DayValueUnlockedIndexSorter _dayValueUnlockedIndexSorter;
 		private readonly ILockableBitArrayFactory lockableBitArrayFactory;
 		private readonly IScheduleResultDataExtractorProvider  _scheduleResultDataExtractorProvider;
 		private readonly IValidateFoundMovedDaysSpecification _validateFoundMovedDaysSpecification;
 
-		public TeamBlockMoveTimeDescisionMaker(IDayValueUnlockedIndexSorter dayValueUnlockedIndexSorter, ILockableBitArrayFactory lockableBitArrayFactory, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider, IValidateFoundMovedDaysSpecification validateFoundMovedDaysSpecification)
+		public TeamBlockMoveTimeDescisionMaker(DayValueUnlockedIndexSorter dayValueUnlockedIndexSorter, ILockableBitArrayFactory lockableBitArrayFactory, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider, IValidateFoundMovedDaysSpecification validateFoundMovedDaysSpecification)
 		{
 			_dayValueUnlockedIndexSorter = dayValueUnlockedIndexSorter;
 			this.lockableBitArrayFactory = lockableBitArrayFactory;

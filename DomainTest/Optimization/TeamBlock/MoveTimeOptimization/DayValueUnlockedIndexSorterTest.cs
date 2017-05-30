@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 	[TestFixture]
 	public class DayValueUnlockedIndexSorterTest
 	{
-		private IDayValueUnlockedIndexSorter _target;
+		private DayValueUnlockedIndexSorter _target;
 
 		[SetUp]
 		public void Setup()
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		{
 			ILockableBitArray lockableBitArray = createBitArray();
 			IList<double? > values = new List<double?> { -20, -10, 10, 30,40,-40 };
-			var sortedList = _target.SortAscending(lockableBitArray, values);
+			var sortedList = _target.SortAscending(lockableBitArray, values).ToArray();
 			Assert.AreEqual(6,sortedList[0]);
 			Assert.AreEqual(1,sortedList[1]);
 			Assert.AreEqual(2,sortedList[2]);
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		{
 			ILockableBitArray lockableBitArray = createBitArray();
 			IList<double?> values = new List<double?> { -20, -10, 10, 30, 40, -40 };
-			var sortedList = _target.SortDescending(lockableBitArray, values);
+			var sortedList = _target.SortDescending(lockableBitArray, values).ToArray();
 			Assert.AreEqual(4, sortedList[0]);
 			Assert.AreEqual(3, sortedList[1]);
 			Assert.AreEqual(2, sortedList[2]);

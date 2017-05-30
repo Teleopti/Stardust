@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private IScheduleDayPro _scheduleDayPro0221Sun;
 
 		private IScheduleDay _schedulePartShortMainShift;
-		private IDayValueUnlockedIndexSorter _dayValueUnlockedIndexSorder;
+		private DayValueUnlockedIndexSorter _dayValueUnlockedIndexSorder;
 		private ILockableBitArrayFactory _lokableBitArrayFactory;
 		private IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private IValidateFoundMovedDaysSpecification _validateFoundMovedDaysSpecification;
