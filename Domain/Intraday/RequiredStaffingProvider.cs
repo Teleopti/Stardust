@@ -109,10 +109,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			var actualStaffingIntervals = new List<StaffingIntervalModel>();
 			var staffing = skillDay.SkillStaffPeriodViewCollection(resolution, false);
-			foreach (var actualInterval in skillDayStats)
+			var skillIntervals = skillDayStats.GroupBy(x => x.StartTime);
+			foreach (var interval in skillIntervals)
 			{
 				var staffingInterval = staffing
-					.FirstOrDefault(x => x.Period.StartDateTime == TimeZoneHelper.ConvertToUtc(actualInterval.StartTime, _timeZone.TimeZone()));
+					.FirstOrDefault(x => x.Period.StartDateTime == TimeZoneHelper.ConvertToUtc(interval.Key, _timeZone.TimeZone()));
 
 				if(staffingInterval == null)
 					continue;
@@ -120,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				actualStaffingIntervals.Add(new StaffingIntervalModel()
 				{
 					SkillId = skillDay.Skill.Id.Value,
-					StartTime = actualInterval.StartTime,
+					StartTime = interval.Key,
 					Agents = staffingInterval.FStaff
 				});
 			}
