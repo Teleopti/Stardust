@@ -41,6 +41,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			WithAnalyticsUnitOfWork.Do(uow =>
 			{
 				uow.Current().FetchSession().CreateSQLQuery(@"
+					DELETE FROM [dbo].[hangfire_requeue]
+				").ExecuteUpdate();
+			});
+			WithAnalyticsUnitOfWork.Do(uow =>
+			{
+				uow.Current().FetchSession().CreateSQLQuery(@"
 					INSERT INTO [dbo].[hangfire_requeue]
 					VALUES (NEWID(), 'Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantDayTickEvent', null, 0, null)
 				").ExecuteUpdate();
