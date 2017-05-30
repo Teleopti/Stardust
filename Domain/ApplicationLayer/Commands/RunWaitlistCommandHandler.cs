@@ -31,6 +31,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
                     + $"OperatedPersonId=\"{trackInfo.OperatedPersonId}\", Period=\"{command.Period}\"");
             }
 
+
+			//Should not send event, should put in a placeholder for each day of period. Let's do it in utc
+			//Maybe rename to triggerWaitlist instead of RunWaitlist.. 
             var @event = new RunRequestWaitlistEvent
             {
                 InitiatorId = trackInfo.OperatedPersonId,
