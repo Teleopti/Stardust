@@ -290,10 +290,9 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 				foreach (var ids in jobIds.Batch(400))
 				{
 					var stringIds = string.Join("','", ids);
-					const string sql = @"DELETE FROM Stardust.JobQueue WHERE JobId IN (@ids)";
+					var sql = $@"DELETE FROM Stardust.JobQueue WHERE JobId IN ('{stringIds}')";
 					using (var comm = new SqlCommand(sql, sqlConnection))
 					{
-						comm.Parameters.AddWithValue("@ids", stringIds);
 						comm.ExecuteNonQuery();
 					}
 				}
