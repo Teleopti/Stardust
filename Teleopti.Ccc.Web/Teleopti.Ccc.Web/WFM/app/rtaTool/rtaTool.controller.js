@@ -9,7 +9,8 @@
 		'$scope',
 		'$q',
 		'$interval',
-		'$filter'];
+		'$filter',
+		'NoticeService'];
 
 	function RtaToolController(rtaToolService, $scope, $q, $interval, $filter) {
 		var vm = this;
@@ -114,7 +115,9 @@
 					States: states
 				};
 
-				rtaToolService.sendBatch(batch);
+				rtaToolService.sendBatch(batch).then(function(){
+					NoticeService.info('Done!', 5000, true);
+				});
 			});
 		}
 
