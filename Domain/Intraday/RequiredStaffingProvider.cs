@@ -74,7 +74,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 					var statInterval = skillDayStats
 						.FirstOrDefault(x => TimeZoneHelper.ConvertToUtc(x.StartTime, _timeZone.TimeZone()) == taskPeriod.Period.StartDateTime &&
 																		  x.WorkloadId == workloadDay.Workload.Id.Value);
-					if (statInterval == null)
+
+                    taskPeriod.CampaignTasks = new Percent(0);
+                    taskPeriod.CampaignTaskTime = new Percent(0);
+                    taskPeriod.CampaignAfterTaskTime = new Percent(0);
+
+                    if (statInterval == null)
 					{
 						taskPeriod.SetTasks(0);
 						taskPeriod.AverageTaskTime = TimeSpan.Zero;
