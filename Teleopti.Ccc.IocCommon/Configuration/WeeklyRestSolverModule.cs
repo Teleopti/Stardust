@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
 			builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
 			builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
-			builder.RegisterType<TeamBlockScheduleCloner>().As<ITeamBlockScheduleCloner>();
+			builder.RegisterType<TeamBlockScheduleCloner>().SingleInstance();
 			builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>().SingleInstance();
 			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
 			builder.RegisterType<VerifyWeeklyRestAroundDayOffSpecification>().As<IVerifyWeeklyRestAroundDayOffSpecification>();

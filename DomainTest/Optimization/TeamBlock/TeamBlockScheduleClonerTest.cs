@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 	public class TeamBlockScheduleClonerTest
 	{
 		private MockRepository _mocks;
-		private ITeamBlockScheduleCloner _target;
+		private TeamBlockScheduleCloner _target;
 		private ITeamBlockInfo _teamBlockInfo;
 		private IBlockInfo _blockInfo;
 		private ITeamInfo _teamInfo;

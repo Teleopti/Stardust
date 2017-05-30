@@ -1,18 +1,11 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public interface ITeamBlockScheduleCloner
-	{
-		IEnumerable<IScheduleDay> CloneSchedules(ITeamBlockInfo teamBlock);
-	}
-
-	public class TeamBlockScheduleCloner : ITeamBlockScheduleCloner
+	public class TeamBlockScheduleCloner
 	{
 		public IEnumerable<IScheduleDay> CloneSchedules(ITeamBlockInfo teamBlock)
 		{

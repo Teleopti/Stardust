@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IShiftNudgeLater _shiftNudgeLater;
 		private readonly IEnsureWeeklyRestRule _ensureWeeklyRestRule;
 		private readonly IContractWeeklyRestForPersonWeek _contractWeeklyRestForPersonWeek;
-		private readonly ITeamBlockScheduleCloner _teamBlockScheduleCloner;
+		private readonly TeamBlockScheduleCloner _teamBlockScheduleCloner;
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 		public ShiftNudgeManager(IShiftNudgeEarlier shiftNudgeEarlier, IShiftNudgeLater shiftNudgeLater,
 			IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek,
-			ITeamBlockScheduleCloner teamBlockScheduleCloner, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
+			TeamBlockScheduleCloner teamBlockScheduleCloner, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
 			ITeamBlockOptimizationLimits teamBlockOptimizationLimits, ISchedulingOptionsCreator schedulingOptionsCreator,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator, IScheduleDayIsLockedSpecification scheduleDayIsLockedSpecification,
 			IScheduleDayChangeCallback scheduleDayChangeCallback)
