@@ -12,7 +12,7 @@
 		'$filter',
 		'NoticeService'];
 
-	function RtaToolController(rtaToolService, $scope, $q, $interval, $filter) {
+	function RtaToolController(rtaToolService, $scope, $q, $interval, $filter, NoticeService) {
 		var vm = this;
 
 		vm.pause = true;
