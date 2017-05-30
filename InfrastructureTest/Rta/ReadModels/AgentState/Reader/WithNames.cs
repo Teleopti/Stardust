@@ -53,7 +53,8 @@ INSERT INTO [ReadModel].[AgentState]
 	EmploymentNumber,
 	IsRuleAlarm,
 	AlarmStartTime,
-	StateGroupId
+	StateGroupId,
+	IsDeleted
 ) VALUES (
 	'{personId1}',
 	'{siteId}',
@@ -65,7 +66,8 @@ INSERT INTO [ReadModel].[AgentState]
 	'1',
 	1,
 	'2017-01-23 08:00',
-	'{Guid.NewGuid()}'
+	'{Guid.NewGuid()}',
+	0
 )
 ").ExecuteUpdate();
 			});
