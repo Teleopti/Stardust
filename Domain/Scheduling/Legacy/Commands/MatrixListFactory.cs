@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class MatrixListFactory
 	{
 		private readonly MatrixUserLockLocker _matrixUserLockLocker;
-		private readonly IMatrixNotPermittedLocker _matrixNotPermittedLocker;
+		private readonly MatrixNotPermittedLocker _matrixNotPermittedLocker;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 
 		public MatrixListFactory(MatrixUserLockLocker matrixUserLockLocker,
-			IMatrixNotPermittedLocker matrixNotPermittedLocker, IPersonListExtractorFromScheduleParts personExtractor,
+			MatrixNotPermittedLocker matrixNotPermittedLocker, IPersonListExtractorFromScheduleParts personExtractor,
 			PeriodExtractorFromScheduleParts periodExtractor)
 		{
 			_matrixUserLockLocker = matrixUserLockLocker;

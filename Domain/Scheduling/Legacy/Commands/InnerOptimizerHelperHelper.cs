@@ -32,15 +32,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var restrictionLocker = new MatrixRestrictionLocker(_restrictionExtractor);
 			foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)
 				lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker, schedulingOptions);
-			IMatrixMeetingDayLocker meetingDayLocker = new MatrixMeetingDayLocker(matrixList);
+			var meetingDayLocker = new MatrixMeetingDayLocker(matrixList);
 			meetingDayLocker.Execute();
-			IMatrixPersonalShiftLocker personalShiftLocker = new MatrixPersonalShiftLocker(matrixList);
+			var personalShiftLocker = new MatrixPersonalShiftLocker(matrixList);
 			personalShiftLocker.Execute();
-			IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
+			var matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
 			matrixOvertimeLocker.Execute();
-			IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
+			var noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
 			noMainShiftLocker.Execute();
-			IMatrixShiftsNotAvailibleLocker matrixShiftsNotAvailibleLocker = new MatrixShiftsNotAvailibleLocker();
+			var matrixShiftsNotAvailibleLocker = new MatrixShiftsNotAvailibleLocker();
 			matrixShiftsNotAvailibleLocker.Execute(matrixList);
 			var matrixUnselectedDaysLocker = new MatrixUnselectedDaysLocker(matrixList, selectedPeriod);
 			matrixUnselectedDaysLocker.Execute();
@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void LockDaysForIntradayOptimization(IEnumerable<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod)
 		{
-			IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
+			var matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
 			matrixOvertimeLocker.Execute();
-			IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
+			var noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
 			noMainShiftLocker.Execute();
 			var matrixUnselectedDaysLocker = new MatrixUnselectedDaysLocker(matrixList, selectedPeriod);
 			matrixUnselectedDaysLocker.Execute();

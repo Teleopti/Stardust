@@ -1,19 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 {
-    /// <summary>
-    /// Locks the days with personal shift.
-    /// </summary>
-    public interface IMatrixPersonalShiftLocker
-    {
-        void Execute();
-    }
-
-    public class MatrixPersonalShiftLocker : IMatrixPersonalShiftLocker
+    public class MatrixPersonalShiftLocker
     {
         private readonly IEnumerable<IScheduleMatrixPro> _scheduleMatrixList;
 

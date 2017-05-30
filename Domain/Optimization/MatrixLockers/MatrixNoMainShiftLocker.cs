@@ -4,15 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 {
-    /// <summary>
-    /// Locks the days with full day, or part day Absence or days that is not scheduled
-    /// </summary>
-    public interface IMatrixNoMainShiftLocker
-    {
-        void Execute();
-    }
-
-    public class MatrixNoMainShiftLocker : IMatrixNoMainShiftLocker
+    public class MatrixNoMainShiftLocker
     {
         private readonly IEnumerable<IScheduleMatrixPro> _scheduleMatrixList;
 

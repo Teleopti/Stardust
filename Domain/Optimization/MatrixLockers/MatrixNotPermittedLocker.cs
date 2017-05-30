@@ -2,16 +2,10 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 {
-	public interface IMatrixNotPermittedLocker
-	{
-		void Execute(IList<IScheduleMatrixPro> matrixList);
-	}
-
-	public class MatrixNotPermittedLocker : IMatrixNotPermittedLocker
+	public class MatrixNotPermittedLocker
 	{
 		private readonly ICurrentAuthorization _authorization;
 

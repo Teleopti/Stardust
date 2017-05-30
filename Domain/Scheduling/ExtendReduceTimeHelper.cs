@@ -161,9 +161,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private static void lockDaysForExtendReduceOptimization(IList<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod)
 		{
-			IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
+			var matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
 			matrixOvertimeLocker.Execute();
-			IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
+			var noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
 			noMainShiftLocker.Execute();
 			var matrixUnselectedDaysLocker = new MatrixUnselectedDaysLocker(matrixList, selectedPeriod);
 			matrixUnselectedDaysLocker.Execute();

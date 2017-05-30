@@ -1,18 +1,9 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 {
-    /// <summary>
-    /// Locks the days with full day meeting.
-    /// </summary>
-    public interface IMatrixMeetingDayLocker
-    {
-        void Execute();
-    }
-
-    public class MatrixMeetingDayLocker : IMatrixMeetingDayLocker
+    public class MatrixMeetingDayLocker
     {
         private readonly IEnumerable<IScheduleMatrixPro> _scheduleMatrixList;
 

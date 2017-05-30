@@ -3,12 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 {
-	public interface IMatrixShiftsNotAvailibleLocker
-	{
-		void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixList);
-	}
-
-	public class MatrixShiftsNotAvailibleLocker : IMatrixShiftsNotAvailibleLocker
+	public class MatrixShiftsNotAvailibleLocker
 	{
 		public void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixList)
 		{

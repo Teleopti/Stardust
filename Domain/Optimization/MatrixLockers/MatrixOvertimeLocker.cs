@@ -1,19 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 {
-    /// <summary>
-    /// Locks the days with overtime in the matrix.
-    /// </summary>
-    public interface IMatrixOvertimeLocker
-    {
-        void Execute();
-    }
-
-    public class MatrixOvertimeLocker : IMatrixOvertimeLocker
+    public class MatrixOvertimeLocker
     {
         private readonly IEnumerable<IScheduleMatrixPro> _matrixList;
 

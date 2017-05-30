@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	public class MatrixShiftsNotAvailibleLockerTest
 	{
 		private MockRepository _mocks;
-		private IMatrixShiftsNotAvailibleLocker _target;
+		private MatrixShiftsNotAvailibleLocker _target;
 		private IList<IScheduleMatrixPro> _matrixList;
 		private IScheduleMatrixPro _matrix;
 		private IScheduleDayPro _scheduleDayPro;
