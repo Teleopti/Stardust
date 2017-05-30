@@ -13,8 +13,11 @@ describe('IntradayAreaCtrl', function () {
 	var skillsWithFirstUnsupported = [];
 	var skillAreaInfo;
 	var trafficAndPerformanceData;
+	var trafficAndPerformanceDataTomorrow;
 	var performanceData;
+	var performanceDataTomorrow;
 	var staffingData;
+	var staffingDataTomorrow;
 	var emptyStaffingData;
 	var timeData;
 	var isUnsupportedSkillTest = false;
@@ -29,6 +32,7 @@ describe('IntradayAreaCtrl', function () {
 						Wfm_Intraday_OptimalStaffing_40921: true,
 						Wfm_Intraday_ScheduledStaffing_41476: true,
 						Wfm_Intraday_ESL_41827: true,
+						WFM_Intraday_Show_For_Other_Days_43504: false,
 						togglesLoaded: {
 							then: function(cb) { cb(); }
 						}
@@ -115,6 +119,38 @@ describe('IntradayAreaCtrl', function () {
 				SpeedOfAnswer: 32296
 			}
 		};
+		trafficAndPerformanceDataTomorrow = {
+			LatestActualIntervalEnd: "0001-01-02T16:00:00",
+			LatestActualIntervalStart: "0001-01-02T15:45:00",
+			IncomingTrafficHasData: true,
+			DataSeries: {
+				AbandonedRate: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				AverageHandleTime: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				AverageSpeedOfAnswer: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				ForecastedAverageHandleTime: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 199.8660714285, 201.3520471464],
+				ForecastedCalls: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0112, 0.3224, 0.5169, 0.7337, 0.9672],
+				CalculatedCalls: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				ServiceLevel: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				Time: ["0001-01-02T00:00:00", "0001-01-02T00:15:00", "0001-01-02T00:30:00", "0001-01-02T00:45:00"]
+			},
+			Summary: {
+				AbandonRate: 0.05594855305466238,
+				AbandonedCalls: 87,
+				AnsweredCalls: 1468,
+				AnsweredCallsWithinSL: 1305,
+				AverageHandleTime: 245.63987138263664,
+				AverageSpeedOfAnswer: 22,
+				ForecastedActualCallsDiff: 11.686895162492235,
+				ForecastedActualHandleTimeDiff: 26.25497332067074,
+				ForecastedAverageHandleTime: 194.55857058299338,
+				ForecastedCalls: 1392.2850999999998,
+				ForecastedHandleTime: 270880.99889999995,
+				HandleTime: 381970,
+				CalculatedCalls: 1337,
+				ServiceLevel: 0.90,
+				SpeedOfAnswer: 32296
+			}
+		};
 
 		performanceData = {
 			LatestActualIntervalEnd: "0001-01-01T16:00:00",
@@ -135,6 +171,25 @@ describe('IntradayAreaCtrl', function () {
 			}
 		};
 
+		performanceDataTomorrow = {
+			LatestActualIntervalEnd: "0001-01-01T16:00:00",
+			LatestActualIntervalStart: "0001-01-01T15:45:00",
+			PerformanceHasData: true,
+			DataSeries: {
+				AbandonedRate: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				AverageSpeedOfAnswer: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				EstimatedServiceLevels: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				ServiceLevel: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				Time: ["0001-01-01T00:00:00", "0001-01-01T00:15:00", "0001-01-01T00:30:00", "0001-01-01T00:45:00"]
+			},
+			Summary: {
+				AbandonRate: 0.05594855305466238,
+				AverageSpeedOfAnswer: 22,
+				ServiceLevel: 0.90,
+				EstimatedServiceLevel: 0.8735783757893
+			}
+		};
+
 		timeData = {
 			latestIntervalTime: {
 				StartTime: {},
@@ -145,6 +200,17 @@ describe('IntradayAreaCtrl', function () {
 			StaffingHasData: true,
 			DataSeries: {
 				ForecastedStaffing: [1, 2, 3],
+				UpdatedForecastedStaffing: [2, 3, 4],
+				ActualStaffing: [2, 3, 4],
+				Time: ["2016-08-30T00:00:00", "2016-08-30T00:15:00"],
+				ScheduledStaffing: [1, 2, 3]
+			}
+		};
+
+		staffingDataTomorrow = {
+			StaffingHasData: true,
+			DataSeries: {
+				ForecastedStaffing: [3, 2, 1],
 				UpdatedForecastedStaffing: [2, 3, 4],
 				ActualStaffing: [2, 3, 4],
 				Time: ["2016-08-30T00:00:00", "2016-08-30T00:15:00"],

@@ -96,13 +96,6 @@
                     id: '@id',
                     dayOffset: '@dayOffset'
                 },
-                 {
-                    query: {
-                        method: 'GET',
-                        //params: {id: '@id', dateUtc: '@date'},
-                        isArray: false
-                    }
-                }
             );
 
             this.getSkillAreaMonitorPerformance = $resource(
@@ -150,13 +143,6 @@
                     id: '@id',
                     dayOffset: '@dayOffset'
                 },
-                {
-                    query: {
-                        method: 'GET',
-                        params: {},
-                        isArray: false
-                    }
-                }
             );
 
             this.getSkillAreaStaffingData = $resource(
@@ -204,13 +190,6 @@
                     id: '@id',
                     dayOffset: '@dayOffset'
                 },
-                {
-                    query: {
-                        method: 'GET',
-                        params: {},
-                        isArray: false
-                    }
-                }
             );
 
             this.getLatestStatisticsTimeForSkillArea = $resource(

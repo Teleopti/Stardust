@@ -315,6 +315,34 @@
         };
 
         function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
+            if ($scope.toggles.showOtherDay) {
+                pollActiveTabDataByDate(activeTab, $scope.getUTCDate($scope.chosenOffset.value));
+            } else {
+                pollActiveTabData(activeTab);
+            }
+        }
+
+        function pollActiveTabData(activeTab) {
+            var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
+
+            if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
+                if ($scope.selectedItem.Skills) {
+                    services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.toggles);
+                    var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
+                } else {
+                    services[activeTab].pollSkillData($scope.selectedItem, $scope.toggles);
+                    var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
+                }
+                $scope.viewObj = services[activeTab].getData();
+                $scope.latestActualInterval = timeData;
+                $scope.hasMonitorData = $scope.viewObj.hasMonitorData;
+            } else {
+                $timeout(function() {
+                    pollActiveTabData($scope.activeTab);
+                }, 1000);
+            }
+        }
+
             var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
 
             if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
