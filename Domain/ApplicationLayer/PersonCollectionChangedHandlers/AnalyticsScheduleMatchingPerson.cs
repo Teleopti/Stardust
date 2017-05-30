@@ -42,6 +42,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		[UnitOfWork]
 		public virtual void Handle(AnalyticsPersonPeriodRangeChangedEvent @event)
 		{
+			InternalHandle(@event);
+		}
+
+		protected void InternalHandle(PersonCollectionChangedEventBase @event)
+		{
 			var didRun = false;
 			_distributedLockAcquirer.TryLockForTypeOf(this, () =>
 			{
@@ -65,6 +70,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			});
 			if (!didRun)
 				throw new Exception("Another handler is running currently, explicitly failing to retry!");
+		}
+
+		// This handler is for legacy reasons, if we have failing events before we moved the handler to another event that are requeued
+		[LogInfo]
+		[UnitOfWork]
+		public virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
+		{
+			InternalHandle(@event);
 		}
 
 		[AnalyticsUnitOfWork]
