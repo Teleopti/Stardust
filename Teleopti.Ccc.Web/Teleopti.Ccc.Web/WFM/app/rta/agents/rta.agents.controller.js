@@ -220,7 +220,6 @@
 
 		function updateStuff(data) {
 			agentsInfo = data.States;
-			vm.agents = data.States;
 			$scope.$watchCollection(
 				function () { return vm.agents; },
 				filterData);
@@ -254,7 +253,7 @@
 		function updateAgentStates(agentStates) {
 			if (skip()) return;
 			var excludedStates = excludedStateIds();
-			setStatesAndStuff(fillAgentState, agentStates);
+			setStatesAndStuff(agentStates);
 			updateUrlWithExcludedStateIds(excludedStates);
 		};
 
@@ -359,46 +358,13 @@
 			return excludedUnique.concat(excluded);
 		}
 
-		function setStatesInAgents(states) {
-			setStatesAndStuff(
-				function (data) {
-					fillAgentsWithState(data);
-					fillAgentsWithoutState();
-				},
-				states);
-		}
-
-		function setStatesAndStuff(fillFunction, states) {
+		function setStatesAndStuff(states) {
 			vm.agents = [];
 			lastUpdate = states.Time;
-			fillFunction(states)
+			fillAgentState(states);
 			vm.timeline = rtaFormatService.buildTimeline(states.Time);
 			vm.isLoading = false;
 			vm.pollingLock = true;
-		}
-
-
-		function fillAgentsWithState(states) {
-			var now = moment(states.Time);
-			states.States.forEach(function (state, i) {
-				var agentInfo = $filter('filter')(agentsInfo, {
-					PersonId: state.PersonId
-				});
-
-				if (agentInfo.length > 0) {
-					state.Name = agentInfo[0].Name;
-					state.SiteAndTeamName = agentInfo[0].SiteName + '/' + agentInfo[0].TeamName;
-					state.TeamName = agentInfo[0].TeamName;
-					state.SiteName = agentInfo[0].SiteName;
-					state.PersonId = agentInfo[0].PersonId;
-					state.TeamId = agentInfo[0].TeamId;
-
-					vm.agents.push(rtaAgentsBuildService.buildAgentState(now, state));
-					if (stateIsNotAdded(vm.states, state))
-						vm.states.push(mapState(state));
-				}
-			});
-			sortPhoneStatesByName();
 		}
 
 		function stateIsNotAdded(existingStates, state) {
@@ -415,23 +381,6 @@
 				Name: state.State,
 				Selected: excludedStatesFromUrl().indexOf(state.StateId) == -1
 			};
-		}
-
-		function fillAgentsWithoutState() {
-			agentsInfo.forEach(function (agentInfo) {
-				var agentFilled = $filter('filter')(vm.agents, {
-					PersonId: agentInfo.PersonId
-				});
-				if (agentFilled.length === 0)
-					vm.agents.push({
-						Name: agentInfo.Name,
-						PersonId: agentInfo.PersonId,
-						SiteAndTeamName: agentInfo.SiteName + '/' + agentInfo.TeamName,
-						TeamName: agentInfo.TeamName,
-						TeamId: agentInfo.TeamId,
-						SiteName: agentInfo.SiteName
-					});
-			});
 		}
 
 		function setupPolling() {

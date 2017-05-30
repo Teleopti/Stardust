@@ -93,10 +93,17 @@
 				displayName: $translate.instant('TimeInAlarm'),
 				field: 'TimeInAlarm',
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
-				sort: alarmOnly ? {
-					direction: 'desc'
-				}
-					: null,
+				sortingAlgorithm: function (a, b, rowA, rowB) {
+					a = rowA.entity.TimeInAlarmSeconds;
+					b = rowB.entity.TimeInAlarmSeconds;
+					if (a == null && b == null)
+						return 0;
+					if (a == null)
+						return -1;
+					if (b == null)
+						return 1;
+					return a - b;
+				},
 				cellTemplate: coloredCellTemplate,
 			};
 
@@ -135,20 +142,20 @@
 							var sortColumnsFilteredByPriority = sortColumns.filter(function (col) { return angular.isDefined(col.sort) && angular.isDefined(col.sort.priority); })
 							updateSortPriority(sortColumnsFilteredByPriority, false);
 							var priority = findMinPriorityForRereprioritize(sortColumnsFilteredByPriority);
-							if( priority > 0)
-								updateSortPriority(sortColumnsFilteredByPriority, true, priority);					
+							if (priority > 0)
+								updateSortPriority(sortColumnsFilteredByPriority, true, priority);
 						});
 				}
 			};
 		};
-		
+
 		function updateSortPriority(columns, setIfExceedsMinPriority, minPriority) {
 			var priorityArray = columns.map(function (col) { return col.sort.priority; });
 			minPriority = minPriority || Math.min.apply(Math, priorityArray);
 
 			columns.forEach(function (col) {
-				if(setIfExceedsMinPriority){
-					if(col.sort.priority > minPriority)
+				if (setIfExceedsMinPriority) {
+					if (col.sort.priority > minPriority)
 						col.sort.priority = col.sort.priority - 1;
 				}
 				else
@@ -161,7 +168,7 @@
 				return 0;
 			var i = 0;
 			var priorityArray = columns.map(function (col) { return col.sort.priority; }).sort();
-			while (i <= priorityArray.length - 0){
+			while (i <= priorityArray.length - 0) {
 				if (priorityArray[i + 1] - priorityArray[i] > 1)
 					return i + 1;
 				i++;

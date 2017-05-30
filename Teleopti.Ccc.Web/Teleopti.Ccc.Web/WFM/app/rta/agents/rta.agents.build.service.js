@@ -39,6 +39,7 @@
 				Color: state.Color,
 				TimeInState: state.TimeInState,
 				TimeInAlarm: getTimeInAlarm(state),
+				TimeInAlarmSeconds: state.TimeInAlarm,
 				TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
 				TimeOutOfAdherence: getTimeOutOfAdherence(state, timeInfo),
 				OutOfAdherences: getOutOfAdherences(state, timeInfo),
