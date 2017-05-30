@@ -13,7 +13,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	public class HangfireUtilities : ICleanHangfire, IRequeueFailedHangfireEvents
+	public class HangfireUtilities : ICleanHangfire, IManageFailedHangfireEvents
 	{
 		private readonly Lazy<JobStorage> _storage;
 		private readonly Lazy<IBackgroundJobClient> _backgroundJobs;
@@ -219,42 +219,86 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public void RequeueFailed(string eventName, string handlerName, string tenant)
 		{
+			getFailedJobs(eventName, handlerName, tenant).ForEach(jobId => backgroundJobs.Requeue(jobId));
+		}
+
+		public void DeleteFailed(string eventName, string handlerName, string tenant)
+		{
+			getFailedJobs(eventName, handlerName, tenant).ForEach(jobId => backgroundJobs.Delete(jobId));
+		}
+
+		private IList<string> getFailedJobs(string eventName, string handlerName, string tenant)
+		{
 			const int batch = 100;
 			var iteration = 0;
 
-			var toBeRequeued = new Dictionary<string, FailedJobDto>();
+			var failed = new Dictionary<string, FailedJobDto>();
 			while (true)
 			{
 				var failedJobs = monitoring.FailedJobs(iteration * batch, batch);
 				failedJobs
 					.Where(x =>
 					{
-						var job = x.Value.Job.Args.OfType<HangfireEventJob>().FirstOrDefault();
-						if (job == null) return false;
+						string tenant1;
+						string eventName1;
+						string handlerName1;
+						try
+						{
+							if (x.Value.Job.Args.Count == 5)
+							{
+								tenant1 = (string)x.Value.Job.Args[1];
+								eventName1 = ((string)x.Value.Job.Args[2]).Split(',')[0];
+								handlerName1 = ((string)x.Value.Job.Args[4]).Split(',')[0];
+							}
+							else if (x.Value.Job.Args.Count == 6)
+							{
+								tenant1 = (string)x.Value.Job.Args[1];
+								eventName1 = ((string)x.Value.Job.Args[3]).Split(',')[0];
+								handlerName1 = ((string)x.Value.Job.Args[5]).Split(',')[0];
+							}
+							else if (x.Value.Job.Args.Count == 7)
+							{
+								tenant1 = (string)x.Value.Job.Args[1];
+								eventName1 = ((string)x.Value.Job.Args[4]).Split(',')[0];
+								handlerName1 = ((string)x.Value.Job.Args[6]).Split(',')[0];
+							}
+							else
+							{
+								var job = x.Value.Job.Args.OfType<HangfireEventJob>().FirstOrDefault();
+								if (job == null) return false;
+								tenant1 = job.Tenant;
+								eventName1 = job.Event.GetType().FullName;
+								handlerName1 = job.HandlerTypeName.Split(',')[0];
+							}
+						}
+						catch (Exception)
+						{
+							return false;
+						}
 
 						bool match = true;
 						if (eventName != null)
-							match = job.Event.GetType().FullName == eventName;
+							match = eventName1 == eventName;
 						if (handlerName != null)
-							match = match && job.HandlerTypeName == handlerName;
+							match = match && handlerName1 == handlerName;
 						if (tenant != null)
-							match = match && job.Tenant == tenant;
+							match = match && tenant1 == tenant;
 						return match;
 					})
-					.ForEach(x => toBeRequeued[x.Key] = x.Value);
+					.ForEach(x => failed[x.Key] = x.Value);
 
 				if (failedJobs.Count < batch)
 					break;
 
 				iteration++;
 			}
-
-			toBeRequeued.ForEach(j => backgroundJobs.Requeue(j.Key));
+			return failed.Keys.ToList();
 		}
 	}
 
-	public interface IRequeueFailedHangfireEvents
+	public interface IManageFailedHangfireEvents
 	{
 		void RequeueFailed(string eventName, string handlerName, string tenant);
+		void DeleteFailed(string eventName, string handlerName, string tenant);
 	}
 }

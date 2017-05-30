@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HangfireUtilities>()
 				.AsSelf()
 				.As<ICleanHangfire>()
-				.As<IRequeueFailedHangfireEvents>()
+				.As<IManageFailedHangfireEvents>()
 				.SingleInstance()
 				.ApplyAspects();
 		}

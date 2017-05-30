@@ -46,7 +46,15 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 					{
 						var data = reader.GetString(0);
 						var arguments = JsonConvert.DeserializeObject<string[]>(data);
-						var type = deserializeProperty("$type", arguments[1]);
+						string type; // We need to match the signatures of different legacy HangfireEventServer.Process() calls
+						if (arguments.Length == 5)
+							type = arguments[2].Replace("\"", "");
+						else if (arguments.Length == 6)
+							type = arguments[3].Replace("\"", "");
+						else if (arguments.Length == 7)
+							type = arguments[4].Replace("\"", "");
+						else 
+							type = deserializeProperty("$type", arguments[1]);
 						jobs.Add(Type.GetType(type));
 					}
 

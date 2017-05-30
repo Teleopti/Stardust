@@ -16,6 +16,7 @@
 		vm.getTypesOfSucceededEvents = getTypesOfSucceededEvents;
 		vm.getTypesOfFailedEvents = getTypesOfFailedEvents;
 		vm.requeueFailedEvents = requeueFailedEvents;
+		vm.deleteFailedEvents = deleteFailedEvents;
 		vm.isFetching = false;
 		var chartLabels = [];
 		var datasets = [
@@ -120,7 +121,13 @@
 		}
 
 		function requeueFailedEvents(type) {
-			return $http.post("./Hangfire/RequeueFailed",{eventName: type}, tokenHeaderService.getHeaders()).then(function() {
+			return $http.post("./Hangfire/RequeueFailed", '"' + type + '"', tokenHeaderService.getHeaders()).then(function() {
+				getTypesOfFailedEvents();
+			});
+		}
+
+		function deleteFailedEvents(type) {
+			return $http.post("./Hangfire/DeleteFailed", '"' + type + '"', tokenHeaderService.getHeaders()).then(function () {
 				getTypesOfFailedEvents();
 			});
 		}

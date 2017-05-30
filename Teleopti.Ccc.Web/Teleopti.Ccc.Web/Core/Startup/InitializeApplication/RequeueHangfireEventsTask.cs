@@ -18,17 +18,17 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	{
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 		private readonly IRequeueHangfireRepository _requeueHangfireRepository;
-		private readonly IRequeueFailedHangfireEvents _requeueFailedHangfireEvents;
+		private readonly IManageFailedHangfireEvents _manageFailedHangfireEvents;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IDataSourceScope _dataSourceScope;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ICurrentAnalyticsUnitOfWorkFactory _currentAnalyticsUnitOfWorkFactory;
 
-		public RequeueHangfireEventsTask(IDistributedLockAcquirer distributedLockAcquirer, IRequeueHangfireRepository requeueHangfireRepository, IRequeueFailedHangfireEvents requeueFailedHangfireEvents, ILoadAllTenants loadAllTenants, IDataSourceScope dataSourceScope, ITenantUnitOfWork tenantUnitOfWork, ICurrentAnalyticsUnitOfWorkFactory currentAnalyticsUnitOfWorkFactory)
+		public RequeueHangfireEventsTask(IDistributedLockAcquirer distributedLockAcquirer, IRequeueHangfireRepository requeueHangfireRepository, IManageFailedHangfireEvents manageFailedHangfireEvents, ILoadAllTenants loadAllTenants, IDataSourceScope dataSourceScope, ITenantUnitOfWork tenantUnitOfWork, ICurrentAnalyticsUnitOfWorkFactory currentAnalyticsUnitOfWorkFactory)
 		{
 			_distributedLockAcquirer = distributedLockAcquirer;
 			_requeueHangfireRepository = requeueHangfireRepository;
-			_requeueFailedHangfireEvents = requeueFailedHangfireEvents;
+			_manageFailedHangfireEvents = manageFailedHangfireEvents;
 			_loadAllTenants = loadAllTenants;
 			_dataSourceScope = dataSourceScope;
 			_tenantUnitOfWork = tenantUnitOfWork;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 				{
 					foreach (var command in _requeueHangfireRepository.GetUnhandledRequeueCommands())
 					{
-						_requeueFailedHangfireEvents.RequeueFailed(command.EventName, command.HandlerName, tenant);
+						_manageFailedHangfireEvents.RequeueFailed(command.EventName, command.HandlerName, tenant);
 						_requeueHangfireRepository.MarkAsCompleted(command);
 						uow.PersistAll();
 					}
