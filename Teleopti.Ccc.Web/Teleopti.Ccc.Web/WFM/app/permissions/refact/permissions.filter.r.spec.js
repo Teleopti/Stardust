@@ -649,8 +649,8 @@ describe('permissionsFilter', function() {
 		expect(filteredOrgData.BusinessUnit.ChildNodes.length).toEqual(1);
 		expect(filteredOrgData.BusinessUnit.ChildNodes[0].Name).toEqual('Site1');
 		expect(filteredOrgData.BusinessUnit.ChildNodes[0].ChildNodes.length).toEqual(2);
-		expect(filteredOrgData.BusinessUnit.ChildNodes[0].ChildNodes[0].Name).toEqual('Team1');
-		expect(filteredOrgData.BusinessUnit.ChildNodes[0].ChildNodes[1].Name).toEqual('Somethingelse');
+		expect(filteredOrgData.BusinessUnit.ChildNodes[0].ChildNodes[0].Name).toEqual('Somethingelse');
+		expect(filteredOrgData.BusinessUnit.ChildNodes[0].ChildNodes[1].Name).toEqual('Team1');
 	});
 
 	it('should show all children under found SUPER parent', function() {

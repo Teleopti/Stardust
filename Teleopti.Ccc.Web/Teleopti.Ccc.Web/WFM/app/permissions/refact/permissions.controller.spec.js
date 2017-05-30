@@ -403,7 +403,7 @@ describe('PermissionsController', function() {
 			vm.copyRole(vm.roles[0]);
 			$httpBackend.flush();
 
-			expect(vm.roles[0].IsSelected).toBe(true);
+			expect(vm.roles[1].IsSelected).toBe(true);
 		});
 
 		it('should set newly copied role to selected role', function() {
@@ -420,7 +420,7 @@ describe('PermissionsController', function() {
 			vm.copyRole(vm.roles[0]);
 			$httpBackend.flush();
 
-			expect(vm.roles[1].IsSelected).toEqual(false);
+			expect(vm.roles[1].IsSelected).toEqual(true);
 			expect(vm.selectedRole.Id).not.toEqual(vm.roles[1].Id)
 			expect(vm.roles.length).toEqual(2);
 		});
@@ -433,19 +433,19 @@ describe('PermissionsController', function() {
 			vm.copyRole(vm.roles[0]);
 			$httpBackend.flush();
 
-			expect(vm.roles[1].IsSelected).toBe(false);
+			expect(vm.roles[0].IsSelected).toBe(false);
 		});
 
-		it('should put copied role on top of roles list', function() {
+		it('should put copied role under the copied role', function() {
 			fakeBackend
 				.withRole(defaultRole2)
 				.withRole(defaultRole);
 			$httpBackend.flush();
 
-			vm.copyRole(vm.roles[1]);
+			vm.copyRole(vm.roles[0]);
 			$httpBackend.flush();
 
-			expect(vm.roles[0].Name).toEqual('Agent');
+			expect(vm.roles[1].Name).toEqual('Agent');
 		});
 
 		it('should be able to select a role', function() {
@@ -1652,8 +1652,8 @@ describe('PermissionsController', function() {
 				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes.length).toEqual(1);
 				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].Name).toEqual('Site1');
 				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes.length).toEqual(2);
-				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].Name).toEqual('Team1');
-				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].Name).toEqual('Somethingelse');
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].Name).toEqual('Somethingelse');
+				expect(vm.filteredOrganizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].Name).toEqual('Team1');
 			});
 		});
 

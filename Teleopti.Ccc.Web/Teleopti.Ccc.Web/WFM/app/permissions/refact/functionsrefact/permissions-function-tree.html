@@ -1,6 +1,6 @@
 <div ui-tree data-drag-enabled="false" ng-if="$ctrl.functions.length>0">
 	<ol ui-tree-nodes="" ng-model="$ctrl.functions">
-		<li ng-repeat="function in $ctrl.functions | orderBy:'LocalizedFunctionDescription'" class="perm-tree" ui-tree-node ng-hide="function.IsHidden">
+		<li ng-repeat="function in $ctrl.functions" class="perm-tree" ui-tree-node ng-hide="function.IsHidden">
 
 			<div ng-cloak class="modal-box">
 				<div ng-cloak ng-show="function.multiDeselectModal">
