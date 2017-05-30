@@ -66,14 +66,17 @@
 		var nullStateId = "noState";
 		var enableWatchOnTeam = false;
 		var updateStatesDelegate = updateStates;
-		var agentsInfo = [];
 		vm.adherence = {};
 		vm.adherencePercent = null;
 		vm.filterText = "";
 		vm.timestamp = "";
+
+		var agentStates = [];
 		vm.agents = [];
-		vm.states = [];
 		vm.filteredData = [];
+
+		vm.states = [];
+
 		vm.format = rtaFormatService.formatDateTime;
 		vm.formatDuration = rtaFormatService.formatDuration;
 		vm.formatToSeconds = rtaFormatService.formatToSeconds;
@@ -219,7 +222,7 @@
 		}
 
 		function updateStuff(data) {
-			agentsInfo = data.States;
+			agentStates = data.States;
 			$scope.$watchCollection(
 				function () { return vm.agents; },
 				filterData);
