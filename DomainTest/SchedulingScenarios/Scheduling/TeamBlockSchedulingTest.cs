@@ -588,7 +588,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#44536")]
+		[Ignore("#44540")]
 		public void ShouldNotPlaceShiftOutsideOpenSkill([Values(true, false)] bool otherAgentKnowsBothOpenAndClosedSkill)
 		{
 			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());
