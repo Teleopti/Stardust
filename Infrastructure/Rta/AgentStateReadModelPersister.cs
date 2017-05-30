@@ -256,7 +256,7 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			SiteName = S.SiteName,
 			TeamId = S.TeamId,
 			TeamName = S.TeamName,
-			IsDeleted = null,
+			IsDeleted = 0,
 			ExpiresAt = null
 		;")
 				.SetParameter("PersonId", info.PersonId)

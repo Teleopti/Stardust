@@ -107,12 +107,12 @@ ORDER BY AlarmStartTime ASC ",
 				builder.Append(selections.QueryFor(SelectionType.Skill).Single());
 				if (selections.Any(SelectionType.Org))
 					builder
-						.Append(" AND (a.IsDeleted IS NULL OR a.IsDeleted <> 1) AND ")
+						.Append(" AND a.IsDeleted = 0 AND ")
 						.Append("(" + string.Join(" OR ", selections.QueryFor(SelectionType.Org)) + ")");
 			}
 			else
 				builder
-					.Append(" WHERE (a.IsDeleted IS NULL OR a.IsDeleted <> 1) AND ")
+					.Append(" WHERE a.IsDeleted = 0 AND ")
 					.Append("(" + string.Join(" OR ", selections.QueryFor(SelectionType.Org)) + ")");
 
 			if (selections.Any(SelectionType.ExcludeStateGroups))
