@@ -93,11 +93,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 		}
 
-		public void Send(List<Guid> requestIds, DateTime timeStamp)
+		public void Send(List<Guid> queuedId, DateTime timeStamp)
 		{
-			foreach (var id in requestIds)
+			foreach (var id in queuedId)
 			{
-				_queuedRequests.FirstOrDefault(x => x.PersonRequest == id).Sent = timeStamp;
+				_queuedRequests.FirstOrDefault(x => x.Id == id).Sent = timeStamp;
 			}
 		}
 

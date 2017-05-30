@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.Count.Should().Be.EqualTo(0);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -77,8 +77,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.Count.Should().Be.EqualTo(1);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 		}
 		
 		[Test]
@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.First().Count().Should().Be.EqualTo(2);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.Count.Should().Be.EqualTo(1);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -138,8 +138,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.First().Count().Should().Be.EqualTo(2);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
 
 
@@ -164,9 +164,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = nearFutureReqId
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.Count.Should().Be.EqualTo(1);
-			absenceRequests.First().First().Should().Be.EqualTo(nearFutureReqId);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
+			queuedAbsenceRequests.First().First().PersonRequest.Should().Be.EqualTo(nearFutureReqId);
 		}
 
 		[Test]
@@ -196,8 +196,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.First().Count().Should().Be.EqualTo(2);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -236,11 +236,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = lastAbsenceReqId
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.Count.Should().Be.EqualTo(2);
-			absenceRequests.First().Count().Should().Be.EqualTo(3);
-			absenceRequests.Second().Count().Should().Be.EqualTo(1);
-			absenceRequests.Second().First().Should().Be.EqualTo(lastAbsenceReqId);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(2);
+			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(3);
+			queuedAbsenceRequests.Second().Count().Should().Be.EqualTo(1);
+			queuedAbsenceRequests.Second().First().PersonRequest.Should().Be.EqualTo(lastAbsenceReqId);
 		}
 
 
@@ -263,8 +263,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.First().Count().Should().Be.EqualTo(1);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(1);
 		}
 
 
@@ -281,8 +281,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = pastId
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.First().First().Should().Be.EqualTo(pastId);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.First().First().PersonRequest.Should().Be.EqualTo(pastId);
 		}
 
 
@@ -309,9 +309,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = futureId
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.First().Count().Should().Be.EqualTo(1);
-			absenceRequests.First().First().Should().Be.EqualTo(futureId);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(1);
+			queuedAbsenceRequests.First().First().PersonRequest.Should().Be.EqualTo(futureId);
 		}
 
 		[Test]
@@ -345,8 +345,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = futureId
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.First().Count().Should().Be.EqualTo(1);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -372,9 +372,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = fatFutureId
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.First().Count().Should().Be.EqualTo(1);
-			absenceRequests.First().First().Should().Be.EqualTo(yesterdayId);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(1);
+			queuedAbsenceRequests.First().First().PersonRequest.Should().Be.EqualTo(yesterdayId);
 		}
 
 		[Test]
@@ -426,10 +426,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = id
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.Count.Should().Be.EqualTo(1);
-			absenceRequests.First().Count().Should().Be.EqualTo(1);
-			absenceRequests.First().First().Should().Be.EqualTo(id);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
+			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(1);
+			queuedAbsenceRequests.First().First().PersonRequest.Should().Be.EqualTo(id);
 		}
 
 		[Test]
@@ -453,8 +453,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			absenceRequests.Count.Should().Be.EqualTo(0);
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -505,6 +505,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
 			QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldIncludePlaceholderRequests()
+		{
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-20),
+				PersonRequest = Guid.Empty
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-21),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
+			queuedAbsenceRequests.First().Select(x => x.PersonRequest).Should().Contain(Guid.Empty);
 		}
 	}
 }

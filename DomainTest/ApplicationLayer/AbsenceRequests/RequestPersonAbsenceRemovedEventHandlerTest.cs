@@ -67,14 +67,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldRunWaitlistCommand()
+		public void ShouldNotRunWaitlistCommand()
 		{
 			addWaitlistEnabledWorkFlowControlSet();
 
 			handle();
 
-			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
-			Publisher.PublishedEvents.Single().Should().Be.OfType<RunRequestWaitlistEvent>();
+			Publisher.PublishedEvents.Count().Should().Be.EqualTo(0);
 		}
 
 		private void addWaitlistEnabledWorkFlowControlSet()

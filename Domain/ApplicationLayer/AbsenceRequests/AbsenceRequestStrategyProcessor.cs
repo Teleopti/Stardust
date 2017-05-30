@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public interface IAbsenceRequestStrategyProcessor
 	{
-		IList<IEnumerable<Guid>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime, DateOnlyPeriod initialPeriod,
+		IList<IEnumerable<IQueuedAbsenceRequest>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime, DateOnlyPeriod initialPeriod,
 									 int windowSize);
 	}
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_configReader = configReader;
 		}
 
-		public IList<IEnumerable<Guid>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime,
+		public IList<IEnumerable<IQueuedAbsenceRequest>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime,
 											DateOnlyPeriod initialPeriod, int windowSize)
 		{
 			var maxDaysForAbsenceRequest = _configReader.ReadValue("MaximumDayLengthForAbsenceRequest", 60);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			//filter out requests that is not in a period that is already beeing processed
 			var processingPeriods = getProcessingPeriods(allRequestsRaw.Where(x => x.Sent != null));
 			var notConflictingRequests = getNotConflictingRequests(allNewRequests, processingPeriods);
-			if (!notConflictingRequests.Any()) return new List<IEnumerable<Guid>>();
+			if (!notConflictingRequests.Any()) return new List<IEnumerable<IQueuedAbsenceRequest>>();
 
 			var futureRequests = getFutureRequests(notConflictingRequests, initialPeriod);
 			var nearFutureRequestIds = getNearFutureRequestIds(nearFutureThresholdTime, initialPeriod, futureRequests);
@@ -121,9 +121,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return allRequests.Where(x => x.StartDateTime.Date >= nearFuturePeriod.StartDate.Date).ToList();
 		}
 
-		private IList<IEnumerable<Guid>> getNearFutureRequestIds(DateTime nearFutureThresholdTime, DateOnlyPeriod nearFuturePeriod, IList<IQueuedAbsenceRequest> futureRequests)
+		private IList<IEnumerable<IQueuedAbsenceRequest>> getNearFutureRequestIds(DateTime nearFutureThresholdTime, DateOnlyPeriod nearFuturePeriod, IList<IQueuedAbsenceRequest> futureRequests)
 		{
-			var result = new List<IEnumerable<Guid>>();
+			var result = new List<IEnumerable<IQueuedAbsenceRequest>>();
 			if (!futureRequests.Any()) return result;
 
 			var requests = getRequestsOnPeriod(nearFutureThresholdTime, nearFuturePeriod, futureRequests);
@@ -133,9 +133,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return result;
 		}
 
-		private IList<IEnumerable<Guid>> getPastRequestIds(DateTime pastThresholdTime, DateOnlyPeriod period, IList<IQueuedAbsenceRequest> pastRequests, int windowSize)
+		private IList<IEnumerable<IQueuedAbsenceRequest>> getPastRequestIds(DateTime pastThresholdTime, DateOnlyPeriod period, IList<IQueuedAbsenceRequest> pastRequests, int windowSize)
 		{
-			var result = new List<IEnumerable<Guid>>();
+			var result = new List<IEnumerable<IQueuedAbsenceRequest>>();
 			//Add Min check to stop in time if a request is "missed in the list" bug #40891
 			while (pastRequests.Any(x => x.StartDateTime.Date <= period.StartDate.Date) && period.StartDate.Date > DateTime.MinValue.AddYears(1))
 			{
@@ -149,10 +149,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return result;
 		}
 
-		private IList<IEnumerable<Guid>> getFarFutureRequestIds(DateTime farFutureThresholdTime, DateOnlyPeriod period,
+		private IList<IEnumerable<IQueuedAbsenceRequest>> getFarFutureRequestIds(DateTime farFutureThresholdTime, DateOnlyPeriod period,
 																	   IList<IQueuedAbsenceRequest> farFutureRequests, int windowSize)
 		{
-			var result = new List<IEnumerable<Guid>>();
+			var result = new List<IEnumerable<IQueuedAbsenceRequest>>();
 			//Add Min check to stop in time if a request is "missed in the list" bug #40891
 			while (farFutureRequests.Any(x => x.StartDateTime.Date >= period.StartDate.Date) && period.StartDate.Date < DateTime.MaxValue.AddYears(-1))
 			{
@@ -175,12 +175,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 		}
 
-		private List<Guid> getRequestsOnPeriod(DateTime thresholdTime, DateOnlyPeriod windowPeriod,
+		private List<IQueuedAbsenceRequest> getRequestsOnPeriod(DateTime thresholdTime, DateOnlyPeriod windowPeriod,
 													  IList<IQueuedAbsenceRequest> requests)
 		{
 			var requestsInPeriod = requests.Where(x => x.StartDateTime.Date >= windowPeriod.StartDate.Date &&
 													   x.StartDateTime.Date <= windowPeriod.EndDate.Date).ToArray();
-			if (!requestsInPeriod.Any()) return new List<Guid>();
+			if (!requestsInPeriod.Any()) return new List<IQueuedAbsenceRequest>();
 
 			var min = requestsInPeriod.Select(x => x.StartDateTime).Min();
 			var max = requestsInPeriod.Select(x => x.EndDateTime).Max();
@@ -190,20 +190,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			if (requestsinExtendedPeriod.Any(x => x.Created <= thresholdTime))
 			{
 				removeRequests(requests, requestsinExtendedPeriod.Select(x => x.PersonRequest));
-
-				foreach (var request in requestsinExtendedPeriod)
-				{
-					if (request.PersonRequest == Guid.Empty)
-					{
-						_queuedAbsenceRequestRepo.Remove(request);
-					}
-				}
-
-				return requestsinExtendedPeriod.Where(y => y.PersonRequest != Guid.Empty).Select(x => x.PersonRequest).ToList();
+				return requestsinExtendedPeriod.ToList();
 			}
 			removeRequests(requests, requestsInPeriod.Select(x => x.PersonRequest));
 
-			return new List<Guid>();
+			return new List<IQueuedAbsenceRequest>();
 		}
 
 		private static IEnumerable<IQueuedAbsenceRequest> findRequestsCompletelyWithinPeriod(IEnumerable<IQueuedAbsenceRequest> requests,

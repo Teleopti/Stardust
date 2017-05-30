@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -52,7 +53,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			int windowSize;
 			int absenceReqNearFutureTime;
 			int absenceReqFarFutureTime;
-			IList<IEnumerable<Guid>> listOfAbsenceRequests = new List<IEnumerable<Guid>>();
 			IDictionary<Guid, int> reqWithVersion = new Dictionary<Guid, int>();
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			            //include yesterday to deal with timezones
 			            var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)),
 			                new DateOnly(now.AddDays(windowSize)));
-			            listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureThresholdTime,
+			           var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureThresholdTime,
 			                farFutureThresholdTime,
 			                pastThresholdTime, initialPeriod, windowSize);
 
@@ -94,16 +94,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			            var sent = _now.UtcDateTime();
 			            listOfAbsenceRequests.ForEach(absenceRequests =>
 			            {
-			                var requests = absenceRequests.ToList();
 			                var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent
 			                {
-			                    PersonRequestIds = requests,
-			                    Sent = sent
+								PersonRequestIds = absenceRequests.Select(x => x.PersonRequest).ToList(),
+								Sent = sent
 			                };
 			                _publisher.Publish(multiAbsenceRequestsEvent);
-			                _queuedAbsenceRequestRepository.Send(requests, sent);
+							_queuedAbsenceRequestRepository.Send(absenceRequests.Select(x => x.Id.GetValueOrDefault()).ToList(), sent);
 
-			                sent = sent.AddSeconds(1);
+							sent = sent.AddSeconds(1);
 			            });
 
 			            uow.PersistAll();

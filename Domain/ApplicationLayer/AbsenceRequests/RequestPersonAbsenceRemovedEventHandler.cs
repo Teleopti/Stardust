@@ -31,8 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			if (_workflowControlSetRepository.LoadAll().Any(w => w.AbsenceRequestWaitlistEnabled))
 			{
 				queueAbsenceRequest(@event);
-
-				runWaitlistCommand(@event);
 			}
 		}
 
@@ -48,18 +46,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
 		}
 
-		private void runWaitlistCommand(RequestPersonAbsenceRemovedEvent @event)
-		{
-			var command = new RunWaitlistCommand
-			{
-				Period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime),
-				TrackedCommandInfo = new TrackedCommandInfo
-				{
-					OperatedPersonId = @event.PersonId,
-					TrackId = Guid.NewGuid()
-				}
-			};
-			_commandDispatcher.Execute(command);
-		}
 	}
 }

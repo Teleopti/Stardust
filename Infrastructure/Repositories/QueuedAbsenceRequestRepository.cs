@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return returnQueuedAbsenceRequests;
 		}
 
-		public void Send(List<Guid> requestIds, DateTime timeStamp)
+		public void Send(List<Guid> queuedId, DateTime timeStamp)
 		{
-			foreach (var batch in requestIds.Batch(1000))
+			foreach (var batch in queuedId.Batch(1000))
 			{
-				var quesryString = "UPDATE[QueuedAbsenceRequest] SET Sent = :timestamp WHERE PersonRequest in (:ids)";
+				var quesryString = "UPDATE[QueuedAbsenceRequest] SET Sent = :timestamp WHERE Id in (:ids)";
 				var sqlQuery = Session.CreateSQLQuery(quesryString);
 				sqlQuery.SetDateTime("timestamp", timeStamp);
 				sqlQuery.SetParameterList("ids", batch);

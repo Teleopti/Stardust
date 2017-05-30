@@ -54,29 +54,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 		}
 	}
-
-	public class AbsenceRequestIntradayFilterIntradayRequestDisabled : IAbsenceRequestIntradayFilter
-	{
-		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-
-		public AbsenceRequestIntradayFilterIntradayRequestDisabled(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
-		{
-			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
-		}
-
-		public void Process(IPersonRequest personRequest)
-		{
-			personRequest.Pending();
-
-			var queuedAbsenceRequest = new QueuedAbsenceRequest
-			{
-				PersonRequest = personRequest.Id.GetValueOrDefault(),
-				Created = personRequest.CreatedOn.GetValueOrDefault(),
-				StartDateTime = personRequest.Request.Period.StartDateTime,
-				EndDateTime = personRequest.Request.Period.EndDateTime
-			};
-			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
-		}
-	}
-
 }

@@ -1,191 +1,245 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
 using NUnit.Framework;
-using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
-	[DomainTest]
-	[TestFixture]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	public class MultiAbsenceRequestsHandlerTest : ISetup
 	{
 		public IPersonRequestRepository PersonRequestRepository;
-		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
-		public IStardustJobFeedback Feedback;
-		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
-		public IMultiAbsenceRequestsUpdater MultiAbsenceRequestsUpdater;
-		public IAbsenceRequestValidatorProvider AbsenceRequestValidatorProvider;
 		public MultiAbsenceRequestsHandler Target;
-		public FakeDataSourceForTenant DataSourceForTenant;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public FakeCurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
-
-		private Domain.Common.BusinessUnit _businessUnit;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public MutableNow Now;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakeSkillDayRepository SkillDayRepository;
+		public FakeActivityRepository ActivityRepository;
+		public FakeSkillRepository SkillRepository;
+		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
-			system.UseTestDouble(MockRepository.GenerateMock<IAbsenceRequestValidatorProvider>())
-				.For<IAbsenceRequestValidatorProvider>();
+			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
+			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 		}
 
 		[Test]
 		public void ShouldHandleRequestWithSpecificValidators()
 		{
-			setDataForTest();
+			Now.Is("2016-12-01 08:00");
+			var bu = new Domain.Common.BusinessUnit("bu").WithId();
+			BusinessUnitRepository.Has(bu);
+			var scenario = new Scenario("scnearioName").WithId();
+			scenario.DefaultScenario = true;
+			scenario.SetBusinessUnit(bu);
+			ScenarioRepository.Has(scenario);
 
-			var person = createPerson();
-			var personRequest = createPersonRequest(person);
+			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			WorkflowControlSetRepository.Add(wfcs);
+			var firstDay = new DateOnly(2016, 12, 01);
+			var activity = ActivityRepository.Has("activityName");
+			var skill = SkillRepository.Has("skillName", activity);
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10));
+			var person = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			person.WorkflowControlSet = wfcs;
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
+			PersonAssignmentRepository.Has(assignment);
+
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 12, 2016, 12, 1, 13))).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+			
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator);
 
 			Target.Handle(new NewMultiAbsenceRequestsCreatedEvent
 			{
 				PersonRequestIds = new List<Guid> {personRequest.Id.GetValueOrDefault()},
-				InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
-				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault(),
-				LogOnDatasource = "Teleopti WFM",
 				Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
 				Sent = DateTime.UtcNow
 			});
 
 			Assert.IsTrue(personRequest.IsPending);
-			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()) == "validatorErrors1");
+			var msg = createDenyMessage(person.PermissionInformation.Culture(), person.PermissionInformation.UICulture(), person.PermissionInformation.DefaultTimeZone(), new DateTime(2016, 12, 01, 12, 0, 0).Utc());
+			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()) == msg);
 		}
 
 		[Test]
 		public void ShouldHandleRequestsWithDifferentSpecificValidators()
 		{
-			setDataForTest();
 
-			var person = createPerson();
-			var personRequest1 = createPersonRequest(person);
-			var personRequest2 = createPersonRequest(person);
+			Now.Is("2016-12-01 08:00");
+			var bu = new Domain.Common.BusinessUnit("bu").WithId();
+			BusinessUnitRepository.Has(bu);
+			var scenario = new Scenario("scnearioName").WithId();
+			scenario.DefaultScenario = true;
+			scenario.SetBusinessUnit(bu);
+			ScenarioRepository.Has(scenario);
 
-			addToQueue(personRequest1, RequestValidatorsFlag.IntradayValidator);
+			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			WorkflowControlSetRepository.Add(wfcs);
+			var firstDay = new DateOnly(2016, 12, 01);
+			var activity = ActivityRepository.Has("activityName");
+			var skill = SkillRepository.Has("skillName", activity);
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10));
+
+			var person = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			person.WorkflowControlSet = wfcs;
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
+			PersonAssignmentRepository.Has(assignment);
+
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 12, 2016, 12, 1, 13))).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+
+			var personRequest2 = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 13, 2016, 12, 1, 14))).WithId();
+			personRequest2.Pending();
+			PersonRequestRepository.Add(personRequest2);
+
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
+
+			addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator);
 			addToQueue(personRequest2, RequestValidatorsFlag.BudgetAllotmentValidator);
 
 			Target.Handle(new NewMultiAbsenceRequestsCreatedEvent
 			{
-				PersonRequestIds = new List<Guid> { personRequest1.Id.GetValueOrDefault(), personRequest2.Id.GetValueOrDefault() },
-				InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
-				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault(),
-				LogOnDatasource = "Teleopti WFM",
+				PersonRequestIds = new List<Guid> { personRequest.Id.GetValueOrDefault(), personRequest2.Id.GetValueOrDefault() },
 				Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
 				Sent = DateTime.UtcNow
 			});
 
-			Assert.IsTrue(personRequest1.IsPending);
-			Assert.IsTrue(personRequest1.GetMessage(new NoFormatting()) == "validatorErrors1");
+			Assert.IsTrue(personRequest.IsPending);
+			var msg = createDenyMessage(person.PermissionInformation.Culture(), person.PermissionInformation.UICulture(), person.PermissionInformation.DefaultTimeZone(), new DateTime(2016, 12, 01, 12, 0, 0).Utc());
+			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()) == msg);
 
 			Assert.IsTrue(personRequest2.IsPending);
-			Assert.IsTrue(personRequest2.GetMessage(new NoFormatting()) == "validatorErrors2");
+			var msg2 = Resources.ResourceManager.GetString("BudgetGroupMissing", person.PermissionInformation.Culture()) ?? Resources.BudgetGroupMissing;
+			Assert.IsTrue(personRequest2.GetMessage(new NoFormatting()) == msg2);
 		}
 
-		private void setDataForTest()
+		[Test]
+		public void ShouldPickUpWaitlistPeriodForAllQueuedRequestsWithSameSentTimestamp()
 		{
-			setBusinessUnit();
-			setCurrentScenario();
-			setAbsenceRequestValidatorProvider();
-			setDataSource();
-			setCurrentPrincipal();
-		}
-
-		private void setBusinessUnit()
-		{
-			_businessUnit = new Domain.Common.BusinessUnit("test bu").WithId();
-			BusinessUnitRepository.Add(_businessUnit);
-		}
-
-		private void setCurrentScenario()
-		{
-			var scenario = MockRepository.GenerateMock<Scenario>();
-			scenario.Stub(s => s.DefaultScenario).Return(true);
-			scenario.Stub(s => s.BusinessUnit).Return(_businessUnit);
-			scenario.Stub(s => s.Id).Return(Guid.NewGuid());
-			scenario.Stub(s => s.Equals(scenario)).Return(true);
+			var dateTimeNow = new DateTime(2016, 12, 01, 8, 0, 0, 2);
+			var truncatedSent = new DateTime(2016, 12, 01, 8, 0, 0, 0);
+			Now.Is(dateTimeNow);
+			var bu = new Domain.Common.BusinessUnit("bu").WithId();
+			BusinessUnitRepository.Has(bu);
+			var scenario = new Scenario("scnearioName").WithId();
+			scenario.DefaultScenario = true;
+			scenario.SetBusinessUnit(bu);
 			ScenarioRepository.Has(scenario);
-		}
 
-		private void setAbsenceRequestValidatorProvider()
-		{
-			var absenceRequestValidator1 = MockRepository.GenerateMock<IAbsenceRequestValidator>();
-			absenceRequestValidator1.Stub(a => a.Validate(null, new RequiredForHandlingAbsenceRequest()))
-				.IgnoreArguments().Return(new ValidatedRequest {IsValid = false, ValidationErrors = "validatorErrors1"});
+			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
 
-			var absenceRequestValidator2 = MockRepository.GenerateMock<IAbsenceRequestValidator>();
-			absenceRequestValidator2.Stub(a => a.Validate(null, new RequiredForHandlingAbsenceRequest()))
-				.IgnoreArguments().Return(new ValidatedRequest {IsValid = false, ValidationErrors = "validatorErrors2"});
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			wfcs.AbsenceRequestWaitlistEnabled = true;
+			WorkflowControlSetRepository.Add(wfcs);
+			var firstDay = new DateOnly(2016, 12, 01);
+			var activity = ActivityRepository.Has("activityName");
+			var skill = SkillRepository.Has("skillName", activity);
 
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 0));
 
-			AbsenceRequestValidatorProvider.Stub(
-				a =>
-					a.GetValidatorList(Arg<IPersonRequest>.Is.Anything,
-						Arg<RequestValidatorsFlag>.Is.Equal(RequestValidatorsFlag.IntradayValidator)))
-				.Return(new[] {absenceRequestValidator1});
-			AbsenceRequestValidatorProvider.Stub(
-				a =>
-					a.GetValidatorList(Arg<IPersonRequest>.Is.Anything,
-						Arg<RequestValidatorsFlag>.Is.Equal(RequestValidatorsFlag.BudgetAllotmentValidator)))
-				.Return(new[] {absenceRequestValidator2});
-		}
+			var person = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			person.WorkflowControlSet = wfcs;
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 10, 2016, 12, 2, 20));
+			PersonAssignmentRepository.Has(assignment);
 
-		private void setDataSource()
-		{
-			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			dataSource.Stub(d => d.DataSourceName).Return("Teleopti WFM");
-			dataSource.Stub(d => d.Application).Return(new FakeUnitOfWorkFactory());
-			DataSourceForTenant.Has(dataSource);
-		}
-
-		private void setCurrentPrincipal()
-		{
-			var person = createPerson();
-			var identity = new TeleoptiIdentity("testPerson", null, null, null, null);
-			CurrentTeleoptiPrincipal.SetCurrentPrincipal(new TeleoptiPrincipal(identity, person));
-		}
-
-		private IPerson createPerson()
-		{
-			var person = PersonFactory.CreatePerson().WithId();
-			person.WorkflowControlSet = new WorkflowControlSet();
-			PersonRepository.Add(person);
-			return person;
-		}
-
-		private IPersonRequest createPersonRequest(IPerson person)
-		{
-			var absence = AbsenceFactory.CreateAbsence("holiday");
-			var personRequestFactory = new PersonRequestFactory();
-			var personRequest = personRequestFactory.CreatePersonRequest(person).WithId();
-			var absenceRequest = personRequestFactory.CreateAbsenceRequest(absence,
-				new DateTimePeriod(DateTime.Now.AddDays(1).Date.ToUniversalTime(), DateTime.Now.AddDays(2).Date.ToUniversalTime()))
-				.WithId();
-			personRequest.Request = absenceRequest;
-			absenceRequest.SetParent(personRequest);
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 12, 2016, 12, 1, 13))).WithId();
+			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
-			return personRequest;
+
+			var personRequestWaitlisted = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 10, 2016, 12, 1, 11))).WithId();
+			personRequestWaitlisted.Pending();
+			personRequestWaitlisted.Deny("", new PersonRequestAuthorizationCheckerForTest(), person, PersonRequestDenyOption.AutoDeny);
+			PersonRequestRepository.Add(personRequestWaitlisted);
+
+			addToQueue(personRequest, RequestValidatorsFlag.None);
+
+			QueuedAbsenceRequestRepository.Add(
+				new QueuedAbsenceRequest
+				{
+					PersonRequest = Guid.Empty,
+					Sent = truncatedSent,  //truncated by DB
+					StartDateTime = personRequestWaitlisted.Request.Period.StartDateTime,
+					EndDateTime = personRequestWaitlisted.Request.Period.EndDateTime
+				});
+
+			var requestList = new List<Guid>{personRequest.Id.GetValueOrDefault()};
+			Target.Handle(new NewMultiAbsenceRequestsCreatedEvent{PersonRequestIds = requestList, Sent = Now.UtcDateTime()});
+			personRequestWaitlisted.IsApproved.Should().Be.EqualTo(true);
+			personRequest.IsApproved.Should().Be.EqualTo(true);
 		}
 
 		private void addToQueue(IPersonRequest personRequest, RequestValidatorsFlag requestValidatorsFlag)
@@ -193,8 +247,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
 				PersonRequest = personRequest.Id.GetValueOrDefault(),
-				MandatoryValidators = requestValidatorsFlag
+				MandatoryValidators = requestValidatorsFlag,
+				StartDateTime = personRequest.Request.Period.StartDateTime,
+				EndDateTime = personRequest.Request.Period.EndDateTime,
+				Sent = Now.UtcDateTime()
 			});
+		}
+
+		private static string createDenyMessage(CultureInfo culture, CultureInfo uiCulture, TimeZoneInfo timeZone, DateTime dateTime)
+		{
+			var detail = new UnderstaffingDetails();
+			var val = new StaffingThresholdValidator();
+			detail.AddUnderstaffingPeriod(new DateTimePeriod(dateTime, dateTime.AddHours(1)));
+			return val.GetUnderStaffingPeriodsString(detail, culture, uiCulture, timeZone);
 		}
 	}
 }
