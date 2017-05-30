@@ -589,7 +589,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[Test]
 		[Ignore("#44536")]
-		public void ShouldNotPlaceShiftOutsideOpenSkill()
+		public void ShouldNotPlaceShiftOutsideOpenSkill([Values(true, false)] bool otherAgentKnowsBothOpenAndClosedSkill)
 		{
 			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());
 			var firstDay = new DateOnly(2015, 10, 12);
@@ -602,7 +602,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), new ShiftCategory("_").WithId()));
-			PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, openSkill, closedSkill);
+			var otherAgentsSkill = otherAgentKnowsBothOpenAndClosedSkill ? new[] {openSkill, closedSkill} : new[] {openSkill};
+			PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, otherAgentsSkill);
 			var agentOnlyKnowingClosedSkill = PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, closedSkill);
 			SkillDayRepository.Has(closedSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			SkillDayRepository.Has(openSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
