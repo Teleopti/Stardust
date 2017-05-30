@@ -240,14 +240,16 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			SiteId,
 			SiteName,
 			TeamId,
-			TeamName
+			TeamName,
+			IsDeleted
 		) VALUES (
 			S.PersonId,
 			S.BusinessUnitId,
 			S.SiteId,
 			S.SiteName,
 			S.TeamId,
-			S.TeamName
+			S.TeamName,
+			0
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
