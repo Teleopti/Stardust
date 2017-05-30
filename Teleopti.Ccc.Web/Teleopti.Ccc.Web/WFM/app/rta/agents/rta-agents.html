@@ -46,7 +46,7 @@
 		<div class="con-flex split-3-1"></div>
 		<div class="con-flex">
 			<div class="wfm-switch panel-switch line-right">
-				<input id="switch1" ng-model="vm.agentsInAlarm" type="checkbox" ng-disabled="vm.pause" />
+				<input id="switch1" ng-model="vm.showInAlarm" type="checkbox" ng-disabled="vm.pause" />
 				<label class="rta-agents-in-alarm-switch" for="switch1" ng-if="vm.agents.length <= vm.maxNumberOfAgents && !vm.isLoading">
 					<span class="wfm-switch-label">{{'InAlarm'|translate}}</span>
 					<span class="wfm-switch-toggle" ng-class="vm.pause ? 'rta-disabled-switch' : ''"></span>
@@ -57,13 +57,13 @@
 	</div>
 	<div class="con-row">
 		<div class="con-flex agent-table-wrapper">
-			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.allGrid && !vm.agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns
+			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.allGrid && !vm.showInAlarm" ui-grid-auto-resize ui-grid-resize-columns
 				ui-grid-disable-animation ui-grid="vm.allGrid"></div>
-		<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns
+		<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.showInAlarm" ui-grid-auto-resize ui-grid-resize-columns
 			ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>
 </div>
 </div>
-<wfm-right-panel ng-if="vm.agentsInAlarm && !vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
+<wfm-right-panel ng-if="vm.showInAlarm && !vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
 	<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
 	<div ng-repeat="state in vm.states">
 		<div class="wfm-checkbox">

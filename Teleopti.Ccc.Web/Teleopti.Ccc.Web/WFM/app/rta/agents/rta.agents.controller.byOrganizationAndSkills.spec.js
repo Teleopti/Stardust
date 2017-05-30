@@ -58,10 +58,10 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].PersonId).toEqual("AshleyGuid");
-		expect(vm.agents.length).toEqual(1);
+		expect(vm.agentStates[0].PersonId).toEqual("AshleyGuid");
+		expect(vm.agentStates.length).toEqual(1);
 	});
 
 	it('should get agent for skill and site', function() {
@@ -87,10 +87,10 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].PersonId).toEqual("AshleyGuid");
-		expect(vm.agents.length).toEqual(1);
+		expect(vm.agentStates[0].PersonId).toEqual("AshleyGuid");
+		expect(vm.agentStates.length).toEqual(1);
 	});
 
 	it('should get agent states for teams and skills', function() {
@@ -115,17 +115,17 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].TeamName).toEqual("Team Red");
-		expect(vm.agents[0].SiteName).toEqual("London");
-		expect(vm.agents[0].State).toEqual("Ready");
-		expect(vm.agents[0].Activity).toEqual("Phone");
-		expect(vm.agents[0].NextActivity).toEqual("Short break");
-		expect(vm.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
-		expect(vm.agents[0].Rule).toEqual("In Adherence");
-		expect(vm.agents[0].Color).toEqual("#00FF00");
-		expect(vm.agents[0].TimeInState).toEqual(15473);
+		expect(vm.agentStates[0].TeamName).toEqual("Team Red");
+		expect(vm.agentStates[0].SiteName).toEqual("London");
+		expect(vm.agentStates[0].State).toEqual("Ready");
+		expect(vm.agentStates[0].Activity).toEqual("Phone");
+		expect(vm.agentStates[0].NextActivity).toEqual("Short break");
+		expect(vm.agentStates[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
+		expect(vm.agentStates[0].Rule).toEqual("In Adherence");
+		expect(vm.agentStates[0].Color).toEqual("#00FF00");
+		expect(vm.agentStates[0].TimeInState).toEqual(15473);
 	});
 
 	it('should get agent states for sites and skills', function() {
@@ -149,17 +149,17 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents.length).toEqual(1);
-		expect(vm.agents[0].SiteName).toEqual("London");
-		expect(vm.agents[0].State).toEqual("Ready");
-		expect(vm.agents[0].Activity).toEqual("Phone");
-		expect(vm.agents[0].NextActivity).toEqual("Short break");
-		expect(vm.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
-		expect(vm.agents[0].Rule).toEqual("In Adherence");
-		expect(vm.agents[0].Color).toEqual("#00FF00");
-		expect(vm.agents[0].TimeInState).toEqual(15473);
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].SiteName).toEqual("London");
+		expect(vm.agentStates[0].State).toEqual("Ready");
+		expect(vm.agentStates[0].Activity).toEqual("Phone");
+		expect(vm.agentStates[0].NextActivity).toEqual("Short break");
+		expect(vm.agentStates[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
+		expect(vm.agentStates[0].Rule).toEqual("In Adherence");
+		expect(vm.agentStates[0].Color).toEqual("#00FF00");
+		expect(vm.agentStates[0].TimeInState).toEqual(15473);
 	});
 
 	it('should display states in alarm for skill and team', function() {
@@ -186,11 +186,11 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].Name).toEqual("Ashley Andeen");
-		expect(vm.filteredData[0].State).toEqual("Break");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].Name).toEqual("Ashley Andeen");
+		expect(vm.agentStates[0].State).toEqual("Break");
 	});
 
 	it('should display states in alarm for skill and site', function() {
@@ -217,11 +217,11 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].Name).toEqual("Ashley Andeen");
-		expect(vm.filteredData[0].State).toEqual("Break");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].Name).toEqual("Ashley Andeen");
+		expect(vm.agentStates[0].State).toEqual("Break");
 	});
 
 	it('should take excluded states as stateParam for team and skill', function() {
@@ -251,11 +251,11 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true)
+		c.apply(vm.showInAlarm = true)
 			.wait(5000);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].PersonId).toEqual("AshleyGuid");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].PersonId).toEqual("AshleyGuid");
 	});
 
 	it('should take excluded states as stateParam for site and skill', function() {
@@ -285,11 +285,11 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true)
+		c.apply(vm.showInAlarm = true)
 			.wait(5000);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].PersonId).toEqual("AshleyGuid");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].PersonId).toEqual("AshleyGuid");
 	});
 
 	it('should get agent for skillArea and team', function() {
@@ -328,11 +328,11 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].PersonId).toEqual("PierreGuid");
-		expect(vm.agents[1].PersonId).toEqual("AshleyGuid");
-		expect(vm.agents.length).toEqual(2);
+		expect(vm.agentStates[0].PersonId).toEqual("PierreGuid");
+		expect(vm.agentStates[1].PersonId).toEqual("AshleyGuid");
+		expect(vm.agentStates.length).toEqual(2);
 	});
 
 	it('should get agent for skillArea and site', function() {
@@ -371,11 +371,11 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].PersonId).toEqual("PierreGuid");
-		expect(vm.agents[1].PersonId).toEqual("AshleyGuid");
-		expect(vm.agents.length).toEqual(2);
+		expect(vm.agentStates[0].PersonId).toEqual("PierreGuid");
+		expect(vm.agentStates[1].PersonId).toEqual("AshleyGuid");
+		expect(vm.agentStates.length).toEqual(2);
 	});
 
 });

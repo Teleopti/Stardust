@@ -82,8 +82,8 @@ describe('RtaAgentsController', function () {
 
 			vm = $controllerBuilder.createController().vm;
 
-			expect(vm.agents[0].PersonId).toEqual("AshleyGuid");
-			expect(vm.agents[1].PersonId).toEqual("JohnGuid");
+			expect(vm.agentStates[0].PersonId).toEqual("AshleyGuid");
+			expect(vm.agentStates[1].PersonId).toEqual("JohnGuid");
 		});
 
 		it('should update agent states for ' + selection.name, function () {
@@ -98,7 +98,7 @@ describe('RtaAgentsController', function () {
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
-			c.apply(vm.agentsInAlarm = false)
+			c.apply(vm.showInAlarm = false)
 				.apply(function () {
 					$fakeBackend.clearAgentStates()
 						.withAgentState(
@@ -111,8 +111,8 @@ describe('RtaAgentsController', function () {
 				})
 				.wait(5000);
 
-			expect(vm.agents[0].State).toEqual("In Call");
-			expect(vm.agents[1].State).toEqual("Ready");
+			expect(vm.agentStates[0].State).toEqual("In Call");
+			expect(vm.agentStates[1].State).toEqual("Ready");
 		});
 
 		it('should set states to agents for ' + selection.name, function () {
@@ -141,23 +141,23 @@ describe('RtaAgentsController', function () {
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
-			c.apply(vm.agentsInAlarm = false);
+			c.apply(vm.showInAlarm = false);
 
-			expect(vm.agents[0].State).toEqual("Ready");
-			expect(vm.agents[0].Activity).toEqual("Phone");
-			expect(vm.agents[0].NextActivity).toEqual("Short break");
-			expect(vm.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
-			expect(vm.agents[0].Rule).toEqual("In Adherence");
-			expect(vm.agents[0].Color).toEqual("#00FF00");
-			expect(vm.agents[0].TimeInState).toEqual(15473);
+			expect(vm.agentStates[0].State).toEqual("Ready");
+			expect(vm.agentStates[0].Activity).toEqual("Phone");
+			expect(vm.agentStates[0].NextActivity).toEqual("Short break");
+			expect(vm.agentStates[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
+			expect(vm.agentStates[0].Rule).toEqual("In Adherence");
+			expect(vm.agentStates[0].Color).toEqual("#00FF00");
+			expect(vm.agentStates[0].TimeInState).toEqual(15473);
 
-			expect(vm.agents[1].State).toEqual("In Call");
-			expect(vm.agents[1].Activity).toEqual("Short break");
-			expect(vm.agents[1].NextActivity).toEqual("Phone");
-			expect(vm.agents[1].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
-			expect(vm.agents[1].Rule).toEqual("Out of Adherence");
-			expect(vm.agents[1].Color).toEqual("#FF0000");
-			expect(vm.agents[1].TimeInState).toEqual(15473);
+			expect(vm.agentStates[1].State).toEqual("In Call");
+			expect(vm.agentStates[1].Activity).toEqual("Short break");
+			expect(vm.agentStates[1].NextActivity).toEqual("Phone");
+			expect(vm.agentStates[1].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
+			expect(vm.agentStates[1].Rule).toEqual("Out of Adherence");
+			expect(vm.agentStates[1].Color).toEqual("#FF0000");
+			expect(vm.agentStates[1].TimeInState).toEqual(15473);
 		});
 
 		it('should stop polling when page is about to destroy for ' + selection.name, function () {
@@ -186,7 +186,7 @@ describe('RtaAgentsController', function () {
 
 			vm = $controllerBuilder.createController().vm;
 
-			expect(vm.agents[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
+			expect(vm.agentStates[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
 		});
 
 		it('should go back to sites when business unit is changed', function () {

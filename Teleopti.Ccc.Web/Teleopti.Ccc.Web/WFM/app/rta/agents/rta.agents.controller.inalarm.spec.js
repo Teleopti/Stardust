@@ -55,11 +55,11 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
-		expect(vm.filteredData[0].State).toEqual("Break");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].State).toEqual("Break");
 	});
 
 	it('should display states in alarm only for site', function() {
@@ -81,11 +81,11 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
-		expect(vm.filteredData[0].State).toEqual("Break");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].State).toEqual("Break");
 	});
 
 	it('should display nothing', function() {
@@ -100,9 +100,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
-		expect(vm.filteredData.length).toEqual(0);
+		expect(vm.agentStates.length).toEqual(0);
 	});
 
 	it('should display states with alarm time in desc order when agentsInAlarm is turned on', function() {
@@ -122,10 +122,10 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
-		expect(vm.filteredData[1].Name).toEqual("Ashley Andeen");
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[1].Name).toEqual("Ashley Andeen");
 	});
 
 	it('should show all agents if it is specified by url', function() {
@@ -133,7 +133,7 @@ describe('RtaAgentsController', function() {
 
 		vm = $controllerBuilder.createController().vm;
 
-		expect(vm.agentsInAlarm).toEqual(false);
+		expect(vm.showInAlarm).toEqual(false);
 	});
 
 	it('should set bool to indicate if user opened max number of agents', function() {
@@ -148,7 +148,7 @@ describe('RtaAgentsController', function() {
 		}
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
 		expect(vm.openedMaxNumberOfAgents).toEqual(true);
 	});
@@ -164,7 +164,7 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
 		expect(vm.openedMaxNumberOfAgents).toEqual(false);
 	});

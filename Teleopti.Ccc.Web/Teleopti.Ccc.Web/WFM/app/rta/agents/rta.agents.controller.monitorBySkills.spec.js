@@ -45,9 +45,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(vm.agentStates[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
 	it('should get state for skill', function() {
@@ -60,9 +60,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].State).toEqual("Ready");
+		expect(vm.agentStates[0].State).toEqual("Ready");
 	});
 
 	it('should state in alarm for skill', function() {
@@ -84,11 +84,11 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
-		expect(vm.filteredData[0].State).toEqual("Break");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].State).toEqual("Break");
 	});
 
 
@@ -115,9 +115,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].PersonId).toEqual("22610fe4-0130-4568-97de-9b5e015b2564");
+		expect(vm.agentStates[0].PersonId).toEqual("22610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
 	it('should get state for skill area', function() {
@@ -139,9 +139,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].State).toEqual("Ready");
+		expect(vm.agentStates[0].State).toEqual("Ready");
 	});
 
 	it('should get state in alarm for skill area', function() {
@@ -171,10 +171,10 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
-		expect(vm.filteredData[0].State).toEqual("Break");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].State).toEqual("Break");
 	});
 });

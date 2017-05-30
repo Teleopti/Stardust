@@ -48,7 +48,7 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.wait(5000)
 			.apply(vm.pause = true)
 			.apply(function() {
@@ -61,7 +61,7 @@ describe('RtaAgentsController', function() {
 			})
 			.wait(5000);
 
-		expect(vm.agents[0].State).toEqual("Phone");
+		expect(vm.agentStates[0].State).toEqual("Phone");
 	});
 
 	it('should restart polling when unpausing', function() {
@@ -73,7 +73,7 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.apply(vm.pause = true)
 			.wait(5000)
 			.apply(vm.pause = false)
@@ -88,7 +88,7 @@ describe('RtaAgentsController', function() {
 			})
 			.wait(5000);
 
-		expect(vm.agents[0].State).toEqual("Ready")
+		expect(vm.agentStates[0].State).toEqual("Ready")
 	});
 
 	it('should display time from when paused', function() {
@@ -185,7 +185,7 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.wait(5000)
 			.apply(vm.pause = true)
 			.apply(function() {
@@ -198,7 +198,7 @@ describe('RtaAgentsController', function() {
 					})
 			});
 
-		expect(vm.agents[0].State).toEqual("Phone");
+		expect(vm.agentStates[0].State).toEqual("Phone");
 	});
 
 });

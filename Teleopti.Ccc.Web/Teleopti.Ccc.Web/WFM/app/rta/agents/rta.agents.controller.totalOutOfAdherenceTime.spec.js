@@ -48,9 +48,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
-		expect(vm.agents[0].TimeInRule).toEqual(11 * 60);
+		expect(vm.agentStates[0].TimeInRule).toEqual(11 * 60);
 	});
 
 	it('should not display time in rule if not in alarm', function() {
@@ -63,9 +63,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].TimeInRule).toEqual(null);
+		expect(vm.agentStates[0].TimeInRule).toEqual(null);
 	});
 
 	it('should display time bar based on rule time', function() {
@@ -79,9 +79,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
-		expect(vm.agents[0].ShiftTimeBar).toEqual("12.5%");
+		expect(vm.agentStates[0].ShiftTimeBar).toEqual("12.5%");
 	});
 
 	it('should not display time bar if not in alarm', function() {
@@ -94,9 +94,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].ShiftTimeBar).toEqual("0%");
+		expect(vm.agentStates[0].ShiftTimeBar).toEqual("0%");
 	});
 
 });

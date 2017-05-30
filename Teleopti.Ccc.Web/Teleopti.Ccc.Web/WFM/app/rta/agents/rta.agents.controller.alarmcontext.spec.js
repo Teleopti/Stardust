@@ -120,12 +120,14 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+console.log('asdD--> ;)=');
+		c.apply(vm.showInAlarm = false);
+console.log(vm.showInAlarm);
 
-		expect(vm.agents[0].Shift.length).toEqual(1);
-		expect(vm.agents[0].Shift[0].Color).toEqual("#80FF80");
-		expect(vm.agents[0].Shift[0].Offset).toEqual("25%");
-		expect(vm.agents[0].Shift[0].Width).toEqual("50%");
+		expect(vm.agentStates[0].Shift.length).toEqual(1);
+		expect(vm.agentStates[0].Shift[0].Color).toEqual("#80FF80");
+		expect(vm.agentStates[0].Shift[0].Offset).toEqual("25%");
+		expect(vm.agentStates[0].Shift[0].Width).toEqual("50%");
 	});
 
 	it('should display all activities', function() {
@@ -152,15 +154,15 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].Shift.length).toEqual(2);
-		expect(vm.agents[0].Shift[0].Color).toEqual("#80FF80");
-		expect(vm.agents[0].Shift[0].Offset).toEqual("0%");
-		expect(vm.agents[0].Shift[0].Width).toEqual("50%");
-		expect(vm.agents[0].Shift[1].Color).toEqual("#0000FF");
-		expect(vm.agents[0].Shift[1].Offset).toEqual("50%");
-		expect(vm.agents[0].Shift[1].Width).toEqual("50%");
+		expect(vm.agentStates[0].Shift.length).toEqual(2);
+		expect(vm.agentStates[0].Shift[0].Color).toEqual("#80FF80");
+		expect(vm.agentStates[0].Shift[0].Offset).toEqual("0%");
+		expect(vm.agentStates[0].Shift[0].Width).toEqual("50%");
+		expect(vm.agentStates[0].Shift[1].Color).toEqual("#0000FF");
+		expect(vm.agentStates[0].Shift[1].Offset).toEqual("50%");
+		expect(vm.agentStates[0].Shift[1].Width).toEqual("50%");
 	});
 
 	it('should display all activities', function() {
@@ -187,9 +189,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].Shift.length).toEqual(2);
+		expect(vm.agentStates[0].Shift.length).toEqual(2);
 	});
 
 	it('should not display past activity before display window', function() {
@@ -209,9 +211,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].Shift.length).toEqual(0);
+		expect(vm.agentStates[0].Shift.length).toEqual(0);
 	});
 
 	it('should not display future activities outside of display window', function() {
@@ -231,9 +233,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].Shift.length).toEqual(0);
+		expect(vm.agentStates[0].Shift.length).toEqual(0);
 	});
 
 	it('should not display future activities outside of display window', function() {
@@ -265,9 +267,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].Shift.length).toEqual(1);
+		expect(vm.agentStates[0].Shift.length).toEqual(1);
 	});
 
 	it('should cut activities that are larger than display window', function() {
@@ -287,10 +289,10 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].Shift[0].Offset).toEqual('0%');
-		expect(vm.agents[0].Shift[0].Width).toEqual('100%');
+		expect(vm.agentStates[0].Shift[0].Offset).toEqual('0%');
+		expect(vm.agentStates[0].Shift[0].Width).toEqual('100%');
 	});
 
 	it('should cut activities starting before display window', function() {
@@ -310,10 +312,10 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].Shift[0].Offset).toEqual('0%');
-		expect(vm.agents[0].Shift[0].Width).toEqual('75%');
+		expect(vm.agentStates[0].Shift[0].Offset).toEqual('0%');
+		expect(vm.agentStates[0].Shift[0].Width).toEqual('75%');
 	});
 
 	it('should produce an activity name', function() {
@@ -333,9 +335,9 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false);
+		c.apply(vm.showInAlarm = false);
 
-		expect(vm.agents[0].Shift[0].Name).toEqual('Phone');
+		expect(vm.agentStates[0].Shift[0].Name).toEqual('Phone');
 	});
 
 });

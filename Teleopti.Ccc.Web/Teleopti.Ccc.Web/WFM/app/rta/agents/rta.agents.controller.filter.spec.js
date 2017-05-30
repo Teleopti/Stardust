@@ -51,10 +51,10 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.apply(vm.filterText = "Charley");
 
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
 	});
 
 	it('should filter agent on state', function () {
@@ -75,11 +75,11 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.apply(vm.filterText = "InCall");
 
-		expect(vm.filteredData[0].State).toEqual("InCall");
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].State).toEqual("InCall");
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
 	});
 
 	it('should filter agent on site name', function () {
@@ -105,10 +105,10 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.apply(vm.filterText = "Paris");
-		expect(vm.filteredData[0].SiteAndTeamName).toEqual("Paris/Red");
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].SiteAndTeamName).toEqual("Paris/Red");
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
 	});
 
 
@@ -135,10 +135,10 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.apply(vm.filterText = "Red");
-		expect(vm.filteredData[0].SiteAndTeamName).toEqual("Paris/Red");
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].SiteAndTeamName).toEqual("Paris/Red");
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
 	});
 
 	it('should filter agent on activity', function () {
@@ -159,11 +159,11 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm,
-			c.apply(vm.agentsInAlarm = false)
+			c.apply(vm.showInAlarm = false)
 				.apply(vm.filterText = "Lunch");
 
-		expect(vm.filteredData[0].Activity).toEqual("Lunch");
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].Activity).toEqual("Lunch");
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
 	});
 
 	it('should filter agent on alarm', function () {
@@ -184,11 +184,11 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.apply(vm.filterText = "Adhering");
 
-		expect(vm.filteredData[0].Rule).toEqual("Adhering");
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].Rule).toEqual("Adhering");
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
 	});
 
 	it('should filter agent state updates', function () {
@@ -202,7 +202,7 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.apply(vm.filterText = "Ashley");
 		$fakeBackend
 			.clearAgentStates()
@@ -214,8 +214,8 @@ describe('RtaAgentsController', function () {
 			});
 		c.wait(5000);
 
-		expect(vm.filteredData[0].State).toEqual("Ready");
-		expect(vm.filteredData[0].Name).toEqual("Ashley Andeen");
+		expect(vm.agentStates[0].State).toEqual("Ready");
+		expect(vm.agentStates[0].Name).toEqual("Ashley Andeen");
 	});
 
 	it('should filter agent name', function () {
@@ -233,10 +233,10 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.apply(vm.filterText = 'Ashley');
 
-		expect(vm.filteredData[0].Name).toEqual("Ashley Andeen");
+		expect(vm.agentStates[0].Name).toEqual("Ashley Andeen");
 	});
 
 	it('should filter agent state updates', function () {
@@ -255,7 +255,7 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = false)
+		c.apply(vm.showInAlarm = false)
 			.apply(vm.filterText = 'Caper')
 			.apply(function () {
 				$fakeBackend.clearAgentStates()
@@ -268,7 +268,7 @@ describe('RtaAgentsController', function () {
 			})
 			.wait(5000);
 
-		expect(vm.filteredData[0].Name).toEqual("Charley Caper");
-		expect(vm.filteredData[0].State).toEqual("Ready");
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[0].State).toEqual("Ready");
 	});
 });

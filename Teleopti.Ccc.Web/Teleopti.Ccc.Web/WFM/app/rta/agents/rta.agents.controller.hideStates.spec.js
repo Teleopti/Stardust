@@ -48,7 +48,7 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
 		expect(vm.states[0].Name).toEqual('LoggedOut');
 		expect(vm.states[0].Id).toEqual('17560fe4-0130-4568-97de-9b5e015b2555');
@@ -74,7 +74,7 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
 		expect(vm.states.length).toEqual(1);
 	});
@@ -91,7 +91,7 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
 		expect(vm.states.length).toEqual(1)
 		expect(vm.states[0].Name).toEqual("No State");
@@ -131,7 +131,7 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 
 		expect(vm.states[0].Name).toEqual("A");
 		expect(vm.states[1].Name).toEqual("B");
@@ -265,7 +265,7 @@ describe('RtaAgentsController', function () {
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
-			c.apply(vm.agentsInAlarm = true)
+			c.apply(vm.showInAlarm = true)
 				.apply(function () {
 					vm.states.filter(function (s) {
 						return s.Id === 'LoggedOutGuid';
@@ -273,8 +273,8 @@ describe('RtaAgentsController', function () {
 				});
 			c.wait(5000);
 
-			expect(vm.filteredData.length).toEqual(1);
-			expect(vm.filteredData[0].PersonId).toEqual("person1");
+			expect(vm.agentStates.length).toEqual(1);
+			expect(vm.agentStates[0].PersonId).toEqual("person1");
 		});
 
 		it('should take excluded states as stateParam for ' + selection.name, function () {
@@ -298,11 +298,11 @@ describe('RtaAgentsController', function () {
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
-			c.apply(vm.agentsInAlarm = true);
+			c.apply(vm.showInAlarm = true);
 			c.wait(5000);
 
-			expect(vm.filteredData.length).toEqual(1);
-			expect(vm.filteredData[0].PersonId).toEqual("person1");
+			expect(vm.agentStates.length).toEqual(1);
+			expect(vm.agentStates[0].PersonId).toEqual("person1");
 		});
 
 		it('should update url when deselecting state for ' + selection.name, function () {
@@ -368,7 +368,7 @@ describe('RtaAgentsController', function () {
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
-			c.apply(vm.agentsInAlarm = true)
+			c.apply(vm.showInAlarm = true)
 				.apply(function () {
 					vm.states.filter(function (s) {
 						return s.Id === 'LoggedOutGuid';
@@ -381,9 +381,9 @@ describe('RtaAgentsController', function () {
 				});
 			c.wait(5000);
 
-			expect(vm.filteredData.length).toEqual(2);
-			expect(vm.filteredData[0].PersonId).toEqual("person1");
-			expect(vm.filteredData[1].PersonId).toEqual("person2");
+			expect(vm.agentStates.length).toEqual(2);
+			expect(vm.agentStates[0].PersonId).toEqual("person1");
+			expect(vm.agentStates[1].PersonId).toEqual("person2");
 		});
 
 		it('should deselect No State for ' + selection.name, function () {
@@ -406,7 +406,7 @@ describe('RtaAgentsController', function () {
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
-			c.apply(vm.agentsInAlarm = true)
+			c.apply(vm.showInAlarm = true)
 				.apply(function () {
 					vm.states.filter(function (s) {
 						return s.Id === "noState";
@@ -414,8 +414,8 @@ describe('RtaAgentsController', function () {
 				});
 			c.wait(5000);
 
-			expect(vm.filteredData.length).toEqual(1);
-			expect(vm.filteredData[0].PersonId).toEqual("person1");
+			expect(vm.agentStates.length).toEqual(1);
+			expect(vm.agentStates[0].PersonId).toEqual("person1");
 		});
 
 		it('should select after deselecting No State for ' + selection.name, function () {
@@ -439,7 +439,7 @@ describe('RtaAgentsController', function () {
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
-			c.apply(vm.agentsInAlarm = true)
+			c.apply(vm.showInAlarm = true)
 				.apply(function () {
 					vm.states.filter(function (s) {
 						return s.Id === "noState";
@@ -447,7 +447,7 @@ describe('RtaAgentsController', function () {
 				});
 			c.wait(5000);
 
-			expect(vm.filteredData.length).toEqual(2);
+			expect(vm.agentStates.length).toEqual(2);
 		});
 
 	});
@@ -486,7 +486,7 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true)
+		c.apply(vm.showInAlarm = true)
 			.apply(function () {
 				vm.states.filter(function (s) {
 					return s.Id === 'LoggedOutGuid';
@@ -494,8 +494,8 @@ describe('RtaAgentsController', function () {
 			});
 		c.wait(5000);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].PersonId).toEqual("person1");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].PersonId).toEqual("person1");
 	});
 
 	it('should take excluded states as stateParam for skill area', function () {
@@ -526,11 +526,11 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true);
+		c.apply(vm.showInAlarm = true);
 		c.wait(5000);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].PersonId).toEqual("person1");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].PersonId).toEqual("person1");
 	});
 
 	it('should update url when deselecting state for skill area', function () {
@@ -610,7 +610,7 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true)
+		c.apply(vm.showInAlarm = true)
 			.apply(function () {
 				vm.states.filter(function (s) {
 					return s.Id === 'LoggedOutGuid';
@@ -623,9 +623,9 @@ describe('RtaAgentsController', function () {
 			});
 		c.wait(5000);
 
-		expect(vm.filteredData.length).toEqual(2);
-		expect(vm.filteredData[0].PersonId).toEqual("person1");
-		expect(vm.filteredData[1].PersonId).toEqual("person2");
+		expect(vm.agentStates.length).toEqual(2);
+		expect(vm.agentStates[0].PersonId).toEqual("person1");
+		expect(vm.agentStates[1].PersonId).toEqual("person2");
 	});
 
 	it('should deselect No State for skill area', function () {
@@ -655,7 +655,7 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true)
+		c.apply(vm.showInAlarm = true)
 			.apply(function () {
 				vm.states.filter(function (s) {
 					return s.Id === "noState";
@@ -663,8 +663,8 @@ describe('RtaAgentsController', function () {
 			});
 		c.wait(5000);
 
-		expect(vm.filteredData.length).toEqual(1);
-		expect(vm.filteredData[0].PersonId).toEqual("person1");
+		expect(vm.agentStates.length).toEqual(1);
+		expect(vm.agentStates[0].PersonId).toEqual("person1");
 	});
 
 	it('should select after deselecting No State for skill area', function () {
@@ -695,7 +695,7 @@ describe('RtaAgentsController', function () {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-		c.apply(vm.agentsInAlarm = true)
+		c.apply(vm.showInAlarm = true)
 			.apply(function () {
 				vm.states.filter(function (s) {
 					return s.Id === "noState";
@@ -703,7 +703,7 @@ describe('RtaAgentsController', function () {
 			});
 		c.wait(5000);
 
-		expect(vm.filteredData.length).toEqual(2);
+		expect(vm.agentStates.length).toEqual(2);
 	});
 
 
