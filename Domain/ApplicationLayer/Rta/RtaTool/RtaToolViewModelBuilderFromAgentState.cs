@@ -27,28 +27,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
 		public IEnumerable<RtaToolViewModel> Build()
 		{
 			var nameDisplayedAs = _nameDisplaySetting.CommonAgentNameSettings;
-			var dataSources = _dataSources.Datasources();
+			var dataSources = _dataSources.Datasources().ToLookup(x => x.Value, x => x.Key);
 			var externalLogOns = _externalLogons.Read().ToArray();
-			var agentStates = _agentStates.Read(externalLogOns.Select(x => x.PersonId));
-			
-			return
-				(from externalLogOn in externalLogOns
-					from dataSource in dataSources
-					from state in agentStates
-					let name = nameDisplayedAs
-						.BuildCommonNameDescription(
-							state.FirstName,
-							state.LastName,
-							state.EmploymentNumber)
-					let dataSourceId = externalLogOn.DataSourceId
-					where state.PersonId == externalLogOn.PersonId &&
-						  dataSource.Value == externalLogOn.DataSourceId.Value
+			var agentStates = _agentStates
+				.Read(externalLogOns.Select(x => x.PersonId))
+				.ToLookup(x => x.PersonId);
+
+			return (
+					from externalLogOn in externalLogOns
+					let state = agentStates[externalLogOn.PersonId].FirstOrDefault()
+					let dataSource = dataSources[externalLogOn.DataSourceId.GetValueOrDefault()].FirstOrDefault()
 					select new RtaToolViewModel
 					{
-						Name = name,
+						Name = nameDisplayedAs.BuildCommonNameDescription(
+							state?.FirstName,
+							state?.LastName,
+							state?.EmploymentNumber),
 						UserCode = externalLogOn.UserCode,
-						DataSource = dataSource.Key
-					}).ToArray();
+						DataSource = dataSource
+					})
+				.ToArray();
 		}
 	}
 }
