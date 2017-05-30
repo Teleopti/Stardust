@@ -181,7 +181,7 @@ ResourcePlanner_MasterActivityBaseLayer_44134 = true
 ResourcePlanner_EvenRelativeDiff_44091 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_TeamSameDayOff_44265 = true
-ResourcePlanner_MergeTeamblockClassicScheduling_44289 = false #Keep this false until we get further so we dont mess with perf tests
+ResourcePlanner_MergeTeamblockClassicScheduling_44289 = RC
 ResourcePlanner_RemoveBackToLegalStateGui_44333 = RC
 
 Wfm_DisplayOnlineHelp_39402 = RC
