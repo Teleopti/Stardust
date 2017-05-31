@@ -4,24 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePublicNoteRepository : IPublicNoteRepository, IEnumerable<IPublicNote>
 	{
-
 		private readonly IList<IPublicNote> _notes = new List<IPublicNote>();
-
 		
 		public FakePublicNoteRepository(params IPublicNote[] publicNotes)
 		{
 			publicNotes.ForEach (Add);
 		}
-		
 
 		public void Add (IPublicNote entity)
 		{
@@ -49,12 +44,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		IPublicNote ILoadAggregateByTypedId<IPublicNote, Guid>.LoadAggregate (Guid id)
 		{
 			return LoadAggregate (id);

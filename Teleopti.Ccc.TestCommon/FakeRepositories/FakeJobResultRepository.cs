@@ -4,10 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -37,19 +35,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _result.ToList();
 		}
 
-
-
 		public IJobResult Load(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<IJobResult> LoadHistoryWithPaging(PagingDetail pagingDetail, params string[] jobCategories)
 		{
 			return _result.Take(5).ToList();

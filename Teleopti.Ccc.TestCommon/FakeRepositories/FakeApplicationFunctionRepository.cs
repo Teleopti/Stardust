@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
@@ -10,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeApplicationFunctionRepository : IApplicationFunctionRepository
 	{
-		readonly IList<IApplicationFunction> _applicationFunctions = new List<IApplicationFunction>();
+		private readonly IList<IApplicationFunction> _applicationFunctions = new List<IApplicationFunction>();
 
 		public void Add(IApplicationFunction entity)
 		{
@@ -37,12 +36,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _applicationFunctions.FirstOrDefault(x => x.Id == id);
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IApplicationFunction> GetAllApplicationFunctionSortedByCode()
 		{
 			throw new NotImplementedException();

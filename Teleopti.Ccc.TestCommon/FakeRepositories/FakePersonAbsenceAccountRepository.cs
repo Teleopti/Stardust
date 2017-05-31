@@ -6,14 +6,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonAbsenceAccountRepository : IPersonAbsenceAccountRepository
 	{
-
 		private readonly IList<IPersonAbsenceAccount> _absenceAccounts = new List<IPersonAbsenceAccount>();
 
 		public void Add(IPersonAbsenceAccount entity)
@@ -37,11 +34,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IPersonAbsenceAccount Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
 		{
 			throw new NotImplementedException();
 		}
@@ -82,7 +74,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 
 			return personAccountCollectionDictionary;
-
 		}
 	}
 }

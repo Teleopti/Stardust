@@ -4,17 +4,14 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonRequestRepositoryWithClone : FakePersonRequestRepository
 	{
-
 		public override void Add(IPersonRequest entity)
 		{
 			if (!entity.Id.HasValue)
@@ -59,8 +56,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return Get(id);
 		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public IList<IPersonRequest> Find(IPerson person, DateTimePeriod period)
 		{
@@ -160,11 +155,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IPersonRequest> FindPersonRequestUpdatedAfter(DateTime lastTime)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(ICollection<IPerson> persons,
 			DateTimePeriod period)
 		{
@@ -211,17 +201,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	    {
 	        throw new NotImplementedException();
 	    }
-
-	    public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IPersonRequest> FindAllRequestsExceptOffer(IPerson person, Paging paging)
-		{
-			return RequestRepository.Where(request => request.Request.RequestType != RequestType.ShiftExchangeOffer
-													   && request.Person.Id.GetValueOrDefault() == person.Id.GetValueOrDefault())
-				.ToList();
-		}
 	}
 }

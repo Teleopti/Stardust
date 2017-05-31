@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -38,12 +36,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.FirstOrDefault(r => r.Id == id);
 		}
 
-		public long CountAllEntities()
-		{
-			return _storage.Count;
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IPersonRotation> Find(IPerson person)
 		{
 			return _storage.Where(r => r.Person == person).ToList();

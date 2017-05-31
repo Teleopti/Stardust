@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
@@ -79,12 +77,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _skills.First(x => x.Id == id);
 		}
 
-		public long CountAllEntities()
-		{
-			return _skills.Count;
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<ISkill> FindAllWithWorkloadAndQueues()
 		{
 			throw new NotImplementedException();

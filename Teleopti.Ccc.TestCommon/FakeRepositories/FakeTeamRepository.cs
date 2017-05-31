@@ -4,18 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeTeamRepository : ITeamRepository, IEnumerable<ITeam>
 	{
-
 		private readonly IList<ITeam> _teams = new List<ITeam>();
-
 
 		public FakeTeamRepository(params  ITeam[] teams)
 		{
@@ -52,12 +47,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _teams.First(x => x.Id.Equals(id));
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<ITeam> FindAllTeamByDescription()
 		{
 			return _teams;
@@ -94,6 +83,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return GetEnumerator();
 		}
-		
 	}
 }

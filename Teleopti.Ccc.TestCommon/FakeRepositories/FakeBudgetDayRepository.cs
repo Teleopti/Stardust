@@ -5,17 +5,16 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeBudgetDayRepository : IBudgetDayRepository
 	{
-		private ICollection<IBudgetDay> _budgetDays = new List<IBudgetDay>();
+		private readonly ICollection<IBudgetDay> _budgetDays = new List<IBudgetDay>();
+
 		public void Add(IBudgetDay entity)
 		{
 			_budgetDays.Add(entity);
-
 		}
 
 		public void Remove(IBudgetDay entity)
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IBudgetDay Get(Guid id)
 		{
 			return _budgetDays.FirstOrDefault(b => b.Id == id);
-
 		}
 
 		public IList<IBudgetDay> LoadAll()
@@ -35,11 +33,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IBudgetDay Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
 		{
 			throw new NotImplementedException();
 		}

@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAvailableDataRepository : IAvailableDataRepository
 	{
-		private List<IAvailableData> _roles = new List<IAvailableData>();
+		private readonly List<IAvailableData> _roles = new List<IAvailableData>();
 
 		public void Add(IAvailableData entity)
 		{
@@ -37,12 +34,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IAvailableData> LoadAllAvailableData()
 		{
 			throw new NotImplementedException();

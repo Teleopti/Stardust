@@ -4,14 +4,12 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeContractRepository : IContractRepository
 	{
-		private IList<IContract> _contracts = new List<IContract>();
+		private readonly IList<IContract> _contracts = new List<IContract>();
 
 		public void Has(IContract root)
 		{
@@ -39,11 +37,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IContract Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
 		{
 			throw new NotImplementedException();
 		}

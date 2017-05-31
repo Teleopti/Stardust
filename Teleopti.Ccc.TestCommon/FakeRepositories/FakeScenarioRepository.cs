@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -61,19 +58,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Get(id);
 		}
 
-		public long CountAllEntities()
-		{
-			return _scenario.Count;
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
-
-		public void SetDefault(IScenario myScenario)
-		{
-			_scenario.ForEach(s => s.DefaultScenario = false);
-			myScenario.DefaultScenario = true;
-		}
-
 		public IList<IScenario> FindAllSorted()
 		{
 			return _scenario.OrderByDescending(s => s.DefaultScenario).ThenBy(s => s.Description.Name).ToArray();
@@ -81,8 +65,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IScenario> FindEnabledForReportingSorted()
 		{
-			return
-				_scenario.OrderByDescending(s => s.DefaultScenario).ThenBy(s => s.Description.Name).Where(s => s.EnableReporting).ToArray();
+			return _scenario.OrderByDescending(s => s.DefaultScenario).ThenBy(s => s.Description.Name).Where(s => s.EnableReporting).ToArray();
 		}
 
 		public IScenario LoadDefaultScenario()

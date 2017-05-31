@@ -3,16 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeSeatPlanRepository : ISeatPlanRepository, IEnumerable<ISeatPlan>
 	{
-
 		private readonly IList<ISeatPlan> _seatPlans = new List<ISeatPlan>();
 
 		public void Add (ISeatPlan seatPlan)
@@ -40,22 +37,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
-		public ISeatPlan LoadAggregate (Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void UpdateStatusForDate (DateOnly date, SeatPlanStatus seatPlanStatus)
-		{
-			
-		}
-
 		public IEnumerator<ISeatPlan> GetEnumerator()
 		{
 			return _seatPlans.GetEnumerator();
@@ -64,10 +45,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
-		}
-
-		public void Update (ISeatPlan seatPlan)
-		{
 		}
 
 		public void RemoveSeatPlanForDate (DateOnly date)

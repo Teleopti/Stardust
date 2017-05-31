@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.SeatManagement;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -49,14 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public long CountAllEntities()
 		{
-			return _seatBookings.Count();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
-		
-		public ISeatBooking LoadAggregate (Guid id)
-		{
-			throw new NotImplementedException();
+			return _seatBookings.Count;
 		}
 
 		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod (DateOnlyPeriod period)

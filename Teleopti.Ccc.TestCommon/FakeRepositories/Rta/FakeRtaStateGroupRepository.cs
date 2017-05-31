@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
@@ -52,16 +49,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public IRtaStateGroup Load(Guid id)
 		{
 			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork
-		{
-			get { throw new NotImplementedException(); }
 		}
 
 		public IList<IRtaStateGroup> LoadAllCompleteGraph()

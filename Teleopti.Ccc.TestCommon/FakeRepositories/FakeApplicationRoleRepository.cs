@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -40,13 +39,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _roles.FirstOrDefault(x => x.Id.Value == id);
 		}
-
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public IList<IApplicationRole> LoadAllApplicationRolesSortedByName()
 		{

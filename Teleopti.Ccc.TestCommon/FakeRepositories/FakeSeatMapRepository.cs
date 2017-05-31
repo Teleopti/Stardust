@@ -4,17 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeSeatMapRepository : ISeatMapLocationRepository, IEnumerable<ISeatMapLocation>
 	{
 		private readonly IList<ISeatMapLocation> _seatMaps = new List<ISeatMapLocation>();
-
 
 		public FakeSeatMapRepository(params ISeatMapLocation[] seatMapLocations)
 		{
@@ -46,12 +42,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		ISeatMapLocation ILoadAggregateByTypedId<ISeatMapLocation, Guid>.LoadAggregate (Guid id)
 		{
 			return LoadAggregate (id);

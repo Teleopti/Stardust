@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -41,13 +40,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _businessUnits.First(x => x.Id.Equals(id));
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
-
 		public IEnumerable<IBusinessUnit> LoadAllWithDeleted()
 		{
 			return _businessUnits;
@@ -67,6 +59,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
-
 	}
 }

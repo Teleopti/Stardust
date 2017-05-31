@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeCampaignRepository : IOutboundCampaignRepository
 	{
-		private IList<IOutboundCampaign> _campaigns;
+		private readonly IList<IOutboundCampaign> _campaigns;
 
 		public FakeCampaignRepository()
 		{
@@ -43,12 +41,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return Get(id);
 		}
 
-		public long CountAllEntities()
-		{
-			return _campaigns.Count;
-		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IOutboundCampaign> GetCampaigns(DateOnlyPeriod period)
 		{
 			return _campaigns.Where(campaign => period.Contains(campaign.BelongsToPeriod)).ToList();
