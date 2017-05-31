@@ -6,4 +6,4 @@ if not exist SikuliApplicationhost.config (
 tasklist /fi "imagename eq iisexpress.exe" | find ":" > nul
 if not errorlevel 1 (
 	cd %IISExpressStartFolder%
-	start iisexpress /config:%THISDIR%SikuliApplicationhost.config /AppPool:Clr4IntegratedAppPool)
+	start /min iisexpress /config:%THISDIR%SikuliApplicationhost.config /AppPool:Clr4IntegratedAppPool)
