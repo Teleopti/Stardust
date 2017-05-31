@@ -138,8 +138,8 @@
 									<div class="con-flex">
 										<label for="filter1" class="input-icon">
 											<i class="mdi mdi-filter-outline">
-												<input type="text" id="filter1" ng-model="searchString" placeholder="{{'PermissionsFilterThreeDots' | translate}}" ng-change="vm.functionsDescriptionFilter(searchString)">
-												<md-tooltip>{{'PermissionsFilterThreeDots'|translate}}</md-tooltip>
+												<input type="text" id="filter1" ng-model="vm.searchString" placeholder="{{'Filter' | translate}}" ng-change="vm.functionsDescriptionFilter(vm.searchString)">
+												<md-tooltip>{{'Filter'|translate}}</md-tooltip>
 											</i>
 										</label>
 									</div>
@@ -166,21 +166,21 @@
 											</div>
 											<div class="wfm-radio">
 												<label>
-													<input type="radio" checked name="tree-toggle" ng-click="vm.allFunctionsFilter()">
+													<input type="radio" checked name="tree-toggle" ng-checked="vm.allFuncFilter" ng-click="vm.allFunctionsFilter()">
 													<span class="wfm-radio-toggle"></span>
 													<span class="wfm-radio-label" translate>All</span>
 												</label>
 											</div>
 											<div class="wfm-radio">
 												<label>
-													<input type="radio" name="tree-toggle" ng-click="vm.selectedFunctionsFilter()" value="true">
+													<input type="radio" name="tree-toggle" ng-checked="vm.functionsFilterObj.isSelected" ng-click="vm.selectedFunctionsFilter()" value="true">
 													<span class="wfm-radio-toggle"></span>
 													<span class="wfm-radio-label" translate>SelectedItems</span>
 												</label>
 											</div>
 											<div class="wfm-radio">
 												<label>
-													<input type="radio" name="tree-toggle" ng-click="vm.unSelectedFunctionsFilter()">
+													<input type="radio" name="tree-toggle" ng-checked="vm.functionsFilterObj.isUnSelected" ng-click="vm.unSelectedFunctionsFilter()">
 													<span class="wfm-radio-toggle"></span>
 													<span class="wfm-radio-label" translate>UnselectedItems</span>
 												</label>
@@ -201,8 +201,8 @@
 									<div class="con-flex">
 										<label for="filter1" class="input-icon">
 											<i class="mdi mdi-filter-outline">
-												<input type="text" id="filter1" ng-model="searchString" placeholder="{{'PermissionsFilterThreeDots' | translate}}" ng-change="vm.orgDataDescriptionFilter(searchString)">
-												<md-tooltip>{{'PermissionsFilterThreeDots'|translate}}</md-tooltip>
+												<input type="text" id="filter1" ng-model="searchString1" placeholder="{{'Filter' | translate}}" ng-change="vm.orgDataDescriptionFilter(searchString1)">
+												<md-tooltip>{{'Filter'|translate}}</md-tooltip>
 											</i>
 										</label>
 									</div>
@@ -224,21 +224,21 @@
 											</div>
 											<div class="wfm-radio">
 												<label>
-													<input type="radio" checked name="tree-toggle" ng-click="vm.allDataFilter()">
+													<input type="radio" checked name="tree-toggle" ng-checked="vm.allOrgFilter" ng-click="vm.allDataFilter()">
 													<span class="wfm-radio-toggle"></span>
 													<span class="wfm-radio-label" translate>All</span>
 												</label>
 											</div>
 											<div class="wfm-radio">
 												<label>
-													<input type="radio" name="tree-toggle" ng-click="vm.selectedDataFilter()" value="true">
+													<input type="radio" name="tree-toggle" ng-checked="vm.dataFilterObj.isSelected" ng-click="vm.selectedDataFilter()" value="true">
 													<span class="wfm-radio-toggle"></span>
 													<span class="wfm-radio-label" translate>SelectedItems</span>
 												</label>
 											</div>
 											<div class="wfm-radio">
 												<label>
-													<input type="radio" name="tree-toggle" ng-click="vm.unselectedDataFilter()" value="true">
+													<input type="radio" name="tree-toggle" ng-checked="vm.dataFilterObj.isUnSelected" ng-click="vm.unselectedDataFilter()" value="true">
 													<span class="wfm-radio-toggle"></span>
 													<span class="wfm-radio-label" translate>UnselectedItems</span>
 												</label>

@@ -14,6 +14,7 @@
 		vm.isAllFunctionSelected = false;
 		var url = $location.search().open;
 		vm.roleOptionsOpen = url ? true : false;
+		vm.allFilter = true;
 
 		fetchData();
 		vm.createRole = createRole;
@@ -314,6 +315,8 @@
 		function selectedDataFilter() {
 			vm.dataFilterObj.isSelected = true;
 			vm.dataFilterObj.isUnSelected = false;
+			vm.searchString = null;
+			vm.allOrgFilter = false;
 			var data = dataFilter.selected(vm.organizationSelection, vm.selectedOrgData);
 
 			orgDataHandler(data);
@@ -322,6 +325,8 @@
 		function unselectedDataFilter() {
 			vm.dataFilterObj.isSelected = false;
 			vm.dataFilterObj.isUnSelected = true;
+			vm.searchString = null;
+			vm.allOrgFilter = false;
 			var data = dataFilter.unselected(vm.organizationSelection, vm.selectedOrgData);
 			orgDataHandler(data);
 		}
@@ -329,6 +334,7 @@
 		function allDataFilter() {
 			vm.dataFilterObj.isSelected = false;
 			vm.dataFilterObj.isUnSelected = false;
+			vm.allOrgFilter = true;
 			orgDataHandler(vm.organizationSelection);
 		}
 
@@ -337,6 +343,7 @@
 		}
 
 		function orgDataDescriptionFilter(searchString) {
+			allDataFilter();
 			var data = descriptionFilter.filterOrgData(vm.organizationSelection, searchString);
 			orgDataHandler(data);
 		}
@@ -417,6 +424,7 @@
 		}
 
 		function functionsDescriptionFilter(searchString) {
+			vm.allFunctionsFilter();
 			var filteredArray = descriptionFilter.filterFunctions(vm.applicationFunctions, searchString);
 			listHandler(filteredArray);
 		}
@@ -428,6 +436,8 @@
 		function unSelectedFunctionsFilter() {
 			vm.functionsFilterObj.isUnSelected = true;
 			vm.functionsFilterObj.isSelected = false;
+			vm.searchString = null;
+			vm.allFuncFilter = false;
 			var filteredArray = functionsFilter.unselected(vm.applicationFunctions, vm.selectedFunctions);
 			listHandler(filteredArray);
 		}
@@ -435,6 +445,8 @@
 		function selectedFunctionsFilter() {
 			vm.functionsFilterObj.isSelected = true;
 			vm.functionsFilterObj.isUnSelected = false;
+			vm.searchString = null;
+			vm.allFuncFilter = false;
 			var filteredArray = functionsFilter.selected(vm.applicationFunctions, vm.selectedFunctions);
 			listHandler(filteredArray);
 		}
@@ -442,6 +454,7 @@
 		function allFunctionsFilter() {
 			vm.functionsFilterObj.isSelected = false;
 			vm.functionsFilterObj.isUnSelected = false;
+			vm.allFuncFilter = true;
 			listHandler(vm.applicationFunctions);
 		}
 
