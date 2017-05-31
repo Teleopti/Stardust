@@ -64,7 +64,8 @@ namespace Teleopti.Ccc.Domain.Notification
 						new
 						{
 							registration_ids = setting.TokenList,
-							notification = new { title = messages.Subject, body = string.Join(" ", messages.Messages) }
+							notification = new { title = messages.Subject, body = string.Join(" ", messages.Messages) },
+							data = messages.Data
 						},
 						s => new NameValueCollection { { "Authorization", key } });
 

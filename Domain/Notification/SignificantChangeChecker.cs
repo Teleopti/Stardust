@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Notification
 			}
 
 			ret.Subject = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged", lang);
-			ret.Data = $"{{domainType:\"{nameof(ScheduleChangedInDefaultScenario)}\"}}";
+			ret.Data = new { domainType = nameof(ScheduleChangedInDefaultScenario) };
 			return ret;
 		}
 	}
