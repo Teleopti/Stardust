@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public static string TenantPrefixForTenant(string tenant)
 		{
-			return tenant.GenerateGuid().ToString("N");
+			return tenant?.GetHashCode().ToString();
 		}
 
 		public static string TenantPrefixForRecurringId(string id)
@@ -28,13 +27,27 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			return id.Substring(0, id.IndexOf(delimiter, StringComparison.Ordinal));
 		}
 
+		private int recurringId()
+		{
+			unchecked
+			{
+				var hash = Tenant?.GetHashCode() ?? "".GetHashCode();
+				hash = (hash * 397) ^ HandlerTypeName.GetHashCode();
+				hash = (hash * 397) ^ Event.GetType().Name.GetHashCode();
+				return hash;
+			}
+		}
+
 		public string RecurringId()
 		{
-			var id = $"{Tenant}{delimiter}{HandlerTypeName}{delimiter}{Event.GetType().Name}";
-
-			var hashedHandlerAndEvent = $"{HandlerTypeName}{delimiter}{Event.GetType().Name}".GenerateGuid().ToString("N");
-			var hashedTenant = Tenant?.GenerateGuid().ToString("N") ?? "";
-			return $"{hashedTenant}{delimiter}{hashedHandlerAndEvent}";
+			var tenantPrefix = TenantPrefixForTenant(Tenant);
+			var tenant = Tenant ?? "";
+			if (tenant.Length > 15)
+				tenant = tenant.Substring(0, 15);
+			var handler = Type.GetType(HandlerTypeName).Name.Substring(0, 15);
+			var @event = Event.GetType().Name.Substring(0, 15);
+			var id = recurringId();
+			return $"{tenantPrefix}{delimiter}{tenant}-{handler}-{@event}-{id}";
 		}
 	}
 }

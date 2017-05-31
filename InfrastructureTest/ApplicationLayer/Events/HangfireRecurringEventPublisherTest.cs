@@ -12,8 +12,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
@@ -167,6 +165,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Target.StopPublishingForTenantsExcept(new[] { dataSource1.DataSourceName });
 
 			JobClient.RecurringIds.Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldAssignIdNoLongerThanMaxLength()
+		{
+			var maxLength = 100 - "recurring-job:".Length;
+
+			Target.PublishHourly(new LongNameHandlerTestEvent());
+
+			JobClient.RecurringIds.First().Length.Should().Be.LessThanOrEqualTo(maxLength);
 		}
 
 		public class UnknownTestEvent : IEvent
