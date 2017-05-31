@@ -481,6 +481,7 @@
 			PermissionsServiceRefact.organizationSelection.get().$promise.then(function (data) {
 				if (data.BusinessUnit && data.BusinessUnit.ChildNodes) {
 					var array = data.BusinessUnit.ChildNodes;
+					array = sortByLocaleLanguage(array, 'Name');
 					array = loopSorting(array, 'ChildNodes', 'Name');
 				}
 				vm.organizationSelection = data;

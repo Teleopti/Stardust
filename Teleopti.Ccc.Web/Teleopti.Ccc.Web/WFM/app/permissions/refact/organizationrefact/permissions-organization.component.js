@@ -1,11 +1,7 @@
-function PermissionsListController(permissionsDataService, NoticeService, localeLanguageSortingService, $translate) {
+function PermissionsListController(permissionsDataService, NoticeService, $translate) {
 	var ctrl = this;
 	ctrl.toggleNode = toggleNode;
-	ctrl.sortByLocaleLanguage = function(a, b){
-		return localeLanguageSortingService.sort(a.value, b.value);
-	} 
-
-
+	
 	function toggleNode(node) {
 
 		if (angular.isUndefined(ctrl.selectedRole) || !ctrl.selectedRole.Id ){
