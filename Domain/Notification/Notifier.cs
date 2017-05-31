@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.Domain.Notification
 {
@@ -11,16 +13,22 @@ namespace Teleopti.Ccc.Domain.Notification
 		private readonly INotificationChecker _notificationChecker;
 		private static bool alreadyWarned;
 		private readonly NotifyAppSubscriptions _notifyAppSubscriptions;
+		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 
-		public Notifier(INotificationSenderFactory notificationSenderFactory, INotificationChecker notificationChecker, NotifyAppSubscriptions notifyAppSubscriptions)
+		public Notifier(INotificationSenderFactory notificationSenderFactory,
+			INotificationChecker notificationChecker,
+			NotifyAppSubscriptions notifyAppSubscriptions,
+			IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_notificationSenderFactory = notificationSenderFactory;
 			_notificationChecker = notificationChecker;
 			_notifyAppSubscriptions = notifyAppSubscriptions;
+			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
 		public Task<bool> Notify(INotificationMessage messages, params IPerson[] persons)
 		{
+			var notificationSetting = _globalSettingDataRepository.FindValueByKey("SmsSettings", new SmsSettings());
 			var sender = _notificationSenderFactory.GetSender();
 			if (sender != null)
 			{
@@ -46,7 +54,10 @@ namespace Teleopti.Ccc.Domain.Notification
 				}
 			}
 
-			return _notifyAppSubscriptions.TrySend(messages, persons);
+			if (notificationSetting.IsMobileNotificationEnabled)
+				return _notifyAppSubscriptions.TrySend(messages, persons);
+
+			return Task.FromResult(true);
 		}
 
 	}
