@@ -9,6 +9,7 @@ angular.module('wfm.people')
 
 function PeopleStartController($scope, $filter, $state, $stateParams, $translate, i18nService, uiGridConstants,
 	uiGridExporterConstants, $q, toggleSvc, peopleSvc, NoticeService) {
+	$scope.searchPlaceholder = $translate.instant('Search');
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.searchOptions = {
