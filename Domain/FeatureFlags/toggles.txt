@@ -166,7 +166,7 @@ MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = RC #Do not release yet
 MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 = RC
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
 MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = true
-MyTimeWeb_DayScheduleForStartPage_43446 = RC
+MyTimeWeb_DayScheduleForStartPage_43446 = true
 MyTimeWeb_DayScheduleForStartPage_Command_44209 = RC
 MyTimeWeb_ViewWFMAppGuide_43848 = RC
 
@@ -249,7 +249,7 @@ ConfigQRCodeURLForMobileApps_43224 = true
 MobileApps_EnableMobileNotifications_44476 = DEV
 
 ETL_SpeedUpNightlyDayOff_38213 = true
-WFM_ImproveIntradaySkillArea_37291 = RC
+WFM_ImproveIntradaySkillArea_37291 = true
 Wfm_Intraday_SupportSkillTypeWebChat_42591 = true
 MyTimeWeb_MobileResponsive_43826 = true
 Wfm_Intraday_SupportSkillTypeEmail_44002 = dev
