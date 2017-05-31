@@ -47,17 +47,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		}
 
 		[Test]
-		public void ShouldNotNotifyWhenNoLicense()
-		{
-			_target.InitiateNotify(null, new DateOnly(), null);
-
-			_significantChangeChecker.AssertWasNotCalled(
-				x =>
-					x.SignificantChangeNotificationMessage(Arg<DateOnly>.Is.Anything, Arg<IPerson>.Is.Anything,
-						Arg<ScheduleDayReadModel>.Is.Anything));
-		}
-
-		[Test]
 		public void ShouldNotNotifyWhenInvalidChange()
 		{
 			setValidLicense();
@@ -68,28 +57,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_significantChangeChecker.Stub(x => x.SignificantChangeNotificationMessage(date, person, readModel)).Return(message);
 			_target.InitiateNotify(readModel, date, person);
 			_notifier.SentMessages.Should().Be.Empty();
-		}
-
-
-		[Test]
-		public void ShouldNotifyAndSetCustomerName()
-		{
-			setValidLicense();
-			var date = new DateOnly();
-			var person = PersonFactory.CreatePerson();
-			person.Email = "john@doe.org";
-			var readModel = new ScheduleDayReadModel();
-			var message = new NotificationMessage { Subject = "This is the message subject" };
-
-			_significantChangeChecker.Stub(x => x.SignificantChangeNotificationMessage(date, person, readModel)).Return(message);
-			
-			_target.InitiateNotify(readModel, date, person);
-
-			_notifier.SentMessages.Should().Not.Be.Empty();
-			var sentMessage = _notifier.SentMessages.Single();
-			sentMessage.Message.CustomerName.Should().Be.EqualTo("Test");
-			sentMessage.Message.Subject.Should().Be.EqualTo(message.Subject);
-			sentMessage.Person.Should().Be.EqualTo(person);
 		}
 	}
 }

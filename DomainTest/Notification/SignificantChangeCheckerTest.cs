@@ -235,6 +235,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
             _mocks.VerifyAll();
         }
+
 	}
 
 }

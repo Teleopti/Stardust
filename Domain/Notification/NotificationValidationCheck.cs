@@ -3,7 +3,6 @@ using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Notification
@@ -12,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Notification
 	{
 		private readonly ISignificantChangeChecker _significantChangeChecker;
 		private readonly INotifier _notifier;
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		private static readonly ILog logger = LogManager.GetLogger(typeof(NotificationValidationCheck));
 
@@ -20,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Notification
 		{
 			_significantChangeChecker = significantChangeChecker;
 			_notifier = notifier;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
 		public void InitiateNotify(ScheduleDayReadModel readModel, DateOnly date, IPerson person)

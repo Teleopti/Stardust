@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Notification
 		public string Subject { get; set; } = "";
 		public IList<string> Messages { get; } = new List<string>();
 		public string CustomerName { get; set; } = "";
+		public string Data { get; set; }
 	}
 }

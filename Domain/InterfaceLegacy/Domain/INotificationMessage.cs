@@ -7,5 +7,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		string Subject { get; set; }
 		IList<string> Messages { get; }
 		string CustomerName { get; set; }
+
+		string Data { get; set; }
 	}
 }

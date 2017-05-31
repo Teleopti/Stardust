@@ -28,24 +28,24 @@ namespace Teleopti.Ccc.Domain.Notification
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
-		public Task<bool> Notify(INotificationMessage messages, params IPerson[] persons)
+		public async Task<bool> Notify(INotificationMessage messages, params IPerson[] persons)
 		{
 			var lookup = _notificationChecker.Lookup();
-			sendSmsOrEmail(lookup, messages, persons);
+			var result = sendSmsOrEmail(lookup, messages, persons);
 
 			if (lookup.IsMobileNotificationEnabled)
-				return _notifyAppSubscriptions.TrySend(messages, persons);
+				result = await _notifyAppSubscriptions.TrySend(messages, persons);
 
-			return Task.FromResult(true);
+			return result;
 		}
 
-		private void sendSmsOrEmail(NotificationLookup lookup, INotificationMessage messages, params IPerson[] persons)
+		private bool sendSmsOrEmail(NotificationLookup lookup, INotificationMessage messages, params IPerson[] persons)
 		{
 			var dataSource = _currentUnitOfWorkFactory.Current().Name;
 			if (!DefinedLicenseDataFactory.HasLicense(dataSource))
 			{
 				logger.Info("Can't access LicenseActivator to check SMSLink license.");
-				return;
+				return false;
 			}
 
 			var licenseActivator = DefinedLicenseDataFactory
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Notification
 			if (!hasSmsLicense)
 			{
 				logger.Info("No SMSLink license found.");
-				return;
+				return false;
 			}
 			logger.Info("Found SMSLink license.");
 
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Notification
 					logger.Warn("No notification sender was found. Review the configuration.");
 					alreadyWarned = true;
 				}
-				return;
+				return false;
 			}
 
 			messages.CustomerName = licenseActivator.CustomerName;
@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.Domain.Notification
 					PersonName = person.Name.ToString()
 				});
 			}
+			return true;
 		}
 
 	}
