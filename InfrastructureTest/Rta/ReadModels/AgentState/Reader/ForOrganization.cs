@@ -52,6 +52,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		}
 
 		[Test]
+		public void ShouldNotLoadDeletedAgetnsForTeam()
+		{
+			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId
+			});
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId2
+			});
+			Persister.UpsertDeleted(personId2, DateTime.MaxValue);
+
+			var result = Target.ReadFor(null, new[] { teamId }, null);
+
+			result.Single().PersonId.Should().Be(personId);
+		}
+
+		[Test]
 		public void ShouldLoadAgentStatesBySiteIds()
 		{
 			var siteId1 = Guid.NewGuid();
