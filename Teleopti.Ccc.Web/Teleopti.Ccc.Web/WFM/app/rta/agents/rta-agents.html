@@ -35,7 +35,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="con-row" ng-class="{'rta-agents-filter-wrapper': vm.agents.length >= vm.maxNumberOfAgents}">
+	<div class="con-row" ng-class="{'rta-agents-filter-wrapper': vm.agentStates.length >= vm.maxNumberOfAgents}">
 		<div class="con-flex">
 			<label for="filter-agents" class="input-icon">
 				<i class="mdi mdi-filter-outline"></i>
@@ -47,11 +47,11 @@
 		<div class="con-flex">
 			<div class="wfm-switch panel-switch line-right">
 				<input id="switch1" ng-model="vm.showInAlarm" type="checkbox" ng-disabled="vm.pause" />
-				<label class="rta-agents-in-alarm-switch" for="switch1" ng-if="vm.agents.length <= vm.maxNumberOfAgents && !vm.isLoading">
+				<label class="rta-agents-in-alarm-switch" for="switch1" ng-if="vm.agentStates.length <= vm.maxNumberOfAgents && !vm.isLoading">
 					<span class="wfm-switch-label">{{'InAlarm'|translate}}</span>
 					<span class="wfm-switch-toggle" ng-class="vm.pause ? 'rta-disabled-switch' : ''"></span>
 				</label>
-				<span ng-if="vm.agents.length > vm.maxNumberOfAgents">{{'AgentsInAlarm'|translate}}</span>
+				<span ng-if="vm.agentStates.length > vm.maxNumberOfAgents">{{'AgentsInAlarm'|translate}}</span>
 			</div>
 		</div>
 	</div>
