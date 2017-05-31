@@ -5,9 +5,9 @@
 		.module('wfm.skillPrio')
 		.controller('skillPrioControllerNew', skillPrioController);
 
-	skillPrioController.$inject = ['$filter', 'Toggle', '$location', 'NoticeService', '$translate', '$q', 'skillPrioServiceNew'];
+	skillPrioController.$inject = ['$filter', 'Toggle', '$location', 'NoticeService', '$translate', '$q', 'skillPrioServiceNew', 'localeLanguageSortingService'];
 
-	function skillPrioController($filter, toggleService, $location, NoticeService, $translate, $q, skillPrioServiceNew) {
+	function skillPrioController($filter, toggleService, $location, NoticeService, $translate, $q, skillPrioServiceNew, localeLanguageSortingService) {
 		var vm = this;
 
 		vm.isModified = false;
@@ -33,7 +33,7 @@
 		function getActivities() {
 			var getAct = skillPrioServiceNew.getActivites.query();
 			return getAct.$promise.then(function (data) {
-				vm.activites = data.sort(sortByName);
+				vm.activites = sortByLocaleLanguage(data, 'ActivityName');
 				vm.selectedActivity = vm.activites[0];
 				return vm.activites;
 			});
@@ -81,7 +81,8 @@
 
 		function compareChange() {
 			var changes = setPriorityForSkill().filter(belongsToActivity);
-			var origin = vm.skills.filter(belongsToActivity).sort(sortByName);
+			var data = vm.skills.filter(belongsToActivity);
+			var origin = sortByLocaleLanguage(data, 'SkillName');
 			var keepGoing = true;
 			angular.forEach(origin, function (skill, i) {
 				if (keepGoing) {
@@ -116,7 +117,7 @@
 
 		function sortSkill(dest_parent_id) {
 			if (dest_parent_id) {
-				vm.cascadeList[dest_parent_id].Skills.sort(sortByName);
+				vm.cascadeList[dest_parent_id].Skills = sortByLocaleLanguage(vm.cascadeList[dest_parent_id].Skills, 'SkillName');
 			}
 		}
 
@@ -150,7 +151,8 @@
 			if (activity !== null) {
 				resetAllList();
 				vm.selectedActivity = activity;
-				var skillsOfSelectedActivity = angular.copy(vm.skills.filter(belongsToActivity).sort(sortByName));
+				var skillsOfSelectedActivity = angular.copy(vm.skills.filter(belongsToActivity));
+				skillsOfSelectedActivity = sortByLocaleLanguage(skillsOfSelectedActivity, 'SkillName');
 				if (skillsOfSelectedActivity.length !== 0) {
 					addNewRow();
 					createCascadeLevel(skillsOfSelectedActivity);
@@ -177,16 +179,11 @@
 			}
 		}
 
-		function sortByName(a, b) {
-			var nameA = a.SkillName ? a.SkillName.toUpperCase() : a.ActivityName.toUpperCase();
-			var nameB = b.SkillName ? b.SkillName.toUpperCase() : b.ActivityName.toUpperCase();
-			if (nameA < nameB) {
-				return -1;
-			}
-			if (nameA > nameB) {
-				return 1;
-			}
-			return 0;
+		function sortByLocaleLanguage(array, key) {
+			return array.sort(function (a, b) {
+				var x = a[key]; var y = b[key];
+				return localeLanguageSortingService.sort(x, y);
+			});
 		}
 
 		function sortByPriority(a, b) {
@@ -217,7 +214,8 @@
 				var index = findIndexInData(skills, 'SkillName', skill.SkillName);
 				skills.splice(index, 1);
 				vm.cascadeList[0].Skills.push(skill);
-				vm.cascadeList[0].Skills.sort(sortByName);
+				// vm.cascadeList[0].Skills.sort(sortByName);
+				vm.cascadeList[0].Skills = sortByLocaleLanguage(vm.cascadeList[0].Skills, 'SkillName');
 				deleteEmptyRow(parent_id);
 				compareChange();
 			}

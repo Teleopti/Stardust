@@ -6,6 +6,7 @@ describe('skillPrioControllerNew', function () {
 
 	beforeEach(function () {
 		module('wfm.skillPrio');
+		module('localeLanguageSortingService');
 	});
 
 	beforeEach(inject(function (_$httpBackend_, _$controller_, _fakeSkillPrioBackend_) {
