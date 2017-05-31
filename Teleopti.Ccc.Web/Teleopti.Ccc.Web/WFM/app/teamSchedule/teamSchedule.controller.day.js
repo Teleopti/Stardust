@@ -446,6 +446,8 @@
 				.replace('{3}', '<a href="../Anywhere#teamschedule">' + $translate.instant('TeamSchedule') + '</a>');
 			NoticeService.info(message, null, true);
 		}
+
+		vm.searchPlaceholder = $translate.instant('Search');
 	}
 
 	function replaceArrayValues(from, to) {

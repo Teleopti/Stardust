@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyController', TeamScheduleWeeklyController);
 
-	TeamScheduleWeeklyController.$inject = ['$window', '$stateParams', '$q', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'TeamSchedule', 'signalRSVC', '$scope', 'teamsToggles', 'bootstrapCommon'];
+	TeamScheduleWeeklyController.$inject = ['$window', '$stateParams', '$q', '$translate', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'TeamSchedule', 'signalRSVC', '$scope', 'teamsToggles', 'bootstrapCommon'];
 
-	function TeamScheduleWeeklyController($window, $stateParams, $q, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, teamsToggles, bootstrapCommon) {
+	function TeamScheduleWeeklyController($window, $stateParams, $q, $translate, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, teamsToggles, bootstrapCommon) {
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined($stateParams.keyword) && $stateParams.keyword !== '' ? $stateParams.keyword : '',
@@ -197,6 +197,7 @@
 			$scope.$evalAsync(vm.loadSchedules);
 		}
 
+		vm.searchPlaceholder = $translate.instant('Search');
 	}
 
 	function replaceArrayValues(from, to) {

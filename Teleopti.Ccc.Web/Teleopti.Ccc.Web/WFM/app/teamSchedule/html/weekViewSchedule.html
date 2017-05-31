@@ -26,7 +26,7 @@
 
 			<div class="people-search-container inline-block"
 			     ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
-				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged" focus-input="vm.searchOptions.focusingSearch"></wfm-multiple-search-input>
+				<wfm-multiple-search-input search-options="vm.searchOptions" title="vm.searchPlaceholder" search-callback="vm.onKeyWordInSearchInputChanged" focus-input="vm.searchOptions.focusingSearch"></wfm-multiple-search-input>
 			</div>
 
 			<span class="datepicker-container" ng-click="$event.stopPropagation()">
