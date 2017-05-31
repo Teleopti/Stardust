@@ -1213,7 +1213,6 @@
     <Compile Include="ResourceCalculation\SchedulingOptionsTest.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultServiceTest.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultStateHolderTest.cs" />
-    <Compile Include="ResourceCalculation\DayOffPlannerRulesTest.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\PopulationStatisticsCalculatorTestSet.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheTest.cs" />

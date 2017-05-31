@@ -537,7 +537,6 @@
     <Compile Include="InterfaceLegacy\Domain\IDayOffOptimizerConflictHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDayOffOptimizerContainer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDayOffOptimizerValidator.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IDayOffPlannerRules.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDayOffsInPeriodCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDayOffTemplate.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDeviationStatisticData.cs" />
@@ -3177,7 +3176,6 @@
     <Compile Include="Repositories\IOptionalColumnRepository.cs" />
     <Compile Include="Repositories\IMeetingRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultStateHolder.cs" />
-    <Compile Include="ResourceCalculation\DayOffPlannerRules.cs" />
     <Compile Include="Scheduling\Meetings\Meeting.cs" />
     <Compile Include="Scheduling\Meetings\MeetingPerson.cs" />
     <Compile Include="Scheduling\Meetings\PersonMeeting.cs" />
