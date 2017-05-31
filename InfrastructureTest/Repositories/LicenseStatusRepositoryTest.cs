@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyMultipleLicensesNotAllowed()
         {
-            ILicenseStatusRepository licenseRepository = new LicenseStatusRepository(UnitOfWork);
+            ILicenseStatusRepository licenseRepository = new LicenseStatusRepository(CurrUnitOfWork);
             ILicenseStatus license = new LicenseStatus { XmlString = "<foo></foo>" };
             licenseRepository.Add(license);
             Session.Flush();
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyMultipleLicensesNotAllowedWithAddRange()
         {
-            ILicenseStatusRepository licenseRepository = new LicenseStatusRepository(UnitOfWork);
+            ILicenseStatusRepository licenseRepository = new LicenseStatusRepository(CurrUnitOfWork);
             var license = new LicenseStatus { XmlString = "<foo></foo>" };
             licenseRepository.Add(license);
             Session.Flush();

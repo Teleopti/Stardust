@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork)
 		{
-			return new LicenseStatusRepository(unitOfWork);
+			return new LicenseStatusRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork)
