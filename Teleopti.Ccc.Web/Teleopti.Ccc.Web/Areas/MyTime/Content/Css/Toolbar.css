@@ -1,10 +1,4 @@
-﻿:root{
-	--topMenuBgColor: #0099ff;
-	--topMenuButtonHoverColor: #0079ef;
-	--toolbarBgColor: #5ACDF9;
-	--toolbarButtonHoverColor: #3AADE9;
-}
-.badge-detail {
+﻿.badge-detail {
 	text-align: center;
 }
 .badge-type {
