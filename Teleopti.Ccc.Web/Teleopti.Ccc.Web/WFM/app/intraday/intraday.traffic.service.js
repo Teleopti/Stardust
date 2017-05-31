@@ -165,7 +165,7 @@
 
             service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
                 trafficData.waitingForData = true;
-                intradayService.getSkillAreaMonitorStatistics
+                intradayService.getSkillAreaMonitorStatisticsByDate
                     .query({
                         id: selectedItem.Id,
                         dayOffset: dayOffset

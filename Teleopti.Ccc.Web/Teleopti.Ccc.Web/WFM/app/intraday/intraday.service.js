@@ -143,7 +143,6 @@
                     id: '@id',
                     dayOffset: '@dayOffset'
                 },
-            );
 
             this.getSkillAreaStaffingData = $resource(
                 '../api/intraday/monitorskillareastaffing/:id',
@@ -190,7 +189,6 @@
                     id: '@id',
                     dayOffset: '@dayOffset'
                 },
-            );
 
             this.getLatestStatisticsTimeForSkillArea = $resource(
                 '../api/intraday/lateststatisticstimeforskillarea/:id',

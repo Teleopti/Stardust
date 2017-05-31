@@ -279,6 +279,16 @@ describe('IntradayAreaCtrl', function () {
 			return [200, trafficAndPerformanceDataTomorrow];
 		});
 
+		$httpBackend.whenGET("../api/intraday/monitorskillareastatisticsbydate?dateUtc=0001-01-01T14:45:00.000Z&id=" + skillAreas[0].Id)
+		.respond(function () {
+			return [200, trafficAndPerformanceData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillareastatisticsbydate?dateUtc=0001-01-02T14:45:00.000Z&id=" + skillAreas[0].Id)
+		.respond(function () {
+			return [200, trafficAndPerformanceDataTomorrow];
+		});
+
 		$httpBackend.whenGET("../api/intraday/monitorskillareaperformance/fa9b5393-ef48-40d1-b7cc-09e797589f81")
 		.respond(function () {
 			return [200, performanceData];
@@ -330,6 +340,16 @@ describe('IntradayAreaCtrl', function () {
 		});
 
 		$httpBackend.whenGET("../api/intraday/monitorskillareastaffing/" + skillAreas[0].Id + "/1")
+		.respond(function () {
+			return [200, staffingDataTomorrow];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillareastaffing?DateTime=0001-01-01T14:45:00.000Z&SkillAreaId=" + skillAreas[0].Id + "&UseShrinkage=false")
+		.respond(function () {
+			return [200, staffingData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillareastaffing?DateTime=0001-01-02T14:45:00.000Z&SkillAreaId=" + skillAreas[0].Id + "&UseShrinkage=false")
 		.respond(function () {
 			return [200, staffingDataTomorrow];
 		});
@@ -696,5 +716,53 @@ describe('IntradayAreaCtrl', function () {
 
 		expect(scope.chosenOffset.value).toEqual(1);
 		expect(scope.viewObj.forecastedStaffing.series[1]).toEqual(3);
+		jasmine.clock().uninstall();
+	});
+
+	it('should get traffic data for skillarea corresponding to chosenOffset', function(){
+		createController(false);
+		scope.activeTab = 0;
+		scope.toggles.showOtherDay = true;
+		scope.skillAreaSelected(skillAreas[0]);
+
+		var today = moment('0001-01-01T15:45:00').toDate();
+		jasmine.clock().mockDate(today);
+		scope.changeChosenOffset(1);
+		$httpBackend.flush();
+		expect(scope.chosenOffset.value).toEqual(1);
+		expect(scope.viewObj.summary.summaryCalculatedCalls).toEqual('1,337.0');
+
+		jasmine.clock().uninstall();
+	});
+
+	it('should get performance data for skillarea corresponding to chosenOffset', function(){
+		createController(false);
+		scope.activeTab = 1;
+		scope.toggles.showOtherDay = true;
+		scope.skillAreaSelected(skillAreas[0]);
+
+		var today = moment('0001-01-01T15:45:00').toDate();
+		jasmine.clock().mockDate(today);
+		scope.changeChosenOffset(1);
+		$httpBackend.flush();
+		expect(scope.chosenOffset.value).toEqual(1);
+		expect(scope.viewObj.summary.summaryServiceLevel).toEqual('90.0');
+
+		jasmine.clock().uninstall();
+	});
+
+	it('should get staffing data for skillarea corresponding to chosenOffset', function(){
+		createController(false);
+		scope.activeTab = 2;
+		scope.toggles.showOtherDay = true;
+		scope.skillAreaSelected(skillAreas[0]);
+
+		var today = moment('0001-01-01T15:45:00').toDate();
+		jasmine.clock().mockDate(today);
+		scope.changeChosenOffset(1);
+		$httpBackend.flush();
+		expect(scope.chosenOffset.value).toEqual(1);
+		expect(scope.viewObj.forecastedStaffing.series[1]).toEqual(3);
+
 	});
 });
