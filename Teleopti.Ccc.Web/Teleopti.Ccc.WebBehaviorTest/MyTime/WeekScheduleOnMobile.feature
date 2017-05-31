@@ -174,8 +174,16 @@ Scenario: Navigate to desktop view
 	When I click the desktop link
 	Then I should see my week schedule for date '2014-04-21'
 	
-Scenario: Navigate from desktop
+@OnlyRunIfDisabled('MyTimeWeb_DayScheduleForStartPage_43446')
+Scenario: Navigate to mobile week from desktop
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2014-04-15'
 	When I click the mobile link
 	Then I should see my mobile week schedule for date '2014-04-15'
+
+@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
+Scenario: Navigate to mobile day from desktop
+	Given I have the role 'Full access to mytime'
+	And I view my week schedule for date '2014-04-15'
+	When I click the mobile link
+	Then I should see my mobile day schedule for date '2014-04-15'

@@ -329,10 +329,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.mobile = function () {
+			var urlPartForDate = getUrlPartForDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash);
 			if (showDayScheduleForStartPage()) {
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay");
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + urlPartForDate);
 			} else {
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + getUrlPartForDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash) + getUrlPartForProbability());
+				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + urlPartForDate + getUrlPartForProbability());
 			}
 		};
 

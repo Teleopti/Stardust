@@ -973,7 +973,7 @@ $(document).ready(function() {
 
 		vm.mobile(); 
 
-		equal("#Schedule/MobileDay", hash);
+		equal("#Schedule/MobileDay/", hash);
 	});
 
 	test("should get correct minutes when there is full day time line", function () {
