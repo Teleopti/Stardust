@@ -108,9 +108,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				Time = timeSeries,
 				ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing, timeSeries),
 				UpdatedForecastedStaffing = updatedForecastedSeries,
-				ActualStaffing =
-					_requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, timeSeries,
-						skills.Count),
+				ActualStaffing = _requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, timeSeries),
 				ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, timeSeries)
 			};
 			calculateRelativeDifference(dataSeries);

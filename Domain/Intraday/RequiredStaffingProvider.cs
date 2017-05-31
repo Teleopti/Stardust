@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return mergedStats;
 		}
 
-		public double?[] DataSeries(IList<StaffingIntervalModel> requiredStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, DateTime[] timeSeries, int skillCount)
+		public double?[] DataSeries(IList<StaffingIntervalModel> requiredStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, DateTime[] timeSeries)
 		{
 			var returnValue = new List<double?>();
 
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			foreach (var interval in timeSeries)
 			{
 				var requiredStaffingInterval = requiredStaffingPerSkill.Where(x => x.StartTime == interval).ToList();
-				if (requiredStaffingInterval.Any() && requiredStaffingInterval.Count == skillCount)
+				if (requiredStaffingInterval.Any())
 					returnValue.Add(requiredStaffingInterval.Sum(a => a.Agents));
 				else
 					returnValue.Add(null);

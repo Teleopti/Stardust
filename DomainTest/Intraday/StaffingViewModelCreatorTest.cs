@@ -1301,7 +1301,34 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
 		}
 
+		[Test]
+		public void ShouldReturnActualStaffingForBothSkillsWhenDifferentOpeningHours()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 45, 0, DateTimeKind.Utc);
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 30, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skillA = createSkill(minutesPerInterval, "skill A", new TimePeriod(8, 0, 9, 0), false, 0);
+			var skillB = createSkill(minutesPerInterval, "skill B", new TimePeriod(8, 15, 8, 30), false, 0);
+			var skillDayAToday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillA, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, ServiceAgreement.DefaultValues());
+			var skillDayBToday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillB, scenario, userNow, new TimePeriod(8, 15, 8, 30), false, ServiceAgreement.DefaultValues());
+			List<SkillIntervalStatistics> skillStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDayAToday, latestStatsTime, minutesPerInterval, TimeZone.TimeZone()).ToList();
+			skillStats.AddRange(StaffingViewModelCreatorTestHelper.CreateStatistics(skillDayBToday, latestStatsTime, minutesPerInterval, TimeZone.TimeZone()).ToList());
+
+			SkillRepository.Has(skillA);
+			SkillRepository.Has(skillB);
+			SkillDayRepository.Has(skillDayAToday, skillDayBToday);
+			IntradayQueueStatisticsLoader.Has(skillStats);
+
+			var vm = Target.Load(new[] { skillA.Id.Value, skillB.Id.Value });
+
+			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(4);
+			vm.DataSeries.ActualStaffing[0].HasValue.Should().Be.EqualTo(true);
+			vm.DataSeries.ActualStaffing[1].HasValue.Should().Be.EqualTo(true);
+			vm.DataSeries.ActualStaffing[2].HasValue.Should().Be.EqualTo(true);
+			vm.DataSeries.ActualStaffing[3].HasValue.Should().Be.EqualTo(false);
+		}
 
 		private ISkill createChatSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, int midnigthBreakOffset)
 		{
