@@ -1543,7 +1543,13 @@ End personal drop down menu
 
 .navbar-teleopti {
 	margin-bottom: 0;
+	background-color: #5ACDF9;
 	border:none;
+}
+
+.navbar-teleopti .btn-default {
+	background-color: #5ACDF9;
+	border-color: #5ACDF9;
 }
 
 .navbar-toggle {

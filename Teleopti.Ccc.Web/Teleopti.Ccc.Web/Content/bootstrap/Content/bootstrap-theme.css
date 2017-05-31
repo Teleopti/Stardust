@@ -19,13 +19,13 @@
 .navbar-teleopti .navbar-nav > li > a:hover,
 .navbar-teleopti .navbar-nav > li > a:focus {
   color: #ffffff;
-  background-color: #3fb618;
+  background-color: #3AADE9;
 }
 .navbar-teleopti .navbar-nav > .active > a,
 .navbar-teleopti .navbar-nav > .active > a:hover,
 .navbar-teleopti .navbar-nav > .active > a:focus {
   color: #ffffff;
-  background-color: #3fb618;
+  background-color: #3AADE9;
 }
 .navbar-teleopti .navbar-nav > .disabled > a,
 .navbar-teleopti .navbar-nav > .disabled > a:hover,
@@ -104,8 +104,8 @@ fieldset[disabled] .navbar-teleopti .btn-link:focus {
 .navbar-teleopti .btn-default:active,
 .navbar-teleopti .btn-default.active,
 .navbar-teleopti .open > .dropdown-toggle.btn-default {
-	background-color: #3fb618;
-	border-color: #3fb618;
+	background-color: #3AADE9;
+	border-color: #3AADE9;
 }
 
 .navbar-teleopti .btn-default.disabled,

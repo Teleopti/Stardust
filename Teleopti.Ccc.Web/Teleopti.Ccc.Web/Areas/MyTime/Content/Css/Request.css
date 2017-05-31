@@ -683,12 +683,5 @@ input[type=search]::-ms-clear {
 	.hide-fab-on-phone{
 		display: none!important;
 	}
-	.purest-green{
-		background-color: #9ccc33!important;
-		border-color: #8cbc23!;
-	}
-	/*.shift-trade-add-schedule > div > div > div > div:nth-child(even){
-		background: red !important;
-	}*/
 }
 
