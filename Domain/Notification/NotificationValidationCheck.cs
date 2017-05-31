@@ -25,36 +25,19 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		public void InitiateNotify(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
 		{
-			var dataSource = _currentUnitOfWorkFactory.Current().Name;
-			if (!DefinedLicenseDataFactory.HasLicense(dataSource))
+			var changeNotificationMessage =
+				_significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
+			if (hasVisibleSignificantChange(changeNotificationMessage))
 			{
-				logger.Info("Can't access LicenseActivator to check SMSLink license.");
-				return;
-			}
-
-			var licenseActivator = DefinedLicenseDataFactory
-				.GetLicenseActivator(dataSource);
-
-			//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
-			if (licenseActivator
-				.EnabledLicenseOptionPaths
-				.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
-			{
-				logger.Info("Found SMSLink license.");
-				var changeNotificationMessage = _significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
-				if (hasVisibleSignificantChange(changeNotificationMessage))
-				{
-					logger.Info($"Found significant change on {date.ToShortDateString(CultureInfo.InvariantCulture)} for {person.Name}");
-					changeNotificationMessage.CustomerName = licenseActivator.CustomerName;
-					_notifier.Notify(changeNotificationMessage, person);
-				}
-				else
-				{
-					logger.Info($"No significant change found on {date.ToShortDateString(CultureInfo.InvariantCulture)} for {person.Name}");
-				}
+				logger.Info(
+					$"Found significant change on {date.ToShortDateString(CultureInfo.InvariantCulture)} for {person.Name}");
+				_notifier.Notify(changeNotificationMessage, person);
 			}
 			else
-				logger.Info("No SMSLink license found.");
+			{
+				logger.Info(
+					$"No significant change found on {date.ToShortDateString(CultureInfo.InvariantCulture)} for {person.Name}");
+			}
 		}
 
 		private static bool hasVisibleSignificantChange(INotificationMessage smsMessages)

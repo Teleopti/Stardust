@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Notification
 		}
 
 		public string EmailSender => _settings.EmailFrom;
+		public bool IsMobileNotificationEnabled => _settings.IsMobileNotificationEnabled;
 
 		public string SmsMobileNumber(IPerson person)
 		{
