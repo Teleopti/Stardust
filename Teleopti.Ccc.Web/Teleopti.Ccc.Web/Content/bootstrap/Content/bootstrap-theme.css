@@ -16,17 +16,6 @@
 .navbar-teleopti .navbar-nav > li > a {
   color: #ffffff;
 }
-.navbar-teleopti .navbar-nav > li > a:hover,
-.navbar-teleopti .navbar-nav > li > a:focus {
-  color: #ffffff;
-  background-color: #3AADE9;
-}
-.navbar-teleopti .navbar-nav > .active > a,
-.navbar-teleopti .navbar-nav > .active > a:hover,
-.navbar-teleopti .navbar-nav > .active > a:focus {
-  color: #ffffff;
-  background-color: #3AADE9;
-}
 .navbar-teleopti .navbar-nav > .disabled > a,
 .navbar-teleopti .navbar-nav > .disabled > a:hover,
 .navbar-teleopti .navbar-nav > .disabled > a:focus {
@@ -53,28 +42,7 @@
   background-color: #3fb618;
   color: #ffffff;
 }
-@media (max-width: 767px) {
-  .navbar-teleopti .navbar-nav .open .dropdown-menu > li > a {
-	color: #ffffff;
-  }
-  .navbar-teleopti .navbar-nav .open .dropdown-menu > li > a:hover,
-  .navbar-teleopti .navbar-nav .open .dropdown-menu > li > a:focus {
-	color: #ffffff;
-	background-color: #3fb618;
-  }
-  .navbar-teleopti .navbar-nav .open .dropdown-menu > .active > a,
-  .navbar-teleopti .navbar-nav .open .dropdown-menu > .active > a:hover,
-  .navbar-teleopti .navbar-nav .open .dropdown-menu > .active > a:focus {
-	color: #ffffff;
-	background-color: #3fb618;
-  }
-  .navbar-teleopti .navbar-nav .open .dropdown-menu > .disabled > a,
-  .navbar-teleopti .navbar-nav .open .dropdown-menu > .disabled > a:hover,
-  .navbar-teleopti .navbar-nav .open .dropdown-menu > .disabled > a:focus {
-	color: #9ccc33;
-	background-color: transparent;
-  }
-}
+
 .navbar-teleopti .navbar-link {
   color: #ffffff;
 }
@@ -95,18 +63,6 @@ fieldset[disabled] .navbar-teleopti .btn-link:focus {
   color: #9ccc33;
 }
 
-.navbar-teleopti .btn-default {
-	background-color: #9ccc33;
-	border-color: #9ccc33;
-}
-.navbar-teleopti .btn-default:hover,
-.navbar-teleopti .btn-default:focus,
-.navbar-teleopti .btn-default:active,
-.navbar-teleopti .btn-default.active,
-.navbar-teleopti .open > .dropdown-toggle.btn-default {
-	background-color: #3AADE9;
-	border-color: #3AADE9;
-}
 
 .navbar-teleopti .btn-default.disabled,
 .navbar-teleopti .btn-default[disabled],
