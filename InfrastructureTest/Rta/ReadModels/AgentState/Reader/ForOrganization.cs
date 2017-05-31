@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				PersonId = personId
 			});
 
-			var result = Target.ReadFor(new AgentStateFilter{ TeamIds = teamId.AsArray()});
+			var result = Target.ReadFor(new AgentStateFilter {TeamIds = teamId.AsArray()});
 
 			result.Single().PersonId.Should().Be(personId);
 		}
@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		public void ShouldLoadAgentStatesByTeamId()
 		{
 			var teamId = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = teamId, PersonId = Guid.NewGuid() });
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = teamId, PersonId = Guid.NewGuid() });
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
 
-			var result = Target.ReadFor(new AgentStateFilter { TeamIds = teamId.AsArray() });
+			var result = Target.ReadFor(new AgentStateFilter {TeamIds = teamId.AsArray()});
 
 			result.Count().Should().Be(2);
 		}
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 			Persister.UpsertDeleted(personId2, DateTime.MaxValue);
 
-			var result = Target.ReadFor(new AgentStateFilter { TeamIds = teamId.AsArray() });
+			var result = Target.ReadFor(new AgentStateFilter {TeamIds = teamId.AsArray()});
 
 			result.Single().PersonId.Should().Be(personId);
 		}
@@ -81,11 +81,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		{
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest { SiteId = siteId1, PersonId = Guid.NewGuid() });
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest { SiteId = siteId2, PersonId = Guid.NewGuid() });
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest { SiteId = Guid.Empty, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest {SiteId = siteId1, PersonId = Guid.NewGuid()});
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest {SiteId = siteId2, PersonId = Guid.NewGuid()});
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest {SiteId = Guid.Empty, PersonId = Guid.NewGuid()});
 
-			var result = Target.ReadFor(new AgentStateFilter { SiteIds = new[] { siteId1, siteId2 } });
+			var result = Target.ReadFor(new AgentStateFilter {SiteIds = new[] {siteId1, siteId2}});
 
 			result.Count().Should().Be(2);
 		}
@@ -95,9 +95,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		{
 			var teamId1 = Guid.NewGuid();
 			var teamId2 = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = teamId1, PersonId = Guid.NewGuid() });
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = teamId2, PersonId = Guid.NewGuid() });
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest {TeamId = teamId1, PersonId = Guid.NewGuid()});
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest {TeamId = teamId2, PersonId = Guid.NewGuid()});
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
 
 			var result = Target.ReadFor(new AgentStateFilter {TeamIds = new[] {teamId1, teamId2}});
 
@@ -133,9 +133,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				IsRuleAlarm = false
 			});
 
-			var result = Target.ReadInAlarmFor(new AgentStateFilter()
+			var result = Target.ReadFor(new AgentStateFilter()
 			{
-				TeamIds = teamId.AsArray()
+				TeamIds = teamId.AsArray(),
+				InAlarm = true
 			});
 
 			result.Single().PersonId.Should().Be(personId1);
@@ -163,9 +164,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				IsRuleAlarm = true
 			});
 
-			var result = Target.ReadInAlarmFor(new AgentStateFilter()
+			var result = Target.ReadFor(new AgentStateFilter()
 			{
-				TeamIds = teamId.AsArray()
+				TeamIds = teamId.AsArray(),
+				InAlarm = true
 			});
 
 			result.First().PersonId.Should().Be(personId2);
@@ -201,14 +203,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				IsRuleAlarm = false
 			});
 
-			var result = Target.ReadInAlarmFor(new AgentStateFilter()
+			var result = Target.ReadFor(new AgentStateFilter()
 			{
-				SiteIds = siteId.AsArray()
+				SiteIds = siteId.AsArray(),
+				InAlarm = true
 			});
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
-		
+
 		[Test]
 		public void ShouldLoadWithStateGroupId()
 		{
@@ -225,9 +228,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				StateGroupId = phoneState
 			});
 
-			Target.ReadInAlarmFor(new AgentStateFilter()
+			Target.ReadFor(new AgentStateFilter()
 				{
-					SiteIds = site.AsArray()
+					SiteIds = site.AsArray(),
+					InAlarm = true
 				})
 				.Single().StateGroupId.Should().Be(phoneState);
 		}
@@ -254,9 +258,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				IsRuleAlarm = true
 			});
 
-			var result = Target.ReadInAlarmFor(new AgentStateFilter()
+			var result = Target.ReadFor(new AgentStateFilter()
 			{
-				SiteIds = siteId.AsArray()
+				SiteIds = siteId.AsArray(),
+				InAlarm = true
 			});
 
 			result.First().PersonId.Should().Be(personId2);
@@ -284,7 +289,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				}
 			});
 
-			var result = Target.ReadFor(new AgentStateFilter { TeamIds = teamId.AsArray() }).Single();
+			var result = Target.ReadFor(new AgentStateFilter {TeamIds = teamId.AsArray()}).Single();
 
 			result.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
 			result.Shift.Single().StartTime.Should().Be("2016-05-30 08:00".Utc());
@@ -309,7 +314,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				}
 			});
 
-			var outOfAdherence = Target.ReadFor(new AgentStateFilter { TeamIds = teamId.AsArray() }).Single()
+			var outOfAdherence = Target.ReadFor(new AgentStateFilter {TeamIds = teamId.AsArray()}).Single()
 				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());
 			outOfAdherence.EndTime.Should().Be("2016-06-16 08:10".Utc());
@@ -329,7 +334,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				.CreateSQLQuery("UPDATE [ReadModel].[AgentState] SET Shift = NULL, OutOfAdherences = NULL")
 				.ExecuteUpdate();
 
-			Assert.DoesNotThrow(() => Target.ReadFor(new AgentStateFilter { TeamIds = teamId.AsArray() }));
+			Assert.DoesNotThrow(() => Target.ReadFor(new AgentStateFilter {TeamIds = teamId.AsArray()}));
 		}
 
 	}

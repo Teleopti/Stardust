@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					IsRuleAlarm = false
 				});
 
-			var agentStates = Target.InAlarmFor(new AgentStateFilter {SiteIds = new[] { siteId1, siteId2 } }).States.Single();
+			var agentStates = Target.For(new AgentStateFilter {SiteIds = new[] { siteId1, siteId2 }, InAlarm = true}).States.Single();
 
 			agentStates.PersonId.Should().Be(personId1);
 		}
@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					AlarmStartTime = "2016-06-21 08:29".Utc()
 				});
 
-			var agentState = Target.InAlarmFor(new AgentStateFilter {SkillIds = new[] { skill1, skill2 } }).States;
+			var agentState = Target.For(new AgentStateFilter {SkillIds = new[] { skill1, skill2 }, InAlarm = true}).States;
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
 		}
@@ -432,14 +432,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					IsDeleted = true
 				});
 
-			Target.For(new AgentStateFilter {SiteIds = new[] { site } }).States.Should().Be.Empty();
-			Target.For(new AgentStateFilter {TeamIds = new[] { team } }).States.Should().Be.Empty();
-			Target.For(new AgentStateFilter {SkillIds = new[] { skill } }).States.Should().Be.Empty();
-			Target.InAlarmFor(new AgentStateFilter {SiteIds = new[] { site } }).States.Should().Be.Empty();
-			Target.InAlarmFor(new AgentStateFilter {TeamIds = new[] { team } }).States.Should().Be.Empty();
-			Target.InAlarmFor(new AgentStateFilter {SkillIds = new[] { skill } }).States.Should().Be.Empty();
+			Target.For(new AgentStateFilter {SiteIds = new[] {site}}).States.Should().Be.Empty();
+			Target.For(new AgentStateFilter {TeamIds = new[] {team}}).States.Should().Be.Empty();
+			Target.For(new AgentStateFilter {SkillIds = new[] {skill}}).States.Should().Be.Empty();
+
+			Target.For(new AgentStateFilter {SiteIds = new[] {site}, InAlarm = true}).States.Should().Be.Empty();
+			Target.For(new AgentStateFilter {TeamIds = new[] {team}, InAlarm = true}).States.Should().Be.Empty();
+			Target.For(new AgentStateFilter {SkillIds = new[] {skill}, InAlarm = true}).States.Should().Be.Empty();
 		}
-		
+
 		[Test]
 		public void ShouldGetWithStateGroupIdForSkill()
 		{
@@ -457,7 +458,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(person, skill);
 			Now.Is("2016-09-22 08:10");
 
-			var agentState = Target.InAlarmFor(new AgentStateFilter { SkillIds = new[] { skill } }).States;
+			var agentState = Target.For(new AgentStateFilter { SkillIds = new[] { skill }, InAlarm = true}).States;
 
 			agentState.Single().StateId.Should().Be(phone);
 		}

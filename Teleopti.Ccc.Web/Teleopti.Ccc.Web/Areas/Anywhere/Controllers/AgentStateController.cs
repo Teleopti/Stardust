@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/AgentStates/InAlarmFor")]
 		public virtual IHttpActionResult InAlarmFor([FromUri]AgentStateFilter filter)
 		{
-			return Ok(_builder.InAlarmFor(filter));
+			// REMOVE ME PLOX
+			filter.InAlarm = true;
+			return Ok(_builder.For(filter));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/AgentStates/InAlarmExcludingPhoneStatesFor")]

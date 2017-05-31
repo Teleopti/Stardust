@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<Guid> TeamIds { get; set; }
 		public IEnumerable<Guid> SkillIds { get; set; }
 		public IEnumerable<Guid?> ExcludedStates { get; set; }
+		public bool InAlarm { get; set; }
 	}
 
 	public class AgentStatesViewModelBuilder
@@ -94,14 +95,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			return build(_reader.ReadFor(filter));
 		}
-		
-		public AgentStatesViewModel InAlarmFor(AgentStateFilter filter)
-		{
-			return build(_reader.ReadInAlarmFor(filter));
-		}
-		
+
 		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(AgentStateFilter filter, IEnumerable<Guid?> excludedPhoneStates)
 		{
+			filter.ExcludedStates = excludedPhoneStates;
 			return build(_reader.ReadInAlarmExcludingStatesFor(filter));
 		}
 		

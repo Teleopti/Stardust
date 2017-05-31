@@ -193,6 +193,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<AgentStateReadModel> ReadFor(AgentStateFilter filter)
 		{
+			if (filter.InAlarm)
+				return ReadInAlarmFor(filter.SiteIds, filter.TeamIds, filter.SkillIds);
 			return ReadFor(filter.SiteIds, filter.TeamIds, filter.SkillIds);
 		}
 

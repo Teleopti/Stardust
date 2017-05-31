@@ -87,7 +87,8 @@ INSERT INTO [ReadModel].[AgentState]
 				}.ForEach(p =>
 				{
 					assert(Target.ReadFor(p));
-					assert(Target.ReadInAlarmFor(p));
+					p.InAlarm = true;
+					assert(Target.ReadFor(p));
 					p.ExcludedStates = new Guid?[]{ Guid.NewGuid() };
 					assert(Target.ReadInAlarmExcludingStatesFor(p));
 				});

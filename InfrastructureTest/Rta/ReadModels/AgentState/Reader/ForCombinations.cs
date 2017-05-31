@@ -225,10 +225,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(new AgentStateFilter()
+			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
-					TeamIds = teamId.AsArray()
+					TeamIds = teamId.AsArray(),
+					InAlarm = true
 				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1, personId2);
@@ -306,12 +307,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(new AgentStateFilter()
+			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
 					TeamIds = teamId.AsArray(),
-					SkillIds = phoneId.AsArray()
-				})
+					SkillIds = phoneId.AsArray(),
+					InAlarm = true
+			})
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam));
 		}
