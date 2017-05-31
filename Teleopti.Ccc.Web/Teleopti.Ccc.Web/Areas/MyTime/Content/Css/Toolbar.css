@@ -174,3 +174,8 @@
 		display: none;
 	}
 }
+
+.bdd-mytime-top-menu {
+	border: none;
+	height: 50px;
+}

@@ -566,7 +566,7 @@ header, #body, #body-signin {
 }
 
 body {
-	padding-top: calc(55.5px + 5px + 2px);
+	padding-top: 50px;
 }
 
 header {
@@ -1534,11 +1534,16 @@ End personal drop down menu
 }
 
 .navbar {
-	margin-bottom: 5px;
+	margin-bottom: 0;
 }
 
 .navbar-teleopti {
 	margin-bottom: 0;
+}
+
+.navbar-teleopti {
+	margin-bottom: 0;
+	border:none;
 }
 
 .navbar-toggle {
@@ -1568,9 +1573,9 @@ End personal drop down menu
 	}
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
 	.menu-top-adjust {
-		margin-top: 58px;
+		margin-top: 50px;
 	}
 
 	.submenu .select2-container {

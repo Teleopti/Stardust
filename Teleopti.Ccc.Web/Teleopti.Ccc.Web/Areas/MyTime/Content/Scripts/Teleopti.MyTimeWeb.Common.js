@@ -429,7 +429,7 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 
 				navbar.removeClass('custom-collapsed'); // set standart view
 				innerNavbar.addClass('container');  //size according to bootstrap
-
+				//toolbar min-heigth: 50px, button: 50px;
 				if (Math.floor(navbar.innerHeight()) > button.height() + 1) // check if we've got 2 lines
 				{
 					innerNavbar.removeClass('container');
