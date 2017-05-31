@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		public IScheduleStorage ScheduleStorage;
 		public IPersonRequestRepository PersonRequestRepository;
 		public IPersonAbsenceRepository PersonAbsenceRepository;
+		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 		public Global.FakePermissionProvider PermissionProvider;
 		public ConfigurablePermissions Authorization;
@@ -419,17 +421,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		}
 
 		[Test]
-		public void ShouldRunRequestWaitlist()
+		public void ShouldAddPlaceholderForEachDayInPeriod()
 		{
-			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
-
 			setupStateHolderProxy();
-			var period = new DateTimePeriod(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
-			var result = Target.RunWaitlist(period);
+			Target.RunWaitlist(new DateTimePeriod(2016, 12, 24, 12, 2016, 12, 31, 12));
 
-			result.CommandTrackId.Should().Not.Be(Guid.Empty);
-			result.Success.Should().Be.True();
-			result.AffectedRequestIds.Any().Should().Be.False();
+			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(8);
+			QueuedAbsenceRequestRepository.LoadAll().ForEach(x => x.PersonRequest.Should().Be.EqualTo(Guid.Empty));
 		}
 
 		[Test]

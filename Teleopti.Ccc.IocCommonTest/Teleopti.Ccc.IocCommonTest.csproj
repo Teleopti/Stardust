@@ -102,7 +102,6 @@
     <Compile Include="Configuration\MessageBrokerModuleTest.cs" />
     <Compile Include="Configuration\OutboundScheduledResourcesProviderModuleTest.cs" />
     <Compile Include="Configuration\RepositoryModuleTest.cs" />
-    <Compile Include="Configuration\RequestModuleTest.cs" />
     <Compile Include="Configuration\ResourceHandlerModuleTest.cs" />
     <Compile Include="Configuration\RuleSetTest.cs" />
     <Compile Include="Configuration\SchedulePersistModuleTest.cs" />

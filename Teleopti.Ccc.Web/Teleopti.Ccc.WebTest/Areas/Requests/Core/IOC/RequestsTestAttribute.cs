@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble(new FakeGroupingReadOnlyRepository()).For<IGroupingReadOnlyRepository>();
 			system.UseTestDouble(new FakePersonAbsenceRepositoryLegacy()).For<IPersonAbsenceRepository>();
 			system.UseTestDouble(new FakePersonAbsenceAccountRepository()).For<IPersonAbsenceAccountRepository>();
+			system.UseTestDouble<FakeQueuedAbsenceRequestRepository>().For<IQueuedAbsenceRequestRepository>();
 			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
 
 			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();

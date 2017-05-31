@@ -1,53 +1,39 @@
 using System;
-using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	//[TestFixture]
-	//public class RunWaitlistCommandHandlerTest
-	//{
-	//	private IEventPublisher publisher;
-	//	private RunWaitlistCommandHandler target;
-	//	private ICurrentBusinessUnit currentCurrentBusinessUnit;
-	//	private ICurrentDataSource currentDataSource;
+	[DomainTest]
+	public class RunWaitlistCommandHandlerTest : ISetup
+	{
+		public RunWaitlistCommandHandler Target;
+		public FakeQueuedAbsenceRequestRepository FakeQueuedAbsenceRequestRepository;
 
-	//	[SetUp]
-	//	public void Setup()
-	//	{
-	//		currentCurrentBusinessUnit = new FakeCurrentBusinessUnit();
-	//		((FakeCurrentBusinessUnit) currentCurrentBusinessUnit)
-	//			.FakeBusinessUnit(new Domain.Common.BusinessUnit("TestBu"));
-	//		currentDataSource = new FakeCurrentDatasource("TestDataSource");
-	//		publisher = new LegacyFakeEventPublisher();
-	//		target = new RunWaitlistCommandHandler();
-	//	}
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<RunWaitlistCommandHandler>().For<IHandleCommand<RunWaitlistCommand>>();
+		}
 
-	//	[Test]
-	//	public void ShouldPublishRunWaitlistEvent()
-	//	{
-	//		var period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
-	//		var command = new RunWaitlistCommand
-	//		{
-	//			Period = period,
-	//			TrackedCommandInfo = new TrackedCommandInfo
-	//			{
-	//				TrackId = Guid.NewGuid()
-	//			}
-	//		};
+		[Test]
+		public void ShouldAddPlaceholderForEachDayInPeriod()
+		{
+			var command = new RunWaitlistCommand
+			{
+				Period = new DateTimePeriod(2016, 12, 24, 12, 2016, 12, 31, 12)
+			};
 
-	//		//target.Handle(command);
-	//		var @event = ((LegacyFakeEventPublisher) publisher).PublishedEvents.Single() as RunRequestWaitlistEvent;
-	//		Assert.NotNull(@event);
-	//		Assert.AreEqual(@event.StartTime, period.StartDateTime);
-	//		Assert.AreEqual(@event.EndTime, period.EndDateTime);
-	//	}
-	//}
+			Target.Handle(command);
+
+			FakeQueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(8);
+			FakeQueuedAbsenceRequestRepository.LoadAll().ForEach(x => x.PersonRequest.Should().Be.EqualTo(Guid.Empty));
+		}
+	}
 }

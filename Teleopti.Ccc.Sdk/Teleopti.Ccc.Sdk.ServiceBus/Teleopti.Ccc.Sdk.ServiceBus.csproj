@@ -190,7 +190,6 @@
     <Compile Include="NodeHandlers\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="NodeHandlers\UpdateStaffingLevelReadModel2WeeksHandler.cs" />
     <Compile Include="NodeHandlers\UpdateStaffingLevelReadModelHandler.cs" />
-    <Compile Include="NodeHandlers\RunRequestWaitlistStardustHandler.cs" />
     <Compile Include="NodeHandlers\RunSchedulingHandler.cs" />
     <Compile Include="NodeHandlers\ImportForecastFromFileHandler.cs" />
     <Compile Include="NodeHandlers\NodeHandlersModule.cs" />

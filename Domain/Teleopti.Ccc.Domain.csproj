@@ -304,7 +304,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceAllocator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceCalculationPeriodDictionary.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourcesExtractor.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillCombinationResourceReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SlimSkillResourceCalculationPeriodWrapper.cs" />
     <Compile Include="ApplicationLayer\AllowFailuresAttribute.cs" />
@@ -1213,7 +1212,6 @@
     <Compile Include="ApplicationLayer\Events\MultiplicatorDefinitionSetCreated.cs" />
     <Compile Include="ApplicationLayer\Events\CalculateBadgeMessage.cs" />
     <Compile Include="ApplicationLayer\Events\AbsenceChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\RunRequestWaitlistEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScenarioChangedEvents.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffTemplateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ExportMultisiteSkillsToSkillEvent.cs" />
