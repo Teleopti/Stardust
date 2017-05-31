@@ -76,25 +76,13 @@
 			});
 		}
 
-		// old function to get skill Staffing -- might delete later
-		function getSkillStaffing(skillId) {
-			if (!skillId) return;
-			return staffingService.getSkillStaffing.get({ id: skillId });
-		}
-
-		// old function to get skill area Staffing -- might delete later
-		function getSkillAreaStaffing(areaId) {
-			if (!areaId) return;
-			return staffingService.getSkillAreaStaffing.get({ id: areaId });
-		}
-
-		function getSkillStaffingByDate(skillId, date, shrinkage) {
+	    function getSkillStaffingByDate(skillId, date, shrinkage) {
 			var data = { SkillId: skillId, DateTime: date, UseShrinkage: shrinkage };
 			return staffingService.getSkillStaffingByDate.get(data);
 		}
 
-		function getSkillAreaStaffingByDate(skillId, date, shrinkage) {
-			var data = { SkillId: skillId, DateTime: date, UseShrinkage: shrinkage };
+		function getSkillAreaStaffingByDate(skillAreaId, date, shrinkage) {
+            var data = { SkillAreaId: skillAreaId, DateTime: date, UseShrinkage: shrinkage };
 			return staffingService.getSkillAreaStaffingByDate.get(data);
 		}
 
