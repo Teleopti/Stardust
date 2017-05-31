@@ -139,12 +139,7 @@ End personal drop down menu
 		width: auto;
 		padding: 1px;
 	}
-}
-
-@media (max-width: 768px) {
-}
-
-@media (min-width: 768px) {
+	
 	.custom-collapsed .navbar-header {
 		float: none;
 	}
