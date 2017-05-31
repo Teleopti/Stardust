@@ -43,10 +43,8 @@
             if (!vm.originLastPp.startDate && !vm.lastPp.startDate)
                 return;
             return vm.textForChangeThisPpMeg = $translate.instant("YouAreGoingToChangeThisPlanningPeriodFrom")
-                .replace("{0}", moment(vm.originLastPp.startDate).format('L'))
-                .replace("{1}", moment(vm.originLastPp.endDate).format('L'))
-                .replace("{2}", moment(vm.lastPp.startDate).format('L'))
-                .replace("{3}", moment(vm.lastPp.endDate).format('L'));
+                .replace("{0}", moment(vm.lastPp.startDate).format('L'))
+                .replace("{1}", moment(vm.lastPp.endDate).format('L'));
         }
 
         function youAreGoingToCreateAPlanningPeriodMessage() {
