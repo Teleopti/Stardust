@@ -22,8 +22,6 @@
 			'rtaFormatService',
 			'rtaAgentsBuildService',
 			'rtaRouteService',
-			'fakeTimeService',
-			'localeLanguageSortingService',
 			'Toggle',
 			'NoticeService'
 		];
@@ -44,8 +42,6 @@
 		rtaFormatService,
 		rtaAgentsBuildService,
 		rtaRouteService,
-		fakeTimeService,
-		localeLanguageSortingService,
 		toggleService,
 		NoticeService
 	) {
@@ -88,10 +84,6 @@
 		vm.hexToRgb = rtaFormatService.formatHexToRgb;
 		vm.pause = false;
 		vm.pausedAt = null;
-		vm.showPath = false;
-		vm.notifySwitchDisabled = false;
-		vm.showBreadcrumb = siteIds.length > 0 || teamIds.length > 0 || skillIds === [];
-		vm.openedMaxNumberOfAgents = false;
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
 
