@@ -216,7 +216,7 @@
 		top: inherit;
 		left: inherit;
 		bottom: 40px;
-		background-color: var(--toolbarBgColor);
+		background-color: #5ACDF9;
 		min-width: inherit;
 		width: 100%;
 	}

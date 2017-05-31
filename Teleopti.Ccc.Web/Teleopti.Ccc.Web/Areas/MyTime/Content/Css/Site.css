@@ -1518,7 +1518,7 @@ select.time-input {
 	bottom: 3%;
 	right: 5%;
 	z-index: 115;
-	background: var(--toolbarBgColor);
+	background: #5ACDF9;
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
