@@ -13,7 +13,6 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using IsolationLevel = System.Data.IsolationLevel;
 using TransactionException = NHibernate.TransactionException;
 
@@ -31,6 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ISession _session;
 		private readonly TransactionIsolationLevel _isolationLevel;
 		private readonly ICurrentTransactionHooks _transactionHooks;
+		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
 		private readonly NHibernateFilterManager _filterManager;
 		protected readonly Lazy<AggregateRootInterceptor> Interceptor;
 		private ITransaction _transaction;
@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ApplicationUnitOfWorkContext context, 
 			ISession session, 
 			TransactionIsolationLevel isolationLevel, 
-			ICurrentTransactionHooks transactionHooks)
+			ICurrentTransactionHooks transactionHooks, 
+			ICurrentPreCommitHooks currentPreCommitHooks)
 		{
 			InParameter.NotNull(nameof(session), session);
 			_context = context;
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_session = session;
 			_session.FlushMode = FlushMode.Never;
 			_isolationLevel = isolationLevel;
+			_currentPreCommitHooks = currentPreCommitHooks;
 			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
 			_filterManager = new NHibernateFilterManager(session);
 			Interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
@@ -142,6 +144,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IEnumerable<IRootChangeInfo> modifiedRoots;
 			try
 			{
+				_currentPreCommitHooks.Current().ForEach(x => x.BeforeCommit(Interceptor.Value.ModifiedRoots.ToList()));
 				Flush();
 				modifiedRoots = Interceptor.Value.ModifiedRoots.ToList();
 				transactionCommit();

@@ -5,6 +5,21 @@ using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
+	public class CurrentPreCommitHooks : ICurrentPreCommitHooks
+	{
+		private readonly IEnumerable<IPreCommitHook> _beforeCommits;
+
+		public CurrentPreCommitHooks(IEnumerable<IPreCommitHook> beforeCommits)
+		{
+			_beforeCommits = beforeCommits;
+		}
+
+		public IEnumerable<IPreCommitHook> Current()
+		{
+			return _beforeCommits;
+		}
+	}
+
 	public class CurrentTransactionHooks : ICurrentTransactionHooks, ITransactionHooksScope
 	{
 		private static IEnumerable<ITransactionHook> _globalHooks;

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				_schedulingProgress.ReportProgress(1, new SchedulingServiceSuccessfulEventArgs(schedulingCallbackInfo.ScheduleDay));
 				_scheduledCount = 0;
-			}
+			} 
 		}
 
 		public bool IsCancelled => _schedulingProgress.CancellationPending;

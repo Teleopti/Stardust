@@ -612,10 +612,14 @@
     <Compile Include="Analytics\AnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\AnalyticsUnitOfWork.cs" />
     <Compile Include="UnitOfWork\CurrentAnalyticsUnitOfWorkFactory.cs" />
+    <Compile Include="UnitOfWork\CurrentSchedulingSource.cs" />
     <Compile Include="UnitOfWork\DisableBusinessUnitFilter.cs" />
+    <Compile Include="UnitOfWork\ICurrentPreCommitHooks.cs" />
+    <Compile Include="UnitOfWork\IPreCommitHook.cs" />
     <Compile Include="UnitOfWork\INHibernateConfigurationCache.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
     <Compile Include="UnitOfWork\MessageBrokerSender.cs" />
+    <Compile Include="UnitOfWork\NoPreCommitHooks.cs" />
     <Compile Include="UnitOfWork\OptionalColumnCollectionChangedEventPublisher.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\ClearScheduleEvents.cs" />
@@ -630,6 +634,7 @@
     <Compile Include="UnitOfWork\ITransactionHooksScope.cs" />
     <Compile Include="UnitOfWork\NoTransactionHooks.cs" />
     <Compile Include="UnitOfWork\PersonCollectionChangedEventPublisherForTeamOrSite.cs" />
+    <Compile Include="UnitOfWork\SetSourceOnPersonAssignment.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="Util\AppVersionTelemetryInitializer.cs" />

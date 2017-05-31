@@ -13,12 +13,9 @@
 	using Teleopti.Ccc.Domain.UnitOfWork;
 	using Teleopti.Ccc.Infrastructure.Foundation;
 	using Teleopti.Ccc.Infrastructure.Repositories;
-	using Teleopti.Ccc.Infrastructure.UnitOfWork;
-	using Teleopti.Ccc.TestCommon;
 	using Teleopti.Ccc.TestCommon.FakeData;
 	using Teleopti.Ccc.TestCommon.TestData;
 	using Teleopti.Interfaces.Domain;
-	using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -224,6 +221,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IList<IPerson> persons = new List<IPerson> {_dummyAgent};
 			ICollection<IPersonAssignment> retList = _rep.Find(persons, searchPeriod, _dummyScenario);
+			Assert.IsTrue(retList.Contains(agAssValid));
+			Assert.AreEqual(1, retList.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyActivity));
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyCategory));
+		}
+
+		[Test]
+		public void CanFindAgentAssignmentsByDatesAndScenarioAndSource()
+		{
+			var notToFindScenario = new Scenario("NotToFind");
+			var searchPeriod = new DateOnlyPeriod(2007, 1, 1, 2007, 1, 2);
+
+			#region setup test data
+
+			// Assignments of _dummyAgent Data
+			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(_dummyAgent,
+				_dummyScenario, _dummyActivity, new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)), _dummyCategory);
+			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+			agAssValid.Source = ScheduleSource.WebScheduling;
+
+			IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(_dummyAgent,
+				notToFindScenario, _dummyActivity, new DateTimePeriod(2006, 12, 31, 2007, 1, 1));
+			agAssInvalid.Source = ScheduleSource.WebScheduling;
+
+			//Assignments of _dummyAgent2 
+			IPersonAssignment agAssInvalid4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_dummyAgent2,
+				_dummyScenario, _dummyActivity, new DateTimePeriod(new DateTime(2007, 1, 1, 4, 0, 0, DateTimeKind.Utc),
+					new DateTime(2007, 1, 2, 4, 0, 0, DateTimeKind.Utc)), _dummyCategory);
+
+			PersistAndRemoveFromUnitOfWork(notToFindScenario);
+			PersistAndRemoveFromUnitOfWork(agAssValid);
+			PersistAndRemoveFromUnitOfWork(agAssInvalid);
+			PersistAndRemoveFromUnitOfWork(agAssInvalid4);
+
+			#endregion
+
+			IList<IPerson> persons = new List<IPerson> { _dummyAgent };
+			ICollection<IPersonAssignment> retList = _rep.Find(persons, searchPeriod, _dummyScenario, ScheduleSource.WebScheduling);
 			Assert.IsTrue(retList.Contains(agAssValid));
 			Assert.AreEqual(1, retList.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyActivity));

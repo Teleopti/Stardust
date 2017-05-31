@@ -15,14 +15,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class WebIntradayOptimizationStardustHandler : IntradayOptimizationEventBaseHandler, IRunOnStardust, IHandleEvent<WebIntradayOptimizationStardustEvent>
 	{
 		private readonly IJobResultRepository _jobResultRepository;
+		private readonly ISchedulingSourceScope _schedulingSourceScope;
 
 		public WebIntradayOptimizationStardustHandler(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager,
-			IJobResultRepository jobResultRepository)
+			IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)
 			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult, gridlockManager)
 		{
 			_jobResultRepository = jobResultRepository;
+			_schedulingSourceScope = schedulingSourceScope;
 		}
 
 		[AsSystem]
@@ -30,8 +32,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			try
 			{
-				HandleEvent(@event.OptimizationWasOrdered);
-				SaveDetailToJobResult(@event, DetailLevel.Info, "", null);
+				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
+				{
+					HandleEvent(@event.OptimizationWasOrdered);
+					SaveDetailToJobResult(@event, DetailLevel.Info, "", null);
+				}
 			}
 			catch (Exception e)
 			{

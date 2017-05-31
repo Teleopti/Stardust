@@ -28,6 +28,11 @@
 					 not-null="true" 
 					 insert="true"
 					 update="false"/>
+
+		<property name="Source"
+				  not-null="false"
+				  type="string"
+				  length="50"/>
 		
 		<many-to-one name="ShiftCategory"
 						class="Teleopti.Ccc.Domain.Scheduling.ShiftCategory"

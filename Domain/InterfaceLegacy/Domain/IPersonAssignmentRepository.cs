@@ -39,6 +39,11 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person);
 
 		DateTime GetScheduleLoadedTime();
+
+		ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons,
+			DateOnlyPeriod period,
+			IScenario scenario,
+			string source);
 	}
 
 	public class PersonAssignmentKey

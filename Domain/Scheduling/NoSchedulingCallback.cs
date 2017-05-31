@@ -6,9 +6,6 @@
 		{
 		}
 
-		public bool IsCancelled
-		{
-			get { return false; }
-		}
+		public bool IsCancelled => false;
 	}
 }

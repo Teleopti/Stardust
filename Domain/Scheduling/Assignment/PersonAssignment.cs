@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IScenario _scenario;
 		private IShiftCategory _shiftCategory;
 		private IDayOffTemplate _dayOffTemplate;
+		private string _source;
 
 
 		public PersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
@@ -55,6 +56,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		public virtual DateOnly Date { get; protected set; }
+
+		public virtual string Source
+		{
+			get { return _source; }
+			set { _source = value; }
+		}
 
 		public virtual DateTimePeriod Period => mergedMainShiftAndPersonalPeriods();
 

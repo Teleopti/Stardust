@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeTenants Tenants;
+		public FakeSchedulingSourceScope FakeSchedulingSourceScope;
 
 		private IBusinessUnit businessUnit;
 
@@ -66,6 +67,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var jobResult = JobResultRepository.Get(jobResultId);
 			jobResult.Details.Count().Should().Be.EqualTo(1);
 			jobResult.FinishedOk.Should().Be.False();
+
+			FakeSchedulingSourceScope.SchedulingSource.Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 
 		[Test]
@@ -93,6 +96,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var jobResult = JobResultRepository.Get(jobResultId);
 			jobResult.Details.Count().Should().Be.EqualTo(1);
 			jobResult.FinishedOk.Should().Be.True();
+
+			FakeSchedulingSourceScope.SchedulingSource.Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 	}
 }

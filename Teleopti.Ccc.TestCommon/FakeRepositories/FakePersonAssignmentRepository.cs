@@ -39,20 +39,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			Add(personAssignment);
 		}
 
-		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnlyPeriod period, TimePeriod timePeriod)
+		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnlyPeriod period, TimePeriod timePeriod, string source=null)
 		{
 			foreach (var date in period.DayCollection())
 			{
 				var ass = new PersonAssignment(agent, scenario, date);
 				ass.AddActivity(activity, timePeriod);
 				ass.SetShiftCategory(shiftCategory);
+				ass.Source = source;
 				Add(ass);
 			}
 		}
 
-		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnly date, TimePeriod timePeriod)
+		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnly date, TimePeriod timePeriod, string source = null)
 		{
-			Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(date, date), timePeriod);
+			Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(date, date), timePeriod, source);
 		}
 
 		public void Has(IPerson agent, IScenario scenario, IDayOffTemplate dayOffTemplate, DateOnly date)
@@ -113,7 +114,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return DateTime.UtcNow;
 		}
-		
+
+		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
+		{
+			return Find(persons, period, scenario).Where(s => s.Source == source).ToList();
+		}
+
 		public IPersonAssignment GetSingle(DateOnly dateOnly)
 		{
 			return _storage.LoadAll<IPersonAssignment>().Single(pa => pa.Date == dateOnly);

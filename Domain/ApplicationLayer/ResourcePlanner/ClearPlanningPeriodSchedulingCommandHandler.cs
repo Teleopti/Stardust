@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var people = _personRepository.FindPeopleInAgentGroup(planningPeriod.AgentGroup, planningPeriod.Range);
 			foreach (var batch in people.Batch(200))
 			{
-				foreach (var personAssignment in _personAssignmentRepository.Find(batch, planningPeriod.Range, scenario))
+				foreach (var personAssignment in _personAssignmentRepository.Find(batch, planningPeriod.Range, scenario, ScheduleSource.WebScheduling))
 				{
 					personAssignment.ClearMainActivities(false);
 					personAssignment.SetDayOff(null);

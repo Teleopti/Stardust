@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ApplicationUnitOfWorkContext _context;
 		private readonly IAuditSetter _auditSettingProvider;
 		private readonly ICurrentTransactionHooks _transactionHooks;
+		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
 
 		// can not inject here because the lifetime of the factory
 		// is longer than the container when running unit tests
@@ -45,15 +46,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ISessionFactory sessionFactory, 
 			IAuditSetter auditSettingProvider, 
 			string connectionString, 
-			ICurrentTransactionHooks transactionHooks, 
-			string tenant
-			)
+			ICurrentTransactionHooks transactionHooks,
+			ICurrentPreCommitHooks currentPreCommitHooks,
+			string tenant)
 		{
 			ConnectionString = connectionString;
 			_factory = sessionFactory;
 			_context = new ApplicationUnitOfWorkContext(tenant);
 			_auditSettingProvider = auditSettingProvider;
 			_transactionHooks = transactionHooks;
+			_currentPreCommitHooks = currentPreCommitHooks;
 		}
 
 		public string Name
@@ -122,7 +124,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_context,
 				session,
 				isolationLevel,
-				_transactionHooks);
+				_transactionHooks,
+				_currentPreCommitHooks);
 
 			return CurrentUnitOfWork();
 		}

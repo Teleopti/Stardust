@@ -272,6 +272,7 @@
     <Compile Include="FakeData\FakeRequestFactory.cs" />
     <Compile Include="FakeRepositories\Rta\FakeHistoricalChangeReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeTeamInAlarmReader.cs" />
+    <Compile Include="FakeSchedulingSourceScope.cs" />
     <Compile Include="FakeTransactionHook.cs" />
     <Compile Include="FakeUserUiCulture.cs" />
     <Compile Include="HangfireUtilitiesExtensions.cs" />

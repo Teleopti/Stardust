@@ -7,7 +7,6 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -118,6 +117,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public virtual DateTime GetScheduleLoadedTime()
 		{
 			return Session.CreateSQLQuery("SELECT GETDATE()").UniqueResult<DateTime>();
+		}
+
+		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
+		{
+			InParameter.NotNull(nameof(persons), persons);
+			var retList = new List<IPersonAssignment>();
+
+			foreach (var personList in persons.Batch(400))
+			{
+				var personArray = personList.ToArray();
+				var crit = personAssignmentCriteriaLoader(period, scenario);
+				crit.Add(Restrictions.InG("ass.Person", personArray));
+				retList.AddRange(crit.List<IPersonAssignment>());
+				crit.Add(Restrictions.Eq(nameof(IPersonAssignment.Source), source));
+			}
+
+			return retList;
 		}
 	}
 }

@@ -2,11 +2,11 @@
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class NoTransactionHooks : ICurrentTransactionHooks
+	public class NoPreCommitHooks : ICurrentPreCommitHooks
 	{
-		public IEnumerable<ITransactionHook> Current()
+		public IEnumerable<IPreCommitHook> Current()
 		{
 			yield break;
 		}
-	} 
+	}
 }

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			AgentGroupRepository.Has(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
 
-			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16));
+			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 
 			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
 			{
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			AgentGroupRepository.Has(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
 
-			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, endDateOutsidePlanningPeriod, new TimePeriod(8, 16));
+			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, endDateOutsidePlanningPeriod, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 
 			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
 			{
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			AgentGroupRepository.Has(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
 
-			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16));
+			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 
 			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
 			{
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			AgentGroupRepository.Has(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
 
-			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16));
+			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 			PersonAbsenceRepository.Has(new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(new DateTime(2017, 05, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2017, 05, 01, 16, 0, 0, DateTimeKind.Utc)))));
 
 			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
@@ -182,6 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			assignment.AddActivity(activity, new TimePeriod(9, 16));
 			assignment.AddPersonalActivity(activity, new DateTimePeriod(2017, 05, 01, 8, 2017, 05, 01, 9));
 			assignment.SetShiftCategory(shiftCategory);
+			assignment.Source = ScheduleSource.WebScheduling;
 			AssignmentRepository.Has(assignment);
 
 			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
@@ -219,6 +220,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var assignment = new PersonAssignment(agent, scenario, startDate);
 			assignment.SetDayOff(dayOffTemplate);
 			assignment.AddPersonalActivity(activity, new DateTimePeriod(2017, 05, 01, 8, 2017, 05, 01, 9));
+			assignment.Source = ScheduleSource.WebScheduling;
 			AssignmentRepository.Has(assignment);
 
 			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
@@ -252,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			AgentGroupRepository.Has(agentGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
 
-			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16));
+			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 			MeetingRepository.Has(new Meeting(agent, new []{new MeetingPerson(agent, false) }, "_", "_", "_", activity, scenario)
 			{
 				StartDate = startDate,

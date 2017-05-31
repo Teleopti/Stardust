@@ -17,11 +17,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly IScheduleOptimization _scheduleOptimization;
 		private readonly IJobResultRepository _jobResultRepository;
+		private readonly ISchedulingSourceScope _schedulingSourceScope;
 
-		public WebDayoffOptimizationStardustHandler(IScheduleOptimization scheduleOptimization, IJobResultRepository jobResultRepository)
+		public WebDayoffOptimizationStardustHandler(IScheduleOptimization scheduleOptimization, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)
 		{
 			_scheduleOptimization = scheduleOptimization;
 			_jobResultRepository = jobResultRepository;
+			_schedulingSourceScope = schedulingSourceScope;
 		}
 
 		[AsSystem]
@@ -29,8 +31,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			try
 			{
-				var result = _scheduleOptimization.Execute(@event.PlanningPeriodId);
-				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
+				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
+				{
+					var result = _scheduleOptimization.Execute(@event.PlanningPeriodId);
+					SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
+				}
 			}
 			catch (Exception e)
 			{

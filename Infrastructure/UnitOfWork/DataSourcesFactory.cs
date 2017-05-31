@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
 		private readonly ICurrentTransactionHooks _transactionHooks;
+		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly INHibernateConfigurationCache _nhibernateConfigurationCache;
@@ -31,13 +32,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ICurrentTransactionHooks transactionHooks, 
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
 			ICurrentHttpContext httpContext, 
-			INHibernateConfigurationCache nhibernateConfigurationCache)
+			INHibernateConfigurationCache nhibernateConfigurationCache, ICurrentPreCommitHooks currentPreCommitHooks)
 		{
 			_enversConfiguration = enversConfiguration;
 			_transactionHooks = transactionHooks;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_httpContext = httpContext;
 			_nhibernateConfigurationCache = nhibernateConfigurationCache;
+			_currentPreCommitHooks = currentPreCommitHooks;
 		}
 
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
@@ -77,6 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_enversConfiguration.AuditSettingProvider,
 				applicationConnectionString,
 				_transactionHooks,
+				_currentPreCommitHooks,
 				tenant
 				);
 

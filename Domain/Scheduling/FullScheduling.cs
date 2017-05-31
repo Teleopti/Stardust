@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var stateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(stateHolder, people, null, null, period);
-
+			
 			if (stateHolder.Schedules.Any())
 			{
 				_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,

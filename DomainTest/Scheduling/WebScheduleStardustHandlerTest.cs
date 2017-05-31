@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public FakePersonRepository PersonRepository;
 		public FakeJobResultRepository JobResultRepository;
 		public FakeTenants Tenants;
+		public FakeSchedulingSourceScope FakeSchedulingSourceScope;
 
 		private IBusinessUnit businessUnit;
 
@@ -78,6 +79,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			jobResultDetail.DetailLevel.Should().Be.EqualTo(DetailLevel.Info);
 			jobResultDetail.ExceptionMessage.Should().Be.Null();
 			jobResultDetail.Message.Should().Not.Be.Null();
+
+			FakeSchedulingSourceScope.SchedulingSource.Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 
 		[Test]
@@ -104,6 +107,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			jobResultDetail.DetailLevel.Should().Be.EqualTo(DetailLevel.Error);
 			jobResultDetail.ExceptionMessage.Should().Not.Be.Null();
 			jobResultDetail.Message.Should().Be.Empty();
+
+			FakeSchedulingSourceScope.SchedulingSource.Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 
 		[Test]
@@ -135,6 +140,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var webOptimizationStardustEvent = EventPublisher.PublishedEvents.Single() as WebDayoffOptimizationStardustEvent;
 			webOptimizationStardustEvent.PlanningPeriodId.Should().Be.EqualTo(planningPeriod.Id.Value);
 			webOptimizationStardustEvent.JobResultId.Should().Be.EqualTo(jobResult.Id.Value);
+
+			FakeSchedulingSourceScope.SchedulingSource.Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 	
 	}
