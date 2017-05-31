@@ -1431,34 +1431,6 @@ select.time-input {
 	z-index: 99000 !important;
 }
 
-/*
-Personal drop down menu
-*/
-.dropdown dd {
-	position: relative;
-}
-
-.dropdown dt span {
-	cursor: pointer;
-}
-
-.dropdown dd ul {
-	background: #f8f8f8 none repeat scroll 0 0;
-	display: none;
-	position: absolute;
-	top: 2px;
-	width: 232px;
-	list-style: none;
-}
-
-	.dropdown dd ul li a {
-		display: block;
-		text-align: left;
-	}
-/*
-End personal drop down menu
-*/
-
 .responsive-header.container {
 	max-width: 965px;
 }
@@ -1484,29 +1456,6 @@ End personal drop down menu
 	min-width: 250px;
 }
 
-.user-name-link {
-	white-space: nowrap;
-	margin: 0;
-	max-width: 200px;
-}
-
-.user-name {
-	max-width: 100px;
-	text-overflow: ellipsis;
-	vertical-align: bottom;
-	overflow: hidden;
-	float: none;
-	display: inline-block;
-}
-
-.placeholder {
-	color: #AAA !important;
-}
-
-.navbar-collapse {
-	max-height: none !important;
-}
-
 /* for fix ie11 bug: http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?id=27041 */
 .transition-fix {
 	-webkit-transition: height 0.001s;
@@ -1515,80 +1464,12 @@ End personal drop down menu
 	-o-transition: height 0.001s;
 	transition: height 0.001s;
 }
-
-.badge-detail {
-	text-align: center;
-}
-
-.badge-type {
-	font-size: 12px;
-	font-weight: bold;
-}
-
 .pagebody {
 	margin-top: 10px;
 }
-
 .m-b-10 {
 	margin-bottom: 10px;
 }
-
-.navbar {
-	margin-bottom: 0;
-}
-
-.navbar-teleopti {
-	margin-bottom: 0;
-}
-
-.navbar-teleopti {
-	margin-bottom: 0;
-	background-color: #5ACDF9;
-	border:none;
-}
-
-.navbar-teleopti .btn-default {
-	background-color: #5ACDF9;
-	border-color: #5ACDF9;
-}
-
-.navbar-toggle {
-	float: left;
-	margin: 10px;
-}
-
-.nav > li > .input-group {
-	position: relative;
-	padding: 4px 0px;
-	margin-left: -5px;
-}
-
-.submenu {
-	width: auto;
-}
-
-@media (min-width: 768px) {
-	.navbar-nav > li > a {
-		padding-left: 12px;
-		padding-right: 12px;
-	}
-
-	.submenu li {
-		width: auto;
-		padding: 1px;
-	}
-}
-
-@media (max-width: 768px) {
-	.menu-top-adjust {
-		margin-top: 50px;
-	}
-
-	.submenu .select2-container {
-		margin-left: 14px;
-	}
-}
-
 @media print {
 	.cal-month-day .visible-lg {
 		display: block !important;
@@ -1637,7 +1518,7 @@ End personal drop down menu
 	bottom: 3%;
 	right: 5%;
 	z-index: 115;
-	background: #9ccc33;
+	background: #5ACDF9;
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;

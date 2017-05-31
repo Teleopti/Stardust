@@ -1,10 +1,131 @@
-﻿@media (min-width: 768px) {
+﻿.badge-detail {
+	text-align: center;
+}
+.badge-type {
+	font-size: 12px;
+	font-weight: bold;
+}
+.navbar {
+	margin-bottom: 0;
+}
+.navbar-teleopti {
+	margin-bottom: 0;
+}
+.navbar-teleopti {
+	margin-bottom: 0;
+	background-color: #5ACDF9;
+	border: none;
+}
+.navbar-teleopti .btn-default {
+	background-color: #5ACDF9;
+	border-color: #5ACDF9;
+}
+.navbar-toggle {
+	float: left;
+	margin: 10px;
+}
+.nav > li > .input-group {
+	position: relative;
+	padding: 4px 0px;
+	margin-left: -5px;
+}
+.submenu {
+	width: auto;
+}
+.navmenu-inverse, .navbar-inverse .navbar-offcanvas {
+	background-color: #0099ff;
+	border-color: #0066cc;
+}
+
+.navbar-collapse {
+	max-height: none !important;
+}
+
+.navbar-nav.navbar-user-setting{
+	margin-right: 2px 10px;
+	margin-left: 10px;
+}
+.navbar-inverse {
+	background-color: #0099ff
+}
+.bdd-mytime-top-menu {
+	border: none;
+}
+
+/*
+Personal drop down menu
+*/
+.dropdown dd {
+	position: relative;
+}
+.dropdown dt span {
+	cursor: pointer;
+}
+.dropdown dd ul {
+	background: #f8f8f8 none repeat scroll 0 0;
+	display: none;
+	position: absolute;
+	top: 2px;
+	width: 232px;
+	list-style: none;
+}
+.dropdown dd ul li a {
+	display: block;
+	text-align: left;
+}
+/*
+End personal drop down menu
+*/
+.user-name-link {
+	white-space: nowrap;
+	margin: 0;
+	max-width: 200px;
+}
+.user-name {
+	max-width: 100px;
+	text-overflow: ellipsis;
+	vertical-align: bottom;
+	overflow: hidden;
+	float: none;
+	display: inline-block;
+}
+.placeholder {
+	color: #AAA !important;
+}
+.navbar-collapse {
+	max-height: none !important;
+}
+
+@media (min-width: 768px) {
+	.navbar-nav > li > a {
+		padding-left: 12px;
+		padding-right: 12px;
+	}
+
+	.submenu li {
+		width: auto;
+		padding: 1px;
+	}
+}
+
+@media (max-width: 768px) {
+	.menu-top-adjust {
+		margin-top: 50px;
+	}
+
+	.submenu .select2-container {
+		margin-left: 14px;
+	}
+}
+
+@media (min-width: 768px) {
 	.custom-collapsed .navbar-header {
 		float: none;
 	}
 
 	.custom-collapsed .navbar-toggle {
-		margin: 5px 10px;
+		display: block;
+		margin: 8px 10px;
 	}
 
 	.custom-collapsed .navbar-collapse {
@@ -120,32 +241,18 @@
 		white-space: nowrap;
 	}
 }
-
-.navmenu-inverse, .navbar-inverse .navbar-offcanvas {
-	background-color: #0099ff;
-	border-color: #0066cc;
-}
-
-.navbar-collapse {
-	max-height: none !important;
-}
-
-.navbar-nav.navbar-user-setting{
-	margin-right: 10px;
-	margin-left: 10px;
-}
-
-/*Hide user name in small screen*/
+/*Hide user name on small screens*/
 @media(max-width: 768px) {
 	.navbar-brand {
 		padding-left: 5px;
 		padding-right: 5px;
 	}
 	.custom-collapsed .navbar-toggle {
+		display: block;
 		margin: 8px 10px;
 	}
 	.navbar-nav.navbar-user-setting{
-		margin: 5px;
+		margin: 2px 5px;
 	}
 	.navbar-nav.navbar-user-setting a{
 		padding-left: 5px;
@@ -175,12 +282,4 @@
 	#BadgePanel {
 		display: none;
 	}
-}
-
-.navbar-inverse {
-	background-color: #0099ff
-}
-
-.bdd-mytime-top-menu {
-	border: none;
 }
