@@ -122,7 +122,7 @@
 }
 
 .navmenu-inverse, .navbar-inverse .navbar-offcanvas {
-	background-color: #007fff;
+	background-color: #0099ff;
 	border-color: #0066cc;
 }
 
@@ -173,6 +173,10 @@
 	#BadgePanel {
 		display: none;
 	}
+}
+
+.navbar-inverse {
+	background-color: #0099ff
 }
 
 .bdd-mytime-top-menu {
