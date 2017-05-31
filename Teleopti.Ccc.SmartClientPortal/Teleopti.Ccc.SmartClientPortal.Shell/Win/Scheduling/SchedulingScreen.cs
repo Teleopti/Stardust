@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly DateNavigateControl _dateNavigateControl;
 		private bool _isAuditingSchedules;
 		private IScheduleTag _defaultScheduleTag = NullScheduleTag.Instance;
-		private System.Windows.Forms.Timer _tmpTimer = new System.Windows.Forms.Timer();
+		private readonly System.Windows.Forms.Timer _tmpTimer = new System.Windows.Forms.Timer();
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
 		public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
 		private SkillResultViewSetting _skillResultViewSetting;
@@ -5350,6 +5350,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripButtonEditNote.Click -= toolStripButtonEditNote_Click;
 			toolStripButtonReplyAndApprove.Click -= toolStripButtonReplyAndApprove_Click;
 			toolStripButtonReplyAndDeny.Click -= toolStripButtonReplyAndDeny_Click;
+
 			//Chart tab
 			toolStripTabItemChart.Click -= toolStripTabItemChart_Click;
 			toolStripButtonGridInChart.Click -= toolStripButtonGridInChartClick;
@@ -5358,6 +5359,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripButtonChartWeekView.Click -= toolStripButtonChartPeriodViewClick;
 			toolStripButtonChartDayView.Click -= toolStripButtonChartPeriodViewClick;
 			toolStripButtonChartIntradayView.Click -= toolStripButtonChartPeriodViewClick;
+			
 			//
 			toolStripButtonFilterStudentAvailability.Click -= toolStripButtonFilterStudentAvailabilityClick;
 			toolStripButtonFilterOvertimeAvailability.Click -= toolStripButtonFilterOvertimeAvailabilityClick;
@@ -5397,6 +5399,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripMenuItemQuickAccessUndo.Click -= toolStripSplitButtonQuickAccessUndo_ButtonClick;
 			toolStripMenuItemQuickAccessUndoAll.Click -= toolStripMenuItemQuickAccessUndoAll_Click_1;
 			toolStripButtonShowTexts.Click -= toolStripButtonShowTexts_Click;
+			toolStripButtonShowResult.Click -= toolStripButtonShowResult_Click;
+
+			toolStripButtonDayView.Click -= toolStripButtonZoomClick;
+			toolStripButtonWeekView.Click -= toolStripButtonZoomClick;
+			toolStripButtonPeriodView.Click -= toolStripButtonZoomClick;
+			toolStripButtonSummaryView.Click -= toolStripButtonZoomClick;
+			toolStripButtonRequestView.Click -= toolStripButtonZoomClick;
+			toolStripButtonRestrictions.Click -= toolStripButtonZoomClick;
 
 			if (_permissionHelper != null)
 				_permissionHelper = null;
@@ -5459,13 +5469,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			if (toolStripComboBoxAutoTag != null)
+			{
 				toolStripComboBoxAutoTag.SelectedIndexChanged -= toolStripComboBoxAutoTagSelectedIndexChanged;
+			}
 
-			if (SchedulerState != null && SchedulerState.Schedules != null)
+			if (SchedulerState?.Schedules != null)
+			{
 				SchedulerState.Schedules.PartModified -= schedulesPartModified;
+			}
 
 			if (_schedulerMeetingHelper != null)
+			{
 				_schedulerMeetingHelper.ModificationOccured -= schedulerMeetingHelperModificationOccured;
+			}
 			if (schedulerSplitters1 != null)
 			{
 				schedulerSplitters1.HandlePersonRequestView1.RemoveEvents();

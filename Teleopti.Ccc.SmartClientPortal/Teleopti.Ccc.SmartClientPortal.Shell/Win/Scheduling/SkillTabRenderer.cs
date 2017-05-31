@@ -7,17 +7,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	public class SkillTabRenderer : TabRendererMetro
 	{
 		static readonly SkillTabPanelProperty TabPropertyExtender;
-		public static new SkillTabPanelProperty TabPanelPropertyExtender
-		{
-			get { return TabPropertyExtender; }
-		}
 
-		public static new string TabStyleName
-		{
-			get { return "SkillTabRenderer"; }
-		}
+		public static new SkillTabPanelProperty TabPanelPropertyExtender => TabPropertyExtender;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
+		public static new string TabStyleName => "SkillTabRenderer";
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
         static SkillTabRenderer()
 		{
 			TabPropertyExtender = new SkillTabPanelProperty();
@@ -27,9 +22,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public SkillTabRenderer(ITabControl parent, ITabPanelRenderer panelRenderer)
 			: base(parent, panelRenderer)
 		{
-			((TabControlAdv)TabControl).TabPanelBackColor = Color.White;
-			((TabControlAdv)TabControl).Font = new Font("Segoe UI", 8.25F,FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-			((TabControlAdv)TabControl).ActiveTabFont = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+			var tabControlAdv = ((TabControlAdv)TabControl);
+			tabControlAdv.TabPanelBackColor = Color.White;
+			tabControlAdv.Font = new Font("Segoe UI", 8.25F,FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+			tabControlAdv.ActiveTabFont = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
