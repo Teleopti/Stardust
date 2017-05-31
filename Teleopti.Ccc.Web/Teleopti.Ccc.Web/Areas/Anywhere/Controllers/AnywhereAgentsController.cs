@@ -57,13 +57,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Agents/ForTeams")]
 		public virtual IHttpActionResult ForTeams([FromUri] Guid[] teamIds)
 		{
-			return Ok(_agentViewModelBuilder.For(new ViewModelFilter {TeamIds = teamIds}).ToArray());
+			return Ok(_agentViewModelBuilder.For(new AgentStateFilter {TeamIds = teamIds}).ToArray());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/ForSites")]
 		public virtual IHttpActionResult ForSites([FromUri] Guid[] siteIds)
 		{
-			return Ok(_agentViewModelBuilder.For(new ViewModelFilter {SiteIds = siteIds}).ToArray());
+			return Ok(_agentViewModelBuilder.For(new AgentStateFilter {SiteIds = siteIds}).ToArray());
 		}
 	}
 }

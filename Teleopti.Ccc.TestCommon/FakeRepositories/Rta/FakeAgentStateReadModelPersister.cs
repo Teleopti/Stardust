@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -190,6 +191,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				where team == model.TeamId
 				select model).ToArray();
 
+		public IEnumerable<AgentStateReadModel> ReadFor(AgentStateFilter filter)
+		{
+			return ReadFor(filter.SiteIds, filter.TeamIds, filter.SkillIds);
+		}
+
+		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(AgentStateFilter filter)
+		{
+			return ReadInAlarmFor(filter.SiteIds, filter.TeamIds, filter.SkillIds);
+		}
 		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds,
 			IEnumerable<Guid> skillIds)
 		{
@@ -242,6 +252,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				orderby model.AlarmStartTime
 				select model;
 
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(AgentStateFilter filter)
+		{
+			return ReadInAlarmExcludingStatesFor(filter.SiteIds, filter.TeamIds, filter.SkillIds, filter.ExcludedStates);
+		}
 
 		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds,
 			IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)

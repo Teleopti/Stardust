@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 
 		[Test]
 		[TestCaseSource(typeof(SelectionFactory), nameof(SelectionFactory.Permutations))]
-		public void ShouldGetNamesForEverythingForEverySelection(ViewModelFilter p)
+		public void ShouldGetNamesForEverythingForEverySelection(AgentStateFilter p)
 		{
 			var personId = Guid.NewGuid();
 			var siteId = SelectionFactory.SiteId;
@@ -78,13 +78,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			{
 				var permutations = new[]
 				{
-					new ViewModelFilter {SiteIds = new[] {SiteId}},
-					new ViewModelFilter {TeamIds = new[] {TeamId}},
-					new ViewModelFilter {SiteIds = new[] {SiteId}, TeamIds = new[] {TeamId}},
-					new ViewModelFilter {SkillIds = new[] {SkillId}},
-					new ViewModelFilter {SiteIds = new[] {SiteId}, SkillIds = new[] {SkillId}},
-					new ViewModelFilter {TeamIds = new[] {TeamId}, SkillIds = new[] {SkillId}},
-					new ViewModelFilter {SiteIds = new[] {SiteId}, TeamIds = new[] {TeamId}, SkillIds = new[] {SkillId}},
+					new AgentStateFilter {SiteIds = new[] {SiteId}},
+					new AgentStateFilter {TeamIds = new[] {TeamId}},
+					new AgentStateFilter {SiteIds = new[] {SiteId}, TeamIds = new[] {TeamId}},
+					new AgentStateFilter {SkillIds = new[] {SkillId}},
+					new AgentStateFilter {SiteIds = new[] {SiteId}, SkillIds = new[] {SkillId}},
+					new AgentStateFilter {TeamIds = new[] {TeamId}, SkillIds = new[] {SkillId}},
+					new AgentStateFilter {SiteIds = new[] {SiteId}, TeamIds = new[] {TeamId}, SkillIds = new[] {SkillId}},
 				};
 
 				return from p in permutations

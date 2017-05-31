@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
 				;
 
-			var agent = Target.For(new ViewModelFilter {SiteIds = new[] {siteId}}).Single();
+			var agent = Target.For(new AgentStateFilter {SiteIds = new[] {siteId}}).Single();
 			agent.Name.Should().Be("123 - Bill Gates");
 			agent.PersonId.Should().Be(personId);
 			agent.TeamId.Should().Be(teamId.ToString());
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
 				;
 
-			var agent = Target.For(new ViewModelFilter {TeamIds = new[] {teamId}}).Single();
+			var agent = Target.For(new AgentStateFilter {TeamIds = new[] {teamId}}).Single();
 			agent.Name.Should().Be("123 - Bill Gates");
 			agent.PersonId.Should().Be(personId);
 			agent.TeamId.Should().Be(teamId.ToString());
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
 				;
 			
-			var result = Target.For(new ViewModelFilter {SkillIds = new[] { skillId } }).Single();
+			var result = Target.For(new AgentStateFilter {SkillIds = new[] { skillId } }).Single();
 
 			result.PersonId.Should().Be(personId);
 			result.SiteId.Should().Be(siteId.ToString());
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
 				;
 
-			var viewModel = Target.For(new ViewModelFilter { SiteIds = new[] { london }, TeamIds = new[] { red } });
+			var viewModel = Target.For(new AgentStateFilter { SiteIds = new[] { london }, TeamIds = new[] { red } });
 
 			var johnVm = viewModel.Single(p => p.PersonId == john);
 			johnVm.SiteId.Should().Be(paris.ToString());
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
 				;
 
-			var result = Target.For(new ViewModelFilter {TeamIds = new[] {greenId}, SkillIds = new[] {skill}}).Single();
+			var result = Target.For(new AgentStateFilter {TeamIds = new[] {greenId}, SkillIds = new[] {skill}}).Single();
 
 			result.PersonId.Should().Be(bill);
 			result.SiteId.Should().Be(paris.ToString());
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
 				;
 
-			var result = Target.For(new ViewModelFilter {SiteIds = new[] {london}, SkillIds = new[] {skill}}).Single();
+			var result = Target.For(new AgentStateFilter {SiteIds = new[] {london}, SkillIds = new[] {skill}}).Single();
 
 			result.PersonId.Should().Be(bill);
 			result.SiteId.Should().Be(london.ToString());
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentNameDisplayedAs("{FirstName} {LastName}")
 				;
 
-			var viewModel = Target.For(new ViewModelFilter {SkillIds = new[] { skill1, skill2 } });
+			var viewModel = Target.For(new AgentStateFilter {SkillIds = new[] { skill1, skill2 } });
 			var person1 = viewModel.Single(p => p.PersonId == personId1);
 			person1.SiteId.Should().Be(siteId.ToString());
 			person1.SiteName.Should().Be("Paris");
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithSkill(support)
 				;
 
-			var result = Target.For(new ViewModelFilter { SiteIds = new[] { paris }, TeamIds = new [] {londonTeam1}, SkillIds = new[] { support } });
+			var result = Target.For(new AgentStateFilter { SiteIds = new[] { paris }, TeamIds = new [] {londonTeam1}, SkillIds = new[] { support } });
 
 			var johnSmithModel = result.Single(x => x.PersonId == johnSmith);
 			johnSmithModel.SiteId.Should().Be(paris.ToString());

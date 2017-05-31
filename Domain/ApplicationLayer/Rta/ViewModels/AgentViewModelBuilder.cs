@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						}).ToArray();
 		}
 		
-		public IEnumerable<AgentViewModel> For(ViewModelFilter filter)
+		public IEnumerable<AgentViewModel> For(AgentStateFilter filter)
 		{
 			if (filter.SiteIds != null && filter.TeamIds != null && filter.SkillIds != null)
 				return forSkillSiteTeam(filter.SiteIds.ToArray(), filter.TeamIds.ToArray(), filter.SkillIds.ToArray());

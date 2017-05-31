@@ -37,25 +37,25 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/For")]
-		public virtual IHttpActionResult For([FromUri]ViewModelFilter filter)
+		public virtual IHttpActionResult For([FromUri]AgentStateFilter filter)
 		{
 			return Ok(_agentViewModelBuilder.For(filter));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/StatesFor")]
-		public virtual IHttpActionResult StatesFor([FromUri] ViewModelFilter filter)
+		public virtual IHttpActionResult StatesFor([FromUri] AgentStateFilter filter)
 		{
 			return Ok(_agentStatesBuilder.For(filter));
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/Agents/InAlarmFor")]
-		public virtual IHttpActionResult InAlarmFor([FromUri]ViewModelFilter filter)
+		public virtual IHttpActionResult InAlarmFor([FromUri]AgentStateFilter filter)
 		{
 			return Ok(_agentStatesBuilder.InAlarmFor(filter));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/InAlarmExcludingPhoneStatesFor")]
-		public virtual IHttpActionResult InAlarmExcludingPhoneStatesFor([FromUri] ViewModelFilter filter, [FromUri] IEnumerable<Guid?> excludedStateIds)
+		public virtual IHttpActionResult InAlarmExcludingPhoneStatesFor([FromUri] AgentStateFilter filter, [FromUri] IEnumerable<Guid?> excludedStateIds)
 		{
 			return Ok(_agentStatesBuilder.InAlarmExcludingPhoneStatesFor(filter, excludedStateIds));
 		}

@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
@@ -76,18 +77,19 @@ INSERT INTO [ReadModel].[AgentState]
 			{
 				new[]
 				{
-					new guidHolder {SiteIds = new[] {siteId}},
-					new guidHolder {TeamIds = new[] {teamId}},
-					new guidHolder {SiteIds = new[] {siteId}, TeamIds = new[] {teamId}},
-					new guidHolder {SkillIds = new[] {skillId}},
-					new guidHolder {SiteIds = new[] {siteId}, SkillIds = new[] {skillId}},
-					new guidHolder {TeamIds = new[] {teamId}, SkillIds = new[] {skillId}},
-					new guidHolder {SiteIds = new[] {siteId}, TeamIds = new[] {teamId}, SkillIds = new[] {skillId}},
+					new AgentStateFilter {SiteIds = new[] {siteId}},
+					new AgentStateFilter {TeamIds = new[] {teamId}},
+					new AgentStateFilter {SiteIds = new[] {siteId}, TeamIds = new[] {teamId}},
+					new AgentStateFilter {SkillIds = new[] {skillId}},
+					new AgentStateFilter {SiteIds = new[] {siteId}, SkillIds = new[] {skillId}},
+					new AgentStateFilter {TeamIds = new[] {teamId}, SkillIds = new[] {skillId}},
+					new AgentStateFilter {SiteIds = new[] {siteId}, TeamIds = new[] {teamId}, SkillIds = new[] {skillId}},
 				}.ForEach(p =>
 				{
-					assert(Target.ReadFor(p.SiteIds, p.TeamIds, p.SkillIds));
-					assert(Target.ReadInAlarmFor(p.SiteIds, p.TeamIds, p.SkillIds));
-					assert(Target.ReadInAlarmExcludingStatesFor(p.SiteIds, p.TeamIds, p.SkillIds, new Guid?[] {Guid.NewGuid()}));
+					assert(Target.ReadFor(p));
+					assert(Target.ReadInAlarmFor(p));
+					p.ExcludedStates = new Guid?[]{ Guid.NewGuid() };
+					assert(Target.ReadInAlarmExcludingStatesFor(p));
 				});
 			});
 		}
@@ -100,13 +102,6 @@ INSERT INTO [ReadModel].[AgentState]
 			model.EmploymentNumber.Should().Be("1");
 			model.SiteName.Should().Be("site");
 			model.TeamName.Should().Be("team");
-		}
-
-		private class guidHolder
-		{
-			public IEnumerable<Guid> SiteIds { get; set; }
-			public IEnumerable<Guid> TeamIds { get; set; }
-			public IEnumerable<Guid> SkillIds { get; set; }
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -23,12 +24,23 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_now = now;
 		}
 
+		public IEnumerable<AgentStateReadModel> ReadFor(AgentStateFilter filter)
+		{
+			return ReadFor(filter.SiteIds, filter.TeamIds, filter.SkillIds);
+		}
+
+		
 		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			var queryBuilder =
 				new AgentStateReadModelQueryBuilder(_now)
 					.WithSelection(siteIds, teamIds, skillIds);
 			return load(queryBuilder);
+		}
+
+		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(AgentStateFilter filter)
+		{
+			return ReadInAlarmFor(filter.SiteIds, filter.TeamIds, filter.SkillIds);
 		}
 
 		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
@@ -63,6 +75,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>();
 
 		}
+
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(AgentStateFilter filter)
+		{
+			return ReadInAlarmExcludingStatesFor(filter.SiteIds, filter.TeamIds, filter.SkillIds, filter.ExcludedStates);
+		}
+
 
 		private class internalModel : AgentStateReadModel
 		{

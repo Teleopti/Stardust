@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				;
 
-			Target.InAlarmFor(new ViewModelFilter {SiteIds = new []{siteId1}})
+			Target.InAlarmFor(new AgentStateFilter {SiteIds = new []{siteId1}})
 				.States.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				;
 
-			Target.InAlarmFor(new ViewModelFilter { TeamIds = new[] { teamId1 } })
+			Target.InAlarmFor(new AgentStateFilter { TeamIds = new[] { teamId1 } })
 				.States.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				.WithPersonSkill(personId3, Guid.NewGuid())
 				;
-			Target.InAlarmFor(new ViewModelFilter { SkillIds = new[] { skillId1 } })
+			Target.InAlarmFor(new AgentStateFilter { SkillIds = new[] { skillId1 } })
 				.States.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(personId2, Guid.NewGuid())
 				;
 
-			Target.InAlarmFor(new ViewModelFilter {SiteIds = new[] {siteId}, SkillIds = new[] {skillId}})
+			Target.InAlarmFor(new AgentStateFilter {SiteIds = new[] {siteId}, SkillIds = new[] {skillId}})
 				.States.Single()
 				.PersonId.Should().Be(personId1);
 		}
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(personId2, Guid.NewGuid())
 				;
 
-			Target.InAlarmFor(new ViewModelFilter { TeamIds = new[] { teamId }, SkillIds = new[] { skillId } })
+			Target.InAlarmFor(new AgentStateFilter { TeamIds = new[] { teamId }, SkillIds = new[] { skillId } })
 				.States.Single()
 				.PersonId.Should().Be(personId1);
 		}

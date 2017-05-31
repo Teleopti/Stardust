@@ -3,6 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -48,7 +50,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new[] {siteId}, null, null, new Guid?[] {loggedOut}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+				new AgentStateFilter()
+				{
+					SiteIds = siteId.AsArray(),
+					ExcludedStates = loggedOut.AsNullableArray()
+				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -79,7 +86,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(null, new[] { teamId }, null, new Guid?[] { loggedOut }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+				new AgentStateFilter()
+				{
+					TeamIds = teamId.AsArray(),
+					ExcludedStates = loggedOut.AsNullableArray()
+				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -125,7 +137,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new []{siteId}, new[] { teamId }, null, new Guid?[] { loggedOut }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+				new AgentStateFilter()
+				{
+					SiteIds = siteId.AsArray(),
+					TeamIds = teamId.AsArray(),
+					ExcludedStates = loggedOut.AsNullableArray()
+				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1, personId2);
 		}
@@ -208,7 +226,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new[] { siteId }, new[] { teamId }, new[] { phoneId }, new Guid?[] {loggedOut}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+				new AgentStateFilter()
+				{
+					SiteIds = siteId.AsArray(),
+					TeamIds = teamId.AsArray(),
+					SkillIds = phoneId.AsArray(),
+					ExcludedStates = loggedOut.AsNullableArray()
+				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam);
 		}
@@ -250,7 +275,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(null, null, new[] { phoneId }, new Guid?[] { loggedOut }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+					new AgentStateFilter()
+					{
+						SkillIds = phoneId.AsArray(),
+						ExcludedStates = loggedOut.AsNullableArray()
+					}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(expected);
 		}
@@ -280,7 +310,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new[] { siteId }, null, null, new Guid?[] { loggedOut }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+				new AgentStateFilter()
+				{
+					SiteIds = siteId.AsArray(),
+					ExcludedStates = loggedOut.AsNullableArray()
+				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -309,7 +344,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new[] { siteId }, null, null, new Guid?[] { null }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+				new AgentStateFilter()
+				{
+					SiteIds = siteId.AsArray(),
+					ExcludedStates = new Guid?[] {null}
+				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -346,7 +386,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(new[] { siteId }, null, null, new Guid?[] { null, loggedOut }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+				new AgentStateFilter()
+				{
+					SiteIds = siteId.AsArray(),
+					ExcludedStates = new Guid?[]
+					{
+						null,
+						loggedOut
+					}
+				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}

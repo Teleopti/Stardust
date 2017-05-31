@@ -53,11 +53,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string EndTime { get; set; }
 	}
 
-	public class ViewModelFilter
+	public class AgentStateFilter
 	{
 		public IEnumerable<Guid> SiteIds { get; set; }
 		public IEnumerable<Guid> TeamIds { get; set; }
 		public IEnumerable<Guid> SkillIds { get; set; }
+		public IEnumerable<Guid?> ExcludedStates { get; set; }
 	}
 
 	public class AgentStatesViewModelBuilder
@@ -89,19 +90,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_nameDisplaySetting = nameDisplaySetting;
 		}
 		
-		public AgentStatesViewModel For(ViewModelFilter filter)
+		public AgentStatesViewModel For(AgentStateFilter filter)
 		{
-			return build(_reader.ReadFor(filter.SiteIds, filter.TeamIds, filter.SkillIds));
+			return build(_reader.ReadFor(filter));
 		}
 		
-		public AgentStatesViewModel InAlarmFor(ViewModelFilter filter)
+		public AgentStatesViewModel InAlarmFor(AgentStateFilter filter)
 		{
-			return build(_reader.ReadInAlarmFor(filter.SiteIds, filter.TeamIds, filter.SkillIds));
+			return build(_reader.ReadInAlarmFor(filter));
 		}
 		
-		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(ViewModelFilter filter, IEnumerable<Guid?> excludedPhoneStates)
+		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(AgentStateFilter filter, IEnumerable<Guid?> excludedPhoneStates)
 		{
-			return build(_reader.ReadInAlarmExcludingStatesFor(filter.SiteIds, filter.TeamIds, filter.SkillIds, excludedPhoneStates));
+			return build(_reader.ReadInAlarmExcludingStatesFor(filter));
 		}
 		
 		public AgentStatesViewModel ForSites(Guid[] siteIds)
