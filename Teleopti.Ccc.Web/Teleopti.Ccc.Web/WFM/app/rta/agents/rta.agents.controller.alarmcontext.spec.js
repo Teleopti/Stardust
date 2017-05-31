@@ -120,9 +120,7 @@ describe('RtaAgentsController', function() {
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
-console.log('asdD--> ;)=');
 		c.apply(vm.showInAlarm = false);
-console.log(vm.showInAlarm);
 
 		expect(vm.agentStates[0].Shift.length).toEqual(1);
 		expect(vm.agentStates[0].Shift[0].Color).toEqual("#80FF80");
