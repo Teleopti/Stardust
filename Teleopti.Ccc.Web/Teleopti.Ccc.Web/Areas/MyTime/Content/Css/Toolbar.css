@@ -4,7 +4,7 @@
 	}
 
 	.custom-collapsed .navbar-toggle {
-		display: block !important;
+		margin: 5px 10px;
 	}
 
 	.custom-collapsed .navbar-collapse {
@@ -16,9 +16,9 @@
 		display: none !important;
 	}
 
-	.custom-collapsed .navbar-nav {
+	.custom-collapsed .navbar-user-setting {
 		float: none !important;
-		margin: 7.5px -15px;
+		margin: 2px -15px;
 	}
 
 	.custom-collapsed .navbar-nav > li {
@@ -141,9 +141,11 @@
 		padding-left: 5px;
 		padding-right: 5px;
 	}
+	.custom-collapsed .navbar-toggle {
+		margin: 8px 10px;
+	}
 	.navbar-nav.navbar-user-setting{
-		margin-right: 5px;
-		margin-left: 5px;
+		margin: 5px;
 	}
 	.navbar-nav.navbar-user-setting a{
 		padding-left: 5px;
@@ -181,5 +183,4 @@
 
 .bdd-mytime-top-menu {
 	border: none;
-	height: 50px;
 }
