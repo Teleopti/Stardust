@@ -347,6 +347,8 @@
     <Compile Include="Common\ScheduleChangedEventDetector.cs" />
     <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdaterTest.cs" />
     <Compile Include="Forecasting\SkillPriorityProviderTest.cs" />
+    <Compile Include="Intraday\StaffingViewModelCreatorEmailTest.cs" />
+    <Compile Include="Intraday\StaffingViewModelCreatorTestHelper.cs" />
     <Compile Include="Intraday\StaffingViewModelCreatorTest_useSkillCombinationsTolleOn.cs" />
     <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
@@ -562,7 +564,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\PersonShiftEndEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonShiftStartEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonStateChangedEventTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\RtaExtensions.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTestAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\SnapshotTests.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UnrecognizedStateTest.cs" />
