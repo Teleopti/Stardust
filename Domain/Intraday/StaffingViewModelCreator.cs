@@ -101,20 +101,40 @@ namespace Teleopti.Ccc.Domain.Intraday
 				forecastedStaffing, 
 				TimeSpan.FromMinutes(minutesPerInterval),
 				forecastedCallsModel.SkillDayStatsRange);
-									
+
+			var dataSeries = new StaffingDataSeries
+			{
+				Date = userDateOnly,
+				Time = timeSeries,
+				ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing, timeSeries),
+				UpdatedForecastedStaffing = updatedForecastedSeries,
+				ActualStaffing =
+					_requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, timeSeries,
+						skills.Count),
+				ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, timeSeries)
+			};
+			calculateRelativeDifference(dataSeries);
 			return new IntradayStaffingViewModel
 			{
-				DataSeries = new StaffingDataSeries
-				{
-					Date = userDateOnly,
-					Time = timeSeries,
-					ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing,timeSeries),
-					UpdatedForecastedStaffing = updatedForecastedSeries,
-					ActualStaffing = _requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, timeSeries, skills.Count),
-					ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, timeSeries)
-				},
+				DataSeries = dataSeries,
 				StaffingHasData = forecastedStaffing.Any()
 			};
+		}
+
+		private static void calculateRelativeDifference(StaffingDataSeries dataSeries)
+		{
+			dataSeries.RelativeDifference = new double?[dataSeries.ForecastedStaffing.Length];
+			for (var index = 0; index < dataSeries.ForecastedStaffing.Length; index++)
+			{
+				if (dataSeries.ForecastedStaffing[index].HasValue && dataSeries.ScheduledStaffing.Length == 0)
+				{
+					dataSeries.RelativeDifference[index] = -dataSeries.ForecastedStaffing[index];
+					continue;
+				}
+
+				if (dataSeries.ForecastedStaffing[index].HasValue && dataSeries.ScheduledStaffing[index].HasValue)
+					dataSeries.RelativeDifference[index] = dataSeries.ScheduledStaffing[index] - dataSeries.ForecastedStaffing[index];
+			}
 		}
 
 		private void calculateForecastedAgentsForEmailSkills(DateOnly? dateOnly, bool useShrinkage, IList<ISkill> skills,

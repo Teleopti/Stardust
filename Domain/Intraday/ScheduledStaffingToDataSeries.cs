@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var staffingIntervals = scheduledStaffing
 				.GroupBy(x => x.StartDateTime)
-				.Select(s => new ScheduledStaffingToDataSeries.StaffingStartInterval
+				.Select(s => new staffingStartInterval
 				{
 					StartTime = s.Key,
 					StaffingLevel = s.Sum(a => a.StaffingLevel)
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return scheduledStaffingList.ToArray();
 		}
 
-		private class StaffingStartInterval
+		private class staffingStartInterval
 		{
 			public DateTime StartTime { get; set; }
 			public double StaffingLevel { get; set; }

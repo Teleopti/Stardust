@@ -578,8 +578,38 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ScheduledStaffing.IsEmpty().Should().Be.EqualTo(true);
 		}
 
+		[Test]
+		public void ShouldReturnRelativeDifferenceForASkill()
+		{
 
-		
+			TimeZone.IsSweden();
+			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
+			var act = ActivityRepository.Has("act");
+			var skill = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30), false, act);
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			SkillRepository.Has(skill);
+			SkillDayRepository.Has(SkillSetupHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false));
+			SkillSetupHelper.PopulateStaffingReadModels(skill, userNow, userNow.AddMinutes(minutesPerInterval), 2, ScheduleForecastSkillReadModelRepository, SkillCombinationResourceRepository);
+			SkillSetupHelper.PopulateStaffingReadModels(skill, userNow.AddMinutes(-minutesPerInterval), userNow, 10, ScheduleForecastSkillReadModelRepository, SkillCombinationResourceRepository);
+
+			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() });
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow.AddMinutes(-minutesPerInterval), TimeZone.TimeZone()));
+			var scheduledSeries = vm.DataSeries.ScheduledStaffing;
+			var forecastedSeries = vm.DataSeries.ForecastedStaffing;
+			var relativeDiffSeries = vm.DataSeries.RelativeDifference;
+			scheduledSeries.First().Should().Be.EqualTo(10);
+			scheduledSeries.Second().Should().Be.EqualTo(2);
+			forecastedSeries.First().Should().Be.EqualTo(3);
+			forecastedSeries.Second().Should().Be.EqualTo(3);
+			relativeDiffSeries.First().Should().Be.EqualTo(7);
+			relativeDiffSeries.Second().Should().Be.EqualTo(-1);
+			vm.DataSeries.RelativeDifference.Length.Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Length);
+
+		}
+
 
 	}
 }
