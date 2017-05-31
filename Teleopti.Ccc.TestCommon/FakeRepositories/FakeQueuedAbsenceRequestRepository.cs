@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories 
 {
@@ -15,28 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IQueuedAbsenceRequest entity)
 		{
-			if (_queuedRequests.Count == 0)
-			{
-				_queuedRequests.Add(entity);
-				return;
-			}
-
-			if (_queuedRequests.All(queuedAbsenceRequest => queuedAbsenceRequest.PersonRequest != entity.PersonRequest))
-			{
-				_queuedRequests.Add(entity);
-				return;
-			}
-
-
-			foreach (var queuedRequest in _queuedRequests)
-			{
-				if (queuedRequest.PersonRequest == entity.PersonRequest)
-				{
-					_queuedRequests.Remove(queuedRequest);
-					_queuedRequests.Add(entity);
-					return;
-				}
-			}
+			_queuedRequests.Add(entity);
 		}
 
 		public void Remove(IQueuedAbsenceRequest entity)

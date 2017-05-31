@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				atleastOneWaitlistedWfc = true;
 
-				var queuedRequests = _queuedAbsenceRequestRepository.LoadAll().Where(x => DateTime.Compare(x.Sent.Value, @event.Sent.Truncate(TimeSpan.FromSeconds(1))) == 0);  
+				var queuedRequests = _queuedAbsenceRequestRepository.LoadAll().Where(x => x.Sent.HasValue && DateTime.Compare(x.Sent.Value, @event.Sent.Truncate(TimeSpan.FromSeconds(1))) == 0);  
 				foreach (var request in queuedRequests)
 				{
 					if (request.StartDateTime < min)

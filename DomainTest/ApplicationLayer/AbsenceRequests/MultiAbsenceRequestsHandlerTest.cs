@@ -242,6 +242,79 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.IsApproved.Should().Be.EqualTo(true);
 		}
 
+		[Test]
+		public void ShouldHandleNullInSentTimestamp()
+		{
+			var dateTimeNow = new DateTime(2016, 12, 01, 8, 0, 0, 2);
+			var truncatedSent = new DateTime(2016, 12, 01, 8, 0, 0, 0);
+			Now.Is(dateTimeNow);
+			var bu = new Domain.Common.BusinessUnit("bu").WithId();
+			BusinessUnitRepository.Has(bu);
+			var scenario = new Scenario("scnearioName").WithId();
+			scenario.DefaultScenario = true;
+			scenario.SetBusinessUnit(bu);
+			ScenarioRepository.Has(scenario);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			wfcs.AbsenceRequestWaitlistEnabled = true;
+			WorkflowControlSetRepository.Add(wfcs);
+			var firstDay = new DateOnly(2016, 12, 01);
+			var activity = ActivityRepository.Has("activityName");
+			var skill = SkillRepository.Has("skillName", activity);
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 0));
+
+			var person = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			person.WorkflowControlSet = wfcs;
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 10, 2016, 12, 2, 20));
+			PersonAssignmentRepository.Has(assignment);
+
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 12, 2016, 12, 1, 13))).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+
+			var personRequestWaitlisted = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 10, 2016, 12, 1, 11))).WithId();
+			personRequestWaitlisted.Pending();
+			personRequestWaitlisted.Deny("", new PersonRequestAuthorizationCheckerForTest(), person, PersonRequestDenyOption.AutoDeny);
+			PersonRequestRepository.Add(personRequestWaitlisted);
+
+			addToQueue(personRequest, RequestValidatorsFlag.None);
+
+			QueuedAbsenceRequestRepository.Add(
+				new QueuedAbsenceRequest
+				{
+					PersonRequest = Guid.Empty,
+					Sent = truncatedSent,  //truncated by DB
+					StartDateTime = personRequestWaitlisted.Request.Period.StartDateTime,
+					EndDateTime = personRequestWaitlisted.Request.Period.EndDateTime
+				});
+
+			QueuedAbsenceRequestRepository.Add(
+				new QueuedAbsenceRequest
+				{
+					PersonRequest = Guid.Empty,
+					//Sent = null,
+					StartDateTime = personRequestWaitlisted.Request.Period.StartDateTime,
+					EndDateTime = personRequestWaitlisted.Request.Period.EndDateTime
+				});
+
+			var requestList = new List<Guid> { personRequest.Id.GetValueOrDefault() };
+			Target.Handle(new NewMultiAbsenceRequestsCreatedEvent { PersonRequestIds = requestList, Sent = Now.UtcDateTime() });
+			personRequestWaitlisted.IsApproved.Should().Be.EqualTo(true);
+			personRequest.IsApproved.Should().Be.EqualTo(true);
+		}
+
 		private void addToQueue(IPersonRequest personRequest, RequestValidatorsFlag requestValidatorsFlag)
 		{
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
