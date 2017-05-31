@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Domain.Common;
@@ -37,12 +36,12 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		public Task Execute(IAppBuilder application)
 		{
-			return Task.Run(() => onAllTenants());
+			// TODO: Remove delay once License does not need a restart
+			return Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith(task => onAllTenants());
 		}
 		
 		private void onAllTenants()
 		{
-			Thread.Sleep(TimeSpan.FromSeconds(20)); // TODO: Remove once License does not need a restart
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 				foreach (var tenant in _loadAllTenants.Tenants())
 					using (_dataSourceScope.OnThisThreadUse(tenant.Name))
