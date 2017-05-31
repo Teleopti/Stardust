@@ -71,13 +71,23 @@
 	width: 100%;
 	display: inline-block;
 	text-align: center;
+	position: relative;
 }
 .mobile-start-day .mobile-summary-content-text {
 	letter-spacing: -1px;
 	display: inline-block;
 }
+.mobile-start-day .mobile-summary-content-text > span {
+	margin: 0 5px;
+}
+.mobile-start-day .mobile-summary-content-text > div{
+	text-transform: uppercase;
+	font-size: 150%;
+}
 .mobile-start-day .probability-toggle-container{
-	margin-right: 4px;
+	position: absolute;
+	right: 4px;
+	bottom: 4px;
 }
 .mobile-start-day .probability-toggle-container a.btn{
 	padding: 0;

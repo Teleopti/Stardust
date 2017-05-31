@@ -26,7 +26,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.dayOfWeek = ko.observable();
 	self.isFullDayAbsence = false;
 	self.isDayOff = ko.observable(false);
-	self.summaryVisible = ko.observable(false);
 	self.hasOvertime = ko.observable(false);
 	self.hasScheduled = ko.observable(true);
 	self.timeLines = ko.observableArray();
@@ -92,7 +91,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.textColor(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.summaryColor()));
         self.summaryName(data.Schedule.Summary.Title);
 		self.hasScheduled(!data.Schedule.HasNotScheduled);
-		self.summaryVisible(true);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
 		self.isDayOff(data.Schedule.IsDayOff);
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
