@@ -35,6 +35,8 @@
 
 		var ctrl = this
 
+		ctrl.longestName = ''
+
 		ctrl.$onInit = function () {
 			var menuPosition = $mdPanel.newPanelPosition().relativeTo($element).addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW)
 
@@ -65,7 +67,7 @@
 			})
 
 			$q.when(ctrl.datasource()).then(function (data) {
-				populateGroupListAndNamemap(data.Children)
+				populateGroupListAndNamemapAndFindLongestName(data.Children)
 				if (!angular.isArray(ctrl.selectedTeamIds)) {
 					ctrl.selectedTeamIds = []
 				}
@@ -88,28 +90,24 @@
 			return index
 		}
 
-		function populateGroupListAndNamemap(rawSites) {
+		function populateGroupListAndNamemapAndFindLongestName(rawSites) {
 			ctrl.groupList = rawSites.map(function (rawSite) {
 				var site = new Site(rawSite.Id, rawSite.Name)
 				ctrl.nameMap[site.id] = site.name
+				if (site.name.length > ctrl.longestName.length) {
+					ctrl.longestName = site.name
+				}
 				rawSite.Children.forEach(function (team) {
 					var t = new Team(team.Id, team.Name, site)
 					ctrl.nameMap[t.id] = t.name
-					site.teams.push(t);
+					site.teams.push(t)
+					if (t.name.length > ctrl.longestName.length) {
+						ctrl.longestName = t.name
+					}
 				})
 				return site
 			});
 		}
-
-		Object.defineProperty(this, 'collapseAll', {
-			value: function () {
-				this.orgsInView.forEach(function (slave) {
-					if (slave.m.isSite)
-						slave.collapsed = true
-				})
-				filterCollapsedTeams(this.orgsInView)
-			}
-		})
 
 		Object.defineProperties(this, {
 			nameMap: { value: {} },

@@ -1102,43 +1102,52 @@ organization-picker {
 }
 
 .orgpicker-menu {
-    $PANEL-WIDTH: 270px;
     $HEADER-HEIGHT: 50px;
     $REPEATED-ITEM-HEIGHT: 40px;
     $NUM-OF-VISIBLE-ITEMS: 7;
 	$VIRTUAL-REPEAT-HEIGHT: $NUM-OF-VISIBLE-ITEMS * $REPEATED-ITEM-HEIGHT + 0.6 * $REPEATED-ITEM-HEIGHT;
     $PD: .2em;
 
-    min-width: $PANEL-WIDTH;
-    width: $PANEL-WIDTH;
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
 	background-color: $white;
+
+    ._zero-height {
+        height: 0;
+        overflow: hidden;
+    }
+
+    .longest-name {
+        padding-left: 6em;
+        padding-right: 1em;
+        @extend ._zero-height;
+    }
 
     .virtual-repeat {
         height: $VIRTUAL-REPEAT-HEIGHT;
         width: 100%;
-        max-width: $PANEL-WIDTH;
 
-        .repeated-item .match {
-            background-color: $orange-400;
-            border-radius: 2px;
-        }
+        .repeated-item {
+            .match {
+                background-color: $orange-400;
+                border-radius: 2px;
+            }
 
-        .repeated-item .team {
-            padding: 0 1em 0 2em;
-        }
+            .team {
+                padding: 0 1em 0 2em;
+            }
 
-        .repeated-item .md-button {
-            align-items: inherit;
-            border-radius: 0;
-            cursor: pointer;
-            display: block;
-            margin: 0;
-            text-align: left;
-            text-transform: none;
-            white-space: normal;
-            width: 100%;
-            height: 100%;
+            .md-button {
+                align-items: inherit;
+                border-radius: 0;
+                cursor: pointer;
+                display: block;
+                margin: 0;
+                text-align: left;
+                text-transform: none;
+                white-space: normal;
+                width: 100%;
+                height: 100%;
+            }
         }
 
         .md-button-toggle {
@@ -1212,7 +1221,8 @@ organization-picker {
 
     .md-toggle-icon {
         margin-left: auto;
-        vertical-align: middle;
+        display: flex;
+        align-items: center;
     }
 }
 

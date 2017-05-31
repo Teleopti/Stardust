@@ -6,10 +6,10 @@
 	<div class="_off-screen">
 		<orgpicker-menu class="orgpicker-menu single-mode">
 			<div class="header">
-				<button type="button" title="Collapse All" ng-click="$ctrl.collapseAll()" class="context-menu card-context collapse-all"><i class="mdi mdi-chevron-double-up"></i></button>
 				<i class="mdi mdi-magnify"></i>
 				<input type="text" class="search md-text" placeholder="{{ 'Search' |translate}}" ng-model="$ctrl.searchText" />
 			</div>
+			<div class="longest-name">{{$ctrl.longestName}}</div>
 			<md-virtual-repeat-container class="virtual-repeat" md-top-index="$ctrl.topIndex">
 				<div md-virtual-repeat="o in $ctrl.orgsInView" class="repeated-item" flex>
 					<div ng-click="$ctrl.collapseSite(o)" class="site md-button-toggle md-button md-ink-ripple" ng-if=" o.m.isSite " ng-class="{'contains-selected-team': o.isChecked() || o.isIndeterminate()}">
