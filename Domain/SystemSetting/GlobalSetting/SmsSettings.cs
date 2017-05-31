@@ -17,5 +17,6 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 		public Guid OptionalColumnId { get; set; }
 
 		public string EmailFrom { get; set; }
+		public bool IsMobileNotificationEnabled { get; set; }
 	}
 }

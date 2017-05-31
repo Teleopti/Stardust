@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			labelSubHeader3.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelSubHeaderMobileNotificationSettings.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			labelSubHeaderMobileNotificationSettings.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-			
+
 		}
 
 		private void loadNotificationSettings()
@@ -90,6 +90,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				comboBoxOptionalColumns.SelectedIndex = -1;
 				textBoxEmailFrom.Text = _smsSettingsSetting.EmailFrom;
 			}
+
+			checkBoxEnableMobileNotification.Checked = _smsSettingsSetting.IsMobileNotificationEnabled;
 			radioButtonCheckChanged();
 		}
 
@@ -115,20 +117,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public void SaveChanges()
 		{
-			if (_smsSettingsSetting != null && comboBoxOptionalColumns.SelectedValue != null)
+			if (_smsSettingsSetting != null)
 			{
-				_smsSettingsSetting.NotificationSelection = NotificationType.Sms;
-				_smsSettingsSetting.OptionalColumnId = ((OptionalColumn)comboBoxOptionalColumns.SelectedValue).Id.Value;
-				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				if (comboBoxOptionalColumns.SelectedValue != null)
 				{
-					new GlobalSettingDataRepository(uow).PersistSettingValue(_smsSettingsSetting);
-					uow.PersistAll();
+					_smsSettingsSetting.NotificationSelection = NotificationType.Sms;
+					_smsSettingsSetting.OptionalColumnId = ((OptionalColumn)comboBoxOptionalColumns.SelectedValue).Id.Value;
 				}
-			}
-			else if (_smsSettingsSetting != null && !textBoxEmailFrom.Text.IsEmpty())
-			{
-				_smsSettingsSetting.NotificationSelection = NotificationType.Email;
-				_smsSettingsSetting.EmailFrom = textBoxEmailFrom.Text;
+				else if (!textBoxEmailFrom.Text.IsEmpty())
+				{
+					_smsSettingsSetting.NotificationSelection = NotificationType.Email;
+					_smsSettingsSetting.EmailFrom = textBoxEmailFrom.Text;
+				}
+
+				_smsSettingsSetting.IsMobileNotificationEnabled = checkBoxEnableMobileNotification.Checked;
 				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					new GlobalSettingDataRepository(uow).PersistSettingValue(_smsSettingsSetting);
@@ -199,14 +201,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void setDefaultEmailData(bool clear)
 		{
-			if(!clear) return;
-				textBoxEmailFrom.Text = _smsSettingsSetting.EmailFrom;
+			if (!clear) return;
+			textBoxEmailFrom.Text = _smsSettingsSetting.EmailFrom;
 		}
 
 		private void clearSmsData(bool clear)
 		{
 			if (!clear) return;
-				comboBoxOptionalColumns.SelectedIndex = -1;
+			comboBoxOptionalColumns.SelectedIndex = -1;
 		}
 
 		private void textBoxEmailFrom_Leave(object sender, EventArgs e)
