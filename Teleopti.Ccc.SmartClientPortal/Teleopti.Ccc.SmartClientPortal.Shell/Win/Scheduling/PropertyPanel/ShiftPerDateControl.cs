@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 	public partial class ShiftPerDateControl : UserControl, INeedShiftCategoryDistributionModel
 	{
 		private IShiftPerDatePresenter _presenter;
+		private Action disposeAction;
 
 		public ShiftPerDateControl()
 		{
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 			if (_presenter == null)
 			{
 				model.ResetNeeded += modelResetNeeded;
+				disposeAction = ()=> model.ResetNeeded -= modelResetNeeded;
 			}
 			_presenter = new ShiftPerDatePresenter(model);
 			_presenter.ReSort(null, true);

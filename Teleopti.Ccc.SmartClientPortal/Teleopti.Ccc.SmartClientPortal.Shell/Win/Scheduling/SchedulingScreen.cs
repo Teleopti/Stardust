@@ -341,7 +341,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				.InstancePerLifetimeScope();
 			updater.Register(c => _schedulerMessageBrokerHandler)
 				.As<IInitiatorIdentifier>()
-				.As<IReassociateDataForSchedules>();
+				.As<IReassociateDataForSchedules>()
+				.ExternallyOwned();
 
 			updater.RegisterType<PersonAccountPersister>().As<IPersonAccountPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<PersonAccountConflictCollector>()
@@ -1474,7 +1475,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (e.Button != MouseButtons.Left) return;
 			Cursor = Cursors.WaitCursor;
-			var scheduleTag = (IScheduleTag) (((ToolStripMenuItem) (sender)).Tag);
+			var scheduleTag = (IScheduleTag) ((ToolStripMenuItem) sender).Tag;
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IScheduleDayTagExtractor scheduleDayTagExtractor = new ScheduleDayTagExtractor(gridSchedulesExtractor.Extract());
 			var gridlockTagCommand = new GridlockTagCommand(LockManager, scheduleDayTagExtractor, scheduleTag);
@@ -1494,7 +1495,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (e.Button != MouseButtons.Left) return;
 			Cursor = Cursors.WaitCursor;
-			var scheduleTag = (IScheduleTag) (((ToolStripMenuItem) (sender)).Tag);
+			var scheduleTag = (IScheduleTag) ((ToolStripMenuItem) sender).Tag;
 			var gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			var setTagCommand = new SetTagCommand(_undoRedo, gridSchedulesExtractor, _scheduleView.Presenter, _scheduleView,
 				scheduleTag, LockManager);
@@ -1571,7 +1572,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripMenuItemLockSpecificDayOffClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
-			var dayOffTemplate = (IDayOffTemplate) (((ToolStripMenuItem) (sender)).Tag);
+			var dayOffTemplate = (IDayOffTemplate) ((ToolStripMenuItem) sender).Tag;
 			GridHelper.GridlockSpecificDayOff(_grid, LockManager, dayOffTemplate);
 			Refresh();
 			RefreshSelection();
@@ -1592,7 +1593,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void lockAbsence(object sender)
 		{
 			Cursor = Cursors.WaitCursor;
-			var absence = (Absence) (((ToolStripMenuItem) (sender)).Tag);
+			var absence = (Absence) ((ToolStripMenuItem) sender).Tag;
 			GridHelper.GridlockAbsences(_grid, LockManager, absence);
 			Refresh();
 			RefreshSelection();
@@ -1613,7 +1614,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void lockShiftCategory(object sender)
 		{
 			Cursor = Cursors.WaitCursor;
-			var shiftCategory = (ShiftCategory) (((ToolStripMenuItem) (sender)).Tag);
+			var shiftCategory = (ShiftCategory) ((ToolStripMenuItem) sender).Tag;
 			GridHelper.GridlockShiftCategories(_grid, LockManager, shiftCategory);
 			Refresh();
 			RefreshSelection();
@@ -4570,6 +4571,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						.CellValue as IScheduleDay;
 				_scheduleView.RefreshSelectionInfo -= scheduleViewRefreshSelectionInfo;
 				_scheduleView.RefreshShiftEditor -= scheduleViewRefreshShiftEditor;
+				_scheduleView.ViewPasteCompleted -= currentViewViewPasteCompleted;
 				_scheduleView.Dispose();
 				_scheduleView = null;
 			}
@@ -4648,7 +4650,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					break;
 				default:
-					throw new InvalidEnumArgumentException("level", (int) level, typeof (ZoomLevel));
+					throw new InvalidEnumArgumentException(nameof(level), (int) level, typeof (ZoomLevel));
 			}
 			_previousZoomLevel = _currentZoomLevel;
 			_currentZoomLevel = level;
@@ -4659,8 +4661,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			foreach (ToolStripItem item in toolStripPanelItemViews2.Items)
 			{
 				var t = item as ToolStripButton;
-				if (t != null && t.Tag != null)
-					t.Checked = ((ZoomLevel) t.Tag == level) ? true : false;
+				if (t?.Tag != null)
+					t.Checked = (ZoomLevel) t.Tag == level;
 			}
 
 			if (_scheduleView != null)
@@ -4687,10 +4689,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_grid.Model.Selections.SelectRange(
 					GridRangeInfo.Cell(_grid.CurrentCell.RowIndex, _grid.CurrentCell.ColIndex), true);
 
-				if (_scheduleView != null)
-				{
-					_scheduleView.SetSelectionFromParts(scheduleParts);
-				}
+				_scheduleView?.SetSelectionFromParts(scheduleParts);
 			}
 		}
 
@@ -5400,6 +5399,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripMenuItemQuickAccessUndoAll.Click -= toolStripMenuItemQuickAccessUndoAll_Click_1;
 			toolStripButtonShowTexts.Click -= toolStripButtonShowTexts_Click;
 			toolStripButtonShowResult.Click -= toolStripButtonShowResult_Click;
+			toolStripButtonShowGraph.Click -= toolStripButtonShowGraph_Click;
+			toolStripButtonShowEditor.Click -= toolStripButtonShowEditor_Click;
 
 			toolStripButtonDayView.Click -= toolStripButtonZoomClick;
 			toolStripButtonWeekView.Click -= toolStripButtonZoomClick;
@@ -5408,6 +5409,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripButtonRequestView.Click -= toolStripButtonZoomClick;
 			toolStripButtonRestrictions.Click -= toolStripButtonZoomClick;
 
+			toolStripSplitButtonUnlock.ButtonClick -= toolStripSplitButtonUnlockButtonClick;
+			
 			if (_permissionHelper != null)
 				_permissionHelper = null;
 
@@ -5466,6 +5469,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				_backgroundWorkerOptimization.DoWork -= backgroundWorkerOptimizationDoWork;
 				_backgroundWorkerOptimization.ProgressChanged -= backgroundWorkerOptimizationProgressChanged;
+				_backgroundWorkerOptimization.RunWorkerCompleted -= backgroundWorkerOptimizationRunWorkerCompleted;
 			}
 
 			if (toolStripComboBoxAutoTag != null)
@@ -5511,7 +5515,83 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				wpfShiftEditor1.AddOvertime -= wpfShiftEditor_AddOvertime;
 				wpfShiftEditor1.AddPersonalShift -= wpfShiftEditor_AddPersonalShift;
 				wpfShiftEditor1.ShowLayers -= wpfShiftEditor1ShowLayers;
+				wpfShiftEditor1.Undo -= wpfShiftEditor_Undo;
 			}
+			
+			toolStripMenuItemStartAsc.MouseUp -= ToolStripMenuItemStartAscMouseUp;
+			toolStripMenuItemStartTimeDesc.MouseUp -= ToolStripMenuItemStartTimeDescMouseUp;
+			toolStripMenuItemEndTimeAsc.MouseUp -= ToolStripMenuItemEndTimeAscMouseUp;
+			toolStripMenuItemEndTimeDesc.MouseUp -= ToolStripMenuItemEndTimeDescMouseUp;
+			toolStripMenuItemContractTimeAsc.MouseUp -= toolStripMenuItemContractTimeAscMouseUp;
+			toolStripMenuItemContractTimeDesc.MouseUp -= toolStripMenuItemContractTimeDescMouseUp;
+			toolStripMenuItemSeniorityRankAsc.MouseUp -= toolStripMenuItemSeniorityRankAscMouseUp;
+			toolStripMenuItemSeniorityRankDesc.MouseUp -= toolStripMenuItemSeniorityRankDescMouseUp;
+			toolStripMenuItemUnlockSelectionRM.MouseUp -= ToolStripMenuItemUnlockSelectionRmMouseUp;
+			toolStripMenuItemUnlockAllRM.MouseUp -= toolStripMenuItemUnlockAllRmMouseUp;
+			toolStripMenuItemLockSelectionRM.MouseUp -= toolStripMenuItemLockSelectionRmMouseUp;
+			ToolStripMenuItemAllRM.MouseUp -= toolStripMenuItemLockAllRestrictionsMouseUp;
+			ToolStripMenuItemAllPreferencesRM.MouseUp -= toolStripMenuItemAllPreferencesMouseUp;
+			ToolStripMenuItemAllAbsencePreferenceRM.MouseUp -= toolStripMenuItemAllAbsencePreferenceMouseUp;
+			ToolStripMenuItemAllDaysOffPreferencesRM.MouseUp -= toolStripMenuItemAllDaysOffMouseUp;
+			ToolStripMenuItemAllShiftsPreferencesRM.MouseUp -= toolStripMenuItemAllShiftsPreferencesMouseUp;
+			ToolStripMenuItemAllMustHaveRM.MouseUp -= toolStripMenuItemAllMustHaveMouseUp;
+			ToolStripMenuItemAllFulFilledPreferencesRM.MouseUp -= toolStripMenuItemAllFulFilledPreferencesMouseUp;
+			ToolStripMenuItemAllFulFilledAbsencesPreferencesRM.MouseUp -= toolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp;
+			ToolStripMenuItemAllFulFilledDaysOffPreferencesRM.MouseUp -= toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp;
+			ToolStripMenuItemAllFulFilledShiftsPreferencesRM.MouseUp -= toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp;
+			ToolStripMenuItemAllFulfilledMustHaveRM.MouseUp -= toolStripMenuItemAllFulfilledMustHaveMouseUp;
+			ToolStripMenuItemAllRotationsRM.MouseUp -= toolStripMenuItemAllRotationsMouseUp;
+			ToolStripMenuItemAllDaysOffRotationsRM.MouseUp -= toolStripMenuItemAllDaysOffRotationsMouseUp;
+			ToolStripMenuItemAllShiftsRotationsRM.MouseUp -= toolStripMenuItemAllShiftsRotationsMouseUp;
+			ToolStripMenuItemAllFulFilledRotationsRM.MouseUp -= toolStripMenuItemAllFulFilledRotationsMouseUp;
+			ToolStripMenuItemAllFulFilledDaysOffRotationsRM.MouseUp -= toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp;
+			ToolStripMenuItemAllFulFilledShiftsRotationsRM.MouseUp -= toolStripMenuItemAllFulFilledShiftsRotationsMouseUp;
+			ToolStripMenuItemAllUnavailableStudentAvailabilityRM.MouseUp -= toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp;
+			ToolStripMenuItemAllAvailableStudentAvailabilityRM.MouseUp -= toolStripMenuItemAllAvailableStudentAvailabilityMouseUp;
+			ToolStripMenuItemAllFulFilledStudentAvailabilityRM.MouseUp -= toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp;
+			ToolStripMenuItemAllUnAvailableAvailabilityRM.MouseUp -= toolStripMenuItemAllUnavailableAvailabilityMouseUp;
+			ToolStripMenuItemAllAvailableAvailabilityRM.MouseUp -= toolStripMenuItemAllAvailableAvailabilityMouseUp;
+			ToolStripMenuItemAllFulFilledAvailabilityRM.MouseUp -= toolStripMenuItemAllFulFilledAvailabilityMouseUp;
+			toolStripMenuItemLockAllTagsRM.MouseUp -= toolStripMenuItemLockAllTagsMouseUp;
+			toolStripMenuItemWriteProtectSchedule.MouseUp -= toolStripMenuItemWriteProtectScheduleMouseUp;
+			toolstripMenuRemoveWriteProtection.MouseUp -= ToolstripMenuRemoveWriteProtectionMouseUp;
+			ToolStripMenuItemCreateMeeting.MouseUp -= toolStripMenuItemCreateMeetingMouseUp;
+			toolStripMenuItemEditMeeting.MouseUp -= toolStripMenuItemEditMeetingMouseUp;
+			toolStripMenuItemRemoveParticipant.MouseUp -= toolStripMenuItemRemoveParticipantMouseUp;
+			toolStripMenuItemDeleteMeeting.MouseUp -= toolStripMenuItemDeleteMeetingMouseUp;
+			toolStripMenuItemScheduledTimePerActivity.MouseUp -= ToolStripMenuItemScheduledTimePerActivityMouseUp;
+			toolStripMenuItemExportToPDF.MouseUp -= toolStripMenuItemExportToPdfMouseUp;
+			toolStripMenuItemExportToPDFGraphical.MouseUp -= toolStripMenuItemExportToPdfGraphicalMouseUp;
+			ToolStripMenuItemExportToPDFShiftsPerDay.MouseUp -= toolStripMenuItemExportToPdfShiftsPerDayMouseUp;
+			ToolStripMenuItemLockAllRestrictions.MouseUp -= toolStripMenuItemLockAllRestrictionsMouseUp;
+			ToolStripMenuItemAllPreferences.MouseUp -= toolStripMenuItemAllPreferencesMouseUp;
+			ToolStripMenuItemAllAbsencePreference.MouseUp -= toolStripMenuItemAllAbsencePreferenceMouseUp;
+			ToolStripMenuItemAllDaysOff.MouseUp -= toolStripMenuItemAllDaysOffMouseUp;
+			ToolStripMenuItemAllShiftsPreferences.MouseUp -= toolStripMenuItemAllShiftsPreferencesMouseUp;
+			ToolStripMenuItemAllMustHave.MouseUp -= toolStripMenuItemAllMustHaveMouseUp;
+			ToolStripMenuItemAllFulFilledPreferences.MouseUp -= toolStripMenuItemAllFulFilledPreferencesMouseUp;
+			ToolStripMenuItemAllFulFilledDaysOffPreferences.MouseUp -= toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp;
+			ToolStripMenuItemAllFulFilledShiftsPreferences.MouseUp -= toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp;
+			ToolStripMenuItemAllFulfilledMustHave.MouseUp -= toolStripMenuItemAllFulfilledMustHaveMouseUp;
+			ToolStripMenuItemAllRotations.MouseUp -= toolStripMenuItemAllRotationsMouseUp;
+			ToolStripMenuItemAllDaysOffRotations.MouseUp -= toolStripMenuItemAllDaysOffRotationsMouseUp;
+			ToolStripMenuItemAllFulFilledRotations.MouseUp -= toolStripMenuItemAllFulFilledRotationsMouseUp;
+			ToolStripMenuItemAllFulFilledDaysOffRotations.MouseUp -= toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp;
+			ToolStripMenuItemAllFulFilledShiftsRotations.MouseUp -= toolStripMenuItemAllFulFilledShiftsRotationsMouseUp;
+			ToolStripMenuItemAllShiftsRotations.MouseUp -= toolStripMenuItemAllShiftsRotationsMouseUp;
+			ToolStripMenuItemAllUnavailableStudentAvailability.MouseUp -= toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp;
+			ToolStripMenuItemAllAvailableStudentAvailability.MouseUp -= toolStripMenuItemAllAvailableStudentAvailabilityMouseUp;
+			ToolStripMenuItemAllFulFilledStudentAvailability.MouseUp -= toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp;
+			ToolStripMenuItemAllUnavailableAvailability.MouseUp -= toolStripMenuItemAllUnavailableAvailabilityMouseUp;
+			ToolStripMenuItemAllAvailableAvailability.MouseUp -= toolStripMenuItemAllAvailableAvailabilityMouseUp;
+			ToolStripMenuItemAllFulFilledAvailability.MouseUp -= toolStripMenuItemAllFulFilledAvailabilityMouseUp;
+			toolStripMenuItemLockAllTags.MouseUp -= toolStripMenuItemLockAllTagsMouseUp;
+			ToolStripMenuItemRemoveWriteProtectionToolBar.MouseUp -= ToolstripMenuRemoveWriteProtectionMouseUp;
+			toolStripButtonQuickAccessRedo.MouseUp -= toolStripButtonQuickAccessRedo_Click_1;
+
+			toolStripButtonShrinkage.Click -= toolStripButtonShrinkage_Click;
+			toolStripButtonCalculation.Click -= toolStripButtonCalculation_Click;
+			toolStripButtonValidation.Click -= toolStripButtonValidation_Click;
 
 			if (notesEditor != null)
 			{
@@ -5914,10 +5994,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// bug 28705 hide it so we don't get strange paint events
 			Hide();
 			_mainWindow.Activate();
-			if (_schedulerState != null && _schedulerState.Schedules != null)
-			{
-				_schedulerState.Schedules.Clear();
-			}
+			_schedulerState?.Schedules?.Clear();
 			setEventHandlersOff();
 			_container.Dispose();
 			if (_scheduleView != null)
@@ -5931,11 +6008,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_schedulerState = null;
 			_schedulerMeetingHelper = null;
 
-			if (wpfShiftEditor1 != null) wpfShiftEditor1.LoadSchedulePart(null);
-			if (notesEditor != null) notesEditor.LoadNote(null);
-			if (wpfShiftEditor1 != null) wpfShiftEditor1.Unload();
+			wpfShiftEditor1?.LoadSchedulePart(null);
+			notesEditor?.LoadNote(null);
+			wpfShiftEditor1?.Unload();
 			wpfShiftEditor1 = null;
-			if (_undoRedo != null) _undoRedo.Clear();
+			_undoRedo?.Clear();
 
 			notesEditor = null;
 

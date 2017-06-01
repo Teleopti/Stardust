@@ -18,9 +18,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 		private Label label1;
 		private TableLayoutPanel tableLayoutPanel1;
 		private IShiftCategoryDistributionModel _model;
-       
-        
-        public PerShiftCategoryChartControl()
+
+	    protected override void Dispose(bool disposing)
+	    {
+		    base.Dispose(disposing);
+
+		    if (_model != null)
+		    {
+				_model.ResetNeeded -= modelResetNeeded;
+			    _model.ChartUpdateNeeded -= modelUpdateChartNeeded;
+			}
+	    }
+
+	    public PerShiftCategoryChartControl()
         {
             InitializeComponent();
 			if(!DesignMode)
@@ -100,7 +110,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 			_model = model;
 			model.ResetNeeded -= modelResetNeeded;
 			model.ResetNeeded += modelResetNeeded;
-			//model.CachedShiftCategoryDistribution.PartModified += modelUpdateChartNeeded;
 			model.ChartUpdateNeeded += modelUpdateChartNeeded;
 			fillCombo();
 			UpdateChart();

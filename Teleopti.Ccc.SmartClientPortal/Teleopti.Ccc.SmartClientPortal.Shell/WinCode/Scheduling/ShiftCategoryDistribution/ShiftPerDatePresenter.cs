@@ -73,13 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 			}
 		}
 
-		public int RowCount
-		{
-			get
-			{
-				return _sortedDates.Count;
-			}
-		}
+		public int RowCount => _sortedDates.Count;
 
 		public int ColumnCount()
 		{

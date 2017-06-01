@@ -78,10 +78,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 			return frequency;
 		}
 
-		public ICachedShiftCategoryDistribution CachedShiftCategoryDistribution
-		{
-			get { return _cachedShiftCategoryDistribution; }
-		}
+		public ICachedShiftCategoryDistribution CachedShiftCategoryDistribution => _cachedShiftCategoryDistribution;
 
 		public MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory)
 		{
@@ -154,22 +151,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 
 		public IList<IShiftCategory> GetSortedShiftCategories()
 		{
-			//var result = new HashSet<IShiftCategory>();
-			//foreach (var filteredPerson in _filteredPersons)
-			//{
-			//	foreach (var shiftCategory in _cachedNumberOfEachCategoryPerPerson.GetValue(filteredPerson).Keys)
-			//	{
-			//		result.Add(shiftCategory);
-			//	}
-			//}
-
-			//if (_lastShiftCategoryCount != result.Count)
-			//{
-			//	_lastShiftCategoryCount = result.Count;
-			//	OnResetNeeded();
-			//}
-
-			//above returned all anyway so...
 			var result = _cachedShiftCategoryDistribution.AllShiftCategories;
 			var sortedCategories = from c in result
 								   orderby c.Description.ShortName, c.Description.Name
@@ -234,16 +215,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 
 		public virtual void OnResetNeeded()
 		{
-			var tmp = ResetNeeded;
-			if(tmp != null)
-				ResetNeeded(this, new EventArgs());
+			ResetNeeded?.Invoke(this, EventArgs.Empty);
 		}
 
 		public virtual void OnChartUpdateNeeded()
 		{
-			var tmp = ChartUpdateNeeded;
-			if(tmp != null)
-				ChartUpdateNeeded(this, new EventArgs());
+			ChartUpdateNeeded?.Invoke(this, EventArgs.Empty);
 		}
 
 		public IList<IPerson> GetSortedPersons(bool ascending)
@@ -326,7 +303,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		private class shiftCategoryDoubleComparer : IComparable
 		{
 			private readonly double _count;
-			public IShiftCategory ShiftCategory { get; private set; }
+			public IShiftCategory ShiftCategory { get; }
 
 			public shiftCategoryDoubleComparer(IShiftCategory shiftCategory, double count)
 			{
@@ -350,7 +327,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		private class shiftCategoryIntComparer : IComparable
 		{
 			private readonly int _count;
-			public IShiftCategory ShiftCategory { get; private set; }
+			public IShiftCategory ShiftCategory { get; }
 
 			public shiftCategoryIntComparer(IShiftCategory shiftCategory, int count)
 			{
@@ -374,7 +351,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		private class agentIntPair : IComparable
 		{
 			private readonly int _count;
-			public IPerson Person { get; private set; }
+			public IPerson Person { get; }
 
 			public agentIntPair(IPerson person, int count)
 			{
@@ -398,7 +375,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		private class dateIntPair : IComparable
 		{
 			private readonly int _count;
-			public DateOnly DateOnly { get; private set; }
+			public DateOnly DateOnly { get; }
 
 			public dateIntPair(DateOnly dateOnly, int count)
 			{
@@ -417,19 +394,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 
 				return -1;
 			}
-		}
-
-		private class intMinMax
-		{
-			public intMinMax()
-			{
-				Min = int.MaxValue;
-				Max = int.MinValue;
-			}
-
-			public int Min { get; set; }
-
-			public int Max { get; set; }
 		}
 	}
 }

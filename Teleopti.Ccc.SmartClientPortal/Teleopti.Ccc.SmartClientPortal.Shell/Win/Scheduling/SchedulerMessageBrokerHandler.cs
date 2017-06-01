@@ -30,14 +30,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly IJsonDeserializer _deserializer;
 		private readonly IScheduleStorage _scheduleStorage;
 
-		public Guid InitiatorId
-		{
-			get { return _instanceId; }
-		}
+		public Guid InitiatorId => _instanceId;
 
 		public SchedulerMessageBrokerHandler(SchedulingScreen owner, ILifetimeScope container)
 		{
-		    if (owner == null) throw new ArgumentNullException("owner");
+		    if (owner == null) throw new ArgumentNullException(nameof(owner));
 		    _owner = owner;
 			_scheduleScreenRefresher = container.Resolve<IScheduleScreenRefresher>(
 				TypedParameter.From<IReassociateDataForSchedules>(this),
