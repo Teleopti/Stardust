@@ -1473,8 +1473,8 @@ describe('PermissionsController', function() {
 				expect(vm.componentFunctions[0].ChildFunctions[1].LocalizedFunctionDescription).toEqual('SomethingElse2');
 				expect(vm.componentFunctions[0].ChildFunctions[0].ChildFunctions.length).toEqual(2);
 				expect(vm.componentFunctions[0].ChildFunctions[1].ChildFunctions.length).toEqual(1);
-				expect(vm.componentFunctions[0].ChildFunctions[0].ChildFunctions[0].LocalizedFunctionDescription).toEqual('Somethingelse');
-				expect(vm.componentFunctions[0].ChildFunctions[0].ChildFunctions[1].LocalizedFunctionDescription).toEqual('Child1-a');
+				expect(vm.componentFunctions[0].ChildFunctions[0].ChildFunctions[0].LocalizedFunctionDescription).toEqual('Child1-a');
+				expect(vm.componentFunctions[0].ChildFunctions[0].ChildFunctions[1].LocalizedFunctionDescription).toEqual('Somethingelse');
 				expect(vm.componentFunctions[0].ChildFunctions[1].ChildFunctions[0].LocalizedFunctionDescription).toEqual('ImAlsoAChild');
 			});
 		});

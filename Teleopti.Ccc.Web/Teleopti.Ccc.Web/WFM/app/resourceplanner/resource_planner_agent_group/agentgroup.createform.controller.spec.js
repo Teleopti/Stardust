@@ -10,6 +10,7 @@ describe('agentGroupFormController', function () {
 
 	beforeEach(function () {
 		module('wfm.resourceplanner');
+		module('localeLanguageSortingService');
 	});
 
 	beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _agentGroupService_, _debounceService_) {
@@ -33,6 +34,10 @@ describe('agentGroupFormController', function () {
 				Name: "Skill 2",
 				FilterType: "Skill"
 			}], {}];
+		});
+
+		$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
+			return [200, true];
 		});
 
 		$httpBackend.whenGET('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
@@ -108,6 +113,7 @@ describe('agentGroupFormController', function () {
 	it('should not create agent group when submit data is invalid', function () {
 		var vm = $controller('agentGroupFormController');
 		vm.persist();
+		$httpBackend.flush();
 
 		expect($state.go).not.toHaveBeenCalledWith('resourceplanner.newoverview');
 	});

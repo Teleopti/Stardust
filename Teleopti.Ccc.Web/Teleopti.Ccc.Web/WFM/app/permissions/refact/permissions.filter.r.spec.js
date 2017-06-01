@@ -561,8 +561,8 @@ describe('permissionsFilter', function() {
 		expect(filteredArray[0].ChildFunctions[1].LocalizedFunctionDescription).toEqual('SomethingElse2');
 		expect(filteredArray[0].ChildFunctions[0].ChildFunctions.length).toEqual(2);
 		expect(filteredArray[0].ChildFunctions[1].ChildFunctions.length).toEqual(1);
-		expect(filteredArray[0].ChildFunctions[0].ChildFunctions[0].LocalizedFunctionDescription).toEqual('Somethingelse');
-		expect(filteredArray[0].ChildFunctions[0].ChildFunctions[1].LocalizedFunctionDescription).toEqual('Child1-a');
+		expect(filteredArray[0].ChildFunctions[0].ChildFunctions[0].LocalizedFunctionDescription).toEqual('Child1-a');
+		expect(filteredArray[0].ChildFunctions[0].ChildFunctions[1].LocalizedFunctionDescription).toEqual('Somethingelse');
 		expect(filteredArray[0].ChildFunctions[1].ChildFunctions[0].LocalizedFunctionDescription).toEqual('ImAlsoAChild');
 	}));
 

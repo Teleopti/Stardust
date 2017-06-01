@@ -13917,7 +13917,7 @@ Dessa val är aktiverade:
     <value>Välj en definitionsgrupp för multiplikatorer</value>
   </data>
   <data name="HideFilter" xml:space="preserve">
-    <value>Göm filter</value>
+    <value>Dölj filter</value>
   </data>
   <data name="NotificationTimeToStay" xml:space="preserve">
     <value>Visning av notifieringar (sekunder)</value>

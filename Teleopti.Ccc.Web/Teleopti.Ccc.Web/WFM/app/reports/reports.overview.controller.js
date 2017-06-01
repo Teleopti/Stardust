@@ -33,7 +33,7 @@
 				}
 				types[item.Category].childNodes.push({ Name: item.Name, IsWeb: item.IsWebReport, Url: item.Url });
 			}
-			grouped = sortByLocaleLanguage(grouped, 'Type');
+			grouped.sort(localeLanguageSortingService.localeSort('+Type'));
 
 			return unshiftCustom(grouped);
 		}
@@ -56,20 +56,11 @@
 		function sortReportByType(array) {
 			if (array.length == 0)
 				return;
-			array = sortByLocaleLanguage(array, 'Type');
+			array.sort(localeLanguageSortingService.localeSort('+Type'));
 			array.forEach(function(element) {
-				element.childNodes = sortByLocaleLanguage(element.childNodes, 'Name');
+				element.childNodes.sort(localeLanguageSortingService.localeSort('+Name'));
 			});
 			return array;
-		}
-
-		function sortByLocaleLanguage(array, key) {
-			if (array.length == 0)
-				return;
-			return array.sort(function (a, b) {
-				var x = a[key]; var y = b[key];
-				return localeLanguageSortingService.sort(x, y);
-			});
 		}
 	}
 })();

@@ -5,9 +5,9 @@
 		.module('wfm.resourceplanner')
 		.controller('agentGroupFormController', Controller);
 
-	Controller.$inject = ['$state', '$timeout', '$stateParams', 'agentGroupService', 'NoticeService', '$translate', 'debounceService'];
+	Controller.$inject = ['$state', '$timeout', '$stateParams', 'agentGroupService', 'NoticeService', '$translate', 'debounceService', 'localeLanguageSortingService'];
 
-	function Controller($state, $timeout, $stateParams, agentGroupService, NoticeService, $translate, debounceService) {
+	function Controller($state, $timeout, $stateParams, agentGroupService, NoticeService, $translate, debounceService, localeLanguageSortingService) {
 		var vm = this;
 
 		var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
@@ -37,7 +37,7 @@
 				vm.editAgentGroup = data;
 				vm.deleteAgentGroupText = $translate.instant("AreYouSureYouWantToDeleteTheAgentGroup").replace("{0}", vm.editAgentGroup.Name);
 				vm.name = data.Name;
-				vm.selectedResults = data.Filters;
+				vm.selectedResults = data.Filters.sort(localeLanguageSortingService.localeSort('+FilterType','+Name'));
 				return vm.editAgentGroup;
 			});
 		}
@@ -70,6 +70,7 @@
 				return;
 			if (isValidUnit(item)) {
 				vm.selectedResults.push(item);
+				vm.selectedResults.sort(localeLanguageSortingService.localeSort('+FilterType','+Name'));
 				clearInput();
 			} else {
 				clearInput();

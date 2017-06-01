@@ -47,6 +47,7 @@ describe('dayoffRuleOverviewController', function () {
 
     beforeEach(function () {
         module('wfm.resourceplanner');
+        module('localeLanguageSortingService');
     });
 
     beforeEach(inject(function (_$httpBackend_, _$controller_, _dayOffRuleService_, _agentGroupService_) {
@@ -55,10 +56,13 @@ describe('dayoffRuleOverviewController', function () {
         dayOffRuleService = _dayOffRuleService_;
         agentGroupService = _agentGroupService_;
 
+        $httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
+			return [200, true];
+		});
+
         $httpBackend.whenDELETE('../api/resourceplanner/dayoffrules/ec4356ba-8278-48e4-b4f8-c3102b7af684').respond(function (method, url, data, headers) {
             return [200, true];
         });
-
     }));
 
     afterEach(function () {
@@ -73,11 +77,12 @@ describe('dayoffRuleOverviewController', function () {
             agentGroupInfo: agentGroupInfo,
             dayOffRulesInfo: dayOffRulesInfo
         });
+        $httpBackend.flush();
 
         expect(vm.dayOffRules.length).toEqual(2);
     });
 
-    it('should delete selected off rule', function () {
+    it('should delete selected day off rule', function () {
         spyOn(dayOffRuleService, 'removeDayOffRule').and.callThrough();
          var vm = $controller('dayoffRuleOverviewController', {
             $stateParams: stateparams,

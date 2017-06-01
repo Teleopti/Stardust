@@ -26,7 +26,7 @@
 							<span>
 								<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-calendar-check"></i>
 								<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="mdi mdi-calendar-remove"></i>
-								{{p.StartDate | amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}
+								{{p.StartDate | amDateFormat:"L"}} - {{p.EndDate | amDateFormat:"L"}}
 							</span>
 						</div>
 						<div class="con-flex head-actions panel-menu" ng-click="$event.stopPropagation();" ng-show="$first">

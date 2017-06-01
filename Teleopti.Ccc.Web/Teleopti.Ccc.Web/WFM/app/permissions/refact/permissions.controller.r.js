@@ -469,41 +469,19 @@
 
 		function fetchData() {
 			PermissionsServiceRefact.roles.query().$promise.then(function (data) {
-				data = sortByLocaleLanguage(data, 'DescriptionText');
-				vm.roles = data;
+				vm.roles = data.sort(localeLanguageSortingService.localeSort('+DescriptionText'));
 			});
 			PermissionsServiceRefact.applicationFunctions.query().$promise.then(function (data) {
-				data = loopSorting(data, 'ChildFunctions', 'LocalizedFunctionDescription');
-				vm.applicationFunctions = data;
+				vm.applicationFunctions = localeLanguageSortingService.loopSort(data, 'ChildFunctions', '+LocalizedFunctionDescription', false);
 				listHandler(vm.applicationFunctions);
 				prepareTree(vm.applicationFunctions);
 			});
 			PermissionsServiceRefact.organizationSelection.get().$promise.then(function (data) {
 				if (data.BusinessUnit && data.BusinessUnit.ChildNodes) {
-					var array = data.BusinessUnit.ChildNodes;
-					array = sortByLocaleLanguage(array, 'Name');
-					array = loopSorting(array, 'ChildNodes', 'Name');
+					data.BusinessUnit.ChildNodes = localeLanguageSortingService.loopSort(data.BusinessUnit.ChildNodes, 'ChildNodes', '+Name');
 				}
-				vm.organizationSelection = data;
+				vm.organizationSelection = data; 
 				orgDataHandler(vm.organizationSelection);
-			});
-		}
-
-		function loopSorting(arr, childType, key) {
-			arr.forEach(function (item) {
-				if (item[childType] && item[childType].length > 0) {
-					var children = item[childType];
-					children = sortByLocaleLanguage(children, key);
-					loopSorting(children);
-				}
-			});
-			return arr;
-		}
-
-		function sortByLocaleLanguage(array, key) {
-			return array.sort(function (a, b) {
-				var x = a[key]; var y = b[key];
-				return localeLanguageSortingService.sort(x, y);
 			});
 		}
 	}

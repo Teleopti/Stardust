@@ -7,12 +7,12 @@
 		.controller('dayoffRuleDirectiveOverviewController', directiveController)
 		.directive('dayoffRules', dayoffRulesDirective);
 
-	overviewController.$inject = ['$state', '$stateParams', '$translate', 'dayOffRuleService', 'agentGroupInfo', 'dayOffRulesInfo'];
+	overviewController.$inject = ['$state', '$stateParams', '$translate', 'dayOffRuleService', 'agentGroupInfo', 'dayOffRulesInfo', 'localeLanguageSortingService'];
 
-	function overviewController($state, $stateParams, $translate, dayOffRuleService, agentGroupInfo, dayOffRulesInfo) {
+	function overviewController($state, $stateParams, $translate, dayOffRuleService, agentGroupInfo, dayOffRulesInfo, localeLanguageSortingService) {
 		var vm = this;
 
-		vm.dayOffRules = dayOffRulesInfo ? dayOffRulesInfo : [];
+		vm.dayOffRules = dayOffRulesInfo.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
 		vm.textDeleteDoRule = '';
 		vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", agentGroupInfo.Name);
 		vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", agentGroupInfo.Name);
@@ -50,7 +50,7 @@
 		}
 	}
 
-	function directiveController($state, $stateParams, $translate, dayOffRuleService) {
+	function directiveController($state, $stateParams, $translate, dayOffRuleService, localeLanguageSortingService) {
 		var vm = this;
 
 		vm.dayOffRules = [];
@@ -62,7 +62,8 @@
 
 		function getDayOffRules() {
 			return dayOffRuleService.getDayOffRulesByAgentGroupId({ agentGroupId: $stateParams.groupId }).$promise.then(function (data) {
-				return vm.dayOffRules = data;
+				vm.dayOffRules = data.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
+				return vm.dayOffRules;
 			});
 		}
 
