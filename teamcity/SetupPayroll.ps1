@@ -47,22 +47,33 @@ function InstallPayrollService
 
         $Computername,
         $ServiceExePath,
+        $Servicename,
         $remove = $false
+        
     )
     
-    $install = "/i"
+    $ServiceExists = Get-Service -Name $Servicename -ComputerName $Computername -ErrorAction SilentlyContinue
     
-    if ($remove -eq $true) 
-    {
-        $install = "/u" 
-    }
-  
+        if ($ServiceExists -ne $null)
+        {
+            Write-Host "Uninstalling service: $Servicename on Computer: $Computername"
+            $install = "/u"
+            Invoke-Command -ComputerName $Computername -Credential $credentials -ScriptBlock {
+            &'C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe' $using:ServiceExePath $using:install } 
+        }
     
-    Invoke-Command -ComputerName $Computername -Credential $credentials -ScriptBlock {
+    
+        $install = "/i"
 
-    &'C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe' $using:ServiceExePath $using:install
+        if ($remove -eq $true) 
+        {
+            $install = "/u" 
+        }
     
-    }
+        Write-Host "Installing Service: $Servicename on Computer: $Computername"
+
+        Invoke-Command -ComputerName $Computername -Credential $credentials -ScriptBlock {
+        &'C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe' $using:ServiceExePath $using:install }
 
 }
 
@@ -73,7 +84,7 @@ function fnStartRemoteService
         $Computername,
         $Servicename
     )
-        Write-Host "Starting"
+        Write-Host "Starting Service: $Servicename on Computer: $Computername"
         Get-Service -Name $Servicename -ComputerName $Computername | Start-Service
 }
 
