@@ -31,7 +31,6 @@
 
 		<property name="Source"
 				  not-null="false"
-				  type="string"
 				  length="50"/>
 		
 		<many-to-one name="ShiftCategory"
