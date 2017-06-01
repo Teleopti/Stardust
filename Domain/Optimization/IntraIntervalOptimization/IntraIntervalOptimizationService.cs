@@ -14,24 +14,27 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly IIntraIntervalOptimizer _intraIntervalOptimizer;
 		private readonly IIntraIntervalIssueCalculator _intraIntervalIssueCalculator;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+		private readonly IUserCulture _userCulture;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
 		public IntraIntervalOptimizationService(
 			IScheduleDayIntraIntervalIssueExtractor scheduleDayIntraIntervalIssueExtractor,
 			IIntraIntervalOptimizer intraIntervalOptimizer, IIntraIntervalIssueCalculator intraIntervalIssueCalculator,
-			ISchedulingOptionsCreator schedulingOptionsCreator)
+			ISchedulingOptionsCreator schedulingOptionsCreator,
+			IUserCulture userCulture)
 		{
 			_scheduleDayIntraIntervalIssueExtractor = scheduleDayIntraIntervalIssueExtractor;
 			_intraIntervalOptimizer = intraIntervalOptimizer;
 			_intraIntervalIssueCalculator = intraIntervalIssueCalculator;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
+			_userCulture = userCulture;
 		}
 
 		public void Execute(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-			var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var cultureInfo = _userCulture.GetCulture();
 
 			foreach (var skill in schedulingResultStateHolder.Skills)
 			{
