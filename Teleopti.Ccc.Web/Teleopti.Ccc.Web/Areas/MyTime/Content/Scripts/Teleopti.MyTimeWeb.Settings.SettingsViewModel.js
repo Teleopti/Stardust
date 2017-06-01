@@ -154,7 +154,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	};
 
 	self.generateQRCode = function () {
-		var defaultUrl = window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl + Teleopti.MyTimeWeb.AjaxSettings.defaultNavigation;
+		var defaultUrl = window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl;
 		if (self.customMobileAppBaseUrl()) {
 			ajax.Ajax({
 				url: "Settings/MobileQRCodeUrl",
@@ -186,7 +186,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 			var qr = qrcode(typeNumber, errorCorrectionLevel);
 			qr.addData(self.myTimeWebBaseUrl());
 			qr.make();
-			document.getElementById('#QRCodePlaceHolder').innerHTML = qr.createImgTag(5);
+			document.getElementById('QRCodePlaceHolder').innerHTML = qr.createImgTag(5);
 			self.generateAppLinkQRCode();
 			self.setupMouseEnterLeaveEventForAppsQRCode();
 		}
@@ -198,12 +198,12 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 		var qrAndroid = qrcode(typeNumber, errorCorrectionLevel);
 		qrAndroid.addData(self.androidAppLink());
 		qrAndroid.make();
-		document.getElementById('#AndroidApp').innerHTML = qrAndroid.createImgTag(5);
+		document.getElementById('AndroidApp').innerHTML = qrAndroid.createImgTag(5);
 
 		var qriOS = qrcode(typeNumber, errorCorrectionLevel);
 		qriOS.addData(self.iOSAppLink());
 		qriOS.make();
-		document.getElementById('#iOSApp').innerHTML = qriOS.createImgTag(5);
+		document.getElementById('iOSApp').innerHTML = qriOS.createImgTag(5);
 	};
 
 	self.setupMouseEnterLeaveEventForAppsQRCode = function(){

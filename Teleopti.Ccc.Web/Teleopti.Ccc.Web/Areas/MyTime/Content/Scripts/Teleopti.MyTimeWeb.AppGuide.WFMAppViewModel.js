@@ -17,7 +17,7 @@
 
 	self.generateMyTimeQRCode = function () {
 		var customUrl = self.myTimeCustomUrl();
-		var codeUrl = window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl + Teleopti.MyTimeWeb.AjaxSettings.defaultNavigation;
+		var codeUrl = window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl;
 		if (!!customUrl) {
 			codeUrl = customUrl;
 		}

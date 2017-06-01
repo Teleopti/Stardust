@@ -13,6 +13,9 @@
 		function() {
 			var target = new Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel();
 			target.generateMyTimeQRCode();
+
+			var expectedUrl = window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl;
 			equal(!!target.myTimeQRCode(), true);
+			equal(target.myTimeWebBaseUrl(), expectedUrl);
 		});
 });
