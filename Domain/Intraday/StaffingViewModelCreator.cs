@@ -124,14 +124,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 			dataSeries.RelativeDifference = new double?[dataSeries.ForecastedStaffing.Length];
 			for (var index = 0; index < dataSeries.ForecastedStaffing.Length; index++)
 			{
-				if (dataSeries.ForecastedStaffing[index].HasValue && dataSeries.ScheduledStaffing.Length == 0)
+				if (dataSeries.ForecastedStaffing[index].HasValue)
 				{
-					dataSeries.RelativeDifference[index] = -dataSeries.ForecastedStaffing[index];
-					continue;
-				}
+					if ( dataSeries.ScheduledStaffing.Length == 0)
+					{
+						dataSeries.RelativeDifference[index] = -dataSeries.ForecastedStaffing[index];
+						continue;
+					}
 
-				if (dataSeries.ForecastedStaffing[index].HasValue && dataSeries.ScheduledStaffing[index].HasValue)
-					dataSeries.RelativeDifference[index] = dataSeries.ScheduledStaffing[index] - dataSeries.ForecastedStaffing[index];
+					if (dataSeries.ScheduledStaffing[index].HasValue)
+						dataSeries.RelativeDifference[index] = dataSeries.ScheduledStaffing[index] - dataSeries.ForecastedStaffing[index];
+				}
+				
 			}
 		}
 
