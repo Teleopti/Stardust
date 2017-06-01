@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.IocCommon;
@@ -41,10 +42,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 			var ass1 = new PersonAssignment(agent1, scenario, date).WithLayer(activity, new TimePeriod(8, 15, 16, 15)).ShiftCategory(shiftCategory);
 			var ass2 = new PersonAssignment(agent2, scenario, date).WithLayer(activity, new TimePeriod(8, 15, 16, 30)).ShiftCategory(shiftCategory);
 			var stateHolder = StateHolder.Fill(scenario, date.ToDateOnlyPeriod(), agents, new[] { ass1, ass2 }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.OptimizationStepIntraInterval = true;
-		
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new []{agent1}, date.ToDateOnlyPeriod(), optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+			var optimizationPreferences = new OptimizationPreferences {General = {OptimizationStepIntraInterval = true, ScheduleTag = new ScheduleTag()}};
+
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new []{agent1}, date.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			stateHolder.Schedules[agent1].ScheduledDay(date).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
@@ -70,10 +70,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 				.WithOvertimeLayer(activity, new TimePeriod(16, 15, 16, 30));
 			var ass2 = new PersonAssignment(agent2, scenario, date).WithLayer(activity, new TimePeriod(8, 15, 16, 30)).ShiftCategory(shiftCategory);
 			var stateHolder = StateHolder.Fill(scenario, date.ToDateOnlyPeriod(), agents, new[] { ass1, ass2 }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.OptimizationStepIntraInterval = true;
+			var optimizationPreferences = new OptimizationPreferences { General = { OptimizationStepIntraInterval = true, ScheduleTag = new ScheduleTag() } };
 
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent1 }, date.ToDateOnlyPeriod(), optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent1 }, date.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			stateHolder.Schedules[agent1].ScheduledDay(date).PersonAssignment().OvertimeActivities().Any()
 				.Should().Be.True();
