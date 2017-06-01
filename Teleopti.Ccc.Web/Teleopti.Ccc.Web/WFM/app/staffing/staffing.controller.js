@@ -20,7 +20,6 @@
 		vm.hasSuggestionData = false;
 		vm.hasRequestedSuggestion = false;
 		vm.draggable = false;
-		vm.toggleDraggable = toggleDraggable;
 		vm.triggerResourceCalc = triggerResourceCalc;
 		vm.timeSerie = [];
 		vm.overTimeModels = [];
@@ -31,6 +30,7 @@
 		vm.useShrinkage = false;
 		vm.useShrinkageForStaffing = useShrinkageForStaffing;
 		vm.generateChart = generateChart;
+
 		var allSkills = [];
 		var allSkillAreas = [];
 		var currentSkills;
@@ -76,13 +76,13 @@
 			});
 		}
 
-	    function getSkillStaffingByDate(skillId, date, shrinkage) {
+		function getSkillStaffingByDate(skillId, date, shrinkage) {
 			var data = { SkillId: skillId, DateTime: date, UseShrinkage: shrinkage };
 			return staffingService.getSkillStaffingByDate.get(data);
 		}
 
 		function getSkillAreaStaffingByDate(skillAreaId, date, shrinkage) {
-            var data = { SkillAreaId: skillAreaId, DateTime: date, UseShrinkage: shrinkage };
+			var data = { SkillAreaId: skillAreaId, DateTime: date, UseShrinkage: shrinkage };
 			return staffingService.getSkillAreaStaffingByDate.get(data);
 		}
 
@@ -236,11 +236,6 @@
 
 		};
 
-		function toggleDraggable() {
-			vm.draggable = !vm.draggable
-			generateChartForView();
-		};
-
 		function triggerResourceCalc() {
 			staffingService.triggerResourceCalculate.get();
 			NoticeService.success('ResourceCalculation Triggered', 5000, true);
@@ -248,83 +243,105 @@
 
 		function generateColorObject(absoluteObj) {
 			var colors = {};
-			var scheduleColorKey = staffingData.scheduledStaffing[0];
+			var scafoldColorKey = staffingData.scheduledStaffing[0];
+			var staffingColorKey = staffingData.scheduledStaffingActual[0];
 			var absoluteColorKey = absoluteObj.data[0]
-			colors[scheduleColorKey] = '#009688';
+			colors[scafoldColorKey] = '#fff';
 			colors[absoluteColorKey] = '#66C2FF';
+			colors[staffingColorKey] = '#8c8282';
 			return colors;
+		}
+
+		function generateOverUnderStaffing() {
+			var staffing = {};
+			staffing.over = [];
+			staffing.under = [];
+			staffing.over.unshift('Overstaffing');
+			staffing.under.unshift('Understaffing');
+			for (var index = 1; index <= staffingData.scheduledStaffing.length; index++) {
+				var value = staffingData.scheduledStaffing[index] - staffingData.forcastedStaffing[index];
+
+				if (value < 0) {
+					staffing.under.push(Math.abs(value));
+					staffing.over.push(0);
+				} else {
+					staffing.over.push(value);
+					staffing.under.push(0);
+				}
+
+			}
+			return staffing
 		}
 
 		function generateTypeObject() {
 			var types = {};
 			var forcastingTypeKey = staffingData.forcastedStaffing[0];
+			var staffingTypeKey = staffingData.scheduledStaffing[0];
 			types[forcastingTypeKey] = 'line';
+			types[staffingTypeKey] = 'line';
 			return types;
 		}
 
-		function generateAbsoluteValue() {
-			var absoluteValue = {};
-			absoluteValue.data = [];
-			absoluteValue.actual = [];
-			absoluteValue.data.unshift('Absolute');
-			for (var index = 1; index <= staffingData.scheduledStaffing.length; index++) {
-				var value = staffingData.forcastedStaffing[index] - staffingData.scheduledStaffing[index];
+		function generateScaffold() {
+			var scaffold = {};
+			scaffold.under = staffingData.scheduledStaffing.concat();
+			scaffold.under.shift();
+			scaffold.under.unshift('UnderStaffScaffold');
 
-				if (value < 0) {
-					staffingData.scheduledStaffing[index] = staffingData.scheduledStaffing[index] + value;
-				}
-				absoluteValue.actual.push(value);
-				absoluteValue.data.push(Math.abs(value));
+			scaffold.over = staffingData.forcastedStaffing.concat();
+			scaffold.over.shift();
+			scaffold.over.unshift('OverStaffScaffold');
+			return scaffold;
+		}
+		function generateColorObjectV2(staffingObj, scaffoldObj) {
+			var colors = {};
+			var overstaffColorKey = staffingObj.over[0];
+			var understaffColorKey = staffingObj.under[0];
+			var overScaffoldKey = scaffoldObj.over[0];
+			var underScaffoldKey = scaffoldObj.under[0];
 
-			}
-			return absoluteValue
+			colors[overstaffColorKey] = '#4286f4';
+			colors[understaffColorKey] = '#f44141';
+			colors[underScaffoldKey] = '#fff';
+			colors[overScaffoldKey] = '#fff';
+			return colors;
 
 		}
 
-		function generateChartForView(input) {
-			var absoluteValue = generateAbsoluteValue();
+		function generateChartForView() {
+			var staffing = generateOverUnderStaffing();
+			var scaffold = generateScaffold();
 			var types = generateTypeObject();
-			var chartColors = generateColorObject(absoluteValue);
+			var chartColors = generateColorObjectV2(staffing, scaffold);
+
 			c3.generate({
 				bindto: '#staffingChart',
+				point: {
+					show: false
+				},
+				legend:{
+				hide:[scaffold.under[0], scaffold.over[0]],
+				},
 				data: {
+					colors: chartColors,
 					order: 'null',
 					type: 'bar',
-					types: types,
-					selection: {
-						enabled: vm.draggable,
-						draggable: vm.draggable,
-						multiple: vm.draggable,
-						grouped: vm.draggable
-
-					},
 					x: "x",
-					colors: chartColors,
+					types: types,
 					columns: [
 						staffingData.time,
-						staffingData.scheduledStaffing,
 						staffingData.forcastedStaffing,
-						absoluteValue.data,
+						staffingData.scheduledStaffing,
+						scaffold.over,
+						scaffold.under,
+						staffing.over,
+						staffing.under
+
 					],
 					groups: [
-						[absoluteValue.data[0], staffingData.scheduledStaffing[0]]
-					],
-					color: function (color, d) {
-						// d will be 'id' when called for legends¨
-						if (d.id && d.id === absoluteValue.data[0]) {
-							console.log(d, absoluteValue.actual[d.index]);
-							if (absoluteValue.actual[d.index] >= 0) {
-								return d3.rgb('#D32F2F')
-							}
-							/*if (staffingData.forcastedStaffing[d.index+1] - staffingData.scheduledStaffing[d.index+1] <= 0) {
-								console.log(d,staffingData.forcastedStaffing[d.index+1]- staffingData.scheduledStaffing[d.index+1]);  
-								return d3.color('#D32F2F');
-							}*/
-
-						}
-						return color;
-					}
-
+						[scaffold.over[0], staffing.over[0]],
+						[scaffold.under[0], staffing.under[0]]
+					]
 				},
 				axis: {
 					x: {

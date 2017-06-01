@@ -787,7 +787,6 @@
     <Compile Include="Core\Extensions\DateTimeFormatExtensions.cs" />
     <Compile Include="Core\Startup\CsrfFilter.cs" />
     <Compile Include="Core\Startup\InitializeApplication\PublishStartupJobsTask.cs" />
-    <Compile Include="Core\Startup\InitializeApplication\RequeueHangfireEventsTask.cs" />
     <Compile Include="Core\Startup\NoCacheFilter.cs" />
     <Compile Include="Core\Startup\OriginHandlerPipelineModule.cs" />
     <Compile Include="Core\Startup\TenantStartupTask.cs" />
@@ -1459,7 +1458,6 @@
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.min.js" />
-    <Content Include="WFM\app\forecasting\refact\forecast.html" />
     <Content Include="WFM\app\global\areas\menu-component.html" />
     <Content Include="WFM\app\global\areas\menu.component.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.controller.spec.js" />
@@ -1566,9 +1564,7 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.validation.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.validation.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_v2\resourceplanning.backend.fake.js" />
-    <Content Include="WFM\app\rtaTool\rtaTool.backend.fake.js" />
     <Content Include="WFM\app\rtaTool\rtaTool.controller.js" />
-    <Content Include="WFM\app\rtaTool\rtaTool.controller.spec.js" />
     <Content Include="WFM\app\rtaTool\rtaTool.html" />
     <Content Include="WFM\app\rtaTool\rtaTool.service.js" />
     <Content Include="WFM\app\rtaTool\rtaTool.state.provider.js" />
@@ -1650,6 +1646,7 @@
     <Content Include="WFM\app\staffing\staffing.html" />
     <Content Include="WFM\app\staffing\staffing.routes.js" />
     <Content Include="WFM\app\staffing\staffing.service.js" />
+    <Content Include="WFM\app\staffing\staffing.util.service.js" />
     <Content Include="WFM\app\staffing\_modules.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addOvertime.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsDatetimePicker.tpl.html" />
