@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_description = new Description(name);
 		}
 
-		public Activity()
+		public Activity() : base(true)
 		{
 			_description = new Description();
 		}

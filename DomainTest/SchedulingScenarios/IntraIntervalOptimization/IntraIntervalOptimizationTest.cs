@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 		{
 			var date = DateOnly.Today;
 			var scenario = new Scenario("_");
-			var activity = new Activity("_").WithId(); //activity utan namn borde också ingå i contract time!
+			var activity = new Activity().WithId();
 			var skill = new Skill().DefaultResolution(30).For(activity).WithId().IsOpen();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
 			var shiftCategory = new ShiftCategory("_").WithId();
