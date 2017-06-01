@@ -145,6 +145,7 @@ BEGIN
 		[Date] [datetime] NOT NULL,
 		[ShiftCategory] [uniqueidentifier] NULL,
 		[DayOffTemplate] [uniqueidentifier] NULL,
+		[Source] nvarchar(50) NULL
 	 CONSTRAINT [PK_PersonAssignment_new] PRIMARY KEY NONCLUSTERED 
 	(
 		[Id] ASC
@@ -160,7 +161,7 @@ BEGIN
 
 	--get data into new table
 	INSERT INTO [dbo].[PersonAssignment_new]
-	SELECT  Id, Version, UpdatedBy, UpdatedOn, Person, Scenario, Date, ShiftCategory, DayOffTemplate
+	SELECT  Id, Version, UpdatedBy, UpdatedOn, Person, Scenario, Date, ShiftCategory, DayOffTemplate, null
 	FROM [dbo].[PersonAssignment]
 
 	--rename tables
