@@ -81,15 +81,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public TimePeriod? GetSkillOpenHourPeriodByDate(IPersonSkill[] personSkills, IScheduleDay scheduleDay)
 		{
+			if (personSkills == null || !personSkills.Any())
+				return null;
+
 			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			IList<ISkill> skills;
 			if (scheduleDay.SignificantPartForDisplay()!= SchedulePartView.DayOff)
 			{
 				var personAssignment = scheduleDay.PersonAssignment();
 				if (personAssignment == null || personAssignment.ShiftLayers.IsEmpty())
-					return null;
-
-				if (personSkills == null || !personSkills.Any())
 					return null;
 
 				var scheduledActivities =

@@ -101,10 +101,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var hasVisualLayerYesterday = dayDomainData.ProjectionYesterday.Any(p => periodIsVisible(p.Period, date, timeZone));
 
 			var hasVisibleOvertimeToday = periodIsVisible(dayDomainData.OvertimeAvailability?.Period, date, timeZone);
-			var hasVisibleOvertimeYesterday = periodIsVisible(dayDomainData.OvertimeAvailabilityYesterday?.Period, date, timeZone);
+			var hasVisibleOvertimeYesterday = existsVisibleOvertimeYesterday(date, dayDomainData, timeZone);
 
 			var hasVisualSchedule = hasVisualLayerToday || hasVisualLayerYesterday || hasVisibleOvertimeToday || hasVisibleOvertimeYesterday;
 			return hasVisualSchedule;
+		}
+
+		private bool existsVisibleOvertimeYesterday(DateOnly date, WeekScheduleDayDomainData dayDomainData, TimeZoneInfo timeZone)
+		{
+			var hasVisibleOvertimeYesterday = false;
+			if (dayDomainData.OvertimeAvailabilityYesterday?.StartTime != null &&
+				dayDomainData.OvertimeAvailabilityYesterday.EndTime.HasValue)
+			{
+				var startTime = date.Date.AddDays(-1).AddTicks(dayDomainData.OvertimeAvailabilityYesterday.StartTime.Value.Ticks);
+				var endTime = date.Date.AddDays(-1).AddTicks(dayDomainData.OvertimeAvailabilityYesterday.EndTime.Value.Ticks);
+				if (endTime == date.Date)
+				{
+					endTime = endTime.AddMinutes(-1);
+				}
+				var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(startTime, timeZone),
+					TimeZoneHelper.ConvertToUtc(endTime, timeZone));
+				hasVisibleOvertimeYesterday = periodIsVisible(period, date, timeZone);
+			}
+			return hasVisibleOvertimeYesterday;
 		}
 
 		private bool needAdjustTimeline(StaffingPossiblityType staffingPossiblityType, DateOnly date, bool forThisWeek)

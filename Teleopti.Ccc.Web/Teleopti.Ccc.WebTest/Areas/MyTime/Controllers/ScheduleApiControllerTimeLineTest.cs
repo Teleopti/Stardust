@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -170,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldNotAdjustTimelineWithSiteOpenHourWhenCurrentWeekOutOfRange()
 		{
 			addSiteOpenHour(new SiteOpenHour
@@ -309,7 +310,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldAdjustTimeLineBySkillOpenHourWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
 			var skill = addSkill();
@@ -323,7 +324,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldAdjustTimeLineByFullDaySkillOpenHourWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
 			var skill = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
@@ -337,7 +338,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldAdjustTimeLineByMultipleDaySkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
 			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -355,7 +356,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldNotAdjustTimeLineByNonInBoundPhoneSkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -370,7 +371,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldNotAdjustTimeLineBySkillOpenHoursWhenNoSkillAreScheduled()
 		{
 			addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -397,7 +398,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldInflateMinMaxTimeAfterAdjustBySkillOpenHourWeekSchedule()
 		{
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -430,7 +431,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldInflateMinMaxTimeAfterAdjustBySiteOpenHourWeekSchedule()
 		{
 			addSiteOpenHour();
@@ -449,7 +450,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldNotAdjustTimeLineBySkillOpenHoursWhenStaffingDataIsNotAvailableForTheDay()
 		{
 			addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -464,7 +465,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldAdjustTimelineBySiteOpenHourAndSkillOpenHourWeekSchedule()
 		{
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -503,7 +504,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		
 		public void ShouldAdjustTimeLineBySkillOpenHoursOnlyWithDayOff()
 		{
 			addSkill();
@@ -513,6 +514,58 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 18, 15);
+		}
+
+		[Test]
+		public void ShouldUseDefaultTimeLineForNoScheduledDayWhenYesterdayHasNoNextDayOvertimeAvaibility()
+		{
+			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 17, 9, 45, 0, DateTimeKind.Utc));
+			addAssignment(new DateOnly(2014, 12, 17), new activityDto { Activity = new Activity(), Period = period });
+
+			IOvertimeAvailability overtimeAvailability =
+				new OvertimeAvailability(User.CurrentUser(), Now.LocalDateOnly().AddDays(-1), TimeSpan.FromHours(11), TimeSpan.FromHours(12));
+			ScheduleData.Add(overtimeAvailability);
+			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 15, 0);
+		}
+
+		[Test]
+		public void ShouldUseDefaultTimeLineForNoScheduledDayWhenYesterdayHasNextDayOvertimeAvaibilityEndsAtZero()
+		{
+			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 17, 9, 45, 0, DateTimeKind.Utc));
+			addAssignment(new DateOnly(2014, 12, 17), new activityDto { Activity = new Activity(), Period = period });
+
+			IOvertimeAvailability overtimeAvailability =
+				new OvertimeAvailability(User.CurrentUser(), Now.LocalDateOnly().AddDays(-1), TimeSpan.FromHours(23), TimeSpan.FromDays(1));
+			ScheduleData.Add(overtimeAvailability);
+			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 15, 0);
+		}
+
+		[Test]
+		public void ShouldGetCorrectPercentageForNoScheduledDayWhenYesterdayHasNextDayOvertimeAvaibilityEndsInFirstHour()
+		{
+			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 17, 9, 45, 0, DateTimeKind.Utc));
+			addAssignment(new DateOnly(2014, 12, 17), new activityDto { Activity = new Activity(), Period = period });
+
+			IOvertimeAvailability overtimeAvailability =
+				new OvertimeAvailability(User.CurrentUser(), Now.LocalDateOnly().AddDays(-1), TimeSpan.FromHours(23),
+					TimeSpan.FromDays(1).Add(TimeSpan.FromMinutes(30)));
+			ScheduleData.Add(overtimeAvailability);
+			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+
+			var timelines = result.TimeLine.ToList();
+			AssertTimeLine(timelines, 0, 0, 1, 0);
+			timelines.Count.Should().Be(2);
+			timelines[0].PositionPercentage.Should().Be(0);
+			timelines[1].PositionPercentage.Should().Be(1);
+			result.Schedule.Periods.ElementAt(0).StartPositionPercentage.Should().Be(0);
+			result.Schedule.Periods.ElementAt(0).EndPositionPercentage.Should().Be(0.5);
 		}
 
 		private void AssertTimeLine(IList<TimeLineViewModel> timeLine, int startHour, int startMinute, int endHour, int endMinute)

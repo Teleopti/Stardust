@@ -210,6 +210,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 		private IEnumerable<TimeLineViewModel> createTimeLine(TimePeriod timelinePeriod)
 		{
+			timelinePeriod = adjustMinEndTime(timelinePeriod);
 			var startTime = timelinePeriod.StartTime;
 			var endTime = timelinePeriod.EndTime;
 
@@ -225,7 +226,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.Append(firstHour)
 				.OrderBy(t => t)
 				.Distinct();
-
 			var diff = endTime - startTime;
 			return times.Select(t => new TimeLineViewModel
 			{
@@ -249,12 +249,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			}
 
 			var periodViewModelFactory = _periodViewModelFactory;
-			var periodsViewModels = periodViewModelFactory.CreatePeriodViewModels(projectionList, s.MinMaxTime, s.Date.Date,
+			var minMaxTime = adjustMinEndTime(s.MinMaxTime);
+			var periodsViewModels = periodViewModelFactory.CreatePeriodViewModels(projectionList, minMaxTime, s.Date.Date,
 				s.ScheduleDay?.TimeZone) ?? new PeriodViewModel[0];
 			var overtimeAvailabilityPeriodViewModels =
 				periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability,
-					s.OvertimeAvailabilityYesterday, s.MinMaxTime) ?? new OvertimeAvailabilityPeriodViewModel[0];
+					s.OvertimeAvailabilityYesterday, minMaxTime) ?? new OvertimeAvailabilityPeriodViewModel[0];
 			return periodsViewModels.Concat(overtimeAvailabilityPeriodViewModels).OrderBy(p => p.StartTime);
+		}
+
+		private TimePeriod adjustMinEndTime(TimePeriod period)
+		{
+			if (period.EndTime < TimeSpan.FromHours(1))
+			{
+				return new TimePeriod(period.StartTime, TimeSpan.FromHours(1));
+			}
+			return period;
 		}
 
 		private OvertimeAvailabilityViewModel overtimeAvailability(WeekScheduleDayDomainData s)
