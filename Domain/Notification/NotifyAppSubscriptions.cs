@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -59,14 +60,19 @@ namespace Teleopti.Ccc.Domain.Notification
 				{
 					var logOnContext =
 						new InputWithLogOnContext(_dataSource.CurrentName(), _currentBusinessUnit.Current().Id.GetValueOrDefault());
+					var notification = new { title = messages.Subject, body = string.Join(" ", messages.Messages) };
 
+					dynamic requestBody = new ExpandoObject();
+					requestBody.registration_ids = setting.TokenList;
+					requestBody.notification = notification;
+					if (messages.Data != null)
+					{
+						messages.Data.title = notification.title;
+						messages.Data.body = notification.body;
+						requestBody.data = (object)messages.Data;
+					}
 					var responseMessage = await _httpServer.Post("https://fcm.googleapis.com/fcm/send",
-						new
-						{
-							registration_ids = setting.TokenList,
-							notification = new { title = messages.Subject, body = string.Join(" ", messages.Messages) },
-							data = messages.Data
-						},
+						(object)requestBody,
 						s => new NameValueCollection { { "Authorization", key } });
 
 					var invalidTokens = await getUserDevicesInvalidTokenAsync(setting.TokenList, responseMessage);

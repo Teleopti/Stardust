@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Globalization;
 using System.Linq;
 using log4net;
@@ -74,7 +75,8 @@ namespace Teleopti.Ccc.Domain.Notification
 			}
 
 			ret.Subject = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged", lang);
-			ret.Data = new { domainType = nameof(ScheduleChangedInDefaultScenario) };
+			ret.Data = new ExpandoObject();
+			ret.Data.domainType = nameof(ScheduleChangedInDefaultScenario);
 			return ret;
 		}
 	}

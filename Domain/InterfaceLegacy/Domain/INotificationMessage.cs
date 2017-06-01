@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IList<string> Messages { get; }
 		string CustomerName { get; set; }
 
-		object Data { get; set; }
+		dynamic Data { get; set; }
 	}
 }
