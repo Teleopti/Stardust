@@ -51,17 +51,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
-			PeriodResource resources;
-			if (!_dictionary.TryGetValue(resourceLayer.Period, out resources))
+			try
 			{
-				return;
+				if (!_dictionary.TryGetValue(resourceLayer.Period, out PeriodResource resources))
+					return;
+
+				var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
+				if (skills.Key.Length == 0) return;
+				var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
+
+				resources.RemoveResource(key, skills, resourceLayer.Resource, resourceLayer.FractionPeriod);
 			}
-
-			var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
-			if (skills.Key.Length == 0) return;
-			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
-
-			resources.RemoveResource(key, skills, resourceLayer.Resource, resourceLayer.FractionPeriod);
+			catch (ArgumentOutOfRangeException ex) //just to get more info if/when #44525 occurs
+			{
+				throw new ArgumentOutOfRangeException($"Resources are negative for agent {person.Id.GetValueOrDefault()} on date {personDate.Date}", ex);
+			}
 		}
 
 		public IEnumerable<DateTimePeriod> IntraIntervalResources(ISkill skill, DateTimePeriod period)
