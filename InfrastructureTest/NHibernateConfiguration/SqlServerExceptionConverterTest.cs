@@ -34,14 +34,19 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			PersistAndRemoveFromUnitOfWork(scenario);
 			var ass1 = new PersonAssignment(per1, scenario, new DateOnly(2000,1,1));
 			var ass2 = new PersonAssignment(per1, scenario, new DateOnly(2000,1,1));
-			Assert.Throws<ConstraintViolationException>(() =>
+			try
 			{
 				var rep = new PersonAssignmentRepository(UnitOfWork);
 				rep.Add(ass1);
 				rep.Add(ass2);
 				UnitOfWork.PersistAll();
-			});
-
+			}
+			catch (ConstraintViolationException)
+			{
+				ok = true;
+			}
+			if (!ok)
+				Assert.Fail("ConstraintViolationException was not thrown!");
 		}
 
 		[Test]
