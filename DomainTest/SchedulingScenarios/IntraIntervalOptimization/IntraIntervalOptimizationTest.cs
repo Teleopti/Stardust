@@ -38,10 +38,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
 			var agent1 = new Person().WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date).WithId().InTimeZone(TimeZoneInfo.Utc);
 			var agent2 = new Person().WithPersonPeriod(skill).WithId().InTimeZone(TimeZoneInfo.Utc);
-			var agents = new[] {agent1, agent2};
 			var ass1 = new PersonAssignment(agent1, scenario, date).WithLayer(activity, new TimePeriod(8, 15, 16, 15)).ShiftCategory(shiftCategory);
 			var ass2 = new PersonAssignment(agent2, scenario, date).WithLayer(activity, new TimePeriod(8, 15, 16, 30)).ShiftCategory(shiftCategory);
-			var stateHolder = StateHolder.Fill(scenario, date.ToDateOnlyPeriod(), agents, new[] { ass1, ass2 }, skillDay);
+			var stateHolder = StateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent1, agent2 }, new[] { ass1, ass2 }, skillDay);
 			var optimizationPreferences = new OptimizationPreferences {General = {OptimizationStepIntraInterval = true, ScheduleTag = new ScheduleTag()}};
 
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new []{agent1}, date.ToDateOnlyPeriod(), optimizationPreferences, null);
@@ -64,12 +63,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
 			var agent1 = new Person().WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date).WithId().InTimeZone(TimeZoneInfo.Utc);
 			var agent2 = new Person().WithPersonPeriod(skill).WithId().InTimeZone(TimeZoneInfo.Utc);
-			var agents = new[] { agent1, agent2 };
 			var ass1 = new PersonAssignment(agent1, scenario, date).ShiftCategory(shiftCategory)
 				.WithLayer(activity, new TimePeriod(8, 15, 16, 15))
 				.WithOvertimeLayer(activity, new TimePeriod(16, 15, 16, 30));
 			var ass2 = new PersonAssignment(agent2, scenario, date).WithLayer(activity, new TimePeriod(8, 15, 16, 30)).ShiftCategory(shiftCategory);
-			var stateHolder = StateHolder.Fill(scenario, date.ToDateOnlyPeriod(), agents, new[] { ass1, ass2 }, skillDay);
+			var stateHolder = StateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent1, agent2 }, new[] { ass1, ass2 }, skillDay);
 			var optimizationPreferences = new OptimizationPreferences { General = { OptimizationStepIntraInterval = true, ScheduleTag = new ScheduleTag() } };
 
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent1 }, date.ToDateOnlyPeriod(), optimizationPreferences, null);
