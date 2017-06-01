@@ -228,8 +228,6 @@ $(document).ready(function() {
 		vm.initializeData(fakeScheduleData);
 		equal(vm.days().length, 2);
 		equal(vm.days()[0].headerTitle(), fakeScheduleData.Days[0].Header.Title);
-		equal(vm.days()[0].headerDayDescription(), fakeScheduleData.Days[0].Header.DayDescription);
-		equal(vm.days()[0].summary(), fakeScheduleData.Days[0].Summary.Summary);
 		equal(vm.days()[0].summary(), fakeScheduleData.Days[0].Summary.Summary);
 		equal(vm.days()[0].summaryTitle(), fakeScheduleData.Days[0].Summary.Title);
 		equal(vm.days()[0].summaryTimeSpan(), fakeScheduleData.Days[0].Summary.TimeSpan);
