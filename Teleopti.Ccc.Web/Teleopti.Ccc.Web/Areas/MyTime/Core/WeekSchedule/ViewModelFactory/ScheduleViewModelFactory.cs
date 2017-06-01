@@ -110,11 +110,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private bool existsVisibleOvertimeYesterday(DateOnly date, WeekScheduleDayDomainData dayDomainData, TimeZoneInfo timeZone)
 		{
 			var hasVisibleOvertimeYesterday = false;
-			if (dayDomainData.OvertimeAvailabilityYesterday?.StartTime != null &&
-				dayDomainData.OvertimeAvailabilityYesterday.EndTime.HasValue)
+			var yesterdayOvertimeAvailability = dayDomainData.OvertimeAvailabilityYesterday;
+			if (yesterdayOvertimeAvailability?.StartTime != null && yesterdayOvertimeAvailability.EndTime != null)
 			{
-				var startTime = date.Date.AddDays(-1).AddTicks(dayDomainData.OvertimeAvailabilityYesterday.StartTime.Value.Ticks);
-				var endTime = date.Date.AddDays(-1).AddTicks(dayDomainData.OvertimeAvailabilityYesterday.EndTime.Value.Ticks);
+				var yesterdayDate = date.Date.AddDays(-1);
+				var startTime = yesterdayDate.Add(yesterdayOvertimeAvailability.StartTime.Value);
+				var endTime = yesterdayDate.Add(yesterdayOvertimeAvailability.EndTime.Value);
 				if (endTime == date.Date)
 				{
 					endTime = endTime.AddMinutes(-1);
