@@ -9,6 +9,9 @@
 		var vm = this;
 
 		vm.searchPlaceholder = $translate.instant('Search');
+		vm.translations = {};
+		vm.translations.From = $translate.instant('DateFrom');
+		vm.translations.To = $translate.instant('DateTo');
 		vm.pageSizeOptions = [20, 50, 100, 200];
 		vm.paging = {
 			pageSize: 20,

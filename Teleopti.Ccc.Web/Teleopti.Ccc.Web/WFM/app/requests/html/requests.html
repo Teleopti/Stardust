@@ -27,8 +27,9 @@
 			</div>
 
 			<date-range-picker id="Request-period" class="request-date-range-picker" ng-model="vm.period"
-							   template-type="vm.dateRangeTemplateType"
-							   custom-validators="vm.dateRangeCustomValidators"></date-range-picker>
+				translations="vm.translations"
+				template-type="vm.dateRangeTemplateType"
+				custom-validators="vm.dateRangeCustomValidators"></date-range-picker>
 
 			<div class="wfm-switch filter-switch" ng-if="vm.filterToggleEnabled">
 				<input type="checkbox" id="filter-switch" ng-model="vm.filterEnabled" />
