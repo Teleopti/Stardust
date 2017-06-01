@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 	{
 		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> StateHolder;
-		public IResourceCalculation ResourceCalculation; //Should (probably) not be here...
-
+		
 		[Test]
 		public void ShouldSolveIntraIntervalIssue()
 		{
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 			var scenario = new Scenario("_");
 			var activity = new Activity("_").WithId(); //activity utan namn borde också ingå i contract time!
 			var skill = new Skill().DefaultResolution(30).For(activity).WithId().IsOpen();
-			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 2); //behövs denna
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
 			var agent1 = new Person().WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date).WithId().InTimeZone(TimeZoneInfo.Utc);
@@ -45,8 +44,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optimizationPreferences.General.OptimizationStepIntraInterval = true;
 			optimizationPreferences.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.SingleAgent); //change default value instead
-			ResourceCalculation.ResourceCalculate(date, new ResourceCalculationData(stateHolder.SchedulingResultState, true, true));
-
+		
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new []{agent1}, date.ToDateOnlyPeriod(), optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
 			stateHolder.Schedules[agent1].ScheduledDay(date).PersonAssignment().Period.StartDateTime.TimeOfDay

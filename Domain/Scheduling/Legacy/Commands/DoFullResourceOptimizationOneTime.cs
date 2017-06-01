@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var stateHolder = _schedulerStateHolder();
 			if (!stateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade())
 			{
-				_resourceCalculation.ResourceCalculate(stateHolder.RequestedPeriod.DateOnlyPeriod, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
+				_resourceCalculation.ResourceCalculate(stateHolder.RequestedPeriod.DateOnlyPeriod, new ResourceCalculationData(stateHolder.SchedulingResultState, false, true));
 			}
 		}
 	}
