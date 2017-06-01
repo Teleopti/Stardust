@@ -50,9 +50,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 		}
 
 
-		[Test]
+		[TestCase(true)]
+		[TestCase(false)]
 		[Ignore("44551 to fixed")]
-		public void ShouldNotRemoveOvertimeLayers()
+		public void ShouldNotRemoveOvertimeLayers(bool teamblock)
 		{
 			var date = DateOnly.Today;
 			var scenario = new Scenario("_");
@@ -69,6 +70,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 			var ass2 = new PersonAssignment(agent2, scenario, date).WithLayer(activity, new TimePeriod(8, 15, 16, 30)).ShiftCategory(shiftCategory);
 			var stateHolder = StateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent1, agent2 }, new[] { ass1, ass2 }, skillDay);
 			var optimizationPreferences = new OptimizationPreferences { General = { OptimizationStepIntraInterval = true, ScheduleTag = new ScheduleTag() } };
+			if (teamblock)
+			{
+				optimizationPreferences.Extra.UseTeamBlockOption = true;
+				optimizationPreferences.Extra.UseBlockSameShiftCategory = true;
+			}
 
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent1 }, date.ToDateOnlyPeriod(), optimizationPreferences, null);
 
