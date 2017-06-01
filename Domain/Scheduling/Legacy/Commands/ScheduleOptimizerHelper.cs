@@ -358,14 +358,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, Resources.CollectingData, optimizationPreferences.Advanced.RefreshScreenInterval);
 			_backgroundWorker.ReportProgress(1, args);
-			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _stateHolder().PersonsInOrganization, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(),
 				tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 				schedulingOptions.ConsiderShortBreaks, _stateHolder(), _userTimeZone);
 			_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedAgents,
-				_schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer,
-				_backgroundWorker);
+				rollbackService, resourceCalculateDelayer, _backgroundWorker);
 		}
 
 		private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(

@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("44551 to fixed")]
 		public void ShouldNotRemoveOvertimeLayers(bool teamblock)
 		{
 			var date = DateOnly.Today;
