@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public bool UseTeams { get; set; }
 		public bool UseTeamSameDaysOff { get; set; }
-		public GroupPageLight TeamGroupPage { get; set; }
-	
+		public GroupPageLight TeamGroupPage { get; set; } = new GroupPageLight("not set", GroupPageType.SingleAgent);
+
 		public bool UseTeamSameStartTime { get; set; }
 		public bool UseTeamSameEndTime { get; set; }
 		public bool UseTeamSameShiftCategory { get; set; }

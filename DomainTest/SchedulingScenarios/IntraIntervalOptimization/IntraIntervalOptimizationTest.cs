@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 			var stateHolder = StateHolder.Fill(scenario, date.ToDateOnlyPeriod(), agents, new[] { ass1, ass2 }, skillDay);
 			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optimizationPreferences.General.OptimizationStepIntraInterval = true;
-			optimizationPreferences.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.SingleAgent); //change default value instead
 		
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new []{agent1}, date.ToDateOnlyPeriod(), optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
