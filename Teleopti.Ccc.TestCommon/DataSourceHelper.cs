@@ -142,7 +142,10 @@ namespace Teleopti.Ccc.TestCommon
 			}
 
 			createDatabase(database);
-
+			
+			//would be better if dbmanager was called, but don't have the time right now....
+			// eh, that thing that is called IS the db manager!
+			application().ConfigureSystem().MergePersonAssignments();
 			database.ConfigureSystem().PersistAuditSetting();
 			database.ConfigureSystem().SetTenantConnectionInfo(name, database.ConnectionString, analytics().ConnectionString);
 
