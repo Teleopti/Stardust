@@ -257,12 +257,13 @@
 			return colors;
 		}
 
-		function generateOverUnderStaffing() {
+        function generateOverUnderStaffing() {
 			var staffing = {};
 			staffing.over = [];
-			staffing.under = [];
+            staffing.under = [];
 			staffing.over.unshift('Overstaffing');
-			staffing.under.unshift('Understaffing');
+            staffing.under.unshift('Understaffing');
+			
 			for (var index = 1; index <= staffingData.scheduledStaffing.length; index++) {
 				var value = staffingData.scheduledStaffing[index] - staffingData.forcastedStaffing[index];
 
@@ -274,7 +275,8 @@
 					staffing.under.push(0);
 				}
 
-			}
+            }
+            
 			return staffing
 		}
 
@@ -327,9 +329,9 @@
 				if (!(d[i] && (d[i].value || d[i].value === 0))) { continue; }
 
 				if (d[i].name === 'OverStaffScaffold' || d[i].name === 'UnderStaffScaffold') { continue; }
-
+               
 				if (!text) {
-					title = 'Staffing'
+                    title = staffingData.time[d[i].index+1];
 					text = "<table class='" + CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
 				}
 
@@ -346,7 +348,7 @@
 		}
 
 		function generateChartForView() {
-			var staffing = generateOverUnderStaffing();
+            var staffing = generateOverUnderStaffing();
 			var scaffold = generateScaffold();
 			var types = generateTypeObject();
 			var chartColors = generateColorObject(staffing, scaffold);
