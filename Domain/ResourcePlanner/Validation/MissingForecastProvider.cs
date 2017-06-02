@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			return result;
 		}
 
-		public IEnumerable<MissingForecastModel> GetMissingForecast(ICollection<IPerson> people, DateOnlyPeriod range, IEnumerable<SkillMissingForecast> existingForecast)
+		public IEnumerable<MissingForecastModel> GetMissingForecast(IEnumerable<IPerson> people, DateOnlyPeriod range, IEnumerable<SkillMissingForecast> existingForecast)
 		{
 			var missingForecasts = GetMissingForecast(range, existingForecast).ToList();
 			var skills = new HashSet<ISkill>();

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var existingForecast = _existingForecastRepository.ExistingForecastForAllSkills(parameters.Period, scenario);
 
-			return _schedulingValidator.Validate(parameters, existingForecast);
+			return _schedulingValidator.Validate(parameters.People, parameters.Period, existingForecast);
 		}
 	}
 }

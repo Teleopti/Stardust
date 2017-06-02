@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonSkillValidator
 	{
-		public IEnumerable<PersonValidationError> GetPeopleMissingSkill(ICollection<IPerson> people, DateOnlyPeriod range)
+		public IEnumerable<PersonValidationError> GetPeopleMissingSkill(IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			return (from person in people
 				let periods = person.PersonPeriods(range)

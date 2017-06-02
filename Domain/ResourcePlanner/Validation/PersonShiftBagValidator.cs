@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonShiftBagValidator
 	{
-		public IEnumerable<PersonValidationError> GetPeopleMissingShiftBag(ICollection<IPerson> people, DateOnlyPeriod range)
+		public IEnumerable<PersonValidationError> GetPeopleMissingShiftBag(IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			var list = new List<PersonValidationError>();
 			foreach (var person in people)

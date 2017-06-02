@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonContractScheduleValidator
 	{
-		public IEnumerable<PersonValidationError> GetPeopleMissingContractSchedule(ICollection<IPerson> people, DateOnlyPeriod range)
+		public IEnumerable<PersonValidationError> GetPeopleMissingContractSchedule(IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			var list = new List<PersonValidationError>();
 			foreach (var person in people)

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
@@ -34,24 +36,24 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			_personContractScheduleValidator = personContractScheduleValidator;
 		}
 
-		public ValidationResult Validate(ValidationParameters parameters, IEnumerable<SkillMissingForecast> existingForecast)
+		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period, IEnumerable<SkillMissingForecast> existingForecast)
 		{
 			var result = new ValidationResult();
-			_missingForecastProvider.GetMissingForecast(parameters.People, parameters.Period, existingForecast)
+			_missingForecastProvider.GetMissingForecast(agents, period, existingForecast)
 				.ForEach(r => result.Add(r));
-			_personPeriodValidator.GetPeopleMissingPeriod(parameters.People, parameters.Period)
+			_personPeriodValidator.GetPeopleMissingPeriod(agents, period)
 				.ForEach(r => result.Add(r));
-			_personSkillValidator.GetPeopleMissingSkill(parameters.People, parameters.Period)
+			_personSkillValidator.GetPeopleMissingSkill(agents, period)
 				.ForEach(r => result.Add(r));
-			_personSchedulePeriodValidator.GetPeopleMissingSchedulePeriod(parameters.People, parameters.Period)
+			_personSchedulePeriodValidator.GetPeopleMissingSchedulePeriod(agents, period)
 				.ForEach(r => result.Add(r));
-			_personShiftBagValidator.GetPeopleMissingShiftBag(parameters.People, parameters.Period)
+			_personShiftBagValidator.GetPeopleMissingShiftBag(agents, period)
 				.ForEach(r => result.Add(r));
-			_partTimePercentageValidator.GetPeopleMissingPartTimePercentage(parameters.People, parameters.Period)
+			_partTimePercentageValidator.GetPeopleMissingPartTimePercentage(agents, period)
 				.ForEach(r => result.Add(r));
-			_personContractValidator.GetPeopleMissingContract(parameters.People, parameters.Period)
+			_personContractValidator.GetPeopleMissingContract(agents, period)
 				.ForEach(r => result.Add(r));
-			_personContractScheduleValidator.GetPeopleMissingContractSchedule(parameters.People, parameters.Period)
+			_personContractScheduleValidator.GetPeopleMissingContractSchedule(agents, period)
 				.ForEach(r => result.Add(r));
 			return result;
 		}

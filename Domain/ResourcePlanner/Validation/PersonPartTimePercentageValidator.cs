@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonPartTimePercentageValidator
 	{
-		public IEnumerable<PersonValidationError> GetPeopleMissingPartTimePercentage(ICollection<IPerson> people, DateOnlyPeriod range)
+		public IEnumerable<PersonValidationError> GetPeopleMissingPartTimePercentage(IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			var list = new List<PersonValidationError>();
 			foreach (var person in people)

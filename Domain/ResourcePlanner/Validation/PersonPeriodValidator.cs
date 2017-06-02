@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonPeriodValidator
 	{
-		public IEnumerable<PersonValidationError> GetPeopleMissingPeriod(ICollection<IPerson> people, DateOnlyPeriod range)
+		public IEnumerable<PersonValidationError> GetPeopleMissingPeriod(IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			var list = new List<PersonValidationError>();
 			foreach (var person in people)
