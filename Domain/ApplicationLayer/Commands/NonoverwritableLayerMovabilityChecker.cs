@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var conflictVisualLayers = projection.Where(l =>
 			{
 				var activityLayer = l.Payload as IActivity;
-				return (activityLayer != null && l.Period.Intersect(newPeriod) && !activityLayer.AllowOverwrite);
+				return activityLayer != null && l.Period.Intersect(newPeriod) && !activityLayer.AllowOverwrite;
 			}).ToList();
 
 			return conflictVisualLayers.SelectMany(l => _projectionHelper.GetMatchedMainShiftLayers(scheduleDay, l)).ToList();

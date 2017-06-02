@@ -47,25 +47,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 		public void Calculate(CalculateBadgeMessage message)
 		{
-			var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().ToList();
-			var settings = teamSettings.Select(t => t.GamificationSetting).Distinct();
+			var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().ToLookup(t => t.GamificationSetting);
+			var settings = teamSettings.Select(t => t.Key);
 			var calculateDate = new DateOnly(message.CalculationDate);
 
 			foreach (var setting in settings)
 			{
-				var settingId = setting.Id;
 				if (setting.IsDeleted ||
-					(!setting.AHTBadgeEnabled && !setting.AdherenceBadgeEnabled && !setting.AnsweredCallsBadgeEnabled))
+					!setting.AHTBadgeEnabled && !setting.AdherenceBadgeEnabled && !setting.AnsweredCallsBadgeEnabled)
 				{
 					continue;
 				}
 
 				var agentsWithSetting = new List<IPerson>();
-				var currentDate = new DateOnly(message.CalculationDate);
-				foreach (var teamSetting in teamSettings.Where(teamSetting => teamSetting.GamificationSetting.Id == settingId))
+				foreach (var teamSetting in teamSettings[setting])
 				{
-					agentsWithSetting.AddRange(_personRepository.FindPeopleBelongTeam(teamSetting.Team,
-						new DateOnlyPeriod(currentDate.AddDays(-1), currentDate.AddDays(1))));
+					agentsWithSetting.AddRange(_personRepository.FindPeopleBelongTeam(teamSetting.Team, calculateDate.ToDateOnlyPeriod().Inflate(1)));
 				}
 				agentsWithSetting = agentsWithSetting.Distinct().ToList();
 

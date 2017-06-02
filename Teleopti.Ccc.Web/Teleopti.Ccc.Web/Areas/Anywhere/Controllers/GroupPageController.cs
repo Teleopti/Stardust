@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				buildInGroupPages.Insert(0, businessHierarchyPage);
 
 			var groupPages = buildInGroupPages.Union(customGroupPages).ToList();
-			var allAvailableGroups = _groupingReadOnlyRepository.AvailableGroups(groupPages, new DateOnly(date));
+			var queryDate = new DateOnly(date);
+			var allAvailableGroups = _groupingReadOnlyRepository.AvailableGroups(groupPages, queryDate).ToLookup(t => t.PageId);
 
 			var actualGroupPages = groupPages.Select(gp =>
 			{
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				return new
 				{
 					Name = name,
-					Groups = allAvailableGroups.Where(g => g.PageId == gp.PageId).Select(g => new
+					Groups = allAvailableGroups[gp.PageId].Select(g => new
 					{
 						Name = gp.PageId == Group.PageMainId ? g.GroupName : name + "/" + g.GroupName,
 						Id = g.GroupId
@@ -72,8 +73,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				};
 			}).ToList();
 
-			var team = _loggedOnUser.CurrentUser().MyTeam(new DateOnly(date));
-			var defaultGroupId = team != null ? team.Id : null;
+			var team = _loggedOnUser.CurrentUser().MyTeam(queryDate);
+			var defaultGroupId = team?.Id;
 
 			return Ok(new {GroupPages = actualGroupPages, DefaultGroupId = defaultGroupId});
 		}

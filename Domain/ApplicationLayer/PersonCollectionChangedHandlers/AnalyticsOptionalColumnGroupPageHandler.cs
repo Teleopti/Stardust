@@ -84,10 +84,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				.Select(x => x.Key)
 				.ToList();
 
+			var people = personValues.ToLookup(p => p.Description);
 			foreach (var groupName in groups)
 			{
-				var personsInGroup = personValues
-					.Where(x => x.Description == groupName)
+				var personsInGroup = people[groupName]
 					.Select(x => x.ReferenceObject.Id.Value)
 					.ToList();
 				var groupCode = newDimGroupPages
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		{
 			var dimGroupPages = personValues
 				.GroupBy(g => g.Description)
-				.Select(s => new AnalyticsGroupPerson()
+				.Select(s => new AnalyticsGroupPerson
 				{
 					GroupPageCode = optionalColumn.Id.Value,
 					GroupPageName = optionalColumn.Name,

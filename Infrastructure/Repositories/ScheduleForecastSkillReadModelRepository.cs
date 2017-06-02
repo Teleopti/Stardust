@@ -163,13 +163,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid[] ids, DateTimePeriod period)
 		{
-			var allIntervals = GetBySkills(ids, period.StartDateTime, period.EndDateTime).ToList();
+			var allIntervals = GetBySkills(ids, period.StartDateTime, period.EndDateTime).ToLookup(s => s.SkillId);
 			var mergedStaffingIntervals = new List<SkillStaffingInterval>();
-			var allIntervalChanges = GetReadModelChanges(period);
+			var allIntervalChanges = GetReadModelChanges(period).ToLookup(s => s.SkillId);
 			foreach (var skillId in ids)
 			{
-				var skillStaffingIntervals = allIntervals.Where(x => x.SkillId == skillId);
-				var skillIntervalChanges = allIntervalChanges.Where(x => x.SkillId == skillId).ToList();
+				var skillStaffingIntervals = allIntervals[skillId];
+				var skillIntervalChanges = allIntervalChanges[skillId];
 				if (skillIntervalChanges.Any())
 				{
 					skillStaffingIntervals.ForEach(interval =>

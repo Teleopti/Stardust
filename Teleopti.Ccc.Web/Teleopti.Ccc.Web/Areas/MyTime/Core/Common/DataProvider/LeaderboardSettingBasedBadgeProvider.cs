@@ -153,23 +153,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			{
 				var agentsInTeam = _personRepo.FindPeopleBelongTeam(teamSetting.Team, new DateOnlyPeriod(date.AddDays(-1), date));
 				
-				var agentsInTeamWithPermissiion = agentsInTeam.Where(p => permittedPersonIdList.Contains(p.Id.Value)).ToList();
+				var agentsInTeamWithPermission = agentsInTeam.Where(p => permittedPersonIdList.Contains(p.Id.Value)).ToList();
 	
 				ICollection<AgentBadge> agentBadgesConvertedFromRatio;
 				if (period.HasValue)
 				{					
-					agentBadgesConvertedFromRatio = AgentBadge.FromAgentBadgeTransaction(_agentBadgeTransactionRepository.Find(agentsInTeamWithPermissiion, period.Value));
+					agentBadgesConvertedFromRatio = AgentBadge.FromAgentBadgeTransaction(_agentBadgeTransactionRepository.Find(agentsInTeamWithPermission, period.Value));
 				}
 				else
 				{
-					var agentIdsInTeamWithPermission = agentsInTeamWithPermissiion.Select(x => x.Id.GetValueOrDefault()).ToList();
+					var agentIdsInTeamWithPermission = agentsInTeamWithPermission.Select(x => x.Id.GetValueOrDefault()).ToList();
 					agentBadgesConvertedFromRatio = _agentBadgeRepository.Find(agentIdsInTeamWithPermission);					
 				}
 				
 				agentWithBadgesConvertedFromRatio.AddRange(getAgentWithBadges(agentBadgesConvertedFromRatio,
 					teamSetting.GamificationSetting.SilverToBronzeBadgeRate, teamSetting.GamificationSetting.GoldToSilverBadgeRate));
 
-				agentListWithDifferentThreshold.AddRange(agentsInTeamWithPermissiion);
+				agentListWithDifferentThreshold.AddRange(agentsInTeamWithPermission);
 			}
 
 			IList<IAgentBadgeWithRank> agentBadgesWithRank;

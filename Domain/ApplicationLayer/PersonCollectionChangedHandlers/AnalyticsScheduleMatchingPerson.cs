@@ -93,10 +93,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		{
 			var datesWithDuplicates = _analyticsScheduleRepository.GetDuplicateDatesForPerson(personId);
 			var dates = _analyticsDateRepository.GetAllPartial();
-			var scenarios = _analyticsScenarioRepository.Scenarios();
+			var scenarios = _analyticsScenarioRepository.Scenarios().ToLookup(s => s.ScenarioId);
 			foreach (var datesForScenario in datesWithDuplicates.GroupBy(x => x.ScenarioId))
 			{
-				var scenario = scenarios.FirstOrDefault(s => s.ScenarioId == datesForScenario.Key);
+				var scenario = scenarios[datesForScenario.Key].FirstOrDefault();
 				if (scenario == null) continue;
 				_eventPublisher.Publish(new ReloadSchedules
 				{
@@ -111,12 +111,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		private static List<DateTime> mapDates(IList<IAnalyticsDate> analyticDates, IEnumerable<int> dateIds)
 		{
-			return dateIds.Select(x =>
-			{
-				var analyticsDate = analyticDates.FirstOrDefault(date => date.DateId == x);
-
-				return analyticsDate?.DateDate;
-			}).Where(d => d != null).Select(d => d.Value).ToList();
+			var dateLookup = analyticDates.ToLookup(a => a.DateId);
+			return dateIds.Select(x => dateLookup[x].FirstOrDefault()?.DateDate).Where(d => d != null).Select(d => d.Value).ToList();
 		}
 
 	}

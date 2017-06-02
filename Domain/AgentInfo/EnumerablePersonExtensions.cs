@@ -15,8 +15,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 					p.PersonPeriods(period)
 						.Any(
 							pp =>
-								pp.PersonContract != null && pp.PersonContract.Contract != null &&
-								pp.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)).ToArray();
+								pp.PersonContract?.Contract != null && pp.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)).ToArray();
 		}
 
 		public static IPerson[] Filter(this IEnumerable<IPerson> agents, IEnumerable<Guid> agentIds)

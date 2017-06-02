@@ -188,12 +188,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		private void publishSkillChangeEvent(IPersonPeriod personPeriod, IEnumerable<AnalyticsSkill> analyticsSkills, AnalyticsPersonPeriod updatedAnalyticsPersonPeriod)
 		{
-			var existsInAnalytics = personPeriod.PersonSkillCollection.Where(a => analyticsSkills.Any(b => b.SkillCode.Equals(a.Skill.Id))).ToList();
+			var existsInAnalytics = personPeriod.PersonSkillCollection.Where(a => analyticsSkills.Any(b => b.SkillCode.Equals(a.Skill.Id))).ToLookup(a => a.Active);
 
-			var activeSkills = existsInAnalytics.Where(a => a.Active)
+			var activeSkills = existsInAnalytics[true]
 					.Select(a => analyticsSkills.First(b => b.SkillCode.Equals(a.Skill.Id)).SkillId)
 					.ToList();
-			var inactiveSkills = existsInAnalytics.Where(a => !a.Active)
+			var inactiveSkills = existsInAnalytics[false]
 					.Select(a => analyticsSkills.First(b => b.SkillCode.Equals(a.Skill.Id)).SkillId)
 					.ToList();
 

@@ -61,9 +61,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var locationSeatBookingScores = new List<LocationSeatBookingScore>();
 			var groupId = Guid.NewGuid();
 
+			var seatScoresLookup = seatScores.ToLookup(seatScore => seatScore.Location);
 			foreach (var location in locations.Where(location => location.IncludeInSeatPlan))
 			{
-				var seatScoresForCurrentLocation = seatScores.Where(seatScore => seatScore.Location == location).ToList();
+				var seatScoresForCurrentLocation = seatScoresLookup[location].ToList();
 				var scoreListByIndexForThisLocation = getScoreListByIndex(groupSeatBookings, location, seatScoresForCurrentLocation, groupId, location.Seats, orderSeatBookingRequestWasAdded);
 
 				if (scoreListByIndexForThisLocation != null)

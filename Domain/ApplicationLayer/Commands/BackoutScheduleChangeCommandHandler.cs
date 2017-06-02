@@ -74,13 +74,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var person = _personRepository.Get(command.PersonId);
 
+			var currentUser = _loggedOnUser.CurrentUser();
+			var currentUserId = currentUser.Id;
 			var versionsOnDates = command.Dates.Select(date => new versionsOnDate
 			{
 				Date = date,
-				Versions = _scheduleHistoryRepository.FindRevisions(person,date,2).ToList()
-			}).Where(vd => vd.Versions.Count == 2 && vd.Versions.First().ModifiedBy.Id == _loggedOnUser.CurrentUser().Id).ToList();
-
-		
+				Versions = _scheduleHistoryRepository.FindRevisions(person,date,2).ToList(),
+			}).Where(vd => vd.Versions.Count == 2 && vd.Versions.First().ModifiedBy.Id == currentUserId).ToList();
+			
 			if (versionsOnDates.Count == 0)
 			{
 				command.ErrorMessages.Add(Resources.CannotUndoScheduleChange);
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var periodForPersonalAccountCheck = findAbsencePeriod(preVersion, lastVersion, person, targetVersionsDate.Date);
 			var datePeriod =
-				targetVersionsDate.Date.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+				targetVersionsDate.Date.ToDateTimePeriod(currentUser.PermissionInformation.DefaultTimeZone());
 
 			var scheduleDictionary = getScheduleDictionary(person, periodForPersonalAccountCheck);
 
@@ -152,15 +153,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var affectedData = diffsForTargetDate.Select(x => x.OriginalItem).Where(d => d != null).Concat(diffsForTargetDate.Select(x => x.CurrentItem).Where(d => d != null));
 
+			var scenario = _currentScenario.Current();
 			_eventPublisher.Publish(new ScheduleBackoutEvent
 			{
 				PersonId = command.PersonId,
-				ScenarioId = _currentScenario.Current().Id.GetValueOrDefault(),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
 				StartDateTime = affectedData.Min(s => s.Period.StartDateTime),
 				EndDateTime = affectedData.Max(s => s.Period.EndDateTime),
 				InitiatorId = command.TrackedCommandInfo.OperatedPersonId,
 				CommandId = command.TrackedCommandInfo.TrackId,
-				LogOnBusinessUnitId = _currentScenario.Current().BusinessUnit.Id.Value,
+				LogOnBusinessUnitId = scenario.BusinessUnit.Id.Value,
 				LogOnDatasource = _currentDataSource.Current().DataSourceName
 			});
 		}
