@@ -81,7 +81,6 @@
                 text, i, title, value, name, bgcolor;
 
             // You can access all of data like this:
-            //console.log($$.data.targets);
             for (i = 0; i < d.length; i++) {
                 if (!(d[i] && (d[i].value || d[i].value === 0))) { continue; }
 
@@ -144,9 +143,9 @@
             staffing.over.unshift('Overstaffing');
             staffing.under.unshift('Understaffing');
 
-            for (var index = 1; index <= staffingData.scheduledStaffing.length; index++) {
-                var value = staffingData.scheduledStaffing[index] - staffingData.forcastedStaffing[index];
-
+            for (var index = 0; index <= staffingData.relativeDifference.length; index++) {
+                var value = staffingData.relativeDifference[index];
+                value = parseFloat(value);
                 if (value < 0) {
                     staffing.under.push(Math.abs(value.toFixed(1)));
                     staffing.over.push(0);

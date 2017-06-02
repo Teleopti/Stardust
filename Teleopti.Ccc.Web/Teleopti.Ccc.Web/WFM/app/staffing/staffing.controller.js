@@ -102,9 +102,11 @@
 				staffingData.scheduledStaffing = [];
 				staffingData.forcastedStaffing = [];
 				staffingData.suggestedStaffing = [];
+				staffingData.relativeDifference = [];
 				if (staffingPrecheck(result.DataSeries)) {
 					staffingData.scheduledStaffing = roundDataToOneDecimal(result.DataSeries.ScheduledStaffing);
 					staffingData.forcastedStaffing = roundDataToOneDecimal(result.DataSeries.ForecastedStaffing);
+					staffingData.relativeDifference = result.DataSeries.RelativeDifference;
 					staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
 					staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
 					vm.timeSerie = result.DataSeries.Time;
