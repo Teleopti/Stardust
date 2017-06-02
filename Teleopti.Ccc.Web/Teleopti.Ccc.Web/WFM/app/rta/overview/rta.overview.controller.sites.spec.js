@@ -35,7 +35,6 @@ describe('RtaOverviewController', function () {
 		scope = $controllerBuilder.setup('RtaOverviewController');
 
 		$fakeBackend.clear();
-		$fakeBackend.withToggle('RTA_SnappierDisplayOfOverview_43568');
 	}));
 
 	it('should display site', function () {

@@ -30,7 +30,7 @@
 				<div class="wfm-grid">
 					<div class="grid-card team" ng-if="team.NumberOfAgents > 0" ng-repeat="team in vm.teams">
 						<a ui-sref="{{vm.getStateForAgents()}}" class="rta-card-link">
-							<div class="list-content" ng-class="vm.snappierToggleOn ? team.Color : {good: vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: vm.getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}" tabindex="-1">
+							<div class="list-content" ng-class="team.Color" tabindex="-1">
 								<div class="wfm-checkbox">
 									<label ng-attr-name="{{team.Name}}" ng-click="$event.stopPropagation()" tabindex="-1">
 										<input type="checkbox" value="value" ng-checked="vm.selectedSites.indexOf(team.Id) > -1" ng-click="vm.toggleSelection(team.Id)" ng-model="selected" tabindex="-1"/>

@@ -34,7 +34,6 @@ describe('RtaOverviewController', function () {
 		scope = $controllerBuilder.setup('RtaOverviewController');
 		$fakeBackend.clear();
 		spyOn($state, 'go');
-		$fakeBackend.withToggle('RTA_SnappierDisplayOfOverview_43568');
 	}));
 
 	it('should display agents out of adherence in sites for preselected skill', function () {

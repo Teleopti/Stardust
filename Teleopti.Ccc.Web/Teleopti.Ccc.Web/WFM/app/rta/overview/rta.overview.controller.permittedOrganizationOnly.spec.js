@@ -40,8 +40,6 @@ describe('RtaOverviewController', function () {
 
 		$fakeBackend.clear();
 		$fakeBackend.withToggle("RTA_MonitorAgentsInPermittedOrganizationOnly_40660");
-		$fakeBackend.withToggle('RTA_SnappierDisplayOfOverview_43568');
-
 	}));
 
 	it('should display permitted site', function () {

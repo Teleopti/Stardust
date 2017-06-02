@@ -36,7 +36,6 @@ describe('RtaOverviewController', function () {
 		$fakeBackend.clear();
 
 		spyOn($state, 'go');
-		$fakeBackend.withToggle('RTA_SnappierDisplayOfOverview_43568');
 	}));
 
 	//should include other site to test filtering it out?
