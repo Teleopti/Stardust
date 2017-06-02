@@ -66,6 +66,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillDayLoadHelper = skillDayLoadHelper;
 		}
 
+		public IntradayStaffingViewModel Load(Guid[] skillIdList, int dayOffset)
+		{
+			return Load(skillIdList, new DateOnly(_now.UtcDateTime().AddDays(dayOffset)));
+		}
+
 		public IntradayStaffingViewModel Load(Guid[] skillIdList, DateOnly? dateOnly = null,  bool useShrinkage = false)
 		{
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;

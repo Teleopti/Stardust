@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok(_performanceViewModelCreator.Load(skillIdList));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareaperformance/{id}/{dateUtc}")]
-		public virtual IHttpActionResult MonitorSkillAreaPerformance(Guid id, DateTime dateUtc)
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareaperformance/{id}/{dayOffset}")]
+		public virtual IHttpActionResult MonitorSkillAreaPerformanceByDayOffset(Guid id, int dayOffset)
 		{
 			var skillArea = _skillAreaRepository.Get(id);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			return Ok(_performanceViewModelCreator.Load(skillIdList, dateUtc));
+			return Ok(_performanceViewModelCreator.Load(skillIdList, dayOffset));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillperformance/{id}")]
@@ -44,10 +44,10 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok(_performanceViewModelCreator.Load(new Guid[] {Id}));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillperformance/{id}/{dateUtc}")]
-		public virtual IHttpActionResult MonitorSkillPerformance(Guid Id, DateTime dateUtc)
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillperformance/{id}/{dayOffset}")]
+		public virtual IHttpActionResult MonitorSkillPerformanceByDayOffset(Guid id, int dayOffset)
 		{
-			return Ok(_performanceViewModelCreator.Load(new Guid[] { Id }, dateUtc));
+			return Ok(_performanceViewModelCreator.Load(new[] { id }, dayOffset));
 		}
 	}
 }

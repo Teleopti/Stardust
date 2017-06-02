@@ -49,6 +49,31 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public void ShouldUseSpecifiecDateTimePeriod()
 		{
 			TimeZone.IsSweden();
+
+		[Test]
+		public void ShouldUseSpecifiedDayOffset()
+		{
+			TimeZone.IsSweden();
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false, 0);
+			SkillRepository.Has(skill);
+
+			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime().AddDays(1), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues());
+			SkillDayRepository.Has(skillDay);
+
+			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, 1);
+
+			var staffingIntervals = skillDay.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervals.First().Period.StartDateTime, TimeZone.TimeZone()));
+			vm.DataSeries.Time.Last().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervals.Last().Period.StartDateTime, TimeZone.TimeZone()));
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ForecastedStaffing.First().Should().Be.GreaterThan(0d);
+			vm.DataSeries.ForecastedStaffing.Last().Should().Be.GreaterThan(0d);
+			vm.StaffingHasData.Should().Be.EqualTo(true);
+		}
+
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 			var scheduledStartTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);

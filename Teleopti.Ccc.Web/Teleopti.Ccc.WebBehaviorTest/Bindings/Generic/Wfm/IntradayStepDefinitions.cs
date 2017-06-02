@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
@@ -69,6 +70,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			DataMaker.Data().Apply(new ForecastConfigurable(skillName, theDate));
 		}
 
+		[Given(@"I should see a summary of incoming traffic")]
+		public void GivenIShouldSeeASummaryOfIncomingTraffic()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+
 		[Given(@"I select to create a new Skill Area")]
 		public void GivenISelectToCreateANewSkillArea()
 		{
@@ -82,6 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[Given(@"I select the skill '(.*)'")]
+		[When(@"I select the skill '(.*)'")]
 		public void GivenISelectTheSkill(string skillName)
 		{
 			Browser.Interactions.ClickContaining(".skill-area-list", skillName);
@@ -147,7 +156,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I should see incoming traffic data in the chart")]
 		public void ThenIShouldSeeIncomingTrafficDataInTheChart()
 		{
-			
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
 				"var forecastedCalls = parseFloat(scope.viewObj.forecastedCallsObj.series[1]);" +
@@ -170,8 +178,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 							, "True");
 		}
 
-		[Then(@"I should see a summary of today's incoming traffic")]
-		public void ThenIShouldSeeASummaryOfTodaySIncomingTraffic()
+		[Then(@"I should see a summary of incoming traffic")]
+		public void ThenIShouldSeeASummaryOfIncomingTraffic()
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return $('.forecasted-calls').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.calculated-calls').text().length > 0", "True");
@@ -179,6 +187,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertJavascriptResultContains("return $('.forecasted-aht').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.aht').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.aht-difference ').text().length > 0", "True");
+		}
+
+		[Given(@"There's no data available")]
+		public void GivenIShouldNotSeeIncomingTrafficDataInTheChart()
+		{
+			Browser.Interactions.IsVisible(".no-data-available");
+		}
+
+		[When(@"I choose to monitor '(.*)'")]
+		public void WhenIChooseToMonitor(string p0)
+		{
+			ScenarioContext.Current.Pending();
 		}
 
 		[When(@"I am navigating to intraday performance view")]
@@ -266,6 +286,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				"var scheduledStaffing = parseFloat(scope.viewObj.scheduledStaffing[1]);" +
                 "return (scheduledStaffing >= 0) + ' |sopeViewObjScheduledStaffing: ' + scope.viewObj.scheduledStaffing[1] + ' |scheduledStaffing: ' + scheduledStaffing;"
                 , "true");
+		}
+
+		[When(@"I choose to look at statistics for '(.*)'")]
+		public void WhenIChooseToLookAtStatisticsFor(string offset)
+		{
+
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should see that the date is '(.*)'")]
+		public void ThenIShouldSeeThatTheDateIs(string p0)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[When(@"I should not see incoming traffic data in the chart")]
+		public void WhenIShouldNotSeeIncomingTrafficDataInTheChart()
+		{
+			Browser.Interactions.AssertExists(".no-data-available");
+		}
+
+		[When(@"I change date offset to '(.*)'")]
+		public void WhenIChangeDateOffsetTo(int p0)
+		{
+			Browser.Interactions.Javascript($"$('.wfm-radio input[value={p0}]').click()");
+			//< input type = "radio" name = "chooseDayOffset-287" ng - checked= "false" ng - click = "$ctrl.dateChange(item.value)" value = "-6" >
 		}
 	}
 }

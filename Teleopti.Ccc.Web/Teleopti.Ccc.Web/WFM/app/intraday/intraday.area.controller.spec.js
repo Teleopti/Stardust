@@ -193,9 +193,39 @@ describe('IntradayAreaCtrl', function () {
 			return [200, trafficAndPerformanceData];
 		});
 
+		$httpBackend.whenGET("../api/intraday/monitorskillstatistics/" + skills[0].Id + "/0")
+		.respond(function () {
+			return [200, trafficAndPerformanceData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillstatistics/" + skills[0].Id + "/1")
+		.respond(function () {
+			return [200, trafficAndPerformanceDataTomorrow];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillareastatistics/" + skillAreas[0].Id + "/0")
+		.respond(function () {
+			return [200, trafficAndPerformanceData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillareastatistics/" + skillAreas[0].Id + "/1")
+		.respond(function () {
+			return [200, trafficAndPerformanceDataTomorrow];
+		});
+
 		$httpBackend.whenGET("../api/intraday/monitorskillareaperformance/fa9b5393-ef48-40d1-b7cc-09e797589f81")
 		.respond(function () {
 			return [200, performanceData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillareaperformance/" + skillAreas[0].Id + "/0")
+		.respond(function () {
+			return [200, performanceData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillareaperformance/" + skillAreas[0].Id + "/1")
+		.respond(function () {
+			return [200, performanceDataTomorrow];
 		});
 
 		$httpBackend.whenGET("../api/intraday/monitorskillperformance/5f15b334-22d1-4bc1-8e41-72359805d30f")
@@ -203,9 +233,39 @@ describe('IntradayAreaCtrl', function () {
 			return [200, performanceData];
 		});
 
+		$httpBackend.whenGET("../api/intraday/monitorskillperformance/" + skills[0].Id + "/0")
+		.respond(function () {
+			return [200, performanceData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillperformance/" + skills[0].Id + "/1")
+		.respond(function () {
+			return [200, performanceDataTomorrow];
+		});
+
 		$httpBackend.whenGET("../api/intraday/monitorskillstaffing/5f15b334-22d1-4bc1-8e41-72359805d30f")
 		.respond(function () {
 			return [200, staffingData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillstaffing/" + skills[0].Id + "/0")
+		.respond(function () {
+			return [200, staffingData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillstaffing/" + skills[0].Id + "/1")
+		.respond(function () {
+			return [200, staffingDataTomorrow];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillareastaffing/" + skillAreas[0].Id + "/0")
+		.respond(function () {
+			return [200, staffingData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillareastaffing/" + skillAreas[0].Id + "/1")
+		.respond(function () {
+			return [200, staffingDataTomorrow];
 		});
 
 		$httpBackend.whenGET("../api/intraday/monitorskillareastaffing/fa9b5393-ef48-40d1-b7cc-09e797589f81")
@@ -232,6 +292,7 @@ describe('IntradayAreaCtrl', function () {
 		.respond(function () {
 			return [200, timeData];
 		});
+
 
 
 	}));
@@ -491,4 +552,83 @@ describe('IntradayAreaCtrl', function () {
 		expect(scope.selectedItem).toEqual(scope.skills[1]);
 	});
 
+	it('should get traffic data corresponding to chosenOffset', function(){
+		skillAreaInfo.SkillAreas = [];
+
+		createController(false);
+		scope.activeTab = 0;
+		scope.toggles.showOtherDay = true;
+
+		scope.selectedSkillChange(skills[0]);
+		scope.changeChosenOffset(1);
+		$httpBackend.flush();
+
+		expect(scope.chosenOffset.value).toEqual(1);
+		expect(scope.viewObj.summary.summaryCalculatedCalls).toEqual('1,337.0');
+	});
+
+	it('should get performance data corresponding to chosenOffset', function(){
+		skillAreaInfo.SkillAreas = [];
+
+		createController(false);
+		scope.activeTab = 1;
+		scope.toggles.showOtherDay = true;
+		scope.selectedSkillChange(skills[0]);
+		scope.changeChosenOffset(1);
+		$httpBackend.flush();
+
+		expect(scope.chosenOffset.value).toEqual(1);
+		expect(scope.viewObj.summary.summaryServiceLevel).toEqual('90.0');
+	});
+
+	it('should get staffing data corresponding to chosenOffset', function(){
+		skillAreaInfo.SkillAreas = [];
+
+		createController(false);
+		scope.activeTab = 2;
+		scope.toggles.showOtherDay = true;
+		scope.selectedSkillChange(skills[0]);
+		scope.changeChosenOffset(1);
+		$httpBackend.flush();
+
+		expect(scope.chosenOffset.value).toEqual(1);
+		expect(scope.viewObj.forecastedStaffing.series[1]).toEqual(3);
+
+	});
+
+	it('should get traffic data for skillarea corresponding to chosenOffset', function(){
+		createController(false);
+		scope.activeTab = 0;
+		scope.toggles.showOtherDay = true;
+		scope.skillAreaSelected(skillAreas[0]);
+		scope.changeChosenOffset(1);
+		$httpBackend.flush();
+
+		expect(scope.chosenOffset.value).toEqual(1);
+		expect(scope.viewObj.summary.summaryCalculatedCalls).toEqual('1,337.0');
+	});
+
+	it('should get performance data for skillarea corresponding to chosenOffset', function(){
+		createController(false);
+		scope.activeTab = 1;
+		scope.toggles.showOtherDay = true;
+		scope.skillAreaSelected(skillAreas[0]);
+		scope.changeChosenOffset(1);
+		$httpBackend.flush();
+
+		expect(scope.chosenOffset.value).toEqual(1);
+		expect(scope.viewObj.summary.summaryServiceLevel).toEqual('90.0');
+	});
+
+	it('should get staffing data for skillarea corresponding to chosenOffset', function(){
+		createController(false);
+		scope.activeTab = 2;
+		scope.toggles.showOtherDay = true;
+		scope.skillAreaSelected(skillAreas[0]);
+		scope.changeChosenOffset(1);
+		$httpBackend.flush();
+
+		expect(scope.chosenOffset.value).toEqual(1);
+		expect(scope.viewObj.forecastedStaffing.series[1]).toEqual(3);
+	});
 });

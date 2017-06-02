@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillRepository SkillRepository;
-
+		public MutableNow Now;
 		private IncomingIntervalModel _firstInterval;
 		private IncomingIntervalModel _secondInterval;
 		private const int minutesPerInterval = 15;
@@ -509,6 +510,26 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() }, new DateTime(2017, 1, 1));
 			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldLoadDataForSpecifiedOffset()
+		{
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			IntradayMonitorDataLoader.ShouldCompareDate = true;
+			Now.Is(_firstInterval.IntervalDate.AddDays(-1));
+			
+			var viewModel = Target.Load(new[] { Guid.NewGuid() }, 1);
+			viewModel.LatestActualIntervalStart.Should().Not.Be.EqualTo(null);
+			viewModel.LatestActualIntervalEnd.Should().Not.Be.EqualTo(null);
+
+			var startDate = new DateOnly(viewModel.LatestActualIntervalStart.Value);
+			var endDate = new DateOnly(viewModel.LatestActualIntervalEnd.Value);
+
+			startDate.Should().Be.EqualTo(new DateOnly(_firstInterval.IntervalDate));
+			endDate.Should().Be.EqualTo(new DateOnly(_firstInterval.IntervalDate));
 		}
 	}
 }

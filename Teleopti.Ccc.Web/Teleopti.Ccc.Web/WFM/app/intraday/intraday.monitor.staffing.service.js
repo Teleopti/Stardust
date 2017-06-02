@@ -20,7 +20,7 @@
 				scheduledStaffing: []
 			};
 
-			var hiddenArray = [];
+            var hiddenArray = [];
 			var mixedArea = null;
 
 			service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing, showEmailSkill) {
@@ -119,90 +119,125 @@
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
-						staffingData.waitingForData = false;
-						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing, toggles.showEmailSkill);
-					},
-					function (error) {
-						staffingData.hasMonitorData = false;
-					});
-			};
+            service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+                staffingData.waitingForData = true;
+                intradayService.getSkillStaffingData
+                    .query({
+                        skillId: selectedItem.Id,
+                        dayOffset: dayOffset,
+                    })
+                    .$promise.then(
+                        function(result) {
+                            staffingData.waitingForData = false;
+                            return service.setStaffingData(
+                                result,
+                                toggles.showOptimalStaffing,
+                                toggles.showScheduledStaffing
+                            );
+                        },
+                        function(error) {
+                            staffingData.hasMonitorData = false;
+                        }
+                    );
+            };
 
-			service.loadStaffingChart = function(staffingData) {
-					var staffingChart = c3.generate({
-						bindto: '#staffingChart',
-						data: {
-							x: 'x',
-							columns: [
-								staffingData.timeSeries,
-								staffingData.forecastedStaffing.series,
-								staffingData.forecastedStaffing.updatedSeries,
-								staffingData.actualStaffingSeries,
-								staffingData.scheduledStaffing
-							],
-							type: 'line',
-							hide: hiddenArray,
-							names: {
-								Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',
-								Updated_forecasted_staffing: $translate.instant('ReforecastedStaff') + ' ←',
-								Actual_staffing: $translate.instant('RequiredStaff') + ' ←',
-								Scheduled_staffing: $translate.instant('ScheduledStaff') + ' ←'
-								},
-								colors: {
-									Forecasted_staffing: '#0099FF',
-									Updated_forecasted_staffing: '#E91E63',
-									Actual_staffing: '#FB8C00',
-									Scheduled_staffing: '#F488C8'
-							}
-						},
-						axis: {
-							x: {
-								label: {
-									text: $translate.instant('SkillTypeTime'),
-									position: 'outer-center'
-								},
-								type: 'category',
-								tick: {
-									culling: {
-										max: 24
-									},
-									fit: true,
-									centered: true,
-									multiline: false
-								}
-							},
-							y: {
-								label: {
-									text: $translate.instant('Agents'),
-									position: 'outer-middle'
-								},
-								tick: {
-										format: d3.format('.1f')
-							}
-						},
-						y2: {
-							show: true,
-							tick: {
-										format: d3.format('.1f')
-							}
-						}
-					},
-					legend: {
-						item: {
-							onclick: function (id) {
-								if (hiddenArray.indexOf(id) > -1) {
-									hiddenArray.splice(hiddenArray.indexOf(id), 1);
-								} else {
-									hiddenArray.push(id);
-								}
-								service.loadStaffingChart(staffingData);
-							}
-						}
-					}
-				});
-			}
+            service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+                staffingData.waitingForData = true;
+                intradayService.getSkillAreaStaffingData
+                    .query({
+                        skillAreaId: selectedItem.Id,
+                        dayOffset: dayOffset
+                    })
+                    .$promise.then(
+                        function(result) {
+                            staffingData.waitingForData = false;
+                            return service.setStaffingData(
+                                result,
+                                toggles.showOptimalStaffing,
+                                toggles.showScheduledStaffing
+                            );
+                        },
+                        function(error) {
+                            staffingData.hasMonitorData = false;
+                        }
+                    );
+            };
 
-			return service;
+            service.loadStaffingChart = function(staffingData) {
+                var staffingChart = c3.generate({
+                    bindto: '#staffingChart',
+                    data: {
+                        x: 'x',
+                        columns: [
+                            staffingData.timeSeries,
+                            staffingData.forecastedStaffing.series,
+                            staffingData.forecastedStaffing.updatedSeries,
+                            staffingData.actualStaffingSeries,
+                            staffingData.scheduledStaffing
+                        ],
+                        type: 'line',
+                        hide: hiddenArray,
+                        names: {
+                            Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',
+                            Updated_forecasted_staffing: $translate.instant('ReforecastedStaff') + ' ←',
+                            Actual_staffing: $translate.instant('RequiredStaff') + ' ←',
+                            Scheduled_staffing: $translate.instant('ScheduledStaff') + ' ←'
+                        },
+                        colors: {
+                            Forecasted_staffing: '#0099FF',
+                            Updated_forecasted_staffing: '#E91E63',
+                            Actual_staffing: '#FB8C00',
+                            Scheduled_staffing: '#F488C8'
+                        }
+                    },
+                    axis: {
+                        x: {
+                            label: {
+                                text: $translate.instant('SkillTypeTime'),
+                                position: 'outer-center'
+                            },
+                            type: 'category',
+                            tick: {
+                                culling: {
+                                    max: 24
+                                },
+                                fit: true,
+                                centered: true,
+                                multiline: false
+                            }
+                        },
+                        y: {
+                            label: {
+                                text: $translate.instant('Agents'),
+                                position: 'outer-middle'
+                            },
+                            tick: {
+                                format: d3.format('.1f')
+                            }
+                        },
+                        y2: {
+                            show: true,
+                            tick: {
+                                format: d3.format('.1f')
+                            }
+                        }
+                    },
+                    legend: {
+                        item: {
+                            onclick: function(id) {
+                                if (hiddenArray.indexOf(id) > -1) {
+                                    hiddenArray.splice(hiddenArray.indexOf(id), 1);
+                                } else {
+                                    hiddenArray.push(id);
+                                }
+                                service.loadStaffingChart(staffingData);
+                            }
+                        }
+                    }
+                });
+            };
 
-		}
-	]);
+            return service;
+        }
+    ]);
 })();

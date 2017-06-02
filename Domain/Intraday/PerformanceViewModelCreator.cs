@@ -42,6 +42,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			return Load(skillIdList, _now.UtcDateTime());
 		}
+
+		public IntradayPerformanceViewModel Load(Guid[] skillIdList, int dayOffset)
+		{
+			return Load(skillIdList, _now.UtcDateTime().AddDays(dayOffset));
+		}
+
 		public IntradayPerformanceViewModel Load(Guid[] skillIdList, DateTime date)
 		{
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;

@@ -40,18 +40,18 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok(_latestStatisticsTimeProvider.Get(new[] { id }));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskillarea/{id}/{dateUtc}")]
-		public virtual IHttpActionResult GetLatestStatisticsTimeForSkillAreaAndDate(Guid id, DateTime dateUtc)
+		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskillarea/{id}/{dayOffset}")]
+		public virtual IHttpActionResult GetLatestStatisticsTimeForSkillAreaAndDate(Guid id, int dayOffset)
 		{
 			var skillArea = _skillAreaRepository.Get(id);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			return Ok(new { latestIntervalTime = _latestStatisticsTimeProvider.Get(skillIdList, dateUtc) });
+			return Ok(new { latestIntervalTime = _latestStatisticsTimeProvider.Get(skillIdList, dayOffset) });
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskill/{id}/{dateUtc}")]
-		public virtual IHttpActionResult GetLatestStatisticsTimeForSkillAndDate(Guid id, DateTime dateUtc)
+		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskill/{id}/{dayOffset}")]
+		public virtual IHttpActionResult GetLatestStatisticsTimeForSkillByDayOffset(Guid id, int dayOffset)
 		{
-			return Ok(_latestStatisticsTimeProvider.Get(new[] { id }, dateUtc));
+			return Ok(_latestStatisticsTimeProvider.Get(new[] { id }, dayOffset));
 		}
 	}
 }

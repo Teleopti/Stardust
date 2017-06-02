@@ -29,6 +29,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return Get(skillIdList, _now.UtcDateTime());
 		}
 
+		public LatestStatitsticsTimeModel Get(Guid[] skillIdList, int dayOffset)
+		{
+			return Get(skillIdList, _now.UtcDateTime().AddDays(dayOffset));
+		}
+
 		public LatestStatitsticsTimeModel Get(Guid[] skillIdList, DateTime dateUtc)
 		{
 			var userTime = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateUtc, _userTimeZone.TimeZone()));

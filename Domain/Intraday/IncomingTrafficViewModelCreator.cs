@@ -30,6 +30,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return Load(skillIdList, _now.UtcDateTime());
 		}
 
+		public IntradayIncomingViewModel Load(Guid[] skillIdList, int dayOffset)
+		{
+			return Load(skillIdList, _now.UtcDateTime().AddDays(dayOffset));
+		}
+
 		public IntradayIncomingViewModel Load(Guid[] skillIdList, DateTime utcDate)
 		{
 			var supportedSkills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
@@ -136,5 +141,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 				IncomingTrafficHasData = intervals.Any()
 			};
 		}
+
 	}
 }

@@ -113,116 +113,163 @@
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
-						trafficData.waitingForData = false;
-						service.setTrafficData(result);
-					},
-					function (error) {
-						trafficData.hasMonitorData = false;
-					});
-				};
+            service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+                trafficData.waitingForData = true;
+                var data = intradayService.getSkillMonitorStatistics
+                	 .query({
+                        id: selectedItem.Id,
+                        dayOffset: dayOffset
+                    })
+                    .$promise.then(
+                        function(result) {
+                            trafficData.waitingForData = false;
+                            service.setTrafficData(result);
+                        },
+                        function(error) {
+                            trafficData.hasMonitorData = false;
+                        }
+                    );
+            };
 
-				service.pollSkillAreaData = function (selectedItem) {
-					trafficData.waitingForData = true;
-					intradayService.getSkillAreaMonitorStatistics.query(
-						{
-							id: selectedItem.Id
-						})
-						.$promise.then(function (result) {
-							trafficData.waitingForData = false;
-							service.setTrafficData(result);
-						},
-						function (error) {
-							trafficData.hasMonitorData = false;
-						});
-					};
+            service.pollSkillAreaData = function(selectedItem) {
+                trafficData.waitingForData = true;
+                intradayService.getSkillAreaMonitorStatistics
+                    .query({
+                        id: selectedItem.Id
+                    })
+                    .$promise.then(
+                        function(result) {
+                            trafficData.waitingForData = false;
+                            service.setTrafficData(result);
+                        },
+                        function(error) {
+                            trafficData.hasMonitorData = false;
+                        }
+                    );
+            };
 
-					service.loadTrafficChart = function (trafficData) {
-						var performanceChart = c3.generate({
-							bindto: '#trafficChart',
-							data: {
-								x: 'x',
-								columns: [
-									trafficData.timeSeries,
-									trafficData.forecastedCallsObj.series,
-									trafficData.actualCallsObj.series,
-									trafficData.forecastedAverageHandleTimeObj.series,
-									trafficData.actualAverageHandleTimeObj.series,
-									trafficData.currentInterval
-								],
-								hide: hiddenArray,
-								types: {
-									Current:'bar'
-								},
-								colors: {
-									Forecasted_calls: '#99D6FF',
-									Calls: '#0099FF',
-									Forecasted_AHT: '#FFC285',
-									AHT: '#FB8C00'
-								},
-								names: {
-									Forecasted_calls: $translate.instant('ForecastedVolume') + ' ←',
-									Calls: $translate.instant('ActualVolume') + ' ←',
-									Forecasted_AHT: $translate.instant('ForecastedAverageHandlingTime') + ' →',
-									AHT: $translate.instant('ActualAverageHandlingTime') + ' →'
-								},
-								axes: {
-									Forecasted_AHT: 'y2',
-									AHT: 'y2'
-								}
-							},
-							axis: {
-								x: {
-									label: {
-										text: $translate.instant('SkillTypeTime'),
-										position: 'outer-center'
-									},
-									type: 'category',
-									tick: {
-										culling: {
-											max: 24
-										},
-										fit: true,
-										centered: true,
-										multiline: false
-									}
-								},
-								y: {
-									label: {
-										text: $translate.instant('Volume'),
-										position: 'outer-middle'
-									},
-									tick: {
-										format: d3.format('.1f')
-									}
-								},
-								y2: {
-									label: {
-										text: $translate.instant('AverageHandlingTime'),
-										position: 'outer-middle'
-									},
-									show: true,
-									tick: {
-										format: d3.format('.1f')
-									}
-								}
-							},
-							legend: {
-								item: {
-									onclick: function (id) {
-										if (hiddenArray.indexOf(id) > -1) {
-											hiddenArray.splice(hiddenArray.indexOf(id), 1);
-										} else {
-											hiddenArray.push(id);
-										}
-										service.loadTrafficChart(trafficData);
-									}
-								}
-							}
-						});
-					};
+            service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+                trafficData.waitingForData = true;
+                intradayService.getSkillAreaMonitorStatistics
+                    .query({
+                        id: selectedItem.Id,
+                        dayOffset: dayOffset
+                    })
+                    .$promise.then(
+                        function(result) {
+                            trafficData.waitingForData = false;
+                            service.setTrafficData(result);
+                        },
+                        function(error) {
+                            trafficData.hasMonitorData = false;
+                        }
+                    );
+            };
 
-					return service;
+            service.initChart = function(trafficData) {
+                trafficChart = c3.generate({
+                    bindto: '#trafficChart',
+                    data: {
+                        columns: [
+                            trafficData.timeSeries,
+                            trafficData.forecastedCallsObj.series,
+                            trafficData.actualCallsObj.series,
+                            trafficData.forecastedAverageHandleTimeObj.series,
+                            trafficData.actualAverageHandleTimeObj.series,
+                            trafficData.currentInterval
+                        ],
+                        x: 'x',
+                        type: 'line',
+                        hide: hiddenArray,
+                        types: {
+                            Current: 'bar'
+                        },
+                        colors: {
+                            Forecasted_calls: '#99D6FF',
+                            Calls: '#0099FF',
+                            Forecasted_AHT: '#FFC285',
+                            AHT: '#FB8C00'
+                        },
+                        names: {
+                            Forecasted_calls: $translate.instant('ForecastedVolume') + ' ←',
+                            Calls: $translate.instant('ActualVolume') + ' ←',
+                            Forecasted_AHT: $translate.instant('ForecastedAverageHandlingTime') + ' →',
+                            AHT: $translate.instant('ActualAverageHandlingTime') + ' →'
+                        },
+                        axes: {
+                            Forecasted_AHT: 'y2',
+                            AHT: 'y2'
+                        }
+                    },
+                    axis: {
+                        x: {
+                            label: {
+                                text: $translate.instant('SkillTypeTime'),
+                                position: 'outer-center'
+                            },
+                            type: 'category',
+                            tick: {
+                                culling: {
+                                    max: 24
+                                },
+                                fit: true,
+                                centered: true,
+                                multiline: false
+                            }
+                        },
+                        y: {
+                            label: {
+                                text: $translate.instant('Volume'),
+                                position: 'outer-middle'
+                            },
+                            tick: {
+                                format: d3.format('.1f')
+                            }
+                        },
+                        y2: {
+                            label: {
+                                text: $translate.instant('AverageHandlingTime'),
+                                position: 'outer-middle'
+                            },
+                            show: true,
+                            tick: {
+                                format: d3.format('.1f')
+                            }
+                        }
+                    },
+                    legend: {
+                        item: {
+                            onclick: function(id) {
+                                if (hiddenArray.indexOf(id) > -1) {
+                                    hiddenArray.splice(hiddenArray.indexOf(id), 1);
+                                } else {
+                                    hiddenArray.push(id);
+                                }
+                                service.loadTrafficChart(trafficData);
+                            }
+                        }
+                    }
+                });
+            };
 
-				}
-			]);
-		})();
+            service.loadTrafficChart = function(trafficData) {
+                //service.initChart(trafficData);
+
+                if (trafficChart) {
+                    trafficChart.load({
+                        columns: [
+                            trafficData.timeSeries,
+                            trafficData.forecastedCallsObj.series,
+                            trafficData.actualCallsObj.series,
+                            trafficData.forecastedAverageHandleTimeObj.series,
+                            trafficData.actualAverageHandleTimeObj.series,
+                            trafficData.currentInterval
+                        ]
+                    });
+                }
+            };
+
+            return service;
+        }
+    ]);
+})();

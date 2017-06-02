@@ -35,18 +35,18 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok(_incomingTrafficViewModelCreator.Load(new[] { Id }));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastatistics/{id}/{dateUtc}")]
-		public virtual IHttpActionResult MonitorSkillAreaStatisticsByDate(Guid id, DateTime dateUtc)
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastatistics/{id}/{dayOffset}")]
+		public virtual IHttpActionResult MonitorSkillAreaStatisticsByDayOffset(Guid id, int dayOffset)
 		{
 			var skillArea = _skillAreaRepository.Get(id);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			return Ok(_incomingTrafficViewModelCreator.Load(skillIdList, dateUtc));
+			return Ok(_incomingTrafficViewModelCreator.Load(skillIdList, dayOffset));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstatistics/{id}/{dateUtc}")]
-		public virtual IHttpActionResult MonitorSkillStatisticsByDate(Guid id, DateTime dateUtc)
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstatistics/{id}/{dayOffset}")]
+		public virtual IHttpActionResult MonitorSkillStatisticsByDayOffset(Guid id, int dayOffset)
 		{
-			return Ok(_incomingTrafficViewModelCreator.Load(new[] { id }, dateUtc));
+			return Ok(_incomingTrafficViewModelCreator.Load(new[] { id }, dayOffset));
 		}
 	}
 }
