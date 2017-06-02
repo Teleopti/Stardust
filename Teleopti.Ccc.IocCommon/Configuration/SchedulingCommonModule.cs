@@ -522,6 +522,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonContractValidator>().SingleInstance().As<IPersonContractValidator>();
 			builder.RegisterType<PersonContractScheduleValidator>().SingleInstance().As<IPersonContractScheduleValidator>();
 			builder.RegisterType<NextPlanningPeriodProvider>().SingleInstance().As<INextPlanningPeriodProvider>();
+			builder.RegisterType<DesktopSchedulingValidator>().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
