@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			foreach (var item in toBeAdded)
 			{
-				if (!Bridges.Contains(item))
-					Bridges.Add(item);
+				Bridges.Add(item);
 			}
 		}
 

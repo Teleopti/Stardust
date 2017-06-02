@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private static ScheduledActivity nextActivity(IEnumerable<ScheduledActivity> schedule, ScheduledActivity currentActivity, DateTime time)
 		{
-			var nextActivity = (from l in schedule where l.StartDateTime > time select l).FirstOrDefault();
+			var nextActivity = schedule.FirstOrDefault(l => l.StartDateTime > time);
 			if (nextActivity == null)
 				return null;
 			if (currentActivity == null)

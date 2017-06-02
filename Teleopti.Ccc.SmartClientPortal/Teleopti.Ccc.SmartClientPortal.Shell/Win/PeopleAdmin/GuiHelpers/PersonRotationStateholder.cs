@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
             IPerson selectedPerson = FilteredStateHolder.PersonRotationParentAdapterCollection[parentRowIndex].Person;
             int rowIndex =
                 FilteredStateHolder.ParentPersonRotationCollection.
-                IndexOf(FilteredStateHolder.ParentPersonRotationCollection.Where(p => p.Person.Id == selectedPerson.Id).FirstOrDefault());
+                IndexOf(FilteredStateHolder.ParentPersonRotationCollection.FirstOrDefault(p => p.Person.Id == selectedPerson.Id));
 
             IPersonRotation personRotation = WorksheetStateHolder.GetSamplePersonRotation(selectedPerson);
 

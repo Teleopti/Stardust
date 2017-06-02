@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			foreach (var skillCombinationResource in skillCombinationResources)
 			{
-				var actId = skillCombinationResource.SkillCombination.Select(s => _allSkills[s].FirstOrDefault().Activity.Id).First();
+				var actId = skillCombinationResource.SkillCombination.Select(s => _allSkills[s].First().Activity.Id).First();
 				var allSkillsInCombination = skillCombinationResource.SkillCombination.Select(s => _allSkills[s].FirstOrDefault()).ToArray();
 
 				var skillCombination = new SkillCombination(allSkillsInCombination,skillCombinationResource.Period().ToDateOnlyPeriod(TimeZoneInfo.Utc), new SkillEffiencyResource[] {}, allSkillsInCombination);

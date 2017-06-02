@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			var requestedPeriod = absenceRequestAndSchedules.AbsenceRequest.Period.ToDateOnlyPeriod(timeZone);
 			var personPeriod = absenceRequestAndSchedules.AbsenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
 
-			if (personPeriod == null || personPeriod.BudgetGroup == null)
+			if (personPeriod?.BudgetGroup == null)
 			{
 				return AbsenceRequestBudgetGroupValidationHelper.PersonPeriodOrBudgetGroupIsNull(language, absenceRequestAndSchedules.AbsenceRequest.Person.Id);
 			}

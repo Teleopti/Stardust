@@ -65,9 +65,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			{
 				_openHours = _workloadDayTemplate.OpenHourList[0];
 			}
-			_templateIndex = (from t in _workload.TemplateWeekCollection
-							  where t.Value == _workloadDayTemplate
-							  select t.Key).First();
+			_templateIndex = _workload.TemplateWeekCollection.First(t => _workloadDayTemplate.Equals(t.Value)).Key;
 		}
 
 		private void closeTemplate()

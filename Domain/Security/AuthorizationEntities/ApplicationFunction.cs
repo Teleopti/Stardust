@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -68,14 +69,14 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <returns>If the item is found, then the item, <c>null</c> otherwise.</returns>
         public static IApplicationFunction FindByForeignId(IEnumerable<IApplicationFunction> list, string source, string id)
         {
-            foreach (IApplicationFunction applicationFunction in list)
-            {
-                if ((!string.IsNullOrEmpty(applicationFunction.ForeignSource) && applicationFunction.ForeignSource == source)
-                    &&
-                   (!string.IsNullOrEmpty(applicationFunction.ForeignId) && applicationFunction.ForeignId.ToUpperInvariant() == id.ToUpperInvariant()))
-                    return applicationFunction;
-            }
-            return null;
+	        var lookup = list.Where(l => !string.IsNullOrEmpty(l.ForeignId)).ToLookup(l => l.ForeignId.ToUpperInvariant());
+	        var found = lookup[id.ToUpperInvariant()].FirstOrDefault();
+	        if (!string.IsNullOrEmpty(found?.ForeignSource) && found.ForeignSource == source)
+	        {
+		        return found;
+	        }
+
+			return null;
         }
 
         /// <summary>
@@ -86,6 +87,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <returns></returns>
         public static IApplicationFunction FindByPath(IEnumerable<IApplicationFunction> functions, string functionPath)
         {
+
             foreach (IApplicationFunction item in functions)
             {
                 if (item.FunctionPath == functionPath)
@@ -132,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             {
                 if (Parent == null)
                     return 0;
-                return (1 + Parent.Level);
+                return 1 + Parent.Level;
             }
         }
 
@@ -151,7 +153,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
                     return "xx" + FunctionCode;
                 return _functionDescription;
             }
-            set { _functionDescription = value; }
+            set => _functionDescription = value;
         }
 
         /// <summary>
@@ -174,8 +176,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </remarks>
         public virtual string FunctionCode
         {
-            get { return _functionCode; }
-            set
+            get => _functionCode;
+		    set
             {
                 _functionCode = value;
                 _functionPathCache = null;
@@ -222,8 +224,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </remarks>
         public virtual string ForeignId
         {
-            get { return _foreignId; }
-            set { _foreignId = value; }
+            get => _foreignId;
+	        set => _foreignId = value;
         }
 
         /// <summary>
@@ -235,8 +237,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </remarks>
         public virtual string ForeignSource
         {
-            get { return _foreignSource; }
-            set { _foreignSource = value; }
+            get => _foreignSource;
+	        set => _foreignSource = value;
         }
 
         /// <summary>
@@ -248,8 +250,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </remarks>
         public virtual IUserTextTranslator UserTextTranslator
         {
-            get { return _userTextTranslator; }
-            set { _userTextTranslator = value; }
+            get => _userTextTranslator;
+	        set => _userTextTranslator = value;
         }
 
         /// <summary>
@@ -262,8 +264,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </remarks>
         public virtual IParentChildEntity Parent
         {
-            get { return _parent; }
-            set 
+            get => _parent;
+	        set 
             { 
                 _parent = value;
 
@@ -323,20 +325,20 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <value>The order.</value>
         public virtual int? SortOrder
         {
-            get { return _sortOrder; }
-            set { _sortOrder = value; }
+            get => _sortOrder;
+	        set => _sortOrder = value;
         }
 
         public virtual bool? IsPermitted
         {
-            get { return _isPermitted; }
-            set { _isPermitted = value; }
+            get => _isPermitted;
+	        set => _isPermitted = value;
         }
 
         public virtual bool IsPreliminary
         {
-            get { return _isPreliminary; }
-            set { _isPreliminary = value; }
+            get => _isPreliminary;
+	        set => _isPreliminary = value;
         }
 
         public virtual bool IsDeleted => _isDeleted;

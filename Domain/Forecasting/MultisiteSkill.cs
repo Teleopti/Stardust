@@ -250,10 +250,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 IForecastDayTemplate template = TryFindTemplateByName(target, templateName);
                 if (template != null)
                 {
-                    int key = (from i in _templateMultisiteWeekCollection
-                               where i.Value.Equals(template)
-                               select i.Key).First();
-
+	                int key = _templateMultisiteWeekCollection.First(i => i.Value.Equals(template)).Key;
                     _templateMultisiteWeekCollection.Remove(key);
                 }
             }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Specification;
@@ -8,22 +9,19 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public class PublishedScheduleSpecification : Specification<IPersonScheduleDayReadModel>
 	{
-		private readonly IEnumerable<IPerson> _permittedPersons;
+		private readonly ILookup<Guid?, IPerson> _permittedPersons;
 		private readonly DateOnly _date;
 
 		public PublishedScheduleSpecification(IEnumerable<IPerson> permittedPersons, DateOnly date)
 		{
-			_permittedPersons = permittedPersons;
+			_permittedPersons = permittedPersons.ToLookup(p => p.Id);
 			_date = date;
 		}
 
 		public override bool IsSatisfiedBy(IPersonScheduleDayReadModel obj)
 		{
-			var person = (from p in _permittedPersons where (p.Id == obj.PersonId) select p).FirstOrDefault();
-
-			if (person != null && isSchedulePublished(_date, person))
-				return true;
-			return false;
+			var person = _permittedPersons[obj.PersonId].FirstOrDefault();
+			return person != null && isSchedulePublished(_date, person);
 		}
 
 		private static bool isSchedulePublished(DateOnly date, IPerson person)

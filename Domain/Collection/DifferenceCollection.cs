@@ -29,12 +29,9 @@ namespace Teleopti.Ccc.Domain.Collection
 
         public DifferenceCollectionItem<T>? FindItemByMatchingOriginal(T match)
         {
-            return (from e in this
-                    where
-                        e.OriginalItem != null &&
-                        e.OriginalItem.Equals(match)
-                    select (DifferenceCollectionItem<T>?) e
-                   ).FirstOrDefault();
+	        return this.FirstOrDefault(e =>
+		        e.OriginalItem != null &&
+		        e.OriginalItem.Equals(match));
         }
     }
 }

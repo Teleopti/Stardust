@@ -242,33 +242,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				return PermissionState.Unspecified;
 
 			var ass = schedulePart.PersonAssignment();
-					if (ass != null)
-					{
-						var dayOff = ass.DayOff();
-						if (dayOff != null)
-						{
-							permissionState = PermissionState.Satisfied;
+	        var dayOff = ass?.DayOff();
+	        if (dayOff != null)
+	        {
+		        permissionState = PermissionState.Satisfied;
 
-							if (preference.DayOffTemplate != null)
-							{
-								if (!ass.AssignedWithDayOff(preference.DayOffTemplate))
-								{
-									//Need to do a return here because the visualLayerCollection can be empty 
-									return PermissionState.Broken;
-								}
-							}
-							else
-								return PermissionState.Broken;
-						}
-					}
-           return permissionState;
+		        if (preference.DayOffTemplate != null)
+		        {
+			        if (!ass.AssignedWithDayOff(preference.DayOffTemplate))
+			        {
+				        //Need to do a return here because the visualLayerCollection can be empty 
+				        return PermissionState.Broken;
+			        }
+		        }
+		        else
+			        return PermissionState.Broken;
+	        }
+	        return permissionState;
         }
 
 		private IPreferenceRestriction RestrictionPreference(IScheduleDay schedulePart)
         {
-			var dataRestrictions = (from r in schedulePart.PersistableScheduleDataCollection()
-                                    where r is IPreferenceDay
-                                    select (IPreferenceDay)r);
+			var dataRestrictions = schedulePart
+				.PersistableScheduleDataCollection()
+				.OfType<IPreferenceDay>();
 
             var preference = (from r in dataRestrictions
                               where r.Restriction != null
@@ -505,22 +502,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             bool a = true;
             bool b = true;
 
-            if (limitation.StartTime.HasValue)
-            {
-                if (limitation.StartTime > contractLength)
-                {
-                    a = false;
-                }
-            }
-            if (limitation.EndTime.HasValue)
-            {
-                if (limitation.EndTime < contractLength)
-                {
-                    b = false;
-                }
-            }
+	        if (limitation.StartTime > contractLength)
+	        {
+		        a = false;
+	        }
+	        if (limitation.EndTime < contractLength)
+	        {
+		        b = false;
+	        }
 
-            return a && b;
+	        return a && b;
         }
     }
 }

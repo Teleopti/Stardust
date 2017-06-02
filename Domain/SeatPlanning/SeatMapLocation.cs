@@ -6,23 +6,15 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
-
 	[Serializable]
 	public class SeatMapLocation : VersionedAggregateRootWithBusinessUnit, ISeatMapLocation
 	{
-		private IList<ISeat> _seats = new List<ISeat>();
-		private IList<SeatMapLocation> _childLocations = new List<SeatMapLocation>();
+		private readonly IList<ISeat> _seats = new List<ISeat>();
+		private readonly IList<SeatMapLocation> _childLocations = new List<SeatMapLocation>();
 
-		public virtual IList<ISeat> Seats
-		{
-			get { return _seats; }
-		}
+		public virtual IList<ISeat> Seats => _seats;
 
-		public virtual IList<SeatMapLocation> ChildLocations
-		{
-			get { return _childLocations; }
-
-		}
+		public virtual IList<SeatMapLocation> ChildLocations => _childLocations;
 
 		public virtual string Name { get; set; }
 		public virtual string LocationPrefix { get; set; }
@@ -30,10 +22,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public virtual bool IncludeInSeatPlan { get; set; }
 		public virtual SeatMapLocation ParentLocation { get; set; }
 		public virtual string SeatMapJsonData { get; set; }
-
-		public SeatMapLocation()
-		{
-		}
 
 		public virtual void SetLocation(String seatMapJsonData, String name)
 		{
@@ -125,7 +113,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			SeatMapJsonData = SeatMapJsonData.Replace(temporaryId.ToString(), persistedId.ToString());
 		}
 		
-		public virtual int SeatCount { get { return _seats.Count; } }
-		
+		public virtual int SeatCount => _seats.Count;
 	}
 }

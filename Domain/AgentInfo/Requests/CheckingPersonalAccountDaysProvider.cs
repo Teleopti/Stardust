@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (foundAccounts.Length == 0)
 				return dateOnlyPeriod.StartDate.ToDateOnlyPeriod();
 
-			var firstDate = foundAccounts.Select(a => a.StartDate).OrderBy(a => a).First();
-			if (firstDate <= dateOnlyPeriod.StartDate)
+			var firstDate = foundAccounts.OrderBy(a => a.StartDate).First();
+			if (firstDate.StartDate <= dateOnlyPeriod.StartDate)
 				return dateOnlyPeriod;
 
-			return new DateOnlyPeriod(firstDate,dateOnlyPeriod.EndDate);
+			return new DateOnlyPeriod(firstDate.StartDate,dateOnlyPeriod.EndDate);
 		}
 	}
 }

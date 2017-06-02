@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages
 			MultisiteSkillSelectionModels = new List<MultisiteSkillSelectionModel>();
 			Period = new DateOnlyPeriod
 				(
-					new DateOnly( DateTime.Today.Date),
-					new DateOnly(DateTime.Today.AddDays(30))
+					DateOnly.Today,
+					DateOnly.Today.AddDays(30)
 				);
 		}
 
@@ -69,21 +69,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages
 		{
 			get
 			{
-				return MultisiteSkillSelectionModels.Select(r => r.ChildSkillMappingModels.Count > 0).FirstOrDefault();
+				return MultisiteSkillSelectionModels.Any(r => r.ChildSkillMappingModels.Count > 0);
 			}
 		}
 
 		public ExportMultisiteSkillsToSkillEvent TransformToServiceBusMessage()
 		{
+			var personId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
+				Guid.Empty);
 			var message = new ExportMultisiteSkillsToSkillEvent
 			{
 				OwnerPersonId =
-					 ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
-						  Guid.Empty),
+					 personId,
 				PeriodStart = Period.StartDate.Date,
 				PeriodEnd = Period.EndDate.Date,
-				InitiatorId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
-						  Guid.Empty)
+				InitiatorId = personId
 			};
 
 			foreach (var multisiteSkillSelection in MultisiteSkillSelectionModels)

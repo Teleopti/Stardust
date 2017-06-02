@@ -201,8 +201,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 																							 DateTime min, DateTime max)
 		{
 			return requests.Where(
-				x => (x.StartDateTime >= min && x.StartDateTime <= max) &&
-					 (x.EndDateTime > min && x.EndDateTime <= max));
+				x => x.StartDateTime >= min && x.StartDateTime <= max && x.EndDateTime > min && x.EndDateTime <= max);
 		}
 	}
 }

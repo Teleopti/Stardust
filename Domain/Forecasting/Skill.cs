@@ -366,10 +366,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ISkillDayTemplate template = TryFindTemplateByName(templateName);
             if (template != null)
             {
-                int key = (from i in _templateWeekCollection
-                           where i.Value == template
-                           select i.Key).First();
-
+	            int key = _templateWeekCollection.First(i => i.Value == template).Key;
                 _templateWeekCollection.Remove(key);
             }
         }
@@ -612,10 +609,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             SkillDayTemplate template = (SkillDayTemplate)TryFindTemplateByName(target, templateName);
             if (template != null)
             {
-                int key = (from i in _templateWeekCollection
-                           where i.Value == template
-                           select i.Key).First();
-
+	            int key = _templateWeekCollection.First(i => template.Equals(i.Value)).Key;
                 _templateWeekCollection.Remove(key);
             }
         }

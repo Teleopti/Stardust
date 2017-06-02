@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			var activeTeams = new List<ITeamInfo>(teamsToWorkWith);
 			while (activeTeams.Any())
 			{
-				var team = activeTeams.GetRandom(activeTeams.Count(), true).FirstOrDefault();
+				var team = activeTeams.GetRandom(activeTeams.Count, true).FirstOrDefault();
 				if (team == null) break;
 				var selectedMatrixes = team.MatrixesForMemberAndPeriod(team.GroupMembers.First(), selectedPeriod).ToList();
 

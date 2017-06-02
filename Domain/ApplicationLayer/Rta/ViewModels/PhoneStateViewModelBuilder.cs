@@ -27,14 +27,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public PhoneStateViewModel For(Guid[] ids)
 		{
+			var lookup = _stateGroups.LoadAll().ToLookup(s => s.Id.Value);
 			return new PhoneStateViewModel
 			{
-				PhoneStates =
-					(from s in _stateGroups.LoadAll()
-						from id in ids
-						let sid = s.Id.Value
-						where sid == id
-						select new PhoneStates {Id = sid, Name = s.Name}).ToArray()
+				PhoneStates = (from id in ids
+					select new PhoneStates {Id = id, Name = lookup[id].First().Name}).ToArray()
 			};
 		}
 	}

@@ -40,13 +40,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 		private bool getDistributions(IMultisiteSkill skill)
 		{
 			decimal percentageSum = 0;
-			IDictionary<IChildSkill, Percent> distributions = new Dictionary<IChildSkill, Percent>();
+			var distributions = new Dictionary<IChildSkill, Percent>();
+			var childSkillLookup = skill.ChildSkills.ToLookup(c => c.Id.Value);
 			for (int i = 1; i < gridSubSkills.RowCount; i++)
 			{
-				GridStyleInfo cell = gridSubSkills[i, 2];
+				var cell = gridSubSkills[i, 2];
 				var id = (Guid)cell.Tag;
-				IChildSkill child = skill.ChildSkills.FirstOrDefault(c => c.Id.Value == id);
-
+				var child = childSkillLookup[id].FirstOrDefault();
 				if (child != null)
 				{
 					var value = (Percent)cell.CellValue;
@@ -76,13 +76,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 				warn.ShowDialog(this);
 			}
 
-			return (percentageSum == 1m);
+			return percentageSum == 1m;
 		}
 
-		public string PageName
-		{
-			get { return UserTexts.Resources.SubSkillDistributions; }
-		}
+		public string PageName => UserTexts.Resources.SubSkillDistributions;
 
 		public void SetEditMode()
 		{
@@ -177,7 +174,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 		}
 
 		#endregion
-
-
 	}
 }
