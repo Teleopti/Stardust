@@ -808,5 +808,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchDayData(date).Schedule;
 			result.HasNotScheduled.Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldReturnTrueForCheckStaffingByIntradayWhenOnlyIntradayAbsencePeriodIsAvailable()
+		{
+			var intradayAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(2)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(2)),
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			};
+			var budgetGroupAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(1)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(1)),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator()
+			};
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(intradayAbsenceRequestOpenDatePeriod);
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(budgetGroupAbsenceRequestOpenDatePeriod);
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchDayData(Now.LocalDateOnly().AddDays(2));
+			result.CheckStaffingByIntraday.Should().Be(true);
+		}
 	}
 }

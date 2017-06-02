@@ -869,6 +869,55 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Days.ElementAt(3).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(18));
 		}
 
+		[Test]
+		public void ShouldReturnFalseForCheckStaffingByIntradayWhenIntradayAbsencePeriodIsInLowPriority()
+		{
+			var intradayAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(13)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(13)),
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			};
+			var budgetGroupAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(13)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(13)),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator()
+			};
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(intradayAbsenceRequestOpenDatePeriod);
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(budgetGroupAbsenceRequestOpenDatePeriod);
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(null);
+			result.CheckStaffingByIntraday.Should().Be(false);
+		}
+
+
+		[Test]
+		public void ShouldReturnTrueForCheckStaffingByIntradayWhenAnyIntradayAbsencePeriodIsAvailable()
+		{
+			var intradayAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(2)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(2)),
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			};
+			var budgetGroupAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(1)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(1)),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator()
+			};
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(intradayAbsenceRequestOpenDatePeriod);
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(budgetGroupAbsenceRequestOpenDatePeriod);
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(null);
+			result.CheckStaffingByIntraday.Should().Be(true);
+		}
+
 		private void addAssignment(DateTimePeriod period, IActivity activity)
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly());

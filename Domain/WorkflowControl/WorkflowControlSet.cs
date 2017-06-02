@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -379,7 +378,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual IAbsenceRequestOpenPeriod GetMergedAbsenceRequestOpenPeriod(IAbsenceRequest absenceRequest)
 		{
-			 var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+			var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
 
 			return getMergedOpenPeriods(absenceRequest, dateOnlyPeriod);
@@ -398,16 +397,22 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				p.StaffingThresholdValidator != null && p.StaffingThresholdValidator.GetType() == expectedValidatorType);
 		}
 
-		public virtual bool IsAbsenceRequestValidatorEnabled<T>(DateOnly today, DateOnlyPeriod period)
+		public virtual bool IsAbsenceRequestValidatorEnabled<T>(DateOnly today, DateOnly date)
 			where T : IAbsenceRequestValidator
 		{
-			var expectedValidatorType = typeof(T); 
+			var period = date.ToDateOnlyPeriod();
+			var expectedValidatorType = typeof(T);
 			var validOpenPeriods = AbsenceRequestOpenPeriods.Where(
-				p =>p.OpenForRequestsPeriod.Intersection(period).HasValue && p.GetPeriod(today).Intersection(period).HasValue
-					 && p.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest));
+				p => p.OpenForRequestsPeriod.Intersection(period).HasValue && p.GetPeriod(today).Intersection(period).HasValue
+					 && p.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest)).OrderByDescending(p => p.OrderIndex).ToList();
 
-			return validOpenPeriods.Any(p =>
-				p.StaffingThresholdValidator != null && p.StaffingThresholdValidator.GetType() == expectedValidatorType);
+			if (!validOpenPeriods.Any())
+				return false;
+
+			var highestPriorityOpenPeriod = validOpenPeriods[0];
+
+			return highestPriorityOpenPeriod.StaffingThresholdValidator != null
+					&& highestPriorityOpenPeriod.StaffingThresholdValidator.GetType() == expectedValidatorType;
 		}
 
 		private IAbsenceRequestOpenPeriod getMergedOpenPeriods(IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)

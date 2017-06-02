@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Days = days(s, loadOpenHourPeriod),
 				AsmPermission = s.AsmPermission,
 				IsCurrentWeek = s.IsCurrentWeek,
-				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, s.Date)
+				CheckStaffingByIntraday = isCheckStaffingByIntradayForWeek(currentUser.WorkflowControlSet, s.Date)
 			};
 		}
 
@@ -114,13 +114,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Schedule = createDayViewModel(s.ScheduleDay, loadOpenHourPeriod),
 				AsmPermission = s.AsmPermission,
 				IsToday = s.IsCurrentDay,
-				CheckStaffingByIntraday = isCheckStaffingByIntraday(currentUser.WorkflowControlSet, s.Date),
+				CheckStaffingByIntraday = isCheckStaffingByIntradayForDay(currentUser.WorkflowControlSet, s.Date),
 				UnReadMessageCount = s.UnReadMessageCount,
 				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel()
 			};
 		}
 
-		private bool isCheckStaffingByIntraday(IWorkflowControlSet workflowControlSet, DateOnly showForDate)
+		private bool isCheckStaffingByIntradayForWeek(IWorkflowControlSet workflowControlSet, DateOnly showForDate)
 		{
 			if (workflowControlSet?.AbsenceRequestOpenPeriods == null || !workflowControlSet.AbsenceRequestOpenPeriods.Any())
 			{
@@ -131,8 +131,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			{
 				weekPeriod = new DateOnlyPeriod(_now.LocalDateOnly(), weekPeriod.EndDate);
 			}
-			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.LocalDateOnly(), weekPeriod) ||
-					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.LocalDateOnly(), weekPeriod);
+
+			var days = weekPeriod.DayCollection();
+
+			foreach (var day in days)
+			{
+				var isChecking =
+					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.LocalDateOnly(),
+						day) ||
+					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.LocalDateOnly(), day);
+				if (isChecking)
+					return true;
+			}
+
+			return false;
+		}
+
+		private bool isCheckStaffingByIntradayForDay(IWorkflowControlSet workflowControlSet, DateOnly showForDate)
+		{
+			if (workflowControlSet?.AbsenceRequestOpenPeriods == null || !workflowControlSet.AbsenceRequestOpenPeriods.Any())
+			{
+				return false;
+			}
+			if (showForDate < _now.LocalDateOnly())
+			{
+				return false;
+			}
+			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.LocalDateOnly(), showForDate) ||
+					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.LocalDateOnly(), showForDate);
 		}
 
 		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData, bool loadOpenHourPeriod = false)

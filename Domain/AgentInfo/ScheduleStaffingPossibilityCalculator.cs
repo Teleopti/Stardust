@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				return false;
 			}
 
-			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.LocalDateOnly(), new DateOnlyPeriod(date, date)) ||
-					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.LocalDateOnly(), new DateOnlyPeriod(date, date));
+			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.LocalDateOnly(), date) ||
+					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.LocalDateOnly(), date);
 		}
 
 		private IScheduleDictionary loadScheduleDictionary(DateOnlyPeriod period)
