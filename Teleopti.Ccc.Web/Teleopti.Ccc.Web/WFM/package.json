@@ -80,9 +80,9 @@
     "start": "npm run iis",
     "webpack": ".\\node_modules\\.bin\\webpack",
     "iis": " c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
-    
+
     "ng-templates": "nghtml2js -m wfm.templates -f app/**/*.html -o ./dist/templates.js",
-    
+
     "sass": "npm run sass:classic && npm run sass:dark",
     "minify:css": ".\\node_modules\\.bin\\cleancss --source-map './css/style_classic.css' -o ./dist/dist.min.css",
     "sass:classic": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/style.scss > ./css/style_classic.css",
