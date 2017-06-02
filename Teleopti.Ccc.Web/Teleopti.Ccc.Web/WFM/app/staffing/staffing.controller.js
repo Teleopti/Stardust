@@ -5,8 +5,8 @@
 		.module('wfm.staffing')
 		.controller('StaffingController', StaffingController);
 
-	StaffingController.$inject = ['staffingService', 'Toggle', '$filter', 'NoticeService', '$translate'];
-	function StaffingController(staffingService, toggleService, $filter, NoticeService, $translate) {
+	StaffingController.$inject = ['staffingService', 'Toggle', 'UtilService', '$filter', 'NoticeService', '$translate'];
+	function StaffingController(staffingService, toggleService, utilService, $filter, NoticeService, $translate) {
 		var vm = this;
 		vm.staffingDataAvailable = true;
 		vm.selectedSkill;
@@ -103,8 +103,8 @@
 				staffingData.forcastedStaffing = [];
 				staffingData.suggestedStaffing = [];
 				if (staffingPrecheck(result.DataSeries)) {
-					staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
-					staffingData.forcastedStaffing = result.DataSeries.ForecastedStaffing;
+					staffingData.scheduledStaffing = roundDataToOneDecimal(result.DataSeries.ScheduledStaffing);
+					staffingData.forcastedStaffing = roundDataToOneDecimal(result.DataSeries.ForecastedStaffing);
 					staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
 					staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
 					vm.timeSerie = result.DataSeries.Time;
@@ -119,6 +119,11 @@
 					vm.staffingDataAvailable = false;
 				}
 			});
+		}
+		function roundDataToOneDecimal(input) {
+			input = utilService.roundArrayContents(input, 1)
+
+			return input;
 		}
 
 		function staffingPrecheck(data) {
@@ -262,10 +267,10 @@
 				var value = staffingData.scheduledStaffing[index] - staffingData.forcastedStaffing[index];
 
 				if (value < 0) {
-					staffing.under.push(Math.abs(value));
+					staffing.under.push(Math.abs(value.toFixed(1)));
 					staffing.over.push(0);
 				} else {
-					staffing.over.push(value);
+					staffing.over.push(value.toFixed(1));
 					staffing.under.push(0);
 				}
 
@@ -293,7 +298,7 @@
 			scaffold.over.unshift('OverStaffScaffold');
 			return scaffold;
 		}
-		function generateColorObjectV2(staffingObj, scaffoldObj) {
+		function generateColorObject(staffingObj, scaffoldObj) {
 			var colors = {};
 			var overstaffColorKey = staffingObj.over[0];
 			var understaffColorKey = staffingObj.under[0];
@@ -306,53 +311,52 @@
 			colors[overScaffoldKey] = '#fff';
 			return colors;
 
-        }
+		}
 
-        function tooltip_contents(d, defaultTitleFormat, defaultValueFormat, color) {
-            var $$ = this, config = $$.config, CLASS = $$.CLASS,
-                titleFormat = config.tooltip_format_title || defaultTitleFormat,
-                nameFormat = config.tooltip_format_name || function (name) { return name; },
-                valueFormat = config.tooltip_format_value || defaultValueFormat,
-                text, i, title, value, name, bgcolor;
+		function tooltip_contents(d, defaultTitleFormat, defaultValueFormat, color) {
+			var $$ = this, config = $$.config, CLASS = $$.CLASS,
+				titleFormat = config.tooltip_format_title || defaultTitleFormat,
+				nameFormat = config.tooltip_format_name || function (name) { return name; },
+				valueFormat = config.tooltip_format_value || defaultValueFormat,
+				text, i, title, value, name, bgcolor;
 
-            // You can access all of data like this:
-            //console.log($$.data.targets);
+			// You can access all of data like this:
+			//console.log($$.data.targets);
 
-            for (i = 0; i < d.length; i++) {
-                if (!(d[i] && (d[i].value || d[i].value === 0))) { continue; }
+			for (i = 0; i < d.length; i++) {
+				if (!(d[i] && (d[i].value || d[i].value === 0))) { continue; }
 
-                if (d[i].name === 'OverStaffScaffold' || d[i].name === 'UnderStaffScaffold') { continue; }
+				if (d[i].name === 'OverStaffScaffold' || d[i].name === 'UnderStaffScaffold') { continue; }
 
-                if (!text) {
-                    title = 'Staffing'
-                    text = "<table class='" + CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
-                }
+				if (!text) {
+					title = 'Staffing'
+					text = "<table class='" + CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
+				}
 
-                name = nameFormat(d[i].name);
-                value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
-                bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
+				name = nameFormat(d[i].name);
+				value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
+				bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
 
-                text += "<tr class='" + CLASS.tooltipName + "-" + d[i].id + "'>";
-                text += "<td class='name'><span style='background-color:" + bgcolor + "'></span>" + name + "</td>";
-                text += "<td class='value'>" + value + "</td>";
-                text += "</tr>";
-            }
-            return text + "</table>";
-        }
+				text += "<tr class='" + CLASS.tooltipName + "-" + d[i].id + "'>";
+				text += "<td class='name'><span style='background-color:" + bgcolor + "'></span>" + name + "</td>";
+				text += "<td class='value'>" + value + "</td>";
+				text += "</tr>";
+			}
+			return text + "</table>";
+		}
 
 		function generateChartForView() {
 			var staffing = generateOverUnderStaffing();
 			var scaffold = generateScaffold();
 			var types = generateTypeObject();
-			var chartColors = generateColorObjectV2(staffing, scaffold);
-
+			var chartColors = generateColorObject(staffing, scaffold);
 			c3.generate({
 				bindto: '#staffingChart',
 				point: {
 					show: false
 				},
-				legend:{
-				hide:[scaffold.under[0], scaffold.over[0]],
+				legend: {
+					hide: [scaffold.under[0], scaffold.over[0]],
 				},
 				data: {
 					colors: chartColors,
@@ -374,10 +378,10 @@
 						[scaffold.over[0], staffing.over[0]],
 						[scaffold.under[0], staffing.under[0]]
 					]
-                },
-                tooltip: {
-                    contents: tooltip_contents
-                },
+				},
+				tooltip: {
+					contents: tooltip_contents
+				},
 				axis: {
 					x: {
 						label: {
