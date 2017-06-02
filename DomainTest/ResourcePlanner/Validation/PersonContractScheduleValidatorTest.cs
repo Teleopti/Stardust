@@ -2,16 +2,19 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 {
 	[DomainTest]
-	public class PersonContractScheduleValidatorTest
+	public class PersonContractScheduleValidatorTest : ISetup
 	{
 		public BasicSchedulingValidator Target;
 
@@ -51,6 +54,11 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
 			validationError.ValidationErrors.Should().Not.Be.Null().And.Not.Be.Empty();
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("_", true, true))).For<IScenarioRepository>();
 		}
 	}
 }

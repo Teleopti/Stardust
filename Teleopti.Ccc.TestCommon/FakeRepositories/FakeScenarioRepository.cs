@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeScenarioRepository : IScenarioRepository
 	{
 		private readonly List<IScenario> _scenario = new List<IScenario>();
-		private bool _throwOnLoadDefaultScenario;
 
 		public FakeScenarioRepository()
 		{			
@@ -24,11 +23,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Has(IScenario scenario)
 		{
 			_scenario.Add(scenario);
-		}
-
-		public void ThrowOnLoadDefaultScenario()
-		{
-			_throwOnLoadDefaultScenario = true;
 		}
 
 		public IScenario Has(string name)
@@ -76,8 +70,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScenario LoadDefaultScenario()
 		{
-			if (_throwOnLoadDefaultScenario) throw new InvalidOperationException();
-			return _scenario.SingleOrDefault(s => s.DefaultScenario);
+			return _scenario.Single(s => s.DefaultScenario);
 		}
 
 		public IScenario LoadDefaultScenario(IBusinessUnit businessUnit)

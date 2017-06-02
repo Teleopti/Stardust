@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				JobResultId = jobResultId
 			};
 
-			ScenarioRepository.ThrowOnLoadDefaultScenario();
 			Assert.Throws<InvalidOperationException>(() => Target.Handle(reqEvent));
 
 			var jobResultDetail = planningPeriod.JobResults.Single().Details.Single();
