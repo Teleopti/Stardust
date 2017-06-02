@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var result = Target.Validate(new[] {agentMissingPersonPeriod}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), Enumerable.Empty<SkillMissingForecast>());
 
-			result.InvalidResources.SelectMany(x => x.ValidationErrors)
-				.Any(x => x == Resources.MissingPersonPeriodForPlanningPeriod)
+			result.InvalidResources.SelectMany(x => x.ValidationTypes)
+				.Any(x => x == typeof(PersonPeriodValidator))
 				.Should().Be.True();
 		}
 
@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var result = Target.Validate(new[] {agent}, new DateOnlyPeriod(startDate, startDate.AddDays(1)), Enumerable.Empty<SkillMissingForecast>());
 
-			result.InvalidResources.SelectMany(x => x.ValidationErrors)
-				.Any(x => x == Resources.NoFullSchedulePeriod)
+			result.InvalidResources.SelectMany(x => x.ValidationTypes)
+				.Any(x => x == typeof(PersonSchedulePeriodValidator))
 				.Should().Be.False();
 		}
 	}

@@ -40,21 +40,21 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 		{
 			var result = new ValidationResult();
 			_missingForecastProvider.GetMissingForecast(agents, period, existingForecast)
-				.ForEach(r => result.Add(r));
+				.ForEach(r => result.Add(r, typeof(MissingForecastProvider)));
 			_personPeriodValidator.GetPeopleMissingPeriod(agents, period)
-				.ForEach(r => result.Add(r));
+				.ForEach(r => result.Add(r, typeof(PersonPeriodValidator)));
 			_personSkillValidator.GetPeopleMissingSkill(agents, period)
-				.ForEach(r => result.Add(r));
+				.ForEach(r => result.Add(r, typeof(PersonSkillValidator)));
 			_personSchedulePeriodValidator.GetPeopleMissingSchedulePeriod(agents, period)
-				.ForEach(r => result.Add(r));
+				.ForEach(r => result.Add(r, typeof(PersonSchedulePeriodValidator)));
 			_personShiftBagValidator.GetPeopleMissingShiftBag(agents, period)
-				.ForEach(r => result.Add(r));
+				.ForEach(r => result.Add(r, typeof(PersonShiftBagValidator)));
 			_partTimePercentageValidator.GetPeopleMissingPartTimePercentage(agents, period)
-				.ForEach(r => result.Add(r));
+				.ForEach(r => result.Add(r, typeof(PersonPartTimePercentageValidator)));
 			_personContractValidator.GetPeopleMissingContract(agents, period)
-				.ForEach(r => result.Add(r));
+				.ForEach(r => result.Add(r, typeof(PersonContractValidator)));
 			_personContractScheduleValidator.GetPeopleMissingContractSchedule(agents, period)
-				.ForEach(r => result.Add(r));
+				.ForEach(r => result.Add(r, typeof(PersonContractScheduleValidator)));
 			return result;
 		}
 	}
