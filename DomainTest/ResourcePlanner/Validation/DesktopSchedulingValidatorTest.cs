@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 {
 	[DomainTest]
+	[SkipRegistringFakeRepositories]
 	public class DesktopSchedulingValidatorTest
 	{
 		public DesktopSchedulingValidator Target;
