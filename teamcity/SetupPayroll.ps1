@@ -85,7 +85,7 @@ function fnStartRemoteService
         $Servicename
     )
         Write-Host "Starting Service: $Servicename on Computer: $Computername"
-        Get-Service -Name $Servicename -ComputerName $Computername | Start-Service
+        Get-Service -Name $Servicename -ComputerName $Computername | Start-Service -ErrorAction SilentlyContinue
 }
 
 function Main
