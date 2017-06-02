@@ -827,5 +827,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GoToWfmCreateAgentGroup();
 		}
+
+		[When(@"I am viewing agent group list page")]
+		public void WhenIAmViewingAgentGroupListPage()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToWfmListAgentGroups();
+		}
+
 	}
 }

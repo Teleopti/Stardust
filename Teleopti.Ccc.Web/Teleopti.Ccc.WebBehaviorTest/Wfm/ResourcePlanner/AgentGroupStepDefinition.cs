@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 {
@@ -45,6 +47,52 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.AssertAnyContains(".agent-group-name", agentGroupName);
 		}
 
+		[Given(@"there is an agent group with")]
+		public void GivenThereIsAnAgentGroupNamedWith(Table table)
+		{
+			var agentGroup = table.CreateInstance<AgentGroupConfigurable>();
+			DataMaker.Data().Apply(agentGroup);
+		}
+
+		[When(@"I click more actions for agent group '(.*)'")]
+		public void WhenIClickMoreActionsForAgentGroup(string agentGroupName)
+		{
+			Browser.Interactions.AssertAnyContains(".agent-group-name", agentGroupName);
+			// TODO: We should find the actual agent group, this only works with one agent group also this is HORRIBLE
+			Browser.Interactions.Javascript(@"
+				var el = document.querySelector('.ag-menu > div'); 
+				var classes = el.classList;
+				classes.remove('context-menu');
+				classes.add('context-menu:focus');
+				el.classList = classes;
+			");
+		}
+
+		[When(@"I click edit agent group")]
+		public void WhenIClickEditAgentGroup()
+		{
+			Browser.Interactions.Click(".edit-agent-group");
+		}
+
+		[When(@"I click delete agent group")]
+		public void WhenIClickDeleteAgentGroup()
+		{
+			Browser.Interactions.Click(".delete-agent-group");
+		}
+
+		[When(@"I confirm deletion")]
+		public void WhenIConfirmDeletion()
+		{
+			Browser.Interactions.Click(".confirm-delete-agent-group");
+		}
+
+		[Then(@"I should not see '(.*)' in the agent group list")]
+		public void ThenIShouldNotSeeInTheAgentGroupList(string agentGroupName)
+		{
+			Browser.Interactions.AssertNoContains(".wfm-grid", ".agent-group-name", agentGroupName);
+		}
+
+
 		private void searchAndSelect(string searchText, string selectItemText)
 		{
 			Browser.Interactions.FillWith("md-autocomplete md-autocomplete-wrap input", searchText);
@@ -56,6 +104,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		}
 
 	}
+
+	
 
 	public class TeamFilter
 	{

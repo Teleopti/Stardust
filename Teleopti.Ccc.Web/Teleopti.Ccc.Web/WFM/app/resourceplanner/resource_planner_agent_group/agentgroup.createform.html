@@ -62,7 +62,7 @@
 			</div>
 			<div class="con-footer">
 				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
-				<button ng-show="vm.editAgentGroup.Id" class="wfm-btn wfm-btn-invis-default" ng-click='confirmModal1=true;'>{{'Delete'|translate}}</button>
+				<button ng-show="vm.editAgentGroup.Id" class="wfm-btn wfm-btn-invis-default delete-agent-group" ng-click='confirmModal1=true;'>{{'Delete'|translate}}</button>
 				<button class="wfm-btn save-agent-group" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
 						ng-click="vm.persist()">
 					{{'Save'|translate}}
@@ -78,7 +78,7 @@
 								<div class="modal-actions">
 									<aside>
 										<button ng-click="confirmModal1=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-										<button ng-click="confirmModal1=false; vm.removeAgentGroup(vm.editAgentGroup.Id)" class="wfm-btn wfm-btn-invis-primary">{{'Delete'|translate}}</button>
+										<button ng-click="confirmModal1=false; vm.removeAgentGroup(vm.editAgentGroup.Id)" class="wfm-btn wfm-btn-invis-primary confirm-delete-agent-group">{{'Delete'|translate}}</button>
 									</aside>
 								</div>
 							</div>

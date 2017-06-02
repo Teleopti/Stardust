@@ -622,5 +622,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/resourceplanner/createagentgroup");
 		}
+
+		public static void GoToWfmListAgentGroups()
+		{
+			GoToPage("wfm/#/resourceplanner/v2");
+		}
 	}
 }

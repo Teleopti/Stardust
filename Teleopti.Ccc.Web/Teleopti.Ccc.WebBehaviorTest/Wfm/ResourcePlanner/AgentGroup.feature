@@ -40,4 +40,22 @@ Scenario: Create agent group
 	And I save agent group
 	Then I should see 'AgentGroup 1' in the agent group list
 
+Scenario: Delete agent group
+	Given there is a site named 'Site 1'
+	And there is a team named 'Team 1' on 'Site 1'
+	And I have a role with
+	| Field                     | Value            |
+	| Name                      | Resource Planner |
+	| Access to team            | Team 1           |
+	| Access to resourceplanner | true             |
+	And there is an agent group with
+	| Field            | Value        |
+	| Agent group name | AgentGroup 1 |
+	| Team             | Team 1       |
+	When I am viewing agent group list page
+	And I click more actions for agent group 'AgentGroup 1'
+	And I click edit agent group
+	And I click delete agent group
+	And I confirm deletion
+	Then I should not see 'AgentGroup 1' in the agent group list
 
