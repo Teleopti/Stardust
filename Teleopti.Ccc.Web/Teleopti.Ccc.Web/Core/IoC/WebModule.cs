@@ -21,6 +21,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
+using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.Intraday;
 using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Messages.Core.Ioc;
@@ -94,8 +95,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new AnywhereAreaModule(_configuration));
 			
 			builder.RegisterModule<ForecastingAreaModule>();
-			builder.RegisterModule(new ResourcePlannerModule());
-
+			builder.RegisterType<BasicActionThrottler>().As<IActionThrottler>().SingleInstance();
 			builder.RegisterModule<ResourceHandlerModule>();
 
 			builder.RegisterModule(new RuleSetModule(_configuration, false));

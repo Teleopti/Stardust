@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {

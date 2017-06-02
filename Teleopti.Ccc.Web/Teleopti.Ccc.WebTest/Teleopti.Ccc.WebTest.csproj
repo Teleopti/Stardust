@@ -287,14 +287,6 @@
     <Compile Include="Areas\People\Providers\ImportAgentDataProviderTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\AgentGroupControllerTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\Validation\PersonContractValidatorTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\Validation\PersonContractScheduleValidatorTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\Validation\PersonPartTimePercentageValidatorTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\Validation\PersonSchedulePeriodValidatorTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\Validation\PersonSkillValidatorTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\Validation\PersonShiftBagValidatorTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\Validation\PersonPeriodValidatorTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\ResourcePlannerTestAttribute.cs" />
     <Compile Include="Areas\Start\Controllers\UserTokenControllerTest.cs" />
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterTest.cs" />
@@ -344,10 +336,8 @@
     <Compile Include="Areas\ResourcePlanner\BusinessRuleValidationResultTest.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffRulesControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\GroupPagesControllerTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\MissingForecastProviderTest.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationResultModelTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodControllerTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\ResourcePlannerModuleTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ThrottleActionTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ViolatedBusinessRulesTest.cs" />
     <Compile Include="Areas\Search\FakeNextPlanningPeriodProvider.cs" />

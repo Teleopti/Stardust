@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation.Validation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -22,7 +23,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner.Validation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
@@ -469,7 +469,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			//instead move logic to domain and don't fake other stuff than "out of process calls" (=repos and similar)
 			//These out of process-fakes, put it in DomainTestAttribute
 			system.AddService<PlanningPeriodController>();
-			system.AddModule(new ResourcePlannerModule());
 		}
 	}
 }
