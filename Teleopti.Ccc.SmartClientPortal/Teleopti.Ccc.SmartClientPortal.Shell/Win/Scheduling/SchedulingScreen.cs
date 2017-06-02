@@ -6938,8 +6938,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 							var skills = aggregateSkills(person, scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
 							if (skills.Count > 0)
 							{
-								var skillResolutionProvider = _container.Resolve<ISkillResolutionProvider>();
-								resolution = skillResolutionProvider.MinimumResolution(skills);
+								resolution = skills.Min(x => x.DefaultResolution);
 							}
 						}
 					}

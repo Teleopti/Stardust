@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 	public class DailyTargetValueCalculatorForTeamBlock : IDailyTargetValueCalculatorForTeamBlock
 	{
-		private readonly ISkillResolutionProvider _resolutionProvider;
 		private readonly ISkillIntervalDataDivider _intervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _intervalDataAggregator;
 		private readonly IDayIntervalDataCalculator _dayIntervalDataCalculator;
@@ -27,8 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IFilterOutIntervalsAfterMidNight _filterOutIntervalsAfterMidNight;
 		private readonly PullTargetValueFromSkillIntervalData _pullTargetValueFromSkillIntervalData;
 
-		public DailyTargetValueCalculatorForTeamBlock(ISkillResolutionProvider resolutionProvider,
-			ISkillIntervalDataDivider intervalDataDivider,
+		public DailyTargetValueCalculatorForTeamBlock(ISkillIntervalDataDivider intervalDataDivider,
 			ISkillIntervalDataAggregator intervalDataAggregator, IDayIntervalDataCalculator dayIntervalDataCalculator,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator,
@@ -36,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IFilterOutIntervalsAfterMidNight filterOutIntervalsAfterMidNight,
 			PullTargetValueFromSkillIntervalData pullTargetValueFromSkillIntervalData)
 		{
-			_resolutionProvider = resolutionProvider;
 			_intervalDataDivider = intervalDataDivider;
 			_intervalDataAggregator = intervalDataAggregator;
 			_dayIntervalDataCalculator = dayIntervalDataCalculator;
@@ -55,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 			var dateOnlyList = blockPeriod.DayCollection();
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
-			var minimumResolution = _resolutionProvider.MinimumResolution(skills);
+			var minimumResolution = skills.Min(x => x.DefaultResolution);
 
 			dateOnlyList.Add(dateOnlyList.Max().AddDays(1));
 			var skillIntervalPerDayList = getSkillIntervalListForEachDay(dateOnlyList, skills, minimumResolution);

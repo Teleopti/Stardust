@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		private MockRepository _mocks;
 		private ICreateSkillIntervalDatasPerActivtyForDate _target;
 		private ICalculateAggregatedDataForActivtyAndDate _calculateAggregatedDataForActivtyAndDate;
-		private ISkillResolutionProvider _skillResolutionProvider;
 		private ISkill _skill1;
 		private ISkill _skill2;
 		private ISkillDay _skillDayForSkill1;
@@ -28,8 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		{
 			_mocks = new MockRepository();
 			_calculateAggregatedDataForActivtyAndDate = _mocks.StrictMock<ICalculateAggregatedDataForActivtyAndDate>();
-			_skillResolutionProvider = _mocks.StrictMock<ISkillResolutionProvider>();
-			_target = new CreateSkillIntervalDatasPerActivtyForDate(_calculateAggregatedDataForActivtyAndDate, _skillResolutionProvider);
+			_target = new CreateSkillIntervalDatasPerActivtyForDate(_calculateAggregatedDataForActivtyAndDate);
 			_skill1 = SkillFactory.CreateSkill("s1");
 			_skill2 = SkillFactory.CreateSkill("s1");
 			_skillDayForSkill1 = _mocks.StrictMock<ISkillDay>();
@@ -52,7 +50,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 									   new DateTime(2013, 10, 02, 17, 0, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
 			using (_mocks.Record())
 			{ 
-				Expect.Call(_skillResolutionProvider.MinimumResolution(skillList)).Return(15);
 				Expect.Call(_skillDayForSkill1.Skill).Return(_skill1).Repeat.Any();
 				Expect.Call(_skillDayForSkill1.CurrentDate).Return(date).Repeat.Any();
 				Expect.Call(_skillDayForSkill2.Skill).Return(_skill2).Repeat.Any();
