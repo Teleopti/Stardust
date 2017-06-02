@@ -438,7 +438,6 @@
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PhoneStateController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\SkillsController.cs" />
-    <Compile Include="Areas\Anywhere\Core\GetBusinessUnitId.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />

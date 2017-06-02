@@ -1198,7 +1198,6 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForSiteViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForTeamsViewModelBuilder.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\IGetBusinessUnitId.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\INumberOfAgentsInTeamReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteOutOfAdherence.cs" />

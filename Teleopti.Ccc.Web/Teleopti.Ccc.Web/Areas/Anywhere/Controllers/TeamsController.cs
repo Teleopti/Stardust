@@ -12,24 +12,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		private readonly AgentsInAlarmForTeamsViewModelBuilder _inAlarmForTeams;
 		private readonly TeamViewModelBuilder _teamViewModelBuilder;
-		private readonly IGetBusinessUnitId _getBusinessUnitId;
 
 		public TeamsController(
 			AgentsInAlarmForTeamsViewModelBuilder inAlarmForTeams,
-			TeamViewModelBuilder teamViewModelBuilder,
-			IGetBusinessUnitId getBusinessUnitId)
+			TeamViewModelBuilder teamViewModelBuilder)
 		{
 			_inAlarmForTeams = inAlarmForTeams;
 			_teamViewModelBuilder = teamViewModelBuilder;
-			_getBusinessUnitId = getBusinessUnitId;
 		}
-
-		[UnitOfWork, HttpGet, Route("api/Teams/GetBusinessUnitId")]
-		public virtual IHttpActionResult GetBusinessUnitId(Guid teamId)
-		{
-			return Ok(_getBusinessUnitId.Get(teamId));
-		}
-
+		
 		[UnitOfWork, HttpGet, Route("api/Teams/Build")]
 		public virtual IHttpActionResult ForSite(Guid siteId)
 		{

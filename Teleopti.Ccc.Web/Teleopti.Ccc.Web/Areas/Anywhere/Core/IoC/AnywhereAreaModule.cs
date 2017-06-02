@@ -52,8 +52,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().SingleInstance();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 
-			builder.RegisterType<GetBusinessUnitId>().As<IGetBusinessUnitId>().InstancePerLifetimeScope();
-
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>();
 			builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>().As<INonBlendSkillImpactOnPeriodForProjection>();
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>();
