@@ -21,7 +21,7 @@
 			link: postlink
 		};
 
-		function campaignCommandsPaneCtrl($scope, $state, outboundService, outboundChartService, toggleService, outboundNotificationService) {
+		function campaignCommandsPaneCtrl($scope, $state, outboundService, outboundChartService, outboundNotificationService, toggleService) {
 			$scope.manualPlanSwitch = false;
 			$scope.manualBacklogSwitch = false;
 			$scope.isPlanClickedSave = false;
