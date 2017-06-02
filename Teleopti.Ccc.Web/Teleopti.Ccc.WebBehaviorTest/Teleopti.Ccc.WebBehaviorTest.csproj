@@ -849,6 +849,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\ResourcePlanner\AgentGroupStepDefinition.cs" />
     <Compile Include="Wfm\ResourcePlanner\PlanningPeriod.feature.cs">
       <DependentUpon>PlanningPeriod.feature</DependentUpon>
       <AutoGen>True</AutoGen>

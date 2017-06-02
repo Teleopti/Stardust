@@ -618,5 +618,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/resourceplanner/importschedule");
 		}
 
+		public static void GoToWfmCreateAgentGroup()
+		{
+			GoToPage("wfm/#/resourceplanner/createagentgroup");
+		}
 	}
 }

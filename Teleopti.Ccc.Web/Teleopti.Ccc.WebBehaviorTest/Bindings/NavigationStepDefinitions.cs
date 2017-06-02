@@ -820,5 +820,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GoToWfmImportSchedule();
 		}
+
+		[When(@"I am viewing create agent group page")]
+		public void WhenIAmViewingCreateAgentGroupPage()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToWfmCreateAgentGroup();
+		}
 	}
 }

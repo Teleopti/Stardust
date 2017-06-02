@@ -7,11 +7,11 @@ Feature: AgentGroup
 		so that John can plan for Invoice in London,
 		so that Fixed agents in London have exactly 2 DOs off per week.
 
-@ignore
 Scenario: Create agent group
 	Given there is a site named 'Site 1'
 	And there is a site named 'Site 2'
-	And there is a skill named 'Skill 1'
+	And there is an activity named 'Phone'
+	And there is a skill named 'Skill 1' with activity 'Phone'
 	And there is a team named 'Team 1' on 'Site 1'
 	And there is a team named 'Team 2' on 'Site 2'
 	And I have a role with
@@ -31,11 +31,11 @@ Scenario: Create agent group
 	When I am viewing create agent group page
 	And I input agent group name 'AgentGroup 1'
 	And I select the team 
-	 | Field  |
-	 | Team 1 |
-	 | Team 2 |
+	 | Team   | Site   |
+	 | Team 1 | Site 1 |
+	 | Team 2 | Site 2 |
 	 And I select the skill 
-	 | Field   |
+	 | Skill   |
 	 | Skill 1 |
 	And I save agent group
 	Then I should see 'AgentGroup 1' in the agent group list

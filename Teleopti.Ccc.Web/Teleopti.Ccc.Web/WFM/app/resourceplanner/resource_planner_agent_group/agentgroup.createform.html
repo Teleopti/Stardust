@@ -16,7 +16,7 @@
 					<form name="form" class="wfm-form" novalidate>
 						<div class="form-input-wrap">
 							<label for="agentGroupName" translate>NameColon</label>
-							<input type="text" name="agentGroupName" id="agentGroupName" autofocus autocomplete="off" ng-model="vm.name" ng-model-options="{ debounce: 500 }"/>
+							<input type="text" name="agentGroupName" id="agentGroupName" autofocus autocomplete="off" ng-model="vm.name" ng-model-options="{ debounce: 500 }" />
 							<p class="text-danger" ng-show="!vm.isValidName()" translate>
 								NameRequired
 							</p>
@@ -27,13 +27,13 @@
 					<div class="wfm-option form-input-wrap">
 						<form name="autocomplete-form" class="autosearch-input">
 							<md-autocomplete md-no-cache="true" md-selected-item="selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForAgentGroup'|translate}}"
-							 md-items="item in vm.inputFilterData()" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">
+											 md-items="item in vm.inputFilterData()" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">
 								<md-item-template>
-									<div class="wfm-filter-selected" >
-										<div class="wfm-chip-wrap pp-filter-chip-wrap" >
+									<div class="wfm-filter-selected">
+										<div class="wfm-chip-wrap pp-filter-chip-wrap">
 											<span class="wfm-chip">
 												<span class="chip-handle">{{item.FilterType}}</span>
-											<span class="chip-text">{{item.Name}}</span>
+												<span class="chip-text">{{item.Name}}</span>
 											</span>
 										</div>
 									</div>
@@ -53,7 +53,7 @@
 							<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults ">
 								<span class="wfm-chip">
 									<span class="chip-handle">{{selected.FilterType | translate}}</span>
-								<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i></span>
+									<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i></span>
 								</span>
 							</div>
 						</div>
@@ -63,8 +63,10 @@
 			<div class="con-footer">
 				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
 				<button ng-show="vm.editAgentGroup.Id" class="wfm-btn wfm-btn-invis-default" ng-click='confirmModal1=true;'>{{'Delete'|translate}}</button>
-				<button class="wfm-btn" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
-				 ng-click="vm.persist()">{{'Save'|translate}}</button>
+				<button class="wfm-btn save-agent-group" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
+						ng-click="vm.persist()">
+					{{'Save'|translate}}
+	 			</button>
 				<div ng-cloak class="modal-box">
 					<div ng-cloak ng-show="confirmModal1">
 						<div class="modalbg">
