@@ -1,124 +1,137 @@
 (function() {
-	'use strict';
-	angular.module('wfm.intraday')
-	.service('intradayTrafficService', [
-		'$filter', 'intradayService','$translate', function($filter, intradayService, $translate) {
-			var service = {};
+    'use strict';
+    angular.module('wfm.intraday').service('intradayTrafficService', [
+        '$filter',
+        'intradayService',
+        '$translate',
+        function($filter, intradayService, $translate) {
+            var service = {};
 
-			var trafficData = {
-				forecastedCallsObj: {
-					series: [],
-					max: {}
-				},
-				actualCallsObj: {
-					series: [],
-					max: {}
-				},
-				forecastedAverageHandleTimeObj: {
-					series: [],
-					max: {}
-				},
-				actualAverageHandleTimeObj: {
-					series: [],
-					max: {}
-				},
-				summary: {},
-				hasMonitorData: false,
-				waitingForData: false,
-				timeSeries : [],
-				currentInterval: []
-			};
+            var trafficData = {
+                forecastedCallsObj: {
+                    series: [],
+                    max: {}
+                },
+                actualCallsObj: {
+                    series: [],
+                    max: {}
+                },
+                forecastedAverageHandleTimeObj: {
+                    series: [],
+                    max: {}
+                },
+                actualAverageHandleTimeObj: {
+                    series: [],
+                    max: {}
+                },
+                summary: {},
+                hasMonitorData: false,
+                waitingForData: false,
+                timeSeries: [],
+                currentInterval: []
+            };
 
-			var hiddenArray = [];
-			var intervalStart;
-			var max;
+            var hiddenArray = [];
+            var intervalStart;
+            var max;
 
-			service.setTrafficData = function (result) {
-				clearData();
-				trafficData.forecastedCallsObj.series = result.DataSeries.ForecastedCalls;
-				trafficData.actualCallsObj.series = result.DataSeries.CalculatedCalls;
-				trafficData.forecastedAverageHandleTimeObj.series = result.DataSeries.ForecastedAverageHandleTime;
-				trafficData.actualAverageHandleTimeObj.series = result.DataSeries.AverageHandleTime;
+            service.setTrafficData = function(result) {
+                clearData();
+                trafficData.forecastedCallsObj.series = result.DataSeries.ForecastedCalls;
+                trafficData.actualCallsObj.series = result.DataSeries.CalculatedCalls;
+                trafficData.forecastedAverageHandleTimeObj.series = result.DataSeries.ForecastedAverageHandleTime;
+                trafficData.actualAverageHandleTimeObj.series = result.DataSeries.AverageHandleTime;
 
-				trafficData.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
-				intervalStart = $filter('date')(result.LatestActualIntervalStart, 'shortTime');
+                trafficData.latestActualInterval =
+                    $filter('date')(result.LatestActualIntervalStart, 'shortTime') +
+                    ' - ' +
+                    $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
+                intervalStart = $filter('date')(result.LatestActualIntervalStart, 'shortTime');
 
-				trafficData.forecastedCallsObj.max = Math.max.apply(Math, trafficData.forecastedCallsObj.series);
-				trafficData.actualCallsObj.max = Math.max.apply(Math, trafficData.actualCallsObj.series);
-				trafficData.forecastedAverageHandleTimeObj.max = Math.max.apply(Math, trafficData.forecastedAverageHandleTimeObj.series);
-				trafficData.actualAverageHandleTimeObj.max = Math.max.apply(Math, trafficData.actualAverageHandleTimeObj.series);
+                trafficData.forecastedCallsObj.max = Math.max.apply(Math, trafficData.forecastedCallsObj.series);
+                trafficData.actualCallsObj.max = Math.max.apply(Math, trafficData.actualCallsObj.series);
+                trafficData.forecastedAverageHandleTimeObj.max = Math.max.apply(
+                    Math,
+                    trafficData.forecastedAverageHandleTimeObj.series
+                );
+                trafficData.actualAverageHandleTimeObj.max = Math.max.apply(
+                    Math,
+                    trafficData.actualAverageHandleTimeObj.series
+                );
 
-				trafficData.forecastedCallsObj.series.splice(0, 0, 'Forecasted_calls');
-				trafficData.actualCallsObj.series.splice(0, 0, 'Calls');
-				trafficData.forecastedAverageHandleTimeObj.series.splice(0, 0, 'Forecasted_AHT');
-				trafficData.actualAverageHandleTimeObj.series.splice(0, 0, 'AHT');
+                trafficData.forecastedCallsObj.series.splice(0, 0, 'Forecasted_calls');
+                trafficData.actualCallsObj.series.splice(0, 0, 'Calls');
+                trafficData.forecastedAverageHandleTimeObj.series.splice(0, 0, 'Forecasted_AHT');
+                trafficData.actualAverageHandleTimeObj.series.splice(0, 0, 'AHT');
 
-				trafficData.summary = {
-					summaryForecastedCalls: $filter('number')(result.Summary.ForecastedCalls, 1),
-					summaryForecastedAverageHandleTime: $filter('number')(result.Summary.ForecastedAverageHandleTime, 1),
-					summaryCalculatedCalls: $filter('number')(result.Summary.CalculatedCalls, 1),
-					summaryAverageHandleTime: $filter('number')(result.Summary.AverageHandleTime, 1),
-					forecastActualCallsDifference: $filter('number')(result.Summary.ForecastedActualCallsDiff, 1),
-					forecastActualAverageHandleTimeDifference: $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1)
-				};
+                trafficData.summary = {
+                    summaryForecastedCalls: $filter('number')(result.Summary.ForecastedCalls, 1),
+                    summaryForecastedAverageHandleTime: $filter('number')(
+                        result.Summary.ForecastedAverageHandleTime,
+                        1
+                    ),
+                    summaryCalculatedCalls: $filter('number')(result.Summary.CalculatedCalls, 1),
+                    summaryAverageHandleTime: $filter('number')(result.Summary.AverageHandleTime, 1),
+                    forecastActualCallsDifference: $filter('number')(result.Summary.ForecastedActualCallsDiff, 1),
+                    forecastActualAverageHandleTimeDifference: $filter('number')(
+                        result.Summary.ForecastedActualHandleTimeDiff,
+                        1
+                    )
+                };
 
-				angular.forEach(result.DataSeries.Time, function (value, key) {
-					this.push($filter('date')(value, 'shortTime'));
-				}, trafficData.timeSeries);
+                angular.forEach(
+                    result.DataSeries.Time,
+                    function(value, key) {
+                        this.push($filter('date')(value, 'shortTime'));
+                    },
+                    trafficData.timeSeries
+                );
 
-				if (trafficData.timeSeries[0] != 'x' ) {
-					trafficData.timeSeries.splice(0, 0, 'x');
-				}
+                if (trafficData.timeSeries[0] != 'x') {
+                    trafficData.timeSeries.splice(0, 0, 'x');
+                }
 
-				trafficData.hasMonitorData = result.IncomingTrafficHasData;
-				getCurrent();
-				service.loadTrafficChart(trafficData);
-				return trafficData;
-			};
+                trafficData.hasMonitorData = result.IncomingTrafficHasData;
+                getCurrent();
+                service.loadTrafficChart(trafficData);
+                return trafficData;
+            };
 
-			service.getData = function () {
-				return trafficData;
-			};
+            service.getData = function() {
+                return trafficData;
+            };
 
-			var clearData = function () {
-				trafficData.timeSeries = [];
-				trafficData.forecastedCallsObj.series = [];
-				trafficData.actualCallsObj.series = [];
-				trafficData.forecastedAverageHandleTimeObj.series = [];
-				trafficData.actualAverageHandleTimeObj.series = [];
-			};
+            var clearData = function() {
+                trafficData.timeSeries = [];
+                trafficData.forecastedCallsObj.series = [];
+                trafficData.actualCallsObj.series = [];
+                trafficData.forecastedAverageHandleTimeObj.series = [];
+                trafficData.actualAverageHandleTimeObj.series = [];
+            };
 
-			var getCurrent = function () {
-				if (trafficData.forecastedCallsObj.max > trafficData.actualCallsObj.max) {
-					max = trafficData.forecastedCallsObj.max;
-				}else{
-					max = trafficData.actualCallsObj.max;
-				}
-				trafficData.currentInterval = [];
+            var getCurrent = function() {
+                if (trafficData.forecastedCallsObj.max > trafficData.actualCallsObj.max) {
+                    max = trafficData.forecastedCallsObj.max;
+                } else {
+                    max = trafficData.actualCallsObj.max;
+                }
+                trafficData.currentInterval = [];
 
-				for (var i = 0; i < trafficData.timeSeries.length; i++) {
-					if (trafficData.timeSeries[i] === intervalStart) {
-						trafficData.currentInterval[i] = max;
-					}else{
-						trafficData.currentInterval[i] = null;
-					}
-					trafficData.currentInterval[0] = 'Current';
-				};
-			};
+                for (var i = 0; i < trafficData.timeSeries.length; i++) {
+                    if (trafficData.timeSeries[i] === intervalStart) {
+                        trafficData.currentInterval[i] = max;
+                    } else {
+                        trafficData.currentInterval[i] = null;
+                    }
+                    trafficData.currentInterval[0] = 'Current';
+                }
+            };
 
-			service.pollSkillData = function (selectedItem) {
-				trafficData.waitingForData = true;
-				intradayService.getSkillMonitorStatistics.query(
-					{
-						id: selectedItem.Id
-					})
-					.$promise.then(function (result) {
-            service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+            service.pollSkillData = function(selectedItem) {
                 trafficData.waitingForData = true;
-                var data = intradayService.getSkillMonitorStatistics
-                	 .query({
+                intradayService.getSkillMonitorStatistics
+                    .query({
                         id: selectedItem.Id
-                        dayOffset: dayOffset
                     })
                     .$promise.then(
                         function(result) {
@@ -131,10 +144,13 @@
                     );
             };
 
-            service.pollSkillDataByDate = function(selectedItem, toggles, date) {
+            service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
                 trafficData.waitingForData = true;
-                var data = intradayService.getSkillMonitorStatisticsByDate
-                    .get({id: selectedItem.Id, dateUtc: date})
+                var data = intradayService.getSkillMonitorStatistics
+                    .query({
+                        id: selectedItem.Id,
+                        dayOffset: dayOffset
+                    })
                     .$promise.then(
                         function(result) {
                             trafficData.waitingForData = false;
@@ -181,10 +197,11 @@
                     );
             };
 
-            service.initChart = function(trafficData) {
-                trafficChart = c3.generate({
+            service.loadTrafficChart = function(trafficData) {
+                var performanceChart = c3.generate({
                     bindto: '#trafficChart',
                     data: {
+                        x: 'x',
                         columns: [
                             trafficData.timeSeries,
                             trafficData.forecastedCallsObj.series,
@@ -193,8 +210,6 @@
                             trafficData.actualAverageHandleTimeObj.series,
                             trafficData.currentInterval
                         ],
-                        x: 'x',
-                        type: 'line',
                         hide: hiddenArray,
                         types: {
                             Current: 'bar'
@@ -265,23 +280,6 @@
                         }
                     }
                 });
-            };
-
-            service.loadTrafficChart = function(trafficData) {
-                //service.initChart(trafficData);
-
-                if (trafficChart) {
-                    trafficChart.load({
-                        columns: [
-                            trafficData.timeSeries,
-                            trafficData.forecastedCallsObj.series,
-                            trafficData.actualCallsObj.series,
-                            trafficData.forecastedAverageHandleTimeObj.series,
-                            trafficData.actualAverageHandleTimeObj.series,
-                            trafficData.currentInterval
-                        ]
-                    });
-                }
             };
 
             return service;

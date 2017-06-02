@@ -78,16 +78,9 @@
             this.getSkillMonitorStatisticsByDayOffset = $resource(
                 '../api/intraday/monitorskillstatistics/:id/:dayOffset',
                 {
-                    id: '@id',
-                    dayOffset: '@dayOffset'
-                },
-                {
-                    query: {
-                        method: 'GET',
-                        params: {},
-                        isArray: false
-                    }
-                }
+                            id: '@id',
+                            dayOffset: '@dayOffset'
+				}
             );
 
             this.getSkillAreaMonitorStatisticsByDayOffset = $resource(
@@ -95,7 +88,7 @@
                 {
                     id: '@id',
                     dayOffset: '@dayOffset'
-                },
+                }
             );
 
             this.getSkillAreaMonitorPerformance = $resource(
@@ -127,13 +120,6 @@
                 {
                     id: '@id',
                     dayOffset: '@dayOffset'
-                },
-                {
-                    query: {
-                        method: 'GET',
-                        params: {},
-                        isArray: false
-                    }
                 }
             );
 
@@ -142,7 +128,8 @@
                 {
                     id: '@id',
                     dayOffset: '@dayOffset'
-                },
+                }
+            );
 
             this.getSkillAreaStaffingData = $resource(
                 '../api/intraday/monitorskillareastaffing/:id',
@@ -173,13 +160,6 @@
                 {
                     id: '@id',
                     dayOffset: '@dayOffset'
-                },
-                {
-                    query: {
-                        method: 'GET',
-                        params: {},
-                        isArray: false
-                    }
                 }
             );
 
@@ -188,7 +168,8 @@
                 {
                     id: '@id',
                     dayOffset: '@dayOffset'
-                },
+                }
+            );
 
             this.getLatestStatisticsTimeForSkillArea = $resource(
                 '../api/intraday/lateststatisticstimeforskillarea/:id',

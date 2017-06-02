@@ -1,113 +1,129 @@
 (function() {
-	'use strict';
-	angular.module('wfm.intraday')
-	.service('intradayPerformanceService', [
-		'$filter', 'intradayService','$translate', function($filter, intradayService, $translate) {
-			var service = {};
+    'use strict';
+    angular.module('wfm.intraday').service('intradayPerformanceService', [
+        '$filter',
+        'intradayService',
+        '$translate',
+        function($filter, intradayService, $translate) {
+            var service = {};
 
-			var performanceData = {
-				averageSpeedOfAnswerObj: {
-					series: {},
-					max : {}
-				},
-				abandonedRateObj: {
-					series: {},
-					max : {}
-				},
-				serviceLevelObj: {
-					series: {},
-					max : {}
-				},
-				estimatedServiceLevelObj: {
-					series: {},
-					max: {}
-				},
-				summary: {},
-				hasMonitorData: false,
+            var performanceData = {
+                averageSpeedOfAnswerObj: {
+                    series: {},
+                    max: {}
+                },
+                abandonedRateObj: {
+                    series: {},
+                    max: {}
+                },
+                serviceLevelObj: {
+                    series: {},
+                    max: {}
+                },
+                estimatedServiceLevelObj: {
+                    series: {},
+                    max: {}
+                },
+                summary: {},
+                hasMonitorData: false,
 				hasEmailSkill: false,
-				waitingForData: false,
-				timeSeries: [],
-				currentInterval: []
-			};
+                waitingForData: false,
+                timeSeries: [],
+                currentInterval: []
+            };
 
-			var hiddenArray = [];
-			var intervalStart;
+            var hiddenArray = [];
+            var intervalStart;
 			var mixedArea = null;
 			service.setPerformanceData = function (result, showEsl, showEmailSkill) {
-				clearData();
+                clearData();
 
-				performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
-				performanceData.abandonedRateObj.series = result.DataSeries.AbandonedRate;
-				performanceData.serviceLevelObj.series = result.DataSeries.ServiceLevel;
-				if(showEsl)
-					performanceData.estimatedServiceLevelObj.series = result.DataSeries.EstimatedServiceLevels;
+                performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
+                performanceData.abandonedRateObj.series = result.DataSeries.AbandonedRate;
+                performanceData.serviceLevelObj.series = result.DataSeries.ServiceLevel;
+                if (showEsl) performanceData.estimatedServiceLevelObj.series = result.DataSeries.EstimatedServiceLevels;
 
-				performanceData.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
-				intervalStart = $filter('date')(result.LatestActualIntervalStart, 'shortTime');
+                performanceData.latestActualInterval =
+                    $filter('date')(result.LatestActualIntervalStart, 'shortTime') +
+                    ' - ' +
+                    $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
+                intervalStart = $filter('date')(result.LatestActualIntervalStart, 'shortTime');
 
-				performanceData.averageSpeedOfAnswerObj.max = Math.max.apply(Math, performanceData.averageSpeedOfAnswerObj.series);
-				performanceData.abandonedRateObj.max = Math.max.apply(Math, performanceData.abandonedRateObj.series);
-				performanceData.serviceLevelObj.max = Math.max.apply(Math, performanceData.serviceLevelObj.series);
-				performanceData.estimatedServiceLevelObj.max = Math.max.apply(Math, performanceData.estimatedServiceLevelObj.series);
+                performanceData.averageSpeedOfAnswerObj.max = Math.max.apply(
+                    Math,
+                    performanceData.averageSpeedOfAnswerObj.series
+                );
+                performanceData.abandonedRateObj.max = Math.max.apply(Math, performanceData.abandonedRateObj.series);
+                performanceData.serviceLevelObj.max = Math.max.apply(Math, performanceData.serviceLevelObj.series);
+                performanceData.estimatedServiceLevelObj.max = Math.max.apply(
+                    Math,
+                    performanceData.estimatedServiceLevelObj.series
+                );
 
-				performanceData.averageSpeedOfAnswerObj.series.splice(0, 0, 'ASA');
-				performanceData.abandonedRateObj.series.splice(0, 0, 'Abandoned_rate');
-				performanceData.serviceLevelObj.series.splice(0, 0, 'Service_level');
-				performanceData.estimatedServiceLevelObj.series.splice(0, 0, 'ESL');
+                performanceData.averageSpeedOfAnswerObj.series.splice(0, 0, 'ASA');
+                performanceData.abandonedRateObj.series.splice(0, 0, 'Abandoned_rate');
+                performanceData.serviceLevelObj.series.splice(0, 0, 'Service_level');
+                performanceData.estimatedServiceLevelObj.series.splice(0, 0, 'ESL');
 
-				performanceData.summary = {
-					summaryAbandonedRate: $filter('number')(result.Summary.AbandonRate * 100, 1),
-					summaryServiceLevel: $filter('number')(result.Summary.ServiceLevel * 100, 1),
-					summaryAverageSpeedOfAnswer: $filter('number')(result.Summary.AverageSpeedOfAnswer, 1)
-				};
+                performanceData.summary = {
+                    summaryAbandonedRate: $filter('number')(result.Summary.AbandonRate * 100, 1),
+                    summaryServiceLevel: $filter('number')(result.Summary.ServiceLevel * 100, 1),
+                    summaryAverageSpeedOfAnswer: $filter('number')(result.Summary.AverageSpeedOfAnswer, 1)
+                };
 
+                if (showEsl)
+                    performanceData.summary.summaryEstimatedServiceLevel = $filter('number')(
 				if (showEsl)
 					performanceData.summary.summaryEstimatedServiceLevel = $filter('number')(result.Summary.EstimatedServiceLevel, 1);
 				if (showEmailSkill && mixedArea){
-					performanceData.abandonedRateObj.series = [];
-					performanceData.hasEmailSkill= true;
-				}else{
-					performanceData.hasEmailSkill= null;
-				}
+                    performanceData.abandonedRateObj.series = [];
+                    performanceData.hasEmailSkill = true;
+                } else {
+                    performanceData.hasEmailSkill = null;
+                }
 
-				angular.forEach(result.DataSeries.Time, function (value, key) {
-					this.push($filter('date')(value, 'shortTime'));
-				}, performanceData.timeSeries);
+                angular.forEach(
+                    result.DataSeries.Time,
+                    function(value, key) {
+                        this.push($filter('date')(value, 'shortTime'));
+                    },
+                    performanceData.timeSeries
+                );
 
-				if (performanceData.timeSeries[0] != 'x' ) {
-					performanceData.timeSeries.splice(0, 0, 'x');
-				}
+                if (performanceData.timeSeries[0] != 'x') {
+                    performanceData.timeSeries.splice(0, 0, 'x');
+                }
 
-				performanceData.hasMonitorData = result.PerformanceHasData;
-				getCurrent();
-				service.loadPerformanceChart(performanceData);
-				return performanceData;
-			};
+                performanceData.hasMonitorData = result.PerformanceHasData;
+                getCurrent();
+                service.loadPerformanceChart(performanceData);
+                return performanceData;
+            };
 
-			service.getData = function () {
-				return performanceData;
-			};
+            service.getData = function() {
+                return performanceData;
+            };
 
-			var getCurrent = function () {
-				performanceData.currentInterval = [];
-				for (var i = 0; i < performanceData.timeSeries.length; i++) {
-					if (performanceData.timeSeries[i] === intervalStart) {
-						performanceData.currentInterval[i] = performanceData.averageSpeedOfAnswerObj.max;
-					}else{
-						performanceData.currentInterval[i] = null;
-					}
-				};
-				performanceData.currentInterval[0] = 'Current';
-			};
+            var getCurrent = function() {
+                performanceData.currentInterval = [];
+                for (var i = 0; i < performanceData.timeSeries.length; i++) {
+                    if (performanceData.timeSeries[i] === intervalStart) {
+                        performanceData.currentInterval[i] = performanceData.averageSpeedOfAnswerObj.max;
+                    } else {
+                        performanceData.currentInterval[i] = null;
+                    }
+                }
+                performanceData.currentInterval[0] = 'Current';
+            };
 
-			var clearData = function () {
+            var clearData = function() {
 				performanceData.hasEmailSkill = false;
-				performanceData.timeSeries = [];
-				performanceData.averageSpeedOfAnswerObj.series = [];
-				performanceData.abandonedRateObj.series = [];
-				performanceData.serviceLevelObj.series = [];
-				performanceData.estimatedServiceLevelObj.series = [];
-			};
+                performanceData.timeSeries = [];
+                performanceData.averageSpeedOfAnswerObj.series = [];
+                performanceData.abandonedRateObj.series = [];
+                performanceData.serviceLevelObj.series = [];
+                performanceData.estimatedServiceLevelObj.series = [];
+            };
 
             service.pollSkillData = function(selectedItem, toggles) {
                 performanceData.waitingForData = true;
@@ -131,7 +147,7 @@
             };
 
             service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
-                performanceData.waitingForData = true;                
+                performanceData.waitingForData = true;
                 intradayService.getSkillMonitorPerformance
                     .get({
                         id: selectedItem.Id,
@@ -148,13 +164,13 @@
                     );
             };
 
-				service.pollSkillAreaData = function (selectedItem, toggles) {
-					performanceData.waitingForData = true;
+            service.pollSkillAreaData = function(selectedItem, toggles) {
+                performanceData.waitingForData = true;
 
-					function findEmail(area) {
+                function findEmail(area) {
 						return area.SkillType === 'SkillTypeEmail';
-					}
-					mixedArea = selectedItem.Skills.find(findEmail);
+                }
+                mixedArea = selectedItem.Skills.find(findEmail);
                 intradayService.getSkillAreaMonitorPerformance
                     .query({
                         id: selectedItem.Id

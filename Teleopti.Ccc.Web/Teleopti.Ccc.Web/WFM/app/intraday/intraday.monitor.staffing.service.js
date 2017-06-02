@@ -1,130 +1,153 @@
-(function () {
-	'use strict';
-	angular.module('wfm.intraday')
-	.service('intradayMonitorStaffingService', [
-		'$filter', 'intradayService', '$translate', function ($filter, intradayService, $translate) {
-			var service = {};
+(function() {
+    'use strict';
+    angular.module('wfm.intraday').service('intradayMonitorStaffingService', [
+        '$filter',
+        'intradayService',
+        '$translate',
+        function($filter, intradayService, $translate) {
+            var service = {};
 
-			var staffingData = {
-				forecastedStaffing: {
-					max: {},
-					series: [],
-					updatedSeries: []
-				},
-				hasMonitorData: false,
-				waitingForData: false,
+            var staffingData = {
+                forecastedStaffing: {
+                    max: {},
+                    series: [],
+                    updatedSeries: []
+                },
+                hasMonitorData: false,
+                waitingForData: false,
 				hasEmailSkill: false,
-				timeSeries: [],
-				actualStaffingSeries: [],
-				currentInterval: [],
-				scheduledStaffing: []
-			};
+                timeSeries: [],
+                actualStaffingSeries: [],
+                currentInterval: [],
+                scheduledStaffing: []
+            };
 
             var hiddenArray = [];
 			var mixedArea = null;
 
-			service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing, showEmailSkill) {
-				clearData();
+            service.setStaffingData = function(result, showOptimalStaffing, showScheduledStaffing) {
+                clearData();
 
-				staffingData.timeSeries = [];
-				staffingData.forecastedStaffing.series = [];
-				staffingData.forecastedStaffing.updatedSeries = [];
-				staffingData.actualStaffingSeries = [];
-				staffingData.scheduledStaffing = [];
+                staffingData.timeSeries = [];
+                staffingData.forecastedStaffing.series = [];
+                staffingData.forecastedStaffing.updatedSeries = [];
+                staffingData.actualStaffingSeries = [];
+                staffingData.scheduledStaffing = [];
 
-				if (result.DataSeries == null)
-					return staffingData;
-				staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
+                if (result.DataSeries == null) return staffingData;
+                staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
 				if (!showEmailSkill || !mixedArea){
-					staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
+                staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
 				}else{
 					staffingData.hasEmailSkill= true;
 				}
 
-				if (showOptimalStaffing)
-					staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
 
-				if (showScheduledStaffing)
-					staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
+                if (showScheduledStaffing) staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
 
-				angular.forEach(result.DataSeries.Time, function (value, key) {
-					this.push($filter('date')(value, 'shortTime'));
-				}, staffingData.timeSeries);
+                angular.forEach(
+                    result.DataSeries.Time,
+                    function(value, key) {
+                        this.push($filter('date')(value, 'shortTime'));
+                    },
+                    staffingData.timeSeries
+                );
 
-				if (staffingData.timeSeries[0] != 'x') {
-					staffingData.timeSeries.splice(0, 0, 'x');
-				}
+                if (staffingData.timeSeries[0] != 'x') {
+                    staffingData.timeSeries.splice(0, 0, 'x');
+                }
 
-				staffingData.hasMonitorData = result.StaffingHasData;
-				var forecastedStaffingMax = Math.max.apply(Math, staffingData.forecastedStaffing.series);
-				var updatedForecastedStaffingMax = Math.max.apply(Math, result.DataSeries.UpdatedForecastedStaffing);
-				if (forecastedStaffingMax > updatedForecastedStaffingMax) {
-					staffingData.forecastedStaffing.max = forecastedStaffingMax;
-				} else {
-					staffingData.forecastedStaffing.max = updatedForecastedStaffingMax;
-				}
+                staffingData.hasMonitorData = result.StaffingHasData;
+                var forecastedStaffingMax = Math.max.apply(Math, staffingData.forecastedStaffing.series);
+                var updatedForecastedStaffingMax = Math.max.apply(Math, result.DataSeries.UpdatedForecastedStaffing);
+                if (forecastedStaffingMax > updatedForecastedStaffingMax) {
+                    staffingData.forecastedStaffing.max = forecastedStaffingMax;
+                } else {
+                    staffingData.forecastedStaffing.max = updatedForecastedStaffingMax;
+                }
 
-				staffingData.forecastedStaffing.series.splice(0, 0, 'Forecasted_staffing');
-				staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
-				staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
-				staffingData.scheduledStaffing.splice(0, 0, 'Scheduled_staffing');
+                staffingData.forecastedStaffing.series.splice(0, 0, 'Forecasted_staffing');
+                staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
+                staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
+                staffingData.scheduledStaffing.splice(0, 0, 'Scheduled_staffing');
 
-				service.loadStaffingChart(staffingData);
-				return staffingData;
-			};
+                service.loadStaffingChart(staffingData);
+                return staffingData;
+            };
 
-				service.getData = function () {
-				return staffingData;
-			}
+            service.getData = function() {
+                return staffingData;
+            };
 
-			var clearData = function () {
+            var clearData = function() {
 				staffingData.hasEmailSkill = false;
-				staffingData.timeSeries = [];
-				staffingData.forecastedStaffing.series = [];
-				staffingData.forecastedStaffing.updatedSeries = [];
-				staffingData.actualStaffingSeries = [];
-				staffingData.scheduledStaffing.series = [];
-			};
+                staffingData.timeSeries = [];
+                staffingData.forecastedStaffing.series = [];
+                staffingData.forecastedStaffing.updatedSeries = [];
+                staffingData.actualStaffingSeries = [];
+                staffingData.scheduledStaffing.series = [];
+            };
 
-			service.pollSkillData = function (selectedItem, toggles) {
-				staffingData.waitingForData = true;
+            service.pollSkillData = function(selectedItem, toggles) {
+                staffingData.waitingForData = true;
 				if (selectedItem.SkillType === 'SkillTypeEmail') {
 					mixedArea = selectedItem;
 				} else {
 					mixedArea = false;
 				}
-				intradayService.getSkillStaffingData.query(
-					{
-						id: selectedItem.Id
-					})
-					.$promise.then(function (result) {
-						staffingData.waitingForData = false;
 						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing, toggles.showEmailSkill);
-					},
-					function (error) {
-						staffingData.hasMonitorData = false;
-					});
-			};
-
-			service.pollSkillAreaData = function (selectedItem, toggles) {
-				staffingData.waitingForData = true;
 
 				function findEmail(area) {
 					return area.SkillType === 'SkillTypeEmail';
 				}
 				mixedArea = selectedItem.Skills.find(findEmail);
 
-				intradayService.getSkillAreaStaffingData.query(
-					{
-						id: selectedItem.Id
-					})
-					.$promise.then(function (result) {
+                intradayService.getSkillStaffingData
+                    .query({
+                        id: selectedItem.Id
+                    })
+                    .$promise.then(
+                        function(result) {
+                            staffingData.waitingForData = false;
+                            return service.setStaffingData(
+                                result,
+                                toggles.showOptimalStaffing,
+                                toggles.showScheduledStaffing
+                            );
+                        },
+                        function(error) {
+                            staffingData.hasMonitorData = false;
+                        }
+                    );
+            };
+
+            service.pollSkillAreaData = function(selectedItem, toggles) {
+                staffingData.waitingForData = true;
+                intradayService.getSkillAreaStaffingData
+                    .query({
+                        id: selectedItem.Id
+                    })
+                    .$promise.then(
+                        function(result) {
+                            staffingData.waitingForData = false;
+                            return service.setStaffingData(
+                                result,
+                                toggles.showOptimalStaffing,
+                                toggles.showScheduledStaffing
+                            );
+                        },
+                        function(error) {
+                            staffingData.hasMonitorData = false;
+                        }
+                    );
+            };
+
             service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
                 staffingData.waitingForData = true;
                 intradayService.getSkillStaffingData
                     .query({
                         skillId: selectedItem.Id,
-                        dayOffset: dayOffset,
+                        dayOffset: dayOffset
                     })
                     .$promise.then(
                         function(result) {
@@ -147,52 +170,6 @@
                     .query({
                         skillAreaId: selectedItem.Id,
                         dayOffset: dayOffset
-                    })
-                    .$promise.then(
-                        function(result) {
-                            staffingData.waitingForData = false;
-                            return service.setStaffingData(
-                                result,
-                                toggles.showOptimalStaffing,
-                                toggles.showScheduledStaffing
-                            );
-                        },
-                        function(error) {
-                            staffingData.hasMonitorData = false;
-                        }
-                    );
-            };
-
-            service.pollSkillDataByDate = function(selectedItem, toggles, utcDate) {
-                staffingData.waitingForData = true;
-                intradayService.getSkillStaffingDataByDate
-                    .get({
-                        SkillId: selectedItem.Id,
-                        DateTime: utcDate,
-                        UseShrinkage: false
-                    })
-                    .$promise.then(
-                        function(result) {
-                            staffingData.waitingForData = false;
-                            return service.setStaffingData(
-                                result,
-                                toggles.showOptimalStaffing,
-                                toggles.showScheduledStaffing
-                            );
-                        },
-                        function(error) {
-                            staffingData.hasMonitorData = false;
-                        }
-                    );
-            };
-
-            service.pollSkillAreaDataByDate = function(selectedItem, toggles, utcDate) {
-                staffingData.waitingForData = true;
-                intradayService.getSkillAreaStaffingDataByDate
-                    .get({
-                        SkillAreaId: selectedItem.Id,
-                        DateTime: utcDate,
-                        UseShrinkage: false
                     })
                     .$promise.then(
                         function(result) {

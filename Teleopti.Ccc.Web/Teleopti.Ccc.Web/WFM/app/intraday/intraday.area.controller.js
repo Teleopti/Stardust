@@ -1,7 +1,6 @@
 (function() {
-	'use strict';
-
-	angular.module('wfm.intraday').controller('IntradayAreaCtrl', intradayController);
+    'use strict';
+    angular.module('wfm.intraday').controller('IntradayAreaCtrl', intradayController);
 
     intradayController.$inject = [
         '$scope',
@@ -69,39 +68,38 @@
 				$scope.toggles.showEmailSkill = toggleSvc.Wfm_Intraday_SupportSkillTypeEmail_44002;
         });
 
-			var getAutoCompleteControls = function() {
-				var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
-				autocompleteSkill = angular.element(autocompleteSkillDOM).scope();
+        var getAutoCompleteControls = function() {
+            var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
+            autocompleteSkill = angular.element(autocompleteSkillDOM).scope();
 
-				var autocompleteSkillAreaDOM = document.querySelector('.autocomplete-skillarea');
-				autocompleteSkillArea = angular.element(autocompleteSkillAreaDOM).scope();
-			};
+            var autocompleteSkillAreaDOM = document.querySelector('.autocomplete-skillarea');
+            autocompleteSkillArea = angular.element(autocompleteSkillAreaDOM).scope();
+        };
 
-			$scope.openSkillFromArea = function(item) {
-				if (item.DoDisplayData) {
-					prevSkill = item;
-					autocompleteSkill.selectedSkill = item;
-					$scope.drillable = true;
-				}
-				else{
-					UnsupportedSkillNotice();
-				}
-			};
+        $scope.openSkillFromArea = function(item) {
+            if (item.DoDisplayData) {
+                prevSkill = item;
+                autocompleteSkill.selectedSkill = item;
+                $scope.drillable = true;
+            } else {
+                UnsupportedSkillNotice();
+            }
+        };
 
-			$scope.openSkillAreaFromSkill = function() {
-				autocompleteSkillArea.selectedSkillArea = $scope.prevArea;
-				$scope.drillable = false;
-			};
+        $scope.openSkillAreaFromSkill = function() {
+            autocompleteSkillArea.selectedSkillArea = $scope.prevArea;
+            $scope.drillable = false;
+        };
 
-			$scope.skillSelected = function(item) {
-				$scope.selectedItem = item;
-				clearSkillAreaSelection();
-			};
+        $scope.skillSelected = function(item) {
+            $scope.selectedItem = item;
+            clearSkillAreaSelection();
+        };
 
-			$scope.skillAreaSelected = function(item) {
-				$scope.selectedItem = item;
-				clearSkillSelection();
-			};
+        $scope.skillAreaSelected = function(item) {
+            $scope.selectedItem = item;
+            clearSkillSelection();
+        };
 
         $scope.deleteSkillArea = function(skillArea) {
             cancelTimeout();
@@ -117,20 +115,20 @@
                     notifySkillAreaDeletion();
                 });
 
-				$scope.toggleModal();
-			};
+            $scope.toggleModal();
+        };
 
-			var clearPrev = function() {
-				$scope.drillable = false;
-				$scope.prevArea = false;
-				prevSkill = false;
-			}
+        var clearPrev = function() {
+            $scope.drillable = false;
+            $scope.prevArea = false;
+            prevSkill = false;
+        };
 
-			$scope.selectedSkillChange = function(item) {
-				if (item) {
-					if (item.DoDisplayData) {
-						$scope.skillSelected(item);
-						pollActiveTabData($scope.activeTab);
+        $scope.selectedSkillChange = function(item) {
+            if (item) {
+                if (item.DoDisplayData) {
+                    $scope.skillSelected(item);
+                    pollActiveTabData($scope.activeTab);
 
                     if (prevSkill) {
                         if (!(prevSkill === autocompleteSkill.selectedSkill)) {
@@ -145,10 +143,10 @@
             }
         };
 
-			function UnsupportedSkillNotice() {
-				var notPhoneMessage = $translate.instant('UnsupportedSkillMsg');
-				NoticeService.warning(notPhoneMessage, 5000, true);
-			}
+        function UnsupportedSkillNotice() {
+            var notPhoneMessage = $translate.instant('UnsupportedSkillMsg');
+            NoticeService.warning(notPhoneMessage, 5000, true);
+        }
 
         $scope.selectedSkillAreaChange = function(item) {
             if (item) {
@@ -165,9 +163,9 @@
             }
         };
 
-			function isSupported(skill) {
-				return skill.DoDisplayData === true;
-			}
+        function isSupported(skill) {
+            return skill.DoDisplayData === true;
+        }
 
         $scope.setDynamicIcon = function(skill) {
             if (!skill.DoDisplayData) {
@@ -244,32 +242,31 @@
             }
         };
 
-			$scope.clearSkillHelper = function() {
-				clearSkillSelection();
-			}
+        $scope.clearSkillHelper = function() {
+            clearSkillSelection();
+        };
 
-			$scope.clearSkillAreaHelper = function() {
-				clearSkillAreaSelection();
-			}
+        $scope.clearSkillAreaHelper = function() {
+            clearSkillAreaSelection();
+        };
 
-			function clearSkillSelection() {
-				if (!autocompleteSkill) return;
-				autocompleteSkill.selectedSkill = null;
-				autocompleteSkill.searchSkillText = '';
-				$scope.drillable = false;
-			};
+        function clearSkillSelection() {
+            if (!autocompleteSkill) return;
+            autocompleteSkill.selectedSkill = null;
+            autocompleteSkill.searchSkillText = '';
+            $scope.drillable = false;
+        }
 
-			function clearSkillAreaSelection() {
-				if (!autocompleteSkillArea) return;
-				autocompleteSkillArea.selectedSkillArea = null;
-				autocompleteSkillArea.searchSkillAreaText = '';
-			};
+        function clearSkillAreaSelection() {
+            if (!autocompleteSkillArea) return;
+            autocompleteSkillArea.selectedSkillArea = null;
+            autocompleteSkillArea.searchSkillAreaText = '';
+        }
 
-			$scope.querySearch = function(query, myArray) {
-				var results = query ? myArray.filter(createFilterFor(query)) : myArray,
-				deferred;
-				return results;
-			};
+        $scope.querySearch = function(query, myArray) {
+            var results = query ? myArray.filter(createFilterFor(query)) : myArray, deferred;
+            return results;
+        };
 
         function createFilterFor(query) {
             var lowercaseQuery = angular.lowercase(query);
@@ -279,9 +276,9 @@
             };
         }
 
-			if (!$scope.selectedSkillArea && !$scope.selectedSkill && $scope.latestActualInterval === '--:--') {
-				$scope.hasMonitorData = false;
-			};
+        if (!$scope.selectedSkillArea && !$scope.selectedSkill && $scope.latestActualInterval === '--:--') {
+            $scope.hasMonitorData = false;
+        }
 
         var cancelTimeout = function() {
             if (timeoutPromise) {
@@ -303,20 +300,10 @@
             if ($scope.chosenOffset.value === 0) {
                 poll();
             }
+        };
         function pollData(activeTab) {
             if ($scope.toggles.showOtherDay) {
                 pollActiveTabDataByDayOffset(activeTab, $scope.chosenOffset.value);
-            } else {
-                pollActiveTabData(activeTab);
-            }
-        }
-
-            }
-        };
-
-        function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
-            if ($scope.toggles.showOtherDay) {
-                pollActiveTabDataByDate(activeTab, $scope.getUTCDate($scope.chosenOffset.value));
             } else {
                 pollActiveTabData(activeTab);
             }
@@ -343,6 +330,7 @@
             }
         }
 
+        function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
             var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
 
             if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
@@ -367,47 +355,41 @@
             cancelTimeout();
         });
 
-			$scope.$on('$locationChangeStart',
-			function() {
-				cancelTimeout();
-			});
+        $scope.$on('$locationChangeStart', function() {
+            cancelTimeout();
+        });
 
-			$scope.configMode = function() {
-				$state.go('intraday.config',
-				{
-					isNewSkillArea: false
-				});
-			};
+        $scope.configMode = function() {
+            $state.go('intraday.config', {
+                isNewSkillArea: false
+            });
+        };
 
-			$scope.toggleModal = function() {
-				$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
-			};
+        $scope.toggleModal = function() {
+            $scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
+        };
 
-			$scope.onStateChanged = function(evt, to, params, from) {
-				if (to.name !== 'intraday.area')
-				return;
-				if (params.isNewSkillArea === true) {
-					reloadSkillAreas(true);
-				} else
-				reloadSkillAreas(false);
-			};
+        $scope.onStateChanged = function(evt, to, params, from) {
+            if (to.name !== 'intraday.area') return;
+            if (params.isNewSkillArea === true) {
+                reloadSkillAreas(true);
+            } else reloadSkillAreas(false);
+        };
 
-			$scope.$on('$stateChangeSuccess', $scope.onStateChanged);
+        $scope.$on('$stateChangeSuccess', $scope.onStateChanged);
 
-			$scope.$on('$viewContentLoaded',
-			function() {
-				pollActiveTabData($scope.activeTab);
-			});
+        $scope.$on('$viewContentLoaded', function() {
+            pollActiveTabData($scope.activeTab);
+        });
 
-			var notifySkillAreaDeletion = function() {
-				var message = $translate.instant('Deleted');
-				NoticeService.success(message, 5000, true);
-			};
+        var notifySkillAreaDeletion = function() {
+            var message = $translate.instant('Deleted');
+            NoticeService.success(message, 5000, true);
+        };
 
-			$scope.$on('$destroy',
-			function() {
-				$interval.cancel(polling);
-			});
+        $scope.$on('$destroy', function() {
+            $interval.cancel(polling);
+        });
 
         $scope.getLocalDate = function(offset) {
             var ret = moment().add(offset, 'days').format('YYYY-MM-DD');
