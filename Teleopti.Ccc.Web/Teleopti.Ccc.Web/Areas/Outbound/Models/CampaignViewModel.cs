@@ -97,6 +97,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public IEnumerable<DateOnly> Dates;
 	}
 
+	public class PlanWithScheduleForm
+	{
+		public Guid CampaignId;
+		public IEnumerable<DateOnly> SkipDates;
+	}
+
 	public class RemoveActualBacklogForm
 	{
 		public Guid CampaignId;

@@ -9,7 +9,7 @@
     	var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';
     	var updateCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan';
     	var removeCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan/Remove';
-    	var redoCampaignProductionPlanUrl = '../api/Outbound/Campaign/Replan/';
+    	var redoCampaignProductionPlanUrl = '../api/Outbound/Campaign/Replan';
     	var updateCampaignBacklogUrl = '../api/Outbound/Campaign/ActualBacklog';
 	    var removeCampaignBacklogUrl = '../api/Outbound/Campaign/ActualBacklog/Remove';
 
@@ -33,8 +33,13 @@
         this.updateManualPlan = updateManualPlan;
         this.updateBacklog = updateBacklog;
 
-        this.replan = function (campaignId, successCb, errorCb) {
-        	$http.get(redoCampaignProductionPlanUrl + campaignId).success(function () {
+		this.replan = function (input, successCb, errorCb) {
+			var postData = {
+				CampaignId: input.campaignId,
+				SkipDates: input.selectedDates
+			};
+
+			$http.post(redoCampaignProductionPlanUrl, postData).success(function () {
 		        if (successCb != null) successCb();
 	        }).error(function (e) {
 				if (errorCb != null) errorCb(e);

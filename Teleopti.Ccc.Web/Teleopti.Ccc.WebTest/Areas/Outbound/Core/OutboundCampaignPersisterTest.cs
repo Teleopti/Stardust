@@ -264,12 +264,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ManualReplanShouldDelegateToReplanHelper()
 		{
+			
 			var campaignId = Guid.NewGuid();
 			var campaign = new Domain.Outbound.Campaign();
 			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
+			var planForm = new PlanWithScheduleForm(){CampaignId = campaignId,SkipDates = new List<DateOnly>()};
 
 			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null, null, _outboundScheduledResourcesCacher);
-			_target.ManualReplanCampaign(campaignId);
+			_target.ManualReplanCampaign(planForm);
 
 			_productionReplanHelper.AssertWasCalled(x => x.Replan(campaign));
 		}

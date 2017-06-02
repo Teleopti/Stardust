@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Outbound;
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 	public interface IOutboundCampaignTaskManager
 	{
 		IBacklogTask GetIncomingTaskFromCampaign(IOutboundCampaign campaign);
+		IBacklogTask GetIncomingTaskFromCampaign(IOutboundCampaign campaign, IList<DateOnly> skipScheduleOnDates);
 	}
 
 	public class CampaignTaskManager : IOutboundCampaignTaskManager
@@ -76,6 +78,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				}								
 			}
 			return incomingTask;
+		}
+
+		public IBacklogTask GetIncomingTaskFromCampaign(IOutboundCampaign campaign, IList<DateOnly> skipScheduleOnDates)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Interfaces.Domain;
@@ -18,11 +20,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_outboundScheduledResourcesCacher = outboundScheduledResourcesCacher;
 		}
 
-		public void Replan(IOutboundCampaign campaign)
+		public void Replan(IOutboundCampaign campaign, params DateOnly[] skipDates)
 		{
 			if (campaign == null) return;
 
-			var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
+			var incomingTask = skipDates.Any() ? _campaignTaskManager.GetIncomingTaskFromCampaign(campaign, skipDates) 
+				: _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
 			incomingTask.RecalculateDistribution();
 
 			var forecasts = _createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask);

@@ -212,10 +212,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_productionReplanHelper.Replan(campaign);
 		}
 
-		public void ManualReplanCampaign(Guid campaignId)
+		public void ManualReplanCampaign(PlanWithScheduleForm planForm)
 		{
-			var campaign = _outboundCampaignRepository.Get(campaignId);
-			_productionReplanHelper.Replan(campaign);
+			var campaign = _outboundCampaignRepository.Get(planForm.CampaignId);
+			_productionReplanHelper.Replan(campaign, planForm.SkipDates.ToArray());
 		}
 
 		public void RemoveCampaign(IOutboundCampaign campaign)

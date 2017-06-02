@@ -152,11 +152,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return _campaignListProvider.GetCampaignStatus(form.CampaignId);
 		}
 
-		[HttpGet, Route("api/Outbound/Campaign/Replan/{Id}"), UnitOfWork]
-		public virtual CampaignVisualizationViewModel CampaignProductionReplan(Guid Id)
+		[HttpPost, Route("api/Outbound/Campaign/Replan"), UnitOfWork]
+		public virtual CampaignVisualizationViewModel CampaignProductionReplan(PlanWithScheduleForm planForm)
 		{
-			_outboundCampaignPersister.ManualReplanCampaign(Id);
-			return _campaignVisualizationProvider.ProvideVisualization(Id);
+			_outboundCampaignPersister.ManualReplanCampaign(planForm);
+			return _campaignVisualizationProvider.ProvideVisualization(planForm.CampaignId);
 		}
 
 		[HttpPut, Route("api/Outbound/Campaign/ThresholdsSetting"), UnitOfWork]

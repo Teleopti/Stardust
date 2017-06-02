@@ -17,11 +17,11 @@
 				isLoading: '=',
 				callbacks: '='
 			},
-			controller: ['$scope', '$state', 'outboundService', 'outboundChartService', 'outboundNotificationService', campaignCommandsPaneCtrl],
+			controller: ['$scope', '$state', 'outboundService', 'outboundChartService', 'outboundNotificationService', 'Toggle', campaignCommandsPaneCtrl],
 			link: postlink
 		};
 
-		function campaignCommandsPaneCtrl($scope, $state, outboundService, outboundChartService, outboundNotificationService) {
+		function campaignCommandsPaneCtrl($scope, $state, outboundService, outboundChartService, toggleService, outboundNotificationService) {
 			$scope.manualPlanSwitch = false;
 			$scope.manualBacklogSwitch = false;
 			$scope.isPlanClickedSave = false;
@@ -154,7 +154,12 @@
 
 			function replan() {
 				$scope.isLoading = true;
-				outboundChartService.replan($scope.campaign.Id, function (response) {
+				var selectedDates = toggleService.Wfm_Outbound_ReplanAfterScheduled_43752 ? $scope.selectedDates : [];
+				
+				outboundChartService.replan({
+					campaignId: $scope.campaign.Id,
+					selectedDates: selectedDates
+				}, function (response) {
 					if (angular.isDefined($scope.callbacks.replan)) {
 						$scope.callbacks.replan(response, callbackDone);
 					} else {
