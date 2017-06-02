@@ -96,8 +96,8 @@ function Main
     CopyPayrollDlls $ScheduleSource $ScheduleDestination
     CopyPayrollDlls $ShiftSource $ShiftDestination
 
-    InstallPayrollService $TargetServer $ScheduleExePath #-Remove $true
-    InstallPayrollService $TargetServer $ShiftExePath #-Remove $true
+    InstallPayrollService $TargetServer $ScheduleExePath $ServiceScheduleChangeListener #-Remove $true
+    InstallPayrollService $TargetServer $ShiftExePath $ServiceTimeBankScheduleValidator #-Remove $true
 	
 	fnStartRemoteService $TargetServer $ServiceScheduleChangeListener
 	fnStartRemoteService $TargetServer $ServiceTimeBankScheduleValidator
