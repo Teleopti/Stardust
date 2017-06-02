@@ -5,8 +5,17 @@
   $ServerName
  )
 
-#$ServerURL = "$ServerName" + ':8080'
-$JenkinsURL = "http://" + $ServerName + ":8080/job/$ENV:JOB_NAME/lastBuild/api/json"
+
+if ($ENV:JOB_NAME -ne $null) 
+{
+	$JenkinsURL = "http://" + $ServerName + ":8080/job/$ENV:JOB_NAME/lastBuild/api/json"
+}
+else
+{
+	$ServerURL = "$ServerName" + ':8080'
+	$JenkinsURL = "http://$ServerURL/job/$ServerName-AutoDeploy/lastBuild/api/json"
+	
+}
 
 $Check_webstatus = invoke-webrequest $JenkinsURL
 $Job_status = ConvertFrom-Json $Check_webstatus
