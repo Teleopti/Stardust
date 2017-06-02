@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
@@ -29,7 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider,
 			IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider,
 			IPushMessageProvider pushMessageProvider,
-			IScheduleMinMaxTimeCalculator scheduleMinMaxTimeCalculator, IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider)
+			IScheduleMinMaxTimeCalculator scheduleMinMaxTimeCalculator,
+			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider)
 		{
 			_monthMapper = monthMapper;
 			_scheduleViewModelMapper = scheduleViewModelMapper;
@@ -54,7 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				_scheduleMinMaxTimeCalculator.AdjustScheduleMinMaxTime(weekDomainData);
 			}
 
-			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData, staffingPossiblityType == StaffingPossiblityType.Overtime);
+			var isOvertimeStaffingPossiblity = staffingPossiblityType == StaffingPossiblityType.Overtime;
+			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData, isOvertimeStaffingPossiblity);
 			return weekScheduleViewModel;
 		}
 
@@ -79,7 +77,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 			daySchedule.UnReadMessageCount = _pushMessageProvider.UnreadMessageCount;
 
-			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule, staffingPossiblityType == StaffingPossiblityType.Overtime);
+			var isOvertimeStaffingPossiblity = staffingPossiblityType == StaffingPossiblityType.Overtime;
+			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule, isOvertimeStaffingPossiblity);
 			return dayScheduleViewModel;
 		}
 
@@ -103,28 +102,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var hasVisibleOvertimeToday = periodIsVisible(dayDomainData.OvertimeAvailability?.Period, date, timeZone);
 			var hasVisibleOvertimeYesterday = existsVisibleOvertimeYesterday(date, dayDomainData, timeZone);
 
-			var hasVisualSchedule = hasVisualLayerToday || hasVisualLayerYesterday || hasVisibleOvertimeToday || hasVisibleOvertimeYesterday;
+			var hasVisualSchedule = hasVisualLayerToday || hasVisualLayerYesterday ||
+									hasVisibleOvertimeToday || hasVisibleOvertimeYesterday;
 			return hasVisualSchedule;
 		}
 
-		private bool existsVisibleOvertimeYesterday(DateOnly date, WeekScheduleDayDomainData dayDomainData, TimeZoneInfo timeZone)
+		private bool existsVisibleOvertimeYesterday(DateOnly date, WeekScheduleDayDomainData dayDomainData,
+			TimeZoneInfo timeZone)
 		{
-			var hasVisibleOvertimeYesterday = false;
+			// Use StartTime to EndTime to rebuild actual period of OvertimeAvailability and check if it's visible,
+			// Since OvertimeAvailability.Period does NOT present actual period from StartTime to EndTime
 			var yesterdayOvertimeAvailability = dayDomainData.OvertimeAvailabilityYesterday;
-			if (yesterdayOvertimeAvailability?.StartTime != null && yesterdayOvertimeAvailability.EndTime != null)
+			if (yesterdayOvertimeAvailability?.StartTime == null || yesterdayOvertimeAvailability.EndTime == null)
 			{
-				var yesterdayDate = date.Date.AddDays(-1);
-				var startTime = yesterdayDate.Add(yesterdayOvertimeAvailability.StartTime.Value);
-				var endTime = yesterdayDate.Add(yesterdayOvertimeAvailability.EndTime.Value);
-				if (endTime == date.Date)
-				{
-					endTime = endTime.AddMinutes(-1);
-				}
-				var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(startTime, timeZone),
-					TimeZoneHelper.ConvertToUtc(endTime, timeZone));
-				hasVisibleOvertimeYesterday = periodIsVisible(period, date, timeZone);
+				return false;
 			}
-			return hasVisibleOvertimeYesterday;
+
+			var previousDate = date.Date.AddDays(-1);
+			var startTime = previousDate.Add(yesterdayOvertimeAvailability.StartTime.Value);
+			var endTime = previousDate.Add(yesterdayOvertimeAvailability.EndTime.Value);
+			if (endTime == date.Date)
+			{
+				endTime = endTime.AddMinutes(-1);
+			}
+
+			var utcStartTime = TimeZoneHelper.ConvertToUtc(startTime, timeZone);
+			var utcEndTime = TimeZoneHelper.ConvertToUtc(endTime, timeZone);
+			var period = new DateTimePeriod(utcStartTime, utcEndTime);
+
+			return periodIsVisible(period, date, timeZone);
 		}
 
 		private bool needAdjustTimeline(StaffingPossiblityType staffingPossiblityType, DateOnly date, bool forThisWeek)
