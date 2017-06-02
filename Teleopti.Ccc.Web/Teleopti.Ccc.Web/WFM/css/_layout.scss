@@ -98,15 +98,10 @@ md-progress-circular{
 		}
 }
 
-@supports (-ms-accelerator:true) {
+@supports (-ms-accelerator: true) {
 	.navbar .navbar-search{
 		padding: 1px;
 	}
-}
-
-.developerTools {
-		background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1'  width='120px'><text x='0' y='35' fill='red' transform='rotate(20,35,25)' font-size='20'>DEV TOOLS</text></svg>");
-		background-color: tomato;
 }
 
 // semi list check
