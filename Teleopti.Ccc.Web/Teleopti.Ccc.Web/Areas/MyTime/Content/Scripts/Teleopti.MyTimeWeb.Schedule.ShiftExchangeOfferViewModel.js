@@ -20,15 +20,16 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory = function ShiftE
 	};
 };
 
-Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchangeOfferViewModel(ajax, doneCallback) {
+Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchangeOfferViewModel(ajax, doneCallback,mywindow) {
 	var self = this;
-
+	mywindow = mywindow || window;
 	self.Template = "shift-exchange-offer-template";
 	self.DenyReason = ko.observable("");
 	self.StartTime = ko.observable();
 	self.EndTime = ko.observable();
 	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
-	
+
+	self.IsTimeInputEditable = !Teleopti.MyTimeWeb.Portal.IsMobile(mywindow);
 	self.isReadyLoaded = ko.observable(false);
 
 	self.Id = ko.observable(null);
