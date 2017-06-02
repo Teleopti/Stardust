@@ -9,7 +9,6 @@
     $stateProvider.state('forecasting', {
       url: '/forecasting',
       templateUrl: 'app/forecasting/html/forecasting.html',
-      controller: 'ForecastingDefaultCtrl',
       resolve: {
         toggles: function (Toggle) {
           return Toggle;
@@ -28,7 +27,7 @@
         workloadId: undefined
       },
       templateUrl: 'app/forecasting/refact/forecast.html',
-      controller: ''
+      controller: 'ForecastRefactCtrl as vm'
     })
     .state('forecasting.start', {
       params: {
