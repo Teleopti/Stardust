@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ResourceCalculation.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;

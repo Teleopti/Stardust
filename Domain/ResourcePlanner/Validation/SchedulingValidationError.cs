@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Teleopti.Ccc.Domain.ResourceCalculation.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class SchedulingValidationError
 	{

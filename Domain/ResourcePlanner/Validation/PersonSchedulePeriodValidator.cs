@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourceCalculation.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonSchedulePeriodValidator : IPersonSchedulePeriodValidator
 	{

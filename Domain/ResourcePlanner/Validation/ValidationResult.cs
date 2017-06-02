@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Domain.ResourceCalculation.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class ValidationResult
 	{

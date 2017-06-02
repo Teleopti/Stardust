@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourceCalculation.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonValidationError
 	{

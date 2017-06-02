@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Domain.ResourceCalculation.Validation
+﻿namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public interface IBasicSchedulingValidator
 	{

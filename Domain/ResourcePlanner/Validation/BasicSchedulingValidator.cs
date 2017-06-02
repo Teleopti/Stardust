@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.Collection;
 
-namespace Teleopti.Ccc.Domain.ResourceCalculation.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class BasicSchedulingValidator : IBasicSchedulingValidator
 	{
