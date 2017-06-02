@@ -22,7 +22,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 
 		public Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, List<ISkill> skills, IEnumerable<ISkillDay> allSkillDays)
 		{
-			var minimumResolution = skills.Min(x => x.DefaultResolution);
+			var minimumResolution = int.MaxValue;
+			if (skills.Any())
+				minimumResolution = skills.Min(x => x.DefaultResolution);
 			var skilldaysForDate = allSkillDays.FilterOnDate(dateOnly);
 			var skillDaysForPersonalSkill = new List<ISkillDay>();
 			foreach (var skillDay in skilldaysForDate)
