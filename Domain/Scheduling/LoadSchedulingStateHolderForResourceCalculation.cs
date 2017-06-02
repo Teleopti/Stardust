@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_personProviderMaker = personProviderMaker;
 		}
 
-		public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons, ISchedulingResultStateHolder schedulingResultStateHolder, bool loadLight)
+		public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons, ISchedulingResultStateHolder schedulingResultStateHolder, Func<DateOnlyPeriod,ICollection<IPerson>> optionalLoadOrganizationFunc = null, bool loadLight = false)
 		{
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
 
@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_workloadRepository.LoadAll();
 			schedulingResultStateHolder.AddSkills(skills);
 
-			schedulingResultStateHolder.PersonsInOrganization = loadLight ?
-				_personRepository.FindPeopleInOrganizationQuiteLight(dateOnlyPeriod) : _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
+			schedulingResultStateHolder.PersonsInOrganization = optionalLoadOrganizationFunc != null ?
+				optionalLoadOrganizationFunc(dateOnlyPeriod) : _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
 
 			var result = _peopleAndSkillLoaderDecider.Execute(scenario, period, requestedPersons);
 			result.FilterPeople(schedulingResultStateHolder.PersonsInOrganization);

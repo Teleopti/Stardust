@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_skillRepository.Stub(x => x.FindAllWithSkillDays(new DateOnlyPeriod())).Return(new List<ISkill>()).IgnoreArguments();
 			_schedulingResultStateHolder.AllPersonAccounts = accounts;
 
-			_target.Execute(null, period, people, _schedulingResultStateHolder, false);
+			_target.Execute(null, period, people, _schedulingResultStateHolder, loadLight: false);
 
 			_personAbsenceAccountRepository.AssertWasCalled(x => x.FindByUsers(null), o => o.IgnoreArguments());
 		}
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_skillDayLoadHelper.Stub(x => x.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario))
 				.Return(skillDictionary).IgnoreArguments();
 
-			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder, false);
+			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder, loadLight: false);
 
 			_schedulingResultStateHolder.Schedules.Should().Be.SameInstanceAs(scheduleDictionary);
 			_schedulingResultStateHolder.SkillDays.Should().Be.SameInstanceAs(skillDictionary);
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_skillDayLoadHelper.Stub(x => x.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario))
 				.Return(skillDictionary);
 
-			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder, false);
+			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder, loadLight: false);
 
 			_scheduleStorage.AssertWasCalled(
 #pragma warning disable 618
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				.Return(new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
 			Assert.AreEqual(0, _schedulingResultStateHolder.PersonsInOrganization.Count);
-			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder, false);
+			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder, loadLight: false);
 
 			_peopleAndSkillLoadDecider.AssertWasCalled(x => x.Execute(scenario, period, requestedPeople));
 			Assert.AreEqual(1, _schedulingResultStateHolder.PersonsInOrganization.Count);

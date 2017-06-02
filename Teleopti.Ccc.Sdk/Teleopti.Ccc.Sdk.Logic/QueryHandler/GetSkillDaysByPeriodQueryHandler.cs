@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var allPeople = _personRepository.FindPeopleInOrganizationQuiteLight(dateOnlyPeriodForResourceCalc);
 
 				_loadSchedulingStateHolderForResourceCalculation.Execute(requestedScenario, periodForResourceCalc, allPeople,
-					_schedulingResultStateHolder, true);
+					_schedulingResultStateHolder, p => allPeople, true);
 
 				foreach (DateOnly dateTime in dateOnlyPeriodForResourceCalc.DayCollection())
 				{
