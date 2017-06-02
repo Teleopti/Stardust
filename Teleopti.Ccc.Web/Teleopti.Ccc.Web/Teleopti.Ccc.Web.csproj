@@ -1574,12 +1574,10 @@
     <Content Include="WFM\app\rta\details\rta-agent-details.html" />
     <Content Include="WFM\app\rta\details\rta.agentdetails.controller.js" />
     <Content Include="WFM\app\rta\details\rta.agentdetails.controller.spec.js" />
-    <Content Include="WFM\app\rta\filter\rta.filter.controller.permittedOrganizationOnly.spec.js" />
     <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.spec.js" />
     <Content Include="WFM\app\rta\filter\filter-template.html" />
-    <Content Include="WFM\app\rta\overview\oldTests\rta.overview.controller.permittedOrganizationOnly.spec.js" />
     <Content Include="WFM\app\rta\overview\oldTests\rta.overview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\overview\oldTests\rta.overview.controller.teams.spec.js" />
     <Content Include="WFM\app\rta\overview\oldTests\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />
@@ -1589,7 +1587,6 @@
     <Content Include="WFM\app\rta\filter\rta.filter.controller.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.js" />
     <Content Include="WFM\app\rta\filter\rta.filter.controller.overview.spec.js" />
-    <Content Include="WFM\app\rta\overview\rta.overview.controller.permittedOrganizationOnly.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.teams.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />

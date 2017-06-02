@@ -36,8 +36,6 @@
             withPhoneState: withPhoneState,
             withOrganization: withOrganization,
             withOrganizationOnSkills: withOrganizationOnSkills,
-            withPermittedSites: withPermittedSites,
-            withPermittedTeams: withPermittedTeams,
             withRule: withRule,
             withTimeline: withTimeline
         };
@@ -63,8 +61,6 @@
         var organizationsOnSkills = [];
         var siteAdherencesForSkill = [];
         var teamAdherencesForSkill = [];
-        var permittedSiteIds = [];
-        var permittedTeamIds = [];
         var rules = [];
         var timeline = {};
 
@@ -87,7 +83,8 @@
 
         var fake = function(url, response) {
             $httpBackend.whenGET(url)
-                .respond(function(method, url, data, headers, params) {
+				.respond(function (method, url, data, headers, params) {
+		            //console.log(url);
                     var params2 = paramsOf(url);
                     return response(params2, method, url, data, headers, params);
                 });
@@ -440,15 +437,11 @@
                     }
                 });
 
-                if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    returnOrg = filteredByPermission(returnOrg, permittedSiteIds);
                 return [200, returnOrg];
             });
 
         fake(/\.\.\/api\/Sites\/Organization(.*)/,
             function() {
-                if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    organizations = filteredByPermission(organizations, permittedSiteIds);
                 return [200, organizations];
             });
 
@@ -506,19 +499,9 @@
 
         fake(/\.\.\/api\/Sites$/,
             function(params) {
-                if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    sites = filteredByPermission(sites, permittedSiteIds);
                 return [200, sites];
             });
-
-        function filteredByPermission(content, permittedcontentIds) {
-            return content.filter(function(c) {
-                if (angular.isDefined(c.Teams) && toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    c.Teams = filteredByPermission(c.Teams, permittedTeamIds);
-                return permittedcontentIds.indexOf(c.Id) > -1;
-            });
-        }
-
+		
         function sitesOrTeamsForSkillOrSkillArea(adherences, adherenceKey, paramId, sitesOrTeams) {
             var siteOrTeamIdsBySkillOrSkillAreaId = adherences.filter(function(a) {
                 return paramId.indexOf(a[adherenceKey]) > -1;
@@ -529,29 +512,15 @@
                 return siteOrTeamIdsBySkillOrSkillAreaId.indexOf(st.Id) > -1;
             });
         }
-
-        function skillIdsFromTheSkillArea(skillAreacollection, skillAreaId) {
-            return skillAreacollection.find(function(sa) {
-                    return sa.Id === skillAreaId;
-                })
-                .Skills
-                .map(function(s) {
-                    return s.Id;
-                });
-        }
-
+		
         fake(/\.\.\/api\/Sites\/ForSkills(.*)/,
             function(params) {
-                if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    sites = filteredByPermission(sites, permittedSiteIds);
                 var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkill, 'SkillId', params.skillIds, sites);
                 return [200, filteredSites];
             });
 
         fake(/\.\.\/api\/Teams\/ForSkills(.*)/,
             function(params) {
-                if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    teams = filteredByPermission(teams, permittedTeamIds);
                 var teamsBySite = teams.filter(function(t) {
                     return params.siteId.indexOf(t.SiteId) > -1;
                 });
@@ -563,8 +532,6 @@
             function(params) {
                 var adherenceBySiteId = {};
                 var sAdherencesForMultipleSkills = [];
-                if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    siteAdherencesForSkill = filteredByPermission(siteAdherencesForSkill, permittedSiteIds);
                 var sAdherencesForSkill = siteAdherencesForSkill.filter(function(sa) {
                     return params.skillIds.indexOf(sa.SkillId) > -1;
                 });
@@ -599,15 +566,11 @@
 
         fake(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSites(.*)/,
             function(params) {
-                if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    siteAdherences = filteredByPermission(siteAdherences, permittedSiteIds);
                 return [200, siteAdherences];
             });
 
         fake(/\.\.\/api\/Teams\/Build(.*)/,
             function(params) {
-                if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    teams = filteredByPermission(teams, permittedTeamIds);
                 return [200, teams.filter(function(team) {
                     return team.SiteId === params.siteId;
                 })];
@@ -617,9 +580,6 @@
             function(params) {
                 var adherenceByTeamId = {};
                 var tAdherencesForMultipleSkills = [];
-
-                if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    teamAdherencesForSkill = filteredByPermission(teamAdherencesForSkill, permittedTeamIds);
 
                 var teamAdherencesBySkillId = teamAdherencesForSkill.filter(function(ta) {
                     return params.skillIds.indexOf(ta.SkillId) > -1 && ta.SiteId === params.siteId;
@@ -655,10 +615,7 @@
 
         fake(/\.\.\/api\/Teams\/GetOutOfAdherenceForTeamsOnSite(.*)/,
             function(params) {
-                if (toggles["RTA_MonitorAgentsInPermittedOrganizationOnly_40660"])
-                    teamAdherences = filteredByPermission(teamAdherences, permittedTeamIds);
-	            var result = teamAdherences;
-                return [200, result];
+				return [200, teamAdherences];
             });
 
         fake(/\.\.\/api\/HistoricalAdherence\/For(.*)/,
@@ -691,8 +648,6 @@
             phoneStates = [];
             siteAdherencesForSkill = [];
             teamAdherencesForSkill = [];
-            permittedSiteIds = [];
-            permittedTeamIds = [];
             rules = [];
             timeline = {};
         }
@@ -751,14 +706,7 @@
             sites.push(site);
             return this;
         };
-
-        function withPermittedSites(siteIds) {
-            siteIds.forEach(function(siteId) {
-                permittedSiteIds.push(siteId);
-            });
-            return this;
-        }
-
+		
         function withSiteAdherence(siteAdherence) {
             siteAdherences.push(siteAdherence);
             return this;
@@ -788,14 +736,7 @@
             teams.push(team);
             return this;
         };
-
-        function withPermittedTeams(teamIds) {
-            teamIds.forEach(function(teamId) {
-                permittedTeamIds.push(teamId);
-            });
-            return this;
-        };
-
+		
         function withTeamAdherenceForSkill(teamAdherenceForSkill) {
             teamAdherencesForSkill.push(teamAdherenceForSkill);
             return this;

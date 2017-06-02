@@ -39,7 +39,7 @@ describe('RtaOverviewController', function() {
 	}));
 
 	it('should display site', function() {
-		$fakeBackend.withSite({
+		$fakeBackend.withSiteAdherence({
 			Name: "London",
 			NumberOfAgents: 11
 		});

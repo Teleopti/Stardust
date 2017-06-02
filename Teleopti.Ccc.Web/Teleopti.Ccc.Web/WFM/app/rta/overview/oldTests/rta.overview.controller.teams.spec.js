@@ -39,7 +39,7 @@ describe('RtaOverviewController', function() {
 
 	it('should display team for site', function() {
 		stateParams.siteIds = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
-		$fakeBackend.withTeam({
+		$fakeBackend.withTeamAdherence({
 			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
 			Name: "Green",
 			NumberOfAgents: 1
