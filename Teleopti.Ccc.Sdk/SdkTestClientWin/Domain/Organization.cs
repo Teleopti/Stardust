@@ -11,7 +11,7 @@ namespace SdkTestClientWin.Domain
     public class Organization
     {
         private readonly IList<Site> _siteColl = new List<Site>();
-        private readonly IList<Agent> _agentColl = new List<Agent>();
+        private readonly List<Agent> _agentColl = new List<Agent>();
 		private readonly IList<PersonPeriod> _personPeriod = new List<PersonPeriod>();
 
 		
@@ -45,16 +45,18 @@ namespace SdkTestClientWin.Domain
                 Site site = new Site(siteDto);
                 _siteColl.Add(site);
                 IList<TeamDto> teams = new List<TeamDto>(sdkService.OrganizationService.GetTeams(siteDto, applicationFunctionDto, date, true));
-                foreach (TeamDto teamDto in teams)
-                {
-                    Team team = site.CreateAndAddTeam(teamDto);
-                    IList<PersonDto> agents = new List<PersonDto>(sdkService.OrganizationService.GetPersonsByTeam(teamDto, applicationFunctionDto, date, true));
-                    foreach (PersonDto personDto in agents)
-                    {
-                        Agent agent = team.CreateAndAddAgent(personDto);
-                        _agentColl.Add(agent);
-                    }
-                }
+	            foreach (TeamDto teamDto in teams)
+	            {
+		            Team team = site.CreateAndAddTeam(teamDto);
+		            IList<PersonDto> agents =
+			            new List<PersonDto>(sdkService.OrganizationService.GetPersonsByQuery(
+				            new GetPeopleByGroupPageGroupQueryDto
+				            {
+					            GroupPageGroupId = teamDto.Id,
+					            QueryDate = new DateOnlyDto {DateTime = date, DateTimeSpecified = true}
+				            }));
+		            _agentColl.AddRange(agents.Select(team.CreateAndAddAgent).ToArray());
+	            }
             }
         }
 
