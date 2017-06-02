@@ -284,7 +284,6 @@
     <Compile Include="ResourcePlanner\Validation\PersonValidationError.cs" />
     <Compile Include="ResourcePlanner\Validation\SchedulingValidationError.cs" />
     <Compile Include="ResourcePlanner\Validation\SchedulingValidator.cs" />
-    <Compile Include="ResourcePlanner\Validation\ValidationParameters.cs" />
     <Compile Include="ResourcePlanner\Validation\ValidationResult.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCategorizeFinderService.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDaysOffSchedulingServiceOLD.cs" />

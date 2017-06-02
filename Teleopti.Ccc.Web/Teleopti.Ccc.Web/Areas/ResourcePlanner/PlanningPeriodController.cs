@@ -190,11 +190,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var validationResult = new ValidationResult();
 			if (planningPeriod.AgentGroup != null)
 			{
-				validationResult = _basicSchedulingValidator.Validate(new ValidationParameters
-				{
-					Period = planningPeriod.Range,
-					People = _agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup).AllPeople.ToList()
-				});
+
+				validationResult = _basicSchedulingValidator.Validate(
+					_agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup).AllPeople.ToList(),
+					planningPeriod.Range);
 			}
 			return Ok(validationResult);
 		}

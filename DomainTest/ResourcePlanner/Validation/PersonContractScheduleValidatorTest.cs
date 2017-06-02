@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[DomainTest]
 	public class PersonContractScheduleValidatorTest
 	{
-		public PersonContractScheduleValidator Target;
+		public BasicSchedulingValidator Target;
 
 		[Test]
 		public void PersonHasContractScheduleShouldNotReturnValidationError()
@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var person = PersonFactory.CreatePerson().WithId();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(startDate));
 
-			var result = Target.GetPeopleMissingContractSchedule(new[] { person }, planningPeriod).ToList();
+			var result = Target.Validate(new[] {person}, planningPeriod).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractScheduleValidator)));
 
 			result.Should().Be.Empty();
 		}
@@ -42,13 +43,14 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			((IDeleteTag)personPeriod.PersonContract.ContractSchedule).SetDeleted();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.GetPeopleMissingContractSchedule(new[] { person }, planningPeriod).ToList();
+			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractScheduleValidator)));
 
 			result.Should().Not.Be.Empty();
 			var validationError = result.SingleOrDefault();
-			validationError.PersonId.Should().Be.EqualTo(person.Id);
-			validationError.PersonName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationError.Should().Not.Be.Null().And.Not.Be.Empty();
+			validationError.ResourceId.Should().Be.EqualTo(person.Id);
+			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
+			validationError.ValidationErrors.Should().Not.Be.Null().And.Not.Be.Empty();
 		}
 	}
 }

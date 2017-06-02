@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScenario LoadDefaultScenario()
 		{
-			return _scenario.Single(s => s.DefaultScenario);
+			return _scenario.SingleOrDefault(s => s.DefaultScenario);
 		}
 
 		public IScenario LoadDefaultScenario(IBusinessUnit businessUnit)

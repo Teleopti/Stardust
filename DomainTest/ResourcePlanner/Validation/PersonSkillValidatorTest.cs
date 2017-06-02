@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[DomainTest]
 	public class PersonSkillValidatorTest
 	{
-		public PersonSkillValidator Target;
+		public BasicSchedulingValidator Target;
 
 		[Test]
 		public void PersonWithSkillsShouldNotReturnValidationError()
@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var person = PersonFactory.CreatePerson().WithId();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2017, 01, 20), SkillFactory.CreateSkill("Juggling")));
 
-			var result = Target.GetPeopleMissingSkill(new[] { person }, planningPeriod).ToList();
+			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillValidator)));
 
 			result.Should().Be.Empty();
 		}
@@ -38,13 +39,14 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 
-			var result = Target.GetPeopleMissingSkill(new[] { person }, planningPeriod).ToList();
+			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillValidator)));
 
 			result.Should().Not.Be.Empty();
 			var validationError = result.SingleOrDefault();
-			validationError.PersonId.Should().Be.EqualTo(person.Id);
-			validationError.PersonName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationError.Should().Not.Be.Null().And.Not.Be.Empty();
+			validationError.ResourceId.Should().Be.EqualTo(person.Id);
+			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
+			validationError.ValidationErrors.Should().Not.Be.Null().And.Not.Be.Empty();
 		}
 
 		[Test]
@@ -58,13 +60,14 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 01, 20)));
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2017, 01, 25), SkillFactory.CreateSkill("Juggling")));
 
-			var result = Target.GetPeopleMissingSkill(new[] { person }, planningPeriod).ToList();
+			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillValidator)));
 
 			result.Should().Not.Be.Empty();
 			var validationError = result.SingleOrDefault();
-			validationError.PersonId.Should().Be.EqualTo(person.Id);
-			validationError.PersonName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationError.Should().Not.Be.Null().And.Not.Be.Empty();
+			validationError.ResourceId.Should().Be.EqualTo(person.Id);
+			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
+			validationError.ValidationErrors.Should().Not.Be.Null().And.Not.Be.Empty();
 		}
 	}
 }

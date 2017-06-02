@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[DomainTest]
 	public class PersonShiftBagValidatorTest
 	{
-		public PersonShiftBagValidator Target;
+		public BasicSchedulingValidator Target;
 
 		[Test]
 		public void PersonWithSkillsShouldNotReturnValidationError()
@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			personPeriod.RuleSetBag = new RuleSetBag();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.GetPeopleMissingShiftBag(new[] { person }, planningPeriod).ToList();
+			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagValidator)));
 
 			result.Should().Be.Empty();
 		}
@@ -41,13 +42,14 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 
-			var result = Target.GetPeopleMissingShiftBag(new[] { person }, planningPeriod).ToList();
+			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagValidator)));
 
 			result.Should().Not.Be.Empty();
 			var validationError = result.SingleOrDefault();
-			validationError.PersonId.Should().Be.EqualTo(person.Id);
-			validationError.PersonName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationError.Should().Not.Be.Null().And.Not.Be.Empty();
+			validationError.ResourceId.Should().Be.EqualTo(person.Id);
+			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
+			validationError.ValidationErrors.Should().Not.Be.Null().And.Not.Be.Empty();
 		}
 
 		[Test]
@@ -63,13 +65,14 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			personPeriod.RuleSetBag = new RuleSetBag();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.GetPeopleMissingShiftBag(new[] { person }, planningPeriod).ToList();
+			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagValidator)));
 
 			result.Should().Not.Be.Empty();
 			var validationError = result.SingleOrDefault();
-			validationError.PersonId.Should().Be.EqualTo(person.Id);
-			validationError.PersonName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationError.Should().Not.Be.Null().And.Not.Be.Empty();
+			validationError.ResourceId.Should().Be.EqualTo(person.Id);
+			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
+			validationError.ValidationErrors.Should().Not.Be.Null().And.Not.Be.Empty();
 		}
 	}
 }
