@@ -1620,6 +1620,7 @@
     <Content Include="WFM\app\skillPrio\skillPrio.new.html" />
     <Content Include="WFM\app\skillPrio\skillPrio.service.new.js" />
     <Content Include="WFM\app\skillPrio\skillprio.service.spec.js" />
+    <Content Include="WFM\app\staffing\staffing.chart.service.js" />
     <Content Include="WFM\app\staffing\staffing.controller.js" />
     <Content Include="WFM\app\staffing\staffing.controller.spec.js" />
     <Content Include="WFM\app\staffing\staffing.html" />
