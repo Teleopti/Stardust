@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.AssertNoContains(".wfm-grid", ".agent-group-name", agentGroupName);
 		}
 
-
 		private void searchAndSelect(string searchText, string selectItemText)
 		{
 			Browser.Interactions.FillWith("md-autocomplete md-autocomplete-wrap input", searchText);
@@ -102,10 +101,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			});
 			Browser.Interactions.ClickContaining(".wfm-chip span.chip-text", selectItemText);
 		}
-
 	}
-
-	
 
 	public class TeamFilter
 	{
