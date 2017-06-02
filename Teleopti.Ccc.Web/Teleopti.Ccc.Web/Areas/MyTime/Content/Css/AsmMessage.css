@@ -178,3 +178,9 @@
 	font-size: 0.8em;
 	color: #9E9E9E;
 }
+
+.asm-messages .dialogue .message-reply {
+	background-color: transparent;
+	border: none;
+	white-space: pre-line;
+}
