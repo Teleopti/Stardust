@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class PersonPartTimePercentageValidator : IPersonPartTimePercentageValidator
+	public class PersonPartTimePercentageValidator
 	{
 		public IEnumerable<PersonValidationError> GetPeopleMissingPartTimePercentage(ICollection<IPerson> people, DateOnlyPeriod range)
 		{

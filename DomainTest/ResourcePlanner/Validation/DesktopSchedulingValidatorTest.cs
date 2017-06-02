@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 		[Test]
 		public void ShouldRunRealValidators()
 		{
-			//simply take one of the validators to see real code is executed
+			//simply take one of the validators to see that real code is executed
 			var agentMissingPersonPeriod = new Person();
 
 			var result = Target.Validate(new[] {agentMissingPersonPeriod}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), Enumerable.Empty<SkillMissingForecast>());

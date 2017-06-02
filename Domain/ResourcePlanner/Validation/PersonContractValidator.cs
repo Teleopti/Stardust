@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class PersonContractValidator : IPersonContractValidator
+	public class PersonContractValidator
 	{
 		public IEnumerable<PersonValidationError> GetPeopleMissingContract(ICollection<IPerson> people, DateOnlyPeriod range)
 		{

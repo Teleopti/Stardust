@@ -2,7 +2,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class BasicSchedulingValidator : IBasicSchedulingValidator
+	public class BasicSchedulingValidator
 	{
 		private readonly SchedulingValidator _schedulingValidator;
 		private readonly IExistingForecastRepository _existingForecastRepository;

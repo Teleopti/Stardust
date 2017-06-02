@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IAgentGroupStaffLoader _agentGroupStaffLoader;
 		private readonly INow _now;
-		private readonly IBasicSchedulingValidator _basicSchedulingValidator;
+		private readonly BasicSchedulingValidator _basicSchedulingValidator;
 		private readonly IAgentGroupRepository _agentGroupRepository;
 
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
 			IPlanningPeriodRepository planningPeriodRepository, IAgentGroupStaffLoader agentGroupStaffLoader, INow now,
-			IBasicSchedulingValidator basicSchedulingValidator, IAgentGroupRepository agentGroupRepository)
+			BasicSchedulingValidator basicSchedulingValidator, IAgentGroupRepository agentGroupRepository)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_planningPeriodRepository = planningPeriodRepository;

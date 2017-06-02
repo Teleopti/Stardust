@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[DomainTest]
 	public class PersonContractValidatorTest
 	{
-		public IPersonContractValidator Target;
+		public PersonContractValidator Target;
 
 		[Test]
 		public void PersonHasContractShouldNotReturnValidationError()

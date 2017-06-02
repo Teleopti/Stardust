@@ -6,16 +6,23 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class SchedulingValidator
 	{
-		private readonly IMissingForecastProvider _missingForecastProvider;
-		private readonly IPersonSkillValidator _personSkillValidator;
-		private readonly IPersonPeriodValidator _personPeriodValidator;
-		private readonly IPersonSchedulePeriodValidator _personSchedulePeriodValidator;
-		private readonly IPersonShiftBagValidator _personShiftBagValidator;
-		private readonly IPersonPartTimePercentageValidator _partTimePercentageValidator;
-		private readonly IPersonContractValidator _personContractValidator;
-		private readonly IPersonContractScheduleValidator _personContractScheduleValidator;
+		private readonly MissingForecastProvider _missingForecastProvider;
+		private readonly PersonSkillValidator _personSkillValidator;
+		private readonly PersonPeriodValidator _personPeriodValidator;
+		private readonly PersonSchedulePeriodValidator _personSchedulePeriodValidator;
+		private readonly PersonShiftBagValidator _personShiftBagValidator;
+		private readonly PersonPartTimePercentageValidator _partTimePercentageValidator;
+		private readonly PersonContractValidator _personContractValidator;
+		private readonly PersonContractScheduleValidator _personContractScheduleValidator;
 
-		public SchedulingValidator(IMissingForecastProvider missingForecastProvider, IPersonSkillValidator personSkillValidator, IPersonPeriodValidator personPeriodValidator, IPersonSchedulePeriodValidator personSchedulePeriodValidator, IPersonShiftBagValidator personShiftBagValidator, IPersonPartTimePercentageValidator partTimePercentageValidator, IPersonContractValidator personContractValidator, IPersonContractScheduleValidator personContractScheduleValidator)
+		public SchedulingValidator(MissingForecastProvider missingForecastProvider, 
+			PersonSkillValidator personSkillValidator, 
+			PersonPeriodValidator personPeriodValidator, 
+			PersonSchedulePeriodValidator personSchedulePeriodValidator, 
+			PersonShiftBagValidator personShiftBagValidator, 
+			PersonPartTimePercentageValidator partTimePercentageValidator, 
+			PersonContractValidator personContractValidator, 
+			PersonContractScheduleValidator personContractScheduleValidator)
 		{
 			_missingForecastProvider = missingForecastProvider;
 			_personSkillValidator = personSkillValidator;

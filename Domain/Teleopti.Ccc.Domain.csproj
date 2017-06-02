@@ -272,15 +272,6 @@
     <Compile Include="ResourceCalculation\GuidCombinationKey.cs" />
     <Compile Include="ResourcePlanner\Validation\BasicSchedulingValidator.cs" />
     <Compile Include="ResourcePlanner\Validation\DesktopSchedulingValidator.cs" />
-    <Compile Include="ResourcePlanner\Validation\IBasicSchedulingValidator.cs" />
-    <Compile Include="ResourcePlanner\Validation\IMissingForecastProvider.cs" />
-    <Compile Include="ResourcePlanner\Validation\IPersonContractScheduleValidator.cs" />
-    <Compile Include="ResourcePlanner\Validation\IPersonContractValidator.cs" />
-    <Compile Include="ResourcePlanner\Validation\IPersonPartTimePercentageValidator.cs" />
-    <Compile Include="ResourcePlanner\Validation\IPersonPeriodValidator.cs" />
-    <Compile Include="ResourcePlanner\Validation\IPersonSchedulePeriodValidator.cs" />
-    <Compile Include="ResourcePlanner\Validation\IPersonShiftBagValidator.cs" />
-    <Compile Include="ResourcePlanner\Validation\IPersonSkillValidator.cs" />
     <Compile Include="ResourcePlanner\Validation\MissingForecastModel.cs" />
     <Compile Include="ResourcePlanner\Validation\MissingForecastProvider.cs" />
     <Compile Include="ResourcePlanner\Validation\PersonContractScheduleValidator.cs" />

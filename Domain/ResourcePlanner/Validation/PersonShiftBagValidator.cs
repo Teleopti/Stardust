@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class PersonShiftBagValidator : IPersonShiftBagValidator
+	public class PersonShiftBagValidator
 	{
 		public IEnumerable<PersonValidationError> GetPeopleMissingShiftBag(ICollection<IPerson> people, DateOnlyPeriod range)
 		{

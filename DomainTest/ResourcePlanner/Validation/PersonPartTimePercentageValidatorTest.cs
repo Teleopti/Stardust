@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[DomainTest]
 	public class PersonPartTimePercentageValidatorTest
 	{
-		public IPersonPartTimePercentageValidator Target;
+		public PersonPartTimePercentageValidator Target;
 
 		[Test]
 		public void PersonHasPartTimePercentageShouldNotReturnValidationError()

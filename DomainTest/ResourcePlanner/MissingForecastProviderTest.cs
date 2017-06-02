@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 	[DomainTest]
 	public class MissingForecastProviderTest : ISetup
 	{
-		public IMissingForecastProvider Target;
+		public MissingForecastProvider Target;
 
 		[Test]
 		public void ShouldReturnMissingForecastForSkill()

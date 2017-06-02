@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[DomainTest]
 	public class PersonShiftBagValidatorTest
 	{
-		public IPersonShiftBagValidator Target;
+		public PersonShiftBagValidator Target;
 
 		[Test]
 		public void PersonWithSkillsShouldNotReturnValidationError()

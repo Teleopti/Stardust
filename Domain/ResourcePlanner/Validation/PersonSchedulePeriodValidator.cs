@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class PersonSchedulePeriodValidator : IPersonSchedulePeriodValidator
+	public class PersonSchedulePeriodValidator
 	{
 		public IEnumerable<PersonValidationError> GetPeopleMissingSchedulePeriod(ICollection<IPerson> people, DateOnlyPeriod range)
 		{
