@@ -29,7 +29,7 @@
 					}
 				},
 				controller: function ($state, toggles) {
-					if (toggles.WFM_ImproveIntradaySkillArea_37291) {
+                    if (toggles.WFM_ImproveIntradaySkillArea_44246) {
 						$state.go('intraday-config-new');
 					} else {
 						$state.go('intraday-config-old');

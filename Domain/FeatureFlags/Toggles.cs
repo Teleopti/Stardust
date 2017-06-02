@@ -234,7 +234,7 @@
 		StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388,
 		ETL_SpeedUpNightlyDayOff_38213,
 		WfmPermission_RelaseRefactor_43587,
-		WFM_ImproveIntradaySkillArea_37291,
+		WFM_ImproveIntradaySkillArea_44246,
 		Wfm_Intraday_SupportSkillTypeWebChat_42591,
 		WFM_ReportHierarchy_43002,
 		MyTimeWeb_MobileResponsive_43826,
