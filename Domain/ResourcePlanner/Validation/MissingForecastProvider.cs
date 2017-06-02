@@ -9,20 +9,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class MissingForecastProvider : IMissingForecastProvider
 	{
-		private readonly IScenarioRepository _scenarioRepository;
-		private readonly IExistingForecastRepository _existingForecastRepository;
-
-		public MissingForecastProvider(IScenarioRepository scenarioRepository, IExistingForecastRepository existingForecastRepository)
+		public IEnumerable<MissingForecastModel> GetMissingForecast(DateOnlyPeriod range, IEnumerable<SkillMissingForecast> existingForecast)
 		{
-			_scenarioRepository = scenarioRepository;
-			_existingForecastRepository = existingForecastRepository;
-		}
-
-		public IEnumerable<MissingForecastModel> GetMissingForecast(DateOnlyPeriod range)
-		{
-			var scenario = _scenarioRepository.LoadDefaultScenario();
-			var existingForecast =  _existingForecastRepository.ExistingForecastForAllSkills(range, scenario);
-
 			return existingForecast
 				.Select(skillMissingForecast => new MissingForecastModel
 				{
@@ -60,9 +48,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			return result;
 		}
 
-		public IEnumerable<MissingForecastModel> GetMissingForecast(ICollection<IPerson> people, DateOnlyPeriod range)
+		public IEnumerable<MissingForecastModel> GetMissingForecast(ICollection<IPerson> people, DateOnlyPeriod range, IEnumerable<SkillMissingForecast> existingForecast)
 		{
-			var missingForecasts = GetMissingForecast(range).ToList();
+			var missingForecasts = GetMissingForecast(range, existingForecast).ToList();
 			var skills = new HashSet<ISkill>();
 			foreach (var periods in people.Select(person => person.PersonPeriods(range)))
 				foreach (var period in periods)

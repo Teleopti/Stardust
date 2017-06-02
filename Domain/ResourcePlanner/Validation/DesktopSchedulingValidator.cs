@@ -1,23 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class DesktopSchedulingValidator
 	{
-		private readonly IBasicSchedulingValidator _basicSchedulingValidator;
+		private readonly SchedulingValidator _schedulingValidator;
 
-		public DesktopSchedulingValidator(IBasicSchedulingValidator basicSchedulingValidator)
+		public DesktopSchedulingValidator(SchedulingValidator schedulingValidator)
 		{
-			_basicSchedulingValidator = basicSchedulingValidator;
+			_schedulingValidator = schedulingValidator;
 		}
 
-		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period, IEnumerable<SkillMissingForecast> existingForecast)
 		{
-			return _basicSchedulingValidator.Validate(new ValidationParameters {People = agents.ToArray(), Period = period});
+			return _schedulingValidator.Validate(new ValidationParameters {People = agents.ToArray(), Period = period}, existingForecast);
 		}
 	}
 }
