@@ -246,7 +246,7 @@ Staffing_ReadModel_BetterAccuracy_Step3_44331 = DEV
 
 QRCodeForMobileApps_42695 = true
 ConfigQRCodeURLForMobileApps_43224 = true
-MobileApps_EnableMobileNotifications_44476 = DEV
+MobileApps_EnableMobileNotifications_44476 = RC
 
 ETL_SpeedUpNightlyDayOff_38213 = true
 WFM_ImproveIntradaySkillArea_37291 = true
