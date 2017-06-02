@@ -568,14 +568,7 @@
             function(params) {
                 return [200, siteAdherences];
             });
-
-        fake(/\.\.\/api\/Teams\/Build(.*)/,
-            function(params) {
-                return [200, teams.filter(function(team) {
-                    return team.SiteId === params.siteId;
-                })];
-            });
-
+		
         fake(/\.\.\/api\/Teams\/InAlarmCountForSkills(.*)/,
             function(params) {
                 var adherenceByTeamId = {};

@@ -170,8 +170,11 @@
 			}
 			
 			function getSitesOrTeams() {
-				if (vm.skillId !== null || vm.skillAreaId !== null) { return vm.siteIds !== null ? getTeamsBySkillsInfo() : getSitesBySkillsInfo(); }
-				else { return vm.siteIds ? getTeamsInfo() : getSitesInfo(); }
+				if (vm.skillId !== null || vm.skillAreaId !== null) {
+					return vm.siteIds !== null ? getTeamsBySkillsInfo() : getSitesBySkillsInfo();
+				} else {
+					return vm.siteIds ? getTeamsInfo() : getSitesInfo();
+				}
 			};
 
 			function goToAgents(selectedItemIds) {

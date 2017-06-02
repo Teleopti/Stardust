@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_teamViewModelBuilder = teamViewModelBuilder;
 		}
 		
-		[UnitOfWork, HttpGet, Route("api/Teams/Build")]
+		[UnitOfWork, HttpGet, Route("api/Teams/ForSite")]
 		public virtual IHttpActionResult ForSite(Guid siteId)
 		{
 			return Ok(_teamViewModelBuilder.Build(siteId));

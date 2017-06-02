@@ -32,7 +32,7 @@
 			ko.applyBindings(viewModel, options.bindingElement);
 
 			ajax.ajax({
-				url: "api/Teams/Build?siteId=" + siteId,
+				url: "api/Teams/ForSite?siteId=" + siteId,
 				success: function (data) {
 					viewModel.fill(data);
 				}
