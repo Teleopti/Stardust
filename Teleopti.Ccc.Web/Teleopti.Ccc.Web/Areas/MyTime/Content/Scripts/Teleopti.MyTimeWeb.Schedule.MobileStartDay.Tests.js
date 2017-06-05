@@ -504,6 +504,32 @@
 		ok(lastTooltips.indexOf("12:00 - 12:15") > -1, "expect contains 12:00 - 12:15 but it is " + lastTooltips);
 	});
 
+	test("should clear probabilities when probability option is none", function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			return false;
+		};
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+		startDayData.CheckStaffingByIntraday = true;
+		startDayData.Date = moment().zone(-startDayData.BaseUtcOffsetInMinutes).format(constants.dateOnlyFormat);
+
+		startDayData.Schedule.Periods.forEach(function (period) {
+			period.StartTime = startDayData.Date + "T" + moment(period.StartTime).format("HH:mm:ss");
+			period.EndTime = startDayData.Date + "T" + moment(period.EndTime).format("HH:mm:ss");
+		});
+
+		propabilities = createPropabilities(["07:00:00", "08:00:00"], startDayData.Date);
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.onProbabilityOptionSelectCallback(constants.probabilityType.absence);
+
+		startDayData.CheckStaffingByIntraday = false;
+		vm.nextDay();
+		var probabilities = vm.probabilities();
+		equal(probabilities.length, 0);
+	});
+
 	function createPropabilities(periods, date) {
 		var values = [];
 		periods.forEach(function(period) {

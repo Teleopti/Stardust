@@ -89,7 +89,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.displayDate(moment(data.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
 		self.summaryColor(data.Schedule.Summary.Color);
 		self.textColor(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.summaryColor()));
-        self.summaryName(data.Schedule.Summary.Title);
+		self.summaryName(data.Schedule.Summary.Title);
 		self.hasScheduled(!data.Schedule.HasNotScheduled);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
 		self.isDayOff(data.Schedule.IsDayOff);
@@ -144,11 +144,11 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.showAbsenceReportingCommandItem(self.absenceReportPermission() && isTodayOrTomorrow);
 		setStaffingProbabilityToggleStates(data);
 
-		if (!self.showProbabilityOptionsToggleIcon()) {
+		if (!self.showProbabilityOptionsToggleIcon() || self.selectedProbabilityOptionValue() === constants.probabilityType.none) {
 			self.probabilities([]);
 		}
 
-		if (self.showProbabilityOptionsToggleIcon() && (self.selectedProbabilityOptionValue() === constants.probabilityType.absence || self.selectedProbabilityOptionValue() == constants.probabilityType.overtime))
+		if (self.showProbabilityOptionsToggleIcon() && (self.selectedProbabilityOptionValue() === constants.probabilityType.absence || self.selectedProbabilityOptionValue() === constants.probabilityType.overtime))
 			self.reloadProbabilityData();
 
 		setPostShiftTradeMenuVisibility(data);
