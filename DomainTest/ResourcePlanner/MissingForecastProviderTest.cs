@@ -18,12 +18,13 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 	public class MissingForecastProviderTest : ISetup
 	{
 		public MissingForecastValidator Target;
+		public FakeExistingForecastRepository ExistingForecastRepository;
 
 		[Test]
 		public void ShouldReturnMissingForecastForSkill()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			var missingForecast = Target.GetMissingForecast(range, new List<SkillMissingForecast>
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>
 			{
 				new SkillMissingForecast
 				{
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 					SkillId = Guid.NewGuid(),
 					Periods = new DateOnlyPeriod[] {}
 				}
-			});
+			};
+			var missingForecast = Target.GetMissingForecast(range);
 
 			var first = missingForecast.First().MissingRanges[0];
 			first.StartDate.Should().Be.EqualTo(range.StartDate.Date);
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
 
-			var missingForecast = Target.GetMissingForecast(range, new List<SkillMissingForecast>
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>
 			{
 				new SkillMissingForecast
 				{
@@ -51,7 +53,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 					SkillId = Guid.NewGuid(),
 					Periods = new[] { new DateOnlyPeriod(2015, 5, 11, 2015, 5, 31) }
 				}
-			});
+			};
+			var missingForecast = Target.GetMissingForecast(range);
 			var first = missingForecast.First();
 
 			first.MissingRanges.Length.Should().Be.EqualTo(1);
@@ -64,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
 
-			var missingForecast = Target.GetMissingForecast(range, new List<SkillMissingForecast>
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>
 			{
 				new SkillMissingForecast
 				{
@@ -72,7 +75,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 					SkillId = Guid.NewGuid(),
 					Periods = new[] { new DateOnlyPeriod(2015, 5, 1, 2015, 5, 21) }
 				}
-			});
+			};
+			var missingForecast = Target.GetMissingForecast(range);
 			var first = missingForecast.First();
 
 			first.MissingRanges.Length.Should().Be.EqualTo(1);
@@ -84,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 		public void ShouldReturnMissingForecastForStartAndEndOfMonth()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			var missingForecast = Target.GetMissingForecast(range, new List<SkillMissingForecast>
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>
 			{
 				new SkillMissingForecast
 				{
@@ -92,7 +96,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 					SkillId = Guid.NewGuid(),
 					Periods = new[] { new DateOnlyPeriod(2015, 5, 11, 2015, 5, 19) }
 				}
-			});
+			};
+			var missingForecast = Target.GetMissingForecast(range);
 			var first = missingForecast.First();
 
 			first.MissingRanges.Length.Should().Be.EqualTo(2);
@@ -106,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 		public void ShouldReturnMissingForecastForAllMonthMinusOneDay()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			var missingForecast = Target.GetMissingForecast(range, new List<SkillMissingForecast>
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>
 			{
 				new SkillMissingForecast
 				{
@@ -114,7 +119,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 					SkillId = Guid.NewGuid(),
 					Periods = new[] { new DateOnlyPeriod(2015, 5, 31, 2015, 5, 31) }
 				}
-			});
+			};
+			var missingForecast = Target.GetMissingForecast(range);
 			var first = missingForecast.First();
 
 			first.MissingRanges.Length.Should().Be.EqualTo(1);
@@ -126,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 		public void ShouldNotReturnSkillWithForecast()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			var missingForecast = Target.GetMissingForecast(range, new List<SkillMissingForecast>
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>
 			{
 				new SkillMissingForecast
 				{
@@ -134,8 +140,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 					SkillId = Guid.NewGuid(),
 					Periods = new[] { new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31) }
 				}
-			});
-
+			};
+			var missingForecast = Target.GetMissingForecast(range);
 			missingForecast.Should().Be.Empty();
 		}
 
@@ -143,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 		public void ShouldReturnSortedSkills()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			var missingForecast = Target.GetMissingForecast(range, new List<SkillMissingForecast>
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>
 			{
 				new SkillMissingForecast
 				{
@@ -157,7 +163,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 					SkillId = Guid.NewGuid(),
 					Periods = new DateOnlyPeriod[] {}
 				}
-			});
+			};
+			var missingForecast = Target.GetMissingForecast(range);
 
 			missingForecast.First().SkillName.Should().Be("A skill");
 			missingForecast.Last().SkillName.Should().Be("Direct Sales");
@@ -172,9 +179,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 			person.AddPersonPeriod(personPeriod);
 			var skill = SkillFactory.CreateSkill("A skill").WithId();
 			person.AddSkill(skill, new DateOnly(2015, 5, 1));
-
-			var result = new ValidationResult();
-			Target.FillMissingForecast(result, new []{person}, range, new List<SkillMissingForecast>
+			var validationResult = new ValidationResult();
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>
 			{
 				new SkillMissingForecast
 				{
@@ -188,9 +194,10 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 					SkillId = skill.Id.Value,
 					Periods = new DateOnlyPeriod[] {}
 				}
-			});
+			};
+			Target.FillMissingForecast(validationResult, new[]{person}, range);
 
-			result.InvalidResources.Single().ResourceName.Should().Be(skill.Name);
+			validationResult.InvalidResources.Single().ResourceName.Should().Be(skill.Name);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

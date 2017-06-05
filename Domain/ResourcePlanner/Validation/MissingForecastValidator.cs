@@ -9,21 +9,30 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class MissingForecastValidator
 	{
-		public IEnumerable<MissingForecastModel> GetMissingForecast(DateOnlyPeriod range, IEnumerable<SkillMissingForecast> existingForecast)
+		private readonly IExistingForecastRepository _existingForecastRepository;
+		private readonly IScenarioRepository _scenarioRepository;
+
+		public MissingForecastValidator(IExistingForecastRepository existingForecastRepository, IScenarioRepository scenarioRepository)
 		{
-			return existingForecast
-				.Select(skillMissingForecast => new MissingForecastModel
-				{
-					SkillName = skillMissingForecast.SkillName,
-					MissingRanges = inverse(range, skillMissingForecast.Periods).Select(r => new MissingForecastRange
-					{
-						StartDate = r.StartDate.Date,
-						EndDate = r.EndDate.Date
-					}).ToArray(),
-					SkillId = skillMissingForecast.SkillId
-				})
-				.Where(missingForecastModel => missingForecastModel.MissingRanges.Any())
-				.OrderBy(missingForecastModel => missingForecastModel.SkillName);
+			_existingForecastRepository = existingForecastRepository;
+			_scenarioRepository = scenarioRepository;
+		}
+
+		public IEnumerable<MissingForecastModel> GetMissingForecast(DateOnlyPeriod range)
+		{
+			var existingForecast = _existingForecastRepository.ExistingForecastForAllSkills(range, _scenarioRepository.LoadDefaultScenario());
+			return existingForecast?.Select(skillMissingForecast => new MissingForecastModel
+					   {
+						   SkillName = skillMissingForecast.SkillName,
+						   MissingRanges = inverse(range, skillMissingForecast.Periods).Select(r => new MissingForecastRange
+						   {
+							   StartDate = r.StartDate.Date,
+							   EndDate = r.EndDate.Date
+						   }).ToArray(),
+						   SkillId = skillMissingForecast.SkillId
+					   })
+					   .Where(missingForecastModel => missingForecastModel.MissingRanges.Any())
+					   .OrderBy(missingForecastModel => missingForecastModel.SkillName) ?? Enumerable.Empty<MissingForecastModel>();
 		}
 
 		private static IEnumerable<DateOnlyPeriod> inverse(DateOnlyPeriod range, IEnumerable<DateOnlyPeriod> raster)
@@ -48,9 +57,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			return result;
 		}
 
-		public void FillMissingForecast(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range, IEnumerable<SkillMissingForecast> existingForecast)
+		public void FillMissingForecast(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
-			var missingForecasts = GetMissingForecast(range, existingForecast).ToList();
+			var missingForecasts = GetMissingForecast(range).ToList();
 			var skills = new HashSet<ISkill>();
 			foreach (var periods in people.Select(person => person.PersonPeriods(range)))
 				foreach (var period in periods)
