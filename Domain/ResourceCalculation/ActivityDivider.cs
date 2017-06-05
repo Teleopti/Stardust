@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					var traff = periodResource.Value.Resource;
 
 					double skillEfficiencyValue;
-					if (!periodResource.Value.SkillEffiencies.TryGetValue(skill.Id.GetValueOrDefault(), out skillEfficiencyValue))
+					if (!periodResource.Value.SkillEffiencies.TryGetValue(skill.Id.GetValueOrDefault(), out skillEfficiencyValue) || headCount == 0)
 					{
 						skillEfficiencyValue = 1;
 					}

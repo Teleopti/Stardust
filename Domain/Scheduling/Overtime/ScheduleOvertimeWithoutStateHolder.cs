@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 					if (scheduleDay == null) continue;
 					//var scheduleDay = resourceCalculationData.Schedules[person].ScheduledDay(dateOnly);
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
-					// OBS Add context func	
-					var res = _scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, resourceCalculationData);  
+				
+					var res = _scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, resourceCalculationData, contextFunc);  
 					if (res)
 						affectedPersons.Add(person);
 					var progressResult = onDayScheduled(backgroundWorker, new SchedulingServiceSuccessfulEventArgs(scheduleDay, () => cancel = true));

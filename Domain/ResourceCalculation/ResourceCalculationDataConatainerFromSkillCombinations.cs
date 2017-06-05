@@ -13,6 +13,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ConcurrentDictionary<Tuple<GuidCombinationKey, DateTimePeriod>, PeriodResource> _dictionary = new ConcurrentDictionary<Tuple<GuidCombinationKey, DateTimePeriod>, PeriodResource>();
 		private readonly List<SkillCombinationResource> _skillCombinationResources;
 		private readonly ILookup<Guid, ISkill> _allSkills;
+		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 
 		public ResourceCalculationDataConatainerFromSkillCombinations(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool useAllSkills)
 		{
@@ -22,6 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			MinSkillResolution = allSkills.Any() ? allSkills.Min(s => s.DefaultResolution) : 15;
 			createDictionary(skillCombinationResources);
 			UseAllSkills = useAllSkills;
+			_personSkillProvider = new PersonSkillProvider();
 		}
 
 		public bool UseAllSkills {get;}
@@ -112,12 +115,37 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
-			//do nothing
+			var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
+			if (skills.Key.Length == 0) return;
+			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
+			//_skills.TryAdd(skills.MergedKey(), skills.Skills);
+
+			var resources = _dictionary.GetOrAdd(Tuple.Create(new GuidCombinationKey(skills.Key), resourceLayer.Period), new PeriodResource());
+				
+			//if (resourceLayer.RequiresSeat)
+			//{
+			//	_activityRequiresSeat.TryAdd(resourceLayer.PayloadId, true);
+			//}
+			resources.AppendResource(key, skills, 0, resourceLayer.Resource, resourceLayer.FractionPeriod);
 		}
 
 		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
-			//do nothing
+			try
+			{
+				var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
+				if (skills.Key.Length == 0) return;
+				var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
+
+				if (!_dictionary.TryGetValue(Tuple.Create(new GuidCombinationKey(skills.Key), resourceLayer.Period), out PeriodResource resources))
+					return;
+
+				resources.RemoveResource(key, skills, 0,resourceLayer.Resource, resourceLayer.FractionPeriod);
+			}
+			catch (ArgumentOutOfRangeException ex) //just to get more info if/when #44525 occurs
+			{
+				throw new ArgumentOutOfRangeException($"Resources are negative for agent {person.Id.GetValueOrDefault()} on period {resourceLayer.Period}", ex);
+			}
 		}
 
 		public IEnumerable<DateTimePeriod> IntraIntervalResources(ISkill skill, DateTimePeriod period)
@@ -126,5 +154,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		public bool PrimarySkillMode { get; }
+
+
+		private SkillCombination fetchSkills(IPerson person, DateOnly personDate)
+		{
+			var foundCombinations = _personCombination.GetOrAdd(person, _ => new ConcurrentBag<SkillCombination>());
+			foreach (var foundCombination in foundCombinations.Where(foundCombination => foundCombination.IsValidForDate(personDate)))
+			{
+				return foundCombination;
+			}
+
+			var skillCombination = _personSkillProvider.SkillsOnPersonDate(person, personDate);
+			foundCombinations.Add(skillCombination);
+			return skillCombination;
+		}
+
 	}
 }

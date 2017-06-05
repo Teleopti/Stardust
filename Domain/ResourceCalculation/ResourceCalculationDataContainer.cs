@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>>();
 		private readonly ConcurrentDictionary<Guid, bool> _activityRequiresSeat = new ConcurrentDictionary<Guid,bool>();
 		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
+		private const double heads = 1d;
 
 		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode)
 		{
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				_activityRequiresSeat.TryAdd(resourceLayer.PayloadId,true);
 			}
-			resources.AppendResource(key, skills, 1d, resourceLayer.Resource, resourceLayer.FractionPeriod);
+			resources.AppendResource(key, skills, heads, resourceLayer.Resource, resourceLayer.FractionPeriod);
 		}
 
 		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (skills.Key.Length == 0) return;
 				var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 
-				resources.RemoveResource(key, skills, resourceLayer.Resource, resourceLayer.FractionPeriod);
+				resources.RemoveResource(key, skills, heads, resourceLayer.Resource, resourceLayer.FractionPeriod);
 			}
 			catch (ArgumentOutOfRangeException ex) //just to get more info if/when #44525 occurs
 			{

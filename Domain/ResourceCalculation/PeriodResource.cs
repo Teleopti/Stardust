@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return result.GroupBy(x => x.Skill).Select(y => new SkillEffiencyResource(y.Key, Math.Max(y.Sum(z => z.Resource), 0))).ToArray();
 		}
 
-		public void RemoveResource(ActivitySkillsCombination key, SkillCombination skillCombination, double resource, DateTimePeriod? fractionPeriod)
+		public void RemoveResource(ActivitySkillsCombination key, SkillCombination skillCombination, double heads,  double resource, DateTimePeriod? fractionPeriod)
 		{
 			_resourceDictionary.AddOrUpdate(key, new InnerPeriodResourceDetail(0, 0, skillCombination.SkillEfficiencies, new DateTimePeriod[]{}), (s, d) =>
 			{
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					dateTimePeriods.Remove(fractionPeriod.Value);
 					fractionPeriodResult = dateTimePeriods.ToArray();
 				}
-				return new InnerPeriodResourceDetail(d.Count - 1, d.Resource - resource,
+				return new InnerPeriodResourceDetail(d.Count - heads, d.Resource - resource,
 					subtractEffiencyResources(d.EffiencyResources, skillCombination.SkillEfficiencies), fractionPeriodResult);
 			});
 		}

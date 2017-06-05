@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	{
 		bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
 			IResourceCalculateDelayerWithoutStateholder resourceCalculateDelayer, DateOnly dateOnly,
-			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData);
+			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc);
 	}
 
 	public class ScheduleOvertimeServiceWithoutStateholder : IScheduleOvertimeServiceWithoutStateholder
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
 			IResourceCalculateDelayerWithoutStateholder resourceCalculateDelayer, DateOnly dateOnly,
-			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData)
+			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc)
 		{
 			var person = scheduleDay.Person;
 			var timeZoneInfo = _timeZoneGuard.CurrentTimeZone();
@@ -86,16 +86,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				if (!_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, scheduleTagSetter, rules))
 					continue;
 
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, resourceCalculationData);
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, resourceCalculationData);
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, resourceCalculationData, contextFunc);
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, resourceCalculationData, contextFunc);
 
 				var newRmsValue = calculatePeriodValue(dateOnly, person, timeZoneInfo, resourceCalculationData, skills);
 				if (newRmsValue <= oldRmsValue)
 					return true;
 
-				_schedulePartModifyAndRollbackService.Rollback();
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, resourceCalculationData);
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, resourceCalculationData);
+				_schedulePartModifyAndRollbackService.RollbackMinimumChecks();
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, resourceCalculationData, contextFunc);
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, resourceCalculationData, contextFunc);
 			}
 
 			return false;
