@@ -3,20 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    /// <summary>
-    /// Holds the result of a try to find a workshift on a Person and Date
-    /// </summary>
-    /// ///
-    /// <remarks>
-    /// Created by: Ola
-    /// Created date: 2008-09-23
-    /// /// </remarks>
-    public class WorkShiftFinderResult
+	/// <summary>
+	/// Holds the result of a try to find a workshift on a Person and Date
+	/// </summary>
+	/// ///
+	/// <remarks>
+	/// Created by: Ola
+	/// Created date: 2008-09-23
+	/// /// </remarks>
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class WorkShiftFinderResult
     {
         private readonly IPerson _person;
 	    private readonly HashSet<WorkShiftFilterResult> _filterResult;

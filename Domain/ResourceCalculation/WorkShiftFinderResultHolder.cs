@@ -1,12 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public interface IWorkShiftFinderResultHolder
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class NullWorkShiftFinderResultHolder : IWorkShiftFinderResultHolder
+	{
+		public void AddResults(IList<WorkShiftFinderResult> results, DateTime theDateTime)
+		{
+		}
+
+		public IList<WorkShiftFinderResult> GetResults()
+		{
+			return new List<WorkShiftFinderResult>();
+		}
+
+		public bool LastResultIsSuccessful => true;
+
+		public IList<WorkShiftFinderResult> GetResults(bool latestOnly, bool notSuccessfulOnly)
+		{
+			return new List<WorkShiftFinderResult>();
+		}
+
+		public void AddFilterToResult(IPerson person, DateOnly theDate, string message)
+		{
+		}
+
+		public void AddFilterToResult(IPerson person, DateOnly theDate, string message, int shiftsBefore, int shiftsAfter)
+		{
+		}
+
+		public void SetResultSuccessful(IPerson person, DateOnly theDate, string newMessage)
+		{
+		}
+
+		public void Clear()
+		{
+		}
+
+		public void Clear(IPerson person, DateOnly theDate)
+		{
+		}
+
+		public bool AlwaysShowTroubleshoot
+		{
+			get { return false; }
+			set {  }
+		}
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public interface IWorkShiftFinderResultHolder
     {
         void AddResults(IList<WorkShiftFinderResult> results, DateTime theDateTime);
         IList<WorkShiftFinderResult> GetResults();
@@ -20,7 +68,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		bool AlwaysShowTroubleshoot { get; set; }
     }
 
-    public class WorkShiftFinderResultHolder : IWorkShiftFinderResultHolder
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class WorkShiftFinderResultHolder : IWorkShiftFinderResultHolder
     {
 		private readonly HashSet<WorkShiftFinderResult> _finderResultList;
         private DateTime _lastFinderResultDate;

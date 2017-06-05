@@ -7,12 +7,14 @@ using System.Linq;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Grid.Grouping;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public partial class SchedulingResult : BaseDialogForm
 	{
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;

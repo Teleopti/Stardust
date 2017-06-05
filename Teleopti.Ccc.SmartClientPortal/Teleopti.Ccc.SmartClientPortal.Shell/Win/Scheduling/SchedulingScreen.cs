@@ -2224,8 +2224,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			afterBackgroundWorkersCompleted(e.Cancelled);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
-			)]
+
+		[RemoveMeWithToggle("Remove WorkShiftFinderResultHolder-if", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		private void afterBackgroundWorkersCompleted(bool canceled)
 		{
 			_personsToValidate.Clear();

@@ -122,8 +122,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			service.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder => _allResults();
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		public void ResetWorkShiftFinderResults()
 		{
 			_allResults().Clear();
