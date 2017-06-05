@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				});
 		}
 
-	    public IEnumerable<TeamInAlarmModel> ReadForSkills(Guid siteId, Guid[] skillIds)
+	    public IEnumerable<TeamInAlarmModel> Read(Guid siteId, IEnumerable<Guid> skillIds)
 	    {
 			return
 				from agentState in _agentStateReadModels.Models

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.Cast<TeamInAlarmModel>();
 		}
 
-		public IEnumerable<TeamInAlarmModel> ReadForSkills(Guid siteId, Guid[] skillIds)
+		public IEnumerable<TeamInAlarmModel> Read(Guid siteId, IEnumerable<Guid> skillIds)
 		{
 			
 			return _unitOfWork.Current().Session()

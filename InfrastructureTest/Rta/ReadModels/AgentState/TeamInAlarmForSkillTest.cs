@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { currentSkillId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { currentSkillId }))
 				.Count().Should().Be(1);
 		}
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				});
 			});
 
-			var result = WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { currentSkillId })).Single();
+			var result = WithUnitOfWork.Get(() => Target.Read(siteId, new[] { currentSkillId })).Single();
 			
 			result.TeamId.Should().Be(teamId);
 			result.Count.Should().Be(1);
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { phoneSkillId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId }))
 				.Single().Count.Should().Be(1);
 		}
 
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { phoneSkillId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId }))
 				.Single().Count.Should().Be(1);
 		}
 
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { phoneSkillId, emailSkillId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId, emailSkillId }))
 				.Single().Count.Should().Be(1);
 		}
 
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { email }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { email }))
 				.Should().Be.Empty();
 		}
 
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { phoneId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneId }))
 				.Should().Be.Empty();
 		}
 
@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			});
 			WithUnitOfWork.Do(() => StatePersister.UpsertDeleted(ashleyId, "2016-10-17 08:30".Utc()));
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { phoneSkillId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId }))
 				.Single().Count.Should().Be(1);
 		}
 

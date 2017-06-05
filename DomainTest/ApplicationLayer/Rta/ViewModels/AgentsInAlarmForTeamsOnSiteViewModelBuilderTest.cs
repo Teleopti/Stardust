@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				})
 				;
 			
-			var viewModel = Target.GetOutOfAdherenceForTeamsOnSite(siteId).Single();
+			var viewModel = Target.Build(siteId).Single();
 
 			viewModel.Id.Should().Be(teamId);
 			viewModel.Name.Should().Be("Team");
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					AlarmStartTime = "2016-10-17 08:00".Utc(),
 				});
 
-			var viewModel = Target.ForSkills(siteId, new[] { skill }).Single();
+			var viewModel = Target.Build(siteId, new[] { skill }).Single();
 
 			viewModel.Id.Should().Be(teamId);
 			viewModel.Name.Should().Be("Team");
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgent(personId)
 				.WithSkill(skill);
 
-			var viewModel = Target.ForSkills(siteId, new[] { skill }).Single();
+			var viewModel = Target.Build(siteId, new[] { skill }).Single();
 
 			viewModel.Id.Should().Be(teamId);
 			viewModel.OutOfAdherence.Should().Be(0);
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithSkill(skill1)
 				.WithSkill(skill2);
 	
-			var viewModel = Target.ForSkills(siteId, new[] { skill1, skill2 }).Single();
+			var viewModel = Target.Build(siteId, new[] { skill1, skill2 }).Single();
 
 			viewModel.Id.Should().Be(teamId);
 			viewModel.OutOfAdherence.Should().Be(1);

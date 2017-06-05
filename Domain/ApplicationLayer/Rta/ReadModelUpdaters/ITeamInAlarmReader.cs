@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 	public interface ITeamInAlarmReader
 	{
 		IEnumerable<TeamInAlarmModel> Read(Guid siteId);
-		IEnumerable<TeamInAlarmModel> ReadForSkills(Guid siteId, Guid[] skillIds);
+		IEnumerable<TeamInAlarmModel> Read(Guid siteId, IEnumerable<Guid> skillIds);
 	}
 }

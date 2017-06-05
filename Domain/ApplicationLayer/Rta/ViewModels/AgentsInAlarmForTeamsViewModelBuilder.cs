@@ -22,38 +22,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 		}
 
-		public IEnumerable<TeamOutOfAdherence> GetOutOfAdherenceForTeamsOnSite(Guid siteId)
+		public IEnumerable<TeamOutOfAdherence> Build(Guid siteId)
 		{
-			var adherence = _teamInAlarmReader.Read(siteId).ToLookup(a => a.TeamId);
-			var teams = _teamRepository.FindTeamsForSite(siteId);
-			var numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams.Select(x => x.Id.Value));
-			return teams.Select(t =>
-				{
-					int result;
-					var agents = numberOfAgents.TryGetValue(t.Id.Value, out result) ? result : 0;
-					var ooa = adherence[t.Id.GetValueOrDefault()]
-							.Select(a => a.Count)
-							.SingleOrDefault();
-					return new TeamOutOfAdherence
-					{
-						Id = t.Id.GetValueOrDefault(),
-						Name = t.Description.Name,
-						NumberOfAgents = agents,
-						SiteId = siteId,
-						OutOfAdherence = adherence[t.Id.GetValueOrDefault()]
-							.Select(a => a.Count)
-							.SingleOrDefault(),
-						Color = getColor(ooa, agents)
-					};
-				})
-				.ToArray();
+			return Build(siteId, null);
 		}
 
-		public IEnumerable<TeamOutOfAdherence> ForSkills(Guid siteId, Guid[] skillIds)
+		public IEnumerable<TeamOutOfAdherence> Build(Guid siteId, IEnumerable<Guid> skillIds)
 		{
-			var adherence = _teamInAlarmReader.ReadForSkills(siteId, skillIds).ToLookup(a => a.TeamId);
 			var teams = _teamRepository.FindTeamsForSite(siteId);
-			var numberOfAgents = _numberOfAgentsInTeamReader.ForSkills(teams.Select(x => x.Id.Value),skillIds);
+
+			var adherence = skillIds == null ?
+				_teamInAlarmReader.Read(siteId).ToLookup(a => a.TeamId) :
+				_teamInAlarmReader.Read(siteId, skillIds).ToLookup(a => a.TeamId)
+				;
+
+			var numberOfAgents = skillIds == null ?
+				_numberOfAgentsInTeamReader.FetchNumberOfAgents(teams.Select(x => x.Id.Value)) : 
+				_numberOfAgentsInTeamReader.ForSkills(teams.Select(x => x.Id.Value), skillIds)
+				;
 			
 			return teams
 				.Where(t =>
@@ -82,11 +68,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				)
 				.ToArray();
 		}
-		private string getColor(int OutOfAdherence, int NumberOfAgents)
+		private string getColor(int outOfAdherence, int numberOfAgents)
 		{
-			if (NumberOfAgents == 0)
+			if (numberOfAgents == 0)
 				return null;
-			var adherencePercent = Math.Floor(((double)OutOfAdherence / (double)NumberOfAgents) * 100);
+			var adherencePercent = Math.Floor(((double)outOfAdherence / (double)numberOfAgents) * 100);
 			if (adherencePercent >= 67)
 				return "danger";
 			if (adherencePercent >= 34 && adherencePercent <= 66)
