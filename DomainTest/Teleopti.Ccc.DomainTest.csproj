@@ -365,7 +365,7 @@
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingReadModelForecastTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
-    <Compile Include="ResourcePlanner\MissingForecastProviderTest.cs" />
+    <Compile Include="ResourcePlanner\Validation\MissingForecastValidatorTest.cs" />
     <Compile Include="ResourcePlanner\Validation\DesktopSchedulingValidatorTest.cs" />
     <Compile Include="ResourcePlanner\Validation\PersonContractScheduleValidatorTest.cs" />
     <Compile Include="ResourcePlanner\Validation\PersonContractValidatorTest.cs" />

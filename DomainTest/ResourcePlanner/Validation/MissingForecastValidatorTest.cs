@@ -12,10 +12,10 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ResourcePlanner
+namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 {
 	[DomainTest]
-	public class MissingForecastProviderTest : ISetup
+	public class MissingForecastValidatorTest : ISetup
 	{
 		public MissingForecastValidator Target;
 		public FakeExistingForecastRepository ExistingForecastRepository;
