@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var validOpenPeriods = person.WorkflowControlSet?.AbsenceRequestOpenPeriods?.Where(isValidOpenPeriods).ToList();
+			var validOpenPeriods = person.WorkflowControlSet?.AbsenceRequestOpenPeriods?
+				.Where(isValidateStaffingWithBudgetGroup).ToList();
 			if (validOpenPeriods == null || !validOpenPeriods.Any())
 			{
 				return createEmptyAllowanceDayCollection(period, false);
@@ -37,10 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			var userTimezone = person.PermissionInformation.DefaultTimeZone();
 			var userToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), userTimezone));
-
-			validOpenPeriods = validOpenPeriods
-				.Where(p => p.OpenForRequestsPeriod.Contains(userToday) && !(p.AbsenceRequestProcess is DenyAbsenceRequest))
-				.OrderBy(p => p.StaffingThresholdValidatorList.IndexOf(p.StaffingThresholdValidator)).ToList();
+			validOpenPeriods = validOpenPeriods.Where(p => isValidOpenPeriod(p, userToday))
+				.OrderBy(p => p.OrderIndex).ToList();
 
 			if (!validOpenPeriods.Any())
 			{
@@ -51,18 +50,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var budgetDays = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period)
 				.SelectMany(x => _budgetDayRepository.Find(defaultScenario, x.Item2, x.Item1)).ToList();
 
-			if (!budgetDays.Any())
-			{
-				return createEmptyAllowanceDayCollection(period, true);
-			}
-
-			return createAllowanceDays(period, userToday, validOpenPeriods, budgetDays);
+			return budgetDays.Any()
+				? createAllowanceDays(period, userToday, validOpenPeriods, budgetDays)
+				: createEmptyAllowanceDayCollection(period, true);
 		}
 
-		private static bool isValidOpenPeriods(IAbsenceRequestOpenPeriod p)
+		private static bool isValidateStaffingWithBudgetGroup(IAbsenceRequestOpenPeriod period)
 		{
-			return p.StaffingThresholdValidator is BudgetGroupAllowanceValidator ||
-					p.StaffingThresholdValidator is BudgetGroupHeadCountValidator;
+			return period.StaffingThresholdValidator is BudgetGroupAllowanceValidator ||
+					period.StaffingThresholdValidator is BudgetGroupHeadCountValidator;
+		}
+
+		private static bool isValidOpenPeriod(IAbsenceRequestOpenPeriod period, DateOnly userToday)
+		{
+			var isAutoDeny = period.AbsenceRequestProcess is DenyAbsenceRequest;
+			return !isAutoDeny && period.OpenForRequestsPeriod.Contains(userToday);
 		}
 
 		private static IEnumerable<AllowanceDay> createEmptyAllowanceDayCollection(DateOnlyPeriod period, bool availability)
@@ -80,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		private static IEnumerable<IAllowanceDay> createAllowanceDays(DateOnlyPeriod period, DateOnly userToday,
-			IList<IAbsenceRequestOpenPeriod> validOpenPeriods, IReadOnlyCollection<IBudgetDay> budgetDays)
+			IEnumerable<IAbsenceRequestOpenPeriod> validOpenPeriods, IReadOnlyCollection<IBudgetDay> budgetDays)
 		{
 			var allowanceList = from d in period.DayCollection()
 				select new
@@ -97,9 +99,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			{
 				var periodForToday = openPeriod.GetPeriod(userToday);
 				var useHeadCount = openPeriod.StaffingThresholdValidator is BudgetGroupHeadCountValidator;
+				var validBudgetDays = budgetDays.Where(bd => periodForToday.Contains(bd.Day));
 				var allowanceFromBudgetDays =
-					from budgetDay in budgetDays
-					where periodForToday.Contains(budgetDay.Day)
+					from budgetDay in validBudgetDays
 					let shrinkedAllowance = budgetDay.ShrinkedAllowance
 					let fullTimeInHours = budgetDay.FulltimeEquivalentHours
 					select new

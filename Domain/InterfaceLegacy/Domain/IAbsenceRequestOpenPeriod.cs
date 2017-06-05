@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <summary>
         /// Gets the index of the order.
         /// </summary>
-        /// <value>The index of the order.</value>
+        /// <value>The index of the order, greater value means higher priority.</value>
         /// <remarks>
         /// Created by: HenryG
         /// Created date: 2010-04-20

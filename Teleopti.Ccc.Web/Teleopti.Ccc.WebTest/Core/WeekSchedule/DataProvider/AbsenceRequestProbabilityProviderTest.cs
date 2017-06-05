@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 	[TestFixture]
 	public class AbsenceRequestProbabilityProviderTest
 	{
-		DateOnly date;
-		IAllowanceProvider allowanceProvider;
-		IAbsenceTimeProvider absenceTimeProvider;
-		AbsenceRequestProbabilityProvider target;
+		private DateOnly date;
+		private IAllowanceProvider allowanceProvider;
+		private IAbsenceTimeProvider absenceTimeProvider;
+		private AbsenceRequestProbabilityProvider target;
 
 		[SetUp]
 		public void Setup()
@@ -160,11 +160,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			Assert.That(ret.First().CssClass, Is.EqualTo("red"));
 		}
 
-		private IAllowanceDay createAllowanceDay(DateOnly date, int timeHours, int headHours)
+		private IAllowanceDay createAllowanceDay(DateOnly allowanceDate, int timeHours, int headHours)
 		{
 			return new AllowanceDay
 			{
-				Date = date,
+				Date = allowanceDate,
 				Time = TimeSpan.FromHours(timeHours),
 				Heads = TimeSpan.FromHours(headHours),
 				AllowanceHeads = 0,

@@ -10,9 +10,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private IAbsence _absence;
 		private DateOnlyPeriod _openForRequestsPeriod;
 
-		private static readonly IList<IAbsenceRequestValidator> _personAccountValidatorList =
-			 new List<IAbsenceRequestValidator> { new AbsenceRequestNoneValidator(), new PersonAccountBalanceValidator() };
-
 		private IAbsenceRequestValidator _currentPersonAccountValidator;
 		private IAbsenceRequestValidator _currentStaffingThresholdValidator;
 		private IProcessAbsenceRequest _currentAbsenceRequestProcess;
@@ -20,6 +17,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private int _personAccountValidator;
 		private int _staffingThresholdValidator;
 		private int _absenceRequestProcess;
+
+		private static readonly IList<IAbsenceRequestValidator> _personAccountValidatorList =
+			new List<IAbsenceRequestValidator>
+			{
+				new AbsenceRequestNoneValidator(),
+				new PersonAccountBalanceValidator()
+			};
 
 		private static readonly IList<IAbsenceRequestValidator> _staffingThresholdValidatorList =
 			new List<IAbsenceRequestValidator>
@@ -32,7 +36,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			};
 
 		private static readonly IList<IProcessAbsenceRequest> _absenceRequestProcessList =
-			 new List<IProcessAbsenceRequest> { new PendingAbsenceRequest(), new GrantAbsenceRequest(), new DenyAbsenceRequest() };
+			new List<IProcessAbsenceRequest>
+			{
+				new PendingAbsenceRequest(),
+				new GrantAbsenceRequest(),
+				new DenyAbsenceRequest()
+			};
 
 		private int _orderIndex;
 
@@ -76,7 +85,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			get
 			{
-				IWorkflowControlSet owner = Parent as IWorkflowControlSet;
+				var owner = Parent as IWorkflowControlSet;
 				_orderIndex = owner == null ? -1 : owner.AbsenceRequestOpenPeriods.IndexOf(this);
 				return _orderIndex;
 			}
@@ -103,7 +112,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				InParameter.NotNull(nameof(AbsenceRequestProcess), value);
 				_absenceRequestProcess = _absenceRequestProcessList.IndexOf(value);
 				_currentAbsenceRequestProcess = value.CreateInstance();
-				
 			}
 		}
 
@@ -127,7 +135,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				InParameter.NotNull(nameof(PersonAccountValidator), value);
 				_personAccountValidator = _personAccountValidatorList.IndexOf(value);
 				_currentPersonAccountValidator = value.CreateInstance();
-
 			}
 		}
 
