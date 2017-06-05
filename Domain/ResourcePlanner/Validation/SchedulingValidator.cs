@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class SchedulingValidator
 	{
-		private readonly MissingForecastProvider _missingForecastProvider;
+		private readonly MissingForecastValidator _missingForecastValidator;
 		private readonly PersonSkillValidator _personSkillValidator;
 		private readonly PersonPeriodValidator _personPeriodValidator;
 		private readonly PersonSchedulePeriodValidator _personSchedulePeriodValidator;
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 		private readonly PersonContractValidator _personContractValidator;
 		private readonly PersonContractScheduleValidator _personContractScheduleValidator;
 
-		public SchedulingValidator(MissingForecastProvider missingForecastProvider, 
+		public SchedulingValidator(MissingForecastValidator missingForecastValidator, 
 			PersonSkillValidator personSkillValidator, 
 			PersonPeriodValidator personPeriodValidator, 
 			PersonSchedulePeriodValidator personSchedulePeriodValidator, 
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			PersonContractValidator personContractValidator, 
 			PersonContractScheduleValidator personContractScheduleValidator)
 		{
-			_missingForecastProvider = missingForecastProvider;
+			_missingForecastValidator = missingForecastValidator;
 			_personSkillValidator = personSkillValidator;
 			_personPeriodValidator = personPeriodValidator;
 			_personSchedulePeriodValidator = personSchedulePeriodValidator;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			_personSkillValidator.FillPeopleMissingSkill(result, agents, period);
 			if (desktop)
 			{
-				_missingForecastProvider.FillMissingForecast(result, agents, period, existingForecast);
+				_missingForecastValidator.FillMissingForecast(result, agents, period, existingForecast);
 				_personSchedulePeriodValidator.FillPeopleMissingSchedulePeriod(result, agents, period);
 			}
 			_personShiftBagValidator.FillPeopleMissingShiftBag(result, agents, period);

@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class MissingForecastProvider
+	public class MissingForecastValidator
 	{
 		public IEnumerable<MissingForecastModel> GetMissingForecast(DateOnlyPeriod range, IEnumerable<SkillMissingForecast> existingForecast)
 		{

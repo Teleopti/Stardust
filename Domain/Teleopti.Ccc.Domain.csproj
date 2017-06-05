@@ -274,7 +274,7 @@
     <Compile Include="ResourcePlanner\Validation\BasicSchedulingValidator.cs" />
     <Compile Include="ResourcePlanner\Validation\DesktopSchedulingValidator.cs" />
     <Compile Include="ResourcePlanner\Validation\MissingForecastModel.cs" />
-    <Compile Include="ResourcePlanner\Validation\MissingForecastProvider.cs" />
+    <Compile Include="ResourcePlanner\Validation\MissingForecastValidator.cs" />
     <Compile Include="ResourcePlanner\Validation\PersonContractScheduleValidator.cs" />
     <Compile Include="ResourcePlanner\Validation\PersonContractValidator.cs" />
     <Compile Include="ResourcePlanner\Validation\PersonPartTimePercentageValidator.cs" />

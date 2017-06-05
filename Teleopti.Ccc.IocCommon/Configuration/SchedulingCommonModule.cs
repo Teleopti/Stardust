@@ -512,7 +512,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private static void registerValidators(ContainerBuilder builder)
 		{
-			builder.RegisterType<MissingForecastProvider>().SingleInstance();
+			builder.RegisterType<MissingForecastValidator>().SingleInstance();
 			builder.RegisterType<BasicSchedulingValidator>().SingleInstance();
 			builder.RegisterType<PersonSkillValidator>().SingleInstance();
 			builder.RegisterType<PersonPeriodValidator>().SingleInstance();

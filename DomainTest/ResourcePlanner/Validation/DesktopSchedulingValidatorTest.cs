@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var result = Target.Validate(new[] { agent }, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1));
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
-				.Any(x => x == typeof(MissingForecastProvider))
+				.Any(x => x == typeof(MissingForecastValidator))
 				.Should().Be.False();
 		}
 	}
