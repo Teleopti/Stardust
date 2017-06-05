@@ -54,8 +54,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period).ToList();
 
-			verifyThatAllDaysHasZeroAllowance(result);
-			verifyAvailability(result, true);
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			verifyAllAvailability(result, true);
+			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
@@ -82,8 +83,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			result.First().Time.Should().Be.EqualTo(allowance);
-			verifyAvailability(result, true);
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+
+			var allowanceDay = result.First();
+			Assert.AreEqual(allowance, allowanceDay.Time);
+			Assert.AreEqual(TimeSpan.FromHours(budgetDay.FulltimeEquivalentHours), allowanceDay.Heads);
+			Assert.AreEqual(allowance.TotalHours, allowanceDay.AllowanceHeads);
+			Assert.AreEqual(true, allowanceDay.Availability);
+			Assert.AreEqual(false, allowanceDay.UseHeadCount);
+			Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
 		}
 
 		[Test]
@@ -110,9 +119,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), new Now());
+
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			verifyThatAllDaysHasZeroAllowance(result);
-			verifyAvailability(result, true);
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			verifyAllAvailability(result, true);
+			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
@@ -144,8 +156,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			verifyThatAllDaysHasZeroAllowance(result);
-			verifyAvailability(result, true);
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			verifyAllAvailability(result, true);
+			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
@@ -182,12 +196,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				_now);
 
 			var result = target.GetAllowanceForPeriod(period).ToList();
-
 			budgetDayRepo.VerifyAllExpectations();
 
-			Assert.That(result.Single(d => d.Date == day1).Time, Is.EqualTo(allowance1));
-			Assert.That(result.Single(d => d.Date == day2).Time, Is.EqualTo(allowance2));
-			verifyAvailability(result, true);
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			verifyAllAvailability(result, true);
+
+			foreach (var allowanceDay in result)
+			{
+				if (allowanceDay.Date == day1)
+				{
+					Assert.AreEqual(allowance1, allowanceDay.Time);
+					Assert.AreEqual(TimeSpan.FromHours(budgetDay1.FulltimeEquivalentHours), allowanceDay.Heads);
+					Assert.AreEqual(allowance1.TotalHours, allowanceDay.AllowanceHeads);
+					Assert.AreEqual(false, allowanceDay.UseHeadCount);
+					Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
+				}
+				else if (allowanceDay.Date == day2)
+				{
+					Assert.AreEqual(allowance2, allowanceDay.Time);
+					Assert.AreEqual(TimeSpan.FromHours(budgetDay2.FulltimeEquivalentHours), allowanceDay.Heads);
+					Assert.AreEqual(allowance2.TotalHours, allowanceDay.AllowanceHeads);
+					Assert.AreEqual(false, allowanceDay.UseHeadCount);
+					Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
+				}
+				else
+				{
+					shouldBeEmptyAllowanceDay(allowanceDay);
+				}
+			}
 		}
 
 		[Test]
@@ -199,10 +235,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
-
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			verifyThatAllDaysHasZeroAllowance(result);
-			verifyAvailability(result, false);
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			verifyAllAvailability(result, false);
+			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
@@ -213,10 +250,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
-
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			verifyThatAllDaysHasZeroAllowance(result);
-			verifyAvailability(result, false);
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			verifyAllAvailability(result, false);
+			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
@@ -231,7 +269,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetGroup = new BudgetGroup();
 			personPeriod.BudgetGroup = budgetGroup;
 
-			var budgetDayWithNegativeValue = createBudgetDayWithAllowance(budgetGroup, period.StartDate, -20);
+			var hoursOfAllowance = -20.0;
+			var budgetDayWithNegativeValue = createBudgetDayWithAllowance(budgetGroup, period.StartDate, hoursOfAllowance);
 
 			_user.AddPersonPeriod(personPeriod);
 			budgetDayRepository.Expect(x => x.Find(_scenario, budgetGroup, period))
@@ -240,8 +279,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			verifyThatAllDaysHasZeroAllowance(result);
-			verifyAvailability(result, true);
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			var allowanceDay = result.First();
+			Assert.AreEqual(TimeSpan.Zero, allowanceDay.Time);
+			Assert.AreEqual(TimeSpan.FromHours(budgetDayWithNegativeValue.FulltimeEquivalentHours), allowanceDay.Heads);
+			Assert.AreEqual(hoursOfAllowance, allowanceDay.AllowanceHeads);
+			Assert.AreEqual(true, allowanceDay.Availability);
+			Assert.AreEqual(false, allowanceDay.UseHeadCount);
+			Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
 		}
 
 		[Test]
@@ -268,8 +314,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			result.First().Time.Should().Be.EqualTo(allowance);
-			verifyAvailability(result, true);
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+
+			verifyAllAvailability(result, true);
+			foreach (var allowanceDay in result)
+			{
+				if (allowanceDay.Date == period.StartDate)
+				{
+					Assert.AreEqual(allowance, allowanceDay.Time);
+					Assert.AreEqual(TimeSpan.FromHours(budgetDay.FulltimeEquivalentHours), allowanceDay.Heads);
+					Assert.AreEqual(allowance.TotalHours, allowanceDay.AllowanceHeads);
+					Assert.AreEqual(false, allowanceDay.UseHeadCount);
+					Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
+				}
+				else
+				{
+					shouldBeEmptyAllowanceDay(allowanceDay);
+				}
+			}
 		}
 
 		[Test]
@@ -309,8 +372,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			verifyThatAllDaysHasZeroAllowance(result);
-			verifyAvailability(result, true);
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			verifyAllAvailability(result, true);
+			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
@@ -348,8 +413,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
-			var result = target.GetAllowanceForPeriod(period);
-			verifyAvailability(result, true);
+			var result = target.GetAllowanceForPeriod(period).ToList();
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			var allowanceDay = result.First();
+			Assert.AreEqual(allowance, allowanceDay.Time);
+			Assert.AreEqual(TimeSpan.FromHours(budgetDay.FulltimeEquivalentHours), allowanceDay.Heads);
+			Assert.AreEqual(allowance.TotalHours, allowanceDay.AllowanceHeads);
+			Assert.AreEqual(true, allowanceDay.Availability);
+			Assert.AreEqual(false, allowanceDay.UseHeadCount);
+			Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
 		}
 
 		[Test]
@@ -388,8 +461,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			Assert.That(result.First().Heads, Is.EqualTo(TimeSpan.Zero));
-			verifyAvailability(result, false);
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			verifyAllAvailability(result, false);
+			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
@@ -416,8 +491,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
-			var result = target.GetAllowanceForPeriod(period);
-			verifyAvailability(result, true);
+			var result = target.GetAllowanceForPeriod(period).ToList();
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			var allowanceDay = result.First();
+			Assert.AreEqual(allowance, allowanceDay.Time);
+			Assert.AreEqual(TimeSpan.FromHours(budgetDay.FulltimeEquivalentHours), allowanceDay.Heads);
+			Assert.AreEqual(allowance.TotalHours, allowanceDay.AllowanceHeads);
+			Assert.AreEqual(true, allowanceDay.Availability);
+			Assert.AreEqual(false, allowanceDay.UseHeadCount);
+			Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
 		}
 
 		[Test]
@@ -455,8 +538,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
-			var result = target.GetAllowanceForPeriod(period);
-			verifyAvailability(result, true);
+			var result = target.GetAllowanceForPeriod(period).ToList();
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			var allowanceDay = result.First();
+			Assert.AreEqual(allowance, allowanceDay.Time);
+			Assert.AreEqual(TimeSpan.FromHours(budgetDay.FulltimeEquivalentHours), allowanceDay.Heads);
+			Assert.AreEqual(allowance.TotalHours, allowanceDay.AllowanceHeads);
+			Assert.AreEqual(true, allowanceDay.Availability);
+			Assert.AreEqual(true, allowanceDay.UseHeadCount);
+			Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
 		}
 
 		[Test]
@@ -494,8 +585,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
-			var result = target.GetAllowanceForPeriod(period);
-			verifyAvailability(result, false);
+			var result = target.GetAllowanceForPeriod(period).ToList();
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			verifyAllAvailability(result, false);
+			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
@@ -522,8 +616,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository,
 				new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period).ToList();
-			Assert.That(result.First().UseHeadCount, Is.EqualTo(true));
-			verifyAvailability(result, true);
+
+			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
+			verifyAllAvailability(result, true);
+			foreach (var allowanceDay in result)
+			{
+				if (allowanceDay.Date == period.StartDate)
+				{
+					Assert.AreEqual(allowance, allowanceDay.Time);
+					Assert.AreEqual(TimeSpan.FromHours(budgetDay.FulltimeEquivalentHours), allowanceDay.Heads);
+					Assert.AreEqual(allowance.TotalHours, allowanceDay.AllowanceHeads);
+					Assert.AreEqual(true, allowanceDay.UseHeadCount);
+					Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
+				}
+				else
+				{
+					shouldBeEmptyAllowanceDay(allowanceDay);
+				}
+			}
 		}
 
 		#region helpers
@@ -554,16 +664,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			_user.WorkflowControlSet = workflowControlSet;
 		}
 
-		private void verifyThatAllDaysHasZeroAllowance(IEnumerable<IAllowanceDay> allowanceDays)
+		private void verifyAllAvailability(IEnumerable<IAllowanceDay> allowanceDays, bool expectedAvailability)
 		{
-			Assert.That(allowanceDays.Sum(a => a.Time.TotalMinutes), Is.EqualTo(0));
+			Assert.AreEqual(true, allowanceDays.All(ad => ad.Availability == expectedAvailability));
 		}
 
-		private void verifyAvailability(IEnumerable<IAllowanceDay> allowanceDays, bool expectedAvailability)
+		private static void shouldBeEmptyAllowanceDay(IAllowanceDay allowanceDay)
 		{
-			foreach (var allowanceDay in allowanceDays)
+			Assert.AreEqual(TimeSpan.Zero, allowanceDay.Time);
+			Assert.AreEqual(TimeSpan.Zero, allowanceDay.Heads);
+			Assert.AreEqual(.0, allowanceDay.AllowanceHeads);
+			Assert.AreEqual(false, allowanceDay.UseHeadCount);
+			Assert.AreEqual(false, allowanceDay.ValidateBudgetGroup);
+		}
+
+		private static void allShouldBeEmptyAllowanceDay(IEnumerable<IAllowanceDay> allowanceDayList)
+		{
+			foreach (var allowanceDay in allowanceDayList)
 			{
-				Assert.AreEqual(allowanceDay.Availability, expectedAvailability);
+				shouldBeEmptyAllowanceDay(allowanceDay);
 			}
 		}
 
