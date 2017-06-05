@@ -404,7 +404,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var expectedValidatorType = typeof(T);
 			var validOpenPeriods = AbsenceRequestOpenPeriods.Where(
 				p => p.OpenForRequestsPeriod.Intersection(period).HasValue && p.GetPeriod(today).Intersection(period).HasValue
-					 && p.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest)).OrderByDescending(p => p.OrderIndex).ToList();
+					 && p.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest)
+					 && p.StaffingThresholdValidator.GetType() != typeof(AbsenceRequestNoneValidator)).OrderByDescending(p => p.OrderIndex).ToList();
 
 			if (!validOpenPeriods.Any())
 				return false;
