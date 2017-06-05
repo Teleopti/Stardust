@@ -3182,6 +3182,12 @@
     <Compile Include="Win\Scheduling\AgentStudentAvailabilityView.Designer.cs">
       <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win\Scheduling\AgentValidationResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Win\Scheduling\AgentValidationResult.Designer.cs">
+      <DependentUpon>AgentValidationResult.cs</DependentUpon>
+    </Compile>
     <Compile Include="Win\Scheduling\AuditHistoryView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -4980,6 +4986,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Scheduling\AgentStudentAvailabilityView.resx">
       <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Win\Scheduling\AgentValidationResult.resx">
+      <DependentUpon>AgentValidationResult.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>

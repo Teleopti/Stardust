@@ -36,6 +36,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
@@ -2246,7 +2247,46 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				drawSkillGrid();
 			}
 			releaseUserInterface(canceled);
-			if (!_scheduleOptimizerHelper.WorkShiftFinderResultHolder.LastResultIsSuccessful)
+
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
+			{
+				if (_schedulingOptions.ShowTroubleshot)
+				{
+					var scheduleDays = _scheduleView.SelectedSchedules();
+					if (scheduleDays.Any())
+					{
+						var startDay = scheduleDays.FirstOrDefault();
+						var endDay = scheduleDays.LastOrDefault();
+						var selectedPeriod = new DateOnlyPeriod(startDay.DateOnlyAsPeriod.DateOnly, endDay.DateOnlyAsPeriod.DateOnly);
+						var skillsMissingForecast = new List<SkillMissingForecast>();
+
+						//.VisibleSkills? .Skills?
+						foreach (var visibleSkill in _schedulerState.SchedulingResultState.VisibleSkills)
+						{
+							var skillDays = _schedulerState.SchedulingResultState.SkillDays[visibleSkill];
+							if (skillDays.IsEmpty()) continue;
+							var datesToPeriod = new DatesToPeriod();
+							var dates = skillDays.Select(skillDay => skillDay.CurrentDate).ToList();
+							var periods = datesToPeriod.Convert(dates);
+							var existingSkill = new SkillMissingForecast
+							{
+								SkillId = visibleSkill.Id.Value,
+								SkillName = visibleSkill.Name,
+								Periods = periods
+							};
+
+							skillsMissingForecast.Add(existingSkill);
+						}
+
+						var desktopSchedulingValidator = _container.Resolve<DesktopSchedulingValidator>();
+						var validationResult = desktopSchedulingValidator.Validate(_scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), selectedPeriod, skillsMissingForecast);
+						if (validationResult.InvalidResources.Any())
+							new AgentValidationResult(validationResult).Show(this);
+					}
+				}
+			}
+
+			else if (!_scheduleOptimizerHelper.WorkShiftFinderResultHolder.LastResultIsSuccessful)
 			{
 				var workShiftFinderResultHolder = _scheduleOptimizerHelper.WorkShiftFinderResultHolder;
 				if (_schedulingOptions.ShowTroubleshot ||
@@ -2256,8 +2296,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					ViewBase.ShowInformationMessage(this,
 						string.Format(CultureInfo.CurrentCulture, Resources.NoOfAgentDaysCouldNotBeScheduled,
 							_scheduleOptimizerHelper.WorkShiftFinderResultHolder.GetResults(false, true).Count)
-						, Resources.SchedulingResult);
+						, Resources.SchedulingResult);	
 			}
+
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
 
 			if (SikuliHelper.InteractiveMode)
