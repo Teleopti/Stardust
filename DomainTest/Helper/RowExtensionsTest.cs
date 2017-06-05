@@ -1,11 +1,9 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.DomainTest.Helper

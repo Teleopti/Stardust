@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.DomainTest.Common;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
