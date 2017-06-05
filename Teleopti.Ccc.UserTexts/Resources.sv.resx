@@ -14691,4 +14691,13 @@ Vill du registrera dig?</value>
   <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
     <value>Målet för kontraktstiden ({0}) är inte uppfyllt</value>
   </data>
+  <data name="WFMAppGuideStep2Description" xml:space="preserve">
+    <value>Konfigurera appen för Teleopti WFM. Starta appen och scanna sedan QR-koden nedan, eller ange </value>
+  </data>
+  <data name="EnableMobileNotifications" xml:space="preserve">
+    <value>Aktivera notifieringar i mobilappen</value>
+  </data>
+  <data name="MobileNotificationSettings" xml:space="preserve">
+    <value>Notifieringsinställningar för mobilappen</value>
+  </data>
 </root>
