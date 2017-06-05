@@ -22,5 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				validationResult.Add(validationError, GetType());
 			}
 		}
+
+		public bool AlsoRunInDesktop => true;
 	}
 }

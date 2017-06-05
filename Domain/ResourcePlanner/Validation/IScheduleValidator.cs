@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 	public interface IScheduleValidator
 	{
 		void FillResult(ValidationResult validationResult, IEnumerable<IPerson> agents, DateOnlyPeriod period);
+		bool AlsoRunInDesktop { get; }
 	}
 }
