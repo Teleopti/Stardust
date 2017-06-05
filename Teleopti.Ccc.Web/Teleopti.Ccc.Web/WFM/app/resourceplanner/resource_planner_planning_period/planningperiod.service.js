@@ -36,8 +36,8 @@
 
 		var service = {
 			// PlanningPeriod.Select
-			getAgentGroupById: planningGroup.get,
-			getPlanningPeriodsForAgentGroup: planningGroup.getPlanningPeriods,
+			getPlanGroupById: planningGroup.get,
+			getPlanningPeriodsForPlanGroup: planningGroup.getPlanningPeriods,
 			nextPlanningPeriod: planningGroup.nextPlanningPeriod,
 			deleteLastPlanningPeriod: planningGroup.deleteLastPlanningPeriod,
 			changeEndDateForLastPlanningPeriod: planningGroup.changeEndDateForLastPlanningPeriod,

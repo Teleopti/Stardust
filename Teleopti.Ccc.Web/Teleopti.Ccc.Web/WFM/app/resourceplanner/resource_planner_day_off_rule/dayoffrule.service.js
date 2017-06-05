@@ -14,7 +14,7 @@
 
 		var service = {
 			getDayOffRules: dayOffRule.query,
-			getDayOffRulesByAgentGroupId: planningGroupDo.query,
+			getDayOffRulesByPlanGroupId: planningGroupDo.query,
 			removeDayOffRule: dayOffRule.remove,
 			getDayOffRule: dayOffRule.get,
 			saveDayOffRule: dayOffRule.save,

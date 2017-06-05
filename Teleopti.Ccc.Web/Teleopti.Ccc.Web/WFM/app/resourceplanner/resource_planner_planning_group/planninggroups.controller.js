@@ -11,8 +11,8 @@
     var vm = this;
 
     vm.goForm = goForm;
-    vm.goAgentGroup = goAgentGroup;
-    vm.goEditAgentGroup = goEditAgentGroup;
+    vm.goPlanGroup = goPlanGroup;
+    vm.goEditPlanGroup = goEditPlanGroup;
     vm.goDayOffRule = goDayOffRule;
     vm.planningGroups = planningGroups.sort(localeLanguageSortingService.localeSort('+Name'));
     vm.hasAg = hasAg;
@@ -26,13 +26,13 @@
       $state.go('resourceplanner.createplanninggroup');
     }
 
-    function goEditAgentGroup(groupId) {
+    function goEditPlanGroup(groupId) {
       if (groupId) {
         $state.go('resourceplanner.editplanninggroup', { groupId: groupId });
       }
     }
 
-    function goAgentGroup(groupId) {
+    function goPlanGroup(groupId) {
       if (groupId) {
         $state.go('resourceplanner.selectplanningperiod', { groupId: groupId });
       }

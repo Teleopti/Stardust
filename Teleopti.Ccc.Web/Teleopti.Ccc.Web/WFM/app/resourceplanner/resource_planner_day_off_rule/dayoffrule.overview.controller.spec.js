@@ -8,12 +8,12 @@ describe('dayoffRuleOverviewController', function () {
         stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' },
         planningGroupInfo = {
             Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            Name: "Agent Group Test",
+            Name: "Plan Group Test",
             Filters: []
         },
         dayOffRulesInfo = [{
             Id: '00e9d2f9-e35e-408a-9cef-a76cfc9f6d6c',
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Name: "Default",
             Default: true,
             MinDayOffsPerWeek: 1,
@@ -25,7 +25,7 @@ describe('dayoffRuleOverviewController', function () {
             Filters: []
         }, {
             Id: 'ec4356ba-8278-48e4-b4f8-c3102b7af684',
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Name: "Day off rule 101",
             Default: false,
             MinDayOffsPerWeek: 1,
@@ -71,7 +71,7 @@ describe('dayoffRuleOverviewController', function () {
     });
 
     it('should get day off rules by planning group id before controller is loaded', function () {
-        spyOn(dayOffRuleService, 'getDayOffRulesByAgentGroupId').and.callThrough();
+        spyOn(dayOffRuleService, 'getDayOffRulesByPlanGroupId').and.callThrough();
         var vm = $controller('dayoffRuleOverviewController', {
             $stateParams: stateparams,
             planningGroupInfo: planningGroupInfo,

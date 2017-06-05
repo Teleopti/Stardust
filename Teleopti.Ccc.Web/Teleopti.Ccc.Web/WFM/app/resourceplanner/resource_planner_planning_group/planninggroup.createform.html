@@ -1,11 +1,11 @@
-<div class="view-header" ng-hide="vm.editAgentGroup.Id">
+<div class="view-header" ng-hide="vm.editPlanGroup.Id">
 	<div class="view-title">
-		<h1><i class="mdi mdi-account-multiple"></i>{{'CreateAgentGroup' | translate}}</h1>
+		<h1><i class="mdi mdi-account-multiple"></i>{{'CreatePlanGroup' | translate}}</h1>
 	</div>
 </div>
-<div class="view-header" ng-if="vm.editAgentGroup.Id">
+<div class="view-header" ng-if="vm.editPlanGroup.Id">
 	<div class="view-title">
-		<h1><i class="mdi mdi-account-multiple"></i>{{'EditAgentGroup' | translate}}: {{vm.editAgentGroup.Name}}</h1>
+		<h1><i class="mdi mdi-account-multiple"></i>{{'EditPlanGroup' | translate}}: {{vm.editPlanGroup.Name}}</h1>
 	</div>
 </div>
 <div class="con-row">
@@ -26,7 +26,7 @@
 				<div class="con-flex split-1-2">
 					<div class="wfm-option form-input-wrap">
 						<form name="autocomplete-form" class="autosearch-input">
-							<md-autocomplete md-no-cache="true" md-selected-item="selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForAgentGroup'|translate}}"
+							<md-autocomplete md-no-cache="true" md-selected-item="selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForPlanGroup'|translate}}"
 											 md-items="item in vm.inputFilterData()" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">
 								<md-item-template>
 									<div class="wfm-filter-selected">
@@ -62,8 +62,8 @@
 			</div>
 			<div class="con-footer">
 				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
-				<button ng-show="vm.editAgentGroup.Id" class="wfm-btn wfm-btn-invis-default delete-agent-group" ng-click='confirmModal1=true;'>{{'Delete'|translate}}</button>
-				<button class="wfm-btn save-agent-group" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
+				<button ng-show="vm.editPlanGroup.Id" class="wfm-btn wfm-btn-invis-default delete-plan-group" ng-click='confirmModal1=true;'>{{'Delete'|translate}}</button>
+				<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
 						ng-click="vm.persist()">
 					{{'Save'|translate}}
 	 			</button>
@@ -72,13 +72,13 @@
 						<div class="modalbg">
 							<div class="dialog-mini material-depth-1">
 								<div class="modal-inner-content">
-									<h3>{{'DeleteAgentGroup'| translate}}</h3>
-									{{vm.deleteAgentGroupText}}
+									<h3>{{'DeletePlanGroup'| translate}}</h3>
+									{{vm.deletePlanGroupText}}
 								</div>
 								<div class="modal-actions">
 									<aside>
 										<button ng-click="confirmModal1=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-										<button ng-click="confirmModal1=false; vm.removeAgentGroup(vm.editAgentGroup.Id)" class="wfm-btn wfm-btn-invis-primary confirm-delete-agent-group">{{'Delete'|translate}}</button>
+										<button ng-click="confirmModal1=false; vm.removePlanGroup(vm.editPlanGroup.Id)" class="wfm-btn wfm-btn-invis-primary confirm-delete-plan-group">{{'Delete'|translate}}</button>
 									</aside>
 								</div>
 							</div>

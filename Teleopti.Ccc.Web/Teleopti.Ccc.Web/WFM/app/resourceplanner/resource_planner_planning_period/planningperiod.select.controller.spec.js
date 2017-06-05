@@ -9,11 +9,11 @@ describe('planningPeriodSelectController', function () {
         stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' },
         planningGroupInfo = {
             Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            Name: "Agent Group Test",
+            Name: "Plan Group Test",
             Filters: []
         },
         planningPeriods = [{
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             StartDate: "2018-07-16T00:00:00",
             EndDate: "2018-08-04T00:00:00",
             HasNextPlanningPeriod: false,
@@ -21,7 +21,7 @@ describe('planningPeriodSelectController', function () {
             State: "New",
             ValidationResult: null
         }, {
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             StartDate: "2018-06-18T00:00:00",
             EndDate: "2018-07-15T00:00:00",
             HasNextPlanningPeriod: true,
@@ -32,7 +32,7 @@ describe('planningPeriodSelectController', function () {
             }
         }],
         planningPeriodOnlyFirst = [{
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             StartDate: "2018-07-16T00:00:00",
             EndDate: "2018-08-04T00:00:00",
             HasNextPlanningPeriod: false,
@@ -59,7 +59,7 @@ describe('planningPeriodSelectController', function () {
 
         $httpBackend.whenPUT('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-09-30&startDate=2018-09-01').respond(function (method, url, data, headers) {
             return [200, [{
-                AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+                PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 StartDate: "2018-09-01T00:00:00",
                 EndDate: "2018-09-30T00:00:00",
                 HasNextPlanningPeriod: true,
@@ -71,7 +71,7 @@ describe('planningPeriodSelectController', function () {
 
         $httpBackend.whenPUT('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-07-30').respond(function (method, url, data, headers) {
             return [200, [{
-                AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+                PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 StartDate: "2018-09-01T00:00:00",
                 EndDate: "2018-09-30T00:00:00",
                 HasNextPlanningPeriod: true,

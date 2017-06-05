@@ -53,9 +53,8 @@ Scenario: Delete planning group
 	| Planning group name | PlanningGroup 1 |
 	| Team                | Team 1          |
 	When I am viewing planning group list page
-	And I click more actions for planning group 'PlanningGroup 1'
-	And I click edit planning group
-	And I click delete planning group
+	And I click edit planning group 'PlanningGroup 1'
+	And I click delete planning group 
 	And I confirm deletion
 	Then I should not see 'PlanningGroup 1' in the planning group list
 
@@ -74,8 +73,7 @@ Scenario: Edit planning group
 	| Planning group name | PlanningGroup 1 |
 	| Team                | Team 1          |
 	When I am viewing planning group list page
-	And I click more actions for planning group 'PlanningGroup 1'
-	And I click edit planning group
+	And I click edit planning group 'PlanningGroup 1'
 	And I input planning group name 'PlanningGroup 2'
 	And I select the team 
 	 | Team   | Site   |

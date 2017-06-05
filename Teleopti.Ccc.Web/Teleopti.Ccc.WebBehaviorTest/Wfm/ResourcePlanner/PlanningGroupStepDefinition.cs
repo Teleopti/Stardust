@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[When(@"I input planning group name '(.*)'")]
 		public void WhenIInputPlanningGroupName(string planningGroupName)
 		{
-			Browser.Interactions.FillWith("input#agentGroupName", planningGroupName);
+			Browser.Interactions.FillWith("input#planningGroupName", planningGroupName);
 		}
 
 		[When(@"I select the team")]
@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[When(@"I save planning group")]
 		public void WhenISavePlanningGroup()
 		{
-			Browser.Interactions.Click(".save-agent-group");
+			Browser.Interactions.Click(".save-plan-group");
 		}
 
 		[Then(@"I should see '(.*)' in the planning group list")]
 		public void ThenIShouldSeeInThePlanningGroupList(string planningGroupName)
 		{
-			Browser.Interactions.AssertAnyContains(".agent-group-name", planningGroupName);
+			Browser.Interactions.AssertAnyContains(".plan-group > div.list-header h1", planningGroupName);
 		}
 
 		[Given(@"there is an planning group with")]
@@ -54,42 +54,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			DataMaker.Data().Apply(planningGroupConfigurable);
 		}
 
-		[When(@"I click more actions for planning group '(.*)'")]
-		public void WhenIClickMoreActionsForPlanningGroup(string planningGroupName)
+		[When(@"I click edit planning group '(.*)'")]
+		public void WhenIClickEditPlanningGroup(string planningGroupName)
 		{
-			Browser.Interactions.AssertAnyContains(".agent-group-name", planningGroupName);
-			// TODO: We should find the actual agent group, this only works with one agent group also this is HORRIBLE
-			Browser.Interactions.Javascript(@"
-				var el = document.querySelector('.ag-menu > div'); 
-				var classes = el.classList;
-				classes.remove('context-menu');
-				classes.add('context-menu:focus');
-				el.classList = classes;
-			");
-		}
-
-		[When(@"I click edit planning group")]
-		public void WhenIClickEditPlanningGroup()
-		{
-			Browser.Interactions.Click(".edit-agent-group");
+			Browser.Interactions.AssertAnyContains(".plan-group > div.list-header h1", planningGroupName);
+			Browser.Interactions.Click(".edit-plan-group");
 		}
 
 		[When(@"I click delete planning group")]
 		public void WhenIClickDeletePlanningGroup()
 		{
-			Browser.Interactions.Click(".delete-agent-group");
+			Browser.Interactions.Click(".delete-plan-group");
 		}
 
 		[When(@"I confirm deletion")]
 		public void WhenIConfirmDeletion()
 		{
-			Browser.Interactions.Click(".confirm-delete-agent-group");
+			Browser.Interactions.Click(".confirm-delete-plan-group");
 		}
 
 		[Then(@"I should not see '(.*)' in the planning group list")]
 		public void ThenIShouldNotSeeInThePlanningGroupList(string planningGroupName)
 		{
-			Browser.Interactions.AssertNoContains(".wfm-grid", ".agent-group-name", planningGroupName);
+			Browser.Interactions.AssertNoContains(".wfm-grid", ".plan-group > div.list-header h1", planningGroupName);
 		}
 
 		private void searchAndSelect(string searchText, string selectItemText)

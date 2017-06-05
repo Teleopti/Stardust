@@ -589,7 +589,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GoToWfmCreatePlanningGroup()
 		{
-			GoToPage("wfm/#/resourceplanner/createagentgroup");
+			GoToPage("wfm/#/resourceplanner/createplanninggroup");
 		}
 
 		public static void GoToWfmListPlanningGroups()
@@ -598,7 +598,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		}
 		public static void GoToPlanningPeriodListForPlanningGroup(Guid planningGroupId)
 		{
-			GoToPage($"wfm/#/resourceplanner/agentgroup/{planningGroupId}/selectplanningperiod");
+			GoToPage($"wfm/#/resourceplanner/planninggroup/{planningGroupId}/selectplanningperiod");
 		}
 	}
 }

@@ -16,8 +16,8 @@
 		vm.filterResults = [];
 		vm.name = '';
 		vm.cancel = cancel;
-		vm.editAgentGroup = {};
-		vm.deleteAgentGroupText = '';
+		vm.editPlanGroup = {};
+		vm.deletePlanGroupText = '';
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
 		vm.isValidFilters = isValidFilters;
@@ -25,20 +25,20 @@
 		vm.isValid = isValid;
 		vm.removeSelectedFilter = removeSelectedFilter;
 		vm.persist = persist;
-		vm.removeAgentGroup = removeAgentGroup;
+		vm.removePlanGroup = removePlanGroup;
 
-		getAgentGroupById();
+		getPlanGroupById();
 
-		function getAgentGroupById() {
+		function getPlanGroupById() {
 			if (planningGroupId == null)
 				return;
-			var getAgentGroup = planningGroupService.getAgentGroupById({ id: planningGroupId });
-			return getAgentGroup.$promise.then(function (data) {
-				vm.editAgentGroup = data;
-				vm.deleteAgentGroupText = $translate.instant("AreYouSureYouWantToDeleteTheAgentGroup").replace("{0}", vm.editAgentGroup.Name);
+			var getPlanGroup = planningGroupService.getPlanGroupById({ id: planningGroupId });
+			return getPlanGroup.$promise.then(function (data) {
+				vm.editPlanGroup = data;
+				vm.deletePlanGroupText = $translate.instant("AreYouSureYouWantToDeleteThePlanGroup").replace("{0}", vm.editPlanGroup.Name);
 				vm.name = data.Name;
 				vm.selectedResults = data.Filters.sort(localeLanguageSortingService.localeSort('+FilterType','+Name'));
-				return vm.editAgentGroup;
+				return vm.editPlanGroup;
 			});
 		}
 
@@ -116,25 +116,25 @@
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 				return;
 			}
-			planningGroupService.saveAgentGroup({
-				Id: vm.editAgentGroup.Id,
+			planningGroupService.savePlanGroup({
+				Id: vm.editPlanGroup.Id,
 				Name: vm.name,
 				Filters: vm.selectedResults
 			}).$promise.then(function () {
-				vm.editAgentGroup = {};
+				vm.editPlanGroup = {};
 				$state.go('resourceplanner.newoverview');
 			});
 		}
 
 		function cancel() {
 			$state.go('resourceplanner.newoverview');
-			vm.editAgentGroup = {};
+			vm.editPlanGroup = {};
 		}
 
-		function removeAgentGroup(id) {
+		function removePlanGroup(id) {
 			if (!id) return;
-			planningGroupService.removeAgentGroup({ id: id }).$promise.then(function () {
-				vm.editAgentGroup = {};
+			planningGroupService.removePlanGroup({ id: id }).$promise.then(function () {
+				vm.editPlanGroup = {};
 				$state.go('resourceplanner.newoverview');
 			});
 		}

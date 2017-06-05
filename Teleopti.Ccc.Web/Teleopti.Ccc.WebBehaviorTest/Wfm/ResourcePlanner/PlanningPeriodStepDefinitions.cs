@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[Then(@"I should see a planning period between '(.*)' and '(.*)'" ), SetCulture("sv-SE")]
 		public void ThenIShouldSeeAPlanningPeriodBetweenAnd(string from, string to)
 		{
-			Browser.Interactions.AssertFirstContains(".ag-pp div span", $"{from} - {to}");
+			Browser.Interactions.AssertAnyContains(".plan-group-pp > div.list-header h1", $"{from} - {to}");
 		}
 		
 	}

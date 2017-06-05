@@ -1,6 +1,6 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> {{'ScheduleAgentGroup' | translate}} - {{vm.planningGroup.Name}}</h1>
+		<h1><i class="mdi mdi-calendar"></i> {{'SchedulePlanGroup' | translate}} - {{vm.planningGroup.Name}}</h1>
 		<div class="pp-sub-title">
 			<span>{{'SelectedPlanningPeriod' | translate}}: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
 			<span ng-if="vm.isDisable() && !vm.clearRunning" ng-bind="vm.status" class="pp-status"></span>
@@ -80,7 +80,7 @@
 								</div>
 								<div ng-show="vm.dayNodes == undefined">
 									<span><i class="mdi mdi-information-outline"></i> {{'NoPreviousScheduleResult' | translate}}</span><br/>
-									<span ng-show="vm.totalAgents == 0"><i class="mdi mdi-information-outline"></i> {{'NoAgentsWithinAgentGroup' | translate}}</span>
+									<span ng-show="vm.totalAgents == 0"><i class="mdi mdi-information-outline"></i> {{'NoAgentsWithinPlanGroup' | translate}}</span>
 								</div>
 							</div>
 						</div>

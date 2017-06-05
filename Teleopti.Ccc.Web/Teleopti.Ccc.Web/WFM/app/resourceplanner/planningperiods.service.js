@@ -39,9 +39,9 @@
 		});
 
 		var service = {
-			// PlanningPeriod + AgentGroup
-			getAgentGroupById: planningGroup.get,
-			getPlanningPeriodsForAgentGroup: planningGroup.getPlanningPeriods,
+			// PlanningPeriod + PlanGroup
+			getPlanGroupById: planningGroup.get,
+			getPlanningPeriodsForPlanGroup: planningGroup.getPlanningPeriods,
 			nextPlanningPeriod: planningGroup.nextPlanningPeriod,
 			deleteLastPlanningPeriod: planningGroup.deleteLastPlanningPeriod,
 			changeEndDateForLastPlanningPeriod: planningGroup.changeEndDateForLastPlanningPeriod,

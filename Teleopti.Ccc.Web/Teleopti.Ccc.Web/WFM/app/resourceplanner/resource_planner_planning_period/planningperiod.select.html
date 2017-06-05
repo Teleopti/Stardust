@@ -1,71 +1,82 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> {{'ScheduleAgentGroup' | translate}} - {{vm.planningGroup.Name}}</h1>
+		<h1><i class="mdi mdi-calendar"></i> {{'SchedulePlanGroup' | translate}} - {{vm.planningGroup.Name}}</h1>
 		<div class="pp-sub-title">
 			<span ng-hide="vm.selectedPp">{{'SelectPpWorkWith' | translate}} </span>
 		</div>
 	</div>
 </div>
 <div class="con-row">
-	<div class="con-flex">
-		<button ng-if="!vm.isNonePp()" class="wfm-btn wfm-btn-default create-next-planning-period" ng-click="vm.startNextPlanningPeriod()">{{'CreateNextPp' | translate}}</button>
-		<div class="line-right pp-color-label" ng-if="!vm.isNonePp()">
+	<div class="con-flex ">
+		<div class="wfm-toolbar material-depth-1">
+			<div class="con-row">
+				<div class="con-flex">
+					<div class="wfm-filter-container">
+						<label for="filter" class="input-icon">
+							<i class="mdi mdi-filter-outline">
+								<input type="text" id="filter" ng-model="vm.filterTime" placeholder="filter planning periods">
+								<md-tooltip>filter planning periods</md-tooltip>
+							</i>
+						</label>
+					</div>
+				</div>
 				<div class="con-flex x3">
-			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>{{'SchedulingSucceeded' | translate}}</span>
-			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>{{'SchedulingFailed' | translate}}</span>
+					<button class="wfm-btn wfm-btn-invis-default create-next-planning-period" ng-click="vm.startNextPlanningPeriod()"><i class="mdi mdi-plus"></i>{{'CreateNextPp' | translate}}</button>
+					<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>{{'SchedulingSucceeded' | translate}}</span>
+					<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>{{'SchedulingFailed' | translate}}</span>
+					<button class="wfm-btn wfm-btn-invis-default" ng-click=""><i class="mdi mdi-information-outline"></i> Help</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
-<div class="con-row">
-	<div class="con-flex">
-		<div class="wfm-grid">
-			<div class="grid-card" ng-repeat="p in vm.planningPeriods | orderBy: '-EndDate'">
-				<div class="list-content panel" ng-class="{'pp-scheduled':p.State == 'Scheduled', 'pp-scheduled-failed':p.State == 'ScheduleFailed'|| p.State == 'IntradayOptimizationFailed'}"
-				 ng-click="vm.selectPp(p)">
-					<div class="ag-pp">
-						<div class="con-flex x3 pp-inner-card">
-							<span>
-								<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-calendar-check"></i>
-								<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="mdi mdi-calendar-remove"></i>
-								{{p.StartDate | amDateFormat:"L"}} - {{p.EndDate | amDateFormat:"L"}}
-							</span>
-						</div>
-						<div class="con-flex head-actions panel-menu" ng-click="$event.stopPropagation();" ng-show="$first">
-							<div tabindex=0 class="context-menu card-context">
-								<i class="mdi mdi-dots-vertical"></i>
-								<div class="context-menu-left">
-									<ul class="wfm-list">
-										<li ng-click="vm.getLastPp(p);"><i class="mdi mdi-pencil"></i>{{'ChangePlanningDuration' | translate}}</li>
-										<li ng-hide="vm.planningPeriods.length == 1" ng-click="vm.getPpInfo(p)"><i class="mdi mdi-close"></i>{{'DeletePlanningPeriod' | translate}}</li>
-									</ul>
-								</div>
+<div class="wfm-grid">
+	<div class="grid-card planingperiod-container" ng-repeat="p in vm.planningPeriods | orderBy: '-EndDate' | filter: vm.filterTime ">
+		<div class="list-content plan-group-pp">
+			<div class="list-header" ng-class="{'pp-scheduled':p.State == 'Scheduled', 'pp-scheduled-failed':p.State == 'ScheduleFailed'|| p.State == 'IntradayOptimizationFailed'}">
+				<!--<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-calendar-check"></i>
+				<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="mdi mdi-calendar-remove"></i>-->
+				<h1>{{p.StartDate | amDateFormat:"L"}} - {{p.EndDate | amDateFormat:"L"}}</h1>
+			</div>
+			<div class="list-header-content line-right">
+				<button class="wfm-fab mini outline-botton" ng-click="vm.getLastPp(p);" ng-show="$first">
+					<i class="mdi mdi-pencil"></i>
+					<md-tooltip>{{'ChangePlanningDuration' | translate}}</md-tooltip>
+				</button>
+				<button class="wfm-fab mini outline-botton" ng-show="$first && vm.planningPeriods.length > 1"  ng-click="vm.getPpInfo(p)">
+					<i class="mdi mdi-delete"></i>
+					<md-tooltip>{{'DeletePlanningPeriod' | translate}}</md-tooltip>
+				</button>
+				<button class="wfm-fab mini" ng-click="vm.selectPp(p)">
+					<i class="mdi mdi-play"></i>
+					<md-tooltip>Scheduling</md-tooltip>
+				</button>
+			</div>
+			<!--<div class="list-header-content-flow">
+				<i class="mdi mdi-account-multiple"></i> 999999
+			</div>-->
+			<div ng-cloak class="modal-box">
+				<div ng-cloak ng-show="vm.confirmDeletePpModal">
+					<div class="modalbg">
+						<div class="dialog-mini material-depth-1">
+							<div class="modal-inner-content">
+								<h3>{{'DeletePlanningPeriod' | translate}}</h3>
+								{{vm.textForDeletePp}}
 							</div>
-							<div ng-cloak class="modal-box">
-								<div ng-cloak ng-show="vm.confirmDeletePpModal">
-									<div class="modalbg">
-										<div class="dialog-mini material-depth-1">
-											<div class="modal-inner-content">
-												<h3>{{'DeletePlanningPeriod' | translate}}</h3>
-												{{vm.textForDeletePp}}
-											</div>
-											<div class="modal-actions">
-												<aside>
-													<button ng-click="vm.confirmDeletePpModal=false" class="wfm-btn wfm-btn-invis-default" translate>Cancel</button>
-									<button ng-click="vm.deleteLastPp(vm.agentGroup.Id);" class="wfm-btn wfm-btn-invis-primary" translate>Delete</button>
-												</aside>
-											</div>
-										</div>
-									</div>
-								</div>
+							<div class="modal-actions">
+								<aside>
+									<button ng-click="vm.confirmDeletePpModal=false" class="wfm-btn wfm-btn-invis-default" translate>Cancel</button>
+									<button ng-click="vm.deleteLastPp(vm.planGroup.Id);" class="wfm-btn wfm-btn-invis-primary" translate>Delete</button>
+								</aside>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div> 
+	</div>
 </div>
-<div class="con-row"  ng-if="vm.isNonePp()">
+<div class="con-row" ng-if="vm.isNonePp()">
 	<div class="con-flex">
 		<div class="line-center">
 			<i class="mdi mdi-information-outline huge-icon line-center"></i>
@@ -81,7 +92,8 @@
 				<div class="modalbg">
 					<div class="dialog material-depth-1">
 						<div class="modal-inner-content">
-							<h3>{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate | amDateFormat:"L"}}</h3>
+							<h3>{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate
+								| amDateFormat:"L"}}</h3>
 							<div class="con-row">
 								<label ng-if="!vm.dateIsChanged && vm.planningPeriods.length > 1">
 									<i class="mdi mdi-information-outline"></i> {{'ModifyEndDateForThisPlanningPeriodDot' | translate}}</label>
@@ -100,7 +112,8 @@
 								<button ng-click="vm.modifyLastPpModal=false" class="wfm-btn wfm-btn-invis-default" translate>
 									Cancel
 								</button>
-								<button ng-class="{'wfm-btn-invis-primary':vm.dateIsChanged, 'wfm-btn-invis-disabled': !vm.dateIsChanged}" ng-click="vm.changeDateForLastPp(vm.lastPp);" class="wfm-btn" translate>
+								<button ng-class="{'wfm-btn-invis-primary':vm.dateIsChanged, 'wfm-btn-invis-disabled': !vm.dateIsChanged}" ng-click="vm.changeDateForLastPp(vm.lastPp);"
+								 class="wfm-btn save-planning-period" translate>
 									Apply
 								</button>
 							</aside>
@@ -129,9 +142,9 @@
 									</div>
 								</div>
 							</div>
-							<div class="con-row" >
+							<div class="con-row">
 								<label ng-show="!vm.selectedIsChanged"><i class="mdi mdi-information-outline"></i>{{'SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot' | translate}}</label>
-							    <label ng-show="vm.selectedIsChanged" class="text-warning"><i class="mdi mdi-alert"></i>{{vm.textForCreatePpMeg}}</label>
+								<label ng-show="vm.selectedIsChanged" class="text-warning"><i class="mdi mdi-alert"></i>{{vm.textForCreatePpMeg}}</label>
 							</div>
 							<div class="con-row">
 								<date-range-picker class="pp-datepicker" ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()"></date-range-picker>
@@ -142,7 +155,8 @@
 								<button ng-click="vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default" translate>
 									Cancel
 								</button>
-								<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsChanged, 'wfm-btn-invis-disabled': !vm.selectedIsChanged}" ng-click="vm.createFirstPp()" class="wfm-btn apply-planning-period" translate>
+								<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsChanged, 'wfm-btn-invis-disabled': !vm.selectedIsChanged}" ng-click="vm.createFirstPp()"
+								 class="wfm-btn apply-planning-period" translate>
 									Apply
 								</button>
 							</aside>

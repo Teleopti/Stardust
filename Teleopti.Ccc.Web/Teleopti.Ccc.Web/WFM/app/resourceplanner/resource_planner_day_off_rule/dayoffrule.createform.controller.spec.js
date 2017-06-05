@@ -52,7 +52,7 @@ describe('dayoffRuleCreateController', function () {
         $httpBackend.whenGET('../api/resourceplanner/dayoffrules/33f52ff4-0314-4a9e-80fa-5c958c57c92f').respond(function (method, url, data, headers) {
             return [200, {
                 Id: '33f52ff4-0314-4a9e-80fa-5c958c57c92f',
-                AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+                PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 Name: "Default",
                 MinDayOffsPerWeek: 1,
                 MaxDayOffsPerWeek: 3,
@@ -67,7 +67,7 @@ describe('dayoffRuleCreateController', function () {
         $httpBackend.whenGET('../api/resourceplanner/dayoffrules/8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb').respond(function (method, url, data, headers) {
             return [200, {
                 Id: '8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb',
-                AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+                PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 Name: "Day off rule 101",
                 Default: false,
                 MinDayOffsPerWeek: 1,
@@ -179,7 +179,7 @@ describe('dayoffRuleCreateController', function () {
             Id: vm.filterId,
             Name: 'Day off rule 911',
             Default: vm.default,
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Filters: vm.selectedResults,
             MinDayOffsPerWeek: 1,
             MaxDayOffsPerWeek: 3,
@@ -219,7 +219,7 @@ describe('dayoffRuleCreateController', function () {
             Id: vm.filterId,
             Name: vm.name,
             Default: vm.default,
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Filters: vm.selectedResults,
             MinDayOffsPerWeek: 2,
             MaxDayOffsPerWeek: 4,
@@ -270,7 +270,7 @@ describe('dayoffRuleCreateController', function () {
             Id: vm.filterId,
             Name: vm.name,
             Default: vm.default,
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Filters: vm.selectedResults,
             MinDayOffsPerWeek: 2,
             MaxDayOffsPerWeek: 4,

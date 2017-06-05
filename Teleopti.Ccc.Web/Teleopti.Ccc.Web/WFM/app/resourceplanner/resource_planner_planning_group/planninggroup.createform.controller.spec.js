@@ -43,7 +43,7 @@ describe('planningGroupFormController', function () {
 		$httpBackend.whenGET('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
 			return [200, {
 				Id: "aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
-				Name: "Agent Group 2",
+				Name: "Plan Group 2",
 				Filters: [{
 					Id: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
 					Name: "Skill 1",
@@ -125,7 +125,7 @@ describe('planningGroupFormController', function () {
 		$httpBackend.flush();
 
 		vm.selectResultItem(vm.filterResults[0]);
-		vm.name = 'Agent Group';
+		vm.name = 'Plan Group';
 		vm.persist();
 		$httpBackend.flush();
 
@@ -136,43 +136,43 @@ describe('planningGroupFormController', function () {
 		var vm = $controller('planningGroupFormController', { $stateParams: stateparams });
 		$httpBackend.flush();
 
-		expect(vm.editAgentGroup.Id).toEqual('aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e');
+		expect(vm.editPlanGroup.Id).toEqual('aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e');
 	});
 
 	it('should load edit planning group', function () {
 		var vm = $controller('planningGroupFormController', { $stateParams: stateparams });
 		$httpBackend.flush();
 
-		expect(vm.editAgentGroup.Id).toEqual('aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e');
+		expect(vm.editPlanGroup.Id).toEqual('aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e');
 	});
 
 	it('should save new name for selected edit planning group', function () {
-		spyOn(planningGroupService, 'saveAgentGroup').and.callThrough();
+		spyOn(planningGroupService, 'savePlanGroup').and.callThrough();
 		var vm = $controller('planningGroupFormController', { $stateParams: stateparams });
 		$httpBackend.flush();
 
-		var id = vm.editAgentGroup.Id;
-		var filter = vm.editAgentGroup.Filters;
-		vm.name = 'Agent Group 3';
+		var id = vm.editPlanGroup.Id;
+		var filter = vm.editPlanGroup.Filters;
+		vm.name = 'Plan Group 3';
 		vm.persist();
 		$httpBackend.flush();
 
-		expect(planningGroupService.saveAgentGroup).toHaveBeenCalledWith({Id:id, Name: vm.name, Filters: filter });
+		expect(planningGroupService.savePlanGroup).toHaveBeenCalledWith({Id:id, Name: vm.name, Filters: filter });
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.newoverview');
 	});
 
 	it('should delete selected planning group', function () {
-		spyOn(planningGroupService, 'removeAgentGroup').and.callThrough();
+		spyOn(planningGroupService, 'removePlanGroup').and.callThrough();
 		var vm = $controller('planningGroupFormController', { $stateParams: stateparams });
 		$httpBackend.flush();
 
-		var id = vm.editAgentGroup.Id;
-		var filter = vm.editAgentGroup.Filters;
-		vm.name = 'Agent Group 3';
-		vm.removeAgentGroup(id);
+		var id = vm.editPlanGroup.Id;
+		var filter = vm.editPlanGroup.Filters;
+		vm.name = 'Plan Group 3';
+		vm.removePlanGroup(id);
 		$httpBackend.flush();
 
-		expect(planningGroupService.removeAgentGroup).toHaveBeenCalledWith({id:id});
+		expect(planningGroupService.removePlanGroup).toHaveBeenCalledWith({id:id});
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.newoverview');
 	});
 });

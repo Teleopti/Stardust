@@ -1,7 +1,7 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> {{'OpenSchedulePage' | translate}}</h1>
-		<p>{{'SchedulePageSelectAg' | translate}}</p>
+		<h1><i class="mdi mdi-calendar"></i> {{'OpenPlansPage' | translate}}</h1>
+		<p>{{'SchedulePageSelectPlanningGroup' | translate}}</p>
 	</div>
 </div>
 <div class="con-row" ng-if="vm.hasAg()">
@@ -12,15 +12,15 @@
 					<div class="wfm-filter-container">
 						<label for="filter" class="input-icon">
 							<i class="mdi mdi-filter-outline">
-								<input type="text" id="filter" ng-model="vm.filterName.Name" placeholder="filter planning groups">
-								<md-tooltip>filter planning groups</md-tooltip>
+								<input type="text" id="filter" ng-model="vm.filterName.Name" placeholder="{{'FilterPlanningGroups' | translate}}">
+								<md-tooltip>{{'FilterPlanningGroups' | translate}}</md-tooltip>
 							</i>
 						</label>
 					</div>
 				</div>
 				<div class="con-flex x3">
-					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goForm()"><i class="mdi mdi-plus"></i>{{'NewAgentGroup' | translate}}</button>
-					<button class="wfm-btn wfm-btn-invis-default" ng-click=""><i class="mdi mdi-information-outline"></i> Help</button>
+					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goForm()"><i class="mdi mdi-plus"></i>{{'NewPlanGroup' | translate}}</button>
+					<button class="wfm-btn wfm-btn-invis-default" ng-click=""><i class="mdi mdi-information-outline"></i>{{'HelpLabel' | translate}}</button>
 				</div>
 			</div>
 		</div>
@@ -30,27 +30,27 @@
 	<div class="con-flex">
 		<div class="line-center">
 			<i class="mdi mdi-information-outline huge-icon line-center"></i>
-			<h2>{{'HelpCreateAgentGroup' | translate}}</h2>
-			<button class="wfm-btn wfm-btn-primary" ng-click="vm.goForm()">{{'CreateAgentGroup' | translate}}</button>
+			<h2>{{'HelpCreatePlanGroup' | translate}}</h2>
+			<button class="wfm-btn wfm-btn-primary" ng-click="vm.goForm()">{{'CreatePlanGroup' | translate}}</button>
 		</div>
 	</div>
 </div>
 <div class="wfm-grid">
 	<div class="grid-card planingperiod-container" ng-repeat="planningGroup in vm.planningGroups | filter:vm.filterName">
-		<div class="list-content ">
-			<div class="list-header ">
+		<div class="list-content plan-group">
+			<div class="list-header">
 				<h1>{{planningGroup.Name }}</h1>
 			</div>
 			<div class="list-header-content line-right">
-				<button class="wfm-fab mini outline-botton" ng-click="vm.goEditAgentGroup(planningGroup.Id)">
+				<button class="wfm-fab mini outline-botton edit-plan-group" ng-click="vm.goEditPlanGroup(planningGroup.Id)">
 					<i class="mdi mdi-pencil"></i>
-					<md-tooltip>Edit Agent Group</md-tooltip>
+					<md-tooltip>{{'EditPlanGroup' | translate}}</md-tooltip>
 				</button>
 				<button class="wfm-fab mini outline-botton" ng-click="vm.goDayOffRule(planningGroup.Id)">
 					<i class="mdi mdi-settings"></i>
-					<md-tooltip>Day Off Rules Setting</md-tooltip>
+					<md-tooltip>{{'DayOffRuleSetting' | translate}}</md-tooltip>
 				</button>
-				<button class="wfm-fab mini" ng-click="vm.goAgentGroup(planningGroup.Id)">
+				<button class="wfm-fab mini" ng-click="vm.goPlanGroup(planningGroup.Id)">
 					<i class="mdi mdi-play"></i>
 					<md-tooltip>Scheduling</md-tooltip>
 				</button>

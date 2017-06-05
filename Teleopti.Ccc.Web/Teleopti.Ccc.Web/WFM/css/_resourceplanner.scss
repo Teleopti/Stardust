@@ -293,11 +293,11 @@ background-color: #cacaca;
 }
 
 //for new rescource planning
-.ag-chip {
+.pg-chip {
 	pointer-events: none;
 }
 
-.ag-pp {
+.pg-pp {
 	margin: 3px;
 }
 
@@ -491,7 +491,46 @@ md-tooltip .md-content {
 	z-index: 3;
 }
 
-	
+//demo design
+.wfm-grid .list-content {
+	padding: 0;
+	position: relative;
+}
+
+.list-header {
+	padding: 5px 10px;
+	background-color: rgba(0, 0, 0, 0.04);
+	height: 100px;
+}
+
+.list-header h1 {
+	color: $gray087 ;
+}
+
+.list-header-content {
+	padding: 10px;
+}
+
+.list-header-content-flow {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+}
+
+.outline-botton {
+	border: 1px #0099ff solid;
+	background-color: transparent;
+	color: #0099ff;
+}
+
+.wfm-toolbar {
+	background-color: $white;
+}
+
+.wfm-filter-container {
+	padding:10px 0px;
+	margin:5px;
+}
 
 
 	

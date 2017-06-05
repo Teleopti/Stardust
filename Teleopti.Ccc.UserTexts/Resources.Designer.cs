@@ -7102,15 +7102,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Agent Group.
-        /// </summary>
-        public static string CreateAgentGroup {
-            get {
-                return ResourceManager.GetString("CreateAgentGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create alarm types.
         /// </summary>
         public static string CreateAlarmTypes {
@@ -7297,6 +7288,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CreatePerformanceManagerReport {
             get {
                 return ResourceManager.GetString("CreatePerformanceManagerReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Plan Group.
+        /// </summary>
+        public static string CreatePlanGroup {
+            get {
+                return ResourceManager.GetString("CreatePlanGroup", resourceCulture);
             }
         }
         
@@ -9812,15 +9812,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Agent Group.
-        /// </summary>
-        public static string EditAgentGroup {
-            get {
-                return ResourceManager.GetString("EditAgentGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit Campaign.
         /// </summary>
         public static string EditCampaign {
@@ -9916,6 +9907,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Editor {
             get {
                 return ResourceManager.GetString("Editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Plan Group.
+        /// </summary>
+        public static string EditPlanGroup {
+            get {
+                return ResourceManager.GetString("EditPlanGroup", resourceCulture);
             }
         }
         
@@ -11810,6 +11810,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter planning groups.
+        /// </summary>
+        public static string FilterPlanningGroups {
+            get {
+                return ResourceManager.GetString("FilterPlanningGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter reports.
         /// </summary>
         public static string FilterReports {
@@ -13260,11 +13269,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An agent group is needed to be able to schedule. Do you want to create an agent group?.
+        ///   Looks up a localized string similar to An plan group is needed to be able to schedule your agents. Do you want to create an plan group?.
         /// </summary>
-        public static string HelpCreateAgentGroup {
+        public static string HelpCreatePlanGroup {
             get {
-                return ResourceManager.GetString("HelpCreateAgentGroup", resourceCulture);
+                return ResourceManager.GetString("HelpCreatePlanGroup", resourceCulture);
             }
         }
         
@@ -18482,15 +18491,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Agent Group.
-        /// </summary>
-        public static string NewAgentGroup {
-            get {
-                return ResourceManager.GetString("NewAgentGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create new alarm.
         /// </summary>
         public static string NewAlarm {
@@ -18811,6 +18811,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewPersonRotation {
             get {
                 return ResourceManager.GetString("NewPersonRotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Plan Group.
+        /// </summary>
+        public static string NewPlanGroup {
+            get {
+                return ResourceManager.GetString("NewPlanGroup", resourceCulture);
             }
         }
         
@@ -20852,6 +20861,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plans.
+        /// </summary>
+        public static string OpenPlansPage {
+            get {
+                return ResourceManager.GetString("OpenPlansPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open preferences.
         /// </summary>
         public static string OpenPreferences {
@@ -20884,15 +20902,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OpenReports {
             get {
                 return ResourceManager.GetString("OpenReports", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Schedules.
-        /// </summary>
-        public static string OpenSchedulePage {
-            get {
-                return ResourceManager.GetString("OpenSchedulePage", resourceCulture);
             }
         }
         
@@ -27237,11 +27246,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select agent group to work with.
+        ///   Looks up a localized string similar to Select planning group to work with your agents.
         /// </summary>
-        public static string SchedulePageSelectAg {
+        public static string SchedulePageSelectPlanningGroup {
             get {
-                return ResourceManager.GetString("SchedulePageSelectAg", resourceCulture);
+                return ResourceManager.GetString("SchedulePageSelectPlanningGroup", resourceCulture);
             }
         }
         

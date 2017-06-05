@@ -171,7 +171,7 @@
 							Name: $scope.name,
 							Default: $scope.default,
 							Filters: $scope.selectedResults,
-							AgentGroupId: $stateParams.groupId
+							PlanGroupId: $stateParams.groupId
 						}).$promise.then(function () {
 							returnFromCreate();
 						});

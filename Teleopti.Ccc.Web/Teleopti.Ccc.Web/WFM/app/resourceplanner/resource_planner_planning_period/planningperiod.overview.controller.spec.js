@@ -13,11 +13,11 @@ describe('planningPeriodOverviewController', function () {
         stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', ppId: 'a557210b-99cc-4128-8ae0-138d812974b6' },
         planningGroupInfo = {
             Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            Name: "Agent Group Test",
+            Name: "Plan Group Test",
             Filters: []
         },
         selectedPp = {
-            AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             StartDate: "2018-06-18T00:00:00",
             EndDate: "2018-07-15T00:00:00",
             HasNextPlanningPeriod: true,

@@ -1357,9 +1357,9 @@ Date</value>
     <value>People</value>
     <comment>Name of People module</comment>
   </data>
-  <data name="OpenSchedulePage" xml:space="preserve">
-    <value>Schedules</value>
-    <comment>Schedules</comment>
+  <data name="OpenPlansPage" xml:space="preserve">
+    <value>Plans</value>
+    <comment>Plans</comment>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Options</value>
@@ -15868,8 +15868,8 @@ Do you want to participate?</value>
     <value>Change planning duration</value>
     <comment>Change planning duration</comment>
   </data>
-  <data name="CreateAgentGroup" xml:space="preserve">
-    <value>Create Agent Group</value>
+  <data name="CreatePlanGroup" xml:space="preserve">
+    <value>Create Plan Group</value>
     <comment>text for helping information </comment>
   </data>
   <data name="CreateFirstPlanningPeriod" xml:space="preserve">
@@ -15904,16 +15904,16 @@ Do you want to participate?</value>
     <value>Delete planning period</value>
     <comment>Delete planning period</comment>
   </data>
-  <data name="EditAgentGroup" xml:space="preserve">
-    <value>Edit Agent Group</value>
-    <comment>text for edit agent group</comment>
+  <data name="EditPlanGroup" xml:space="preserve">
+    <value>Edit Plan Group</value>
+    <comment>text for edit plan group</comment>
   </data>
   <data name="FilterValidationIssues" xml:space="preserve">
     <value>Filter validation issues</value>
     <comment>Filter validation issues</comment>
   </data>
-  <data name="HelpCreateAgentGroup" xml:space="preserve">
-    <value>An agent group is needed to be able to schedule. Do you want to create an agent group?</value>
+  <data name="HelpCreatePlanGroup" xml:space="preserve">
+    <value>An plan group is needed to be able to schedule your agents. Do you want to create an plan group?</value>
     <comment>text for helping information</comment>
   </data>
   <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
@@ -15928,9 +15928,9 @@ Do you want to participate?</value>
     <value>Manage day off rules for the agent group {0}</value>
     <comment>ManageDayOffForAgentGroup</comment>
   </data>
-  <data name="NewAgentGroup" xml:space="preserve">
-    <value>New Agent Group</value>
-    <comment>text for create new agent group</comment>
+  <data name="NewPlanGroup" xml:space="preserve">
+    <value>New Plan Group</value>
+    <comment>text for create new plan group</comment>
   </data>
   <data name="NoAgentsWithinAgentGroup" xml:space="preserve">
     <value>There are no agents that can be scheduled in this agent group</value>
@@ -15972,9 +15972,9 @@ Do you want to participate?</value>
     <value>Scheduling succeeded</value>
     <comment>Scheduled Succeeded</comment>
   </data>
-  <data name="SchedulePageSelectAg" xml:space="preserve">
-    <value>Select agent group to work with</value>
-    <comment>text in Schedules overview</comment>
+  <data name="SchedulePageSelectPlanningGroup" xml:space="preserve">
+    <value>Select planning group to work with your agents</value>
+    <comment>text in Plans overview</comment>
   </data>
   <data name="SearchForAgentGroup" xml:space="preserve">
     <value>Search site / team / skill / contract</value>
@@ -16133,5 +16133,9 @@ Do you want to participate?</value>
   <data name="IgnoredScheduleHint" xml:space="preserve">
     <value>Ignored Schedule</value>
     <comment>hint for outbound campaign ignored schedule</comment>
+  </data>
+  <data name="FilterPlanningGroups" xml:space="preserve">
+    <value>Filter planning groups</value>
+    <comment>filter planning groups</comment>
   </data>
 </root>
