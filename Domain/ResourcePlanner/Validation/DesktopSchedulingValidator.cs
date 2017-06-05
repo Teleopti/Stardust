@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 
 		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period, IEnumerable<SkillMissingForecast> existingForecast)
 		{
-			return _schedulingValidator.Validate(agents, period, existingForecast);
+			return _schedulingValidator.Validate(agents, period, existingForecast, false);
 		}
 	}
 }

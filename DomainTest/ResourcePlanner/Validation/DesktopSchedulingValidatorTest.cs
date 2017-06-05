@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 		}
 
 		[Test]
-		[Ignore("18358")]
 		public void ShouldNotCareAboutFullSchedulePeriod()
 		{
 			var startDate = new DateOnly(2000,1,1);

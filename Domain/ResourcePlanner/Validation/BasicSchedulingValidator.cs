@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var existingForecast = _existingForecastRepository.ExistingForecastForAllSkills(period, scenario) ?? Enumerable.Empty<SkillMissingForecast>();
 
-			return _schedulingValidator.Validate(agents, period, existingForecast);
+			return _schedulingValidator.Validate(agents, period, existingForecast, true);
 		}
 	}
 }

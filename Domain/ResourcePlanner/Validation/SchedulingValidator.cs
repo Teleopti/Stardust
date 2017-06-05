@@ -36,13 +36,16 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			_personContractScheduleValidator = personContractScheduleValidator;
 		}
 
-		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period, IEnumerable<SkillMissingForecast> existingForecast)
+		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period, IEnumerable<SkillMissingForecast> existingForecast, bool forceCompleteSchedulePeriod)
 		{
 			var result = new ValidationResult();
 			_missingForecastProvider.FillMissingForecast(result, agents, period, existingForecast);
 			_personPeriodValidator.FillPeopleMissingPeriod(result, agents, period);
 			_personSkillValidator.FillPeopleMissingSkill(result, agents, period);
-			_personSchedulePeriodValidator.FillPeopleMissingSchedulePeriod(result, agents, period);
+			if (forceCompleteSchedulePeriod)
+			{
+				_personSchedulePeriodValidator.FillPeopleMissingSchedulePeriod(result, agents, period);
+			}
 			_personShiftBagValidator.FillPeopleMissingShiftBag(result, agents, period);
 			_partTimePercentageValidator.FillPeopleMissingPartTimePercentage(result, agents, period);
 			_personContractValidator.FillPeopleMissingContract(result, agents, period);
