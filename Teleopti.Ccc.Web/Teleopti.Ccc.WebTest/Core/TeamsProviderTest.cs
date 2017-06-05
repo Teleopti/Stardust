@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -218,6 +219,53 @@ namespace Teleopti.Ccc.WebTest.Core
 			permittedHierachy.Children.First().Name.Should().Be.EqualTo("mysite");
 			permittedHierachy.Children.First().Children.Single().Name.Should().Be.EqualTo("myteam");
 			permittedHierachy.LogonUserTeamId.Should().Be(team.Id);
+		}
+
+
+		[Test]
+		public void ShouldOrderNameByCultureWhenGetPermittedTeamHierachy()
+		{
+			var date = new DateOnly(2017, 6, 5);
+			var bu = BusinessUnitFactory.CreateWithId("_");
+			CurrentBusinessUnit.FakeBusinessUnit(bu);
+			var site1 = SiteFactory.CreateSimpleSite("D").WithId();
+			var site2 = SiteFactory.CreateSimpleSite("Ä").WithId();
+			var site3 = SiteFactory.CreateSimpleSite("A").WithId();
+
+			var team1 = TeamFactory.CreateTeamWithId("teamD");
+			var team2 = TeamFactory.CreateTeamWithId("teamÄ");
+			var team3 = TeamFactory.CreateTeamWithId("teamA");
+			var team4 = TeamFactory.CreateTeamWithId("teamC");
+
+			site1.AddTeam(team1);
+			site2.AddTeam(team2);
+			site2.AddTeam(team4);
+			site3.AddTeam(team3);
+
+			SiteRepository.Add(site1);
+			SiteRepository.Add(site2);
+			SiteRepository.Add(site3);
+
+			TeamRepository.Add(team1);
+			TeamRepository.Add(team2);
+			TeamRepository.Add(team3);
+			TeamRepository.Add(team4);
+
+			CurrentLoggedOnUser.CurrentUser().PermissionInformation.SetUICulture(new CultureInfo("sv"));
+			PermissionProvider.Enable();
+
+			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team1, date);
+			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team2, date);
+			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team3, date);
+			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team4, date);
+
+			var permittedHierachy = Target.GetPermittedTeamHierachy(date, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			permittedHierachy.Children.Last().Name.Should().Be("Ä");
+			permittedHierachy.Children.Last().Children.Last().Name.Should().Be("teamÄ");
+
+			CurrentLoggedOnUser.CurrentUser().PermissionInformation.SetUICulture(new CultureInfo("en-US"));
+			permittedHierachy = Target.GetPermittedTeamHierachy(date, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			permittedHierachy.Children.Last().Name.Should().Be("D");
 		}
 	}
 }

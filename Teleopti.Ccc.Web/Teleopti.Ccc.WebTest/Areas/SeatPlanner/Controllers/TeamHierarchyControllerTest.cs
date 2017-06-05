@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 		public void Setup()
 		{
 			siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			
+
 			var bu1 = BusinessUnitFactory.BusinessUnitUsedInTest;
 			businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();
@@ -48,17 +48,17 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			team.SetId(Guid.NewGuid());
 			site.AddTeam(team);
 
-			siteRepository.Stub(x => x.LoadAll()).Return(new List<ISite>(){site});
-			
+			siteRepository.Stub(x => x.LoadAll()).Return(new List<ISite>() { site });
+
 			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository, currentBusinessUnit, new Global.FakePermissionProvider(), loggedOnUser);
 			target = new TeamHierarchyController(teamsProvider);
-			
+
 			var result = target.Get() as dynamic;
 			var businessUnitWithSitesViewModel = result as BusinessUnitWithSitesViewModel;
 			businessUnitWithSitesViewModel.Should().Not.Be.Null();
 			var siteViewModel = businessUnitWithSitesViewModel.Children.SingleOrDefault(x => x.Id == site.Id.ToString());
 			siteViewModel.Should().Not.Be.Null();
-			var teamViewModel = siteViewModel.Children.SingleOrDefault (x => x.Id == team.Id.ToString());
+			var teamViewModel = siteViewModel.Children.SingleOrDefault(x => x.Id == team.Id.ToString());
 			teamViewModel.Should().Not.Be.Null();
 		}
 

@@ -15,7 +15,10 @@ namespace Teleopti.Ccc.Web.Core
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public TeamsProvider(ISiteRepository siteRepository, ICurrentBusinessUnit currentBusinessUnit, IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser)
+		public TeamsProvider(ISiteRepository siteRepository,
+			ICurrentBusinessUnit currentBusinessUnit,
+			IPermissionProvider permissionProvider,
+			ILoggedOnUser loggedOnUser)
 		{
 			_siteRepository = siteRepository;
 			_currentBusinessUnit = currentBusinessUnit;
@@ -32,18 +35,18 @@ namespace Teleopti.Ccc.Web.Core
 		private IEnumerable<TeamViewModel> getTeamsForSite(ISite site)
 		{
 			return site.SortedTeamCollection
-				.Where (team => team.IsChoosable)
+				.Where(team => team.IsChoosable)
 				.Select(team => new TeamViewModel
 				{
-						Id = team.Id.Value.ToString(),
-						Name = team.Description.Name
-				
+					Id = team.Id.Value.ToString(),
+					Name = team.Description.Name
+
 				});
 		}
 
 		public BusinessUnitWithSitesViewModel GetTeamHierarchy()
 		{
-			var sites = _siteRepository.LoadAll().OrderBy (site => site.Description.Name);
+			var sites = _siteRepository.LoadAll().OrderBy(site => site.Description.Name);
 			var siteViewModels = new List<SiteViewModelWithTeams>();
 
 			foreach (var site in sites)
@@ -71,7 +74,10 @@ namespace Teleopti.Ccc.Web.Core
 		public BusinessUnitWithSitesViewModel GetPermittedTeamHierachy(DateOnly date, string permission)
 		{
 			var currentBusinessUnit = _currentBusinessUnit.Current();
-			var sites = _siteRepository.LoadAll().Where(site => site.BusinessUnit.Id == currentBusinessUnit.Id).OrderBy(site => site.Description.Name);
+			var compare = StringComparer.Create(_loggedOnUser.CurrentUser().PermissionInformation.UICulture(), false);
+			var sites = _siteRepository.LoadAll()
+				.Where(site => site.BusinessUnit.Id == currentBusinessUnit.Id)
+				.OrderBy(site => site.Description.Name, compare);
 			var siteViewModels = new List<SiteViewModelWithTeams>();
 
 			var currentUser = _loggedOnUser.CurrentUser();
@@ -87,32 +93,20 @@ namespace Teleopti.Ccc.Web.Core
 					Name = site.Description.Name,
 					Children = new List<TeamViewModel>()
 				};
-				var teams = site.SortedTeamCollection.Where(t => t.IsChoosable);
-				foreach (var team in teams)
+				var teams = site.TeamCollection
+					.OrderBy(team => team.Description.Name, compare)
+					.Where(team => team.IsChoosable
+								&& (_permissionProvider.HasTeamPermission(permission, date, team)
+									|| (logonUserTeamId != null && logonUserTeamId == team.Id && hasPermissonForLogonTeam)));
+				if (teams.Any())
 				{
-					if (_permissionProvider.HasTeamPermission(permission, date, team))
+					siteViewModel.Children = teams.Select(team => new TeamViewModel
 					{
-						siteViewModel.Children.Add(new TeamViewModel
-						{
-							Id = team.Id.Value.ToString(),
-							Name = team.Description.Name
-						});
-					}
-					else if (logonUserTeamId != null && logonUserTeamId == team.Id
-					       && hasPermissonForLogonTeam)
-					{
-						siteViewModel.Children.Add(new TeamViewModel
-						{
-							Id = team.Id.Value.ToString(),
-							Name = team.Description.Name
-						});
-					}
-				}
-				if (siteViewModel.Children.Any())
-				{
+						Id = team.Id.Value.ToString(),
+						Name = team.Description.Name
+					}).ToList();
 					siteViewModels.Add(siteViewModel);
 				}
-
 			}
 
 			return new BusinessUnitWithSitesViewModel
