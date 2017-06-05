@@ -38,7 +38,7 @@ describe('RtaOverviewController', function () {
 
 	it('should display agents out of adherence in sites for preselected skill', function () {
 		stateParams.skillIds = "emailGuid";
-		$fakeBackend.withSiteAdherenceForSkill({
+		$fakeBackend.withSiteAdherence({
 			Id: "parisGuid",
 			NumberOfAgents: 11,
 			OutOfAdherence: 5,
@@ -56,27 +56,20 @@ describe('RtaOverviewController', function () {
 
 	it('should display agents out of adherence in sites for preselected skill area', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
-		$fakeBackend.withSiteAdherenceForSkill({
+		$fakeBackend.withSiteAdherence({
 			Id: "londonGuid",
 			NumberOfAgents: 11,
 			OutOfAdherence: 1,
 			SkillId: "phoneGuid",
 			Color: "good"
 		})
-			.withSiteAdherenceForSkill({
+			.withSiteAdherence({
 				Id: "parisGuid",
 				NumberOfAgents: 10,
-				OutOfAdherence: 3,
+				OutOfAdherence: 5,
 				SkillId: "emailGuid",
-				Color: "good"
-			})
-			.withSiteAdherenceForSkill({
-				Id: "parisGuid",
-				NumberOfAgents: 10,
-				OutOfAdherence: 2,
-				SkillId: "phoneGuid",
-				Color: "good"
-			})
+				Color: "warning"
+			})			
 			.withSkillAreas([{
 				Id: "emailAndPhoneGuid",
 				Skills: [{
@@ -100,7 +93,7 @@ describe('RtaOverviewController', function () {
 	it('should update adherence for site and preselected skill', function () {
 		stateParams.skillIds = "phoneGuid";
 		$fakeBackend
-			.withSiteAdherenceForSkill({
+			.withSiteAdherence({
 				Id: "londonGuid",
 				NumberOfAgents: 10,
 				OutOfAdherence: 1,
@@ -111,8 +104,8 @@ describe('RtaOverviewController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			$fakeBackend.clearSiteAdherencesForSkill()
-				.withSiteAdherenceForSkill({
+			$fakeBackend.clearSiteAdherences()
+				.withSiteAdherence({
 					Id: "londonGuid",
 					NumberOfAgents: 10,
 					OutOfAdherence: 5,
@@ -128,14 +121,14 @@ describe('RtaOverviewController', function () {
 
 	it('should update adherence for site and preselected skill area', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
-		$fakeBackend.withSiteAdherenceForSkill({
+		$fakeBackend.withSiteAdherence({
 			Id: "londonGuid",
 			NumberOfAgents: 10,
 			OutOfAdherence: 2,
 			SkillId: "phoneGuid",
 			Color: "good"
 		})
-			.withSiteAdherenceForSkill({
+			.withSiteAdherence({
 				Id: "londonGuid",
 				NumberOfAgents: 10,
 				OutOfAdherence: 3,
@@ -154,20 +147,13 @@ describe('RtaOverviewController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			$fakeBackend.clearSiteAdherencesForSkill()
-				.withSiteAdherenceForSkill({
+			$fakeBackend.clearSiteAdherences()
+				.withSiteAdherence({
 					Id: "londonGuid",
 					NumberOfAgents: 10,
-					OutOfAdherence: 5,
-					SkillId: "phoneGuid",
-					Color: "warning"
-				})
-				.withSiteAdherenceForSkill({
-					Id: "londonGuid",
-					NumberOfAgents: 10,
-					OutOfAdherence: 4,
+					OutOfAdherence: 9,
 					SkillId: "emailGuid",
-					Color: "warning"
+					Color: "danger"
 				})
 		})
 			.wait(5000);

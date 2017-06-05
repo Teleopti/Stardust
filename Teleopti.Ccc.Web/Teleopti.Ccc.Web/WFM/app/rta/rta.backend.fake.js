@@ -22,9 +22,7 @@
             withActivityAdherence: withActivityAdherence,
             withSite: withSite,
             withSiteAdherence: withSiteAdherence,
-            withSiteAdherenceForSkill: withSiteAdherenceForSkill,
             clearSiteAdherences: clearSiteAdherences,
-            clearSiteAdherencesForSkill: clearSiteAdherencesForSkill,
             withTeam: withTeam,
             withTeamAdherence: withTeamAdherence,
             clearTeamAdherences: clearTeamAdherences,
@@ -57,7 +55,6 @@
         var phoneStates = [];
         var organizations = [];
         var organizationsOnSkills = [];
-        var siteAdherencesForSkill = [];
         var rules = [];
         var timeline = {};
 
@@ -499,57 +496,24 @@
                 return [200, sites];
             });
 		
-        function sitesOrTeamsForSkillOrSkillArea(adherences, adherenceKey, paramId, sitesOrTeams) {
-            var siteOrTeamIdsBySkillOrSkillAreaId = adherences.filter(function(a) {
-                return paramId.indexOf(a[adherenceKey]) > -1;
-            }).map(function(s) {
-                return s.Id;
-            });
-            return sitesOrTeams.filter(function(st) {
-                return siteOrTeamIdsBySkillOrSkillAreaId.indexOf(st.Id) > -1;
-            });
-        }
-		
         fake(/\.\.\/api\/Sites\/ForSkills(.*)/,
             function(params) {
-                var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkill, 'SkillId', params.skillIds, sites);
-                return [200, filteredSites];
+                var result = siteAdherences;
+                if (params.skillIds)
+                    result = siteAdherences.filter(function(ta) {
+                        return params.skillIds.indexOf(ta.SkillId) > -1;
+                    });
+				return [200, result];
             });
 		
         fake(/\.\.\/api\/Sites\/InAlarmCountForSkills(.*)/,
             function(params) {
-                var adherenceBySiteId = {};
-                var sAdherencesForMultipleSkills = [];
-                var sAdherencesForSkill = siteAdherencesForSkill.filter(function(sa) {
-                    return params.skillIds.indexOf(sa.SkillId) > -1;
-                });
-
-                if (params.skillIds.length > 1) {
-                    sAdherencesForSkill.forEach(function(sas) {
-                        if (angular.isDefined(adherenceBySiteId[sas.Id])) {
-	                        adherenceBySiteId[sas.Id].OutOfAdherence = adherenceBySiteId[sas.Id].OutOfAdherence + sas.OutOfAdherence;
-	                        adherenceBySiteId[sas.Id].NumberOfAgents = sas.NumberOfAgents;
-	                        adherenceBySiteId[sas.Id].Color = (adherenceBySiteId[sas.Id].OutOfAdherence / adherenceBySiteId[sas.Id].NumberOfAgents) * 100 < 33 ? "good" : ((adherenceBySiteId[sas.Id].OutOfAdherence / adherenceBySiteId[sas.Id].NumberOfAgents) * 100 < 66 ? "warning" : "danger");
-                        } else {
-                            adherenceBySiteId[sas.Id] = {};
-                            adherenceBySiteId[sas.Id].OutOfAdherence = sas.OutOfAdherence;
-	                        adherenceBySiteId[sas.Id].NumberOfAgents = sas.NumberOfAgents;
-	                        adherenceBySiteId[sas.Id].Color = sas.Color;
-                        }
-                        return 0;
+                var result = siteAdherences;
+                if (params.skillIds)
+                    result = siteAdherences.filter(function(ta) {
+                        return params.skillIds.indexOf(ta.SkillId) > -1;
                     });
-
-                    for (var id in adherenceBySiteId) {
-	                    sAdherencesForMultipleSkills.push({
-		                    Id: id,
-		                    OutOfAdherence: adherenceBySiteId[id].OutOfAdherence,
-		                    NumberOfAgents: adherenceBySiteId[id].NumberOfAgents,
-		                    Color: adherenceBySiteId[id].Color
-	                    });
-                    }
-                    sAdherencesForSkill = sAdherencesForMultipleSkills;
-                }
-                return [200, sAdherencesForSkill];
+				return [200, result];
             });
 
         fake(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSites(.*)/,
@@ -595,7 +559,6 @@
             teamAdherences = [];
             skillAreas = [];
             phoneStates = [];
-            siteAdherencesForSkill = [];
             rules = [];
             timeline = {};
         }
@@ -660,18 +623,8 @@
             return this;
         };
 
-        function withSiteAdherenceForSkill(siteAdherenceForSkill) {
-            siteAdherencesForSkill.push(siteAdherenceForSkill);
-            return this;
-        };
-
         function clearSiteAdherences() {
             siteAdherences = [];
-            return this;
-        };
-
-        function clearSiteAdherencesForSkill() {
-            siteAdherencesForSkill = [];
             return this;
         };
 
