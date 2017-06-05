@@ -6,13 +6,12 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 {
 	[DomainTest]
-	[SkipRegistringFakeRepositories]
+	[ThrowIfRespositoriesAreUsed]
 	public class DesktopSchedulingValidatorTest
 	{
 		public DesktopSchedulingValidator Target;

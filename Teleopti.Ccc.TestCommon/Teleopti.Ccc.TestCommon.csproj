@@ -371,7 +371,7 @@
     <Compile Include="IoC\SystemImpl.cs" />
     <Compile Include="IoC\TestDoubles.cs" />
     <Compile Include="IoC\TestModule.cs" />
-    <Compile Include="IoC\SkipRegistringFakeRepositoriesAttribute.cs" />
+    <Compile Include="IoC\ThrowIfRespositoriesAreUsedAttribute.cs" />
     <Compile Include="IoC\UseEventPublisherAttribute.cs" />
     <Compile Include="IoC\LoggedOnAppDomainAttribute.cs" />
     <Compile Include="DbManagerLog4Net.cs" />

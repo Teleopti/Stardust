@@ -3,7 +3,7 @@
 namespace Teleopti.Ccc.TestCommon.IoC
 {
 	[AttributeUsage(AttributeTargets.Class)]
-	public class SkipRegistringFakeRepositoriesAttribute : Attribute
+	public class ThrowIfRespositoriesAreUsedAttribute : Attribute
 	{
 	}
 }

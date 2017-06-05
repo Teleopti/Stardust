@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Repositories
 			system.AddService<FakeDatabase>();
 			system.AddService<FakeStorage>();
-			if (!QueryAllAttributes<SkipRegistringFakeRepositoriesAttribute>().Any())
+			if (!QueryAllAttributes<ThrowIfRespositoriesAreUsedAttribute>().Any())
 			{
 				system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 				system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
