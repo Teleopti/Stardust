@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[DomainTest]
 	public class PersonShiftBagValidatorTest : ISetup
 	{
-		public BasicSchedulingValidator Target;
+		public SchedulingValidator Target;
 
 		[Test]
 		public void PersonWithSkillsShouldNotReturnValidationError()
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			personPeriod.RuleSetBag = new RuleSetBag();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagValidator)));
 
 			result.Should().Be.Empty();
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagValidator)));
 
 			result.Should().Not.Be.Empty();
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			personPeriod.RuleSetBag = new RuleSetBag();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagValidator)));
 
 			result.Should().Not.Be.Empty();

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[DomainTest]
 	public class PersonContractValidatorTest : ISetup
 	{
-		public BasicSchedulingValidator Target;
+		public SchedulingValidator Target;
 
 		[Test]
 		public void PersonHasContractShouldNotReturnValidationError()
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var person = PersonFactory.CreatePerson().WithId();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(startDate));
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractValidator)));
 
 			result.Should().Be.Empty();
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			((IDeleteTag)personPeriod.PersonContract.Contract).SetDeleted();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractValidator)));
 
 			result.Should().Not.Be.Empty();

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[DomainTest]
 	public class PersonPeriodValidatorTest : ISetup
 	{
-		public BasicSchedulingValidator Target;
+		public SchedulingValidator Target;
 
 		[Test]
 		public void PersonWithoutPersonPeriodsShouldReturnValidationError()
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
 			var person = PersonFactory.CreatePerson().WithId();
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodValidator)));
 
 			result.Should().Not.Be.Empty();
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodValidator)));
 
 			result.Should().Be.Empty();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 31)).WithId();
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodValidator)));
 
 			result.Should().Not.Be.Empty();
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 25)).WithId();
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodValidator)));
 
 			result.Should().Not.Be.Empty();
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 01, 20)));
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 01, 25)));
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodValidator)));
 
 			result.Should().Be.Empty();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 			person.TerminatePerson(new DateOnly(2017, 01, 25), new PersonAccountUpdaterDummy());
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodValidator)));
 
 			result.Should().Be.Empty();

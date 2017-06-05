@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IAgentGroupStaffLoader _agentGroupStaffLoader;
 		private readonly INow _now;
-		private readonly BasicSchedulingValidator _basicSchedulingValidator;
+		private readonly SchedulingValidator _basicSchedulingValidator;
 		private readonly IAgentGroupRepository _agentGroupRepository;
 
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
 			IPlanningPeriodRepository planningPeriodRepository, IAgentGroupStaffLoader agentGroupStaffLoader, INow now,
-			BasicSchedulingValidator basicSchedulingValidator, IAgentGroupRepository agentGroupRepository)
+			SchedulingValidator basicSchedulingValidator, IAgentGroupRepository agentGroupRepository)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_planningPeriodRepository = planningPeriodRepository;
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 				validationResult = _basicSchedulingValidator.Validate(
 					_agentGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.AgentGroup).AllPeople.ToList(),
-					planningPeriod.Range);
+					planningPeriod.Range, true);
 			}
 			return Ok(validationResult);
 		}

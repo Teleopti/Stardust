@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[DomainTest]
 	public class PersonSkillValidatorTest : ISetup
 	{
-		public BasicSchedulingValidator Target;
+		public SchedulingValidator Target;
 
 		[Test]
 		public void PersonWithSkillsShouldNotReturnValidationError()
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var person = PersonFactory.CreatePerson().WithId();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2017, 01, 20), SkillFactory.CreateSkill("Juggling")));
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillValidator)));
 
 			result.Should().Be.Empty();
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillValidator)));
 
 			result.Should().Not.Be.Empty();
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 01, 20)));
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2017, 01, 25), SkillFactory.CreateSkill("Juggling")));
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(new[] { person }, planningPeriod, true).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillValidator)));
 
 			result.Should().Not.Be.Empty();
