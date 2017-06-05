@@ -31,12 +31,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 		
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Teams/CardsFor")]
-		public virtual IHttpActionResult CardsFor([FromUri]Guid siteId, [FromUri]Guid[] skillIds)
+		public virtual IHttpActionResult CardsFor([FromUri]Guid siteId, [FromUri]Guid[] skillIds = null)
 		{
 			// check for empty because we'r scared
-			return Ok(skillIds.EmptyIfNull().Any() ?
-				_inAlarmForTeams.Build(siteId) : 
-				_inAlarmForTeams.Build(siteId, skillIds));
+			return Ok(skillIds.EmptyIfNull().Any() ? 
+				_inAlarmForTeams.Build(siteId, skillIds) : 
+				_inAlarmForTeams.Build(siteId))
+				;
 		}
 	}
 }

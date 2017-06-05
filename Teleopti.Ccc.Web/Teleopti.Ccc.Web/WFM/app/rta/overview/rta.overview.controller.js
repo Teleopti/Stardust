@@ -140,7 +140,7 @@
 									});
 							};
 						} else if (vm.siteIds) {
-							rtaService.getTeamCardsFor({ siteId: vm.siteIds })
+							rtaService.getTeamCardsFor({ siteIds: vm.siteIds })
 								.then(function(teamAdherences) {
 									currentState = JSON.stringify(teamAdherences);
 									if (previousState != currentState) {
@@ -213,7 +213,7 @@
 			
 			function getTeamsInfo() {
 				pollingLock = false;
-				rtaService.getTeamCardsFor({ siteId: vm.siteIds }).then(function (teamAdherences) {
+				rtaService.getTeamCardsFor({ siteIds: vm.siteIds }).then(function (teamAdherences) {
 					vm.teams = teamAdherences;
 					pollingLock = true;
 				});

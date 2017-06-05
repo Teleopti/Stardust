@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public static string TeleoptiClaimProvider;
 		public static string UrlWindowsIdentityProvider;
 
-
 		private static IISExpress _server;
 		private static IDisposable _portsConfiguration;
 

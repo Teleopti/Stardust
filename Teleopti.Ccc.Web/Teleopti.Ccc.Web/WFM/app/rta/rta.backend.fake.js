@@ -78,7 +78,6 @@
         var fake = function(url, response) {
             $httpBackend.whenGET(url)
 				.respond(function (method, url, data, headers, params) {
-		            //console.log(url);
                     var params2 = paramsOf(url);
                     return response(params2, method, url, data, headers, params);
                 });

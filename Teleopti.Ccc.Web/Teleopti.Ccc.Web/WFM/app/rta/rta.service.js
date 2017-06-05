@@ -166,7 +166,7 @@
                 .$promise;
         };
 		
-	    function getTeamCardsFor(data) {
+		function getTeamCardsFor(data) {
 		    return $resource('../api/Teams/CardsFor', {}, {
 			    query: {
 				    method: 'GET',
