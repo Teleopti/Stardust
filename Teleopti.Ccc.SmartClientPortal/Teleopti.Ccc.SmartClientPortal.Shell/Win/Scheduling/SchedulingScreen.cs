@@ -2255,31 +2255,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					var scheduleDays = _scheduleView.SelectedSchedules();
 					if (scheduleDays.Any())
 					{
-						var startDay = scheduleDays.FirstOrDefault();
-						var endDay = scheduleDays.LastOrDefault();
+						var startDay = scheduleDays.First();
+						var endDay = scheduleDays.Last();
 						var selectedPeriod = new DateOnlyPeriod(startDay.DateOnlyAsPeriod.DateOnly, endDay.DateOnlyAsPeriod.DateOnly);
-						var skillsMissingForecast = new List<SkillMissingForecast>();
-
-						//.VisibleSkills? .Skills?
-						foreach (var visibleSkill in _schedulerState.SchedulingResultState.VisibleSkills)
-						{
-							var skillDays = _schedulerState.SchedulingResultState.SkillDays[visibleSkill];
-							if (skillDays.IsEmpty()) continue;
-							var datesToPeriod = new DatesToPeriod();
-							var dates = skillDays.Select(skillDay => skillDay.CurrentDate).ToList();
-							var periods = datesToPeriod.Convert(dates);
-							var existingSkill = new SkillMissingForecast
-							{
-								SkillId = visibleSkill.Id.Value,
-								SkillName = visibleSkill.Name,
-								Periods = periods
-							};
-
-							skillsMissingForecast.Add(existingSkill);
-						}
 
 						var desktopSchedulingValidator = _container.Resolve<DesktopSchedulingValidator>();
-						var validationResult = desktopSchedulingValidator.Validate(_scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), selectedPeriod, skillsMissingForecast);
+						var validationResult = desktopSchedulingValidator.Validate(_scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), selectedPeriod);
 						if (validationResult.InvalidResources.Any())
 							new AgentValidationResult(validationResult).Show(this);
 					}

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			//simply take one of the validators to see that real code is executed
 			var agentMissingPersonPeriod = new Person();
 
-			var result = Target.Validate(new[] {agentMissingPersonPeriod}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), Enumerable.Empty<SkillMissingForecast>());
+			var result = Target.Validate(new[] {agentMissingPersonPeriod}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1));
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(PersonPeriodValidator))
@@ -35,10 +35,22 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var startDate = new DateOnly(2000,1,1);
 			var agent = new Person().WithSchedulePeriodOneMonth(startDate);
 
-			var result = Target.Validate(new[] {agent}, new DateOnlyPeriod(startDate, startDate.AddDays(1)), Enumerable.Empty<SkillMissingForecast>());
+			var result = Target.Validate(new[] {agent}, new DateOnlyPeriod(startDate, startDate.AddDays(1)));
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(PersonSchedulePeriodValidator))
+				.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotCareAboutMissingForecast()
+		{
+			var agent = new Person();
+
+			var result = Target.Validate(new[] { agent }, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1));
+
+			result.InvalidResources.SelectMany(x => x.ValidationTypes)
+				.Any(x => x == typeof(MissingForecastProvider))
 				.Should().Be.False();
 		}
 	}

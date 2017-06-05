@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
@@ -14,9 +13,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			_schedulingValidator = schedulingValidator;
 		}
 
-		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period, IEnumerable<SkillMissingForecast> existingForecast)
+		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			return _schedulingValidator.Validate(agents, period, existingForecast, false);
+			return _schedulingValidator.Validate(agents, period, null, false);
 		}
 	}
 }
