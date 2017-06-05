@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 					{
 						validationResult.Add(new PersonValidationError(person)
 						{
-							ValidationError = Resources.MissingShiftBagForPlanningPeriod
+							ValidationError = Resources.MissingShiftBagForPeriod
 						}, GetType());
 					}
 					else if (((IDeleteTag)period.RuleSetBag).IsDeleted)
 					{
 						validationResult.Add(new PersonValidationError(person)
 						{
-							ValidationError = string.Format(Resources.DeletedShiftBagAssignedForPlanningPeriod, period.RuleSetBag.Description.Name)
+							ValidationError = string.Format(Resources.DeletedShiftBagAssigned, period.RuleSetBag.Description.Name)
 						}, GetType());
 					}
 				}

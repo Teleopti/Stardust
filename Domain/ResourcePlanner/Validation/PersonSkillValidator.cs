@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				where periods.Any(period => !period.PersonSkillCollection.Any())
 				select new PersonValidationError(person)
 				{
-					ValidationError = Resources.MissingSkillsForPlanningPeriod
+					ValidationError = Resources.MissingSkillsForPeriod
 				};
 			foreach (var validationError in validationErrors)
 			{

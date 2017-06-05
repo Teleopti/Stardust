@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				{
 					validationResult.Add(new PersonValidationError(person)
 					{
-						ValidationError = Resources.MissingSchedulePeriodForPlanningPeriod
+						ValidationError = Resources.MissingSchedulePeriodForPeriod
 					}, GetType());
 				}
 				else
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 					{
 						validationResult.Add(new PersonValidationError(person)
 						{
-							ValidationError = Resources.NoFullSchedulePeriod
+							ValidationError = Resources.NoMatchingSchedulePeriod
 						}, GetType());
 					}
 				}

@@ -15800,40 +15800,40 @@ Do you want to participate?</value>
     <value>Purged</value>
     <comment>Indicating a job is purged in Import Agents</comment>
   </data>
-  <data name="DeletedContractAssignedForPlanningPeriod" xml:space="preserve">
+  <data name="DeletedContractAssigned" xml:space="preserve">
     <value>The contract {0} assigned to this agent has been deleted</value>
     <comment>Shown when validating agents in ResourcePlanner on WFM web and an agent has a contract that has been deleted</comment>
   </data>
-  <data name="DeletedContractScheduleAssignedForPlanningPeriod" xml:space="preserve">
+  <data name="DeletedContractScheduleAssigned" xml:space="preserve">
     <value>The contract schedule {0} assigned to this agent has been deleted</value>
     <comment>Shown when validating agents in ResourcePlanner on WFM web and an agent has a contract schedule that has been deleted</comment>
   </data>
-  <data name="DeletedPartTimePercentageAssignedForPlanningPeriod" xml:space="preserve">
+  <data name="DeletedPartTimePercentageAssigned" xml:space="preserve">
     <value>The part-time-percentage {0} assigned to this agent has been deleted</value>
     <comment>Shown when validating agents in ResourcePlanner on WFM web and an agent has a part-time-percentage that has been deleted</comment>
   </data>
-  <data name="DeletedShiftBagAssignedForPlanningPeriod" xml:space="preserve">
+  <data name="DeletedShiftBagAssigned" xml:space="preserve">
     <value>The shift bag {0} assigned to this agent has been deleted</value>
     <comment>Shown when validating agents in ResourcePlanner on WFM web and an agent has a shift bag that has been deleted</comment>
   </data>
-  <data name="MissingPersonPeriodForPlanningPeriod" xml:space="preserve">
-    <value>The agent does not have a person period for all or part of the planning period</value>
+  <data name="MissingPersonPeriodForPeriod" xml:space="preserve">
+    <value>The agent does not have a person period for all or part of the selected period</value>
     <comment>Shown when validating agents in ResourcePlanner on WFM web and an agent does not have a person period within the planning period</comment>
   </data>
-  <data name="MissingSchedulePeriodForPlanningPeriod" xml:space="preserve">
-    <value>The agent does not have any schedule period for the planning period</value>
+  <data name="MissingSchedulePeriodForPeriod" xml:space="preserve">
+    <value>The agent does not have any schedule period for the selected period</value>
     <comment>Shown when validating agents in ResourcePlanner on WFM web and an agent does not have a schedule period within the planning period</comment>
   </data>
-  <data name="MissingShiftBagForPlanningPeriod" xml:space="preserve">
-    <value>The agent does not have a shift bag for all or part of the planning period</value>
+  <data name="MissingShiftBagForPeriod" xml:space="preserve">
+    <value>The agent does not have a shift bag for all or part of the selected period</value>
     <comment>Shown when validating agents in ResourcePlanner on WFM web and an agent does not have a shift bag within the planning period</comment>
   </data>
-  <data name="MissingSkillsForPlanningPeriod" xml:space="preserve">
-    <value>The agent does not have skills for all or part of the planning period</value>
+  <data name="MissingSkillsForPeriod" xml:space="preserve">
+    <value>The agent does not have skills for all or part of the selected period</value>
     <comment>Shown when validating agents in ResourcePlanner on WFM web and an agent does not have any skills within the planning period</comment>
   </data>
-  <data name="NoFullSchedulePeriod" xml:space="preserve">
-    <value>Schedule period does not match the planning period</value>
+  <data name="NoMatchingSchedulePeriod" xml:space="preserve">
+    <value>Schedule period does not match the selected period</value>
     <comment>Used in web resource planner validation</comment>
   </data>
   <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">

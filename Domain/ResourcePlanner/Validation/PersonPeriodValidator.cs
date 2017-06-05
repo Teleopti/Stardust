@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				{
 					validationResult.Add(new PersonValidationError(person)
 					{
-						ValidationError = Resources.MissingPersonPeriodForPlanningPeriod
+						ValidationError = Resources.MissingPersonPeriodForPeriod
 					}, GetType());
 				}
 			}

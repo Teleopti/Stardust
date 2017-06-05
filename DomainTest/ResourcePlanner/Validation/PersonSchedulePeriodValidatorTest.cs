@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var validationError = result.SingleOrDefault();
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationErrors.Should().Contain(Resources.MissingSchedulePeriodForPlanningPeriod);
+			validationError.ValidationErrors.Should().Contain(Resources.MissingSchedulePeriodForPeriod);
 		}
 
 		[Test]
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var validationError = result.SingleOrDefault();
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationErrors.Should().Contain(Resources.NoFullSchedulePeriod);
+			validationError.ValidationErrors.Should().Contain(Resources.NoMatchingSchedulePeriod);
 		}
 
 		[Test]
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var validationError = result.SingleOrDefault();
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationErrors.Should().Contain(Resources.NoFullSchedulePeriod);
+			validationError.ValidationErrors.Should().Contain(Resources.NoMatchingSchedulePeriod);
 		}
 
 		[Test]
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var validationError = result.SingleOrDefault();
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationErrors.Should().Contain(Resources.NoFullSchedulePeriod);
+			validationError.ValidationErrors.Should().Contain(Resources.NoMatchingSchedulePeriod);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

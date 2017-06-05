@@ -8626,18 +8626,18 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to The contract {0} assigned to this agent has been deleted.
         /// </summary>
-        public static string DeletedContractAssignedForPlanningPeriod {
+        public static string DeletedContractAssigned {
             get {
-                return ResourceManager.GetString("DeletedContractAssignedForPlanningPeriod", resourceCulture);
+                return ResourceManager.GetString("DeletedContractAssigned", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The contract schedule {0} assigned to this agent has been deleted.
         /// </summary>
-        public static string DeletedContractScheduleAssignedForPlanningPeriod {
+        public static string DeletedContractScheduleAssigned {
             get {
-                return ResourceManager.GetString("DeletedContractScheduleAssignedForPlanningPeriod", resourceCulture);
+                return ResourceManager.GetString("DeletedContractScheduleAssigned", resourceCulture);
             }
         }
         
@@ -8653,18 +8653,18 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to The part-time-percentage {0} assigned to this agent has been deleted.
         /// </summary>
-        public static string DeletedPartTimePercentageAssignedForPlanningPeriod {
+        public static string DeletedPartTimePercentageAssigned {
             get {
-                return ResourceManager.GetString("DeletedPartTimePercentageAssignedForPlanningPeriod", resourceCulture);
+                return ResourceManager.GetString("DeletedPartTimePercentageAssigned", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The shift bag {0} assigned to this agent has been deleted.
         /// </summary>
-        public static string DeletedShiftBagAssignedForPlanningPeriod {
+        public static string DeletedShiftBagAssigned {
             get {
-                return ResourceManager.GetString("DeletedShiftBagAssignedForPlanningPeriod", resourceCulture);
+                return ResourceManager.GetString("DeletedShiftBagAssigned", resourceCulture);
             }
         }
         
@@ -17114,29 +17114,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The agent does not have a person period for all or part of the planning period.
+        ///   Looks up a localized string similar to The agent does not have a person period for all or part of the selected period.
         /// </summary>
-        public static string MissingPersonPeriodForPlanningPeriod {
+        public static string MissingPersonPeriodForPeriod {
             get {
-                return ResourceManager.GetString("MissingPersonPeriodForPlanningPeriod", resourceCulture);
+                return ResourceManager.GetString("MissingPersonPeriodForPeriod", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The agent does not have any schedule period for the planning period.
+        ///   Looks up a localized string similar to The agent does not have any schedule period for the selected period.
         /// </summary>
-        public static string MissingSchedulePeriodForPlanningPeriod {
+        public static string MissingSchedulePeriodForPeriod {
             get {
-                return ResourceManager.GetString("MissingSchedulePeriodForPlanningPeriod", resourceCulture);
+                return ResourceManager.GetString("MissingSchedulePeriodForPeriod", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The agent does not have a shift bag for all or part of the planning period.
+        ///   Looks up a localized string similar to The agent does not have a shift bag for all or part of the selected period.
         /// </summary>
-        public static string MissingShiftBagForPlanningPeriod {
+        public static string MissingShiftBagForPeriod {
             get {
-                return ResourceManager.GetString("MissingShiftBagForPlanningPeriod", resourceCulture);
+                return ResourceManager.GetString("MissingShiftBagForPeriod", resourceCulture);
             }
         }
         
@@ -17150,11 +17150,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The agent does not have skills for all or part of the planning period.
+        ///   Looks up a localized string similar to The agent does not have skills for all or part of the selected period.
         /// </summary>
-        public static string MissingSkillsForPlanningPeriod {
+        public static string MissingSkillsForPeriod {
             get {
-                return ResourceManager.GetString("MissingSkillsForPlanningPeriod", resourceCulture);
+                return ResourceManager.GetString("MissingSkillsForPeriod", resourceCulture);
             }
         }
         
@@ -19484,15 +19484,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Schedule period does not match the planning period.
-        /// </summary>
-        public static string NoFullSchedulePeriod {
-            get {
-                return ResourceManager.GetString("NoFullSchedulePeriod", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No functions available.
         /// </summary>
         public static string NoFunctionsAvailable {
@@ -19552,6 +19543,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoLogonAccountErrorMsgSemicolon {
             get {
                 return ResourceManager.GetString("NoLogonAccountErrorMsgSemicolon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schedule period does not match the selected period.
+        /// </summary>
+        public static string NoMatchingSchedulePeriod {
+            get {
+                return ResourceManager.GetString("NoMatchingSchedulePeriod", resourceCulture);
             }
         }
         

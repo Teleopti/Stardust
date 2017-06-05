@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				{
 					validationResult.Add(new PersonValidationError(person)
 					{
-						ValidationError = string.Format(Resources.DeletedContractAssignedForPlanningPeriod, period.PersonContract.Contract.Description.Name)
+						ValidationError = string.Format(Resources.DeletedContractAssigned, period.PersonContract.Contract.Description.Name)
 					}, GetType());
 				}
 			}

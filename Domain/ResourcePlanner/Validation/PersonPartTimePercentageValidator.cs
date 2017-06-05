@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				{
 					validationResult.Add(new PersonValidationError(person)
 					{
-						ValidationError = string.Format(Resources.DeletedPartTimePercentageAssignedForPlanningPeriod, period.PersonContract.PartTimePercentage.Description.Name)
+						ValidationError = string.Format(Resources.DeletedPartTimePercentageAssigned, period.PersonContract.PartTimePercentage.Description.Name)
 					}, GetType());
 				}
 			}
