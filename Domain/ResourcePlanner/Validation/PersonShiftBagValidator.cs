@@ -6,9 +6,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class PersonShiftBagValidator
+	public class PersonShiftBagValidator : IScheduleValidator
 	{
-		public void FillPeopleMissingShiftBag(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillResult(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			foreach (var person in people)
 			{

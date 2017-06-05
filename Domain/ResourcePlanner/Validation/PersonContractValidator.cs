@@ -7,9 +7,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class PersonContractValidator
+	public class PersonContractValidator : IScheduleValidator
 	{
-		public void FillPeopleMissingContract(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillResult(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			foreach (var person in people)
 			{

@@ -6,9 +6,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class PersonSkillValidator
+	public class PersonSkillValidator : IScheduleValidator
 	{
-		public void FillPeopleMissingSkill(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillResult(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			var validationErrors = from person in people
 				let periods = person.PersonPeriods(range)

@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class MissingForecastValidator
+	public class MissingForecastValidator : IScheduleValidator
 	{
 		private readonly IExistingForecastRepository _existingForecastRepository;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			return result;
 		}
 
-		public void FillMissingForecast(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillResult(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			var missingForecasts = GetMissingForecast(range).ToList();
 			var skills = new HashSet<ISkill>();

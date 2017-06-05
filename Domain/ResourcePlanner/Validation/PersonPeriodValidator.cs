@@ -6,9 +6,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class PersonPeriodValidator
+	public class PersonPeriodValidator : IScheduleValidator
 	{
-		public void FillPeopleMissingPeriod(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillResult(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			foreach (var person in people)
 			{
