@@ -2259,8 +2259,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						var endDay = scheduleDays.Last();
 						var selectedPeriod = new DateOnlyPeriod(startDay.DateOnlyAsPeriod.DateOnly, endDay.DateOnlyAsPeriod.DateOnly);
 
-						var desktopSchedulingValidator = _container.Resolve<DesktopSchedulingValidator>();
-						var validationResult = desktopSchedulingValidator.Validate(_scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), selectedPeriod);
+						var validationResult = _container.Resolve<SchedulingValidator>()
+							.Validate(_scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), selectedPeriod, false);
 						if (validationResult.InvalidResources.Any())
 							new AgentValidationResult(validationResult).Show(this);
 					}

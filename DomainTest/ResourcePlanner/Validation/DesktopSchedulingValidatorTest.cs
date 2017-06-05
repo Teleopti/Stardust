@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[ThrowIfRespositoriesAreUsed]
 	public class DesktopSchedulingValidatorTest
 	{
-		public DesktopSchedulingValidator Target;
+		public SchedulingValidator Target;
 
 		[Test]
 		public void ShouldRunRealValidators()
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			//simply take one of the validators to see that real code is executed
 			var agentMissingPersonPeriod = new Person();
 
-			var result = Target.Validate(new[] {agentMissingPersonPeriod}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1));
+			var result = Target.Validate(new[] {agentMissingPersonPeriod}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), false);
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(PersonPeriodValidator))
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var startDate = new DateOnly(2000,1,1);
 			var agent = new Person().WithSchedulePeriodOneMonth(startDate);
 
-			var result = Target.Validate(new[] {agent}, new DateOnlyPeriod(startDate, startDate.AddDays(1)));
+			var result = Target.Validate(new[] {agent}, new DateOnlyPeriod(startDate, startDate.AddDays(1)), false);
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(PersonSchedulePeriodValidator))
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 		{
 			var agent = new Person();
 
-			var result = Target.Validate(new[] { agent }, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1));
+			var result = Target.Validate(new[] { agent }, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), false);
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(MissingForecastValidator))
