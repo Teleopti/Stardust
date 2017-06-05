@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
             skillDay.WorkloadDayCollection.First().CampaignTasks = new Percent(-0.5);
             SkillRepository.Has(skill);
             SkillDayRepository.Has(skillDay);
-            IntradayQueueStatisticsLoader.Has(actualCalls);
+            IntradayQueueStatisticsLoader.HasStatistics(actualCalls);
 
             var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -1266,7 +1266,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var actualCalls = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 
 			SkillRepository.Has(skill);
-			IntradayQueueStatisticsLoader.Has(actualCalls);
+			IntradayQueueStatisticsLoader.HasStatistics(actualCalls);
 			SkillDayRepository.Has(skillDay);
 
 			var forecastedAgents = skillDay.SkillStaffPeriodCollection.First().FStaff;
@@ -1296,7 +1296,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skillA);
 			SkillRepository.Has(skillB);
 			SkillDayRepository.Has(skillDayAToday, skillDayBToday);
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			var vm = Target.Load(new[] { skillA.Id.Value, skillB.Id.Value });
 

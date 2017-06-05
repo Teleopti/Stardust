@@ -7,7 +7,7 @@ GO
 -- Create date: 2017-06-02
 -- Description:	Get the email backlog for a given period
 -- =============================================
--- EXEC [mart].[web_intraday_email_backlog_per_workload] 'B8A74A6C-3125-4C13-A19A-9F0800E35A1F', '2017-05-26', '1900-01-01 08:00', '2017-05-30', '1900-01-01 09:00'
+-- EXEC [mart].[web_intraday_email_backlog_per_workload] 'A7092015-60D2-4D35-83BF-9F0801136943', '2017-06-02', '1900-01-01 15:00', '2017-06-05', '1900-01-01 06:00'
 CREATE PROCEDURE [mart].[web_intraday_email_backlog_per_workload]
 @workload_id uniqueidentifier,
 @start_date smalldatetime,
@@ -18,7 +18,7 @@ CREATE PROCEDURE [mart].[web_intraday_email_backlog_per_workload]
 AS
 BEGIN
 	SET NOCOUNT ON;
-            
+    
 	DECLARE @default_scenario_id int
 	DECLARE @bu_id int
 	
@@ -59,8 +59,8 @@ BEGIN
 	INNER JOIN mart.dim_skill ds ON qw.skill_id = ds.skill_id
 	WHERE w.is_deleted = 0 AND w.workload_code = @workload_id
 	
-	SELECT 
-		SUM(mart.CalculateQueueStatistics(
+	SELECT
+		ISNULL(SUM(mart.CalculateQueueStatistics(
 			q.percentage_offered,
 			q.percentage_overflow_in,
 			q.percentage_overflow_out,
@@ -73,7 +73,7 @@ BEGIN
 			ISNULL(fq.abandoned_calls_within_SL, 0),
 			ISNULL(fq.abandoned_short_calls, 0),
 			ISNULL(fq.overflow_out_calls, 0),
-			ISNULL(fq.overflow_in_calls, 0)))
+			ISNULL(fq.overflow_in_calls, 0))), 0) AS Emails
 	FROM 
 		#queues q
 		INNER JOIN mart.fact_queue fq ON q.queue_id = fq.queue_id

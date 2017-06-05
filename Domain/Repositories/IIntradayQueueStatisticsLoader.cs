@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface IIntradayQueueStatisticsLoader
 	{
 		IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<ISkill> skills, TimeZoneInfo timeZone, DateOnly today);
-		int LoadActualEmailBacklogForWorkload(Guid workloadId, TimeZoneInfo timeZone, DateTimePeriod closedPeriod);
+		int LoadActualEmailBacklogForWorkload(Guid workloadId, DateTimePeriod closedPeriod);
 	}
 }

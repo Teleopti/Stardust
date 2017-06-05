@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public int LoadActualEmailBacklogForWorkload(Guid workloadId, TimeZoneInfo timeZone, DateTimePeriod closedPeriod)
+		public int LoadActualEmailBacklogForWorkload(Guid workloadId, DateTimePeriod closedPeriod)
 		{
 			var startDate = closedPeriod.StartDateTime.Date;
 			var endDate = closedPeriod.EndDateTime.Date;
@@ -57,14 +57,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				var emailsPerWorkload =
 					uow.Session()
 						.CreateSQLQuery(
-							@"mart.web_intraday_email_backlog_per_workload @workload_id=:workloadId, @time_zone_code=:TimeZone, @start_date=:startDate, @start_time=:startTime, @end_date=:endDate, @end_time=:endTime")
+							@"mart.web_intraday_email_backlog_per_workload @workload_id=:WorkloadId, @start_date=:StartDate, @start_time=:StartTime, @end_date=:EndDate, @end_time=:EndTime")
 						.AddScalar("Emails", NHibernateUtil.Int32)
-						.SetString("WorkloadId", workloadId.ToString())
-						.SetString("TimeZone", timeZone.Id)
-						.SetString("StartDate", startDate.ToString("d", CultureInfo.InvariantCulture))
-						.SetString("StartTime", startTime.ToString("d", CultureInfo.InvariantCulture))
-						.SetString("EndDate", endDate.ToString("d", CultureInfo.InvariantCulture))
-						.SetString("EndTime", endTime.ToString("d", CultureInfo.InvariantCulture))
+						.SetGuid("WorkloadId", workloadId)
+						.SetDateTime("StartDate", startDate)
+						.SetDateTime("StartTime", startTime)
+						.SetDateTime("EndDate", endDate)
+						.SetDateTime("EndTime", endTime)
 						.UniqueResult<int>();
 
 				return emailsPerWorkload;

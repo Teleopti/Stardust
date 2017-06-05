@@ -16,21 +16,26 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_intradayQueueStatisticsLoader = intradayQueueStatisticsLoader;
 		}
 
-		public Dictionary<Guid, int> Load(ICollection<ISkillDay> skillDays, IList<SkillIntervalStatistics> actualVolumePerWorkloadInterval, TimeZoneInfo timeZone, DateOnly userDateOnly, int minutesPerInterval, IList<SkillDayStatsRange> skillDayStatsRange)
+		public Dictionary<Guid, int> Load(
+			ICollection<ISkillDay> skillDays, 
+			IList<SkillIntervalStatistics> actualVolumePerWorkloadInterval, 
+			DateOnly userDateOnly, 
+			int minutesPerInterval, 
+			IList<SkillDayStatsRange> skillDayStatsRange)
 		{
 			var workloadClosedHoursWithSl = GetWorkloadsClosedPeriod(skillDays, userDateOnly);
-			var workloadBacklogs = GetEmailBacklogs(timeZone, workloadClosedHoursWithSl);
+			var workloadBacklogs = GetEmailBacklogs(workloadClosedHoursWithSl);
 			return workloadBacklogs;
 		}
 
-		private Dictionary<Guid, int> GetEmailBacklogs(TimeZoneInfo timeZone, Dictionary<Guid, ClosedPeriodWorkload> workloadsClosedHours)
+		private Dictionary<Guid, int> GetEmailBacklogs(Dictionary<Guid, ClosedPeriodWorkload> workloadsClosedHours)
 		{
 			var workloadBacklogDictionary = new Dictionary<Guid, int>();
 			foreach (var workloadId in workloadsClosedHours.Keys)
 			{
 				var closedPeriod = new DateTimePeriod(workloadsClosedHours[workloadId].Period.StartDateTime,
 					workloadsClosedHours[workloadId].Period.EndDateTime);
-				var backlog = _intradayQueueStatisticsLoader.LoadActualEmailBacklogForWorkload(workloadId, timeZone, closedPeriod);
+				var backlog = _intradayQueueStatisticsLoader.LoadActualEmailBacklogForWorkload(workloadId, closedPeriod);
 				workloadBacklogDictionary.Add(workloadId, backlog);
 			}
 

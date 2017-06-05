@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var target = new IntradayQueueStatisticsLoader();
 			var skill = SkillFactory.CreateSkillWithId("skill"); 
 			var actualWorkloadInSecondsPerSkillInterval = target.LoadActualCallPerSkillInterval(new List<ISkill>() { skill }, TimeZoneInfo.Utc, DateOnly.Today);
-			var emailBacklogWorkload = target.LoadActualEmailBacklogForWorkload(Guid.NewGuid(), TimeZoneInfo.Utc, new DateTimePeriod(DateTime.Today, DateTime.Today));
+			var emailBacklogWorkload = target.LoadActualEmailBacklogForWorkload(Guid.NewGuid(), new DateTimePeriod(DateTime.Today, DateTime.Today));
 
 			actualWorkloadInSecondsPerSkillInterval.Count.Should().Be.EqualTo(0);
 			emailBacklogWorkload.Should().Be.EqualTo(0);

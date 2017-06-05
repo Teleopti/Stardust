@@ -64,12 +64,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 			clonedSkillDay.Lock();
 			foreach (var workloadDay in clonedSkillDay.WorkloadDayCollection)
 			{
-				DateTime openHourStart;
 				if (workloadDay.OpenTaskPeriodList.Any())
 				{
-					openHourStart = workloadDay.OpenTaskPeriodList.First().Period.StartDateTime;
+					var openHourStartLocal = TimeZoneHelper.ConvertFromUtc(workloadDay.OpenTaskPeriodList.First().Period.StartDateTime, _timeZone.TimeZone());
 					var firstOpenInterval = skillDayStats
-						.FirstOrDefault(x => x.StartTime == openHourStart && x.WorkloadId == workloadDay.Workload.Id.Value);
+						.FirstOrDefault(x => x.StartTime == openHourStartLocal && x.WorkloadId == workloadDay.Workload.Id.Value);
 					if(firstOpenInterval != null)
 						firstOpenInterval.Calls = workloadBacklog[workloadDay.Workload.Id.Value] + firstOpenInterval.Calls;
 				}
