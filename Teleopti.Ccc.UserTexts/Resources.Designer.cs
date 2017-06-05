@@ -10235,7 +10235,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable mobile notifications.
+        ///   Looks up a localized string similar to Enable mobile app notifications.
         /// </summary>
         public static string EnableMobileNotifications {
             get {
@@ -17186,7 +17186,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mobile Notification Settings.
+        ///   Looks up a localized string similar to Mobile App Notification Settings.
         /// </summary>
         public static string MobileNotificationSettings {
             get {
