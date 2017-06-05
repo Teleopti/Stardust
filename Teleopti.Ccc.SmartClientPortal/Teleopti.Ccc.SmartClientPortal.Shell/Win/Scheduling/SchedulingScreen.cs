@@ -2280,6 +2280,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						, Resources.SchedulingResult);	
 			}
 
+			_schedulingOptions.ShowTroubleshot = false;
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
 
 			if (SikuliHelper.InteractiveMode)
