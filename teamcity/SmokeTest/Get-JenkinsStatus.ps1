@@ -10,6 +10,10 @@ if ($ENV:JOB_NAME -ne $null)
 {
 	$JenkinsURL = "http://" + $ServerName + ":8080/job/$ENV:JOB_NAME/lastBuild/api/json"
 }
+if ($ENV:JenkinsJobName -ne $null) 
+{
+	$JenkinsURL = "http://" + $ServerName + ":8080/job/$ENV:JenkinsJobName/lastBuild/api/json"
+}
 else
 {
 	$ServerURL = "$ServerName" + ':8080'
