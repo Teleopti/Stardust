@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			var useCurrentUser = false;
 			if (userTimezone != null)
 			{
-				Console.WriteLine($"Use {userTimezone.Username} with timezone {userTimezone.TimeZoneId}. Y/N?");
+				Console.WriteLine($"Use  user '{userTimezone.Username}' with timezone '{userTimezone.TimeZoneId}'. Y/N?");
 				useCurrentUser = Console.ReadLine()?.ToUpper() == "Y";
 			}
 			if (!useCurrentUser)
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 					Console.ReadKey();
 					return;
 				}
-				time = time.AddHours(temp.Hour -time.Hour).AddMinutes(temp.Minute - time.Minute);
+				time = time.Date.Add(temp.TimeOfDay);
 				time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, time);
 			}
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				queueDataDictionary.Add(targetQueue.QueueId, generateQueueDataIntervals(forecastIntervals, targetQueue));
 			}
 
-			queueDataPersister.Persist(queueDataDictionary, timeZoneIntervalLength.TimeZoneId);
+			queueDataPersister.Persist(queueDataDictionary, timeZoneIntervalLength.TimeZoneId, time);
 
 			var skillsContainingQueue = new List<string>();
 
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 					continue;
 				}
 
-				Console.WriteLine($"Use {userTimeZone.Username} with timezone {userTimeZone.TimeZoneId}. Y/N?");
+				Console.WriteLine($"Use user '{userTimeZone.Username}' with timezone '{userTimeZone.TimeZoneId}'. Y/N?");
 				if (Console.ReadLine()?.ToUpper() == "Y")
 				{
 					return userTimeZone;

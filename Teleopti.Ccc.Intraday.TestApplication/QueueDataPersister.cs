@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				_connectionString = connectionString;
 		  }
 
-		  public void Persist(IDictionary<int, IList<QueueInterval>> queueData, string timeZoneCode)
+		  public void Persist(IDictionary<int, IList<QueueInterval>> queueData, string timeZoneCode, DateTime dateToDelete)
 		  {
 				var table = FactQueue.CreateTable();
 
@@ -47,16 +47,16 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 					 }
 				}
 
-				deleteQueueStatsForToday(timeZoneCode);
+				deleteQueueStatsForToday(dateToDelete, timeZoneCode);
 				bulkInsert(table);
 		  }
 
-		  private void deleteQueueStatsForToday(string timeZoneCode)
+		  private void deleteQueueStatsForToday(DateTime dateToDelete, string timeZoneCode)
 		  {
 				var dbCommand = new DatabaseCommand(CommandType.StoredProcedure, "mart.web_intraday_simulator_delete_stats", _connectionString);
 				var parameterList = new[]
 				{
-					 new SqlParameter("today", DateTime.Now.Date),
+					 new SqlParameter("today", dateToDelete.Date),
 					 new SqlParameter("@time_zone_code", timeZoneCode)
 				};
 				dbCommand.ExecuteNonQuery(parameterList);

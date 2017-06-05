@@ -10,7 +10,7 @@ GO
 -- EXEC [mart].[web_intraday_simulator_delete_stats] 'W. Europe Standard Time', '2016-04-04'
 CREATE PROCEDURE [mart].[web_intraday_simulator_delete_stats]
 @time_zone_code nvarchar(100),
-@today smalldatetime
+@date smalldatetime
 
 AS
 BEGIN
@@ -28,7 +28,7 @@ BEGIN
 		INNER JOIN mart.dim_interval i ON bz.local_interval_id = i.interval_id
 	WHERE
 		bz.time_zone_id = @time_zone_id
-		AND d.date_date = @today
+		AND d.date_date = @date
 END
 
 GO
