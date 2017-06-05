@@ -252,6 +252,8 @@
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
     <Compile Include="InterfaceLegacy\Messages\InputWithLogOnContext.cs" />
+    <Compile Include="Intraday\ClosedPeriodWorkload.cs" />
+    <Compile Include="Intraday\EmailBacklogProvider.cs" />
     <Compile Include="Intraday\IMultisiteSkillSupportedCheck.cs" />
     <Compile Include="Intraday\ISupportedSkillCheck.cs" />
     <Compile Include="Intraday\ISupportedSkillsInIntradayProvider.cs" />

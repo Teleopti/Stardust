@@ -16,17 +16,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_timeZone = timeZone;
 		}
 
-		public IList<StaffingIntervalModel> Load(IList<SkillIntervalStatistics> actualStatistics,
-			IList<ISkill> skills,
-			ICollection<ISkillDay> skillDays,
-			IList<StaffingIntervalModel> forecastedStaffingIntervals,
-			TimeSpan resolution,
-			IList<SkillDayStatsRange> skillDayStatsRange)
+		public IList<StaffingIntervalModel> Load(IList<SkillIntervalStatistics> actualStatistics, IList<ISkill> skills, ICollection<ISkillDay> skillDays, IList<StaffingIntervalModel> forecastedStaffingIntervals, TimeSpan resolution, IList<SkillDayStatsRange> skillDayStatsRange, Dictionary<Guid, int> workloadBacklog)
 		{
 
 			var actualStaffingIntervals = new List<StaffingIntervalModel>();
 
-			var skillDaysBySkill = skillDays.Select(s => new {Original = s, Clone = s.NoneEntityClone()})
+			var skillDaysBySkill = skillDays.Select(s => new { Original = s, Clone = s.NoneEntityClone() })
 				.ToLookup(s => s.Original.Skill.Id.Value);
 			var actualStatisticsBySkill = actualStatistics.ToLookup(s => s.SkillId);
 			foreach (var skill in skills)
@@ -37,14 +32,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 				foreach (var skillDay in skillDaysForSkill)
 				{
-					var skillDayStats = GetSkillDayStatistics(skillDayStatsRange, skill, skillDay.Original.CurrentDate,
-						actualStatsPerSkillInterval, resolution);
+					var skillDayStats = GetSkillDayStatistics(skillDayStatsRange, skill, skillDay.Original.CurrentDate, actualStatsPerSkillInterval, resolution);
+
 
 					if (!skillDayStats.Any())
 						continue;
 					mapWorkloadIds(skillDay.Clone, skillDay.Original);
-					assignActualWorkloadToClonedSkillDay(skillDay.Clone, skillDayStats);
-					skillDay.Clone.RecalculateDailyTasks();
+					assignActualWorkloadToClonedSkillDay(skillDay.Clone, skillDayStats, workloadBacklog);
 					actualStaffingIntervals.AddRange(GetRequiredStaffing(resolution, skillDayStats, skillDay.Clone));
 					reset(skillDay.Clone, skillDay.Original);
 				}
@@ -65,11 +59,22 @@ namespace Teleopti.Ccc.Domain.Intraday
 			}
 		}
 
-		private void assignActualWorkloadToClonedSkillDay(ISkillDay clonedSkillDay, IList<SkillIntervalStatistics> skillDayStats)
+		private void assignActualWorkloadToClonedSkillDay(ISkillDay clonedSkillDay, IList<SkillIntervalStatistics> skillDayStats, Dictionary<Guid, int> workloadBacklog)
 		{
 			clonedSkillDay.Lock();
 			foreach (var workloadDay in clonedSkillDay.WorkloadDayCollection)
 			{
+				DateTime openHourStart;
+				if (workloadDay.OpenTaskPeriodList.Any())
+				{
+					openHourStart = workloadDay.OpenTaskPeriodList.First().Period.StartDateTime;
+					var firstOpenInterval = skillDayStats
+						.FirstOrDefault(x => x.StartTime == openHourStart && x.WorkloadId == workloadDay.Workload.Id.Value);
+					if(firstOpenInterval != null)
+						firstOpenInterval.Calls = workloadBacklog[workloadDay.Workload.Id.Value] + firstOpenInterval.Calls;
+				}
+				else
+					continue;
 				foreach (var taskPeriod in workloadDay.TaskPeriodList)
 				{
 					var timeZone = _timeZone.TimeZone();

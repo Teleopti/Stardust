@@ -86,13 +86,26 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (!templateTaskPeriods.Any())
 				return new SkillDayStatsRange();
 
+			var startTime = new DateTime();
+			var endTime = new DateTime();
+			foreach (var workloadDay in skillDay.WorkloadDayCollection)
+			{
+				var workloadId = workloadDay.Workload.Id.Value;
+				var start = workloadDay.OpenTaskPeriodList.Min(x => x.Period.StartDateTime);
+				var end = workloadDay.OpenTaskPeriodList.Max(x => x.Period.EndDateTime);
+				if (startTime != null || startTime > start)
+					startTime = start;
+				if (end != null || endTime < end)
+					endTime = end;
+			}
+
 			return new SkillDayStatsRange()
 			{
 				SkillId = skill.Id.Value,
 				SkillDayDate = skillDay.CurrentDate,
 				RangePeriod = new DateTimePeriod(
-					templateTaskPeriods.Min(t => t.Period.StartDateTime),
-					templateTaskPeriods.Max(t => t.Period.EndDateTime))
+					startTime,
+					endTime)
 			};
 		}
 	}

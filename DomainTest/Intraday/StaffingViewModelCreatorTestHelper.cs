@@ -117,8 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					Calls = calls,
 					AnsweredCalls = answeredCalls,
 					HandleTime = 120,
-					AverageHandleTime = 120d / answeredCalls,
-
+					AverageHandleTime = 120d / answeredCalls
 				});
 			}
 			return skillStats;
@@ -167,15 +166,19 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			return skillStats;
 		}
 
-		private static SkillIntervalStatistics getStatsInterval(DateTime startDateTime, double totalTasks, double totalHandlingTime, TimeZoneInfo timezone, Guid skillId, Guid workloadId)
+		private static SkillIntervalStatistics getStatsInterval(DateTime startDateTime, double totalTasks, double totalAverageHandlingTime, TimeZoneInfo timezone, Guid skillId, Guid workloadId)
 		{
+			var answeredCalls = (int)(totalTasks*0.8);
+			var handleTime = answeredCalls * totalAverageHandlingTime;
 			return new SkillIntervalStatistics
 			{
 				SkillId = skillId,
 				WorkloadId = workloadId,
 				StartTime = TimeZoneHelper.ConvertFromUtc(startDateTime, timezone),
 				Calls = totalTasks,
-				AverageHandleTime = totalHandlingTime,
+				AnsweredCalls = answeredCalls,
+				HandleTime = handleTime,
+				AverageHandleTime = totalAverageHandlingTime,
 			};
 		}
 	}

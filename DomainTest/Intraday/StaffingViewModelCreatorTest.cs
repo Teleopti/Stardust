@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
-			IntradayQueueStatisticsLoader.Has(actualCalls);
+			IntradayQueueStatisticsLoader.HasStatistics(actualCalls);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDayFriday);
 			SkillDayRepository.Has(skillDaySaturday);
-			IntradayQueueStatisticsLoader.Has(actualCalls);
+			IntradayQueueStatisticsLoader.HasStatistics(actualCalls);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
-			IntradayQueueStatisticsLoader.Has(actualCalls);
+			IntradayQueueStatisticsLoader.HasStatistics(actualCalls);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues());
 			SkillDayRepository.Has(skillDay);
 
-			IntradayQueueStatisticsLoader.Has(StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone()));
+			IntradayQueueStatisticsLoader.HasStatistics(StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone()));
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues());
 			SkillDayRepository.Has(skillDay);
 
-			IntradayQueueStatisticsLoader.Has(StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone()));
+			IntradayQueueStatisticsLoader.HasStatistics(StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone()));
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				}
 			};
 
-			IntradayQueueStatisticsLoader.Has(actualIntervals);
+			IntradayQueueStatisticsLoader.HasStatistics(actualIntervals);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -337,29 +337,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(skillDay.SkillStaffPeriodCollection.First().FStaff);
 		}
 
-		[Test]
-		public void ShouldReturnActualStaffingSameAsForecastedIfSameWorkLoad()
-		{
-			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
-			var latestStatsTime = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
-			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
-
-			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
-			var skill = createSkill(15, "skill", new TimePeriod(8, 0, 8, 30), false, 0);
-			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), false);
-
-			var actualCalls = StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
-
-			SkillRepository.Has(skill);
-			IntradayQueueStatisticsLoader.Has(actualCalls);
-			SkillDayRepository.Has(skillDay);
-
-			var vm = Target.Load(new[] { skill.Id.Value });
-
-			Math.Round((double)vm.DataSeries.ActualStaffing.First(), 3)
-				.Should().Be.EqualTo(Math.Round((double)vm.DataSeries.ForecastedStaffing.First(),3));
-			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
-		}
 
 		[Test]
 		public void ShouldSkipZeroForecastedCallIntervalsWhenCalculatingUpdatedForecast()
@@ -380,7 +357,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
-			IntradayQueueStatisticsLoader.Has(actualIntervals);
+			IntradayQueueStatisticsLoader.HasStatistics(actualIntervals);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -401,7 +378,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 24, 0), false, 0);
 			SkillRepository.Has(skill);
 
-			IntradayQueueStatisticsLoader.Has(createSkillDaysYesterdayTodayTomorrow(skill, scenario, userNow, TimeZoneHelper.ConvertToUtc(latestStatsTimeLocal, TimeZone.TimeZone())));
+			IntradayQueueStatisticsLoader.HasStatistics(createSkillDaysYesterdayTodayTomorrow(skill, scenario, userNow, TimeZoneHelper.ConvertToUtc(latestStatsTimeLocal, TimeZone.TimeZone())));
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -424,7 +401,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 24, 0), false, 0);
 			SkillRepository.Has(skill);
 
-			IntradayQueueStatisticsLoader.Has(createSkillDaysYesterdayTodayTomorrow(skill, scenario, userNow, TimeZoneHelper.ConvertToUtc(latestStatsTimeLocal, TimeZone.TimeZone())));
+			IntradayQueueStatisticsLoader.HasStatistics(createSkillDaysYesterdayTodayTomorrow(skill, scenario, userNow, TimeZoneHelper.ConvertToUtc(latestStatsTimeLocal, TimeZone.TimeZone())));
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -448,7 +425,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var actualCalls = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 
 			SkillRepository.Has(skill);
-			IntradayQueueStatisticsLoader.Has(actualCalls);
+			IntradayQueueStatisticsLoader.HasStatistics(actualCalls);
 			SkillDayRepository.Has(skillDay);
 
 			var actualStaffing = getActualStaffing(skillDay, actualCalls, skill.DefaultResolution);
@@ -481,7 +458,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var actualCalls = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 
 			SkillRepository.Has(skill);
-			IntradayQueueStatisticsLoader.Has(actualCalls);
+			IntradayQueueStatisticsLoader.HasStatistics(actualCalls);
 			SkillDayRepository.Has(skillDay);
 
 			var skillIntervalStatistics = actualCalls.First();
@@ -544,7 +521,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill15, skill30);
 			SkillDayRepository.Has(skillDay15, skillDay30);
-			IntradayQueueStatisticsLoader.Has(actualCallsTotal);
+			IntradayQueueStatisticsLoader.HasStatistics(actualCallsTotal);
 
 			var vm = Target.Load(new[] { skill15.Id.Value, skill30.Id.Value });
 
@@ -590,7 +567,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
-			IntradayQueueStatisticsLoader.Has(new List<SkillIntervalStatistics>
+			IntradayQueueStatisticsLoader.HasStatistics(new List<SkillIntervalStatistics>
 			{
 				new SkillIntervalStatistics { SkillId = skill.Id.Value, StartTime = latestStatsTime, Calls = 30 }
 			});
@@ -634,7 +611,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false, 0);
 
 			SkillRepository.Has(skill);
-			IntradayQueueStatisticsLoader.Has(new List<SkillIntervalStatistics>
+			IntradayQueueStatisticsLoader.HasStatistics(new List<SkillIntervalStatistics>
 			  {
 				  new SkillIntervalStatistics {SkillId = skill.Id.Value, StartTime = latestStatsTime, Calls = 30}
 			  });
@@ -672,7 +649,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skillWithReforecast1, skillWithReforecast2, skillWithoutReforecast);
 			SkillDayRepository.Has(skillDayWithReforecast1, skillDayWithReforecast2, skillDayWithoutReforecast);
-			IntradayQueueStatisticsLoader.Has(actualCallsTotal);
+			IntradayQueueStatisticsLoader.HasStatistics(actualCallsTotal);
 
 			var deviationWithReforecast1 = calculateAverageDeviation(actualCalls1, skillDayWithReforecast1);
 			var deviationWithReforecast2 = calculateAverageDeviation(actualCalls2, skillDayWithReforecast2);
@@ -716,7 +693,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillDayRepository.Has(skillDay);
 			SkillRepository.Has(skill);
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -748,7 +725,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -781,7 +758,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -807,7 +784,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDayYesterday, skillDayToday);
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -847,7 +824,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill1, skill2);
 			SkillDayRepository.Has(skillDay1, skillDay2);
-			IntradayQueueStatisticsLoader.Has(actualCallsTotal);
+			IntradayQueueStatisticsLoader.HasStatistics(actualCallsTotal);
 
 			var actualStaffingSkill1 = getActualStaffing(skillDay1, actualCalls1, skill1.DefaultResolution);
 			var actualStaffingSkill2 = getActualStaffing(skillDay2, actualCalls2, skill2.DefaultResolution);
@@ -882,7 +859,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(phoneSkill, emailSkill);
 			SkillDayRepository.Has(skillDayPhone, skillDayEmail);
-			IntradayQueueStatisticsLoader.Has(actualStatsTotal);
+			IntradayQueueStatisticsLoader.HasStatistics(actualStatsTotal);
 
 			var actualStaffingSkill1 = getActualStaffing(skillDayPhone, actualPhoneStats, phoneSkill.DefaultResolution);
 			
@@ -1074,7 +1051,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				}
 			};
 
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			var scheduledStaffingList = StaffingViewModelCreatorTestHelper.CreateScheduledStaffing(skill, scheduledStartTime, scheduledStartTime.AddMinutes(3 * minutesPerInterval), minutesPerInterval);
 
@@ -1116,7 +1093,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
-			IntradayQueueStatisticsLoader.Has(StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone()));
+			IntradayQueueStatisticsLoader.HasStatistics(StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone()));
 
 			var scheduledStaffingList = StaffingViewModelCreatorTestHelper.CreateScheduledStaffing(skill, scheduledStartTime, scheduledStartTime.AddMinutes(3 * minutesPerInterval), minutesPerInterval);
 
@@ -1161,7 +1138,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var skillStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			var scheduledStaffingList = StaffingViewModelCreatorTestHelper.CreateScheduledStaffing(skill, scheduledStartTime, scheduledStartTime.AddMinutes(minutesPerInterval), minutesPerInterval);
 
@@ -1204,7 +1181,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var skillStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			var scheduledStaffingList = StaffingViewModelCreatorTestHelper.CreateScheduledStaffing(skill, scheduledStartTime, scheduledStartTime.AddMinutes(minutesPerInterval), minutesPerInterval);
 

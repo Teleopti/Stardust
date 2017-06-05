@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				}
 			};
 
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime, scheduledStartTime.AddMinutes(1 * skill.DefaultResolution), 4.9, ScheduleForecastSkillReadModelRepository, SkillCombinationResourceRepository);
 			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime.AddMinutes(1 * skill.DefaultResolution), scheduledStartTime.AddMinutes(2 * skill.DefaultResolution), 4.9, ScheduleForecastSkillReadModelRepository, SkillCombinationResourceRepository);
@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
-			IntradayQueueStatisticsLoader.Has(SkillSetupHelper.CreateStatistics(skillDay, latestStatsTime,TimeZone));
+			IntradayQueueStatisticsLoader.HasStatistics(SkillSetupHelper.CreateStatistics(skillDay, latestStatsTime,TimeZone));
 
 			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime, scheduledStartTime.AddMinutes(3*minutesPerInterval), 4.9, ScheduleForecastSkillReadModelRepository,SkillCombinationResourceRepository).ToList();
 
@@ -480,7 +480,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var skillStats = SkillSetupHelper.CreateStatistics(skillDay, latestStatsTime, TimeZone);
 
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime, scheduledStartTime.AddMinutes(minutesPerInterval), 8.3, ScheduleForecastSkillReadModelRepository, SkillCombinationResourceRepository);
 
@@ -522,7 +522,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var skillStats = SkillSetupHelper.CreateStatistics(skillDay, latestStatsTime, TimeZone);
 
-			IntradayQueueStatisticsLoader.Has(skillStats);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
 			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime, scheduledStartTime.AddMinutes(minutesPerInterval), 5.7, ScheduleForecastSkillReadModelRepository, SkillCombinationResourceRepository);
 

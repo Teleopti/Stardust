@@ -45,6 +45,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		public int LoadActualEmailBacklogForWorkload(Guid workloadId, TimeZoneInfo timeZone, DateTimePeriod closedPeriod)
+		{
+			var startDate = closedPeriod.StartDateTime.Date;
+			var endDate = closedPeriod.EndDateTime.Date;
+			var startTime = new DateTime(1900, 01, 01).Add(closedPeriod.StartDateTime.TimeOfDay);
+			var endTime = new DateTime(1900, 01, 01).Add(closedPeriod.EndDateTime.TimeOfDay);
+
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var emailsPerWorkload =
+					uow.Session()
+						.CreateSQLQuery(
+							@"mart.web_intraday_email_backlog_per_workload @workload_id=:workloadId, @time_zone_code=:TimeZone, @start_date=:startDate, @start_time=:startTime, @end_date=:endDate, @end_time=:endTime")
+						.AddScalar("Emails", NHibernateUtil.Int32)
+						.SetString("WorkloadId", workloadId.ToString())
+						.SetString("TimeZone", timeZone.Id)
+						.SetString("StartDate", startDate.ToString("d", CultureInfo.InvariantCulture))
+						.SetString("StartTime", startTime.ToString("d", CultureInfo.InvariantCulture))
+						.SetString("EndDate", endDate.ToString("d", CultureInfo.InvariantCulture))
+						.SetString("EndTime", endTime.ToString("d", CultureInfo.InvariantCulture))
+						.UniqueResult<int>();
+
+				return emailsPerWorkload;
+			}
+		}
+
 		private IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
 			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
