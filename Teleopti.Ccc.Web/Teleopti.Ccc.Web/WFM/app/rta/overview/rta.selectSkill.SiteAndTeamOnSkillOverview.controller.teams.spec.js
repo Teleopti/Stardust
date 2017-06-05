@@ -38,11 +38,10 @@ describe('RtaOverviewController', function () {
 		spyOn($state, 'go');
 	}));
 
-	//should include other site to test filtering it out?
 	it('should display agents out of adherence in team for preselected skill', function () {
 		stateParams.skillIds = "emailGuid";
 		stateParams.siteIds = "parisGuid";
-		$fakeBackend.withTeamAdherenceForSkill({
+		$fakeBackend.withTeamAdherence({
 			SiteId: "parisGuid",
 			Id: "parisTeamGreenGuid",
 			NumberOfAgents: 10,
@@ -50,7 +49,7 @@ describe('RtaOverviewController', function () {
 			SkillId: "phoneGuid",
 			Color: "warning"
 		})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamRedGuid",
 				NumberOfAgents: 8,
@@ -67,27 +66,52 @@ describe('RtaOverviewController', function () {
 		expect(vm.teams[0].Color).toEqual("good");
 	});
 
-	it('should display agents out of adherence in teams for preselected skill area', function () {
-		stateParams.skillAreaId = "emailAndPhoneGuid";
+	it('should update adherence for team and preselected skill', function () {
+		stateParams.skillIds = "phoneGuid";
 		stateParams.siteIds = "parisGuid";
 		$fakeBackend
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
 				NumberOfAgents: 10,
 				OutOfAdherence: 5,
 				SkillId: "phoneGuid",
-				Color: "warning"
-			})
-			.withTeamAdherenceForSkill({
+				Color: "danger"
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function () {
+			$fakeBackend
+				.clearTeamAdherences()
+				.withTeamAdherence({
+					SiteId: "parisGuid",
+					Id: "parisTeamGreenGuid",
+					NumberOfAgents: 10,
+					OutOfAdherence: 2,
+					SkillId: "phoneGuid",
+					Color: "good"
+				})
+		})
+			.wait(5000);
+
+		expect(vm.teams[0].OutOfAdherence).toEqual(2);
+		expect(vm.teams[0].Color).toEqual("good");
+	});
+
+	it('should display agents out of adherence in teams for preselected skill area', function () {
+		stateParams.skillAreaId = "emailAndPhoneGuid";
+		stateParams.siteIds = "parisGuid";
+		$fakeBackend
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
 				NumberOfAgents: 10,
-				OutOfAdherence: 2,
-				SkillId: "emailGuid",
-				Color: "good"
+				OutOfAdherence: 7,
+				SkillId: "phoneGuid",
+				Color: "warning"
 			})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamRedGuid",
 				NumberOfAgents: 11,
@@ -111,48 +135,15 @@ describe('RtaOverviewController', function () {
 		expect(vm.teams[1].Id).toEqual("parisTeamRedGuid");
 		expect(vm.teams[0].OutOfAdherence).toEqual(7);
 		expect(vm.teams[1].OutOfAdherence).toEqual(7);
-		expect(vm.teams[0].Color).toEqual("danger");
-		expect(vm.teams[0].Color).toEqual("danger");
-	});
-
-	it('should update adherence for team and preselected skill', function () {
-		stateParams.skillIds = "phoneGuid";
-		stateParams.siteIds = "parisGuid";
-		$fakeBackend
-			.withTeamAdherenceForSkill({
-				SiteId: "parisGuid",
-				Id: "parisTeamGreenGuid",
-				NumberOfAgents: 10,
-				OutOfAdherence: 5,
-				SkillId: "phoneGuid",
-				Color: "danger"
-			});
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(function () {
-			$fakeBackend
-				.clearTeamAdherencesForSkill()
-				.withTeamAdherenceForSkill({
-					SiteId: "parisGuid",
-					Id: "parisTeamGreenGuid",
-					NumberOfAgents: 10,
-					OutOfAdherence: 2,
-					SkillId: "phoneGuid",
-					Color: "good"
-				})
-		})
-			.wait(5000);
-
-		expect(vm.teams[0].OutOfAdherence).toEqual(2);
-		expect(vm.teams[0].Color).toEqual("good");
+		expect(vm.teams[0].Color).toEqual("warning");
+		expect(vm.teams[1].Color).toEqual("danger");
 	});
 
 	it('should update adherence for team and preselected skill area', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
 		stateParams.siteIds = "parisGuid";
 		$fakeBackend
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
 				NumberOfAgents: 10,
@@ -160,7 +151,7 @@ describe('RtaOverviewController', function () {
 				SkillId: "phoneGuid",
 				Color: "danger"
 			})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
 				NumberOfAgents: 10,
@@ -180,21 +171,13 @@ describe('RtaOverviewController', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 		c.apply(function () {
-			$fakeBackend.clearTeamAdherencesForSkill()
-				.withTeamAdherenceForSkill({
+			$fakeBackend.clearTeamAdherences()
+				.withTeamAdherence({
 					SiteId: "parisGuid",
 					Id: "parisTeamGreenGuid",
 					NumberOfAgents: 10,
-					OutOfAdherence: 1,
+					OutOfAdherence: 3,
 					SkillId: "phoneGuid",
-					Color: "good"
-				})
-				.withTeamAdherenceForSkill({
-					SiteId: "parisGuid",
-					Id: "parisTeamGreenGuid",
-					NumberOfAgents: 10,
-					OutOfAdherence: 2,
-					SkillId: "emailGuid",
 					Color: "good"
 				})
 		})

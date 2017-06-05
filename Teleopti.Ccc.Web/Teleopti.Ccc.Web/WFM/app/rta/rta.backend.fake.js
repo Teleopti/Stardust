@@ -25,9 +25,7 @@
             withSiteAdherenceForSkill: withSiteAdherenceForSkill,
             clearSiteAdherences: clearSiteAdherences,
             clearSiteAdherencesForSkill: clearSiteAdherencesForSkill,
-            clearTeamAdherencesForSkill: clearTeamAdherencesForSkill,
             withTeam: withTeam,
-            withTeamAdherenceForSkill: withTeamAdherenceForSkill,
             withTeamAdherence: withTeamAdherence,
             clearTeamAdherences: clearTeamAdherences,
             withSkill: withSkill,
@@ -60,7 +58,6 @@
         var organizations = [];
         var organizationsOnSkills = [];
         var siteAdherencesForSkill = [];
-        var teamAdherencesForSkill = [];
         var rules = [];
         var timeline = {};
 
@@ -562,44 +559,12 @@
 		
 		fake(/\.\.\/api\/Teams\/CardsFor(.*)/,
             function(params) {
-                var adherenceByTeamId = {};
-                var tAdherencesForMultipleSkills = [];
-
-                var teamAdherencesBySkillId = teamAdherencesForSkill.filter(function(ta) {
-                    return params.skillIds.indexOf(ta.SkillId) > -1 && ta.SiteId === params.siteId;
-                });
-
-                if (params.skillIds.length > 1) {
-                    teamAdherencesBySkillId.forEach(function(tas) {
-                        if (angular.isDefined(adherenceByTeamId[tas.Id])) {
-	                        adherenceByTeamId[tas.Id].OutOfAdherence = adherenceByTeamId[tas.Id].OutOfAdherence + tas.OutOfAdherence;
-	                        adherenceByTeamId[tas.Id].NumberOfAgents = tas.NumberOfAgents;
-	                        adherenceByTeamId[tas.Id].Color = (adherenceByTeamId[tas.Id].OutOfAdherence / adherenceByTeamId[tas.Id].NumberOfAgents) * 100 < 33 ? "good" : ((adherenceByTeamId[tas.Id].OutOfAdherence / adherenceByTeamId[tas.Id].NumberOfAgents) * 100 < 66 ? "warning" : "danger");
-                        } else {
-                            adherenceByTeamId[tas.Id] = {};
-                            adherenceByTeamId[tas.Id].OutOfAdherence = tas.OutOfAdherence;
-	                        adherenceByTeamId[tas.Id].NumberOfAgents = tas.NumberOfAgents;
-	                        adherenceByTeamId[tas.Id].Color = tas.Color;
-                        }
-                        return 0;
+                var result = teamAdherences;
+                if (params.skillIds)
+                    result = teamAdherences.filter(function(ta) {
+                        return params.skillIds.indexOf(ta.SkillId) > -1;
                     });
-
-                    for (var id in adherenceByTeamId) {
-	                    tAdherencesForMultipleSkills.push({
-		                    Id: id,
-		                    OutOfAdherence: adherenceByTeamId[id].OutOfAdherence,
-		                    NumberOfAgents: adherenceByTeamId[id].NumberOfAgents,
-		                    Color: adherenceByTeamId[id].Color
-	                    });
-                    }
-                    teamAdherencesBySkillId = tAdherencesForMultipleSkills;
-                }
-                return [200, teamAdherencesBySkillId];
-            });
-
-		fake(/\.\.\/api\/Teams\/CardsFor(.*)/,
-            function(params) {
-				return [200, teamAdherences];
+				return [200, result];
             });
 
         fake(/\.\.\/api\/HistoricalAdherence\/For(.*)/,
@@ -631,7 +596,6 @@
             skillAreas = [];
             phoneStates = [];
             siteAdherencesForSkill = [];
-            teamAdherencesForSkill = [];
             rules = [];
             timeline = {};
         }
@@ -711,21 +675,11 @@
             return this;
         };
 
-        function clearTeamAdherencesForSkill() {
-            teamAdherencesForSkill = [];
-            return this;
-        };
-
         function withTeam(team) {
             teams.push(team);
             return this;
         };
 		
-        function withTeamAdherenceForSkill(teamAdherenceForSkill) {
-            teamAdherencesForSkill.push(teamAdherenceForSkill);
-            return this;
-        };
-
         function withTeamAdherence(teamAdherence) {
             teamAdherences.push(teamAdherence);
             return this;

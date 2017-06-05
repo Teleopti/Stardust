@@ -198,7 +198,7 @@ describe('RtaFilterController', function () {
 				Id: "parisTeamGreenGuid",
 				SiteId: "parisGuid"
 			})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
 				OutOfAdherence: 3,
@@ -233,19 +233,19 @@ describe('RtaFilterController', function () {
 				Id: "parisTeamRedGuid",
 				SiteId: "parisGuid"
 			})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
 				OutOfAdherence: 5,
 				SkillId: "phoneGuid"
 			})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
 				OutOfAdherence: 2,
 				SkillId: "emailGuid"
 			})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamRedGuid",
 				OutOfAdherence: 7,
@@ -281,7 +281,7 @@ describe('RtaFilterController', function () {
 				Id: "parisTeamGreenGuid",
 				SiteId: "parisGuid"
 			})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
 				OutOfAdherence: 3,
@@ -306,7 +306,7 @@ describe('RtaFilterController', function () {
 				Id: "parisTeamGreenGuid",
 				SiteId: "parisGuid"
 			})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
 				OutOfAdherence: 3,
