@@ -26,7 +26,6 @@
 		vm.selectedDate = new Date();
 		vm.options = { customClass: getDayClass };
 		vm.events = [];
-		vm.devTogglesEnabled = false;
 		vm.useShrinkage = false;
 		vm.useShrinkageForStaffing = useShrinkageForStaffing;
 		vm.generateChart = generateChart;
@@ -42,7 +41,6 @@
 
 		getSkills();
 		getSkillAreas();
-		checkToggles();
 		setPrepareDays();
 
 		function setPrepareDays() {
@@ -68,12 +66,6 @@
 				}
 			}
 			return '';
-		}
-
-		function checkToggles() {
-			toggleService.togglesLoaded.then(function () {
-				vm.devTogglesEnabled = toggleService.WfmStaffing_AllowActions_42524;
-			});
 		}
 
 		function getSkillStaffingByDate(skillId, date, shrinkage) {
