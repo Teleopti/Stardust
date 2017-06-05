@@ -8,8 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface ICalculateBestOvertime
 	{
-		IEnumerable<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod,
-			IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution,
+		IEnumerable<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IScheduleDay scheduleDay, int minimumResolution,
 			bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList);
 	}
 
@@ -18,15 +17,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	{
 		private readonly IOvertimeDateTimePeriodExtractor _overtimeDateTimePeriodExtractor;
 		private readonly IOvertimeRelativeDifferenceCalculator _overtimeRelativeDifferenceCalculator;
+		private readonly IOvertimePeriodValueMapper _overtimePeriodValueMapper;
 
-		public CalculateBestOvertimeBeforeOrAfter(IOvertimeDateTimePeriodExtractor overtimeDateTimePeriodExtractor, IOvertimeRelativeDifferenceCalculator overtimeRelativeDifferenceCalculator)
+		public CalculateBestOvertimeBeforeOrAfter(IOvertimeDateTimePeriodExtractor overtimeDateTimePeriodExtractor, IOvertimeRelativeDifferenceCalculator overtimeRelativeDifferenceCalculator,
+												  IOvertimePeriodValueMapper overtimePeriodValueMapper)
 		{
 			_overtimeDateTimePeriodExtractor = overtimeDateTimePeriodExtractor;
 			_overtimeRelativeDifferenceCalculator = overtimeRelativeDifferenceCalculator;
+			_overtimePeriodValueMapper = overtimePeriodValueMapper;
 		}
 
-		public IEnumerable<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList)
+		public IEnumerable<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList)
 		{
+			var overtimePeriodValueMappedData = _overtimePeriodValueMapper.Map(skillIntervalDataList);
 			var scheduleDayPeriodStart = scheduleDay.Period.StartDateTime;
 			var start = scheduleDayPeriodStart.Add(overtimeSpecifiedPeriod.Minimum);
 			var end = scheduleDayPeriodStart.Add(overtimeSpecifiedPeriod.Maximum);

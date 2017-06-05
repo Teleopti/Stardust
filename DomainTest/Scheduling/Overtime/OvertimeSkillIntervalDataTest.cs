@@ -19,20 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         }
 
         [Test]
-        public void ShouldReturnNegativeRelativeDifference()
-        {
-            _target = new OvertimeSkillIntervalData(_dtp, 6, -2);
-            Assert.AreEqual(0.33, Math.Round(_target.RelativeDifference(), 2));
-        }
-
-        [Test]
-        public void ShouldReturnRelativeDifference()
-        {
-            _target = new OvertimeSkillIntervalData(_dtp, 3, 8);
-            Assert.AreEqual(-2.667, Math.Round(_target.RelativeDifference(), 3));
-        }
-
-        [Test]
         public void ShouldReturnForcastedDemand()
         {
             _target = new OvertimeSkillIntervalData(_dtp, 5.8, 8);

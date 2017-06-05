@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		{
 			if (model == null || model.SkillIds.IsEmpty()) return BadRequest();
 
-			var result =_addOverTime.GetSuggestion(model);
+			var result =_addOverTime.GetSuggestionOld(model);
 
 			return Ok(result);
 		}

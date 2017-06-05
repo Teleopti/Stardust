@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
@@ -11,13 +12,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	{
         public IList<OvertimePeriodValue> Map(IEnumerable<IOvertimeSkillIntervalData> dataList)
         {
-            var listOfOvertimePeriodValue = new List<OvertimePeriodValue>();
-            foreach (var overtimeSkillIntervalData in dataList)
-            {
-                listOfOvertimePeriodValue.Add(new OvertimePeriodValue(overtimeSkillIntervalData.Period,
-                                           overtimeSkillIntervalData.RelativeDifference()));
-            }
-            return listOfOvertimePeriodValue;
+	        return dataList.Select(overtimeSkillIntervalData =>
+									   new OvertimePeriodValue(overtimeSkillIntervalData.Period, -overtimeSkillIntervalData.CurrentDemand / overtimeSkillIntervalData.ForecastedDemand)).ToList();
         }
     }
 }

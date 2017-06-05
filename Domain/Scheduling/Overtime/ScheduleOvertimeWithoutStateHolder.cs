@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
@@ -15,50 +14,54 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	public class ScheduleOvertimeWithoutStateHolder
 	{
 		private readonly IScheduleOvertimeServiceWithoutStateholder _scheduleOvertimeService;
-		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IUserTimeZone _userTimeZone;
 
 		public ScheduleOvertimeWithoutStateHolder(IScheduleOvertimeServiceWithoutStateholder scheduleOvertimeService,
-																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
 																	IResourceCalculation resourceOptimizationHelper,
 																	IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation)
 		{ 
 			_scheduleOvertimeService = scheduleOvertimeService;
-			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_userTimeZone = userTimeZone;
 			_resourceCalculation = resourceCalculation;
 		}
 
-		public void Execute(IOvertimePreferences overtimePreferences,
+		public HashSet<IPerson> Execute(IOvertimePreferences overtimePreferences,
 										ISchedulingProgress backgroundWorker,
 										IList<IScheduleDay> selectedSchedules,
-										DateOnlyPeriod requestedDateOnlyPeriod,
-										ResourceCalculationData resourceCalculationData)
+										DateTimePeriod requestedDateTimePeriod,
+										ResourceCalculationData resourceCalculationData,
+										Func<IDisposable> contextFunc)
 		{
-			
-			_resourceCalculation.ResourceCalculate(requestedDateOnlyPeriod, resourceCalculationData);
+
+			_resourceCalculation.ResourceCalculate(requestedDateTimePeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc), resourceCalculationData, contextFunc);
 			var resourceCalculateDelayer = new ResourceCalculateDelayerWithoutStateHolder(_resourceOptimizationHelper, 1, _userTimeZone);
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			var cancel = false;
+			var affectedPersons = new HashSet<IPerson>();
 			foreach (var dateOnly in selectedDates)
 			{
 				var persons = selectedPersons.Randomize();
 				foreach (var person in persons)
 				{
-					if (cancel || checkIfCancelPressed(backgroundWorker)) return;
+					if (cancel || checkIfCancelPressed(backgroundWorker)) return affectedPersons;
 
-					var scheduleDay = resourceCalculationData.Schedules[person].ScheduledDay(dateOnly);
+					var scheduleDay = selectedSchedules.FirstOrDefault(x => x.Person == person && x.DateOnlyAsPeriod.DateOnly == dateOnly);
+					if (scheduleDay == null) continue;
+					//var scheduleDay = resourceCalculationData.Schedules[person].ScheduledDay(dateOnly);
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
-					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, resourceCalculationData);
-					//_scheduleOvertimeOnNonScheduleDays.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer);
+					// OBS Add context func	
+					var res = _scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, resourceCalculationData);  
+					if (res)
+						affectedPersons.Add(person);
 					var progressResult = onDayScheduled(backgroundWorker, new SchedulingServiceSuccessfulEventArgs(scheduleDay, () => cancel = true));
-					if (progressResult.ShouldCancel) return;
+					if (progressResult.ShouldCancel) return affectedPersons;
 				}
 			}
+			return affectedPersons;
 		}
 
 		private static CancelSignal onDayScheduled(ISchedulingProgress backgroundWorker, SchedulingServiceBaseEventArgs args)

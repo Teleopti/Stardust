@@ -23,23 +23,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 	public class ScheduleOvertimeServiceWithoutStateholder : IScheduleOvertimeServiceWithoutStateholder
 	{
-		private readonly IOvertimeLengthDecider _overtimeLengthDecider;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
+		private readonly ICalculateBestOvertime _calculateBestOvertime;
 
-		public ScheduleOvertimeServiceWithoutStateholder(IOvertimeLengthDecider overtimeLengthDecider, 
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
+		public ScheduleOvertimeServiceWithoutStateholder(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			IGridlockManager gridlockManager,
 			ITimeZoneGuard timeZoneGuard,
-			PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider, ResourceCalculationData resourceCalculationData)
+			PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider, ICalculateBestOvertime calculateBestOvertime)
 		{
-			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_gridlockManager = gridlockManager;
 			_timeZoneGuard = timeZoneGuard;
 			_personSkillsForScheduleDaysOvertimeProvider = personSkillsForScheduleDaysOvertimeProvider;
+			_calculateBestOvertime = calculateBestOvertime;
 		}
 
 		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
@@ -57,10 +56,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				overtimePreferences.SelectedTimePeriod.EndTime);
 			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime,
 				overtimePreferences.SelectedSpecificTimePeriod.EndTime);
-			var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(overtimePreferences, person, dateOnly, scheduleDay,
-				overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
+			//var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(overtimePreferences, person, dateOnly, scheduleDay,
+			//	overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
+			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
+			var minResolution = OvertimeLengthDecider.GetMinimumResolution(skills, overtimeDuration,scheduleDay);
+			var overtimeSkillIntervalDataAggregatedList = getAggregatedOvertimeSkillIntervals(resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items());
+			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertime(overtimeDuration, overtimeSpecifiedPeriod, scheduleDay,minResolution
+												   , overtimePreferences.AvailableAgentsOnly, overtimeSkillIntervalDataAggregatedList);
 
-			var oldRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, person, timeZoneInfo, resourceCalculationData);
+			var oldRmsValue = calculatePeriodValue(dateOnly, person, timeZoneInfo, resourceCalculationData, skills);
 			var rules = setupRules(overtimePreferences);
 
 			foreach (var dateTimePeriod in overtimeLayerLengthPeriodsUtc)
@@ -85,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, resourceCalculationData);
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, resourceCalculationData);
 
-				var newRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, person, timeZoneInfo, resourceCalculationData);
+				var newRmsValue = calculatePeriodValue(dateOnly, person, timeZoneInfo, resourceCalculationData, skills);
 				if (newRmsValue <= oldRmsValue)
 					return true;
 
@@ -95,6 +99,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			}
 
 			return false;
+		}
+
+		private IList<IOvertimeSkillIntervalData> getAggregatedOvertimeSkillIntervals(IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> dics)
+		{
+			var overtimePeriods = new List<IOvertimeSkillIntervalData>();
+
+			foreach (var dic in dics)
+			{
+				foreach (var pair in dic.Value.Items())
+				{
+					var overtimePeriod = overtimePeriods.FirstOrDefault(x => x.Period == pair.Key);
+					if (overtimePeriod != null)
+					{
+						overtimePeriod.Add(pair.Value.ForecastedDistributedDemand, -((SkillStaffingInterval)pair.Value).AbsoluteDifference);
+					}
+					else
+					{
+						overtimePeriods.Add(new OvertimeSkillIntervalData(pair.Key, pair.Value.ForecastedDistributedDemand, -((SkillStaffingInterval)pair.Value).AbsoluteDifference));
+					}
+				}
+			}
+
+			return overtimePeriods;
 		}
 
 		private static INewBusinessRuleCollection setupRules(IOvertimePreferences overtimePreferences)
@@ -120,14 +147,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return rules;
 		}
 
-		private double calculatePeriodValue(IOvertimePreferences overtimePreferences, DateOnly dateOnly, IPerson person, TimeZoneInfo timeZoneInfo, ResourceCalculationData resourceCalculationData)
+		private double calculatePeriodValue(DateOnly dateOnly, IPerson person, TimeZoneInfo timeZoneInfo, ResourceCalculationData resourceCalculationData, IEnumerable<ISkill> skills)
 		{
-			var aggregateSkill = createAggregateSkill(overtimePreferences, person, dateOnly);
-
-			if (aggregateSkill != null)
+			if (skills.Any())
 			{
-				var aggregatedSkillStaffPeriods = skillStaffPeriods(aggregateSkill, dateOnly.Date, timeZoneInfo, resourceCalculationData);
-				double? result = SkillStaffPeriodHelper.SkillDayRootMeanSquare(aggregatedSkillStaffPeriods);
+				var aggregatedSkillStaffPeriods = skillStaffPeriods(skills, dateOnly.Date, timeZoneInfo, resourceCalculationData);
+				double? result = SkillDayRootMeanSquare(aggregatedSkillStaffPeriods);
 				if (result.HasValue)
 					return result.Value;
 			}
@@ -157,20 +182,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return aggregateSkillSkill;
 		}
 
-		private IEnumerable<ISkillStaffPeriod> skillStaffPeriods(IAggregateSkill aggregateSkill, DateTime date, TimeZoneInfo timeZoneInfo, ResourceCalculationData resourceCalculationData)
+		private IEnumerable<IOvertimeSkillPeriodData> skillStaffPeriods(IEnumerable<ISkill> skills, DateTime date, TimeZoneInfo timeZoneInfo, ResourceCalculationData resourceCalculationData)
 		{
+			var intervals = new List<IOvertimeSkillPeriodData>();
 			foreach (KeyValuePair<ISkill, IResourceCalculationPeriodDictionary> pair in resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items())
 			{
-				var skill = pair.Key;
-				if(skill.Equals(aggregateSkill))
-					// here we have a list of keuvaluepairs and we want a list of skillstaffperiods later
-					//just so it compiles
-					return new List<ISkillStaffPeriod>();
-						//return pair.Value.Items().
+				if (skills.Contains(pair.Key))
+				{
+					var things =  pair.Value.Items().Select(x => x.Value);
+					foreach (var thing in things)
+					{
+						intervals.Add(new SkillStaffingInterval
+						{
+							CalculatedResource = ((SkillStaffingInterval) thing).CalculatedResource,
+							Forecast = ((SkillStaffingInterval) thing).Forecast,
+							StartDateTime = thing.CalculationPeriod.StartDateTime,
+							EndDateTime = thing.CalculationPeriod.EndDateTime
+						});
+					}
+				}
 			}
-			return null;
-			//_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date, date.AddDays(1), timeZoneInfo));
-			//return _schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date, date.AddDays(1), timeZoneInfo));
+			return intervals;
 		}
 
 		private static bool hasMultiplicatorDefinitionSetOfOvertimeType(IPerson person, DateOnly dateOnly)
@@ -182,6 +214,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			if (personContract == null) return false;
 
 			return personContract.Contract.MultiplicatorDefinitionSetCollection.Any(multiplicatorDefinitionSet => multiplicatorDefinitionSet.MultiplicatorType == MultiplicatorType.Overtime);
+		}
+
+		public static double? SkillDayRootMeanSquare(IEnumerable<IOvertimeSkillPeriodData> skillStaffingIntervals)
+		{
+			var intradayDifferences = skillStaffingIntervals.Select(s => s.AbsoluteDifference * s.CalculationPeriod.ElapsedTime().TotalHours).ToList();
+			return SkillStaffPeriodHelper.CalculateRootMeanSquare(intradayDifferences, 0);
 		}
 	}
 }

@@ -41,13 +41,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         }
 
         [Test]
-        public void TestRelativeDifferenceCalculatedCorrectly()
-        {
-            var interval1 = new OvertimeSkillIntervalData(_dtPeriod, 2.2, 3);
-            var interval2 = new OvertimeSkillIntervalData(_dtPeriod, 2.1, 1.8);
-            Assert.AreEqual(-1.12, Math.Round(_target.MergeSkillIntervalData(interval1, interval2).RelativeDifference(), 2));
-        }
-        [Test]
         public void TestForecastedDemandHaveDefaultValue()
         {
             var interval1 = new OvertimeSkillIntervalData(_dtPeriod, 0, 3);

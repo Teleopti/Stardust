@@ -7,25 +7,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         DateTimePeriod Period { get; }
         double CurrentDemand { get; }
         double ForecastedDemand { get; }
-        double RelativeDifference();
+	    void Add(double forecastedDemand, double currentDemand);
     }
 
     public class OvertimeSkillIntervalData : IOvertimeSkillIntervalData
     {
         private double _forecastedDemand;
-        private readonly double _currentDemand;
-        public DateTimePeriod Period { get; private set; }
+	    public DateTimePeriod Period { get; }
+	    public double CurrentDemand { get; private set; }
 
-        public OvertimeSkillIntervalData(DateTimePeriod dateTimePeriod, double forecastedDemand, double currentDemand)
+		public OvertimeSkillIntervalData(DateTimePeriod dateTimePeriod, double forecastedDemand, double currentDemand)
         {
             _forecastedDemand = forecastedDemand;
-            _currentDemand = currentDemand;
+            CurrentDemand = currentDemand;
             Period = dateTimePeriod;
         }
 
-        public double CurrentDemand { get { return _currentDemand; } }
-
-        public double ForecastedDemand
+	    public double ForecastedDemand
         {
             get
             {
@@ -35,11 +33,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             }
         }
 
-        public double RelativeDifference()
-        {
-            return (CurrentDemand / ForecastedDemand) * -1;
-
-        }
+	    public void Add(double forecastedDemand, double currentDemand)
+	    {
+		    _forecastedDemand += forecastedDemand;
+		    CurrentDemand += currentDemand;
+	    }
 
     }
 }
