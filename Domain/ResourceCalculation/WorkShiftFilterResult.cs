@@ -1,8 +1,10 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class WorkShiftFilterResult
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class WorkShiftFilterResult
     {
 	    public WorkShiftFilterResult(string message, int workShiftsBefore, int workShiftsAfter)
 		{
