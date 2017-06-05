@@ -45,6 +45,11 @@ datepicker.show = function (e) {
         return;
     }
 
+    $('button[data-bind^=\'datepicker\']').each(function (index, item) {
+        var datepickerObj = $(item).data("datepicker");
+        datepickerObj && datepickerObj.hide();
+    });
+
     this.picker.show();
     this.picker.isOpened = true;
 
@@ -58,6 +63,7 @@ datepicker.show = function (e) {
     if (!this.isInput) {
         $(document).on('click', $.proxy(this.hide, this));
     }
+
     this.element.trigger({
         type: 'show'
     });

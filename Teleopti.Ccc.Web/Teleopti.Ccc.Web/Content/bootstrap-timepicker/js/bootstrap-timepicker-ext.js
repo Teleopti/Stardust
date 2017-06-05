@@ -99,6 +99,10 @@ timepicker.showWidget = function() {
 		this.$widget.modal('show').on('hidden', $.proxy(this.hideWidget, this));
 	} else {
 		if (this.isOpen === false) {
+			$('button[data-bind^=\'timepicker\']').each(function (index, item) {
+				var timepickerObj = $(item).data("timepicker");
+				timepickerObj && timepickerObj.hideWidget();
+			});
 			this.$widget.addClass('open');
 		}
 	}
