@@ -173,7 +173,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 			var skill = SkillFactory.CreateSkill("A skill").WithId();
 			person.AddSkill(skill, new DateOnly(2015, 5, 1));
 
-			var missingForecast = Target.GetMissingForecast(new []{person}, range, new List<SkillMissingForecast>
+			var result = new ValidationResult();
+			Target.FillMissingForecast(result, new []{person}, range, new List<SkillMissingForecast>
 			{
 				new SkillMissingForecast
 				{
@@ -189,47 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner
 				}
 			});
 
-			missingForecast.Single().SkillName.Should().Be(skill.Name);
-		}
-
-		[Test]
-		public void Asd()
-		{
-			var startDate = new DateOnly(2015, 5, 1);
-			var endDate = new DateOnly(2015, 5, 7);
-			var range = new DateOnlyPeriod(startDate, endDate);
-			var person = PersonFactory.CreatePerson("_");
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(startDate);
-			person.AddPersonPeriod(personPeriod);
-
-			var skill1 = SkillFactory.CreateSkill("Skill 1").WithId();
-			var skill2 = SkillFactory.CreateSkill("Skill 2").WithId();
-			person.AddSkill(skill1, startDate);
-			person.AddSkill(skill2, startDate);
-
-			var missingForecast = Target.GetMissingForecast(new[] { person }, range, new List<SkillMissingForecast>
-			{
-				new SkillMissingForecast
-				{
-					SkillName = skill1.Name,
-					SkillId = skill1.Id.GetValueOrDefault(),
-					Periods = new[] { new DateOnlyPeriod(new DateOnly(2015, 5, 4), endDate) }
-				},
-				new SkillMissingForecast
-				{
-					SkillName = skill2.Name,
-					SkillId = skill2.Id.GetValueOrDefault(),
-					Periods = new DateOnlyPeriod[] {}
-				}
-			}).ToList();
-
-			var resultForSkill1 = missingForecast.First(m => m.SkillId == skill1.Id);
-			resultForSkill1.MissingRanges[0].StartDate.Should().Be.EqualTo(startDate.Date);
-			resultForSkill1.MissingRanges[0].EndDate.Should().Be.EqualTo(new DateOnly(2015, 5, 3).Date);
-
-			var resultForSkill2 = missingForecast.First(m => m.SkillId == skill2.Id);
-			resultForSkill2.MissingRanges[0].StartDate.Should().Be.EqualTo(startDate.Date);
-			resultForSkill2.MissingRanges[0].EndDate.Should().Be.EqualTo(endDate.Date);
+			result.InvalidResources.Single().ResourceName.Should().Be(skill.Name);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

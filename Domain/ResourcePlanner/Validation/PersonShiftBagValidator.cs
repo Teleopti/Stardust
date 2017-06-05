@@ -8,27 +8,29 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonShiftBagValidator
 	{
-		public IEnumerable<PersonValidationError> GetPeopleMissingShiftBag(IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillPeopleMissingShiftBag(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
-			var list = new List<PersonValidationError>();
 			foreach (var person in people)
 			{
 				var periods = person.PersonPeriods(range);
 				foreach (var period in periods)
 				{
 					if (period.RuleSetBag == null)
-						list.Add(new PersonValidationError(person)
+					{
+						validationResult.Add(new PersonValidationError(person)
 						{
 							ValidationError = Resources.MissingShiftBagForPlanningPeriod
-						});
+						}, GetType());
+					}
 					else if (((IDeleteTag)period.RuleSetBag).IsDeleted)
-						list.Add(new PersonValidationError(person)
+					{
+						validationResult.Add(new PersonValidationError(person)
 						{
 							ValidationError = string.Format(Resources.DeletedShiftBagAssignedForPlanningPeriod, period.RuleSetBag.Description.Name)
-						});
+						}, GetType());
+					}
 				}
 			}
-			return list;
 		}
 	}
 }

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			return result;
 		}
 
-		public IEnumerable<MissingForecastModel> GetMissingForecast(IEnumerable<IPerson> people, DateOnlyPeriod range, IEnumerable<SkillMissingForecast> existingForecast)
+		public void FillMissingForecast(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range, IEnumerable<SkillMissingForecast> existingForecast)
 		{
 			var missingForecasts = GetMissingForecast(range, existingForecast).ToList();
 			var skills = new HashSet<ISkill>();
@@ -56,7 +56,10 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				foreach (var period in periods)
 					foreach (var personSkill in period.PersonSkillCollection)
 						skills.Add(personSkill.Skill);
-			return missingForecasts.Where(missingForecast => skills.Any(skill => skill.Id == missingForecast.SkillId)).ToList();
+			foreach (var missingForecast in missingForecasts.Where(missingForecast => skills.Any(skill => skill.Id == missingForecast.SkillId)))
+			{
+				validationResult.Add(missingForecast, GetType());
+			}
 		}
 	}
 

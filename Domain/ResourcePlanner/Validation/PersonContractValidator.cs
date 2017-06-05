@@ -9,21 +9,19 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonContractValidator
 	{
-		public IEnumerable<PersonValidationError> GetPeopleMissingContract(IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillPeopleMissingContract(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
-			var list = new List<PersonValidationError>();
 			foreach (var person in people)
 			{
 				var periods = person.PersonPeriods(range);
 				foreach (var period in periods.Where(x => ((IDeleteTag)x.PersonContract.Contract).IsDeleted))
 				{
-					list.Add(new PersonValidationError(person)
+					validationResult.Add(new PersonValidationError(person)
 					{
 						ValidationError = string.Format(Resources.DeletedContractAssignedForPlanningPeriod, period.PersonContract.Contract.Description.Name)
-					});
+					}, GetType());
 				}
 			}
-			return list;
 		}
 	}
 }

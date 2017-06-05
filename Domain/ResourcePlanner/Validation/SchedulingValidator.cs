@@ -39,22 +39,14 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period, IEnumerable<SkillMissingForecast> existingForecast)
 		{
 			var result = new ValidationResult();
-			_missingForecastProvider.GetMissingForecast(agents, period, existingForecast)
-				.ForEach(r => result.Add(r, typeof(MissingForecastProvider)));
-			_personPeriodValidator.GetPeopleMissingPeriod(agents, period)
-				.ForEach(r => result.Add(r, typeof(PersonPeriodValidator)));
-			_personSkillValidator.GetPeopleMissingSkill(agents, period)
-				.ForEach(r => result.Add(r, typeof(PersonSkillValidator)));
-			_personSchedulePeriodValidator.GetPeopleMissingSchedulePeriod(agents, period)
-				.ForEach(r => result.Add(r, typeof(PersonSchedulePeriodValidator)));
-			_personShiftBagValidator.GetPeopleMissingShiftBag(agents, period)
-				.ForEach(r => result.Add(r, typeof(PersonShiftBagValidator)));
-			_partTimePercentageValidator.GetPeopleMissingPartTimePercentage(agents, period)
-				.ForEach(r => result.Add(r, typeof(PersonPartTimePercentageValidator)));
-			_personContractValidator.GetPeopleMissingContract(agents, period)
-				.ForEach(r => result.Add(r, typeof(PersonContractValidator)));
-			_personContractScheduleValidator.GetPeopleMissingContractSchedule(agents, period)
-				.ForEach(r => result.Add(r, typeof(PersonContractScheduleValidator)));
+			_missingForecastProvider.FillMissingForecast(result, agents, period, existingForecast);
+			_personPeriodValidator.FillPeopleMissingPeriod(result, agents, period);
+			_personSkillValidator.FillPeopleMissingSkill(result, agents, period);
+			_personSchedulePeriodValidator.FillPeopleMissingSchedulePeriod(result, agents, period);
+			_personShiftBagValidator.FillPeopleMissingShiftBag(result, agents, period);
+			_partTimePercentageValidator.FillPeopleMissingPartTimePercentage(result, agents, period);
+			_personContractValidator.FillPeopleMissingContract(result, agents, period);
+			_personContractScheduleValidator.FillPeopleMissingContractSchedule(result, agents, period);
 			return result;
 		}
 	}

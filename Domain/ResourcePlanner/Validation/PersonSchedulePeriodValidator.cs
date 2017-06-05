@@ -9,20 +9,19 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonSchedulePeriodValidator
 	{
-		public IEnumerable<PersonValidationError> GetPeopleMissingSchedulePeriod(IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillPeopleMissingSchedulePeriod(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			var personIncrementor = new PeriodIncrementorFactory();
-			var list = new List<PersonValidationError>();
 			foreach (var person in people)
 			{
 				var schedulePeriods = person.PersonSchedulePeriods(range);
 				
 				if (!schedulePeriods.Any())
 				{
-					list.Add(new PersonValidationError(person)
+					validationResult.Add(new PersonValidationError(person)
 					{
 						ValidationError = Resources.MissingSchedulePeriodForPlanningPeriod
-					});
+					}, GetType());
 				}
 				else
 				{
@@ -45,14 +44,16 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 							start = (period?.EndDate ?? incrementor.Increase(start, schedulePeriod.Number)).AddDays(1);
 						}
 					}
-					if (containedPeriods.All(x => x.StartDate != range.StartDate) || containedPeriods.All(x => x.EndDate != (person.TerminalDate ?? range.EndDate)))
-						list.Add(new PersonValidationError(person)
+					if (containedPeriods.All(x => x.StartDate != range.StartDate) ||
+						containedPeriods.All(x => x.EndDate != (person.TerminalDate ?? range.EndDate)))
+					{
+						validationResult.Add(new PersonValidationError(person)
 						{
 							ValidationError = Resources.NoFullSchedulePeriod
-						});
+						}, GetType());
+					}
 				}
 			}
-			return list;
 		}
 	}
 }

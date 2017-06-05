@@ -8,15 +8,19 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonSkillValidator
 	{
-		public IEnumerable<PersonValidationError> GetPeopleMissingSkill(IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillPeopleMissingSkill(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
-			return (from person in people
+			var validationErrors = from person in people
 				let periods = person.PersonPeriods(range)
 				where periods.Any(period => !period.PersonSkillCollection.Any())
 				select new PersonValidationError(person)
 				{
 					ValidationError = Resources.MissingSkillsForPlanningPeriod
-				}).ToList();
+				};
+			foreach (var validationError in validationErrors)
+			{
+				validationResult.Add(validationError, GetType());
+			}
 		}
 	}
 }
