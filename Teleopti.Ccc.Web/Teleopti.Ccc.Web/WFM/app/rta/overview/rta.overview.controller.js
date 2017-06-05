@@ -116,7 +116,7 @@
 							if (vm.skillAreaId !== null)
 								vm.skillId = skillIdsFromSkillArea(vm.skillAreaId);
 							if (vm.siteIds !== null && angular.isDefined(vm.teams)) {
-								rtaService.getAdherenceForTeamsBySkills({
+								rtaService.getTeamCardsFor({
 										skillIds: vm.skillId,
 										siteIds: vm.siteIds
 									})
@@ -140,7 +140,7 @@
 									});
 							};
 						} else if (vm.siteIds) {
-							rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds })
+							rtaService.getTeamCardsFor({ siteId: vm.siteIds })
 								.then(function(teamAdherences) {
 									currentState = JSON.stringify(teamAdherences);
 									if (previousState != currentState) {
@@ -193,7 +193,7 @@
 			function getTeamsBySkillsInfo() {
 				pollingLock = false;
 				vm.skillIds = getSkillIds();
-				rtaService.getAdherenceForTeamsBySkills({
+				rtaService.getTeamCardsFor({
 					skillIds: vm.skillIds,
 					siteIds: vm.siteIds
 				}).then(function (teamAdherences) {
@@ -213,7 +213,7 @@
 			
 			function getTeamsInfo() {
 				pollingLock = false;
-				rtaService.getAdherenceForTeamsOnSite({ siteId: vm.siteIds }).then(function (teamAdherences) {
+				rtaService.getTeamCardsFor({ siteId: vm.siteIds }).then(function (teamAdherences) {
 					vm.teams = teamAdherences;
 					pollingLock = true;
 				});

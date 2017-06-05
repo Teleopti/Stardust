@@ -560,7 +560,7 @@
                 return [200, siteAdherences];
             });
 		
-        fake(/\.\.\/api\/Teams\/InAlarmCountForSkills(.*)/,
+		fake(/\.\.\/api\/Teams\/CardsFor(.*)/,
             function(params) {
                 var adherenceByTeamId = {};
                 var tAdherencesForMultipleSkills = [];
@@ -597,7 +597,7 @@
                 return [200, teamAdherencesBySkillId];
             });
 
-        fake(/\.\.\/api\/Teams\/GetOutOfAdherenceForTeamsOnSite(.*)/,
+		fake(/\.\.\/api\/Teams\/CardsFor(.*)/,
             function(params) {
 				return [200, teamAdherences];
             });

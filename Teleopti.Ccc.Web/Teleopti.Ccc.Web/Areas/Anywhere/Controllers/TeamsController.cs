@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
@@ -28,16 +30,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_teamViewModelBuilder.Build(siteId));
 		}
 		
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Teams/GetOutOfAdherenceForTeamsOnSite")]
-		public virtual IHttpActionResult GetOutOfAdherenceForTeamsOnSite(Guid siteId)
+		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Teams/CardsFor")]
+		public virtual IHttpActionResult CardsFor([FromUri]Guid siteId, [FromUri]Guid[] skillIds)
 		{
-			return Ok(_inAlarmForTeams.Build(siteId));
-		}
-
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Teams/InAlarmCountForSkills")]
-		public virtual IHttpActionResult InAlarmCountForSkills([FromUri]Guid siteId, [FromUri]Guid[] skillIds)
-		{
-			return Ok(_inAlarmForTeams.Build(siteId, skillIds));
+			// check for empty because we'r scared
+			return Ok(skillIds.EmptyIfNull().Any() ?
+				_inAlarmForTeams.Build(siteId) : 
+				_inAlarmForTeams.Build(siteId, skillIds));
 		}
 	}
 }

@@ -24,7 +24,7 @@ define([
 	var load = function (callback, businessUnitId, siteId) {
 		ajax.ajax({
 			headers: { 'X-Business-Unit-Filter': businessUnitId },
-			url: "api/Teams/GetOutOfAdherenceForTeamsOnSite?siteId=" + siteId,
+			url: "api/Teams/CardsFor?siteId=" + siteId,
 			success: function (data) {
 				for (var i = 0; i < data.length; i++) {
 					callback(mapAsNotification(data[i]));

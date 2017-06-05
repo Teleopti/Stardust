@@ -25,12 +25,11 @@
             getAlarmStatesForTeamsAndSkillsExcludingStates: getAlarmStatesForTeamsAndSkillsExcludingStates,
             getAlarmStatesForSkillsExcludingStates: getAlarmStatesForSkillsExcludingStates,
             getAlarmStatesForTeamsExcludingStates: getAlarmStatesForTeamsExcludingStates,
-            getAdherenceForTeamsOnSite: getAdherenceForTeamsOnSite,
             getAdherenceForAllSites: getAdherenceForAllSites,
             getAdherenceForSitesBySkills: getAdherenceForSitesBySkills,
             getSites: getSites,
             getSitesForSkills: getSitesForSkills,
-            getAdherenceForTeamsBySkills: getAdherenceForTeamsBySkills,
+			getTeamCardsFor: getTeamCardsFor,
             getSkillName: getSkillName,
             getSkillArea: getSkillArea,
             getPhoneStates: getPhoneStates,
@@ -166,17 +165,18 @@
                 }).query(data)
                 .$promise;
         };
-
-        function getAdherenceForTeamsOnSite(data) {
-            return $resource('../api/Teams/GetOutOfAdherenceForTeamsOnSite', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: true
-                }
-            }).query({
-                siteId: data.siteId
-            }).$promise;
-        };
+		
+	    function getTeamCardsFor(data) {
+		    return $resource('../api/Teams/CardsFor', {}, {
+			    query: {
+				    method: 'GET',
+				    isArray: true
+			    }
+		    }).query({
+			    skillIds: data.skillIds,
+			    siteId: data.siteIds
+		    }).$promise;
+	    };
 
         function getAdherenceForAllSites(data) {
             return $resource('../api/Sites/GetOutOfAdherenceForAllSites', {}, {
@@ -218,18 +218,6 @@
             }).$promise;
         };
 
-        function getAdherenceForTeamsBySkills(data) {
-            return $resource('../api/Teams/InAlarmCountForSkills', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: true
-                }
-            }).query({
-                skillIds: data.skillIds,
-                siteId: data.siteIds
-            }).$promise;
-        };
-		
         function getSkillName(data) {
             return $resource('../api/Skills/NameFor', {}, {
                 query: {
